@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
@@ -47,6 +47,8 @@ interface Props {
     pages?: Page[]
     categories: Category[]
   }
+  nav: []
+  footer: []
 }
 
 const ModalView: FC<{ modalView: string; closeModal(): any }> = ({
@@ -93,20 +95,17 @@ const SidebarUI: FC = () => {
 const Layout: FC<Props> = ({
   children,
   pageProps: { categories = [], ...pageProps },
+  nav,
+  footer,
 }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
-  const navBarlinks = categories.slice(0, 2).map((c) => ({
-    label: c.name,
-    href: `/search/${c.slug}`,
-  }))
-
   return (
     <CommerceProvider locale={locale}>
       <div className={cn(s.root)}>
-        <Navbar />
+        <Navbar config={nav} />
         <main className="fit">{children}</main>
-        <Footer />
+        <Footer config={footer} />
         <ModalUI />
         <SidebarUI />
         <FeatureBar

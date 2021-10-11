@@ -3,8 +3,17 @@ import Link from 'next/link'
 import type { Page } from '@commerce/types/page'
 import { Logo } from '@components/ui'
 import config from './config'
+import { useRouter } from 'next/router'
 
-const Footer: FC = () => {
+interface Props {
+  config: []
+}
+
+const Footer: FC<Props> = ({ config }) => {
+  const router = useRouter()
+
+  const handleRedirect = (path: string) => (path ? router.push(path) : {})
+
   return (
     <footer aria-labelledby="footer-heading" className="bg-gray-50">
       <h2 id="footer-heading" className="sr-only">
@@ -21,58 +30,42 @@ const Footer: FC = () => {
             {/* Sitemap sections */}
             <div className="mt-10 col-span-6 grid grid-cols-2 gap-8 sm:grid-cols-3 md:mt-0 md:row-start-1 md:col-start-3 md:col-span-8 lg:col-start-2 lg:col-span-6">
               <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">
-                    Products
-                  </h3>
-                  <ul role="list" className="mt-6 space-y-6">
-                    {config.products.map((item) => (
-                      <li key={item.name} className="text-sm">
-                        <a
-                          href={item.href}
-                          className="text-gray-500 hover:text-gray-600"
-                        >
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">Company</h3>
-                  <ul role="list" className="mt-6 space-y-6">
-                    {config.company.map((item) => (
-                      <li key={item.name} className="text-sm">
-                        <a
-                          href={item.href}
-                          className="text-gray-500 hover:text-gray-600"
-                        >
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">
-                  Customer Service
-                </h3>
-                <ul role="list" className="mt-6 space-y-6">
-                  {config.customerService.map((item) => (
-                    <li key={item.name} className="text-sm">
-                      <a
-                        href={item.href}
-                        className="text-gray-500 hover:text-gray-600"
-                      >
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                {config.map((item: any, idx: number) => {
+                  return (
+                    <div key={`${idx}-footer-item`}>
+                      <h3 className="text-md font-medium text-gray-900">
+                        {item.caption}
+                      </h3>
+                      <ul role="list" className="mt-6 space-y-6">
+                        {item.navBlocks.map((navBlock: any) => (
+                          <li key={navBlock.boxTitle} className="text-sm">
+                            <h3 className="text-sm font-medium text-gray-900">
+                              {navBlock.boxTitle}
+                            </h3>
+                            <ul>
+                              {navBlock.navItems.map(
+                                (navItem: any, navItemIdx: number) => {
+                                  return (
+                                    <li
+                                      key={navItemIdx + 'navItem'}
+                                      className="text-sm"
+                                    >
+                                      <span className="text-gray-500 hover:text-gray-600 cursor-hand">
+                                        {navItem.caption}
+                                      </span>
+                                    </li>
+                                  )
+                                }
+                              )}
+                            </ul>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )
+                })}
               </div>
             </div>
-
             {/* Newsletter section */}
             <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-9 lg:col-span-4">
               <h3 className="text-sm font-medium text-gray-900">
