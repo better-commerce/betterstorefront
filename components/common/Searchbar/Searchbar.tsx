@@ -35,7 +35,7 @@ const Searchbar: FC<Props> = ({ id = 'search' }) => {
 
   return (
     <div className="flex flex-row">
-      <Transition show={isSearchOpen} className="px-5">
+      <Transition show={isSearchOpen} className="min-w-searchbar ">
         <label className="hidden" htmlFor={id}>
           Search
         </label>

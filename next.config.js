@@ -10,6 +10,7 @@ const isShopify = provider === 'shopify'
 const isSaleor = provider === 'saleor'
 const isSwell = provider === 'swell'
 const isVendure = provider === 'vendure'
+const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({
   commerce,
