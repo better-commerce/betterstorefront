@@ -22,7 +22,7 @@ const Navbar: FC<Props> = ({ config }) => {
           <div className="border-b border-gray-200 px-4 pb-14 sm:px-0 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
               {/* Logo */}
-              <Link href="#">
+              <Link href="/">
                 <div className="w-auto flex cursor-pointer">
                   <span className="sr-only">Workflow</span>
                   <Logo />
