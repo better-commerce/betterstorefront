@@ -2,7 +2,7 @@ import fetcher from '../../fetcher'
 export default function getNavTree() {
   async function getNavTreeAsync() {
     try {
-      const response = await fetcher({
+      const response: any = await fetcher({
         url: '/api/v1/content/nav',
         method: 'GET',
       })
