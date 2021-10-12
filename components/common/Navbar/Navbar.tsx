@@ -134,7 +134,7 @@ const Navbar: FC<Props> = ({ config }) => {
               </Popover.Group>
               <div className="flex-1 flex items-center justify-end">
                 {/* Search */}
-                {process.env.COMMERCE_SEARCH_ENABLED && <Searchbar />}
+                <Searchbar />
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-8">
