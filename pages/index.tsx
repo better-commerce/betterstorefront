@@ -18,6 +18,8 @@ export async function getStaticProps({
     // Saleor provider only
     ...({ featured: true } as any),
   })
+  const slugsPromise = commerce.getAllSlugs()
+  const slugs = await slugsPromise
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { products } = await productsPromise
@@ -30,6 +32,7 @@ export async function getStaticProps({
       categories,
       brands,
       pages,
+      slugs,
     },
     revalidate: 60,
   }
@@ -37,52 +40,11 @@ export async function getStaticProps({
 
 export default function Home({
   products,
+  slugs,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      <Grid variant="filled">
-        {products.slice(0, 3).map((product: any, i: number) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            imgProps={{
-              width: i === 0 ? 1080 : 540,
-              height: i === 0 ? 1080 : 540,
-            }}
-          />
-        ))}
-      </Grid>
-      <Marquee variant="secondary">
-        {products.slice(0, 3).map((product: any, i: number) => (
-          <ProductCard key={product.id} product={product} variant="slim" />
-        ))}
-      </Marquee>
-      <Hero
-        headline=" Dessert dragée halvah croissant."
-        description="Cupcake ipsum dolor sit amet lemon drops pastry cotton candy. Sweet carrot cake macaroon bonbon croissant fruitcake jujubes macaroon oat cake. Soufflé bonbon caramels jelly beans. Tiramisu sweet roll cheesecake pie carrot cake. "
-      />
-      <Grid layout="B" variant="filled">
-        {products.slice(0, 3).map((product: any, i: number) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            imgProps={{
-              width: i === 0 ? 1080 : 540,
-              height: i === 0 ? 1080 : 540,
-            }}
-          />
-        ))}
-      </Grid>
-      <Marquee>
-        {products.slice(3).map((product: any, i: number) => (
-          <ProductCard key={product.id} product={product} variant="slim" />
-        ))}
-      </Marquee>
-      {/* <HomeAllProductsGrid
-        newestProducts={products}
-        categories={categories}
-        brands={brands}
-      /> */}
+      <Hero banners={slugs.components[0].images} />
     </>
   )
 }

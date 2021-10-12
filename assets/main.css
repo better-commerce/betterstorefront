@@ -5,3 +5,35 @@
 @import './components.css';
 
 @tailwind utilities;
+
+.swiper-button-next {
+  color: white !important;
+  background: rgba(0, 0, 0, 0.2);
+  width: 50px !important;
+  height: 50px !important;
+  line-height: 50px;
+  border-radius: 25px;
+  font-size: 28px;
+  text-align: center;
+  transition: background 0.45s cubic-bezier(0.22, 0.61, 0.35, 1);
+}
+
+.swiper-button-next::after {
+  font-size: 25px !important;
+}
+
+.swiper-button-prev::after {
+  font-size: 25px !important;
+}
+
+.swiper-button-prev {
+  color: white !important;
+  background: rgba(0, 0, 0, 0.2);
+  width: 50px !important;
+  height: 50px !important;
+  line-height: 50px;
+  border-radius: 25px;
+  font-size: 28px;
+  text-align: center;
+  transition: background 0.45s cubic-bezier(0.22, 0.61, 0.35, 1);
+}

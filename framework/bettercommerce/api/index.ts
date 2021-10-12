@@ -9,9 +9,10 @@ import getCustomerWishlist from './operations/get-customer-wishlist'
 import getAllProductPaths from './operations/get-all-product-paths'
 import getAllProducts from './operations/get-all-products'
 import getProduct from './operations/get-product'
+import { getAllSlugs } from './operations'
 
-export interface LocalConfig extends CommerceAPIConfig {}
-const config: LocalConfig = {
+export interface BetterCommerceConfig extends CommerceAPIConfig {}
+const config: BetterCommerceConfig = {
   commerceUrl: '',
   apiToken: '',
   cartCookie: '',
@@ -28,6 +29,7 @@ const operations = {
   getAllProductPaths,
   getAllProducts,
   getProduct,
+  getAllSlugs,
 }
 
 export const provider = { config, operations }
