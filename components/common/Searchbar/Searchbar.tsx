@@ -1,14 +1,13 @@
-import { FC, memo, useEffect } from 'react'
-import cn from 'classnames'
-import s from './Searchbar.module.css'
+import { FC, memo, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-
+import { SearchIcon } from '@heroicons/react/outline'
+import { Transition } from '@headlessui/react'
 interface Props {
-  className?: string
   id?: string
 }
 
-const Searchbar: FC<Props> = ({ className, id = 'search' }) => {
+const Searchbar: FC<Props> = ({ id = 'search' }) => {
+  const [isSearchOpen, setSearchOpen] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -32,27 +31,29 @@ const Searchbar: FC<Props> = ({ className, id = 'search' }) => {
     }
   }
 
+  const handleSearchInput = () => setSearchOpen(!isSearchOpen)
+
   return (
-    <div className={cn(s.root, className)}>
-      <label className="hidden" htmlFor={id}>
-        Search
-      </label>
-      <input
-        id={id}
-        className={s.input}
-        placeholder="Search for products..."
-        defaultValue={router.query.q}
-        onKeyUp={handleKeyUp}
-      />
-      <div className={s.iconContainer}>
-        <svg className={s.icon} fill="currentColor" viewBox="0 0 20 20">
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-          />
-        </svg>
-      </div>
+    <div className="flex flex-row">
+      <Transition show={isSearchOpen} className="px-5">
+        <label className="hidden" htmlFor={id}>
+          Search
+        </label>
+        <input
+          id={id}
+          className="text-gray-700 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+          placeholder="Search..."
+          defaultValue={router.query.q}
+          onKeyUp={handleKeyUp}
+        />
+      </Transition>
+      <button
+        onClick={handleSearchInput}
+        className="p-2 text-gray-400 hover:text-gray-500"
+      >
+        <span className="sr-only">Search</span>
+        <SearchIcon className="w-6 h-6" aria-hidden="true" />
+      </button>
     </div>
   )
 }

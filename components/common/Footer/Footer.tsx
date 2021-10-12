@@ -1,117 +1,118 @@
 import { FC } from 'react'
-import cn from 'classnames'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import type { Page } from '@commerce/types/page'
-import getSlug from '@lib/get-slug'
-import { Github, Vercel } from '@components/icons'
-import { Logo, Container } from '@components/ui'
-import { I18nWidget } from '@components/common'
-import s from './Footer.module.css'
+import { Logo } from '@components/ui'
+import config from './config'
 
-interface Props {
-  className?: string
-  children?: any
-  pages?: Page[]
-}
-
-const links = [
-  {
-    name: 'Home',
-    url: '/',
-  },
-]
-
-const Footer: FC<Props> = ({ className, pages }) => {
-  const { sitePages } = usePages(pages)
-  const rootClassName = cn(s.root, className)
-
+const Footer: FC = () => {
   return (
-    <footer className={rootClassName}>
-      <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border-b border-accent-2 py-12 text-primary bg-primary transition-colors duration-150">
-          <div className="col-span-1 lg:col-span-2">
-            <Link href="/">
-              <a className="flex flex-initial items-center font-bold md:mr-24">
-                <span className="rounded-full border border-accent-6 mr-2">
-                  <Logo />
-                </span>
-                <span>ACME</span>
-              </a>
-            </Link>
-          </div>
-          <div className="col-span-1 lg:col-span-8">
-            <div className="grid md:grid-rows-4 md:grid-cols-3 md:grid-flow-col">
-              {[...links, ...sitePages].map((page) => (
-                <span key={page.url} className="py-3 md:py-0 md:pb-4">
-                  <Link href={page.url!}>
-                    <a className="text-accent-9 hover:text-accent-6 transition ease-in-out duration-150">
-                      {page.name}
-                    </a>
-                  </Link>
-                </span>
-              ))}
+    <footer aria-labelledby="footer-heading" className="bg-gray-50">
+      <h2 id="footer-heading" className="sr-only">
+        Footer
+      </h2>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="border-t border-gray-200 py-20">
+          <div className="grid grid-cols-1 md:grid-cols-12 md:grid-flow-col md:gap-x-8 md:gap-y-16 md:auto-rows-min">
+            {/* Image section */}
+            <div className="col-span-1 md:col-span-2 lg:row-start-1 lg:col-start-1">
+              <Logo />
             </div>
-          </div>
-          <div className="col-span-1 lg:col-span-2 flex items-start lg:justify-end text-primary">
-            <div className="flex space-x-6 items-center h-10">
-              <a
-                className={s.link}
-                aria-label="Github Repository"
-                href="https://github.com/vercel/commerce"
-              >
-                <Github />
-              </a>
-              <I18nWidget />
+
+            {/* Sitemap sections */}
+            <div className="mt-10 col-span-6 grid grid-cols-2 gap-8 sm:grid-cols-3 md:mt-0 md:row-start-1 md:col-start-3 md:col-span-8 lg:col-start-2 lg:col-span-6">
+              <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900">
+                    Products
+                  </h3>
+                  <ul role="list" className="mt-6 space-y-6">
+                    {config.products.map((item) => (
+                      <li key={item.name} className="text-sm">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900">Company</h3>
+                  <ul role="list" className="mt-6 space-y-6">
+                    {config.company.map((item) => (
+                      <li key={item.name} className="text-sm">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-900">
+                  Customer Service
+                </h3>
+                <ul role="list" className="mt-6 space-y-6">
+                  {config.customerService.map((item) => (
+                    <li key={item.name} className="text-sm">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Newsletter section */}
+            <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-9 lg:col-span-4">
+              <h3 className="text-sm font-medium text-gray-900">
+                Sign up for our newsletter
+              </h3>
+              <p className="mt-6 text-sm text-gray-500">
+                The latest deals and savings, sent to your inbox weekly.
+              </p>
+              <form className="mt-2 flex sm:max-w-md">
+                <label htmlFor="email-address" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="email-address"
+                  type="text"
+                  autoComplete="email"
+                  required
+                  className="appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                />
+                <div className="ml-4 flex-shrink-0">
+                  <button
+                    type="submit"
+                    className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Sign up
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-        <div className="pt-6 pb-10 flex flex-col md:flex-row justify-between items-center space-y-4 text-accent-6 text-sm">
-          <div>
-            <span>&copy; 2020 ACME, Inc. All rights reserved.</span>
-          </div>
-          <div className="flex items-center text-primary text-sm">
-            <span className="text-primary">Created by</span>
-            <a
-              rel="noopener noreferrer"
-              href="https://vercel.com"
-              aria-label="Vercel.com Link"
-              target="_blank"
-              className="text-primary"
-            >
-              <Vercel
-                className="inline-block h-6 ml-3 text-primary"
-                alt="Vercel.com Logo"
-              />
-            </a>
-          </div>
+
+        <div className="border-t border-gray-100 py-10 text-center">
+          <p className="text-sm text-gray-500">
+            &copy; 2021 Workflow, Inc. All rights reserved.
+          </p>
         </div>
-      </Container>
+      </div>
     </footer>
   )
-}
-
-function usePages(pages?: Page[]) {
-  const { locale } = useRouter()
-  const sitePages: Page[] = []
-
-  if (pages) {
-    pages.forEach((page) => {
-      const slug = page.url && getSlug(page.url)
-      if (!slug) return
-      if (locale && !slug.startsWith(`${locale}/`)) return
-      sitePages.push(page)
-    })
-  }
-
-  return {
-    sitePages: sitePages.sort(bySortOrder),
-  }
-}
-
-// Sort pages by the sort order assigned in the BC dashboard
-function bySortOrder(a: Page, b: Page) {
-  return (a.sort_order ?? 0) - (b.sort_order ?? 0)
 }
 
 export default Footer

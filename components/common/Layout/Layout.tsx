@@ -104,9 +104,9 @@ const Layout: FC<Props> = ({
   return (
     <CommerceProvider locale={locale}>
       <div className={cn(s.root)}>
-        <Navbar links={navBarlinks} />
+        <Navbar />
         <main className="fit">{children}</main>
-        <Footer pages={pageProps.pages} />
+        <Footer />
         <ModalUI />
         <SidebarUI />
         <FeatureBar
