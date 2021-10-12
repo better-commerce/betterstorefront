@@ -19,6 +19,9 @@ module.exports = {
       maxWidth: {
         '8xl': '1920px',
       },
+      transitionProperty: {
+        width: 'width',
+      },
       colors: {
         primary: 'var(--primary)',
         'primary-2': 'var(--primary-2)',
