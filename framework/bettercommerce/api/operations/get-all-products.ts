@@ -2,7 +2,7 @@ import { Product } from '@commerce/types/product'
 import { GetAllProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
 import type { BetterCommerceConfig, Provider } from '../index'
-import data from '../../data.json'
+import fetcher from '../../fetcher'
 
 export default function getAllProductsOperation({
   commerce,
@@ -16,9 +16,17 @@ export default function getAllProductsOperation({
     variables?: T['variables']
     config?: Partial<BetterCommerceConfig>
     preview?: boolean
-  } = {}): Promise<{ products: Product[] | any[] }> {
-    return {
-      products: data.products,
+  } = {}): Promise<any> {
+    try {
+      const response: any = await fetcher({
+        url: 'api/v1/catalog/category',
+        method: 'get',
+      })
+      return {
+        products: response.result,
+      }
+    } catch (error: any) {
+      throw new Error(error)
     }
   }
   return getAllProducts
