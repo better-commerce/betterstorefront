@@ -23,6 +23,7 @@ export const OPERATIONS = [
   'getAllProductPaths',
   'getAllProducts',
   'getProduct',
+  'getSlugs',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -48,7 +49,7 @@ export type Operations<P extends APIProvider> = {
       } & OperationOptions
     ): Promise<T['data']>
   }
-
+  getSlugs: {}
   getAllPages: {
     <T extends GetAllPagesOperation>(opts?: {
       config?: P['config']
