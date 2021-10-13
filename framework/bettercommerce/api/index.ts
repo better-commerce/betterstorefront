@@ -1,15 +1,16 @@
 import type { CommerceAPI, CommerceAPIConfig } from '@commerce/api'
 import { getCommerceApi as commerceApi } from '@commerce/api'
 import createFetcher from './utils/fetch-local'
-
-import getAllPages from './operations/get-all-pages'
-import getPage from './operations/get-page'
-import getSiteInfo from './operations/get-site-info'
-import getCustomerWishlist from './operations/get-customer-wishlist'
-import getAllProductPaths from './operations/get-all-product-paths'
-import getAllProducts from './operations/get-all-products'
-import getProduct from './operations/get-product'
-import { getAllSlugs } from './operations'
+import {
+  getSlugs,
+  getProduct,
+  getAllProducts,
+  getAllProductPaths,
+  getCustomerWishlist,
+  getSiteInfo,
+  getPage,
+  getAllPages,
+} from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
 const config: BetterCommerceConfig = {
@@ -29,7 +30,7 @@ const operations = {
   getAllProductPaths,
   getAllProducts,
   getProduct,
-  getAllSlugs,
+  getSlugs,
 }
 
 export const provider = { config, operations }

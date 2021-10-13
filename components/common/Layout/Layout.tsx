@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'

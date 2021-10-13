@@ -1,9 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
-import { ProductCard } from '@components/product'
-import { Grid, Marquee, Hero } from '@components/ui'
-// import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
+import { Hero } from '@components/ui'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import { HOMEPAGE_SLUG } from '@components/utils/constants'
 
 export async function getStaticProps({
   preview,
@@ -18,7 +17,7 @@ export async function getStaticProps({
     // Saleor provider only
     ...({ featured: true } as any),
   })
-  const slugsPromise = commerce.getAllSlugs()
+  const slugsPromise = commerce.getSlugs({ slug: HOMEPAGE_SLUG })
   const slugs = await slugsPromise
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })

@@ -1,10 +1,10 @@
 import fetcher from '../../fetcher'
 
-export default function getAllSlugsOperation() {
-  async function getAllSlugs() {
+export default function getSlugsOperation() {
+  async function getSlugs({ slug }: any) {
     try {
       const response: any = await fetcher({
-        url: 'api/v1/content/siteview/slug?slug=/',
+        url: `api/v1/content/siteview/slug${slug}`,
         method: 'post',
       })
       return response.result
@@ -12,5 +12,5 @@ export default function getAllSlugsOperation() {
       console.log(error)
     }
   }
-  return getAllSlugs
+  return getSlugs
 }
