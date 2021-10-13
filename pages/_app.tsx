@@ -4,6 +4,7 @@ import 'keen-slider/keen-slider.min.css'
 import { FC, useEffect } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
+import 'swiper/css/bundle'
 
 const Noop: FC = ({ children }) => <>{children}</>
 

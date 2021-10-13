@@ -37,7 +37,6 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
             </SwiperSlide>
           )
         })}
-        ;
       </Swiper>
 
       {/* Decorative image and overlay */}

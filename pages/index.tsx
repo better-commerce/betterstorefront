@@ -3,6 +3,7 @@ import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import { HOMEPAGE_SLUG } from '@components/utils/constants'
+import ProductSlider from '@components/product/ProductSlider'
 
 export async function getStaticProps({
   preview,
@@ -44,6 +45,7 @@ export default function Home({
   return (
     <>
       <Hero banners={slugs.components[0].images} />
+      <ProductSlider config={slugs.components[3]} />
     </>
   )
 }
