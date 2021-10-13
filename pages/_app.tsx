@@ -4,7 +4,6 @@ import 'keen-slider/keen-slider.min.css'
 import { FC, useEffect } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
-import getNavTree from '@framework/api/content/getNavTree'
 
 const Noop: FC = ({ children }) => <>{children}</>
 
@@ -24,11 +23,6 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
       </ManagedUIContext>
     </>
   )
-}
-
-MyApp.getInitialProps = async ({ appContext }: any) => {
-  const response = await getNavTree()
-  return { nav: response.header, footer: response.footer }
 }
 
 export default MyApp

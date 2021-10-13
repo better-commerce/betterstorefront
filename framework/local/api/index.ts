@@ -10,8 +10,8 @@ import getAllProductPaths from './operations/get-all-product-paths'
 import getAllProducts from './operations/get-all-products'
 import getProduct from './operations/get-product'
 
-export interface LocalConfig extends CommerceAPIConfig {}
-const config: LocalConfig = {
+export interface BetterCommerceConfig extends CommerceAPIConfig {}
+const config: BetterCommerceConfig = {
   commerceUrl: '',
   apiToken: '',
   cartCookie: '',

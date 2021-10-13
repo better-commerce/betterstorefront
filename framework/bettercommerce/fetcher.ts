@@ -1,31 +1,90 @@
 import { Fetcher } from '@commerce/utils/types'
-import { getToken, getError } from './utils'
-import { BASE_URL } from './utils/constants'
-import getAuthToken from './auth/get-auth-token'
+import { getToken, getError, setToken, clearTokens } from './utils'
+import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
 import axios from 'axios'
 
-const fetcher = async ({ url = '', method = 'post', body = {} }: any) => {
-  let token = getToken()
+const SingletonFactory = (function () {
+  let accessToken = ''
+  const axiosInstance = axios.create({
+    baseURL: BASE_URL,
+    withCredentials: true,
+  })
 
-  if (!token) {
-    const tokenGenerator = await getAuthToken()
-    token = tokenGenerator.access_token
+  const getToken = () => accessToken
+
+  const setToken = (token: string) => (accessToken = token)
+
+  const clearToken = () => (accessToken = '')
+
+  axiosInstance.interceptors.request.use(
+    (config: any) => {
+      const token = getToken()
+      if (token) {
+        config.headers['Authorization'] = 'Bearer ' + token
+      }
+      return config
+    },
+    (err) => Promise.reject(err)
+  )
+  function createAxiosResponseInterceptor() {
+    const interceptor = axiosInstance.interceptors.response.use(
+      (response: any) => response,
+      (error: any) => {
+        // Reject promise if usual error
+        if (error.response.status !== 401) {
+          return Promise.reject(error)
+        }
+        /*
+         * When response code is 401, try to refresh the token.
+         * Eject the interceptor so it doesn't loop in case
+         * token refresh causes the 401 response
+         */
+        axiosInstance.interceptors.response.eject(interceptor)
+
+        // return getAuthToken().finally(createAxiosResponseInterceptor)
+        const url = new URL('oAuth/token', AUTH_URL)
+
+        return axiosInstance({
+          url: url.href,
+          method: 'post',
+          data: `client_id=${CLIENT_ID}&client_secret=${SHARED_SECRET}&grant_type=client_credentials`,
+        })
+          .then((res: any) => {
+            setToken(res.data.access_token)
+            error.response.config.headers['Authorization'] =
+              'Bearer ' + getToken()
+            return axiosInstance(error.response.config)
+          })
+          .catch((error) => {
+            clearToken()
+            //@TODO redirect here to Login page
+            return Promise.reject(error)
+          })
+          .finally(createAxiosResponseInterceptor)
+      }
+    )
   }
 
+  createAxiosResponseInterceptor()
+  return { axiosInstance }
+})()
+
+const axiosInstance = SingletonFactory.axiosInstance
+
+Object.freeze(axiosInstance)
+
+const fetcher = async ({ url = '', method = 'post', body = {} }: any) => {
   const computedUrl = new URL(url, BASE_URL)
   const config = {
     method: method,
     url: computedUrl.href,
     body,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-type': 'application/json',
-    },
   }
   try {
-    const response = await axios(config)
+    const response = await axiosInstance(config)
     return response.data
   } catch (error: any) {
+    console.log(error)
     throw getError(error, error.status)
   }
 }

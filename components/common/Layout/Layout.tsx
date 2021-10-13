@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
@@ -13,9 +13,10 @@ import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import PaymentMethodView from '@components/checkout/PaymentMethodView'
 import CheckoutSidebarView from '@components/checkout/CheckoutSidebarView'
-
+import useSWR from 'swr'
 import LoginView from '@components/auth/LoginView'
 import s from './Layout.module.css'
+import { getData } from '../../utils/clientFetcher'
 
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
@@ -92,20 +93,27 @@ const SidebarUI: FC = () => {
   ) : null
 }
 
+interface LayoutProps {
+  nav: []
+  footer: []
+}
+
 const Layout: FC<Props> = ({
   children,
   pageProps: { categories = [], ...pageProps },
-  nav,
-  footer,
 }) => {
+  const { data = { nav: [], footer: [] } } = useSWR<LayoutProps>(
+    '/api/get-navigation',
+    getData
+  )
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
   return (
     <CommerceProvider locale={locale}>
       <div className={cn(s.root)}>
-        <Navbar config={nav} />
+        <Navbar config={data.nav} />
         <main className="fit">{children}</main>
-        <Footer config={footer} />
+        <Footer config={data.footer} />
         <ModalUI />
         <SidebarUI />
         <FeatureBar
