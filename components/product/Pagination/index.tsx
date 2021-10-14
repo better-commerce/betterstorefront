@@ -1,3 +1,4 @@
+// @ts-ignore
 import ReactPaginate from 'react-paginate'
 import { FC } from 'react'
 

@@ -11,13 +11,16 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
     const parsedQuery = JSON.parse(query)
     try {
       const response: any = await fetcher({
-        url: `api/v1/catalog/product?page=${parsedQuery.page}&sortBy=${parsedQuery.sortBy}&sortOrder=${parsedQuery.sortOrder}`,
-        method: 'get',
+        url: `api/v1/catalog/search/r`,
+        method: 'post',
+        // url: `api/v1/catalog/product?page=${parsedQuery.page}&sortBy=${parsedQuery.sortBy}&sortOrder=${parsedQuery.sortOrder}`,
       })
+      console.log(response)
       return {
-        products: response.results || [],
+        products: response.result.products || [],
       }
     } catch (error: any) {
+      console.log(error)
       throw new Error(error)
     }
   }

@@ -18,10 +18,13 @@ module.exports = {
     extend: {
       maxWidth: {
         '8xl': '1920px',
-        '40p': '40%'
+        '40p': '40%',
       },
       minWidth: {
         searchbar: '200px',
+      },
+      minHeight: {
+        '30px': '30px',
       },
       transitionProperty: {
         width: 'width',

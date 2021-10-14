@@ -11,6 +11,7 @@ import { getData } from '@components/utils/clientFetcher'
 import Skeleton from '@components/ui/Skeleton'
 import Pagination from '@components/product/Pagination'
 import { GetServerSideProps } from 'next'
+import rangeMap from '@lib/range-map'
 
 const filters = {
   price: [
@@ -150,7 +151,7 @@ function Search({ query }: any) {
   const router = useRouter()
   const [state, dispatch] = useReducer(reducer, initialState)
   const computedUrl = `/api/catalog/products/?page=${state.page}&sortBy=${state.sortBy}&sortOrder=${state.sortOrder}`
-  const { data, error } = useSwr(computedUrl, getData)
+  const { data = { products: [] }, error } = useSwr(computedUrl, getData)
   const handlePageChange = (page: any) => {
     router.push(
       {
@@ -161,6 +162,11 @@ function Search({ query }: any) {
       { shallow: true }
     )
     dispatch({ type: PAGE, payload: page.selected + 1 })
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    })
   }
 
   return (
@@ -216,7 +222,7 @@ function Search({ query }: any) {
                   <div className="pt-6 space-y-6 sm:pt-4 sm:space-y-4">
                     {filters.price.map((option, optionIdx) => (
                       <div
-                        key={option.value}
+                        key={optionIdx}
                         className="flex items-center text-base sm:text-sm"
                       >
                         <input
@@ -382,56 +388,67 @@ function Search({ query }: any) {
           </h2>
 
           <div className="-mx-px border-l border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="group relative p-4 border-r border-b border-gray-200 sm:p-6"
-              >
-                <div className="rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-                  <img
-                    src={product.imageSrc}
-                    alt={product.imageAlt}
-                    className="w-full h-full object-center object-cover"
-                  />
-                </div>
-                <div className="pt-10 pb-4 text-center">
-                  <h3 className="text-sm font-medium text-gray-900">
-                    <a href={product.href}>
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {product.name}
-                    </a>
-                  </h3>
-                  <div className="mt-3 flex flex-col items-center">
-                    <p className="sr-only">{product.rating} out of 5 stars</p>
-                    <div className="flex items-center">
-                      {[0, 1, 2, 3, 4].map((rating) => (
-                        <StarIcon
-                          key={rating}
-                          className={classNames(
-                            product.rating > rating
-                              ? 'text-yellow-400'
-                              : 'text-gray-200',
-                            'flex-shrink-0 h-5 w-5'
-                          )}
-                          aria-hidden="true"
-                        />
-                      ))}
+            {!data.products.length &&
+              rangeMap(12, (i) => (
+                <div
+                  key={i}
+                  className="shadow-md w-60 h-72 rounded-md mx-auto mt-20"
+                >
+                  <div className="flex animate-pulse flex-row items-center h-full justify-center space-x-5">
+                    <div className="flex flex-col space-y-3">
+                      <div className="w-full bg-gray-100 h-48 rounded-md "></div>
+                      <div className="w-36 bg-gray-100 h-6 mt-40 rounded-md "></div>
                     </div>
-                    <p className="mt-1 text-sm text-gray-500">
-                      {product.reviewCount} reviews
-                    </p>
                   </div>
-                  <p className="mt-4 text-base font-medium text-gray-900">
-                    {product.price}
-                  </p>
                 </div>
-              </div>
+              ))}
+            {data.products.map((product: any) => (
+              <Link
+                passHref
+                href={product.slug}
+                key={'data-product' + product.slug}
+              >
+                <a>
+                  <div
+                    key={product.id}
+                    className="group relative p-4 border-r border-b border-gray-200 sm:p-6"
+                  >
+                    <div className="rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-64 object-center object-cover"
+                      />
+                    </div>
+                    <div className="pt-10 pb-4 text-center">
+                      <h3 className="min-h-30px text-sm font-medium text-gray-900">
+                        <a href={product.slug}>
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0"
+                          />
+                          {product.name}
+                        </a>
+                      </h3>
+
+                      <p className="mt-4 font-medium text-gray-900">
+                        {product?.price?.formatted?.withTax}
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </Link>
             ))}
           </div>
+          {data.products.length && (
+            <Pagination
+              currentPage={state.page}
+              onPageChange={handlePageChange}
+            />
+          )}
         </section>
 
         {/* Pagination */}
-        <Pagination currentPage={state.page} onPageChange={handlePageChange} />
       </main>
     </div>
   )
