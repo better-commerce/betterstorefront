@@ -13,7 +13,7 @@ interface Props {
 const Navbar: FC<Props> = ({ config }) => {
   const router = useRouter()
 
-  const handleRedirect = (path: string) => (path ? router.push(path) : {})
+  const handleRedirect = (path: string) => (path ? router.push('/' + path) : {})
 
   return (
     <div className="bg-white">

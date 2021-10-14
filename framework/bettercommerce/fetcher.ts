@@ -82,6 +82,7 @@ const fetcher = async ({ url = '', method = 'post', body = {} }: any) => {
   }
   try {
     const response = await axiosInstance(config)
+    console.log(response)
     return response.data
   } catch (error: any) {
     console.log(error)
