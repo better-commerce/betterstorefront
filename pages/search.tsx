@@ -1,11 +1,16 @@
 import { Layout } from '@components/common'
+import Link from 'next/link'
+import { useReducer } from 'react'
+import { useRouter } from 'next/router'
 import classNames from '@components/utils/classNames'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon, FilterIcon, StarIcon } from '@heroicons/react/solid'
 import useSwr from 'swr'
 import { getData } from '@components/utils/clientFetcher'
 import Skeleton from '@components/ui/Skeleton'
+import Pagination from '@components/product/Pagination'
+import { GetServerSideProps } from 'next'
 
 const filters = {
   price: [
@@ -39,7 +44,7 @@ const filters = {
   ],
 }
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
+  { name: 'Most Popular', href: '?sortOrder=desc', current: true },
   { name: 'Best Rating', href: '#', current: false },
   { name: 'Newest', href: '#', current: false },
   { name: 'Price: Low to High', href: '#', current: false },
@@ -93,9 +98,70 @@ const products = [
   // More products...
 ]
 
-function Search() {
-  const [open, setOpen] = useState(false)
-  const { data, error } = useSwr('/api/catalog/products', getData)
+const ACTION_TYPES = {
+  SORT_BY: 'SORT_BY',
+  PAGE: 'PAGE',
+  SORT_ORDER: 'SORT_ORDER',
+  CLEAR: 'CLEAR',
+}
+
+interface actionInterface {
+  type?: string
+  payload?: object | any
+}
+
+interface stateInterface {
+  sortBy?: string
+  page?: string
+  sortOrder?: string
+}
+
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR } = ACTION_TYPES
+
+const DEFAULT_STATE = {
+  sortBy: '',
+  sortOrder: '',
+  page: 1,
+}
+
+function reducer(state: stateInterface, { type, payload }: actionInterface) {
+  switch (type) {
+    case SORT_BY:
+      return { ...state, sortBy: payload }
+    case PAGE:
+      return { ...state, page: payload }
+    case SORT_ORDER:
+      return { ...state, sortOrder: payload }
+    case CLEAR:
+      return { ...state, ...DEFAULT_STATE }
+    default:
+      return state
+  }
+}
+
+function Search({ query }: any) {
+  const adaptedQuery = { ...query }
+  adaptedQuery.page ? (adaptedQuery.page = Number(adaptedQuery.page)) : false
+  const initialState = {
+    ...DEFAULT_STATE,
+    ...adaptedQuery,
+  }
+
+  const router = useRouter()
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const computedUrl = `/api/catalog/products/?page=${state.page}&sortBy=${state.sortBy}&sortOrder=${state.sortOrder}`
+  const { data, error } = useSwr(computedUrl, getData)
+  const handlePageChange = (page: any) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, page: page.selected + 1 },
+      },
+      undefined,
+      { shallow: true }
+    )
+    dispatch({ type: PAGE, payload: page.selected + 1 })
+  }
 
   return (
     <div className="bg-white">
@@ -105,10 +171,6 @@ function Search() {
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
             Catalog
           </h1>
-          <p className="mt-4 max-w-xl mx-auto text-base text-gray-500">
-            The secret to a tidy desk? Don't get rid of anything, just put it in
-            really really nice looking containers.
-          </p>
         </div>
 
         {/* Filters */}
@@ -132,9 +194,17 @@ function Search() {
                 </Disclosure.Button>
               </div>
               <div className="pl-6">
-                <button type="button" className="text-gray-500">
-                  Clear all
-                </button>
+                <Link href="/search">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      dispatch({ type: CLEAR })
+                    }}
+                    className="text-gray-500"
+                  >
+                    Clear all
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -277,18 +347,20 @@ function Search() {
                       {sortOptions.map((option) => (
                         <Menu.Item key={option.name}>
                           {({ active }) => (
-                            <a
-                              href={option.href}
-                              className={classNames(
-                                option.current
-                                  ? 'font-medium text-gray-900'
-                                  : 'text-gray-500',
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm'
-                              )}
-                            >
-                              {option.name}
-                            </a>
+                            <Link href={option.href} passHref>
+                              <a
+                                href={option.href}
+                                className={classNames(
+                                  option.current
+                                    ? 'font-medium text-gray-900'
+                                    : 'text-gray-500',
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm'
+                                )}
+                              >
+                                {option.name}
+                              </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       ))}
@@ -359,75 +431,17 @@ function Search() {
         </section>
 
         {/* Pagination */}
-        <nav
-          aria-label="Pagination"
-          className="max-w-7xl mx-auto px-4 mt-6 flex justify-between text-sm font-medium text-gray-700 sm:px-6 lg:px-8"
-        >
-          <div className="min-w-0 flex-1">
-            <a
-              href="#"
-              className="inline-flex items-center px-4 h-10 border border-gray-300 rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-offset-1 focus:ring-offset-indigo-600 focus:ring-indigo-600 focus:ring-opacity-25"
-            >
-              Previous
-            </a>
-          </div>
-          <div className="hidden space-x-2 sm:flex">
-            {/* Current: "border-indigo-600 ring-1 ring-indigo-600", Default: "border-gray-300" */}
-            <a
-              href="#"
-              className="inline-flex items-center px-4 h-10 border border-gray-300 rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-offset-1 focus:ring-offset-indigo-600 focus:ring-indigo-600 focus:ring-opacity-25"
-            >
-              1
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center px-4 h-10 border border-gray-300 rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-offset-1 focus:ring-offset-indigo-600 focus:ring-indigo-600 focus:ring-opacity-25"
-            >
-              2
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center px-4 h-10 border border-indigo-600 ring-1 ring-indigo-600 rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-offset-1 focus:ring-offset-indigo-600 focus:ring-indigo-600 focus:ring-opacity-25"
-            >
-              3
-            </a>
-            <span className="inline-flex items-center text-gray-500 px-1.5 h-10">
-              ...
-            </span>
-            <a
-              href="#"
-              className="inline-flex items-center px-4 h-10 border border-gray-300 rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-offset-1 focus:ring-offset-indigo-600 focus:ring-indigo-600 focus:ring-opacity-25"
-            >
-              8
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center px-4 h-10 border border-gray-300 rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-offset-1 focus:ring-offset-indigo-600 focus:ring-indigo-600 focus:ring-opacity-25"
-            >
-              9
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center px-4 h-10 border border-gray-300 rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-offset-1 focus:ring-offset-indigo-600 focus:ring-indigo-600 focus:ring-opacity-25"
-            >
-              10
-            </a>
-          </div>
-          <div className="min-w-0 flex-1 flex justify-end">
-            <a
-              href="#"
-              className="inline-flex items-center px-4 h-10 border border-gray-300 rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-offset-1 focus:ring-offset-indigo-600 focus:ring-indigo-600 focus:ring-opacity-25"
-            >
-              Next
-            </a>
-          </div>
-        </nav>
+        <Pagination currentPage={state.page} onPageChange={handlePageChange} />
       </main>
     </div>
   )
 }
 
-export async function getInitialProps({ query: { page = 1 } }) {}
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: { query: context.query }, // will be passed to the page component as props
+  }
+}
 
 export default Search
 
