@@ -18,7 +18,6 @@ export default function getProductOperation({
     config?: Partial<BetterCommerceConfig>
     preview?: boolean
   } = {}): Promise<Product | {} | any> {
-    console.log(query)
     const response = await fetcher({
       url: `/api/v1/catalog/product/slug?slug=${query}`,
       method: 'get',

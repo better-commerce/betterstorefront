@@ -17,7 +17,6 @@ export default function getAllProductPathsOperation() {
           response.result.products.map(({ slug }: any) => ({ slug })) || [],
       }
     } catch (error: any) {
-      console.log(error)
       throw new Error(error)
     }
   }
