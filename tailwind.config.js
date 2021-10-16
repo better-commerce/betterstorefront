@@ -24,7 +24,7 @@ module.exports = {
         searchbar: '200px',
       },
       minHeight: {
-        '30px': '30px',
+        '50px': '50px',
       },
       transitionProperty: {
         width: 'width',

@@ -33,6 +33,7 @@ export async function getStaticProps({
 export default function Home({
   slugs,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  console.log(slugs)
   return (
     <>
       <Hero banners={slugs.components[0].images} />

@@ -9,7 +9,6 @@ const SingletonFactory = (function () {
     baseURL: BASE_URL,
     withCredentials: true,
   })
-
   const getToken = () => accessToken
 
   const setToken = (token: string) => (accessToken = token)
@@ -73,19 +72,24 @@ const axiosInstance = SingletonFactory.axiosInstance
 
 Object.freeze(axiosInstance)
 
-const fetcher = async ({ url = '', method = 'post', body = {} }: any) => {
+const fetcher = async ({
+  url = '',
+  method = 'post',
+  data = {},
+  headers = {},
+}: any) => {
   const computedUrl = new URL(url, BASE_URL)
-  const config = {
+  const config: any = {
     method: method,
     url: computedUrl.href,
-    body,
+    data,
+    headers,
   }
+
   try {
     const response = await axiosInstance(config)
-    console.log(response)
     return response.data
   } catch (error: any) {
-    console.log(error)
     throw getError(error, error.status)
   }
 }
