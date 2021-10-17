@@ -6,6 +6,7 @@ export function normalize(product: RawProduct): Product {
   return {
     id: product.ID,
     name: product.Name,
+    result: '',
     description: product.Description,
     slug: product.ID,
     images: product.xp.Images,

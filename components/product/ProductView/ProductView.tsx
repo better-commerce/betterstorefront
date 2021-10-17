@@ -1,89 +1,12 @@
-import { Fragment, useState } from 'react'
-import {
-  Dialog,
-  Disclosure,
-  Popover,
-  RadioGroup,
-  Tab,
-  Transition,
-} from '@headlessui/react'
-import {
-  HeartIcon,
-  MenuIcon,
-  MinusSmIcon,
-  PlusSmIcon,
-  SearchIcon,
-  ShoppingBagIcon,
-  UserIcon,
-  XIcon,
-} from '@heroicons/react/outline'
+import { useState } from 'react'
+import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
+import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
 import { StarIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
 
-const product = {
-  name: 'Zip Tote Basket',
-  price: '$140',
-  rating: 4,
-  images: [
-    {
-      id: 1,
-      name: 'Angled view',
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg',
-      alt: 'Angled front view with bag zipped and handles upright.',
-    },
-    // More images...
-  ],
-  colors: [
-    {
-      name: 'Washed Black',
-      bgColor: 'bg-gray-700',
-      selectedColor: 'ring-gray-700',
-    },
-    { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
-    {
-      name: 'Washed Gray',
-      bgColor: 'bg-gray-500',
-      selectedColor: 'ring-gray-500',
-    },
-  ],
-  description: `
-    <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
-  `,
-  details: [
-    {
-      name: 'Features',
-      items: [
-        'Multiple strap configurations',
-        'Spacious interior with top zip',
-        'Leather handle and tabs',
-        'Interior dividers',
-        'Stainless strap loops',
-        'Double stitched construction',
-        'Water-resistant',
-      ],
-    },
-    // More sections...
-  ],
-}
-const relatedProducts = [
-  {
-    id: 1,
-    name: 'Zip Tote Basket',
-    color: 'White and black',
-    href: '#',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/product-page-03-related-product-01.jpg',
-    imageAlt:
-      'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
-    price: '$140',
-  },
-  // More products...
-]
-
-export default function Example() {
-  const [selectedColor, setSelectedColor] = useState(product.colors[0])
-
+export default function ProductView({ product }: any) {
+  const [selectedColor, setSelectedColor] = useState('ring-gray-700')
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -96,9 +19,9 @@ export default function Example() {
               {/* Image selector */}
               <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
-                  {product.images.map((image) => (
+                  {product.images.map((image: any) => (
                     <Tab
-                      key={image.id}
+                      key={image.name}
                       className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
                     >
                       {({ selected }) => (
@@ -106,18 +29,18 @@ export default function Example() {
                           <span className="sr-only">{image.name}</span>
                           <span className="absolute inset-0 rounded-md overflow-hidden">
                             <img
-                              src={image.src}
+                              src={image.image}
                               alt=""
                               className="w-full h-full object-center object-cover"
                             />
                           </span>
-                          <span
+                          {/* <span
                             className={classNames(
                               selected ? 'ring-indigo-500' : 'ring-transparent',
                               'absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none'
                             )}
                             aria-hidden="true"
-                          />
+                          /> */}
                         </>
                       )}
                     </Tab>
@@ -126,11 +49,11 @@ export default function Example() {
               </div>
 
               <Tab.Panels className="w-full aspect-w-1 aspect-h-1">
-                {product.images.map((image) => (
-                  <Tab.Panel key={image.id}>
+                {product.images.map((image: any) => (
+                  <Tab.Panel key={image.name + 'tab-panel'}>
                     <img
-                      src={image.src}
-                      alt={image.alt}
+                      src={image.image}
+                      alt={image.name}
                       className="w-full h-full object-center object-cover sm:rounded-lg"
                     />
                   </Tab.Panel>
@@ -146,7 +69,9 @@ export default function Example() {
 
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
-                <p className="text-3xl text-gray-900">{product.price}</p>
+                <p className="text-3xl text-gray-900">
+                  {product.listPrice.formatted.withTax}
+                </p>
               </div>
 
               {/* Reviews */}
@@ -182,46 +107,47 @@ export default function Example() {
 
               <form className="mt-6">
                 {/* Colors */}
-                <div>
-                  <h3 className="text-sm text-gray-600">Color</h3>
+                {/* <div> */}
+                <h3 className="text-sm text-gray-600">Color</h3>
 
-                  <RadioGroup
-                    value={selectedColor}
-                    onChange={setSelectedColor}
-                    className="mt-2"
-                  >
-                    <RadioGroup.Label className="sr-only">
-                      Choose a color
-                    </RadioGroup.Label>
-                    <div className="flex items-center space-x-3">
-                      {product.colors.map((color) => (
-                        <RadioGroup.Option
-                          key={color.name}
-                          value={color}
-                          className={({ active, checked }) =>
-                            classNames(
-                              color.selectedColor,
-                              active && checked ? 'ring ring-offset-1' : '',
-                              !active && checked ? 'ring-2' : '',
-                              '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
-                            )
-                          }
-                        >
-                          <RadioGroup.Label as="p" className="sr-only">
-                            {color.name}
-                          </RadioGroup.Label>
-                          <span
-                            aria-hidden="true"
-                            className={classNames(
-                              color.bgColor,
-                              'h-8 w-8 border border-black border-opacity-10 rounded-full'
-                            )}
-                          />
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </div>
+                <RadioGroup
+                  value={'ring-gray-700'}
+                  onChange={setSelectedColor}
+                  className="mt-2"
+                >
+                  <RadioGroup.Label className="sr-only">
+                    Choose a color
+                  </RadioGroup.Label>
+                  <div className="flex items-center space-x-3">
+                    {product.colors?.map((color: any) => (
+                      <RadioGroup.Option
+                        key={color.name}
+                        value={color}
+                        className={({ active, checked }) =>
+                          classNames(
+                            color.selectedColor,
+                            active && checked ? 'ring ring-offset-1' : '',
+                            !active && checked ? 'ring-2' : '',
+                            '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
+                          )
+                        }
+                      >
+                        <RadioGroup.Label as="p" className="sr-only">
+                          {color.name}
+                        </RadioGroup.Label>
+                        <span
+                          aria-hidden="true"
+                          className={classNames(
+                            color.bgColor,
+                            'h-8 w-8 border border-black border-opacity-10 rounded-full'
+                          )}
+                        />
+                      </RadioGroup.Option>
+                    ))}{' '}
+                    *
+                  </div>
+                </RadioGroup>
+                {/* </div> */}
 
                 <div className="mt-10 flex sm:flex-col1">
                   <button
@@ -250,7 +176,7 @@ export default function Example() {
                 </h2>
 
                 <div className="border-t divide-y divide-gray-200">
-                  {product.details.map((detail) => (
+                  {/* {product.details.map((detail:any) => (
                     <Disclosure as="div" key={detail.name}>
                       {({ open }) => (
                         <>
@@ -292,7 +218,7 @@ export default function Example() {
                         </>
                       )}
                     </Disclosure>
-                  ))}
+                  ))} */}
                 </div>
               </section>
             </div>
@@ -310,7 +236,7 @@ export default function Example() {
             </h2>
 
             <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-              {relatedProducts.map((product) => (
+              {product.relatedProducts.map((product: any) => (
                 <div key={product.id}>
                   <div className="relative">
                     <div className="relative w-full h-72 rounded-lg overflow-hidden">
@@ -352,124 +278,24 @@ export default function Example() {
             </div>
           </section>
         </div>
+        <NextSeo
+          title={product.name}
+          description={product.description}
+          openGraph={{
+            type: 'website',
+            title: product.metaTitle,
+            description: product.metaDescription,
+            images: [
+              {
+                url: product.image,
+                width: 800,
+                height: 600,
+                alt: product.name,
+              },
+            ],
+          }}
+        />
       </main>
     </div>
   )
-}
-
-// import cn from 'classnames'
-// import Image from 'next/image'
-// import { NextSeo } from 'next-seo'
-// import s from './ProductView.module.css'
-// import { FC } from 'react'
-// import type { Product } from '@commerce/types/product'
-// import usePrice from '@framework/product/use-price'
-// import { WishlistButton } from '@components/wishlist'
-// import { ProductSlider, ProductCard } from '@components/product'
-// import { Container, Text } from '@components/ui'
-// import ProductSidebar from '../ProductSidebar'
-// import ProductTag from '../ProductTag'
-// interface ProductViewProps {
-//   product: Product
-//   relatedProducts: Product[]
-// }
-
-// const ProductView: FC<ProductViewProps> = ({ product, relatedProducts }) => {
-//   const { price } = usePrice({
-//     amount: product.price.value,
-//     baseAmount: product.price.retailPrice,
-//     currencyCode: product.price.currencyCode!,
-//   })
-
-//   return (
-//     <>
-//       <Container className="max-w-none w-full" clean>
-//         <div className={cn(s.root, 'fit')}>
-//           <div className={cn(s.main, 'fit')}>
-//             <ProductTag
-//               name={product.name}
-//               price={`${price} ${product.price?.currencyCode}`}
-//               fontSize={32}
-//             />
-//             <div className={s.sliderContainer}>
-//               <ProductSlider key={product.id}>
-//                 {product.images.map((image, i) => (
-//                   <div key={image.url} className={s.imageContainer}>
-//                     <Image
-//                       className={s.img}
-//                       src={image.url!}
-//                       alt={image.alt || 'Product Image'}
-//                       width={600}
-//                       height={600}
-//                       priority={i === 0}
-//                       quality="85"
-//                     />
-//                   </div>
-//                 ))}
-//               </ProductSlider>
-//             </div>
-//             {process.env.COMMERCE_WISHLIST_ENABLED && (
-//               <WishlistButton
-//                 className={s.wishlistButton}
-//                 productId={product.id}
-//                 variant={product.variants[0]}
-//               />
-//             )}
-//           </div>
-
-//           <ProductSidebar
-//             key={product.id}
-//             product={product}
-//             className={s.sidebar}
-//           />
-//         </div>
-//         <hr className="mt-7 border-accent-2" />
-//         <section className="py-12 px-6 mb-10">
-//           <Text variant="sectionHeading">Related Products</Text>
-//           <div className={s.relatedProductsGrid}>
-//             {relatedProducts.map((p) => (
-//               <div
-//                 key={p.path}
-//                 className="animated fadeIn bg-accent-0 border border-accent-2"
-//               >
-//                 <ProductCard
-//                   noNameTag
-//                   product={p}
-//                   key={p.path}
-//                   variant="simple"
-//                   className="animated fadeIn"
-//                   imgProps={{
-//                     width: 300,
-//                     height: 300,
-//                   }}
-//                 />
-//               </div>
-//             ))}
-//           </div>
-//         </section>
-//       </Container>
-//     </>
-//   )
-// }
-
-// export default ProductView
-
-{
-  /* <NextSeo
-        title={product.name}
-        description={product.description}
-        openGraph={{
-          type: 'website',
-          title: product.name,
-          description: product.description,
-          images: [
-            {
-              url: product.images[0]?.url!,
-              width: 800,
-              height: 600,
-              alt: product.name,
-            },
-          ],
-        }}
-      /> */
 }
