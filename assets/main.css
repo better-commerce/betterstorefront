@@ -22,6 +22,9 @@
   margin-top: 0px;
 }
 
+.filter-input {
+  display: none;
+}
 .swiper-button-next::after {
   font-size: 25px !important;
 }

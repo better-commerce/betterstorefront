@@ -17,7 +17,10 @@ interface Props {
   handleSortBy: any
 }
 
-export default function Filters({ products, handleSortBy }: Props) {
+export default function Filters({
+  products = { filters: [] },
+  handleSortBy,
+}: Props) {
   const [open, setOpen] = useState(false)
   return (
     <div className="bg-transparent">
@@ -60,7 +63,7 @@ export default function Filters({ products, handleSortBy }: Props) {
 
               {/* Filters */}
               <form className="mt-4">
-                {products.filters.map((section: any) => (
+                {products.filters?.map((section: any) => (
                   <Disclosure
                     as="div"
                     key={section.name}
