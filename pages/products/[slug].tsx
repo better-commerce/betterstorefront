@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
+import Head from 'next/head'
 
 export async function getStaticProps({
   params,
@@ -14,40 +15,12 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ slug: string }>) {
-  // const config = { locale, locales }
-  console.log(params)
-
-  // const pagesPromise = commerce.getAllPages({ config, preview })
-  // const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  // const productPromise = commerce.getProduct({ query: params!.slug })
-
-  // const product = await productPromise
-  // console.log(product)
-  // const allProductsPromise = commerce.getAllProducts({
-  //   variables: { first: 4 },
-  //   config,
-  //   preview,
-  // })
-  // const { pages } = await pagesPromise
-  // const { categories } = await siteInfoPromise
-  // const { product } = await productPromise
-  // const { products: relatedProducts } = await allProductsPromise
-
-  // if (!product) {
-  //   throw new Error(`Product with slug '${params!.slug}' not found`)
-  // }
-
+  const productPromise = commerce.getProduct({ query: params!.slug })
+  const product = await productPromise
   return {
     props: {
-      // product,
-      hi: 1,
+      data: product,
     },
-    // props: {
-    //   pages,
-    //   product,
-    //   relatedProducts,
-    //   categories,
-    // },
     revalidate: 200,
   }
 }
@@ -60,10 +33,17 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-export default function Slug({}: // product,
+export default function Slug({
+  data,
+}: // product,
 InferGetStaticPropsType<typeof getStaticProps>) {
+  console.log(data)
   const router = useRouter()
-  return router.isFallback ? <h1>Loading...</h1> : <ProductView />
+  return router.isFallback ? (
+    <h1>Loading...</h1>
+  ) : (
+    data && <ProductView product={data.product} />
+  )
 }
 
 Slug.Layout = Layout

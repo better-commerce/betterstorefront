@@ -10,22 +10,15 @@ export default function getProductOperation({
 }: OperationContext<any>) {
   async function getProduct<T extends GetProductOperation>({
     query = '',
-    variables,
-    config,
   }: {
     query?: string
-    variables?: T['variables']
-    config?: Partial<BetterCommerceConfig>
-    preview?: boolean
-  } = {}): Promise<Product | {} | any> {
-    const response = await fetcher({
-      url: `/api/v1/catalog/product/slug?slug=${query}`,
-      method: 'get',
+  } = {}): Promise<any> {
+    const response: any = await fetcher({
+      url: `/api/v1/catalog/product/slug?slug=products/${query}`,
+      method: 'post',
     })
     return {
-      product: response,
-      // product: data.products.find(({ slug }) => slug === variables!.slug),
-      // const response = await fetcher(`api/v1/catalog/product/slug?slug=${query.slug}`)
+      product: response.result,
     }
   }
 
