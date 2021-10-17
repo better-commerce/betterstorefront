@@ -18,6 +18,10 @@
   transition: background 0.45s cubic-bezier(0.22, 0.61, 0.35, 1);
 }
 
+#search-input {
+  margin-top: 0px;
+}
+
 .swiper-button-next::after {
   font-size: 25px !important;
 }
