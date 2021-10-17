@@ -35,9 +35,6 @@ const ColorSelector = ({ attr, onChange, link }: any) => {
 
 ColorSelector.displayName = 'ColorSelector'
 
-// 'global.colour': (props: any) => <ColorSelector {...props} />,
-//   'clothing.size': (props: any) => null,
-
 const getAttributeComponent = (type: string) => {
   switch (type) {
     case 'global.colour':

@@ -12,21 +12,78 @@ const FILTER_KEYS = {
   SIZE: 'attributes.value~clothing.size',
 }
 
-const FilterItem = ({ option, optionIdx }: any) => {
+const FilterItem = ({
+  option,
+  optionIdx,
+  sectionKey,
+  isChecked = false,
+  isCheckboxTickDisabled = false,
+  bgColor = () => false,
+  ...props
+}: any) => {
+  const [isCheckboxChecked, setCheckbox] = useState(isChecked)
+
+  const handleCheckbox = () => {
+    console.log('here')
+    setCheckbox(!isCheckboxChecked)
+  }
+
+  const generateOptionName = () => {
+    if (sectionKey === FILTER_KEYS.PRICE) return `${option.name} £` //TBD
+    if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1]
+    else return option.name
+  }
+
+  const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div key={option.value} className="flex items-center">
-      <input
-        name={`${optionIdx}-input[]`}
-        defaultValue={option.value}
-        type="checkbox"
-        className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
-      />
-      <label
-        htmlFor={`${optionIdx}-input[]`}
-        className="ml-3 text-sm text-gray-500"
-      >
-        {option.name}
-      </label>
+    <div key={option.value} className="flex">
+      <div className="flex items-center">
+        <input
+          name={`${optionIdx}-input[]`}
+          defaultValue={option.value}
+          type="checkbox"
+          className="h-4 w-4 border-gray-300 rounded filter-input"
+        />
+
+        <label
+          htmlFor={`${optionIdx}-input[]`}
+          onClick={handleCheckbox}
+          className="cursor-pointer ml-3 text-sm text-gray-500 relative filter-label"
+        >
+          {isCheckboxChecked && !isCheckboxTickDisabled && (
+            <div
+              style={{
+                content: '',
+                float: 'left',
+                left: '6px',
+                top: '0px',
+                zIndex: 99999,
+                position: 'absolute',
+                width: '10px',
+                height: '14px',
+                border: 'solid #000',
+                borderWidth: '0 2px 2px 0',
+                transform: 'rotate(45deg)',
+              }}
+            />
+          )}
+          {generateOptionName()}
+          <div
+            style={{
+              content: '',
+              float: 'left',
+              height: '20px',
+              width: '20px',
+              borderRadius: '2px',
+              background: checkboxBgColor,
+              border: '1px solid #cacaca',
+              position: 'relative',
+              marginRight: '10px',
+            }}
+          />
+        </label>
+      </div>
+      <span className="px-2 text-gray-500">({option.count})</span>
     </div>
   )
 }
@@ -35,18 +92,27 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
       <label htmlFor="search-input" className="sr-only">
-        Email address
+        Brand
       </label>
       <input
         id="search-input"
         type="text"
         onChange={(e) => handleSearch(e.target.value)}
-        autoComplete="email"
+        autoComplete="brand"
         placeholder="Search brands"
         className="appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-1 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
       />
     </>
   )
+}
+
+const getCustomComponent = (type: string) => {
+  switch (type) {
+    case FILTER_KEYS.BRAND:
+      return (props: any) => <SearchInput {...props} />
+    default:
+      return () => null
+  }
 }
 
 export default function FilterList({ items = [], sectionKey }: any) {
@@ -60,14 +126,28 @@ export default function FilterList({ items = [], sectionKey }: any) {
     setFilterItems(filteredItems)
   }
 
+  const PROPS_LIST = {
+    [FILTER_KEYS.BRAND]: {
+      handleSearch: (value: string) => handleSearch(value),
+    },
+    [FILTER_KEYS.COLOR]: {
+      isCheckboxTickDisabled: true,
+      bgColor: (item: any) => item.name.split('|')[0],
+    },
+  }
+
   return (
     <>
-      {sectionKey === FILTER_KEYS.BRAND ? (
-        <SearchInput handleSearch={handleSearch} />
-      ) : null}
+      {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
       {filterItems.map((option: any, optionIdx: number) => {
         return (
-          <FilterItem option={option} optionIdx={optionIdx} key={optionIdx} />
+          <FilterItem
+            sectionKey={sectionKey}
+            option={option}
+            optionIdx={optionIdx}
+            key={optionIdx}
+            {...PROPS_LIST[sectionKey]}
+          />
         )
       })}
     </>
