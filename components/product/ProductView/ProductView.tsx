@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
-import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
+import { RadioGroup, Tab } from '@headlessui/react'
+import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
+import AttributesHandler from './AttributesHandler'
 
 export default function ProductView({ product }: any) {
   const [selectedColor, setSelectedColor] = useState('ring-gray-700')
+  console.log(product)
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -105,54 +107,22 @@ export default function ProductView({ product }: any) {
                 />
               </div>
 
-              <form className="mt-6">
-                {/* Colors */}
-                {/* <div> */}
-                <h3 className="text-sm text-gray-600">Color</h3>
-
-                <RadioGroup
-                  value={'ring-gray-700'}
-                  onChange={setSelectedColor}
-                  className="mt-2"
-                >
-                  <RadioGroup.Label className="sr-only">
-                    Choose a color
-                  </RadioGroup.Label>
-                  <div className="flex items-center space-x-3">
-                    {product.colors?.map((color: any) => (
-                      <RadioGroup.Option
-                        key={color.name}
-                        value={color}
-                        className={({ active, checked }) =>
-                          classNames(
-                            color.selectedColor,
-                            active && checked ? 'ring ring-offset-1' : '',
-                            !active && checked ? 'ring-2' : '',
-                            '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
-                          )
-                        }
-                      >
-                        <RadioGroup.Label as="p" className="sr-only">
-                          {color.name}
-                        </RadioGroup.Label>
-                        <span
-                          aria-hidden="true"
-                          className={classNames(
-                            color.bgColor,
-                            'h-8 w-8 border border-black border-opacity-10 rounded-full'
-                          )}
-                        />
-                      </RadioGroup.Option>
-                    ))}{' '}
-                    *
-                  </div>
-                </RadioGroup>
-                {/* </div> */}
-
+              <section aria-labelledby="details-heading" className="mt-12">
+                <h2 id="details-heading" className="sr-only">
+                  Additional details
+                </h2>
+                <div>
+                  {/* {product.variantProductsAttribute.map(
+                    (variant: any, variantIdx: number) => {
+                      return <div></div>
+                    }
+                  )} */}
+                  <AttributesHandler product={product} />
+                </div>
                 <div className="mt-10 flex sm:flex-col1">
                   <button
                     type="submit"
-                    className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                    className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                   >
                     Add to bag
                   </button>
@@ -168,12 +138,6 @@ export default function ProductView({ product }: any) {
                     <span className="sr-only">Add to favorites</span>
                   </button>
                 </div>
-              </form>
-
-              <section aria-labelledby="details-heading" className="mt-12">
-                <h2 id="details-heading" className="sr-only">
-                  Additional details
-                </h2>
 
                 <div className="border-t divide-y divide-gray-200">
                   {/* {product.details.map((detail:any) => (
