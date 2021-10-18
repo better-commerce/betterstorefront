@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import AttributeSelector from './AttributeSelector'
 import AddToBasketButton from '@components/ui/AddToBasketButton'
@@ -22,9 +22,18 @@ interface ProductData {
 }
 
 const ProductCard: FC<Props> = ({ product }) => {
-  const originalProductRef = { image: product.image, link: product.slug }
-  const [currentProductData, setCurrentProductData] =
-    useState(originalProductRef)
+  const [currentProductData, setCurrentProductData] = useState({
+    image: product.image,
+    link: product.slug,
+  })
+
+  useEffect(() => {
+    setCurrentProductData((prevState): any => {
+      if (prevState.link !== product.slug) {
+        return { ...prevState, image: product.image, link: product.slug }
+      } else return { ...prevState }
+    })
+  }, [product.slug])
 
   const productWithColors = product.variantProductsAttributeMinimal.find(
     (item: Attribute) => item.fieldCode === colorKey
@@ -34,9 +43,6 @@ const ProductCard: FC<Props> = ({ product }) => {
     productWithColors && productWithColors.fieldValues.length > 1
 
   const handleVariableProduct = (attr: any, type: string = 'enter') => {
-    console.log(attr)
-    console.log(product)
-    console.log(type)
     if (type === 'enter') {
       const variatedProduct = product.variantProductsMinimal.find((item: any) =>
         item.variantAttributes.find(
@@ -50,7 +56,7 @@ const ProductCard: FC<Props> = ({ product }) => {
         })
       }
     } else {
-      setCurrentProductData(originalProductRef)
+      setCurrentProductData({ image: product.image, link: product.slug })
     }
   }
 

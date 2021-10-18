@@ -37,7 +37,6 @@ export default function Slug({
   data,
 }: // product,
 InferGetStaticPropsType<typeof getStaticProps>) {
-  console.log(data)
   const router = useRouter()
   return router.isFallback ? (
     <h1>Loading...</h1>

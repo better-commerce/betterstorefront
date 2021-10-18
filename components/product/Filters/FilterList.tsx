@@ -24,7 +24,6 @@ const FilterItem = ({
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
 
   const handleCheckbox = () => {
-    console.log('here')
     setCheckbox(!isCheckboxChecked)
   }
 
