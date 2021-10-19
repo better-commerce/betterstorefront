@@ -18,6 +18,7 @@ import LoginView from '@components/auth/LoginView'
 import s from './Layout.module.css'
 import { getData } from '../../utils/clientFetcher'
 import { setItem, getItem } from '../../utils/localStorage'
+import NotifyUserPopup from '@components/ui/NotifyPopup'
 
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
@@ -62,15 +63,17 @@ const ModalView: FC<{ modalView: string; closeModal(): any }> = ({
       {modalView === 'LOGIN_VIEW' && <LoginView />}
       {modalView === 'SIGNUP_VIEW' && <SignUpView />}
       {modalView === 'FORGOT_VIEW' && <ForgotPassword />}
+      {modalView === 'NOTIFY_USER' && null}
     </Modal>
   )
 }
 
 const ModalUI: FC = () => {
-  const { displayModal, closeModal, modalView } = useUI()
-  return displayModal ? (
-    <ModalView modalView={modalView} closeModal={closeModal} />
-  ) : null
+  const { displayModal, closeModal, modalView, notifyUser, productId } = useUI()
+  if (notifyUser) return <NotifyUserPopup />
+  if (displayModal)
+    return <ModalView modalView={modalView} closeModal={closeModal} />
+  return null
 }
 
 const SidebarView: FC<{ sidebarView: string; closeSidebar(): any }> = ({

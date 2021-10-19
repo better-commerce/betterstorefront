@@ -10,6 +10,7 @@ import {
   getSiteInfo,
   getPage,
   getAllPages,
+  notifyMe,
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -31,6 +32,7 @@ const operations = {
   getAllProducts,
   getProduct,
   getSlugs,
+  notifyMe,
 }
 
 export const provider = { config, operations }

@@ -6,12 +6,20 @@ import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
 import AttributesHandler from './AttributesHandler'
 import Link from 'next/link'
+import { useUI } from '@components/ui/context'
 
 export default function ProductView({ product = { images: [] } }: any) {
   const [selectedColor, setSelectedColor] = useState('ring-gray-700')
   if (!product) {
     return null
   }
+
+  const { openNotifyUser } = useUI()
+
+  const handleNotification = () => {
+    openNotifyUser(product.id)
+  }
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -68,7 +76,12 @@ export default function ProductView({ product = { images: [] } }: any) {
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
                 <p className="text-3xl text-gray-900">
-                  {product.listPrice.formatted.withTax}
+                  {product.price.formatted.withTax}
+                  {product.listPrice.raw.tax > 0 ? (
+                    <span className="px-5 text-sm line-through text-gray-500">
+                      RRP {product.listPrice.formatted.withTax}
+                    </span>
+                  ) : null}
                 </p>
               </div>
 
@@ -113,9 +126,12 @@ export default function ProductView({ product = { images: [] } }: any) {
                 <div className="mt-10 flex sm:flex-col1">
                   <button
                     type="submit"
+                    onClick={() => {
+                      product.currentStock ? () => {} : handleNotification()
+                    }}
                     className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                   >
-                    Add to bag
+                    {product.currentStock ? 'Add to bag' : 'Notify me'}
                   </button>
 
                   <button
@@ -219,7 +235,7 @@ export default function ProductView({ product = { images: [] } }: any) {
                         className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
                       />
                       <p className="relative text-lg font-semibold text-white">
-                        {product.listPrice.formatted.withTax}
+                        {product.price.formatted.withTax}
                       </p>
                     </div>
                   </div>

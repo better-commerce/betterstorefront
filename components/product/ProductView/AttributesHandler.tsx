@@ -8,6 +8,11 @@ const ATTR_COMPONENTS: any = {
   undefined: () => null,
 }
 
+const TEMP_MAP: any = {
+  'clothing.size': ATTR_COMPONENTS['Dropdown'],
+  'global.colour': ATTR_COMPONENTS['HorizontalList'],
+}
+
 export default function AttributesHandler({ product }: any) {
   const { attributes, variantProductsAttribute = [], variantProducts } = product
 
@@ -48,20 +53,38 @@ export default function AttributesHandler({ product }: any) {
 
   const originalAttributes = getAttributesFromSlug()
 
-  const DefaultComponent: any = () => null
+  const getStockPerAttribute = (key: string, variant: string) => {
+    let productData = { stock: 0, id: '' }
+    const slug = `products/${router.query.slug}`
+    variantProducts.find((product: any) => {
+      product.variantAttributes.forEach((attr: any) => {
+        if (
+          key.toLowerCase() === attr.fieldCode.toLowerCase() &&
+          attr.fieldValue === variant &&
+          product.slug === slug
+        ) {
+          productData.stock = product.currentStock
+        }
+      })
+    })
+    return productData
+  }
 
+  const DefaultComponent: any = () => null
   return (
     <>
       {variantProductsAttribute?.map((option: any, idx: number) => {
-        const Component = ATTR_COMPONENTS[option.inputType] || DefaultComponent
+        const Component = TEMP_MAP[option.fieldCode] || DefaultComponent
         return (
           <div key={idx} className="py-3">
             <Component
               currentAttribute={originalAttributes[option.fieldCode]}
+              getStockPerAttribute={getStockPerAttribute}
               items={option.fieldValues}
               label={option.fieldName}
               onChange={handleChange}
               fieldCode={option.fieldCode}
+              productId={product.id}
             />
           </div>
         )
