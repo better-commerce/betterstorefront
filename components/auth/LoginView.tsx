@@ -55,7 +55,7 @@ const LoginView: FC<Props> = () => {
   useEffect(() => {
     handleValidation()
   }, [handleValidation])
-
+  console.log('here')
   return (
     <form
       onSubmit={handleLogin}
