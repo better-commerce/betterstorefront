@@ -17,6 +17,7 @@ import useSWR from 'swr'
 import LoginView from '@components/auth/LoginView'
 import s from './Layout.module.css'
 import { getData } from '../../utils/clientFetcher'
+import { setItem, getItem } from '../../utils/localStorage'
 
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
@@ -98,14 +99,28 @@ interface LayoutProps {
   footer: []
 }
 
+const parameters = {
+  revalidateOnFocus: false,
+  revalidateOnMount: false,
+  revalidateOnReconnect: false,
+  refreshWhenOffline: false,
+  refreshWhenHidden: false,
+  refreshInterval: 0,
+}
+
 const Layout: FC<Props> = ({
   children,
   pageProps: { categories = [], ...pageProps },
 }) => {
-  const { data = { nav: [], footer: [] } } = useSWR<LayoutProps>(
+  const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
+
+  const { data = navTreeFromLocalStorage } = useSWR(
     '/api/get-navigation',
     getData
   )
+
+  setItem('navTree', data)
+
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
   return (
