@@ -5,10 +5,13 @@ import { StarIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
 import AttributesHandler from './AttributesHandler'
+import Link from 'next/link'
 
-export default function ProductView({ product }: any) {
+export default function ProductView({ product = { images: [] } }: any) {
   const [selectedColor, setSelectedColor] = useState('ring-gray-700')
-  console.log(product)
+  if (!product) {
+    return null
+  }
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -21,7 +24,7 @@ export default function ProductView({ product }: any) {
               {/* Image selector */}
               <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
-                  {product.images.map((image: any) => (
+                  {product?.images?.map((image: any) => (
                     <Tab
                       key={image.name}
                       className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
@@ -36,13 +39,6 @@ export default function ProductView({ product }: any) {
                               className="w-full h-full object-center object-cover"
                             />
                           </span>
-                          {/* <span
-                            className={classNames(
-                              selected ? 'ring-indigo-500' : 'ring-transparent',
-                              'absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none'
-                            )}
-                            aria-hidden="true"
-                          /> */}
                         </>
                       )}
                     </Tab>
@@ -51,7 +47,7 @@ export default function ProductView({ product }: any) {
               </div>
 
               <Tab.Panels className="w-full aspect-w-1 aspect-h-1">
-                {product.images.map((image: any) => (
+                {product?.images?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     <img
                       src={image.image}
@@ -111,12 +107,7 @@ export default function ProductView({ product }: any) {
                 <h2 id="details-heading" className="sr-only">
                   Additional details
                 </h2>
-                <div>
-                  {/* {product.variantProductsAttribute.map(
-                    (variant: any, variantIdx: number) => {
-                      return <div></div>
-                    }
-                  )} */}
+                <div className="w-full sm:w-6/12">
                   <AttributesHandler product={product} />
                 </div>
                 <div className="mt-10 flex sm:flex-col1">
@@ -200,23 +191,27 @@ export default function ProductView({ product }: any) {
             </h2>
 
             <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-              {product.relatedProducts.map((product: any) => (
+              {product?.relatedProductList?.map((product: any) => (
                 <div key={product.id}>
                   <div className="relative">
                     <div className="relative w-full h-72 rounded-lg overflow-hidden">
-                      <img
-                        src={product.imageSrc}
-                        alt={product.imageAlt}
-                        className="w-full h-full object-center object-cover"
-                      />
+                      <Link href={`/${product.slug}`} passHref>
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-center object-cover"
+                        />
+                      </Link>
                     </div>
                     <div className="relative mt-4">
                       <h3 className="text-sm font-medium text-gray-900">
-                        {product.name}
+                        <Link href={`/${product.slug}`} passHref>
+                          <a href={`/${product.slug}`}>{product.name}</a>
+                        </Link>
                       </h3>
-                      <p className="mt-1 text-sm text-gray-500">
+                      {/* <p className="mt-1 text-sm text-gray-500">
                         {product.color}
-                      </p>
+                      </p> */}
                     </div>
                     <div className="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
                       <div
@@ -224,18 +219,20 @@ export default function ProductView({ product }: any) {
                         className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
                       />
                       <p className="relative text-lg font-semibold text-white">
-                        {product.price}
+                        {product.listPrice.formatted.withTax}
                       </p>
                     </div>
                   </div>
                   <div className="mt-6">
-                    <a
-                      href={product.href}
-                      className="relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200"
-                    >
-                      Add to bag
-                      <span className="sr-only">, {product.name}</span>
-                    </a>
+                    <Link href={`/${product.slug}`} passHref>
+                      <a
+                        href={product.slug}
+                        className="relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200"
+                      >
+                        Add to bag
+                        <span className="sr-only">, {product.name}</span>
+                      </a>
+                    </Link>
                   </div>
                 </div>
               ))}
