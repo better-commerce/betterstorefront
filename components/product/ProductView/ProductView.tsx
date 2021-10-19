@@ -9,7 +9,6 @@ import Link from 'next/link'
 import { useUI } from '@components/ui/context'
 
 export default function ProductView({ product = { images: [] } }: any) {
-  const [selectedColor, setSelectedColor] = useState('ring-gray-700')
   const { openNotifyUser } = useUI()
 
   if (!product) {
