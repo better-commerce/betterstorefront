@@ -1,24 +1,40 @@
-import { Product } from '@commerce/types/product'
 import { GetAllProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
-import type { BetterCommerceConfig, Provider } from '../index'
-import data from '../../data.json'
+import fetcher from '../../fetcher'
+import qs from 'qs'
 
-export default function getAllProductsOperation({
-  commerce,
-}: OperationContext<any>) {
+export default function getAllProductsOperation({}: OperationContext<any>) {
   async function getAllProducts<T extends GetAllProductsOperation>({
     query = '',
-    variables,
-    config,
   }: {
     query?: string
-    variables?: T['variables']
-    config?: Partial<BetterCommerceConfig>
-    preview?: boolean
-  } = {}): Promise<{ products: Product[] | any[] }> {
-    return {
-      products: data.products,
+  } = {}): Promise<any> {
+    const parsedQuery = JSON.parse(query)
+
+    console.log({ freeText: '', pageSize: 20, ...parsedQuery }, 'parsed data')
+    try {
+      const response: any = await fetcher({
+        url: `/api/v1/catalog/search/advanced/minimal`,
+        method: 'post',
+        data: qs.stringify({
+          freeText: '',
+          pageSize: 20,
+          allowFacet: true,
+          facetOnly: false,
+          ...parsedQuery,
+        }),
+      })
+      return {
+        products: response.result || {
+          results: [],
+          sortList: [],
+          pages: 0,
+          total: 0,
+          currentPage: 1,
+        },
+      }
+    } catch (error: any) {
+      throw new Error(error)
     }
   }
   return getAllProducts

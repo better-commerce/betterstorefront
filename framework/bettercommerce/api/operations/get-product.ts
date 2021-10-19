@@ -3,6 +3,7 @@ import { Product } from '@commerce/types/product'
 import { GetProductOperation } from '@commerce/types/product'
 import data from '../../data.json'
 import type { OperationContext } from '@commerce/api/operations'
+import fetcher from '../../fetcher'
 
 export default function getProductOperation({
   commerce,
@@ -17,8 +18,14 @@ export default function getProductOperation({
     config?: Partial<BetterCommerceConfig>
     preview?: boolean
   } = {}): Promise<Product | {} | any> {
+    const response = await fetcher({
+      url: `/api/v1/catalog/product/slug?slug=${query}`,
+      method: 'get',
+    })
     return {
-      product: data.products.find(({ slug }) => slug === variables!.slug),
+      product: response,
+      // product: data.products.find(({ slug }) => slug === variables!.slug),
+      // const response = await fetcher(`api/v1/catalog/product/slug?slug=${query.slug}`)
     }
   }
 

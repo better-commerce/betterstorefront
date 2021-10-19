@@ -1,1 +1,5 @@
-export default function noopApi(...args: any[]): void {}
+const getProducts = async ({}) => {
+  return { hello: 1 }
+}
+
+export default getProducts
