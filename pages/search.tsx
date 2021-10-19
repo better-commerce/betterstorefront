@@ -128,7 +128,6 @@ function Search({ query }: any) {
     error,
   } = useSwr(computedUrl, getData)
 
-  console.log(data)
   const handlePageChange = (page: any) => {
     router.push(
       {

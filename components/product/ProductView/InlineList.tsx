@@ -1,12 +1,12 @@
 import { RadioGroup } from '@headlessui/react'
 import classNames from '@components/utils/classNames'
-import { SyntheticEvent } from 'react'
 
 export default function InlineList({
   items = [],
   onChange = () => {},
   label = 'Choose a color',
   fieldCode = 'global.colour',
+  currentAttribute = 'black',
 }: any) {
   const handleChange = (value: any) => {
     return onChange(fieldCode, value)
