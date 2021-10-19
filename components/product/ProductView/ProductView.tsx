@@ -10,11 +10,11 @@ import { useUI } from '@components/ui/context'
 
 export default function ProductView({ product = { images: [] } }: any) {
   const [selectedColor, setSelectedColor] = useState('ring-gray-700')
+  const { openNotifyUser } = useUI()
+
   if (!product) {
     return null
   }
-
-  const { openNotifyUser } = useUI()
 
   const handleNotification = () => {
     openNotifyUser(product.id)
