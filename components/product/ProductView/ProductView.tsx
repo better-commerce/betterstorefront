@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { RadioGroup, Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
-import { StarIcon } from '@heroicons/react/solid'
+import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
 import AttributesHandler from './AttributesHandler'
@@ -12,6 +12,8 @@ import BreadCrumbs from '@components/ui/BreadCrumbs'
 export default function ProductView({ product = { images: [] } }: any) {
   const { openNotifyUser } = useUI()
 
+  console.log(product)
+
   if (!product) {
     return null
   }
@@ -19,6 +21,8 @@ export default function ProductView({ product = { images: [] } }: any) {
   const handleNotification = () => {
     openNotifyUser(product.id)
   }
+
+  const content = [...product.images, ...product.videos]
 
   return (
     <div className="bg-white">
@@ -35,20 +39,24 @@ export default function ProductView({ product = { images: [] } }: any) {
               {/* Image selector */}
               <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
-                  {product?.images?.map((image: any) => (
+                  {content?.map((image: any) => (
                     <Tab
                       key={image.name}
                       className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
                     >
-                      {({ selected }) => (
+                      {() => (
                         <>
                           <span className="sr-only">{image.name}</span>
                           <span className="absolute inset-0 rounded-md overflow-hidden">
-                            <img
-                              src={image.image}
-                              alt=""
-                              className="w-full h-full object-center object-cover"
-                            />
+                            {image.image ? (
+                              <img
+                                src={image.image}
+                                alt=""
+                                className="w-full h-full object-center object-cover"
+                              />
+                            ) : (
+                              <PlayIcon className="h-full w-full object-center object-cover" />
+                            )}
                           </span>
                         </>
                       )}
@@ -58,13 +66,25 @@ export default function ProductView({ product = { images: [] } }: any) {
               </div>
 
               <Tab.Panels className="w-full aspect-w-1 aspect-h-1">
-                {product?.images?.map((image: any) => (
+                {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
-                    <img
-                      src={image.image}
-                      alt={image.name}
-                      className="w-full h-full object-center object-cover sm:rounded-lg"
-                    />
+                    {image.image ? (
+                      <img
+                        src={image.image}
+                        alt={image.name}
+                        className="w-full h-full object-center object-cover sm:rounded-lg"
+                      />
+                    ) : (
+                      <iframe
+                        width="560"
+                        height="315"
+                        src={image.url}
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    )}
                   </Tab.Panel>
                 ))}
               </Tab.Panels>
@@ -261,6 +281,12 @@ export default function ProductView({ product = { images: [] } }: any) {
         <NextSeo
           title={product.name}
           description={product.metaDescription}
+          additionalMetaTags={[
+            {
+              name: 'keywords',
+              content: product.metaKeywords,
+            },
+          ]}
           openGraph={{
             type: 'website',
             title: product.metaTitle,
