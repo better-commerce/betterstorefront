@@ -12,18 +12,32 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
   } = {}): Promise<any> {
     const parsedQuery = JSON.parse(query)
 
+    const filters = JSON.parse(parsedQuery.filters)
+
+    const sortBy = parsedQuery.sortBy
+    const sortOrder = parsedQuery.sortOrder
+    const currentPage = parsedQuery.currentPage
+
+    const data: any = {
+      freeText: '',
+      pageSize: 20,
+      allowFacet: true,
+      facetOnly: false,
+      sortBy,
+      sortOrder,
+      currentPage,
+    }
+
+    if (filters.length) {
+      data.filters = filters
+    }
     try {
       const response: any = await fetcher({
         url: SEARCH_MINIMAL_ENDPOINT,
         method: 'post',
-        data: qs.stringify({
-          freeText: '',
-          pageSize: 20,
-          allowFacet: true,
-          facetOnly: false,
-          ...parsedQuery,
-        }),
+        data: qs.stringify(data),
       })
+
       return {
         products: response.result || {
           results: [],
@@ -34,6 +48,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
         },
       }
     } catch (error: any) {
+      console.log(error)
       throw new Error(error)
     }
   }

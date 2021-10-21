@@ -1,27 +1,42 @@
 import { Fragment, useState } from 'react'
-import {
-  Dialog,
-  Disclosure,
-  Menu,
-  Popover,
-  Transition,
-} from '@headlessui/react'
+import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon, FilterIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
 
+/**
+ *
+ * {
+ *  key: "brandNoAnlz",
+ *  value: "Accessorize"
+ *  "isSelected": true
+ * }
+ * */
 interface Props {
   products: any
   handleSortBy: any
+  handleFilters: any
+  routerFilters: any
+  clearAll: any
 }
 
 export default function Filters({
   products = { filters: [] },
+  handleFilters,
   handleSortBy,
+  routerFilters,
+  clearAll,
 }: Props) {
   const [open, setOpen] = useState(false)
+
+  const generateFiltersTitle = (filtersLength: number) => {
+    if (filtersLength === 0) return null
+    if (filtersLength === 1) return `${filtersLength} Filter`
+    return `${filtersLength} Filters`
+  }
+
   return (
     <div className="bg-transparent">
       {/* Mobile filter dialog */}
@@ -90,8 +105,11 @@ export default function Filters({
                         <Disclosure.Panel className="pt-6">
                           <div className="space-y-6">
                             <FilterList
+                              handleFilters={handleFilters}
                               sectionKey={section.key}
                               items={section.items}
+                              routerFilters={routerFilters}
+                              closeSidebar={() => setOpen(false)}
                             />
                           </div>
                         </Disclosure.Panel>
@@ -129,11 +147,15 @@ export default function Filters({
                       className="flex-none w-5 h-5 mr-2 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
-                    2 Filters
+                    {generateFiltersTitle(routerFilters.length)}
                   </button>
                 </div>
                 <div className="pl-6">
-                  <button type="button" className="text-gray-500">
+                  <button
+                    onClick={clearAll}
+                    type="button"
+                    className="text-gray-500"
+                  >
                     Clear all
                   </button>
                 </div>

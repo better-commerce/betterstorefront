@@ -71,6 +71,7 @@ export default function AttributesHandler({ product }: any) {
   }
 
   const DefaultComponent: any = () => null
+  console.log(product)
   return (
     <>
       {variantProductsAttribute?.map((option: any, idx: number) => {

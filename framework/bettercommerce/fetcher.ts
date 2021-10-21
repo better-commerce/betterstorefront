@@ -90,6 +90,7 @@ const fetcher = async ({
     const response = await axiosInstance(config)
     return response.data
   } catch (error: any) {
+    console.log(error)
     throw getError(error, error.status)
   }
 }
