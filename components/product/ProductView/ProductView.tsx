@@ -7,6 +7,7 @@ import classNames from '@components/utils/classNames'
 import AttributesHandler from './AttributesHandler'
 import Link from 'next/link'
 import { useUI } from '@components/ui/context'
+import BreadCrumbs from '@components/ui/BreadCrumbs'
 
 export default function ProductView({ product = { images: [] } }: any) {
   const { openNotifyUser } = useUI()
@@ -22,6 +23,9 @@ export default function ProductView({ product = { images: [] } }: any) {
   return (
     <div className="bg-white">
       {/* Mobile menu */}
+      <div className="max-w-7xl mx-auto sm:pt-6 sm:px-6 lg:px-8">
+        <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />
+      </div>
       <main className="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto lg:max-w-none">
           {/* Product */}
@@ -105,7 +109,9 @@ export default function ProductView({ product = { images: [] } }: any) {
                   <p className="sr-only">{product.rating} out of 5 stars</p>
                 </div>
               </div>
-
+              <div className="w-full sm:w-6/12">
+                <AttributesHandler product={product} />
+              </div>
               <div className="mt-6">
                 <h3 className="sr-only">Description</h3>
 
@@ -119,9 +125,7 @@ export default function ProductView({ product = { images: [] } }: any) {
                 <h2 id="details-heading" className="sr-only">
                   Additional details
                 </h2>
-                <div className="w-full sm:w-6/12">
-                  <AttributesHandler product={product} />
-                </div>
+
                 <div className="mt-10 flex sm:flex-col1">
                   <button
                     type="submit"
@@ -256,7 +260,7 @@ export default function ProductView({ product = { images: [] } }: any) {
         </div>
         <NextSeo
           title={product.name}
-          description={product.description}
+          description={product.metaDescription}
           openGraph={{
             type: 'website',
             title: product.metaTitle,
