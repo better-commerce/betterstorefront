@@ -1,7 +1,6 @@
 import commerce from '@lib/api/commerce'
 
 export default async (req: any, res: any) => {
-  console.log(req.body, 'body')
   try {
     const response = await commerce.getAllProducts({
       query: req.body,

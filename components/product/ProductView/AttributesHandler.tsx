@@ -14,6 +14,7 @@ const TEMP_MAP: any = {
 }
 
 export default function AttributesHandler({ product }: any) {
+  console.log(product)
   const { attributes, variantProductsAttribute = [], variantProducts } = product
 
   const router = useRouter()
