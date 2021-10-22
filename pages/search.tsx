@@ -2,11 +2,10 @@ import { Layout } from '@components/common'
 import { useReducer, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
-import { getData } from '@components/utils/clientFetcher'
+import { getData, postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
 import ProductFilters from '@components/product/Filters'
-
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -68,7 +67,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
         ),
       }
     default:
-      return state
+      return { ...state }
   }
 }
 
@@ -88,11 +87,6 @@ function Search({ query }: any) {
 
   const router = useRouter()
   const [state, dispatch] = useReducer(reducer, initialState)
-  const computedUrl = `/api/catalog/products/?currentPage=${
-    state.currentPage
-  }&sortBy=${state.sortBy}&sortOrder=${
-    state.sortOrder
-  }&filters=${JSON.stringify(state.filters)}`
   const {
     data = {
       products: {
@@ -105,7 +99,7 @@ function Search({ query }: any) {
       },
     },
     error,
-  } = useSwr(computedUrl, getData)
+  } = useSwr(['/api/catalog/products', state], postData)
 
   const handlePageChange = (page: any) => {
     router.push(
@@ -141,11 +135,11 @@ function Search({ query }: any) {
     })
   }, [state.filters])
   const handleFilters = (filter: null, type: string) => {
-    debugger
     dispatch({
       type,
       payload: filter,
     })
+    dispatch({ type: PAGE, payload: 1 })
   }
 
   const clearAll = () => dispatch({ type: CLEAR })

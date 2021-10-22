@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { RadioGroup, Tab } from '@headlessui/react'
+import { useEffect } from 'react'
+import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
@@ -9,10 +9,37 @@ import Link from 'next/link'
 import { useUI } from '@components/ui/context'
 import BreadCrumbs from '@components/ui/BreadCrumbs'
 
+const PLACEMENTS_MAP: any = {
+  Head: {
+    element: 'head',
+    position: 'beforeend',
+  },
+  PageContainerAfter: {
+    element: 'page-container',
+    position: 'afterbegin',
+  },
+  PageContainerBefore: {
+    element: 'page-container',
+    position: 'beforebegin',
+  },
+}
+
 export default function ProductView({ product = { images: [] } }: any) {
   const { openNotifyUser } = useUI()
 
-  console.log(product)
+  useEffect(() => {
+    if (product.snippets) {
+      product.snippets.forEach((snippet: any) => {
+        const domElement = document.querySelector(
+          PLACEMENTS_MAP[snippet.placement].element
+        )
+        domElement.insertAdjacentHTML(
+          PLACEMENTS_MAP[snippet.placement].position,
+          snippet.content
+        )
+      })
+    }
+  }, [])
 
   if (!product) {
     return null
@@ -22,13 +49,44 @@ export default function ProductView({ product = { images: [] } }: any) {
     openNotifyUser(product.id)
   }
 
-  const content = [...product.images, ...product.videos]
+  let content = [...product.images]
+
+  if (product.videos && product.videos.length > 0) {
+    content = [...product.images, ...product.videos]
+  }
+
+  const buttonTitle = () => {
+    let buttonConfig: any = {
+      title: 'Add to bag',
+      action: () => {},
+      shortMessage: '',
+    }
+    if (!product.currentStock && !product.preOrder.isEnabled) {
+      if (!product.flags.sellWithoutInventory) {
+        buttonConfig.title = 'Notify me'
+        buttonConfig.action = () => handleNotification()
+      }
+    } else if (product.preOrder.isEnabled && !product.currentStock) {
+      if (product.preOrder.currentStock < product.preOrder.maxStock) {
+        buttonConfig.title = 'Pre-order'
+        buttonConfig.shortMessage = product.preOrder.shortMessage
+      } else {
+        buttonConfig.title = 'Notify me'
+        buttonConfig.action = () => handleNotification()
+      }
+    }
+    return buttonConfig
+  }
+
+  const buttonConfig = buttonTitle()
 
   return (
-    <div className="bg-white">
+    <div className="bg-white page-container">
       {/* Mobile menu */}
       <div className="max-w-7xl mx-auto sm:pt-6 sm:px-6 lg:px-8">
-        <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />
+        {product.breadCrumbs && (
+          <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />
+        )}
       </div>
       <main className="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto lg:max-w-none">
@@ -96,6 +154,7 @@ export default function ProductView({ product = { images: [] } }: any) {
                 {product.name}
               </h1>
 
+              <p className="text-gray-500 text-md">Ref: {product.stockCode}</p>
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
                 <p className="text-3xl text-gray-900">
@@ -132,6 +191,11 @@ export default function ProductView({ product = { images: [] } }: any) {
               <div className="w-full sm:w-6/12">
                 <AttributesHandler product={product} />
               </div>
+              <p className="text-gray-900 text-md">
+                <span>In stock:</span>
+                <span className="font-bold">{product.currentStock}</span>
+              </p>
+
               <div className="mt-6">
                 <h3 className="sr-only">Description</h3>
 
@@ -149,12 +213,10 @@ export default function ProductView({ product = { images: [] } }: any) {
                 <div className="mt-10 flex sm:flex-col1">
                   <button
                     type="submit"
-                    onClick={() => {
-                      product.currentStock ? () => {} : handleNotification()
-                    }}
+                    onClick={buttonConfig.action}
                     className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                   >
-                    {product.currentStock ? 'Add to bag' : 'Notify me'}
+                    {buttonConfig.title}
                   </button>
 
                   <button
@@ -169,50 +231,12 @@ export default function ProductView({ product = { images: [] } }: any) {
                   </button>
                 </div>
 
-                <div className="border-t divide-y divide-gray-200">
-                  {/* {product.details.map((detail:any) => (
-                    <Disclosure as="div" key={detail.name}>
-                      {({ open }) => (
-                        <>
-                          <h3>
-                            <Disclosure.Button className="group relative w-full py-6 flex justify-between items-center text-left">
-                              <span
-                                className={classNames(
-                                  open ? 'text-indigo-600' : 'text-gray-900',
-                                  'text-sm font-medium'
-                                )}
-                              >
-                                {detail.name}
-                              </span>
-                              <span className="ml-6 flex items-center">
-                                {open ? (
-                                  <MinusSmIcon
-                                    className="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
-                                    aria-hidden="true"
-                                  />
-                                ) : (
-                                  <PlusSmIcon
-                                    className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                                    aria-hidden="true"
-                                  />
-                                )}
-                              </span>
-                            </Disclosure.Button>
-                          </h3>
-                          <Disclosure.Panel
-                            as="div"
-                            className="pb-6 prose prose-sm"
-                          >
-                            <ul role="list">
-                              {detail.items.map((item) => (
-                                <li key={item}>{item}</li>
-                              ))}
-                            </ul>
-                          </Disclosure.Panel>
-                        </>
-                      )}
-                    </Disclosure>
-                  ))} */}
+                <div className="border-t divide-y divide-gray-200 mt-10">
+                  <p className="text-gray-900 text-lg">
+                    {product.currentStock > 0
+                      ? product.deliveryMessage
+                      : product.stockAvailabilityMessage}
+                  </p>
                 </div>
               </section>
             </div>

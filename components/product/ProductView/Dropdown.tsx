@@ -24,16 +24,19 @@ export default function Dropdown({
     productId: productData.productId,
   })
 
+  const isPreOrderEnabled = productData.isPreOrderEnabled
+
   const generateItemOption = (value: any, stock: number) => {
-    if (stock === 0) return `${value.toUpperCase()} - NOTIFY ME`
-    if (stock < 5 && stock > 0)
+    if (stock === 0 && !isPreOrderEnabled)
+      return `${value.toUpperCase()} - NOTIFY ME`
+    if ((stock < 5 && stock > 0) || isPreOrderEnabled)
       return `${value.toUpperCase()} - ONLY ${stock} LEFT`
     return value.toUpperCase()
   }
 
   const handleOnChange = (value: any) => {
     setSelected(value)
-    if (value.stock === 0) {
+    if (value.stock === 0 && !isPreOrderEnabled) {
       openNotifyUser(productId)
     }
   }
@@ -93,7 +96,6 @@ export default function Dropdown({
                             'ml-3 block truncate'
                           )}
                         >
-                          {/* {item.fieldValue.toUpperCase() + stockAmount < 5} */}
                           {generateItemOption(item.fieldValue, stockAmount)}
                         </span>
                       </div>

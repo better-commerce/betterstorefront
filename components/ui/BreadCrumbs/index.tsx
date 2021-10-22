@@ -21,7 +21,8 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
     return flattenedItems
   }
 
-  const createBreadcrumbs = (items: any) => {
+  const createBreadcrumbs = (items: any = []) => {
+    console.log(items)
     const map: any = flattenBreadcrumbs(items)
     const currentCrumb: any = {
       title: currentProduct.name,
