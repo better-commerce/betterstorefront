@@ -54,7 +54,12 @@ export default function AttributesHandler({ product }: any) {
   const originalAttributes = getAttributesFromSlug()
 
   const getStockPerAttribute = (key: string, variant: string) => {
-    let productData = { stock: 0, id: '' }
+    let productData = {
+      stock: 0,
+      id: '',
+      isPreOrderEnabled: false,
+      sellWithoutInventory: false,
+    }
     const slug = `products/${router.query.slug}`
     variantProducts.find((product: any) => {
       product.variantAttributes.forEach((attr: any) => {
@@ -64,6 +69,8 @@ export default function AttributesHandler({ product }: any) {
           product.slug === slug
         ) {
           productData.stock = product.currentStock
+          productData.isPreOrderEnabled = product.isPreOrderEnabled
+          productData.sellWithoutInventory = product.sellWithoutInventory
         }
       })
     })
@@ -71,7 +78,6 @@ export default function AttributesHandler({ product }: any) {
   }
 
   const DefaultComponent: any = () => null
-  console.log(product)
   return (
     <>
       {variantProductsAttribute?.map((option: any, idx: number) => {

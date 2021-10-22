@@ -8,15 +8,10 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
   async function getAllProducts<T extends GetAllProductsOperation>({
     query = '',
   }: {
-    query?: string
+    query?: any
   } = {}): Promise<any> {
-    const parsedQuery = JSON.parse(query)
-
-    const filters = JSON.parse(parsedQuery.filters)
-
-    const sortBy = parsedQuery.sortBy
-    const sortOrder = parsedQuery.sortOrder
-    const currentPage = parsedQuery.currentPage
+    console.log(query, 'query')
+    const { filters, sortBy, sortOrder, currentPage } = query
 
     const data: any = {
       freeText: '',
@@ -31,6 +26,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
     if (filters.length) {
       data.filters = filters
     }
+
     try {
       const response: any = await fetcher({
         url: SEARCH_MINIMAL_ENDPOINT,
