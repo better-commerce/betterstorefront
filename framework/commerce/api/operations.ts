@@ -25,6 +25,7 @@ export const OPERATIONS = [
   'getProduct',
   'getSlugs',
   'notifyMe',
+  'priceMatch',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -52,6 +53,7 @@ export type Operations<P extends APIProvider> = {
   }
   getSlugs: {}
   notifyMe: {}
+  priceMatch: {}
   getAllPages: {
     <T extends GetAllPagesOperation>(opts?: {
       config?: P['config']

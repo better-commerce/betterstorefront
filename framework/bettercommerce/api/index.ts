@@ -11,6 +11,7 @@ import {
   getPage,
   getAllPages,
   notifyMe,
+  priceMatch,
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -33,6 +34,7 @@ const operations = {
   getProduct,
   getSlugs,
   notifyMe,
+  priceMatch,
 }
 
 export const provider = { config, operations }

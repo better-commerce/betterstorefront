@@ -1,36 +1,7 @@
 import { Fragment, useState } from 'react'
-import { Dialog, RadioGroup, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
-import { StarIcon } from '@heroicons/react/solid'
-import classNames from '@components/utils/classNames'
-import AttributesHandler from '@components/product/ProductView/AttributesHandler'
 import Link from 'next/link'
-
-const product = {
-  name: 'Basic Tee 6-Pack ',
-  price: '$192',
-  rating: 3.9,
-  reviewCount: 117,
-  href: '#',
-  imageSrc:
-    'https://tailwindui.com/img/ecommerce-images/product-quick-preview-02-detail.jpg',
-  imageAlt: 'Two each of gray, white, and black shirts arranged on table.',
-  colors: [
-    { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-    { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-    { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
-  ],
-  sizes: [
-    { name: 'XXS', inStock: true },
-    { name: 'XS', inStock: true },
-    { name: 'S', inStock: true },
-    { name: 'M', inStock: true },
-    { name: 'L', inStock: true },
-    { name: 'XL', inStock: true },
-    { name: 'XXL', inStock: true },
-    { name: 'XXXL', inStock: false },
-  ],
-}
 
 export default function BundleCard({ productData, closeModal }: any) {
   const [activeImage, setActiveImage] = useState(
@@ -96,7 +67,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                   </div>
                   <div className="sm:col-span-8 lg:col-span-7">
                     <h2 className="text-2xl font-extrabold text-gray-900 sm:pr-12">
-                      {product.name}
+                      {productData.name}
                     </h2>
 
                     <section
@@ -106,8 +77,6 @@ export default function BundleCard({ productData, closeModal }: any) {
                       <h3 id="information-heading" className="sr-only">
                         Product information
                       </h3>
-
-                      <p className="text-2xl text-gray-900">{product.price}</p>
                     </section>
                     <div className="mt-6">
                       <h3 className="sr-only">Description</h3>
@@ -131,6 +100,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                           (image: any, imageIdx: number) => {
                             return (
                               <img
+                                key={imageIdx}
                                 className="h-16 w-16 object-center object-cover"
                                 src={image.image}
                                 onClick={() => setActiveImage(image.image)}
@@ -160,7 +130,3 @@ export default function BundleCard({ productData, closeModal }: any) {
     </Transition.Root>
   )
 }
-// export default function BundleCard({ product, closeModal }: any) {
-//   console.log(product)
-//   return <div onClick={closeModal}>hi</div>
-// }

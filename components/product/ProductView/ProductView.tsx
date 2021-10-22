@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
@@ -10,6 +10,7 @@ import BreadCrumbs from '@components/ui/BreadCrumbs'
 import RelatedProducts from '@components/product/RelatedProducts'
 import Bundles from '@components/product/Bundles'
 import Reviews from '@components/product/Reviews'
+import BetterPrice from '@components/product/BetterPrice'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -28,6 +29,8 @@ const PLACEMENTS_MAP: any = {
 
 export default function ProductView({ product = { images: [] } }: any) {
   const { openNotifyUser } = useUI()
+
+  const [isBetterPriceModalShown, showBetterPriceModal] = useState(false)
 
   useEffect(() => {
     if (product.snippets) {
@@ -81,7 +84,7 @@ export default function ProductView({ product = { images: [] } }: any) {
   }
 
   const buttonConfig = buttonTitle()
-
+  console.log(product.breadCrumbs)
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}
@@ -193,9 +196,12 @@ export default function ProductView({ product = { images: [] } }: any) {
               <div className="w-full sm:w-6/12">
                 <AttributesHandler product={product} />
               </div>
-              <p className="text-gray-900 text-md">
-                <span>In stock:</span>
-                <span className="font-bold">{product.currentStock}</span>
+              <p
+                className="text-gray-900 text-md cursor-pointer hover:underline"
+                onClick={() => showBetterPriceModal(true)}
+              >
+                <span className="font-bold">Seen it cheaper?</span>
+                <span>{''} We'll match the best price</span>
               </p>
 
               <div className="mt-6">
@@ -259,6 +265,17 @@ export default function ProductView({ product = { images: [] } }: any) {
           {product.reviews && !!product.reviews.length && (
             <Reviews data={product.reviews} />
           )}
+          <BetterPrice
+            show={isBetterPriceModalShown}
+            onClose={showBetterPriceModal}
+            productName={product.name}
+            productImage={product.images[0]?.image}
+            productId={product.id}
+            stockCode={product.stockCode}
+            ourCost={product.price.raw.withTax}
+            rrp={product.listPrice.raw.withTax}
+            ourDeliveryCost={product.price.raw.tax} //TBD
+          />
         </div>
         <NextSeo
           title={product.name}
