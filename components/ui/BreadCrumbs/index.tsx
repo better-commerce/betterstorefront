@@ -15,6 +15,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
         if (obj[key] && obj[key].childSlug) {
           flatten([{ childSlug: obj[key].childSlug }], 'childSlug')
         }
+        return acc
       }, flattenedItems)
     }
     flatten(breadcrumbs, 'slug')

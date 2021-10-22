@@ -7,8 +7,6 @@ export default function Bundles({ price = '', products = [] }: any) {
 
   const handleProduct = (product: any) => setProductData(product)
 
-  console.log(productData)
-
   return (
     <section
       aria-labelledby="bundles-heading"
@@ -27,7 +25,7 @@ export default function Bundles({ price = '', products = [] }: any) {
         <div className="flex py-5">
           {products.map((product: any, productIdx: number) => {
             return (
-              <div onClick={() => handleProduct(product)}>
+              <div onClick={() => handleProduct(product)} key={productIdx}>
                 <img
                   className="h-40 w-40 object-center object-cover"
                   src={product.image || product.images[0]?.image}
