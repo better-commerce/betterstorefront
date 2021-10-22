@@ -5,9 +5,11 @@ import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
 import AttributesHandler from './AttributesHandler'
-import Link from 'next/link'
 import { useUI } from '@components/ui/context'
 import BreadCrumbs from '@components/ui/BreadCrumbs'
+import RelatedProducts from '@components/product/RelatedProducts'
+import Bundles from '@components/product/Bundles'
+import Reviews from '@components/product/Reviews'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -242,65 +244,21 @@ export default function ProductView({ product = { images: [] } }: any) {
             </div>
           </div>
 
-          <section
-            aria-labelledby="related-heading"
-            className="mt-10 border-t border-gray-200 py-16 px-4 sm:px-0"
-          >
-            <h2
-              id="related-heading"
-              className="text-xl font-bold text-gray-900"
-            >
-              Customers also bought
-            </h2>
-
-            <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-              {product?.relatedProductList?.map((product: any) => (
-                <div key={product.id}>
-                  <div className="relative">
-                    <div className="relative w-full h-72 rounded-lg overflow-hidden">
-                      <Link href={`/${product.slug}`} passHref>
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-full h-full object-center object-cover"
-                        />
-                      </Link>
-                    </div>
-                    <div className="relative mt-4">
-                      <h3 className="text-sm font-medium text-gray-900">
-                        <Link href={`/${product.slug}`} passHref>
-                          <a href={`/${product.slug}`}>{product.name}</a>
-                        </Link>
-                      </h3>
-                      {/* <p className="mt-1 text-sm text-gray-500">
-                        {product.color}
-                      </p> */}
-                    </div>
-                    <div className="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
-                      <div
-                        aria-hidden="true"
-                        className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
-                      />
-                      <p className="relative text-lg font-semibold text-white">
-                        {product.price.formatted.withTax}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-6">
-                    <Link href={`/${product.slug}`} passHref>
-                      <a
-                        href={product.slug}
-                        className="relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200"
-                      >
-                        Add to bag
-                        <span className="sr-only">, {product.name}</span>
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          {product.componentProducts && (
+            <Bundles
+              price={product.price.formatted.withTax}
+              products={product.componentProducts}
+            />
+          )}
+          {product.relatedProductList ? (
+            <RelatedProducts
+              relatedProducts={product.relatedProducts}
+              relatedProductList={product.relatedProductList}
+            />
+          ) : null}
+          {product.reviews && !!product.reviews.length && (
+            <Reviews data={product.reviews} />
+          )}
         </div>
         <NextSeo
           title={product.name}

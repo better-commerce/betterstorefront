@@ -10,7 +10,6 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
   }: {
     query?: any
   } = {}): Promise<any> {
-    console.log(query, 'query')
     const { filters, sortBy, sortOrder, currentPage } = query
 
     const data: any = {
