@@ -48,6 +48,7 @@ export default function BetterPriceForm({ submitContactForm }: any) {
             return (
               <>
                 <Field
+                  key={itemIdx}
                   name={itemForm.key}
                   placeholder={itemForm.placeholder}
                   onChange={handleChange}
