@@ -11,6 +11,7 @@ import RelatedProducts from '@components/product/RelatedProducts'
 import Bundles from '@components/product/Bundles'
 import Reviews from '@components/product/Reviews'
 import BetterPrice from '@components/product/BetterPrice'
+import Engraving from '@components/product/Engraving'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -31,6 +32,7 @@ export default function ProductView({ product = { images: [] } }: any) {
   const { openNotifyUser } = useUI()
 
   const [isBetterPriceModalShown, showBetterPriceModal] = useState(false)
+  const [isEngravingOpen, showEngravingModal] = useState(false)
 
   useEffect(() => {
     if (product.snippets) {
@@ -84,7 +86,11 @@ export default function ProductView({ product = { images: [] } }: any) {
   }
 
   const buttonConfig = buttonTitle()
-  console.log(product.breadCrumbs)
+  console.log(product)
+  const isEngravingAvailable =
+    product.isEngraving ||
+    product.stockCode === 'BS21316-MAGENTA / FUCHSIA-16' ||
+    true //TBD
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}
@@ -203,6 +209,14 @@ export default function ProductView({ product = { images: [] } }: any) {
                 <span className="font-bold">Seen it cheaper?</span>
                 <span>{''} We'll match the best price</span>
               </p>
+              {isEngravingAvailable && (
+                <p
+                  className="py-5 text-gray-900 text-md cursor-pointer hover:underline"
+                  onClick={() => showEngravingModal(true)}
+                >
+                  <span className="font-bold">Engraving</span>
+                </p>
+              )}
 
               <div className="mt-6">
                 <h3 className="sr-only">Description</h3>
@@ -265,6 +279,13 @@ export default function ProductView({ product = { images: [] } }: any) {
           {product.reviews && !!product.reviews.length && (
             <Reviews data={product.reviews} />
           )}
+          {isEngravingAvailable && (
+            <Engraving
+              show={isEngravingOpen}
+              onClose={() => showEngravingModal(false)}
+            />
+          )}
+
           <BetterPrice
             show={isBetterPriceModalShown}
             onClose={showBetterPriceModal}
