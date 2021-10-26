@@ -22,7 +22,7 @@ const schema = Yup.object().shape({
   phone: Yup.string().required('Required'),
 })
 
-export default function BetterPriceForm({ submitContactForm }: any) {
+export default function PriceMatchForm({ submitContactForm }: any) {
   return (
     <Formik
       initialValues={{

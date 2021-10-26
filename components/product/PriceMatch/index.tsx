@@ -5,7 +5,7 @@ import Form from './form'
 import axios from 'axios'
 import { NEXT_API_PRICE_MATCH_ENDPOINT } from '@components/utils/constants'
 
-export default function BetterPrice({
+export default function PriceMatch({
   show,
   onClose,
   productImage,
