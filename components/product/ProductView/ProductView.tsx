@@ -35,6 +35,7 @@ export default function ProductView({ product = { images: [] } }: any) {
   const [isEngravingOpen, showEngravingModal] = useState(false)
 
   useEffect(() => {
+    console.log(product)
     if (product.snippets) {
       product.snippets.forEach((snippet: any) => {
         const domElement = document.querySelector(
@@ -87,10 +88,7 @@ export default function ProductView({ product = { images: [] } }: any) {
 
   const buttonConfig = buttonTitle()
   console.log(product)
-  const isEngravingAvailable =
-    product.isEngraving ||
-    product.stockCode === 'BS21316-MAGENTA / FUCHSIA-16' ||
-    true //TBD
+  const isEngravingAvailable = product.stockCode === 'ADDON'
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}

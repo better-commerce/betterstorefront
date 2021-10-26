@@ -48,8 +48,7 @@ export default function RelatedProducts({
               <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                 {relatedItem.relatedProducts &&
                   relatedItem.relatedProducts.map((product: any) => {
-                    const isEngravingAvailable =
-                      product.stockCode === 'BS21554-DENIM-SM' //TBD
+                    const isEngravingAvailable = product.stockCode === 'ADDON'
                     return (
                       <div key={product.id}>
                         <div className="relative">
