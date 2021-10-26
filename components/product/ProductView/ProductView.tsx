@@ -12,6 +12,7 @@ import Bundles from '@components/product/Bundles'
 import Reviews from '@components/product/Reviews'
 import PriceMatch from '@components/product/PriceMatch'
 import Engraving from '@components/product/Engraving'
+import ProductDetails from '@components/product/ProductDetails'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -19,32 +20,44 @@ const PLACEMENTS_MAP: any = {
     position: 'beforeend',
   },
   PageContainerAfter: {
-    element: 'page-container',
-    position: 'afterbegin',
+    element: '.page-container',
+    position: 'afterend',
   },
   PageContainerBefore: {
-    element: 'page-container',
+    element: '.page-container',
     position: 'beforebegin',
   },
 }
 
-export default function ProductView({ product = { images: [] } }: any) {
+export default function ProductView({
+  product = { images: [] },
+  snippets,
+}: any) {
   const { openNotifyUser } = useUI()
 
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
 
   useEffect(() => {
-    console.log(product)
-    if (product.snippets) {
-      product.snippets.forEach((snippet: any) => {
+    if (snippets) {
+      snippets.forEach((snippet: any) => {
         const domElement = document.querySelector(
           PLACEMENTS_MAP[snippet.placement].element
         )
-        domElement.insertAdjacentHTML(
-          PLACEMENTS_MAP[snippet.placement].position,
-          snippet.content
-        )
+        if (domElement) {
+          domElement.insertAdjacentHTML(
+            PLACEMENTS_MAP[snippet.placement].position,
+            snippet.content
+          )
+        }
+      })
+    }
+    //this function is triggered when the component is unmounted. here we clean the injected scripts
+    return function cleanup() {
+      snippets.forEach((snippet: any) => {
+        document
+          .getElementsByName(snippet.name)
+          .forEach((node: any) => node.remove())
       })
     }
   }, [])
@@ -87,7 +100,6 @@ export default function ProductView({ product = { images: [] } }: any) {
   }
 
   const buttonConfig = buttonTitle()
-  console.log(product)
   const isEngravingAvailable = product.stockCode === 'ADDON'
   return (
     <div className="bg-white page-container">
@@ -216,19 +228,11 @@ export default function ProductView({ product = { images: [] } }: any) {
                 </p>
               )}
 
-              <div className="mt-6">
-                <h3 className="sr-only">Description</h3>
-
-                <div
-                  className="text-gray-700 space-y-6"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
-                />
-              </div>
-
               <section aria-labelledby="details-heading" className="mt-12">
                 <h2 id="details-heading" className="sr-only">
                   Additional details
                 </h2>
+                <ProductDetails product={product} />
 
                 <div className="mt-10 flex sm:flex-col1">
                   <button

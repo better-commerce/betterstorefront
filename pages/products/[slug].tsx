@@ -41,7 +41,7 @@ InferGetStaticPropsType<typeof getStaticProps>) {
   return router.isFallback ? (
     <h1>Loading...</h1>
   ) : (
-    data && <ProductView product={data.product} />
+    data && <ProductView product={data.product} snippets={data.snippets} />
   )
 }
 
