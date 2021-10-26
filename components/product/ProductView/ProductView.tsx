@@ -10,7 +10,7 @@ import BreadCrumbs from '@components/ui/BreadCrumbs'
 import RelatedProducts from '@components/product/RelatedProducts'
 import Bundles from '@components/product/Bundles'
 import Reviews from '@components/product/Reviews'
-import BetterPrice from '@components/product/BetterPrice'
+import PriceMatch from '@components/product/PriceMatch'
 import Engraving from '@components/product/Engraving'
 
 const PLACEMENTS_MAP: any = {
@@ -31,7 +31,7 @@ const PLACEMENTS_MAP: any = {
 export default function ProductView({ product = { images: [] } }: any) {
   const { openNotifyUser } = useUI()
 
-  const [isBetterPriceModalShown, showBetterPriceModal] = useState(false)
+  const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
 
   useEffect(() => {
@@ -204,7 +204,7 @@ export default function ProductView({ product = { images: [] } }: any) {
               </div>
               <p
                 className="text-gray-900 text-md cursor-pointer hover:underline"
-                onClick={() => showBetterPriceModal(true)}
+                onClick={() => showPriceMatchModal(true)}
               >
                 <span className="font-bold">Seen it cheaper?</span>
                 <span>{''} We'll match the best price</span>
@@ -286,9 +286,9 @@ export default function ProductView({ product = { images: [] } }: any) {
             />
           )}
 
-          <BetterPrice
-            show={isBetterPriceModalShown}
-            onClose={showBetterPriceModal}
+          <PriceMatch
+            show={isPriceMatchModalShown}
+            onClose={showPriceMatchModal}
             productName={product.name}
             productImage={product.images[0]?.image}
             productId={product.id}
