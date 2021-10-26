@@ -11,7 +11,7 @@ const Attributes = ({ attributes = [] }: any) => {
       <tbody>
         {attributes.map((attr: any, idx: number) => {
           return (
-            <tr>
+            <tr key={idx}>
               <th className="border text-left px-5 py-5">{attr.display}</th>
               <td className="border text-left px-5 py-5">
                 {colorRegex.test(attr.value) ? (
@@ -65,7 +65,7 @@ export default function ProductDetails({ product }: any) {
   ]
   return (
     <div className="border-t divide-y divide-gray-200">
-      {detailsConfig.map((detail: any) => (
+      {detailsConfig.map((detail: any, idx: number) => (
         <Disclosure as="div" key={detail.name}>
           {({ open }) => (
             <>
