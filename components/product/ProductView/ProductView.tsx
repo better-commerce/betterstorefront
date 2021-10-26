@@ -13,7 +13,6 @@ import Reviews from '@components/product/Reviews'
 import PriceMatch from '@components/product/PriceMatch'
 import Engraving from '@components/product/Engraving'
 import ProductDetails from '@components/product/ProductDetails'
-
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -33,10 +32,11 @@ export default function ProductView({
   product = { images: [] },
   snippets,
 }: any) {
-  const { openNotifyUser } = useUI()
+  const { openNotifyUser, addToWishlist } = useUI()
 
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
+  const [isInWishList, setItemsInWishList] = useState(false)
 
   useEffect(() => {
     if (snippets) {
@@ -100,7 +100,13 @@ export default function ProductView({
   }
 
   const buttonConfig = buttonTitle()
+
   const isEngravingAvailable = product.stockCode === 'ADDON'
+
+  const handleWishList = () => {
+    addToWishlist(product)
+    setItemsInWishList(true)
+  }
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}
@@ -247,10 +253,15 @@ export default function ProductView({
                     type="button"
                     className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                   >
-                    <HeartIcon
-                      className="h-6 w-6 flex-shrink-0"
-                      aria-hidden="true"
-                    />
+                    {isInWishList ? (
+                      <span>Item was added in wishlist</span>
+                    ) : (
+                      <HeartIcon
+                        className="h-6 w-6 flex-shrink-0"
+                        onClick={handleWishList}
+                        aria-hidden="true"
+                      />
+                    )}
                     <span className="sr-only">Add to favorites</span>
                   </button>
                 </div>

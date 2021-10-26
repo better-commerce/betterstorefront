@@ -1,11 +1,12 @@
 import { FC, Fragment } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition } from '@headlessui/react'
-import { ShoppingBagIcon } from '@heroicons/react/outline'
+import { ShoppingBagIcon, HeartIcon } from '@heroicons/react/outline'
 import { Searchbar } from '@components/common'
 import { Logo } from '@components/ui'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useUI } from '@components/ui'
 interface Props {
   config: []
 }
@@ -13,6 +14,7 @@ interface Props {
 const Navbar: FC<Props> = ({ config }) => {
   const router = useRouter()
 
+  const { wishListItems } = useUI()
   const handleRedirect = (path: string) => (path ? router.push('/' + path) : {})
 
   return (
@@ -135,8 +137,22 @@ const Navbar: FC<Props> = ({ config }) => {
               <div className="flex-1 flex items-center justify-end">
                 {/* Search */}
                 <Searchbar />
+                {/* Wishlist*/}
 
+                <div className="ml-4 flow-root lg:ml-8">
+                  <button className="group -m-2 p-2 flex items-center">
+                    <HeartIcon
+                      className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                      {wishListItems.length}
+                    </span>
+                    <span className="sr-only">items in cart, view bag</span>
+                  </button>
+                </div>
                 {/* Cart */}
+
                 <div className="ml-4 flow-root lg:ml-8">
                   <button className="group -m-2 p-2 flex items-center">
                     <ShoppingBagIcon

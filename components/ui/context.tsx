@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
+import { setItem, getItem } from '@components/utils/localStorage'
 
 export interface State {
   displaySidebar: boolean
@@ -10,6 +11,7 @@ export interface State {
   userAvatar: string
   productId: string
   notifyUser: boolean
+  wishListItems: any
 }
 
 const initialState = {
@@ -21,6 +23,7 @@ const initialState = {
   userAvatar: '',
   productId: '',
   notifyUser: false,
+  wishListItems: getItem('wishListItems') || [],
 }
 
 type Action =
@@ -60,6 +63,10 @@ type Action =
   | {
       type: 'SET_USER_AVATAR'
       value: string
+    }
+  | {
+      type: 'ADD_TO_WISHLIST'
+      payload: any
     }
 
 type MODAL_VIEWS =
@@ -139,11 +146,26 @@ function uiReducer(state: State, action: Action) {
         userAvatar: action.value,
       }
     }
+    case 'ADD_TO_WISHLIST': {
+      return {
+        ...state,
+        wishListItems: [...state.wishListItems, action.payload],
+      }
+    }
   }
 }
 
 export const UIProvider: FC = (props) => {
   const [state, dispatch] = React.useReducer(uiReducer, initialState)
+
+  const addToWishlist = useCallback(
+    (payload: any) => {
+      const storedItems = getItem('wishListItems') || []
+      setItem('wishListItems', [...storedItems, payload])
+      dispatch({ type: 'ADD_TO_WISHLIST', payload })
+    },
+    [dispatch]
+  )
 
   const openSidebar = useCallback(
     () => dispatch({ type: 'OPEN_SIDEBAR' }),
@@ -222,6 +244,7 @@ export const UIProvider: FC = (props) => {
       setUserAvatar,
       openNotifyUser,
       closeNotifyUser,
+      addToWishlist,
     }),
     [state]
   )

@@ -17,7 +17,6 @@ export default function getProductOperation({
       url: `${PRODUCT_API_ENDPOINT}slug?slug=products/${query}`,
       method: 'post',
     })
-    console.log(response)
     return {
       product: response.result,
       snippets: response.snippets,
