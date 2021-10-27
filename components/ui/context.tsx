@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
+import { setItem, getItem } from '@components/utils/localStorage'
 
 export interface State {
   displaySidebar: boolean
@@ -8,6 +9,9 @@ export interface State {
   sidebarView: string
   modalView: string
   userAvatar: string
+  productId: string
+  notifyUser: boolean
+  wishListItems: any
 }
 
 const initialState = {
@@ -17,6 +21,9 @@ const initialState = {
   modalView: 'LOGIN_VIEW',
   sidebarView: 'CART_VIEW',
   userAvatar: '',
+  productId: '',
+  notifyUser: false,
+  wishListItems: getItem('wishListItems') || [],
 }
 
 type Action =
@@ -36,6 +43,13 @@ type Action =
       type: 'OPEN_MODAL'
     }
   | {
+      type: 'OPEN_NOTIFY_USER_POPUP'
+      value: string
+    }
+  | {
+      type: 'CLOSE_NOTIFY_USER_POPUP'
+    }
+  | {
       type: 'CLOSE_MODAL'
     }
   | {
@@ -50,6 +64,10 @@ type Action =
       type: 'SET_USER_AVATAR'
       value: string
     }
+  | {
+      type: 'ADD_TO_WISHLIST'
+      payload: any
+    }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -57,6 +75,7 @@ type MODAL_VIEWS =
   | 'FORGOT_VIEW'
   | 'NEW_SHIPPING_ADDRESS'
   | 'NEW_PAYMENT_METHOD'
+  | 'NOTIFY_USER'
 
 type SIDEBAR_VIEWS = 'CART_VIEW' | 'CHECKOUT_VIEW' | 'PAYMENT_METHOD_VIEW'
 
@@ -97,6 +116,12 @@ function uiReducer(state: State, action: Action) {
         displaySidebar: false,
       }
     }
+    case 'OPEN_NOTIFY_USER_POPUP': {
+      return { ...state, notifyUser: true, productId: action.value }
+    }
+    case 'CLOSE_NOTIFY_USER_POPUP': {
+      return { ...state, notifyUser: false }
+    }
     case 'CLOSE_MODAL': {
       return {
         ...state,
@@ -121,14 +146,37 @@ function uiReducer(state: State, action: Action) {
         userAvatar: action.value,
       }
     }
+    case 'ADD_TO_WISHLIST': {
+      return {
+        ...state,
+        wishListItems: [...state.wishListItems, action.payload],
+      }
+    }
   }
 }
 
 export const UIProvider: FC = (props) => {
   const [state, dispatch] = React.useReducer(uiReducer, initialState)
 
+  const addToWishlist = useCallback(
+    (payload: any) => {
+      const storedItems = getItem('wishListItems') || []
+      setItem('wishListItems', [...storedItems, payload])
+      dispatch({ type: 'ADD_TO_WISHLIST', payload })
+    },
+    [dispatch]
+  )
+
   const openSidebar = useCallback(
     () => dispatch({ type: 'OPEN_SIDEBAR' }),
+    [dispatch]
+  )
+  const openNotifyUser = useCallback(
+    (value: any) => dispatch({ type: 'OPEN_NOTIFY_USER_POPUP', value }),
+    [dispatch]
+  )
+  const closeNotifyUser = useCallback(
+    () => dispatch({ type: 'CLOSE_NOTIFY_USER_POPUP' }),
     [dispatch]
   )
   const closeSidebar = useCallback(
@@ -194,6 +242,9 @@ export const UIProvider: FC = (props) => {
       setModalView,
       setSidebarView,
       setUserAvatar,
+      openNotifyUser,
+      closeNotifyUser,
+      addToWishlist,
     }),
     [state]
   )

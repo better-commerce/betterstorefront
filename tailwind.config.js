@@ -20,6 +20,7 @@ module.exports = {
         '8xl': '1920px',
         '40p': '40%',
       },
+      opacity: ['disabled'],
       minWidth: {
         searchbar: '200px',
       },
@@ -55,7 +56,6 @@ module.exports = {
         cyan: 'var(--cyan)',
         blue: 'var(--blue)',
         green: 'var(--green)',
-        red: 'var(--red)',
       },
       textColor: {
         base: 'var(--text-base)',

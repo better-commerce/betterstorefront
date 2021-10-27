@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { ACTION_TYPES } from 'pages/search'
+
 const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
   CATEGORY: 'classification.category',
@@ -19,13 +21,24 @@ const FilterItem = ({
   isChecked = false,
   isCheckboxTickDisabled = false,
   bgColor = () => false,
+  onSelect,
+  closeSidebar = () => {},
   ...props
 }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
 
   const handleCheckbox = () => {
-    console.log('here')
     setCheckbox(!isCheckboxChecked)
+    let obj = {
+      Key: sectionKey,
+      Value: option.name,
+      IsSelected: true,
+    }
+    let type = !isCheckboxChecked
+      ? ACTION_TYPES.ADD_FILTERS
+      : ACTION_TYPES.REMOVE_FILTERS
+    onSelect(obj, type)
+    closeSidebar()
   }
 
   const generateOptionName = () => {
@@ -115,7 +128,13 @@ const getCustomComponent = (type: string) => {
   }
 }
 
-export default function FilterList({ items = [], sectionKey }: any) {
+export default function FilterList({
+  items = [],
+  sectionKey,
+  handleFilters,
+  routerFilters,
+  closeSidebar,
+}: any) {
   const [filterItems, setFilterItems] = useState(items)
 
   const handleSearch = (value: string) => {
@@ -136,16 +155,26 @@ export default function FilterList({ items = [], sectionKey }: any) {
     },
   }
 
+  const isDefaultChecked = (sectionKey: string, value: string) => {
+    return !!routerFilters.find(
+      (filter: any) => filter.Key === sectionKey && filter.Value === value
+    )
+  }
+
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
       {filterItems.map((option: any, optionIdx: number) => {
+        const isChecked = isDefaultChecked(sectionKey, option.name)
         return (
           <FilterItem
             sectionKey={sectionKey}
             option={option}
+            onSelect={handleFilters}
             optionIdx={optionIdx}
             key={optionIdx}
+            isChecked={isChecked}
+            closeSidebar={closeSidebar}
             {...PROPS_LIST[sectionKey]}
           />
         )
