@@ -1,92 +1,120 @@
-import { Fragment, useState } from 'react'
-import {
-  Dialog,
-  Disclosure,
-  Popover,
-  RadioGroup,
-  Tab,
-  Transition,
-} from '@headlessui/react'
-import {
-  HeartIcon,
-  MenuIcon,
-  MinusSmIcon,
-  PlusSmIcon,
-  SearchIcon,
-  ShoppingBagIcon,
-  UserIcon,
-  XIcon,
-} from '@heroicons/react/outline'
-import { StarIcon } from '@heroicons/react/solid'
+import { useEffect, useState } from 'react'
+import { Tab } from '@headlessui/react'
+import { HeartIcon } from '@heroicons/react/outline'
+import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
-
-const product = {
-  name: 'Zip Tote Basket',
-  price: '$140',
-  rating: 4,
-  images: [
-    {
-      id: 1,
-      name: 'Angled view',
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg',
-      alt: 'Angled front view with bag zipped and handles upright.',
-    },
-    // More images...
-  ],
-  colors: [
-    {
-      name: 'Washed Black',
-      bgColor: 'bg-gray-700',
-      selectedColor: 'ring-gray-700',
-    },
-    { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
-    {
-      name: 'Washed Gray',
-      bgColor: 'bg-gray-500',
-      selectedColor: 'ring-gray-500',
-    },
-  ],
-  description: `
-    <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
-  `,
-  details: [
-    {
-      name: 'Features',
-      items: [
-        'Multiple strap configurations',
-        'Spacious interior with top zip',
-        'Leather handle and tabs',
-        'Interior dividers',
-        'Stainless strap loops',
-        'Double stitched construction',
-        'Water-resistant',
-      ],
-    },
-    // More sections...
-  ],
-}
-const relatedProducts = [
-  {
-    id: 1,
-    name: 'Zip Tote Basket',
-    color: 'White and black',
-    href: '#',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/product-page-03-related-product-01.jpg',
-    imageAlt:
-      'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
-    price: '$140',
+import AttributesHandler from './AttributesHandler'
+import { useUI } from '@components/ui/context'
+import BreadCrumbs from '@components/ui/BreadCrumbs'
+import RelatedProducts from '@components/product/RelatedProducts'
+import Bundles from '@components/product/Bundles'
+import Reviews from '@components/product/Reviews'
+import PriceMatch from '@components/product/PriceMatch'
+import Engraving from '@components/product/Engraving'
+import ProductDetails from '@components/product/ProductDetails'
+const PLACEMENTS_MAP: any = {
+  Head: {
+    element: 'head',
+    position: 'beforeend',
   },
-  // More products...
-]
+  PageContainerAfter: {
+    element: '.page-container',
+    position: 'afterend',
+  },
+  PageContainerBefore: {
+    element: '.page-container',
+    position: 'beforebegin',
+  },
+}
 
-export default function Example() {
-  const [selectedColor, setSelectedColor] = useState(product.colors[0])
+export default function ProductView({
+  product = { images: [] },
+  snippets,
+}: any) {
+  const { openNotifyUser, addToWishlist } = useUI()
 
+  const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
+  const [isEngravingOpen, showEngravingModal] = useState(false)
+  const [isInWishList, setItemsInWishList] = useState(false)
+
+  useEffect(() => {
+    if (snippets) {
+      snippets.forEach((snippet: any) => {
+        const domElement = document.querySelector(
+          PLACEMENTS_MAP[snippet.placement].element
+        )
+        if (domElement) {
+          domElement.insertAdjacentHTML(
+            PLACEMENTS_MAP[snippet.placement].position,
+            snippet.content
+          )
+        }
+      })
+    }
+    //this function is triggered when the component is unmounted. here we clean the injected scripts
+    return function cleanup() {
+      snippets.forEach((snippet: any) => {
+        document
+          .getElementsByName(snippet.name)
+          .forEach((node: any) => node.remove())
+      })
+    }
+  }, [])
+
+  if (!product) {
+    return null
+  }
+
+  const handleNotification = () => {
+    openNotifyUser(product.id)
+  }
+
+  let content = [...product.images]
+
+  if (product.videos && product.videos.length > 0) {
+    content = [...product.images, ...product.videos]
+  }
+
+  const buttonTitle = () => {
+    let buttonConfig: any = {
+      title: 'Add to bag',
+      action: () => {},
+      shortMessage: '',
+    }
+    if (!product.currentStock && !product.preOrder.isEnabled) {
+      if (!product.flags.sellWithoutInventory) {
+        buttonConfig.title = 'Notify me'
+        buttonConfig.action = () => handleNotification()
+      }
+    } else if (product.preOrder.isEnabled && !product.currentStock) {
+      if (product.preOrder.currentStock < product.preOrder.maxStock) {
+        buttonConfig.title = 'Pre-order'
+        buttonConfig.shortMessage = product.preOrder.shortMessage
+      } else {
+        buttonConfig.title = 'Notify me'
+        buttonConfig.action = () => handleNotification()
+      }
+    }
+    return buttonConfig
+  }
+
+  const buttonConfig = buttonTitle()
+
+  const isEngravingAvailable = product.stockCode === 'ADDON'
+
+  const handleWishList = () => {
+    addToWishlist(product)
+    setItemsInWishList(true)
+  }
   return (
-    <div className="bg-white">
+    <div className="bg-white page-container">
       {/* Mobile menu */}
+      <div className="max-w-7xl mx-auto sm:pt-6 sm:px-6 lg:px-8">
+        {product.breadCrumbs && (
+          <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />
+        )}
+      </div>
       <main className="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto lg:max-w-none">
           {/* Product */}
@@ -96,28 +124,25 @@ export default function Example() {
               {/* Image selector */}
               <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
-                  {product.images.map((image) => (
+                  {content?.map((image: any) => (
                     <Tab
-                      key={image.id}
+                      key={image.name}
                       className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
                     >
-                      {({ selected }) => (
+                      {() => (
                         <>
                           <span className="sr-only">{image.name}</span>
                           <span className="absolute inset-0 rounded-md overflow-hidden">
-                            <img
-                              src={image.src}
-                              alt=""
-                              className="w-full h-full object-center object-cover"
-                            />
-                          </span>
-                          <span
-                            className={classNames(
-                              selected ? 'ring-indigo-500' : 'ring-transparent',
-                              'absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none'
+                            {image.image ? (
+                              <img
+                                src={image.image}
+                                alt=""
+                                className="w-full h-full object-center object-cover"
+                              />
+                            ) : (
+                              <PlayIcon className="h-full w-full object-center object-cover" />
                             )}
-                            aria-hidden="true"
-                          />
+                          </span>
                         </>
                       )}
                     </Tab>
@@ -126,13 +151,25 @@ export default function Example() {
               </div>
 
               <Tab.Panels className="w-full aspect-w-1 aspect-h-1">
-                {product.images.map((image) => (
-                  <Tab.Panel key={image.id}>
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      className="w-full h-full object-center object-cover sm:rounded-lg"
-                    />
+                {content?.map((image: any) => (
+                  <Tab.Panel key={image.name + 'tab-panel'}>
+                    {image.image ? (
+                      <img
+                        src={image.image}
+                        alt={image.name}
+                        className="w-full h-full object-center object-cover sm:rounded-lg"
+                      />
+                    ) : (
+                      <iframe
+                        width="560"
+                        height="315"
+                        src={image.url}
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    )}
                   </Tab.Panel>
                 ))}
               </Tab.Panels>
@@ -144,9 +181,17 @@ export default function Example() {
                 {product.name}
               </h1>
 
+              <p className="text-gray-500 text-md">Ref: {product.stockCode}</p>
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
-                <p className="text-3xl text-gray-900">{product.price}</p>
+                <p className="text-3xl text-gray-900">
+                  {product.price.formatted.withTax}
+                  {product.listPrice.raw.tax > 0 ? (
+                    <span className="px-5 text-sm line-through text-gray-500">
+                      RRP {product.listPrice.formatted.withTax}
+                    </span>
+                  ) : null}
+                </p>
               </div>
 
               {/* Reviews */}
@@ -170,306 +215,126 @@ export default function Example() {
                   <p className="sr-only">{product.rating} out of 5 stars</p>
                 </div>
               </div>
-
-              <div className="mt-6">
-                <h3 className="sr-only">Description</h3>
-
-                <div
-                  className="text-gray-700 space-y-6"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
-                />
+              <div className="w-full sm:w-6/12">
+                <AttributesHandler product={product} />
               </div>
+              <p
+                className="text-gray-900 text-md cursor-pointer hover:underline"
+                onClick={() => showPriceMatchModal(true)}
+              >
+                <span className="font-bold">Seen it cheaper?</span>
+                <span>{''} We'll match the best price</span>
+              </p>
+              {isEngravingAvailable && (
+                <p
+                  className="py-5 text-gray-900 text-md cursor-pointer hover:underline"
+                  onClick={() => showEngravingModal(true)}
+                >
+                  <span className="font-bold">Engraving</span>
+                </p>
+              )}
 
-              <form className="mt-6">
-                {/* Colors */}
-                <div>
-                  <h3 className="text-sm text-gray-600">Color</h3>
-
-                  <RadioGroup
-                    value={selectedColor}
-                    onChange={setSelectedColor}
-                    className="mt-2"
-                  >
-                    <RadioGroup.Label className="sr-only">
-                      Choose a color
-                    </RadioGroup.Label>
-                    <div className="flex items-center space-x-3">
-                      {product.colors.map((color) => (
-                        <RadioGroup.Option
-                          key={color.name}
-                          value={color}
-                          className={({ active, checked }) =>
-                            classNames(
-                              color.selectedColor,
-                              active && checked ? 'ring ring-offset-1' : '',
-                              !active && checked ? 'ring-2' : '',
-                              '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
-                            )
-                          }
-                        >
-                          <RadioGroup.Label as="p" className="sr-only">
-                            {color.name}
-                          </RadioGroup.Label>
-                          <span
-                            aria-hidden="true"
-                            className={classNames(
-                              color.bgColor,
-                              'h-8 w-8 border border-black border-opacity-10 rounded-full'
-                            )}
-                          />
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </div>
+              <section aria-labelledby="details-heading" className="mt-12">
+                <h2 id="details-heading" className="sr-only">
+                  Additional details
+                </h2>
+                <ProductDetails product={product} />
 
                 <div className="mt-10 flex sm:flex-col1">
                   <button
                     type="submit"
-                    className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                    onClick={buttonConfig.action}
+                    className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                   >
-                    Add to bag
+                    {buttonConfig.title}
                   </button>
 
                   <button
                     type="button"
                     className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                   >
-                    <HeartIcon
-                      className="h-6 w-6 flex-shrink-0"
-                      aria-hidden="true"
-                    />
+                    {isInWishList ? (
+                      <span>Item was added in wishlist</span>
+                    ) : (
+                      <HeartIcon
+                        className="h-6 w-6 flex-shrink-0"
+                        onClick={handleWishList}
+                        aria-hidden="true"
+                      />
+                    )}
                     <span className="sr-only">Add to favorites</span>
                   </button>
                 </div>
-              </form>
 
-              <section aria-labelledby="details-heading" className="mt-12">
-                <h2 id="details-heading" className="sr-only">
-                  Additional details
-                </h2>
-
-                <div className="border-t divide-y divide-gray-200">
-                  {product.details.map((detail) => (
-                    <Disclosure as="div" key={detail.name}>
-                      {({ open }) => (
-                        <>
-                          <h3>
-                            <Disclosure.Button className="group relative w-full py-6 flex justify-between items-center text-left">
-                              <span
-                                className={classNames(
-                                  open ? 'text-indigo-600' : 'text-gray-900',
-                                  'text-sm font-medium'
-                                )}
-                              >
-                                {detail.name}
-                              </span>
-                              <span className="ml-6 flex items-center">
-                                {open ? (
-                                  <MinusSmIcon
-                                    className="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
-                                    aria-hidden="true"
-                                  />
-                                ) : (
-                                  <PlusSmIcon
-                                    className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                                    aria-hidden="true"
-                                  />
-                                )}
-                              </span>
-                            </Disclosure.Button>
-                          </h3>
-                          <Disclosure.Panel
-                            as="div"
-                            className="pb-6 prose prose-sm"
-                          >
-                            <ul role="list">
-                              {detail.items.map((item) => (
-                                <li key={item}>{item}</li>
-                              ))}
-                            </ul>
-                          </Disclosure.Panel>
-                        </>
-                      )}
-                    </Disclosure>
-                  ))}
+                <div className="border-t divide-y divide-gray-200 mt-10">
+                  <p className="text-gray-900 text-lg">
+                    {product.currentStock > 0
+                      ? product.deliveryMessage
+                      : product.stockAvailabilityMessage}
+                  </p>
                 </div>
               </section>
             </div>
           </div>
 
-          <section
-            aria-labelledby="related-heading"
-            className="mt-10 border-t border-gray-200 py-16 px-4 sm:px-0"
-          >
-            <h2
-              id="related-heading"
-              className="text-xl font-bold text-gray-900"
-            >
-              Customers also bought
-            </h2>
+          {product.componentProducts && (
+            <Bundles
+              price={product.price.formatted.withTax}
+              products={product.componentProducts}
+            />
+          )}
+          {product.relatedProductList ? (
+            <RelatedProducts
+              relatedProducts={product.relatedProducts}
+              relatedProductList={product.relatedProductList}
+            />
+          ) : null}
+          {product.reviews && !!product.reviews.length && (
+            <Reviews data={product.reviews} />
+          )}
+          {isEngravingAvailable && (
+            <Engraving
+              show={isEngravingOpen}
+              onClose={() => showEngravingModal(false)}
+            />
+          )}
 
-            <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-              {relatedProducts.map((product) => (
-                <div key={product.id}>
-                  <div className="relative">
-                    <div className="relative w-full h-72 rounded-lg overflow-hidden">
-                      <img
-                        src={product.imageSrc}
-                        alt={product.imageAlt}
-                        className="w-full h-full object-center object-cover"
-                      />
-                    </div>
-                    <div className="relative mt-4">
-                      <h3 className="text-sm font-medium text-gray-900">
-                        {product.name}
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500">
-                        {product.color}
-                      </p>
-                    </div>
-                    <div className="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
-                      <div
-                        aria-hidden="true"
-                        className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
-                      />
-                      <p className="relative text-lg font-semibold text-white">
-                        {product.price}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-6">
-                    <a
-                      href={product.href}
-                      className="relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200"
-                    >
-                      Add to bag
-                      <span className="sr-only">, {product.name}</span>
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          <PriceMatch
+            show={isPriceMatchModalShown}
+            onClose={showPriceMatchModal}
+            productName={product.name}
+            productImage={product.images[0]?.image}
+            productId={product.id}
+            stockCode={product.stockCode}
+            ourCost={product.price.raw.withTax}
+            rrp={product.listPrice.raw.withTax}
+            ourDeliveryCost={product.price.raw.tax} //TBD
+          />
         </div>
+        <NextSeo
+          title={product.name}
+          description={product.metaDescription}
+          additionalMetaTags={[
+            {
+              name: 'keywords',
+              content: product.metaKeywords,
+            },
+          ]}
+          openGraph={{
+            type: 'website',
+            title: product.metaTitle,
+            description: product.metaDescription,
+            images: [
+              {
+                url: product.image,
+                width: 800,
+                height: 600,
+                alt: product.name,
+              },
+            ],
+          }}
+        />
       </main>
     </div>
   )
-}
-
-// import cn from 'classnames'
-// import Image from 'next/image'
-// import { NextSeo } from 'next-seo'
-// import s from './ProductView.module.css'
-// import { FC } from 'react'
-// import type { Product } from '@commerce/types/product'
-// import usePrice from '@framework/product/use-price'
-// import { WishlistButton } from '@components/wishlist'
-// import { ProductSlider, ProductCard } from '@components/product'
-// import { Container, Text } from '@components/ui'
-// import ProductSidebar from '../ProductSidebar'
-// import ProductTag from '../ProductTag'
-// interface ProductViewProps {
-//   product: Product
-//   relatedProducts: Product[]
-// }
-
-// const ProductView: FC<ProductViewProps> = ({ product, relatedProducts }) => {
-//   const { price } = usePrice({
-//     amount: product.price.value,
-//     baseAmount: product.price.retailPrice,
-//     currencyCode: product.price.currencyCode!,
-//   })
-
-//   return (
-//     <>
-//       <Container className="max-w-none w-full" clean>
-//         <div className={cn(s.root, 'fit')}>
-//           <div className={cn(s.main, 'fit')}>
-//             <ProductTag
-//               name={product.name}
-//               price={`${price} ${product.price?.currencyCode}`}
-//               fontSize={32}
-//             />
-//             <div className={s.sliderContainer}>
-//               <ProductSlider key={product.id}>
-//                 {product.images.map((image, i) => (
-//                   <div key={image.url} className={s.imageContainer}>
-//                     <Image
-//                       className={s.img}
-//                       src={image.url!}
-//                       alt={image.alt || 'Product Image'}
-//                       width={600}
-//                       height={600}
-//                       priority={i === 0}
-//                       quality="85"
-//                     />
-//                   </div>
-//                 ))}
-//               </ProductSlider>
-//             </div>
-//             {process.env.COMMERCE_WISHLIST_ENABLED && (
-//               <WishlistButton
-//                 className={s.wishlistButton}
-//                 productId={product.id}
-//                 variant={product.variants[0]}
-//               />
-//             )}
-//           </div>
-
-//           <ProductSidebar
-//             key={product.id}
-//             product={product}
-//             className={s.sidebar}
-//           />
-//         </div>
-//         <hr className="mt-7 border-accent-2" />
-//         <section className="py-12 px-6 mb-10">
-//           <Text variant="sectionHeading">Related Products</Text>
-//           <div className={s.relatedProductsGrid}>
-//             {relatedProducts.map((p) => (
-//               <div
-//                 key={p.path}
-//                 className="animated fadeIn bg-accent-0 border border-accent-2"
-//               >
-//                 <ProductCard
-//                   noNameTag
-//                   product={p}
-//                   key={p.path}
-//                   variant="simple"
-//                   className="animated fadeIn"
-//                   imgProps={{
-//                     width: 300,
-//                     height: 300,
-//                   }}
-//                 />
-//               </div>
-//             ))}
-//           </div>
-//         </section>
-//       </Container>
-//     </>
-//   )
-// }
-
-// export default ProductView
-
-{
-  /* <NextSeo
-        title={product.name}
-        description={product.description}
-        openGraph={{
-          type: 'website',
-          title: product.name,
-          description: product.description,
-          images: [
-            {
-              url: product.images[0]?.url!,
-              width: 800,
-              height: 600,
-              alt: product.name,
-            },
-          ],
-        }}
-      /> */
 }

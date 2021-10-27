@@ -1,68 +1,19 @@
 import { Layout } from '@components/common'
-import Link from 'next/link'
-import { useReducer, useState } from 'react'
+import { useReducer, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Disclosure } from '@headlessui/react'
-import { FilterIcon } from '@heroicons/react/solid'
 import useSwr from 'swr'
-import { getData } from '@components/utils/clientFetcher'
+import { getData, postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
-import ProductSort from '@components/product/ProductSort'
 import ProductFilters from '@components/product/Filters'
-
-const filters = [
-  {
-    id: 'color',
-    name: 'Color',
-    options: [
-      { value: 'white', label: 'White' },
-      { value: 'beige', label: 'Beige' },
-      { value: 'blue', label: 'Blue' },
-      { value: 'brown', label: 'Brown' },
-      { value: 'green', label: 'Green' },
-      { value: 'purple', label: 'Purple' },
-    ],
-  },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'All New Arrivals' },
-      { value: 'tees', label: 'Tees' },
-      { value: 'crewnecks', label: 'Crewnecks' },
-      { value: 'sweatshirts', label: 'Sweatshirts' },
-      { value: 'pants-shorts', label: 'Pants & Shorts' },
-    ],
-  },
-  {
-    id: 'sizes',
-    name: 'Sizes',
-    options: [
-      { value: 'xs', label: 'XS' },
-      { value: 's', label: 'S' },
-      { value: 'm', label: 'M' },
-      { value: 'l', label: 'L' },
-      { value: 'xl', label: 'XL' },
-      { value: '2xl', label: '2XL' },
-    ],
-  },
-]
-
-const sortOptions = [
-  { name: 'Most Popular', href: '?sortOrder=desc', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-]
-
-const ACTION_TYPES = {
+export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
   SORT_ORDER: 'SORT_ORDER',
   CLEAR: 'CLEAR',
-  HANDLE_FILTERS: 'HANDLE_FILTERS',
+  HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
+  ADD_FILTERS: 'ADD_FILTERS',
+  REMOVE_FILTERS: 'REMOVE_FILTERS',
 }
 
 interface actionInterface {
@@ -74,14 +25,24 @@ interface stateInterface {
   sortBy?: string
   currentPage?: string | number
   sortOrder?: string
+  filters: any
 }
 
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS } = ACTION_TYPES
+const {
+  SORT_BY,
+  PAGE,
+  SORT_ORDER,
+  CLEAR,
+  HANDLE_FILTERS_UI,
+  ADD_FILTERS,
+  REMOVE_FILTERS,
+} = ACTION_TYPES
 
 const DEFAULT_STATE = {
   sortBy: '',
   sortOrder: 'asc',
   currentPage: 1,
+  filters: [],
 }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -93,11 +54,20 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
     case SORT_ORDER:
       return { ...state, sortOrder: payload }
     case CLEAR:
-      return { ...state, ...DEFAULT_STATE }
-    case HANDLE_FILTERS:
+      return { ...state, filters: [] }
+    case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
+    case ADD_FILTERS:
+      return { ...state, filters: [...state.filters, payload] }
+    case REMOVE_FILTERS:
+      return {
+        ...state,
+        filters: state.filters.filter(
+          (item: any) => item.Value !== payload.Value
+        ),
+      }
     default:
-      return state
+      return { ...state }
   }
 }
 
@@ -106,6 +76,10 @@ function Search({ query }: any) {
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
     : false
+  adaptedQuery.filters
+    ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
+    : false
+
   const initialState = {
     ...DEFAULT_STATE,
     ...adaptedQuery,
@@ -113,7 +87,6 @@ function Search({ query }: any) {
 
   const router = useRouter()
   const [state, dispatch] = useReducer(reducer, initialState)
-  const computedUrl = `/api/catalog/products/?currentPage=${state.currentPage}&sortBy=${state.sortBy}&sortOrder=${state.sortOrder}`
   const {
     data = {
       products: {
@@ -126,9 +99,8 @@ function Search({ query }: any) {
       },
     },
     error,
-  } = useSwr(computedUrl, getData)
+  } = useSwr(['/api/catalog/products', state], postData)
 
-  console.log(data)
   const handlePageChange = (page: any) => {
     router.push(
       {
@@ -152,6 +124,26 @@ function Search({ query }: any) {
       payload: payload,
     })
   }
+
+  useEffect(() => {
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        filters: JSON.stringify(state.filters),
+      },
+    })
+  }, [state.filters])
+  const handleFilters = (filter: null, type: string) => {
+    dispatch({
+      type,
+      payload: filter,
+    })
+    dispatch({ type: PAGE, payload: 1 })
+  }
+
+  const clearAll = () => dispatch({ type: CLEAR })
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -161,7 +153,13 @@ function Search({ query }: any) {
             Catalog
           </h1>
         </div>
-        <ProductFilters products={data.products} handleSortBy={handleSortBy} />
+        <ProductFilters
+          handleFilters={handleFilters}
+          products={data.products}
+          handleSortBy={handleSortBy}
+          routerFilters={state.filters}
+          clearAll={clearAll}
+        />
         <ProductGrid
           products={data.products}
           currentPage={state.currentPage}

@@ -2,28 +2,37 @@ import { GetAllProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
 import fetcher from '../../fetcher'
 import qs from 'qs'
+import { SEARCH_MINIMAL_ENDPOINT } from '@components/utils/constants'
 
 export default function getAllProductsOperation({}: OperationContext<any>) {
   async function getAllProducts<T extends GetAllProductsOperation>({
     query = '',
   }: {
-    query?: string
+    query?: any
   } = {}): Promise<any> {
-    const parsedQuery = JSON.parse(query)
+    const { filters, sortBy, sortOrder, currentPage } = query
 
-    console.log({ freeText: '', pageSize: 20, ...parsedQuery }, 'parsed data')
+    const data: any = {
+      freeText: '',
+      pageSize: 20,
+      allowFacet: true,
+      facetOnly: false,
+      sortBy,
+      sortOrder,
+      currentPage,
+    }
+
+    if (filters.length) {
+      data.filters = filters
+    }
+
     try {
       const response: any = await fetcher({
-        url: `/api/v1/catalog/search/advanced/minimal`,
+        url: SEARCH_MINIMAL_ENDPOINT,
         method: 'post',
-        data: qs.stringify({
-          freeText: '',
-          pageSize: 20,
-          allowFacet: true,
-          facetOnly: false,
-          ...parsedQuery,
-        }),
+        data: qs.stringify(data),
       })
+
       return {
         products: response.result || {
           results: [],
@@ -34,6 +43,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
         },
       }
     } catch (error: any) {
+      console.log(error)
       throw new Error(error)
     }
   }
