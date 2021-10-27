@@ -1,5 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
-
+import Cookies from 'cookie'
 class MyDocument extends Document {
   render() {
     return (
