@@ -13,6 +13,8 @@ import Reviews from '@components/product/Reviews'
 import PriceMatch from '@components/product/PriceMatch'
 import Engraving from '@components/product/Engraving'
 import ProductDetails from '@components/product/ProductDetails'
+import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
+
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -31,6 +33,8 @@ const PLACEMENTS_MAP: any = {
 export default function ProductView({
   product = { images: [] },
   snippets,
+  setEntities,
+  recordEvent,
 }: any) {
   const { openNotifyUser, addToWishlist } = useUI()
 
@@ -39,6 +43,14 @@ export default function ProductView({
   const [isInWishList, setItemsInWishList] = useState(false)
 
   useEffect(() => {
+    const { entityId, entityName, entityType, entity } = KEYS_MAP
+    setEntities({
+      [entityId]: product.recordId,
+      [entityName]: product.name,
+      [entityType]: 'Product',
+      [entity]: JSON.stringify(product),
+    })
+    recordEvent(EVENTS.ProductViewed)
     if (snippets) {
       snippets.forEach((snippet: any) => {
         const domElement = document.querySelector(
@@ -124,9 +136,9 @@ export default function ProductView({
               {/* Image selector */}
               <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
-                  {content?.map((image: any) => (
+                  {content?.map((image: any, idx) => (
                     <Tab
-                      key={image.name}
+                      key={`${idx}-tab`}
                       className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
                     >
                       {() => (

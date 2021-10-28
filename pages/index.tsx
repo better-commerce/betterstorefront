@@ -4,6 +4,10 @@ import { Hero } from '@components/ui'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import { HOMEPAGE_SLUG } from '@components/utils/constants'
 import ProductSlider from '@components/product/ProductSlider'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
+
+import { useEffect } from 'react'
 
 export async function getStaticProps({
   preview,
@@ -30,9 +34,29 @@ export async function getStaticProps({
   }
 }
 
-export default function Home({
-  slugs,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+const PAGE_TYPE = PAGE_TYPES.Home
+
+function Home({ slugs, setEntities, recordEvent }: any) {
+  useEffect(() => {
+    const { entityId, entityName, entityType, entity } = KEYS_MAP
+    setEntities({
+      [entityId]: '84eb4e71-318e-4989-8837-58fcfc9e5066',
+      [entityName]: PAGE_TYPE,
+      [entityType]: 'Page',
+      [entity]: JSON.stringify({
+        id: '84eb4e71-318e-4989-8837-58fcfc9e5066',
+        name: 'Home',
+        metaTitle: 'Home', //TBD
+        metaKeywords: null, //TBD
+        metaDescription: null, //TBD
+        slug: window.location.pathname,
+        title: 'Home', //tbd
+        viewType: 'home', //tbd
+      }),
+    })
+    recordEvent(EVENTS.PageViewed)
+  }, [])
+
   return (
     <>
       <Hero banners={slugs.components[0].images} />
@@ -42,3 +66,5 @@ export default function Home({
 }
 
 Home.Layout = Layout
+
+export default withDataLayer(Home, PAGE_TYPE)

@@ -12,17 +12,18 @@ import DataLayerInstance from '@components/utils/dataLayer'
 
 const Noop: FC = ({ children }) => <>{children}</>
 
-const setSessionIdCookie = () => {
-  console.count('times')
-  const expiryTime: any = new Date(new Date().getTime() + 30 * 60 * 1000)
-  const sessionIdGenerator: string = uuid_v4()
-  Cookies.set(SessionIdCookieKey, sessionIdGenerator, {
-    expires: expiryTime,
-  })
-  DataLayerInstance.setItemInDataLayer(SessionIdCookieKey, sessionIdGenerator)
-  setTimeout(() => {
-    setSessionIdCookie()
-  }, 1800000)
+const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
+  if (!Cookies.get(SessionIdCookieKey) || isCalledByTimeout) {
+    const expiryTime: any = new Date(new Date().getTime() + 30 * 60 * 1000)
+    const sessionIdGenerator: string = uuid_v4()
+    Cookies.set(SessionIdCookieKey, sessionIdGenerator, {
+      expires: expiryTime,
+    })
+    DataLayerInstance.setItemInDataLayer(SessionIdCookieKey, sessionIdGenerator)
+    setTimeout(() => {
+      setSessionIdCookie(true)
+    }, 1800000)
+  }
 }
 
 const setDeviceIdCookie = () => {
