@@ -1,11 +1,13 @@
-import { Layout } from '@components/common'
 import { useReducer, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
-import { getData, postData } from '@components/utils/clientFetcher'
+import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
 import ProductFilters from '@components/product/Filters'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
+
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -71,7 +73,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function Search({ query }: any) {
+function Search({ query, setEntities, recordEvent }: any) {
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -144,6 +146,44 @@ function Search({ query }: any) {
 
   const clearAll = () => dispatch({ type: CLEAR })
 
+  useEffect(() => {
+    const entity = {
+      allowFacet: true,
+      brand: null,
+      brandId: null,
+      breadCrumb: null,
+      category: null,
+      categoryId: null,
+      categoryIds: null,
+      collection: null,
+      collectionId: null,
+      currentPage: state.currentPage,
+      excludedBrandIds: null,
+      excludedCategoryIds: null,
+      facet: null,
+      facetOnly: false,
+      filters: state.filters,
+      freeText: '',
+      gender: null,
+      ignoreDisplayInSerach: false,
+      includeExcludedBrand: false,
+      page: state.currentPage,
+      pageSize: 0,
+      promoCode: null,
+      resultCount: data.products.total,
+      sortBy: state.sortBy,
+      sortOrder: state.sortOrder,
+    }
+    setEntities({
+      [KEYS_MAP.entityId]: '',
+      [KEYS_MAP.entityName]: '',
+      [KEYS_MAP.entityType]: 'Search',
+      [KEYS_MAP.entity]: JSON.stringify(entity),
+    })
+
+    recordEvent(EVENTS.FreeText)
+  })
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -176,6 +216,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-export default Search
+const PAGE_TYPE = PAGE_TYPES['Search']
 
-Search.Layout = Layout
+export default withDataLayer(Search, PAGE_TYPE)

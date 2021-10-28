@@ -66,7 +66,7 @@ export default function ProductDetails({ product }: any) {
   return (
     <div className="border-t divide-y divide-gray-200">
       {detailsConfig.map((detail: any, idx: number) => (
-        <Disclosure as="div" key={detail.name}>
+        <Disclosure as="div" key={`${idx}-detail-item`}>
           {({ open }) => (
             <>
               <h3>

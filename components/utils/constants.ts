@@ -6,6 +6,6 @@ export const NEXT_API_NOTIFY_ME_ENDPOINT = '/api/notify-me/'
 export const PRICE_MATCH_ENDPOINT = '/api/v1/commerce/basket/pricematch/add'
 export const NEXT_API_PRICE_MATCH_ENDPOINT = '/api/price-match'
 
-export const SessionIdCookieKey: string = 'SessionId'
+export const SessionIdCookieKey: string = 'sessionId'
 
-export const DeviceIdKey: string = 'DeviceId'
+export const DeviceIdKey: string = 'deviceId'

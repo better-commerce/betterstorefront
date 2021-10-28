@@ -7,7 +7,8 @@ import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
-import Head from 'next/head'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { useEffect } from 'react'
 
 export async function getStaticProps({
   params,
@@ -33,16 +34,28 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-export default function Slug({
+function Slug({
   data,
+  setEntities,
+  recordEvent,
 }: // product,
-InferGetStaticPropsType<typeof getStaticProps>) {
+any) {
   const router = useRouter()
+
   return router.isFallback ? (
     <h1>Loading...</h1>
   ) : (
-    data && <ProductView product={data.product} snippets={data.snippets} />
+    data && (
+      <ProductView
+        recordEvent={recordEvent}
+        setEntities={setEntities}
+        product={data.product}
+        snippets={data.snippets}
+      />
+    )
   )
 }
 
 Slug.Layout = Layout
+
+export default withDataLayer(Slug, PAGE_TYPES.Product)
