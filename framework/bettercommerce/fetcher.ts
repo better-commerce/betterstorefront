@@ -82,6 +82,8 @@ const fetcher = async ({
   data = {},
   headers = {},
 }: any) => {
+  console.log(url)
+  console.log(BASE_URL)
   const computedUrl = new URL(url, BASE_URL)
   const config: any = {
     method: method,

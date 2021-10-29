@@ -14,6 +14,7 @@ import PriceMatch from '@components/product/PriceMatch'
 import Engraving from '@components/product/Engraving'
 import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
+import cartHandler from '@components/services/cart'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -36,7 +37,7 @@ export default function ProductView({
   setEntities,
   recordEvent,
 }: any) {
-  const { openNotifyUser, addToWishlist } = useUI()
+  const { openNotifyUser, addToWishlist, addToCart } = useUI()
 
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
@@ -91,7 +92,17 @@ export default function ProductView({
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: 'Add to bag',
-      action: () => {},
+      action: async () => {
+        const item = await cartHandler().addToCart({
+          basketId: '00000000-0000-0000-0000-000000000000', //temporary store
+          productId: product.recordId,
+          qty: 1,
+          manualUnitPrice: product.price.raw.withTax,
+          stockCode: product.stockCode,
+        })
+        addToCart(item)
+      },
+
       shortMessage: '',
     }
     if (!product.currentStock && !product.preOrder.isEnabled) {

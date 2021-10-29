@@ -5,7 +5,8 @@ export const PRODUCT_API_ENDPOINT = '/api/v1/catalog/product/'
 export const NEXT_API_NOTIFY_ME_ENDPOINT = '/api/notify-me/'
 export const PRICE_MATCH_ENDPOINT = '/api/v1/commerce/basket/pricematch/add'
 export const NEXT_API_PRICE_MATCH_ENDPOINT = '/api/price-match'
-
+export const BASKET_ENDPOINT = '/api/v1/commerce/basket'
 export const SessionIdCookieKey: string = 'sessionId'
 
+export const NEXT_ADD_TO_CART = '/api/add-item-cart'
 export const DeviceIdKey: string = 'deviceId'

@@ -14,8 +14,13 @@ interface Props {
 const Navbar: FC<Props> = ({ config }) => {
   const router = useRouter()
 
-  const { wishListItems } = useUI()
+  const { wishListItems, cartItems, openSidebar, setSidebarView } = useUI()
   const handleRedirect = (path: string) => (path ? router.push('/' + path) : {})
+
+  const openCart = () => {
+    setSidebarView('CART_VIEW')
+    openSidebar()
+  }
 
   return (
     <div className="bg-white">
@@ -154,13 +159,16 @@ const Navbar: FC<Props> = ({ config }) => {
                 {/* Cart */}
 
                 <div className="ml-4 flow-root lg:ml-8">
-                  <button className="group -m-2 p-2 flex items-center">
+                  <button
+                    className="group -m-2 p-2 flex items-center"
+                    onClick={openCart}
+                  >
                     <ShoppingBagIcon
                       className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      0
+                      {cartItems.length}
                     </span>
                     <span className="sr-only">items in cart, view bag</span>
                   </button>
