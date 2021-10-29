@@ -12,6 +12,7 @@ export interface State {
   productId: string
   notifyUser: boolean
   wishListItems: any
+  cartItems: any
 }
 
 const initialState = {
@@ -24,6 +25,7 @@ const initialState = {
   productId: '',
   notifyUser: false,
   wishListItems: getItem('wishListItems') || [],
+  cartItems: getItem('cartItems') || [],
 }
 
 type Action =
@@ -66,6 +68,14 @@ type Action =
     }
   | {
       type: 'ADD_TO_WISHLIST'
+      payload: any
+    }
+  | {
+      type: 'ADD_TO_CART'
+      payload: any
+    }
+  | {
+      type: 'REMOVE_FROM_CART'
       payload: any
     }
 
@@ -152,6 +162,20 @@ function uiReducer(state: State, action: Action) {
         wishListItems: [...state.wishListItems, action.payload],
       }
     }
+    case 'ADD_TO_CART': {
+      return {
+        ...state,
+        cartItems: [...state.cartItems, action.payload],
+      }
+    }
+    case 'REMOVE_FROM_CART': {
+      return {
+        ...state,
+        cartItems: state.cartItems.filter(
+          (cartItem: any) => cartItem.id !== action.payload
+        ),
+      }
+    }
   }
 }
 
@@ -228,6 +252,15 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const addToCart = useCallback(
+    (payload: any) => dispatch({ type: 'ADD_TO_CART', payload }),
+    [dispatch]
+  )
+
+  const removeFromCart = useCallback(
+    (payload: any) => dispatch({ type: 'REMOVE_FROM_CART', payload }),
+    [dispatch]
+  )
   const value = useMemo(
     () => ({
       ...state,
@@ -245,6 +278,8 @@ export const UIProvider: FC = (props) => {
       openNotifyUser,
       closeNotifyUser,
       addToWishlist,
+      addToCart,
+      removeFromCart,
     }),
     [state]
   )

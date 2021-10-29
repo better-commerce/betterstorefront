@@ -11,6 +11,7 @@ import usePrice from '@framework/product/use-price'
 import SidebarLayout from '@components/common/SidebarLayout'
 
 const CartSidebarView: FC = () => {
+  console.log('heress')
   const { closeSidebar, setSidebarView } = useUI()
   const { data, isLoading, isEmpty } = useCart()
 

@@ -5,7 +5,7 @@ export default function priceMatch() {
     console.log(data)
     try {
       const response: any = await fetcher({
-        url: `$${PRICE_MATCH_ENDPOINT}`,
+        url: `${PRICE_MATCH_ENDPOINT}`,
         method: 'post',
         data,
       })
