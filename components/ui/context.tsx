@@ -253,7 +253,11 @@ export const UIProvider: FC = (props) => {
   )
 
   const addToCart = useCallback(
-    (payload: any) => dispatch({ type: 'ADD_TO_CART', payload }),
+    (payload: any) => {
+      const storedItems = getItem('cartItems') || []
+      setItem('cartItems', [...storedItems, payload])
+      dispatch({ type: 'ADD_TO_CART', payload })
+    },
     [dispatch]
   )
 
