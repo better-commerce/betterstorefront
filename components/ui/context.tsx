@@ -9,6 +9,7 @@ const basketId = () => {
   }
   const basketId = uuid()
   setItem('basketId', basketId)
+  return basketId
 }
 export interface State {
   displaySidebar: boolean
@@ -34,7 +35,7 @@ const initialState = {
   productId: '',
   notifyUser: false,
   wishListItems: getItem('wishListItems') || [],
-  cartItems: getItem('cartItems') || [],
+  cartItems: getItem('cartItems') || { lineItems: [] },
   basketId: basketId(),
 }
 
@@ -88,6 +89,7 @@ type Action =
       type: 'REMOVE_FROM_CART'
       payload: any
     }
+  | { type: 'SET_CART_ITEMS'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -175,13 +177,22 @@ function uiReducer(state: State, action: Action) {
     case 'ADD_TO_CART': {
       return {
         ...state,
-        cartItems: [...state.cartItems, action.payload],
+        cartItems: {
+          ...state.cartItems,
+          lineItems: [...state.cartItems.lineItems, action.payload],
+        },
+      }
+    }
+    case 'SET_CART_ITEMS': {
+      return {
+        ...state,
+        cartItems: action.payload,
       }
     }
     case 'REMOVE_FROM_CART': {
       return {
         ...state,
-        cartItems: state.cartItems.filter(
+        cartItems: state.cartItems.lineItems.filter(
           (cartItem: any) => cartItem.id !== action.payload
         ),
       }
@@ -264,8 +275,8 @@ export const UIProvider: FC = (props) => {
 
   const addToCart = useCallback(
     (payload: any) => {
-      const storedItems = getItem('cartItems') || []
-      setItem('cartItems', [...storedItems, payload])
+      const storedItems = getItem('cartItems') || { lineItems: [] }
+      setItem('cartItems', { lineItems: [...storedItems.lineItems, payload] })
       dispatch({ type: 'ADD_TO_CART', payload })
     },
     [dispatch]
@@ -273,6 +284,14 @@ export const UIProvider: FC = (props) => {
 
   const removeFromCart = useCallback(
     (payload: any) => dispatch({ type: 'REMOVE_FROM_CART', payload }),
+    [dispatch]
+  )
+
+  const setCartItems = useCallback(
+    (payload: any) => {
+      setItem('cartItems', { ...payload })
+      dispatch({ type: 'SET_CART_ITEMS', payload })
+    },
     [dispatch]
   )
   const value = useMemo(
@@ -294,7 +313,7 @@ export const UIProvider: FC = (props) => {
       addToWishlist,
       addToCart,
       removeFromCart,
-      basketId,
+      setCartItems,
     }),
     [state]
   )
