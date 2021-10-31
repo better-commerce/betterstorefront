@@ -37,7 +37,7 @@ export default function ProductView({
   setEntities,
   recordEvent,
 }: any) {
-  const { openNotifyUser, addToWishlist, addToCart } = useUI()
+  const { openNotifyUser, addToWishlist, addToCart, basketId } = useUI()
 
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
@@ -94,7 +94,7 @@ export default function ProductView({
       title: 'Add to bag',
       action: async () => {
         const item = await cartHandler().addToCart({
-          basketId: '00000000-0000-0000-0000-000000000000', //temporary store
+          basketId: basketId,
           productId: product.recordId,
           qty: 1,
           manualUnitPrice: product.price.raw.withTax,

@@ -1,7 +1,15 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { setItem, getItem } from '@components/utils/localStorage'
+import { uuid } from 'uuidv4'
 
+const basketId = () => {
+  if (getItem('basketId')) {
+    return getItem('basketId')
+  }
+  const basketId = uuid()
+  setItem('basketId', basketId)
+}
 export interface State {
   displaySidebar: boolean
   displayDropdown: boolean
@@ -13,6 +21,7 @@ export interface State {
   notifyUser: boolean
   wishListItems: any
   cartItems: any
+  basketId: string
 }
 
 const initialState = {
@@ -26,6 +35,7 @@ const initialState = {
   notifyUser: false,
   wishListItems: getItem('wishListItems') || [],
   cartItems: getItem('cartItems') || [],
+  basketId: basketId(),
 }
 
 type Action =
@@ -284,6 +294,7 @@ export const UIProvider: FC = (props) => {
       addToWishlist,
       addToCart,
       removeFromCart,
+      basketId,
     }),
     [state]
   )
