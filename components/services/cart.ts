@@ -1,4 +1,8 @@
-import { NEXT_ADD_TO_CART } from '@components/utils/constants'
+import {
+  NEXT_ADD_TO_CART,
+  NEXT_GET_CART,
+  NEXT_REMOVE_ITEM_FROM_CART,
+} from '@components/utils/constants'
 import axios from 'axios'
 
 interface CartItem {
@@ -8,6 +12,10 @@ interface CartItem {
   manualUnitPrice?: number
   displayOrder?: number
   stockCode?: string
+}
+
+interface GetCart {
+  basketId?: string
 }
 
 export default function cartHandler() {
@@ -28,6 +36,19 @@ export default function cartHandler() {
           manualUnitPrice,
           displayOrder,
           stockCode,
+        },
+      })
+      return response.data
+    },
+    getCart: async ({ basketId }: GetCart) => {
+      const response = await axios.get(`${NEXT_GET_CART}?basketId=${basketId}`)
+      return response.data
+    },
+    removeItemFromCart: async ({ basketId, productId }: any) => {
+      const response = await axios.post(`${NEXT_REMOVE_ITEM_FROM_CART}`, {
+        data: {
+          basketId,
+          productId,
         },
       })
       return response.data

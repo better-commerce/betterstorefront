@@ -25,7 +25,7 @@ const CartItem = ({
   ...rest
 }: {
   variant?: 'default' | 'display'
-  item: LineItem
+  item: any //to change
   currencyCode: string
 }) => {
   const { closeSidebarIfPresent } = useUI()
@@ -33,12 +33,6 @@ const CartItem = ({
   const [quantity, setQuantity] = useState<number>(item.quantity)
   const removeItem = useRemoveItem()
   const updateItem = useUpdateItem({ item })
-
-  const { price } = usePrice({
-    amount: item.variant.price * item.quantity,
-    baseAmount: item.variant.listPrice * item.quantity,
-    currencyCode,
-  })
 
   const handleChange = async ({
     target: { value },
@@ -61,6 +55,8 @@ const CartItem = ({
       setRemoving(false)
     }
   }
+
+  console.log(item)
 
   // TODO: Add a type for this
   const options = (item as any).options
@@ -91,15 +87,15 @@ const CartItem = ({
                 className={s.productImage}
                 width={150}
                 height={150}
-                src={item.variant.image!.url}
-                alt={item.variant.image!.altText}
+                src={item.image}
+                alt={item.name}
                 unoptimized
               />
             </a>
           </Link>
         </div>
         <div className="flex-1 flex flex-col text-base">
-          <Link href={`/product/${item.path}`}>
+          <Link href={`/${item.slug}`}>
             <a>
               <span
                 className={s.productName}
@@ -138,9 +134,7 @@ const CartItem = ({
             <div className="text-sm tracking-wider">{quantity}x</div>
           )}
         </div>
-        <div className="flex flex-col justify-between space-y-2 text-sm">
-          <span>{price}</span>
-        </div>
+        <div className="flex flex-col justify-between space-y-2 text-sm"></div>
       </div>
       {variant === 'default' && (
         <Quantity
