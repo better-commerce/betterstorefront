@@ -46,7 +46,6 @@ const getIpAddress = () => {
 const DataLayerSingleton = function () {
   const windowObject: any = window
   const navigator: any = windowObject.navigator
-  console.log(navigator.userAgent)
   const isTablet =
     /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/.test(
       navigator.userAgent.toLowerCase()

@@ -9,7 +9,6 @@ export default async (req: any, res: any) => {
     stockCode,
   }: any = req.body.data
   try {
-    console.log(req.body)
     const response = await useAddItem()({
       basketId,
       productId,

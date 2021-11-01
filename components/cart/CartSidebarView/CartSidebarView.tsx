@@ -5,36 +5,49 @@ import { useUI } from '@components/ui/context'
 import { useEffect, useState, Fragment } from 'react'
 import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/outline'
+import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 
 const CartSidebarView: FC = () => {
-  const { closeSidebar, setCartItems, cartItems, basketId, removeFromCart } =
-    useUI()
-  const [isLoading, setIsLoading] = useState(true)
-  const { getCart, removeItemFromCart } = useCart()
+  const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
+  const { getCart, addToCart } = useCart()
 
   useEffect(() => {
     const handleCartitems = async () => {
       const items = await getCart({ basketId })
       setCartItems(items)
-      setIsLoading(false)
     }
     handleCartitems()
   }, [])
 
-  const removeItem = (productId: string) => {
-    const asyncRemoveItem = async () => {
+  const handleItem = (product: any, type = 'increase') => {
+    const asyncHandleItem = async () => {
+      const data: any = {
+        basketId,
+        productId: product.id,
+        stockCode: product.stockCode,
+        manualUnitPrice: product.manualUnitPrice,
+        displayOrder: product.displayOrderta,
+        qty: -1,
+      }
+      if (type === 'increase') {
+        data.qty = 1
+      }
+      if (type === 'delete') {
+        data.qty = 0
+      }
       try {
-        await removeItemFromCart({ basketId, productId })
-        removeFromCart(productId)
+        const item = await addToCart(data)
+        setCartItems(item)
       } catch (error) {
         console.log(error)
       }
     }
-    asyncRemoveItem()
+    asyncHandleItem()
   }
 
   const handleClose = () => closeSidebar()
+
+  const isEmpty: boolean = cartItems.lineItems.length === 0
 
   return (
     <Transition.Root show={true} as={Fragment}>
@@ -87,6 +100,21 @@ const CartSidebarView: FC = () => {
 
                     <div className="mt-8">
                       <div className="flow-root">
+                        {isEmpty && (
+                          <div className="text-gray-900 h-full w-full flex flex-col justify-center items-center">
+                            Uh-oh, you don't have any items in here
+                            <Link href="/search">
+                              <button
+                                type="button"
+                                className="text-indigo-600 font-medium hover:text-indigo-500"
+                                onClick={handleClose}
+                              >
+                                Catalog
+                                <span aria-hidden="true"> &rarr;</span>
+                              </button>
+                            </Link>
+                          </div>
+                        )}
                         <ul
                           role="list"
                           className="-my-6 divide-y divide-gray-200"
@@ -105,12 +133,12 @@ const CartSidebarView: FC = () => {
                                 <div>
                                   <div className="flex justify-between font-medium text-gray-900">
                                     <h3 onClick={handleClose}>
-                                      <Link href={product.slug}>
+                                      <Link href={`/${product.slug}`}>
                                         {product.name}
                                       </Link>
                                     </h3>
                                     <p className="ml-4">
-                                      {product.listPrice?.formatted?.withTax}
+                                      {product.price?.formatted?.withTax}
                                     </p>
                                   </div>
                                   {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
@@ -118,14 +146,33 @@ const CartSidebarView: FC = () => {
                                 <div className="flex-1 flex items-end justify-between text-sm">
                                   {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                  <div className="flex">
+                                  <div className="flex justify-between w-full">
                                     <button
                                       type="button"
                                       className="font-medium text-indigo-600 hover:text-indigo-500"
-                                      onClick={() => removeItem(product.id)}
+                                      onClick={() =>
+                                        handleItem(product, 'delete')
+                                      }
                                     >
                                       Remove
                                     </button>
+                                    <div className="border px-4 text-gray-900 flex flex-row">
+                                      <MinusSmIcon
+                                        onClick={() =>
+                                          handleItem(product, 'decrease')
+                                        }
+                                        className="w-4 cursor-pointer"
+                                      />
+                                      <span className="text-md px-2 py-2">
+                                        {product.qty}
+                                      </span>
+                                      <PlusSmIcon
+                                        className="w-4 cursor-pointer"
+                                        onClick={() =>
+                                          handleItem(product, 'increase')
+                                        }
+                                      />
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -139,17 +186,16 @@ const CartSidebarView: FC = () => {
                   <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                     <div className="flex py-2 justify-between font-small text-gray-900">
                       <p>Total</p>
-                      <p>{cartItems.grandTotal?.formatted?.withoutTax}</p>
+                      <p>{cartItems.subTotal?.formatted?.withoutTax}</p>
                     </div>
                     <div className="flex py-2 justify-between font-small text-gray-900">
                       <p>Tax</p>
-                      <p>{cartItems.grandTotal?.formatted?.tax}</p>
+                      <p>{cartItems.subTotal?.formatted?.tax}</p>
                     </div>
                     <div className="flex justify-between font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p>{cartItems.grandTotal?.formatted?.withTax}</p>
+                      <p>{cartItems.subTotal?.formatted?.withTax}</p>
                     </div>
-                    {console.log(cartItems.grandTotal)}
                     <p className="mt-0.5 text-sm text-gray-500">
                       Shipping is calculated at checkout.
                     </p>
