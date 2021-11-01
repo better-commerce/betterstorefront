@@ -1,7 +1,7 @@
 import { FC, Fragment } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition } from '@headlessui/react'
-import { ShoppingBagIcon, HeartIcon } from '@heroicons/react/outline'
+import { ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/outline'
 import { Searchbar } from '@components/common'
 import { Logo } from '@components/ui'
 import Link from 'next/link'
@@ -142,6 +142,15 @@ const Navbar: FC<Props> = ({ config }) => {
               <div className="flex-1 flex items-center justify-end">
                 {/* Search */}
                 <Searchbar />
+                {/* account */}
+                <div className="ml-4 flow-root lg:ml-8">
+                  <button className="group -m-2 p-2 flex items-center">
+                    <UserIcon
+                      className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </div>
                 {/* Wishlist*/}
 
                 <div className="ml-4 flow-root lg:ml-8">

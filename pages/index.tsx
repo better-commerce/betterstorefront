@@ -6,7 +6,6 @@ import { HOMEPAGE_SLUG } from '@components/utils/constants'
 import ProductSlider from '@components/product/ProductSlider'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-
 import { useEffect } from 'react'
 
 export async function getStaticProps({
@@ -43,16 +42,7 @@ function Home({ slugs, setEntities, recordEvent }: any) {
       [entityId]: '84eb4e71-318e-4989-8837-58fcfc9e5066',
       [entityName]: PAGE_TYPE,
       [entityType]: 'Page',
-      [entity]: JSON.stringify({
-        id: '84eb4e71-318e-4989-8837-58fcfc9e5066',
-        name: 'Home',
-        metaTitle: 'Home', //TBD
-        metaKeywords: null, //TBD
-        metaDescription: null, //TBD
-        slug: window.location.pathname,
-        title: 'Home', //tbd
-        viewType: 'home', //tbd
-      }),
+      [entity]: JSON.stringify(slugs),
     })
     recordEvent(EVENTS.PageViewed)
   }, [])
