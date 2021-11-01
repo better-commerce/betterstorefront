@@ -26,6 +26,7 @@ export default function useAddItem() {
       displayOrder,
       stockCode,
     }
+    console.log(data)
     try {
       const response: any = await fetcher({
         url: `${BASKET_ENDPOINT}/${basketId}/add`,

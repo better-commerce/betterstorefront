@@ -8,8 +8,8 @@ export default function Engraving({
   onClose = () => {},
   engravingPrice = '5.99$',
   show = false,
+  submitForm,
 }: any) {
-  const submitForm = (values: any) => console.log(values) //TODO values
   return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog

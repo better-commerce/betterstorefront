@@ -11,7 +11,6 @@ export const NEXT_API_NOTIFY_ME_ENDPOINT = '/api/notify-me/'
 export const PRICE_MATCH_ENDPOINT = '/api/v1/commerce/basket/pricematch/add'
 export const NEXT_ADD_TO_CART = '/api/add-item-cart'
 export const NEXT_GET_CART = '/api/get-cart'
-export const NEXT_REMOVE_ITEM_FROM_CART = '/api/remove-item-from-cart'
 
 //CONSTANTS
 export const DeviceIdKey: string = 'deviceId'

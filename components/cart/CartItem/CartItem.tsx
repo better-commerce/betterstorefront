@@ -56,8 +56,6 @@ const CartItem = ({
     }
   }
 
-  console.log(item)
-
   // TODO: Add a type for this
   const options = (item as any).options
 

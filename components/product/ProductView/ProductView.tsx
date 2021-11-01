@@ -37,7 +37,8 @@ export default function ProductView({
   setEntities,
   recordEvent,
 }: any) {
-  const { openNotifyUser, addToWishlist, addToCart, basketId } = useUI()
+  const { openNotifyUser, addToWishlist, addToCart, basketId, setCartItems } =
+    useUI()
 
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
@@ -100,7 +101,7 @@ export default function ProductView({
           manualUnitPrice: product.price.raw.withTax,
           stockCode: product.stockCode,
         })
-        addToCart(item)
+        setCartItems(item)
       },
 
       shortMessage: '',
@@ -318,6 +319,7 @@ export default function ProductView({
           {isEngravingAvailable && (
             <Engraving
               show={isEngravingOpen}
+              submitForm={() => addToCart(product)}
               onClose={() => showEngravingModal(false)}
             />
           )}
