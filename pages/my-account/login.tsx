@@ -4,17 +4,30 @@ import Form from '@components/customer'
 import { NEXT_AUTHENTICATE } from '@components/utils/constants'
 import axios from 'axios'
 import { useState } from 'react'
-
+import { useUI } from '@components/ui/context'
+import Router from 'next/router'
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
+  const { setUser, user } = useUI()
+  if (user) {
+    Router.push('/')
+  }
+  if (user) {
+    return (
+      <div className="font-extrabold text-center w-full h-full text-gray-900">
+        You're already logged in
+      </div>
+    )
+  }
   const handleUserLogin = (values: any) => {
     const asyncLoginUser = async () => {
       const result = await axios.post(NEXT_AUTHENTICATE, { data: values })
-      console.log(result)
       if (!result.data) {
         setNoAccount(true)
-      } else if (noAccount && result.data) {
+      } else if (result.data) {
         setNoAccount(false)
+        setUser(result.data)
+        Router.push('/')
       }
     }
     asyncLoginUser()

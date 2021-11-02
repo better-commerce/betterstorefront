@@ -1,11 +1,24 @@
 import { Layout } from '@components/common'
-import commerce from '@lib/api/commerce'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import axios from 'axios'
 import { NEXT_SIGN_UP } from '@components/utils/constants'
-import { data } from 'autoprefixer'
+import { useUI } from '@components/ui/context'
+import Router from 'next/router'
+
 function RegisterPage({ recordEvent, setEntities }: any) {
+  const { setUser, user } = useUI()
+  if (user) {
+    Router.push('/')
+  }
+  if (user) {
+    return (
+      <div className="font-extrabold text-center w-full h-full text-gray-900">
+        You're already logged in
+      </div>
+    )
+  }
+
   const handleUserRegister = (values: any) => {
     const asyncRegisterUser = async () => {
       await axios.post(NEXT_SIGN_UP, { data: values })

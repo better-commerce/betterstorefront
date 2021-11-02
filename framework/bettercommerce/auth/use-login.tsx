@@ -10,7 +10,7 @@ interface Props {
 export default function useLogin() {
   return async function handler({ email, password }: Props) {
     const data = {
-      email,
+      username: email,
       password,
     }
 
@@ -23,8 +23,10 @@ export default function useLogin() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
+      console.log(response)
       return response.result
     } catch (error: any) {
+      console.log(error)
       throw new Error(error.message)
     }
   }
