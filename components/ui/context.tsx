@@ -1,7 +1,16 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { setItem, getItem } from '@components/utils/localStorage'
+import { uuid } from 'uuidv4'
 
+const basketId = () => {
+  if (getItem('basketId')) {
+    return getItem('basketId')
+  }
+  const basketId = uuid()
+  setItem('basketId', basketId)
+  return basketId
+}
 export interface State {
   displaySidebar: boolean
   displayDropdown: boolean
@@ -12,6 +21,8 @@ export interface State {
   productId: string
   notifyUser: boolean
   wishListItems: any
+  cartItems: any
+  basketId: string
 }
 
 const initialState = {
@@ -24,6 +35,8 @@ const initialState = {
   productId: '',
   notifyUser: false,
   wishListItems: getItem('wishListItems') || [],
+  cartItems: getItem('cartItems') || { lineItems: [] },
+  basketId: basketId(),
 }
 
 type Action =
@@ -68,6 +81,15 @@ type Action =
       type: 'ADD_TO_WISHLIST'
       payload: any
     }
+  | {
+      type: 'ADD_TO_CART'
+      payload: any
+    }
+  | {
+      type: 'REMOVE_FROM_CART'
+      payload: any
+    }
+  | { type: 'SET_CART_ITEMS'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -152,6 +174,30 @@ function uiReducer(state: State, action: Action) {
         wishListItems: [...state.wishListItems, action.payload],
       }
     }
+    case 'ADD_TO_CART': {
+      debugger
+      return {
+        ...state,
+        cartItems: {
+          ...state.cartItems,
+          lineItems: [...state.cartItems.lineItems, action.payload],
+        },
+      }
+    }
+    case 'SET_CART_ITEMS': {
+      return {
+        ...state,
+        cartItems: action.payload,
+      }
+    }
+    case 'REMOVE_FROM_CART': {
+      return {
+        ...state,
+        cartItems: state.cartItems.lineItems.filter(
+          (cartItem: any) => cartItem.id !== action.payload
+        ),
+      }
+    }
   }
 }
 
@@ -228,6 +274,27 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const addToCart = useCallback(
+    (payload: any) => {
+      const storedItems = getItem('cartItems') || { lineItems: [] }
+      setItem('cartItems', { lineItems: [...storedItems.lineItems, payload] })
+      dispatch({ type: 'ADD_TO_CART', payload })
+    },
+    [dispatch]
+  )
+
+  const removeFromCart = useCallback(
+    (payload: any) => dispatch({ type: 'REMOVE_FROM_CART', payload }),
+    [dispatch]
+  )
+
+  const setCartItems = useCallback(
+    (payload: any) => {
+      setItem('cartItems', { ...payload })
+      dispatch({ type: 'SET_CART_ITEMS', payload })
+    },
+    [dispatch]
+  )
   const value = useMemo(
     () => ({
       ...state,
@@ -245,6 +312,9 @@ export const UIProvider: FC = (props) => {
       openNotifyUser,
       closeNotifyUser,
       addToWishlist,
+      addToCart,
+      removeFromCart,
+      setCartItems,
     }),
     [state]
   )

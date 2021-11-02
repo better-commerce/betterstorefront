@@ -45,19 +45,7 @@ const WishlistCard: FC<Props> = ({ product }) => {
       setRemoving(false)
     }
   }
-  const addToCart = async () => {
-    setLoading(true)
-    try {
-      await addItem({
-        productId: String(product.id),
-        variantId: String(product.variants[0].id),
-      })
-      openSidebar()
-      setLoading(false)
-    } catch (err) {
-      setLoading(false)
-    }
-  }
+  const addToCart = async () => {}
 
   return (
     <div className={cn(s.root, { 'opacity-75 pointer-events-none': removing })}>

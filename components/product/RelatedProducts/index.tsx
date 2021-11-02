@@ -1,11 +1,16 @@
 import Link from 'next/link'
 import Engraving from '@components/product/Engraving'
 import { useState } from 'react'
+import cartHandler from '@components/services/cart'
+import { useUI } from '@components/ui/context'
+
 export default function RelatedProducts({
   relatedProducts = [],
   relatedProductList = [],
 }: any) {
   const [isEngravingOpen, showEngravingModal] = useState(false)
+
+  const { basketId, setCartItems } = useUI()
 
   const computeRelatedItems = () => {
     const relatedProductsClone = [...relatedProducts]
@@ -24,6 +29,20 @@ export default function RelatedProducts({
   }
 
   const computedItems = computeRelatedItems()
+
+  const addToCart = (product: any) => {
+    const asyncAddToCart = async () => {
+      const item = await cartHandler().addToCart({
+        basketId: basketId,
+        productId: product.recordId,
+        qty: 1,
+        manualUnitPrice: product.price.raw.withTax,
+        stockCode: product.stockCode,
+      })
+      setCartItems(item)
+    }
+    asyncAddToCart()
+  }
 
   return (
     <section
@@ -79,14 +98,15 @@ export default function RelatedProducts({
                           </div>
                         </div>
                         <div className="mt-6">
+                          <button
+                            onClick={() => addToCart(product)}
+                            type="button"
+                            className="w-full relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200"
+                          >
+                            Add to bag
+                          </button>
                           <Link href={`/${product.slug}`} passHref>
-                            <a
-                              href={product.slug}
-                              className="relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200"
-                            >
-                              Add to bag
-                              <span className="sr-only">, {product.name}</span>
-                            </a>
+                            <span className="sr-only">, {product.name}</span>
                           </Link>
                           {isEngravingAvailable && (
                             <>
@@ -98,6 +118,7 @@ export default function RelatedProducts({
                               </button>
                               <Engraving
                                 show={isEngravingOpen}
+                                submitForm={() => addToCart(product)}
                                 onClose={() => showEngravingModal(false)}
                               />
                             </>

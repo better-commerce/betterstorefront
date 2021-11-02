@@ -13,7 +13,6 @@ import s from './CheckoutSidebarView.module.css'
 
 const CheckoutSidebarView: FC = () => {
   const { setSidebarView, closeSidebar } = useUI()
-  const { data: cartData } = useCart()
   const { data: checkoutData, submit: onCheckout } = useCheckout()
 
   async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
@@ -23,19 +22,6 @@ const CheckoutSidebarView: FC = () => {
 
     closeSidebar()
   }
-
-  const { price: subTotal } = usePrice(
-    cartData && {
-      amount: Number(cartData.subtotalPrice),
-      currencyCode: cartData.currency.code,
-    }
-  )
-  const { price: total } = usePrice(
-    cartData && {
-      amount: Number(cartData.totalPrice),
-      currencyCode: cartData.currency.code,
-    }
-  )
 
   return (
     <SidebarLayout
@@ -58,16 +44,7 @@ const CheckoutSidebarView: FC = () => {
           onClick={() => setSidebarView('SHIPPING_VIEW')}
         />
 
-        <ul className={s.lineItemsList}>
-          {cartData!.lineItems.map((item: any) => (
-            <CartItem
-              key={item.id}
-              item={item}
-              currencyCode={cartData!.currency.code}
-              variant="display"
-            />
-          ))}
-        </ul>
+        <ul className={s.lineItemsList}></ul>
       </div>
 
       <form
@@ -77,7 +54,6 @@ const CheckoutSidebarView: FC = () => {
         <ul className="pb-2">
           <li className="flex justify-between py-1">
             <span>Subtotal</span>
-            <span>{subTotal}</span>
           </li>
           <li className="flex justify-between py-1">
             <span>Taxes</span>
@@ -90,7 +66,6 @@ const CheckoutSidebarView: FC = () => {
         </ul>
         <div className="flex justify-between border-t border-accent-2 py-3 font-bold mb-2">
           <span>Total</span>
-          <span>{total}</span>
         </div>
         <div>
           {/* Once data is correcly filled */}

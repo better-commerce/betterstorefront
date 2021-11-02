@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { Cross, ChevronLeft } from '@components/icons'
-import { UserNav } from '@components/common'
 import cn from 'classnames'
 import s from './SidebarLayout.module.css'
 
@@ -38,9 +37,6 @@ const SidebarLayout: FC<ComponentProps> = ({
             <span className="ml-2 text-accent-7 text-xs">Back</span>
           </button>
         )}
-        <span className={s.nav}>
-          <UserNav />
-        </span>
       </header>
       <div className={s.container}>{children}</div>
     </div>
