@@ -11,3 +11,9 @@ export const getItem = (key: string) => {
   }
   return item ? JSON.parse(item) : null
 }
+
+export const removeItem = (key: string) => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(key)
+  }
+}
