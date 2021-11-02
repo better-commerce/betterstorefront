@@ -5,7 +5,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head />
-
         <body className="loading">
           <Main />
           <NextScript />

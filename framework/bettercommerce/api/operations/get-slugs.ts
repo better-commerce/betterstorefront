@@ -7,6 +7,7 @@ export default function getSlugsOperation() {
         url: `api/v1/content/siteview/slug?slug=${slug}`,
         method: 'post',
       })
+      console.log(response)
       return response.result
     } catch (error) {
       console.log(error)

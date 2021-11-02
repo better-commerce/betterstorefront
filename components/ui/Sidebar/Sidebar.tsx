@@ -23,12 +23,8 @@ const Sidebar: FC<SidebarProps> = ({ children, onClose }) => {
   }
 
   useEffect(() => {
-    if (sidebarRef.current) {
-      sidebarRef.current.focus()
-    }
-
     const contentElement = contentRef.current
-  
+
     if (contentElement) {
       disableBodyScroll(contentElement, { reserveScrollBarGap: true })
     }

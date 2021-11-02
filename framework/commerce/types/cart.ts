@@ -9,6 +9,11 @@ export type SelectedOption = {
   value: string
 }
 
+interface GrandTotal {
+  formatted: any
+  raw: any
+}
+
 export type LineItem = {
   id: string
   variantId: string

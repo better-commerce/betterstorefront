@@ -18,6 +18,10 @@
   transition: background 0.45s cubic-bezier(0.22, 0.61, 0.35, 1);
 }
 
+.mySwiper {
+  z-index: 0 !important;
+}
+
 #search-input {
   margin-top: 0px;
 }

@@ -1,42 +1,27 @@
-import { useMemo } from 'react'
-import { SWRHook } from '@commerce/utils/types'
-import useCart, { UseCart } from '@commerce/cart/use-cart'
+import { BASKET_ENDPOINT } from '@components/utils/constants'
+import fetcher from '../fetcher'
+interface Props {
+  basketId?: string
+}
 
-export default useCart as UseCart<typeof handler>
-
-export const handler: SWRHook<any> = {
-  fetchOptions: {
-    query: '',
-  },
-  async fetcher() {
-    return {
-      id: '',
-      createdAt: '',
-      currency: { code: '' },
-      taxesIncluded: '',
-      lineItems: [],
-      lineItemsSubtotalPrice: '',
-      subtotalPrice: 0,
-      totalPrice: 0,
+export default function useAddItem() {
+  return async function handler({ basketId }: Props) {
+    const data = {
+      basketId,
     }
-  },
-  useHook:
-    ({ useData }) =>
-    (input) => {
-      return useMemo(
-        () =>
-          Object.create(
-            {},
-            {
-              isEmpty: {
-                get() {
-                  return true
-                },
-                enumerable: true,
-              },
-            }
-          ),
-        []
-      )
-    },
+    try {
+      const response: any = await fetcher({
+        url: `${BASKET_ENDPOINT}/${basketId}`,
+        method: 'get',
+        data,
+        headers: {
+          DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        },
+      })
+      return response.result
+    } catch (error: any) {
+      console.log(error)
+      // throw new Error(error.message)
+    }
+  }
 }

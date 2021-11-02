@@ -1,17 +1,45 @@
-import useAddItem, { UseAddItem } from '@commerce/cart/use-add-item'
-import { MutationHook } from '@commerce/utils/types'
+import { BASKET_ENDPOINT } from '@components/utils/constants'
+import fetcher from '../fetcher'
+interface Props {
+  basketId?: string
+  productId?: string
+  qty?: number
+  manualUnitPrice?: number
+  displayOrder?: number
+  stockCode?: string
+}
 
-export default useAddItem as UseAddItem<typeof handler>
-export const handler: MutationHook<any> = {
-  fetchOptions: {
-    query: '',
-  },
-  async fetcher({ input, options, fetch }) {},
-  useHook:
-    ({ fetch }) =>
-    () => {
-      return async function addItem() {
-        return {}
-      }
-    },
+export default function useAddItem() {
+  return async function handler({
+    basketId,
+    productId,
+    qty,
+    manualUnitPrice,
+    displayOrder,
+    stockCode,
+  }: Props) {
+    const data = {
+      basketId,
+      productId,
+      qty,
+      manualUnitPrice,
+      displayOrder,
+      stockCode,
+    }
+    console.log(data)
+    try {
+      const response: any = await fetcher({
+        url: `${BASKET_ENDPOINT}/${basketId}/add`,
+        method: 'post',
+        data,
+        headers: {
+          DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        },
+      })
+      return response.result
+    } catch (error: any) {
+      console.log(error)
+      // throw new Error(error.message)
+    }
+  }
 }

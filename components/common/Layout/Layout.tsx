@@ -19,6 +19,7 @@ import s from './Layout.module.css'
 import { getData } from '../../utils/clientFetcher'
 import { setItem, getItem } from '../../utils/localStorage'
 import NotifyUserPopup from '@components/ui/NotifyPopup'
+import Script from 'next/script'
 
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
@@ -128,6 +129,11 @@ const Layout: FC<Props> = ({
   const { locale = 'en-US' } = useRouter()
   return (
     <CommerceProvider locale={locale}>
+      <Script
+        src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
+        strategy="beforeInteractive"
+      />
+
       <div className={cn(s.root)}>
         <Navbar config={data.nav} />
         <main className="fit">{children}</main>

@@ -1,18 +1,28 @@
-import { MutationHook } from '@commerce/utils/types'
-import useRemoveItem, { UseRemoveItem } from '@commerce/cart/use-remove-item'
+import { BASKET_ENDPOINT } from '@components/utils/constants'
+import fetcher from '../fetcher'
+interface Props {
+  basketId?: string
+  productId?: string
+}
 
-export default useRemoveItem as UseRemoveItem<typeof handler>
-
-export const handler: MutationHook<any> = {
-  fetchOptions: {
-    query: '',
-  },
-  async fetcher({ input, options, fetch }) {},
-  useHook:
-    ({ fetch }) =>
-    () => {
-      return async function removeItem(input) {
-        return {}
-      }
-    },
+export default function useRemoveItem() {
+  return async function handler({ basketId, productId }: Props) {
+    const data = {
+      basketId,
+      productId,
+    }
+    try {
+      const response: any = await fetcher({
+        url: `${BASKET_ENDPOINT}/${basketId}/items/${productId}/remove`,
+        method: 'post',
+        data,
+        headers: {
+          DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        },
+      })
+      return response.result
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
 }
