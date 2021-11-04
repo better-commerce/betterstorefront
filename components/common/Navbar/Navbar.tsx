@@ -1,25 +1,79 @@
 import { FC, Fragment } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition } from '@headlessui/react'
-import { ShoppingBagIcon, HeartIcon } from '@heroicons/react/outline'
+import { ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/outline'
 import { Searchbar } from '@components/common'
 import { Logo } from '@components/ui'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui'
+import Account from './AccountDropdown'
+
 interface Props {
   config: []
 }
 
+const accountDropDownConfigUnauthorized: any = [
+  {
+    href: '/my-account/login',
+    title: 'Login',
+    className:
+      'mt-5 max-w-xs flex-1 bg-gray-300 border font-semibold border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full',
+  },
+  {
+    href: '/my-account/register',
+    title: 'Register',
+    className:
+      'mt-5 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md op-75 py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full',
+  },
+]
+
 const Navbar: FC<Props> = ({ config }) => {
   const router = useRouter()
 
-  const { wishListItems, cartItems, openSidebar, setSidebarView } = useUI()
+  const {
+    wishListItems,
+    cartItems,
+    openSidebar,
+    setSidebarView,
+    user,
+    deleteUser,
+  } = useUI()
   const handleRedirect = (path: string) => (path ? router.push('/' + path) : {})
+
+  const accountDropDownConfigAuthorized: any = [
+    {
+      href: '/my-account',
+      title: 'My account',
+      className: 'text-center py-2 cursor-pointer',
+    },
+    {
+      href: '/my-account/orders',
+      title: 'My orders',
+      className: 'text-center py-2 cursor-pointer',
+    },
+    {
+      href: '/my-account/recently-viewed',
+      title: 'Recently viewed',
+      className: 'text-center py-2 cursor-pointer',
+    },
+    {
+      href: '/',
+      onClick: () => deleteUser(),
+      title: 'Sign out',
+      className: 'text-center py-2 cursor-pointer text-red-300',
+    },
+  ]
 
   const openCart = () => {
     setSidebarView('CART_VIEW')
     openSidebar()
+  }
+
+  let accountDropdownConfig = accountDropDownConfigUnauthorized
+  let title = user ? `Hi, ${user.firstName}` : 'My account'
+  if (user) {
+    accountDropdownConfig = accountDropDownConfigAuthorized
   }
 
   return (
@@ -142,9 +196,11 @@ const Navbar: FC<Props> = ({ config }) => {
               <div className="flex-1 flex items-center justify-end">
                 {/* Search */}
                 <Searchbar />
+                {/* account */}
+                <Account title={title} config={accountDropdownConfig} />
                 {/* Wishlist*/}
 
-                <div className="ml-4 flow-root lg:ml-8">
+                <div className="px-2 flow-root">
                   <button className="group -m-2 p-2 flex items-center">
                     <HeartIcon
                       className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
@@ -158,7 +214,7 @@ const Navbar: FC<Props> = ({ config }) => {
                 </div>
                 {/* Cart */}
 
-                <div className="ml-4 flow-root lg:ml-8">
+                <div className="px-2 flow-root">
                   <button
                     className="group -m-2 p-2 flex items-center"
                     onClick={openCart}

@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
-import { setItem, getItem } from '@components/utils/localStorage'
+import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { uuid } from 'uuidv4'
 
 const basketId = () => {
@@ -23,6 +23,7 @@ export interface State {
   wishListItems: any
   cartItems: any
   basketId: string
+  user: any
 }
 
 const initialState = {
@@ -37,6 +38,7 @@ const initialState = {
   wishListItems: getItem('wishListItems') || [],
   cartItems: getItem('cartItems') || { lineItems: [] },
   basketId: basketId(),
+  user: getItem('user') || null,
 }
 
 type Action =
@@ -90,6 +92,11 @@ type Action =
       payload: any
     }
   | { type: 'SET_CART_ITEMS'; payload: any }
+  | {
+      type: 'SET_USER'
+      payload: any
+    }
+  | { type: 'REMOVE_USER'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -198,6 +205,18 @@ function uiReducer(state: State, action: Action) {
         ),
       }
     }
+    case 'SET_USER': {
+      return {
+        ...state,
+        user: action.payload,
+      }
+    }
+    case 'REMOVE_USER': {
+      return {
+        ...state,
+        user: null,
+      }
+    }
   }
 }
 
@@ -295,6 +314,22 @@ export const UIProvider: FC = (props) => {
     },
     [dispatch]
   )
+
+  const setUser = useCallback(
+    (payload: any) => {
+      setItem('user', payload)
+      dispatch({ type: 'SET_USER', payload })
+    },
+    [dispatch]
+  )
+
+  const deleteUser = useCallback(
+    (payload: any) => {
+      removeItem('user')
+      dispatch({ type: 'REMOVE_USER', payload: null })
+    },
+    [dispatch]
+  )
   const value = useMemo(
     () => ({
       ...state,
@@ -315,6 +350,8 @@ export const UIProvider: FC = (props) => {
       addToCart,
       removeFromCart,
       setCartItems,
+      setUser,
+      deleteUser,
     }),
     [state]
   )

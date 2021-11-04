@@ -14,7 +14,6 @@ import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import PaymentMethodView from '@components/checkout/PaymentMethodView'
 import CheckoutSidebarView from '@components/checkout/CheckoutSidebarView'
 import useSWR from 'swr'
-import LoginView from '@components/auth/LoginView'
 import s from './Layout.module.css'
 import { getData } from '../../utils/clientFetcher'
 import { setItem, getItem } from '../../utils/localStorage'
@@ -30,16 +29,6 @@ const Loading = () => (
 const dynamicProps = {
   loading: Loading,
 }
-
-const SignUpView = dynamic(
-  () => import('@components/auth/SignUpView'),
-  dynamicProps
-)
-
-const ForgotPassword = dynamic(
-  () => import('@components/auth/ForgotPassword'),
-  dynamicProps
-)
 
 const FeatureBar = dynamic(
   () => import('@components/common/FeatureBar'),
@@ -60,12 +49,7 @@ const ModalView: FC<{ modalView: string; closeModal(): any }> = ({
   closeModal,
 }) => {
   return (
-    <Modal onClose={closeModal}>
-      {modalView === 'LOGIN_VIEW' && <LoginView />}
-      {modalView === 'SIGNUP_VIEW' && <SignUpView />}
-      {modalView === 'FORGOT_VIEW' && <ForgotPassword />}
-      {modalView === 'NOTIFY_USER' && null}
-    </Modal>
+    <Modal onClose={closeModal}>{modalView === 'NOTIFY_USER' && null}</Modal>
   )
 }
 

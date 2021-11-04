@@ -1,19 +1,45 @@
-import { useCallback } from 'react'
-import useCustomer from '../customer/use-customer'
-import { MutationHook } from '@commerce/utils/types'
-import useSignup, { UseSignup } from '@commerce/auth/use-signup'
+import { REGISTER_CUSTOMER } from '@components/utils/constants'
+import fetcher from '../fetcher'
+import qs from 'qs'
 
-export default useSignup as UseSignup<typeof handler>
+interface Props {
+  Email: string
+  Password: string
+  confirmPassword: string
+  firstName: string
+  lastName: string
+}
 
-export const handler: MutationHook<any> = {
-  fetchOptions: {
-    query: '',
-  },
-  async fetcher() {
-    return null
-  },
-  useHook:
-    ({ fetch }) =>
-    () =>
-    () => {},
+export default function useSignup() {
+  return async function handler({
+    Email,
+    Password,
+    confirmPassword,
+    firstName,
+    lastName,
+  }: Props) {
+    const data = {
+      email: Email,
+      password: Password,
+      firstName,
+      lastName,
+      confirmPassword,
+    }
+
+    try {
+      const response: any = await fetcher({
+        url: `${REGISTER_CUSTOMER}`,
+        method: 'post',
+        data,
+        headers: {
+          DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        },
+      })
+      console.log(response)
+      return response.result
+    } catch (error: any) {
+      console.log(error)
+      throw new Error(error.message)
+    }
+  }
 }
