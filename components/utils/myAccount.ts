@@ -1,11 +1,6 @@
 export const config: any = [
   {
     type: 'tab',
-    text: 'Account overview',
-    props: 'my-account',
-  },
-  {
-    type: 'tab',
     text: 'My Orders',
     props: 'my-orders',
   },

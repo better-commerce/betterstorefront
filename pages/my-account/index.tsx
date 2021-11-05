@@ -9,7 +9,7 @@ function MyAccount() {
       <div className="w-full">
         <div className="justify-between px-10 flex flex-col md:flex-row">
           <Tab.Group vertical>
-            <Tab.List className="sticky top-0 px-5 flex flex-col w-full md:w-1/4 bg-gray-200 h-full rounded-lg">
+            <Tab.List className="sticky top-0 flex flex-col w-full md:w-1/4 bg-gray-200 h-full rounded-lg">
               {config.map((item: any, idx: number) => {
                 return (
                   <Tab
@@ -28,7 +28,6 @@ function MyAccount() {
             </Tab.List>
             <Tab.Panels className="w-3/4">
               {config.map((item: any, idx: any) => {
-                console.log(COMPONENTS_MAP[item.props])
                 let Component = COMPONENTS_MAP[item.props] || null
                 return (
                   <Tab.Panel
