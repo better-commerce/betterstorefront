@@ -21,7 +21,6 @@ export default function ContractPreferences() {
 
   const handleCheckbox = (key: string) => {
     const items = checkboxes.map((box: any) => {
-      // box.key.checked = !box[key].checked
       if (box.key === key) {
         box.checked = !box.checked
       } else box.checked = false
@@ -62,7 +61,7 @@ export default function ContractPreferences() {
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row flex-wrap mt-10">
         {checkboxes.map((box: any, idx: number) => {
           return (
-            <div className="w-1/2 py-5 flex items-center">
+            <div className="w-1/2 py-5 flex items-center" key={idx}>
               <input
                 name={`${idx}-input[]`}
                 defaultValue={box.key}

@@ -2,17 +2,17 @@ export const config: any = [
   {
     type: 'tab',
     text: 'My Orders',
-    props: 'my-orders',
+    props: 'orders',
   },
   {
     type: 'tab',
     text: 'My Returns',
-    props: 'my-returns',
+    props: 'returns',
   },
   {
     type: 'tab',
     text: 'My Details',
-    props: 'my-details',
+    props: 'details',
   },
   {
     type: 'tab',

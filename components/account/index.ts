@@ -6,10 +6,9 @@ import MyDetails from './MyDetails'
 import MyReturns from './MyReturns'
 
 const COMPONENTS_MAP: any = {
-  'my-account': MyAccount,
-  'my-orders': MyOrders,
-  'my-details': MyDetails,
-  'my-returns': MyReturns,
+  orders: MyOrders,
+  details: MyDetails,
+  returns: MyReturns,
   'address-book': AddressBook,
   contact: ContactPreferences,
 }
