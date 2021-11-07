@@ -3,6 +3,8 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Tab } from '@headlessui/react'
 import { config } from '@components/utils/myAccount'
 import COMPONENTS_MAP from '@components/account'
+import withAuth from '@components/utils/withAuth'
+
 function MyAccount() {
   return (
     <section className="text-gray-900 relative py-10">
@@ -49,4 +51,4 @@ function MyAccount() {
 MyAccount.Layout = Layout
 
 const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(MyAccount, PAGE_TYPE)
+export default withDataLayer(withAuth(MyAccount), PAGE_TYPE)

@@ -1,6 +1,6 @@
 import MyAccount from './MyAccount'
 import MyOrders from './MyOrders'
-import AddressBook from './AddressBook'
+import AddressBook from './Address/AddressBook'
 import ContactPreferences from './ContactPreferences'
 import MyDetails from './MyDetails'
 import MyReturns from './MyReturns'

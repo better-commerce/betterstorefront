@@ -2,6 +2,7 @@ import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { uuid } from 'uuidv4'
+import { useRouter } from 'next/router'
 
 const basketId = () => {
   if (getItem('basketId')) {
@@ -221,6 +222,8 @@ function uiReducer(state: State, action: Action) {
 }
 
 export const UIProvider: FC = (props) => {
+  const Router = useRouter()
+
   const [state, dispatch] = React.useReducer(uiReducer, initialState)
 
   const addToWishlist = useCallback(
@@ -325,8 +328,10 @@ export const UIProvider: FC = (props) => {
 
   const deleteUser = useCallback(
     (payload: any) => {
-      removeItem('user')
-      dispatch({ type: 'REMOVE_USER', payload: null })
+      Router.push('/').then(() => {
+        removeItem('user')
+        dispatch({ type: 'REMOVE_USER', payload: null })
+      })
     },
     [dispatch]
   )
