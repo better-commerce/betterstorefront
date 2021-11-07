@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
 import { formConfig, schema } from './configs/details'
 import { useUI } from '@components/ui/context'
-
+import { handleSubmit } from './common'
 export default function MyDetails() {
-  const { user } = useUI()
-  console.log(user)
+  const [title, setTitle] = useState('My Details')
+
+  const { user, setUser } = useUI()
 
   const initialValues = {
     email: user.email,
@@ -14,13 +15,16 @@ export default function MyDetails() {
     mobile: user.mobile,
     phone: user.telephone,
   }
-  console.log(initialValues)
+
+  const handleDataSubmit = (values: any) =>
+    handleSubmit(values, user, setUser, setTitle)
+
   return (
     <main className="sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="px-4 sm:px-0">
           <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-            My Details
+            {title}
           </h1>
           <p className="mt-2 text-sm text-gray-500">
             Feel free to edit any of your details below so your account is
@@ -32,7 +36,7 @@ export default function MyDetails() {
         <Formik
           validationSchema={schema}
           initialValues={initialValues}
-          onSubmit={(val) => console.log(val)}
+          onSubmit={handleDataSubmit}
         >
           {({ errors, touched, handleSubmit, values, handleChange }: any) => {
             return (
@@ -40,8 +44,8 @@ export default function MyDetails() {
                 <Form className="font-semibold w-full sm:w-1/2">
                   {formConfig.map((formItem: any, idx: number) => {
                     return (
-                      <>
-                        <label key={idx} className="text-gray-700 text-sm">
+                      <div key={`${formItem.label}_${idx}`}>
+                        <label className="text-gray-700 text-sm">
                           {formItem.label}
                         </label>
                         <Field
@@ -59,7 +63,7 @@ export default function MyDetails() {
                             {errors[formItem.key]}
                           </div>
                         ) : null}
-                      </>
+                      </div>
                     )
                   })}
                 </Form>
