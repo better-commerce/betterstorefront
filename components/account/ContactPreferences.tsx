@@ -118,7 +118,7 @@ export default function ContractPreferences() {
         <div className="w-1/2 flex justify-between align-center">
           {items.map((btn: any, idx: number) => {
             return (
-              <div className="flex">
+              <div className="flex" key={`${idx}-radio-btn`}>
                 <input
                   id={`radio-btn-${idx}`}
                   name="notification-type"
