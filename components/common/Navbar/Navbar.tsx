@@ -48,12 +48,12 @@ const Navbar: FC<Props> = ({ config }) => {
       className: 'text-center py-2 cursor-pointer',
     },
     {
-      href: '/my-account?orders',
+      href: '/my-account?view=orders',
       title: 'My orders',
       className: 'text-center py-2 cursor-pointer',
     },
     {
-      href: '/my-account?details',
+      href: '/my-account?view=details',
       title: 'Recently viewed',
       className: 'text-center py-2 cursor-pointer',
     },

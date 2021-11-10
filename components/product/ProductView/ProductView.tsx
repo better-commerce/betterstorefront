@@ -15,7 +15,8 @@ import Engraving from '@components/product/Engraving'
 import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
-
+import axios from 'axios'
+import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -37,8 +38,14 @@ export default function ProductView({
   setEntities,
   recordEvent,
 }: any) {
-  const { openNotifyUser, addToWishlist, addToCart, basketId, setCartItems } =
-    useUI()
+  const {
+    openNotifyUser,
+    addToWishlist,
+    addToCart,
+    basketId,
+    setCartItems,
+    user,
+  } = useUI()
 
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
@@ -127,11 +134,28 @@ export default function ProductView({
 
   const isEngravingAvailable = product.stockCode === 'ADDON'
 
-  const handleWishList = () => {
+  const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
   }
-  console.log(product)
+  const handleWishList = () => {
+    const accessToken = localStorage.getItem('user')
+    if (accessToken) {
+      const createWishlist = async () => {
+        try {
+          const response = await axios.post(NEXT_CREATE_WISHLIST, {
+            id: user.userId,
+            productId: product.id,
+            flag: true,
+          })
+          insertToLocalWishlist()
+        } catch (error) {
+          console.log(error, 'error')
+        }
+      }
+      createWishlist()
+    } else insertToLocalWishlist()
+  }
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}

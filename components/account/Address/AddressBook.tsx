@@ -67,7 +67,8 @@ export default function AddressBook() {
     window.scrollTo(0, 0)
   }
   const addNewAddress = (values: any) => {
-    createAddress(values)
+    let newValues = { ...values, userId: user.userId }
+    createAddress(newValues)
       .then(() => success())
       .catch(() => failCb())
   }

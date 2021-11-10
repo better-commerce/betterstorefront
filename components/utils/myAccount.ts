@@ -11,6 +11,11 @@ export const config: any = [
   },
   {
     type: 'tab',
+    text: 'Wishlist',
+    props: 'wishlist',
+  },
+  {
+    type: 'tab',
     text: 'My Details',
     props: 'details',
   },
