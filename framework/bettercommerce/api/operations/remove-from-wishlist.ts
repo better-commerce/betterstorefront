@@ -1,10 +1,10 @@
 import fetcher from '../../fetcher'
-import { CUSTOMER_BASE_API } from '@components/utils/constants'
+import { ORDERS_ENDPOINT } from '@components/utils/constants'
 export default function getOrders() {
   async function getOrdersAsync({ query }: any) {
     try {
       const response: any = await fetcher({
-        url: `${CUSTOMER_BASE_API}/${query.id}/orders/${query.hasMembership}`,
+        url: `${ORDERS_ENDPOINT}/email?email=${query.email}`,
         method: 'get',
         data: query,
       })

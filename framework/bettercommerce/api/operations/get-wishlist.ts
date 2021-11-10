@@ -1,10 +1,10 @@
 import fetcher from '../../fetcher'
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
-export default function getOrders() {
-  async function getOrdersAsync({ query }: any) {
+export default function getWishlist() {
+  async function getWishlistAsync({ query }: any) {
     try {
       const response: any = await fetcher({
-        url: `${CUSTOMER_BASE_API}/${query.id}/orders/${query.hasMembership}`,
+        url: `${CUSTOMER_BASE_API}/${query.id}/wishlist/${query.flag}`,
         method: 'get',
         data: query,
       })
@@ -14,5 +14,5 @@ export default function getOrders() {
       throw new Error(error)
     }
   }
-  return getOrdersAsync
+  return getWishlistAsync
 }

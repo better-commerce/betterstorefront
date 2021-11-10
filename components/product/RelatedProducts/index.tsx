@@ -26,7 +26,6 @@ export default function RelatedProducts({
               ...item,
             }
           }
-          console.log(tempArr)
           tempArr[item.relatedTypeCode]['relatedProducts'] = [
             ...tempArr[item.relatedTypeCode].relatedProducts,
             obj,

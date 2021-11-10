@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Tab } from '@headlessui/react'
@@ -6,6 +7,7 @@ import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 function MyAccount({ defaultView }: any) {
+  const [view, setView] = useState(defaultView)
   const router = useRouter()
 
   const handleTabChange = (index: number) => {
@@ -18,6 +20,12 @@ function MyAccount({ defaultView }: any) {
       { shallow: true }
     )
   }
+  useEffect(() => {
+    if (router.query.view && view !== router.query.view) {
+      setView(router.query.view)
+    }
+  }, [router.asPath])
+
   return (
     <section className="text-gray-900 relative py-10">
       <div className="w-full">

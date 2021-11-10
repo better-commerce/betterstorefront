@@ -5,12 +5,23 @@ import {
 } from '@components/utils/constants'
 export default function useAddress() {
   async function getAdressAsync({ query }: any) {
-    console.log(query)
+    const data = {
+      firstName: query.firstName,
+      lastName: query.lastName,
+      Address1: query.address1,
+      Address2: query.address2,
+      City: query.city,
+      PostCode: query.postCode,
+      Country: query.country,
+      CountryCode: query.countryCode,
+      UserId: query.userId,
+      PhoneNo: query.phoneNo,
+    }
     try {
       const response: any = await fetcher({
         url: `${ADDRESS_ENDPOINT}${query.id}/update`,
         method: 'post',
-        data: query,
+        data: data,
       })
       return response.result
     } catch (error: any) {
