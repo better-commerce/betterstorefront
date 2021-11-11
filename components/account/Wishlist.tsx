@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react'
 import { CheckIcon } from '@heroicons/react/outline'
 import axios from 'axios'
-import { NEXT_GET_ORDERS } from '@components/utils/constants'
+import { NEXT_GET_WISHLIST } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 
-export default function MyOrders() {
+export default function Wishlist() {
   const [data, setData] = useState([])
 
   const { user } = useUI()
   useEffect(() => {
     const fetchOrders = async () => {
-      const response: any = await axios.post(NEXT_GET_ORDERS, {
+      const response: any = await axios.post(NEXT_GET_WISHLIST, {
         id: user.userId,
-        hasMembership: user.hasMembership,
+        flag: true,
       })
-
       setData(response.data)
     }
     fetchOrders()
@@ -28,7 +27,7 @@ export default function MyOrders() {
         <div className="max-w-4xl mx-auto">
           <div className="px-4 sm:px-0">
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-              Order history
+              Wishlist
             </h1>
             <p className="mt-2 text-sm text-gray-500">
               Check the status of recent orders, manage returns, and download
@@ -37,10 +36,7 @@ export default function MyOrders() {
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
-            <h2 id="recent-heading" className="sr-only">
-              Recent orders
-            </h2>
-
+            {!data.length && <div>Oh-no! Your wishlist is empty.</div>}
             <div className="space-y-16 sm:space-y-24">
               {data.map((order: any) => (
                 <div key={order.orderNo}>
@@ -72,7 +68,7 @@ export default function MyOrders() {
                       <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
                         <dt>Total</dt>
                         <dd className="md:mt-1">
-                          {order?.subTotal?.formatted?.withTax}
+                          {order.subTotal.formatted.withTax}
                         </dd>
                       </div>
                       <div className="flex justify-between md:block">
@@ -80,7 +76,26 @@ export default function MyOrders() {
                         <dd className="md:mt-1">{order.orderStatus}</dd>
                       </div>
                     </dl>
+                    {/* <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
+                      <a
+                        href={order.href}
+                        className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                      >
+                        View Order
+                        <span className="sr-only">{order.number}</span>
+                      </a>
+                      <a
+                        href={order.invoiceHref}
+                        className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                      >
+                        View Invoice
+                        <span className="sr-only">
+                          for order {order.number}
+                        </span>
+                      </a>
+                    </div> */}
                   </div>
+
                   <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
                     <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
                       {order.items.map((product: any) => (
@@ -90,7 +105,7 @@ export default function MyOrders() {
                               <div className="sm:flex">
                                 <div>
                                   <h4 className="font-medium text-gray-900">
-                                    {product?.name}
+                                    {product.name}
                                   </h4>
                                   <div
                                     dangerouslySetInnerHTML={{
@@ -100,13 +115,13 @@ export default function MyOrders() {
                                   />
                                 </div>
                                 <p className="mt-1 font-medium text-gray-900 sm:mt-0 sm:ml-6">
-                                  {product.price?.formatted?.withTax}
+                                  {product.price.formatted.withTax}
                                 </p>
                               </div>
                               <div className="mt-2 flex text-sm font-medium sm:mt-4">
-                                <Link href={`/${product.slug || '#'}`}>
+                                <Link href={`/${product.slug}`}>
                                   <a
-                                    href={product.slug || '#'}
+                                    href={product.slug}
                                     className="text-indigo-600 hover:text-indigo-500"
                                   >
                                     View Product
