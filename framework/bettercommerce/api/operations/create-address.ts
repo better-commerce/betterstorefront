@@ -2,7 +2,6 @@ import fetcher from '../../fetcher'
 import { CREATE_ADDRESS_ENDPOINT } from '@components/utils/constants'
 export default function useAddress() {
   async function getAdressAsync({ query }: any) {
-    console.log(query)
     const data = {
       firstName: query.firstName,
       lastName: query.lastName,
@@ -15,7 +14,6 @@ export default function useAddress() {
       UserId: query.userId,
       PhoneNo: query.phoneNo,
     }
-    console.log(data)
     try {
       const response: any = await fetcher({
         url: `${CREATE_ADDRESS_ENDPOINT}`,
