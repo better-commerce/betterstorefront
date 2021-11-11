@@ -1,8 +1,8 @@
 export const config = [
-  {
-    key: 'newsLetterSubscribed',
-    label: "I don't want to receive offers",
-  },
+  // {
+  //   key: 'newsLetterSubscribed',
+  //   label: "I don't want to receive offers",
+  // },
   {
     key: 'notifyByEmail',
     label: 'Email',

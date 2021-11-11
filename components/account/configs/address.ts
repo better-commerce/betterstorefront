@@ -56,9 +56,9 @@ export const formConfig = [
   },
   {
     type: 'text',
-    name: 'state',
-    placeholder: 'County ( optional )',
-    label: 'County ( optional )',
+    name: 'countryCode',
+    placeholder: 'Country Code',
+    label: 'Country Code',
   },
   {
     type: 'text',
@@ -86,7 +86,7 @@ export const schema = Yup.object({
   phoneNo: Yup.string().required(),
   country: Yup.string().required(),
   postCode: Yup.string().required(),
-  state: Yup.string(),
+  countryCode: Yup.string().required(),
   address1: Yup.string().required(),
   title: Yup.string(),
   city: Yup.string().required(),
