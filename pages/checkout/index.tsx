@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router'
 
 export default function Checkout() {
+  const Router = useRouter()
   if (typeof window !== 'undefined') {
-    const Router = useRouter()
-
     const accessToken = localStorage.getItem('user')
 
     // If there is no access token we redirect to "/" page.

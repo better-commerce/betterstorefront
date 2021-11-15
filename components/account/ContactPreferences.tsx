@@ -21,7 +21,7 @@ const radioBtnsConfig = [
 ]
 
 export default function ContractPreferences() {
-  const [title, setTitle] = useState('My Details')
+  const [title, setTitle] = useState('Contact')
   const [items, setItems] = useState([])
   const [activeItem, setActiveItem] = useState({ items: [] })
   const [data, setData] = useState({})
@@ -123,7 +123,7 @@ export default function ContractPreferences() {
                   id={`radio-btn-${idx}`}
                   name="notification-type"
                   type="radio"
-                  checked={btn.checked}
+                  checked={btn.checked || btn.default}
                   onClick={() => {
                     handleRadioButton(btn.unsubscribe, btn.id)
                   }}
