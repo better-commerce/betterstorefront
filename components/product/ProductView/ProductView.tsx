@@ -145,7 +145,7 @@ export default function ProductView({
         try {
           const response = await axios.post(NEXT_CREATE_WISHLIST, {
             id: user.userId,
-            productId: product.id,
+            productId: product.recordId,
             flag: true,
           })
           insertToLocalWishlist()

@@ -25,7 +25,7 @@ export default function AddressItem({
 
   const handleAddressSubmit = (values: any) => {
     updateAddress({ ...item, ...values, ...{ userId } })
-      .then(() => successCallback())
+      .then(() => successCallback() && setEditMode(false))
       .catch(() => errCallback())
   }
 
