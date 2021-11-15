@@ -183,7 +183,6 @@ function uiReducer(state: State, action: Action) {
       }
     }
     case 'ADD_TO_CART': {
-      debugger
       return {
         ...state,
         cartItems: {

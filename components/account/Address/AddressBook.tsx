@@ -69,7 +69,10 @@ export default function AddressBook() {
   const addNewAddress = (values: any) => {
     let newValues = { ...values, userId: user.userId }
     createAddress(newValues)
-      .then(() => success())
+      .then(() => {
+        setNewFormMode(false)
+        success()
+      })
       .catch(() => failCb())
   }
   return (
