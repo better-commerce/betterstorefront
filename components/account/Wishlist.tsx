@@ -11,7 +11,7 @@ import { LoadingDots } from '@components/ui'
 export default function Wishlist() {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const { user, basketId, setCartItems } = useUI()
+  const { user, basketId, setCartItems, openCart } = useUI()
 
   const fetchItems = async () => {
     !isLoading && setIsLoading(true)
@@ -41,7 +41,10 @@ export default function Wishlist() {
         manualUnitPrice: product.price.raw.withTax,
         stockCode: product.stockCode,
       })
-      .then((response: any) => setCartItems(response))
+      .then((response: any) => {
+        setCartItems(response)
+        openCart()
+      })
       .catch((err: any) => console.log('error', err))
   }
 
