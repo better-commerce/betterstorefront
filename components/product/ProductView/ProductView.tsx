@@ -97,6 +97,7 @@ export default function ProductView({
     content = [...product.images, ...product.videos]
   }
 
+  console.log(product)
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: 'Add to bag',
@@ -145,7 +146,7 @@ export default function ProductView({
         try {
           const response = await axios.post(NEXT_CREATE_WISHLIST, {
             id: user.userId,
-            productId: product.id,
+            productId: product.recordId,
             flag: true,
           })
           insertToLocalWishlist()
@@ -339,7 +340,7 @@ export default function ProductView({
             />
           ) : null}
           {product.reviews && !!product.reviews.length && (
-            <Reviews data={product.reviews} />
+            <Reviews data={product.reviews} productId={product.recordId} />
           )}
           {isEngravingAvailable && (
             <Engraving

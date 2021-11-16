@@ -1,11 +1,11 @@
 import fetcher from '../../fetcher'
-import { ORDERS_ENDPOINT } from '@components/utils/constants'
-export default function getOrders() {
-  async function getOrdersAsync({ query }: any) {
+import { CUSTOMER_BASE_API } from '@components/utils/constants'
+export default function removeFromWishlist() {
+  async function removeFromWishlistAsync({ query }: any) {
     try {
       const response: any = await fetcher({
-        url: `${ORDERS_ENDPOINT}/email?email=${query.email}`,
-        method: 'get',
+        url: `${CUSTOMER_BASE_API}${query.id}/wishlist/${query.productId}/remove/${query.flag}`,
+        method: 'post',
         data: query,
       })
       return response.result
@@ -14,5 +14,5 @@ export default function getOrders() {
       throw new Error(error)
     }
   }
-  return getOrdersAsync
+  return removeFromWishlistAsync
 }

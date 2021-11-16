@@ -11,7 +11,7 @@ export default function useAddress() {
       PostCode: query.postCode,
       Country: query.country,
       CountryCode: query.countryCode,
-      UserId: query.userId,
+      CustomerId: query.userId,
       PhoneNo: query.phoneNo,
     }
     try {

@@ -2,13 +2,10 @@ import commerce from '@lib/api/commerce'
 
 export default async (req: any, res: any) => {
   try {
-    console.group(req.body, 'req body')
-    const response = await commerce.editAddress({
-      query: req.body,
-    })
+    const response = await commerce.createReview(req.body)
     res.status(200).json(response)
   } catch (error) {
-    console.log(error, 'error')
+    console.log(error)
     res.status(500).json({ error })
   }
 }
