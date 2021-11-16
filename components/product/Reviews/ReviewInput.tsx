@@ -70,7 +70,6 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
     }
   }
 
-  console.log(asyncMessage)
   return (
     <div className="py-5">
       {asyncMessage ? (

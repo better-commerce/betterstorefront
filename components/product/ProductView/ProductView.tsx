@@ -16,7 +16,11 @@ import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import axios from 'axios'
-import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import {
+  NEXT_CREATE_WISHLIST,
+  NEXT_BULK_ADD_TO_CART,
+  NEXT_UPDATE_CART_INFO,
+} from '@components/utils/constants'
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -41,7 +45,7 @@ export default function ProductView({
   const {
     openNotifyUser,
     addToWishlist,
-    addToCart,
+    openCart,
     basketId,
     setCartItems,
     user,
@@ -97,7 +101,6 @@ export default function ProductView({
     content = [...product.images, ...product.videos]
   }
 
-  console.log(product)
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: 'Add to bag',
@@ -111,7 +114,6 @@ export default function ProductView({
         })
         setCartItems(item)
       },
-
       shortMessage: '',
     }
     if (!product.currentStock && !product.preOrder.isEnabled) {
@@ -133,7 +135,32 @@ export default function ProductView({
 
   const buttonConfig = buttonTitle()
 
-  const isEngravingAvailable = product.stockCode === 'ADDON'
+  const handleEngravingSubmit = (values: any) => {
+    const addonProducts = product.relatedProducts.filter(
+      (item: any) => item.stockCode === 'ADDON'
+    )
+    const asyncHandler = async () => {
+      try {
+        await axios.post(NEXT_BULK_ADD_TO_CART, {
+          basketId,
+          products: [...addonProducts, product],
+        })
+        await axios.post(NEXT_UPDATE_CART_INFO, {
+          basketId,
+          info: [...Object.values(values)],
+          lineInfo: [...addonProducts, product],
+        })
+        showEngravingModal(false)
+      } catch (error) {
+        console.log(error, 'err')
+      }
+    }
+    asyncHandler()
+  }
+
+  const isEngravingAvailable = !!product.relatedProducts.filter(
+    (item: any) => item.stockCode === 'ADDON'
+  ).length
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
@@ -275,14 +302,6 @@ export default function ProductView({
                 <span className="font-bold">Seen it cheaper?</span>
                 <span>{''} We'll match the best price</span>
               </p>
-              {isEngravingAvailable && (
-                <p
-                  className="py-5 text-gray-900 text-md cursor-pointer hover:underline"
-                  onClick={() => showEngravingModal(true)}
-                >
-                  <span className="font-bold">Engraving</span>
-                </p>
-              )}
 
               <section aria-labelledby="details-heading" className="mt-12">
                 <h2 id="details-heading" className="sr-only">
@@ -315,7 +334,14 @@ export default function ProductView({
                     <span className="sr-only">Add to favorites</span>
                   </button>
                 </div>
-
+                {isEngravingAvailable && (
+                  <button
+                    className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                    onClick={() => showEngravingModal(true)}
+                  >
+                    <span className="font-bold">Engraving</span>
+                  </button>
+                )}
                 <div className="border-t divide-y divide-gray-200 mt-10">
                   <p className="text-gray-900 text-lg">
                     {product.currentStock > 0
@@ -345,7 +371,7 @@ export default function ProductView({
           {isEngravingAvailable && (
             <Engraving
               show={isEngravingOpen}
-              submitForm={() => addToCart(product)}
+              submitForm={handleEngravingSubmit}
               onClose={() => showEngravingModal(false)}
             />
           )}
