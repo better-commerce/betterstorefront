@@ -1,39 +1,29 @@
 import { StarIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
-
-const reviews = [
-  {
-    id: 1,
-    title: "Can't say enough good things",
-    rating: 5,
-    content: `
-      <p>I was really pleased with the overall shopping experience. My order even included a little personal, handwritten note, which delighted me!</p>
-      <p>The product quality is amazing, it looks and feel even better than I had anticipated. Brilliant stuff! I would gladly recommend this store to my friends. And, now that I think of it... I actually have, many times!</p>
-    `,
-    author: 'Risako M',
-    date: 'May 16, 2021',
-    datetime: '2021-01-06',
-  },
-  // More reviews...
-]
-
-export default function Reviews({ data }: any) {
+import ReviewInput from './ReviewInput'
+export default function Reviews({ data, productId }: any) {
   return (
     <div className="bg-white">
       <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+        <div>
+          <h2 className="text-lg font-medium text-gray-900">
+            Post your review
+          </h2>
+          <ReviewInput productId={productId} />
+        </div>
         <h2 className="text-lg font-medium text-gray-900">Reviews</h2>
         <div className="mt-6 pb-10 border-t border-b border-gray-200 divide-y divide-gray-200 space-y-10">
           {data.map((review: any, reviewIdx: number) => (
             <div
-              key={reviewIdx}
+              key={'dataReview' + reviewIdx}
               className="pt-10 lg:grid lg:grid-cols-12 lg:gap-x-8"
             >
               <div className="lg:col-start-5 lg:col-span-8 xl:col-start-4 xl:col-span-9 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:items-start">
                 <div className="flex items-center xl:col-span-1">
                   <div className="flex items-center">
-                    {[0, 1, 2, 3, 4].map((rating) => (
+                    {[0, 1, 2, 3, 4].map((rating, idx) => (
                       <StarIcon
-                        key={rating}
+                        key={'ratingStar' + idx + review.postedOn}
                         className={classNames(
                           review.rating > rating
                             ? 'text-yellow-400'

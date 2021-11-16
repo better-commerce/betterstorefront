@@ -22,6 +22,7 @@ import {
   getWishlist,
   createWishlist,
   removeItemFromWishlist,
+  createReview,
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -55,6 +56,7 @@ const operations = {
   getWishlist,
   createWishlist,
   removeItemFromWishlist,
+  createReview,
 }
 
 export const provider = { config, operations }
