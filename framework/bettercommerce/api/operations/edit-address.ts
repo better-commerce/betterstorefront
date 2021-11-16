@@ -1,10 +1,8 @@
 import fetcher from '../../fetcher'
-import {
-  ADDRESS_ENDPOINT,
-  CREATE_ADDRESS_ENDPOINT,
-} from '@components/utils/constants'
+import { ADDRESS_ENDPOINT } from '@components/utils/constants'
 export default function useAddress() {
   async function getAdressAsync({ query }: any) {
+    console.group('here', query)
     const data = {
       firstName: query.firstName,
       lastName: query.lastName,
@@ -14,7 +12,7 @@ export default function useAddress() {
       PostCode: query.postCode,
       Country: query.country,
       CountryCode: query.countryCode,
-      UserId: query.userId,
+      CustomerId: query.userId,
       PhoneNo: query.phoneNo,
     }
     try {

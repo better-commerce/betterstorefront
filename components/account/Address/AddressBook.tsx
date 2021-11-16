@@ -9,6 +9,8 @@ import {
 import axios from 'axios'
 import AddressItem from './AddressItem'
 import Form from './AddressBookForm'
+import { LoadingDots } from '@components/ui'
+
 function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -48,16 +50,31 @@ export default function AddressBook() {
   const [data, setData] = useState([])
   const [isNewFormMode, setNewFormMode] = useState(false)
   const [title, setTitle] = useState('Address Book')
+  const [isLoading, setIsLoading] = useState(true)
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
 
   const { user } = useUI()
 
+  const fetchAddress = async () => {
+    !isLoading && setIsLoading(true)
+    try {
+      const response: any = await getAddress(user.userId)
+      setIsLoading(false)
+      setData(response)
+    } catch (error) {
+      console.log(error, 'err')
+      failCb()
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
-    getAddress(user.userId).then((data: any) => setData(data))
+    fetchAddress()
   }, [])
 
   const success = () => {
+    fetchAddress()
     setTitle('Success! Your details have been updated!')
     window.scrollTo(0, 0)
   }
@@ -66,10 +83,14 @@ export default function AddressBook() {
     setTitle('Woops! Something went wrong!')
     window.scrollTo(0, 0)
   }
+
   const addNewAddress = (values: any) => {
     let newValues = { ...values, userId: user.userId }
     createAddress(newValues)
-      .then(() => success())
+      .then(() => {
+        setNewFormMode(false)
+        success()
+      })
       .catch(() => failCb())
   }
   return (
@@ -84,6 +105,12 @@ export default function AddressBook() {
             totally up to date.
           </p>
         </div>
+      </div>
+      <div className="max-w-4xl mx-auto py-10">
+        {!data.length && !isLoading && (
+          <div>Oh-no! Your address book is empty is empty.</div>
+        )}
+        {isLoading ? <LoadingDots /> : null}
       </div>
       {isNewFormMode && (
         <Form

@@ -36,6 +36,7 @@ export const OPERATIONS = [
   'getWishlist',
   'createWishlist',
   'removeItemFromWishlist',
+  'createReview',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -63,6 +64,7 @@ export type Operations<P extends APIProvider> = {
   }
   getSlugs: {}
   notifyMe: {}
+  createReview: {}
   updateDetails: {}
   createAddress: {}
   deleteAddress: {}
