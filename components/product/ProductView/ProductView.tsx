@@ -17,6 +17,7 @@ import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import Button from '@components/ui/IndigoButton'
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -97,7 +98,6 @@ export default function ProductView({
     content = [...product.images, ...product.videos]
   }
 
-  console.log(product)
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: 'Add to bag',
@@ -144,7 +144,7 @@ export default function ProductView({
     if (accessToken) {
       const createWishlist = async () => {
         try {
-          const response = await axios.post(NEXT_CREATE_WISHLIST, {
+          await axios.post(NEXT_CREATE_WISHLIST, {
             id: user.userId,
             productId: product.recordId,
             flag: true,
@@ -291,13 +291,9 @@ export default function ProductView({
                 <ProductDetails product={product} />
 
                 <div className="mt-10 flex sm:flex-col1">
-                  <button
-                    type="submit"
-                    onClick={buttonConfig.action}
-                    className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-                  >
+                  <Button action={buttonConfig.action}>
                     {buttonConfig.title}
-                  </button>
+                  </Button>
 
                   <button
                     type="button"
@@ -309,7 +305,6 @@ export default function ProductView({
                       <HeartIcon
                         className="h-6 w-6 flex-shrink-0"
                         onClick={handleWishList}
-                        aria-hidden="true"
                       />
                     )}
                     <span className="sr-only">Add to favorites</span>
