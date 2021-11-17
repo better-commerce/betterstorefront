@@ -334,6 +334,10 @@ export const UIProvider: FC = (props) => {
     },
     [dispatch]
   )
+  const openCart = () => {
+    setSidebarView('CART_VIEW')
+    openSidebar()
+  }
   const value = useMemo(
     () => ({
       ...state,
@@ -356,6 +360,7 @@ export const UIProvider: FC = (props) => {
       setCartItems,
       setUser,
       deleteUser,
+      openCart,
     }),
     [state]
   )
