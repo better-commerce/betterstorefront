@@ -31,14 +31,7 @@ const accountDropDownConfigUnauthorized: any = [
 const Navbar: FC<Props> = ({ config }) => {
   const router = useRouter()
 
-  const {
-    wishListItems,
-    cartItems,
-    openSidebar,
-    setSidebarView,
-    user,
-    deleteUser,
-  } = useUI()
+  const { wishListItems, cartItems, user, deleteUser, openCart } = useUI()
   const handleRedirect = (path: string) => (path ? router.push('/' + path) : {})
 
   const accountDropDownConfigAuthorized: any = [
@@ -64,11 +57,6 @@ const Navbar: FC<Props> = ({ config }) => {
       className: 'text-center py-2 cursor-pointer text-red-300',
     },
   ]
-
-  const openCart = () => {
-    setSidebarView('CART_VIEW')
-    openSidebar()
-  }
 
   let accountDropdownConfig = accountDropDownConfigUnauthorized
   let title = user ? `Hi, ${user.firstName}` : 'My account'

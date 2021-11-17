@@ -19,7 +19,7 @@ interface ReviewInputProps {
 }
 
 const ReviewInput = ({ productId }: ReviewInputProps) => {
-  const [rating, setRating] = useState(1)
+  const [rating, setRating] = useState(5)
   const [commentBody, setCommentBody] = useState('')
   const [error, setError] = useState('')
   const [commentTitle, setCommentTitle] = useState('')
@@ -70,7 +70,6 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
     }
   }
 
-  console.log(asyncMessage)
   return (
     <div className="py-5">
       {asyncMessage ? (

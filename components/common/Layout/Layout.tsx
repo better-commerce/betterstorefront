@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
@@ -13,13 +13,12 @@ import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import PaymentMethodView from '@components/checkout/PaymentMethodView'
 import CheckoutSidebarView from '@components/checkout/CheckoutSidebarView'
-import useSWR from 'swr'
 import s from './Layout.module.css'
 import { getData } from '../../utils/clientFetcher'
 import { setItem, getItem } from '../../utils/localStorage'
 import NotifyUserPopup from '@components/ui/NotifyPopup'
 import Script from 'next/script'
-
+import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
     <LoadingDots />
@@ -87,27 +86,27 @@ interface LayoutProps {
   footer: []
 }
 
-const parameters = {
-  revalidateOnFocus: false,
-  revalidateOnMount: false,
-  revalidateOnReconnect: false,
-  refreshWhenOffline: false,
-  refreshWhenHidden: false,
-  refreshInterval: 0,
-}
-
 const Layout: FC<Props> = ({
   children,
   pageProps: { categories = [], ...pageProps },
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
 
-  const { data = navTreeFromLocalStorage } = useSWR(
-    '/api/get-navigation',
-    getData
-  )
+  const [data, setData] = useState(navTreeFromLocalStorage)
 
-  setItem('navTree', data)
+  useEffect(() => {
+    const fetchLayout = async () => {
+      try {
+        const response: any = await getData(NEXT_GET_NAVIGATION)
+        console.log(response)
+        setData(response)
+        setItem('navTree', response)
+      } catch (error) {
+        console.log(error, 'error')
+      }
+    }
+    fetchLayout()
+  }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
