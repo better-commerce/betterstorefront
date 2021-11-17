@@ -318,15 +318,17 @@ export default function ProductView({
 
                   <button
                     type="button"
+                    onClick={() => {
+                      if (!isInWishList) {
+                        handleWishList()
+                      }
+                    }}
                     className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                   >
                     {isInWishList ? (
                       <span>Item was added in wishlist</span>
                     ) : (
-                      <HeartIcon
-                        className="h-6 w-6 flex-shrink-0"
-                        onClick={handleWishList}
-                      />
+                      <HeartIcon className="h-6 w-6 flex-shrink-0" />
                     )}
                     <span className="sr-only">Add to favorites</span>
                   </button>
