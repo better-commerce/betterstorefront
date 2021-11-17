@@ -37,6 +37,8 @@ export const NEXT_DELETE_ADDRESS = '/api/customer/delete-address'
 
 export const NEXT_CREATE_REVIEW = '/api/create-review'
 export const NEXT_GET_NAVIGATION = '/api/get-navigation'
+
+export const NEXT_APPLY_PROMOTION = '/api/apply-promo'
 //CONSTANTS
 export const SessionIdCookieKey: string = 'sessionId'
 export const DeviceIdKey: string = 'deviceId'
