@@ -2,7 +2,11 @@ import { FC } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import AttributeSelector from './AttributeSelector'
-import AddToBasketButton from '@components/ui/AddToBasketButton'
+import Button from '@components/ui/IndigoButton'
+import cartHandler from '@components/services/cart'
+import { useUI } from '@components/ui/context'
+import axios from 'axios'
+import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 
 interface Props {
   product: any
@@ -10,22 +14,65 @@ interface Props {
 
 const colorKey = 'global.colour'
 
+const WISHLIST_BUTTON_COLOR_SCHEME = {
+  bgColor: 'bg-gray-500',
+  hoverBgColor: 'bg-gray-400',
+  focusRingColor: 'focus-gray-400',
+}
+
 interface Attribute {
   fieldName?: string
   fieldCode?: string
   fieldValues?: []
 }
 
-interface ProductData {
-  image: string
-  slug: string
-}
-
 const ProductCard: FC<Props> = ({ product }) => {
+  const [isInWishList, setItemsInWishList] = useState(false)
   const [currentProductData, setCurrentProductData] = useState({
     image: product.image,
     link: product.slug,
   })
+  const { basketId, user, addToWishlist } = useUI()
+
+  const handleAddToCart = () => {
+    const handleAsync = async () => {
+      try {
+        await cartHandler().addToCart({
+          basketId,
+          productId: product.recordId,
+          qty: 1,
+          manualUnitPrice: product.price.raw.withTax,
+          stockCode: product.stockCode,
+        })
+      } catch (error) {
+        console.log(error, 'err')
+      }
+    }
+    handleAsync()
+  }
+
+  const insertToLocalWishlist = () => {
+    addToWishlist(product)
+    setItemsInWishList(true)
+  }
+  const handleWishList = () => {
+    const accessToken = localStorage.getItem('user')
+    if (accessToken) {
+      const createWishlist = async () => {
+        try {
+          await axios.post(NEXT_CREATE_WISHLIST, {
+            id: user.userId,
+            productId: product.recordId,
+            flag: true,
+          })
+          insertToLocalWishlist()
+        } catch (error) {
+          console.log(error, 'error')
+        }
+      }
+      createWishlist()
+    } else insertToLocalWishlist()
+  }
 
   useEffect(() => {
     setCurrentProductData((prevState): any => {
@@ -103,8 +150,21 @@ const ProductCard: FC<Props> = ({ product }) => {
           ) : (
             <div className="h-10 w-10 inline-block" />
           )}
-          <div className="flex">
-            <AddToBasketButton className="mt-5" />
+          <div className="flex flex-col">
+            <Button className="mt-5" action={handleAddToCart} />
+            {isInWishList ? (
+              <span className="text-gray-900">
+                Item was added in your wishlist
+              </span>
+            ) : (
+              <Button
+                className="mt-5"
+                action={handleWishList}
+                buttonType="wishlist"
+                colorScheme={WISHLIST_BUTTON_COLOR_SCHEME}
+                title="Add to wishlist"
+              />
+            )}
           </div>
         </div>
       </div>
