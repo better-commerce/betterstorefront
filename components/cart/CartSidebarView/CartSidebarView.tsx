@@ -6,6 +6,7 @@ import { useEffect, useState, Fragment } from 'react'
 import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
+import PromotionInput from '../PromotionInput'
 
 const CartSidebarView: FC = () => {
   const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
@@ -184,6 +185,7 @@ const CartSidebarView: FC = () => {
                   </div>
 
                   <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                    <PromotionInput />
                     <div className="flex py-2 justify-between font-small text-gray-900">
                       <p>Total</p>
                       <p>{cartItems.subTotal?.formatted?.withoutTax}</p>
