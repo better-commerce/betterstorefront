@@ -93,6 +93,7 @@ export default function ContractPreferences() {
     setData(tempObj)
     setActiveItem({ items: newItems })
   }
+
   return (
     <main className="sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
@@ -117,13 +118,15 @@ export default function ContractPreferences() {
       <div className="max-w-4xl mx-auto flex flex-col mt-10">
         <div className="w-1/2 flex justify-between align-center">
           {items.map((btn: any, idx: number) => {
+            const isChecked =
+              typeof btn.checked !== 'undefined' ? btn.checked : btn.default
             return (
               <div className="flex" key={`${idx}-radio-btn`}>
                 <input
                   id={`radio-btn-${idx}`}
                   name="notification-type"
                   type="radio"
-                  checked={btn.checked || btn.default}
+                  checked={isChecked}
                   onClick={() => {
                     handleRadioButton(btn.unsubscribe, btn.id)
                   }}

@@ -21,6 +21,11 @@ export default function AddressItem({
     postCode,
     country,
     phoneNo,
+    isDefault,
+    isDefaultBilling,
+    isDefaultDelivery,
+    isDefaultSubscription,
+    countryCode,
   } = item
 
   const handleAddressSubmit = (values: any) => {
@@ -48,8 +53,13 @@ export default function AddressItem({
             city: city || '',
             state: state || '',
             postCode: postCode || '',
+            countryCode: countryCode || '',
             country: country || '',
             phoneNo: phoneNo || '',
+            isDefault: isDefault || false,
+            isDefaultBilling: isDefaultBilling || false,
+            isDefaultDelivery: isDefaultDelivery || false,
+            isDefaultSubscription: isDefaultSubscription || false,
           }}
           closeEditMode={() => setEditMode(false)}
           onSubmit={handleAddressSubmit}
