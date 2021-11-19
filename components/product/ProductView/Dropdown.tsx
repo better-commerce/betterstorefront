@@ -29,6 +29,9 @@ export default function Dropdown({
   const generateItemOption = (value: any, stock: number) => {
     if (stock === 0 && !isPreOrderEnabled)
       return `${value.toUpperCase()} - NOTIFY ME`
+    if (stock === 0 && isPreOrderEnabled) {
+      return `${value.toUpperCase()} - PRE-ORDER`
+    }
     if ((stock < 5 && stock > 0) || isPreOrderEnabled)
       return `${value.toUpperCase()} - ONLY ${stock} LEFT`
     return value.toUpperCase()

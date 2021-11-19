@@ -186,6 +186,15 @@ export default function ProductView({
       createWishlist()
     } else insertToLocalWishlist()
   }
+
+  const filteredRelatedProducts = product.relatedProducts?.filter(
+    (item: any) => item.stockCode !== 'ADDON'
+  )
+
+  const filteredRelatedProductList = product.relatedProductList?.filter(
+    (item: any) => item.stockCode !== 'ADDON'
+  )
+
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}
@@ -312,9 +321,10 @@ export default function ProductView({
                 <ProductDetails product={product} />
 
                 <div className="mt-10 flex sm:flex-col1">
-                  <Button action={buttonConfig.action}>
-                    {buttonConfig.title}
-                  </Button>
+                  <Button
+                    title={buttonConfig.title}
+                    action={buttonConfig.action}
+                  />
 
                   <button
                     type="button"
@@ -358,10 +368,10 @@ export default function ProductView({
               products={product.componentProducts}
             />
           )}
-          {product.relatedProductList ? (
+          {filteredRelatedProducts ? (
             <RelatedProducts
-              relatedProducts={product.relatedProducts}
-              relatedProductList={product.relatedProductList}
+              relatedProducts={filteredRelatedProducts}
+              relatedProductList={filteredRelatedProductList}
             />
           ) : null}
           {product.reviews && !!product.reviews.length && (

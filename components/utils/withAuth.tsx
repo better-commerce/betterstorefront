@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
 
-const withAuth = (WrappedComponent: any) => {
+const withAuth = (WrappedComponent: any, redirect = true) => {
   return (props: any) => {
     // checks whether we are on client / browser or server.
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && redirect) {
       const Router = useRouter()
 
       const accessToken = localStorage.getItem('user')

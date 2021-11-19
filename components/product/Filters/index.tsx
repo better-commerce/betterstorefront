@@ -5,6 +5,7 @@ import { ChevronDownIcon, FilterIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
+import { data } from 'autoprefixer'
 
 /**
  *
@@ -20,6 +21,7 @@ interface Props {
   handleFilters: any
   routerFilters: any
   clearAll: any
+  routerSortOption: any
 }
 
 export default function Filters({
@@ -28,6 +30,7 @@ export default function Filters({
   handleSortBy,
   routerFilters,
   clearAll,
+  routerSortOption,
 }: Props) {
   const [open, setOpen] = useState(false)
 
@@ -37,6 +40,21 @@ export default function Filters({
     return `${filtersLength} Filters`
   }
 
+  const appliedFilters = products.filters.reduce(
+    (acc: any, obj: any) => {
+      acc.forEach((item: any) => {
+        if (item.Key === obj.key) {
+          item['name'] = obj.name
+          return item
+        }
+        return acc
+      })
+      return acc
+    },
+    [...routerFilters]
+  )
+
+  console.log(appliedFilters, 'applied filters')
   return (
     <div className="bg-transparent">
       {/* Mobile filter dialog */}
@@ -159,10 +177,27 @@ export default function Filters({
                     Clear all
                   </button>
                 </div>
+                <div className="pl-6 flex justify-center flex-col items-baseline">
+                  {appliedFilters.map((appliedFilter: any, idx: number) => {
+                    return (
+                      <div className="flex justify-center items-center text-gray-600">
+                        {appliedFilter.name ? (
+                          <>
+                            <span>{appliedFilter.name}: </span>
+                            <span className="ml-1">{appliedFilter.Value}</span>
+                          </>
+                        ) : null}
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             </div>
-
-            <ProductSort products={products} action={handleSortBy} />
+            <ProductSort
+              routerSortOption={routerSortOption}
+              products={products}
+              action={handleSortBy}
+            />
           </div>
         </section>
       </div>
