@@ -30,13 +30,9 @@ export default function Account({ config, title }: any) {
                     <h1 className="text-center font-bold py-2">{title}</h1>
                     {config.map((item: any, idx: number) => {
                       return (
-                        <div>
+                        <div className={item.className}>
                           <Link key={idx} passHref href={item.href}>
-                            <a
-                              className={item.className}
-                              onClick={item.onClick || false}
-                              href={item.href}
-                            >
+                            <a onClick={item.onClick || false} href={item.href}>
                               {item.title}
                             </a>
                           </Link>

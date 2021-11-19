@@ -1,4 +1,5 @@
 import * as Yup from 'yup'
+import countryList from '@components/utils/countryList'
 
 export const formConfig = [
   {
@@ -56,20 +57,14 @@ export const formConfig = [
   },
   {
     type: 'text',
-    name: 'countryCode',
-    placeholder: 'Country Code',
-    label: 'Country Code',
-  },
-  {
-    type: 'text',
     name: 'postCode',
     placeholder: 'Postcode',
     label: 'Postcode',
   },
   {
-    type: 'text',
+    as: 'select',
     name: 'country',
-    placeholder: 'Country',
+    options: countryList,
     label: 'Country',
   },
   {
@@ -86,7 +81,6 @@ export const schema = Yup.object({
   phoneNo: Yup.string().required(),
   country: Yup.string().required(),
   postCode: Yup.string().required(),
-  countryCode: Yup.string().required(),
   address1: Yup.string().required(),
   title: Yup.string(),
   city: Yup.string().required(),

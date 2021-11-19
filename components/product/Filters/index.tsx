@@ -54,7 +54,6 @@ export default function Filters({
     [...routerFilters]
   )
 
-  console.log(appliedFilters, 'applied filters')
   return (
     <div className="bg-transparent">
       {/* Mobile filter dialog */}
