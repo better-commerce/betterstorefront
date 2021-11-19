@@ -187,20 +187,24 @@ const CartSidebarView: FC = () => {
                   <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                     <PromotionInput />
                     <div className="flex py-2 justify-between font-small text-gray-900">
-                      <p>Total</p>
-                      <p>{cartItems.subTotal?.formatted?.withoutTax}</p>
-                    </div>
-                    <div className="flex py-2 justify-between font-small text-gray-900">
-                      <p>Tax</p>
-                      <p>{cartItems.subTotal?.formatted?.tax}</p>
-                    </div>
-                    <div className="flex justify-between font-medium text-gray-900">
-                      <p>Subtotal</p>
+                      <p>Subtotal (taxes included)</p>
                       <p>{cartItems.subTotal?.formatted?.withTax}</p>
                     </div>
-                    <p className="mt-0.5 text-sm text-gray-500">
-                      Shipping is calculated at checkout.
-                    </p>
+                    <div className="flex py-2 justify-between font-small text-gray-900">
+                      <p>Shipping</p>
+                      <p>{cartItems.shippingCharge?.formatted?.withTax}</p>
+                    </div>
+
+                    {cartItems.promotionsApplied.length > 0 && (
+                      <div className="flex py-2 justify-between font-small text-indigo-600">
+                        <p>Discount</p>
+                        <p>{cartItems.discount?.formatted?.withTax}</p>
+                      </div>
+                    )}
+                    <div className="flex justify-between font-medium text-gray-900">
+                      <p>Total</p>
+                      <p>{cartItems.grandTotal?.formatted?.withTax}</p>
+                    </div>
                     <div className="mt-6">
                       <Link href="/checkout" passHref>
                         <a

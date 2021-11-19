@@ -6,9 +6,6 @@ export default function Reviews({ data, productId }: any) {
     <div className="bg-white">
       <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <div>
-          <h2 className="text-lg font-medium text-gray-900">
-            Post your review
-          </h2>
           <ReviewInput productId={productId} />
         </div>
         <h2 className="text-lg font-medium text-gray-900">Reviews</h2>

@@ -20,7 +20,7 @@ const radioBtnsConfig = [
   },
 ]
 
-export default function ContractPreferences() {
+export default function ContactPreferences() {
   const [title, setTitle] = useState('Contact')
   const [items, setItems] = useState([])
   const [activeItem, setActiveItem] = useState({ items: [] })

@@ -98,7 +98,6 @@ const Layout: FC<Props> = ({
     const fetchLayout = async () => {
       try {
         const response: any = await getData(NEXT_GET_NAVIGATION)
-        console.log(response)
         setData(response)
         setItem('navTree', response)
       } catch (error) {
