@@ -72,6 +72,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
 
   return (
     <div className="py-5">
+      <h2 className="text-lg font-medium text-gray-900">Post your review</h2>
       {asyncMessage ? (
         <div>
           <span className="text-gray-900 text-2xl">{asyncMessage}</span>
@@ -125,4 +126,4 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
   )
 }
 
-export default withAuth(ReviewInput)
+export default withAuth(ReviewInput, false)

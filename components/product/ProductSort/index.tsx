@@ -1,17 +1,25 @@
 import classNames from '@components/utils/classNames'
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition, Dialog } from '@headlessui/react'
-import { ChevronDownIcon, FilterIcon, XIcon } from '@heroicons/react/solid'
+import { Fragment, useState } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 interface Props {
   products: any
   action: any
+  routerSortOption: any
 }
 
-export default function ProductSort({ products, action }: Props) {
+export default function ProductSort({
+  products,
+  action,
+  routerSortOption,
+}: Props) {
   const router = useRouter()
 
+  const currentOption = products.sortList?.filter(
+    (item: any) => item.key === routerSortOption
+  )[0]
   return (
     <Menu as="div" className="relative inline-block">
       <div className="flex">
@@ -39,30 +47,32 @@ export default function ProductSort({ products, action }: Props) {
               products.sortList.map((option: any) => (
                 <Menu.Item key={option.value}>
                   {({ active }) => (
-                    <Link
-                      href={{
-                        pathname: '/search',
-                        query: {
-                          ...router.query,
-                          sortBy: option.key,
-                        },
-                      }}
-                      passHref
-                    >
-                      <a
-                        href={option.href}
-                        onClick={() => action(option.key)}
-                        className={classNames(
-                          option.current
-                            ? 'font-medium text-gray-900'
-                            : 'text-gray-500',
-                          active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm'
-                        )}
+                    <div>
+                      <Link
+                        href={{
+                          pathname: '/search',
+                          query: {
+                            ...router.query,
+                            sortBy: option.key,
+                          },
+                        }}
+                        passHref
                       >
-                        {option.value}
-                      </a>
-                    </Link>
+                        <a
+                          href={option.href}
+                          onClick={() => action(option.key)}
+                          className={classNames(
+                            'text-gray-500 hover:bg-gray-100',
+                            currentOption?.key === option.key
+                              ? 'bg-gray-100'
+                              : '',
+                            'block px-4 py-2 text-sm'
+                          )}
+                        >
+                          {option.value}
+                        </a>
+                      </Link>
+                    </div>
                   )}
                 </Menu.Item>
               ))}

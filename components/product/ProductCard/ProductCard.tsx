@@ -89,7 +89,7 @@ const ProductCard: FC<Props> = ({ product }) => {
     )
 
   const hasColorVariation =
-    productWithColors && productWithColors.fieldValues.length > 1
+    productWithColors && productWithColors.fieldValues.length >= 1
 
   const handleVariableProduct = (attr: any, type: string = 'enter') => {
     if (type === 'enter') {
@@ -109,6 +109,15 @@ const ProductCard: FC<Props> = ({ product }) => {
     }
   }
 
+  const secondImage = product.images[1]?.image
+
+  const handleHover = (type: string) => {
+    if (type === 'enter' && secondImage)
+      setCurrentProductData({ ...currentProductData, image: secondImage })
+    if (type === 'leave' && secondImage)
+      setCurrentProductData({ ...currentProductData, image: product.image })
+  }
+
   return (
     <div className="border-r border-b border-gray-200">
       <div key={product.id} className="group relative p-4 sm:p-6">
@@ -122,6 +131,8 @@ const ProductCard: FC<Props> = ({ product }) => {
               <img
                 src={currentProductData.image}
                 alt={product.name}
+                onMouseEnter={() => handleHover('enter')}
+                onMouseLeave={() => handleHover('leave')}
                 className="w-full h-64 object-center object-cover"
               />
             </div>
@@ -131,10 +142,7 @@ const ProductCard: FC<Props> = ({ product }) => {
         <div className="pt-10 pb-4 text-center">
           <h3 className="min-h-50px text-sm font-medium text-gray-900">
             <Link href={currentProductData.link}>
-              <a href={currentProductData.link}>
-                {/* <span aria-hidden="true" className="absolute inset-0" /> */}
-                {product.name}
-              </a>
+              <a href={currentProductData.link}>{product.name}</a>
             </Link>
           </h3>
 
