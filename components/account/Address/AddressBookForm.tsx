@@ -1,6 +1,11 @@
 import { Formik, Form, Field } from 'formik'
 import { formConfig, schema } from '../configs/address'
+import Checkbox from './Checkbox'
 import React from 'react'
+
+const COMPONENTS_MAP: any = {
+  CustomCheckbox: (props: any) => <Checkbox {...props} />,
+}
 
 export default function AddressForm({
   initialValues = {},
@@ -24,24 +29,35 @@ export default function AddressForm({
                     <label className="text-gray-700 text-sm">
                       {formItem.label}
                     </label>
-                    <Field
-                      key={idx}
-                      as={formItem.as || ''}
-                      name={formItem.name}
-                      placeholder={formItem.placeholder}
-                      onChange={handleChange}
-                      value={values[formItem.name]}
-                      type={formItem.type}
-                      className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
-                    >
-                      {formItem.options?.map((option: any, idx: number) => {
-                        return (
-                          <option key={idx} value={option.value}>
-                            {option.title}
-                          </option>
-                        )
-                      })}
-                    </Field>
+                    {formItem.customComponent ? (
+                      COMPONENTS_MAP[formItem.customComponent]({
+                        formItem,
+                        values,
+                        handleChange,
+                      })
+                    ) : (
+                      <Field
+                        key={idx}
+                        as={formItem.as || ''}
+                        name={formItem.name}
+                        placeholder={formItem.placeholder}
+                        onChange={handleChange}
+                        value={values[formItem.name]}
+                        type={formItem.type}
+                        className={
+                          formItem.className ||
+                          'mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 '
+                        }
+                      >
+                        {formItem.options?.map((option: any, idx: number) => {
+                          return (
+                            <option key={idx} value={option.value}>
+                              {option.title}
+                            </option>
+                          )
+                        })}
+                      </Field>
+                    )}
                     {errors[formItem.name] && touched[formItem.name] ? (
                       <div className="text-red-400 text-sm">
                         {errors[formItem.name]}

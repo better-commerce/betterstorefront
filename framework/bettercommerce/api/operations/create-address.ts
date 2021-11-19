@@ -18,6 +18,10 @@ export default function useAddress() {
       CountryCode: countryCode,
       CustomerId: query.userId,
       PhoneNo: query.phoneNo,
+      isDefault: query.isDefault,
+      isDefaultBilling: query.isDefaultBilling,
+      isDefaultDelivery: query.isDefaultDelivery,
+      isDefaultSubscription: query.isDefaultSubscription,
     }
     try {
       const response: any = await fetcher({
