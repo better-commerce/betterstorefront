@@ -179,7 +179,10 @@ export default function Filters({
                 <div className="pl-6 flex justify-center flex-col items-baseline">
                   {appliedFilters.map((appliedFilter: any, idx: number) => {
                     return (
-                      <div className="flex justify-center items-center text-gray-600">
+                      <div
+                        key={`applied-filter-${idx}`}
+                        className="flex justify-center items-center text-gray-600"
+                      >
                         {appliedFilter.name ? (
                           <>
                             <span>{appliedFilter.name}: </span>

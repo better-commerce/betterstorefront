@@ -8,8 +8,6 @@ export default function PromotionInput() {
   const [error, setError] = useState(false)
   const { basketId, setCartItems, cartItems } = useUI()
 
-  console.log(cartItems)
-
   const [value, setValue] = useState('')
 
   const handleChange = (e: any) => {
