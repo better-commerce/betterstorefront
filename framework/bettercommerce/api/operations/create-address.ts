@@ -1,7 +1,12 @@
 import fetcher from '../../fetcher'
 import { CREATE_ADDRESS_ENDPOINT } from '@components/utils/constants'
+import countryList from '@components/utils/countryList'
+
 export default function useAddress() {
   async function getAdressAsync({ query }: any) {
+    const countryCode = countryList.find(
+      (country) => country.value === query.country
+    )?.code
     const data = {
       firstName: query.firstName,
       lastName: query.lastName,
@@ -10,7 +15,7 @@ export default function useAddress() {
       City: query.city,
       PostCode: query.postCode,
       Country: query.country,
-      CountryCode: query.countryCode,
+      CountryCode: countryCode,
       CustomerId: query.userId,
       PhoneNo: query.phoneNo,
     }

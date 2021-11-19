@@ -192,6 +192,9 @@ function Search({ query, setEntities, recordEvent }: any) {
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
             Catalog
           </h1>
+          <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+            {data.products.total} results
+          </h1>
         </div>
         <ProductFilters
           handleFilters={handleFilters}
@@ -199,6 +202,7 @@ function Search({ query, setEntities, recordEvent }: any) {
           handleSortBy={handleSortBy}
           routerFilters={state.filters}
           clearAll={clearAll}
+          routerSortOption={state.sortBy}
         />
         <ProductGrid
           products={data.products}
