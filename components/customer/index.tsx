@@ -3,7 +3,6 @@ import * as Yup from 'yup'
 import { registrationConfig, loginConfig } from './config'
 
 const registerSchema = Yup.object({
-  email: Yup.string().email().required(),
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
   password: Yup.string().min(8).max(24).required(),
@@ -18,7 +17,6 @@ const loginSchema = Yup.object({
 })
 
 const registerInitialValues = {
-  email: '',
   firstName: '',
   lastName: '',
   password: '',

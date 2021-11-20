@@ -1,11 +1,5 @@
 export const registrationConfig = [
   {
-    key: 'email',
-    label: 'Email',
-    type: 'email',
-    placeholder: 'john@doe.com',
-  },
-  {
     key: 'firstName',
     label: 'First Name',
     type: 'text',
