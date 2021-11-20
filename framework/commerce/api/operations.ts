@@ -27,6 +27,7 @@ export const OPERATIONS = [
   'notifyMe',
   'priceMatch',
   'updateDetails',
+  'validateEmail',
   'subscribe',
   'getOrders',
   'getAddress',
@@ -68,6 +69,7 @@ export type Operations<P extends APIProvider> = {
   applyPromo: {}
   createReview: {}
   updateDetails: {}
+  validateEmail: {}
   createAddress: {}
   deleteAddress: {}
   editAddress: {}
