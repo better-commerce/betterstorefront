@@ -44,7 +44,7 @@ export default function PromotionInput() {
           {cartItems.promotionsApplied.length
             ? cartItems.promotionsApplied.map((promo: any, key: number) => {
                 return (
-                  <div className="flex items-center my-5">
+                  <div className="flex items-center my-5" key={promo.name}>
                     <span className="text-indigo-500">
                       {promo.name} has been applied
                     </span>

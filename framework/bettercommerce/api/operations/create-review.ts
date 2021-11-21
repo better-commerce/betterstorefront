@@ -1,7 +1,7 @@
 import fetcher from '../../fetcher'
 import { PRODUCT_API_ENDPOINT } from '@components/utils/constants'
 export default function createREview() {
-  async function createREviewAsync(query: any) {
+  async function createReviewAsync(query: any) {
     const { title, rating, comment, userId, userEmail, productId, nickname } =
       query
     try {
@@ -22,5 +22,5 @@ export default function createREview() {
       throw new Error(error.message)
     }
   }
-  return createREviewAsync
+  return createReviewAsync
 }

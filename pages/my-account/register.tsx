@@ -2,12 +2,60 @@ import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import axios from 'axios'
-import { NEXT_SIGN_UP } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
+import { useState, useEffect } from 'react'
+import Button from '@components/ui/IndigoButton'
+import { validate } from 'email-validator'
 
+const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
+  const [error, setError] = useState(apiError)
+
+  useEffect(() => {
+    setError(apiError)
+  }, [apiError])
+
+  const handleSubmit = () => {
+    const isValidEmail = validate(value)
+    if (isValidEmail) {
+      error ? setError('') : false
+      submit(value)
+    } else {
+      setError('Please enter a valid email')
+    }
+  }
+
+  return (
+    <div className="w-full flex justify-center mt-10 flex-col items-center">
+      <div className="font-semibold w-full sm:w-1/2">
+        <label className="text-gray-700 text-sm">Email</label>
+        <input
+          className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+          value={value}
+          type="email"
+          onChange={onChange}
+        />
+      </div>
+      {error ? <span className="text-red-500">{error}</span> : null}
+      <div className="w-full sm:w-1/2 flex justify-center items-center my-5">
+        <Button buttonType="default" action={handleSubmit} title={'Submit'} />
+      </div>
+    </div>
+  )
+}
 function RegisterPage({ recordEvent, setEntities }: any) {
-  const { setUser, user } = useUI()
+  const [hasPassedEmailValidation, setHasPassedEmailValidation] =
+    useState(false)
+  const [userEmail, setUserEmail] = useState('')
+  const { user } = useUI()
+  const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
+
+  useEffect(() => {
+    setError('')
+  }, [userEmail])
+
   if (user) {
     Router.push('/')
   }
@@ -21,9 +69,30 @@ function RegisterPage({ recordEvent, setEntities }: any) {
 
   const handleUserRegister = (values: any) => {
     const asyncRegisterUser = async () => {
-      await axios.post(NEXT_SIGN_UP, { data: values })
+      await axios.post(NEXT_SIGN_UP, { data: { ...values, email: userEmail } })
+      setSuccessMessage('Success!')
+      Router.push('/my-account/login')
     }
     asyncRegisterUser()
+  }
+
+  const handleEmailSubmit = (email: string) => {
+    const handleAsync = async () => {
+      try {
+        const { data }: any = await axios.post(NEXT_VALIDATE_EMAIL, {
+          data: email,
+        })
+        if (!data.length) {
+          setHasPassedEmailValidation(true)
+        } else {
+          console.log('here')
+          setError('This email is already in use')
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    handleAsync()
   }
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
@@ -33,7 +102,23 @@ function RegisterPage({ recordEvent, setEntities }: any) {
             Register for free
           </h2>
         </div>
-        <Form type="register" onSubmit={handleUserRegister} />
+        {!successMessage && (
+          <>
+            {!hasPassedEmailValidation ? (
+              <EmailInput
+                value={userEmail}
+                onChange={(e: any) => setUserEmail(e.target.value)}
+                submit={handleEmailSubmit}
+                apiError={error}
+              />
+            ) : (
+              <Form type="register" onSubmit={handleUserRegister} />
+            )}
+          </>
+        )}
+        <span className="flex w-full justify-center items-center text-2xl text-indigo-600">
+          {successMessage}
+        </span>
       </div>
     </section>
   )
