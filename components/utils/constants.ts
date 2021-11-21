@@ -22,6 +22,7 @@ export const NEXT_UPDATE_CART_INFO = '/api/update-cart-info'
 
 export const NEXT_GET_CART = '/api/get-cart'
 export const NEXT_SIGN_UP = '/api/signup'
+export const NEXT_VALIDATE_EMAIL = '/api/customer/validate-email'
 export const NEXT_AUTHENTICATE = '/api/login'
 export const NEXT_UPDATE_DETAILS = '/api/customer/update-details'
 export const NEXT_SUBSCRIBE = '/api/customer/subscribe'
@@ -40,5 +41,6 @@ export const NEXT_GET_NAVIGATION = '/api/get-navigation'
 
 export const NEXT_APPLY_PROMOTION = '/api/apply-promo'
 //CONSTANTS
+
 export const SessionIdCookieKey: string = 'sessionId'
 export const DeviceIdKey: string = 'deviceId'
