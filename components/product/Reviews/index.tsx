@@ -8,9 +8,11 @@ export default function Reviews({ data, productId }: any) {
         <div>
           <ReviewInput productId={productId} />
         </div>
-        <h2 className="text-lg font-medium text-gray-900">Reviews</h2>
+        {data?.length && (
+          <h2 className="text-lg font-medium text-gray-900">Reviews</h2>
+        )}
         <div className="mt-6 pb-10 border-t border-b border-gray-200 divide-y divide-gray-200 space-y-10">
-          {data.map((review: any, reviewIdx: number) => (
+          {data?.map((review: any, reviewIdx: number) => (
             <div
               key={'dataReview' + reviewIdx}
               className="pt-10 lg:grid lg:grid-cols-12 lg:gap-x-8"
@@ -57,7 +59,7 @@ export default function Reviews({ data, productId }: any) {
                   dateTime={review.postedOn}
                   className="ml-4 border-l border-gray-200 pl-4 text-gray-500 lg:ml-0 lg:mt-2 lg:border-0 lg:pl-0"
                 >
-                  {review.postedOn}
+                  {new Date(review.postedOn).toLocaleDateString()}
                 </time>
               </div>
             </div>
