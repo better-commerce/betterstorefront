@@ -6,7 +6,6 @@ import { MIN_BODY_LENGTH_ERROR } from '@components/utils/textVariables'
 import { NEXT_CREATE_REVIEW } from '@components/utils/constants'
 import axios from 'axios'
 import { useUI } from '@components/ui/context'
-import { comment } from 'postcss'
 
 const MIN_LENGTH = 5
 const MAX_LENGTH = 240 //@TODO TBD with PO
