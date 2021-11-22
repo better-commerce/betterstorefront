@@ -80,6 +80,7 @@ const fetcher = async ({
   url = '',
   method = 'post',
   data = {},
+  params = {},
   headers = {},
 }: any) => {
   const computedUrl = new URL(url, BASE_URL)
@@ -88,6 +89,10 @@ const fetcher = async ({
     url: computedUrl.href,
     data,
     headers,
+  }
+
+  if (params) {
+    config.params = params
   }
 
   try {
