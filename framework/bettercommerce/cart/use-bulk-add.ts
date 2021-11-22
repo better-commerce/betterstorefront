@@ -12,10 +12,9 @@ export default function useBulkAdd() {
       const response: any = await fetcher({
         url: `${BASKET_ENDPOINT}/${basketId}/bulkAdd`,
         method: 'post',
-        data: JSON.stringify(JSON.stringify(Object.assign({}, products))),
+        data: products,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-          // 'Content-Type': 'application/x-www-form-urlencoded',
         },
       })
       return response.result
