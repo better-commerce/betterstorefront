@@ -107,7 +107,11 @@ type MODAL_VIEWS =
   | 'NEW_PAYMENT_METHOD'
   | 'NOTIFY_USER'
 
-type SIDEBAR_VIEWS = 'CART_VIEW' | 'CHECKOUT_VIEW' | 'PAYMENT_METHOD_VIEW'
+type SIDEBAR_VIEWS =
+  | 'CART_VIEW'
+  | 'CHECKOUT_VIEW'
+  | 'PAYMENT_METHOD_VIEW'
+  | 'WISHLIST_VIEW'
 
 export const UIContext = React.createContext<State | any>(initialState)
 
@@ -338,6 +342,11 @@ export const UIProvider: FC = (props) => {
     setSidebarView('CART_VIEW')
     openSidebar()
   }
+
+  const openWishlist = () => {
+    setSidebarView('WISHLIST_VIEW')
+    openSidebar()
+  }
   const value = useMemo(
     () => ({
       ...state,
@@ -361,6 +370,7 @@ export const UIProvider: FC = (props) => {
       setUser,
       deleteUser,
       openCart,
+      openWishlist,
     }),
     [state]
   )
