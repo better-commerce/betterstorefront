@@ -32,7 +32,7 @@ const ProductCard: FC<Props> = ({ product }) => {
     image: product.image,
     link: product.slug,
   })
-  const { basketId, user, addToWishlist } = useUI()
+  const { basketId, user, addToWishlist, openWishlist } = useUI()
 
   const handleAddToCart = () => {
     const handleAsync = async () => {
@@ -54,6 +54,7 @@ const ProductCard: FC<Props> = ({ product }) => {
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
+    openWishlist()
   }
   const handleWishList = () => {
     const accessToken = localStorage.getItem('user')
