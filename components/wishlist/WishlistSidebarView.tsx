@@ -1,49 +1,65 @@
-import cn from 'classnames'
 import Link from 'next/link'
 import { FC } from 'react'
 import { useUI } from '@components/ui/context'
-import { useEffect, useState, Fragment } from 'react'
+import { useEffect, Fragment, useState } from 'react'
 import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
-import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
+import { XIcon, CheckCircleIcon } from '@heroicons/react/outline'
+import useWishlist from '@components/services/wishlist'
+const WishlistSidebar: FC = () => {
+  const {
+    closeSidebar,
+    setWishlist,
+    wishListItems,
+    user,
+    wishlistItems,
+    basketId,
+    setCartItems,
+    removeFromWishlist,
+  } = useUI()
+  const { getWishlist, deleteWishlistItem } = useWishlist()
 
-const CartSidebarView: FC = () => {
-  const { closeSidebar, setCartItems, cartItems, basketId, wishListItems } =
-    useUI()
-  const { getCart, addToCart } = useCart()
+  const [isItemInCart, setItemInCart] = useState(false)
+
+  const { addToCart } = useCart()
+  const handleWishlistItems = async () => {
+    const items = await getWishlist(user.userId, wishlistItems)
+    setWishlist(items)
+  }
+  let accessToken: boolean | any = false
+
+  if (typeof window !== 'undefined') {
+    accessToken = localStorage.getItem('user')
+  }
 
   useEffect(() => {
-    const handleCartitems = async () => {
-      const items = await getCart({ basketId })
-      setCartItems(items)
-    }
-    handleCartitems()
+    if (accessToken) handleWishlistItems()
   }, [])
 
-  const handleItem = (product: any, type = 'increase') => {
-    const asyncHandleItem = async () => {
-      const data: any = {
-        basketId,
-        productId: product.id,
-        stockCode: product.stockCode,
-        manualUnitPrice: product.manualUnitPrice,
-        displayOrder: product.displayOrderta,
-        qty: -1,
-      }
-      if (type === 'increase') {
-        data.qty = 1
-      }
-      if (type === 'delete') {
-        data.qty = 0
-      }
-      try {
-        const item = await addToCart(data)
-        setCartItems(item)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    asyncHandleItem()
+  const deleteItemFromWishlist = (productId: string) => {
+    if (accessToken) {
+      deleteWishlistItem(user.userId, productId).then(() =>
+        handleWishlistItems()
+      )
+    } else removeFromWishlist(productId)
+  }
+
+  const handleAddToCart = (product: any) => {
+    addToCart({
+      basketId,
+      productId: product.recordId,
+      qty: 1,
+      manualUnitPrice: product.price.raw.withTax,
+      stockCode: product.stockCode,
+    })
+      .then((response: any) => {
+        setCartItems(response)
+        setItemInCart(true)
+        setTimeout(() => {
+          setItemInCart(false)
+        }, 3000)
+      })
+      .catch((err: any) => console.log('error', err))
   }
 
   const handleClose = () => closeSidebar()
@@ -152,28 +168,20 @@ const CartSidebarView: FC = () => {
                                       type="button"
                                       className="font-medium text-indigo-600 hover:text-indigo-500"
                                       onClick={() =>
-                                        handleItem(product, 'delete')
+                                        deleteItemFromWishlist(product.recordId)
                                       }
                                     >
                                       Remove
                                     </button>
-                                    <div className="border px-4 text-gray-900 flex flex-row">
-                                      <MinusSmIcon
-                                        onClick={() =>
-                                          handleItem(product, 'decrease')
-                                        }
-                                        className="w-4 cursor-pointer"
-                                      />
-                                      <span className="text-md px-2 py-2">
-                                        {product.qty}
-                                      </span>
-                                      <PlusSmIcon
-                                        className="w-4 cursor-pointer"
-                                        onClick={() =>
-                                          handleItem(product, 'increase')
-                                        }
-                                      />
-                                    </div>
+                                  </div>
+                                  <div className="flex justify-between w-full">
+                                    <button
+                                      type="button"
+                                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                                      onClick={() => handleAddToCart(product)}
+                                    >
+                                      Add to cart
+                                    </button>
                                   </div>
                                 </div>
                               </div>
@@ -181,6 +189,32 @@ const CartSidebarView: FC = () => {
                           ))}
                         </ul>
                       </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                    {isItemInCart && (
+                      <div className="text-gray-500 py-5 text-xl w-full justify-center items-center h-full">
+                        <CheckCircleIcon className="h-12 text-center flex justify-center w-full items-center text-indigo-600" />
+                        <p className="mt-5 text-center">
+                          Item was added in the cart
+                        </p>
+                      </div>
+                    )}
+                    <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
+                      <p>
+                        <button
+                          type="button"
+                          className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                          onClick={handleClose}
+                        >
+                          Continue Shopping
+                          <span className="ml-2" aria-hidden="true">
+                            {' '}
+                            &rarr;
+                          </span>
+                        </button>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -193,4 +227,4 @@ const CartSidebarView: FC = () => {
   )
 }
 
-export default CartSidebarView
+export default WishlistSidebar

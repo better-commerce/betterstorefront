@@ -6,9 +6,11 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
+import useWishlist from '@components/services/wishlist'
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
-  const { setUser, user } = useUI()
+  const { setUser, user, wishlistItems } = useUI()
+  const { getWishlist } = useWishlist()
   if (user) {
     Router.push('/')
   }
@@ -21,12 +23,13 @@ function LoginPage({ recordEvent, setEntities }: any) {
   }
   const handleUserLogin = (values: any) => {
     const asyncLoginUser = async () => {
-      const result = await axios.post(NEXT_AUTHENTICATE, { data: values })
+      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       if (!result.data) {
         setNoAccount(true)
       } else if (result.data) {
         setNoAccount(false)
         setUser(result.data)
+        getWishlist(result.data.userId, wishlistItems)
         Router.push('/')
       }
     }
