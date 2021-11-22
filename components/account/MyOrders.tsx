@@ -4,11 +4,13 @@ import axios from 'axios'
 import { NEXT_GET_ORDERS } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
+import cartHandler from '@components/services/cart'
 
 export default function MyOrders() {
   const [data, setData] = useState([])
 
-  const { user } = useUI()
+  const { user, basketId, setCartItems, openCart } = useUI()
+
   useEffect(() => {
     const fetchOrders = async () => {
       const response: any = await axios.post(NEXT_GET_ORDERS, {
@@ -20,6 +22,23 @@ export default function MyOrders() {
     }
     fetchOrders()
   }, [])
+
+  const handleAddToCart = (product: any) => {
+    cartHandler()
+      .addToCart({
+        basketId,
+        productId: product.recordId,
+        qty: 1,
+        manualUnitPrice: product.price.raw.withTax,
+        stockCode: product.stockCode,
+      })
+      .then((response: any) => {
+        setCartItems(response)
+        openCart()
+      })
+      .catch((err: any) => console.log('error', err))
+  }
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -51,8 +70,8 @@ export default function MyOrders() {
                     </time>
                   </h3>
 
-                  <div className="bg-gray-50 px-4 py-6 sm:rounded-lg sm:p-6 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-8">
-                    <dl className="divide-y divide-gray-200 space-y-4 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-4 md:gap-x-8 lg:w-1/2 lg:flex-none lg:gap-x-8">
+                  <div className="bg-gray-50 px-4 py-8 sm:rounded-lg sm:p-8 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-10">
+                    <dl className="divide-y divide-gray-200 space-y-6 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-5 md:gap-x-10 w-full lg:flex-none lg:gap-x-10">
                       <div className="flex justify-between md:block">
                         <dt className="font-medium text-gray-900">
                           Order number
@@ -79,11 +98,22 @@ export default function MyOrders() {
                         <dt className="font-medium text-gray-900">Status</dt>
                         <dd className="md:mt-1">{order.orderStatus}</dd>
                       </div>
+                      <div className="flex justify-between md:block">
+                        <dt className="font-medium text-gray-900">Tracking</dt>
+                        {/* <dd className="md:mt-1">{order.orderStatus}</dd> */}
+                        <a
+                          href={order.trackingLink}
+                          className="md:mt-1 text-indigo-600 hover:indigo-500"
+                          target="_blank"
+                        >
+                          Tracking link
+                        </a>
+                      </div>
                     </dl>
                   </div>
                   <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
                     <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
-                      {order.items.map((product: any) => (
+                      {order.itemsBasic.map((product: any) => (
                         <div key={product.id} className="flex py-6 sm:py-10">
                           <div className="min-w-0 flex-1 lg:flex lg:flex-col">
                             <div className="lg:flex-1">
@@ -113,12 +143,12 @@ export default function MyOrders() {
                                   </a>
                                 </Link>
                                 <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
-                                  <a
-                                    href="#"
+                                  <button
+                                    onClick={() => handleAddToCart(product)}
                                     className="text-indigo-600 hover:text-indigo-500"
                                   >
-                                    Buy Again
-                                  </a>
+                                    Add to basket
+                                  </button>
                                 </div>
                               </div>
                             </div>
