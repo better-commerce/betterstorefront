@@ -12,7 +12,7 @@ export default function useUpdateCartInfo() {
     info.forEach((item: any, index: number) => {
       params.append(`customInfo${index + 1}`, item)
     })
-    params.append('lineInfo', lineInfo)
+    params.append('lineInfo', JSON.stringify(lineInfo))
     try {
       const response: any = await fetcher({
         url: `${BASKET_ENDPOINT}/${basketId}/updateInfo`,

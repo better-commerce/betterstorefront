@@ -137,10 +137,20 @@ export default function ProductView({
 
   const buttonConfig = buttonTitle()
 
+  console.log(product)
   const handleEngravingSubmit = (values: any) => {
     const addonProducts = product.relatedProducts.filter(
       (item: any) => item.stockCode === 'ADDON'
     )
+    // const comptuedProducts = [...addonProducts, product].reduce(
+    //   (acc: any, obj: any) => {
+    //     acc.push({
+    //       productId: product.recordId,
+
+    //     })
+    //   },
+    //   []
+    // )
     const asyncHandler = async () => {
       try {
         await axios.post(NEXT_BULK_ADD_TO_CART, {
