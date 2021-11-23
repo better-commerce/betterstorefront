@@ -141,18 +141,69 @@ export default function ProductView({
     const addonProducts = product.relatedProducts.filter(
       (item: any) => item.stockCode === 'ADDON'
     )
+    const computedProducts = [...addonProducts, product].reduce(
+      (acc: any, obj: any) => {
+        acc.push({
+          ProductId: obj.recordId || obj.productId,
+          BasketId: basketId,
+          ParentProductId: obj.parentProductId || null,
+          Qty: 1,
+          DisplayOrder: obj.displayOrder || 0,
+          StockCode: obj.stockCode,
+          ItemType: obj.itemType || 0,
+          CustomInfo1: values.line1 || null,
+
+          CustomInfo2: values.line2 || null,
+
+          CustomInfo3: values.line3 || null,
+
+          CustomInfo4: values.line4 || null,
+
+          CustomInfo5: values.line5 || null,
+
+          ProductName: obj.name,
+
+          ManualUnitPrice: obj.manualUnitPrice || 0.0,
+
+          PostCode: obj.postCode || null,
+
+          IsSubscription: obj.subscriptionEnabled || false,
+
+          IsMembership: obj.hasMembership || false,
+
+          SubscriptionPlanId: obj.subscriptionPlanId || null,
+
+          SubscriptionTermId: obj.subscriptionTermId || null,
+
+          UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
+
+          GiftWrapId: obj.giftWrapConfig || null,
+
+          IsGiftWrapApplied: obj.isGiftWrapApplied || false,
+
+          ItemGroupId: obj.itemGroupId || 0,
+
+          PriceMatchReqId:
+            obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
+        })
+        return acc
+      },
+      []
+    )
+
     const asyncHandler = async () => {
       try {
         await axios.post(NEXT_BULK_ADD_TO_CART, {
           basketId,
-          products: [...addonProducts, product],
+          products: computedProducts,
         })
         await axios.post(NEXT_UPDATE_CART_INFO, {
           basketId,
           info: [...Object.values(values)],
-          lineInfo: [...addonProducts, product],
+          lineInfo: computedProducts,
         })
         showEngravingModal(false)
+        openCart()
       } catch (error) {
         console.log(error, 'err')
       }
