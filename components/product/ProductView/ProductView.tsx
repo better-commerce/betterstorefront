@@ -374,9 +374,7 @@ export default function ProductView({
               relatedProductList={filteredRelatedProductList}
             />
           ) : null}
-          {product.reviews && !!product.reviews.length && (
-            <Reviews data={product.reviews} productId={product.recordId} />
-          )}
+          <Reviews data={product.reviews} productId={product.recordId} />
           {isEngravingAvailable && (
             <Engraving
               show={isEngravingOpen}

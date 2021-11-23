@@ -3,13 +3,13 @@ import { useRouter } from 'next/router'
 const withAuth = (WrappedComponent: any, redirect = true) => {
   return (props: any) => {
     // checks whether we are on client / browser or server.
-    if (typeof window !== 'undefined' && redirect) {
+    if (typeof window !== 'undefined') {
       const Router = useRouter()
 
       const accessToken = localStorage.getItem('user')
 
       // If there is no access token we redirect to "/" page.
-      if (!accessToken) {
+      if (!accessToken && redirect) {
         Router.replace('/')
         return null
       }
