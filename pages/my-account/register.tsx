@@ -85,7 +85,6 @@ function RegisterPage({ recordEvent, setEntities }: any) {
         if (!data.length) {
           setHasPassedEmailValidation(true)
         } else {
-          console.log('here')
           setError('This email is already in use')
         }
       } catch (error) {

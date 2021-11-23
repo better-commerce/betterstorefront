@@ -1,4 +1,5 @@
 import fetcher from '../../fetcher'
+import { CATALOG_SEARCH } from '@components/utils/constants'
 
 export type GetAllProductPathsResult = {
   products: Array<{ path: string }>
@@ -8,9 +9,8 @@ export default function getAllProductPathsOperation() {
   async function getAllProductPaths(): Promise<GetAllProductPathsResult> {
     try {
       const response: any = await fetcher({
-        url: `api/v1/catalog/search/r`,
+        url: CATALOG_SEARCH,
         method: 'post',
-        // url: `api/v1/catalog/product?page=${parsedQuery.page}&sortBy=${parsedQuery.sortBy}&sortOrder=${parsedQuery.sortOrder}`,
       })
       return {
         products:
