@@ -98,6 +98,7 @@ type Action =
       payload: any
     }
   | { type: 'REMOVE_USER'; payload: any }
+  | { type: 'SET_WISHLIST'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -107,7 +108,11 @@ type MODAL_VIEWS =
   | 'NEW_PAYMENT_METHOD'
   | 'NOTIFY_USER'
 
-type SIDEBAR_VIEWS = 'CART_VIEW' | 'CHECKOUT_VIEW' | 'PAYMENT_METHOD_VIEW'
+type SIDEBAR_VIEWS =
+  | 'CART_VIEW'
+  | 'CHECKOUT_VIEW'
+  | 'PAYMENT_METHOD_VIEW'
+  | 'WISHLIST_VIEW'
 
 export const UIContext = React.createContext<State | any>(initialState)
 
@@ -182,6 +187,12 @@ function uiReducer(state: State, action: Action) {
         wishListItems: [...state.wishListItems, action.payload],
       }
     }
+    case 'SET_WISHLIST': {
+      return {
+        ...state,
+        wishListItems: action.payload,
+      }
+    }
     case 'ADD_TO_CART': {
       return {
         ...state,
@@ -230,6 +241,17 @@ export const UIProvider: FC = (props) => {
       const storedItems = getItem('wishListItems') || []
       setItem('wishListItems', [...storedItems, payload])
       dispatch({ type: 'ADD_TO_WISHLIST', payload })
+    },
+    [dispatch]
+  )
+
+  const removeFromWishlist = useCallback(
+    (payload: any) => {
+      const items = state.wishListItems.filter(
+        (item: any) => item.recordId !== payload
+      )
+      dispatch({ type: 'SET_WISHLIST', payload: items })
+      setItem('wishListItems', items)
     },
     [dispatch]
   )
@@ -329,13 +351,29 @@ export const UIProvider: FC = (props) => {
     (payload: any) => {
       Router.push('/').then(() => {
         removeItem('user')
+        dispatch({ type: 'SET_WISHLIST', payload: [] })
+        setItem('wishListItems', [])
         dispatch({ type: 'REMOVE_USER', payload: null })
       })
     },
     [dispatch]
   )
+
+  const setWishlist = useCallback(
+    (payload: any) => {
+      setItem('wishListItems', payload)
+      dispatch({ type: 'SET_WISHLIST', payload })
+    },
+    [dispatch]
+  )
+
   const openCart = () => {
     setSidebarView('CART_VIEW')
+    openSidebar()
+  }
+
+  const openWishlist = () => {
+    setSidebarView('WISHLIST_VIEW')
     openSidebar()
   }
   const value = useMemo(
@@ -361,6 +399,9 @@ export const UIProvider: FC = (props) => {
       setUser,
       deleteUser,
       openCart,
+      openWishlist,
+      setWishlist,
+      removeFromWishlist,
     }),
     [state]
   )

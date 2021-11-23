@@ -31,7 +31,8 @@ const accountDropDownConfigUnauthorized: any = [
 const Navbar: FC<Props> = ({ config }) => {
   const router = useRouter()
 
-  const { wishListItems, cartItems, user, deleteUser, openCart } = useUI()
+  const { wishListItems, cartItems, user, deleteUser, openCart, openWishlist } =
+    useUI()
   const handleRedirect = (path: string) => (path ? router.push('/' + path) : {})
 
   const accountDropDownConfigAuthorized: any = [
@@ -189,7 +190,10 @@ const Navbar: FC<Props> = ({ config }) => {
                 {/* Wishlist*/}
 
                 <div className="px-2 flow-root">
-                  <button className="group -m-2 p-2 flex items-center">
+                  <button
+                    className="group -m-2 p-2 flex items-center"
+                    onClick={openWishlist}
+                  >
                     <HeartIcon
                       className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
