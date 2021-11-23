@@ -47,7 +47,7 @@ export default function ProductView({
   const {
     openNotifyUser,
     addToWishlist,
-    openCart,
+    openWishlist,
     basketId,
     setCartItems,
     user,
@@ -218,6 +218,7 @@ export default function ProductView({
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
+    openWishlist()
   }
   const handleWishList = () => {
     const accessToken = localStorage.getItem('user')
