@@ -7,10 +7,19 @@ import { useState } from 'react'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import useWishlist from '@components/services/wishlist'
+import cartHandler from '@components/services/cart'
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
-  const { setUser, user, wishlistItems, setWishlist } = useUI()
+  const {
+    setUser,
+    user,
+    wishlistItems,
+    setCartItems,
+    setBasketId,
+    setWishlist,
+  } = useUI()
   const { getWishlist } = useWishlist()
+  const { getCartByUser } = cartHandler()
   if (user) {
     Router.push('/')
   }
@@ -31,6 +40,10 @@ function LoginPage({ recordEvent, setEntities }: any) {
         setUser(result.data)
         const wishlist = await getWishlist(result.data.userId, wishlistItems)
         setWishlist(wishlist)
+        getWishlist(result.data.userId, wishlistItems)
+        const [cart]: any = await getCartByUser({ userId: result.data.userId })
+        setCartItems(cart)
+        setBasketId(cart.id)
         Router.push('/')
       }
     }

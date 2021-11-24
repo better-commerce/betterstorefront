@@ -100,6 +100,7 @@ type Action =
     }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
+  | { type: 'SET_BASKET_ID'; payload: string }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -229,6 +230,12 @@ function uiReducer(state: State, action: Action) {
         user: null,
       }
     }
+    case 'SET_BASKET_ID': {
+      return {
+        ...state,
+        basketId: action.payload,
+      }
+    }
   }
 }
 
@@ -354,6 +361,11 @@ export const UIProvider: FC = (props) => {
         removeItem('user')
         dispatch({ type: 'SET_WISHLIST', payload: [] })
         setItem('wishListItems', [])
+        setItem('cartItems', { lineItems: [] })
+        dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+        const basketIdRef = basketId()
+        Cookies.set('basketId', basketIdRef)
+        dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
         dispatch({ type: 'REMOVE_USER', payload: null })
       })
     },
@@ -372,6 +384,14 @@ export const UIProvider: FC = (props) => {
     setSidebarView('CART_VIEW')
     openSidebar()
   }
+
+  const setBasketId = useCallback(
+    (basketId: string) => {
+      Cookies.set('basketId', basketId)
+      dispatch({ type: 'SET_BASKET_ID', payload: basketId })
+    },
+    [dispatch]
+  )
 
   const openWishlist = () => {
     setSidebarView('WISHLIST_VIEW')
@@ -403,6 +423,7 @@ export const UIProvider: FC = (props) => {
       openWishlist,
       setWishlist,
       removeFromWishlist,
+      setBasketId,
     }),
     [state]
   )

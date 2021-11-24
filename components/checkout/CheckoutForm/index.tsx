@@ -17,7 +17,7 @@
 import { useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/solid'
-
+import classNames from '@components/utils/classNames'
 const products = [
   {
     id: 1,
@@ -46,10 +46,6 @@ const paymentMethods = [
   { id: 'paypal', title: 'PayPal' },
   { id: 'etransfer', title: 'eTransfer' },
 ]
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 export default function Example() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
