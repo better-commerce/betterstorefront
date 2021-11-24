@@ -1,7 +1,4 @@
-import {
-  QuestionMarkCircleIcon,
-  XIcon as XIconSolid,
-} from '@heroicons/react/solid'
+import { XIcon as XIconSolid } from '@heroicons/react/solid'
 import { Layout } from '@components/common'
 import { GetServerSideProps } from 'next'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
