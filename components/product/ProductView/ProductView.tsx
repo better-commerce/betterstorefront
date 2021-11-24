@@ -203,7 +203,6 @@ export default function ProductView({
           lineInfo: computedProducts,
         })
         showEngravingModal(false)
-        openCart()
       } catch (error) {
         console.log(error, 'err')
       }
