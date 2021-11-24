@@ -206,11 +206,11 @@ const CartSidebarView: FC = () => {
                       <p>{cartItems.grandTotal?.formatted?.withTax}</p>
                     </div>
                     <div className="mt-6">
-                      <Link href="/checkout" passHref>
+                      <Link href="/cart" passHref>
                         <a
                           onClick={handleClose}
                           className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                          href="/checkout"
+                          href="/cart"
                         >
                           Checkout
                         </a>
