@@ -1,4 +1,8 @@
-import { NEXT_ADD_TO_CART, NEXT_GET_CART } from '@components/utils/constants'
+import {
+  NEXT_ADD_TO_CART,
+  NEXT_GET_CART,
+  NEXT_GET_USER_CART,
+} from '@components/utils/constants'
 import axios from 'axios'
 
 interface CartItem {
@@ -38,6 +42,10 @@ export default function cartHandler() {
     },
     getCart: async ({ basketId }: GetCart) => {
       const response = await axios.get(`${NEXT_GET_CART}?basketId=${basketId}`)
+      return response.data
+    },
+    getCartByUser: async ({ userId }: any) => {
+      const response = await axios.get(`${NEXT_GET_USER_CART}?userId=${userId}`)
       return response.data
     },
   }
