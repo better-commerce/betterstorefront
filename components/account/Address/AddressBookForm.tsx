@@ -19,7 +19,6 @@ export default function AddressForm({
       onSubmit={onSubmit}
     >
       {({ errors, touched, handleSubmit, values, handleChange }: any) => {
-        console.log(errors)
         return (
           <div className="flex-col w-full py-5 flex items-flex-start mx-auto max-w-4xl justify-center">
             <Form className="font-semibold w-full sm:w-1/2">
