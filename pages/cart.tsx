@@ -1,67 +1,50 @@
 import {
-  CheckIcon,
-  ClockIcon,
   QuestionMarkCircleIcon,
   XIcon as XIconSolid,
 } from '@heroicons/react/solid'
 import { Layout } from '@components/common'
 import { GetServerSideProps } from 'next'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import commerce from '@lib/api/commerce'
+import { useCart as getCart } from '@framework/cart'
+import cookie from 'cookie'
+import { basketId } from '@components/ui/context'
+import Link from 'next/link'
+import { useUI } from '@components/ui/context'
+import cartHandler from '@components/services/cart'
+import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
+import PromotionInput from '../components/cart/PromotionInput'
 
-const products = [
-  {
-    id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    price: '$32.00',
-    color: 'Sienna',
-    inStock: true,
-    size: 'Large',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in sienna.",
-  },
-  {
-    id: 2,
-    name: 'Basic Tee',
-    href: '#',
-    price: '$32.00',
-    color: 'Black',
-    inStock: false,
-    leadTime: '3–4 weeks',
-    size: 'Large',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-02.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-  {
-    id: 3,
-    name: 'Nomad Tumbler',
-    href: '#',
-    price: '$35.00',
-    color: 'White',
-    inStock: true,
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-03.jpg',
-    imageAlt: 'Insulated bottle with white base and black snap lid.',
-  },
-]
-const relatedProducts = [
-  {
-    id: 1,
-    name: 'Billfold Wallet',
-    href: '#',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-related-product-01.jpg',
-    imageAlt: 'Front of Billfold Wallet in natural leather.',
-    price: '$118',
-    color: 'Natural',
-  },
-  // More products...
-]
+function Cart({ cart }: any) {
+  const { setCartItems, cartItems, basketId } = useUI()
+  const { getCart, addToCart } = cartHandler()
 
-function Cart() {
+  const handleItem = (product: any, type = 'increase') => {
+    const asyncHandleItem = async () => {
+      const data: any = {
+        basketId,
+        productId: product.id,
+        stockCode: product.stockCode,
+        manualUnitPrice: product.manualUnitPrice,
+        displayOrder: product.displayOrderta,
+        qty: -1,
+      }
+      if (type === 'increase') {
+        data.qty = 1
+      }
+      if (type === 'delete') {
+        data.qty = 0
+      }
+      try {
+        const item = await addToCart(data)
+        setCartItems(item)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    asyncHandleItem()
+  }
+
+  const userCart = cartItems?.lineItems?.length ? cartItems : cart
   return (
     <div className="bg-white">
       <main className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -79,98 +62,73 @@ function Cart() {
               role="list"
               className="border-t border-b border-gray-200 divide-y divide-gray-200"
             >
-              {products.map((product, productIdx) => (
+              {userCart.lineItems?.map((product: any, productIdx: number) => (
                 <li key={product.id} className="flex py-6 sm:py-10">
                   <div className="flex-shrink-0">
                     <img
-                      src={product.imageSrc}
-                      alt={product.imageAlt}
+                      src={product.image}
+                      alt={product.name}
                       className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
                     />
                   </div>
 
                   <div className="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-                    <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                    <div className="relative pr-9 flex justify-between sm:pr-0">
                       <div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between flex-col">
+                          <h3 className="py-2 text-md font-bold text-gray-900">
+                            {product.brand}
+                          </h3>
                           <h3 className="text-sm">
-                            <a
-                              href={product.href}
-                              className="font-medium text-gray-700 hover:text-gray-800"
-                            >
-                              {product.name}
-                            </a>
+                            <Link href={`/${product.slug}`}>
+                              <a
+                                href={product.slug}
+                                className="font-medium text-gray-700 hover:text-gray-800"
+                              >
+                                {product.name}
+                              </a>
+                            </Link>
                           </h3>
                         </div>
-                        <div className="mt-1 flex text-sm">
+                        {/* <div className="mt-1 flex text-sm">
                           <p className="text-gray-500">{product.color}</p>
                           {product.size ? (
                             <p className="ml-4 pl-4 border-l border-gray-200 text-gray-500">
                               {product.size}
                             </p>
                           ) : null}
-                        </div>
+                        </div> */}
                         <p className="mt-1 text-sm font-medium text-gray-900">
-                          {product.price}
+                          {product.price?.formatted?.withTax}
                         </p>
                       </div>
 
                       <div className="mt-4 sm:mt-0 sm:pr-9">
-                        <label
-                          htmlFor={`quantity-${productIdx}`}
-                          className="sr-only"
-                        >
-                          Quantity, {product.name}
-                        </label>
-                        <select
-                          id={`quantity-${productIdx}`}
-                          name={`quantity-${productIdx}`}
-                          className="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                        </select>
-
-                        <div className="absolute top-0 right-0">
-                          <button
-                            type="button"
-                            className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
-                          >
-                            <span className="sr-only">Remove</span>
-                            <XIconSolid
-                              className="h-5 w-5"
-                              aria-hidden="true"
-                            />
-                          </button>
+                        <div className="border px-4 text-gray-900 flex flex-row">
+                          <MinusSmIcon
+                            onClick={() => handleItem(product, 'decrease')}
+                            className="w-4 cursor-pointer"
+                          />
+                          <span className="text-md px-2 py-2">
+                            {product.qty}
+                          </span>
+                          <PlusSmIcon
+                            className="w-4 cursor-pointer"
+                            onClick={() => handleItem(product, 'increase')}
+                          />
                         </div>
                       </div>
+                      <div className="absolute top-0 right-0">
+                        <button
+                          type="button"
+                          onClick={() => handleItem(product, 'delete')}
+                          className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                        >
+                          <span className="sr-only">Remove</span>
+                          <XIconSolid className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                      </div>
                     </div>
-
-                    <p className="mt-4 flex text-sm text-gray-700 space-x-2">
-                      {product.inStock ? (
-                        <CheckIcon
-                          className="flex-shrink-0 h-5 w-5 text-green-500"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <ClockIcon
-                          className="flex-shrink-0 h-5 w-5 text-gray-300"
-                          aria-hidden="true"
-                        />
-                      )}
-
-                      <span>
-                        {product.inStock
-                          ? 'In stock'
-                          : `Ships in ${product.leadTime}`}
-                      </span>
-                    </p>
                   </div>
                 </li>
               ))}
@@ -191,103 +149,55 @@ function Cart() {
 
             <dl className="mt-6 space-y-4">
               <div className="flex items-center justify-between">
-                <dt className="text-sm text-gray-600">Subtotal</dt>
-                <dd className="text-sm font-medium text-gray-900">$99.00</dd>
+                <dt className="text-sm text-gray-600">
+                  Subtotal (taxes included)
+                </dt>
+                <dd className="text-sm font-medium text-gray-900">
+                  {cartItems.subTotal?.formatted?.withTax}
+                </dd>
               </div>
               <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                 <dt className="flex items-center text-sm text-gray-600">
-                  <span>Shipping estimate</span>
-                  <a
-                    href="#"
-                    className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                  >
-                    <span className="sr-only">
-                      Learn more about how shipping is calculated
-                    </span>
-                    <QuestionMarkCircleIcon
-                      className="h-5 w-5"
-                      aria-hidden="true"
-                    />
-                  </a>
+                  <span>Shipping</span>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                <dd className="text-sm font-medium text-gray-900">
+                  {cartItems.shippingCharge?.formatted?.withTax}
+                </dd>
               </div>
               <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
-                <dt className="flex text-sm text-gray-600">
-                  <span>Tax estimate</span>
-                  <a
-                    href="#"
-                    className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                  >
-                    <span className="sr-only">
-                      Learn more about how tax is calculated
-                    </span>
-                    <QuestionMarkCircleIcon
-                      className="h-5 w-5"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </dt>
-                <dd className="text-sm font-medium text-gray-900">$8.32</dd>
+                {userCart.promotionsApplied?.length > 0 && (
+                  <>
+                    <dt className="flex items-center text-sm text-indigo-600">
+                      <span>Discount</span>
+                    </dt>
+                    <dd className="text-indigo-600 text-sm font-medium">
+                      <p>{cartItems.discount?.formatted?.withTax}</p>
+                    </dd>
+                  </>
+                )}
               </div>
-              <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
-                <dt className="text-base font-medium text-gray-900">
-                  Order total
-                </dt>
-                <dd className="text-base font-medium text-gray-900">$112.32</dd>
+              <PromotionInput />
+
+              <div className="text-gray-900 border-t border-gray-200 pt-4 flex items-center justify-between">
+                <dt className="font-medium text-gray-900">Order total</dt>
+                <dd className="font-medium text-gray-900">
+                  {cartItems.grandTotal?.formatted?.withTax}
+                </dd>
               </div>
             </dl>
 
             <div className="mt-6">
-              <button
-                type="submit"
-                className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
-              >
-                Checkout
-              </button>
+              <Link href="/checkout">
+                <a
+                  type="submit"
+                  className="text-center w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                >
+                  Checkout now
+                </a>
+              </Link>
             </div>
           </section>
         </form>
-
-        {/* Related products */}
-        <section aria-labelledby="related-heading" className="mt-24">
-          <h2
-            id="related-heading"
-            className="text-lg font-medium text-gray-900"
-          >
-            You may also like&hellip;
-          </h2>
-
-          <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-            {relatedProducts.map((relatedProduct) => (
-              <div key={relatedProduct.id} className="group relative">
-                <div className="w-full min-h-80 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-                  <img
-                    src={relatedProduct.imageSrc}
-                    alt={relatedProduct.imageAlt}
-                    className="w-full h-full object-center object-cover lg:w-full lg:h-full"
-                  />
-                </div>
-                <div className="mt-4 flex justify-between">
-                  <div>
-                    <h3 className="text-sm text-gray-700">
-                      <a href={relatedProduct.href}>
-                        <span aria-hidden="true" className="absolute inset-0" />
-                        {relatedProduct.name}
-                      </a>
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-500">
-                      {relatedProduct.color}
-                    </p>
-                  </div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {relatedProduct.price}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
       </main>
     </div>
   )
@@ -297,9 +207,19 @@ Cart.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES['Checkout']
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log(context.req.headers.cookie)
+  const cookies = cookie.parse(context.req.headers.cookie || '')
+  let basketRef: any = cookies.basketId
+  if (!basketRef) {
+    basketRef = basketId()
+    context.res.setHeader('set-cookie', `basketId=${basketRef}`)
+  }
+
+  const response = await getCart()({
+    basketId: basketRef,
+  })
+
   return {
-    props: { query: context.query }, // will be passed to the page component as props
+    props: { cart: response }, // will be passed to the page component as props
   }
 }
 
