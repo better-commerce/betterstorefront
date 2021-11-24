@@ -195,7 +195,7 @@ const CartSidebarView: FC = () => {
                       <p>{cartItems.shippingCharge?.formatted?.withTax}</p>
                     </div>
 
-                    {cartItems.promotionsApplied.length > 0 && (
+                    {cartItems.promotionsApplied?.length > 0 && (
                       <div className="flex py-2 justify-between font-small text-indigo-600">
                         <p>Discount</p>
                         <p>{cartItems.discount?.formatted?.withTax}</p>
