@@ -3,13 +3,14 @@ import { ThemeProvider } from 'next-themes'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { uuid } from 'uuidv4'
 import { useRouter } from 'next/router'
+import Cookies from 'js-cookie'
 
-const basketId = () => {
-  if (getItem('basketId')) {
-    return getItem('basketId')
+export const basketId = () => {
+  if (Cookies.get('basketId')) {
+    return Cookies.get('basketId') || ''
   }
   const basketId = uuid()
-  setItem('basketId', basketId)
+  Cookies.set('basketId', basketId)
   return basketId
 }
 export interface State {
