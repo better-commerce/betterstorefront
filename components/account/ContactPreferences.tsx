@@ -23,7 +23,11 @@ const radioBtnsConfig = [
 export default function ContactPreferences() {
   const [title, setTitle] = useState('Contact')
   const [items, setItems] = useState([])
-  const [activeItem, setActiveItem] = useState({ items: [] })
+  const [activeItem, setActiveItem] = useState({
+    items: [],
+    checked: false,
+    id: 2,
+  })
   const [data, setData] = useState({})
   const [defaultData, setDefaultData] = useState({})
   const { user, setUser } = useUI()
@@ -91,7 +95,7 @@ export default function ContactPreferences() {
       return item
     })
     setData(tempObj)
-    setActiveItem({ items: newItems })
+    setActiveItem({ ...activeItem, items: newItems })
   }
 
   return (
@@ -118,15 +122,13 @@ export default function ContactPreferences() {
       <div className="max-w-4xl mx-auto flex flex-col mt-10">
         <div className="w-1/2 flex justify-between align-center">
           {items.map((btn: any, idx: number) => {
-            const isChecked =
-              typeof btn.checked !== 'undefined' ? btn.checked : btn.default
             return (
               <div className="flex" key={`${idx}-radio-btn`}>
                 <input
                   id={`radio-btn-${idx}`}
                   name="notification-type"
                   type="radio"
-                  checked={isChecked}
+                  checked={activeItem.id === btn.id}
                   onClick={() => {
                     handleRadioButton(btn.unsubscribe, btn.id)
                   }}

@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
@@ -23,6 +23,21 @@ export default function Dropdown({
     stock: productData.stock,
     productId: productData.productId,
   })
+
+  useEffect(() => {
+    const newState = {
+      currentAttribute,
+      stock: productData.stock,
+      productId: productData.productId,
+    }
+    if (JSON.stringify(newState) !== JSON.stringify(selected)) {
+      setSelected({
+        currentAttribute,
+        stock: productData.stock,
+        productId: productData.productId,
+      })
+    }
+  }, [productData])
 
   const isPreOrderEnabled = productData.isPreOrderEnabled
 
