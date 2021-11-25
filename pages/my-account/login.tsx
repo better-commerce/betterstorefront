@@ -9,7 +9,7 @@ import Router from 'next/router'
 import useWishlist from '@components/services/wishlist'
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
-  const { setUser, user, wishlistItems } = useUI()
+  const { setUser, user, wishlistItems, setWishlist } = useUI()
   const { getWishlist } = useWishlist()
   if (user) {
     Router.push('/')
@@ -29,7 +29,8 @@ function LoginPage({ recordEvent, setEntities }: any) {
       } else if (result.data) {
         setNoAccount(false)
         setUser(result.data)
-        getWishlist(result.data.userId, wishlistItems)
+        const wishlist = await getWishlist(result.data.userId, wishlistItems)
+        setWishlist(wishlist)
         Router.push('/')
       }
     }
