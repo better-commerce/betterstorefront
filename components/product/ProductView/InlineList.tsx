@@ -40,7 +40,7 @@ export default function InlineList({
                 <Link href={`/${path}`} passHref>
                   <a
                     aria-hidden="true"
-                    href={`/${path}`}
+                    onClick={() => handleChange(item.fieldvalue)}
                     className={classNames(
                       item.fieldvalue,
                       'h-8 w-8 border border-black border-opacity-10 rounded-full'
