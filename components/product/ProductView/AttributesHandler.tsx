@@ -92,6 +92,7 @@ export default function AttributesHandler({ product }: any) {
               onChange={handleChange}
               fieldCode={option.fieldCode}
               productId={product.id}
+              generateLink={generateLink}
             />
           </div>
         )

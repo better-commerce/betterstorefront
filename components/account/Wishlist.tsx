@@ -11,7 +11,7 @@ import { LoadingDots } from '@components/ui'
 export default function Wishlist() {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const { user, basketId, setCartItems, openCart } = useUI()
+  const { user, basketId, setCartItems, openCart, setWishlist } = useUI()
 
   const fetchItems = async () => {
     !isLoading && setIsLoading(true)
@@ -22,6 +22,7 @@ export default function Wishlist() {
       })
       setIsLoading(false)
       setData(response.data)
+      setWishlist(response.data)
     } catch (error) {
       console.log(error, 'err')
       setIsLoading(false)
