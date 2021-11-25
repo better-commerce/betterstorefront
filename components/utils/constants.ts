@@ -13,6 +13,7 @@ export const ORDERS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/comm
 export const ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/`
 export const CREATE_ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/create`
 export const CATALOG_SEARCH = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/r`
+export const SHIPPING_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/shipping`
 //LOCAL ENDPOINTS
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
@@ -42,7 +43,18 @@ export const NEXT_CREATE_REVIEW = `/api/create-review`
 export const NEXT_GET_NAVIGATION = `/api/get-navigation`
 
 export const NEXT_APPLY_PROMOTION = `/api/apply-promo`
+
+export const NEXT_SHIPPING_ENDPOINT = '/api/shipping-options'
 //CONSTANTS
 
 export const SessionIdCookieKey: string = `sessionId`
 export const DeviceIdKey: string = `deviceId`
+
+//SHIPPING ACTION TYPES
+export const SHIPPING_ACTION_TYPES_MAP = {
+  GET_ALL: 'GET_ALL',
+  CLICK_AND_COLLECT: 'CLICK_AND_COLLECT',
+  ACTIVE_SHIPPING_METHODS: 'ACTIVE_SHIPPING_METHODS',
+}
+export const GEO_ENDPOINT =
+  'https://omnilytics.omnicx.com/api/v1/IpInfo?ipAddress='
