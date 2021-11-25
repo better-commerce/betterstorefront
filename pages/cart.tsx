@@ -1,10 +1,13 @@
-import { XIcon as XIconSolid } from '@heroicons/react/solid'
+import {
+  QuestionMarkCircleIcon,
+  XIcon as XIconSolid,
+} from '@heroicons/react/solid'
 import { Layout } from '@components/common'
 import { GetServerSideProps } from 'next'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useCart as getCart } from '@framework/cart'
 import cookie from 'cookie'
-import { basketId } from '@components/ui/context'
+import { basketId as basketIdGenerator } from '@components/ui/context'
 import Link from 'next/link'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
@@ -207,7 +210,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketRef: any = cookies.basketId
   if (!basketRef) {
-    basketRef = basketId()
+    basketRef = basketIdGenerator()
     context.res.setHeader('set-cookie', `basketId=${basketRef}`)
   }
 
