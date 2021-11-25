@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Tab } from '@headlessui/react'
@@ -24,31 +24,33 @@ function MyAccount({ defaultView }: any) {
           <Tab.Group vertical defaultIndex={defaultView}>
             <Tab.List className="sticky top-0 flex flex-col w-full md:w-1/4 bg-gray-200 h-full rounded-lg">
               {config.map((item: any, idx: number) => {
+                console.log(item.props)
                 return (
-                  <Link
-                    key={idx}
-                    href={{
-                      pathname: router.pathname,
-                      query: { ...router.query, view: item.props },
+                  <Tab
+                    key={`my-acc-${idx}`}
+                    as="div"
+                    // href="#"
+
+                    className={({ selected }: any) => {
+                      return `${
+                        selected
+                          ? 'bg-white text-indigo-600 border border-indigo-600'
+                          : ''
+                      } hover:bg-white hover:text-indigo-600 border border-transparent hover:border-indigo-600 text-lg leading-5 font-medium text-gray-700 font-bold rounded-lg focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60`
                     }}
-                    shallow={true}
                   >
-                    <Tab
-                      key={`my-acc-${idx}`}
-                      as="a"
-                      href="#"
-                      onClick={(e: any) => e.preventDefault()}
-                      className={({ selected }: any) => {
-                        return `${
-                          selected
-                            ? 'bg-white text-indigo-600 border border-indigo-600'
-                            : ''
-                        } w-full px-5 py-5 hover:bg-white hover:text-indigo-600 border border-transparent hover:border-indigo-600 text-lg leading-5 font-medium text-gray-700 font-bold rounded-lg focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60`
+                    <Link
+                      key={idx}
+                      href={{
+                        pathname: router.pathname,
+                        query: { ...router.query, view: item.props },
                       }}
+                      passHref
+                      shallow={true}
                     >
-                      {item.text}
-                    </Tab>
-                  </Link>
+                      <a className="px-5 py-5 block h-full">{item.text}</a>
+                    </Link>
+                  </Tab>
                 )
               })}
             </Tab.List>
