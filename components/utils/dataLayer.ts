@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 import { SessionIdCookieKey } from '@components/utils/constants'
-
+import geoData from '@components/utils/geographicService'
 export const ACTIONS = {
   DynamicPage: 'DynamicPage',
   SearchFull: 'SearchFull',
