@@ -33,7 +33,6 @@ const Navbar: FC<Props> = ({ config }) => {
 
   const { wishListItems, cartItems, user, deleteUser, openCart, openWishlist } =
     useUI()
-  const handleRedirect = (path: string) => (path ? router.push('/' + path) : {})
 
   const accountDropDownConfigAuthorized: any = [
     {
@@ -87,21 +86,23 @@ const Navbar: FC<Props> = ({ config }) => {
                       <Popover key={idx} className="flex">
                         {({ open }) => (
                           <>
-                            <div
-                              className="relative flex"
-                              onClick={() => handleRedirect(item.hyperlink)}
-                            >
-                              <Popover.Button
-                                className={classNames(
-                                  open
-                                    ? 'border-indigo-600 text-indigo-600'
-                                    : 'border-transparent text-gray-700 hover:text-gray-800',
-                                  'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                )}
+                            <Link href={`/${item.hyperlink}`} passHref>
+                              <a
+                                className="relative flex"
+                                href={item.hyperlink}
                               >
-                                {item.caption}
-                              </Popover.Button>
-                            </div>
+                                <Popover.Button
+                                  className={classNames(
+                                    open
+                                      ? 'border-indigo-600 text-indigo-600'
+                                      : 'border-transparent text-gray-700 hover:text-gray-800',
+                                    'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                  )}
+                                >
+                                  {item.caption}
+                                </Popover.Button>
+                              </a>
+                            </Link>
                             {item.navBlocks.length ? (
                               <Transition
                                 as={Fragment}

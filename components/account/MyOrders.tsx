@@ -105,6 +105,7 @@ export default function MyOrders() {
                           href={order.trackingLink}
                           className="md:mt-1 text-indigo-600 hover:indigo-500"
                           target="_blank"
+                          rel="noreferrer"
                         >
                           Tracking link
                         </a>
