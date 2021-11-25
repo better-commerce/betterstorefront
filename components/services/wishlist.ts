@@ -36,7 +36,7 @@ export default function wishlistHandler() {
     },
     getWishlist: async (userId: string, localStorageWishlistItems: any) => {
       try {
-        if (accessToken) {
+        if (userId) {
           const response: any = await axios.post(NEXT_GET_WISHLIST, {
             id: userId,
             flag: true,
