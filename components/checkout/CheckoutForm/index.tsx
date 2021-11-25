@@ -1,64 +1,54 @@
-/*
-  This example requires Tailwind CSS v2.0+
+import { TrashIcon } from '@heroicons/react/solid'
+import Link from 'next/link'
+import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
+import { useUI } from '@components/ui/context'
+import cartHandler from '@components/services/cart'
+import PromotionInput from '@components/cart/PromotionInput'
+import Delivery from './Delivery'
 
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-import { useState } from 'react'
-import { RadioGroup } from '@headlessui/react'
-import { CheckCircleIcon, TrashIcon } from '@heroicons/react/solid'
-import classNames from '@components/utils/classNames'
-const products = [
-  {
-    id: 1,
-    title: 'Basic Tee',
-    href: '#',
-    price: '$32.00',
-    color: 'Black',
-    size: 'Large',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/checkout-page-02-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-  // More products...
-]
-const deliveryMethods = [
-  {
-    id: 1,
-    title: 'Standard',
-    turnaround: '4–10 business days',
-    price: '$5.00',
-  },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-]
 const paymentMethods = [
   { id: 'credit-card', title: 'Credit card' },
   { id: 'paypal', title: 'PayPal' },
   { id: 'etransfer', title: 'eTransfer' },
 ]
 
-export default function Example() {
-  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
-    deliveryMethods[0]
-  )
+export default function CheckoutForm({ cart, user }: any) {
+  const { setCartItems, basketId } = useUI()
+  const { addToCart } = cartHandler()
+
+  const handleItem = (product: any, type = 'increase') => {
+    const asyncHandleItem = async () => {
+      const data: any = {
+        basketId,
+        productId: product.id,
+        stockCode: product.stockCode,
+        manualUnitPrice: product.manualUnitPrice,
+        displayOrder: product.displayOrderta,
+        qty: -1,
+      }
+      if (type === 'increase') {
+        data.qty = 1
+      }
+      if (type === 'delete') {
+        data.qty = 0
+      }
+      try {
+        const item = await addToCart(data)
+        setCartItems(item)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    asyncHandleItem()
+  }
 
   return (
     <div className="bg-gray-50">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Checkout</h2>
-
         <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
           <div>
+            <Delivery />
             <div>
               <h2 className="text-lg font-medium text-gray-900">
                 Contact information
@@ -270,76 +260,6 @@ export default function Example() {
               </div>
             </div>
 
-            <div className="mt-10 border-t border-gray-200 pt-10">
-              <RadioGroup
-                value={selectedDeliveryMethod}
-                onChange={setSelectedDeliveryMethod}
-              >
-                <RadioGroup.Label className="text-lg font-medium text-gray-900">
-                  Delivery method
-                </RadioGroup.Label>
-
-                <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                  {deliveryMethods.map((deliveryMethod) => (
-                    <RadioGroup.Option
-                      key={deliveryMethod.id}
-                      value={deliveryMethod}
-                      className={({ checked, active }) =>
-                        classNames(
-                          checked ? 'border-transparent' : 'border-gray-300',
-                          active ? 'ring-2 ring-indigo-500' : '',
-                          'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none'
-                        )
-                      }
-                    >
-                      {({ checked, active }) => (
-                        <>
-                          <div className="flex-1 flex">
-                            <div className="flex flex-col">
-                              <RadioGroup.Label
-                                as="span"
-                                className="block text-sm font-medium text-gray-900"
-                              >
-                                {deliveryMethod.title}
-                              </RadioGroup.Label>
-                              <RadioGroup.Description
-                                as="span"
-                                className="mt-1 flex items-center text-sm text-gray-500"
-                              >
-                                {deliveryMethod.turnaround}
-                              </RadioGroup.Description>
-                              <RadioGroup.Description
-                                as="span"
-                                className="mt-6 text-sm font-medium text-gray-900"
-                              >
-                                {deliveryMethod.price}
-                              </RadioGroup.Description>
-                            </div>
-                          </div>
-                          {checked ? (
-                            <CheckCircleIcon
-                              className="h-5 w-5 text-indigo-600"
-                              aria-hidden="true"
-                            />
-                          ) : null}
-                          <div
-                            className={classNames(
-                              active ? 'border' : 'border-2',
-                              checked
-                                ? 'border-indigo-500'
-                                : 'border-transparent',
-                              'absolute -inset-px rounded-lg pointer-events-none'
-                            )}
-                            aria-hidden="true"
-                          />
-                        </>
-                      )}
-                    </RadioGroup.Option>
-                  ))}
-                </div>
-              </RadioGroup>
-            </div>
-
             {/* Payment */}
             <div className="mt-10 border-t border-gray-200 pt-10">
               <h2 className="text-lg font-medium text-gray-900">Payment</h2>
@@ -460,12 +380,12 @@ export default function Example() {
             <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
               <h3 className="sr-only">Items in your cart</h3>
               <ul role="list" className="divide-y divide-gray-200">
-                {products.map((product) => (
+                {cart.lineItems?.map((product: any) => (
                   <li key={product.id} className="flex py-6 px-4 sm:px-6">
                     <div className="flex-shrink-0">
                       <img
-                        src={product.imageSrc}
-                        alt={product.imageAlt}
+                        src={product.image}
+                        alt={product.name}
                         className="w-20 rounded-md"
                       />
                     </div>
@@ -474,24 +394,21 @@ export default function Example() {
                       <div className="flex">
                         <div className="min-w-0 flex-1">
                           <h4 className="text-sm">
-                            <a
-                              href={product.href}
-                              className="font-medium text-gray-700 hover:text-gray-800"
-                            >
-                              {product.title}
-                            </a>
+                            <h3 className="py-2 text-md font-bold text-gray-900">
+                              {product.brand}
+                            </h3>
+                            <Link href={`/${product.slug}`}>
+                              <a className="font-medium text-gray-700 hover:text-gray-800">
+                                {product.name}
+                              </a>
+                            </Link>
                           </h4>
-                          <p className="mt-1 text-sm text-gray-500">
-                            {product.color}
-                          </p>
-                          <p className="mt-1 text-sm text-gray-500">
-                            {product.size}
-                          </p>
                         </div>
 
                         <div className="ml-4 flex-shrink-0 flow-root">
                           <button
                             type="button"
+                            onClick={() => handleItem(product, 'delete')}
                             className="-m-2.5 bg-white p-2.5 flex items-center justify-center text-gray-400 hover:text-gray-500"
                           >
                             <span className="sr-only">Remove</span>
@@ -502,27 +419,23 @@ export default function Example() {
 
                       <div className="flex-1 pt-2 flex items-end justify-between">
                         <p className="mt-1 text-sm font-medium text-gray-900">
-                          {product.price}
+                          {product.price?.formatted?.withTax}
                         </p>
 
-                        <div className="ml-4">
-                          <label htmlFor="quantity" className="sr-only">
-                            Quantity
-                          </label>
-                          <select
-                            id="quantity"
-                            name="quantity"
-                            className="rounded-md border border-gray-300 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          >
-                            <option value={1}>1</option>
-                            <option value={2}>2</option>
-                            <option value={3}>3</option>
-                            <option value={4}>4</option>
-                            <option value={5}>5</option>
-                            <option value={6}>6</option>
-                            <option value={7}>7</option>
-                            <option value={8}>8</option>
-                          </select>
+                        <div className="mt-4 sm:mt-0 sm:pr-9">
+                          <div className="border px-4 text-gray-900 flex flex-row">
+                            <MinusSmIcon
+                              onClick={() => handleItem(product, 'decrease')}
+                              className="w-4 cursor-pointer"
+                            />
+                            <span className="text-md px-2 py-2">
+                              {product.qty}
+                            </span>
+                            <PlusSmIcon
+                              className="w-4 cursor-pointer"
+                              onClick={() => handleItem(product, 'increase')}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -531,20 +444,39 @@ export default function Example() {
               </ul>
               <dl className="border-t border-gray-200 py-6 px-4 space-y-6 sm:px-6">
                 <div className="flex items-center justify-between">
-                  <dt className="text-sm text-gray-900">Subtotal</dt>
-                  <dd className="text-sm font-medium text-gray-900">$64.00</dd>
+                  <dt className="text-sm text-gray-900">
+                    {' '}
+                    Subtotal (taxes included)
+                  </dt>
+                  <dd className="text-sm font-medium text-gray-900">
+                    {cart.subTotal?.formatted?.withTax}
+                  </dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-900">Shipping</dt>
-                  <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                  <dd className="text-sm font-medium text-gray-900">
+                    {cart.shippingCharge?.formatted?.withTax}
+                  </dd>
                 </div>
-                <div className="flex items-center justify-between">
-                  <dt className="text-sm text-gray-900">Taxes</dt>
-                  <dd className="text-sm font-medium text-gray-900">$5.52</dd>
+                <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
+                  {cart.promotionsApplied?.length > 0 && (
+                    <>
+                      <dt className="flex items-center text-sm text-indigo-600">
+                        <span>Discount</span>
+                      </dt>
+                      <dd className="text-indigo-600 text-sm font-medium">
+                        <p>{cart.discount?.formatted?.withTax}</p>
+                      </dd>
+                    </>
+                  )}
                 </div>
+                <PromotionInput />
+
                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-                  <dt className="font-medium">Total</dt>
-                  <dd className="font-medium text-gray-900">$75.52</dd>
+                  <dt className="font-medium text-gray-900">Total</dt>
+                  <dd className="font-medium text-gray-900">
+                    {cart.grandTotal?.formatted?.withTax}
+                  </dd>
                 </div>
               </dl>
 
