@@ -95,7 +95,7 @@ export default function ProductView({
   }
 
   const handleNotification = () => {
-    openNotifyUser(product.id)
+    openNotifyUser(product.recordId)
   }
 
   let content = [...product.images]
