@@ -5,8 +5,12 @@ export default function notifyUser() {
     const { email, productId } = query
     try {
       const response: any = await fetcher({
-        url: `${PRODUCT_API_ENDPOINT}${email}/notifyme/${productId}`,
+        url: `${PRODUCT_API_ENDPOINT}${productId}/notifyme`,
         method: 'post',
+        data: {
+          email,
+          id: productId,
+        },
       })
       return response.result
     } catch (error: any) {
