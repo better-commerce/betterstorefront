@@ -80,6 +80,7 @@ export default function AttributesHandler({
         }
       })
     })
+    console.log(productData)
     return productData
   }
 

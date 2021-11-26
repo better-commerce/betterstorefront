@@ -20,7 +20,7 @@ export default function NotifyUserPopup() {
       await axios.post(
         `${NEXT_API_NOTIFY_ME_ENDPOINT}?email=${email}&productId=${productId}`
       )
-    console.log(postEmail)
+    console.log(productId, 'productId')
     // closeNotifyUser()
     if (email && isValidEmail) postEmail()
   }
