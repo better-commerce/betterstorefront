@@ -142,6 +142,7 @@ export default function ProductView({
 
   const buttonConfig = buttonTitle()
 
+  console.log(product)
   const handleEngravingSubmit = (values: any) => {
     const updatedProduct = {
       ...product,
