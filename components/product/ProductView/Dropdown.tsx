@@ -12,11 +12,17 @@ export default function Dropdown({
   currentAttribute = 'S',
   getStockPerAttribute,
   productId,
+  setSelectedAttrData,
 }: any) {
-  // const [selected, setSelected] = useState(currentAttribute)
   const { openNotifyUser, closeNotifyUser } = useUI()
 
-  const productData = getStockPerAttribute(fieldCode, currentAttribute)
+  console.log(currentAttribute)
+
+  console.log(productId)
+
+  const [productData, setProductData] = useState(
+    getStockPerAttribute(fieldCode, currentAttribute)
+  )
 
   const [selected, setSelected] = useState({
     currentAttribute,
@@ -37,7 +43,7 @@ export default function Dropdown({
         productId: productData.productId,
       })
     }
-  }, [productData])
+  }, [productId])
 
   const isPreOrderEnabled = productData.isPreOrderEnabled
 
@@ -53,9 +59,17 @@ export default function Dropdown({
   }
 
   const handleOnChange = (value: any) => {
-    setSelected(value)
+    const stockPerAttrValue = getStockPerAttribute(
+      fieldCode,
+      value.currentAttribute
+    )
+    setSelected({ ...value, ...stockPerAttrValue })
+    setSelectedAttrData({
+      productId: stockPerAttrValue.productId,
+      stockCode: stockPerAttrValue.stockCode,
+    })
     if (value.stock === 0 && !isPreOrderEnabled) {
-      openNotifyUser(productId)
+      openNotifyUser(stockPerAttrValue.productId)
     }
   }
 
