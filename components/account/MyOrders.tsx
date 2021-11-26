@@ -24,12 +24,13 @@ export default function MyOrders() {
   }, [])
 
   const handleAddToCart = (product: any) => {
+    console.log(product)
     cartHandler()
       .addToCart({
         basketId,
         productId: product.recordId,
-        qty: 1,
-        manualUnitPrice: product.price.raw.withTax,
+        qty: product.qty,
+        manualUnitPrice: product.price,
         stockCode: product.stockCode,
       })
       .then((response: any) => {
