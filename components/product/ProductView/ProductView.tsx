@@ -51,6 +51,7 @@ export default function ProductView({
     basketId,
     setCartItems,
     user,
+    openCart,
   } = useUI()
 
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
@@ -193,7 +194,7 @@ export default function ProductView({
 
     const asyncHandler = async () => {
       try {
-        await axios.post(NEXT_BULK_ADD_TO_CART, {
+        const newCart = await axios.post(NEXT_BULK_ADD_TO_CART, {
           basketId,
           products: computedProducts,
         })
@@ -202,7 +203,9 @@ export default function ProductView({
           info: [...Object.values(values)],
           lineInfo: computedProducts,
         })
+        setCartItems(newCart)
         showEngravingModal(false)
+        openCart()
       } catch (error) {
         console.log(error, 'err')
       }
