@@ -26,7 +26,7 @@ export const formConfig = [
     label: 'Mobile Number',
   },
   {
-    type: 'tel',
+    type: 'phone',
     name: 'phone',
     placeholder: 'Phone number',
     label: 'Phone number',

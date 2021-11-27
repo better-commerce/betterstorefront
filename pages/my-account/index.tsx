@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Tab } from '@headlessui/react'
@@ -6,20 +6,11 @@ import { config } from '@components/utils/myAccount'
 import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 function MyAccount({ defaultView }: any) {
   const [view, setView] = useState(defaultView)
   const router = useRouter()
 
-  const handleTabChange = (index: number) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, view: config[index].props },
-      },
-      undefined,
-      { shallow: true }
-    )
-  }
   useEffect(() => {
     if (router.query.view && view !== router.query.view) {
       setView(router.query.view)
@@ -30,25 +21,35 @@ function MyAccount({ defaultView }: any) {
     <section className="text-gray-900 relative py-10">
       <div className="w-full">
         <div className="justify-between px-10 flex flex-col md:flex-row">
-          <Tab.Group
-            onChange={handleTabChange}
-            vertical
-            defaultIndex={defaultView}
-          >
+          <Tab.Group vertical defaultIndex={defaultView}>
             <Tab.List className="sticky top-0 flex flex-col w-full md:w-1/4 bg-gray-200 h-full rounded-lg">
               {config.map((item: any, idx: number) => {
+                console.log(item.props)
                 return (
                   <Tab
                     key={`my-acc-${idx}`}
+                    as="div"
+                    // href="#"
+
                     className={({ selected }: any) => {
                       return `${
                         selected
                           ? 'bg-white text-indigo-600 border border-indigo-600'
                           : ''
-                      } w-full px-5 py-5 hover:bg-white hover:text-indigo-600 border border-transparent hover:border-indigo-600 text-lg leading-5 font-medium text-gray-700 font-bold rounded-lg focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60`
+                      } hover:bg-white hover:text-indigo-600 border border-transparent hover:border-indigo-600 text-lg leading-5 font-medium text-gray-700 font-bold rounded-lg focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60`
                     }}
                   >
-                    {item.text}
+                    <Link
+                      key={idx}
+                      href={{
+                        pathname: router.pathname,
+                        query: { ...router.query, view: item.props },
+                      }}
+                      passHref
+                      shallow={true}
+                    >
+                      <a className="px-5 py-5 block h-full">{item.text}</a>
+                    </Link>
                   </Tab>
                 )
               })}

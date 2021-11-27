@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
@@ -12,17 +12,34 @@ export default function Dropdown({
   currentAttribute = 'S',
   getStockPerAttribute,
   productId,
+  setSelectedAttrData,
 }: any) {
-  // const [selected, setSelected] = useState(currentAttribute)
   const { openNotifyUser, closeNotifyUser } = useUI()
 
-  const productData = getStockPerAttribute(fieldCode, currentAttribute)
+  const [productData, setProductData] = useState(
+    getStockPerAttribute(fieldCode, currentAttribute)
+  )
 
   const [selected, setSelected] = useState({
     currentAttribute,
     stock: productData.stock,
     productId: productData.productId,
+    stockCode: productData.stockCode,
   })
+
+  useEffect(() => {
+    const getStockPerAttrData = getStockPerAttribute(
+      fieldCode,
+      currentAttribute
+    )
+    setProductData(getStockPerAttrData)
+    setSelected({
+      currentAttribute,
+      stock: getStockPerAttrData.stock,
+      productId: getStockPerAttrData.productId,
+      stockCode: getStockPerAttrData.stockCode,
+    })
+  }, [productId])
 
   const isPreOrderEnabled = productData.isPreOrderEnabled
 
@@ -38,9 +55,17 @@ export default function Dropdown({
   }
 
   const handleOnChange = (value: any) => {
-    setSelected(value)
+    const stockPerAttrValue = getStockPerAttribute(
+      fieldCode,
+      value.currentAttribute
+    )
+    setSelected({ ...value, ...stockPerAttrValue })
+    setSelectedAttrData({
+      productId: stockPerAttrValue.productId,
+      stockCode: stockPerAttrValue.stockCode,
+    })
     if (value.stock === 0 && !isPreOrderEnabled) {
-      openNotifyUser(productId)
+      openNotifyUser(stockPerAttrValue.productId)
     }
   }
 

@@ -51,11 +51,16 @@ export default function ProductView({
     basketId,
     setCartItems,
     user,
+    openCart,
   } = useUI()
 
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
+  const [selectedAttrData, setSelectedAttrData] = useState({
+    productId: product.recordId,
+    stockCode: product.stockCode,
+  })
 
   useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
@@ -109,10 +114,10 @@ export default function ProductView({
       action: async () => {
         const item = await cartHandler().addToCart({
           basketId: basketId,
-          productId: product.recordId,
+          productId: selectedAttrData.productId,
           qty: 1,
           manualUnitPrice: product.price.raw.withTax,
-          stockCode: product.stockCode,
+          stockCode: selectedAttrData.stockCode,
         })
         setCartItems(item)
       },
@@ -138,10 +143,17 @@ export default function ProductView({
   const buttonConfig = buttonTitle()
 
   const handleEngravingSubmit = (values: any) => {
+    const updatedProduct = {
+      ...product,
+      ...{
+        recordId: selectedAttrData.productId,
+        stockCode: selectedAttrData.stockCode,
+      },
+    }
     const addonProducts = product.relatedProducts.filter(
       (item: any) => item.stockCode === 'ADDON'
     )
-    const computedProducts = [...addonProducts, product].reduce(
+    const computedProducts = [...addonProducts, updatedProduct].reduce(
       (acc: any, obj: any) => {
         acc.push({
           ProductId: obj.recordId || obj.productId,
@@ -193,7 +205,7 @@ export default function ProductView({
 
     const asyncHandler = async () => {
       try {
-        await axios.post(NEXT_BULK_ADD_TO_CART, {
+        const newCart = await axios.post(NEXT_BULK_ADD_TO_CART, {
           basketId,
           products: computedProducts,
         })
@@ -202,6 +214,7 @@ export default function ProductView({
           info: [...Object.values(values)],
           lineInfo: computedProducts,
         })
+        setCartItems(newCart)
         showEngravingModal(false)
       } catch (error) {
         console.log(error, 'err')
@@ -355,7 +368,10 @@ export default function ProductView({
                 </div>
               </div>
               <div className="w-full sm:w-6/12">
-                <AttributesHandler product={product} />
+                <AttributesHandler
+                  product={product}
+                  setSelectedAttrData={setSelectedAttrData}
+                />
               </div>
               <p
                 className="text-gray-900 text-md cursor-pointer hover:underline"
