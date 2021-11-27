@@ -25,10 +25,9 @@ const DefaultButton: FC<Props> = ({
   const { openCart } = useUI()
 
   const handleAction = () => {
-    action()
     if (buttonType === 'cart') {
-      openCart()
-    }
+      action().then(() => openCart())
+    } else action()
   }
 
   const { bgColor, hoverBgColor, focusRingColor } = colorScheme
@@ -36,6 +35,7 @@ const DefaultButton: FC<Props> = ({
   return (
     <button
       onClick={handleAction}
+      type="button"
       className={`max-w-xs flex-1 ${bgColor} border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className}`}
     >
       {title}
