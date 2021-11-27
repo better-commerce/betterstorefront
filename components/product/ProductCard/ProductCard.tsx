@@ -34,21 +34,18 @@ const ProductCard: FC<Props> = ({ product }) => {
   })
   const { basketId, user, addToWishlist, openWishlist } = useUI()
 
-  const handleAddToCart = () => {
-    const handleAsync = async () => {
-      try {
-        await cartHandler().addToCart({
-          basketId,
-          productId: product.recordId,
-          qty: 1,
-          manualUnitPrice: product.price.raw.withTax,
-          stockCode: product.stockCode,
-        })
-      } catch (error) {
-        console.log(error, 'err')
-      }
+  const handleAddToCart = async () => {
+    try {
+      await cartHandler().addToCart({
+        basketId,
+        productId: product.recordId,
+        qty: 1,
+        manualUnitPrice: product.price.raw.withTax,
+        stockCode: product.stockCode,
+      })
+    } catch (error) {
+      console.log(error, 'err')
     }
-    handleAsync()
   }
 
   const insertToLocalWishlist = () => {
