@@ -41,21 +41,23 @@ export default function PromotionInput() {
       <div>
         <label className="text-gray-700 text-sm">Apply promotion</label>
         <div className="flex flex-col">
-          {cartItems.promotionsApplied?.length
-            ? cartItems.promotionsApplied.map((promo: any, key: number) => {
-                return (
-                  <div className="flex items-center my-5" key={promo.name}>
-                    <span className="text-indigo-500">
-                      {promo.name} has been applied
-                    </span>
-                    <TrashIcon
-                      className="ml-5 cursor-pointer text-gray-500 hover:text-indigo-700 max-w-xs h-7"
-                      onClick={() => handleSubmit('remove', promo.promoCode)}
-                    />
-                  </div>
-                )
-              })
-            : null}
+          <div className="flex justify-start flex-col my-5">
+            {cartItems.promotionsApplied?.length
+              ? cartItems.promotionsApplied.map((promo: any, key: number) => {
+                  return (
+                    <div className="flex items-center py-2" key={promo.name}>
+                      <span className="text-indigo-500">
+                        {promo.name} has been applied
+                      </span>
+                      <TrashIcon
+                        className="ml-5 cursor-pointer text-gray-500 hover:text-indigo-700 max-w-xs h-7"
+                        onClick={() => handleSubmit('remove', promo.promoCode)}
+                      />
+                    </div>
+                  )
+                })
+              : null}
+          </div>
 
           <div className="flex justify-center items-center">
             <input
@@ -68,6 +70,7 @@ export default function PromotionInput() {
 
             <button
               onClick={() => handleSubmit('apply')}
+              type="button"
               className={`max-w-xs flex-1 ml-5 bg-indigo-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-600 sm:w-full`}
             >
               Apply
