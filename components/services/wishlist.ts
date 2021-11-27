@@ -34,13 +34,34 @@ export default function wishlistHandler() {
         createWishlist()
       } else insertToLocalWishlist()
     },
-    getWishlist: async (userId: string, localStorageWishlistItems: any) => {
+    getWishlist: async (
+      userId: string,
+      localStorageWishlistItems: any = []
+    ) => {
+      console.log(localStorageWishlistItems)
       try {
         if (userId) {
+          const postExistingItems = async () => {
+            await Promise.all(
+              localStorageWishlistItems.map(async (item: any) => {
+                try {
+                  await axios.post(NEXT_CREATE_WISHLIST, {
+                    id: userId,
+                    productId: item.recordId,
+                    flag: true,
+                  })
+                } catch (error) {
+                  console.log(error)
+                }
+              })
+            )
+          }
+          await postExistingItems()
           const response: any = await axios.post(NEXT_GET_WISHLIST, {
             id: userId,
             flag: true,
           })
+
           return response.data
         } else return localStorageWishlistItems
       } catch (error) {
