@@ -13,7 +13,7 @@ export default function MyDetails() {
     firstName: user.firstName,
     lastName: user.lastName,
     mobile: user.mobile,
-    phone: user.telephone,
+    phone: user.phone,
   }
 
   const handleDataSubmit = (values: any) =>
