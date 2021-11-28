@@ -64,23 +64,19 @@ export default function AttributesHandler({
       sellWithoutInventory: false,
       stockCode: '',
     }
-    const slug = `products/${router.query.slug}`
+    // const slug = `products/${router.query.slug}`
     variantProducts.find((product: any) => {
       product.variantAttributes.forEach((attr: any) => {
         if (
           key.toLowerCase() === attr.fieldCode.toLowerCase() &&
-          attr.fieldValue === variant &&
-          product.slug === slug
+          attr.fieldValue === variant
+          // product.slug === slug
         ) {
           productData.stock = product.currentStock
-          productData.isPreOrderEnabled = product.isPreOrderEnabled
-          productData.sellWithoutInventory = product.sellWithoutInventory
-          productData.productId = product.productId
-          productData.stockCode = product.stockCode
+          productData = { ...productData, ...product }
         }
       })
     })
-    console.log(productData)
     return productData
   }
 
