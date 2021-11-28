@@ -60,6 +60,7 @@ export default function ProductView({
   const [selectedAttrData, setSelectedAttrData] = useState({
     productId: product.recordId,
     stockCode: product.stockCode,
+    ...product,
   })
 
   useEffect(() => {
@@ -123,17 +124,19 @@ export default function ProductView({
       },
       shortMessage: '',
     }
-    if (!product.currentStock && !product.preOrder.isEnabled) {
+    if (!selectedAttrData.currentStock && !product.preOrder.isEnabled) {
       if (!product.flags.sellWithoutInventory) {
         buttonConfig.title = 'Notify me'
         buttonConfig.action = () => handleNotification()
+        buttonConfig.type = 'button'
       }
-    } else if (product.preOrder.isEnabled && !product.currentStock) {
+    } else if (product.preOrder.isEnabled && !selectedAttrData.currentStock) {
       if (product.preOrder.currentStock < product.preOrder.maxStock) {
         buttonConfig.title = 'Pre-order'
         buttonConfig.shortMessage = product.preOrder.shortMessage
       } else {
         buttonConfig.title = 'Notify me'
+        buttonConfig.type = 'button'
         buttonConfig.action = () => handleNotification()
       }
     }
@@ -142,7 +145,6 @@ export default function ProductView({
 
   const buttonConfig = buttonTitle()
 
-  console.log(product)
   const handleEngravingSubmit = (values: any) => {
     const updatedProduct = {
       ...product,
@@ -392,6 +394,7 @@ export default function ProductView({
                   <Button
                     title={buttonConfig.title}
                     action={buttonConfig.action}
+                    buttonType={buttonConfig.type || 'cart'}
                   />
 
                   <button

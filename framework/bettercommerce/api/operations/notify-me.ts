@@ -3,10 +3,9 @@ import { PRODUCT_API_ENDPOINT } from '@components/utils/constants'
 export default function notifyUser() {
   async function notifyUserAsync(query: any) {
     const { email, productId } = query
-    console.log(query, ' ...query')
     try {
       const response: any = await fetcher({
-        url: `${PRODUCT_API_ENDPOINT}${productId}/notifyme`,
+        url: `${PRODUCT_API_ENDPOINT}${productId}/notifyme?email=email`,
         method: 'post',
         data: {
           email,
