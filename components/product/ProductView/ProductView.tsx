@@ -217,7 +217,6 @@ export default function ProductView({
         })
         setCartItems(newCart)
         showEngravingModal(false)
-        openCart()
       } catch (error) {
         console.log(error, 'err')
       }
