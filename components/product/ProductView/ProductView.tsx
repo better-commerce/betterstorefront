@@ -153,55 +153,59 @@ export default function ProductView({
     const addonProducts = product.relatedProducts.filter(
       (item: any) => item.stockCode === 'ADDON'
     )
-    const computedProducts = [...addonProducts, updatedProduct].reduce(
-      (acc: any, obj: any) => {
-        acc.push({
-          ProductId: obj.recordId || obj.productId,
-          BasketId: basketId,
-          ParentProductId: obj.parentProductId || null,
-          Qty: 1,
-          DisplayOrder: obj.displayOrder || 0,
-          StockCode: obj.stockCode,
-          ItemType: obj.itemType || 0,
-          CustomInfo1: values.line1 || null,
+    const addonProductsWithParentProduct = addonProducts.map((item: any) => {
+      item.parentProductId = product.recordId
+      return item
+    })
+    const computedProducts = [
+      ...addonProductsWithParentProduct,
+      updatedProduct,
+    ].reduce((acc: any, obj: any) => {
+      acc.push({
+        ProductId: obj.recordId || obj.productId,
+        BasketId: basketId,
+        ParentProductId: obj.parentProductId || null,
+        Qty: 1,
+        DisplayOrder: obj.displayOrder || 0,
+        StockCode: obj.stockCode,
+        ItemType: obj.itemType || 0,
+        CustomInfo1: values.line1 || null,
 
-          CustomInfo2: values.line2 || null,
+        CustomInfo2: values.line2 || null,
 
-          CustomInfo3: values.line3 || null,
+        CustomInfo3: values.line3 || null,
 
-          CustomInfo4: values.line4 || null,
+        CustomInfo4: values.line4 || null,
 
-          CustomInfo5: values.line5 || null,
+        CustomInfo5: values.line5 || null,
 
-          ProductName: obj.name,
+        ProductName: obj.name,
 
-          ManualUnitPrice: obj.manualUnitPrice || 0.0,
+        ManualUnitPrice: obj.manualUnitPrice || 0.0,
 
-          PostCode: obj.postCode || null,
+        PostCode: obj.postCode || null,
 
-          IsSubscription: obj.subscriptionEnabled || false,
+        IsSubscription: obj.subscriptionEnabled || false,
 
-          IsMembership: obj.hasMembership || false,
+        IsMembership: obj.hasMembership || false,
 
-          SubscriptionPlanId: obj.subscriptionPlanId || null,
+        SubscriptionPlanId: obj.subscriptionPlanId || null,
 
-          SubscriptionTermId: obj.subscriptionTermId || null,
+        SubscriptionTermId: obj.subscriptionTermId || null,
 
-          UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
+        UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
 
-          GiftWrapId: obj.giftWrapConfig || null,
+        GiftWrapId: obj.giftWrapConfig || null,
 
-          IsGiftWrapApplied: obj.isGiftWrapApplied || false,
+        IsGiftWrapApplied: obj.isGiftWrapApplied || false,
 
-          ItemGroupId: obj.itemGroupId || 0,
+        ItemGroupId: obj.itemGroupId || 0,
 
-          PriceMatchReqId:
-            obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
-        })
-        return acc
-      },
-      []
-    )
+        PriceMatchReqId:
+          obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
+      })
+      return acc
+    }, [])
 
     const asyncHandler = async () => {
       try {
