@@ -73,12 +73,12 @@ export const formConfig = [
     placeholder: 'Phone',
     label: 'Phone',
   },
-  {
-    customComponent: 'CustomCheckbox',
-    name: 'isDefault',
-    label: 'Is default address',
-    className: 'mb-2 mt-2',
-  },
+  // {
+  //   customComponent: 'CustomCheckbox',
+  //   name: 'isDefault',
+  //   label: 'Is default address',
+  //   className: 'mb-2 mt-2',
+  // },
   {
     customComponent: 'CustomCheckbox',
     name: 'isDefaultDelivery',
@@ -91,12 +91,12 @@ export const formConfig = [
     label: 'Is default billing address',
     className: ' ',
   },
-  {
-    customComponent: 'CustomCheckbox',
-    name: 'isDefaultForSubscription',
-    label: 'Is default subscription',
-    className: ' ',
-  },
+  // {
+  //   customComponent: 'CustomCheckbox',
+  //   name: 'isDefaultForSubscription',
+  //   label: 'Is default subscription',
+  //   className: ' ',
+  // },
 ]
 
 export const schema = Yup.object({
