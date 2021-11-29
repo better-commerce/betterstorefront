@@ -129,21 +129,13 @@ const ProductCard: FC<Props> = ({ product }) => {
       shortMessage: '',
     }
     if (!product.currentStock && !product.preOrder.isEnabled) {
-      if (!product.flags.sellWithoutInventory) {
-        buttonConfig.title = 'Notify me'
-        buttonConfig.isNotifyMeEnabled = true
-        buttonConfig.action = () => handleNotification()
-      }
-    } else if (product.preOrder.isEnabled && !product.currentStock) {
-      if (product.preOrder.currentStock < product.preOrder.maxStock) {
-        buttonConfig.title = 'Pre-order'
-        buttonConfig.isPreOrderEnabled = true
-        buttonConfig.shortMessage = product.preOrder.shortMessage
-      } else {
-        buttonConfig.title = 'Notify me'
-        buttonConfig.isNotifyMeEnabled = true
-        buttonConfig.action = () => handleNotification()
-      }
+      buttonConfig.title = 'Notify me'
+      buttonConfig.isNotifyMeEnabled = true
+      buttonConfig.action = () => handleNotification()
+    } else if (!product.currentStock && product.preOrder.isEnabled) {
+      buttonConfig.title = 'Pre-order'
+      buttonConfig.isPreOrderEnabled = true
+      buttonConfig.shortMessage = product.preOrder.shortMessage
     }
     return buttonConfig
   }
