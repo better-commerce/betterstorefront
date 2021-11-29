@@ -61,7 +61,7 @@ type Action =
     }
   | {
       type: 'OPEN_NOTIFY_USER_POPUP'
-      value: string
+      payload: string
     }
   | {
       type: 'CLOSE_NOTIFY_USER_POPUP'
@@ -153,7 +153,8 @@ function uiReducer(state: State, action: Action) {
       }
     }
     case 'OPEN_NOTIFY_USER_POPUP': {
-      return { ...state, notifyUser: true, productId: action.value }
+      console.log(action)
+      return { ...state, notifyUser: true, productId: action.payload }
     }
     case 'CLOSE_NOTIFY_USER_POPUP': {
       return { ...state, notifyUser: false }
@@ -262,7 +263,7 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
   const openNotifyUser = useCallback(
-    (value: any) => dispatch({ type: 'OPEN_NOTIFY_USER_POPUP', value }),
+    (payload: any) => dispatch({ type: 'OPEN_NOTIFY_USER_POPUP', payload }),
     [dispatch]
   )
   const closeNotifyUser = useCallback(
