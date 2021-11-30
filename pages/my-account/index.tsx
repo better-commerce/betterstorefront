@@ -36,7 +36,7 @@ function MyAccount({ defaultView }: any) {
                         selected
                           ? 'bg-white text-indigo-600 border border-indigo-600'
                           : ''
-                      } hover:bg-white hover:text-indigo-600 border border-transparent hover:border-indigo-600 text-md leading-3 font-medium text-gray-700 font-bold rounded-lg focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60`
+                      } hover:bg-white hover:text-indigo-600 border border-transparent text-md leading-3 font-medium text-gray-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60`
                     }}
                   >
                     <Link
