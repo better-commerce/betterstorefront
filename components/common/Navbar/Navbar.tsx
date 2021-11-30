@@ -54,7 +54,7 @@ const Navbar: FC<Props> = ({ config }) => {
       href: '/',
       onClick: () => deleteUser(),
       title: 'Sign out',
-      className: 'text-center py-2 cursor-pointer text-red-300',
+      className: 'text-left p-2 cursor-pointer text-red-600',
     },
   ]
 
