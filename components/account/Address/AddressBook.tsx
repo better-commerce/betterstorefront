@@ -106,9 +106,9 @@ export default function AddressBook() {
           </p>
         </div>
       </div>
-      <div className="max-w-4xl mx-auto py-10">
+      <div className="max-w-4xl mx-auto">
         {!data.length && !isLoading && (
-          <div>Oh-no! Your address book is empty is empty.</div>
+          <div className="py-10">Oh-no! Your address book is empty is empty.</div>
         )}
         {isLoading ? <LoadingDots /> : null}
       </div>
@@ -119,6 +119,7 @@ export default function AddressBook() {
           onSubmit={addNewAddress}
         />
       )}
+      {!isNewFormMode && (
       <div className="max-w-4xl mx-auto">
         {data.map((item: any, idx: number) => {
           return (
@@ -133,17 +134,21 @@ export default function AddressBook() {
             />
           )
         })}
+        
         <button
-          type="submit"
-          onClick={() => {
-            setNewFormMode(true)
-            window.scrollTo(0, 0)
-          }}
-          className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-        >
-          Add new address
-        </button>
+        type="submit"
+        onClick={() => {
+          setNewFormMode(true)
+          window.scrollTo(0, 0)
+        }}
+        className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+      >
+        Add new address
+      </button>
+     
+        
       </div>
+       )}
     </main>
   )
 }

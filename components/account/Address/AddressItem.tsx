@@ -67,9 +67,9 @@ export default function AddressItem({
         />
       ) : (
         <>
-          <div className="border py-5 px-5 mb-5 mt-5 flex flex-row justify-between items-center">
-            <div className="flex flex-col text-xl font-medium">
-              <span>{item.firstName + ' ' + item.lastName}</span>
+          <div className="border rounded-lg py-5 px-5 mb-5 mt-5 flex flex-row justify-between items-center">
+            <div className="flex flex-col text-md font-regular">
+              <span className="text-xl font-bold">{item.firstName + ' ' + item.lastName}</span>
               <span>{item.address1}</span>
               <span>{item.address2}</span>
 

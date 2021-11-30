@@ -78,7 +78,7 @@ export default function PromotionInput() {
           </div>
         </div>
         {error ? (
-          <div className="text-red-400 text-sm">{PROMO_ERROR}</div>
+          <div className="text-red-400 text-xs capitalize mb-2">{PROMO_ERROR}</div>
         ) : null}
       </div>
       <div></div>

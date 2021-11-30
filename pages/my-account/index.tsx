@@ -19,10 +19,10 @@ function MyAccount({ defaultView }: any) {
 
   return (
     <section className="text-gray-900 relative py-10">
-      <div className="w-full">
-        <div className="justify-between px-10 flex flex-col md:flex-row">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div className="justify-between flex flex-col md:flex-row">
           <Tab.Group vertical defaultIndex={defaultView}>
-            <Tab.List className="sticky top-0 flex flex-col w-full md:w-1/4 bg-gray-200 h-full rounded-lg">
+            <Tab.List className="sticky top-0 flex flex-col w-full md:w-1/4 bg-gray-50 h-full rounded-lg">
               {config.map((item: any, idx: number) => {
                 console.log(item.props)
                 return (
@@ -36,7 +36,7 @@ function MyAccount({ defaultView }: any) {
                         selected
                           ? 'bg-white text-indigo-600 border border-indigo-600'
                           : ''
-                      } hover:bg-white hover:text-indigo-600 border border-transparent hover:border-indigo-600 text-lg leading-5 font-medium text-gray-700 font-bold rounded-lg focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60`
+                      } hover:bg-white hover:text-indigo-600 border border-transparent text-md leading-3 font-medium text-gray-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60`
                     }}
                   >
                     <Link
