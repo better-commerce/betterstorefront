@@ -37,7 +37,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
           onChange={onChange}
         />
       </div>
-      {error ? <span className="text-red-500">{error}</span> : null}
+      {error ? <span className="text-red-500 capitalize">{error}</span> : null}
       <div className="w-full sm:w-1/2 flex justify-center items-center my-5">
         <Button buttonType="default" action={handleSubmit} title={'Submit'} />
       </div>
