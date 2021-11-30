@@ -59,7 +59,7 @@ export default function AddressForm({
                       </Field>
                     )}
                     {errors[formItem.name] && touched[formItem.name] ? (
-                      <div className="text-red-400 text-sm">
+                      <div className="text-red-400 text-xs capitalize mb-2">
                         {errors[formItem.name]}
                       </div>
                     ) : null}
