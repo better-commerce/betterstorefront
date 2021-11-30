@@ -73,30 +73,30 @@ export const formConfig = [
     placeholder: 'Phone',
     label: 'Phone',
   },
-  {
-    customComponent: 'CustomCheckbox',
-    name: 'isDefault',
-    label: 'Is default address',
-    className: 'mb-2 mt-2',
-  },
+  // {
+  //   customComponent: 'CustomCheckbox',
+  //   name: 'isDefault',
+  //   label: 'Is default address',
+  //   className: 'mb-2 mt-2',
+  // },
   {
     customComponent: 'CustomCheckbox',
     name: 'isDefaultDelivery',
-    label: 'Is default delivery address',
-    className: ' ',
+    label: 'Is Default Delivery Address',
+    className: 'flex-inline',
   },
   {
     customComponent: 'CustomCheckbox',
     name: 'isDefaultBilling',
-    label: 'Is default billing address',
-    className: ' ',
+    label: 'Is Default Billing Address',
+    className: 'flex-inline',
   },
-  {
-    customComponent: 'CustomCheckbox',
-    name: 'isDefaultForSubscription',
-    label: 'Is default subscription',
-    className: ' ',
-  },
+  // {
+  //   customComponent: 'CustomCheckbox',
+  //   name: 'isDefaultForSubscription',
+  //   label: 'Is default subscription',
+  //   className: ' ',
+  // },
 ]
 
 export const schema = Yup.object({
