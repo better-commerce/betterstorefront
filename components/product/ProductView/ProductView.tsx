@@ -221,7 +221,8 @@ export default function ProductView({
           info: [...Object.values(values)],
           lineInfo: computedProducts,
         })
-        setCartItems(newCart)
+
+        setCartItems(newCart.data)
         showEngravingModal(false)
       } catch (error) {
         console.log(error, 'err')

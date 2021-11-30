@@ -121,62 +121,107 @@ const CartSidebarView: FC = () => {
                           className="-my-6 divide-y divide-gray-200"
                         >
                           {cartItems.lineItems?.map((product: any) => (
-                            <li key={product.id} className="py-6 flex">
-                              <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-                                <img
-                                  src={product.image}
-                                  alt={product.name}
-                                  className="w-full h-full object-center object-cover"
-                                />
-                              </div>
-
-                              <div className="ml-4 flex-1 flex flex-col">
-                                <div>
-                                  <div className="flex justify-between font-medium text-gray-900">
-                                    <h3 onClick={handleClose}>
-                                      <Link href={`/${product.slug}`}>
-                                        {product.name}
-                                      </Link>
-                                    </h3>
-                                    <p className="ml-4">
-                                      {product.price?.formatted?.withTax}
-                                    </p>
-                                  </div>
-                                  {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
+                            <li key={product.id} className="">
+                              <div className="py-6 flex">
+                                <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+                                  <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="w-full h-full object-center object-cover"
+                                  />
                                 </div>
-                                <div className="flex-1 flex items-end justify-between text-sm">
-                                  {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                  <div className="flex justify-between w-full">
-                                    <button
-                                      type="button"
-                                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                                      onClick={() =>
-                                        handleItem(product, 'delete')
-                                      }
-                                    >
-                                      Remove
-                                    </button>
-                                    <div className="border px-4 text-gray-900 flex flex-row">
-                                      <MinusSmIcon
+                                <div className="ml-4 flex-1 flex flex-col">
+                                  <div>
+                                    <div className="flex justify-between font-medium text-gray-900">
+                                      <h3 onClick={handleClose}>
+                                        <Link href={`/${product.slug}`}>
+                                          {product.name}
+                                        </Link>
+                                      </h3>
+                                      <p className="ml-4">
+                                        {product.price?.formatted?.withTax}
+                                      </p>
+                                    </div>
+                                    {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
+                                  </div>
+                                  <div className="flex-1 flex items-end justify-between text-sm">
+                                    {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
+
+                                    <div className="flex justify-between w-full">
+                                      <button
+                                        type="button"
+                                        className="font-medium text-indigo-600 hover:text-indigo-500"
                                         onClick={() =>
-                                          handleItem(product, 'decrease')
+                                          handleItem(product, 'delete')
                                         }
-                                        className="w-4 cursor-pointer"
-                                      />
-                                      <span className="text-md px-2 py-2">
-                                        {product.qty}
-                                      </span>
-                                      <PlusSmIcon
-                                        className="w-4 cursor-pointer"
-                                        onClick={() =>
-                                          handleItem(product, 'increase')
-                                        }
-                                      />
+                                      >
+                                        Remove
+                                      </button>
+                                      <div className="border px-4 text-gray-900 flex flex-row">
+                                        <MinusSmIcon
+                                          onClick={() =>
+                                            handleItem(product, 'decrease')
+                                          }
+                                          className="w-4 cursor-pointer"
+                                        />
+                                        <span className="text-md px-2 py-2">
+                                          {product.qty}
+                                        </span>
+                                        <PlusSmIcon
+                                          className="w-4 cursor-pointer"
+                                          onClick={() =>
+                                            handleItem(product, 'increase')
+                                          }
+                                        />
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
+                              {product.children?.map(
+                                (child: any, idx: number) => {
+                                  return (
+                                    <div className="flex" key={idx}>
+                                      <div className="ml-10 flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
+                                        <img
+                                          src={child.image}
+                                          alt={child.name}
+                                          className="w-full h-full object-center object-cover"
+                                        />
+                                      </div>
+                                      <div className="ml-4 flex-1 flex flex-col">
+                                        <div>
+                                          <div className="flex justify-between font-medium text-gray-900">
+                                            <h3 onClick={handleClose}>
+                                              <Link href={`/${child.slug}`}>
+                                                {child.name}
+                                              </Link>
+                                            </h3>
+                                            <p className="ml-4">
+                                              {child.price?.formatted?.withTax}
+                                            </p>
+                                          </div>
+                                          {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
+                                        </div>
+                                      </div>
+                                      <div className="flex-1 flex items-end justify-end text-sm">
+                                        {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
+
+                                        <button
+                                          type="button"
+                                          className="font-medium text-indigo-600 hover:text-indigo-500"
+                                          onClick={() =>
+                                            handleItem(product, 'delete')
+                                          }
+                                        >
+                                          Remove
+                                        </button>
+                                      </div>
+                                    </div>
+                                  )
+                                }
+                              )}
                             </li>
                           ))}
                         </ul>
