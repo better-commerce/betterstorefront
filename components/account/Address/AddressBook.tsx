@@ -106,9 +106,9 @@ export default function AddressBook() {
           </p>
         </div>
       </div>
-      <div className="max-w-4xl mx-auto py-10">
+      <div className="max-w-4xl mx-auto">
         {!data.length && !isLoading && (
-          <div>Oh-no! Your address book is empty is empty.</div>
+          <div className="py-10">Oh-no! Your address book is empty is empty.</div>
         )}
         {isLoading ? <LoadingDots /> : null}
       </div>

@@ -82,14 +82,14 @@ export const formConfig = [
   {
     customComponent: 'CustomCheckbox',
     name: 'isDefaultDelivery',
-    label: 'Is default delivery address',
-    className: ' ',
+    label: 'Is Default Delivery Address',
+    className: 'flex-inline',
   },
   {
     customComponent: 'CustomCheckbox',
     name: 'isDefaultBilling',
-    label: 'Is default billing address',
-    className: ' ',
+    label: 'Is Default Billing Address',
+    className: 'flex-inline',
   },
   // {
   //   customComponent: 'CustomCheckbox',
