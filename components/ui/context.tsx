@@ -335,8 +335,18 @@ export const UIProvider: FC = (props) => {
 
   const setCartItems = useCallback(
     (payload: any) => {
+      const newCartDataClone: any = { ...payload }
+      newCartDataClone.lineItems.forEach((element: any, idx: number) => {
+        newCartDataClone.lineItems.forEach((i: any) => {
+          if (element.parentProductId === i.productId) {
+            i.children = i.children ? [...i.children, element] : [element]
+            newCartDataClone.lineItems.splice(idx, 1)
+          }
+        })
+      })
+
       setItem('cartItems', { ...payload })
-      dispatch({ type: 'SET_CART_ITEMS', payload })
+      dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
     },
     [dispatch]
   )
