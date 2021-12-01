@@ -32,21 +32,14 @@ const ProductCard: FC<Props> = ({ product }) => {
     image: product.image,
     link: product.slug,
   })
-  const { basketId, user, addToWishlist, openWishlist } = useUI()
-
-  const handleAddToCart = async () => {
-    try {
-      await cartHandler().addToCart({
-        basketId,
-        productId: product.recordId,
-        qty: 1,
-        manualUnitPrice: product.price.raw.withTax,
-        stockCode: product.stockCode,
-      })
-    } catch (error) {
-      console.log(error, 'err')
-    }
-  }
+  const {
+    basketId,
+    user,
+    addToWishlist,
+    openWishlist,
+    setCartItems,
+    openNotifyUser,
+  } = useUI()
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
@@ -116,6 +109,39 @@ const ProductCard: FC<Props> = ({ product }) => {
       setCurrentProductData({ ...currentProductData, image: product.image })
   }
 
+  const handleNotification = () => {
+    openNotifyUser(product.id)
+  }
+
+  const buttonTitle = () => {
+    let buttonConfig: any = {
+      title: 'Add to bag',
+      action: async () => {
+        const item = await cartHandler().addToCart({
+          basketId,
+          productId: product.recordId,
+          qty: 1,
+          manualUnitPrice: product.price.raw.withTax,
+          stockCode: product.stockCode,
+        })
+        setCartItems(item)
+      },
+      shortMessage: '',
+    }
+    if (!product.currentStock && !product.preOrder.isEnabled) {
+      buttonConfig.title = 'Notify me'
+      buttonConfig.isNotifyMeEnabled = true
+      buttonConfig.action = () => handleNotification()
+    } else if (!product.currentStock && product.preOrder.isEnabled) {
+      buttonConfig.title = 'Pre-order'
+      buttonConfig.isPreOrderEnabled = true
+      buttonConfig.shortMessage = product.preOrder.shortMessage
+    }
+    return buttonConfig
+  }
+
+  const buttonConfig = buttonTitle()
+
   return (
     <div className="border-r border-b border-gray-200">
       <div key={product.id} className="group relative p-4 sm:p-6">
@@ -125,7 +151,7 @@ const ProductCard: FC<Props> = ({ product }) => {
           key={'data-product' + currentProductData.link}
         >
           <a href={currentProductData.link}>
-            <div className="rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
+            <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
               <img
                 src={currentProductData.image}
                 alt={product.name}
@@ -133,6 +159,16 @@ const ProductCard: FC<Props> = ({ product }) => {
                 onMouseLeave={() => handleHover('leave')}
                 className="w-full h-64 object-center object-cover"
               />
+              {buttonConfig.isPreOrderEnabled && (
+                <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
+                  PRE-ORDER
+                </div>
+              )}
+              {buttonConfig.isNotifyMeEnabled && (
+                <div className="bg-indigo-400 absolute py-1 px-1 rounded-sm top-2">
+                  Notify me
+                </div>
+              )}
             </div>
           </a>
         </Link>
@@ -157,7 +193,12 @@ const ProductCard: FC<Props> = ({ product }) => {
             <div className="h-10 w-10 inline-block" />
           )}
           <div className="flex flex-col">
-            <Button className="mt-5" action={handleAddToCart} />
+            <Button
+              className="mt-5"
+              title={buttonConfig.title}
+              action={buttonConfig.action}
+              type="button"
+            />
             {isInWishList ? (
               <span className="text-gray-900">
                 Item was added in your wishlist

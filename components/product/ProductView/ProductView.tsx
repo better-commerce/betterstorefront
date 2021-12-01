@@ -51,11 +51,17 @@ export default function ProductView({
     basketId,
     setCartItems,
     user,
+    openCart,
   } = useUI()
 
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
+  const [selectedAttrData, setSelectedAttrData] = useState({
+    productId: product.recordId,
+    stockCode: product.stockCode,
+    ...product,
+  })
 
   useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
@@ -94,7 +100,7 @@ export default function ProductView({
   }
 
   const handleNotification = () => {
-    openNotifyUser(product.id)
+    openNotifyUser(product.recordId)
   }
 
   let content = [...product.images]
@@ -109,26 +115,28 @@ export default function ProductView({
       action: async () => {
         const item = await cartHandler().addToCart({
           basketId: basketId,
-          productId: product.recordId,
+          productId: selectedAttrData.productId,
           qty: 1,
           manualUnitPrice: product.price.raw.withTax,
-          stockCode: product.stockCode,
+          stockCode: selectedAttrData.stockCode,
         })
         setCartItems(item)
       },
       shortMessage: '',
     }
-    if (!product.currentStock && !product.preOrder.isEnabled) {
+    if (!selectedAttrData.currentStock && !product.preOrder.isEnabled) {
       if (!product.flags.sellWithoutInventory) {
         buttonConfig.title = 'Notify me'
         buttonConfig.action = () => handleNotification()
+        buttonConfig.type = 'button'
       }
-    } else if (product.preOrder.isEnabled && !product.currentStock) {
+    } else if (product.preOrder.isEnabled && !selectedAttrData.currentStock) {
       if (product.preOrder.currentStock < product.preOrder.maxStock) {
         buttonConfig.title = 'Pre-order'
         buttonConfig.shortMessage = product.preOrder.shortMessage
       } else {
         buttonConfig.title = 'Notify me'
+        buttonConfig.type = 'button'
         buttonConfig.action = () => handleNotification()
       }
     }
@@ -138,62 +146,73 @@ export default function ProductView({
   const buttonConfig = buttonTitle()
 
   const handleEngravingSubmit = (values: any) => {
+    const updatedProduct = {
+      ...product,
+      ...{
+        recordId: selectedAttrData.productId,
+        stockCode: selectedAttrData.stockCode,
+      },
+    }
     const addonProducts = product.relatedProducts.filter(
       (item: any) => item.stockCode === 'ADDON'
     )
-    const computedProducts = [...addonProducts, product].reduce(
-      (acc: any, obj: any) => {
-        acc.push({
-          ProductId: obj.recordId || obj.productId,
-          BasketId: basketId,
-          ParentProductId: obj.parentProductId || null,
-          Qty: 1,
-          DisplayOrder: obj.displayOrder || 0,
-          StockCode: obj.stockCode,
-          ItemType: obj.itemType || 0,
-          CustomInfo1: values.line1 || null,
+    const addonProductsWithParentProduct = addonProducts.map((item: any) => {
+      item.parentProductId = product.recordId
+      return item
+    })
+    const computedProducts = [
+      ...addonProductsWithParentProduct,
+      updatedProduct,
+    ].reduce((acc: any, obj: any) => {
+      acc.push({
+        ProductId: obj.recordId || obj.productId,
+        BasketId: basketId,
+        ParentProductId: obj.parentProductId || null,
+        Qty: 1,
+        DisplayOrder: obj.displayOrder || 0,
+        StockCode: obj.stockCode,
+        ItemType: obj.itemType || 0,
+        CustomInfo1: values.line1 || null,
 
-          CustomInfo2: values.line2 || null,
+        CustomInfo2: values.line2 || null,
 
-          CustomInfo3: values.line3 || null,
+        CustomInfo3: values.line3 || null,
 
-          CustomInfo4: values.line4 || null,
+        CustomInfo4: values.line4 || null,
 
-          CustomInfo5: values.line5 || null,
+        CustomInfo5: values.line5 || null,
 
-          ProductName: obj.name,
+        ProductName: obj.name,
 
-          ManualUnitPrice: obj.manualUnitPrice || 0.0,
+        ManualUnitPrice: obj.manualUnitPrice || 0.0,
 
-          PostCode: obj.postCode || null,
+        PostCode: obj.postCode || null,
 
-          IsSubscription: obj.subscriptionEnabled || false,
+        IsSubscription: obj.subscriptionEnabled || false,
 
-          IsMembership: obj.hasMembership || false,
+        IsMembership: obj.hasMembership || false,
 
-          SubscriptionPlanId: obj.subscriptionPlanId || null,
+        SubscriptionPlanId: obj.subscriptionPlanId || null,
 
-          SubscriptionTermId: obj.subscriptionTermId || null,
+        SubscriptionTermId: obj.subscriptionTermId || null,
 
-          UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
+        UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
 
-          GiftWrapId: obj.giftWrapConfig || null,
+        GiftWrapId: obj.giftWrapConfig || null,
 
-          IsGiftWrapApplied: obj.isGiftWrapApplied || false,
+        IsGiftWrapApplied: obj.isGiftWrapApplied || false,
 
-          ItemGroupId: obj.itemGroupId || 0,
+        ItemGroupId: obj.itemGroupId || 0,
 
-          PriceMatchReqId:
-            obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
-        })
-        return acc
-      },
-      []
-    )
+        PriceMatchReqId:
+          obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
+      })
+      return acc
+    }, [])
 
     const asyncHandler = async () => {
       try {
-        await axios.post(NEXT_BULK_ADD_TO_CART, {
+        const newCart = await axios.post(NEXT_BULK_ADD_TO_CART, {
           basketId,
           products: computedProducts,
         })
@@ -202,6 +221,8 @@ export default function ProductView({
           info: [...Object.values(values)],
           lineInfo: computedProducts,
         })
+
+        setCartItems(newCart.data)
         showEngravingModal(false)
       } catch (error) {
         console.log(error, 'err')
@@ -355,7 +376,10 @@ export default function ProductView({
                 </div>
               </div>
               <div className="w-full sm:w-6/12">
-                <AttributesHandler product={product} />
+                <AttributesHandler
+                  product={product}
+                  setSelectedAttrData={setSelectedAttrData}
+                />
               </div>
               <p
                 className="text-gray-900 text-md cursor-pointer hover:underline"
@@ -375,6 +399,7 @@ export default function ProductView({
                   <Button
                     title={buttonConfig.title}
                     action={buttonConfig.action}
+                    buttonType={buttonConfig.type || 'cart'}
                   />
 
                   <button

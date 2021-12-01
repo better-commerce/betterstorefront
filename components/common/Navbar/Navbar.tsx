@@ -38,23 +38,23 @@ const Navbar: FC<Props> = ({ config }) => {
     {
       href: '/my-account',
       title: 'My account',
-      className: 'text-center py-2 cursor-pointer',
+      className: 'text-left p-2 cursor-pointer',
     },
     {
       href: '/my-account?view=orders',
       title: 'My orders',
-      className: 'text-center py-2 cursor-pointer',
+      className: 'text-left p-2 cursor-pointer',
     },
     {
       href: '/my-account?view=details',
       title: 'Recently viewed',
-      className: 'text-center py-2 cursor-pointer',
+      className: 'text-left p-2 cursor-pointer',
     },
     {
       href: '/',
       onClick: () => deleteUser(),
       title: 'Sign out',
-      className: 'text-center py-2 cursor-pointer text-red-300',
+      className: 'text-left p-2 cursor-pointer text-red-600',
     },
   ]
 

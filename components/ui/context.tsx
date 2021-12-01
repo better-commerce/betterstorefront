@@ -61,7 +61,7 @@ type Action =
     }
   | {
       type: 'OPEN_NOTIFY_USER_POPUP'
-      value: string
+      payload: string
     }
   | {
       type: 'CLOSE_NOTIFY_USER_POPUP'
@@ -154,7 +154,8 @@ function uiReducer(state: State, action: Action) {
       }
     }
     case 'OPEN_NOTIFY_USER_POPUP': {
-      return { ...state, notifyUser: true, productId: action.value }
+      console.log(action)
+      return { ...state, notifyUser: true, productId: action.payload }
     }
     case 'CLOSE_NOTIFY_USER_POPUP': {
       return { ...state, notifyUser: false }
@@ -269,7 +270,7 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
   const openNotifyUser = useCallback(
-    (value: any) => dispatch({ type: 'OPEN_NOTIFY_USER_POPUP', value }),
+    (payload: any) => dispatch({ type: 'OPEN_NOTIFY_USER_POPUP', payload }),
     [dispatch]
   )
   const closeNotifyUser = useCallback(
@@ -341,8 +342,18 @@ export const UIProvider: FC = (props) => {
 
   const setCartItems = useCallback(
     (payload: any) => {
+      const newCartDataClone: any = { ...payload }
+      newCartDataClone.lineItems.forEach((element: any, idx: number) => {
+        newCartDataClone.lineItems.forEach((i: any) => {
+          if (element.parentProductId === i.productId) {
+            i.children = i.children ? [...i.children, element] : [element]
+            newCartDataClone.lineItems.splice(idx, 1)
+          }
+        })
+      })
+
       setItem('cartItems', { ...payload })
-      dispatch({ type: 'SET_CART_ITEMS', payload })
+      dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
     },
     [dispatch]
   )
