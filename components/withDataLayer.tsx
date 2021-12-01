@@ -34,6 +34,7 @@ export default function withDataLayer(Component: any, pageType: string) {
       />
     )
   }
+
   WrappedComponent.Layout = Layout
   return WrappedComponent
 }

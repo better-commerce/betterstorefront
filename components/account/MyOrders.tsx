@@ -24,7 +24,6 @@ export default function MyOrders() {
   }, [])
 
   const handleAddToCart = (product: any) => {
-    console.log(product)
     cartHandler()
       .addToCart({
         basketId,
@@ -32,6 +31,8 @@ export default function MyOrders() {
         qty: product.qty,
         manualUnitPrice: product.price,
         stockCode: product.stockCode,
+        userId: user.userId,
+        isAssociated: user.isAssociated,
       })
       .then((response: any) => {
         setCartItems(response)

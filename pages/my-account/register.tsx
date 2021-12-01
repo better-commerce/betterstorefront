@@ -2,12 +2,17 @@ import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import axios from 'axios'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL } from '@components/utils/constants'
+import {
+  NEXT_SIGN_UP,
+  NEXT_VALIDATE_EMAIL,
+  NEXT_ASSOCIATE_CART,
+} from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import { useState, useEffect } from 'react'
 import Button from '@components/ui/IndigoButton'
 import { validate } from 'email-validator'
+import cartHandler from '@components/services/cart'
 
 const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   const [error, setError] = useState(apiError)
@@ -48,18 +53,18 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
   const [userEmail, setUserEmail] = useState('')
-  const { user } = useUI()
+  const { user, basketId } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-
+  const { addToCart, associateCart } = cartHandler()
   useEffect(() => {
     setError('')
   }, [userEmail])
 
-  if (user) {
+  if (user.userId) {
     Router.push('/')
   }
-  if (user) {
+  if (user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
         You're already logged in
@@ -67,9 +72,16 @@ function RegisterPage({ recordEvent, setEntities }: any) {
     )
   }
 
+  const handleBasketAssociation = async (userId: string) => {
+    const response: any = await associateCart(userId, basketId)
+  }
+
   const handleUserRegister = (values: any) => {
     const asyncRegisterUser = async () => {
-      await axios.post(NEXT_SIGN_UP, { data: { ...values, email: userEmail } })
+      const response: any = await axios.post(NEXT_SIGN_UP, {
+        data: { ...values, email: userEmail },
+      })
+      await handleBasketAssociation(response.data.recordId)
       setSuccessMessage('Success!')
       Router.push('/my-account/login')
     }
