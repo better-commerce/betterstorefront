@@ -40,7 +40,7 @@ const initialState = {
   wishListItems: getItem('wishListItems') || [],
   cartItems: getItem('cartItems') || { lineItems: [] },
   basketId: basketId(),
-  user: getItem('user') || null,
+  user: getItem('user') || {},
 }
 
 type Action =
@@ -228,7 +228,7 @@ function uiReducer(state: State, action: Action) {
     case 'REMOVE_USER': {
       return {
         ...state,
-        user: null,
+        user: {},
       }
     }
     case 'SET_BASKET_ID': {
@@ -374,10 +374,10 @@ export const UIProvider: FC = (props) => {
         setItem('wishListItems', [])
         setItem('cartItems', { lineItems: [] })
         dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
-        const basketIdRef = basketId()
+        const basketIdRef = uuid()
         Cookies.set('basketId', basketIdRef)
         dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
-        dispatch({ type: 'REMOVE_USER', payload: null })
+        dispatch({ type: 'REMOVE_USER', payload: {} })
       })
     },
     [dispatch]

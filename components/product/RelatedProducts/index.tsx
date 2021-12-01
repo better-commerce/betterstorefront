@@ -10,7 +10,7 @@ export default function RelatedProducts({
 }: any) {
   const [isEngravingOpen, showEngravingModal] = useState(false)
 
-  const { basketId, setCartItems } = useUI()
+  const { basketId, setCartItems, user } = useUI()
 
   const computeRelatedItems = () => {
     const relatedProductsClone = [...relatedProducts]
@@ -48,6 +48,8 @@ export default function RelatedProducts({
         qty: 1,
         manualUnitPrice: product.price.raw.withTax,
         stockCode: product.stockCode,
+        userId: user.userId,
+        isAssociated: user.isAssociated,
       })
       setCartItems(item)
     }

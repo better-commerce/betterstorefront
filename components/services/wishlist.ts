@@ -38,7 +38,6 @@ export default function wishlistHandler() {
       userId: string,
       localStorageWishlistItems: any = []
     ) => {
-      console.log(localStorageWishlistItems)
       try {
         if (userId) {
           const postExistingItems = async () => {

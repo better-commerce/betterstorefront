@@ -23,6 +23,8 @@ export const NEXT_BULK_ADD_TO_CART = `/api/bulk-add-cart`
 export const NEXT_UPDATE_CART_INFO = `/api/update-cart-info`
 
 export const NEXT_GET_CART = `/api/get-cart`
+export const NEXT_ASSOCIATE_CART = '/api/customer/associate-cart'
+export const NEXT_MERGE_CART = '/api/merge-cart'
 export const NEXT_GET_USER_CART = '/api/get-user-cart'
 export const NEXT_SIGN_UP = `/api/signup`
 export const NEXT_VALIDATE_EMAIL = `/api/customer/validate-email`

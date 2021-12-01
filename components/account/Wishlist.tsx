@@ -41,6 +41,8 @@ export default function Wishlist() {
         qty: 1,
         manualUnitPrice: product.price.raw.withTax,
         stockCode: product.stockCode,
+        userId: user.userId,
+        isAssociated: user.isAssociated,
       })
       .then((response: any) => {
         setCartItems(response)
@@ -75,7 +77,6 @@ export default function Wishlist() {
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
               Wishlist
             </h1>
-            
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
