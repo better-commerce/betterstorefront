@@ -8,7 +8,6 @@ export default async function geoData() {
         'Access-Control-Allow-Origin': '*',
       },
     })
-    console.log(data)
     return data
   } catch (error) {
     console.log(error, 'err')

@@ -5,7 +5,7 @@ import PromotionInput from '@components/cart/PromotionInput'
 
 export default function Summary({ cart, handleItem }: any) {
   return (
-    <div className="mt-10 lg:mt-0">
+    <div className="mt-10 lg:mt-0 md:sticky top-0">
       <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
 
       <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">

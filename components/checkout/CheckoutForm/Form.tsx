@@ -1,6 +1,6 @@
 import { Formik, Form, Field } from 'formik'
-import { shippingFormConfig, shippingSchema } from './config'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
+import { CheckCircleIcon } from '@heroicons/react/solid'
 
 export default function AddressForm({
   initialValues = {},
@@ -8,22 +8,87 @@ export default function AddressForm({
   closeEditMode,
   btnTitle = 'Save',
   toggleAction,
-  isShippingInformationCompleted,
+  isInfoCompleted,
+  values: defaultValues,
+  schema,
+  config,
+  addresses,
+  setAddress,
+  sameAddressAction,
+  isSameAddressCheckboxEnabled,
 }: any) {
-  if (isShippingInformationCompleted) {
-    return <ConfirmedGeneralComponent onStateChange={toggleAction} />
+  if (Object.keys(defaultValues).length > 0) {
+    return (
+      <ConfirmedGeneralComponent
+        onStateChange={toggleAction}
+        content={{
+          name: defaultValues.firstName + ' ' + defaultValues.lastName,
+          address1: defaultValues.address1,
+          address2: defaultValues.address2,
+          city: defaultValues.city,
+          postCode: defaultValues.postCode,
+          country: defaultValues.country + ', ' + defaultValues.countryCode,
+          phone: defaultValues.phoneNo,
+        }}
+      />
+    )
   }
+
   return (
     <Formik
-      validationSchema={shippingSchema}
+      validationSchema={schema}
       initialValues={initialValues}
       onSubmit={onSubmit}
     >
-      {({ errors, touched, handleSubmit, values, handleChange }: any) => {
+      {({
+        errors,
+        touched,
+        handleSubmit,
+        values,
+        handleChange,
+        setValues,
+      }: any) => {
         return (
           <>
+            <div className="flex flex-1 flex-grow">
+              {addresses.map((item: any, idx: number) => {
+                return (
+                  <div
+                    onClick={() => {
+                      setValues(item)
+                      setAddress(item)
+                    }}
+                    className={`cursor-pointer w-full m-5 text-gray-900 border rounded-lg py-5 px-5 mb-5 mt-5 flex flex-row justify-between items-center ${
+                      item.id === defaultValues.id ? 'border-indigo-600' : ''
+                    }`}
+                  >
+                    <div className="flex flex-col text-md font-regular">
+                      <span className="text-xl font-bold">
+                        {item.firstName + ' ' + item.lastName}
+                      </span>
+                      <span>{item.address1}</span>
+                      <span>{item.address2}</span>
+
+                      <span>{item.city}</span>
+                      <span>{item.postCode}</span>
+                      <span>{item.country}</span>
+                      <span>{item.phoneNo}</span>
+                    </div>
+                    <div>
+                      {item.id === defaultValues.id ? (
+                        <CheckCircleIcon
+                          className="h-5 w-5 text-indigo-600"
+                          aria-hidden="true"
+                        />
+                      ) : null}
+                      <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end"></div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
             <Form className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-              {shippingFormConfig.map((formItem: any, idx: number) => {
+              {config.map((formItem: any, idx: number) => {
                 return (
                   <div
                     key={`${formItem.label}_${idx}`}
@@ -62,6 +127,28 @@ export default function AddressForm({
                 )
               })}
             </Form>
+            {isSameAddressCheckboxEnabled && (
+              <div className="flex items-center mt-10">
+                <input
+                  name={`sameAddress`}
+                  type="checkbox"
+                  defaultChecked={true}
+                  onChange={(e) => {
+                    console.log(e.target.checked)
+                    if (e.target.checked) {
+                      sameAddressAction(values)
+                    }
+                  }}
+                  className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                />
+                <label
+                  htmlFor={`sameAddress`}
+                  className="ml-3 text-sm text-gray-500"
+                >
+                  My billing and delivery address are the same
+                </label>
+              </div>
+            )}
             <div className="mt-10 flex sm:flex-col1 w-1/2">
               <button
                 type="submit"
