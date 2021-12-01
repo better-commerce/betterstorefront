@@ -11,7 +11,7 @@ import AddressItem from './AddressItem'
 import Form from './AddressBookForm'
 import { LoadingDots } from '@components/ui'
 
-function asyncHandler() {
+export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
       const response = await axios.post(NEXT_ADDRESS, {

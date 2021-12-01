@@ -59,8 +59,8 @@ const Navbar: FC<Props> = ({ config }) => {
   ]
 
   let accountDropdownConfig = accountDropDownConfigUnauthorized
-  let title = user ? `Hi, ${user.firstName}` : 'My account'
-  if (user) {
+  let title = user.userId ? `Hi, ${user.firstName}` : 'My account'
+  if (user.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
 

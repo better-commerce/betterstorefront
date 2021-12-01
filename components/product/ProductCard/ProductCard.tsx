@@ -123,6 +123,8 @@ const ProductCard: FC<Props> = ({ product }) => {
           qty: 1,
           manualUnitPrice: product.price.raw.withTax,
           stockCode: product.stockCode,
+          userId: user.userId,
+          isAssociated: user.isAssociated,
         })
         setCartItems(item)
       },

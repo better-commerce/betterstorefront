@@ -7,7 +7,7 @@ import { GetServerSideProps } from 'next'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useCart as getCart } from '@framework/cart'
 import cookie from 'cookie'
-import { basketId } from '@components/ui/context'
+import { basketId as basketIdGenerator } from '@components/ui/context'
 import Link from 'next/link'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
@@ -101,6 +101,43 @@ function Cart({ cart }: any) {
                         <p className="mt-1 text-sm font-medium text-gray-900">
                           {product.price?.formatted?.withTax}
                         </p>
+                        {product.children?.map((child: any, idx: number) => {
+                          return (
+                            <div className="flex mt-10" key={idx}>
+                              <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
+                                <img
+                                  src={child.image}
+                                  alt={child.name}
+                                  className="w-full h-full object-center object-cover"
+                                />
+                              </div>
+                              <div className="flex ml-5 justify-between font-medium text-gray-900">
+                                <Link href={`/${child.slug}`}>
+                                  {child.name}
+                                </Link>
+                                <p className="ml-4">
+                                  {child.price?.formatted?.withTax}
+                                </p>
+                                {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
+                              </div>
+                              <div className="flex-1 flex items-center justify-end text-sm">
+                                {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
+
+                                <button
+                                  type="button"
+                                  onClick={() => handleItem(child, 'delete')}
+                                  className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                                >
+                                  <span className="sr-only">Remove</span>
+                                  <XIconSolid
+                                    className="h-5 w-5"
+                                    aria-hidden="true"
+                                  />
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        })}
                       </div>
 
                       <div className="mt-4 sm:mt-0 sm:pr-9">
@@ -210,7 +247,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketRef: any = cookies.basketId
   if (!basketRef) {
-    basketRef = basketId()
+    basketRef = basketIdGenerator()
     context.res.setHeader('set-cookie', `basketId=${basketRef}`)
   }
 

@@ -1,6 +1,7 @@
 export default function Checkbox(props: any) {
+  const flexDirection = props.flexDirection || ''
   return (
-    <div className="w-1/2 py-5 flex items-center">
+    <div className={`w-1/2 py-5 flex ${flexDirection} items-center`}>
       <input
         name={`${props.formItem.name}-input[]`}
         defaultValue={props.values[props.formItem.name]}
@@ -51,6 +52,7 @@ export default function Checkbox(props: any) {
           }}
         />
       </label>
+      <span className="text-gray-900">{props.formItem.label}</span>
     </div>
   )
 }

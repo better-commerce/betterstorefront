@@ -7,20 +7,32 @@ import { useState } from 'react'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import useWishlist from '@components/services/wishlist'
+import cartHandler from '@components/services/cart'
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
-  const { setUser, user, wishListItems, setWishlist } = useUI()
+  const {
+    setUser,
+    user,
+    wishListItems,
+    setCartItems,
+    setBasketId,
+    setWishlist,
+    cartItems,
+    basketId,
+  } = useUI()
   const { getWishlist } = useWishlist()
-  if (user) {
+  const { getCartByUser, addToCart } = cartHandler()
+  if (user.userId) {
     Router.push('/')
   }
-  if (user) {
+  if (user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
         You're already logged in
       </div>
     )
   }
+
   const handleUserLogin = (values: any) => {
     const asyncLoginUser = async () => {
       const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
@@ -28,10 +40,23 @@ function LoginPage({ recordEvent, setEntities }: any) {
         setNoAccount(true)
       } else if (result.data) {
         setNoAccount(false)
-        setUser(result.data)
-        console.log(wishListItems)
+        const userObj = { ...result.data }
         const wishlist = await getWishlist(result.data.userId, wishListItems)
         setWishlist(wishlist)
+        getWishlist(result.data.userId, wishListItems)
+        const cart: any = await getCartByUser({
+          userId: result.data.userId,
+          cart: cartItems,
+          basketId,
+        })
+        if (cart && cart.id) {
+          setCartItems(cart)
+          setBasketId(cart.id)
+          userObj.isAssociated = true
+        } else {
+          userObj.isAssociated = false
+        }
+        setUser(userObj)
         Router.push('/')
       }
     }
