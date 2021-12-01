@@ -65,6 +65,7 @@ export default function Delivery({
               {countryList.map((country: any, idx: number) => {
                 return (
                   <option
+                    key={idx}
                     selected={country.value === selectedCountry.value}
                     value={country.value}
                   >
@@ -83,9 +84,9 @@ export default function Delivery({
             </RadioGroup.Label>
 
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-              {deliveryMethods.map((deliveryMethod) => (
+              {deliveryMethods.map((deliveryMethod: any, deliveryIdx) => (
                 <RadioGroup.Option
-                  key={deliveryMethod.id}
+                  key={deliveryIdx}
                   value={deliveryMethod}
                   className={({ checked, active }) =>
                     classNames(

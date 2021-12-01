@@ -51,6 +51,8 @@ const WishlistSidebar: FC = () => {
       qty: 1,
       manualUnitPrice: product.price.raw.withTax,
       stockCode: product.stockCode,
+      userId: user.userId,
+      isAssociated: user.isAssociated,
     })
       .then((response: any) => {
         setCartItems(response)

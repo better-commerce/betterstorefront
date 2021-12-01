@@ -119,6 +119,8 @@ export default function ProductView({
           qty: 1,
           manualUnitPrice: product.price.raw.withTax,
           stockCode: selectedAttrData.stockCode,
+          userId: user.userId,
+          isAssociated: user.isAssociated,
         })
         setCartItems(item)
       },
