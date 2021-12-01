@@ -75,10 +75,7 @@ export default function Wishlist() {
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
               Wishlist
             </h1>
-            <p className="mt-2 text-sm text-gray-500">
-              Check the status of recent orders, manage returns, and download
-              invoices.
-            </p>
+            
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">

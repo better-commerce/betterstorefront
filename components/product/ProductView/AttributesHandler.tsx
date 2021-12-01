@@ -13,7 +13,10 @@ const TEMP_MAP: any = {
   'global.colour': ATTR_COMPONENTS['HorizontalList'],
 }
 
-export default function AttributesHandler({ product }: any) {
+export default function AttributesHandler({
+  product,
+  setSelectedAttrData,
+}: any) {
   const { attributes, variantProductsAttribute = [], variantProducts } = product
 
   const router = useRouter()
@@ -56,21 +59,21 @@ export default function AttributesHandler({ product }: any) {
   const getStockPerAttribute = (key: string, variant: string) => {
     let productData = {
       stock: 0,
-      id: '',
+      productId: '',
       isPreOrderEnabled: false,
       sellWithoutInventory: false,
+      stockCode: '',
     }
-    const slug = `products/${router.query.slug}`
+    // const slug = `products/${router.query.slug}`
     variantProducts.find((product: any) => {
       product.variantAttributes.forEach((attr: any) => {
         if (
           key.toLowerCase() === attr.fieldCode.toLowerCase() &&
-          attr.fieldValue === variant &&
-          product.slug === slug
+          attr.fieldValue === variant
+          // product.slug === slug
         ) {
           productData.stock = product.currentStock
-          productData.isPreOrderEnabled = product.isPreOrderEnabled
-          productData.sellWithoutInventory = product.sellWithoutInventory
+          productData = { ...productData, ...product }
         }
       })
     })
@@ -90,6 +93,7 @@ export default function AttributesHandler({ product }: any) {
               items={option.fieldValues}
               label={option.fieldName}
               onChange={handleChange}
+              setSelectedAttrData={setSelectedAttrData}
               fieldCode={option.fieldCode}
               productId={product.id}
               generateLink={generateLink}

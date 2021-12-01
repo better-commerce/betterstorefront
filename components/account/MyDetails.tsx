@@ -13,7 +13,7 @@ export default function MyDetails() {
     firstName: user.firstName,
     lastName: user.lastName,
     mobile: user.mobile,
-    phone: user.telephone,
+    phone: user.phone,
   }
 
   const handleDataSubmit = (values: any) =>
@@ -58,9 +58,9 @@ export default function MyDetails() {
                           className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
                         />
 
-                        {errors[formItem.key] && touched[formItem.key] ? (
-                          <div className="text-red-400 text-sm">
-                            {errors[formItem.key]}
+                        {errors[formItem.name] && touched[formItem.name] ? (
+                          <div className="text-red-400 text-xs capitalize mb-2">
+                            {errors[formItem.name]}
                           </div>
                         ) : null}
                       </div>

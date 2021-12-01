@@ -75,7 +75,7 @@ export default function CustomerForm({
                     />
 
                     {errors[formItem.key] && touched[formItem.key] ? (
-                      <div className="text-red-400 text-sm">
+                      <div className="text-red-400 text-xs capitalize mb-2">
                         {errors[formItem.key]}
                       </div>
                     ) : null}

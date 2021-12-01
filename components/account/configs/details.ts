@@ -26,7 +26,7 @@ export const formConfig = [
     label: 'Mobile Number',
   },
   {
-    type: 'tel',
+    type: 'phone',
     name: 'phone',
     placeholder: 'Phone number',
     label: 'Phone number',
@@ -34,8 +34,8 @@ export const formConfig = [
 ]
 
 export const schema = Yup.object({
-  firstName: Yup.string(),
-  lastName: Yup.string(),
+  firstName: Yup.string().required(),
+  lastName: Yup.string().required(),
   email: Yup.string().email().required(),
   mobile: Yup.string(),
   phone: Yup.string(),

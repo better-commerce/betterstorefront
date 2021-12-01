@@ -40,6 +40,7 @@ export default function AddressItem({
       .catch(() => errCallback)
   }
 
+  console.log(item)
   return (
     <div>
       {isEditMode ? (
@@ -65,32 +66,48 @@ export default function AddressItem({
           onSubmit={handleAddressSubmit}
         />
       ) : (
-        <div className="border py-5 px-5 mb-5 mt-5 flex flex-row justify-between items-center">
-          <div className="flex flex-col text-xl font-medium">
-            <span>{item.firstName + ' ' + item.lastName}</span>
-            <span>{item.address1}</span>
-            <span>{item.address2}</span>
+        <>
+          <div className="border rounded-lg py-5 px-5 mb-5 mt-5 flex flex-row justify-between items-center">
+            <div className="flex flex-col text-md font-regular">
+              <span className="text-xl font-bold">{item.firstName + ' ' + item.lastName}</span>
+              <span>{item.address1}</span>
+              <span>{item.address2}</span>
 
-            <span>{item.city}</span>
-            <span>{item.postCode}</span>
-            <span>{item.country}</span>
-            <span>{item.phoneNo}</span>
+              <span>{item.city}</span>
+              <span>{item.postCode}</span>
+              <span>{item.country}</span>
+              <span>{item.phoneNo}</span>
+            </div>
+            <div>
+              <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end">
+                <button
+                  onClick={() => setEditMode(true)}
+                  className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={deleteItem}
+                  className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                >
+                  Delete
+                </button>
+              </div>
+              <div className="mt-5 flex justify-between items-center">
+                {item.isDefaultDelivery && (
+                  <div className="px-2 py-2 mr-2 border">
+                    Default delivery address
+                  </div>
+                )}
+                {item.isDefaultBilling && (
+                  <div className="px-2 py-2 border">
+                    Default billing address
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
-            <button
-              onClick={() => setEditMode(true)}
-              className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
-            >
-              Edit
-            </button>
-            <button
-              onClick={deleteItem}
-              className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
+        </>
       )}
     </div>
   )

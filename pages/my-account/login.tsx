@@ -13,7 +13,7 @@ function LoginPage({ recordEvent, setEntities }: any) {
   const {
     setUser,
     user,
-    wishlistItems,
+    wishListItems,
     setCartItems,
     setBasketId,
     setWishlist,
@@ -38,9 +38,10 @@ function LoginPage({ recordEvent, setEntities }: any) {
       } else if (result.data) {
         setNoAccount(false)
         setUser(result.data)
-        const wishlist = await getWishlist(result.data.userId, wishlistItems)
+        console.log(wishListItems)
+        const wishlist = await getWishlist(result.data.userId, wishListItems)
         setWishlist(wishlist)
-        getWishlist(result.data.userId, wishlistItems)
+        getWishlist(result.data.userId, wishListItems)
         const [cart]: any = await getCartByUser({ userId: result.data.userId })
         setCartItems(cart)
         setBasketId(cart.id)
