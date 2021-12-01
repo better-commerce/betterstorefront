@@ -13,10 +13,10 @@ function Checkout({ cart }: any) {
   const [isMailSubscribed, setMailSubscirbed] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
+  const [userAddresses, setUserAddresses] = useState([])
   const { user } = useUI()
   const handleGuestMail = () => setMailSubscirbed(true)
-  const { getAddress, updateAddress, createAddress, deleteAddress } =
-    asyncHandler()
+  const { getAddress } = asyncHandler()
 
   let userObject: any = null
   if (typeof window !== 'undefined') {
@@ -34,6 +34,7 @@ function Checkout({ cart }: any) {
         const shippingAddress = response.find(
           (item: any) => item.isDefaultDelivery
         )
+        setUserAddresses(response)
         if (billingAddress) setDefaultBillingAddress(billingAddress)
         if (shippingAddress) setDefaultShippingAddress(shippingAddress)
       } catch (error) {
@@ -43,13 +44,11 @@ function Checkout({ cart }: any) {
     fetchAddress()
   }, [])
 
-  console.log(defaultBillingAddress, 'addrs')
-  console.log(defaultShippingAddress)
-
   if (userObject || isMailSubscribed) {
     return (
       <CheckoutForm
         cart={cart}
+        addresses={userAddresses}
         defaultBillingAddress={defaultBillingAddress}
         defaultShippingAddress={defaultShippingAddress}
         user={user}

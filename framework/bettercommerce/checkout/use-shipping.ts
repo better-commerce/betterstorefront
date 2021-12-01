@@ -1,20 +1,18 @@
 import { SHIPPING_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
-import { Disclosure } from '@headlessui/react'
-import { ChevronUpIcon } from '@heroicons/react/solid'
 
 interface Props {
   userId?: string
   basketId?: string
-  shipToCountryIso?: string
+  countryCode?: string
   postCode?: string
   type?: string
   method?: string
 }
 
 const TYPES_MAP_TO_ACTIONS: any = {
-  GET_ALL: ({ basketId, shipToCountryIso, postCode }: any) =>
-    `/country/${basketId}/${shipToCountryIso}/${postCode}`,
+  GET_ALL: ({ basketId, countryCode, postCode }: any) =>
+    `/${basketId}/shipping-methods?countryCode=${countryCode}&postcode`,
   CLICK_AND_COLLECT: ({ basketId, postCode }: any) =>
     `/clickandcollect/${basketId}/${postCode}`,
   ACTIVE_SHIPPING_METHODS: () => '/all',
@@ -23,13 +21,13 @@ const TYPES_MAP_TO_ACTIONS: any = {
 export default function getShippingMethods() {
   return async function handler({
     basketId,
-    shipToCountryIso,
+    countryCode,
     postCode,
     method = 'GET_ALL',
   }: Props) {
     const url =
       SHIPPING_ENDPOINT +
-      TYPES_MAP_TO_ACTIONS[method]({ basketId, shipToCountryIso, postCode })
+      TYPES_MAP_TO_ACTIONS[method]({ basketId, countryCode, postCode })
     try {
       const response: any = await fetcher({
         url,
