@@ -2,7 +2,6 @@ export default function ConfirmedGeneralComponent({
   onStateChange,
   content = {},
 }: any) {
-  console.log(content)
   return (
     <div className="text-gray-900 flex justify-between items-center">
       <ul className={`text-gray-900 mt-10`}>

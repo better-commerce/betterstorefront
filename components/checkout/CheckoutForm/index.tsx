@@ -149,6 +149,7 @@ export default function CheckoutForm({
     setBillingInformation(defaultBillingAddress)
   }, [])
 
+  console.log(state)
   return (
     <div className="bg-gray-50 relative">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
