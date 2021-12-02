@@ -10,7 +10,7 @@ export default function ConfirmedGeneralComponent({
           return <li className="font-semibold">{content[item]}</li>
         })}
       </ul>
-      <button onClick={onStateChange} className="btn btn">
+      <button onClick={onStateChange} className="btn btn" type="button">
         Edit
       </button>
     </div>

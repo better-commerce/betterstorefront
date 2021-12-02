@@ -17,7 +17,7 @@ export default function AddressForm({
   sameAddressAction,
   isSameAddressCheckboxEnabled,
 }: any) {
-  if (Object.keys(defaultValues).length > 0) {
+  if (isInfoCompleted) {
     return (
       <ConfirmedGeneralComponent
         onStateChange={toggleAction}
@@ -34,10 +34,14 @@ export default function AddressForm({
     )
   }
 
+  const initState = Object.keys(defaultValues).length
+    ? defaultValues
+    : initialValues
+
   return (
     <Formik
       validationSchema={schema}
-      initialValues={initialValues}
+      initialValues={initState}
       onSubmit={onSubmit}
     >
       {({
@@ -132,9 +136,8 @@ export default function AddressForm({
                 <input
                   name={`sameAddress`}
                   type="checkbox"
-                  defaultChecked={true}
+                  defaultChecked={false}
                   onChange={(e) => {
-                    console.log(e.target.checked)
                     if (e.target.checked) {
                       sameAddressAction(values)
                     }
