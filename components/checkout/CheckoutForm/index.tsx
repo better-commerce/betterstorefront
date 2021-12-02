@@ -96,7 +96,9 @@ export default function CheckoutForm({
 
   const toggleDelivery = () => dispatch({ type: 'TOGGLE_DELIVERY_METHOD' })
 
-  const toggleShipping = () => dispatch({ type: 'TOGGLE_SHIPPING' })
+  const toggleShipping = () => {
+    dispatch({ type: 'TOGGLE_SHIPPING' })
+  }
 
   const togglePayment = () => dispatch({ type: 'TOGGLE_PAYMENT' })
 
@@ -187,8 +189,7 @@ export default function CheckoutForm({
               <h2 className="text-lg font-medium text-gray-900">
                 Billing information
               </h2>
-              {state?.isDeliveryMethodSelected &&
-              state?.isShippingInformationCompleted ? (
+              {state?.isDeliveryMethodSelected && (
                 <Form
                   toggleAction={togglePayment}
                   onSubmit={handleBillingSubmit}
@@ -203,10 +204,10 @@ export default function CheckoutForm({
                   isSameAddressCheckboxEnabled={false}
                   sameAddressAction={setBillingInformation}
                 />
-              ) : null}
+              )}
             </div>
 
-            <div className="mt-10 border-t border-gray-200 pt-10">
+            {/* <div className="mt-10 border-t border-gray-200 pt-10">
               <h2 className="text-lg font-medium text-gray-900">Payment</h2>
 
               <fieldset className="mt-4">
@@ -315,7 +316,7 @@ export default function CheckoutForm({
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Order summary */}
