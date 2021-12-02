@@ -17,6 +17,7 @@ export default function AddressForm({
   sameAddressAction,
   isSameAddressCheckboxEnabled,
 }: any) {
+  console.log(isInfoCompleted)
   if (isInfoCompleted) {
     return (
       <ConfirmedGeneralComponent
