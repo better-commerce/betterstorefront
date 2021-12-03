@@ -99,6 +99,10 @@ export default function Delivery({
           return acc
         }, [])
         setDeliveryMethods(tempArr)
+        if (tempArr[0].children[0]) {
+          setShippingMethod(tempArr[0].children[0])
+        }
+        setSelectedDeliveryMethod(tempArr[0])
       }
     }
     fetchDeliveryMethods()

@@ -91,14 +91,12 @@ const fetcher = async ({
   }
 
   if (Object.keys(params).length) {
-    config.data = data
-  }
-
-  if (Object.keys(params).length) {
     config.params = params
   }
 
-  console.log(config)
+  if (Object.keys(data).length) {
+    config.data = data
+  }
   try {
     const response = await axiosInstance(config)
     return response.data

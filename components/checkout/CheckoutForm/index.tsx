@@ -38,6 +38,7 @@ export default function CheckoutForm({
     shippingInformation: defaultShippingAddress,
     billingInformation: defaultBillingAddress,
     deliveryMethod: defaultDeliveryMethod,
+    isSameAddress: true,
   }
 
   interface stateInterface {
@@ -47,6 +48,7 @@ export default function CheckoutForm({
     shippingInformation: any
     billingInformation: any
     deliveryMethod: any
+    isSameAddress: boolean
   }
   interface actionInterface {
     type?: string
@@ -70,7 +72,7 @@ export default function CheckoutForm({
       case 'TOGGLE_PAYMENT': {
         return {
           ...state,
-          isPaymentInformationCompleted: !state.isPaymentInformationCompleted,
+          isPaymentInformationCompleted: payload,
         }
       }
       case 'SET_SHIPPING_INFORMATION': {
@@ -83,6 +85,12 @@ export default function CheckoutForm({
         return {
           ...state,
           billingInformation: payload,
+        }
+      }
+      case 'SET_SAME_ADDRESS': {
+        return {
+          ...state,
+          isSameAddress: !state.isSameAddress,
         }
       }
       default: {
@@ -100,7 +108,15 @@ export default function CheckoutForm({
     dispatch({ type: 'TOGGLE_SHIPPING' })
   }
 
-  const togglePayment = () => dispatch({ type: 'TOGGLE_PAYMENT' })
+  const togglePayment = (
+    payload: boolean = !state.isPaymentInformationCompleted
+  ) => {
+    console.log(payload)
+    dispatch({
+      type: 'TOGGLE_PAYMENT',
+      payload: payload,
+    })
+  }
 
   const handleItem = (product: any, type = 'increase') => {
     const asyncHandleItem = async () => {
@@ -136,6 +152,10 @@ export default function CheckoutForm({
 
   const handleShippingSubmit = (values: any) => {
     toggleShipping()
+    if (state.isSameAddress) {
+      setBillingInformation(values)
+      togglePayment(true)
+    }
     setShippingInformation(values)
   }
 
@@ -178,8 +198,11 @@ export default function CheckoutForm({
                     btnTitle="Deliver to this address"
                     addresses={addresses}
                     setAddress={setShippingInformation}
-                    isSameAddressCheckboxEnabled
-                    sameAddressAction={setBillingInformation}
+                    isSameAddress={state?.isSameAddress}
+                    isSameAddressCheckboxEnabled={true}
+                    sameAddressAction={() => {
+                      dispatch({ type: 'SET_SAME_ADDRESS' })
+                    }}
                   />
                 </>
               ) : null}
@@ -190,9 +213,11 @@ export default function CheckoutForm({
               <h2 className="text-lg font-medium text-gray-900">
                 Billing information
               </h2>
-              {state?.isDeliveryMethodSelected && (
+              {state?.isShippingInformationCompleted && (
                 <Form
-                  toggleAction={togglePayment}
+                  toggleAction={() =>
+                    togglePayment(!state.isPaymentInformationCompleted)
+                  }
                   onSubmit={handleBillingSubmit}
                   values={state?.billingInformation}
                   schema={billingSchema}
@@ -203,7 +228,6 @@ export default function CheckoutForm({
                   addresses={addresses}
                   setAddress={setBillingInformation}
                   isSameAddressCheckboxEnabled={false}
-                  sameAddressAction={setBillingInformation}
                 />
               )}
             </div>

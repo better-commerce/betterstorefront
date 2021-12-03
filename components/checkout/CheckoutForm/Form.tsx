@@ -14,8 +14,9 @@ export default function AddressForm({
   config,
   addresses,
   setAddress,
-  sameAddressAction,
+  sameAddressAction = () => {},
   isSameAddressCheckboxEnabled,
+  isSameAddress = true,
 }: any) {
   console.log(isInfoCompleted)
   if (isInfoCompleted) {
@@ -28,7 +29,6 @@ export default function AddressForm({
           address2: defaultValues.address2,
           city: defaultValues.city,
           postCode: defaultValues.postCode,
-          country: defaultValues.country + ', ' + defaultValues.countryCode,
           phone: defaultValues.phoneNo,
         }}
       />
@@ -137,7 +137,7 @@ export default function AddressForm({
                 <input
                   name={`sameAddress`}
                   type="checkbox"
-                  defaultChecked={false}
+                  defaultChecked={isSameAddress}
                   onChange={(e) => {
                     if (e.target.checked) {
                       sameAddressAction(values)
