@@ -8,20 +8,33 @@ import { useCart as getCart } from '@framework/cart'
 import { GetServerSideProps } from 'next'
 import { useUI } from '@components/ui/context'
 import { asyncHandler } from '@components/account/Address/AddressBook'
+import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
+import axios from 'axios'
 
 function Checkout({ cart }: any) {
-  const [isMailSubscribed, setMailSubscirbed] = useState(false)
-  const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
-  const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
-  const [userAddresses, setUserAddresses] = useState([])
-  const { user } = useUI()
-  const handleGuestMail = () => setMailSubscirbed(true)
-  const { getAddress } = asyncHandler()
-
   let userObject: any = null
   if (typeof window !== 'undefined') {
     userObject = localStorage.getItem('user')
   }
+
+  const [isMailSubscribed, setMailSubscirbed] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(!!userObject)
+  const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
+  const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
+  const [userAddresses, setUserAddresses] = useState([])
+  const { user, basketId, setCartItems } = useUI()
+  const handleGuestMail = (values: any) => {
+    const handleAsync = async () => {
+      const response = await axios.post(NEXT_GUEST_CHECKOUT, {
+        basketId: basketId,
+        ...values,
+      })
+      setCartItems(response.data)
+      setMailSubscirbed(true)
+    }
+    handleAsync()
+  }
+  const { getAddress } = asyncHandler()
 
   useEffect(() => {
     const parsedUser = JSON.parse(userObject)
@@ -44,7 +57,7 @@ function Checkout({ cart }: any) {
     fetchAddress()
   }, [])
 
-  if (userObject || isMailSubscribed) {
+  if (userObject || isLoggedIn) {
     return (
       <CheckoutForm
         cart={cart}
@@ -55,7 +68,12 @@ function Checkout({ cart }: any) {
       />
     )
   }
-  return <CheckoutRouter handleGuestMail={handleGuestMail} />
+  return (
+    <CheckoutRouter
+      setIsLoggedIn={setIsLoggedIn}
+      handleGuestMail={handleGuestMail}
+    />
+  )
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')
