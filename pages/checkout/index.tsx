@@ -12,17 +12,13 @@ import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
 import axios from 'axios'
 
 function Checkout({ cart }: any) {
-  let userObject: any = null
-  if (typeof window !== 'undefined') {
-    userObject = localStorage.getItem('user')
-  }
+  const { user, basketId, setCartItems, cartItems } = useUI()
 
   const [isMailSubscribed, setMailSubscirbed] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(!!userObject)
+  const [isLoggedIn, setIsLoggedIn] = useState(!!cartItems.userEmail)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
   const [userAddresses, setUserAddresses] = useState([])
-  const { user, basketId, setCartItems } = useUI()
   const handleGuestMail = (values: any) => {
     const handleAsync = async () => {
       const response = await axios.post(NEXT_GUEST_CHECKOUT, {
@@ -37,10 +33,9 @@ function Checkout({ cart }: any) {
   const { getAddress } = asyncHandler()
 
   useEffect(() => {
-    const parsedUser = JSON.parse(userObject)
     const fetchAddress = async () => {
       try {
-        const response: any = await getAddress(parsedUser.userId)
+        const response: any = await getAddress(cartItems.userId)
         const billingAddress = response.find(
           (item: any) => item.isDefaultBilling
         )
@@ -57,7 +52,7 @@ function Checkout({ cart }: any) {
     fetchAddress()
   }, [])
 
-  if (userObject || isLoggedIn) {
+  if (isLoggedIn) {
     return (
       <CheckoutForm
         cart={cart}
@@ -94,4 +89,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const PAGE_TYPE = PAGE_TYPES['Checkout']
 
-export default withDataLayer(Checkout, PAGE_TYPE)
+export default withDataLayer(Checkout, PAGE_TYPE, false)
