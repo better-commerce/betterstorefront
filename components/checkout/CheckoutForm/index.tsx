@@ -169,7 +169,7 @@ export default function CheckoutForm({
     setBillingInformation(defaultBillingAddress)
   }, [])
 
-  console.log(state)
+  console.log(cartItems)
   return (
     <div className="bg-gray-50 relative">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -198,6 +198,7 @@ export default function CheckoutForm({
                     btnTitle="Deliver to this address"
                     addresses={addresses}
                     setAddress={setShippingInformation}
+                    isGuest={cartItems.isGuestCheckout}
                     isSameAddress={state?.isSameAddress}
                     isSameAddressCheckboxEnabled={true}
                     sameAddressAction={() => {
@@ -226,6 +227,7 @@ export default function CheckoutForm({
                   isInfoCompleted={state?.isPaymentInformationCompleted}
                   btnTitle="Save"
                   addresses={addresses}
+                  isGuest={cartItems.isGuestCheckout}
                   setAddress={setBillingInformation}
                   isSameAddressCheckboxEnabled={false}
                 />

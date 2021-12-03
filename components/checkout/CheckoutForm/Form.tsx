@@ -18,9 +18,9 @@ export default function AddressForm({
   sameAddressAction = () => {},
   isSameAddressCheckboxEnabled,
   isSameAddress = true,
-  isActiveMode = false,
+  isGuest = false,
 }: any) {
-  const [isFormOpen, setNewFormOpen] = useState(isActiveMode)
+  const [isFormOpen, setNewFormOpen] = useState(!addresses.length)
 
   if (isInfoCompleted) {
     return (
@@ -144,24 +144,26 @@ export default function AddressForm({
                 })}
               </Form>
             )}
-            <div className="flex">
-              <button
-                type="button"
-                onClick={handleNewFormButton}
-                className="max-w-xs m-2 flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-              >
-                {isFormOpen ? 'Save' : 'Add new address'}
-              </button>
-              {isFormOpen && (
+            {!isGuest && (
+              <div className="flex">
                 <button
                   type="button"
-                  onClick={() => setNewFormOpen(false)}
-                  className="max-w-xs m-2 flex-1 bg-gray-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                  onClick={handleNewFormButton}
+                  className="max-w-xs m-2 flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
-                  Cancel
+                  {isFormOpen ? 'Save' : 'Add new address'}
                 </button>
-              )}
-            </div>
+                {isFormOpen && (
+                  <button
+                    type="button"
+                    onClick={() => setNewFormOpen(false)}
+                    className="max-w-xs m-2 flex-1 bg-gray-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+            )}
             {isSameAddressCheckboxEnabled && (
               <div className="flex items-center mt-10">
                 <input
