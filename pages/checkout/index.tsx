@@ -14,7 +14,6 @@ import axios from 'axios'
 function Checkout({ cart }: any) {
   const { user, basketId, setCartItems, cartItems } = useUI()
 
-  const [isMailSubscribed, setMailSubscirbed] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(!!cartItems.userEmail)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
@@ -25,13 +24,16 @@ function Checkout({ cart }: any) {
         basketId: basketId,
         ...values,
       })
-      setCartItems(response.data)
-      setMailSubscirbed(true)
+      const newCartClone = { ...response.data, isGuestCheckout: true }
+      console.log(newCartClone)
+      setCartItems(newCartClone)
+      setIsLoggedIn(!!response.data.userEmail)
     }
     handleAsync()
   }
   const { getAddress } = asyncHandler()
 
+  console.log(cartItems)
   useEffect(() => {
     const fetchAddress = async () => {
       try {

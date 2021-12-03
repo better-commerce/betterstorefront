@@ -35,7 +35,7 @@ export default function Delivery({
   toggleDelivery,
   isDeliveryMethodSelected,
 }: any) {
-  const { basketId, setCartItems } = useUI()
+  const { basketId, setCartItems, cartItems } = useUI()
 
   const [selectedCountry, setSelectedCountry] = useState(countryList[0])
   const [deliveryMethods, setDeliveryMethods] = useState(DELIVERY_METHODS_TYPE)
@@ -62,7 +62,7 @@ export default function Delivery({
         shippingId: shippingMethod.id,
       })
       .then((response: any) => {
-        setCartItems(response.data)
+        setCartItems({ ...cartItems, ...response.data })
         toggleDelivery()
       })
       .catch((err) => console.log(err))
