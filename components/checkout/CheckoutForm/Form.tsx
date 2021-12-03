@@ -59,6 +59,7 @@ export default function AddressForm({
               {addresses.map((item: any, idx: number) => {
                 return (
                   <div
+                    key={idx}
                     onClick={() => {
                       setValues(item)
                       setAddress(item)

@@ -225,6 +225,7 @@ export default function Delivery({
               {selectedDeliveryMethod.children.map((item: any, idx: number) => {
                 return (
                   <li
+                    key={idx}
                     onClick={() => handleShippingMethod(item)}
                     className={`${
                       shippingMethod.id === item.id ? 'border-indigo-600' : ''
