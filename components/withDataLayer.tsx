@@ -14,7 +14,11 @@ export const PAGE_TYPES = {
   Search: 'Search',
   Survey: 'Survey',
 }
-export default function withDataLayer(Component: any, pageType: string) {
+export default function withDataLayer(
+  Component: any,
+  pageType: string,
+  showLayout = true
+) {
   function WrappedComponent(props: any) {
     useEffect(() => {
       DataLayerInstance.setItemInDataLayer('pageCategory', pageType)
@@ -35,6 +39,8 @@ export default function withDataLayer(Component: any, pageType: string) {
     )
   }
 
-  WrappedComponent.Layout = Layout
+  if (showLayout) {
+    WrappedComponent.Layout = Layout
+  }
   return WrappedComponent
 }
