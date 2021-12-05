@@ -1,12 +1,11 @@
-import { useShipping } from '@framework/checkout'
+import { updateShipping } from '@framework/checkout'
 export default async (req: any, res: any) => {
-  const { basketId, countryCode, postCode, method }: any = req.body
+  const { basketId, countryCode, shippingId }: any = req.body
   try {
-    const response = await useShipping()({
+    const response = await updateShipping()({
       basketId,
       countryCode,
-      postCode,
-      method,
+      shippingId,
     })
     res.status(200).json(response)
   } catch (error) {

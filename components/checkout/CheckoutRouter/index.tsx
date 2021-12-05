@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import useWishlist from '@components/services/wishlist'
-import { NEXT_AUTHENTICATE } from '@components/utils/constants'
+import { NEXT_LOGIN_CHECKOUT } from '@components/utils/constants'
 import axios from 'axios'
 import Form from '@components/customer'
 import GuestForm from './GuestForm'
@@ -23,28 +23,36 @@ const DEFAULT_TAB = {
   key: 'logIn',
 }
 
-export default function CheckoutRouter({ handleGuestMail }: any) {
+export default function CheckoutRouter({
+  handleGuestMail,
+  setIsLoggedIn,
+}: any) {
   const [noAccount, setNoAccount] = useState(false)
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB)
-  const { setUser, wishlistItems } = useUI()
+  const { setUser, wishlistItems, basketId, setCartItems } = useUI()
   const { getWishlist } = useWishlist()
 
   const handleUserLogin = (values: any) => {
     const asyncLoginUser = async () => {
-      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
+      const result: any = await axios.post(NEXT_LOGIN_CHECKOUT, {
+        basketId: basketId,
+        ...values,
+      })
       if (!result.data) {
         setNoAccount(true)
       } else if (result.data) {
         setNoAccount(false)
-        setUser(result.data)
-        getWishlist(result.data.userId, wishlistItems)
+        setCartItems(result.data)
+        setIsLoggedIn(true)
+        // setUser(result.data)
+        // getWishlist(result.data.userId, wishlistItems)
         Router.push('/checkout')
       }
     }
     asyncLoginUser()
   }
 
-  const handleGuestCheckout = (values: any) => handleGuestMail()
+  const handleGuestCheckout = (values: any) => handleGuestMail(values)
 
   const handleTabChange = (key: string) => {
     const item: any = config.find((item: any) => item.key === key)

@@ -8,32 +8,43 @@ import { useCart as getCart } from '@framework/cart'
 import { GetServerSideProps } from 'next'
 import { useUI } from '@components/ui/context'
 import { asyncHandler } from '@components/account/Address/AddressBook'
+import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
+import axios from 'axios'
 
 function Checkout({ cart }: any) {
-  const [isMailSubscribed, setMailSubscirbed] = useState(false)
+  const { user, basketId, setCartItems, cartItems } = useUI()
+
+  const [isLoggedIn, setIsLoggedIn] = useState(!!cartItems.userEmail)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
-  const { user } = useUI()
-  const handleGuestMail = () => setMailSubscirbed(true)
-  const { getAddress, updateAddress, createAddress, deleteAddress } =
-    asyncHandler()
-
-  let userObject: any = null
-  if (typeof window !== 'undefined') {
-    userObject = localStorage.getItem('user')
+  const [userAddresses, setUserAddresses] = useState([])
+  const handleGuestMail = (values: any) => {
+    const handleAsync = async () => {
+      const response = await axios.post(NEXT_GUEST_CHECKOUT, {
+        basketId: basketId,
+        ...values,
+      })
+      const newCartClone = { ...response.data, isGuestCheckout: true }
+      console.log(newCartClone)
+      setCartItems(newCartClone)
+      setIsLoggedIn(!!response.data.userEmail)
+    }
+    handleAsync()
   }
+  const { getAddress } = asyncHandler()
 
+  console.log(cartItems)
   useEffect(() => {
-    const parsedUser = JSON.parse(userObject)
     const fetchAddress = async () => {
       try {
-        const response: any = await getAddress(parsedUser.userId)
+        const response: any = await getAddress(cartItems.userId)
         const billingAddress = response.find(
           (item: any) => item.isDefaultBilling
         )
         const shippingAddress = response.find(
           (item: any) => item.isDefaultDelivery
         )
+        setUserAddresses(response)
         if (billingAddress) setDefaultBillingAddress(billingAddress)
         if (shippingAddress) setDefaultShippingAddress(shippingAddress)
       } catch (error) {
@@ -43,20 +54,23 @@ function Checkout({ cart }: any) {
     fetchAddress()
   }, [])
 
-  console.log(defaultBillingAddress, 'addrs')
-  console.log(defaultShippingAddress)
-
-  if (userObject || isMailSubscribed) {
+  if (isLoggedIn) {
     return (
       <CheckoutForm
         cart={cart}
+        addresses={userAddresses}
         defaultBillingAddress={defaultBillingAddress}
         defaultShippingAddress={defaultShippingAddress}
         user={user}
       />
     )
   }
-  return <CheckoutRouter handleGuestMail={handleGuestMail} />
+  return (
+    <CheckoutRouter
+      setIsLoggedIn={setIsLoggedIn}
+      handleGuestMail={handleGuestMail}
+    />
+  )
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')
@@ -77,4 +91,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const PAGE_TYPE = PAGE_TYPES['Checkout']
 
-export default withDataLayer(Checkout, PAGE_TYPE)
+export default withDataLayer(Checkout, PAGE_TYPE, false)

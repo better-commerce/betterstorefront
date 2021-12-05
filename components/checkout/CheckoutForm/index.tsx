@@ -1,9 +1,17 @@
 import { useUI } from '@components/ui/context'
-import { useReducer } from 'react'
+import { useReducer, useEffect } from 'react'
 import cartHandler from '@components/services/cart'
 import Delivery from './Delivery'
 import Summary from './Summary'
 import Form from './Form'
+
+import {
+  shippingFormConfig,
+  shippingSchema,
+  billingFormConfig,
+  billingSchema,
+} from './config'
+
 const paymentMethods = [
   { id: 'credit-card', title: 'Credit card' },
   { id: 'paypal', title: 'PayPal' },
@@ -15,13 +23,22 @@ export default function CheckoutForm({
   user,
   defaultShippingAddress,
   defaultBillingAddress,
+  addresses = [],
 }: any) {
+  const { setCartItems, basketId, cartItems } = useUI()
+
+  const defaultDeliveryMethod = cartItems.shippingMethods.find(
+    (i: any) => i.id === cartItems.shippingMethodId
+  )
   const INITIAL_STATE = {
     isDeliveryMethodSelected: false,
-    isShippingInformationCompleted: true,
-    isPaymentInformationCompleted: true,
+    isShippingInformationCompleted: !!Object.keys(defaultShippingAddress)
+      .length,
+    isPaymentInformationCompleted: !!Object.keys(defaultBillingAddress).length,
     shippingInformation: defaultShippingAddress,
     billingInformation: defaultBillingAddress,
+    deliveryMethod: defaultDeliveryMethod,
+    isSameAddress: true,
   }
 
   interface stateInterface {
@@ -30,16 +47,15 @@ export default function CheckoutForm({
     isPaymentInformationCompleted: boolean
     shippingInformation: any
     billingInformation: any
+    deliveryMethod: any
+    isSameAddress: boolean
   }
   interface actionInterface {
     type?: string
     payload?: any
   }
 
-  function reducer(
-    state: stateInterface = INITIAL_STATE,
-    { type, payload }: actionInterface
-  ) {
+  function reducer(state: stateInterface, { type, payload }: actionInterface) {
     switch (type) {
       case 'TOGGLE_DELIVERY_METHOD': {
         return {
@@ -56,7 +72,7 @@ export default function CheckoutForm({
       case 'TOGGLE_PAYMENT': {
         return {
           ...state,
-          isPaymentInformationCompleted: !state.isPaymentInformationCompleted,
+          isPaymentInformationCompleted: payload,
         }
       }
       case 'SET_SHIPPING_INFORMATION': {
@@ -65,18 +81,42 @@ export default function CheckoutForm({
           shippingInformation: payload,
         }
       }
+      case 'SET_BILLING_INFORMATION': {
+        return {
+          ...state,
+          billingInformation: payload,
+        }
+      }
+      case 'SET_SAME_ADDRESS': {
+        return {
+          ...state,
+          isSameAddress: !state.isSameAddress,
+        }
+      }
+      default: {
+        return state
+      }
     }
   }
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
-  const { setCartItems, basketId } = useUI()
   const { addToCart } = cartHandler()
 
   const toggleDelivery = () => dispatch({ type: 'TOGGLE_DELIVERY_METHOD' })
 
-  const toggleShipping = () => dispatch({ type: 'TOGGLE_SHIPPING' })
+  const toggleShipping = () => {
+    dispatch({ type: 'TOGGLE_SHIPPING' })
+  }
 
-  const togglePayment = () => dispatch({ type: 'TOGGLE_PAYMENT' })
+  const togglePayment = (
+    payload: boolean = !state.isPaymentInformationCompleted
+  ) => {
+    console.log(payload)
+    dispatch({
+      type: 'TOGGLE_PAYMENT',
+      payload: payload,
+    })
+  }
 
   const handleItem = (product: any, type = 'increase') => {
     const asyncHandleItem = async () => {
@@ -104,18 +144,34 @@ export default function CheckoutForm({
     asyncHandleItem()
   }
 
+  const setShippingInformation = (payload: any) =>
+    dispatch({ type: 'SET_SHIPPING_INFORMATION', payload })
+
+  const setBillingInformation = (payload: any) =>
+    dispatch({ type: 'SET_BILLING_INFORMATION', payload })
+
   const handleShippingSubmit = (values: any) => {
     toggleShipping()
-    dispatch({ type: 'SET_SHIPPING_INFORMATION', payload: values })
+    if (state.isSameAddress) {
+      setBillingInformation(values)
+      togglePayment(true)
+    }
+    setShippingInformation(values)
   }
 
   const handleBillingSubmit = (values: any) => {
     togglePayment()
-    dispatch({ type: 'SET_BILLING_INFORMATION', payload: values })
+    setBillingInformation(values)
   }
 
+  useEffect(() => {
+    setShippingInformation(defaultShippingAddress)
+    setBillingInformation(defaultBillingAddress)
+  }, [])
+
+  console.log(cartItems)
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 relative">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Checkout</h2>
         <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
@@ -129,15 +185,28 @@ export default function CheckoutForm({
               <h2 className="text-lg font-medium text-gray-900">
                 Shipping information
               </h2>
-              <Form
-                toggleAction={toggleShipping}
-                onSubmit={handleShippingSubmit}
-                initialValues={state?.shippingInformation}
-                isShippingInformationCompleted={
-                  state?.isShippingInformationCompleted
-                }
-                btnTitle="Deliver to this address"
-              />
+              {state?.isDeliveryMethodSelected ? (
+                <>
+                  <Form
+                    toggleAction={toggleShipping}
+                    values={state?.shippingInformation}
+                    onSubmit={handleShippingSubmit}
+                    schema={shippingSchema}
+                    config={shippingFormConfig}
+                    initialValues={defaultShippingAddress}
+                    isInfoCompleted={state?.isShippingInformationCompleted}
+                    btnTitle="Deliver to this address"
+                    addresses={addresses}
+                    setAddress={setShippingInformation}
+                    isGuest={cartItems.isGuestCheckout}
+                    isSameAddress={state?.isSameAddress}
+                    isSameAddressCheckboxEnabled={true}
+                    sameAddressAction={() => {
+                      dispatch({ type: 'SET_SAME_ADDRESS' })
+                    }}
+                  />
+                </>
+              ) : null}
             </div>
 
             {/* Payment */}
@@ -145,18 +214,27 @@ export default function CheckoutForm({
               <h2 className="text-lg font-medium text-gray-900">
                 Billing information
               </h2>
-              <Form
-                toggleAction={togglePayment}
-                onSubmit={handleBillingSubmit}
-                initialValues={state?.billingInformation}
-                isShippingInformationCompleted={
-                  state?.isPaymentInformationCompleted
-                }
-                btnTitle="Save"
-              />
+              {state?.isShippingInformationCompleted && (
+                <Form
+                  toggleAction={() =>
+                    togglePayment(!state.isPaymentInformationCompleted)
+                  }
+                  onSubmit={handleBillingSubmit}
+                  values={state?.billingInformation}
+                  schema={billingSchema}
+                  config={billingFormConfig}
+                  initialValues={defaultBillingAddress}
+                  isInfoCompleted={state?.isPaymentInformationCompleted}
+                  btnTitle="Save"
+                  addresses={addresses}
+                  isGuest={cartItems.isGuestCheckout}
+                  setAddress={setBillingInformation}
+                  isSameAddressCheckboxEnabled={false}
+                />
+              )}
             </div>
 
-            <div className="mt-10 border-t border-gray-200 pt-10">
+            {/* <div className="mt-10 border-t border-gray-200 pt-10">
               <h2 className="text-lg font-medium text-gray-900">Payment</h2>
 
               <fieldset className="mt-4">
@@ -265,7 +343,7 @@ export default function CheckoutForm({
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Order summary */}

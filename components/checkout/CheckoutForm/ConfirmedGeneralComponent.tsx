@@ -1,9 +1,20 @@
-export default function ConfirmedGeneralComponent({ onStateChange }: any) {
+export default function ConfirmedGeneralComponent({
+  onStateChange,
+  content = {},
+}: any) {
   return (
     <div className="text-gray-900 flex justify-between items-center">
-      <span>it's confirmed</span>
-      <button onClick={onStateChange} className="btn btn">
-        change
+      <ul className={`text-gray-900 mt-10`}>
+        {Object.keys(content).map((item: any, idx: number) => {
+          return (
+            <li key={idx} className="font-semibold">
+              {content[item]}
+            </li>
+          )
+        })}
+      </ul>
+      <button onClick={onStateChange} className="btn btn" type="button">
+        Edit
       </button>
     </div>
   )
