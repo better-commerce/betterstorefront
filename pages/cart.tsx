@@ -52,7 +52,7 @@ function Cart({ cart }: any) {
           Shopping Cart
         </h1>
 
-        <form className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
+        <form className="relative mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
             <h2 id="cart-heading" className="sr-only">
               Items in your shopping cart
@@ -90,14 +90,7 @@ function Cart({ cart }: any) {
                             </Link>
                           </h3>
                         </div>
-                        {/* <div className="mt-1 flex text-sm">
-                          <p className="text-gray-500">{product.color}</p>
-                          {product.size ? (
-                            <p className="ml-4 pl-4 border-l border-gray-200 text-gray-500">
-                              {product.size}
-                            </p>
-                          ) : null}
-                        </div> */}
+
                         <p className="mt-1 text-sm font-medium text-gray-900">
                           {product.price?.formatted?.withTax}
                         </p>
@@ -175,7 +168,7 @@ function Cart({ cart }: any) {
           {/* Order summary */}
           <section
             aria-labelledby="summary-heading"
-            className="mt-16 bg-gray-50 rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5"
+            className="md:sticky top-0 mt-16 bg-gray-50 rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5"
           >
             <h2
               id="summary-heading"

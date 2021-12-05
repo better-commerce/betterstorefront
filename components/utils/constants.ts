@@ -13,7 +13,7 @@ export const ORDERS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/comm
 export const ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/`
 export const CREATE_ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/create`
 export const CATALOG_SEARCH = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/r`
-export const SHIPPING_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/shipping`
+export const SHIPPING_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout`
 //LOCAL ENDPOINTS
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
@@ -47,6 +47,9 @@ export const NEXT_GET_NAVIGATION = `/api/get-navigation`
 export const NEXT_APPLY_PROMOTION = `/api/apply-promo`
 
 export const NEXT_SHIPPING_ENDPOINT = '/api/shipping-options'
+export const NEXT_UPDATE_SHIPPING = '/api/update-shipping'
+export const NEXT_GUEST_CHECKOUT = '/api/customer/guest-checkout'
+export const NEXT_LOGIN_CHECKOUT = '/api/customer/login-checkout'
 //CONSTANTS
 
 export const SessionIdCookieKey: string = `sessionId`

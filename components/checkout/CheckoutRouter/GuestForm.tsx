@@ -8,14 +8,16 @@ const COMPONENTS_MAP: any = {
 
 const schema = Yup.object({
   email: Yup.string().email().required(),
-  isEmailChecked: Yup.boolean(),
-  isSmsChecked: Yup.boolean(),
-  isPostChecked: Yup.boolean(),
+  notifyByEmail: Yup.boolean(),
+  notifyBySms: Yup.boolean(),
+  notifyByPost: Yup.boolean(),
 })
 
 const initialValues = {
   email: '',
-  password: '',
+  notifyByEmail: true,
+  notifyBySms: false,
+  notifyByPost: false,
 }
 
 export const config = [
@@ -30,19 +32,19 @@ export const config = [
 const checkboxConfig = [
   {
     customComponent: 'CustomCheckbox',
-    name: 'isEmailChecked',
+    name: 'notifyByEmail',
     label: 'Email',
     className: ' ',
   },
   {
     customComponent: 'CustomCheckbox',
-    name: 'isSmsChecked',
+    name: 'notifyBySms',
     label: 'SMS',
     className: ' ',
   },
   {
     customComponent: 'CustomCheckbox',
-    name: 'isPostChecked',
+    name: 'notifyByPost',
     label: 'Post',
     className: ' ',
   },
