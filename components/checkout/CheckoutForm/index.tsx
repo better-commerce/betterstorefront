@@ -111,7 +111,6 @@ export default function CheckoutForm({
   const togglePayment = (
     payload: boolean = !state.isPaymentInformationCompleted
   ) => {
-    console.log(payload)
     dispatch({
       type: 'TOGGLE_PAYMENT',
       payload: payload,
@@ -147,10 +146,12 @@ export default function CheckoutForm({
   const setShippingInformation = (payload: any) =>
     dispatch({ type: 'SET_SHIPPING_INFORMATION', payload })
 
-  const setBillingInformation = (payload: any) =>
+  const setBillingInformation = (payload: any) => {
     dispatch({ type: 'SET_BILLING_INFORMATION', payload })
+  }
 
   const handleShippingSubmit = (values: any) => {
+    console.log(values)
     toggleShipping()
     if (state.isSameAddress) {
       setBillingInformation(values)
