@@ -175,6 +175,6 @@ export const billingSchema = Yup.object({
   phoneNo: Yup.string().required(),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
-  title: Yup.string(),
+  title: Yup.string().nullable(),
   city: Yup.string().required(),
 })

@@ -33,7 +33,6 @@ function Checkout({ cart }: any) {
   }
   const { getAddress } = asyncHandler()
 
-  console.log(cartItems)
   useEffect(() => {
     const fetchAddress = async () => {
       try {

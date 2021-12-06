@@ -1,15 +1,10 @@
-import { guestCheckout } from '@framework/cart'
+import { getPaymentMethods } from '@framework/payment'
 export default async (req: any, res: any) => {
-  const { basketId, email, notifyByEmail, notifyBySms, notifyByPost }: any =
-    req.body
-  console.log(req.body)
+  const { countryCode, currencyCode }: any = req.body
   try {
-    const response = await guestCheckout()({
-      basketId,
-      email,
-      notifyByEmail,
-      notifyBySms,
-      notifyByPost,
+    const response = await getPaymentMethods()({
+      countryCode,
+      currencyCode,
     })
     res.status(200).json(response)
   } catch (error) {
