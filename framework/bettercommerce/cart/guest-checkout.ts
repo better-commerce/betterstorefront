@@ -1,4 +1,4 @@
-import { SHIPPING_ENDPOINT } from '@components/utils/constants'
+import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 interface Props {
   basketId: string
@@ -18,7 +18,7 @@ export default function useGuestCheckout() {
   }: Props) {
     try {
       const response: any = await fetcher({
-        url: `${SHIPPING_ENDPOINT}/${basketId}/guest-checkout`,
+        url: `${CHECKOUT_ENDPOINT}/${basketId}/guest-checkout`,
         method: 'post',
         data: {
           email,

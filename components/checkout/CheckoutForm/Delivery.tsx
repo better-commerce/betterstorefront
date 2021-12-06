@@ -34,6 +34,7 @@ const DELIVERY_METHODS_TYPE = [
 export default function Delivery({
   toggleDelivery,
   isDeliveryMethodSelected,
+  setParentShipping,
 }: any) {
   const { basketId, setCartItems, cartItems } = useUI()
 
@@ -63,7 +64,8 @@ export default function Delivery({
       })
       .then((response: any) => {
         setCartItems({ ...cartItems, ...response.data })
-        toggleDelivery()
+        toggleDelivery(selectedCountry)
+        setParentShipping(shippingMethod)
       })
       .catch((err) => console.log(err))
   }
