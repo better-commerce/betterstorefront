@@ -1,19 +1,17 @@
-import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
+import { ORDERS_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 
 interface Props {
-  basketId?: string
-  model?: any
+  id?: string
 }
 
-export default function updateShippingMethod() {
-  return async function handler({ basketId, model }: Props) {
-    const url = CHECKOUT_ENDPOINT + `/${basketId}/convert`
+export default function getOrderDetails() {
+  return async function handler(id?: string) {
+    const url = ORDERS_ENDPOINT + `/${id}`
     try {
       const response: any = await fetcher({
         url,
-        method: 'post',
-        data: model,
+        method: 'get',
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
