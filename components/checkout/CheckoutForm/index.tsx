@@ -4,19 +4,19 @@ import cartHandler from '@components/services/cart'
 import Delivery from './Delivery'
 import Summary from './Summary'
 import Form from './Form'
-
+import axios from 'axios'
+import {
+  NEXT_UPDATE_CHECKOUT_ADDRESS,
+  NEXT_PAYMENT_METHODS,
+  NEXT_CONFIRM_ORDER,
+} from '@components/utils/constants'
 import {
   shippingFormConfig,
   shippingSchema,
   billingFormConfig,
   billingSchema,
 } from './config'
-
-const paymentMethods = [
-  { id: 'credit-card', title: 'Credit card' },
-  { id: 'paypal', title: 'PayPal' },
-  { id: 'etransfer', title: 'eTransfer' },
-]
+import Payments from './Payments'
 
 export default function CheckoutForm({
   cart,
@@ -39,6 +39,8 @@ export default function CheckoutForm({
     billingInformation: defaultBillingAddress,
     deliveryMethod: defaultDeliveryMethod,
     isSameAddress: true,
+    selectedPaymentMethod: null,
+    shippingMethod: null,
   }
 
   interface stateInterface {
@@ -49,6 +51,8 @@ export default function CheckoutForm({
     billingInformation: any
     deliveryMethod: any
     isSameAddress: boolean
+    selectedPaymentMethod: any
+    shippingMethod: any
   }
   interface actionInterface {
     type?: string
@@ -57,10 +61,23 @@ export default function CheckoutForm({
 
   function reducer(state: stateInterface, { type, payload }: actionInterface) {
     switch (type) {
+      case 'SET_SHIPPING_METHOD': {
+        return {
+          ...state,
+          shippingMethod: payload,
+        }
+      }
+      case 'SET_PAYMENT_METHOD': {
+        return {
+          ...state,
+          selectedPaymentMethod: payload,
+        }
+      }
       case 'TOGGLE_DELIVERY_METHOD': {
         return {
           ...state,
           isDeliveryMethodSelected: !state.isDeliveryMethodSelected,
+          deliveryMethod: payload || state.deliveryMethod,
         }
       }
       case 'TOGGLE_SHIPPING': {
@@ -102,16 +119,31 @@ export default function CheckoutForm({
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
   const { addToCart } = cartHandler()
 
-  const toggleDelivery = () => dispatch({ type: 'TOGGLE_DELIVERY_METHOD' })
+  const toggleDelivery = (payload?: any) =>
+    dispatch({ type: 'TOGGLE_DELIVERY_METHOD', payload })
 
   const toggleShipping = () => {
     dispatch({ type: 'TOGGLE_SHIPPING' })
   }
 
+  const handlePaymentMethod = (method: any) => {
+    dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
+  }
+
+  const paymentData = async () => {
+    const response = await axios.post(NEXT_PAYMENT_METHODS, {
+      currencyCode: cartItems.baseCurrency,
+      countryCode: state.deliveryMethod.code,
+    })
+    return response
+  }
+
+  const setShippingMethod = (payload: any) =>
+    dispatch({ type: 'SET_SHIPPING_METHOD', payload })
+
   const togglePayment = (
     payload: boolean = !state.isPaymentInformationCompleted
   ) => {
-    console.log(payload)
     dispatch({
       type: 'TOGGLE_PAYMENT',
       payload: payload,
@@ -147,8 +179,36 @@ export default function CheckoutForm({
   const setShippingInformation = (payload: any) =>
     dispatch({ type: 'SET_SHIPPING_INFORMATION', payload })
 
-  const setBillingInformation = (payload: any) =>
+  const setBillingInformation = (payload: any, update = true) => {
+    const handleAsync = async () => {
+      const billingInfoClone = { ...payload }
+      delete billingInfoClone.id
+      const shippingClone = { ...state.shippingInformation }
+      delete shippingClone.id
+
+      const data = {
+        billingAddress: {
+          ...billingInfoClone,
+          country: state.deliveryMethod.value,
+          countryCode: state.deliveryMethod.code,
+        },
+        shippingAddress: {
+          ...shippingClone,
+          country: state.deliveryMethod.value,
+          countryCode: state.deliveryMethod.code,
+        },
+      }
+
+      try {
+        await axios.post(NEXT_UPDATE_CHECKOUT_ADDRESS, {
+          basketId,
+          model: data,
+        })
+      } catch (error) {}
+    }
     dispatch({ type: 'SET_BILLING_INFORMATION', payload })
+    if (update) handleAsync()
+  }
 
   const handleShippingSubmit = (values: any) => {
     toggleShipping()
@@ -166,10 +226,41 @@ export default function CheckoutForm({
 
   useEffect(() => {
     setShippingInformation(defaultShippingAddress)
-    setBillingInformation(defaultBillingAddress)
+    setBillingInformation(defaultBillingAddress, false)
   }, [])
 
-  console.log(cartItems)
+  const confirmOrder = () => {
+    const billingInfoClone = { ...state.billingInformation }
+    delete billingInfoClone.id
+    const shippingClone = { ...state.shippingInformation }
+    delete shippingClone.id
+
+    const data = {
+      basketId,
+      customerId: cartItems.userId,
+      basket: cartItems,
+      billingAddress: {
+        ...billingInfoClone,
+        country: state.deliveryMethod.value,
+        countryCode: state.deliveryMethod.code,
+      },
+      shippingAddress: {
+        ...shippingClone,
+        country: state.deliveryMethod.value,
+        countryCode: state.deliveryMethod.code,
+      },
+      selectedShipping: state.shippingMethod,
+      selectedPayment: state.selectedPaymentMethod,
+    }
+    const handleAsync = async () => {
+      const response = await axios.post(NEXT_CONFIRM_ORDER, {
+        basketId,
+        model: data,
+      })
+    }
+    handleAsync()
+  }
+
   return (
     <div className="bg-gray-50 relative">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -177,6 +268,7 @@ export default function CheckoutForm({
         <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
           <div>
             <Delivery
+              setParentShipping={setShippingMethod}
               toggleDelivery={toggleDelivery}
               isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
             />
@@ -233,121 +325,24 @@ export default function CheckoutForm({
                 />
               )}
             </div>
-
-            {/* <div className="mt-10 border-t border-gray-200 pt-10">
+            <div className="mt-10 border-t border-gray-200 pt-10">
               <h2 className="text-lg font-medium text-gray-900">Payment</h2>
-
-              <fieldset className="mt-4">
-                <legend className="sr-only">Payment type</legend>
-                <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
-                  {paymentMethods.map((paymentMethod, paymentMethodIdx) => (
-                    <div key={paymentMethod.id} className="flex items-center">
-                      {paymentMethodIdx === 0 ? (
-                        <input
-                          id={paymentMethod.id}
-                          name="payment-type"
-                          type="radio"
-                          defaultChecked
-                          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                        />
-                      ) : (
-                        <input
-                          id={paymentMethod.id}
-                          name="payment-type"
-                          type="radio"
-                          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                        />
-                      )}
-
-                      <label
-                        htmlFor={paymentMethod.id}
-                        className="ml-3 block text-sm font-medium text-gray-700"
-                      >
-                        {paymentMethod.title}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </fieldset>
-
-              <div className="mt-6 grid grid-cols-4 gap-y-6 gap-x-4">
-                <div className="col-span-4">
-                  <label
-                    htmlFor="card-number"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Card number
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="card-number"
-                      name="card-number"
-                      autoComplete="cc-number"
-                      className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="col-span-4">
-                  <label
-                    htmlFor="name-on-card"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Name on card
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="name-on-card"
-                      name="name-on-card"
-                      autoComplete="cc-name"
-                      className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="col-span-3">
-                  <label
-                    htmlFor="expiration-date"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Expiration date (MM/YY)
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="expiration-date"
-                      id="expiration-date"
-                      autoComplete="cc-exp"
-                      className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="cvc"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    CVC
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="cvc"
-                      id="cvc"
-                      autoComplete="csc"
-                      className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div> */}
+              {state.isPaymentInformationCompleted && (
+                <Payments
+                  handlePaymentMethod={handlePaymentMethod}
+                  paymentData={paymentData}
+                  selectedPaymentMethod={state.selectedPaymentMethod}
+                />
+              )}
+            </div>
           </div>
 
           {/* Order summary */}
-          <Summary cart={cart} handleItem={handleItem} />
+          <Summary
+            confirmOrder={confirmOrder}
+            cart={cartItems}
+            handleItem={handleItem}
+          />
         </form>
       </div>
     </div>

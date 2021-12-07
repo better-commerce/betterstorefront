@@ -1,4 +1,4 @@
-import { SHIPPING_ENDPOINT } from '@components/utils/constants'
+import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 
 interface Props {
@@ -26,7 +26,7 @@ export default function getShippingMethods() {
     method = 'GET_ALL',
   }: Props) {
     const url =
-      SHIPPING_ENDPOINT +
+      CHECKOUT_ENDPOINT +
       TYPES_MAP_TO_ACTIONS[method]({ basketId, countryCode, postCode })
     try {
       const response: any = await fetcher({
