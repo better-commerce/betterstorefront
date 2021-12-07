@@ -25,7 +25,6 @@ function Checkout({ cart }: any) {
         ...values,
       })
       const newCartClone = { ...response.data, isGuestCheckout: true }
-      console.log(newCartClone)
       setCartItems(newCartClone)
       setIsLoggedIn(!!response.data.userEmail)
     }

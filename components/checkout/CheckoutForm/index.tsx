@@ -252,6 +252,7 @@ export default function CheckoutForm({
       selectedShipping: state.shippingMethod,
       selectedPayment: state.selectedPaymentMethod,
     }
+    console.log(data)
     const handleAsync = async () => {
       const response = await axios.post(NEXT_CONFIRM_ORDER, {
         basketId,
