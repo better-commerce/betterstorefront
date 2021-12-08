@@ -40,7 +40,6 @@ export default function AddressForm({
   }
 
   const handleNewFormButton = (values?: any) => {
-    console.log(values)
     if (!isFormOpen) {
       setNewFormOpen(true)
     } else {
