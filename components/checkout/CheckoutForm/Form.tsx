@@ -19,6 +19,7 @@ export default function AddressForm({
   isSameAddressCheckboxEnabled,
   isSameAddress = true,
   isGuest = false,
+  handleNewAddress,
 }: any) {
   const [isFormOpen, setNewFormOpen] = useState(!addresses.length)
 
@@ -39,8 +40,11 @@ export default function AddressForm({
   }
 
   const handleNewFormButton = (values?: any) => {
+    console.log(values)
     if (!isFormOpen) {
       setNewFormOpen(true)
+    } else {
+      handleNewAddress(values, () => setNewFormOpen(false))
     }
   }
 
@@ -148,7 +152,7 @@ export default function AddressForm({
               <div className="flex">
                 <button
                   type="button"
-                  onClick={handleNewFormButton}
+                  onClick={() => handleNewFormButton(values)}
                   className="max-w-xs m-2 flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
                   {isFormOpen ? 'Save' : 'Add new address'}

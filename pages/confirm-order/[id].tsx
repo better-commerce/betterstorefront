@@ -105,14 +105,16 @@ export default function OrderConfirmation({ order }: any) {
 
             <h4 className="sr-only">Payment</h4>
             <dl className="grid grid-cols-2 gap-x-6 border-t border-gray-200 text-sm py-10">
-              <div>
-                <dt className="font-medium text-gray-900">Payment method</dt>
-                <dd className="mt-2 text-gray-700">
-                  <p>{order.payments[0]?.paymentMethod}</p>
-                  <p>{order.payments[0]?.paymentGateway}</p>
-                  <p>{order.payments[0]?.cardNo}</p>
-                </dd>
-              </div>
+              {order.payments && (
+                <div>
+                  <dt className="font-medium text-gray-900">Payment method</dt>
+                  <dd className="mt-2 text-gray-700">
+                    <p>{order.paymentsorder.payments[0]?.paymentMethod}</p>
+                    <p>{order.payments[0]?.paymentGateway}</p>
+                    <p>{order.payments[0]?.cardNo}</p>
+                  </dd>
+                </div>
+              )}
               <div>
                 <dt className="font-medium text-gray-900">Shipping method</dt>
                 <dd className="mt-2 text-gray-700">
