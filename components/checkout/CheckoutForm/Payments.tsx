@@ -28,20 +28,29 @@ export default function PaymentMethods({
               activePaymentMethod.id === item.id ? 'border-indigo-600' : ''
             }  pointer border-t border py-5 px-5 flex justify-between flex-row`}
           >
-            <div>
-              <h3 className="font-bold">{item.displayName}</h3>
-              <p className="text-sm py-2">{item.description}</p>
-            </div>
             <div className="flex flex-row justify-center items-center">
               {activePaymentMethod.id === item.id ? (
-                <div className="ml-5">
+                <div>
                   <CheckCircleIcon
-                    className="h-5 w-5 text-indigo-600"
+                    className="h-5 pr-4 text-indigo-600"
+                    aria-hidden="true"
+                  />
+                </div>
+              ) : null}
+               {activePaymentMethod.id != item.id ? (
+                <div>
+                  <CheckCircleIcon
+                    className="h-5 pr-4 text-left align-left text-gray-200"
                     aria-hidden="true"
                   />
                 </div>
               ) : null}
             </div>
+            <div>
+              <h3 className="font-bold">{item.displayName}</h3>
+              <p className="text-sm py-2">{item.description}</p>
+            </div>
+            
           </li>
         )
       })}

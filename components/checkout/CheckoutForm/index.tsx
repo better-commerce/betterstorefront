@@ -273,8 +273,8 @@ export default function CheckoutForm({
               isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
             />
 
-            <div className="mt-10 border-t border-gray-200 pt-10">
-              <h2 className="text-lg font-medium text-gray-900">
+            <div className="mt-4 border-t border-gray-200 pt-4">
+              <h2 className="text-lg font-semibold text-gray-900">
                 Shipping information
               </h2>
               {state?.isDeliveryMethodSelected ? (
@@ -302,8 +302,8 @@ export default function CheckoutForm({
             </div>
 
             {/* Payment */}
-            <div className="mt-10 border-t border-gray-200 pt-10">
-              <h2 className="text-lg font-medium text-gray-900">
+            <div className="mt-6 border-t border-gray-200 pt-6">
+              <h2 className="text-lg font-semibold text-gray-900">
                 Billing information
               </h2>
               {state?.isShippingInformationCompleted && (
@@ -325,8 +325,8 @@ export default function CheckoutForm({
                 />
               )}
             </div>
-            <div className="mt-10 border-t border-gray-200 pt-10">
-              <h2 className="text-lg font-medium text-gray-900">Payment</h2>
+            <div className="mt-6 border-t border-gray-200 pt-6">
+              <h2 className="text-lg font-semibold text-gray-900">Payment</h2>
               {state.isPaymentInformationCompleted && (
                 <Payments
                   handlePaymentMethod={handlePaymentMethod}
