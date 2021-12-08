@@ -9,7 +9,7 @@ export default function ConfirmedGeneralComponent({
           {Object.keys(content).map((item: any, idx: number) => {
             return (
               <li key={idx} className="font-normal d-inline font-sm pr-1">
-                {content[item]},
+                {content[item]}
               </li>
             )
           })}
