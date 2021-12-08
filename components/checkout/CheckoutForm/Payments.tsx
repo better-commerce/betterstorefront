@@ -37,7 +37,7 @@ export default function PaymentMethods({
                   />
                 </div>
               ) : null}
-               {activePaymentMethod.id != item.id ? (
+               {activePaymentMethod.id !== item.id ? (
                 <div>
                   <CheckCircleIcon
                     className="h-5 pr-4 text-left align-left text-gray-200"

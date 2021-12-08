@@ -84,7 +84,7 @@ export default function AddressForm({
                           aria-hidden="true"
                         />
                       ) : null}
-                      {item.id != defaultValues.id ? (
+                      {item.id !== defaultValues.id ? (
                         <CheckCircleIcon
                           className="h-5 pr-4 text-left align-left text-gray-200"
                           aria-hidden="true"
