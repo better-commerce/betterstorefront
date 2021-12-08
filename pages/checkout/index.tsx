@@ -32,23 +32,22 @@ function Checkout({ cart }: any) {
   }
   const { getAddress } = asyncHandler()
 
-  useEffect(() => {
-    const fetchAddress = async () => {
-      try {
-        const response: any = await getAddress(cartItems.userId)
-        const billingAddress = response.find(
-          (item: any) => item.isDefaultBilling
-        )
-        const shippingAddress = response.find(
-          (item: any) => item.isDefaultDelivery
-        )
-        setUserAddresses(response)
-        if (billingAddress) setDefaultBillingAddress(billingAddress)
-        if (shippingAddress) setDefaultShippingAddress(shippingAddress)
-      } catch (error) {
-        console.log(error, 'err')
-      }
+  const fetchAddress = async () => {
+    try {
+      const response: any = await getAddress(cartItems.userId)
+      const billingAddress = response.find((item: any) => item.isDefaultBilling)
+      const shippingAddress = response.find(
+        (item: any) => item.isDefaultDelivery
+      )
+      setUserAddresses(response)
+      if (billingAddress) setDefaultBillingAddress(billingAddress)
+      if (shippingAddress) setDefaultShippingAddress(shippingAddress)
+    } catch (error) {
+      console.log(error, 'err')
     }
+  }
+
+  useEffect(() => {
     fetchAddress()
   }, [])
 
@@ -60,6 +59,7 @@ function Checkout({ cart }: any) {
         defaultBillingAddress={defaultBillingAddress}
         defaultShippingAddress={defaultShippingAddress}
         user={user}
+        fetchAddress={fetchAddress}
       />
     )
   }

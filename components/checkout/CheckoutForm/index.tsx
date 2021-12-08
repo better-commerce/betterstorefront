@@ -17,6 +17,8 @@ import {
   billingSchema,
 } from './config'
 import Payments from './Payments'
+import Router from 'next/router'
+import { asyncHandler } from '@components/account/Address/AddressBook'
 
 export default function CheckoutForm({
   cart,
@@ -24,6 +26,7 @@ export default function CheckoutForm({
   defaultShippingAddress,
   defaultBillingAddress,
   addresses = [],
+  fetchAddress,
 }: any) {
   const { setCartItems, basketId, cartItems } = useUI()
 
@@ -118,6 +121,23 @@ export default function CheckoutForm({
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
   const { addToCart } = cartHandler()
+
+  const { createAddress } = asyncHandler()
+
+  const handleNewAddress = (values: any, callback: any = () => {}) => {
+    const newValues = {
+      ...values,
+      userId: user.userId,
+      country: state.deliveryMethod.value,
+      countryCode: state.deliveryMethod.code,
+    }
+    createAddress(newValues)
+      .then((response: any) => {
+        callback()
+        fetchAddress()
+      })
+      .catch((error: any) => console.log(error))
+  }
 
   const toggleDelivery = (payload?: any) =>
     dispatch({ type: 'TOGGLE_DELIVERY_METHOD', payload })
@@ -252,12 +272,18 @@ export default function CheckoutForm({
       selectedShipping: state.shippingMethod,
       selectedPayment: state.selectedPaymentMethod,
     }
-    console.log(data)
     const handleAsync = async () => {
-      const response = await axios.post(NEXT_CONFIRM_ORDER, {
-        basketId,
-        model: data,
-      })
+      try {
+        const response: any = await axios.post(NEXT_CONFIRM_ORDER, {
+          basketId,
+          model: data,
+        })
+        if (response.data.result.id) {
+          Router.push(`/confirm-order/${response.data.result.id}`)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
     handleAsync()
   }
@@ -290,6 +316,7 @@ export default function CheckoutForm({
                     isInfoCompleted={state?.isShippingInformationCompleted}
                     btnTitle="Deliver to this address"
                     addresses={addresses}
+                    handleNewAddress={handleNewAddress}
                     setAddress={setShippingInformation}
                     isGuest={cartItems.isGuestCheckout}
                     isSameAddress={state?.isSameAddress}
@@ -316,6 +343,7 @@ export default function CheckoutForm({
                   values={state?.billingInformation}
                   schema={billingSchema}
                   config={billingFormConfig}
+                  handleNewAddress={handleNewAddress}
                   initialValues={defaultBillingAddress}
                   isInfoCompleted={state?.isPaymentInformationCompleted}
                   btnTitle="Save"
