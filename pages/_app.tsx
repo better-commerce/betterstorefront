@@ -9,7 +9,6 @@ import Cookies from 'js-cookie'
 import { v4 as uuid_v4 } from 'uuid'
 import { SessionIdCookieKey, DeviceIdKey } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
-
 const Noop: FC = ({ children }) => <>{children}</>
 
 const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
