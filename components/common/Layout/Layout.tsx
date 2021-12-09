@@ -19,7 +19,11 @@ import { getData } from '../../utils/clientFetcher'
 import { setItem, getItem } from '../../utils/localStorage'
 import NotifyUserPopup from '@components/ui/NotifyPopup'
 import Script from 'next/script'
-import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
+import {
+  NEXT_GET_NAVIGATION,
+  NEXT_INFRA_ENDPOINT,
+} from '@components/utils/constants'
+
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
     <LoadingDots />
@@ -96,6 +100,8 @@ const Layout: FC<Props> = ({
 
   const [data, setData] = useState(navTreeFromLocalStorage)
 
+  const { appConfig, setAppConfig } = useUI()
+
   useEffect(() => {
     const fetchLayout = async () => {
       try {
@@ -107,6 +113,15 @@ const Layout: FC<Props> = ({
       }
     }
     fetchLayout()
+    const fetchAppConfig = async () => {
+      try {
+        const response: any = await getData(NEXT_INFRA_ENDPOINT)
+        setAppConfig(response)
+      } catch (error) {
+        console.log(error, 'error')
+      }
+    }
+    fetchAppConfig()
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
@@ -119,7 +134,7 @@ const Layout: FC<Props> = ({
       />
 
       <div className={cn(s.root)}>
-        <Navbar config={data.nav} />
+        <Navbar currencies={appConfig.currencies} config={data.nav} />
         <main className="fit">{children}</main>
         <Footer config={data.footer} />
         <ModalUI />

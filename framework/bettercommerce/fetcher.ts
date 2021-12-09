@@ -76,6 +76,24 @@ const axiosInstance = SingletonFactory.axiosInstance
 
 Object.freeze(axiosInstance)
 
+const GeneralParams = (function () {
+  const params: any = {
+    Currency: '',
+  }
+  const setGeneralParams = (param: any, value: any) => {
+    params[param] = value
+    return params
+  }
+  return { params, setGeneralParams }
+})()
+
+let newConfig = {}
+
+export const setGeneralParams = (param: any, value: any) => {
+  newConfig = GeneralParams.setGeneralParams(param, value)
+  Object.freeze(newConfig)
+}
+
 const fetcher = async ({
   url = '',
   method = 'post',
@@ -87,7 +105,7 @@ const fetcher = async ({
   const config: any = {
     method: method,
     url: computedUrl.href,
-    headers,
+    headers: { ...headers, ...newConfig },
   }
 
   if (Object.keys(params).length) {
@@ -97,6 +115,7 @@ const fetcher = async ({
   if (Object.keys(data).length) {
     config.data = data
   }
+  console.log(config)
   try {
     const response = await axiosInstance(config)
     return response.data
