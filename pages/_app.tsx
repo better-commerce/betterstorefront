@@ -36,6 +36,7 @@ const setDeviceIdCookie = () => {
 
 function MyApp({ Component, pageProps, nav, footer }: any) {
   const Layout = (Component as any).Layout || Noop
+
   useEffect(() => {
     DataLayerInstance.setDataLayer()
     setSessionIdCookie()

@@ -8,9 +8,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui'
 import Account from './AccountDropdown'
+import CurrencySwitcher from './CurrencySwitcher'
 
 interface Props {
   config: []
+  currencies: []
 }
 
 const accountDropDownConfigUnauthorized: any = [
@@ -28,7 +30,7 @@ const accountDropDownConfigUnauthorized: any = [
   },
 ]
 
-const Navbar: FC<Props> = ({ config }) => {
+const Navbar: FC<Props> = ({ config, currencies }) => {
   const router = useRouter()
 
   const { wishListItems, cartItems, user, deleteUser, openCart, openWishlist } =
@@ -188,6 +190,8 @@ const Navbar: FC<Props> = ({ config }) => {
                 <Searchbar />
                 {/* account */}
                 <Account title={title} config={accountDropdownConfig} />
+                {/* currency */}
+                <CurrencySwitcher config={currencies} title="Select currency" />
                 {/* Wishlist*/}
 
                 <div className="px-2 flow-root">
