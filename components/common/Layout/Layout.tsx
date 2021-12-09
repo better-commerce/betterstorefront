@@ -20,6 +20,8 @@ import { setItem, getItem } from '../../utils/localStorage'
 import NotifyUserPopup from '@components/ui/NotifyPopup'
 import Script from 'next/script'
 import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
+import SearchWrapper from '@components/search/index'
+
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
     <LoadingDots />
@@ -94,8 +96,8 @@ const Layout: FC<Props> = ({
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
 
+  const { showSearchBar, setShowSearchBar } = useUI()
   const [data, setData] = useState(navTreeFromLocalStorage)
-
   useEffect(() => {
     const fetchLayout = async () => {
       try {
@@ -119,6 +121,9 @@ const Layout: FC<Props> = ({
       />
 
       <div className={cn(s.root)}>
+        {showSearchBar && (
+          <SearchWrapper closeWrapper={() => setShowSearchBar(false)} />
+        )}
         <Navbar config={data.nav} />
         <main className="fit">{children}</main>
         <Footer config={data.footer} />
