@@ -37,8 +37,15 @@ const accountDropDownConfigUnauthorized: any = [
 const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   const router = useRouter()
 
-  const { wishListItems, cartItems, user, deleteUser, openCart, openWishlist } =
-    useUI()
+  const {
+    wishListItems,
+    cartItems,
+    user,
+    deleteUser,
+    openCart,
+    openWishlist,
+    setShowSearchBar,
+  } = useUI()
 
   const accountDropDownConfigAuthorized: any = [
     {
@@ -200,7 +207,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               </Popover.Group>
               <div className="flex-1 flex items-center justify-end">
                 {/* Search */}
-                <Searchbar />
+                <Searchbar onClick={setShowSearchBar} />
                 {/* account */}
                 <Account title={title} config={accountDropdownConfig} />
                 {/* currency */}

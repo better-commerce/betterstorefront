@@ -13,6 +13,8 @@ export const ORDERS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/comm
 export const ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/`
 export const CREATE_ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/create`
 export const CATALOG_SEARCH = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/r`
+export const BASE_SEARCH_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search`
+export const SHIPPING_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout`
 export const CHECKOUT_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout`
 export const PAYMENTS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/payment`
 export const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config/get`
@@ -53,6 +55,8 @@ export const NEXT_UPDATE_CHECKOUT_ADDRESS = '/api/update-checkout-address'
 export const NEXT_UPDATE_SHIPPING = '/api/update-shipping'
 export const NEXT_GUEST_CHECKOUT = '/api/customer/guest-checkout'
 export const NEXT_LOGIN_CHECKOUT = '/api/customer/login-checkout'
+export const NEXT_SEARCH_PRODUCTS = `/api/catalog/search`
+
 export const NEXT_PAYMENT_METHODS = '/api/payment-methods'
 export const NEXT_CONFIRM_ORDER = '/api/confirm-order'
 export const NEXT_INFRA_ENDPOINT = '/api/infra'
