@@ -26,6 +26,7 @@ export interface State {
   cartItems: any
   basketId: string
   user: any
+  showSearchBar: boolean
   appConfig: any
 }
 
@@ -42,6 +43,7 @@ const initialState = {
   cartItems: getItem('cartItems') || { lineItems: [] },
   basketId: basketId(),
   user: getItem('user') || {},
+  showSearchBar: false,
   appConfig: {},
 }
 
@@ -103,6 +105,7 @@ type Action =
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
+  | { type: 'SHOW_SEARCH_BAR'; payload: boolean }
   | { type: 'SET_APP_CONFIG'; payload: any }
 
 type MODAL_VIEWS =
@@ -239,6 +242,12 @@ function uiReducer(state: State, action: Action) {
         basketId: action.payload,
       }
     }
+    case 'SHOW_SEARCH_BAR': {
+      return {
+        ...state,
+        showSearchBar: action.payload,
+      }
+    }
     case 'SET_APP_CONFIG': {
       return {
         ...state,
@@ -356,6 +365,10 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const setShowSearchBar = useCallback(
+    (payload: any) => dispatch({ type: 'SHOW_SEARCH_BAR', payload }),
+    [dispatch]
+  )
   const setCartItems = useCallback(
     (payload: any) => {
       const newCartDataClone: any = { ...payload }
@@ -451,6 +464,7 @@ export const UIProvider: FC = (props) => {
       setWishlist,
       removeFromWishlist,
       setBasketId,
+      setShowSearchBar,
       setAppConfig,
     }),
     [state]

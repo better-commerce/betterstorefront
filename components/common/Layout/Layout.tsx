@@ -19,6 +19,7 @@ import { getData } from '../../utils/clientFetcher'
 import { setItem, getItem } from '../../utils/localStorage'
 import NotifyUserPopup from '@components/ui/NotifyPopup'
 import Script from 'next/script'
+import SearchWrapper from '@components/search/index'
 import {
   NEXT_GET_NAVIGATION,
   NEXT_INFRA_ENDPOINT,
@@ -100,6 +101,7 @@ const Layout: FC<Props> = ({
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
 
+  const { showSearchBar, setShowSearchBar } = useUI()
   const [data, setData] = useState(navTreeFromLocalStorage)
 
   const { appConfig, setAppConfig } = useUI()
@@ -128,6 +130,9 @@ const Layout: FC<Props> = ({
       />
 
       <div className={cn(s.root)}>
+        {showSearchBar && (
+          <SearchWrapper closeWrapper={() => setShowSearchBar(false)} />
+        )}
         <Navbar
           currencies={config.currencies}
           config={data.nav}
