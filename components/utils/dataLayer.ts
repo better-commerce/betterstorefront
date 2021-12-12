@@ -40,7 +40,14 @@ export const KEYS_MAP = {
 
 const getIpAddress = () => {
   /* to be provided an endpoint */
-  return '81.196.3.222'
+  geoData()
+    .then((response: any) => {
+      return response.Ip
+    })
+    .catch((err) => {
+      console.log(err)
+      return '81.196.3.222'
+    })
 }
 
 const DataLayerSingleton = function () {

@@ -2,7 +2,7 @@ import { Fetcher } from '@commerce/utils/types'
 import { getToken, getError, setToken, clearTokens } from './utils'
 import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
 import axios from 'axios'
-import Cookies from 'cookie'
+import store from 'store'
 
 const SingletonFactory = (function () {
   let accessToken = ''
@@ -76,6 +76,10 @@ const axiosInstance = SingletonFactory.axiosInstance
 
 Object.freeze(axiosInstance)
 
+export const setGeneralParams = (param: any, value: any) => {
+  store.set(param, value)
+}
+
 const fetcher = async ({
   url = '',
   method = 'post',
@@ -84,10 +88,14 @@ const fetcher = async ({
   headers = {},
 }: any) => {
   const computedUrl = new URL(url, BASE_URL)
+  const newConfig = {
+    Currency: store.get('Currency') || 'GBP',
+    Language: store.get('Language') || 'en',
+  }
   const config: any = {
     method: method,
     url: computedUrl.href,
-    headers,
+    headers: { ...headers, ...newConfig },
   }
 
   if (Object.keys(params).length) {
@@ -101,7 +109,6 @@ const fetcher = async ({
     const response = await axiosInstance(config)
     return response.data
   } catch (error: any) {
-    console.log(error)
     throw getError(error, error.status)
   }
 }

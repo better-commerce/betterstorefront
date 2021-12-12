@@ -26,6 +26,7 @@ export interface State {
   cartItems: any
   basketId: string
   user: any
+  appConfig: any
 }
 
 const initialState = {
@@ -41,6 +42,7 @@ const initialState = {
   cartItems: getItem('cartItems') || { lineItems: [] },
   basketId: basketId(),
   user: getItem('user') || {},
+  appConfig: {},
 }
 
 type Action =
@@ -101,6 +103,7 @@ type Action =
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
+  | { type: 'SET_APP_CONFIG'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -154,7 +157,6 @@ function uiReducer(state: State, action: Action) {
       }
     }
     case 'OPEN_NOTIFY_USER_POPUP': {
-      console.log(action)
       return { ...state, notifyUser: true, productId: action.payload }
     }
     case 'CLOSE_NOTIFY_USER_POPUP': {
@@ -235,6 +237,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         basketId: action.payload,
+      }
+    }
+    case 'SET_APP_CONFIG': {
+      return {
+        ...state,
+        appConfig: action.payload,
       }
     }
   }
@@ -323,6 +331,14 @@ export const UIProvider: FC = (props) => {
 
   const setSidebarView = useCallback(
     (view: SIDEBAR_VIEWS) => dispatch({ type: 'SET_SIDEBAR_VIEW', view }),
+    [dispatch]
+  )
+
+  const setAppConfig = useCallback(
+    (payload: any) => {
+      console.log(payload)
+      dispatch({ type: 'SET_APP_CONFIG', payload })
+    },
     [dispatch]
   )
 
@@ -435,6 +451,7 @@ export const UIProvider: FC = (props) => {
       setWishlist,
       removeFromWishlist,
       setBasketId,
+      setAppConfig,
     }),
     [state]
   )
