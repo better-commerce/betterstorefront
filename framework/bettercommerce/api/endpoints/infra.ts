@@ -2,9 +2,8 @@ import { INFRA_ENDPOINT } from '@components/utils/constants'
 import fetcher, { setGeneralParams } from '../../fetcher'
 
 export default function useInfra(req: any) {
-  setGeneralParams('Currency', req.cookies.Currency)
-
-  return async function handler() {
+  //TODO change based on location
+  return async function handler(setHeader = false) {
     try {
       const response: any = await fetcher({
         url: `${INFRA_ENDPOINT}`,
@@ -13,6 +12,10 @@ export default function useInfra(req: any) {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
+      if (setHeader) {
+        setGeneralParams('Currency', response.result.currencies[0].currencyCode)
+        setGeneralParams('Language', response.result.languages[0].languageCode)
+      }
       return response.result
     } catch (error: any) {
       console.log(error)

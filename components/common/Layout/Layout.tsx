@@ -46,6 +46,7 @@ interface Props {
   }
   nav: []
   footer: []
+  config: any
 }
 
 const ModalView: FC<{ modalView: string; closeModal(): any }> = ({
@@ -94,6 +95,7 @@ interface LayoutProps {
 
 const Layout: FC<Props> = ({
   children,
+  config,
   pageProps: { categories = [], ...pageProps },
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
@@ -113,19 +115,11 @@ const Layout: FC<Props> = ({
       }
     }
     fetchLayout()
-    const fetchAppConfig = async () => {
-      try {
-        const response: any = await getData(NEXT_INFRA_ENDPOINT)
-        setAppConfig(response)
-      } catch (error) {
-        console.log(error, 'error')
-      }
-    }
-    fetchAppConfig()
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
+  console.log(config)
   return (
     <CommerceProvider locale={locale}>
       <Script
@@ -134,7 +128,11 @@ const Layout: FC<Props> = ({
       />
 
       <div className={cn(s.root)}>
-        <Navbar currencies={appConfig.currencies} config={data.nav} />
+        <Navbar
+          currencies={config.currencies}
+          config={data.nav}
+          languages={config.languages}
+        />
         <main className="fit">{children}</main>
         <Footer config={data.footer} />
         <ModalUI />

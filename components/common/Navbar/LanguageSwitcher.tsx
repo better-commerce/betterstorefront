@@ -1,13 +1,12 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { CurrencyDollarIcon } from '@heroicons/react/outline'
-import { setCookie } from '@components/utils/cookieHandler'
+import { FlagIcon } from '@heroicons/react/outline'
 
 export default function CurrencySwitcher({ config, title, action }: any) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="p-2 text-gray-400 hover:text-gray-500 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-        <CurrencyDollarIcon
+        <FlagIcon
           className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
           aria-hidden="true"
         />
@@ -31,15 +30,15 @@ export default function CurrencySwitcher({ config, title, action }: any) {
                     {config.map((item: any, idx: number) => {
                       return (
                         <div
-                          key={'currency' + idx}
+                          key={'language' + idx}
                           className={
                             'text-left p-2 cursor-pointer hover:bg-gray-200'
                           }
                           onClick={() =>
-                            action({ Currency: item.currencyCode })
+                            action({ Language: item.languageCode })
                           }
                         >
-                          {item.currencyCode} - {item.currencySymbol}
+                          {item.languageCode} - {item.name}
                         </div>
                       )
                     })}

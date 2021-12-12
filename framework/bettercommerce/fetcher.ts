@@ -2,7 +2,7 @@ import { Fetcher } from '@commerce/utils/types'
 import { getToken, getError, setToken, clearTokens } from './utils'
 import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
 import axios from 'axios'
-import Cookies from 'cookie'
+import store from 'store'
 
 const SingletonFactory = (function () {
   let accessToken = ''
@@ -76,22 +76,8 @@ const axiosInstance = SingletonFactory.axiosInstance
 
 Object.freeze(axiosInstance)
 
-const GeneralParams = (function () {
-  const params: any = {
-    Currency: '',
-  }
-  const setGeneralParams = (param: any, value: any) => {
-    params[param] = value
-    return params
-  }
-  return { params, setGeneralParams }
-})()
-
-let newConfig = {}
-
 export const setGeneralParams = (param: any, value: any) => {
-  newConfig = GeneralParams.setGeneralParams(param, value)
-  Object.freeze(newConfig)
+  store.set(param, value)
 }
 
 const fetcher = async ({
@@ -102,6 +88,10 @@ const fetcher = async ({
   headers = {},
 }: any) => {
   const computedUrl = new URL(url, BASE_URL)
+  const newConfig = {
+    Currency: store.get('Currency') || 'GBP',
+    Language: store.get('Language') || 'en',
+  }
   const config: any = {
     method: method,
     url: computedUrl.href,
@@ -115,12 +105,10 @@ const fetcher = async ({
   if (Object.keys(data).length) {
     config.data = data
   }
-  console.log(config)
   try {
     const response = await axiosInstance(config)
     return response.data
   } catch (error: any) {
-    console.log(error)
     throw getError(error, error.status)
   }
 }
