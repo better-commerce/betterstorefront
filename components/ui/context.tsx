@@ -27,6 +27,7 @@ export interface State {
   basketId: string
   user: any
   showSearchBar: boolean
+  appConfig: any
 }
 
 const initialState = {
@@ -43,6 +44,7 @@ const initialState = {
   basketId: basketId(),
   user: getItem('user') || {},
   showSearchBar: false,
+  appConfig: {},
 }
 
 type Action =
@@ -104,6 +106,7 @@ type Action =
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
   | { type: 'SHOW_SEARCH_BAR'; payload: boolean }
+  | { type: 'SET_APP_CONFIG'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -157,7 +160,6 @@ function uiReducer(state: State, action: Action) {
       }
     }
     case 'OPEN_NOTIFY_USER_POPUP': {
-      console.log(action)
       return { ...state, notifyUser: true, productId: action.payload }
     }
     case 'CLOSE_NOTIFY_USER_POPUP': {
@@ -246,6 +248,12 @@ function uiReducer(state: State, action: Action) {
         showSearchBar: action.payload,
       }
     }
+    case 'SET_APP_CONFIG': {
+      return {
+        ...state,
+        appConfig: action.payload,
+      }
+    }
   }
 }
 
@@ -332,6 +340,14 @@ export const UIProvider: FC = (props) => {
 
   const setSidebarView = useCallback(
     (view: SIDEBAR_VIEWS) => dispatch({ type: 'SET_SIDEBAR_VIEW', view }),
+    [dispatch]
+  )
+
+  const setAppConfig = useCallback(
+    (payload: any) => {
+      console.log(payload)
+      dispatch({ type: 'SET_APP_CONFIG', payload })
+    },
     [dispatch]
   )
 
@@ -449,6 +465,7 @@ export const UIProvider: FC = (props) => {
       removeFromWishlist,
       setBasketId,
       setShowSearchBar,
+      setAppConfig,
     }),
     [state]
   )

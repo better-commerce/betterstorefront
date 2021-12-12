@@ -34,6 +34,7 @@ const DELIVERY_METHODS_TYPE = [
 export default function Delivery({
   toggleDelivery,
   isDeliveryMethodSelected,
+  setParentShipping,
 }: any) {
   const { basketId, setCartItems, cartItems } = useUI()
 
@@ -63,7 +64,8 @@ export default function Delivery({
       })
       .then((response: any) => {
         setCartItems({ ...cartItems, ...response.data })
-        toggleDelivery()
+        toggleDelivery(selectedCountry)
+        setParentShipping(shippingMethod)
       })
       .catch((err) => console.log(err))
   }
@@ -132,7 +134,7 @@ export default function Delivery({
       ) : (
         <>
           <div className="py-5">
-            <h1 className="text-lg font-medium text-gray-900">
+            <h1 className="text-lg font-semibold text-gray-900">
               Select country
             </h1>
             <select
@@ -156,7 +158,7 @@ export default function Delivery({
             value={selectedDeliveryMethod}
             onChange={setSelectedDeliveryMethod}
           >
-            <RadioGroup.Label className="text-lg font-medium text-gray-900">
+            <RadioGroup.Label className="text-lg font-semibold text-gray-900">
               Delivery method
             </RadioGroup.Label>
 

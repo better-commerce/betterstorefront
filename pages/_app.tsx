@@ -1,14 +1,20 @@
 import '@assets/main.css'
 import '@assets/chrome-bug.css'
 import 'keen-slider/keen-slider.min.css'
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
 import 'swiper/css/bundle'
 import Cookies from 'js-cookie'
 import { v4 as uuid_v4 } from 'uuid'
-import { SessionIdCookieKey, DeviceIdKey } from '@components/utils/constants'
+import {
+  SessionIdCookieKey,
+  DeviceIdKey,
+  NEXT_INFRA_ENDPOINT,
+} from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
+import { postData } from '@components/utils/clientFetcher'
+
 const Noop: FC = ({ children }) => <>{children}</>
 
 const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
@@ -34,12 +40,25 @@ const setDeviceIdCookie = () => {
 }
 
 function MyApp({ Component, pageProps, nav, footer }: any) {
+  const [appConfig, setAppConfig] = useState({})
   const Layout = (Component as any).Layout || Noop
+
+  const fetchAppConfig = async () => {
+    try {
+      const response: any = await postData(NEXT_INFRA_ENDPOINT, {
+        setHeader: true,
+      })
+      setAppConfig(response)
+    } catch (error) {
+      console.log(error, 'error')
+    }
+  }
   useEffect(() => {
     DataLayerInstance.setDataLayer()
     setSessionIdCookie()
     setDeviceIdCookie()
     document.body.classList?.remove('loading')
+    fetchAppConfig()
     return function cleanup() {
       Cookies.remove(SessionIdCookieKey)
     }
@@ -49,7 +68,12 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
     <>
       <Head />
       <ManagedUIContext>
-        <Layout nav={nav} footer={footer} pageProps={pageProps}>
+        <Layout
+          nav={nav}
+          footer={footer}
+          config={appConfig}
+          pageProps={pageProps}
+        >
           <Component {...pageProps} />
         </Layout>
       </ManagedUIContext>
