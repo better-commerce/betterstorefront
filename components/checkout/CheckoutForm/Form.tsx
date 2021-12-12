@@ -19,6 +19,7 @@ export default function AddressForm({
   isSameAddressCheckboxEnabled,
   isSameAddress = true,
   isGuest = false,
+  handleNewAddress,
 }: any) {
   const [isFormOpen, setNewFormOpen] = useState(!addresses.length)
 
@@ -41,6 +42,8 @@ export default function AddressForm({
   const handleNewFormButton = (values?: any) => {
     if (!isFormOpen) {
       setNewFormOpen(true)
+    } else {
+      handleNewAddress(values, () => setNewFormOpen(false))
     }
   }
 
@@ -73,31 +76,36 @@ export default function AddressForm({
                       setValues(item)
                       setAddress(item)
                     }}
-                    className={`w-2/5 cursor-pointer m-2 text-gray-900 border rounded-lg py-5 px-5 mb-5 mt-5 flex flex-row justify-between items-center ${
+                    className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex justify-between items-center ${
                       item.id === defaultValues.id ? 'border-indigo-600' : ''
                     }`}
                   >
-                    <div className="flex flex-col text-md font-regular">
-                      <span className="text-xl font-bold">
-                        {item.firstName + ' ' + item.lastName}
-                      </span>
-                      <span>{item.address1}</span>
-                      <span>{item.address2}</span>
-
-                      <span>{item.city}</span>
-                      <span>{item.postCode}</span>
-                      <span>{item.country}</span>
-                      <span>{item.phoneNo}</span>
-                    </div>
                     <div>
                       {item.id === defaultValues.id ? (
                         <CheckCircleIcon
-                          className="h-5 w-5 text-indigo-600"
+                          className="h-5 pr-4 text-left align-left text-indigo-600"
+                          aria-hidden="true"
+                        />
+                      ) : null}
+                      {item.id !== defaultValues.id ? (
+                        <CheckCircleIcon
+                          className="h-5 pr-4 text-left align-left text-gray-200"
                           aria-hidden="true"
                         />
                       ) : null}
                       <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end"></div>
                     </div>
+                    <div className="flex text-md font-regular flex-wrap =">
+                        <span className="font-semibold pr-1">
+                          {item.firstName + ' ' + item.lastName},
+                        </span>
+                      <span className="pr-1">{item.address1}, </span>
+                      <span className="pr-1">{item.address2}, </span>
+                      <span className="pr-1">{item.city}, </span>
+                      <span className="pr-1">{item.postCode}, </span>
+                      <span className="pr-1">{item.country}, </span>
+                      <span className="pr-1">{item.phoneNo}</span>
+                    </div>                    
                   </div>
                 )
               })}
@@ -148,7 +156,7 @@ export default function AddressForm({
               <div className="flex">
                 <button
                   type="button"
-                  onClick={handleNewFormButton}
+                  onClick={() => handleNewFormButton(values)}
                   className="max-w-xs m-2 flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
                   {isFormOpen ? 'Save' : 'Add new address'}
