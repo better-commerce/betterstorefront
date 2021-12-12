@@ -51,7 +51,7 @@ export const NEXT_SHIPPING_ENDPOINT = '/api/shipping-options'
 export const NEXT_UPDATE_SHIPPING = '/api/update-shipping'
 export const NEXT_GUEST_CHECKOUT = '/api/customer/guest-checkout'
 export const NEXT_LOGIN_CHECKOUT = '/api/customer/login-checkout'
-export const NEXT_SEARCH_PRODUCTS = `api/catalog/search`
+export const NEXT_SEARCH_PRODUCTS = `/api/catalog/search`
 
 //CONSTANTS
 
