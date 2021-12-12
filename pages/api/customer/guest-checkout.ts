@@ -2,7 +2,6 @@ import { guestCheckout } from '@framework/cart'
 export default async (req: any, res: any) => {
   const { basketId, email, notifyByEmail, notifyBySms, notifyByPost }: any =
     req.body
-  console.log(req.body)
   try {
     const response = await guestCheckout()({
       basketId,

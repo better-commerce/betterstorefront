@@ -15,7 +15,7 @@ export const CREATE_ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSI
 export const CATALOG_SEARCH = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/r`
 export const CHECKOUT_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout`
 export const PAYMENTS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/payment`
-
+export const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config/get`
 //LOCAL ENDPOINTS
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
@@ -55,6 +55,8 @@ export const NEXT_GUEST_CHECKOUT = '/api/customer/guest-checkout'
 export const NEXT_LOGIN_CHECKOUT = '/api/customer/login-checkout'
 export const NEXT_PAYMENT_METHODS = '/api/payment-methods'
 export const NEXT_CONFIRM_ORDER = '/api/confirm-order'
+export const NEXT_INFRA_ENDPOINT = '/api/infra'
+export const NEXT_SET_CONFIG = '/api/set-config'
 //CONSTANTS
 
 export const SessionIdCookieKey: string = `sessionId`

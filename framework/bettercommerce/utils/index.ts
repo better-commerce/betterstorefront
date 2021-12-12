@@ -1,7 +1,7 @@
 import Cookies, { CookieAttributes } from 'js-cookie'
 import { FetcherError } from '@commerce/utils/errors'
 
-const setCookie = (
+export const setCookie = (
   name: string,
   token?: string,
   options?: CookieAttributes
@@ -12,6 +12,8 @@ const setCookie = (
     Cookies.set(name, token, options ?? { expires: 60 * 60 * 24 * 30 })
   }
 }
+
+export const getCookie = (name: string) => Cookies.get(name)
 
 export function getError(errors: any[], status: number) {
   errors = errors ?? [{ message: 'Failed to fetch BetterCommerce API' }]

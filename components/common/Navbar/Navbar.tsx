@@ -8,9 +8,15 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui'
 import Account from './AccountDropdown'
-
+import CurrencySwitcher from './CurrencySwitcher'
+import axios from 'axios'
+import { NEXT_SET_CONFIG } from '@components/utils/constants'
+import Router from 'next/router'
+import LanguageSwitcher from './LanguageSwitcher'
 interface Props {
   config: []
+  currencies: []
+  languages: []
 }
 
 const accountDropDownConfigUnauthorized: any = [
@@ -28,7 +34,7 @@ const accountDropDownConfigUnauthorized: any = [
   },
 ]
 
-const Navbar: FC<Props> = ({ config }) => {
+const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   const router = useRouter()
 
   const { wishListItems, cartItems, user, deleteUser, openCart, openWishlist } =
@@ -62,6 +68,15 @@ const Navbar: FC<Props> = ({ config }) => {
   let title = user.userId ? `Hi, ${user.firstName}` : 'My account'
   if (user.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
+  }
+
+  const configAction = (pair: any) => {
+    axios
+      .post(NEXT_SET_CONFIG, { obj: pair })
+      .then(() => {
+        Router.reload()
+      })
+      .catch((err: any) => console.log(err))
   }
 
   return (
@@ -188,6 +203,17 @@ const Navbar: FC<Props> = ({ config }) => {
                 <Searchbar />
                 {/* account */}
                 <Account title={title} config={accountDropdownConfig} />
+                {/* currency */}
+                <CurrencySwitcher
+                  config={currencies}
+                  title="Select currency"
+                  action={configAction}
+                />
+                <LanguageSwitcher
+                  title="Select language"
+                  action={configAction}
+                  config={languages}
+                />
                 {/* Wishlist*/}
 
                 <div className="px-2 flow-root">
