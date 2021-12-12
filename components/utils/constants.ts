@@ -56,6 +56,7 @@ export const NEXT_LOGIN_CHECKOUT = '/api/customer/login-checkout'
 export const NEXT_PAYMENT_METHODS = '/api/payment-methods'
 export const NEXT_CONFIRM_ORDER = '/api/confirm-order'
 export const NEXT_INFRA_ENDPOINT = '/api/infra'
+export const NEXT_SET_CONFIG = '/api/set-config'
 //CONSTANTS
 
 export const SessionIdCookieKey: string = `sessionId`
