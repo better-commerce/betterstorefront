@@ -13,6 +13,8 @@ import axios from 'axios'
 import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
 import LanguageSwitcher from './LanguageSwitcher'
+import Cookies from 'js-cookie'
+
 interface Props {
   config: []
   currencies: []
@@ -78,6 +80,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   }
 
   const configAction = (pair: any) => {
+    const value: any = Object.values(pair)[0]
+    const key = Object.keys(pair)[0]
+    Cookies.set(key, value)
     axios
       .post(NEXT_SET_CONFIG, { obj: pair })
       .then(() => {

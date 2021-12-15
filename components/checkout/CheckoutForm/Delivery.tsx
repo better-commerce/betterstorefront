@@ -35,10 +35,14 @@ export default function Delivery({
   toggleDelivery,
   isDeliveryMethodSelected,
   setParentShipping,
+  appConfig,
 }: any) {
   const { basketId, setCartItems, cartItems } = useUI()
 
-  const [selectedCountry, setSelectedCountry] = useState(countryList[0])
+  const [selectedCountry, setSelectedCountry] = useState({
+    name: 'Country',
+    twoLetterIsoCode: null,
+  })
   const [deliveryMethods, setDeliveryMethods] = useState(DELIVERY_METHODS_TYPE)
   const [shippingMethod, setShippingMethod] = useState({
     id: false,
@@ -59,7 +63,7 @@ export default function Delivery({
     axios
       .post(NEXT_UPDATE_SHIPPING, {
         basketId,
-        countryCode: selectedCountry.code,
+        countryCode: selectedCountry.twoLetterIsoCode,
         shippingId: shippingMethod.id,
       })
       .then((response: any) => {
@@ -73,13 +77,14 @@ export default function Delivery({
   useEffect(() => {
     const getDefaultCountry = async () => {
       const { CountryCode }: any = await geoData()
-      const defaultSelectedCountry: any = countryList.find(
-        (item: any) => item.code === CountryCode
+      const defaultSelectedCountry: any = appConfig.shippingCountries?.find(
+        (item: any) => item.twoLetterIsoCode === CountryCode
       )
-      setSelectedCountry(defaultSelectedCountry)
+
+      if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
     }
-    getDefaultCountry()
-  }, [])
+    if (Object.keys(appConfig).length) getDefaultCountry()
+  }, [appConfig])
 
   useEffect(() => {
     setDeliveryMethods(DELIVERY_METHODS_TYPE)
@@ -87,7 +92,7 @@ export default function Delivery({
     const fetchDeliveryMethods = async () => {
       const response = await postData(NEXT_SHIPPING_ENDPOINT, {
         basketId,
-        countryCode: selectedCountry.code,
+        countryCode: selectedCountry.twoLetterIsoCode,
       })
       if (response.length) {
         let tempArr = deliveryMethods.reduce((acc: any, obj: any) => {
@@ -112,7 +117,9 @@ export default function Delivery({
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value
-    const country: any = countryList.find((el) => el.value === value)
+    const country: any = appConfig.shippingCountries.find(
+      (el: any) => el.name === value
+    )
     setSelectedCountry(country)
   }
 
@@ -124,7 +131,7 @@ export default function Delivery({
           <ConfirmedGeneralComponent
             onStateChange={toggleDelivery}
             content={{
-              firstLine: selectedCountry.value,
+              firstLine: selectedCountry.name,
               secondLine: shippingMethod.displayName,
               thirdLine: shippingMethod.description,
               fourthLine: shippingMethod.price?.formatted?.withTax,
@@ -141,14 +148,17 @@ export default function Delivery({
               onChange={handleChange}
               className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
             >
-              {countryList.map((country: any, idx: number) => {
+              {!Object.keys(appConfig.shippingCountries).length ? (
+                <option value={''}>Country List</option>
+              ) : null}
+              {appConfig.shippingCountries?.map((country: any, idx: number) => {
                 return (
                   <option
                     key={idx}
-                    selected={country.value === selectedCountry.value}
-                    value={country.value}
+                    selected={country.name === selectedCountry.name}
+                    value={country.name}
                   >
-                    {country.value}
+                    {country.name}
                   </option>
                 )
               })}

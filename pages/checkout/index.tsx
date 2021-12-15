@@ -11,9 +11,8 @@ import { asyncHandler } from '@components/account/Address/AddressBook'
 import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
 import axios from 'axios'
 
-function Checkout({ cart }: any) {
+function Checkout({ cart, config }: any) {
   const { user, basketId, setCartItems, cartItems } = useUI()
-
   const [isLoggedIn, setIsLoggedIn] = useState(!!cartItems.userEmail)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
@@ -60,6 +59,7 @@ function Checkout({ cart }: any) {
         defaultShippingAddress={defaultShippingAddress}
         user={user}
         fetchAddress={fetchAddress}
+        config={config}
       />
     )
   }

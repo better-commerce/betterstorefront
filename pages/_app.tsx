@@ -74,7 +74,7 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
           config={appConfig}
           pageProps={pageProps}
         >
-          <Component {...pageProps} />
+          <Component {...pageProps} config={appConfig} />
         </Layout>
       </ManagedUIContext>
     </>
