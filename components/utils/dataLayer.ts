@@ -38,16 +38,13 @@ export const KEYS_MAP = {
   eventType: 'eventType',
 }
 
-const getIpAddress = () => {
-  /* to be provided an endpoint */
-  geoData()
-    .then((response: any) => {
-      return response.Ip
-    })
-    .catch((err) => {
-      console.log(err)
-      return '81.196.3.222'
-    })
+const getIpAddress = async () => {
+  try {
+    const response = await geoData()
+    return response.Ip
+  } catch (error) {
+    return '81.196.3.222'
+  }
 }
 
 const DataLayerSingleton = function () {
@@ -66,6 +63,7 @@ const DataLayerSingleton = function () {
   let deviceType = 'desktop'
   if (isTablet) deviceType = 'tablet'
   if (isMobile) deviceType = 'mobile'
+
   const setDataLayer = () => {
     const dataLayer = {
       sessionId: Cookies.get(SessionIdCookieKey),
@@ -74,7 +72,7 @@ const DataLayerSingleton = function () {
       channel: 'Web',
       lang: 'en-GB',
       domainId: process.env.NEXT_PUBLIC_DOMAIN_ID || '',
-      ipAddress: getIpAddress(),
+      ipAddress: '',
       orgId: process.env.NEXT_PUBLIC_ORG_ID,
       server: 'x.x.x.29',
       visitorAffiliate: '',

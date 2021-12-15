@@ -19,8 +19,6 @@ const SingletonFactory = (function () {
   axiosInstance.interceptors.request.use(
     (config: any) => {
       const token = getToken()
-      // config.headers['Currency'] = 'GBP'
-      // config.headers['Language'] = 'en'
       //this is to be changed when we implement currency / language switcher
       if (token) {
         config.headers['Authorization'] = 'Bearer ' + token
