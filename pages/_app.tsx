@@ -42,6 +42,7 @@ const setDeviceIdCookie = () => {
 
 function MyApp({ Component, pageProps, nav, footer }: any) {
   const [appConfig, setAppConfig] = useState({})
+  const [location, setUserLocation] = useState({})
   const Layout = (Component as any).Layout || Noop
 
   const fetchAppConfig = async () => {
@@ -57,9 +58,10 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
   useEffect(() => {
     DataLayerInstance.setDataLayer()
     geoData()
-      .then((response) =>
+      .then((response) => {
+        setUserLocation(response)
         DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
-      )
+      })
       .catch((err) =>
         DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
       )
@@ -82,7 +84,7 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
           config={appConfig}
           pageProps={pageProps}
         >
-          <Component {...pageProps} config={appConfig} />
+          <Component {...pageProps} location={location} config={appConfig} />
         </Layout>
       </ManagedUIContext>
     </>

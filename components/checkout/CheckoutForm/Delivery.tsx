@@ -36,6 +36,7 @@ export default function Delivery({
   isDeliveryMethodSelected,
   setParentShipping,
   appConfig,
+  location,
 }: any) {
   const { basketId, setCartItems, cartItems } = useUI()
 
@@ -76,7 +77,7 @@ export default function Delivery({
 
   useEffect(() => {
     const getDefaultCountry = async () => {
-      const { CountryCode }: any = await geoData()
+      const { CountryCode } = location
       const defaultSelectedCountry: any = appConfig.shippingCountries?.find(
         (item: any) => item.twoLetterIsoCode === CountryCode
       )
