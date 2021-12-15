@@ -117,11 +117,12 @@ const Layout: FC<Props> = ({
       }
     }
     fetchLayout()
+    setAppConfig(config)
   }, [])
 
+  console.log(appConfig)
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
-  console.log(config)
   return (
     <CommerceProvider locale={locale}>
       <Script

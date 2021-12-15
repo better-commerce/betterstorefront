@@ -13,8 +13,14 @@ export default function useInfra(req: any) {
         },
       })
       if (setHeader) {
-        setGeneralParams('Currency', response.result.currencies[0].currencyCode)
-        setGeneralParams('Language', response.result.languages[0].languageCode)
+        setGeneralParams(
+          'Currency',
+          req.cookies.Currency || response.result.currencies[0].currencyCode
+        )
+        setGeneralParams(
+          'Language',
+          req.cookies.Language || response.result.languages[0].languageCode
+        )
       }
       return response.result
     } catch (error: any) {
