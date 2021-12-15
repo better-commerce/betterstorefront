@@ -27,6 +27,7 @@ export default function CheckoutForm({
   defaultBillingAddress,
   addresses = [],
   fetchAddress,
+  config,
 }: any) {
   const { setCartItems, basketId, cartItems } = useUI()
 
@@ -295,6 +296,7 @@ export default function CheckoutForm({
         <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
           <div>
             <Delivery
+              appConfig={config}
               setParentShipping={setShippingMethod}
               toggleDelivery={toggleDelivery}
               isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
@@ -308,6 +310,7 @@ export default function CheckoutForm({
                 <>
                   <Form
                     toggleAction={toggleShipping}
+                    appConfig={config}
                     values={state?.shippingInformation}
                     onSubmit={handleShippingSubmit}
                     schema={shippingSchema}
@@ -340,6 +343,7 @@ export default function CheckoutForm({
                     togglePayment(!state.isPaymentInformationCompleted)
                   }
                   onSubmit={handleBillingSubmit}
+                  appConfig={config}
                   values={state?.billingInformation}
                   schema={billingSchema}
                   config={billingFormConfig}
