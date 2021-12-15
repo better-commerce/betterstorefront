@@ -14,6 +14,7 @@ import {
 } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { postData } from '@components/utils/clientFetcher'
+import geoData from '@components/utils/geographicService'
 
 const Noop: FC = ({ children }) => <>{children}</>
 
@@ -55,6 +56,13 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
   }
   useEffect(() => {
     DataLayerInstance.setDataLayer()
+    geoData()
+      .then((response) =>
+        DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
+      )
+      .catch((err) =>
+        DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
+      )
     setSessionIdCookie()
     setDeviceIdCookie()
     document.body.classList?.remove('loading')

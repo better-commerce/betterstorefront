@@ -2,7 +2,6 @@ import { INFRA_ENDPOINT } from '@components/utils/constants'
 import fetcher, { setGeneralParams } from '../../fetcher'
 
 export default function useInfra(req: any) {
-  console.log(req.cookies.Currency)
   //TODO change based on location
   return async function handler(setHeader = false) {
     try {
