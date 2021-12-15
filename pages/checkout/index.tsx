@@ -12,7 +12,7 @@ import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
 import axios from 'axios'
 
 function Checkout({ cart, config }: any) {
-  const { user, basketId, setCartItems, cartItems } = useUI()
+  const { user, basketId, setCartItems, cartItems, location } = useUI()
   const [isLoggedIn, setIsLoggedIn] = useState(!!cartItems.userEmail)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
@@ -60,6 +60,7 @@ function Checkout({ cart, config }: any) {
         user={user}
         fetchAddress={fetchAddress}
         config={config}
+        location={location}
       />
     )
   }
