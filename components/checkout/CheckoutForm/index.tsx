@@ -28,6 +28,7 @@ export default function CheckoutForm({
   addresses = [],
   fetchAddress,
   config,
+  location,
 }: any) {
   const { setCartItems, basketId, cartItems } = useUI()
 
@@ -297,6 +298,7 @@ export default function CheckoutForm({
           <div>
             <Delivery
               appConfig={config}
+              geoData={location}
               setParentShipping={setShippingMethod}
               toggleDelivery={toggleDelivery}
               isDeliveryMethodSelected={state?.isDeliveryMethodSelected}

@@ -11,7 +11,6 @@ import {
 import { useUI } from '@components/ui/context'
 import Button from '@components/ui/IndigoButton'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
-import geoData from '@components/utils/geographicService'
 import axios from 'axios'
 
 const DELIVERY_METHODS_TYPE = [
@@ -36,6 +35,7 @@ export default function Delivery({
   isDeliveryMethodSelected,
   setParentShipping,
   appConfig,
+  geoData,
 }: any) {
   const { basketId, setCartItems, cartItems } = useUI()
 
@@ -76,7 +76,7 @@ export default function Delivery({
 
   useEffect(() => {
     const getDefaultCountry = async () => {
-      const { CountryCode }: any = await geoData()
+      const { CountryCode } = geoData
       const defaultSelectedCountry: any = appConfig.shippingCountries?.find(
         (item: any) => item.twoLetterIsoCode === CountryCode
       )
