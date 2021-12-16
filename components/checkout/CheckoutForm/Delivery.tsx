@@ -41,7 +41,7 @@ export default function Delivery({
 
   const [selectedCountry, setSelectedCountry] = useState({
     name: 'Country',
-    twoLetterIsoCode: null,
+    twoLetterIsoCode: geoData.CountryCode,
   })
   const [deliveryMethods, setDeliveryMethods] = useState(DELIVERY_METHODS_TYPE)
   const [shippingMethod, setShippingMethod] = useState({
@@ -54,6 +54,7 @@ export default function Delivery({
     id: 0,
     children: [],
   })
+  const [isSelected, setIsSelected] = useState(true)
 
   const handleShippingMethod = (item: any) => {
     setShippingMethod(item)
@@ -74,6 +75,30 @@ export default function Delivery({
       .catch((err) => console.log(err))
   }
 
+  const fetchDeliveryMethods = async () => {
+    const response = await postData(NEXT_SHIPPING_ENDPOINT, {
+      basketId,
+      countryCode: selectedCountry.twoLetterIsoCode,
+    })
+    if (response.length) {
+      let tempArr = deliveryMethods.reduce((acc: any, obj: any) => {
+        let itemWithChildren = { ...obj }
+        response.forEach((item: any) => {
+          if (item.type === obj.type) {
+            itemWithChildren.children = [item]
+          }
+        })
+        acc.push(itemWithChildren)
+        return acc
+      }, [])
+      setDeliveryMethods(tempArr)
+      if (tempArr[0].children[0]) {
+        setShippingMethod(tempArr[0].children[0])
+      }
+      setSelectedDeliveryMethod(tempArr[0])
+    }
+  }
+
   useEffect(() => {
     const getDefaultCountry = async () => {
       const { CountryCode } = geoData
@@ -82,6 +107,8 @@ export default function Delivery({
       )
 
       if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
+      else
+        setSelectedCountry({ name: 'United Kingdon', twoLetterIsoCode: 'GB' })
     }
     if (Object.keys(appConfig).length) getDefaultCountry()
   }, [appConfig])
@@ -89,29 +116,7 @@ export default function Delivery({
   useEffect(() => {
     setDeliveryMethods(DELIVERY_METHODS_TYPE)
     setSelectedDeliveryMethod({ id: 0, children: [] })
-    const fetchDeliveryMethods = async () => {
-      const response = await postData(NEXT_SHIPPING_ENDPOINT, {
-        basketId,
-        countryCode: selectedCountry.twoLetterIsoCode,
-      })
-      if (response.length) {
-        let tempArr = deliveryMethods.reduce((acc: any, obj: any) => {
-          let itemWithChildren = { ...obj }
-          response.forEach((item: any) => {
-            if (item.type === obj.type) {
-              itemWithChildren.children = [item]
-            }
-          })
-          acc.push(itemWithChildren)
-          return acc
-        }, [])
-        setDeliveryMethods(tempArr)
-        if (tempArr[0].children[0]) {
-          setShippingMethod(tempArr[0].children[0])
-        }
-        setSelectedDeliveryMethod(tempArr[0])
-      }
-    }
+
     fetchDeliveryMethods()
   }, [selectedCountry])
 
@@ -144,25 +149,51 @@ export default function Delivery({
             <h1 className="text-lg font-semibold text-gray-900">
               Select country
             </h1>
-            <select
-              onChange={handleChange}
-              className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
-            >
-              {!Object.keys(appConfig.shippingCountries).length ? (
-                <option value={''}>Country List</option>
-              ) : null}
-              {appConfig.shippingCountries?.map((country: any, idx: number) => {
-                return (
-                  <option
-                    key={idx}
-                    selected={country.name === selectedCountry.name}
-                    value={country.name}
+
+            {isSelected ? (
+              <div className="py-5 flex justify-between items-center">
+                <span className="font-normal d-inline font-sm pr-1 text-gray-900">
+                  {selectedCountry.name}
+                </span>
+                <div className="flex">
+                  <button
+                    onClick={() => setIsSelected(false)}
+                    className="btn text-indigo-500 font-xs"
+                    type="button"
                   >
-                    {country.name}
-                  </option>
-                )
-              })}
-            </select>
+                    Edit
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <select
+                  onChange={handleChange}
+                  className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                >
+                  {appConfig.shippingCountries?.map(
+                    (country: any, idx: number) => {
+                      return (
+                        <option
+                          key={idx}
+                          selected={country.name === selectedCountry.name}
+                          value={country.name}
+                        >
+                          {country.name}
+                        </option>
+                      )
+                    }
+                  )}
+                </select>
+                <div className="py-2 h-12 flex justify-left w-full">
+                  <Button
+                    buttonType="button"
+                    action={() => setIsSelected(true)}
+                    title="Confirm"
+                  />
+                </div>
+              </>
+            )}
           </div>
           <RadioGroup
             value={selectedDeliveryMethod}
