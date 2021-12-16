@@ -12,14 +12,16 @@ export default function PaymentMethods({
   useEffect(() => {
     paymentData()
       .then((response: any) => {
-        setPaymentMethods(response.data)
+        console.log(response)
+        setPaymentMethods(response.data || [])
       })
       .catch((err: any) => console.log(err))
   }, [])
 
+  console.log(methods)
   return (
     <ul className={`text-gray-900 mt-10`}>
-      {methods.map((item: any, idx: number) => {
+      {methods?.map((item: any, idx: number) => {
         return (
           <li
             key={idx}
@@ -37,7 +39,7 @@ export default function PaymentMethods({
                   />
                 </div>
               ) : null}
-               {activePaymentMethod.id !== item.id ? (
+              {activePaymentMethod.id !== item.id ? (
                 <div>
                   <CheckCircleIcon
                     className="h-5 pr-4 text-left align-left text-gray-200"
@@ -50,7 +52,6 @@ export default function PaymentMethods({
               <h3 className="font-bold">{item.displayName}</h3>
               <p className="text-sm py-2">{item.description}</p>
             </div>
-            
           </li>
         )
       })}
