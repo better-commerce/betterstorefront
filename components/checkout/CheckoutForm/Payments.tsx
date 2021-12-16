@@ -12,13 +12,11 @@ export default function PaymentMethods({
   useEffect(() => {
     paymentData()
       .then((response: any) => {
-        console.log(response)
-        setPaymentMethods(response.data || [])
+        if (response.data) setPaymentMethods(response.data)
       })
       .catch((err: any) => console.log(err))
   }, [])
 
-  console.log(methods)
   return (
     <ul className={`text-gray-900 mt-10`}>
       {methods?.map((item: any, idx: number) => {
