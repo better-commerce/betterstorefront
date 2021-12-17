@@ -72,5 +72,5 @@ export const SHIPPING_ACTION_TYPES_MAP = {
   CLICK_AND_COLLECT: 'CLICK_AND_COLLECT',
   ACTIVE_SHIPPING_METHODS: 'ACTIVE_SHIPPING_METHODS',
 }
-export const GEO_ENDPOINT =
-  'https://omnilytics.omnicx.com/api/v1/IpInfo?ipAddress='
+
+export const NEXT_GEO_ENDPOINT = '/api/geo-location'
