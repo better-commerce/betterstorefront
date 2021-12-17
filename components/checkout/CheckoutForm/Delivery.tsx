@@ -23,7 +23,7 @@ const DELIVERY_METHODS_TYPE = [
   },
   {
     id: 2,
-    type: 3,
+    type: 1,
     title: 'Collect',
     content: 'in store or using Collect+',
     children: [],
