@@ -13,11 +13,14 @@ import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '../components/cart/PromotionInput'
-
+import { useEffect } from 'react'
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
-  const { getCart, addToCart } = cartHandler()
+  const { addToCart } = cartHandler()
 
+  useEffect(() => {
+    setCartItems(cart)
+  }, [])
   const handleItem = (product: any, type = 'increase') => {
     const asyncHandleItem = async () => {
       const data: any = {
@@ -44,7 +47,8 @@ function Cart({ cart }: any) {
     asyncHandleItem()
   }
 
-  const userCart = cartItems?.lineItems?.length ? cartItems : cart
+  const userCart = cartItems
+
   return (
     <div className="bg-white">
       <main className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -63,7 +67,7 @@ function Cart({ cart }: any) {
               className="border-t border-b border-gray-200 divide-y divide-gray-200"
             >
               {userCart.lineItems?.map((product: any, productIdx: number) => (
-                <li key={product.id} className="flex py-6 sm:py-10">
+                <li key={productIdx} className="flex py-6 sm:py-10">
                   <div className="flex-shrink-0">
                     <img
                       src={product.image}
@@ -71,7 +75,6 @@ function Cart({ cart }: any) {
                       className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
                     />
                   </div>
-
                   <div className="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
                     <div className="relative pr-9 flex justify-between sm:pr-0">
                       <div>
@@ -96,7 +99,7 @@ function Cart({ cart }: any) {
                         </p>
                         {product.children?.map((child: any, idx: number) => {
                           return (
-                            <div className="flex mt-10" key={idx}>
+                            <div className="flex mt-10" key={'child' + idx}>
                               <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
                                 <img
                                   src={child.image}
