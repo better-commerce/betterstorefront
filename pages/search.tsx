@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react'
+import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
@@ -87,6 +87,17 @@ function Search({ query, setEntities, recordEvent }: any) {
     ...adaptedQuery,
   }
 
+  const [productListMemory, setProductListMemory] = useState({
+    products: {
+      results: [],
+      sortList: [],
+      pages: 0,
+      total: 0,
+      currentPage: 1,
+      filters: [],
+    },
+  })
+
   const router = useRouter()
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
@@ -103,6 +114,24 @@ function Search({ query, setEntities, recordEvent }: any) {
     error,
   } = useSwr(['/api/catalog/products', state], postData)
 
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL) {
+      if (
+        data.products.currentPage !== productListMemory.products.currentPage ||
+        data.products.total !== productListMemory.products.total
+      ) {
+        setProductListMemory((prevData: any) => {
+          let dataClone = { ...data }
+          dataClone.products.results = [
+            ...prevData.products.results,
+            ...dataClone.products.results,
+          ]
+          return dataClone
+        })
+      }
+    }
+  }, [data.products.results.length])
+
   const handlePageChange = (page: any) => {
     router.push(
       {
@@ -118,6 +147,15 @@ function Search({ query, setEntities, recordEvent }: any) {
       left: 0,
       behavior: 'smooth',
     })
+  }
+
+  const handleInfiniteScroll = () => {
+    if (
+      data.products.pages &&
+      data.products.currentPage < data.products.pages
+    ) {
+      dispatch({ type: PAGE, payload: data.products.currentPage + 1 })
+    }
   }
 
   const handleSortBy = (payload: any) => {
@@ -184,6 +222,10 @@ function Search({ query, setEntities, recordEvent }: any) {
     recordEvent(EVENTS.FreeText)
   })
 
+  const productDataToPass = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL
+    ? productListMemory.products
+    : data.products
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -205,9 +247,10 @@ function Search({ query, setEntities, recordEvent }: any) {
           routerSortOption={state.sortBy}
         />
         <ProductGrid
-          products={data.products}
+          products={productDataToPass}
           currentPage={state.currentPage}
           handlePageChange={handlePageChange}
+          handleInfiniteScroll={handleInfiniteScroll}
         />
       </main>
     </div>
