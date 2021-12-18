@@ -24,7 +24,7 @@ import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import Router from 'next/router'
 import ProgressBar from '@components/ui/ProgressBar'
 const Loading = () => (
-  <div className="w-80 h-80 flex items-center text-center justify-center p-3">
+  <div className="w-80 h-80 flex items-center text-center fixed z-50 justify-center p-3">
     <LoadingDots />
   </div>
 )

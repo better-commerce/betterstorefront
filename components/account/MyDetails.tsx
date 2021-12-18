@@ -3,6 +3,7 @@ import { Formik, Form, Field } from 'formik'
 import { formConfig, schema } from './configs/details'
 import { useUI } from '@components/ui/context'
 import { handleSubmit } from './common'
+import LoadingDots from '@components/ui/LoadingDots'
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
 
@@ -16,8 +17,8 @@ export default function MyDetails() {
     phone: user.phone,
   }
 
-  const handleDataSubmit = (values: any) =>
-    handleSubmit(values, user, setUser, setTitle)
+  const handleDataSubmit = async (values: any) =>
+    await handleSubmit(values, user, setUser, setTitle)
 
   return (
     <main className="sm:px-6 lg:px-8">
@@ -38,7 +39,14 @@ export default function MyDetails() {
           initialValues={initialValues}
           onSubmit={handleDataSubmit}
         >
-          {({ errors, touched, handleSubmit, values, handleChange }: any) => {
+          {({
+            errors,
+            touched,
+            handleSubmit,
+            values,
+            handleChange,
+            isSubmitting,
+          }: any) => {
             return (
               <div className="flex-col w-full py-5 flex items-flex-start mx-auto max-w-4xl justify-center">
                 <Form className="font-semibold w-full sm:w-1/2">
@@ -73,7 +81,7 @@ export default function MyDetails() {
                     onClick={handleSubmit}
                     className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                   >
-                    Save changes
+                    {isSubmitting ? <LoadingDots /> : 'Save changes'}
                   </button>
                 </div>
               </div>

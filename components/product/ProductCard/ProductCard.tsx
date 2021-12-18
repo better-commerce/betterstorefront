@@ -46,7 +46,7 @@ const ProductCard: FC<Props> = ({ product }) => {
     setItemsInWishList(true)
     openWishlist()
   }
-  const handleWishList = () => {
+  const handleWishList = async () => {
     const accessToken = localStorage.getItem('user')
     if (accessToken) {
       const createWishlist = async () => {
@@ -133,7 +133,7 @@ const ProductCard: FC<Props> = ({ product }) => {
     if (!product.currentStock && !product.preOrder.isEnabled) {
       buttonConfig.title = 'Notify me'
       buttonConfig.isNotifyMeEnabled = true
-      buttonConfig.action = () => handleNotification()
+      buttonConfig.action = async () => handleNotification()
     } else if (!product.currentStock && product.preOrder.isEnabled) {
       buttonConfig.title = 'Pre-order'
       buttonConfig.isPreOrderEnabled = true

@@ -1,5 +1,8 @@
 import { FC } from 'react'
 import { useUI } from '@components/ui/context'
+import { useState } from 'react'
+import { LoadingDots } from '@components/ui'
+
 interface Props {
   className?: string
   title?: string
@@ -22,12 +25,22 @@ const DefaultButton: FC<Props> = ({
   action = () => {},
   colorScheme = DEFAULT_COLOR_SCHEME,
 }) => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const { openCart } = useUI()
 
+  console.log(action)
   const handleAction = () => {
+    setIsLoading(true)
     if (buttonType === 'cart') {
-      action().then(() => openCart())
-    } else action()
+      action().then(() => {
+        setIsLoading(false)
+        openCart()
+      })
+    } else
+      action().then(() => {
+        setIsLoading(false)
+      })
   }
 
   const { bgColor, hoverBgColor, focusRingColor } = colorScheme
@@ -38,7 +51,7 @@ const DefaultButton: FC<Props> = ({
       type="button"
       className={`max-w-xs flex-1 ${bgColor} border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className}`}
     >
-      {title}
+      {isLoading ? <LoadingDots /> : title}
     </button>
   )
 }

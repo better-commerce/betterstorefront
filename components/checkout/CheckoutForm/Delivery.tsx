@@ -61,7 +61,7 @@ export default function Delivery({
   }
 
   const submitShippingMethod = () => {
-    axios
+    return axios
       .post(NEXT_UPDATE_SHIPPING, {
         basketId,
         countryCode: selectedCountry.twoLetterIsoCode,

@@ -153,7 +153,6 @@ export default function CheckoutForm({
   }
 
   const paymentData = async () => {
-    console.log(state.deliveryMethod)
     const response = await axios.post(NEXT_PAYMENT_METHODS, {
       currencyCode: cartItems.baseCurrency,
       countryCode: state.deliveryMethod.twoLetterIsoCode,

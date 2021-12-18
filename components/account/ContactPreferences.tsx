@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { config } from './configs/contact'
 import { useUI } from '@components/ui/context'
 import { handleSubmit, URLS } from './common'
+import Button from '@components/ui/IndigoButton'
 
 const radioBtnsConfig = [
   {
@@ -81,8 +82,8 @@ export default function ContactPreferences() {
     setData(tempObj)
   }
 
-  const handleDataSubmit = () => {
-    handleSubmit(data, user, setUser, setTitle, URLS.subscribe)
+  const handleDataSubmit = async () => {
+    await handleSubmit(data, user, setUser, setTitle, URLS.subscribe)
   }
 
   const handleCheckbox = (key: string) => {
@@ -196,13 +197,12 @@ export default function ContactPreferences() {
           })}
         </div>
         <div className="mt-10 flex sm:flex-col1">
-          <button
-            type="submit"
-            onClick={handleDataSubmit}
+          <Button
+            buttonType="button"
+            action={handleDataSubmit}
+            title="Save changes"
             className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-          >
-            Save changes
-          </button>
+          />
         </div>
       </div>
     </main>
