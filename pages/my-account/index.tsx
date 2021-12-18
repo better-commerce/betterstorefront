@@ -24,7 +24,6 @@ function MyAccount({ defaultView }: any) {
           <Tab.Group vertical defaultIndex={defaultView}>
             <Tab.List className="sticky top-0 flex flex-col w-full md:w-1/4 bg-gray-50 h-full rounded-lg">
               {config.map((item: any, idx: number) => {
-                console.log(item.props)
                 return (
                   <Tab
                     key={`my-acc-${idx}`}

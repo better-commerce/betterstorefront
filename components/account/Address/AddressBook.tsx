@@ -84,9 +84,9 @@ export default function AddressBook() {
     window.scrollTo(0, 0)
   }
 
-  const addNewAddress = (values: any) => {
+  const addNewAddress = async (values: any) => {
     let newValues = { ...values, userId: user.userId }
-    createAddress(newValues)
+    return createAddress(newValues)
       .then(() => {
         setNewFormMode(false)
         success()
@@ -108,7 +108,9 @@ export default function AddressBook() {
       </div>
       <div className="max-w-4xl mx-auto">
         {!data.length && !isLoading && (
-          <div className="py-10">Oh-no! Your address book is empty is empty.</div>
+          <div className="py-10">
+            Oh-no! Your address book is empty is empty.
+          </div>
         )}
         {isLoading ? <LoadingDots /> : null}
       </div>
@@ -120,35 +122,33 @@ export default function AddressBook() {
         />
       )}
       {!isNewFormMode && (
-      <div className="max-w-4xl mx-auto">
-        {data.map((item: any, idx: number) => {
-          return (
-            <AddressItem
-              errCallback={failCb}
-              successCallback={success}
-              key={idx}
-              updateAddress={updateAddress}
-              item={item}
-              userId={user.userId}
-              deleteAddress={deleteAddress}
-            />
-          )
-        })}
-        
-        <button
-        type="submit"
-        onClick={() => {
-          setNewFormMode(true)
-          window.scrollTo(0, 0)
-        }}
-        className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-      >
-        Add new address
-      </button>
-     
-        
-      </div>
-       )}
+        <div className="max-w-4xl mx-auto">
+          {data.map((item: any, idx: number) => {
+            return (
+              <AddressItem
+                errCallback={failCb}
+                successCallback={success}
+                key={idx}
+                updateAddress={updateAddress}
+                item={item}
+                userId={user.userId}
+                deleteAddress={deleteAddress}
+              />
+            )
+          })}
+
+          <button
+            type="submit"
+            onClick={() => {
+              setNewFormMode(true)
+              window.scrollTo(0, 0)
+            }}
+            className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+          >
+            Add new address
+          </button>
+        </div>
+      )}
     </main>
   )
 }
