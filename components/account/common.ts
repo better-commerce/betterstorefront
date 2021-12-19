@@ -14,29 +14,26 @@ export const URLS = {
   updateDetails: NEXT_UPDATE_DETAILS,
 }
 
-export const handleSubmit = (
+export const handleSubmit = async (
   values: any,
   user: any,
   setUser: any,
   setTitle: any,
   url: string = URLS.updateDetails
 ) => {
-  const handleAsyncSubmit = async () => {
-    try {
-      const response = await axios.post(url, {
-        ...user,
-        ...values,
-      })
-      if (response) {
-        setUser({ ...user, ...values })
-        setTitle('Success! Your details have been updated!')
-        window.scrollTo(0, 0)
-      } else {
-        handleError(setTitle)
-      }
-    } catch (error) {
+  try {
+    const response = await axios.post(url, {
+      ...user,
+      ...values,
+    })
+    if (response) {
+      setUser({ ...user, ...values })
+      setTitle('Success! Your details have been updated!')
+      window.scrollTo(0, 0)
+    } else {
       handleError(setTitle)
     }
+  } catch (error) {
+    handleError(setTitle)
   }
-  handleAsyncSubmit()
 }

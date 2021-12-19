@@ -28,8 +28,8 @@ export default function AddressItem({
     countryCode,
   } = item
 
-  const handleAddressSubmit = (values: any) => {
-    updateAddress({ ...item, ...values, ...{ userId } })
+  const handleAddressSubmit = async (values: any) => {
+    return updateAddress({ ...item, ...values, ...{ userId } })
       .then(() => successCallback() && setEditMode(false))
       .catch(() => errCallback())
   }

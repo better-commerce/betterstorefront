@@ -15,9 +15,18 @@ import {
 import DataLayerInstance from '@components/utils/dataLayer'
 import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
-
 const Noop: FC = ({ children }) => <>{children}</>
 
+const TEST_GEO_DATA = {
+  Ip: '81.196.3.147',
+  Country: 'Romania',
+  CountryCode: 'RO',
+  City: 'Bucharest',
+  CityCode: 'B',
+  DetailJson: null,
+  Message: null,
+  IsValid: false,
+}
 const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
   if (!Cookies.get(SessionIdCookieKey) || isCalledByTimeout) {
     const expiryTime: any = new Date(new Date().getTime() + 30 * 60 * 1000)
@@ -57,14 +66,19 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
   }
   useEffect(() => {
     DataLayerInstance.setDataLayer()
-    geoData()
-      .then((response) => {
-        setUserLocation(response)
-        DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
-      })
-      .catch((err) =>
-        DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
-      )
+    if (!process.env.DEVELOPMENT) {
+      geoData()
+        .then((response) => {
+          setUserLocation(response)
+          DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
+        })
+        .catch((err) =>
+          DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
+        )
+    } else {
+      setUserLocation(TEST_GEO_DATA)
+      DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
+    }
     setSessionIdCookie()
     setDeviceIdCookie()
     document.body.classList?.remove('loading')

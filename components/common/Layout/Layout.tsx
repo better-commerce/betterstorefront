@@ -20,13 +20,11 @@ import { setItem, getItem } from '../../utils/localStorage'
 import NotifyUserPopup from '@components/ui/NotifyPopup'
 import Script from 'next/script'
 import SearchWrapper from '@components/search/index'
-import {
-  NEXT_GET_NAVIGATION,
-  NEXT_INFRA_ENDPOINT,
-} from '@components/utils/constants'
-
+import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
+import Router from 'next/router'
+import ProgressBar from '@components/ui/ProgressBar'
 const Loading = () => (
-  <div className="w-80 h-80 flex items-center text-center justify-center p-3">
+  <div className="w-80 h-80 flex items-center text-center fixed z-50 justify-center p-3">
     <LoadingDots />
   </div>
 )
@@ -100,7 +98,7 @@ const Layout: FC<Props> = ({
   pageProps: { categories = [], ...pageProps },
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
-
+  const [isLoading, setIsLoading] = useState(false)
   const { showSearchBar, setShowSearchBar } = useUI()
   const [data, setData] = useState(navTreeFromLocalStorage)
 
@@ -120,7 +118,10 @@ const Layout: FC<Props> = ({
     setAppConfig(config)
   }, [])
 
-  console.log(appConfig)
+  useEffect(() => {
+    Router.events.on('routeChangeStart', () => setIsLoading(true))
+    Router.events.on('routeChangeComplete', () => setIsLoading(false))
+  }, [])
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
   return (
@@ -129,7 +130,7 @@ const Layout: FC<Props> = ({
         src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
         strategy="beforeInteractive"
       />
-
+      {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
         {showSearchBar && (
           <SearchWrapper closeWrapper={() => setShowSearchBar(false)} />

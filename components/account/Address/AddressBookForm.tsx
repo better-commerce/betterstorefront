@@ -2,7 +2,7 @@ import { Formik, Form, Field } from 'formik'
 import { formConfig, schema } from '../configs/address'
 import Checkbox from './Checkbox'
 import React from 'react'
-
+import LoadingDots from '@components/ui/LoadingDots'
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
 }
@@ -18,7 +18,14 @@ export default function AddressForm({
       initialValues={initialValues}
       onSubmit={onSubmit}
     >
-      {({ errors, touched, handleSubmit, values, handleChange }: any) => {
+      {({
+        errors,
+        touched,
+        handleSubmit,
+        values,
+        handleChange,
+        isSubmitting,
+      }: any) => {
         return (
           <div className="flex-col w-full py-5 flex items-flex-start mx-auto max-w-4xl justify-center">
             <Form className="font-semibold w-full sm:w-1/2">
@@ -72,7 +79,7 @@ export default function AddressForm({
                 onClick={handleSubmit}
                 className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
               >
-                Save changes
+                {isSubmitting ? <LoadingDots /> : 'Save changes'}
               </button>
               {!!closeEditMode && (
                 <button
