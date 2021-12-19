@@ -21,11 +21,11 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
     setError(apiError)
   }, [apiError])
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const isValidEmail = validate(value)
     if (isValidEmail) {
       error ? setError('') : false
-      submit(value)
+      await submit(value)
     } else {
       setError('Please enter a valid email')
     }
@@ -76,34 +76,28 @@ function RegisterPage({ recordEvent, setEntities }: any) {
     const response: any = await associateCart(userId, basketId)
   }
 
-  const handleUserRegister = (values: any) => {
-    const asyncRegisterUser = async () => {
-      const response: any = await axios.post(NEXT_SIGN_UP, {
-        data: { ...values, email: userEmail },
-      })
-      await handleBasketAssociation(response.data.recordId)
-      setSuccessMessage('Success!')
-      Router.push('/my-account/login')
-    }
-    asyncRegisterUser()
+  const handleUserRegister = async (values: any) => {
+    const response: any = await axios.post(NEXT_SIGN_UP, {
+      data: { ...values, email: userEmail },
+    })
+    await handleBasketAssociation(response.data.recordId)
+    setSuccessMessage('Success!')
+    Router.push('/my-account/login')
   }
 
-  const handleEmailSubmit = (email: string) => {
-    const handleAsync = async () => {
-      try {
-        const { data }: any = await axios.post(NEXT_VALIDATE_EMAIL, {
-          data: email,
-        })
-        if (!data.length) {
-          setHasPassedEmailValidation(true)
-        } else {
-          setError('This email is already in use')
-        }
-      } catch (error) {
-        console.log(error)
+  const handleEmailSubmit = async (email: string) => {
+    try {
+      const { data }: any = await axios.post(NEXT_VALIDATE_EMAIL, {
+        data: email,
+      })
+      if (!data.length) {
+        setHasPassedEmailValidation(true)
+      } else {
+        setError('This email is already in use')
       }
+    } catch (error) {
+      console.log(error)
     }
-    handleAsync()
   }
   return (
     <section aria-labelledby="trending-heading" className="bg-white">

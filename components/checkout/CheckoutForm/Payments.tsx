@@ -58,7 +58,7 @@ export default function PaymentMethods({
         <div className="py-5 flex justify-center w-full">
           <Button
             buttonType="button"
-            action={() => handlePaymentMethod(activePaymentMethod)}
+            action={async () => handlePaymentMethod(activePaymentMethod)}
             title="Confirm"
           />
         </div>
