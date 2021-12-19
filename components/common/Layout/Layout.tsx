@@ -122,6 +122,7 @@ const Layout: FC<Props> = ({
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
   }, [])
+
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
   return (
