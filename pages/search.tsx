@@ -30,6 +30,9 @@ interface stateInterface {
   filters: any
 }
 
+const IS_INFINITE_SCROLL =
+  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+
 const {
   SORT_BY,
   PAGE,
@@ -115,7 +118,7 @@ function Search({ query, setEntities, recordEvent }: any) {
   } = useSwr(['/api/catalog/products', state], postData)
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL) {
+    if (IS_INFINITE_SCROLL) {
       if (
         data.products.currentPage !== productListMemory.products.currentPage ||
         data.products.total !== productListMemory.products.total
@@ -222,7 +225,7 @@ function Search({ query, setEntities, recordEvent }: any) {
     recordEvent(EVENTS.FreeText)
   })
 
-  const productDataToPass = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL
+  const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory.products
     : data.products
 

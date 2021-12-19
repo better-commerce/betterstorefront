@@ -16,7 +16,8 @@ export default function Grid({
   handlePageChange,
   handleInfiniteScroll,
 }: Props) {
-  const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL
+  const IS_INFINITE_SCROLL =
+    process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 
   return (
     <section
