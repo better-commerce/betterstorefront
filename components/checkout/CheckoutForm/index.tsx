@@ -291,6 +291,7 @@ export default function CheckoutForm({
       },
       selectedShipping: state.shippingMethod,
       selectedPayment: state.selectedPaymentMethod,
+      storeId: state.storeId,
     }
     const handleAsync = async () => {
       try {

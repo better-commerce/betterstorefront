@@ -52,6 +52,7 @@ export default function CncList({
       {availableLocations?.map((location: any, idx: number) => {
         return (
           <div
+            key={idx}
             className={
               selectedLocation.id === location.id
                 ? 'border-indigo-600 border border-t '
@@ -59,7 +60,6 @@ export default function CncList({
             }
           >
             <li
-              key={idx}
               onClick={() => setSelectedLocation(location)}
               className={`pointer py-5 px-5 flex justify-between flex-row`}
             >
