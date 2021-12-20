@@ -345,7 +345,6 @@ export const UIProvider: FC = (props) => {
 
   const setAppConfig = useCallback(
     (payload: any) => {
-      console.log(payload)
       dispatch({ type: 'SET_APP_CONFIG', payload })
     },
     [dispatch]
