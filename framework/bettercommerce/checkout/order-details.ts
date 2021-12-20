@@ -16,7 +16,6 @@ export default function getOrderDetails() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
-      console.log(response)
       return response
     } catch (error: any) {
       console.log(error, 'err')

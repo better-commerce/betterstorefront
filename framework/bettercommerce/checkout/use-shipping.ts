@@ -36,7 +36,6 @@ export default function getShippingMethods() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
-      console.log(response)
       return response.result
     } catch (error: any) {
       console.log(error)
