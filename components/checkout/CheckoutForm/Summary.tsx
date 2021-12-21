@@ -36,7 +36,7 @@ export default function Summary({ cart, handleItem, confirmOrder }: any) {
                     </h4>
                   </div>
 
-                  <div className="ml-4 flex-shrink-0 flow-root">
+                  {/* <div className="ml-4 flex-shrink-0 flow-root">
                     <button
                       type="button"
                       onClick={() => handleItem(product, 'delete')}
@@ -45,27 +45,13 @@ export default function Summary({ cart, handleItem, confirmOrder }: any) {
                       <span className="sr-only">Remove</span>
                       <TrashIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="flex-1 pt-2 flex items-end justify-between">
                   <p className="mt-1 text-sm font-medium text-gray-900">
                     {product.price?.formatted?.withTax}
                   </p>
-
-                  <div className="mt-4 sm:mt-0 sm:pr-9">
-                    <div className="border px-4 text-gray-900 flex flex-row">
-                      <MinusSmIcon
-                        onClick={() => handleItem(product, 'decrease')}
-                        className="w-4 cursor-pointer"
-                      />
-                      <span className="text-md px-2 py-2">{product.qty}</span>
-                      <PlusSmIcon
-                        className="w-4 cursor-pointer"
-                        onClick={() => handleItem(product, 'increase')}
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
             </li>
