@@ -29,7 +29,6 @@ const DefaultButton: FC<Props> = ({
 
   const { openCart } = useUI()
 
-  console.log(action)
   const handleAction = () => {
     setIsLoading(true)
     if (buttonType === 'cart') {
