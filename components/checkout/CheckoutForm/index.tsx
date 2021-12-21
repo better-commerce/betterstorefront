@@ -46,6 +46,8 @@ export default function CheckoutForm({
     isSameAddress: true,
     selectedPaymentMethod: null,
     shippingMethod: null,
+    storeId: '',
+    isCNC: false,
   }
 
   interface stateInterface {
@@ -58,6 +60,8 @@ export default function CheckoutForm({
     isSameAddress: boolean
     selectedPaymentMethod: any
     shippingMethod: any
+    storeId: string
+    isCNC: boolean
   }
   interface actionInterface {
     type?: string
@@ -70,6 +74,13 @@ export default function CheckoutForm({
         return {
           ...state,
           shippingMethod: payload,
+        }
+      }
+      case 'IS_CNC': {
+        return {
+          ...state,
+          storeId: payload,
+          isCNC: !state.isCNC,
         }
       }
       case 'SET_PAYMENT_METHOD': {
@@ -160,8 +171,15 @@ export default function CheckoutForm({
     return response
   }
 
-  const setShippingMethod = (payload: any) =>
+  const setShippingMethod = (payload: any, isCNC = false, storeId = '') => {
     dispatch({ type: 'SET_SHIPPING_METHOD', payload })
+    if (isCNC) {
+      dispatch({ type: 'IS_CNC', payload: storeId })
+    }
+    if (!isCNC && state.isCNC) {
+      dispatch({ type: 'IS_CNC', payload: '' })
+    }
+  }
 
   const togglePayment = (
     payload: boolean = !state.isPaymentInformationCompleted
@@ -273,6 +291,7 @@ export default function CheckoutForm({
       },
       selectedShipping: state.shippingMethod,
       selectedPayment: state.selectedPaymentMethod,
+      storeId: state.storeId,
     }
     const handleAsync = async () => {
       try {
@@ -304,42 +323,44 @@ export default function CheckoutForm({
               isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
             />
 
-            <div className="mt-4 border-t border-gray-200 pt-4">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Shipping information
-              </h2>
-              {state?.isDeliveryMethodSelected ? (
-                <>
-                  <Form
-                    toggleAction={toggleShipping}
-                    appConfig={config}
-                    values={state?.shippingInformation}
-                    onSubmit={handleShippingSubmit}
-                    schema={shippingSchema}
-                    config={shippingFormConfig}
-                    initialValues={defaultShippingAddress}
-                    isInfoCompleted={state?.isShippingInformationCompleted}
-                    btnTitle="Deliver to this address"
-                    addresses={addresses}
-                    handleNewAddress={handleNewAddress}
-                    setAddress={setShippingInformation}
-                    isGuest={cartItems.isGuestCheckout}
-                    isSameAddress={state?.isSameAddress}
-                    isSameAddressCheckboxEnabled={true}
-                    sameAddressAction={() => {
-                      dispatch({ type: 'SET_SAME_ADDRESS' })
-                    }}
-                  />
-                </>
-              ) : null}
-            </div>
+            {state.isCNC ? null : (
+              <div className="mt-4 border-t border-gray-200 pt-4">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Shipping information
+                </h2>
+                {state?.isDeliveryMethodSelected ? (
+                  <>
+                    <Form
+                      toggleAction={toggleShipping}
+                      appConfig={config}
+                      values={state?.shippingInformation}
+                      onSubmit={handleShippingSubmit}
+                      schema={shippingSchema}
+                      config={shippingFormConfig}
+                      initialValues={defaultShippingAddress}
+                      isInfoCompleted={state?.isShippingInformationCompleted}
+                      btnTitle="Deliver to this address"
+                      addresses={addresses}
+                      handleNewAddress={handleNewAddress}
+                      setAddress={setShippingInformation}
+                      isGuest={cartItems.isGuestCheckout}
+                      isSameAddress={state?.isSameAddress}
+                      isSameAddressCheckboxEnabled={true}
+                      sameAddressAction={() => {
+                        dispatch({ type: 'SET_SAME_ADDRESS' })
+                      }}
+                    />
+                  </>
+                ) : null}
+              </div>
+            )}
 
             {/* Payment */}
             <div className="mt-6 border-t border-gray-200 pt-6">
               <h2 className="text-lg font-semibold text-gray-900">
                 Billing information
               </h2>
-              {state?.isShippingInformationCompleted && (
+              {(state?.isShippingInformationCompleted || state.isCNC) && (
                 <Form
                   toggleAction={() =>
                     togglePayment(!state.isPaymentInformationCompleted)

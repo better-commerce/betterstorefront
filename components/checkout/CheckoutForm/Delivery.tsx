@@ -2,16 +2,18 @@ import classNames from '@components/utils/classNames'
 import React, { useState, useEffect, SyntheticEvent } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/solid'
-import countryList from '@components/utils/countryList'
+import CncInput from './CncInput'
 import { postData } from '@components/utils/clientFetcher'
 import {
   NEXT_SHIPPING_ENDPOINT,
   NEXT_UPDATE_SHIPPING,
+  NEXT_CLICK_AND_COLLECT,
 } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Button from '@components/ui/IndigoButton'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import axios from 'axios'
+import CncList from './CncList'
 
 const DELIVERY_METHODS_TYPE = [
   {
@@ -48,6 +50,7 @@ export default function Delivery({
     id: false,
     displayName: '',
     description: '',
+    shippingCode: '',
     price: { formatted: { withTax: '' } },
   })
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState({
@@ -55,12 +58,20 @@ export default function Delivery({
     children: [],
   })
   const [isSelected, setIsSelected] = useState(true)
+  const [availableLocations, setAvailableLocations] = useState([])
+  const [selectedStore, setSelectedStore] = useState({
+    storeId: '',
+    name: '',
+    availableToCollectIn: '',
+  })
 
   const handleShippingMethod = (item: any) => {
     setShippingMethod(item)
   }
 
-  const submitShippingMethod = () => {
+  const isCncMethod = shippingMethod.shippingCode === 'CNC'
+
+  const submitShippingMethod = (storeId?: string) => {
     return axios
       .post(NEXT_UPDATE_SHIPPING, {
         basketId,
@@ -70,7 +81,7 @@ export default function Delivery({
       .then((response: any) => {
         setCartItems({ ...cartItems, ...response.data })
         toggleDelivery(selectedCountry)
-        setParentShipping(shippingMethod)
+        setParentShipping(shippingMethod, isCncMethod, storeId)
       })
       .catch((err) => console.log(err))
   }
@@ -128,6 +139,40 @@ export default function Delivery({
     setSelectedCountry(country)
   }
 
+  const handleDeliveryMethodChange = (value: any) => {
+    setSelectedDeliveryMethod(value)
+    setAvailableLocations([])
+    setSelectedStore({ storeId: '', name: '', availableToCollectIn: '' })
+    setShippingMethod({
+      id: false,
+      displayName: '',
+      description: '',
+      shippingCode: '',
+      price: { formatted: { withTax: '' } },
+    })
+  }
+
+  const handleCncPostCode = async (postCode: string) => {
+    const items = cartItems.lineItems
+    const response: { data: [] } = await axios.post(NEXT_CLICK_AND_COLLECT, {
+      items,
+      postCode,
+    })
+    setAvailableLocations(response.data)
+  }
+
+  const content: any = {
+    firstLine: selectedCountry.name,
+    secondLine: shippingMethod.displayName,
+    thirdLine: shippingMethod.description,
+    fourthLine: shippingMethod.price?.formatted?.withTax,
+  }
+
+  if (selectedStore.storeId && isCncMethod) {
+    content['thirdLine'] = selectedStore.name
+    content.fifthLine = selectedStore.availableToCollectIn
+  }
+
   return (
     <div className="py-10 mt-10 border-t border-gray-200">
       {isDeliveryMethodSelected ? (
@@ -135,12 +180,7 @@ export default function Delivery({
           <h3 className="text-lg font-medium text-gray-900">Delivery method</h3>
           <ConfirmedGeneralComponent
             onStateChange={toggleDelivery}
-            content={{
-              firstLine: selectedCountry.name,
-              secondLine: shippingMethod.displayName,
-              thirdLine: shippingMethod.description,
-              fourthLine: shippingMethod.price?.formatted?.withTax,
-            }}
+            content={content}
           />
         </>
       ) : (
@@ -197,7 +237,8 @@ export default function Delivery({
           </div>
           <RadioGroup
             value={selectedDeliveryMethod}
-            onChange={setSelectedDeliveryMethod}
+            // onChange={setSelectedDeliveryMethod}
+            onChange={handleDeliveryMethodChange}
           >
             <RadioGroup.Label className="text-lg font-semibold text-gray-900">
               Delivery method
@@ -267,29 +308,40 @@ export default function Delivery({
             <ul className={`text-gray-900 mt-10`}>
               {selectedDeliveryMethod.children.map((item: any, idx: number) => {
                 return (
-                  <li
-                    key={idx}
-                    onClick={() => handleShippingMethod(item)}
-                    className={`${
-                      shippingMethod.id === item.id ? 'border-indigo-600' : ''
-                    }  pointer border-t border py-5 px-5 flex justify-between flex-row`}
-                  >
-                    <div>
-                      <h3 className="font-bold">{item.displayName}</h3>
-                      <p className="text-sm py-2">{item.description}</p>
-                    </div>
-                    <div className="flex flex-row justify-center items-center">
-                      <h3>{item.price.formatted.withTax}</h3>
-                      {shippingMethod.id === item.id ? (
-                        <div className="ml-5">
-                          <CheckCircleIcon
-                            className="h-5 w-5 text-indigo-600"
-                            aria-hidden="true"
-                          />
-                        </div>
-                      ) : null}
-                    </div>
-                  </li>
+                  <div key={idx} className="flex flex-col">
+                    <li
+                      onClick={() => handleShippingMethod(item)}
+                      className={`${
+                        shippingMethod.id === item.id ? 'border-indigo-600' : ''
+                      }  pointer border-t border py-5 px-5 flex justify-between flex-row`}
+                    >
+                      <div>
+                        <h3 className="font-bold">{item.displayName}</h3>
+                        <p className="text-sm py-2">{item.description}</p>
+                      </div>
+                      <div className="flex flex-row justify-center items-center">
+                        <h3>{item.price.formatted.withTax}</h3>
+                        {shippingMethod.id === item.id ? (
+                          <div className="ml-5">
+                            <CheckCircleIcon
+                              className="h-5 w-5 text-indigo-600"
+                              aria-hidden="true"
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+                    </li>
+                    {isCncMethod && (
+                      <CncInput handleSubmit={handleCncPostCode} />
+                    )}
+                    {isCncMethod && (
+                      <CncList
+                        setSelectedStore={setSelectedStore}
+                        submitShippingMethod={submitShippingMethod}
+                        availableLocations={availableLocations}
+                      />
+                    )}
+                  </div>
                 )
               })}
             </ul>
