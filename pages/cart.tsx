@@ -1,7 +1,4 @@
-import {
-  QuestionMarkCircleIcon,
-  XIcon as XIconSolid,
-} from '@heroicons/react/solid'
+import { XIcon as XIconSolid } from '@heroicons/react/solid'
 import { Layout } from '@components/common'
 import { GetServerSideProps } from 'next'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -14,13 +11,76 @@ import cartHandler from '@components/services/cart'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '../components/cart/PromotionInput'
 import { useEffect } from 'react'
+import axios from 'axios'
+import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
+
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
   const { addToCart } = cartHandler()
 
+  const mapShippingPlansToItems = (plans: any, items: any) => {
+    const itemsClone = [...items]
+    return plans.reduce((acc: any, obj: any) => {
+      acc.forEach((cartItem: any) => {
+        const foundShippingPlan = obj.items.find((item: any) => {
+          return (
+            item.productId.toLowerCase() === cartItem.productId.toLowerCase()
+          )
+        })
+        if (foundShippingPlan) {
+          cartItem.shippingPlan = obj
+        }
+      })
+      return acc
+    }, itemsClone)
+  }
+
+  const fetchShippingPlans = async () => {
+    const shippingMethodItem: any = cart.shippingMethods.find(
+      (method: any) => method.id === cart.shippingMethodId
+    )
+
+    const model = {
+      BasketId: basketId,
+      OrderId: '00000000-0000-0000-0000-000000000000',
+      PostCode: '',
+      ShippingMethodType: shippingMethodItem.type,
+      ShippingMethodId: cart.shippingMethodId,
+      ShippingMethodName: shippingMethodItem.displayName,
+      ShippingMethodCode: shippingMethodItem.shippingCode,
+      DeliveryItems: cartItems.lineItems.map((item: any) => {
+        return {
+          BasketLineId: Number(item.id),
+          OrderLineRecordId: '00000000-0000-0000-0000-000000000000',
+          ProductId: item.productId,
+          ParentProductId: item.parentProductId,
+          StockCode: item.stockCode,
+          Qty: item.qty,
+          PoolCode: item.poolCode || null,
+        }
+      }),
+      AllowPartialOrderDelivery: true,
+      AllowPartialLineDelivery: true,
+      PickupStoreId: '00000000-0000-0000-0000-000000000000',
+      RefStoreId: null,
+      PrimaryInventoryPool: 'PrimaryInvPool',
+      SecondaryInventoryPool: 'PrimaryInvPool',
+      IsEditOrder: false,
+      OrderNo: null,
+      DeliveryCenter: null,
+    }
+    const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
+    setCartItems({
+      ...cartItems,
+      lineItems: mapShippingPlansToItems(response.data, cartItems.lineItems),
+    })
+  }
+
   useEffect(() => {
     setCartItems(cart)
+    fetchShippingPlans()
   }, [])
+
   const handleItem = (product: any, type = 'increase') => {
     const asyncHandleItem = async () => {
       const data: any = {
@@ -76,64 +136,69 @@ function Cart({ cart }: any) {
                     />
                   </div>
                   <div className="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-                    <div className="relative pr-9 flex justify-between sm:pr-0">
-                      <div>
-                        <div className="flex justify-between flex-col">
-                          <h3 className="py-2 text-md font-bold text-gray-900">
-                            {product.brand}
-                          </h3>
-                          <h3 className="text-sm">
-                            <Link href={`/${product.slug}`}>
-                              <a
-                                href={product.slug}
-                                className="font-medium text-gray-700 hover:text-gray-800"
-                              >
-                                {product.name}
-                              </a>
-                            </Link>
-                          </h3>
-                        </div>
-
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          {product.price?.formatted?.withTax}
-                        </p>
-                        {product.children?.map((child: any, idx: number) => {
-                          return (
-                            <div className="flex mt-10" key={'child' + idx}>
-                              <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
-                                <img
-                                  src={child.image}
-                                  alt={child.name}
-                                  className="w-full h-full object-center object-cover"
-                                />
-                              </div>
-                              <div className="flex ml-5 justify-between font-medium text-gray-900">
-                                <Link href={`/${child.slug}`}>
-                                  {child.name}
-                                </Link>
-                                <p className="ml-4">
-                                  {child.price?.formatted?.withTax}
-                                </p>
-                                {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
-                              </div>
-                              <div className="flex-1 flex items-center justify-end text-sm">
-                                {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
-
-                                <button
-                                  type="button"
-                                  onClick={() => handleItem(child, 'delete')}
-                                  className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                    <div className="relative pr-9 flex justify-between sm:pr-0 h-full">
+                      <div className="flex flex-col justify-between h-full">
+                        <div>
+                          <div className="flex justify-between flex-col">
+                            <h3 className="py-2 text-md font-bold text-gray-900">
+                              {product.brand}
+                            </h3>
+                            <h3 className="text-sm">
+                              <Link href={`/${product.slug}`}>
+                                <a
+                                  href={product.slug}
+                                  className="font-medium text-gray-700 hover:text-gray-800"
                                 >
-                                  <span className="sr-only">Remove</span>
-                                  <XIconSolid
-                                    className="h-5 w-5"
-                                    aria-hidden="true"
+                                  {product.name}
+                                </a>
+                              </Link>
+                            </h3>
+                          </div>
+
+                          <p className="mt-1 text-sm font-medium text-gray-900">
+                            {product.price?.formatted?.withTax}
+                          </p>
+                          {product.children?.map((child: any, idx: number) => {
+                            return (
+                              <div className="flex mt-10" key={'child' + idx}>
+                                <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
+                                  <img
+                                    src={child.image}
+                                    alt={child.name}
+                                    className="w-full h-full object-center object-cover"
                                   />
-                                </button>
+                                </div>
+                                <div className="flex ml-5 justify-between font-medium text-gray-900">
+                                  <Link href={`/${child.slug}`}>
+                                    {child.name}
+                                  </Link>
+                                  <p className="ml-4">
+                                    {child.price?.formatted?.withTax}
+                                  </p>
+                                  {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
+                                </div>
+                                <div className="flex-1 flex items-center justify-end text-sm">
+                                  {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
+
+                                  <button
+                                    type="button"
+                                    onClick={() => handleItem(child, 'delete')}
+                                    className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                                  >
+                                    <span className="sr-only">Remove</span>
+                                    <XIconSolid
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          )
-                        })}
+                            )
+                          })}
+                        </div>
+                        <p className="py-5 text-sm font-medium text-gray-900">
+                          {product.shippingPlan?.shippingSpeed}
+                        </p>
                       </div>
 
                       <div className="mt-4 sm:mt-0 sm:pr-9">

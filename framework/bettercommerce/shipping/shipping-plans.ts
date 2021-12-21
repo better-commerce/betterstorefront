@@ -1,0 +1,34 @@
+import { OMS_SHIPPING_PLANS } from '@components/utils/constants'
+import { OMS_BASE_URL } from '@framework/utils/constants'
+import fetcher from '../fetcher'
+
+interface Props {
+  model: any
+}
+
+export default function getShippingPlans() {
+  return async function handler({ model }: Props) {
+    const url = new URL(OMS_SHIPPING_PLANS, OMS_BASE_URL)
+    const enhancedModel = {
+      ...model,
+      DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+      OrgId: process.env.NEXT_PUBLIC_ORG_ID,
+    }
+    try {
+      const response: any = await fetcher({
+        url: url,
+        method: 'post',
+        data: {
+          ...enhancedModel,
+        },
+        headers: {
+          DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        },
+      })
+      return response.result
+    } catch (error: any) {
+      console.log(error)
+      // throw new Error(error.message)
+    }
+  }
+}
