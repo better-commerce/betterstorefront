@@ -153,7 +153,9 @@ export default function Delivery({
   }
 
   const handleCncPostCode = async (postCode: string) => {
-    const items = cartItems.lineItems
+    const items = cartItems.lineItems.map((item: any) => {
+      return { stockCode: item.stockCode, qty: item.qty }
+    })
     const response: { data: [] } = await axios.post(NEXT_CLICK_AND_COLLECT, {
       items,
       postCode,
@@ -237,7 +239,6 @@ export default function Delivery({
           </div>
           <RadioGroup
             value={selectedDeliveryMethod}
-            // onChange={setSelectedDeliveryMethod}
             onChange={handleDeliveryMethodChange}
           >
             <RadioGroup.Label className="text-lg font-semibold text-gray-900">
