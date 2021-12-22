@@ -3,6 +3,7 @@ import { formConfig, schema } from '../configs/address'
 import Checkbox from './Checkbox'
 import React from 'react'
 import LoadingDots from '@components/ui/LoadingDots'
+import { GENERAL_CANCEL } from '@components/utils/textVariables'
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
 }
@@ -87,7 +88,7 @@ export default function AddressForm({
                   onClick={closeEditMode}
                   className="max-w-xs flex-1 bg-gray-500 border border-transparent rounded-md py-3 ml-5 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
-                  Cancel
+                  {GENERAL_CANCEL}
                 </button>
               )}
             </div>
