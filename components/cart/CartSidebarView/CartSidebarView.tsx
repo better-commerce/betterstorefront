@@ -229,52 +229,54 @@ const CartSidebarView: FC = () => {
                     </div>
                   </div>
 
-                  <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                    <PromotionInput />
-                    <div className="flex py-2 justify-between font-small text-gray-900">
-                      <p>Subtotal (taxes included)</p>
-                      <p>{cartItems.subTotal?.formatted?.withTax}</p>
-                    </div>
-                    <div className="flex py-2 justify-between font-small text-gray-900">
-                      <p>Shipping</p>
-                      <p>{cartItems.shippingCharge?.formatted?.withTax}</p>
-                    </div>
-
-                    {cartItems.promotionsApplied?.length > 0 && (
-                      <div className="flex py-2 justify-between font-small text-indigo-600">
-                        <p>Discount</p>
-                        <p>{cartItems.discount?.formatted?.withTax}</p>
+                  {!isEmpty && (
+                    <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                      <PromotionInput />
+                      <div className="flex py-2 justify-between font-small text-gray-900">
+                        <p>Subtotal (taxes included)</p>
+                        <p>{cartItems.subTotal?.formatted?.withTax}</p>
                       </div>
-                    )}
-                    <div className="flex justify-between font-medium text-gray-900">
-                      <p>Total</p>
-                      <p>{cartItems.grandTotal?.formatted?.withTax}</p>
+                      <div className="flex py-2 justify-between font-small text-gray-900">
+                        <p>Shipping</p>
+                        <p>{cartItems.shippingCharge?.formatted?.withTax}</p>
+                      </div>
+
+                      {cartItems.promotionsApplied?.length > 0 && (
+                        <div className="flex py-2 justify-between font-small text-indigo-600">
+                          <p>Discount</p>
+                          <p>{cartItems.discount?.formatted?.withTax}</p>
+                        </div>
+                      )}
+                      <div className="flex justify-between font-medium text-gray-900">
+                        <p>Total</p>
+                        <p>{cartItems.grandTotal?.formatted?.withTax}</p>
+                      </div>
+                      <div className="mt-6">
+                        <Link href="/cart" passHref>
+                          <a
+                            onClick={handleClose}
+                            className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                            href="/cart"
+                          >
+                            Checkout
+                          </a>
+                        </Link>
+                      </div>
+                      <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
+                        <p>
+                          or{' '}
+                          <button
+                            type="button"
+                            className="text-indigo-600 font-medium hover:text-indigo-500"
+                            onClick={handleClose}
+                          >
+                            Continue Shopping
+                            <span aria-hidden="true"> &rarr;</span>
+                          </button>
+                        </p>
+                      </div>
                     </div>
-                    <div className="mt-6">
-                      <Link href="/cart" passHref>
-                        <a
-                          onClick={handleClose}
-                          className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                          href="/cart"
-                        >
-                          Checkout
-                        </a>
-                      </Link>
-                    </div>
-                    <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
-                      <p>
-                        or{' '}
-                        <button
-                          type="button"
-                          className="text-indigo-600 font-medium hover:text-indigo-500"
-                          onClick={handleClose}
-                        >
-                          Continue Shopping
-                          <span aria-hidden="true"> &rarr;</span>
-                        </button>
-                      </p>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </Transition.Child>
