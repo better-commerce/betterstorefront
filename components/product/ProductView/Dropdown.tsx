@@ -7,12 +7,14 @@ import { useUI } from '@components/ui/context'
 export default function Dropdown({
   items = [],
   onChange = () => {},
-  label = 'Choose a color',
-  fieldCode = 'global.colour',
-  currentAttribute = 'S',
+  label = '',
+  fieldCode = '',
+  currentAttribute = '',
   getStockPerAttribute,
   productId,
   setSelectedAttrData,
+  setAttrCombination,
+  isDisabled,
 }: any) {
   const { openNotifyUser, closeNotifyUser } = useUI()
 
@@ -26,6 +28,20 @@ export default function Dropdown({
     productId: productData.productId,
     stockCode: productData.stockCode,
   })
+
+  useEffect(() => {
+    const getStockPerAttrData = getStockPerAttribute(
+      fieldCode,
+      currentAttribute
+    )
+    setProductData(getStockPerAttrData)
+    setSelected({
+      currentAttribute,
+      stock: getStockPerAttrData.stock,
+      productId: getStockPerAttrData.productId,
+      stockCode: getStockPerAttrData.stockCode,
+    })
+  }, [currentAttribute])
 
   useEffect(() => {
     const getStockPerAttrData = getStockPerAttribute(
@@ -60,6 +76,7 @@ export default function Dropdown({
       value.currentAttribute
     )
     setSelected({ ...value, ...stockPerAttrValue })
+    setAttrCombination(fieldCode, value.currentAttribute)
     setSelectedAttrData(stockPerAttrValue)
     if (value.stock === 0 && !isPreOrderEnabled) {
       openNotifyUser(stockPerAttrValue.productId)
@@ -67,15 +84,29 @@ export default function Dropdown({
   }
 
   return (
-    <Listbox value={selected} onChange={handleOnChange}>
-      <Listbox.Label className="block text-sm font-medium text-gray-700">
+    <Listbox value={selected} onChange={handleOnChange} disabled={isDisabled}>
+      <Listbox.Label
+        className={`${
+          isDisabled ? 'opacity-40' : ''
+        } block text-sm font-medium text-gray-700`}
+      >
         {label}
       </Listbox.Label>
       <div className="mt-1 relative">
-        <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        <Listbox.Button
+          disabled
+          className={`${
+            isDisabled ? 'opacity-40' : ''
+          } relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+        >
           <span className="flex items-center">
-            <span className="text-gray-700 ml-3 block truncate">
-              {generateItemOption(selected.currentAttribute, selected.stock)}
+            <span
+              style={{ minHeight: '20px' }}
+              className="text-gray-700 ml-3 block truncate"
+            >
+              {selected.currentAttribute
+                ? generateItemOption(selected.currentAttribute, selected.stock)
+                : ' '}
             </span>
           </span>
           <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -121,7 +152,9 @@ export default function Dropdown({
                             'ml-3 block truncate'
                           )}
                         >
-                          {generateItemOption(item.fieldValue, stockAmount)}
+                          {item.fieldValue
+                            ? generateItemOption(item.fieldValue, stockAmount)
+                            : null}
                         </span>
                       </div>
 

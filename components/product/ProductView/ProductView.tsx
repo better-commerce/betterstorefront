@@ -23,6 +23,7 @@ import {
   NEXT_GET_PRODUCT,
 } from '@components/utils/constants'
 import Button from '@components/ui/IndigoButton'
+
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
