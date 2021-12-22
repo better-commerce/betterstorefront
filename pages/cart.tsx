@@ -48,7 +48,7 @@ function Cart({ cart }: any) {
       ShippingMethodId: cart.shippingMethodId,
       ShippingMethodName: shippingMethodItem.displayName,
       ShippingMethodCode: shippingMethodItem.shippingCode,
-      DeliveryItems: cartItems.lineItems.map((item: any) => {
+      DeliveryItems: cart.lineItems.map((item: any) => {
         return {
           BasketLineId: Number(item.id),
           OrderLineRecordId: '00000000-0000-0000-0000-000000000000',
@@ -71,14 +71,16 @@ function Cart({ cart }: any) {
     }
     const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
     setCartItems({
-      ...cartItems,
-      lineItems: mapShippingPlansToItems(response.data, cartItems.lineItems),
+      ...cart,
+      lineItems: mapShippingPlansToItems(response.data, cart.lineItems),
     })
   }
 
   useEffect(() => {
-    setCartItems(cart)
     if (cart.shippingMethods.length > 0) fetchShippingPlans()
+    else {
+      setCartItems(cart)
+    }
   }, [])
 
   const handleItem = (product: any, type = 'increase') => {

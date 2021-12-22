@@ -20,9 +20,9 @@ import {
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
   NEXT_UPDATE_CART_INFO,
+  NEXT_GET_PRODUCT,
 } from '@components/utils/constants'
 import Button from '@components/ui/IndigoButton'
-
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -39,10 +39,11 @@ const PLACEMENTS_MAP: any = {
 }
 
 export default function ProductView({
-  product = { images: [] },
+  data = { images: [] },
   snippets,
   setEntities,
   recordEvent,
+  slug,
 }: any) {
   const {
     openNotifyUser,
@@ -54,16 +55,27 @@ export default function ProductView({
     openCart,
   } = useUI()
 
+  const [updatedProduct, setUpdatedProduct] = useState(null)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
+
+  const product = updatedProduct || data
   const [selectedAttrData, setSelectedAttrData] = useState({
     productId: product.recordId,
     stockCode: product.stockCode,
     ...product,
   })
 
+  const fetchProduct = async () => {
+    const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
+    if (response?.data?.product) {
+      setUpdatedProduct(response.data.product)
+    }
+  }
+
   useEffect(() => {
+    fetchProduct()
     const { entityId, entityName, entityType, entity } = KEYS_MAP
     setEntities({
       [entityId]: product.recordId,
@@ -346,14 +358,18 @@ export default function ProductView({
               <p className="text-gray-500 text-md">Ref: {product.stockCode}</p>
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
-                <p className="text-3xl text-gray-900">
-                  {product.price.formatted.withTax}
-                  {product.listPrice.raw.tax > 0 ? (
-                    <span className="px-5 text-sm line-through text-gray-500">
-                      RRP {product.listPrice.formatted.withTax}
-                    </span>
-                  ) : null}
-                </p>
+                {updatedProduct ? (
+                  <p className="text-3xl text-gray-900">
+                    {product.price.formatted.withTax}
+                    {product.listPrice.raw.tax > 0 ? (
+                      <span className="px-5 text-sm line-through text-gray-500">
+                        RRP {product.listPrice.formatted.withTax}
+                      </span>
+                    ) : null}
+                  </p>
+                ) : (
+                  <p className="text-3xl text-gray-900">------</p>
+                )}
               </div>
 
               {/* Reviews */}
@@ -397,38 +413,42 @@ export default function ProductView({
                 </h2>
                 <ProductDetails product={product} />
 
-                <div className="mt-10 flex sm:flex-col1">
-                  <Button
-                    title={buttonConfig.title}
-                    action={buttonConfig.action}
-                    buttonType={buttonConfig.type || 'cart'}
-                  />
+                {updatedProduct ? (
+                  <>
+                    <div className="mt-10 flex sm:flex-col1">
+                      <Button
+                        title={buttonConfig.title}
+                        action={buttonConfig.action}
+                        buttonType={buttonConfig.type || 'cart'}
+                      />
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!isInWishList) {
-                        handleWishList()
-                      }
-                    }}
-                    className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
-                  >
-                    {isInWishList ? (
-                      <span>Item was added in wishlist</span>
-                    ) : (
-                      <HeartIcon className="h-6 w-6 flex-shrink-0" />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!isInWishList) {
+                            handleWishList()
+                          }
+                        }}
+                        className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+                      >
+                        {isInWishList ? (
+                          <span>Item was added in wishlist</span>
+                        ) : (
+                          <HeartIcon className="h-6 w-6 flex-shrink-0" />
+                        )}
+                        <span className="sr-only">Add to favorites</span>
+                      </button>
+                    </div>
+                    {isEngravingAvailable && (
+                      <button
+                        className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                        onClick={() => showEngravingModal(true)}
+                      >
+                        <span className="font-bold">Engraving</span>
+                      </button>
                     )}
-                    <span className="sr-only">Add to favorites</span>
-                  </button>
-                </div>
-                {isEngravingAvailable && (
-                  <button
-                    className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                    onClick={() => showEngravingModal(true)}
-                  >
-                    <span className="font-bold">Engraving</span>
-                  </button>
-                )}
+                  </>
+                ) : null}
                 <div className="border-t divide-y divide-gray-200 mt-10">
                   <p className="text-gray-900 text-lg">
                     {product.currentStock > 0
