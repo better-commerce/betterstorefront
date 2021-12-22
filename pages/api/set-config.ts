@@ -2,7 +2,6 @@ import store from 'store'
 
 export default async (req: any, res: any) => {
   const { obj } = req.body
-  console.log(obj)
   try {
     Object.keys(obj).forEach((item: any) => {
       store.set(item, obj[item])
