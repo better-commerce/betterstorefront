@@ -1,14 +1,9 @@
-import type {
-  GetStaticPathsContext,
-  GetStaticPropsContext,
-  InferGetStaticPropsType,
-} from 'next'
+import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { useEffect } from 'react'
 
 export async function getStaticProps({
   params,
@@ -34,12 +29,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({
-  data,
-  setEntities,
-  recordEvent,
-}: // product,
-any) {
+function Slug({ data, setEntities, recordEvent }: any) {
   const router = useRouter()
 
   return router.isFallback ? (
