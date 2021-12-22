@@ -21,7 +21,7 @@ export const GENERAL_LAST_NAME = 'Last name'
 export const GENERAL_ADDRESS_LINE = 'Address line'
 export const GENERAL_ADDRESS_LINE1 = 'Address line 1'
 export const GENERAL_ADDRESS_LINE2 = 'Address line 2'
-
+export const GENERAL_CANCEL = 'Cancel'
 export const GENERAL_CITY = 'Town / city'
 export const GENERAL_POSTCODE = 'Postcode'
 export const GENERAL_COUNTRY = 'Country'
