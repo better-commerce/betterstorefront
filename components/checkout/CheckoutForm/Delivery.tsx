@@ -56,6 +56,7 @@ export default function Delivery({
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState({
     id: 0,
     children: [],
+    type: 0,
   })
   const [isSelected, setIsSelected] = useState(true)
   const [availableLocations, setAvailableLocations] = useState([])
@@ -126,7 +127,7 @@ export default function Delivery({
 
   useEffect(() => {
     setDeliveryMethods(DELIVERY_METHODS_TYPE)
-    setSelectedDeliveryMethod({ id: 0, children: [] })
+    setSelectedDeliveryMethod({ id: 0, children: [], type: 0 })
 
     fetchDeliveryMethods()
   }, [selectedCountry])
