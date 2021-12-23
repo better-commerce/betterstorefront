@@ -62,6 +62,7 @@ export default function ProductView({
   const [isInWishList, setItemsInWishList] = useState(false)
 
   const product = updatedProduct || data
+
   const [selectedAttrData, setSelectedAttrData] = useState({
     productId: product.recordId,
     stockCode: product.stockCode,
@@ -77,6 +78,9 @@ export default function ProductView({
 
   useEffect(() => {
     fetchProduct()
+  }, [slug])
+
+  useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
     setEntities({
       [entityId]: product.recordId,
