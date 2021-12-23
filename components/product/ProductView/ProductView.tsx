@@ -73,6 +73,11 @@ export default function ProductView({
     const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
     if (response?.data?.product) {
       setUpdatedProduct(response.data.product)
+      setSelectedAttrData({
+        productId: response.data.product.recordId,
+        stockCode: response.data.product.stockCode,
+        ...response.data.product,
+      })
     }
   }
 
@@ -374,7 +379,7 @@ export default function ProductView({
                 {updatedProduct ? (
                   <p className="text-3xl text-gray-900">
                     {selectedAttrData.price?.formatted?.withTax}
-                    {selectedAttrData.listPrice.raw.tax > 0 ? (
+                    {selectedAttrData.listPrice?.raw.tax > 0 ? (
                       <span className="px-5 text-sm line-through text-gray-500">
                         RRP {product.listPrice.formatted.withTax}
                       </span>
@@ -409,6 +414,7 @@ export default function ProductView({
               <div className="w-full sm:w-6/12">
                 <AttributesHandler
                   product={product}
+                  variant={selectedAttrData}
                   setSelectedAttrData={setSelectedAttrData}
                 />
               </div>
