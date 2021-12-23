@@ -99,8 +99,13 @@ export default function AttributesHandler({
         Object.keys(attrCombination).length ===
         0 || Object.keys(attrCombination).includes(option.fieldCode)
 
+    const isLastItem = Object.keys(attrCombination).pop() === option.fieldCode
     if (isInOrder) {
-      if (isCustomAttr && Object.keys(attrCombination).length > 1) {
+      if (
+        isCustomAttr &&
+        Object.keys(attrCombination).length > 1 &&
+        !isLastItem
+      ) {
         const entriesFromCombination = () => {
           return Object.fromEntries(
             Object.entries(attrCombination).slice(
@@ -140,6 +145,17 @@ export default function AttributesHandler({
     })
   }
 
+  const handleSelectedAttrData = (value: any) => {
+    if (isCustomAttr) {
+      if (
+        Object.keys(attrCombination).length ===
+        Object.keys(originalAttributes).length
+      ) {
+        setSelectedAttrData(value)
+      }
+    } else setSelectedAttrData(value)
+  }
+
   const DefaultComponent: any = () => null
   const stateAttributes: any = attrCombination
   return (
@@ -162,7 +178,7 @@ export default function AttributesHandler({
               label={option.fieldName}
               isDisabled={!optionsToPass.length}
               onChange={handleChange}
-              setSelectedAttrData={setSelectedAttrData}
+              setSelectedAttrData={handleSelectedAttrData}
               fieldCode={option.fieldCode}
               productId={product.id}
               setAttrCombination={handleAttrCombinations}

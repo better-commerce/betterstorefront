@@ -126,7 +126,10 @@ export default function ProductView({
   )
 
   if (product.videos && product.videos.length > 0) {
-    content = [...product.images, ...product.videos]
+    content = [...product.images, ...product.videos].filter(
+      (value: any, index: number, self: any) =>
+        index === self.findIndex((t: any) => t.image === value.image)
+    )
   }
 
   const buttonTitle = () => {
@@ -289,9 +292,6 @@ export default function ProductView({
     (item: any) => item.stockCode !== 'ADDON'
   )
 
-  console.log(selectedAttrData)
-
-  console.log(content)
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}
@@ -373,7 +373,7 @@ export default function ProductView({
                 <h2 className="sr-only">Product information</h2>
                 {updatedProduct ? (
                   <p className="text-3xl text-gray-900">
-                    {product.price.formatted.withTax}
+                    {selectedAttrData.price?.formatted?.withTax}
                     {selectedAttrData.listPrice.raw.tax > 0 ? (
                       <span className="px-5 text-sm line-through text-gray-500">
                         RRP {product.listPrice.formatted.withTax}
