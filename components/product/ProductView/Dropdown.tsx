@@ -77,6 +77,7 @@ export default function Dropdown({
     )
     setSelected({ ...value, ...stockPerAttrValue })
     setAttrCombination(fieldCode, value.currentAttribute)
+    console.log(stockPerAttrValue)
     setSelectedAttrData(stockPerAttrValue)
     if (value.stock === 0 && !isPreOrderEnabled) {
       openNotifyUser(stockPerAttrValue.productId)

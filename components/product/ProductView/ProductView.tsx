@@ -120,7 +120,10 @@ export default function ProductView({
     openNotifyUser(product.recordId)
   }
 
-  let content = [...product.images]
+  let content = [{ image: selectedAttrData.image }, ...product.images].filter(
+    (value: any, index: number, self: any) =>
+      index === self.findIndex((t: any) => t.image === value.image)
+  )
 
   if (product.videos && product.videos.length > 0) {
     content = [...product.images, ...product.videos]
@@ -286,6 +289,9 @@ export default function ProductView({
     (item: any) => item.stockCode !== 'ADDON'
   )
 
+  console.log(selectedAttrData)
+
+  console.log(content)
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}
@@ -357,16 +363,18 @@ export default function ProductView({
             {/* Product info */}
             <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
               <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-                {product.name}
+                {selectedAttrData.name}
               </h1>
 
-              <p className="text-gray-500 text-md">Ref: {product.stockCode}</p>
+              <p className="text-gray-500 text-md">
+                Ref: {selectedAttrData.stockCode}
+              </p>
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
                 {updatedProduct ? (
                   <p className="text-3xl text-gray-900">
                     {product.price.formatted.withTax}
-                    {product.listPrice.raw.tax > 0 ? (
+                    {selectedAttrData.listPrice.raw.tax > 0 ? (
                       <span className="px-5 text-sm line-through text-gray-500">
                         RRP {product.listPrice.formatted.withTax}
                       </span>
@@ -456,7 +464,7 @@ export default function ProductView({
                 ) : null}
                 <div className="border-t divide-y divide-gray-200 mt-10">
                   <p className="text-gray-900 text-lg">
-                    {product.currentStock > 0
+                    {selectedAttrData.currentStock > 0
                       ? product.deliveryMessage
                       : product.stockAvailabilityMessage}
                   </p>
