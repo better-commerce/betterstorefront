@@ -3,18 +3,25 @@ import { config } from './configs/contact'
 import { useUI } from '@components/ui/context'
 import { handleSubmit, URLS } from './common'
 import Button from '@components/ui/IndigoButton'
+import {
+  GENERAL_WANT_RECEIVE_OFFERS, 
+  GENERAL_NOT_WANT_RECEIVE_OFFERS,
+  CONTACT_PREFERENCES_TITLE,
+  CONTACT_PREFERENCES_SUBTITLE,
+  GENERAL_SAVE_CHANGES
+} from '@components/utils/textVariables'
 
 const radioBtnsConfig = [
   {
     type: 'radio',
-    title: 'I want to receive offers',
+    title: GENERAL_WANT_RECEIVE_OFFERS,
     items: config,
     id: 1,
   },
   {
     type: 'radio',
     id: 2,
-    title: "I don't want to receive offers",
+    title: GENERAL_NOT_WANT_RECEIVE_OFFERS,
     items: [],
     default: true,
     unsubscribe: true,
@@ -109,13 +116,11 @@ export default function ContactPreferences() {
           <p className="mt-2 text-sm flex flex-col text-gray-500">
             <span>
               {' '}
-              Please note, when you update your preferences they will be saved
-              but they won’t be reflected right away.
+              {CONTACT_PREFERENCES_TITLE}
             </span>
             <span className="mt-5">
               {' '}
-              Receive emails and texts containing tips, guidance, offers and
-              news on new products and services.
+              {CONTACT_PREFERENCES_SUBTITLE}
             </span>
           </p>
         </div>
@@ -200,7 +205,7 @@ export default function ContactPreferences() {
           <Button
             buttonType="button"
             action={handleDataSubmit}
-            title="Save changes"
+            title={GENERAL_SAVE_CHANGES}
             className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
           />
         </div>
