@@ -16,6 +16,7 @@ export async function getStaticProps({
   return {
     props: {
       data: product,
+      slug: params!.slug,
     },
     revalidate: 200,
   }
@@ -29,9 +30,8 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent }: any) {
+function Slug({ data, setEntities, recordEvent, slug }: any) {
   const router = useRouter()
-
   return router.isFallback ? (
     <h1>Loading...</h1>
   ) : (
@@ -39,7 +39,8 @@ function Slug({ data, setEntities, recordEvent }: any) {
       <ProductView
         recordEvent={recordEvent}
         setEntities={setEntities}
-        product={data.product}
+        data={data.product}
+        slug={slug}
         snippets={data.snippets}
       />
     )
