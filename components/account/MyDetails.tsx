@@ -4,6 +4,8 @@ import { formConfig, schema } from './configs/details'
 import { useUI } from '@components/ui/context'
 import { handleSubmit } from './common'
 import LoadingDots from '@components/ui/LoadingDots'
+import { MY_DETAIL_TEXT, GENERAL_SAVE_CHANGES } from '@components/utils/textVariables'
+
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
 
@@ -28,8 +30,7 @@ export default function MyDetails() {
             {title}
           </h1>
           <p className="mt-2 text-sm text-gray-500">
-            Feel free to edit any of your details below so your account is
-            totally up to date.
+            {MY_DETAIL_TEXT}
           </p>
         </div>
       </div>
@@ -81,7 +82,7 @@ export default function MyDetails() {
                     onClick={handleSubmit}
                     className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                   >
-                    {isSubmitting ? <LoadingDots /> : 'Save changes'}
+                    {isSubmitting ? <LoadingDots /> : GENERAL_SAVE_CHANGES }
                   </button>
                 </div>
               </div>
