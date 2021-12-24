@@ -2,7 +2,9 @@ import Dropdown from './Dropdown'
 import InlineList from './InlineList'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import attributesGenerator from '@components/utils/attributesGenerator'
+import attributesGenerator, {
+  getAttributesFromSlug,
+} from '@components/utils/attributesGenerator'
 
 const ATTR_COMPONENTS: any = {
   Dropdown: (props: any) => <Dropdown {...props} />,
@@ -18,24 +20,15 @@ const TEMP_MAP: any = {
 export default function AttributesHandler({
   product,
   setSelectedAttrData,
+  variant,
 }: any) {
   const { attributes, variantProductsAttribute = [], variantProducts } = product
 
   const router = useRouter()
 
-  const getAttributesFromSlug = () => {
-    const slug = `products/${router.query.slug}`
-    return variantProducts.reduce((acc: any, obj: any) => {
-      if (obj.slug === slug) {
-        obj.variantAttributes.forEach((varAttr: any) => {
-          acc[varAttr.fieldCode] = varAttr.fieldValue
-        })
-      }
-      return acc
-    }, {})
-  }
+  const slug = `products/${router.query.slug}`
 
-  const originalAttributes = getAttributesFromSlug()
+  const originalAttributes = getAttributesFromSlug(slug, variantProducts)
 
   const generatedAttrCombination = Object.fromEntries(
     Object.entries(originalAttributes).slice(0, 1)
@@ -99,8 +92,13 @@ export default function AttributesHandler({
         Object.keys(attrCombination).length ===
         0 || Object.keys(attrCombination).includes(option.fieldCode)
 
+    const isLastItem = Object.keys(attrCombination).pop() === option.fieldCode
     if (isInOrder) {
-      if (isCustomAttr && Object.keys(attrCombination).length > 1) {
+      if (
+        isCustomAttr &&
+        Object.keys(attrCombination).length > 1 &&
+        !isLastItem
+      ) {
         const entriesFromCombination = () => {
           return Object.fromEntries(
             Object.entries(attrCombination).slice(
@@ -140,6 +138,17 @@ export default function AttributesHandler({
     })
   }
 
+  const handleSelectedAttrData = (value: any) => {
+    if (isCustomAttr) {
+      if (
+        Object.keys(attrCombination).length ===
+        Object.keys(originalAttributes).length
+      ) {
+        setSelectedAttrData(value)
+      }
+    } else setSelectedAttrData(value)
+  }
+
   const DefaultComponent: any = () => null
   const stateAttributes: any = attrCombination
   return (
@@ -162,11 +171,13 @@ export default function AttributesHandler({
               label={option.fieldName}
               isDisabled={!optionsToPass.length}
               onChange={handleChange}
-              setSelectedAttrData={setSelectedAttrData}
+              setSelectedAttrData={handleSelectedAttrData}
               fieldCode={option.fieldCode}
               productId={product.id}
               setAttrCombination={handleAttrCombinations}
               generateLink={generateLink}
+              product={product}
+              variant={variant}
             />
           </div>
         )
