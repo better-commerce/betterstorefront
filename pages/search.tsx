@@ -125,10 +125,12 @@ function Search({ query, setEntities, recordEvent }: any) {
       ) {
         setProductListMemory((prevData: any) => {
           let dataClone = { ...data }
-          dataClone.products.results = [
-            ...prevData.products.results,
-            ...dataClone.products.results,
-          ]
+          if (state.currentPage > 1) {
+            dataClone.products.results = [
+              ...prevData.products.results,
+              ...dataClone.products.results,
+            ]
+          }
           return dataClone
         })
       }
@@ -177,6 +179,7 @@ function Search({ query, setEntities, recordEvent }: any) {
       },
     })
   }, [state.filters])
+
   const handleFilters = (filter: null, type: string) => {
     dispatch({
       type,
