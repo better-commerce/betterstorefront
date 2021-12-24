@@ -30,12 +30,18 @@ import {
   RETURN_ORDER_TITLE,
   RETURN_ORDER_TEXT,
   GENERAL_ORDER_NUMBER,
-  RETURN_ORDER_PLACED_ON,
+  GENERAL_ORDER_PLACED_ON,
   GENERAL_DATE_PLACED,
   GENERAL_TOTAL_AMOUNT,
   GENERAL_VIEW_ORDER,
   GENERAL_VIEW_PRODUCT,
-  GENERAL_VIEW_INVOICE
+  GENERAL_VIEW_INVOICE,
+  RETURN_FOR_ORDER,
+  GENERAL_BUY_AGAIN,
+  GENERAL_DELIVERED,
+  GENERAL_ON_TEXT,
+  ORDER_STATUS_OUT_FOR_DELIVERY,
+  ORDER_STATUS_CANCELLED
 } from '@components/utils/textVariables'
 
 
@@ -251,7 +257,7 @@ export default function MyReturns() {
               {orders.map((order) => (
                 <div key={order.number}>
                   <h3 className="sr-only">
-                    {RETURN_ORDER_PLACED_ON}{' '}
+                    {GENERAL_ORDER_PLACED_ON}{' '}
                     <time dateTime={order.datetime}>{order.date}</time>
                   </h3>
 
@@ -290,7 +296,7 @@ export default function MyReturns() {
                       >
                         {GENERAL_VIEW_INVOICE}
                         <span className="sr-only">
-                          for order {order.number}
+                          {RETURN_FOR_ORDER} {order.number}
                         </span>
                       </a>
                     </div>
@@ -327,23 +333,23 @@ export default function MyReturns() {
                                     href="#"
                                     className="text-indigo-600 hover:text-indigo-500"
                                   >
-                                    Buy Again
+                                    {GENERAL_BUY_AGAIN}
                                   </a>
                                 </div>
                               </div>
                             </div>
                             <div className="mt-6 font-medium">
-                              {product.status === 'delivered' ? (
+                              {product.status === GENERAL_DELIVERED ? (
                                 <div className="flex space-x-2">
                                   <CheckIcon
                                     className="flex-none w-6 h-6 text-green-500"
                                     aria-hidden="true"
                                   />
                                   <p>
-                                    Delivered
+                                    {GENERAL_DELIVERED}
                                     <span className="hidden sm:inline">
                                       {' '}
-                                      on{' '}
+                                      {GENERAL_ON_TEXT}{' '}
                                       <time dateTime={product.datetime}>
                                         {product.date}
                                       </time>
@@ -351,9 +357,9 @@ export default function MyReturns() {
                                   </p>
                                 </div>
                               ) : product.status === 'out-for-delivery' ? (
-                                <p>Out for delivery</p>
+                                <p>{ORDER_STATUS_OUT_FOR_DELIVERY}</p>
                               ) : product.status === 'cancelled' ? (
-                                <p className="text-gray-500">Cancelled</p>
+                                <p className="text-gray-500">{ORDER_STATUS_CANCELLED}</p>
                               ) : null}
                             </div>
                           </div>

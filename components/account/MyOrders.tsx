@@ -13,7 +13,9 @@ import {
   GENERAL_TRACKING_LINK,
   GENERAL_VIEW_PRODUCT,
   GENERAL_ADD_TO_BASKET,
-  ORDER_HISTORY_TITLE
+  ORDER_HISTORY_TITLE,
+  GENERAL_TOTAL,
+  GENERAL_ORDER_PLACED_ON
 } from '@components/utils/textVariables'
 
 export default function MyOrders() {
@@ -75,7 +77,7 @@ export default function MyOrders() {
               {data.map((order: any) => (
                 <div key={order.orderNo}>
                   <h3 className="sr-only">
-                    Order placed on{' '}
+                    {GENERAL_ORDER_PLACED_ON}{' '}
                     <time dateTime={order.orderDate}>
                       {new Date(order.orderDate).toLocaleDateString()}
                     </time>
@@ -100,7 +102,7 @@ export default function MyOrders() {
                         </dd>
                       </div>
                       <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
-                        <dt>Total</dt>
+                        <dt>{GENERAL_TOTAL}</dt>
                         <dd className="md:mt-1">
                           {order?.subTotal?.formatted?.withTax}
                         </dd>
