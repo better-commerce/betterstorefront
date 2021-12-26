@@ -9,6 +9,7 @@ import {
   NEXT_UPDATE_CHECKOUT_ADDRESS,
   NEXT_PAYMENT_METHODS,
   NEXT_CONFIRM_ORDER,
+  NEXT_POST_PAYMENT_RESPONSE,
 } from '@components/utils/constants'
 import {
   shippingFormConfig,
@@ -30,7 +31,7 @@ export default function CheckoutForm({
   config,
   location,
 }: any) {
-  const { setCartItems, basketId, cartItems } = useUI()
+  const { setCartItems, basketId, cartItems, setOrderId, orderId } = useUI()
 
   const defaultDeliveryMethod = cartItems.shippingMethods.find(
     (i: any) => i.id === cartItems.shippingMethodId
@@ -159,10 +160,6 @@ export default function CheckoutForm({
     dispatch({ type: 'TOGGLE_SHIPPING' })
   }
 
-  const handlePaymentMethod = (method: any) => {
-    dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
-  }
-
   const paymentData = async () => {
     const response = await axios.post(NEXT_PAYMENT_METHODS, {
       currencyCode: cartItems.baseCurrency,
@@ -269,7 +266,38 @@ export default function CheckoutForm({
     setBillingInformation(defaultBillingAddress, false)
   }, [])
 
-  const confirmOrder = () => {
+  const handlePayments = (method: any) => {
+    // const isTestUrl = state.selectedPaymentMethod.settings.find((method:any) => method.key === 'UseSandbox').value === 'True';
+    const paymentObject = method.settings.reduce((acc: any, obj: any) => {
+      if (obj.key === 'UseSandbox') {
+        acc['isTestUrl'] = obj.value === 'True'
+        return acc
+      }
+      if (obj.key === 'TestUrl') {
+        acc['testUrl'] = obj.value
+        return acc
+      }
+      if (obj.key === 'ProductionUrl') {
+        acc['prodUrl'] = obj.value
+        return acc
+      }
+      return acc
+    }, {})
+    //@TODO temporary
+    // switch (method.inputType) {
+    //   case 15:
+    //     paymentObject.isTestUrl
+    //       ? window.open(paymentObject.testUrl, '_self')
+    //       : window.open(paymentObject.prodUrl, '_self')
+    //     break
+    //   default:
+    //     return false
+    // }
+  }
+
+  const confirmOrder = (method: any) => {
+    dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
+
     const billingInfoClone = { ...state.billingInformation }
     delete billingInfoClone.id
     const shippingClone = { ...state.shippingInformation }
@@ -290,9 +318,10 @@ export default function CheckoutForm({
         countryCode: state.deliveryMethod.code,
       },
       selectedShipping: state.shippingMethod,
-      selectedPayment: state.selectedPaymentMethod,
+      selectedPayment: method,
       storeId: state.storeId,
     }
+
     const handleAsync = async () => {
       try {
         const response: any = await axios.post(NEXT_CONFIRM_ORDER, {
@@ -300,13 +329,70 @@ export default function CheckoutForm({
           model: data,
         })
         if (response.data.result.id) {
-          Router.push(`/confirm-order/${response.data.result.id}`)
+          handlePayments(method)
+          //@TODO temporary
+        }
+        const orderModel = {
+          // id: '10',
+          cardNo: 'null',
+          orderNo: response.data.result.orderNo,
+          orderAmount: response.data.result.grandTotal.raw.withTax,
+          paidAmount: response.data.result.grandTotal.raw.withTax,
+          balanceAmount: '0.00',
+          isValid: true,
+          status: 'paid',
+          authCode: 'null',
+          issuerUrl: 'null',
+          paRequest: 'null',
+          pspSessionCookie: 'null',
+          pspResponseCode: 'null',
+          pspResponseMessage: 'null',
+          paymentGatewayId: method.id,
+          paymentGateway: method.systemName,
+          token: 'null',
+          payerId: 'null',
+          cvcResult: 'null',
+          avsResult: 'null',
+          secure3DResult: 'null',
+          cardHolderName: 'null',
+          issuerCountry: 'null',
+          info1: '',
+          fraudScore: 'null',
+          paymentMethod: method.systemName,
+          cardType: 'null',
+          operatorId: 'null',
+          refStoreId: 'null',
+          tillNumber: 'null',
+          externalRefNo: 'null',
+          expiryYear: 'null',
+          expiryMonth: 'null',
+          isMoto: 'true',
+          upFrontPayment: 'false',
+          upFrontAmount: '0.00',
+          upFrontTerm: '76245369',
+          isPrePaid: 'false',
+        }
+        if (method.systemName === 'COD') {
+          const orderModelResponse: any = await axios.post(
+            NEXT_POST_PAYMENT_RESPONSE,
+            {
+              model: orderModel,
+            }
+          )
+          if (orderModelResponse.data.success) {
+            setOrderId(response.data.result.id)
+            Router.push('/thank-you')
+          }
         }
       } catch (error) {
         console.log(error)
       }
     }
     handleAsync()
+  }
+
+  const handlePaymentMethod = (method: any) => {
+    confirmOrder(method)
   }
 
   return (

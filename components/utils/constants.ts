@@ -29,7 +29,7 @@ export const PRICE_MATCH_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}
 export const NEXT_ADD_TO_CART = `/api/add-item-cart`
 export const NEXT_BULK_ADD_TO_CART = `/api/bulk-add-cart`
 export const NEXT_UPDATE_CART_INFO = `/api/update-cart-info`
-
+export const NEXT_GET_ORDER_DETAILS = '/api/customer/order-details'
 export const NEXT_GET_CART = `/api/get-cart`
 export const NEXT_ASSOCIATE_CART = '/api/customer/associate-cart'
 export const NEXT_MERGE_CART = '/api/merge-cart'
@@ -65,6 +65,7 @@ export const NEXT_PAYMENT_METHODS = '/api/payment-methods'
 export const NEXT_CONFIRM_ORDER = '/api/confirm-order'
 export const NEXT_INFRA_ENDPOINT = '/api/infra'
 export const NEXT_SET_CONFIG = '/api/set-config'
+export const NEXT_POST_PAYMENT_RESPONSE = '/api/payment-response'
 //CONSTANTS
 
 export const SessionIdCookieKey: string = `sessionId`
