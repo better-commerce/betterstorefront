@@ -1,3 +1,5 @@
+import {GENERAL_EDIT} from '@components/utils/textVariables'
+
 export default function ConfirmedGeneralComponent({
   onStateChange,
   content = {},
@@ -17,11 +19,9 @@ export default function ConfirmedGeneralComponent({
       </div>
       <div className="flex">
         <button onClick={onStateChange} className="btn text-indigo-500 font-xs" type="button">
-          Edit
+          {GENERAL_EDIT}
         </button>
       </div>
-      
-     
     </div>
   )
 }
