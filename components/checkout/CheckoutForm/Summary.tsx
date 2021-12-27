@@ -35,17 +35,6 @@ export default function Summary({ cart, handleItem, confirmOrder }: any) {
                       </Link>
                     </h4>
                   </div>
-
-                  {/* <div className="ml-4 flex-shrink-0 flow-root">
-                    <button
-                      type="button"
-                      onClick={() => handleItem(product, 'delete')}
-                      className="-m-2.5 bg-white p-2.5 flex items-center justify-center text-gray-400 hover:text-gray-500"
-                    >
-                      <span className="sr-only">Remove</span>
-                      <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                    </button>
-                  </div> */}
                 </div>
 
                 <div className="flex-1 pt-2 flex items-end justify-between">
@@ -95,7 +84,7 @@ export default function Summary({ cart, handleItem, confirmOrder }: any) {
           </div>
         </dl>
 
-        <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+        {/* <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
           <button
             type="button"
             onClick={confirmOrder}
@@ -103,7 +92,7 @@ export default function Summary({ cart, handleItem, confirmOrder }: any) {
           >
             Confirm order
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   )

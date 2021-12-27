@@ -13,6 +13,7 @@ export const basketId = () => {
   Cookies.set('basketId', basketId)
   return basketId
 }
+
 export interface State {
   displaySidebar: boolean
   displayDropdown: boolean
@@ -28,6 +29,7 @@ export interface State {
   user: any
   showSearchBar: boolean
   appConfig: any
+  orderId: string
 }
 
 const initialState = {
@@ -45,6 +47,7 @@ const initialState = {
   user: getItem('user') || {},
   showSearchBar: false,
   appConfig: {},
+  orderId: getItem('orderId') || '',
 }
 
 type Action =
@@ -107,6 +110,7 @@ type Action =
   | { type: 'SET_BASKET_ID'; payload: string }
   | { type: 'SHOW_SEARCH_BAR'; payload: boolean }
   | { type: 'SET_APP_CONFIG'; payload: any }
+  | { type: 'SET_ORDER_ID'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -252,6 +256,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         appConfig: action.payload,
+      }
+    }
+    case 'SET_ORDER_ID': {
+      return {
+        ...state,
+        orderId: action.payload,
       }
     }
   }
@@ -436,6 +446,19 @@ export const UIProvider: FC = (props) => {
     setSidebarView('WISHLIST_VIEW')
     openSidebar()
   }
+
+  const setOrderId = useCallback(
+    (payload: string) => {
+      if (payload) {
+        Cookies.set('orderId', payload)
+      } else {
+        Cookies.remove('orderId')
+      }
+      dispatch({ type: 'SET_ORDER_ID', payload })
+    },
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -465,6 +488,7 @@ export const UIProvider: FC = (props) => {
       setBasketId,
       setShowSearchBar,
       setAppConfig,
+      setOrderId,
     }),
     [state]
   )
