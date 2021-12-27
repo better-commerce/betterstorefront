@@ -7,19 +7,20 @@ import axios from 'axios'
 import Form from '@components/customer'
 import GuestForm from './GuestForm'
 import Link from 'next/link'
+import { BTN_CHECKOUT_SECURELY, CUSTOMER_ERROR_MESSAGE, GUEST_CHECKOUT, LOG_IN, NEW_CUSTOMER } from '@components/utils/textVariables'
 const config = [
   {
-    title: 'Log in',
+    title: LOG_IN,
     key: 'logIn',
   },
   {
-    title: 'Guest Checkout',
+    title: GUEST_CHECKOUT,
     key: 'guestCheckout',
   },
 ]
 
 const DEFAULT_TAB = {
-  title: 'Log in',
+  title: LOG_IN,
   key: 'logIn',
 }
 
@@ -66,7 +67,7 @@ export default function CheckoutRouter({
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
-            Secure checkout
+            {BTN_CHECKOUT_SECURELY}
           </h2>
         </div>
         <div className="flex justify-center items-center pt-10">
@@ -92,7 +93,7 @@ export default function CheckoutRouter({
             <div>
               <Link href="/my-account/register">
                 <span className="text-gray-600 underline cursor-pointer">
-                  New customer?
+                  {NEW_CUSTOMER}
                 </span>
               </Link>
             </div>
@@ -104,7 +105,7 @@ export default function CheckoutRouter({
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && activeTab.key === 'logIn' && (
             <span className="text-red-700 text-lg">
-              No account has been found with this email/password
+              {CUSTOMER_ERROR_MESSAGE}
             </span>
           )}
         </div>
