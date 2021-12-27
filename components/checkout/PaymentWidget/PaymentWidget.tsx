@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import s from './PaymentWidget.module.css'
 import { ChevronRight, CreditCard, Check } from '@components/icons'
+import { ADD_PAYMENT_METHOD } from '@components/utils/textVariables'
 
 interface ComponentProps {
   onClick?: () => any
@@ -16,7 +17,7 @@ const PaymentWidget: FC<ComponentProps> = ({ onClick, isValid }) => {
       <div className="flex flex-1 items-center">
         <CreditCard className="w-5 flex" />
         <span className="ml-5 text-sm text-center font-medium">
-          Add Payment Method
+          {ADD_PAYMENT_METHOD}
         </span>
         {/* <span>VISA #### #### #### 2345</span> */}
       </div>
