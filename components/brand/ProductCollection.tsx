@@ -2,11 +2,7 @@ import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
-import getBrands from '@framework/api/endpoints/catalog/brands'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import ProductSort from '@components/product/ProductSort'
 
 export const ACTION_TYPES = {
@@ -77,12 +73,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({
-  query,
-  setEntities,
-  recordEvent,
-  brandDetails,
-}: any) {
+export default function ProductCollection({ query = {}, brandDetails }: any) {
+  console.log(brandDetails)
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -97,7 +89,7 @@ function BrandDetailPage({
       filters: [
         {
           Key: 'brandNoAnlz',
-          Value: brandDetails.manufacturerName,
+          Value: brandDetails.name,
           IsSelected: true,
         },
       ],
@@ -151,23 +143,6 @@ function BrandDetailPage({
     }
   }, [data.products.results.length])
 
-  const handlePageChange = (page: any) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, currentPage: page.selected + 1 },
-      },
-      undefined,
-      { shallow: true }
-    )
-    dispatch({ type: PAGE, payload: page.selected + 1 })
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    })
-  }
-
   const handleInfiniteScroll = () => {
     if (
       data.products.pages &&
@@ -183,44 +158,6 @@ function BrandDetailPage({
       payload: payload,
     })
   }
-
-  useEffect(() => {
-    const entity = {
-      allowFacet: true,
-      brand: null,
-      brandId: null,
-      breadCrumb: null,
-      category: null,
-      categoryId: null,
-      categoryIds: null,
-      collection: null,
-      collectionId: null,
-      currentPage: state.currentPage,
-      excludedBrandIds: null,
-      excludedCategoryIds: null,
-      facet: null,
-      facetOnly: false,
-      filters: state.filters,
-      freeText: '',
-      gender: null,
-      ignoreDisplayInSerach: false,
-      includeExcludedBrand: false,
-      page: state.currentPage,
-      pageSize: 0,
-      promoCode: null,
-      resultCount: data.products.total,
-      sortBy: state.sortBy,
-      sortOrder: state.sortOrder,
-    }
-    setEntities({
-      [KEYS_MAP.entityId]: '',
-      [KEYS_MAP.entityName]: '',
-      [KEYS_MAP.entityType]: 'Search',
-      [KEYS_MAP.entity]: JSON.stringify(entity),
-    })
-
-    recordEvent(EVENTS.FreeText)
-  })
 
   const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory.products
@@ -254,7 +191,6 @@ function BrandDetailPage({
         <ProductGrid
           products={productDataToPass}
           currentPage={state.currentPage}
-          handlePageChange={handlePageChange}
           handleInfiniteScroll={handleInfiniteScroll}
         />
       </main>
@@ -262,13 +198,13 @@ function BrandDetailPage({
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await getBrands({ brandIds: context.query.id })
-  return {
-    props: { query: context.query, brandDetails: response.result.results[0] }, // will be passed to the page component as props
-  }
-}
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const response = await getBrands({ brandIds: context.query.id })
+//   return {
+//     props: { query: context.query, brandDetails: response.result.results[0] }, // will be passed to the page component as props
+//   }
+// }
 
-const PAGE_TYPE = PAGE_TYPES['Brand']
+// const PAGE_TYPE = PAGE_TYPES['Brand']
 
-export default withDataLayer(BrandDetailPage, PAGE_TYPE)
+// export default withDataLayer(BrandDetailPage, PAGE_TYPE)

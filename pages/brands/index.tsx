@@ -28,6 +28,7 @@ const dataNormalizr = (data: any = []) => {
 }
 
 function BrandsPage({ brands }: any) {
+  console.log(brands)
   const data = dataNormalizr(brands.results)
   const [normalizedBrands, setNormalizedBrands] = useState(data)
 
@@ -106,11 +107,16 @@ function BrandsPage({ brands }: any) {
                       style={{ flex: '0 0 33.333333%' }}
                       className="text-gray-900 sm:inline-flex flex "
                     >
-                      <Link href={`/${result.link}`}>
-                        <a
-                          href={`/${result.link}`}
-                          className="text-lg py-5 hover:underline cursor-pointer"
-                        >
+                      <Link
+                        passHref
+                        href={{
+                          pathname: `/${result.link}`,
+                          query: {
+                            id: result.id,
+                          },
+                        }}
+                      >
+                        <a className="text-lg py-5 hover:underline cursor-pointer">
                           {result.manufacturerName}
                         </a>
                       </Link>
