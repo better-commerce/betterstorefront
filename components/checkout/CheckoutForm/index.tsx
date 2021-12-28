@@ -320,6 +320,44 @@ export default function CheckoutForm({
       selectedShipping: state.shippingMethod,
       selectedPayment: method,
       storeId: state.storeId,
+      Payment: {
+        Id: null,
+        CardNo: null,
+        OrderNo: 0,
+        OrderAmount: cartItems.grandTotal.raw.withTax,
+        PaidAmount: 0.0,
+        BalanceAmount: 0.0,
+        IsValid: false,
+        Status: 0,
+        AuthCode: null,
+        IssuerUrl: null,
+        PaRequest: null,
+        PspSessionCookie: null,
+        PspResponseCode: null,
+        PspResponseMessage: null,
+        PaymentGatewayId: method.id,
+        PaymentGateway: method.systemName,
+        Token: null,
+        PayerId: null,
+        CvcResult: null,
+        AvsResult: null,
+        Secure3DResult: null,
+        CardHolderName: null,
+        IssuerCountry: null,
+        Info1: null,
+        FraudScore: null,
+        PaymentMethod: method.systemName,
+        IsVerify: false,
+        IsValidAddress: false,
+        LastUpdatedBy: null,
+        OperatorId: null,
+        RefStoreId: null,
+        TillNumber: null,
+        ExternalRefNo: null,
+        ExpiryYear: null,
+        ExpiryMonth: null,
+        IsMoto: false,
+      },
     }
 
     const handleAsync = async () => {
@@ -330,10 +368,9 @@ export default function CheckoutForm({
         })
         if (response.data.result.id) {
           handlePayments(method)
-          //@TODO temporary
+          //@TODO temporary move to BE
         }
         const orderModel = {
-          // id: '10',
           cardNo: 'null',
           orderNo: response.data.result.orderNo,
           orderAmount: response.data.result.grandTotal.raw.withTax,
