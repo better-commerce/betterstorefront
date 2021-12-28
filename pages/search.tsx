@@ -78,6 +78,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 
 function Search({ query, setEntities, recordEvent }: any) {
   const adaptedQuery = { ...query }
+  console.log(query)
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
     : false
@@ -116,6 +117,8 @@ function Search({ query, setEntities, recordEvent }: any) {
     },
     error,
   } = useSwr(['/api/catalog/products', state], postData)
+
+  console.log(state)
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {

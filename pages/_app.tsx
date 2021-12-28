@@ -66,7 +66,7 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
   }
   useEffect(() => {
     DataLayerInstance.setDataLayer()
-    if (!process.env.DEVELOPMENT) {
+    if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
       geoData()
         .then((response) => {
           setUserLocation(response)
