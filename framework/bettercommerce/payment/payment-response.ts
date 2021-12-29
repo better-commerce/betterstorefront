@@ -5,7 +5,7 @@ interface Props {
   model: any
 }
 
-export default function getPaymentMethods() {
+export default function putPaymentResponse() {
   return async function handler({ orderId, model }: Props) {
     try {
       const response: any = await fetcher({
