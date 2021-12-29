@@ -113,6 +113,11 @@ function Cart({ cart }: any) {
 
   const isEmpty: boolean = userCart?.lineItems?.length === 0
 
+  const isShippingDisabled =
+    cartItems.lineItems.filter(
+      (i: any) => i.itemType === 2 || i.itemType === 20
+    ).length === cartItems.lineItems.length
+
   return (
     <div className="bg-white">
       <main className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -267,14 +272,16 @@ function Cart({ cart }: any) {
                     {cartItems.subTotal?.formatted?.withTax}
                   </dd>
                 </div>
-                <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
-                  <dt className="flex items-center text-sm text-gray-600">
-                    <span>Shipping</span>
-                  </dt>
-                  <dd className="text-sm font-medium text-gray-900">
-                    {cartItems.shippingCharge?.formatted?.withTax}
-                  </dd>
-                </div>
+                {isShippingDisabled ? null : (
+                  <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
+                    <dt className="flex items-center text-sm text-gray-600">
+                      <span>Shipping</span>
+                    </dt>
+                    <dd className="text-sm font-medium text-gray-900">
+                      {cartItems.shippingCharge?.formatted?.withTax}
+                    </dd>
+                  </div>
+                )}
                 <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                   {userCart.promotionsApplied?.length > 0 && (
                     <>
