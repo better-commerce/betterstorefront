@@ -378,7 +378,7 @@ export default function CheckoutForm({
           paidAmount: response.data.result.grandTotal.raw.withTax,
           balanceAmount: '0.00',
           isValid: true,
-          status: 'paid',
+          status: 2,
           authCode: 'null',
           issuerUrl: 'null',
           paRequest: 'null',
