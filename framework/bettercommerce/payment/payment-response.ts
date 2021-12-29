@@ -8,6 +8,7 @@ interface Props {
 export default function putPaymentResponse() {
   return async function handler({ orderId, model }: Props) {
     try {
+      console.log(`${CHECKOUT_ENDPOINT}/${orderId}/payment-response`);
       const response: any = await fetcher({
         url: `${CHECKOUT_ENDPOINT}/${orderId}/payment-response`,
         method: 'put',
