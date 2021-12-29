@@ -49,6 +49,7 @@ export default function CheckoutForm({
     shippingMethod: null,
     storeId: '',
     isCNC: false,
+    error: '',
   }
 
   interface stateInterface {
@@ -63,6 +64,7 @@ export default function CheckoutForm({
     shippingMethod: any
     storeId: string
     isCNC: boolean
+    error: string
   }
   interface actionInterface {
     type?: string
@@ -125,6 +127,12 @@ export default function CheckoutForm({
         return {
           ...state,
           isSameAddress: !state.isSameAddress,
+        }
+      }
+      case 'SET_ERROR': {
+        return {
+          ...state,
+          error: payload,
         }
       }
       default: {
@@ -366,63 +374,71 @@ export default function CheckoutForm({
           basketId,
           model: data,
         })
-        if (response.data.result.id) {
+
+        if (state.error) dispatch({ type: 'SET_ERROR', payload: '' })
+
+        if (response.data?.result?.id) {
           handlePayments(method)
           //@TODO temporary move to BE
-        }
-        const orderModel = {
-          id: response.data.result.payment.id,
-          cardNo: 'null',
-          orderNo: response.data.result.orderNo,
-          orderAmount: response.data.result.grandTotal.raw.withTax,
-          paidAmount: response.data.result.grandTotal.raw.withTax,
-          balanceAmount: '0.00',
-          isValid: true,
-          status: 2,
-          authCode: null,
-          issuerUrl: null,
-          paRequest: null,
-          pspSessionCookie: null,
-          pspResponseCode: null,
-          pspResponseMessage: null,
-          paymentGatewayId: method.id,
-          paymentGateway: method.systemName,
-          token: null,
-          payerId: null,
-          cvcResult: null,
-          avsResult: null,
-          secure3DResult: null,
-          cardHolderName: null,
-          issuerCountry: null,
-          info1: '',
-          fraudScore: null,
-          paymentMethod: method.systemName,
-          cardType: null,
-          operatorId: null,
-          refStoreId: null,
-          tillNumber: null,
-          externalRefNo: null,
-          expiryYear: null,
-          expiryMonth: null,
-          isMoto: 'true',
-          upFrontPayment: 'false',
-          upFrontAmount: '0.00',
-          upFrontTerm: '76245369',
-          isPrePaid: 'false',
-        }
-        if (method.systemName === 'COD') {
-          const orderModelResponse: any = await axios.post(
-            NEXT_POST_PAYMENT_RESPONSE,
-            {
-              model: orderModel,
-            }
-          )
-          // if (orderModelResponse.data.success) {
-          //   setOrderId(response.data.result.id)
-          //   Router.push('/thank-you')
-          // }
+
+          const orderModel = {
+            id: response.data.result.payment.id,
+            cardNo: 'null',
+            orderNo: response.data.result.orderNo,
+            orderAmount: response.data.result.grandTotal.raw.withTax,
+            paidAmount: response.data.result.grandTotal.raw.withTax,
+            balanceAmount: '0.00',
+            isValid: true,
+            status: 2,
+            authCode: null,
+            issuerUrl: null,
+            paRequest: null,
+            pspSessionCookie: null,
+            pspResponseCode: null,
+            pspResponseMessage: null,
+            paymentGatewayId: method.id,
+            paymentGateway: method.systemName,
+            token: null,
+            payerId: null,
+            cvcResult: null,
+            avsResult: null,
+            secure3DResult: null,
+            cardHolderName: null,
+            issuerCountry: null,
+            info1: '',
+            fraudScore: null,
+            paymentMethod: method.systemName,
+            cardType: null,
+            operatorId: null,
+            refStoreId: null,
+            tillNumber: null,
+            externalRefNo: null,
+            expiryYear: null,
+            expiryMonth: null,
+            isMoto: 'true',
+            upFrontPayment: 'false',
+            upFrontAmount: '0.00',
+            upFrontTerm: '76245369',
+            isPrePaid: 'false',
+          }
+          if (method.systemName === 'COD') {
+            const orderModelResponse: any = await axios.post(
+              NEXT_POST_PAYMENT_RESPONSE,
+              {
+                model: orderModel,
+                orderId: response.data?.result?.id,
+              }
+            )
+            // if (orderModelResponse.data.success) {
+            //   setOrderId(response.data.result.id)
+            //   Router.push('/thank-you')
+            // }
+          }
+        } else {
+          dispatch({ type: 'SET_ERROR', payload: response.data.message })
         }
       } catch (error) {
+        window.alert(error)
         console.log(error)
       }
     }
@@ -513,6 +529,11 @@ export default function CheckoutForm({
                   paymentData={paymentData}
                   selectedPaymentMethod={state.selectedPaymentMethod}
                 />
+              )}
+              {state.error && (
+                <h4 className="py-5 text-lg font-semibold text-red-500">
+                  {state.error}
+                </h4>
               )}
             </div>
           </div>
