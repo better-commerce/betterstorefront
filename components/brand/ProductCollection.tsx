@@ -73,8 +73,11 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-export default function ProductCollection({ query = {}, brandDetails }: any) {
-  console.log(brandDetails)
+export default function ProductCollection({
+  query = {},
+  brandDetails,
+  ...props
+}: any) {
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -83,6 +86,7 @@ export default function ProductCollection({ query = {}, brandDetails }: any) {
     ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
     : false
 
+  console.log(props)
   const initialState = {
     ...DEFAULT_STATE,
     ...{
@@ -93,6 +97,7 @@ export default function ProductCollection({ query = {}, brandDetails }: any) {
           IsSelected: true,
         },
       ],
+      collectionId: props.recordId,
     },
   }
 
@@ -181,13 +186,13 @@ export default function ProductCollection({ query = {}, brandDetails }: any) {
             className="py-10 px-5 mt-5 text-gray-900"
           />
         </div>
-        <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
+        {/* <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
           <ProductSort
             routerSortOption={state.sortBy}
             products={data.products}
             action={handleSortBy}
           />
-        </div>
+        </div> */}
         <ProductGrid
           products={productDataToPass}
           currentPage={state.currentPage}
@@ -197,14 +202,3 @@ export default function ProductCollection({ query = {}, brandDetails }: any) {
     </div>
   )
 }
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const response = await getBrands({ brandIds: context.query.id })
-//   return {
-//     props: { query: context.query, brandDetails: response.result.results[0] }, // will be passed to the page component as props
-//   }
-// }
-
-// const PAGE_TYPE = PAGE_TYPES['Brand']
-
-// export default withDataLayer(BrandDetailPage, PAGE_TYPE)
