@@ -33,6 +33,11 @@ export default function CheckoutForm({
 }: any) {
   const { setCartItems, basketId, cartItems, setOrderId, orderId } = useUI()
 
+  const isShippingDisabled =
+    cartItems.lineItems.filter(
+      (i: any) => i.itemType === 2 || i.itemType === 20
+    ).length === cartItems.lineItems.length
+
   const defaultDeliveryMethod = cartItems.shippingMethods.find(
     (i: any) => i.id === cartItems.shippingMethodId
   )
@@ -171,7 +176,7 @@ export default function CheckoutForm({
   const paymentData = async () => {
     const response = await axios.post(NEXT_PAYMENT_METHODS, {
       currencyCode: cartItems.baseCurrency,
-      countryCode: state.deliveryMethod.twoLetterIsoCode,
+      countryCode: state.deliveryMethod.twoLetterIsoCode || 'GB',
     })
     return response
   }
@@ -455,15 +460,17 @@ export default function CheckoutForm({
         <h2 className="sr-only">Checkout</h2>
         <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
           <div>
-            <Delivery
-              appConfig={config}
-              geoData={location}
-              setParentShipping={setShippingMethod}
-              toggleDelivery={toggleDelivery}
-              isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
-            />
+            {!isShippingDisabled && (
+              <Delivery
+                appConfig={config}
+                geoData={location}
+                setParentShipping={setShippingMethod}
+                toggleDelivery={toggleDelivery}
+                isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
+              />
+            )}
 
-            {state.isCNC ? null : (
+            {state.isCNC || isShippingDisabled ? null : (
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <h2 className="text-lg font-semibold text-gray-900">
                   Shipping information
@@ -500,7 +507,9 @@ export default function CheckoutForm({
               <h2 className="text-lg font-semibold text-gray-900">
                 Billing information
               </h2>
-              {(state?.isShippingInformationCompleted || state.isCNC) && (
+              {(state?.isShippingInformationCompleted ||
+                state.isCNC ||
+                isShippingDisabled) && (
                 <Form
                   toggleAction={() =>
                     togglePayment(!state.isPaymentInformationCompleted)
@@ -541,6 +550,7 @@ export default function CheckoutForm({
           {/* Order summary */}
           <Summary
             confirmOrder={confirmOrder}
+            isShippingDisabled={isShippingDisabled}
             cart={cartItems}
             handleItem={handleItem}
           />

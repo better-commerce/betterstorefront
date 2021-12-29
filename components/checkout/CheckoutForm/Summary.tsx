@@ -3,7 +3,12 @@ import { TrashIcon } from '@heroicons/react/solid'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '@components/cart/PromotionInput'
 
-export default function Summary({ cart, handleItem, confirmOrder }: any) {
+export default function Summary({
+  cart,
+  handleItem,
+  confirmOrder,
+  isShippingDisabled,
+}: any) {
   return (
     <div className="mt-10 lg:mt-0 md:sticky top-0">
       <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
@@ -56,12 +61,14 @@ export default function Summary({ cart, handleItem, confirmOrder }: any) {
               {cart.subTotal?.formatted?.withTax}
             </dd>
           </div>
-          <div className="flex items-center justify-between">
-            <dt className="text-sm text-gray-900">Shipping</dt>
-            <dd className="text-sm font-medium text-gray-900">
-              {cart.shippingCharge?.formatted?.withTax}
-            </dd>
-          </div>
+          {isShippingDisabled ? null : (
+            <div className="flex items-center justify-between">
+              <dt className="text-sm text-gray-900">Shipping</dt>
+              <dd className="text-sm font-medium text-gray-900">
+                {cart.shippingCharge?.formatted?.withTax}
+              </dd>
+            </div>
+          )}
           <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
             {cart.promotionsApplied?.length > 0 && (
               <>
