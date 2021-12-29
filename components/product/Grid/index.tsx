@@ -6,14 +6,14 @@ import InfiniteScroll from '@components/ui/InfiniteScroll'
 interface Props {
   products: any
   currentPage: number | string
-  handlePageChange: any
+  handlePageChange?: any
   handleInfiniteScroll: any
 }
 
 export default function Grid({
   products,
   currentPage,
-  handlePageChange,
+  handlePageChange = () => {},
   handleInfiniteScroll,
 }: Props) {
   const IS_INFINITE_SCROLL =
