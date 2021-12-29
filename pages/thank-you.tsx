@@ -150,7 +150,7 @@ export default function OrderConfirmation() {
                       Payment method
                     </dt>
                     <dd className="mt-2 text-gray-700">
-                      <p>{order.paymentsorder.payments[0]?.paymentMethod}</p>
+                      <p>{order.payments[0]?.paymentMethod}</p>
                       <p>{order.payments[0]?.paymentGateway}</p>
                       <p>{order.payments[0]?.cardNo}</p>
                     </dd>

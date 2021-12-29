@@ -1,4 +1,5 @@
-import { useUI } from '@components/ui/context'
+import { useUI, basketId as generateBasketId } from '@components/ui/context'
+import Cookies from 'js-cookie'
 import { useReducer, useEffect } from 'react'
 import cartHandler from '@components/services/cart'
 import Delivery from './Delivery'
@@ -31,7 +32,14 @@ export default function CheckoutForm({
   config,
   location,
 }: any) {
-  const { setCartItems, basketId, cartItems, setOrderId, orderId } = useUI()
+  const {
+    setCartItems,
+    basketId,
+    cartItems,
+    setOrderId,
+    orderId,
+    setBasketId,
+  } = useUI()
 
   const isShippingDisabled =
     cartItems.lineItems.filter(
@@ -147,7 +155,7 @@ export default function CheckoutForm({
   }
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
-  const { addToCart } = cartHandler()
+  const { addToCart, associateCart } = cartHandler()
 
   const { createAddress } = asyncHandler()
 
@@ -434,10 +442,17 @@ export default function CheckoutForm({
                 orderId: response.data?.result?.id,
               }
             )
-            // if (orderModelResponse.data.success) {
-            //   setOrderId(response.data.result.id)
-            //   Router.push('/thank-you')
-            // }
+
+            if (orderModelResponse.data.success) {
+              Cookies.remove('basketId')
+              const generatedBasketId = generateBasketId()
+              setBasketId(generatedBasketId)
+              const userId = cartItems.userId
+              const newCart = await associateCart(userId, generatedBasketId)
+              setCartItems(newCart.data)
+              setOrderId(response.data.result.id)
+              Router.push('/thank-you')
+            }
           }
         } else {
           dispatch({ type: 'SET_ERROR', payload: response.data.message })
