@@ -15,6 +15,12 @@ import {
 import DataLayerInstance from '@components/utils/dataLayer'
 import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
+import TagManager from 'react-gtm-module'
+
+const tagManagerArgs: any = {
+  gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
+}
+
 const Noop: FC = ({ children }) => <>{children}</>
 
 const TEST_GEO_DATA = {
@@ -64,7 +70,13 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
       console.log(error, 'error')
     }
   }
+
+  const initializeGTM = () => {
+    if (process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID)
+      TagManager.initialize(tagManagerArgs)
+  }
   useEffect(() => {
+    initializeGTM()
     DataLayerInstance.setDataLayer()
     if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
       geoData()
