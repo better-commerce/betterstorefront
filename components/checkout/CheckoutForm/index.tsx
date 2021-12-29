@@ -371,6 +371,7 @@ export default function CheckoutForm({
           //@TODO temporary move to BE
         }
         const orderModel = {
+          id: response.data.result.payment.id,
           cardNo: 'null',
           orderNo: response.data.result.orderNo,
           orderAmount: response.data.result.grandTotal.raw.withTax,
@@ -416,10 +417,10 @@ export default function CheckoutForm({
               model: orderModel,
             }
           )
-          if (orderModelResponse.data.success) {
-            setOrderId(response.data.result.id)
-            Router.push('/thank-you')
-          }
+          // if (orderModelResponse.data.success) {
+          //   setOrderId(response.data.result.id)
+          //   Router.push('/thank-you')
+          // }
         }
       } catch (error) {
         console.log(error)
