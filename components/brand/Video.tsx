@@ -1,7 +1,9 @@
 export default function Video({ heading, name }: any) {
   return (
-    <div>
-      <h1 className="text-gray-900 font-bold text-xl">{heading}</h1>
+    <div className="w-full flex flex-col justify-center items-center py-y">
+      <h1 className="text-gray-900 text-center font-bold text-4xl py-5 ">
+        {heading}
+      </h1>
       <iframe
         width="560"
         height="315"

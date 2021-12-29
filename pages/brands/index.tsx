@@ -6,6 +6,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { SearchIcon } from '@heroicons/react/outline'
 
+const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
+
 const dataNormalizr = (data: any = []) => {
   return data.reduce((acc: any, item: any) => {
     let ref = acc.findIndex(
@@ -59,14 +61,28 @@ function BrandsPage({ brands }: any) {
           <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
             {totalResults} results
           </h1>
-          <div className="w-full py-5 flex justify-center items-center">
-            {normalizedBrands.map((brand: any, key: number) => {
+          <div className="w-full py-5 flex justify-center items-center flex-wrap">
+            {ALPHABET.split('').map((letter: any, key: number) => {
+              const brandExists = !!normalizedBrands.find(
+                (brand: any) =>
+                  brand.title.toUpperCase() === letter.toUpperCase()
+              )
+              if (brandExists) {
+                return (
+                  <Link key={key} passHref href={`#${letter}`}>
+                    <a className="hover:bg-indigo-600 hover:text-white mr-3 mt-5 py-2 px-4 text-gray-900 border font-extrabold text-lg">
+                      {letter.toUpperCase()}
+                    </a>
+                  </Link>
+                )
+              }
               return (
-                <Link key={key} passHref href={`#${brand.title}`}>
-                  <a className="hover:bg-indigo-600 hover:text-white mr-3 py-2 px-4 text-gray-900 border font-extrabold text-lg">
-                    {brand.title}
-                  </a>
-                </Link>
+                <span
+                  key={key}
+                  className="mr-3 mt-5 py-2 px-4 text-gray-900 border font-extrabold text-lg opacity-40 pointer-events-none"
+                >
+                  {letter.toUpperCase()}
+                </span>
               )
             })}
           </div>
