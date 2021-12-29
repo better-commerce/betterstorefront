@@ -11,6 +11,8 @@ import {
   NEXT_PAYMENT_METHODS,
   NEXT_CONFIRM_ORDER,
   NEXT_POST_PAYMENT_RESPONSE,
+  LOQATE_ADDRESS,
+  RETRIEVE_ADDRESS,
 } from '@components/utils/constants'
 import {
   shippingFormConfig,
@@ -236,6 +238,25 @@ export default function CheckoutForm({
 
   const setShippingInformation = (payload: any) =>
     dispatch({ type: 'SET_SHIPPING_INFORMATION', payload })
+
+  const updateAddress = (type: string, payload: any) => {
+    switch (type) {
+      case 'SHIPPING':
+        dispatch({
+          type: 'SET_SHIPPING_INFORMATION',
+          payload: { ...state.shippingInformation, ...payload },
+        })
+        return true
+      case 'BILLING':
+        dispatch({
+          type: 'SET_BILLING_INFORMATION',
+          payload: { ...state.billingInformation, ...payload },
+        })
+        return true
+      default:
+        return false
+    }
+  }
 
   const setBillingInformation = (payload: any, update = true) => {
     const handleAsync = async () => {
@@ -469,6 +490,38 @@ export default function CheckoutForm({
     confirmOrder(method)
   }
 
+  const loqateAddress = (postCode: string = 'E1') => {
+    const handleAsync = async () => {
+      const response: any = await axios.post(LOQATE_ADDRESS, {
+        postCode,
+        country: state.deliveryMethod.twoLetterIsoCode,
+      })
+
+      //TODO normalize data
+      if (response.data) {
+        return response.data.response.data.map((item: any) => {
+          return {
+            text: item.Text,
+            id: item.Id,
+            description: item.Description,
+          }
+        })
+      } else return []
+    }
+    return handleAsync()
+  }
+
+  const retrieveAddress = async (id: string) => {
+    const response: any = await axios.post(RETRIEVE_ADDRESS, {
+      id,
+    })
+    return {
+      postCode: response.data.response.data[0].PostalCode,
+      address1: response.data.response.data[0].Line1,
+      city: response.data.response.data[0].City,
+    }
+  }
+
   return (
     <div className="bg-gray-50 relative">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -496,13 +549,17 @@ export default function CheckoutForm({
                       toggleAction={toggleShipping}
                       appConfig={config}
                       values={state?.shippingInformation}
+                      updateAddress={updateAddress}
                       onSubmit={handleShippingSubmit}
+                      infoType="SHIPPING"
                       schema={shippingSchema}
+                      loqateAddress={loqateAddress}
                       config={shippingFormConfig}
                       initialValues={defaultShippingAddress}
                       isInfoCompleted={state?.isShippingInformationCompleted}
                       btnTitle="Deliver to this address"
                       addresses={addresses}
+                      retrieveAddress={retrieveAddress}
                       handleNewAddress={handleNewAddress}
                       setAddress={setShippingInformation}
                       isGuest={cartItems.isGuestCheckout}
@@ -533,9 +590,13 @@ export default function CheckoutForm({
                   appConfig={config}
                   values={state?.billingInformation}
                   schema={billingSchema}
+                  updateAddress={updateAddress}
+                  infoType="BILLING"
+                  loqateAddress={loqateAddress}
                   config={billingFormConfig}
                   handleNewAddress={handleNewAddress}
                   initialValues={defaultBillingAddress}
+                  retrieveAddress={retrieveAddress}
                   isInfoCompleted={state?.isPaymentInformationCompleted}
                   btnTitle="Save"
                   addresses={addresses}

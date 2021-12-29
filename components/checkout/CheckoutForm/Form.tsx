@@ -20,8 +20,14 @@ export default function AddressForm({
   isSameAddress = true,
   isGuest = false,
   handleNewAddress,
+  loqateAddress,
+  updateAddress,
+  infoType,
+  retrieveAddress,
 }: any) {
   const [isFormOpen, setNewFormOpen] = useState(!addresses.length)
+  const [addressList, setAddressList] = useState([])
+  const [postCodeValue, setPostCodeValue] = useState('')
 
   if (isInfoCompleted) {
     return (
@@ -50,6 +56,29 @@ export default function AddressForm({
   const initState = Object.keys(defaultValues).length
     ? defaultValues
     : initialValues
+
+  const handleAddressList = async (postCode: string) => {
+    setPostCodeValue(postCode)
+    const data: any = await loqateAddress(postCode)
+    if (data.length) {
+      setAddressList(data)
+    }
+  }
+
+  const handleAddress = async (
+    address: any,
+    setValues: any,
+    existingValues: any
+  ) => {
+    const foundAddress = await retrieveAddress(address.id)
+    if (foundAddress) {
+      const isAddressUpdated = updateAddress(infoType, foundAddress)
+      if (isAddressUpdated) {
+        setAddressList([])
+        setValues({ ...existingValues, ...foundAddress })
+      }
+    }
+  }
 
   return (
     <Formik
@@ -96,16 +125,16 @@ export default function AddressForm({
                       <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end"></div>
                     </div>
                     <div className="flex text-md font-regular flex-wrap =">
-                        <span className="font-semibold pr-1">
-                          {item.firstName + ' ' + item.lastName},
-                        </span>
+                      <span className="font-semibold pr-1">
+                        {item.firstName + ' ' + item.lastName},
+                      </span>
                       <span className="pr-1">{item.address1}, </span>
                       <span className="pr-1">{item.address2}, </span>
                       <span className="pr-1">{item.city}, </span>
                       <span className="pr-1">{item.postCode}, </span>
                       <span className="pr-1">{item.country}, </span>
                       <span className="pr-1">{item.phoneNo}</span>
-                    </div>                    
+                    </div>
                   </div>
                 )
               })}
@@ -113,35 +142,93 @@ export default function AddressForm({
             {isFormOpen && (
               <Form className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                 {config.map((formItem: any, idx: number) => {
+                  let classNames = ''
+                  formItem.isFullWidth
+                    ? (classNames = classNames + ` sm:col-span-2`)
+                    : ''
+                  formItem.addressFinder
+                    ? (classNames = classNames + ' flex')
+                    : ''
                   return (
                     <div
                       key={`${formItem.label}_${idx}`}
-                      className={formItem.isFullWidth ? 'sm:col-span-2' : ''}
+                      className={classNames}
                     >
-                      <label className="text-gray-700 text-sm">
-                        {formItem.label}
-                      </label>
-                      <Field
-                        key={idx}
-                        as={formItem.as || ''}
-                        name={formItem.name}
-                        placeholder={formItem.placeholder}
-                        onChange={handleChange}
-                        value={values[formItem.name]}
-                        type={formItem.type}
-                        className={
-                          formItem.className ||
-                          'mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 '
-                        }
-                      >
-                        {formItem.options?.map((option: any, idx: number) => {
-                          return (
-                            <option key={idx} value={option.value}>
-                              {option.title}
-                            </option>
-                          )
-                        })}
-                      </Field>
+                      <div>
+                        <label className="text-gray-700 text-sm">
+                          {formItem.label}
+                        </label>
+                        <Field
+                          key={idx}
+                          as={formItem.as || ''}
+                          name={formItem.name}
+                          placeholder={formItem.placeholder}
+                          onChange={handleChange}
+                          value={values[formItem.name]}
+                          type={formItem.type}
+                          className={
+                            formItem.className ||
+                            'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 '
+                          }
+                        >
+                          {formItem.options?.map((option: any, idx: number) => {
+                            return (
+                              <option key={idx} value={option.value}>
+                                {option.title}
+                              </option>
+                            )
+                          })}
+                        </Field>
+                        {formItem.addressFinder &&
+                        values[formItem.name] === postCodeValue &&
+                        addressList.length > 0 ? (
+                          <div className="absolute bg-white z-10 w-64 max-h-80 overflow-scroll">
+                            <div className="bg-gray-900">
+                              <h2
+                                onClick={() => setAddressList([])}
+                                className="py-2 px-2 text-white cursor-pointer"
+                              >
+                                Close
+                              </h2>
+                            </div>
+                            {addressList.map(
+                              (address: any, addressIdx: number) => {
+                                return (
+                                  <div
+                                    key={addressIdx}
+                                    className="py-2 px-2 text-gray-900 hover:text-white border-t hover:bg-gray-900"
+                                  >
+                                    <h2
+                                      className="cursor-pointer"
+                                      onClick={() =>
+                                        handleAddress(
+                                          address,
+                                          setValues,
+                                          values[formItem.name]
+                                        )
+                                      }
+                                    >
+                                      {address.text}, {address.description}
+                                    </h2>
+                                  </div>
+                                )
+                              }
+                            )}
+                          </div>
+                        ) : null}
+                      </div>
+                      {formItem.addressFinder ? (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleAddressList(values[formItem.name])
+                          }
+                          style={{ maxWidth: '20%' }}
+                          className="ml-3 mt-6 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-2 px-1 flex items-center justify-center font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                        >
+                          Find
+                        </button>
+                      ) : null}
                       {errors[formItem.name] && touched[formItem.name] ? (
                         <div className="text-red-400 text-sm">
                           {errors[formItem.name]}

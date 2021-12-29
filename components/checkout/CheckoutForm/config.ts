@@ -71,12 +71,15 @@ export const shippingFormConfig = [
     name: 'city',
     placeholder: 'Town / city',
     label: 'Town / city',
+    isFullWidth: true,
   },
   {
     type: 'text',
     name: 'postCode',
     placeholder: 'Postcode',
     label: 'Postcode',
+    addressFinder: true,
+    isFullWidth: true,
   },
   {
     type: 'phone',
@@ -153,12 +156,15 @@ export const billingFormConfig = [
     name: 'city',
     placeholder: 'Town / city',
     label: 'Town / city',
+    isFullWidth: true,
   },
   {
     type: 'text',
     name: 'postCode',
     placeholder: 'Postcode',
     label: 'Postcode',
+    addressFinder: true,
+    isFullWidth: true,
   },
   {
     type: 'phone',
