@@ -63,7 +63,7 @@ function BrandsPage({ brands }: any) {
           <div className="w-full py-5 flex justify-center items-center">
             {normalizedBrands.map((brand: any, key: number) => {
               return (
-                <Link passHref href={`#${brand.title}`}>
+                <Link key={key} passHref href={`#${brand.title}`}>
                   <a className="hover:bg-indigo-600 hover:text-white mr-3 py-2 px-4 text-gray-900 border font-extrabold text-lg">
                     {brand.title}
                   </a>
@@ -104,6 +104,7 @@ function BrandsPage({ brands }: any) {
                 {brand.results.map((result: any, key: number) => {
                   return (
                     <div
+                      key={key}
                       style={{ flex: '0 0 33.333333%' }}
                       className="text-gray-900 sm:inline-flex flex "
                     >
