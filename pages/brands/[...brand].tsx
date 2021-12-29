@@ -4,9 +4,10 @@ import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
-import ProductFilters from '@components/product/Filters'
+import getBrands from '@framework/api/endpoints/catalog/brands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
+import ProductSort from '@components/product/ProductSort'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -76,9 +77,13 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function Search({ query, setEntities, recordEvent }: any) {
+function BrandDetailPage({
+  query,
+  setEntities,
+  recordEvent,
+  brandDetails,
+}: any) {
   const adaptedQuery = { ...query }
-  console.log(query)
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
     : false
@@ -88,7 +93,15 @@ function Search({ query, setEntities, recordEvent }: any) {
 
   const initialState = {
     ...DEFAULT_STATE,
-    ...adaptedQuery,
+    ...{
+      filters: [
+        {
+          Key: 'brandNoAnlz',
+          Value: brandDetails.manufacturerName,
+          IsSelected: true,
+        },
+      ],
+    },
   }
 
   const [productListMemory, setProductListMemory] = useState({
@@ -117,8 +130,6 @@ function Search({ query, setEntities, recordEvent }: any) {
     },
     error,
   } = useSwr(['/api/catalog/products', state], postData)
-
-  console.log(state)
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
@@ -174,26 +185,6 @@ function Search({ query, setEntities, recordEvent }: any) {
   }
 
   useEffect(() => {
-    router.push({
-      pathname: router.pathname,
-      query: {
-        ...router.query,
-        filters: JSON.stringify(state.filters),
-      },
-    })
-  }, [state.filters])
-
-  const handleFilters = (filter: null, type: string) => {
-    dispatch({
-      type,
-      payload: filter,
-    })
-    dispatch({ type: PAGE, payload: 1 })
-  }
-
-  const clearAll = () => dispatch({ type: CLEAR })
-
-  useEffect(() => {
     const entity = {
       allowFacet: true,
       brand: null,
@@ -241,20 +232,25 @@ function Search({ query, setEntities, recordEvent }: any) {
       <main className="pb-24">
         <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-            Catalog
+            {state.filters[0]?.Value}
           </h1>
           <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
             {data.products.total} results
           </h1>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: brandDetails.description,
+            }}
+            className="py-10 px-5 mt-5 text-gray-900"
+          />
         </div>
-        <ProductFilters
-          handleFilters={handleFilters}
-          products={data.products}
-          handleSortBy={handleSortBy}
-          routerFilters={state.filters}
-          clearAll={clearAll}
-          routerSortOption={state.sortBy}
-        />
+        <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
+          <ProductSort
+            routerSortOption={state.sortBy}
+            products={data.products}
+            action={handleSortBy}
+          />
+        </div>
         <ProductGrid
           products={productDataToPass}
           currentPage={state.currentPage}
@@ -267,11 +263,12 @@ function Search({ query, setEntities, recordEvent }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const response = await getBrands({ brandIds: context.query.id })
   return {
-    props: { query: context.query }, // will be passed to the page component as props
+    props: { query: context.query, brandDetails: response.result.results[0] }, // will be passed to the page component as props
   }
 }
 
-const PAGE_TYPE = PAGE_TYPES['Search']
+const PAGE_TYPE = PAGE_TYPES['Brand']
 
-export default withDataLayer(Search, PAGE_TYPE)
+export default withDataLayer(BrandDetailPage, PAGE_TYPE)
