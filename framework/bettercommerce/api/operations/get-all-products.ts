@@ -43,7 +43,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
         },
       }
     } catch (error: any) {
-      console.log(error)
+      console.log(error, 'error')
       throw new Error(error)
     }
   }
