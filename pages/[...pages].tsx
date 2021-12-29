@@ -1,7 +1,13 @@
 import { GetServerSideProps } from 'next'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { PlainText, ProductCollection, Video, Image } from '@components/brand'
+import {
+  PlainText,
+  ProductCollection,
+  Video,
+  Image,
+  ImageCollection,
+} from '@components/brand'
 import React from 'react'
 
 const COMPONENTS_MAP: any = {
@@ -9,6 +15,7 @@ const COMPONENTS_MAP: any = {
   ProductCollection: (props: any) => <ProductCollection {...props} />,
   Video: (props: any) => <Video {...props} />,
   ImageBanner: (props: any) => <Image {...props} />,
+  ImageCollection: (props: any) => <ImageCollection {...props} />,
   undefined: () => null,
 }
 
