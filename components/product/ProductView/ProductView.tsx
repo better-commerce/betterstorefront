@@ -240,6 +240,7 @@ export default function ProductView({
       return acc
     }, [])
 
+    console.log(computedProducts)
     const asyncHandler = async () => {
       try {
         const newCart = await axios.post(NEXT_BULK_ADD_TO_CART, {

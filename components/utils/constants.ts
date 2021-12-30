@@ -6,6 +6,7 @@ export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
 export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
 export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
+export const LOOKBOOK_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook`
 export const SITEVIEW_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/content/siteview`
 export const CATALOG_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/brand`
 export const SEARCH_MINIMAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced/minimal`
@@ -47,7 +48,7 @@ export const NEXT_GET_ORDERS = `/api/customer/orders`
 export const NEXT_GET_WISHLIST = `/api/customer/get-wishlist`
 export const NEXT_CREATE_WISHLIST = `/api/customer/create-wishlist`
 export const NEXT_REMOVE_WISHLIST = `/api/customer/remove-item-from-wishlist`
-
+export const NEXT_GET_SINGLE_LOOKBOOK = '/api/get-single-lookbook'
 export const NEXT_ADDRESS = `/api/customer/address`
 export const NEXT_EDIT_ADDRESS = `/api/customer/edit-address`
 export const NEXT_CREATE_ADDRESS = `/api/customer/create-address`
