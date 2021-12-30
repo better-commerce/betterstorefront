@@ -4,6 +4,7 @@ export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
 export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
 export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
 export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
+export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
 export const SITEVIEW_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/content/siteview`
 export const CATALOG_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/brand`
