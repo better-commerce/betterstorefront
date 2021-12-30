@@ -2,7 +2,7 @@ import { XIcon as XIconSolid } from '@heroicons/react/solid'
 import { Layout } from '@components/common'
 import { GetServerSideProps } from 'next'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { useCart as getCart } from '@framework/cart'
+import { useCart as getSsrCart } from '@framework/cart'
 import cookie from 'cookie'
 import { basketId as basketIdGenerator } from '@components/ui/context'
 import Link from 'next/link'
@@ -10,13 +10,17 @@ import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '../components/cart/PromotionInput'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
-
+import {
+  NEXT_SHIPPING_PLANS,
+  NEXT_UPDATE_DELIVERY_INFO,
+} from '@components/utils/constants'
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
-  const { addToCart } = cartHandler()
+  const [deliveryPlans, setDeliveryPlans] = useState([])
+
+  const { addToCart, getCart } = cartHandler()
 
   const mapShippingPlansToItems = (plans: any, items: any) => {
     const itemsClone = [...items]
@@ -35,9 +39,9 @@ function Cart({ cart }: any) {
     }, itemsClone)
   }
 
-  const fetchShippingPlans = async () => {
-    const shippingMethodItem: any = cart.shippingMethods.find(
-      (method: any) => method.id === cart.shippingMethodId
+  const fetchShippingPlans = async (userCart: any) => {
+    const shippingMethodItem: any = userCart.shippingMethods.find(
+      (method: any) => method.id === userCart.shippingMethodId
     )
 
     const model = {
@@ -45,10 +49,10 @@ function Cart({ cart }: any) {
       OrderId: '00000000-0000-0000-0000-000000000000',
       PostCode: '',
       ShippingMethodType: shippingMethodItem.type,
-      ShippingMethodId: cart.shippingMethodId,
+      ShippingMethodId: userCart.shippingMethodId,
       ShippingMethodName: shippingMethodItem.displayName,
       ShippingMethodCode: shippingMethodItem.shippingCode,
-      DeliveryItems: cart.lineItems.map((item: any) => {
+      DeliveryItems: userCart.lineItems.map((item: any) => {
         return {
           BasketLineId: Number(item.id),
           OrderLineRecordId: '00000000-0000-0000-0000-000000000000',
@@ -69,15 +73,16 @@ function Cart({ cart }: any) {
       OrderNo: null,
       DeliveryCenter: null,
     }
-    const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
+    const response: any = await axios.post(NEXT_SHIPPING_PLANS, { model })
     setCartItems({
-      ...cart,
-      lineItems: mapShippingPlansToItems(response.data, cart.lineItems),
+      ...userCart,
+      lineItems: mapShippingPlansToItems(response.data, userCart.lineItems),
     })
+    setDeliveryPlans(response.data)
   }
 
   useEffect(() => {
-    if (cart.shippingMethods.length > 0) fetchShippingPlans()
+    if (cart.shippingMethods.length > 0) fetchShippingPlans(cart)
     else {
       setCartItems(cart)
     }
@@ -100,8 +105,16 @@ function Cart({ cart }: any) {
         data.qty = 0
       }
       try {
-        const item = await addToCart(data)
-        setCartItems(item)
+        await addToCart(data)
+        await axios.post(NEXT_UPDATE_DELIVERY_INFO, {
+          data: deliveryPlans,
+          id: basketId,
+        })
+        const newCart: any = await getCart({ basketId })
+        if (newCart.shippingMethods.length > 0) fetchShippingPlans(newCart)
+        else {
+          setCartItems(newCart)
+        }
       } catch (error) {
         console.log(error)
       }
@@ -347,7 +360,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     context.res.setHeader('set-cookie', `basketId=${basketRef}`)
   }
 
-  const response = await getCart()({
+  const response = await getSsrCart()({
     basketId: basketRef,
   })
 
