@@ -149,7 +149,7 @@ const ProductCard: FC<Props> = ({ product }) => {
       <div key={product.id} className="group relative p-4 sm:p-6">
         <Link
           passHref
-          href={currentProductData.link}
+          href={`/${currentProductData.link}`}
           key={'data-product' + currentProductData.link}
         >
           <a href={currentProductData.link}>

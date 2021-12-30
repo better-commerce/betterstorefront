@@ -17,6 +17,7 @@ export default function useBulkAdd() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
+      console.log(response)
       return response.result
     } catch (error: any) {
       throw new Error(error.message)

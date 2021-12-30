@@ -158,8 +158,6 @@ export default function AddressForm({
                   if (itemsToHide.includes(formItem.name)) {
                     return null
                   }
-                  if (formItem.addressFinder && itemsToHide.length === 0)
-                    return null
 
                   return (
                     <div

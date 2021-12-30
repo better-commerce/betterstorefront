@@ -54,6 +54,14 @@ export const shippingFormConfig = [
   },
   {
     type: 'text',
+    name: 'addressFinder',
+    placeholder: 'Enter postcode',
+    label: 'Address Finder',
+    addressFinder: true,
+    isFullWidth: true,
+  },
+  {
+    type: 'text',
     name: 'address1',
     placeholder: 'Address line 1',
     label: 'Address line 1',
@@ -80,14 +88,7 @@ export const shippingFormConfig = [
     label: 'Postcode',
     isFullWidth: true,
   },
-  {
-    type: 'text',
-    name: 'addressFinder',
-    placeholder: 'Enter postcode',
-    label: 'Address Finder',
-    addressFinder: true,
-    isFullWidth: true,
-  },
+
   {
     type: 'phone',
     name: 'phoneNo',
@@ -147,6 +148,14 @@ export const billingFormConfig = [
   },
   {
     type: 'text',
+    name: 'addressFinder',
+    placeholder: 'Enter postcode',
+    label: 'Address Finder',
+    addressFinder: true,
+    isFullWidth: true,
+  },
+  {
+    type: 'text',
     name: 'address1',
     placeholder: 'Address line 1',
     label: 'Address line 1',
@@ -173,14 +182,7 @@ export const billingFormConfig = [
     label: 'Postcode',
     isFullWidth: true,
   },
-  {
-    type: 'text',
-    name: 'addressFinder',
-    placeholder: 'Enter postcode',
-    label: 'Address Finder',
-    addressFinder: true,
-    isFullWidth: true,
-  },
+
   {
     type: 'phone',
     name: 'phoneNo',
