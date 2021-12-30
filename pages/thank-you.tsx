@@ -10,8 +10,9 @@ import { LoadingDots } from '@components/ui'
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState(defaultModel)
   const [isLoading, setIsLoading] = useState(true)
-  const { setOrderId, orderId } = useUI()
+  const { setOrderId } = useUI()
 
+  const orderId = 'adb80e42-fdad-4c97-ad79-ae0e009c480f'
   useEffect(() => {
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER_DETAILS, {
@@ -152,7 +153,6 @@ export default function OrderConfirmation() {
                     <dd className="mt-2 text-gray-700">
                       <p>{order.payments[0]?.paymentMethod}</p>
                       <p>{order.payments[0]?.paymentGateway}</p>
-                      <p>{order.payments[0]?.cardNo}</p>
                     </dd>
                   </div>
                 )}
@@ -182,13 +182,13 @@ export default function OrderConfirmation() {
                 <div className="flex justify-between">
                   <dt className="font-medium text-gray-900">Shipping</dt>
                   <dd className="text-gray-700">
-                    {order.shipping.price.formatted.withTax}
+                    {order.shippingCharge.formatted.withTax}
                   </dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="font-medium text-gray-900">Total</dt>
                   <dd className="text-gray-900">
-                    {order.subTotal?.formatted?.withTax}
+                    {order.grandTotal?.formatted?.withTax}
                   </dd>
                 </div>
               </dl>
