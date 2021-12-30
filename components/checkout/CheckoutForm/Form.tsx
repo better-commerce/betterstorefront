@@ -25,9 +25,14 @@ export default function AddressForm({
   infoType,
   retrieveAddress,
 }: any) {
+  const defaultItemsToHide = ['address1', 'address2', 'city', 'postCode']
   const [isFormOpen, setNewFormOpen] = useState(!addresses.length)
   const [addressList, setAddressList] = useState([])
   const [postCodeValue, setPostCodeValue] = useState('')
+  const [itemsToHide, setItemsToHide] = useState(defaultItemsToHide)
+
+  const IS_LOQATE_AVAILABLE =
+    process.env.NEXT_PUBLIC_IS_LOQATE_AVAILABLE === 'true'
 
   if (isInfoCompleted) {
     return (
@@ -76,6 +81,7 @@ export default function AddressForm({
       if (isAddressUpdated) {
         setAddressList([])
         setValues({ ...existingValues, ...foundAddress })
+        setItemsToHide([])
       }
     }
   }
@@ -149,6 +155,12 @@ export default function AddressForm({
                   formItem.addressFinder
                     ? (classNames = classNames + ' flex')
                     : ''
+                  if (itemsToHide.includes(formItem.name)) {
+                    return null
+                  }
+                  if (formItem.addressFinder && itemsToHide.length === 0)
+                    return null
+
                   return (
                     <div
                       key={`${formItem.label}_${idx}`}
@@ -179,6 +191,14 @@ export default function AddressForm({
                             )
                           })}
                         </Field>
+                        {formItem.addressFinder && (
+                          <span
+                            onClick={() => setItemsToHide([])}
+                            className="text-gray-400 underline cursor-pointer"
+                          >
+                            Enter address manually
+                          </span>
+                        )}
                         {formItem.addressFinder &&
                         values[formItem.name] === postCodeValue &&
                         addressList.length > 0 ? (
@@ -217,14 +237,14 @@ export default function AddressForm({
                           </div>
                         ) : null}
                       </div>
-                      {formItem.addressFinder ? (
+                      {formItem.addressFinder && itemsToHide.length > 0 ? (
                         <button
                           type="button"
                           onClick={() =>
                             handleAddressList(values[formItem.name])
                           }
                           style={{ maxWidth: '20%' }}
-                          className="ml-3 mt-6 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-2 px-1 flex items-center justify-center font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                          className="ml-3 mt-8 mb-8 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-2 px-1 flex items-center justify-center font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                         >
                           Find
                         </button>
