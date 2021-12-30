@@ -160,6 +160,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 BrandsPage.Layout = Layout
 
-const PAGE_TYPE = PAGE_TYPES['Checkout']
+const PAGE_TYPE = PAGE_TYPES['Brand']
 
 export default withDataLayer(BrandsPage, PAGE_TYPE)

@@ -34,7 +34,13 @@ export default function Grid({
           total={products.total}
           currentNumber={products.results.length}
           component={
-            <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+            <div
+              className={`-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 ${
+                products.results.length < 4
+                  ? `lg:grid-cols-${products.results.length}`
+                  : 'lg:grid-cols-4'
+              }`}
+            >
               {!products.results.length &&
                 rangeMap(12, (i) => (
                   <div
