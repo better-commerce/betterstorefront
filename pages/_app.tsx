@@ -65,7 +65,9 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
       const response: any = await postData(NEXT_INFRA_ENDPOINT, {
         setHeader: true,
       })
-      setAppConfig(response)
+      setAppConfig(response.result)
+      Cookies.set('Currency', response.defaultCurrency)
+      Cookies.set('Language', response.defaultLanguage)
     } catch (error) {
       console.log(error, 'error')
     }
