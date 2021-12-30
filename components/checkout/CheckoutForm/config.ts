@@ -78,6 +78,13 @@ export const shippingFormConfig = [
     name: 'postCode',
     placeholder: 'Postcode',
     label: 'Postcode',
+    isFullWidth: true,
+  },
+  {
+    type: 'text',
+    name: 'addressFinder',
+    placeholder: 'Enter postcode',
+    label: 'Address Finder',
     addressFinder: true,
     isFullWidth: true,
   },
@@ -96,6 +103,7 @@ export const shippingSchema = Yup.object({
   phoneNo: Yup.string().required(),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
+  address2: Yup.string(),
   title: Yup.string().nullable(),
   city: Yup.string().required(),
 })
@@ -163,6 +171,13 @@ export const billingFormConfig = [
     name: 'postCode',
     placeholder: 'Postcode',
     label: 'Postcode',
+    isFullWidth: true,
+  },
+  {
+    type: 'text',
+    name: 'addressFinder',
+    placeholder: 'Enter postcode',
+    label: 'Address Finder',
     addressFinder: true,
     isFullWidth: true,
   },
@@ -181,6 +196,7 @@ export const billingSchema = Yup.object({
   phoneNo: Yup.string().required(),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
+  address2: Yup.string(),
   title: Yup.string().nullable(),
   city: Yup.string().required(),
 })
