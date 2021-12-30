@@ -204,7 +204,7 @@ export default function AddressForm({
                                         handleAddress(
                                           address,
                                           setValues,
-                                          values[formItem.name]
+                                          values
                                         )
                                       }
                                     >
