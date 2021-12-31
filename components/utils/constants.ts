@@ -24,6 +24,7 @@ export const SHIPPING_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/com
 export const CHECKOUT_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout`
 export const PAYMENTS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout/payment-methods`
 export const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config/get`
+export const STORE_LOCATOR_API = '/api/v1/oms/store/locator'
 export const LOQATE_ADDRESS = '/api/loqate'
 export const RETRIEVE_ADDRESS = '/api/retrieve-address'
 //LOCAL ENDPOINTS
@@ -57,7 +58,7 @@ export const NEXT_CREATE_REVIEW = `/api/create-review`
 export const NEXT_GET_NAVIGATION = `/api/get-navigation`
 
 export const NEXT_APPLY_PROMOTION = `/api/apply-promo`
-
+export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
 export const NEXT_SHIPPING_ENDPOINT = '/api/shipping-options'
 export const NEXT_UPDATE_CHECKOUT_ADDRESS = '/api/update-checkout-address'
 export const NEXT_UPDATE_SHIPPING = '/api/update-shipping'
