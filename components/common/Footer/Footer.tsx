@@ -4,7 +4,13 @@ import type { Page } from '@commerce/types/page'
 import { Logo } from '@components/ui'
 import config from './config'
 import { useRouter } from 'next/router'
-import { BTN_SIGN_UP, GENERAL_EMAIL_ADDRESS, SIGN_UP_FOR_NEWSLETTER, SIGN_UP_TEXT } from '@components/utils/textVariables'
+import { 
+  BTN_SIGN_UP, 
+  COPYRIGHT_FOOTER_INFO, 
+  GENERAL_EMAIL_ADDRESS, 
+  SIGN_UP_FOR_NEWSLETTER, 
+  SIGN_UP_TEXT 
+} from '@components/utils/textVariables'
 
 interface Props {
   config: []
@@ -101,7 +107,7 @@ const Footer: FC<Props> = ({ config }) => {
 
         <div className="border-t border-gray-100 py-10 text-center">
           <p className="text-sm text-gray-500">
-            &copy; 2021 Workflow, Inc. All rights reserved.
+            &copy; {COPYRIGHT_FOOTER_INFO}
           </p>
         </div>
       </div>
