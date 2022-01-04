@@ -12,7 +12,7 @@ interface Props {
 
 const TYPES_MAP_TO_ACTIONS: any = {
   GET_ALL: ({ basketId, countryCode, postCode }: any) =>
-    `/${basketId}/shipping-methods?countryCode=${countryCode}&postcode`,
+    `/${basketId}/delivery/shipping-methods?countryCode=${countryCode}&postcode`,
   CLICK_AND_COLLECT: ({ basketId, postCode }: any) =>
     `/clickandcollect/${basketId}/${postCode}`,
   ACTIVE_SHIPPING_METHODS: () => '/all',
