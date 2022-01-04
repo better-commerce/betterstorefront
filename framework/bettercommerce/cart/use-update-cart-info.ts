@@ -15,8 +15,8 @@ export default function useUpdateCartInfo() {
     params['lineInfo'] = JSON.stringify(lineInfo)
     try {
       const response: any = await fetcher({
-        url: `${BASKET_ENDPOINT}/${basketId}/bulkAdd`,
-        method: 'post',
+        url: `${BASKET_ENDPOINT}/${basketId}/items/add-bulk`,
+        method: 'put',
         data: {
           ...params,
         },
@@ -26,6 +26,7 @@ export default function useUpdateCartInfo() {
       })
       return response.result
     } catch (error: any) {
+      console.log(error)
       throw new Error(error.message)
     }
   }
