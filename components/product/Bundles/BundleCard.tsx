@@ -2,6 +2,13 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
+import { 
+  BTN_SEE_MORE_DETAILS, 
+  GENERAL_CLOSE, 
+  PRODUCT_DESCRIPTION, 
+  PRODUCT_INFORMATION, 
+  PRODUCT_OPTIONS 
+} from '@components/utils/textVariables'
 
 export default function BundleCard({ productData, closeModal }: any) {
   const [activeImage, setActiveImage] = useState(
@@ -53,7 +60,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                   className="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8"
                   onClick={closeModal}
                 >
-                  <span className="sr-only">Close</span>
+                  <span className="sr-only">{GENERAL_CLOSE}</span>
                   <XIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
 
@@ -75,11 +82,11 @@ export default function BundleCard({ productData, closeModal }: any) {
                       className="mt-2"
                     >
                       <h3 id="information-heading" className="sr-only">
-                        Product information
+                        {PRODUCT_INFORMATION}
                       </h3>
                     </section>
                     <div className="mt-6">
-                      <h3 className="sr-only">Description</h3>
+                      <h3 className="sr-only">{PRODUCT_DESCRIPTION}</h3>
 
                       <div
                         className="text-gray-700 space-y-6"
@@ -93,7 +100,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                       className="mt-10"
                     >
                       <h3 id="options-heading" className="sr-only">
-                        Product options
+                        {PRODUCT_OPTIONS}
                       </h3>
                       <div className="flex justify-between w-1/2">
                         {productData.images.map(
@@ -115,7 +122,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                             type="submit"
                             className="mt-6 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                           >
-                            See more details
+                            {BTN_SEE_MORE_DETAILS}
                           </button>
                         </Link>
                       </form>
