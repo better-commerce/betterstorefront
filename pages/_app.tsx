@@ -16,6 +16,9 @@ import DataLayerInstance from '@components/utils/dataLayer'
 import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import analytics from '@components/services/analytics/analytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -78,7 +81,9 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
       TagManager.initialize(tagManagerArgs)
   }
   useEffect(() => {
+    analytics()
     initializeGTM()
+    eventDispatcher('@@PageViewed', { id: '1' })
     DataLayerInstance.setDataLayer()
     if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
       geoData()
@@ -99,6 +104,9 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
     fetchAppConfig()
     return function cleanup() {
       Cookies.remove(SessionIdCookieKey)
+      Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((event: any) =>
+        window.removeEventListener(EVENTS_MAP.EVENT_TYPES[event], () => {})
+      )
     }
   }, [])
 

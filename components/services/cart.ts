@@ -6,7 +6,8 @@ import {
   NEXT_MERGE_CART,
 } from '@components/utils/constants'
 import axios from 'axios'
-
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 interface CartItem {
   basketId?: string
   productId?: string
@@ -22,6 +23,9 @@ interface GetCart {
   basketId?: string
 }
 
+const { BasketItemAdded, BasketItemRemoved, BasketViewed } =
+  EVENTS_MAP.EVENT_TYPES
+
 export default function cartHandler() {
   return {
     addToCart: async ({
@@ -34,6 +38,7 @@ export default function cartHandler() {
       userId,
       isAssociated = true,
     }: CartItem) => {
+      eventDispatcher(BasketItemAdded, { productId })
       const response = await axios.post(NEXT_ADD_TO_CART, {
         data: {
           basketId,
