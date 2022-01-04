@@ -14,6 +14,18 @@ import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
 import LanguageSwitcher from './LanguageSwitcher'
 import Cookies from 'js-cookie'
+import { 
+  BTN_SIGN_OUT, 
+  GENERAL_LOGIN, 
+  GENERAL_MY_ORDERS, 
+  GENERAL_RECENTLY_VIEWED, 
+  GENERAL_REGISTER, 
+  MY_ACCOUNT_TITLE,
+  GENERAL_WORKFLOW_TITLE, 
+  SELECT_CURRENCY,
+  SELECT_LANGUAGE,
+  GENERAL_ITEM_IN_CART
+} from '@components/utils/textVariables'
 
 interface Props {
   config: []
@@ -24,13 +36,13 @@ interface Props {
 const accountDropDownConfigUnauthorized: any = [
   {
     href: '/my-account/login',
-    title: 'Login',
+    title: GENERAL_LOGIN,
     className:
       'mt-5 max-w-xs flex-1 bg-gray-300 border font-semibold border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full',
   },
   {
     href: '/my-account/register',
-    title: 'Register',
+    title: GENERAL_REGISTER,
     className:
       'mt-5 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md op-75 py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full',
   },
@@ -52,23 +64,23 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   const accountDropDownConfigAuthorized: any = [
     {
       href: '/my-account',
-      title: 'My account',
+      title: MY_ACCOUNT_TITLE,
       className: 'text-left p-2 cursor-pointer',
     },
     {
       href: '/my-account?view=orders',
-      title: 'My orders',
+      title: GENERAL_MY_ORDERS,
       className: 'text-left p-2 cursor-pointer',
     },
     {
       href: '/my-account?view=details',
-      title: 'Recently viewed',
+      title: GENERAL_RECENTLY_VIEWED,
       className: 'text-left p-2 cursor-pointer',
     },
     {
       href: '/',
       onClick: () => deleteUser(),
-      title: 'Sign out',
+      title: BTN_SIGN_OUT,
       className: 'text-left p-2 cursor-pointer text-red-600',
     },
   ]
@@ -100,7 +112,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               {/* Logo */}
               <Link href="/">
                 <div className="w-auto flex cursor-pointer">
-                  <span className="sr-only">Workflow</span>
+                  <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
                   <Logo />
                 </div>
               </Link>
@@ -218,11 +230,11 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 {/* currency */}
                 <CurrencySwitcher
                   config={currencies}
-                  title="Select currency"
+                  title={SELECT_CURRENCY}
                   action={configAction}
                 />
                 <LanguageSwitcher
-                  title="Select language"
+                  title={SELECT_LANGUAGE}
                   action={configAction}
                   config={languages}
                 />
@@ -240,7 +252,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                       {wishListItems.length}
                     </span>
-                    <span className="sr-only">items in cart, view bag</span>
+                    <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
                   </button>
                 </div>
                 {/* Cart */}
@@ -257,7 +269,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                       {cartItems.lineItems?.length}
                     </span>
-                    <span className="sr-only">items in cart, view bag</span>
+                    <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
                   </button>
                 </div>
               </div>
