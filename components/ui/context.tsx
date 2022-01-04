@@ -380,6 +380,7 @@ export const UIProvider: FC = (props) => {
   )
   const setCartItems = useCallback(
     (payload: any) => {
+      console.log(payload)
       const newCartDataClone: any = { ...payload }
       newCartDataClone.lineItems.forEach((element: any, idx: number) => {
         newCartDataClone.lineItems.forEach((i: any) => {

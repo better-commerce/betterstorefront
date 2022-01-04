@@ -29,7 +29,7 @@ export default function useAddItem() {
     try {
       const response: any = await fetcher({
         url: `${BASKET_ENDPOINT}/${basketId}/items/add`,
-        method: 'post',
+        method: 'put',
         data,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
