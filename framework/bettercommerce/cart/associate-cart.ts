@@ -13,8 +13,8 @@ export default function useAssociateCart() {
     }
     try {
       const response: any = await fetcher({
-        url: `${BASKET_ENDPOINT}/${basketId}/user/${userId}/update`,
-        method: 'post',
+        url: `${BASKET_ENDPOINT}/${basketId}/user/${userId}`,
+        method: 'put',
         data,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
