@@ -1,3 +1,5 @@
+import exp from "constants"
+
 export const MIN_BODY_LENGTH_ERROR = 'Your review needs to be at least 5 characters long'
 export const PROMO_ERROR = 'Promotion code is not valid'
 export const DETAILS_SUCCESS = 'Success! Your details have been updated!'
@@ -145,3 +147,17 @@ export const SIGN_UP_TEXT = 'The latest deals and savings, sent to your inbox we
 export const GENERAL_EMAIL_ADDRESS = 'Email address'
 export const BTN_SIGN_UP = 'Sign up'
 export const COPYRIGHT_FOOTER_INFO = '2021 Workflow, Inc. All rights reserved.'
+export const GENERAL_COOKIE_TEXT = 'This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.'
+export const BTN_ACCEPT_COOKIE = 'Accept cookies'
+export const GENERAL_RECENTLY_VIEWED = 'Recently viewed'
+export const BTN_SIGN_OUT = 'Sign out'
+export const GENERAL_LOGIN = 'Login'
+export const GENERAL_REGISTER = 'Register'
+export const GENERAL_WORKFLOW_TITLE ='Workflow'
+export const SELECT_CURRENCY = 'Select currency'
+export const SELECT_LANGUAGE = 'sELECT language'
+export const GENERAL_ITEM_IN_CART = 'items in cart, view bag'
+export const BTN_SEARCH  ='Search'
+export const GENERAL_CLOSE = 'Close'
+export const GENERAL_BACK = 'Back'
+export const VALIDATION_PASSWORD_MUST_MATCH  ='Passwords must match'
