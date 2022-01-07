@@ -13,6 +13,8 @@ import { useState, useEffect } from 'react'
 import Button from '@components/ui/IndigoButton'
 import { validate } from 'email-validator'
 import cartHandler from '@components/services/cart'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   const [error, setError] = useState(apiError)
@@ -57,6 +59,12 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const { addToCart, associateCart } = cartHandler()
+  const { CustomerCreated } = EVENTS_MAP.EVENT_TYPES
+
+  useEffect(() => {
+    eventDispatcher(CustomerCreated, 'customer created')
+  }, [])
+
   useEffect(() => {
     setError('')
   }, [userEmail])

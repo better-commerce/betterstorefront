@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import Form from './AddressBookForm'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export default function AddressItem({
   item,
@@ -28,15 +30,26 @@ export default function AddressItem({
     countryCode,
   } = item
 
+  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
+
   const handleAddressSubmit = async (values: any) => {
     return updateAddress({ ...item, ...values, ...{ userId } })
-      .then(() => successCallback() && setEditMode(false))
+      .then(
+        () =>
+          successCallback() &&
+          setEditMode(false) &&
+          eventDispatcher(CustomerUpdated, 'customer updated')
+      )
       .catch(() => errCallback())
   }
 
   const deleteItem = () => {
     deleteAddress({ userId, addressId: item.id })
-      .then(() => successCallback())
+      .then(
+        () =>
+          successCallback() &&
+          eventDispatcher(CustomerUpdated, 'customer updated')
+      )
       .catch(() => errCallback)
   }
 

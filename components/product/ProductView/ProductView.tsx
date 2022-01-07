@@ -23,6 +23,8 @@ import {
   NEXT_GET_PRODUCT,
 } from '@components/utils/constants'
 import Button from '@components/ui/IndigoButton'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -69,9 +71,12 @@ export default function ProductView({
     ...product,
   })
 
+  const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
+
   const fetchProduct = async () => {
     const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
     if (response?.data?.product) {
+      eventDispatcher(ProductViewed, 'product viewed')
       setUpdatedProduct(response.data.product)
       setSelectedAttrData({
         productId: response.data.product.recordId,
@@ -141,15 +146,19 @@ export default function ProductView({
     let buttonConfig: any = {
       title: 'Add to bag',
       action: async () => {
-        const item = await cartHandler().addToCart({
-          basketId: basketId,
-          productId: selectedAttrData.productId,
-          qty: 1,
-          manualUnitPrice: product.price.raw.withTax,
-          stockCode: selectedAttrData.stockCode,
-          userId: user.userId,
-          isAssociated: user.isAssociated,
-        })
+        const item = await cartHandler().addToCart(
+          {
+            basketId: basketId,
+            productId: selectedAttrData.productId,
+            qty: 1,
+            manualUnitPrice: product.price.raw.withTax,
+            stockCode: selectedAttrData.stockCode,
+            userId: user.userId,
+            isAssociated: user.isAssociated,
+          },
+          'ADD',
+          { selectedAttrData }
+        )
         setCartItems(item)
       },
       shortMessage: '',

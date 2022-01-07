@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { XIcon } from '@heroicons/react/outline'
 import rangeMap from '@lib/range-map'
 import { useRouter } from 'next/router'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export default function Search({ closeWrapper = () => {} }: any) {
   const Router = useRouter()
@@ -27,6 +29,7 @@ export default function Search({ closeWrapper = () => {} }: any) {
         setIsLoading(false)
       }
     }
+    eventDispatcher(EVENTS_MAP.EVENT_TYPES.Search, 'search')
     if (inputValue) fetchItems()
   }, [inputValue])
 

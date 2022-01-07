@@ -16,11 +16,15 @@ import {
   NEXT_SHIPPING_PLANS,
   NEXT_UPDATE_DELIVERY_INFO,
 } from '@components/utils/constants'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
   const [deliveryPlans, setDeliveryPlans] = useState([])
 
   const { addToCart, getCart } = cartHandler()
+  const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
 
   const mapShippingPlansToItems = (plans: any, items: any) => {
     const itemsClone = [...items]
@@ -82,6 +86,7 @@ function Cart({ cart }: any) {
   }
 
   useEffect(() => {
+    eventDispatcher(BasketViewed, 'cart seen')
     if (cart.shippingMethods.length > 0) fetchShippingPlans(cart)
     else {
       setCartItems(cart)
@@ -98,14 +103,17 @@ function Cart({ cart }: any) {
         displayOrder: product.displayOrderta,
         qty: -1,
       }
+      let type = 'ADD'
+
       if (type === 'increase') {
         data.qty = 1
       }
       if (type === 'delete') {
+        type = 'REMOVE'
         data.qty = 0
       }
       try {
-        await addToCart(data)
+        await addToCart(data, type, { product })
         await axios.post(NEXT_UPDATE_DELIVERY_INFO, {
           data: deliveryPlans,
           id: basketId,

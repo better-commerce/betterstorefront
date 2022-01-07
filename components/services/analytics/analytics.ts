@@ -2,28 +2,35 @@ import { EVENTS_MAP } from './constants'
 export default function AnalyticsService() {
   const addToCart = (payload: any) => {
     console.log(payload)
+    //+
     console.log('log item add to cart')
   }
   const removedFromCart = (payload: any) => {
+    //+
     console.log('item removed from cart')
   }
   const basketViewed = (payload: any) => {
+    //+
     console.log('BasketViewed')
   }
 
   const brandViewed = (payload: any) => {
+    //+
     console.log('BrandViewed')
   }
 
   const categoryViewed = (payload: any) => {
+    //+
     console.log('CategoryViewed')
   }
 
   const checkoutConfirmation = (payload: any) => {
+    //+
     console.log('CheckoutConfirmation')
   }
 
   const checkoutStarted = (payload: any) => {
+    //+
     console.log('CheckoutStarted')
   }
 
@@ -36,17 +43,21 @@ export default function AnalyticsService() {
   }
 
   const customerCreated = (payload: any) => {
+    //+
     console.log('CustomerCreated')
   }
 
   const customerProfileViewed = (payload: any) => {
+    //+
     console.log('CustomerProfileViewed')
   }
 
   const customerUpdated = (payload: any) => {
+    //+
     console.log('CustomerUpdated')
   }
   const facetSearch = (payload: any) => {
+    //+
     console.log('FacetSearch')
   }
   const faqViewed = (payload: any) => {
@@ -59,9 +70,11 @@ export default function AnalyticsService() {
     console.log('PageViewed')
   }
   const productViewed = (payload: any) => {
+    //+
     console.log('ProductViewed')
   }
   const search = (payload: any) => {
+    //+
     console.log('Search')
   }
 

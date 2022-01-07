@@ -12,6 +12,8 @@ import {
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
 
 function LookbookDetailPage({ data, slug }: any) {
   const router = useRouter()

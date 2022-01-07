@@ -28,17 +28,28 @@ const { BasketItemAdded, BasketItemRemoved, BasketViewed } =
 
 export default function cartHandler() {
   return {
-    addToCart: async ({
-      basketId,
-      productId,
-      qty,
-      manualUnitPrice,
-      displayOrder,
-      stockCode,
-      userId,
-      isAssociated = true,
-    }: CartItem) => {
-      eventDispatcher(BasketItemAdded, { productId })
+    addToCart: async (
+      {
+        basketId,
+        productId,
+        qty,
+        manualUnitPrice,
+        displayOrder,
+        stockCode,
+        userId,
+        isAssociated = true,
+      }: CartItem,
+      type = 'ADD',
+      data = {}
+    ) => {
+      switch (type) {
+        case 'ADD':
+          eventDispatcher(BasketItemAdded, { ...data })
+          break
+        case 'REMOVE':
+          eventDispatcher(BasketItemRemoved, { ...data })
+          break
+      }
       const response = await axios.post(NEXT_ADD_TO_CART, {
         data: {
           basketId,
