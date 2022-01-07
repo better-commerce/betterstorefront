@@ -76,7 +76,13 @@ export default function ProductView({
   const fetchProduct = async () => {
     const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
     if (response?.data?.product) {
-      eventDispatcher(ProductViewed, 'product viewed')
+      eventDispatcher(ProductViewed, {
+        id: response.data.product.recordId,
+        sku: response.data.product.sku,
+        name: response.data.product.name,
+        stockCode: response.data.product.stockCode,
+        img: response.data.product.image,
+      })
       setUpdatedProduct(response.data.product)
       setSelectedAttrData({
         productId: response.data.product.recordId,

@@ -9,7 +9,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-
+import { useUI } from '@components/ui/context'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -92,6 +92,7 @@ function Search({ query, setEntities, recordEvent }: any) {
     ...adaptedQuery,
   }
 
+  const { user } = useUI()
   const [productListMemory, setProductListMemory] = useState({
     products: {
       results: [],
@@ -159,7 +160,27 @@ function Search({ query, setEntities, recordEvent }: any) {
   }
 
   useEffect(() => {
-    eventDispatcher(FacetSearch, 'facet search')
+    const BrandFilter = state.filters.find(
+      (filter: any) => filter.name === 'Brand'
+    )
+    const CategoryFilter = state.filters.find(
+      (filter: any) => filter.name === 'Category'
+    )
+    eventDispatcher(FacetSearch, {
+      FreeText: '',
+      Page: state.currentPage,
+      SortBy: state.sortBy,
+      SortOrder: state.sortOrder,
+      Brand: BrandFilter ? BrandFilter.value : null,
+      Category: CategoryFilter ? CategoryFilter.value : null,
+      Gender: user.gender,
+      CurrentPage: state.currentPage,
+      PageSize: 20,
+      Filters: state.filters,
+      AllowFacet: true,
+      ResultCount: data.products.total,
+      omniImg: 'http://dev-ocx.imgix.net/products/361346Red.jpg',
+    })
   }, [])
   const handleInfiniteScroll = () => {
     if (

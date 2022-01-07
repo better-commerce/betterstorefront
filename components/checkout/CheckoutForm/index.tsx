@@ -472,7 +472,7 @@ export default function CheckoutForm({
             )
 
             if (orderModelResponse.data.success) {
-              eventDispatcher(CheckoutConfirmation, 'checkout confirmation')
+              eventDispatcher(CheckoutConfirmation, orderModelResponse.data)
               Cookies.remove('basketId')
               const generatedBasketId = generateBasketId()
               setBasketId(generatedBasketId)

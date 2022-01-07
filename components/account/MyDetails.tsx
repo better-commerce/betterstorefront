@@ -23,7 +23,15 @@ export default function MyDetails() {
 
   const handleDataSubmit = async (values: any) => {
     await handleSubmit(values, user, setUser, setTitle)
-    eventDispatcher(CustomerUpdated, 'customer updated')
+    eventDispatcher(CustomerUpdated, {
+      id: user.userId,
+      name: user.username,
+      dateOfBirth: user.yearOfBirth,
+      gender: user.gender,
+      email: user.email,
+      postCode: user.postCode,
+      omniImg: user.omniImg,
+    })
   }
 
   return (
