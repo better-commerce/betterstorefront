@@ -10,6 +10,8 @@ import { useUI } from '@components/ui/context'
 import { asyncHandler } from '@components/account/Address/AddressBook'
 import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
 import axios from 'axios'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
 
 function Checkout({ cart, config, location }: any) {
   const { user, basketId, setCartItems, cartItems } = useUI()
@@ -46,8 +48,11 @@ function Checkout({ cart, config, location }: any) {
     }
   }
 
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+
   useEffect(() => {
     fetchAddress()
+    eventDispatcher(PageViewed, 'page')
   }, [])
 
   if (isLoggedIn) {

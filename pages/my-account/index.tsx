@@ -7,15 +7,22 @@ import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 function MyAccount({ defaultView }: any) {
   const [view, setView] = useState(defaultView)
   const router = useRouter()
+  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
     if (router.query.view && view !== router.query.view) {
       setView(router.query.view)
     }
   }, [router.asPath])
+
+  useEffect(() => {
+    eventDispatcher(CustomerProfileViewed, 'customer profile viewed')
+  }, [])
 
   return (
     <section className="text-gray-900 relative py-10">

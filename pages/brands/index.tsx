@@ -1,10 +1,13 @@
 import { GetServerSideProps } from 'next'
+import { useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
 import getBrands from '@framework/api/endpoints/catalog/brands'
 import { useState } from 'react'
 import Link from 'next/link'
 import { SearchIcon } from '@heroicons/react/outline'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -47,7 +50,11 @@ function BrandsPage({ brands }: any) {
     })
     setNormalizedBrands(filteredData)
   }
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
 
+  useEffect(() => {
+    eventDispatcher(PageViewed, 'page')
+  }, [])
   const totalResults = normalizedBrands.map((i: any) => i.results).flat().length
 
   return (

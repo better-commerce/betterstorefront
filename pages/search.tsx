@@ -7,6 +7,8 @@ import ProductGrid from '@components/product/Grid'
 import ProductFilters from '@components/product/Filters'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -117,6 +119,8 @@ function Search({ query, setEntities, recordEvent }: any) {
     error,
   } = useSwr(['/api/catalog/products', state], postData)
 
+  const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
+
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
       if (
@@ -154,6 +158,9 @@ function Search({ query, setEntities, recordEvent }: any) {
     })
   }
 
+  useEffect(() => {
+    eventDispatcher(FacetSearch, 'facet search')
+  }, [])
   const handleInfiniteScroll = () => {
     if (
       data.products.pages &&
@@ -171,6 +178,14 @@ function Search({ query, setEntities, recordEvent }: any) {
   }
 
   useEffect(() => {
+    const categoryFilter = state.filters.find(
+      (item: any) => item.name === 'Category'
+    )
+
+    if (categoryFilter) {
+      eventDispatcher(CategoryViewed, 'category viewed' + categoryFilter)
+    }
+
     router.push({
       pathname: router.pathname,
       query: {

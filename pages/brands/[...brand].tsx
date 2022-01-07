@@ -8,6 +8,8 @@ import getBrands from '@framework/api/endpoints/catalog/brands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import ProductSort from '@components/product/ProductSort'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -84,6 +86,12 @@ function BrandDetailPage({
   brandDetails,
 }: any) {
   const adaptedQuery = { ...query }
+  const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  useEffect(() => {
+    eventDispatcher(BrandViewed, 'brand')
+    eventDispatcher(PageViewed, 'page')
+  }, [])
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
     : false

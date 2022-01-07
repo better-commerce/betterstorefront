@@ -7,16 +7,19 @@ import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '../PromotionInput'
-
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
 const CartSidebarView: FC = () => {
   const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
   const { getCart, addToCart } = useCart()
+  const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
     const handleCartitems = async () => {
       const items = await getCart({ basketId })
       setCartItems(items)
     }
+    eventDispatcher(BasketViewed, 'cart seen')
     handleCartitems()
   }, [])
 
@@ -30,14 +33,16 @@ const CartSidebarView: FC = () => {
         displayOrder: product.displayOrderta,
         qty: -1,
       }
+      let type = 'ADD'
       if (type === 'increase') {
         data.qty = 1
       }
       if (type === 'delete') {
         data.qty = 0
+        type = 'REMOVE'
       }
       try {
-        const item = await addToCart(data)
+        const item = await addToCart(data, type, { product })
         setCartItems(item)
       } catch (error) {
         console.log(error)
