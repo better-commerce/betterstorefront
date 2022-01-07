@@ -8,6 +8,8 @@ import {
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { setItem, getItem, removeItem } from '@components/utils/localStorage'
+
 interface CartItem {
   basketId?: string
   productId?: string
@@ -42,15 +44,7 @@ export default function cartHandler() {
       type = 'ADD',
       data = {}
     ) => {
-      switch (type) {
-        case 'ADD':
-          eventDispatcher(BasketItemAdded, { ...data })
-          break
-        case 'REMOVE':
-          eventDispatcher(BasketItemRemoved, { ...data })
-          break
-      }
-      const response = await axios.post(NEXT_ADD_TO_CART, {
+      const response: any = await axios.post(NEXT_ADD_TO_CART, {
         data: {
           basketId,
           productId,
@@ -62,6 +56,26 @@ export default function cartHandler() {
       })
       if (userId && !isAssociated) {
         await cartHandler().associateCart(userId, basketId)
+      }
+      const eventData = {
+        id: response.data.id,
+        grandTotal: response.data.grandTotal.raw.withTax,
+        tax: response.data.grandTotal.raw.tax,
+        taxPercent: response.data.taxPercent,
+        shipCharge: response.data.shippingCharge.raw.withTax,
+        shipTax: response.data.shippingCharge.raw.tax,
+        lineitems: response.data.lineItems,
+        promoCode: response.data.promotionsApplied,
+        omniImg: 'http://dev-ocx.imgix.net/products/361494Asphalt.jpg', //TODO couldn't find in the cart object
+      }
+
+      switch (type) {
+        case 'ADD':
+          eventDispatcher(BasketItemAdded, eventData)
+          break
+        case 'REMOVE':
+          eventDispatcher(BasketItemRemoved, eventData)
+          break
       }
       return response.data
     },

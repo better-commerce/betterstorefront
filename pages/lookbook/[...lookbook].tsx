@@ -23,7 +23,11 @@ function LookbookDetailPage({ data, slug }: any) {
     const response: any = await axios.post(NEXT_GET_SINGLE_LOOKBOOK, { slug })
     setProducts(response.data.products)
   }
+
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+
   useEffect(() => {
+    eventDispatcher(PageViewed, 'page')
     if (slug) loadProducts()
   }, [])
 

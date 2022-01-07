@@ -28,6 +28,7 @@ export default function AddressItem({
     isDefaultDelivery,
     isDefaultSubscription,
     countryCode,
+    user,
   } = item
 
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
@@ -38,7 +39,15 @@ export default function AddressItem({
         () =>
           successCallback() &&
           setEditMode(false) &&
-          eventDispatcher(CustomerUpdated, 'customer updated')
+          eventDispatcher(CustomerUpdated, {
+            id: user.userId,
+            name: user.username,
+            dateOfBirth: user.yearOfBirth,
+            gender: user.gender,
+            email: user.email,
+            postCode: user.postCode,
+            omniImg: user.omniImg,
+          })
       )
       .catch(() => errCallback())
   }
@@ -48,7 +57,15 @@ export default function AddressItem({
       .then(
         () =>
           successCallback() &&
-          eventDispatcher(CustomerUpdated, 'customer updated')
+          eventDispatcher(CustomerUpdated, {
+            id: user.userId,
+            name: user.username,
+            dateOfBirth: user.yearOfBirth,
+            gender: user.gender,
+            email: user.email,
+            postCode: user.postCode,
+            omniImg: user.omniImg,
+          })
       )
       .catch(() => errCallback)
   }

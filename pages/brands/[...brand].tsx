@@ -89,8 +89,26 @@ function BrandDetailPage({
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
-    eventDispatcher(BrandViewed, 'brand')
-    eventDispatcher(PageViewed, 'page')
+    eventDispatcher(BrandViewed, {
+      id: brandDetails.id,
+      name: brandDetails.name || '',
+      manufName: brandDetails.manufacturerName,
+      omniImg:
+        brandDetails.productImage ||
+        'http://dev-ocx.imgix.net/products/117293BlueDenim.jpg',
+    })
+    //TODO
+    eventDispatcher(PageViewed, {
+      id: '064cb262-8937-4032-9ddb-8ed5ed3e7ee1',
+      name: 'Home',
+      metaTitle: 'Home TItle',
+      MetaKeywords: 'Home Keywords',
+      MetaDescription: 'Home Description',
+      Slug: '/',
+      Title: 'Home Title',
+      ViewType: 'custom',
+      omniImg: 'http://dev-ocx.imgix.net/products/361494Asphalt.jpg',
+    })
   }, [])
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
