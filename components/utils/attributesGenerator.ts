@@ -9,12 +9,12 @@ export default function attributesGenerator(
     .reduce((acc, obj) => {
       variantProducts.forEach((el: any) => {
         const fieldValues: any = []
-        el.variantAttributes.some((item: any) => {
+        el.attributes.some((item: any) => {
           fieldValues.push(item.fieldValue)
         })
 
         if (checker(fieldValues, Object.values(combination))) {
-          acc = acc.concat(el.variantAttributes)
+          acc = acc.concat(el.attributes)
           return acc
         }
       })
@@ -33,7 +33,7 @@ export default function attributesGenerator(
 export const getAttributesFromSlug = (slug: string, variantProducts: any) => {
   return variantProducts.reduce((acc: any, obj: any) => {
     if (obj.slug === slug) {
-      obj.variantAttributes.forEach((varAttr: any) => {
+      obj.attributes.forEach((varAttr: any) => {
         acc[varAttr.fieldCode] = varAttr.fieldValue
       })
     }
@@ -64,7 +64,8 @@ export const getProductFromAttributes = (
     } else return i.fieldValue
   })
   const variantLookUp = variantProducts.filter((product: any) => {
-    let combination = product.variantAttributes.map((i: any) => i.fieldValue)
+    const productAttr = product.attributes || product.customAttributes
+    let combination = productAttr.map((i: any) => i.fieldValue)
     return checker(existingCombination, combination)
   })[0]
   return variantLookUp || variant

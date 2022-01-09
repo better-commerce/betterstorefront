@@ -8,6 +8,8 @@ import getBrands from '@framework/api/endpoints/catalog/brands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import ProductSort from '@components/product/ProductSort'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -84,6 +86,30 @@ function BrandDetailPage({
   brandDetails,
 }: any) {
   const adaptedQuery = { ...query }
+  const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  useEffect(() => {
+    eventDispatcher(BrandViewed, {
+      id: brandDetails.id,
+      name: brandDetails.name || '',
+      manufName: brandDetails.manufacturerName,
+      omniImg:
+        brandDetails.productImage ||
+        'http://dev-ocx.imgix.net/products/117293BlueDenim.jpg',
+    })
+    //TODO
+    eventDispatcher(PageViewed, {
+      id: '064cb262-8937-4032-9ddb-8ed5ed3e7ee1',
+      name: 'Home',
+      metaTitle: 'Home TItle',
+      MetaKeywords: 'Home Keywords',
+      MetaDescription: 'Home Description',
+      Slug: '/',
+      Title: 'Home Title',
+      ViewType: 'custom',
+      omniImg: 'http://dev-ocx.imgix.net/products/361494Asphalt.jpg',
+    })
+  }, [])
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
     : false

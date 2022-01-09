@@ -12,6 +12,8 @@ import {
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
 
 function LookbookDetailPage({ data, slug }: any) {
   const router = useRouter()
@@ -21,7 +23,11 @@ function LookbookDetailPage({ data, slug }: any) {
     const response: any = await axios.post(NEXT_GET_SINGLE_LOOKBOOK, { slug })
     setProducts(response.data.products)
   }
+
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+
   useEffect(() => {
+    eventDispatcher(PageViewed, 'page')
     if (slug) loadProducts()
   }, [])
 

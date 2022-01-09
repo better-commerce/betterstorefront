@@ -3,6 +3,8 @@ import { config } from './configs/contact'
 import { useUI } from '@components/ui/context'
 import { handleSubmit, URLS } from './common'
 import Button from '@components/ui/IndigoButton'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 const radioBtnsConfig = [
   {
@@ -32,6 +34,7 @@ export default function ContactPreferences() {
   const [data, setData] = useState({})
   const [defaultData, setDefaultData] = useState({})
   const { user, setUser } = useUI()
+  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
     const tempObj: any = {}
@@ -84,6 +87,15 @@ export default function ContactPreferences() {
 
   const handleDataSubmit = async () => {
     await handleSubmit(data, user, setUser, setTitle, URLS.subscribe)
+    eventDispatcher(CustomerUpdated, {
+      id: user.userId,
+      name: user.username,
+      dateOfBirth: user.yearOfBirth,
+      gender: user.gender,
+      email: user.email,
+      postCode: user.postCode,
+      omniImg: user.omniImg,
+    })
   }
 
   const handleCheckbox = (key: string) => {
