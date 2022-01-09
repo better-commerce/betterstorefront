@@ -117,15 +117,19 @@ const ProductCard: FC<Props> = ({ product }) => {
     let buttonConfig: any = {
       title: 'Add to bag',
       action: async () => {
-        const item = await cartHandler().addToCart({
-          basketId,
-          productId: product.recordId,
-          qty: 1,
-          manualUnitPrice: product.price.raw.withTax,
-          stockCode: product.stockCode,
-          userId: user.userId,
-          isAssociated: user.isAssociated,
-        })
+        const item = await cartHandler().addToCart(
+          {
+            basketId,
+            productId: product.recordId,
+            qty: 1,
+            manualUnitPrice: product.price.raw.withTax,
+            stockCode: product.stockCode,
+            userId: user.userId,
+            isAssociated: user.isAssociated,
+          },
+          'ADD',
+          { product }
+        )
         setCartItems(item)
       },
       shortMessage: '',

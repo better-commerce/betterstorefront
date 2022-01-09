@@ -23,6 +23,8 @@ import {
 import Payments from './Payments'
 import Router from 'next/router'
 import { asyncHandler } from '@components/account/Address/AddressBook'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export default function CheckoutForm({
   cart,
@@ -161,6 +163,8 @@ export default function CheckoutForm({
 
   const { createAddress } = asyncHandler()
 
+  const { CheckoutStarted, CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
+
   const handleNewAddress = (values: any, callback: any = () => {}) => {
     const newValues = {
       ...values,
@@ -220,14 +224,16 @@ export default function CheckoutForm({
         displayOrder: product.displayOrderta,
         qty: -1,
       }
+      let type = 'ADD'
       if (type === 'increase') {
         data.qty = 1
       }
       if (type === 'delete') {
         data.qty = 0
+        type = 'REMOVE'
       }
       try {
-        const item = await addToCart(data)
+        const item = await addToCart(data, type, { product })
         setCartItems(item)
       } catch (error) {
         console.log(error)
@@ -306,6 +312,7 @@ export default function CheckoutForm({
   useEffect(() => {
     setShippingInformation(defaultShippingAddress)
     setBillingInformation(defaultBillingAddress, false)
+    eventDispatcher(CheckoutStarted, 'checkout started')
   }, [])
 
   const handlePayments = (method: any) => {
@@ -465,6 +472,7 @@ export default function CheckoutForm({
             )
 
             if (orderModelResponse.data.success) {
+              eventDispatcher(CheckoutConfirmation, orderModelResponse.data)
               Cookies.remove('basketId')
               const generatedBasketId = generateBasketId()
               setBasketId(generatedBasketId)

@@ -25,15 +25,19 @@ export default function MyOrders() {
 
   const handleAddToCart = (product: any) => {
     cartHandler()
-      .addToCart({
-        basketId,
-        productId: product.recordId,
-        qty: product.qty,
-        manualUnitPrice: product.price,
-        stockCode: product.stockCode,
-        userId: user.userId,
-        isAssociated: user.isAssociated,
-      })
+      .addToCart(
+        {
+          basketId,
+          productId: product.recordId,
+          qty: product.qty,
+          manualUnitPrice: product.price,
+          stockCode: product.stockCode,
+          userId: user.userId,
+          isAssociated: user.isAssociated,
+        },
+        'ADD',
+        { product }
+      )
       .then((response: any) => {
         setCartItems(response)
         openCart()

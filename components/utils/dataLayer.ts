@@ -60,9 +60,115 @@ const DataLayerSingleton = function () {
       navigator.userAgent.toLowerCase()
     )
 
-  let deviceType = 'desktop'
-  if (isTablet) deviceType = 'tablet'
-  if (isMobile) deviceType = 'mobile'
+  const deviceDetection = (function (n, t) {
+    function s() {
+      var n = !!navigator.userAgent.match(/iPhone|iPod/i)
+      return n && (i.deviceOS = 'iOS (iPhone)'), n
+    }
+    function h() {
+      var n = !!navigator.userAgent.match(/iPad/i)
+      return n && (i.deviceOS = 'iOS (iPad)'), n
+    }
+    function c() {
+      var n = !!navigator.userAgent.match(/Kindle/i)
+      return n && (i.deviceOS = 'Kindle'), n
+    }
+    function l() {
+      return !!(
+        navigator.userAgent.match(
+          /^(?=.*?(Android))((?!Kindle).)((?!Mobile).)*$/i
+        ) ||
+        h() ||
+        ((n = !!navigator.userAgent.match(/(MSIE 10\.0).*(Touch)/i)),
+        n && (i.deviceOS = 'Windows 8 Tablet'),
+        n) ||
+        c()
+      )
+      var n
+    }
+    var deviceVersion: any
+    var lpMTagConfig: any
+    var r = !1,
+      u = !1,
+      f: any = !1,
+      i: any = {
+        isIPhone: !1,
+        isIPad: !1,
+        isMobile: !1,
+        isTablet: !1,
+        deviceOS: '',
+      },
+      e = navigator.appVersion,
+      o: any = /\s(\d)_\d/,
+      a = /\s[(](\w+\s?\w*)[;]\s/
+    return l()
+      ? 3
+      : (function () {
+          var n, v, y, p
+          o.exec(e) && a.exec(e) && (deviceVersion = o.exec(e)[1])
+          u = !!(
+            s() ||
+            ((p = !1),
+            c() ||
+              ((p = !!navigator.userAgent.match(
+                /^(?=.*?(Android))(?=.*?(Mobile)).*$/i
+              )) &&
+                (i.deviceOS = 'Android')),
+            p) ||
+            ((y = !!navigator.userAgent.match(/BlackBerry/i)),
+            y && (i.deviceOS = 'Blackberry'),
+            y) ||
+            ((v = !!navigator.userAgent.match(/Opera Mini/i)),
+            v && (i.deviceOS = 'Opera'),
+            v) ||
+            ((n = !!navigator.userAgent.match(/IEMobile/i)),
+            n && (i.deviceOS = 'Windows'),
+            n)
+          )
+          f = l()
+          r = f || u
+          i.isIPhone = s()
+          i.isIPad = h()
+          i.isMobile = u
+          i.isTablet = f
+          i.userAgent = navigator.appVersion
+          '' === i.deviceOS &&
+            navigator.userAgent.match(/(;\s).*;\s/i) &&
+            (i.deviceOS = navigator.userAgent
+              .match(/(;\s).*;\s/i)[0]
+              .replace(';', ''))
+          try {
+            void 0 === lpMTagConfig.sessionVar && (lpMTagConfig.sessionVar = [])
+            r && lpMTagConfig
+              ? ((lpMTagConfig.sessionVar[lpMTagConfig.sessionVar.length] =
+                  'mobileDevice=' + r),
+                (lpMTagConfig.sessionVar[lpMTagConfig.sessionVar.length] =
+                  'mobilePhone=' + u),
+                (lpMTagConfig.sessionVar[lpMTagConfig.sessionVar.length] =
+                  'mobileTablet=' + f),
+                (lpMTagConfig.sessionVar[lpMTagConfig.sessionVar.length] =
+                  'deviceOS=' + i.deviceOS.replace(/^\s+|\s+$/g, '')),
+                (lpMTagConfig.sessionVar[lpMTagConfig.sessionVar.length] =
+                  'deviceUserAgent=' + navigator.userAgent),
+                t.innerWidth &&
+                  ((lpMTagConfig.sessionVar[lpMTagConfig.sessionVar.length] =
+                    'mobileDevice-VisualViewport-Width=' + t.innerWidth),
+                  (lpMTagConfig.sessionVar[lpMTagConfig.sessionVar.length] =
+                    'mobileDevice-VisualViewport-Height=' + t.innerHeight)))
+              : lpMTagConfig &&
+                !1 === r &&
+                (lpMTagConfig.sessionVar[lpMTagConfig.sessionVar.length] =
+                  'mobileDevice=' + r)
+          } catch (n) {}
+          return r
+        })()
+      ? 2
+      : 1
+  })(document, window)
+
+  let deviceType = deviceDetection
+  // if (isTablet) deviceType = 'tablet'
+  // if (isMobile) deviceType = 'mobile'
 
   const setDataLayer = () => {
     const dataLayer = {
@@ -101,7 +207,13 @@ const DataLayerSingleton = function () {
     })
   }
 
-  return { setItemInDataLayer, getItemFromDataLayer, setDataLayer, setEntities }
+  return {
+    setItemInDataLayer,
+    getItemFromDataLayer,
+    setDataLayer,
+    setEntities,
+    dataLayer: windowObject.dataLayer,
+  }
 }
 
 let DataLayerInstance: any = null

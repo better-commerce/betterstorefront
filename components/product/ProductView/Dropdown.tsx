@@ -83,6 +83,7 @@ export default function Dropdown({
     //   fieldCode,
     //   value.currentAttribute
     // )
+    debugger
     const stockPerAttrValue = getProductFromAttributes(
       fieldCode,
       value.currentAttribute,

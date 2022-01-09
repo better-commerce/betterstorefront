@@ -4,10 +4,14 @@ import { formConfig, schema } from './configs/details'
 import { useUI } from '@components/ui/context'
 import { handleSubmit } from './common'
 import LoadingDots from '@components/ui/LoadingDots'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
 
   const { user, setUser } = useUI()
+  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const initialValues = {
     email: user.email,
@@ -17,8 +21,18 @@ export default function MyDetails() {
     phone: user.phone,
   }
 
-  const handleDataSubmit = async (values: any) =>
+  const handleDataSubmit = async (values: any) => {
     await handleSubmit(values, user, setUser, setTitle)
+    eventDispatcher(CustomerUpdated, {
+      id: user.userId,
+      name: user.username,
+      dateOfBirth: user.yearOfBirth,
+      gender: user.gender,
+      email: user.email,
+      postCode: user.postCode,
+      omniImg: user.omniImg,
+    })
+  }
 
   return (
     <main className="sm:px-6 lg:px-8">
