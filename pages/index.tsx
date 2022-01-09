@@ -7,6 +7,8 @@ import ProductSlider from '@components/product/ProductSlider'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useEffect } from 'react'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export async function getStaticProps({
   preview,
@@ -36,15 +38,24 @@ export async function getStaticProps({
 const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ slugs, setEntities, recordEvent }: any) {
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+
   useEffect(() => {
-    const { entityId, entityName, entityType, entity } = KEYS_MAP
-    setEntities({
-      [entityId]: '84eb4e71-318e-4989-8837-58fcfc9e5066',
-      [entityName]: PAGE_TYPE,
-      [entityType]: 'Page',
-      [entity]: JSON.stringify(slugs),
+    eventDispatcher(PageViewed, {
+      entity: JSON.stringify({
+        id: slugs.id,
+        name: slugs.name,
+        metaTitle: slugs.metaTitle,
+        MetaKeywords: slugs.metaKeywords,
+        MetaDescription: slugs.metaDescription,
+        Slug: slugs.slug,
+        Title: slugs.title,
+        ViewType: slugs.viewType,
+      }),
+      entityName: PAGE_TYPE,
+      entityType: 'Page',
+      entityId: slugs.id,
     })
-    recordEvent(EVENTS.PageViewed)
   }, [])
 
   return (

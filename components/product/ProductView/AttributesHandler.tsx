@@ -22,7 +22,7 @@ export default function AttributesHandler({
   setSelectedAttrData,
   variant,
 }: any) {
-  const { attributes, variantProductsAttribute = [], variantProducts } = product
+  const { attributes, variantAttributes = [], variantProducts } = product
 
   const router = useRouter()
 
@@ -40,7 +40,7 @@ export default function AttributesHandler({
   const generateLink = (fieldCode: any, value: any) => {
     let slug = ''
     variantProducts.find((item: any) => {
-      item.variantAttributes.find((option: any) => {
+      item.attributes.find((option: any) => {
         const isFieldCode = option.fieldCode === fieldCode
         const isFieldValue = option.fieldValue === value
         if (isFieldCode && isFieldValue) {
@@ -68,7 +68,7 @@ export default function AttributesHandler({
     }
     // const slug = `products/${router.query.slug}`
     variantProducts.find((product: any) => {
-      product.variantAttributes.forEach((attr: any) => {
+      product.attributes.forEach((attr: any) => {
         if (
           key.toLowerCase() === attr.fieldCode.toLowerCase() &&
           attr.fieldValue === variant
@@ -153,7 +153,7 @@ export default function AttributesHandler({
   const stateAttributes: any = attrCombination
   return (
     <>
-      {variantProductsAttribute?.map((option: any, idx: number) => {
+      {variantAttributes?.map((option: any, idx: number) => {
         const optionsToPass = generateOptions(option)
         const originalAttribute = isCustomAttr
           ? stateAttributes[option.fieldCode]

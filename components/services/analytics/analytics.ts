@@ -1,37 +1,73 @@
 import { EVENTS_MAP } from './constants'
+import axios from 'axios'
+
+const endpoint = 'https://omnilytics.omnicx.com/data'
+
+const publisher = async (data: any, event: string) => {
+  const windowClone: any = typeof window !== 'undefined' ? window : {}
+  const dataLayer = windowClone.dataLayer[0]
+
+  const getQueryStringValue = function (n: string) {
+    return decodeURIComponent(
+      window.location.search.replace(
+        new RegExp(
+          '^(?:.*[&\\?]' +
+            encodeURIComponent(n).replace(/[\.\+\*]/g, '\\$&') +
+            '(?:\\=([^&]*))?)?.*$',
+          'i'
+        ),
+        '$1'
+      )
+    )
+  }
+
+  let dataToPublish = {
+    dataLayer: { ...dataLayer, data },
+    deviceType: dataLayer.deviceType,
+    ipAddress: dataLayer.ipAddress,
+    event,
+    session: null,
+    trackerId: process.env.NEXT_PUBLIC_OMNILYTICS_ID,
+    url: window.location.href,
+    utmCampaign: getQueryStringValue('utm_campaign'),
+    utmMedium: getQueryStringValue('utm_medium'),
+    utmSource: getQueryStringValue('utm_source'),
+    utmContent: getQueryStringValue('utm_content'),
+    utmTerm: getQueryStringValue('utm_term'),
+  }
+
+  try {
+    await axios.post(endpoint, { ...dataToPublish })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export default function AnalyticsService() {
   const addToCart = (payload: any) => {
-    console.log(payload)
-    //+
-    console.log('log item add to cart')
+    publisher(payload, 'addToCart')
   }
   const removedFromCart = (payload: any) => {
-    //+
-    console.log('item removed from cart')
+    publisher(payload, 'removedFromCart')
   }
   const basketViewed = (payload: any) => {
-    //+
-    console.log('BasketViewed')
+    publisher(payload, 'basketViewed')
   }
 
   const brandViewed = (payload: any) => {
-    //+
-    console.log('BrandViewed')
+    publisher(payload, 'brandViewed')
   }
 
   const categoryViewed = (payload: any) => {
-    //+
     console.log('CategoryViewed')
   }
 
   const checkoutConfirmation = (payload: any) => {
-    //+
-    console.log('CheckoutConfirmation')
+    publisher(payload, 'checkoutConfirmation')
   }
 
   const checkoutStarted = (payload: any) => {
-    //+
-    console.log('CheckoutStarted')
+    publisher(payload, ' checkoutStarted')
   }
 
   const cmsPageViewed = (payload: any) => {
@@ -43,22 +79,18 @@ export default function AnalyticsService() {
   }
 
   const customerCreated = (payload: any) => {
-    //+
-    console.log('CustomerCreated')
+    publisher(payload, 'customerCreated')
   }
 
   const customerProfileViewed = (payload: any) => {
-    //+
-    console.log('CustomerProfileViewed')
+    publisher(payload, 'customerProfileViewed')
   }
 
   const customerUpdated = (payload: any) => {
-    //+
-    console.log('CustomerUpdated')
+    publisher(payload, 'customerUpdated')
   }
   const facetSearch = (payload: any) => {
-    //+
-    console.log('FacetSearch')
+    publisher(payload, 'facetSearch')
   }
   const faqViewed = (payload: any) => {
     console.log('FaqViewed')
@@ -67,15 +99,13 @@ export default function AnalyticsService() {
     console.log('FreeText')
   }
   const pageViewed = (payload: any) => {
-    console.log('PageViewed')
+    publisher(payload, 'pageLoad')
   }
   const productViewed = (payload: any) => {
-    //+
-    console.log('ProductViewed')
+    publisher(payload, 'productViewed')
   }
   const search = (payload: any) => {
-    //+
-    console.log('Search')
+    publisher(payload, 'search')
   }
 
   const defaultAction = (payload?: any) => {
@@ -104,8 +134,6 @@ export default function AnalyticsService() {
   } = EVENTS_MAP.EVENT_TYPES
 
   const eventHandler = function (action: string, payload: any) {
-    console.log(action)
-    console.log(payload)
     switch (action) {
       case BasketItemAdded:
         addToCart(payload)
