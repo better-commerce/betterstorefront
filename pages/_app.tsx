@@ -81,7 +81,6 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
       TagManager.initialize(tagManagerArgs)
   }
   useEffect(() => {
-    analytics()
     initializeGTM()
     eventDispatcher('@@PageViewed', { id: '1' })
     DataLayerInstance.setDataLayer()
@@ -98,6 +97,7 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
       setUserLocation(TEST_GEO_DATA)
       DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
     }
+    analytics()
     setSessionIdCookie()
     setDeviceIdCookie()
     document.body.classList?.remove('loading')

@@ -179,7 +179,6 @@ function Search({ query, setEntities, recordEvent }: any) {
       Filters: state.filters,
       AllowFacet: true,
       ResultCount: data.products.total,
-      omniImg: 'http://dev-ocx.imgix.net/products/361346Red.jpg',
     })
   }, [])
   const handleInfiniteScroll = () => {
@@ -199,14 +198,6 @@ function Search({ query, setEntities, recordEvent }: any) {
   }
 
   useEffect(() => {
-    const categoryFilter = state.filters.find(
-      (item: any) => item.name === 'Category'
-    )
-
-    if (categoryFilter) {
-      eventDispatcher(CategoryViewed, 'category viewed' + categoryFilter)
-    }
-
     router.push({
       pathname: router.pathname,
       query: {
