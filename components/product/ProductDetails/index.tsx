@@ -31,14 +31,14 @@ const Attributes = ({ attributes = [] }: any) => {
   )
 }
 
-export default function ProductDetails({ product }: any) {
+export default function ProductDetails({ product, description }: any) {
   const detailsConfig = [
     {
       title: 'Description',
       InnerComponent: (props: any) => (
         <div
           className="text-gray-700 space-y-6"
-          dangerouslySetInnerHTML={{ __html: product.description }}
+          dangerouslySetInnerHTML={{ __html: description || '' }}
         />
       ),
     },
@@ -63,6 +63,7 @@ export default function ProductDetails({ product }: any) {
       ),
     },
   ]
+
   return (
     <div className="border-t divide-y divide-gray-200">
       {detailsConfig.map((detail: any, idx: number) => (
@@ -95,7 +96,9 @@ export default function ProductDetails({ product }: any) {
                 </Disclosure.Button>
               </h3>
               <Disclosure.Panel as="div" className="pb-6 prose prose-sm">
-                {detail.InnerComponent({ attributes: product.attributes })}
+                {detail.InnerComponent({
+                  attributes: product.customAttributes || product.attributes,
+                })}
               </Disclosure.Panel>
             </>
           )}

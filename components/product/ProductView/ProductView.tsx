@@ -445,8 +445,10 @@ export default function ProductView({
                 <h2 id="details-heading" className="sr-only">
                   Additional details
                 </h2>
-                <ProductDetails product={product} />
-
+                <ProductDetails
+                  product={product}
+                  description={selectedAttrData.description}
+                />
                 {updatedProduct ? (
                   <>
                     <div className="mt-10 flex sm:flex-col1">

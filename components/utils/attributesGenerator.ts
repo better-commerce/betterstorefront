@@ -48,15 +48,13 @@ export const getProductFromAttributes = (
   variantProducts: any,
   slug: string = ''
 ) => {
-  const normalizer = variant.variant
-    ? {
-        variantAttributes: Object.entries(
-          getAttributesFromSlug(slug, variantProducts)
-        ).map(([key, value]: any) => {
-          return { fieldCode: key, fieldValue: value }
-        }),
-      }
-    : variant
+  const normalizer = {
+    variantAttributes: Object.entries(
+      getAttributesFromSlug(slug, variantProducts)
+    ).map(([key, value]: any) => {
+      return { fieldCode: key, fieldValue: value }
+    }),
+  }
 
   const existingCombination = normalizer.variantAttributes.map((i: any) => {
     if (i.fieldCode === fieldCode) {
