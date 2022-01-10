@@ -91,7 +91,6 @@ export default function Dropdown({
       product.variantProducts,
       slug
     )
-    console.log(stockPerAttrValue)
     setSelected({ ...value, ...stockPerAttrValue })
     setAttrCombination(fieldCode, value.currentAttribute)
     setSelectedAttrData(stockPerAttrValue)
