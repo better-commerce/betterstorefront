@@ -1,11 +1,12 @@
 import { EVENTS_MAP } from './constants'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const endpoint = 'https://omnilytics.omnicx.com/data'
 
 const publisher = async (data: any, event: string) => {
   const windowClone: any = typeof window !== 'undefined' ? window : {}
-  const dataLayer = windowClone.dataLayer[0]
+  const dataLayer = windowClone.dataLayer && windowClone.dataLayer[0]
 
   const getQueryStringValue = function (n: string) {
     return decodeURIComponent(
@@ -21,19 +22,35 @@ const publisher = async (data: any, event: string) => {
     )
   }
 
+  const visitorData: any = JSON.parse(
+    windowClone.localStorage.getItem('user')
+  ) || {
+    email: '',
+  }
+
   let dataToPublish = {
-    dataLayer: { ...dataLayer, data },
+    dataLayer: {
+      ...dataLayer,
+      utmCampaign: getQueryStringValue('utm_campaign'),
+      utmMedium: getQueryStringValue('utm_medium'),
+      utmSource: getQueryStringValue('utm_source'),
+      utmContent: getQueryStringValue('utm_content'),
+      utmTerm: getQueryStringValue('utm_term'),
+      pageUrl: window.location.href,
+      urlReferrer: document.referrer,
+      currency: Cookies.get('Currency'),
+      visitorEmail: visitorData.email,
+      visitorExistingCustomer: visitorData.userName || '',
+      visitorId: visitorData.userId || '',
+      visitorLoggedIn: !!visitorData.email,
+      ...data,
+    },
     deviceType: dataLayer.deviceType,
     ipAddress: dataLayer.ipAddress,
     event,
-    session: null,
+    session: dataLayer.se,
     trackerId: process.env.NEXT_PUBLIC_OMNILYTICS_ID,
     url: window.location.href,
-    utmCampaign: getQueryStringValue('utm_campaign'),
-    utmMedium: getQueryStringValue('utm_medium'),
-    utmSource: getQueryStringValue('utm_source'),
-    utmContent: getQueryStringValue('utm_content'),
-    utmTerm: getQueryStringValue('utm_term'),
   }
 
   try {
@@ -134,6 +151,7 @@ export default function AnalyticsService() {
   } = EVENTS_MAP.EVENT_TYPES
 
   const eventHandler = function (action: string, payload: any) {
+    console.log(action, payload)
     switch (action) {
       case BasketItemAdded:
         addToCart(payload)
@@ -211,11 +229,9 @@ export default function AnalyticsService() {
         break
     }
   }
-  if (typeof window !== 'undefined') {
-    Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
-      window.addEventListener(EVENTS_MAP.EVENT_TYPES[eventType], (event: any) =>
-        eventHandler(event.detail.action, event.detail.payload)
-      )
-    })
-  }
+  Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
+    window.addEventListener(EVENTS_MAP.EVENT_TYPES[eventType], (event: any) =>
+      eventHandler(event.detail.action, event.detail.payload)
+    )
+  })
 }
