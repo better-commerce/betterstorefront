@@ -60,11 +60,13 @@ const setDeviceIdCookie = () => {
   }
 }
 
-function MyApp({ Component, pageProps, nav, footer }: any) {
+function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [appConfig, setAppConfig] = useState({})
   const [location, setUserLocation] = useState({})
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
   const Layout = (Component as any).Layout || Noop
+
+  let analyticsCb: any = {}
 
   const fetchAppConfig = async () => {
     try {
@@ -90,9 +92,7 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
     fetchAppConfig()
     return function cleanup() {
       Cookies.remove(SessionIdCookieKey)
-      Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((event: any) =>
-        window.removeEventListener(EVENTS_MAP.EVENT_TYPES[event], () => {})
-      )
+      analyticsCb.removeListeners()
     }
   }, [])
 
@@ -113,10 +113,10 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
       setUserLocation(TEST_GEO_DATA)
       DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
     }
+    analyticsCb = analytics()
+    setAnalyticsEnabled(true)
     setSessionIdCookie()
     setDeviceIdCookie()
-    analytics()
-    setAnalyticsEnabled(true)
   }
 
   return (

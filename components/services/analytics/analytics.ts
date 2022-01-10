@@ -6,7 +6,7 @@ const endpoint = 'https://omnilytics.omnicx.com/data'
 
 const publisher = async (data: any, event: string) => {
   const windowClone: any = typeof window !== 'undefined' ? window : {}
-  const dataLayer = windowClone.dataLayer && windowClone.dataLayer[0]
+  const windowDataLayer = windowClone.dataLayer && windowClone.dataLayer[0]
 
   const getQueryStringValue = function (n: string) {
     return decodeURIComponent(
@@ -28,9 +28,58 @@ const publisher = async (data: any, event: string) => {
     email: '',
   }
 
+  const _getOmniImage = function () {
+    var t = '',
+      n: any = document.getElementsByClassName('omni-img')
+    return (
+      n && n[0]
+        ? (t = n[0].src)
+        : ((n = document.getElementsByTagName('img')),
+          (t = n.length > 0 ? n[0].src : null)),
+      t
+    )
+  }
+
+  const _cloneNavigator = function () {
+    var t = window.navigator,
+      i = Object.keys(Object.getPrototypeOf(t))
+    return i.reduce(function (n, i) {
+      return (windowClone[i] = windowClone[i]), n
+    }, {})
+  }
+
+  const getBrowserData = () => {
+    return {
+      cookies: document.cookie,
+      dimensions: {
+        documentHeight: Math.max(
+          document.body.scrollHeight,
+          document.body.scrollHeight,
+          document.body.offsetHeight,
+          document.body.offsetHeight,
+          document.body.clientHeight
+        ),
+        documentWidth: Math.max(
+          document.body.scrollWidth,
+          document.body.scrollWidth,
+          document.body.offsetWidth,
+          document.body.offsetWidth,
+          document.body.clientWidth
+        ),
+        screenHeight: screen.height,
+        screenWidth: screen.width,
+        windowHeight: document.body.clientHeight,
+        windowWidth: document.body.clientWidth,
+      },
+      navigator: _cloneNavigator(),
+      referrer: document.referrer,
+      timing: window.performance.timing,
+    }
+  }
+
   let dataToPublish = {
     dataLayer: {
-      ...dataLayer,
+      ...windowDataLayer,
       utmCampaign: getQueryStringValue('utm_campaign'),
       utmMedium: getQueryStringValue('utm_medium'),
       utmSource: getQueryStringValue('utm_source'),
@@ -43,16 +92,22 @@ const publisher = async (data: any, event: string) => {
       visitorExistingCustomer: visitorData.userName || '',
       visitorId: visitorData.userId || '',
       visitorLoggedIn: !!visitorData.email,
+      dataLayer: JSON.stringify({
+        ...JSON.parse(data.entity),
+        omniImg: _getOmniImage(),
+      }),
+      data: JSON.stringify(getBrowserData()),
       ...data,
     },
-    deviceType: dataLayer.deviceType,
-    ipAddress: dataLayer.ipAddress,
+    deviceType: windowDataLayer.deviceType,
+    ipAddress: windowDataLayer.ipAddress,
     event,
-    session: dataLayer.se,
+    session: windowDataLayer.sessionId,
     trackerId: process.env.NEXT_PUBLIC_OMNILYTICS_ID,
     url: window.location.href,
   }
 
+  console.log(dataToPublish)
   try {
     await axios.post(endpoint, { ...dataToPublish })
   } catch (error) {
@@ -151,7 +206,6 @@ export default function AnalyticsService() {
   } = EVENTS_MAP.EVENT_TYPES
 
   const eventHandler = function (action: string, payload: any) {
-    console.log(action, payload)
     switch (action) {
       case BasketItemAdded:
         addToCart(payload)
@@ -234,4 +288,14 @@ export default function AnalyticsService() {
       eventHandler(event.detail.action, event.detail.payload)
     )
   })
+  return {
+    removeListeners: () =>
+      Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
+        window.addEventListener(
+          EVENTS_MAP.EVENT_TYPES[eventType],
+          (event: any) =>
+            eventHandler(event.detail.action, event.detail.payload)
+        )
+      }),
+  }
 }
