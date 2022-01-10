@@ -83,7 +83,8 @@ export default function AttributesHandler({
     return productData
   }
 
-  const isCustomAttr = product.stockCode === 'CC0001'
+  //temporary until DisplayTemplate is implemented
+  const isCustomAttr = product.variantAttributes.length > 2
 
   const generateOptions = (option: any) => {
     const isInOrder =
