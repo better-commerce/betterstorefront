@@ -198,7 +198,7 @@ export default function ProductView({
         stockCode: selectedAttrData.stockCode,
       },
     }
-    const addonProducts = product.relatedProducts.filter(
+    const addonProducts = product.relatedProducts?.filter(
       (item: any) => item.stockCode === 'ADDON'
     )
     const addonProductsWithParentProduct = addonProducts.map((item: any) => {
@@ -276,10 +276,11 @@ export default function ProductView({
     asyncHandler()
   }
 
-  const isEngravingAvailable = !!product.relatedProducts.filter(
+  const isEngravingAvailable = !!product.relatedProducts?.filter(
     (item: any) => item.stockCode === 'ADDON'
   ).length
 
+  //TODO no additionalProperties key found on product object
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
