@@ -102,12 +102,7 @@ export default function AttributesHandler({
         !isLastItem
       ) {
         const entriesFromCombination = () => {
-          return Object.fromEntries(
-            Object.entries(attrCombination).slice(
-              1,
-              Object.keys(attrCombination).length
-            )
-          )
+          return Object.fromEntries(Object.entries(attrCombination).slice(-1))
         }
         const generatedAttributes = attributesGenerator(
           entriesFromCombination(),
