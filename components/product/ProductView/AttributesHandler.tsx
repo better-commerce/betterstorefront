@@ -82,7 +82,7 @@ export default function AttributesHandler({
     return productData
   }
 
-  const isCustomAttr = product.stockCode === '123N'
+  const isCustomAttr = product.stockCode === 'CC0001'
 
   const generateOptions = (option: any) => {
     const isInOrder =

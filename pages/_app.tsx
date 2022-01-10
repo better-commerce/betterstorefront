@@ -55,12 +55,15 @@ const setDeviceIdCookie = () => {
     const deviceId = uuid_v4()
     Cookies.set(DeviceIdKey, deviceId)
     DataLayerInstance.setItemInDataLayer(DeviceIdKey, deviceId)
+  } else {
+    DataLayerInstance.setItemInDataLayer(DeviceIdKey, Cookies.get(DeviceIdKey))
   }
 }
 
 function MyApp({ Component, pageProps, nav, footer }: any) {
   const [appConfig, setAppConfig] = useState({})
   const [location, setUserLocation] = useState({})
+  const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
   const Layout = (Component as any).Layout || Noop
 
   const fetchAppConfig = async () => {
@@ -80,26 +83,9 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
     if (process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID)
       TagManager.initialize(tagManagerArgs)
   }
+
   useEffect(() => {
     initializeGTM()
-    eventDispatcher('@@PageViewed', { id: '1' })
-    DataLayerInstance.setDataLayer()
-    if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
-      geoData()
-        .then((response) => {
-          setUserLocation(response)
-          DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
-        })
-        .catch((err) =>
-          DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
-        )
-    } else {
-      setUserLocation(TEST_GEO_DATA)
-      DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
-    }
-    analytics()
-    setSessionIdCookie()
-    setDeviceIdCookie()
     document.body.classList?.remove('loading')
     fetchAppConfig()
     return function cleanup() {
@@ -109,6 +95,29 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
       )
     }
   }, [])
+
+  if (typeof window !== 'undefined' && !isAnalyticsEnabled) {
+    DataLayerInstance.setDataLayer()
+    if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
+      geoData()
+        .then((response) => {
+          setUserLocation(response)
+          DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
+          DataLayerInstance.setItemInDataLayer('city', response.City)
+          DataLayerInstance.setItemInDataLayer('country', response.Country)
+        })
+        .catch((err) =>
+          DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
+        )
+    } else {
+      setUserLocation(TEST_GEO_DATA)
+      DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
+    }
+    setSessionIdCookie()
+    setDeviceIdCookie()
+    analytics()
+    setAnalyticsEnabled(true)
+  }
 
   return (
     <>
