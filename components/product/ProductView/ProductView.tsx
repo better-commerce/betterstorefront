@@ -313,6 +313,7 @@ export default function ProductView({
     (item: any) => item.stockCode !== 'ADDON'
   )
 
+  console.log(product)
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}
@@ -448,7 +449,9 @@ export default function ProductView({
                 </h2>
                 <ProductDetails
                   product={product}
-                  description={selectedAttrData.description}
+                  description={
+                    selectedAttrData.description || product.description
+                  }
                 />
                 {updatedProduct ? (
                   <>
