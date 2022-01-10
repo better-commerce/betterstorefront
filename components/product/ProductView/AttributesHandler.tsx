@@ -86,7 +86,6 @@ export default function AttributesHandler({
   const isCustomAttr = product.stockCode === 'CC0001'
 
   const generateOptions = (option: any) => {
-    console.count('trigger')
     const isInOrder =
       Object.keys(originalAttributes).findIndex(
         (i: string) => i === option.fieldCode
@@ -161,12 +160,10 @@ export default function AttributesHandler({
   const DefaultComponent: any = () => null
   const stateAttributes: any = attrCombination
 
-  console.count('trigger 1')
   return (
     <>
       {variantAttributes?.map((option: any, idx: number) => {
         const optionsToPass = generateOptions(option)
-        console.log(optionsToPass)
         const originalAttribute = isCustomAttr
           ? stateAttributes[option.fieldCode]
           : originalAttributes[option.fieldCode]
