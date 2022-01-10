@@ -84,7 +84,7 @@ export default function AttributesHandler({
   }
 
   //temporary until DisplayTemplate is implemented
-  const isCustomAttr = product.variantAttributes.length > 2
+  const isCustomAttr = product.variantAttributes?.length > 2
 
   const generateOptions = (option: any) => {
     const isInOrder =
