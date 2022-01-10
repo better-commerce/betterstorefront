@@ -68,3 +68,11 @@ export const getProductFromAttributes = (
   })[0]
   return variantLookUp || variant
 }
+
+export const productLookup = (variants: any, combination: any) => {
+  return variants.filter((variant: any) => {
+    const productAttr = variant.attributes || variant.customAttributes
+    let variantComb = productAttr.map((i: any) => i.fieldValue)
+    return checker(Object.values(combination), variantComb)
+  })
+}
