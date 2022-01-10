@@ -448,7 +448,9 @@ export default function ProductView({
                 </h2>
                 <ProductDetails
                   product={product}
-                  description={selectedAttrData.description}
+                  description={
+                    selectedAttrData.description || product.description
+                  }
                 />
                 {updatedProduct ? (
                   <>

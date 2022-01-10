@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import attributesGenerator, {
   getAttributesFromSlug,
+  productLookup,
 } from '@components/utils/attributesGenerator'
 
 const ATTR_COMPONENTS: any = {
@@ -82,7 +83,8 @@ export default function AttributesHandler({
     return productData
   }
 
-  const isCustomAttr = product.stockCode === '123N'
+  //temporary until DisplayTemplate is implemented
+  const isCustomAttr = product.variantAttributes?.length > 2
 
   const generateOptions = (option: any) => {
     const isInOrder =
@@ -133,7 +135,9 @@ export default function AttributesHandler({
         newValue = Object.fromEntries(
           Object.entries(newValue).slice(0, existingValueIndex + 1)
         )
+        return newValue
       }
+      newValue = { ...newValue, [key]: value }
       return newValue
     })
   }
@@ -144,13 +148,19 @@ export default function AttributesHandler({
         Object.keys(attrCombination).length ===
         Object.keys(originalAttributes).length
       ) {
-        setSelectedAttrData(value)
+        const currentProduct = productLookup(
+          variantProducts,
+          attrCombination
+        )[0]
+
+        if (currentProduct) setSelectedAttrData(currentProduct)
       }
     } else setSelectedAttrData(value)
   }
 
   const DefaultComponent: any = () => null
   const stateAttributes: any = attrCombination
+
   return (
     <>
       {variantAttributes?.map((option: any, idx: number) => {

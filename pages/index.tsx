@@ -53,8 +53,10 @@ function Home({ slugs, setEntities, recordEvent }: any) {
         ViewType: slugs.viewType,
       }),
       entityName: PAGE_TYPE,
+      pageTitle: slugs.title,
       entityType: 'Page',
       entityId: slugs.id,
+      eventType: 'PageViewed',
     })
   }, [])
 
