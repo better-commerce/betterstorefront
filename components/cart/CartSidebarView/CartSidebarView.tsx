@@ -39,7 +39,6 @@ const CartSidebarView: FC = () => {
   }, [])
 
   const handleItem = (product: any, type = 'increase') => {
-    debugger
     const asyncHandleItem = async () => {
       const data: any = {
         basketId,

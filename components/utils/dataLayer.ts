@@ -173,11 +173,12 @@ const DataLayerSingleton = function () {
   const setDataLayer = () => {
     const dataLayer = {
       sessionId: Cookies.get(SessionIdCookieKey),
-      BrowserInfo: navigator.userAgent,
+      browserInfo: navigator.userAgent,
       deviceType: deviceType,
       channel: 'Web',
       lang: 'en-GB',
       domainId: process.env.NEXT_PUBLIC_DOMAIN_ID || '',
+      appId: process.env.NEXT_PUBLIC_DOMAIN_ID || '',
       ipAddress: '',
       orgId: process.env.NEXT_PUBLIC_ORG_ID,
       server: 'x.x.x.29',

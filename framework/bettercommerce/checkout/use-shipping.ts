@@ -1,4 +1,7 @@
-import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
+import {
+  CHECKOUT_ENDPOINT,
+  SHIPPING_ENDPOINT,
+} from '@components/utils/constants'
 import fetcher from '../fetcher'
 
 interface Props {
@@ -11,8 +14,7 @@ interface Props {
 }
 
 const TYPES_MAP_TO_ACTIONS: any = {
-  GET_ALL: ({ basketId, countryCode, postCode }: any) =>
-    `/${basketId}/delivery/shipping-methods?countryCode=${countryCode}&postcode`,
+  GET_ALL: ({ basketId, countryCode, postCode }: any) => `/`,
   CLICK_AND_COLLECT: ({ basketId, postCode }: any) =>
     `/clickandcollect/${basketId}/${postCode}`,
   ACTIVE_SHIPPING_METHODS: () => '/all',
@@ -26,8 +28,8 @@ export default function getShippingMethods() {
     method = 'GET_ALL',
   }: Props) {
     const url =
-      CHECKOUT_ENDPOINT +
-      TYPES_MAP_TO_ACTIONS[method]({ basketId, countryCode, postCode })
+      SHIPPING_ENDPOINT +
+      `?basketId=${basketId}&shipToCountryIso=${countryCode}`
     try {
       const response: any = await fetcher({
         url,

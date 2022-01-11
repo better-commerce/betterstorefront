@@ -13,7 +13,7 @@ export default function useAssociateCart() {
     }
     try {
       const response: any = await fetcher({
-        url: `${BASKET_ENDPOINT}/${basketId}/user/${userId}`,
+        url: `${BASKET_ENDPOINT}/${basketId}/user?userId=${userId}`,
         method: 'put',
         data,
         headers: {

@@ -92,7 +92,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     fetchAppConfig()
     return function cleanup() {
       Cookies.remove(SessionIdCookieKey)
-      analyticsCb.removeListeners()
+      if (analyticsCb.removeListeners) analyticsCb.removeListeners()
     }
   }, [])
 
