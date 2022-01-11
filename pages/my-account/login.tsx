@@ -8,6 +8,9 @@ import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
   const {
@@ -22,6 +25,12 @@ function LoginPage({ recordEvent, setEntities }: any) {
   } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  useAnalytics(PageViewed, {
+    eventType: PageViewed,
+  })
+
   if (user.userId) {
     Router.push('/')
   }

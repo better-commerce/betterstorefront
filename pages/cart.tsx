@@ -17,8 +17,7 @@ import {
   NEXT_UPDATE_DELIVERY_INFO,
 } from '@components/utils/constants'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-
+import useAnalytics from '@components/services/analytics/useAnalytics'
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
   const [deliveryPlans, setDeliveryPlans] = useState([])
@@ -85,8 +84,26 @@ function Cart({ cart }: any) {
     setDeliveryPlans(response.data)
   }
 
+  const { Basket } = EVENTS_MAP.ENTITY_TYPES
+
+  useAnalytics(BasketViewed, {
+    entity: JSON.stringify({
+      id: basketId,
+      grandTotal: cartItems.grandTotal.raw.withTax,
+      lineItems: cartItems.lineItems,
+      promoCode: cartItems.promotionsApplied,
+      shipCharge: cartItems.shippingCharge.raw.withTax,
+      shipTax: cartItems.shippingCharge.raw.tax,
+      taxPercent: cartItems.taxPercent,
+      tax: cartItems.grandTotal.raw.tax,
+    }),
+    entityName: 'Cart',
+    entityType: Basket,
+    eventType: BasketViewed,
+    promoCodes: cartItems.promotionsApplied,
+  })
+
   useEffect(() => {
-    eventDispatcher(BasketViewed, 'cart seen')
     if (cart.shippingMethods.length > 0) fetchShippingPlans(cart)
     else {
       setCartItems(cart)
@@ -103,13 +120,11 @@ function Cart({ cart }: any) {
         displayOrder: product.displayOrderta,
         qty: -1,
       }
-      let type = 'ADD'
 
       if (type === 'increase') {
         data.qty = 1
       }
       if (type === 'delete') {
-        type = 'REMOVE'
         data.qty = 0
       }
       try {

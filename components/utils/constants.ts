@@ -83,4 +83,6 @@ export const SHIPPING_ACTION_TYPES_MAP = {
   ACTIVE_SHIPPING_METHODS: 'ACTIVE_SHIPPING_METHODS',
 }
 
-export const NEXT_GEO_ENDPOINT = '/api/geo-location'
+export const NEXT_GEO_ENDPOINT =
+  process.env.NEXT_PUBLIC_GEO_ENDPOINT ||
+  'https://omnilytics.omnicx.com/api/v1/IpInfo?ipAddress='

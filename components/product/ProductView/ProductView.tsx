@@ -73,15 +73,22 @@ export default function ProductView({
 
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
 
+  const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
     const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
-        id: response.data.product.recordId,
-        sku: response.data.product.sku,
-        name: response.data.product.name,
-        stockCode: response.data.product.stockCode,
-        img: response.data.product.image,
+        entity: JSON.stringify({
+          id: response.data.product.recordId,
+          sku: response.data.product.sku,
+          name: response.data.product.name,
+          stockCode: response.data.product.stockCode,
+          img: response.data.product.image,
+        }),
+        entityId: response.data.product.recordId,
+        entityName: response.data.product.name,
+        entityType: Product,
+        eventType: ProductViewed,
       })
       setUpdatedProduct(response.data.product)
       setSelectedAttrData({
@@ -163,7 +170,7 @@ export default function ProductView({
             isAssociated: user.isAssociated,
           },
           'ADD',
-          { selectedAttrData }
+          { product: selectedAttrData }
         )
         setCartItems(item)
       },

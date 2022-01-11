@@ -40,13 +40,17 @@ export default function AddressItem({
           successCallback() &&
           setEditMode(false) &&
           eventDispatcher(CustomerUpdated, {
-            id: user.userId,
-            name: user.username,
-            dateOfBirth: user.yearOfBirth,
-            gender: user.gender,
-            email: user.email,
-            postCode: user.postCode,
-            omniImg: user.omniImg,
+            entity: JSON.stringify({
+              id: user.userId,
+              name: user.username,
+              dateOfBirth: user.yearOfBirth,
+              gender: user.gender,
+              email: user.email,
+              postCode: user.postCode,
+            }),
+            entityId: user.userId,
+            entityName: user.firstName + user.lastName,
+            eventType: CustomerUpdated,
           })
       )
       .catch(() => errCallback())
@@ -58,13 +62,17 @@ export default function AddressItem({
         () =>
           successCallback() &&
           eventDispatcher(CustomerUpdated, {
-            id: user.userId,
-            name: user.username,
-            dateOfBirth: user.yearOfBirth,
-            gender: user.gender,
-            email: user.email,
-            postCode: user.postCode,
-            omniImg: user.omniImg,
+            entity: JSON.stringify({
+              id: user.userId,
+              name: user.username,
+              dateOfBirth: user.yearOfBirth,
+              gender: user.gender,
+              email: user.email,
+              postCode: user.postCode,
+            }),
+            entityId: user.userId,
+            entityName: user.firstName + user.lastName,
+            eventType: CustomerUpdated,
           })
       )
       .catch(() => errCallback)

@@ -93,10 +93,11 @@ const publisher = async (data: any, event: string) => {
       visitorId: visitorData.userId || '',
       visitorLoggedIn: !!visitorData.email,
       dataLayer: JSON.stringify({
-        ...JSON.parse(data.entity),
+        ...JSON.parse(data.entity || '{}'),
         omniImg: _getOmniImage(),
       }),
       data: JSON.stringify(getBrowserData()),
+      pageTitle: document.title,
       ...data,
     },
     deviceType: windowDataLayer.deviceType,
@@ -107,7 +108,6 @@ const publisher = async (data: any, event: string) => {
     url: window.location.href,
   }
 
-  console.log(dataToPublish)
   try {
     await axios.post(endpoint, { ...dataToPublish })
   } catch (error) {
@@ -139,7 +139,7 @@ export default function AnalyticsService() {
   }
 
   const checkoutStarted = (payload: any) => {
-    publisher(payload, ' checkoutStarted')
+    publisher(payload, 'checkoutStarted')
   }
 
   const cmsPageViewed = (payload: any) => {

@@ -13,7 +13,7 @@ import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 interface CartItem {
   basketId?: string
   productId?: string
-  qty?: number
+  qty: number
   manualUnitPrice?: number
   displayOrder?: number
   stockCode?: string
@@ -42,7 +42,7 @@ export default function cartHandler() {
         isAssociated = true,
       }: CartItem,
       type = 'ADD',
-      data = {}
+      data: any = {}
     ) => {
       const response: any = await axios.post(NEXT_ADD_TO_CART, {
         data: {
@@ -58,25 +58,30 @@ export default function cartHandler() {
         await cartHandler().associateCart(userId, basketId)
       }
       const eventData = {
-        id: response.data.id,
-        grandTotal: response.data.grandTotal.raw.withTax,
-        tax: response.data.grandTotal.raw.tax,
-        taxPercent: response.data.taxPercent,
-        shipCharge: response.data.shippingCharge.raw.withTax,
-        shipTax: response.data.shippingCharge.raw.tax,
-        lineitems: response.data.lineItems,
-        promoCode: response.data.promotionsApplied,
-        omniImg: 'http://dev-ocx.imgix.net/products/361494Asphalt.jpg', //TODO couldn't find in the cart object
+        entity: JSON.stringify({
+          basketId,
+          id: productId,
+          name: data.product.name,
+          price: data.product.price.raw.withTax,
+          quantity: qty,
+          stockCode: data.product.stockCode,
+        }),
+        basketItems: response.data.lineItems,
+        entityId: data.product.recordId,
+        entityType: 'product',
+        eventType: BasketItemAdded,
+        entityName: data.product.name,
       }
 
-      switch (type) {
-        case 'ADD':
-          eventDispatcher(BasketItemAdded, eventData)
-          break
-        case 'REMOVE':
-          eventDispatcher(BasketItemRemoved, eventData)
-          break
-      }
+      console.log(qty)
+      if (qty && qty > 0) {
+        eventDispatcher(BasketItemAdded, eventData)
+      } else
+        eventDispatcher(BasketItemRemoved, {
+          ...eventData,
+          eventType: BasketItemRemoved,
+        })
+
       return response.data
     },
     getCart: async ({ basketId }: GetCart) => {

@@ -4,7 +4,8 @@ import Link from 'next/link'
 import type { GetStaticPropsContext } from 'next'
 import getLookbooks from '@framework/api/content/lookbook'
 import { Swiper, SwiperSlide } from 'swiper/react'
-
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
@@ -19,6 +20,14 @@ const DESCRIPTION_PLACEHOLDER =
   'My ideal home is a personalized handpicked furniture items set that gives you the touch of royalty and the feel of contemporary world yet keeping your living area cool and peace making.'
 
 function LookbookPage({ data }: any) {
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+  const {} = EVENTS_MAP.ENTITY_TYPES
+
+  useAnalytics(PageViewed, {
+    eventType: PageViewed,
+    pageCategory: 'Lookbook',
+  })
+
   return (
     <div className="mt-8 relative mb-5">
       <div className="text-center py-16 px-4 sm:px-6 lg:px-8">

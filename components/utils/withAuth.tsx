@@ -16,7 +16,7 @@ const withAuth = (WrappedComponent: any, redirect = true) => {
 
       // If this is an accessToken we just render the component that was passed with all its props
 
-      return <WrappedComponent {...props} />
+      return <WrappedComponent isLoggedIn={true} {...props} />
     }
 
     // If we are on server, return null
