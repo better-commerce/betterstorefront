@@ -13,17 +13,33 @@ const CartSidebarView: FC = () => {
   const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
   const { getCart, addToCart } = useCart()
   const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
-
+  const { Basket } = EVENTS_MAP.ENTITY_TYPES
   useEffect(() => {
     const handleCartitems = async () => {
       const items = await getCart({ basketId })
       setCartItems(items)
     }
-    eventDispatcher(BasketViewed, 'cart seen')
+    eventDispatcher(BasketViewed, {
+      entity: JSON.stringify({
+        id: basketId,
+        grandTotal: cartItems.grandTotal.raw.withTax,
+        lineItems: cartItems.lineItems,
+        promoCode: cartItems.promotionsApplied,
+        shipCharge: cartItems.shippingCharge.raw.withTax,
+        shipTax: cartItems.shippingCharge.raw.tax,
+        taxPercent: cartItems.taxPercent,
+        tax: cartItems.grandTotal.raw.tax,
+      }),
+      entityName: 'Cart',
+      entityType: Basket,
+      eventType: BasketViewed,
+      promoCodes: cartItems.promotionsApplied,
+    })
     handleCartitems()
   }, [])
 
   const handleItem = (product: any, type = 'increase') => {
+    debugger
     const asyncHandleItem = async () => {
       const data: any = {
         basketId,
@@ -33,13 +49,11 @@ const CartSidebarView: FC = () => {
         displayOrder: product.displayOrderta,
         qty: -1,
       }
-      let type = 'ADD'
       if (type === 'increase') {
         data.qty = 1
       }
       if (type === 'delete') {
         data.qty = 0
-        type = 'REMOVE'
       }
       try {
         const item = await addToCart(data, type, { product })

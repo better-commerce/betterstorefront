@@ -13,8 +13,7 @@ import {
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-
+import useAnalytics from '@components/services/analytics/useAnalytics'
 function LookbookDetailPage({ data, slug }: any) {
   const router = useRouter()
   const { basketId, openCart, setCartItems } = useUI()
@@ -26,8 +25,12 @@ function LookbookDetailPage({ data, slug }: any) {
 
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
 
+  useAnalytics(PageViewed, {
+    eventType: PageViewed,
+    pageCategory: 'Lookbook',
+  })
+
   useEffect(() => {
-    eventDispatcher(PageViewed, 'page')
     if (slug) loadProducts()
   }, [])
 

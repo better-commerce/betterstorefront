@@ -163,7 +163,8 @@ export default function CheckoutForm({
 
   const { createAddress } = asyncHandler()
 
-  const { CheckoutStarted, CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
+  const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
+  const { Order } = EVENTS_MAP.ENTITY_TYPES
 
   const handleNewAddress = (values: any, callback: any = () => {}) => {
     const newValues = {
@@ -224,13 +225,11 @@ export default function CheckoutForm({
         displayOrder: product.displayOrderta,
         qty: -1,
       }
-      let type = 'ADD'
       if (type === 'increase') {
         data.qty = 1
       }
       if (type === 'delete') {
         data.qty = 0
-        type = 'REMOVE'
       }
       try {
         const item = await addToCart(data, type, { product })
@@ -312,7 +311,6 @@ export default function CheckoutForm({
   useEffect(() => {
     setShippingInformation(defaultShippingAddress)
     setBillingInformation(defaultBillingAddress, false)
-    eventDispatcher(CheckoutStarted, 'checkout started')
   }, [])
 
   const handlePayments = (method: any) => {
@@ -472,7 +470,13 @@ export default function CheckoutForm({
             )
 
             if (orderModelResponse.data.success) {
-              eventDispatcher(CheckoutConfirmation, orderModelResponse.data)
+              eventDispatcher(CheckoutConfirmation, {
+                entity: JSON.stringify(orderModelResponse.data),
+                entityId: response.data.result.id,
+                entityName: 'Checkout',
+                entityType: Order,
+                eventType: CheckoutConfirmation,
+              })
               Cookies.remove('basketId')
               const generatedBasketId = generateBasketId()
               setBasketId(generatedBasketId)
