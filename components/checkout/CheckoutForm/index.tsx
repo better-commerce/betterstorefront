@@ -295,6 +295,7 @@ export default function CheckoutForm({
   }
 
   const handleShippingSubmit = (values: any) => {
+    console.log(values)
     toggleShipping()
     if (state.isSameAddress) {
       setBillingInformation(values)
@@ -422,7 +423,7 @@ export default function CheckoutForm({
 
           const orderModel = {
             id: response.data.result.payment.id,
-            cardNo: 'null',
+            cardNo: null,
             orderNo: response.data.result.orderNo,
             orderAmount: response.data.result.grandTotal.raw.withTax,
             paidAmount: response.data.result.grandTotal.raw.withTax,
@@ -454,11 +455,11 @@ export default function CheckoutForm({
             externalRefNo: null,
             expiryYear: null,
             expiryMonth: null,
-            isMoto: 'true',
-            upFrontPayment: 'false',
+            isMoto: true,
+            upFrontPayment: false,
             upFrontAmount: '0.00',
             upFrontTerm: '76245369',
-            isPrePaid: 'false',
+            isPrePaid: false,
           }
           if (method.systemName === 'COD') {
             const orderModelResponse: any = await axios.post(
