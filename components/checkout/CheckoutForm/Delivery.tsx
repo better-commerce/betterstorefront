@@ -231,7 +231,7 @@ export default function Delivery({
                 <div className="py-2 h-12 flex justify-left w-full">
                   <Button
                     buttonType="button"
-                    action={() => setIsSelected(true)}
+                    action={async () => setIsSelected(true)}
                     title="Confirm"
                   />
                 </div>
