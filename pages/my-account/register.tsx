@@ -15,6 +15,7 @@ import { validate } from 'email-validator'
 import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   const [error, setError] = useState(apiError)
@@ -59,11 +60,11 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const { addToCart, associateCart } = cartHandler()
-  const { CustomerCreated } = EVENTS_MAP.EVENT_TYPES
+  const { CustomerCreated, PageViewed } = EVENTS_MAP.EVENT_TYPES
 
-  useEffect(() => {
-    eventDispatcher(CustomerCreated, 'customer created')
-  }, [])
+  useAnalytics(PageViewed, {
+    eventType: PageViewed,
+  })
 
   useEffect(() => {
     setError('')
@@ -87,6 +88,14 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   const handleUserRegister = async (values: any) => {
     const response: any = await axios.post(NEXT_SIGN_UP, {
       data: { ...values, email: userEmail },
+    })
+    eventDispatcher(CustomerCreated, {
+      entity: JSON.stringify({
+        id: response.data.recordId,
+        name: values.firstName + values.lastName,
+        email: values.email,
+      }),
+      eventType: CustomerCreated,
     })
     await handleBasketAssociation(response.data.recordId)
     setSuccessMessage('Success!')

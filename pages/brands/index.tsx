@@ -7,7 +7,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { SearchIcon } from '@heroicons/react/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -50,11 +50,13 @@ function BrandsPage({ brands }: any) {
     })
     setNormalizedBrands(filteredData)
   }
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+  const { BrandViewed } = EVENTS_MAP.EVENT_TYPES
 
-  useEffect(() => {
-    eventDispatcher(PageViewed, 'page')
-  }, [])
+  useAnalytics(BrandViewed, {
+    eventType: BrandViewed,
+    pageTitle: 'Brands',
+  })
+  useEffect(() => {}, [])
   const totalResults = normalizedBrands.map((i: any) => i.results).flat().length
 
   return (

@@ -8,6 +8,7 @@ import rangeMap from '@lib/range-map'
 import { useRouter } from 'next/router'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { useUI } from '@components/ui/context'
 
 export default function Search({ closeWrapper = () => {} }: any) {
   const Router = useRouter()
@@ -15,6 +16,11 @@ export default function Search({ closeWrapper = () => {} }: any) {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [path, setCurrentPath] = useState(Router.asPath)
+  const SearchEvent = EVENTS_MAP.EVENT_TYPES.Search
+  const SearchEntity = EVENTS_MAP.ENTITY_TYPES.Search
+
+  const { basketId, cartItems } = useUI()
+
   useEffect(() => {
     const fetchItems = async () => {
       setIsLoading(true)
@@ -29,7 +35,22 @@ export default function Search({ closeWrapper = () => {} }: any) {
         setIsLoading(false)
       }
     }
-    eventDispatcher(EVENTS_MAP.EVENT_TYPES.Search, 'search')
+    eventDispatcher(SearchEvent, {
+      entity: JSON.stringify({
+        id: basketId,
+        grandTotal: cartItems.grandTotal.raw.withTax,
+        lineItems: cartItems.lineItems,
+        promoCode: cartItems.promotionsApplied,
+        shipCharge: cartItems.shippingCharge.raw.withTax,
+        shipTax: cartItems.shippingCharge.raw.tax,
+        taxPercent: cartItems.taxPercent,
+        tax: cartItems.grandTotal.raw.tax,
+      }),
+      basketItems: JSON.stringify(cartItems.lineItems),
+      entityName: SearchEntity,
+      entityType: SearchEntity,
+      eventType: SearchEvent,
+    })
     if (inputValue) fetchItems()
   }, [inputValue])
 
