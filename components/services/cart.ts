@@ -66,14 +66,28 @@ export default function cartHandler() {
           quantity: qty,
           stockCode: data.product.stockCode,
         }),
-        basketItems: response.data.lineItems,
+        basketItems: JSON.stringify(
+          response.data.lineItems.map((obj: any) => {
+            return {
+              basketId,
+              id: obj.id,
+              img: obj.image,
+              name: obj.name,
+              price: obj.price?.raw?.withTax,
+              qty: obj.qty,
+              stockCode: obj.stockCode,
+              tax: obj.price.raw.tax,
+            }
+          })
+        ),
+        basketItemCount: response.data?.lineItems?.length || 0,
+        basketTotal: response.data.grandTotal?.raw?.withTax,
         entityId: data.product.recordId,
         entityType: 'product',
         eventType: BasketItemAdded,
         entityName: data.product.name,
       }
 
-      console.log(qty)
       if (qty && qty > 0) {
         eventDispatcher(BasketItemAdded, eventData)
       } else
