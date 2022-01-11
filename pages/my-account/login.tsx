@@ -26,6 +26,11 @@ function LoginPage({ recordEvent, setEntities }: any) {
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  useAnalytics(PageViewed, {
+    eventType: PageViewed,
+  })
+
   if (user.userId) {
     Router.push('/')
   }
@@ -36,10 +41,6 @@ function LoginPage({ recordEvent, setEntities }: any) {
       </div>
     )
   }
-
-  useAnalytics(PageViewed, {
-    eventType: PageViewed,
-  })
 
   const handleUserLogin = (values: any) => {
     const asyncLoginUser = async () => {
