@@ -22,13 +22,13 @@ const CartSidebarView: FC = () => {
     eventDispatcher(BasketViewed, {
       entity: JSON.stringify({
         id: basketId,
-        grandTotal: cartItems.grandTotal.raw.withTax,
+        grandTotal: cartItems.grandTotal?.raw.withTax,
         lineItems: cartItems.lineItems,
         promoCode: cartItems.promotionsApplied,
-        shipCharge: cartItems.shippingCharge.raw.withTax,
-        shipTax: cartItems.shippingCharge.raw.tax,
+        shipCharge: cartItems.shippingCharge?.raw?.withTax,
+        shipTax: cartItems.shippingCharge?.raw?.tax,
         taxPercent: cartItems.taxPercent,
-        tax: cartItems.grandTotal.raw.tax,
+        tax: cartItems.grandTotal?.raw?.tax,
       }),
       entityName: 'Cart',
       entityType: Basket,
