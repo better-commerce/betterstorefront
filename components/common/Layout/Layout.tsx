@@ -99,6 +99,7 @@ const Layout: FC<Props> = ({
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
   const [isLoading, setIsLoading] = useState(false)
+  const [isAppLoading, setAppIsLoading] = useState(true)
   const { showSearchBar, setShowSearchBar } = useUI()
   const [data, setData] = useState(navTreeFromLocalStorage)
 
@@ -107,9 +108,12 @@ const Layout: FC<Props> = ({
   useEffect(() => {
     const fetchLayout = async () => {
       try {
-        const response: any = await getData(NEXT_GET_NAVIGATION)
-        setData(response)
-        setItem('navTree', response)
+        if (!data.nav.length) {
+          const response: any = await getData(NEXT_GET_NAVIGATION)
+          setData(response)
+          setItem('navTree', response)
+          setAppIsLoading(false)
+        } else setAppIsLoading(false)
       } catch (error) {
         console.log(error, 'error')
       }
@@ -131,30 +135,40 @@ const Layout: FC<Props> = ({
         src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
         strategy="beforeInteractive"
       />
-      {isLoading && <ProgressBar />}
-      <div className={cn(s.root)}>
-        {showSearchBar && (
-          <SearchWrapper closeWrapper={() => setShowSearchBar(false)} />
-        )}
-        <Navbar
-          currencies={config.currencies}
-          config={data.nav}
-          languages={config.languages}
-        />
-        <main className="fit">{children}</main>
-        <Footer config={data.footer} />
-        <ModalUI />
-        <SidebarUI />
-        <FeatureBar
-          title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
-          hide={acceptedCookies}
-          action={
-            <Button className="mx-5" onClick={() => onAcceptCookies()}>
-              Accept cookies
-            </Button>
-          }
-        />
-      </div>
+      {isAppLoading ? (
+        <main className="fit bg-white">
+          <div className="fixed top-0 right-0 h-screen w-screen z-50 flex justify-center items-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+          </div>
+        </main>
+      ) : (
+        <>
+          {isLoading && <ProgressBar />}
+          <div className={cn(s.root)}>
+            {showSearchBar && (
+              <SearchWrapper closeWrapper={() => setShowSearchBar(false)} />
+            )}
+            <Navbar
+              currencies={config.currencies}
+              config={data.nav}
+              languages={config.languages}
+            />
+            <main className="fit">{children}</main>
+            <Footer config={data.footer} />
+            <ModalUI />
+            <SidebarUI />
+            <FeatureBar
+              title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
+              hide={acceptedCookies}
+              action={
+                <Button className="mx-5" onClick={() => onAcceptCookies()}>
+                  Accept cookies
+                </Button>
+              }
+            />
+          </div>
+        </>
+      )}
     </CommerceProvider>
   )
 }
