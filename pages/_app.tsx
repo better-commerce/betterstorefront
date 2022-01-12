@@ -64,6 +64,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [appConfig, setAppConfig] = useState({})
   const [location, setUserLocation] = useState({})
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
+
   const Layout = (Component as any).Layout || Noop
 
   let analyticsCb: any = {}
