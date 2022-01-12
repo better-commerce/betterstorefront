@@ -10,9 +10,8 @@ import { LoadingDots } from '@components/ui'
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState(defaultModel)
   const [isLoading, setIsLoading] = useState(true)
-  const { setOrderId } = useUI()
+  const { setOrderId, orderId } = useUI()
 
-  const orderId = 'adb80e42-fdad-4c97-ad79-ae0e009c480f'
   useEffect(() => {
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER_DETAILS, {

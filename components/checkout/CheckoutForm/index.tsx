@@ -471,12 +471,79 @@ export default function CheckoutForm({
             )
 
             if (orderModelResponse.data.success) {
+              const {
+                basketId,
+                customerId,
+                billingAddress,
+                discount,
+                grandTotal,
+                id,
+                items,
+                orderNo,
+                paidAmount,
+                payments,
+                promotionsApplied,
+                shippingCharge,
+                shippingAddress,
+                shipping,
+                orderStatus,
+                subTotal,
+                taxPercent,
+                orderDate,
+              } = orderModelResponse.data.result
               eventDispatcher(CheckoutConfirmation, {
-                entity: JSON.stringify(orderModelResponse.data),
+                entity: JSON.stringify({
+                  basketId: basketId,
+                  billingAddress: billingAddress,
+                  customerId: customerId,
+                  discount: discount?.raw?.withTax,
+                  grandTotal: grandTotal?.raw?.withTax,
+                  id: id,
+                  lineitems: items,
+                  orderNo: orderNo,
+                  paidAmount: paidAmount?.raw?.withTax,
+                  payments: payments.map((i: any) => {
+                    return {
+                      methodName: i.paymentMethod,
+                      paymentGateway: i.paymentGateway,
+                      amount: i.paidAmount,
+                    }
+                  }),
+                  promoCode: promotionsApplied,
+                  shipCharge: shippingCharge?.raw?.withTax,
+                  shippingAddress: shippingAddress,
+                  shippingMethod: shipping,
+                  status: orderStatus,
+                  subTotal: subTotal?.raw?.withTax,
+                  tax: grandTotal?.raw?.withTax,
+                  taxPercent: taxPercent,
+                  timestamp: orderDate,
+                }),
                 entityId: response.data.result.id,
-                entityName: 'Checkout',
+                entityName: orderNo,
                 entityType: Order,
                 eventType: CheckoutConfirmation,
+                basketItems: JSON.stringify(
+                  items.map((i: any) => {
+                    return {
+                      categories: i.categoryItems,
+                      discountAmt: i.discountAmt?.raw?.withTax,
+                      id: i.id,
+                      img: i.image,
+                      isSubscription: i.isSubscription,
+                      itemType: i.itemType,
+                      manufacturer: i.manufacturer,
+                      name: i.name,
+                      price: i.price?.raw?.withTax,
+                      productId: i.productId,
+                      qty: i.qty,
+                      rootManufacturer: i.rootManufacturer || '',
+                      stockCode: i.stockCode,
+                      subManufacturer: i.subManufacturer,
+                      tax: i.totalPrice?.raw?.withTax,
+                    }
+                  })
+                ),
               })
               Cookies.remove('basketId')
               const generatedBasketId = generateBasketId()
