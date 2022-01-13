@@ -18,7 +18,7 @@ import {
 } from '@components/utils/constants'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-function Cart({ cart }: any) {
+function Cart({ cart, ipAddress }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
   const [deliveryPlans, setDeliveryPlans] = useState([])
 

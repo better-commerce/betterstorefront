@@ -25,7 +25,7 @@ import Router from 'next/router'
 import { asyncHandler } from '@components/account/Address/AddressBook'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-
+import setSessionIdCookie from '@components/utils/setSessionId'
 export default function CheckoutForm({
   cart,
   user,
@@ -295,7 +295,6 @@ export default function CheckoutForm({
   }
 
   const handleShippingSubmit = (values: any) => {
-    console.log(values)
     toggleShipping()
     if (state.isSameAddress) {
       setBillingInformation(values)
@@ -545,6 +544,8 @@ export default function CheckoutForm({
                   })
                 ),
               })
+              Cookies.remove('sessionId')
+              setSessionIdCookie()
               Cookies.remove('basketId')
               const generatedBasketId = generateBasketId()
               setBasketId(generatedBasketId)

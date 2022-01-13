@@ -34,7 +34,7 @@ export async function getStaticProps({
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ slugs, setEntities, recordEvent }: any) {
+function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
 
   useAnalytics(PageViewed, {

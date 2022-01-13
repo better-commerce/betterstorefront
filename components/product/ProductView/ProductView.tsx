@@ -105,12 +105,7 @@ export default function ProductView({
 
   useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
-    setEntities({
-      [entityId]: product.recordId,
-      [entityName]: product.name,
-      [entityType]: 'Product',
-      [entity]: JSON.stringify(product),
-    })
+
     recordEvent(EVENTS.ProductViewed)
     if (snippets) {
       snippets.forEach((snippet: any) => {
