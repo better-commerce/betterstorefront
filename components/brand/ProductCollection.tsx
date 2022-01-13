@@ -86,7 +86,6 @@ export default function ProductCollection({
     ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
     : false
 
-  console.log(props)
   const initialState = {
     ...DEFAULT_STATE,
     ...{
