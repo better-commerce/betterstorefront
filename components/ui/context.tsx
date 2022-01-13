@@ -30,6 +30,7 @@ export interface State {
   showSearchBar: boolean
   appConfig: any
   orderId: string
+  userIp: string
 }
 
 const initialState = {
@@ -48,6 +49,7 @@ const initialState = {
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
+  userIp: '',
 }
 
 type Action =
@@ -111,6 +113,7 @@ type Action =
   | { type: 'SHOW_SEARCH_BAR'; payload: boolean }
   | { type: 'SET_APP_CONFIG'; payload: any }
   | { type: 'SET_ORDER_ID'; payload: any }
+  | { type: 'SET_USER_IP'; payload: string }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -138,6 +141,13 @@ function uiReducer(state: State, action: Action) {
         displaySidebar: true,
       }
     }
+    case 'SET_USER_IP': {
+      return {
+        ...state,
+        userIp: action.payload,
+      }
+    }
+
     case 'CLOSE_SIDEBAR': {
       return {
         ...state,
@@ -281,6 +291,12 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const setUserIp = useCallback(
+    (payload: string) => {
+      dispatch({ type: 'SET_USER_IP', payload })
+    },
+    [dispatch]
+  )
   const removeFromWishlist = useCallback(
     (payload: any) => {
       const items = state.wishListItems.filter(
@@ -489,6 +505,7 @@ export const UIProvider: FC = (props) => {
       setShowSearchBar,
       setAppConfig,
       setOrderId,
+      setUserIp,
     }),
     [state]
   )

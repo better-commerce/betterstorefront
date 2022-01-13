@@ -284,6 +284,7 @@ export default function AnalyticsService() {
     }
   }
   Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
+    console.log('event listener', eventType)
     window.addEventListener(EVENTS_MAP.EVENT_TYPES[eventType], (event: any) =>
       eventHandler(event.detail.action, event.detail.payload)
     )

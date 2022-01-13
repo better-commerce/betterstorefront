@@ -1,7 +1,7 @@
 import '@assets/main.css'
 import '@assets/chrome-bug.css'
 import 'keen-slider/keen-slider.min.css'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useLayoutEffect } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
 import 'swiper/css/bundle'
@@ -19,6 +19,8 @@ import TagManager from 'react-gtm-module'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import analytics from '@components/services/analytics/analytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { useUI } from '@components/ui/context'
+import setSessionIdCookie from '@components/utils/setSessionId'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -36,19 +38,6 @@ const TEST_GEO_DATA = {
   Message: null,
   IsValid: false,
 }
-const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
-  if (!Cookies.get(SessionIdCookieKey) || isCalledByTimeout) {
-    const expiryTime: any = new Date(new Date().getTime() + 30 * 60 * 1000)
-    const sessionIdGenerator: string = uuid_v4()
-    Cookies.set(SessionIdCookieKey, sessionIdGenerator, {
-      expires: expiryTime,
-    })
-    DataLayerInstance.setItemInDataLayer(SessionIdCookieKey, sessionIdGenerator)
-    setTimeout(() => {
-      setSessionIdCookie(true)
-    }, 1800000)
-  }
-}
 
 const setDeviceIdCookie = () => {
   if (!Cookies.get(DeviceIdKey)) {
@@ -62,12 +51,11 @@ const setDeviceIdCookie = () => {
 
 function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [appConfig, setAppConfig] = useState({})
-  const [location, setUserLocation] = useState({})
+  const [location, setUserLocation] = useState({ Ip: '' })
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
+  const [isAppLoading, setAppIsLoading] = useState(true)
 
   const Layout = (Component as any).Layout || Noop
-
-  let analyticsCb: any = {}
 
   const fetchAppConfig = async () => {
     try {
@@ -91,47 +79,66 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     initializeGTM()
     document.body.classList?.remove('loading')
     fetchAppConfig()
+  }, [])
+
+  useLayoutEffect(() => {
+    DataLayerInstance.setDataLayer()
+
+    if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
+      geoData()
+        .then((response) => {
+          DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
+          DataLayerInstance.setItemInDataLayer('city', response.City)
+          DataLayerInstance.setItemInDataLayer('country', response.Country)
+          setUserLocation(response)
+          setAppIsLoading(false)
+        })
+        .catch((err) => {
+          DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
+        })
+    } else {
+      DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
+      DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
+      setUserLocation(TEST_GEO_DATA)
+      setAppIsLoading(false)
+    }
+    let analyticsCb = analytics()
+    setAnalyticsEnabled(true)
+    setSessionIdCookie()
+    setDeviceIdCookie()
     return function cleanup() {
       Cookies.remove(SessionIdCookieKey)
       if (analyticsCb.removeListeners) analyticsCb.removeListeners()
     }
   }, [])
 
-  if (typeof window !== 'undefined' && !isAnalyticsEnabled) {
-    DataLayerInstance.setDataLayer()
-    if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
-      geoData()
-        .then((response) => {
-          setUserLocation(response)
-          DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
-          DataLayerInstance.setItemInDataLayer('city', response.City)
-          DataLayerInstance.setItemInDataLayer('country', response.Country)
-        })
-        .catch((err) =>
-          DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
-        )
-    } else {
-      setUserLocation(TEST_GEO_DATA)
-      DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
-    }
-    analyticsCb = analytics()
-    setAnalyticsEnabled(true)
-    setSessionIdCookie()
-    setDeviceIdCookie()
-  }
-
   return (
     <>
       <Head />
       <ManagedUIContext>
-        <Layout
-          nav={nav}
-          footer={footer}
-          config={appConfig}
-          pageProps={pageProps}
-        >
-          <Component {...pageProps} location={location} config={appConfig} />
-        </Layout>
+        {isAppLoading && !location.Ip ? (
+          <main className="fit bg-white">
+            <div className="fixed top-0 right-0 h-screen w-screen z-50 flex justify-center items-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+            </div>
+          </main>
+        ) : (
+          <>
+            <Layout
+              nav={nav}
+              footer={footer}
+              config={appConfig}
+              pageProps={pageProps}
+            >
+              <Component
+                {...pageProps}
+                location={location}
+                ipAddress={location.Ip}
+                config={appConfig}
+              />
+            </Layout>
+          </>
+        )}
       </ManagedUIContext>
     </>
   )
