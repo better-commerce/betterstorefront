@@ -16,7 +16,7 @@ interface Props {
 const TYPES_MAP_TO_ACTIONS: any = {
   GET_ALL: ({ basketId, countryCode, postCode }: any) => `/`,
   CLICK_AND_COLLECT: ({ basketId, postCode }: any) =>
-    `/clickandcollect/${basketId}/${postCode}`,
+    `/click-collect-stores/${basketId}/${postCode}`,
   ACTIVE_SHIPPING_METHODS: () => '/all',
 }
 
