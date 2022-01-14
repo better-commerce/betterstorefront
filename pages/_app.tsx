@@ -107,8 +107,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     setSessionIdCookie()
     setDeviceIdCookie()
     return function cleanup() {
+      analyticsCb.removeListeners()
       Cookies.remove(SessionIdCookieKey)
-      if (analyticsCb.removeListeners) analyticsCb.removeListeners()
     }
   }, [])
 
