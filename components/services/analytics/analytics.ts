@@ -205,7 +205,10 @@ export default function AnalyticsService() {
     Search,
   } = EVENTS_MAP.EVENT_TYPES
 
-  const eventHandler = function (action: string, payload: any) {
+  const eventHandler = function (event: any) {
+    const action = event.detail.action
+    const payload = event.detail.payload
+    console.log(action, payload)
     switch (action) {
       case BasketItemAdded:
         addToCart(payload)
@@ -285,17 +288,15 @@ export default function AnalyticsService() {
   }
   Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
     console.log('event listener', eventType)
-    window.addEventListener(EVENTS_MAP.EVENT_TYPES[eventType], (event: any) =>
-      eventHandler(event.detail.action, event.detail.payload)
-    )
+    window.addEventListener(EVENTS_MAP.EVENT_TYPES[eventType], eventHandler)
   })
   return {
     removeListeners: () =>
       Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
-        window.addEventListener(
+        console.log(eventType, '=======remove')
+        window.removeEventListener(
           EVENTS_MAP.EVENT_TYPES[eventType],
-          (event: any) =>
-            eventHandler(event.detail.action, event.detail.payload)
+          eventHandler
         )
       }),
   }
