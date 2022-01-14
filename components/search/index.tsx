@@ -30,27 +30,21 @@ export default function Search({ closeWrapper = () => {} }: any) {
         })
         setProducts(response?.data?.products)
         setIsLoading(false)
+        eventDispatcher(SearchEvent, {
+          entity: JSON.stringify({
+            FreeText: inputValue,
+            ResultCount: response?.data?.products?.length || 0,
+          }),
+          entityId: inputValue,
+          entityName: inputValue,
+          entityType: SearchEntity,
+          eventType: SearchEvent,
+        })
       } catch (error) {
         console.log(error)
         setIsLoading(false)
       }
     }
-    eventDispatcher(SearchEvent, {
-      entity: JSON.stringify({
-        id: basketId,
-        grandTotal: cartItems.grandTotal?.raw.withTax,
-        lineItems: cartItems.lineItems,
-        promoCode: cartItems.promotionsApplied,
-        shipCharge: cartItems.shippingCharge?.raw?.withTax,
-        shipTax: cartItems.shippingCharge?.raw?.tax,
-        taxPercent: cartItems.taxPercent,
-        tax: cartItems.grandTotal?.raw?.tax,
-      }),
-      basketItems: JSON.stringify(cartItems.lineItems),
-      entityName: SearchEntity,
-      entityType: SearchEntity,
-      eventType: SearchEvent,
-    })
     if (inputValue) fetchItems()
   }, [inputValue])
 
