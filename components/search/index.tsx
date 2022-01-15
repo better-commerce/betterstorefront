@@ -45,7 +45,7 @@ export default function Search({ closeWrapper = () => {} }: any) {
         setIsLoading(false)
       }
     }
-    if (inputValue) fetchItems()
+    if (inputValue.length > 2) fetchItems()
   }, [inputValue])
 
   useEffect(() => {
