@@ -181,8 +181,8 @@ const ProductCard: FC<Props> = ({ product }) => {
 
         <div className="pt-10 pb-4 text-center">
           <h3 className="min-h-50px text-sm font-medium text-gray-900">
-            <Link href={currentProductData.link}>
-              <a href={currentProductData.link}>{product.name}</a>
+            <Link href={`/${currentProductData.link}`}>
+              <a href={`/${currentProductData.link}`}>{product.name}</a>
             </Link>
           </h3>
 
