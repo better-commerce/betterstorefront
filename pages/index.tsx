@@ -1,7 +1,7 @@
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
-import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import type { GetStaticPropsContext } from 'next'
 import { HOMEPAGE_SLUG } from '@components/utils/constants'
 import ProductSlider from '@components/product/ProductSlider'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'

@@ -491,6 +491,31 @@ export default function CheckoutForm({
                 orderDate,
               } = orderModelResponse.data.result
               eventDispatcher(CheckoutConfirmation, {
+                basketItemCount: items.length,
+                basketTotal: grandTotal?.raw?.withTax,
+                shippingCost: shippingCharge?.raw?.withTax,
+                promoCodes: promotionsApplied,
+                basketItems: JSON.stringify(
+                  items.map((i: any) => {
+                    return {
+                      categories: i.categoryItems,
+                      discountAmt: i.discountAmt?.raw?.withTax,
+                      id: i.id,
+                      img: i.image,
+                      isSubscription: i.isSubscription,
+                      itemType: i.itemType,
+                      manufacturer: i.manufacturer,
+                      name: i.name,
+                      price: i.price?.raw?.withTax,
+                      productId: i.productId,
+                      qty: i.qty,
+                      rootManufacturer: i.rootManufacturer || '',
+                      stockCode: i.stockCode,
+                      subManufacturer: i.subManufacturer,
+                      tax: i.totalPrice?.raw?.withTax,
+                    }
+                  })
+                ),
                 entity: JSON.stringify({
                   basketId: basketId,
                   billingAddress: billingAddress,
@@ -522,27 +547,6 @@ export default function CheckoutForm({
                 entityName: orderNo,
                 entityType: Order,
                 eventType: CheckoutConfirmation,
-                basketItems: JSON.stringify(
-                  items.map((i: any) => {
-                    return {
-                      categories: i.categoryItems,
-                      discountAmt: i.discountAmt?.raw?.withTax,
-                      id: i.id,
-                      img: i.image,
-                      isSubscription: i.isSubscription,
-                      itemType: i.itemType,
-                      manufacturer: i.manufacturer,
-                      name: i.name,
-                      price: i.price?.raw?.withTax,
-                      productId: i.productId,
-                      qty: i.qty,
-                      rootManufacturer: i.rootManufacturer || '',
-                      stockCode: i.stockCode,
-                      subManufacturer: i.subManufacturer,
-                      tax: i.totalPrice?.raw?.withTax,
-                    }
-                  })
-                ),
               })
               Cookies.remove('sessionId')
               setSessionIdCookie()
