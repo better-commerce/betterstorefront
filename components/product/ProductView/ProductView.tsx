@@ -172,7 +172,10 @@ export default function ProductView({
       shortMessage: '',
     }
     if (!selectedAttrData.currentStock && !product.preOrder.isEnabled) {
-      if (!product.flags.sellWithoutInventory) {
+      if (
+        !product.flags.sellWithoutInventory ||
+        !selectedAttrData.sellWithoutInventory
+      ) {
         buttonConfig.title = 'Notify me'
         buttonConfig.action = () => handleNotification()
         buttonConfig.type = 'button'
