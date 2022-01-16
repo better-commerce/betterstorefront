@@ -4,7 +4,7 @@ export default function getWishlist() {
   async function getWishlistAsync({ query }: any) {
     try {
       const response: any = await fetcher({
-        url: `${CUSTOMER_BASE_API}${query.id}/wishlist?flag=${query.flag}`,
+        url: `${CUSTOMER_BASE_API}${query.id}/wishlist?saveForLater=${query.flag}`,
         method: 'get',
       })
       return response.result
