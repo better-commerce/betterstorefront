@@ -36,7 +36,18 @@ export default function MyOrders() {
           isAssociated: user.isAssociated,
         },
         'ADD',
-        { product }
+        {
+          product: {
+            name: product.name,
+            price: {
+              raw: {
+                withTax: product.price,
+              },
+            },
+            stockCode: product.stockCode,
+            recordId: product.id,
+          },
+        }
       )
       .then((response: any) => {
         setCartItems(response)
