@@ -26,6 +26,7 @@ function LookbookPage({ data }: any) {
   useAnalytics(PageViewed, {
     eventType: PageViewed,
     pageCategory: 'Lookbook',
+    omniImg: data[0].image,
   })
 
   return (
