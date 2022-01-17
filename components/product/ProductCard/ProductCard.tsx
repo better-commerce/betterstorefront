@@ -7,6 +7,13 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import {
+  ALERT_SUCCESS_WISHLIST_MESSAGE, 
+  BTN_ADD_TO_WISHLIST, 
+  BTN_NOTIFY_ME, 
+  BTN_PRE_ORDER, 
+  GENERAL_ADD_TO_BASKET
+} from '@components/utils/textVariables'
 
 interface Props {
   product: any
@@ -115,7 +122,7 @@ const ProductCard: FC<Props> = ({ product }) => {
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: 'Add to bag',
+      title: {GENERAL_ADD_TO_BASKET},
       action: async () => {
         const item = await cartHandler().addToCart({
           basketId,
@@ -131,11 +138,11 @@ const ProductCard: FC<Props> = ({ product }) => {
       shortMessage: '',
     }
     if (!product.currentStock && !product.preOrder.isEnabled) {
-      buttonConfig.title = 'Notify me'
+      buttonConfig.title = BTN_NOTIFY_ME
       buttonConfig.isNotifyMeEnabled = true
       buttonConfig.action = async () => handleNotification()
     } else if (!product.currentStock && product.preOrder.isEnabled) {
-      buttonConfig.title = 'Pre-order'
+      buttonConfig.title = BTN_PRE_ORDER
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.shortMessage = product.preOrder.shortMessage
     }
@@ -163,12 +170,12 @@ const ProductCard: FC<Props> = ({ product }) => {
               />
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
-                  PRE-ORDER
+                  {BTN_PRE_ORDER}
                 </div>
               )}
               {buttonConfig.isNotifyMeEnabled && (
                 <div className="bg-indigo-400 absolute py-1 px-1 rounded-sm top-2">
-                  Notify me
+                  {BTN_NOTIFY_ME}
                 </div>
               )}
             </div>
@@ -203,7 +210,7 @@ const ProductCard: FC<Props> = ({ product }) => {
             />
             {isInWishList ? (
               <span className="text-gray-900">
-                Item was added in your wishlist
+                {ALERT_SUCCESS_WISHLIST_MESSAGE}
               </span>
             ) : (
               <Button
@@ -211,7 +218,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                 action={handleWishList}
                 buttonType="wishlist"
                 colorScheme={WISHLIST_BUTTON_COLOR_SCHEME}
-                title="Add to wishlist"
+                title={BTN_ADD_TO_WISHLIST}
               />
             )}
           </div>

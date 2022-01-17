@@ -1,3 +1,10 @@
+import { 
+  BTN_SUBMIT, 
+  VALIDATION_ENTER_CORRECT_URL, 
+  VALIDATION_ENTER_PRODUCT_LINK, 
+  VALIDATION_ENTER_WEBSITE_LINK
+} from '@components/utils/textVariables'
+
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { config } from './config'
@@ -5,15 +12,15 @@ const schema = Yup.object().shape({
   websiteName: Yup.string()
     .matches(
       /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-      'Enter correct url!'
+      VALIDATION_ENTER_CORRECT_URL
     )
-    .required('Please enter website link'),
+    .required(VALIDATION_ENTER_WEBSITE_LINK),
   websiteLink: Yup.string()
     .matches(
       /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-      'Enter correct url!'
+      VALIDATION_ENTER_CORRECT_URL
     )
-    .required('Please enter a product link'),
+    .required(VALIDATION_ENTER_PRODUCT_LINK),
   costOfProduct: Yup.number().required('Required'),
   deliveryCost: Yup.number().required('Required'),
   totalCost: Yup.number(),
@@ -70,7 +77,7 @@ export default function PriceMatchForm({ submitContactForm }: any) {
               onClick={handleSubmit}
               className="w-full max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
             >
-              Submit
+              {BTN_SUBMIT}
             </button>
           </div>
         </Form>

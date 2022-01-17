@@ -9,6 +9,7 @@ import {
   selectDefaultOptionFromProduct,
   SelectedOptions,
 } from '../helpers'
+import { GENERAL_ADD_TO_BASKET, GENERAL_CARE_TEXT, GENERAL_DETAILS, GENERAL_DETAILS_TEXT, GENERAL_NOT_AVAILABLE } from '@components/utils/textVariables'
 
 interface ProductSidebarProps {
   product: Product
@@ -46,7 +47,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
       <div>
         {process.env.COMMERCE_CART_ENABLED && (
           <Button
-            aria-label="Add to Cart"
+            aria-label={GENERAL_ADD_TO_BASKET}
             type="button"
             className={s.button}
             onClick={addToCart}
@@ -54,20 +55,17 @@ const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
             disabled={variant?.availableForSale === false}
           >
             {variant?.availableForSale === false
-              ? 'Not Available'
-              : 'Add To Cart'}
+              ? GENERAL_NOT_AVAILABLE
+              : GENERAL_ADD_TO_BASKET}
           </Button>
         )}
       </div>
       <div className="mt-6">
-        <Collapse title="Care">
-          This is a limited edition production run. Printing starts when the
-          drop ends.
+        <Collapse title={GENERAL_CARE_TEXT}>
+          {GENERAL_CARE_TEXT}
         </Collapse>
-        <Collapse title="Details">
-          This is a limited edition production run. Printing starts when the
-          drop ends. Reminder: Bad Boys For Life. Shipping may take 10+ days due
-          to COVID-19.
+        <Collapse title={GENERAL_DETAILS}>
+          {GENERAL_DETAILS_TEXT}
         </Collapse>
       </div>
     </div>
