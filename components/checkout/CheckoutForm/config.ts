@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-
+import { PhoneRegExp as phoneNoReg } from '@components/utils/constants'
 export const PANELS = [
   {
     title: 'Delivery Method',
@@ -14,7 +14,6 @@ export const PANELS = [
     key: 'paymentMethod',
   },
 ]
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 export const shippingFormConfig = [
   {
     as: 'select',
@@ -101,7 +100,7 @@ export const shippingFormConfig = [
 export const shippingSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phoneNo: Yup.string().required().matches(phoneRegExp,'Phone no is invalid'),
+  phoneNo: Yup.string().required().matches(phoneNoReg,'Phone no is not valid'),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
   address2: Yup.string(),
@@ -194,7 +193,7 @@ export const billingFormConfig = [
 export const billingSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phoneNo: Yup.string().required().matches(phoneRegExp,'Phone no is invalid'),
+  phoneNo: Yup.string().required().matches(phoneNoReg,'Phone no is not valid'),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
   address2: Yup.string(),
