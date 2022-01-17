@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
+import { BTN_SEARCH } from '@components/utils/textVariables'
 
 export default function Search({ closeWrapper = () => {} }: any) {
   const Router = useRouter()
@@ -66,12 +67,12 @@ export default function Search({ closeWrapper = () => {} }: any) {
         <div className="flex flex-row mb-10">
           <div className="min-w-searchbar flex flex-row border border-gray-300 rounded-md py-2 px-4 shadow-sm ">
             <label className="hidden" htmlFor={'search-bar'}>
-              Search
+            {BTN_SEARCH}
             </label>
             <input
               id={'search-bar'}
               className="text-gray-700 appearance-none min-w-0 w-full bg-white  placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-              placeholder="Search..."
+              placeholder={BTN_SEARCH}
               onChange={(e: any) => setInputValue(e.target.value)}
             />
             <div className="text-gray-400">

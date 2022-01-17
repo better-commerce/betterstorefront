@@ -242,3 +242,5 @@ export const ERROR_PAGE_NOT_FOUND_MESSAGE = "The requested page doesn't exist or
 export const BTN_CHECKOUT_NOW = 'Checkout now'
 export const MESSAGE_NO_ORDER_FOUND = 'No orders found'
 export const MESSAGE_NO_ORDER_FOUND_TEXT = 'Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.'
+export const GENERAL_ENTER_POSTCODE  ='Enter postcode'
+export const GENERAL_ADDRESS_FINDER = 'Address Finder'
