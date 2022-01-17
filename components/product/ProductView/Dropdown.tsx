@@ -32,7 +32,7 @@ export default function Dropdown({
 
   const [selected, setSelected] = useState({
     currentAttribute,
-    stock: productData.stock,
+    stock: productData.currentStock,
     productId: productData.productId,
     stockCode: productData.stockCode,
   })
@@ -45,7 +45,7 @@ export default function Dropdown({
     setProductData(getStockPerAttrData)
     setSelected({
       currentAttribute,
-      stock: getStockPerAttrData.stock,
+      stock: getStockPerAttrData.currentStock,
       productId: getStockPerAttrData.productId,
       stockCode: getStockPerAttrData.stockCode,
     })
@@ -59,7 +59,7 @@ export default function Dropdown({
     setProductData(getStockPerAttrData)
     setSelected({
       currentAttribute,
-      stock: getStockPerAttrData.stock,
+      stock: getStockPerAttrData.currentStock,
       productId: getStockPerAttrData.productId,
       stockCode: getStockPerAttrData.stockCode,
     })

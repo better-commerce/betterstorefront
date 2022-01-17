@@ -25,7 +25,24 @@ import {
 import Button from '@components/ui/IndigoButton'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { ALERT_SUCCESS_WISHLIST_MESSAGE, BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, GENERAL_PRICE_LABEL_RRP, GENERAL_REFERENCE, GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE, ITEM_TYPE_ADDON, PRICEMATCH_ADDITIONAL_DETAILS, PRICEMATCH_BEST_PRICE, PRICEMATCH_SEEN_IT_CHEAPER, PRODUCT_INFORMATION, YOUTUBE_VIDEO_PLAYER } from '@components/utils/textVariables'
+import {
+  ALERT_SUCCESS_WISHLIST_MESSAGE,
+  BTN_ADD_TO_FAVORITES,
+  BTN_NOTIFY_ME,
+  BTN_PRE_ORDER,
+  GENERAL_ADD_TO_BASKET,
+  GENERAL_ENGRAVING,
+  GENERAL_PRICE_LABEL_RRP,
+  GENERAL_REFERENCE,
+  GENERAL_REVIEWS,
+  GENERAL_REVIEW_OUT_OF_FIVE,
+  ITEM_TYPE_ADDON,
+  PRICEMATCH_ADDITIONAL_DETAILS,
+  PRICEMATCH_BEST_PRICE,
+  PRICEMATCH_SEEN_IT_CHEAPER,
+  PRODUCT_INFORMATION,
+  YOUTUBE_VIDEO_PLAYER,
+} from '@components/utils/textVariables'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -179,7 +196,7 @@ export default function ProductView({
         !selectedAttrData.sellWithoutInventory
       ) {
         buttonConfig.title = BTN_NOTIFY_ME
-        buttonConfig.action = () => handleNotification()
+        buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
       }
     } else if (product.preOrder.isEnabled && !selectedAttrData.currentStock) {
@@ -188,7 +205,8 @@ export default function ProductView({
         buttonConfig.shortMessage = product.preOrder.shortMessage
       } else {
         buttonConfig.title = BTN_NOTIFY_ME
-        buttonConfig.action = () => handleNotification()
+        buttonConfig.action = async () => handleNotification()
+        buttonConfig.type = 'button'
       }
     }
     return buttonConfig
@@ -394,7 +412,7 @@ export default function ProductView({
               </h1>
 
               <p className="text-gray-500 text-md">
-              {GENERAL_REFERENCE}: {selectedAttrData.stockCode}
+                {GENERAL_REFERENCE}: {selectedAttrData.stockCode}
               </p>
               <div className="mt-3">
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
@@ -403,7 +421,8 @@ export default function ProductView({
                     {selectedAttrData.price?.formatted?.withTax}
                     {selectedAttrData.listPrice?.raw.tax > 0 ? (
                       <span className="px-5 text-sm line-through text-gray-500">
-                        {GENERAL_PRICE_LABEL_RRP} {product.listPrice.formatted.withTax}
+                        {GENERAL_PRICE_LABEL_RRP}{' '}
+                        {product.listPrice.formatted.withTax}
                       </span>
                     ) : null}
                   </p>
@@ -430,7 +449,9 @@ export default function ProductView({
                       />
                     ))}
                   </div>
-                  <p className="sr-only">{product.rating} {GENERAL_REVIEW_OUT_OF_FIVE}</p>
+                  <p className="sr-only">
+                    {product.rating} {GENERAL_REVIEW_OUT_OF_FIVE}
+                  </p>
                 </div>
               </div>
               <div className="w-full sm:w-6/12">
@@ -445,12 +466,14 @@ export default function ProductView({
                 onClick={() => showPriceMatchModal(true)}
               >
                 <span className="font-bold">{PRICEMATCH_SEEN_IT_CHEAPER}</span>
-                <span>{''} {PRICEMATCH_BEST_PRICE}</span>
+                <span>
+                  {''} {PRICEMATCH_BEST_PRICE}
+                </span>
               </p>
 
               <section aria-labelledby="details-heading" className="mt-12">
                 <h2 id="details-heading" className="sr-only">
-                {PRICEMATCH_ADDITIONAL_DETAILS}
+                  {PRICEMATCH_ADDITIONAL_DETAILS}
                 </h2>
                 <ProductDetails
                   product={product}
