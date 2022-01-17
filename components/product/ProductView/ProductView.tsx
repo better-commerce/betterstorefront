@@ -89,6 +89,7 @@ export default function ProductView({
         entityName: response.data.product.name,
         entityType: Product,
         eventType: ProductViewed,
+        omniImg: response.data.product.image,
       })
       setUpdatedProduct(response.data.product)
       setSelectedAttrData({

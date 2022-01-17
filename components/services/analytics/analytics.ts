@@ -94,7 +94,7 @@ const publisher = async (data: any, event: string) => {
       visitorLoggedIn: !!visitorData.email,
       dataLayer: JSON.stringify({
         ...JSON.parse(data.entity || '{}'),
-        omniImg: _getOmniImage(),
+        omniImg: data.omniImg || _getOmniImage(),
       }),
       data: JSON.stringify(getBrowserData()),
       pageTitle: document.title,
