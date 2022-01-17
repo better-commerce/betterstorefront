@@ -28,6 +28,7 @@ function LookbookDetailPage({ data, slug }: any) {
   useAnalytics(PageViewed, {
     eventType: PageViewed,
     pageCategory: 'Lookbook',
+    omniImg: data.mainImage,
   })
 
   useEffect(() => {
