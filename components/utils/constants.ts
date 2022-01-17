@@ -79,7 +79,7 @@ export const NEXT_POST_PAYMENT_RESPONSE = '/api/payment-response'
 
 export const SessionIdCookieKey: string = `sessionId`
 export const DeviceIdKey: string = `deviceId`
-
+export const PhoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 //SHIPPING ACTION TYPES
 export const SHIPPING_ACTION_TYPES_MAP = {
   GET_ALL: 'GET_ALL',

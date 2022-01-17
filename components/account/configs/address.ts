@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 import countryList from '@components/utils/countryList'
-
+import { PhoneRegExp as phoneNoReg } from '@components/utils/constants'
 export const formConfig = [
   {
     as: 'select',
@@ -102,7 +102,7 @@ export const formConfig = [
 export const schema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phoneNo: Yup.string().required(),
+  phoneNo: Yup.string().required().matches(phoneNoReg, 'Phone number is not valid'),
   country: Yup.string().required(),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
