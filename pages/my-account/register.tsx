@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react'
 import Button from '@components/ui/IndigoButton'
 import { validate } from 'email-validator'
 import cartHandler from '@components/services/cart'
+import { BTN_REGISTER_FOR_FREE, GENERAL_EMAIL, VALIDATION_EMAIL_ALREADY_IN_USE, VALIDATION_ENTER_A_VALID_EMAIL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
 
 const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   const [error, setError] = useState(apiError)
@@ -27,14 +28,14 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
       error ? setError('') : false
       await submit(value)
     } else {
-      setError('Please enter a valid email')
+      setError(VALIDATION_ENTER_A_VALID_EMAIL)
     }
   }
 
   return (
     <div className="w-full flex justify-center mt-10 flex-col items-center">
       <div className="font-semibold w-full sm:w-1/2">
-        <label className="text-gray-700 text-sm">Email</label>
+        <label className="text-gray-700 text-sm">{GENERAL_EMAIL}</label>
         <input
           className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
           value={value}
@@ -67,7 +68,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   if (user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-        You're already logged in
+        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
       </div>
     )
   }
@@ -93,7 +94,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
       if (!data.length) {
         setHasPassedEmailValidation(true)
       } else {
-        setError('This email is already in use')
+        setError(VALIDATION_EMAIL_ALREADY_IN_USE)
       }
     } catch (error) {
       console.log(error)
@@ -104,7 +105,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
-            Register for free
+            {BTN_REGISTER_FOR_FREE}
           </h2>
         </div>
         {!successMessage && (

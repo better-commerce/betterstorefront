@@ -13,6 +13,7 @@ import PromotionInput from '../components/cart/PromotionInput'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
+import { BTN_CHECKOUT_NOW, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TOTAL, ITEMS_IN_YOUR_CART, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
 
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
@@ -117,13 +118,13 @@ function Cart({ cart }: any) {
     <div className="bg-white">
       <main className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-          Shopping Cart
+          {GENERAL_SHOPPING_CART}
         </h1>
         {!isEmpty && (
           <form className="relative mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
             <section aria-labelledby="cart-heading" className="lg:col-span-7">
               <h2 id="cart-heading" className="sr-only">
-                Items in your shopping cart
+                {ITEMS_IN_YOUR_CART}
               </h2>
 
               <ul
@@ -195,7 +196,7 @@ function Cart({ cart }: any) {
                                         }
                                         className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                                       >
-                                        <span className="sr-only">Remove</span>
+                                        <span className="sr-only">{GENERAL_REMOVE}</span>
                                         <XIconSolid
                                           className="h-5 w-5"
                                           aria-hidden="true"
@@ -233,7 +234,7 @@ function Cart({ cart }: any) {
                             onClick={() => handleItem(product, 'delete')}
                             className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                           >
-                            <span className="sr-only">Remove</span>
+                            <span className="sr-only">{GENERAL_REMOVE}</span>
                             <XIconSolid
                               className="h-5 w-5"
                               aria-hidden="true"
@@ -255,13 +256,13 @@ function Cart({ cart }: any) {
                 id="summary-heading"
                 className="text-lg font-medium text-gray-900"
               >
-                Order summary
+                {GENERAL_ORDER_SUMMARY}
               </h2>
 
               <dl className="mt-6 space-y-4">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">
-                    Subtotal (taxes included)
+                    {SUBTOTAL_INCLUDING_TAX}
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
                     {cartItems.subTotal?.formatted?.withTax}
@@ -269,7 +270,7 @@ function Cart({ cart }: any) {
                 </div>
                 <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                   <dt className="flex items-center text-sm text-gray-600">
-                    <span>Shipping</span>
+                    <span>{GENERAL_SHIPPING}</span>
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
                     {cartItems.shippingCharge?.formatted?.withTax}
@@ -279,7 +280,7 @@ function Cart({ cart }: any) {
                   {userCart.promotionsApplied?.length > 0 && (
                     <>
                       <dt className="flex items-center text-sm text-indigo-600">
-                        <span>Discount</span>
+                        <span>{GENERAL_DISCOUNT}</span>
                       </dt>
                       <dd className="text-indigo-600 text-sm font-medium">
                         <p>{cartItems.discount?.formatted?.withTax}</p>
@@ -290,7 +291,7 @@ function Cart({ cart }: any) {
                 <PromotionInput />
 
                 <div className="text-gray-900 border-t border-gray-200 pt-4 flex items-center justify-between">
-                  <dt className="font-medium text-gray-900">Order total</dt>
+                  <dt className="font-medium text-gray-900">{GENERAL_TOTAL}</dt>
                   <dd className="font-medium text-gray-900">
                     {cartItems.grandTotal?.formatted?.withTax}
                   </dd>
@@ -303,7 +304,7 @@ function Cart({ cart }: any) {
                     type="submit"
                     className="text-center w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                   >
-                    Checkout now
+                    {BTN_CHECKOUT_NOW}
                   </a>
                 </Link>
               </div>
@@ -318,7 +319,7 @@ function Cart({ cart }: any) {
                 type="button"
                 className="text-indigo-600 font-medium hover:text-indigo-500"
               >
-                Catalog
+                {GENERAL_CATALOG}
                 <span aria-hidden="true"> &rarr;</span>
               </button>
             </Link>

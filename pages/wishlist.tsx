@@ -7,6 +7,7 @@ import { useCustomer } from '@framework/customer'
 import { WishlistCard } from '@components/wishlist'
 import useWishlist from '@framework/wishlist/use-wishlist'
 import rangeMap from '@lib/range-map'
+import { MESSAGE_NO_ORDER_FOUND_TEXT, WISHLIST_SUB_TITLE } from '@components/utils/textVariables'
 
 export async function getStaticProps({
   preview,
@@ -58,10 +59,10 @@ export default function Wishlist() {
                 <Heart className="absolute" />
               </span>
               <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
-                Your wishlist is empty
+                {WISHLIST_SUB_TITLE}
               </h2>
               <p className="text-accent-6 px-10 text-center pt-2">
-                Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.
+                {MESSAGE_NO_ORDER_FOUND_TEXT}
               </p>
             </div>
           ) : (
