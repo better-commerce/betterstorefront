@@ -1,42 +1,53 @@
+import { 
+  PRICEMATCH_COST_OF_PRODUCT, 
+  PRICEMATCH_DELIVERY_COST, 
+  PRICEMATCH_PRODUCT_LINK, 
+  PRICEMATCH_TOTAL_COST, 
+  PRICEMATCH_USER_EMAIL, 
+  PRICEMATCH_USER_NAME, 
+  PRICEMATCH_USER_TELEPHONE, 
+  PRICEMATCH_WEBSITE_NAME 
+} from "@components/utils/textVariables";
+
 export const config = [
   {
     key: 'websiteName',
-    placeholder: 'Name of website you have found cheaper to*',
+    placeholder: PRICEMATCH_WEBSITE_NAME,
     type: 'text',
   },
   {
     key: 'websiteLink',
-    placeholder: 'Full direct link to product (copy/paste website URL)*',
+    placeholder: PRICEMATCH_PRODUCT_LINK,
     type: 'text',
   },
   {
     key: 'costOfProduct',
-    placeholder: 'Cost of product*',
+    placeholder: PRICEMATCH_COST_OF_PRODUCT,
     type: 'number',
   },
   {
     key: 'deliveryCost',
-    placeholder: 'Delivery Cost*',
+    placeholder: PRICEMATCH_DELIVERY_COST,
     type: 'number',
   },
   {
     key: 'totalCost',
-    placeholder: 'Total cost',
+    placeholder: PRICEMATCH_TOTAL_COST,
     type: 'number',
   },
   {
     key: 'name',
-    placeholder: 'Name*',
+    placeholder: PRICEMATCH_USER_NAME,
     type: 'string',
   },
   {
     key: 'email',
-    placeholder: 'Email*',
+    placeholder: PRICEMATCH_USER_EMAIL,
     type: 'email',
   },
   {
     key: 'phone',
-    placeholder: 'Telephone*',
+    placeholder: PRICEMATCH_USER_TELEPHONE,
     type: ':tel',
   },
 ]

@@ -2,6 +2,7 @@ import Pagination from '@components/product/Pagination'
 import rangeMap from '@lib/range-map'
 import ProductCard from '@components/product/ProductCard/ProductCard'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
+import { TITLE_PRODUCTS } from '@components/utils/textVariables'
 
 interface Props {
   products: any
@@ -25,7 +26,7 @@ export default function Grid({
       className="max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8"
     >
       <h2 id="products-heading" className="sr-only">
-        Products
+        {TITLE_PRODUCTS}
       </h2>
 
       {IS_INFINITE_SCROLL && (
