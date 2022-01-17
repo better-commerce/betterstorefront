@@ -7,14 +7,14 @@ import { TITLE_PRODUCTS } from '@components/utils/textVariables'
 interface Props {
   products: any
   currentPage: number | string
-  handlePageChange: any
+  handlePageChange?: any
   handleInfiniteScroll: any
 }
 
 export default function Grid({
   products,
   currentPage,
-  handlePageChange,
+  handlePageChange = () => {},
   handleInfiniteScroll,
 }: Props) {
   const IS_INFINITE_SCROLL =
@@ -35,7 +35,13 @@ export default function Grid({
           total={products.total}
           currentNumber={products.results.length}
           component={
-            <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+            <div
+              className={`-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 ${
+                products.results.length < 4
+                  ? `lg:grid-cols-3`
+                  : 'lg:grid-cols-4'
+              }`}
+            >
               {!products.results.length &&
                 rangeMap(12, (i) => (
                   <div

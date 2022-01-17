@@ -3,6 +3,8 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
+import { useRouter } from 'next/router'
+import { getProductFromAttributes } from '@components/utils/attributesGenerator'
 
 export default function Dropdown({
   items = [],
@@ -15,8 +17,14 @@ export default function Dropdown({
   setSelectedAttrData,
   setAttrCombination,
   isDisabled,
+  product,
+  variant,
 }: any) {
   const { openNotifyUser, closeNotifyUser } = useUI()
+
+  const router = useRouter()
+
+  const slug = `products/${router.query.slug}`
 
   const [productData, setProductData] = useState(
     getStockPerAttribute(fieldCode, currentAttribute)
@@ -71,9 +79,17 @@ export default function Dropdown({
   }
 
   const handleOnChange = (value: any) => {
-    const stockPerAttrValue = getStockPerAttribute(
+    // const stockPerAttrValue = getStockPerAttribute(
+    //   fieldCode,
+    //   value.currentAttribute
+    // )
+
+    const stockPerAttrValue = getProductFromAttributes(
       fieldCode,
-      value.currentAttribute
+      value.currentAttribute,
+      variant,
+      product.variantProducts,
+      slug
     )
     setSelected({ ...value, ...stockPerAttrValue })
     setAttrCombination(fieldCode, value.currentAttribute)

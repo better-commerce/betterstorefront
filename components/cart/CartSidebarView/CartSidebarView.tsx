@@ -7,31 +7,34 @@ import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '../PromotionInput'
-import {
-  CLOSE_PANEL, 
-  GENERAL_SHOPPING_CART,
-  WISHLIST_SIDEBAR_MESSAGE,
-  GENERAL_CATALOG,
-  GENERAL_REMOVE,
-  GENERAL_DELETE,
-  SUBTOTAL_INCLUDING_TAX,
-  GENERAL_SHIPPING,
-  GENERAL_DISCOUNT,
-  GENERAL_TOTAL,
-  GENERAL_CHECKOUT,
-  GENERAL_CONTINUE_SHOPPING,
-  GENERAL_OR_TEXT
-} from '@components/utils/textVariables'
-
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
 const CartSidebarView: FC = () => {
   const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
   const { getCart, addToCart } = useCart()
-
+  const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
+  const { Basket } = EVENTS_MAP.ENTITY_TYPES
   useEffect(() => {
     const handleCartitems = async () => {
       const items = await getCart({ basketId })
       setCartItems(items)
     }
+    eventDispatcher(BasketViewed, {
+      entity: JSON.stringify({
+        id: basketId,
+        grandTotal: cartItems.grandTotal?.raw.withTax,
+        lineItems: cartItems.lineItems,
+        promoCode: cartItems.promotionsApplied,
+        shipCharge: cartItems.shippingCharge?.raw?.withTax,
+        shipTax: cartItems.shippingCharge?.raw?.tax,
+        taxPercent: cartItems.taxPercent,
+        tax: cartItems.grandTotal?.raw?.tax,
+      }),
+      entityName: 'Cart',
+      entityType: Basket,
+      eventType: BasketViewed,
+      promoCodes: cartItems.promotionsApplied,
+    })
     handleCartitems()
   }, [])
 
@@ -52,7 +55,7 @@ const CartSidebarView: FC = () => {
         data.qty = 0
       }
       try {
-        const item = await addToCart(data)
+        const item = await addToCart(data, type, { product })
         setCartItems(item)
       } catch (error) {
         console.log(error)
@@ -100,7 +103,7 @@ const CartSidebarView: FC = () => {
                   <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
                     <div className="flex items-start justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
-                        {GENERAL_SHOPPING_CART}
+                        Shopping cart
                       </Dialog.Title>
                       <div className="ml-3 h-7 flex items-center">
                         <button
@@ -108,7 +111,7 @@ const CartSidebarView: FC = () => {
                           className="-m-2 p-2 text-gray-400 hover:text-gray-500"
                           onClick={handleClose}
                         >
-                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <span className="sr-only">Close panel</span>
                           <XIcon className="h-6 w-6" aria-hidden="true" />
                         </button>
                       </div>
@@ -118,14 +121,14 @@ const CartSidebarView: FC = () => {
                       <div className="flow-root">
                         {isEmpty && (
                           <div className="text-gray-900 h-full w-full flex flex-col justify-center items-center">
-                            {WISHLIST_SIDEBAR_MESSAGE}
+                            Uh-oh, you don't have any items in here
                             <Link href="/search">
                               <button
                                 type="button"
                                 className="text-indigo-600 font-medium hover:text-indigo-500"
                                 onClick={handleClose}
                               >
-                                {GENERAL_CATALOG}
+                                Catalog
                                 <span aria-hidden="true"> &rarr;</span>
                               </button>
                             </Link>
@@ -171,7 +174,7 @@ const CartSidebarView: FC = () => {
                                           handleItem(product, 'delete')
                                         }
                                       >
-                                        {GENERAL_REMOVE}
+                                        Remove
                                       </button>
                                       <div className="border px-4 text-gray-900 flex flex-row">
                                         <MinusSmIcon
@@ -227,10 +230,10 @@ const CartSidebarView: FC = () => {
                                           type="button"
                                           className="font-medium text-indigo-600 hover:text-indigo-500"
                                           onClick={() =>
-                                            handleItem(child, GENERAL_DELETE)
+                                            handleItem(child, 'delete')
                                           }
                                         >
-                                          {GENERAL_REMOVE}
+                                          Remove
                                         </button>
                                       </div>
                                     </div>
@@ -248,22 +251,22 @@ const CartSidebarView: FC = () => {
                     <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                       <PromotionInput />
                       <div className="flex py-2 justify-between font-small text-gray-900">
-                        <p>{SUBTOTAL_INCLUDING_TAX}</p>
+                        <p>Subtotal (taxes included)</p>
                         <p>{cartItems.subTotal?.formatted?.withTax}</p>
                       </div>
                       <div className="flex py-2 justify-between font-small text-gray-900">
-                        <p>{GENERAL_SHIPPING}</p>
+                        <p>Shipping</p>
                         <p>{cartItems.shippingCharge?.formatted?.withTax}</p>
                       </div>
 
                       {cartItems.promotionsApplied?.length > 0 && (
                         <div className="flex py-2 justify-between font-small text-indigo-600">
-                          <p>{GENERAL_DISCOUNT}</p>
+                          <p>Discount</p>
                           <p>{cartItems.discount?.formatted?.withTax}</p>
                         </div>
                       )}
                       <div className="flex justify-between font-medium text-gray-900">
-                        <p>{GENERAL_TOTAL}</p>
+                        <p>Total</p>
                         <p>{cartItems.grandTotal?.formatted?.withTax}</p>
                       </div>
                       <div className="mt-6">
@@ -273,19 +276,19 @@ const CartSidebarView: FC = () => {
                             className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                             href="/cart"
                           >
-                            {GENERAL_CHECKOUT}
+                            Checkout
                           </a>
                         </Link>
                       </div>
                       <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
                         <p>
-                          {GENERAL_OR_TEXT}{' '}
+                          or{' '}
                           <button
                             type="button"
                             className="text-indigo-600 font-medium hover:text-indigo-500"
                             onClick={handleClose}
                           >
-                            {GENERAL_CONTINUE_SHOPPING}
+                            Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>
                           </button>
                         </p>

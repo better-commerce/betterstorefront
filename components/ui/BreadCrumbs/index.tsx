@@ -39,7 +39,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li key={breadcrumbIdx}>
           <div className="flex items-center text-sm">
-            <Link href={breadcrumb.slug} passHref>
+            <Link href={`/${breadcrumb.slug}`} passHref>
               <a
                 href={breadcrumb.slug}
                 className={`font-medium hover:text-gray-900 ${

@@ -4,13 +4,11 @@ export default function getWishlist() {
   async function getWishlistAsync({ query }: any) {
     try {
       const response: any = await fetcher({
-        url: `${CUSTOMER_BASE_API}/${query.id}/wishlist/${query.flag}`,
+        url: `${CUSTOMER_BASE_API}${query.id}/wishlist?saveForLater=${query.flag}`,
         method: 'get',
-        data: query,
       })
       return response.result
     } catch (error: any) {
-      console.log(error, 'error')
       throw new Error(error)
     }
   }

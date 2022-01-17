@@ -7,15 +7,45 @@ import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-function MyAccount({ defaultView }: any) {
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { useUI } from '@components/ui/context'
+function MyAccount({ defaultView, isLoggedIn }: any) {
   const [view, setView] = useState(defaultView)
   const router = useRouter()
-
+  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
+  const { Customer } = EVENTS_MAP.ENTITY_TYPES
   useEffect(() => {
     if (router.query.view && view !== router.query.view) {
       setView(router.query.view)
     }
   }, [router.asPath])
+
+  const { user } = useUI()
+
+  let loggedInEventData: any = {
+    eventType: CustomerProfileViewed,
+  }
+
+  if (user && user.userId) {
+    loggedInEventData = {
+      ...loggedInEventData,
+      entity: JSON.stringify({
+        email: user.email,
+        dateOfBirth: user.yearOfBirth,
+        gender: user.gender,
+        id: user.userId,
+        name: user.firstName + user.lastName,
+        postCode: user.postCode,
+      }),
+      entityId: user.userId,
+      entityName: user.firstName + user.lastName,
+      entityType: Customer,
+    }
+  }
+
+  useAnalytics(CustomerProfileViewed, loggedInEventData)
 
   return (
     <section className="text-gray-900 relative py-10">

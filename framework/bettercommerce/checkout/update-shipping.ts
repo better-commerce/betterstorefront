@@ -11,7 +11,7 @@ export default function updateShippingMethod() {
   return async function handler({ basketId, shippingId, countryCode }: Props) {
     const url =
       CHECKOUT_ENDPOINT +
-      `/${basketId}/shipping-method?shippingMethodId=${shippingId}&countryCode=${countryCode}`
+      `/${basketId}/delivery/shipping-method?shippingMethodId=${shippingId}&countryCode=${countryCode}`
     try {
       const response: any = await fetcher({
         url,

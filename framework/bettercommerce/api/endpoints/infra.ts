@@ -15,14 +15,46 @@ export default function useInfra(req: any) {
       if (setHeader) {
         setGeneralParams(
           'Currency',
-          req.cookies.Currency || response.result.currencies[0].currencyCode
+          req.cookies.Currency ||
+            response.result.configSettings
+              .find((setting: any) => setting.configType === 'RegionalSettings')
+              .configKeys.find(
+                (item: any) =>
+                  item.key === 'RegionalSettings.DefaultCurrencyCode'
+              ).value ||
+            'GBP'
         )
         setGeneralParams(
           'Language',
-          req.cookies.Language || response.result.languages[0].languageCode
+          req.cookies.Language ||
+            response.result.configSettings
+              .find((setting: any) => setting.configType === 'RegionalSettings')
+              .configKeys.find(
+                (item: any) =>
+                  item.key === 'RegionalSettings.DefaultLanguageCode'
+              ).value ||
+            'en'
         )
       }
-      return response.result
+      return {
+        result: response.result,
+        defaultCurrency:
+          req.cookies.Currency ||
+          response.result.configSettings
+            .find((setting: any) => setting.configType === 'RegionalSettings')
+            .configKeys.find(
+              (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
+            ).value ||
+          'GBP',
+        defaultLanguage:
+          req.cookies.Language ||
+          response.result.configSettings
+            .find((setting: any) => setting.configType === 'RegionalSettings')
+            .configKeys.find(
+              (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
+            ).value ||
+          'en',
+      }
     } catch (error: any) {
       console.log(error)
       // throw new Error(error.message)

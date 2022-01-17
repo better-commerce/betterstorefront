@@ -8,7 +8,9 @@ import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
-import { GENERAL_LOGIN, VALIDATION_NO_ACCOUNT_FOUND, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
   const {
@@ -23,13 +25,19 @@ function LoginPage({ recordEvent, setEntities }: any) {
   } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  useAnalytics(PageViewed, {
+    eventType: PageViewed,
+  })
+
   if (user.userId) {
     Router.push('/')
   }
   if (user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        You're already logged in
       </div>
     )
   }
@@ -68,14 +76,14 @@ function LoginPage({ recordEvent, setEntities }: any) {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
-            {GENERAL_LOGIN}
+            Login
           </h2>
         </div>
         <Form btnText="Login" type="login" onSubmit={handleUserLogin} />
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && (
             <span className="text-red-700 text-lg">
-              {VALIDATION_NO_ACCOUNT_FOUND}
+              No account has been found with this email/password
             </span>
           )}
         </div>

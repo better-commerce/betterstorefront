@@ -132,6 +132,7 @@ export default function AddressBook() {
                 errCallback={failCb}
                 successCallback={success}
                 key={idx}
+                user={user}
                 updateAddress={updateAddress}
                 item={item}
                 userId={user.userId}
