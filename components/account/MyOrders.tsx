@@ -5,6 +5,18 @@ import { NEXT_GET_ORDERS } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
+import { 
+  MY_ORDERS_TEXT, 
+  GENERAL_RECENT_ORDERS,
+  GENERAL_ORDER_NUMBER,
+  GENERAL_DATE_PLACED,
+  GENERAL_TRACKING_LINK,
+  GENERAL_VIEW_PRODUCT,
+  GENERAL_ADD_TO_BASKET,
+  ORDER_HISTORY_TITLE,
+  GENERAL_TOTAL,
+  GENERAL_ORDER_PLACED_ON
+} from '@components/utils/textVariables'
 
 export default function MyOrders() {
   const [data, setData] = useState([])
@@ -64,24 +76,23 @@ export default function MyOrders() {
         <div className="max-w-4xl mx-auto">
           <div className="px-4 sm:px-0">
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-              Order history
+              {ORDER_HISTORY_TITLE}
             </h1>
             <p className="mt-2 text-sm text-gray-500">
-              Check the status of recent orders, manage returns, and download
-              invoices.
+              {MY_ORDERS_TEXT}
             </p>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
             <h2 id="recent-heading" className="sr-only">
-              Recent orders
+              {GENERAL_RECENT_ORDERS}
             </h2>
 
             <div className="space-y-16 sm:space-y-24">
               {data.map((order: any) => (
                 <div key={order.orderNo}>
                   <h3 className="sr-only">
-                    Order placed on{' '}
+                    {GENERAL_ORDER_PLACED_ON}{' '}
                     <time dateTime={order.orderDate}>
                       {new Date(order.orderDate).toLocaleDateString()}
                     </time>
@@ -91,13 +102,13 @@ export default function MyOrders() {
                     <dl className="divide-y divide-gray-200 space-y-6 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-5 md:gap-x-10 w-full lg:flex-none lg:gap-x-10">
                       <div className="flex justify-between md:block">
                         <dt className="font-medium text-gray-900">
-                          Order number
+                          {GENERAL_ORDER_NUMBER}
                         </dt>
                         <dd className="md:mt-1">{order.orderNo}</dd>
                       </div>
                       <div className="flex justify-between pt-4 md:block md:pt-0">
                         <dt className="font-medium text-gray-900">
-                          Date placed
+                          {GENERAL_DATE_PLACED}
                         </dt>
                         <dd className="md:mt-1">
                           <time dateTime={order.orderDate}>
@@ -106,7 +117,7 @@ export default function MyOrders() {
                         </dd>
                       </div>
                       <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
-                        <dt>Total</dt>
+                        <dt>{GENERAL_TOTAL}</dt>
                         <dd className="md:mt-1">
                           {order?.subTotal?.formatted?.withTax}
                         </dd>
@@ -124,7 +135,7 @@ export default function MyOrders() {
                           target="_blank"
                           rel="noreferrer"
                         >
-                          Tracking link
+                          {GENERAL_TRACKING_LINK}
                         </a>
                       </div>
                     </dl>
@@ -153,11 +164,8 @@ export default function MyOrders() {
                               </div>
                               <div className="mt-2 flex text-sm font-medium sm:mt-4">
                                 <Link href={`/${product.slug || '#'}`}>
-                                  <a
-                                    href={product.slug || '#'}
-                                    className="text-indigo-600 hover:text-indigo-500"
-                                  >
-                                    View Product
+                                  <a href={product.slug || '#'} className="text-indigo-600 hover:text-indigo-500">
+                                    {GENERAL_VIEW_PRODUCT}
                                   </a>
                                 </Link>
                                 <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
@@ -165,7 +173,7 @@ export default function MyOrders() {
                                     onClick={() => handleAddToCart(product)}
                                     className="text-indigo-600 hover:text-indigo-500"
                                   >
-                                    Add to basket
+                                    {GENERAL_ADD_TO_BASKET}
                                   </button>
                                 </div>
                               </div>

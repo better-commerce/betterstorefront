@@ -4,6 +4,7 @@ import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { LOADER_LOADING } from '@components/utils/textVariables'
 
 export async function getStaticProps({
   params,
@@ -33,7 +34,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
 function Slug({ data, setEntities, recordEvent, slug }: any) {
   const router = useRouter()
   return router.isFallback ? (
-    <h1>Loading...</h1>
+    <h1>{LOADER_LOADING}</h1>
   ) : (
     data && (
       <ProductView

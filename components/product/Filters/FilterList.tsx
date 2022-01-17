@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ACTION_TYPES } from 'pages/search'
+import { GENERAL_SEARCH_BRAND } from '@components/utils/textVariables'
 
 const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
@@ -112,7 +113,7 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
         type="text"
         onChange={(e) => handleSearch(e.target.value)}
         autoComplete="brand"
-        placeholder="Search brands"
+        placeholder={GENERAL_SEARCH_BRAND}
         className="appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-1 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
       />
     </>

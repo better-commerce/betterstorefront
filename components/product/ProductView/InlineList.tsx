@@ -1,10 +1,11 @@
 import { RadioGroup } from '@headlessui/react'
 import classNames from '@components/utils/classNames'
 import Link from 'next/link'
+import { CHOOSE_A_COLOR } from '@components/utils/textVariables'
 export default function InlineList({
   items = [],
   onChange = () => {},
-  label = 'Choose a color',
+  label = CHOOSE_A_COLOR,
   fieldCode = 'global.colour',
   currentAttribute = 'black',
   generateLink = () => {},

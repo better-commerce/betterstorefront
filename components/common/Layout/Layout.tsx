@@ -23,6 +23,7 @@ import SearchWrapper from '@components/search/index'
 import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import Router from 'next/router'
 import ProgressBar from '@components/ui/ProgressBar'
+import { BTN_ACCEPT_COOKIE, GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center fixed z-50 justify-center p-3">
     <LoadingDots />
@@ -151,11 +152,11 @@ const Layout: FC<Props> = ({
         <ModalUI />
         <SidebarUI />
         <FeatureBar
-          title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
+          title={GENERAL_COOKIE_TEXT}
           hide={acceptedCookies}
           action={
             <Button className="mx-5" onClick={() => onAcceptCookies()}>
-              Accept cookies
+              {BTN_ACCEPT_COOKIE}
             </Button>
           }
         />

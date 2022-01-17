@@ -3,6 +3,7 @@ import Engraving from '@components/product/Engraving'
 import { useState } from 'react'
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
+import { GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 
 export default function RelatedProducts({
   relatedProducts = [],
@@ -83,7 +84,7 @@ export default function RelatedProducts({
                     computedItems[relatedItem].relatedProducts.map(
                       (product: any) => {
                         const isEngravingAvailable =
-                          product.stockCode === 'ADDON'
+                          product.stockCode === ITEM_TYPE_ADDON
                         return (
                           <div key={product.id}>
                             <div className="relative">
@@ -121,7 +122,7 @@ export default function RelatedProducts({
                                 type="button"
                                 className="w-full relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200"
                               >
-                                Add to bag
+                                {GENERAL_ADD_TO_BASKET}
                               </button>
                               <Link href={`/${product.slug}`} passHref>
                                 <span className="sr-only">
@@ -134,7 +135,7 @@ export default function RelatedProducts({
                                     className="w-full relative flex bg-gray-400 border border-transparent rounded-md py-2 mt-2 items-center justify-center text-sm font-medium text-white hover:bg-gray-500"
                                     onClick={() => showEngravingModal(true)}
                                   >
-                                    <span className="font-bold">Engraving</span>
+                                    <span className="font-bold">{GENERAL_ENGRAVING}</span>
                                   </button>
                                   <Engraving
                                     show={isEngravingOpen}

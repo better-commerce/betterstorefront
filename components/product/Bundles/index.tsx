@@ -1,4 +1,5 @@
 import ProductCard from '@components/product/ProductCard'
+import { BUNDLE_TEXT, GENERAL_ADD_TO_BASKET, YOUR_BUNDLE_INCLUDE } from '@components/utils/textVariables'
 import { useState } from 'react'
 import BundleCard from './BundleCard'
 
@@ -16,10 +17,10 @@ export default function Bundles({ price = '', products = [] }: any) {
         id="bundles-heading"
         className="text-center text-xl font-bold text-gray-900"
       >
-        Your bundle includes
+        {YOUR_BUNDLE_INCLUDE}
       </h2>
       <p className="text-center text-gray-900">
-        Click on a product to edit your bundle
+        {BUNDLE_TEXT}
       </p>
       <div className="flex justify-between items-center">
         <div className="flex py-5">
@@ -41,7 +42,7 @@ export default function Bundles({ price = '', products = [] }: any) {
             onClick={() => {}}
             className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
           >
-            Add to cart
+            {GENERAL_ADD_TO_BASKET}
           </button>
         </div>
       </div>

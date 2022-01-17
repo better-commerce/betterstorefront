@@ -14,12 +14,20 @@ import Button from '@components/ui/IndigoButton'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import axios from 'axios'
 import CncList from './CncList'
+import {
+  ADDRESS_OF_YOUR_CHOICE, 
+  IN_STORE_OR_COLLECT_PLUS,
+  GENERAL_SELECT_COUNTRY,
+  GENERAL_EDIT,
+  GENERAL_CONFIRM,
+  GENERAL_DELIVERY_METHOD
+} from '@components/utils/textVariables'
 
 const DELIVERY_METHODS_TYPE = [
   {
     id: 1,
     title: 'Deliver',
-    content: 'to an address of your choice',
+    content: ADDRESS_OF_YOUR_CHOICE,
     children: [],
     type: 2,
   },
@@ -27,7 +35,7 @@ const DELIVERY_METHODS_TYPE = [
     id: 2,
     type: 1,
     title: 'Collect',
-    content: 'in store or using Collect+',
+    content: IN_STORE_OR_COLLECT_PLUS,
     children: [],
   },
 ]
@@ -190,7 +198,7 @@ export default function Delivery({
         <>
           <div className="py-5">
             <h1 className="text-lg font-semibold text-gray-900">
-              Select country
+            {GENERAL_SELECT_COUNTRY}
             </h1>
 
             {isSelected ? (
@@ -204,7 +212,7 @@ export default function Delivery({
                     className="btn text-indigo-500 font-xs"
                     type="button"
                   >
-                    Edit
+                      {GENERAL_EDIT}
                   </button>
                 </div>
               </div>
@@ -232,7 +240,7 @@ export default function Delivery({
                   <Button
                     buttonType="button"
                     action={async () => setIsSelected(true)}
-                    title="Confirm"
+                    title={GENERAL_CONFIRM}
                   />
                 </div>
               </>
@@ -243,7 +251,7 @@ export default function Delivery({
             onChange={handleDeliveryMethodChange}
           >
             <RadioGroup.Label className="text-lg font-semibold text-gray-900">
-              Delivery method
+              {GENERAL_DELIVERY_METHOD}
             </RadioGroup.Label>
 
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
@@ -353,7 +361,7 @@ export default function Delivery({
               <Button
                 buttonType="button"
                 action={submitShippingMethod}
-                title="Confirm"
+                title={GENERAL_CONFIRM}
               />
             </div>
           ) : null}

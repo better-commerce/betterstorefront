@@ -1,6 +1,13 @@
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import Checkbox from '@components/account/Address/Checkbox'
+import { 
+  BTN_CHECKOUT_SECURELY,
+  GENERAL_EMAIL, 
+  GENERAL_POST, 
+  GENERAL_SMS,
+  GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION 
+} from '@components/utils/textVariables'
 
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
@@ -23,7 +30,7 @@ const initialValues = {
 export const config = [
   {
     key: 'email',
-    label: 'Your email',
+    label: GENERAL_EMAIL,
     type: 'email',
     placeholder: 'john@doe.com',
   },
@@ -33,19 +40,19 @@ const checkboxConfig = [
   {
     customComponent: 'CustomCheckbox',
     name: 'notifyByEmail',
-    label: 'Email',
+    label: GENERAL_EMAIL,
     className: ' ',
   },
   {
     customComponent: 'CustomCheckbox',
     name: 'notifyBySms',
-    label: 'SMS',
+    label: GENERAL_SMS,
     className: ' ',
   },
   {
     customComponent: 'CustomCheckbox',
     name: 'notifyByPost',
-    label: 'Post',
+    label: GENERAL_POST,
     className: ' ',
   },
 ]
@@ -78,9 +85,7 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
                       className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
                     />
                     <h3 className="text-center py-2 text-gray-600 text-sm">
-                      To get our latest promotions, exclusive offers, new
-                      launches and more, let us know how you'd like us to keep
-                      you updated
+                     {GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION}
                     </h3>
 
                     {errors[formItem.key] && touched[formItem.key] ? (
@@ -108,7 +113,7 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
                 onClick={handleSubmit}
                 className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
               >
-                Checkout securely
+                {BTN_CHECKOUT_SECURELY}
               </button>
             </div>
           </div>

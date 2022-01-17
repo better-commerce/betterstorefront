@@ -6,6 +6,7 @@ import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
 import { data } from 'autoprefixer'
+import { BTN_CLEAR_ALL, GENERAL_CLOSE, GENERAL_FILTER_TITLE, PRODUCT_FILTER } from '@components/utils/textVariables'
 
 /**
  *
@@ -82,13 +83,13 @@ export default function Filters({
           >
             <div className="ml-auto relative max-w-xs w-full h-full bg-white shadow-xl py-4 pb-6 flex flex-col overflow-y-auto">
               <div className="px-4 flex items-center justify-between">
-                <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+                <h2 className="text-lg font-medium text-gray-900">{GENERAL_FILTER_TITLE}</h2>
                 <button
                   type="button"
                   className="-mr-2 w-10 h-10 bg-white p-2 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   onClick={() => setOpen(false)}
                 >
-                  <span className="sr-only">Close menu</span>
+                  <span className="sr-only">{GENERAL_CLOSE}</span>
                   <XIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
@@ -146,12 +147,12 @@ export default function Filters({
           className="border-t border-gray-200 py-6"
         >
           <h2 id="filter-heading" className="sr-only">
-            Product filters
+            {PRODUCT_FILTER}
           </h2>
 
           <div className="flex items-center justify-between">
             <h2 id="filter-heading" className="sr-only">
-              Filters
+              {GENERAL_FILTER_TITLE}
             </h2>
             <div className="relative col-start-1 row-start-1 py-4">
               <div className="max-w-7xl mx-auto flex space-x-6 divide-x divide-gray-200 text-sm px-4 sm:px-6 lg:px-8">
@@ -173,7 +174,7 @@ export default function Filters({
                     type="button"
                     className="text-gray-500"
                   >
-                    Clear all
+                    {BTN_CLEAR_ALL}
                   </button>
                 </div>
                 <div className="pl-6 flex justify-center flex-col items-baseline">

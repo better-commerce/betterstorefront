@@ -6,6 +6,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
+import { BTN_SEE_EVERYTHING } from '@components/utils/textVariables'
 
 SwiperCore.use([Navigation])
 
@@ -89,7 +90,7 @@ const ProductSlider: FC<Props> = ({ config }) => {
             href="#"
             className="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
           >
-            See everything<span aria-hidden="true"> &rarr;</span>
+            {BTN_SEE_EVERYTHING}<span aria-hidden="true"> &rarr;</span>
           </a>
         </div>
       </div>

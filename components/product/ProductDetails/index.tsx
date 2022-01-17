@@ -2,6 +2,7 @@ import { Tab, Disclosure } from '@headlessui/react'
 import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
+import {PRODUCT_DESCRIPTION,PRODUCT_SPECIFICATION,GENERAL_SHIPPING,GENERAL_RETURNS} from '@components/utils/textVariables'
 
 const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i
 
@@ -34,7 +35,7 @@ const Attributes = ({ attributes = [] }: any) => {
 export default function ProductDetails({ product, description }: any) {
   const detailsConfig = [
     {
-      title: 'Description',
+      title: PRODUCT_DESCRIPTION,
       InnerComponent: (props: any) => (
         <div
           className="text-gray-700 space-y-6"
@@ -43,11 +44,11 @@ export default function ProductDetails({ product, description }: any) {
       ),
     },
     {
-      title: 'Product specification',
+      title: PRODUCT_SPECIFICATION,
       InnerComponent: (props: any) => <Attributes {...props} />,
     },
     {
-      title: 'Shipping',
+      title: GENERAL_SHIPPING,
       InnerComponent: (props: any) => (
         <p className="text-gray-900">
           {props.shippingMessage || 'SHIPPING CONTENT TO BE ADDED'}
@@ -55,7 +56,7 @@ export default function ProductDetails({ product, description }: any) {
       ),
     },
     {
-      title: 'Returns',
+      title: GENERAL_RETURNS,
       InnerComponent: (props: any) => (
         <p className="text-gray-900">
           {props.returnsMessage || 'RETURNS CONTENT TO BE ADDED'}

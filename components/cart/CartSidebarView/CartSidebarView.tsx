@@ -9,6 +9,22 @@ import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import {
+  CLOSE_PANEL, 
+  GENERAL_SHOPPING_CART,
+  WISHLIST_SIDEBAR_MESSAGE,
+  GENERAL_CATALOG,
+  GENERAL_REMOVE,
+  GENERAL_DELETE,
+  SUBTOTAL_INCLUDING_TAX,
+  GENERAL_SHIPPING,
+  GENERAL_DISCOUNT,
+  GENERAL_TOTAL,
+  GENERAL_CHECKOUT,
+  GENERAL_CONTINUE_SHOPPING,
+  GENERAL_OR_TEXT
+} from '@components/utils/textVariables'
+
 const CartSidebarView: FC = () => {
   const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
   const { getCart, addToCart } = useCart()
@@ -103,7 +119,7 @@ const CartSidebarView: FC = () => {
                   <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
                     <div className="flex items-start justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
-                        Shopping cart
+                        {GENERAL_SHOPPING_CART}
                       </Dialog.Title>
                       <div className="ml-3 h-7 flex items-center">
                         <button
@@ -111,7 +127,7 @@ const CartSidebarView: FC = () => {
                           className="-m-2 p-2 text-gray-400 hover:text-gray-500"
                           onClick={handleClose}
                         >
-                          <span className="sr-only">Close panel</span>
+                          <span className="sr-only">{CLOSE_PANEL}</span>
                           <XIcon className="h-6 w-6" aria-hidden="true" />
                         </button>
                       </div>
@@ -121,14 +137,14 @@ const CartSidebarView: FC = () => {
                       <div className="flow-root">
                         {isEmpty && (
                           <div className="text-gray-900 h-full w-full flex flex-col justify-center items-center">
-                            Uh-oh, you don't have any items in here
+                             {WISHLIST_SIDEBAR_MESSAGE}
                             <Link href="/search">
                               <button
                                 type="button"
                                 className="text-indigo-600 font-medium hover:text-indigo-500"
                                 onClick={handleClose}
                               >
-                                Catalog
+                                  {GENERAL_CATALOG}
                                 <span aria-hidden="true"> &rarr;</span>
                               </button>
                             </Link>
@@ -174,7 +190,7 @@ const CartSidebarView: FC = () => {
                                           handleItem(product, 'delete')
                                         }
                                       >
-                                        Remove
+                                         {GENERAL_REMOVE}
                                       </button>
                                       <div className="border px-4 text-gray-900 flex flex-row">
                                         <MinusSmIcon
@@ -230,10 +246,10 @@ const CartSidebarView: FC = () => {
                                           type="button"
                                           className="font-medium text-indigo-600 hover:text-indigo-500"
                                           onClick={() =>
-                                            handleItem(child, 'delete')
+                                            handleItem(child, GENERAL_DELETE)
                                           }
                                         >
-                                          Remove
+                                          {GENERAL_REMOVE}
                                         </button>
                                       </div>
                                     </div>
@@ -251,22 +267,22 @@ const CartSidebarView: FC = () => {
                     <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                       <PromotionInput />
                       <div className="flex py-2 justify-between font-small text-gray-900">
-                        <p>Subtotal (taxes included)</p>
+                        <p>{SUBTOTAL_INCLUDING_TAX}</p>
                         <p>{cartItems.subTotal?.formatted?.withTax}</p>
                       </div>
                       <div className="flex py-2 justify-between font-small text-gray-900">
-                        <p>Shipping</p>
+                        <p>{GENERAL_SHIPPING}</p>
                         <p>{cartItems.shippingCharge?.formatted?.withTax}</p>
                       </div>
 
                       {cartItems.promotionsApplied?.length > 0 && (
                         <div className="flex py-2 justify-between font-small text-indigo-600">
-                          <p>Discount</p>
+                          <p>{GENERAL_DISCOUNT}</p>
                           <p>{cartItems.discount?.formatted?.withTax}</p>
                         </div>
                       )}
                       <div className="flex justify-between font-medium text-gray-900">
-                        <p>Total</p>
+                        <p>{GENERAL_TOTAL}</p>
                         <p>{cartItems.grandTotal?.formatted?.withTax}</p>
                       </div>
                       <div className="mt-6">
@@ -276,19 +292,19 @@ const CartSidebarView: FC = () => {
                             className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                             href="/cart"
                           >
-                            Checkout
+                             {GENERAL_CHECKOUT}
                           </a>
                         </Link>
                       </div>
                       <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
                         <p>
-                          or{' '}
+                        {GENERAL_OR_TEXT}{' '}
                           <button
                             type="button"
                             className="text-indigo-600 font-medium hover:text-indigo-500"
                             onClick={handleClose}
                           >
-                            Continue Shopping
+                             {GENERAL_CONTINUE_SHOPPING}
                             <span aria-hidden="true"> &rarr;</span>
                           </button>
                         </p>
