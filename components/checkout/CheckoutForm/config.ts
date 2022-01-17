@@ -14,7 +14,7 @@ export const PANELS = [
     key: 'paymentMethod',
   },
 ]
-
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 export const shippingFormConfig = [
   {
     as: 'select',
@@ -101,7 +101,7 @@ export const shippingFormConfig = [
 export const shippingSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phoneNo: Yup.string().required(),
+  phoneNo: Yup.string().required().matches(phoneRegExp,'Phone no is invalid'),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
   address2: Yup.string(),
@@ -191,11 +191,10 @@ export const billingFormConfig = [
     isFullWidth: true,
   },
 ]
-
 export const billingSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phoneNo: Yup.string().required(),
+  phoneNo: Yup.string().required().matches(phoneRegExp,'Phone no is invalid'),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
   address2: Yup.string(),
