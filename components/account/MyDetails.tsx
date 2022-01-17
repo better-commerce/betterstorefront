@@ -4,12 +4,14 @@ import { formConfig, schema } from './configs/details'
 import { useUI } from '@components/ui/context'
 import { handleSubmit } from './common'
 import LoadingDots from '@components/ui/LoadingDots'
-import { MY_DETAIL_TEXT, GENERAL_SAVE_CHANGES } from '@components/utils/textVariables'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
 
   const { user, setUser } = useUI()
+  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const initialValues = {
     email: user.email,
@@ -19,8 +21,22 @@ export default function MyDetails() {
     phone: user.phone,
   }
 
-  const handleDataSubmit = async (values: any) =>
+  const handleDataSubmit = async (values: any) => {
     await handleSubmit(values, user, setUser, setTitle)
+    eventDispatcher(CustomerUpdated, {
+      entity: JSON.stringify({
+        id: user.userId,
+        name: user.username,
+        dateOfBirth: user.yearOfBirth,
+        gender: user.gender,
+        email: user.email,
+        postCode: user.postCode,
+      }),
+      entityId: user.userId,
+      entityName: user.firstName + user.lastName,
+      eventType: CustomerUpdated,
+    })
+  }
 
   return (
     <main className="sm:px-6 lg:px-8">
@@ -30,7 +46,8 @@ export default function MyDetails() {
             {title}
           </h1>
           <p className="mt-2 text-sm text-gray-500">
-            {MY_DETAIL_TEXT}
+            Feel free to edit any of your details below so your account is
+            totally up to date.
           </p>
         </div>
       </div>
@@ -82,7 +99,7 @@ export default function MyDetails() {
                     onClick={handleSubmit}
                     className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                   >
-                    {isSubmitting ? <LoadingDots /> : GENERAL_SAVE_CHANGES }
+                    {isSubmitting ? <LoadingDots /> : 'Save changes'}
                   </button>
                 </div>
               </div>

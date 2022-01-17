@@ -14,20 +14,12 @@ import Button from '@components/ui/IndigoButton'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import axios from 'axios'
 import CncList from './CncList'
-import {
-  ADDRESS_OF_YOUR_CHOICE, 
-  IN_STORE_OR_COLLECT_PLUS,
-  GENERAL_SELECT_COUNTRY,
-  GENERAL_EDIT,
-  GENERAL_CONFIRM,
-  GENERAL_DELIVERY_METHOD
-} from '@components/utils/textVariables'
 
 const DELIVERY_METHODS_TYPE = [
   {
     id: 1,
     title: 'Deliver',
-    content: ADDRESS_OF_YOUR_CHOICE,
+    content: 'to an address of your choice',
     children: [],
     type: 2,
   },
@@ -35,7 +27,7 @@ const DELIVERY_METHODS_TYPE = [
     id: 2,
     type: 1,
     title: 'Collect',
-    content: IN_STORE_OR_COLLECT_PLUS,
+    content: 'in store or using Collect+',
     children: [],
   },
 ]
@@ -198,7 +190,7 @@ export default function Delivery({
         <>
           <div className="py-5">
             <h1 className="text-lg font-semibold text-gray-900">
-              {GENERAL_SELECT_COUNTRY}
+              Select country
             </h1>
 
             {isSelected ? (
@@ -212,7 +204,7 @@ export default function Delivery({
                     className="btn text-indigo-500 font-xs"
                     type="button"
                   >
-                    {GENERAL_EDIT}
+                    Edit
                   </button>
                 </div>
               </div>
@@ -239,8 +231,8 @@ export default function Delivery({
                 <div className="py-2 h-12 flex justify-left w-full">
                   <Button
                     buttonType="button"
-                    action={() => setIsSelected(true)}
-                    title={GENERAL_CONFIRM}
+                    action={async () => setIsSelected(true)}
+                    title="Confirm"
                   />
                 </div>
               </>
@@ -251,7 +243,7 @@ export default function Delivery({
             onChange={handleDeliveryMethodChange}
           >
             <RadioGroup.Label className="text-lg font-semibold text-gray-900">
-              {GENERAL_DELIVERY_METHOD}
+              Delivery method
             </RadioGroup.Label>
 
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
@@ -361,7 +353,7 @@ export default function Delivery({
               <Button
                 buttonType="button"
                 action={submitShippingMethod}
-                title={GENERAL_CONFIRM}
+                title="Confirm"
               />
             </div>
           ) : null}

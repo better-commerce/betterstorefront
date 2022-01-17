@@ -1,5 +1,4 @@
 import { Fetcher } from '@commerce/utils/types'
-import { getToken, getError, setToken, clearTokens } from './utils'
 import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
 import axios from 'axios'
 import store from 'store'
@@ -53,11 +52,10 @@ const SingletonFactory = (function () {
           .then((res: any) => {
             setToken(res.data.access_token)
             error.response.config.headers['Authorization'] =
-              'Bearer ' + getToken()
+              'Bearer ' + res.data.access_token
             return axiosInstance(error.response.config)
           })
           .catch((error) => {
-            clearToken()
             //@TODO redirect here to Login page
             return Promise.reject(error)
           })
@@ -107,7 +105,8 @@ const fetcher = async ({
     const response = await axiosInstance(config)
     return response.data
   } catch (error: any) {
-    throw getError(error, error.status)
+    // console.log(error, 'error inside fetcher')
+    throw new Error(error.response.data.message)
   }
 }
 export default fetcher

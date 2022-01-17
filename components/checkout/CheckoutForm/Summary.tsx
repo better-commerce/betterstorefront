@@ -2,23 +2,19 @@ import Link from 'next/link'
 import { TrashIcon } from '@heroicons/react/solid'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '@components/cart/PromotionInput'
-import { 
-  GENERAL_CONFIRM_ORDER, 
-  GENERAL_DISCOUNT, 
-  GENERAL_ORDER_SUMMARY, 
-  GENERAL_SHIPPING, 
-  GENERAL_TOTAL, 
-  ITEMS_IN_YOUR_CART, 
-  SUBTOTAL_INCLUDING_TAX 
-} from '@components/utils/textVariables'
 
-export default function Summary({ cart, handleItem, confirmOrder }: any) {
+export default function Summary({
+  cart,
+  handleItem,
+  confirmOrder,
+  isShippingDisabled,
+}: any) {
   return (
     <div className="mt-10 lg:mt-0 md:sticky top-0">
-      <h2 className="text-lg font-medium text-gray-900">{GENERAL_ORDER_SUMMARY}</h2>
+      <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
 
       <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-        <h3 className="sr-only">{ITEMS_IN_YOUR_CART}</h3>
+        <h3 className="sr-only">Items in your cart</h3>
         <ul role="list" className="divide-y divide-gray-200">
           {cart.lineItems?.map((product: any) => (
             <li key={product.id} className="flex py-6 px-4 sm:px-6">
@@ -44,17 +40,6 @@ export default function Summary({ cart, handleItem, confirmOrder }: any) {
                       </Link>
                     </h4>
                   </div>
-
-                  {/* <div className="ml-4 flex-shrink-0 flow-root">
-                    <button
-                      type="button"
-                      onClick={() => handleItem(product, 'delete')}
-                      className="-m-2.5 bg-white p-2.5 flex items-center justify-center text-gray-400 hover:text-gray-500"
-                    >
-                      <span className="sr-only">Remove</span>
-                      <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                    </button>
-                  </div> */}
                 </div>
 
                 <div className="flex-1 pt-2 flex items-end justify-between">
@@ -70,23 +55,25 @@ export default function Summary({ cart, handleItem, confirmOrder }: any) {
           <div className="flex items-center justify-between">
             <dt className="text-sm text-gray-900">
               {' '}
-              {SUBTOTAL_INCLUDING_TAX}
+              Subtotal (taxes included)
             </dt>
             <dd className="text-sm font-medium text-gray-900">
               {cart.subTotal?.formatted?.withTax}
             </dd>
           </div>
-          <div className="flex items-center justify-between">
-            <dt className="text-sm text-gray-900">{GENERAL_SHIPPING}</dt>
-            <dd className="text-sm font-medium text-gray-900">
-              {cart.shippingCharge?.formatted?.withTax}
-            </dd>
-          </div>
+          {isShippingDisabled ? null : (
+            <div className="flex items-center justify-between">
+              <dt className="text-sm text-gray-900">Shipping</dt>
+              <dd className="text-sm font-medium text-gray-900">
+                {cart.shippingCharge?.formatted?.withTax}
+              </dd>
+            </div>
+          )}
           <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
             {cart.promotionsApplied?.length > 0 && (
               <>
                 <dt className="flex items-center text-sm text-indigo-600">
-                  <span>{GENERAL_DISCOUNT}</span>
+                  <span>Discount</span>
                 </dt>
                 <dd className="text-indigo-600 text-sm font-medium">
                   <p>{cart.discount?.formatted?.withTax}</p>
@@ -97,22 +84,22 @@ export default function Summary({ cart, handleItem, confirmOrder }: any) {
           <PromotionInput />
 
           <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-            <dt className="font-medium text-gray-900">{GENERAL_TOTAL}</dt>
+            <dt className="font-medium text-gray-900">Total</dt>
             <dd className="font-medium text-gray-900">
               {cart.grandTotal?.formatted?.withTax}
             </dd>
           </div>
         </dl>
 
-        <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+        {/* <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
           <button
             type="button"
             onClick={confirmOrder}
             className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
           >
-            {GENERAL_CONFIRM_ORDER}
+            Confirm order
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   )

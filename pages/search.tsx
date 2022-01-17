@@ -7,8 +7,9 @@ import ProductGrid from '@components/product/Grid'
 import ProductFilters from '@components/product/Filters'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-import { GENERAL_CATALOG } from '@components/utils/textVariables'
-
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { useUI } from '@components/ui/context'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -33,6 +34,8 @@ interface stateInterface {
 
 const IS_INFINITE_SCROLL =
   process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+
+const PAGE_TYPE = PAGE_TYPES['Search']
 
 const {
   SORT_BY,
@@ -91,6 +94,7 @@ function Search({ query, setEntities, recordEvent }: any) {
     ...adaptedQuery,
   }
 
+  const { user } = useUI()
   const [productListMemory, setProductListMemory] = useState({
     products: {
       results: [],
@@ -117,6 +121,8 @@ function Search({ query, setEntities, recordEvent }: any) {
     },
     error,
   } = useSwr(['/api/catalog/products', state], postData)
+
+  const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
@@ -154,6 +160,34 @@ function Search({ query, setEntities, recordEvent }: any) {
       behavior: 'smooth',
     })
   }
+
+  const BrandFilter = state.filters.find(
+    (filter: any) => filter.name === 'Brand'
+  )
+  const CategoryFilter = state.filters.find(
+    (filter: any) => filter.name === 'Category'
+  )
+
+  useAnalytics(FacetSearch, {
+    entity: JSON.stringify({
+      FreeText: '',
+      Page: state.currentPage,
+      SortBy: state.sortBy,
+      SortOrder: state.sortOrder,
+      Brand: BrandFilter ? BrandFilter.value : null,
+      Category: CategoryFilter ? CategoryFilter.value : null,
+      Gender: user.gender,
+      CurrentPage: state.currentPage,
+      PageSize: 20,
+      Filters: state.filters,
+      AllowFacet: true,
+      ResultCount: data.products.total,
+    }),
+    entityName: PAGE_TYPE,
+    pageTitle: 'Catalog',
+    entityType: 'Page',
+    eventType: 'Search',
+  })
 
   const handleInfiniteScroll = () => {
     if (
@@ -239,7 +273,7 @@ function Search({ query, setEntities, recordEvent }: any) {
       <main className="pb-24">
         <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-            {GENERAL_CATALOG}
+            Catalog
           </h1>
           <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
             {data.products.total} results
@@ -269,7 +303,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: { query: context.query }, // will be passed to the page component as props
   }
 }
-
-const PAGE_TYPE = PAGE_TYPES['Search']
 
 export default withDataLayer(Search, PAGE_TYPE)

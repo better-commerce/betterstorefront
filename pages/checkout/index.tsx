@@ -10,6 +10,9 @@ import { useUI } from '@components/ui/context'
 import { asyncHandler } from '@components/account/Address/AddressBook'
 import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
 import axios from 'axios'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 function Checkout({ cart, config, location }: any) {
   const { user, basketId, setCartItems, cartItems } = useUI()
@@ -45,6 +48,27 @@ function Checkout({ cart, config, location }: any) {
       console.log(error, 'err')
     }
   }
+
+  const { CheckoutStarted } = EVENTS_MAP.EVENT_TYPES
+
+  const { Basket } = EVENTS_MAP.ENTITY_TYPES
+
+  useAnalytics(CheckoutStarted, {
+    entity: JSON.stringify({
+      grandTotal: cart.grandTotal.raw,
+      id: cart.id,
+      lineItems: cart.lineItems,
+      shipCharge: cart.shippingCharge.raw.withTax,
+      shipTax: cart.shippingCharge.raw.tax,
+      taxPercent: cart.taxPercent,
+      tax: cart.grandTotal.raw.tax,
+    }),
+    promoCodes: JSON.stringify(cart.promotionsApplied),
+    entityId: cart.id,
+    entityName: PAGE_TYPE,
+    entityType: Basket,
+    eventType: CheckoutStarted,
+  })
 
   useEffect(() => {
     fetchAddress()

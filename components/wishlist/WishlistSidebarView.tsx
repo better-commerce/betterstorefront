@@ -55,15 +55,19 @@ const WishlistSidebar: FC = () => {
   }
 
   const handleAddToCart = (product: any) => {
-    addToCart({
-      basketId,
-      productId: product.recordId,
-      qty: 1,
-      manualUnitPrice: product.price.raw.withTax,
-      stockCode: product.stockCode,
-      userId: user.userId,
-      isAssociated: user.isAssociated,
-    })
+    addToCart(
+      {
+        basketId,
+        productId: product.recordId,
+        qty: 1,
+        manualUnitPrice: product.price.raw.withTax,
+        stockCode: product.stockCode,
+        userId: user.userId,
+        isAssociated: user.isAssociated,
+      },
+      'ADD',
+      { product }
+    )
       .then((response: any) => {
         setCartItems(response)
         setItemInCart(true)

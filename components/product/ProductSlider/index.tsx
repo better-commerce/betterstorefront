@@ -76,16 +76,6 @@ const ProductSlider: FC<Props> = ({ config }) => {
                             </p>
                           </div>
                         </div>
-
-                        {/* {product.availableColors.map((color:any) => (
-                          <li
-                            key={color.name}
-                            className="w-4 h-4 rounded-full border border-black border-opacity-10"
-                            style={{ backgroundColor: color.colorBg }}
-                          >
-                            <span className="sr-only">{color.name}</span>
-                          </li>
-                        ))} */}
                       </li>
                     </Link>
                   </SwiperSlide>

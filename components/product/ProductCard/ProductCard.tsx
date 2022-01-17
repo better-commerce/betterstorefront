@@ -124,15 +124,19 @@ const ProductCard: FC<Props> = ({ product }) => {
     let buttonConfig: any = {
       title: {GENERAL_ADD_TO_BASKET},
       action: async () => {
-        const item = await cartHandler().addToCart({
-          basketId,
-          productId: product.recordId,
-          qty: 1,
-          manualUnitPrice: product.price.raw.withTax,
-          stockCode: product.stockCode,
-          userId: user.userId,
-          isAssociated: user.isAssociated,
-        })
+        const item = await cartHandler().addToCart(
+          {
+            basketId,
+            productId: product.recordId,
+            qty: 1,
+            manualUnitPrice: product.price.raw.withTax,
+            stockCode: product.stockCode,
+            userId: user.userId,
+            isAssociated: user.isAssociated,
+          },
+          'ADD',
+          { product }
+        )
         setCartItems(item)
       },
       shortMessage: '',
@@ -156,7 +160,7 @@ const ProductCard: FC<Props> = ({ product }) => {
       <div key={product.id} className="group relative p-4 sm:p-6">
         <Link
           passHref
-          href={currentProductData.link}
+          href={`/${currentProductData.link}`}
           key={'data-product' + currentProductData.link}
         >
           <a href={currentProductData.link}>
@@ -184,8 +188,8 @@ const ProductCard: FC<Props> = ({ product }) => {
 
         <div className="pt-10 pb-4 text-center">
           <h3 className="min-h-50px text-sm font-medium text-gray-900">
-            <Link href={currentProductData.link}>
-              <a href={currentProductData.link}>{product.name}</a>
+            <Link href={`/${currentProductData.link}`}>
+              <a href={`/${currentProductData.link}`}>{product.name}</a>
             </Link>
           </h3>
 

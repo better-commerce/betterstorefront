@@ -43,15 +43,19 @@ export default function RelatedProducts({
 
   const addToCart = (product: any) => {
     const asyncAddToCart = async () => {
-      const item = await cartHandler().addToCart({
-        basketId: basketId,
-        productId: product.recordId,
-        qty: 1,
-        manualUnitPrice: product.price.raw.withTax,
-        stockCode: product.stockCode,
-        userId: user.userId,
-        isAssociated: user.isAssociated,
-      })
+      const item = await cartHandler().addToCart(
+        {
+          basketId: basketId,
+          productId: product.recordId,
+          qty: 1,
+          manualUnitPrice: product.price.raw.withTax,
+          stockCode: product.stockCode,
+          userId: user.userId,
+          isAssociated: user.isAssociated,
+        },
+        'ADD',
+        { product }
+      )
       setCartItems(item)
     }
     asyncAddToCart()

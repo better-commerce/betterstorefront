@@ -13,6 +13,7 @@ export const basketId = () => {
   Cookies.set('basketId', basketId)
   return basketId
 }
+
 export interface State {
   displaySidebar: boolean
   displayDropdown: boolean
@@ -28,6 +29,8 @@ export interface State {
   user: any
   showSearchBar: boolean
   appConfig: any
+  orderId: string
+  userIp: string
 }
 
 const initialState = {
@@ -45,6 +48,8 @@ const initialState = {
   user: getItem('user') || {},
   showSearchBar: false,
   appConfig: {},
+  orderId: getItem('orderId') || '',
+  userIp: '',
 }
 
 type Action =
@@ -107,6 +112,8 @@ type Action =
   | { type: 'SET_BASKET_ID'; payload: string }
   | { type: 'SHOW_SEARCH_BAR'; payload: boolean }
   | { type: 'SET_APP_CONFIG'; payload: any }
+  | { type: 'SET_ORDER_ID'; payload: any }
+  | { type: 'SET_USER_IP'; payload: string }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -134,6 +141,13 @@ function uiReducer(state: State, action: Action) {
         displaySidebar: true,
       }
     }
+    case 'SET_USER_IP': {
+      return {
+        ...state,
+        userIp: action.payload,
+      }
+    }
+
     case 'CLOSE_SIDEBAR': {
       return {
         ...state,
@@ -254,6 +268,12 @@ function uiReducer(state: State, action: Action) {
         appConfig: action.payload,
       }
     }
+    case 'SET_ORDER_ID': {
+      return {
+        ...state,
+        orderId: action.payload,
+      }
+    }
   }
 }
 
@@ -271,6 +291,12 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const setUserIp = useCallback(
+    (payload: string) => {
+      dispatch({ type: 'SET_USER_IP', payload })
+    },
+    [dispatch]
+  )
   const removeFromWishlist = useCallback(
     (payload: any) => {
       const items = state.wishListItems.filter(
@@ -436,6 +462,19 @@ export const UIProvider: FC = (props) => {
     setSidebarView('WISHLIST_VIEW')
     openSidebar()
   }
+
+  const setOrderId = useCallback(
+    (payload: string) => {
+      if (payload) {
+        Cookies.set('orderId', payload)
+      } else {
+        Cookies.remove('orderId')
+      }
+      dispatch({ type: 'SET_ORDER_ID', payload })
+    },
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -465,6 +504,8 @@ export const UIProvider: FC = (props) => {
       setBasketId,
       setShowSearchBar,
       setAppConfig,
+      setOrderId,
+      setUserIp,
     }),
     [state]
   )

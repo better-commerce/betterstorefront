@@ -4,7 +4,7 @@ export default function createWishlist() {
   async function createWishlistAsync({ query }: any) {
     try {
       const response: any = await fetcher({
-        url: `${CUSTOMER_BASE_API}${query.id}/wishlist/${query.productId}/add/${query.flag}`,
+        url: `${CUSTOMER_BASE_API}${query.id}/wishlist/add-item?productId=${query.productId}&flag=${query.flag}`,
         method: 'post',
         data: query,
       })

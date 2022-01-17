@@ -11,7 +11,7 @@ export default function getUserCart() {
     }
     try {
       const response: any = await fetcher({
-        url: `${BASKET_ENDPOINT}/${userId}/baskets`,
+        url: `${BASKET_ENDPOINT}/${userId}/all`,
         method: 'get',
         data,
         headers: {

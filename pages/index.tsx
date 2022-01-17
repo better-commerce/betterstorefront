@@ -1,13 +1,12 @@
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
-import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import type { GetStaticPropsContext } from 'next'
 import { HOMEPAGE_SLUG } from '@components/utils/constants'
 import ProductSlider from '@components/product/ProductSlider'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-import { useEffect } from 'react'
-
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 export async function getStaticProps({
   preview,
   locale,
@@ -35,17 +34,26 @@ export async function getStaticProps({
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ slugs, setEntities, recordEvent }: any) {
-  useEffect(() => {
-    const { entityId, entityName, entityType, entity } = KEYS_MAP
-    setEntities({
-      [entityId]: '84eb4e71-318e-4989-8837-58fcfc9e5066',
-      [entityName]: PAGE_TYPE,
-      [entityType]: 'Page',
-      [entity]: JSON.stringify(slugs),
-    })
-    recordEvent(EVENTS.PageViewed)
-  }, [])
+function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  useAnalytics(PageViewed, {
+    entity: JSON.stringify({
+      id: slugs.id,
+      name: slugs.name,
+      metaTitle: slugs.metaTitle,
+      MetaKeywords: slugs.metaKeywords,
+      MetaDescription: slugs.metaDescription,
+      Slug: slugs.slug,
+      Title: slugs.title,
+      ViewType: slugs.viewType,
+    }),
+    entityName: PAGE_TYPE,
+    pageTitle: slugs.title,
+    entityType: 'Page',
+    entityId: slugs.id,
+    eventType: 'PageViewed',
+  })
 
   return (
     <>

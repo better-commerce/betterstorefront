@@ -46,6 +46,7 @@ interface Props {
   }
   nav: []
   footer: []
+  isLocationLoaded: boolean
   config: any
 }
 
@@ -97,6 +98,7 @@ const Layout: FC<Props> = ({
   children,
   config,
   pageProps: { categories = [], ...pageProps },
+  isLocationLoaded,
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
   const [isLoading, setIsLoading] = useState(false)
@@ -108,9 +110,11 @@ const Layout: FC<Props> = ({
   useEffect(() => {
     const fetchLayout = async () => {
       try {
-        const response: any = await getData(NEXT_GET_NAVIGATION)
-        setData(response)
-        setItem('navTree', response)
+        if (!data.nav.length) {
+          const response: any = await getData(NEXT_GET_NAVIGATION)
+          setData(response)
+          setItem('navTree', response)
+        }
       } catch (error) {
         console.log(error, 'error')
       }
@@ -132,6 +136,7 @@ const Layout: FC<Props> = ({
         src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
         strategy="beforeInteractive"
       />
+
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
         {showSearchBar && (

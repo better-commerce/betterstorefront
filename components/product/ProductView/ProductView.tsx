@@ -23,7 +23,8 @@ import {
   NEXT_GET_PRODUCT,
 } from '@components/utils/constants'
 import Button from '@components/ui/IndigoButton'
-import { ALERT_SUCCESS_WISHLIST_MESSAGE, BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, GENERAL_PRICE_LABEL_RRP, GENERAL_REFERENCE, GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE, ITEM_TYPE_ADDON, PRICEMATCH_ADDITIONAL_DETAILS, PRICEMATCH_BEST_PRICE, PRICEMATCH_SEEN_IT_CHEAPER, PRODUCT_INFORMATION, YOUTUBE_VIDEO_PLAYER } from '@components/utils/textVariables'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -70,10 +71,31 @@ export default function ProductView({
     ...product,
   })
 
+  const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
+
+  const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
     const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
     if (response?.data?.product) {
+      eventDispatcher(ProductViewed, {
+        entity: JSON.stringify({
+          id: response.data.product.recordId,
+          sku: response.data.product.sku,
+          name: response.data.product.name,
+          stockCode: response.data.product.stockCode,
+          img: response.data.product.image,
+        }),
+        entityId: response.data.product.recordId,
+        entityName: response.data.product.name,
+        entityType: Product,
+        eventType: ProductViewed,
+      })
       setUpdatedProduct(response.data.product)
+      setSelectedAttrData({
+        productId: response.data.product.recordId,
+        stockCode: response.data.product.stockCode,
+        ...response.data.product,
+      })
     }
   }
 
@@ -83,12 +105,7 @@ export default function ProductView({
 
   useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
-    setEntities({
-      [entityId]: product.recordId,
-      [entityName]: product.name,
-      [entityType]: 'Product',
-      [entity]: JSON.stringify(product),
-    })
+
     recordEvent(EVENTS.ProductViewed)
     if (snippets) {
       snippets.forEach((snippet: any) => {
@@ -121,41 +138,54 @@ export default function ProductView({
     openNotifyUser(product.recordId)
   }
 
-  let content = [...product.images]
+  let content = [{ image: selectedAttrData.image }, ...product.images].filter(
+    (value: any, index: number, self: any) =>
+      index === self.findIndex((t: any) => t.image === value.image)
+  )
 
   if (product.videos && product.videos.length > 0) {
-    content = [...product.images, ...product.videos]
+    content = [...product.images, ...product.videos].filter(
+      (value: any, index: number, self: any) =>
+        index === self.findIndex((t: any) => t.image === value.image)
+    )
   }
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: 'Add to bag',
       action: async () => {
-        const item = await cartHandler().addToCart({
-          basketId: basketId,
-          productId: selectedAttrData.productId,
-          qty: 1,
-          manualUnitPrice: product.price.raw.withTax,
-          stockCode: selectedAttrData.stockCode,
-          userId: user.userId,
-          isAssociated: user.isAssociated,
-        })
+        const item = await cartHandler().addToCart(
+          {
+            basketId: basketId,
+            productId: selectedAttrData.productId,
+            qty: 1,
+            manualUnitPrice: product.price.raw.withTax,
+            stockCode: selectedAttrData.stockCode,
+            userId: user.userId,
+            isAssociated: user.isAssociated,
+          },
+          'ADD',
+          { product: selectedAttrData }
+        )
         setCartItems(item)
       },
       shortMessage: '',
     }
     if (!selectedAttrData.currentStock && !product.preOrder.isEnabled) {
-      if (!product.flags.sellWithoutInventory) {
-        buttonConfig.title = BTN_NOTIFY_ME
+      if (
+        !product.flags.sellWithoutInventory ||
+        !selectedAttrData.sellWithoutInventory
+      ) {
+        buttonConfig.title = 'Notify me'
         buttonConfig.action = () => handleNotification()
         buttonConfig.type = 'button'
       }
     } else if (product.preOrder.isEnabled && !selectedAttrData.currentStock) {
       if (product.preOrder.currentStock < product.preOrder.maxStock) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = 'Pre-order'
         buttonConfig.shortMessage = product.preOrder.shortMessage
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = 'Notify me'
         buttonConfig.type = 'button'
         buttonConfig.action = () => handleNotification()
       }
@@ -173,8 +203,8 @@ export default function ProductView({
         stockCode: selectedAttrData.stockCode,
       },
     }
-    const addonProducts = product.relatedProducts.filter(
-      (item: any) => item.stockCode === ITEM_TYPE_ADDON
+    const addonProducts = product.relatedProducts?.filter(
+      (item: any) => item.stockCode === 'ADDON'
     )
     const addonProductsWithParentProduct = addonProducts.map((item: any) => {
       item.parentProductId = product.recordId
@@ -251,10 +281,11 @@ export default function ProductView({
     asyncHandler()
   }
 
-  const isEngravingAvailable = !!product.relatedProducts.filter(
-    (item: any) => item.stockCode === ITEM_TYPE_ADDON
+  const isEngravingAvailable = !!product.relatedProducts?.filter(
+    (item: any) => item.stockCode === 'ADDON'
   ).length
 
+  //TODO no additionalProperties key found on product object
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
@@ -280,11 +311,11 @@ export default function ProductView({
   }
 
   const filteredRelatedProducts = product.relatedProducts?.filter(
-    (item: any) => item.stockCode !== ITEM_TYPE_ADDON
+    (item: any) => item.stockCode !== 'ADDON'
   )
 
   const filteredRelatedProductList = product.relatedProductList?.filter(
-    (item: any) => item.stockCode !== ITEM_TYPE_ADDON
+    (item: any) => item.stockCode !== 'ADDON'
   )
 
   return (
@@ -344,7 +375,7 @@ export default function ProductView({
                         width="560"
                         height="315"
                         src={image.url}
-                        title={YOUTUBE_VIDEO_PLAYER}
+                        title="YouTube video player"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -358,18 +389,20 @@ export default function ProductView({
             {/* Product info */}
             <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
               <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-                {product.name}
+                {selectedAttrData.name}
               </h1>
 
-              <p className="text-gray-500 text-md">{GENERAL_REFERENCE}: {product.stockCode}</p>
+              <p className="text-gray-500 text-md">
+                Ref: {selectedAttrData.stockCode}
+              </p>
               <div className="mt-3">
-                <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
+                <h2 className="sr-only">Product information</h2>
                 {updatedProduct ? (
                   <p className="text-3xl text-gray-900">
-                    {product.price.formatted.withTax}
-                    {product.listPrice.raw.tax > 0 ? (
+                    {selectedAttrData.price?.formatted?.withTax}
+                    {selectedAttrData.listPrice?.raw.tax > 0 ? (
                       <span className="px-5 text-sm line-through text-gray-500">
-                        {GENERAL_PRICE_LABEL_RRP} {product.listPrice.formatted.withTax}
+                        RRP {product.listPrice.formatted.withTax}
                       </span>
                     ) : null}
                   </p>
@@ -380,7 +413,7 @@ export default function ProductView({
 
               {/* Reviews */}
               <div className="mt-3">
-                <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
+                <h3 className="sr-only">Reviews</h3>
                 <div className="flex items-center">
                   <div className="flex items-center">
                     {[0, 1, 2, 3, 4].map((rating) => (
@@ -396,12 +429,13 @@ export default function ProductView({
                       />
                     ))}
                   </div>
-                  <p className="sr-only">{product.rating} {GENERAL_REVIEW_OUT_OF_FIVE}</p>
+                  <p className="sr-only">{product.rating} out of 5 stars</p>
                 </div>
               </div>
               <div className="w-full sm:w-6/12">
                 <AttributesHandler
                   product={product}
+                  variant={selectedAttrData}
                   setSelectedAttrData={setSelectedAttrData}
                 />
               </div>
@@ -409,16 +443,20 @@ export default function ProductView({
                 className="text-gray-900 text-md cursor-pointer hover:underline"
                 onClick={() => showPriceMatchModal(true)}
               >
-                <span className="font-bold">{PRICEMATCH_SEEN_IT_CHEAPER}</span>
-                <span>{''} {PRICEMATCH_BEST_PRICE}</span>
+                <span className="font-bold">Seen it cheaper?</span>
+                <span>{''} We'll match the best price</span>
               </p>
 
               <section aria-labelledby="details-heading" className="mt-12">
                 <h2 id="details-heading" className="sr-only">
-                  {PRICEMATCH_ADDITIONAL_DETAILS}
+                  Additional details
                 </h2>
-                <ProductDetails product={product} />
-
+                <ProductDetails
+                  product={product}
+                  description={
+                    selectedAttrData.description || product.description
+                  }
+                />
                 {updatedProduct ? (
                   <>
                     <div className="mt-10 flex sm:flex-col1">
@@ -438,11 +476,11 @@ export default function ProductView({
                         className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                       >
                         {isInWishList ? (
-                          <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
+                          <span>Item was added in wishlist</span>
                         ) : (
                           <HeartIcon className="h-6 w-6 flex-shrink-0" />
                         )}
-                        <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
+                        <span className="sr-only">Add to favorites</span>
                       </button>
                     </div>
                     {isEngravingAvailable && (
@@ -450,14 +488,14 @@ export default function ProductView({
                         className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                         onClick={() => showEngravingModal(true)}
                       >
-                        <span className="font-bold">{GENERAL_ENGRAVING}</span>
+                        <span className="font-bold">Engraving</span>
                       </button>
                     )}
                   </>
                 ) : null}
                 <div className="border-t divide-y divide-gray-200 mt-10">
                   <p className="text-gray-900 text-lg">
-                    {product.currentStock > 0
+                    {selectedAttrData.currentStock > 0
                       ? product.deliveryMessage
                       : product.stockAvailabilityMessage}
                   </p>

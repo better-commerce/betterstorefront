@@ -3,25 +3,20 @@ import { config } from './configs/contact'
 import { useUI } from '@components/ui/context'
 import { handleSubmit, URLS } from './common'
 import Button from '@components/ui/IndigoButton'
-import {
-  GENERAL_WANT_RECEIVE_OFFERS, 
-  GENERAL_NOT_WANT_RECEIVE_OFFERS,
-  CONTACT_PREFERENCES_TITLE,
-  CONTACT_PREFERENCES_SUBTITLE,
-  GENERAL_SAVE_CHANGES
-} from '@components/utils/textVariables'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 const radioBtnsConfig = [
   {
     type: 'radio',
-    title: GENERAL_WANT_RECEIVE_OFFERS,
+    title: 'I want to receive offers',
     items: config,
     id: 1,
   },
   {
     type: 'radio',
     id: 2,
-    title: GENERAL_NOT_WANT_RECEIVE_OFFERS,
+    title: "I don't want to receive offers",
     items: [],
     default: true,
     unsubscribe: true,
@@ -39,6 +34,7 @@ export default function ContactPreferences() {
   const [data, setData] = useState({})
   const [defaultData, setDefaultData] = useState({})
   const { user, setUser } = useUI()
+  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
     const tempObj: any = {}
@@ -91,6 +87,19 @@ export default function ContactPreferences() {
 
   const handleDataSubmit = async () => {
     await handleSubmit(data, user, setUser, setTitle, URLS.subscribe)
+    eventDispatcher(CustomerUpdated, {
+      entity: JSON.stringify({
+        id: user.userId,
+        name: user.username,
+        dateOfBirth: user.yearOfBirth,
+        gender: user.gender,
+        email: user.email,
+        postCode: user.postCode,
+      }),
+      entityId: user.userId,
+      entityName: user.firstName + user.lastName,
+      eventType: CustomerUpdated,
+    })
   }
 
   const handleCheckbox = (key: string) => {
@@ -116,11 +125,13 @@ export default function ContactPreferences() {
           <p className="mt-2 text-sm flex flex-col text-gray-500">
             <span>
               {' '}
-              {CONTACT_PREFERENCES_TITLE}
+              Please note, when you update your preferences they will be saved
+              but they won’t be reflected right away.
             </span>
             <span className="mt-5">
               {' '}
-              {CONTACT_PREFERENCES_SUBTITLE}
+              Receive emails and texts containing tips, guidance, offers and
+              news on new products and services.
             </span>
           </p>
         </div>
@@ -205,7 +216,7 @@ export default function ContactPreferences() {
           <Button
             buttonType="button"
             action={handleDataSubmit}
-            title={GENERAL_SAVE_CHANGES}
+            title="Save changes"
             className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
           />
         </div>
