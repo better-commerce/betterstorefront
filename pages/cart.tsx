@@ -2,7 +2,7 @@ import { XIcon as XIconSolid } from '@heroicons/react/solid'
 import { Layout } from '@components/common'
 import { GetServerSideProps } from 'next'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { useCart as getSsrCart } from '@framework/cart'
+import { useCart as getCart } from '@framework/cart'
 import cookie from 'cookie'
 import { basketId as basketIdGenerator } from '@components/ui/context'
 import Link from 'next/link'
@@ -10,20 +10,14 @@ import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '../components/cart/PromotionInput'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import axios from 'axios'
-import {
-  NEXT_SHIPPING_PLANS,
-  NEXT_UPDATE_DELIVERY_INFO,
-} from '@components/utils/constants'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import useAnalytics from '@components/services/analytics/useAnalytics'
-function Cart({ cart, ipAddress }: any) {
-  const { setCartItems, cartItems, basketId } = useUI()
-  const [deliveryPlans, setDeliveryPlans] = useState([])
+import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
+import { BTN_CHECKOUT_NOW, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TOTAL, ITEMS_IN_YOUR_CART, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
 
-  const { addToCart, getCart } = cartHandler()
-  const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
+function Cart({ cart }: any) {
+  const { setCartItems, cartItems, basketId } = useUI()
+  const { addToCart } = cartHandler()
 
   const mapShippingPlansToItems = (plans: any, items: any) => {
     const itemsClone = [...items]
@@ -42,9 +36,9 @@ function Cart({ cart, ipAddress }: any) {
     }, itemsClone)
   }
 
-  const fetchShippingPlans = async (userCart: any) => {
-    const shippingMethodItem: any = userCart.shippingMethods.find(
-      (method: any) => method.id === userCart.shippingMethodId
+  const fetchShippingPlans = async () => {
+    const shippingMethodItem: any = cart.shippingMethods.find(
+      (method: any) => method.id === cart.shippingMethodId
     )
 
     const model = {
@@ -52,10 +46,10 @@ function Cart({ cart, ipAddress }: any) {
       OrderId: '00000000-0000-0000-0000-000000000000',
       PostCode: '',
       ShippingMethodType: shippingMethodItem.type,
-      ShippingMethodId: userCart.shippingMethodId,
+      ShippingMethodId: cart.shippingMethodId,
       ShippingMethodName: shippingMethodItem.displayName,
       ShippingMethodCode: shippingMethodItem.shippingCode,
-      DeliveryItems: userCart.lineItems.map((item: any) => {
+      DeliveryItems: cart.lineItems.map((item: any) => {
         return {
           BasketLineId: Number(item.id),
           OrderLineRecordId: '00000000-0000-0000-0000-000000000000',
@@ -76,35 +70,15 @@ function Cart({ cart, ipAddress }: any) {
       OrderNo: null,
       DeliveryCenter: null,
     }
-    const response: any = await axios.post(NEXT_SHIPPING_PLANS, { model })
+    const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
     setCartItems({
-      ...userCart,
-      lineItems: mapShippingPlansToItems(response.data, userCart.lineItems),
+      ...cart,
+      lineItems: mapShippingPlansToItems(response.data, cart.lineItems),
     })
-    setDeliveryPlans(response.data)
   }
 
-  const { Basket } = EVENTS_MAP.ENTITY_TYPES
-
-  useAnalytics(BasketViewed, {
-    entity: JSON.stringify({
-      id: basketId,
-      grandTotal: cartItems.grandTotal?.raw?.withTax,
-      lineItems: cartItems.lineItems,
-      promoCode: cartItems.promotionsApplied,
-      shipCharge: cartItems.shippingCharge?.raw?.withTax,
-      shipTax: cartItems.shippingCharge?.raw?.tax,
-      taxPercent: cartItems.taxPercent,
-      tax: cartItems.grandTotal?.raw?.tax,
-    }),
-    entityName: 'Cart',
-    entityType: Basket,
-    eventType: BasketViewed,
-    promoCodes: cartItems.promotionsApplied,
-  })
-
   useEffect(() => {
-    if (cart.shippingMethods.length > 0) fetchShippingPlans(cart)
+    if (cart.shippingMethods.length > 0) fetchShippingPlans()
     else {
       setCartItems(cart)
     }
@@ -120,7 +94,6 @@ function Cart({ cart, ipAddress }: any) {
         displayOrder: product.displayOrderta,
         qty: -1,
       }
-
       if (type === 'increase') {
         data.qty = 1
       }
@@ -128,16 +101,8 @@ function Cart({ cart, ipAddress }: any) {
         data.qty = 0
       }
       try {
-        await addToCart(data, type, { product })
-        await axios.post(NEXT_UPDATE_DELIVERY_INFO, {
-          data: deliveryPlans,
-          id: basketId,
-        })
-        const newCart: any = await getCart({ basketId })
-        if (newCart.shippingMethods.length > 0) fetchShippingPlans(newCart)
-        else {
-          setCartItems(newCart)
-        }
+        const item = await addToCart(data)
+        setCartItems(item)
       } catch (error) {
         console.log(error)
       }
@@ -149,22 +114,17 @@ function Cart({ cart, ipAddress }: any) {
 
   const isEmpty: boolean = userCart?.lineItems?.length === 0
 
-  const isShippingDisabled =
-    cartItems.lineItems.filter(
-      (i: any) => i.itemType === 2 || i.itemType === 20
-    ).length === cartItems.lineItems.length
-
   return (
     <div className="bg-white">
       <main className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-          Shopping Cart
+          {GENERAL_SHOPPING_CART}
         </h1>
         {!isEmpty && (
           <form className="relative mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
             <section aria-labelledby="cart-heading" className="lg:col-span-7">
               <h2 id="cart-heading" className="sr-only">
-                Items in your shopping cart
+                {ITEMS_IN_YOUR_CART}
               </h2>
 
               <ul
@@ -236,7 +196,7 @@ function Cart({ cart, ipAddress }: any) {
                                         }
                                         className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                                       >
-                                        <span className="sr-only">Remove</span>
+                                        <span className="sr-only">{GENERAL_REMOVE}</span>
                                         <XIconSolid
                                           className="h-5 w-5"
                                           aria-hidden="true"
@@ -274,7 +234,7 @@ function Cart({ cart, ipAddress }: any) {
                             onClick={() => handleItem(product, 'delete')}
                             className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                           >
-                            <span className="sr-only">Remove</span>
+                            <span className="sr-only">{GENERAL_REMOVE}</span>
                             <XIconSolid
                               className="h-5 w-5"
                               aria-hidden="true"
@@ -296,33 +256,31 @@ function Cart({ cart, ipAddress }: any) {
                 id="summary-heading"
                 className="text-lg font-medium text-gray-900"
               >
-                Order summary
+                {GENERAL_ORDER_SUMMARY}
               </h2>
 
               <dl className="mt-6 space-y-4">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">
-                    Subtotal (taxes included)
+                    {SUBTOTAL_INCLUDING_TAX}
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
                     {cartItems.subTotal?.formatted?.withTax}
                   </dd>
                 </div>
-                {isShippingDisabled ? null : (
-                  <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
-                    <dt className="flex items-center text-sm text-gray-600">
-                      <span>Shipping</span>
-                    </dt>
-                    <dd className="text-sm font-medium text-gray-900">
-                      {cartItems.shippingCharge?.formatted?.withTax}
-                    </dd>
-                  </div>
-                )}
+                <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
+                  <dt className="flex items-center text-sm text-gray-600">
+                    <span>{GENERAL_SHIPPING}</span>
+                  </dt>
+                  <dd className="text-sm font-medium text-gray-900">
+                    {cartItems.shippingCharge?.formatted?.withTax}
+                  </dd>
+                </div>
                 <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                   {userCart.promotionsApplied?.length > 0 && (
                     <>
                       <dt className="flex items-center text-sm text-indigo-600">
-                        <span>Discount</span>
+                        <span>{GENERAL_DISCOUNT}</span>
                       </dt>
                       <dd className="text-indigo-600 text-sm font-medium">
                         <p>{cartItems.discount?.formatted?.withTax}</p>
@@ -333,7 +291,7 @@ function Cart({ cart, ipAddress }: any) {
                 <PromotionInput />
 
                 <div className="text-gray-900 border-t border-gray-200 pt-4 flex items-center justify-between">
-                  <dt className="font-medium text-gray-900">Order total</dt>
+                  <dt className="font-medium text-gray-900">{GENERAL_TOTAL}</dt>
                   <dd className="font-medium text-gray-900">
                     {cartItems.grandTotal?.formatted?.withTax}
                   </dd>
@@ -346,7 +304,7 @@ function Cart({ cart, ipAddress }: any) {
                     type="submit"
                     className="text-center w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                   >
-                    Checkout now
+                    {BTN_CHECKOUT_NOW}
                   </a>
                 </Link>
               </div>
@@ -361,7 +319,7 @@ function Cart({ cart, ipAddress }: any) {
                 type="button"
                 className="text-indigo-600 font-medium hover:text-indigo-500"
               >
-                Catalog
+                {GENERAL_CATALOG}
                 <span aria-hidden="true"> &rarr;</span>
               </button>
             </Link>
@@ -383,7 +341,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     context.res.setHeader('set-cookie', `basketId=${basketRef}`)
   }
 
-  const response = await getSsrCart()({
+  const response = await getCart()({
     basketId: basketRef,
   })
 

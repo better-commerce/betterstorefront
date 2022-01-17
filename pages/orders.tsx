@@ -3,6 +3,7 @@ import commerce from '@lib/api/commerce'
 import { Bag } from '@components/icons'
 import { Layout } from '@components/common'
 import { Container, Text } from '@components/ui'
+import { MESSAGE_NO_ORDER_FOUND, MESSAGE_NO_ORDER_FOUND_TEXT } from '@components/utils/textVariables'
 
 export async function getStaticProps({
   preview,
@@ -29,10 +30,10 @@ export default function Orders() {
           <Bag className="absolute" />
         </span>
         <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
-          No orders found
+          {MESSAGE_NO_ORDER_FOUND}
         </h2>
         <p className="text-accent-6 px-10 text-center pt-2">
-          Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.
+          {MESSAGE_NO_ORDER_FOUND_TEXT}
         </p>
       </div>
     </Container>

@@ -8,6 +8,14 @@ import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { LoadingDots } from '@components/ui'
+import {
+  WISHLIST_TITLE,
+  WISHLIST_SUB_TITLE,
+  GENERAL_VIEW_PRODUCT,
+  GENERAL_ADD_TO_BASKET,
+  GENERAL_REMOVE
+} from '@components/utils/textVariables'
+
 export default function Wishlist() {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -79,13 +87,13 @@ export default function Wishlist() {
         <div className="max-w-4xl mx-auto">
           <div className="px-4 sm:px-0">
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-              Wishlist
+              {WISHLIST_TITLE}
             </h1>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
             {!data.length && !isLoading && (
-              <div>Oh-no! Your wishlist is empty.</div>
+              <div>{WISHLIST_SUB_TITLE}</div>
             )}
             {isLoading ? <LoadingDots /> : null}
             <div className="space-y-16 sm:space-y-24">
@@ -117,7 +125,7 @@ export default function Wishlist() {
                                 href={product.slug}
                                 className="text-indigo-600 hover:text-indigo-500"
                               >
-                                View Product
+                                {GENERAL_VIEW_PRODUCT}
                               </a>
                             </Link>
                             <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
@@ -125,7 +133,7 @@ export default function Wishlist() {
                                 onClick={() => handleAddToCart(product)}
                                 className="text-indigo-600 hover:text-indigo-500"
                               >
-                                Add to basket
+                                {GENERAL_ADD_TO_BASKET}
                               </button>
                             </div>
                             <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
@@ -135,7 +143,7 @@ export default function Wishlist() {
                                 }
                                 className="text-red-600 hover:text-red-500"
                               >
-                                Remove
+                                {GENERAL_REMOVE}
                               </button>
                             </div>
                           </div>

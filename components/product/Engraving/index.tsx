@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import axios from 'axios'
 import Form from './form'
+import { GENERAL_CLOSE, GENERAL_ENGRAVING, GENERAL_ENGRAVING_PERSONALIZE_BOTTLE } from '@components/utils/textVariables'
 export default function Engraving({
   onClose = () => {},
   engravingPrice = '5.99$',
@@ -56,15 +57,15 @@ export default function Engraving({
                   className="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8"
                   onClick={() => onClose(false)}
                 >
-                  <span className="sr-only">Close</span>
+                  <span className="sr-only">{GENERAL_CLOSE}</span>
                   <XIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
                 {/* <div className="text-gray-900">hello</div>  */}
                 <section className="flex p-10 w-full flex-col">
                   <div className="py-5 flex flex-col">
-                    <h1 className="text-gray-900 text-lg">Engraving</h1>
+                    <h1 className="text-gray-900 text-lg">{GENERAL_ENGRAVING}</h1>
                     <span className="py-2 text-gray-700 text-md">
-                      Personalize your bottle for only {engravingPrice}{' '}
+                      {GENERAL_ENGRAVING_PERSONALIZE_BOTTLE} {engravingPrice}{' '}
                     </span>
                   </div>
                   <Form submitForm={submitForm} />

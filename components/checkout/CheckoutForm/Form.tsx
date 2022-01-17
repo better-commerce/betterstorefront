@@ -2,6 +2,7 @@ import { Formik, Form, Field } from 'formik'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import { CheckCircleIcon } from '@heroicons/react/solid'
 import { useState } from 'react'
+import { BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS, GENERAL_CANCEL } from '@components/utils/textVariables'
 
 export default function AddressForm({
   initialValues = {},
@@ -272,7 +273,7 @@ export default function AddressForm({
                     onClick={() => setNewFormOpen(false)}
                     className="max-w-xs m-2 flex-1 bg-gray-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                   >
-                    Cancel
+                    {GENERAL_CANCEL}
                   </button>
                 )}
               </div>
@@ -294,7 +295,7 @@ export default function AddressForm({
                   htmlFor={`sameAddress`}
                   className="ml-3 text-sm text-gray-500"
                 >
-                  My billing and delivery address are the same
+                  {BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS}
                 </label>
               </div>
             )}
@@ -313,7 +314,7 @@ export default function AddressForm({
                   onClick={closeEditMode}
                   className="max-w-xs flex-1 bg-gray-500 border border-transparent rounded-md py-3 ml-5 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
-                  Cancel
+                  {GENERAL_CANCEL}
                 </button>
               )}
             </div>

@@ -10,6 +10,7 @@ import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { GENERAL_LOGIN, VALIDATION_NO_ACCOUNT_FOUND, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
 
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
@@ -37,7 +38,7 @@ function LoginPage({ recordEvent, setEntities }: any) {
   if (user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-        You're already logged in
+        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
       </div>
     )
   }
@@ -76,14 +77,14 @@ function LoginPage({ recordEvent, setEntities }: any) {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
-            Login
+          {GENERAL_LOGIN}
           </h2>
         </div>
         <Form btnText="Login" type="login" onSubmit={handleUserLogin} />
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && (
             <span className="text-red-700 text-lg">
-              No account has been found with this email/password
+               {VALIDATION_NO_ACCOUNT_FOUND}
             </span>
           )}
         </div>

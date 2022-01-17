@@ -2,12 +2,13 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { registrationConfig, loginConfig } from './config'
 import LoadingDots from '@components/ui/LoadingDots'
+import { GENERAL_REGISTER, VALIDATION_PASSWORD_MUST_MATCH } from '@components/utils/textVariables'
 const registerSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
   password: Yup.string().min(8).max(24).required(),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .oneOf([Yup.ref('password'), null], VALIDATION_PASSWORD_MUST_MATCH)
     .required(),
 })
 
@@ -44,7 +45,7 @@ const VALUES_MAP: any = {
 export default function CustomerForm({
   type = 'register',
   onSubmit = () => {},
-  btnText = 'Register',
+  btnText = GENERAL_REGISTER,
 }: any) {
   const { config, initialValues, schema } = VALUES_MAP[type]
 

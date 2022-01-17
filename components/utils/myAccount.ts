@@ -1,33 +1,42 @@
+import {
+  GENERAL_MY_ORDERS,
+  GENERAL_MY_RETURNS,
+  WISHLIST_TITLE,
+  GENERAL_MY_DETAILS,
+  ADDRESS_BOOK_TITLE,
+  GENERAL_CONTACT_PREFERENCES
+} from '@components/utils/textVariables'
+
 export const config: any = [
   {
     type: 'tab',
-    text: 'My Orders',
+    text: GENERAL_MY_ORDERS,
     props: 'orders',
   },
   {
     type: 'tab',
-    text: 'My Returns',
+    text: GENERAL_MY_RETURNS,
     props: 'returns',
   },
   {
     type: 'tab',
-    text: 'Wishlist',
+    text: WISHLIST_TITLE,
     props: 'wishlist',
   },
   {
     type: 'tab',
-    text: 'My Details',
+    text: GENERAL_MY_DETAILS,
     props: 'details',
   },
   {
     type: 'tab',
-    text: 'Address Book',
+    text: ADDRESS_BOOK_TITLE,
     props: 'address-book',
   },
 
   {
     type: 'tab',
-    text: 'Contact Preferences',
+    text: GENERAL_CONTACT_PREFERENCES,
     props: 'contact',
   },
 ]

@@ -25,6 +25,25 @@ import {
   XIcon,
 } from '@heroicons/react/outline'
 import classNames from '@components/utils/classNames'
+import {
+  GENERAL_RECENT_ORDERS,
+  RETURN_ORDER_TITLE,
+  RETURN_ORDER_TEXT,
+  GENERAL_ORDER_NUMBER,
+  GENERAL_ORDER_PLACED_ON,
+  GENERAL_DATE_PLACED,
+  GENERAL_TOTAL_AMOUNT,
+  GENERAL_VIEW_ORDER,
+  GENERAL_VIEW_PRODUCT,
+  GENERAL_VIEW_INVOICE,
+  RETURN_FOR_ORDER,
+  GENERAL_BUY_AGAIN,
+  GENERAL_DELIVERED,
+  GENERAL_ON_TEXT,
+  ORDER_STATUS_OUT_FOR_DELIVERY,
+  ORDER_STATUS_CANCELLED
+} from '@components/utils/textVariables'
+
 
 const navigation = {
   categories: [
@@ -222,23 +241,23 @@ export default function MyReturns() {
         <div className="max-w-4xl mx-auto">
           <div className="px-4 sm:px-0">
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-              Return history
+              {RETURN_ORDER_TITLE}
             </h1>
             <p className="mt-2 text-sm text-gray-500">
-              Check the products you've returned
+              {RETURN_ORDER_TEXT}
             </p>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
             <h2 id="recent-heading" className="sr-only">
-              Recent orders
+              {GENERAL_RECENT_ORDERS}
             </h2>
 
             <div className="space-y-16 sm:space-y-24">
               {orders.map((order) => (
                 <div key={order.number}>
                   <h3 className="sr-only">
-                    Order placed on{' '}
+                    {GENERAL_ORDER_PLACED_ON}{' '}
                     <time dateTime={order.datetime}>{order.date}</time>
                   </h3>
 
@@ -246,20 +265,20 @@ export default function MyReturns() {
                     <dl className="divide-y divide-gray-200 space-y-4 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-6 lg:w-1/2 lg:flex-none lg:gap-x-8">
                       <div className="flex justify-between md:block">
                         <dt className="font-medium text-gray-900">
-                          Order number
+                          {GENERAL_ORDER_NUMBER}
                         </dt>
                         <dd className="md:mt-1">{order.number}</dd>
                       </div>
                       <div className="flex justify-between pt-4 md:block md:pt-0">
                         <dt className="font-medium text-gray-900">
-                          Date placed
+                          {GENERAL_DATE_PLACED}
                         </dt>
                         <dd className="md:mt-1">
                           <time dateTime={order.datetime}>{order.date}</time>
                         </dd>
                       </div>
                       <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
-                        <dt>Total amount</dt>
+                        <dt>{GENERAL_TOTAL_AMOUNT}</dt>
                         <dd className="md:mt-1">{order.total}</dd>
                       </div>
                     </dl>
@@ -268,16 +287,16 @@ export default function MyReturns() {
                         href={order.href}
                         className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                       >
-                        View Order
+                        {GENERAL_VIEW_ORDER}
                         <span className="sr-only">{order.number}</span>
                       </a>
                       <a
                         href={order.invoiceHref}
                         className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                       >
-                        View Invoice
+                        {GENERAL_VIEW_INVOICE}
                         <span className="sr-only">
-                          for order {order.number}
+                          {RETURN_FOR_ORDER} {order.number}
                         </span>
                       </a>
                     </div>
@@ -307,30 +326,30 @@ export default function MyReturns() {
                                   href={product.href}
                                   className="text-indigo-600 hover:text-indigo-500"
                                 >
-                                  View Product
+                                  {GENERAL_VIEW_PRODUCT}
                                 </a>
                                 <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                                   <a
                                     href="#"
                                     className="text-indigo-600 hover:text-indigo-500"
                                   >
-                                    Buy Again
+                                    {GENERAL_BUY_AGAIN}
                                   </a>
                                 </div>
                               </div>
                             </div>
                             <div className="mt-6 font-medium">
-                              {product.status === 'delivered' ? (
+                              {product.status === GENERAL_DELIVERED ? (
                                 <div className="flex space-x-2">
                                   <CheckIcon
                                     className="flex-none w-6 h-6 text-green-500"
                                     aria-hidden="true"
                                   />
                                   <p>
-                                    Delivered
+                                    {GENERAL_DELIVERED}
                                     <span className="hidden sm:inline">
                                       {' '}
-                                      on{' '}
+                                      {GENERAL_ON_TEXT}{' '}
                                       <time dateTime={product.datetime}>
                                         {product.date}
                                       </time>
@@ -338,9 +357,9 @@ export default function MyReturns() {
                                   </p>
                                 </div>
                               ) : product.status === 'out-for-delivery' ? (
-                                <p>Out for delivery</p>
+                                <p>{ORDER_STATUS_OUT_FOR_DELIVERY}</p>
                               ) : product.status === 'cancelled' ? (
-                                <p className="text-gray-500">Cancelled</p>
+                                <p className="text-gray-500">{ORDER_STATUS_CANCELLED}</p>
                               ) : null}
                             </div>
                           </div>

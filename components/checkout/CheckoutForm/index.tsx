@@ -26,6 +26,15 @@ import { asyncHandler } from '@components/account/Address/AddressBook'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import setSessionIdCookie from '@components/utils/setSessionId'
+import { 
+  BILLING_INFORMATION, 
+  BTN_DELIVER_TO_THIS_ADDRESS, 
+  GENERAL_CHECKOUT, 
+  GENERAL_PAYMENT, 
+  GENERAL_SAVE_CHANGES, 
+  SHIPPING_INFORMATION 
+} from '@components/utils/textVariables'
+
 export default function CheckoutForm({
   cart,
   user,
@@ -610,7 +619,7 @@ export default function CheckoutForm({
   return (
     <div className="bg-gray-50 relative">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 className="sr-only">Checkout</h2>
+        <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
         <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
           <div>
             {!isShippingDisabled && (
@@ -626,7 +635,7 @@ export default function CheckoutForm({
             {state.isCNC || isShippingDisabled ? null : (
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <h2 className="text-lg font-semibold text-gray-900">
-                  Shipping information
+                 {SHIPPING_INFORMATION}
                 </h2>
                 {state?.isDeliveryMethodSelected ? (
                   <>
@@ -642,7 +651,7 @@ export default function CheckoutForm({
                       config={shippingFormConfig}
                       initialValues={defaultShippingAddress}
                       isInfoCompleted={state?.isShippingInformationCompleted}
-                      btnTitle="Deliver to this address"
+                      btnTitle={BTN_DELIVER_TO_THIS_ADDRESS}
                       addresses={addresses}
                       retrieveAddress={retrieveAddress}
                       handleNewAddress={handleNewAddress}
@@ -662,7 +671,7 @@ export default function CheckoutForm({
             {/* Payment */}
             <div className="mt-6 border-t border-gray-200 pt-6">
               <h2 className="text-lg font-semibold text-gray-900">
-                Billing information
+              {BILLING_INFORMATION}
               </h2>
               {(state?.isShippingInformationCompleted ||
                 state.isCNC ||
@@ -683,7 +692,7 @@ export default function CheckoutForm({
                   initialValues={defaultBillingAddress}
                   retrieveAddress={retrieveAddress}
                   isInfoCompleted={state?.isPaymentInformationCompleted}
-                  btnTitle="Save"
+                  btnTitle={GENERAL_SAVE_CHANGES}
                   addresses={addresses}
                   isGuest={cartItems.isGuestCheckout}
                   setAddress={setBillingInformation}
@@ -692,7 +701,7 @@ export default function CheckoutForm({
               )}
             </div>
             <div className="mt-6 border-t border-gray-200 pt-6">
-              <h2 className="text-lg font-semibold text-gray-900">Payment</h2>
+              <h2 className="text-lg font-semibold text-gray-900">{GENERAL_PAYMENT}</h2>
               {state.isPaymentInformationCompleted && (
                 <Payments
                   handlePaymentMethod={handlePaymentMethod}

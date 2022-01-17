@@ -1,5 +1,21 @@
 import * as Yup from 'yup'
 import countryList from '@components/utils/countryList'
+import {
+  GENERAL_TITLE,
+  GENERAL_MISS,
+  GENERAL_MR,
+  GENERAL_MRS,
+  GENERAL_FIRST_NAME,
+  GENERAL_LAST_NAME,
+  GENERAL_ADDRESS_LINE1,
+  GENERAL_ADDRESS_LINE2,
+  GENERAL_CITY,
+  GENERAL_POSTCODE,
+  GENERAL_COUNTRY,
+  GENERAL_PHONE,
+  GENERAL_IS_DEFAULT_DELIVERY_ADDRESS,
+  GENERAL_IS_DEFAULT_BILLING_ADDRESS,
+} from '@components/utils/textVariables'
 
 export const formConfig = [
   {
@@ -7,96 +23,84 @@ export const formConfig = [
     name: 'title',
     options: [
       {
-        title: 'Title',
-        value: 'Title',
+        title: GENERAL_TITLE,
+        value: GENERAL_TITLE,
       },
       {
-        title: 'Miss',
-        value: 'Miss',
+        title: GENERAL_MISS,
+        value: GENERAL_MISS,
       },
       {
-        title: 'Mr',
-        value: 'Mr',
+        title: GENERAL_MR,
+        value: GENERAL_MR,
       },
       {
-        title: 'Mrs',
-        value: 'Mrs',
+        title: GENERAL_MRS,
+        value: GENERAL_MRS,
       },
     ],
-    label: 'Title',
+    label: GENERAL_TITLE,
   },
   {
     type: 'text',
     name: 'firstName',
-    placeholder: 'First name',
-    label: 'First name',
+    placeholder: GENERAL_FIRST_NAME,
+    label: GENERAL_FIRST_NAME,
   },
   {
     type: 'text',
     name: 'lastName',
-    placeholder: 'Last name',
-    label: 'Last name',
+    placeholder: GENERAL_LAST_NAME,
+    label: GENERAL_LAST_NAME,
   },
   {
     type: 'text',
     name: 'address1',
-    placeholder: 'Address line 1',
-    label: 'Address line 1',
+    placeholder: GENERAL_ADDRESS_LINE1,
+    label: GENERAL_ADDRESS_LINE1,
   },
   {
     type: 'text',
     name: 'address2',
-    placeholder: 'Address line 2',
-    label: 'Address line 2',
+    placeholder: GENERAL_ADDRESS_LINE2,
+    label: GENERAL_ADDRESS_LINE2,
   },
   {
     type: 'text',
     name: 'city',
-    placeholder: 'Town / city',
-    label: 'Town / city',
+    placeholder: GENERAL_CITY,
+    label: GENERAL_CITY,
   },
   {
     type: 'text',
     name: 'postCode',
-    placeholder: 'Postcode',
-    label: 'Postcode',
+    placeholder: GENERAL_POSTCODE,
+    label: GENERAL_POSTCODE,
   },
   {
     as: 'select',
     name: 'country',
     options: countryList,
-    label: 'Country',
+    label: GENERAL_COUNTRY,
   },
   {
     type: 'phone',
     name: 'phoneNo',
-    placeholder: 'Phone',
-    label: 'Phone',
+    placeholder: GENERAL_PHONE,
+    label: GENERAL_PHONE,
   },
-  // {
-  //   customComponent: 'CustomCheckbox',
-  //   name: 'isDefault',
-  //   label: 'Is default address',
-  //   className: 'mb-2 mt-2',
-  // },
   {
     customComponent: 'CustomCheckbox',
     name: 'isDefaultDelivery',
-    label: 'Is Default Delivery Address',
+    label: GENERAL_IS_DEFAULT_DELIVERY_ADDRESS,
     className: 'flex-inline',
   },
   {
     customComponent: 'CustomCheckbox',
     name: 'isDefaultBilling',
-    label: 'Is Default Billing Address',
+    label: GENERAL_IS_DEFAULT_BILLING_ADDRESS,
     className: 'flex-inline',
   },
-  // {
-  //   customComponent: 'CustomCheckbox',
-  //   name: 'isDefaultForSubscription',
-  //   label: 'Is default subscription',
-  //   className: ' ',
-  // },
 ]
 
 export const schema = Yup.object({

@@ -10,6 +10,16 @@ import useCheckout from '@framework/checkout/use-checkout'
 import ShippingWidget from '../ShippingWidget'
 import PaymentWidget from '../PaymentWidget'
 import s from './CheckoutSidebarView.module.css'
+import { 
+  BTN_CONFIRM_PURCHASE, 
+  CALCULATED_AT_CHECKOUT, 
+  GENERAL_CHECKOUT, 
+  GENERAL_FREE, 
+  GENERAL_SHIPPING, 
+  GENERAL_SUBTOTAL, 
+  GENERAL_TAXES, 
+  GENERAL_TOTAL 
+} from '@components/utils/textVariables'
 
 const CheckoutSidebarView: FC = () => {
   const { setSidebarView, closeSidebar } = useUI()
@@ -31,7 +41,7 @@ const CheckoutSidebarView: FC = () => {
       <div className="px-4 sm:px-6 flex-1">
         <Link href="/cart">
           <a>
-            <Text variant="sectionHeading">Checkout</Text>
+            <Text variant="sectionHeading">{GENERAL_CHECKOUT}</Text>
           </a>
         </Link>
 
@@ -53,19 +63,19 @@ const CheckoutSidebarView: FC = () => {
       >
         <ul className="pb-2">
           <li className="flex justify-between py-1">
-            <span>Subtotal</span>
+            <span>{GENERAL_SUBTOTAL}</span>
           </li>
           <li className="flex justify-between py-1">
-            <span>Taxes</span>
-            <span>Calculated at checkout</span>
+            <span>{GENERAL_TAXES}</span>
+            <span>{CALCULATED_AT_CHECKOUT}</span>
           </li>
           <li className="flex justify-between py-1">
-            <span>Shipping</span>
-            <span className="font-bold tracking-wide">FREE</span>
+            <span>{GENERAL_SHIPPING}</span>
+            <span className="font-bold tracking-wide">{GENERAL_FREE}</span>
           </li>
         </ul>
         <div className="flex justify-between border-t border-accent-2 py-3 font-bold mb-2">
-          <span>Total</span>
+          <span>{GENERAL_TOTAL}</span>
         </div>
         <div>
           {/* Once data is correcly filled */}
@@ -74,7 +84,7 @@ const CheckoutSidebarView: FC = () => {
             width="100%"
             disabled={!checkoutData?.hasPayment || !checkoutData?.hasShipping}
           >
-            Confirm Purchase
+            {BTN_CONFIRM_PURCHASE}
           </Button>
         </div>
       </form>
