@@ -7,6 +7,7 @@ import ProductGrid from '@components/product/Grid'
 import ProductFilters from '@components/product/Filters'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
+import { GENERAL_CATALOG } from '@components/utils/textVariables'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -238,7 +239,7 @@ function Search({ query, setEntities, recordEvent }: any) {
       <main className="pb-24">
         <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-            Catalog
+            {GENERAL_CATALOG}
           </h1>
           <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
             {data.products.total} results
