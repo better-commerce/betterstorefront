@@ -2,7 +2,14 @@ import { Formik, Form, Field } from 'formik'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import { CheckCircleIcon } from '@heroicons/react/solid'
 import { useState } from 'react'
-import { ADD_ADDRESS, BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS, BTN_FIND, BTN_SAVE, ENTER_ADDRESS_MANUALY, GENERAL_CANCEL, GENERAL_CLOSE } from '@components/utils/textVariables'
+import { 
+  ADD_ADDRESS, 
+  BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS, 
+  BTN_FIND, BTN_SAVE, 
+  ENTER_ADDRESS_MANUALY, 
+  GENERAL_CANCEL, 
+  GENERAL_CLOSE 
+} from '@components/utils/textVariables'
 
 export default function AddressForm({
   initialValues = {},

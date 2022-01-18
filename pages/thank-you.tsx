@@ -6,7 +6,30 @@ import axios from 'axios'
 import { NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
 const defaultModel: any = {}
 import { LoadingDots } from '@components/ui'
-import { GENERAL_ADDRESSES, GENERAL_BILLING_ADDRESS, GENERAL_DELIVERED_BY, GENERAL_ITEMS, GENERAL_ON_THE_WAY, GENERAL_ORDER_WILL_BE_WITH_YOU_SOON, GENERAL_PAYMENT, GENERAL_PAYMENT_METHOD, GENERAL_PRICE, GENERAL_QUANTITY, GENERAL_SHIPPING, GENERAL_SHIPPING_ADDRESS, GENERAL_SHIPPING_METHOD, GENERAL_SUBTOTAL, GENERAL_SUMMARY, GENERAL_THANK_YOU, GENERAL_TOTAL, GENERAL_YOUR_ORDER, LOADING_YOUR_ORDERS, NO_ORDER_PROVIDED, SUBTOTAL_INCLUDING_TAX, YOUR_INFORMATION } from '@components/utils/textVariables'
+import { 
+  BTN_BACK_TO_HOME, 
+  GENERAL_ADDRESSES, 
+  GENERAL_BILLING_ADDRESS, 
+  GENERAL_DELIVERED_BY, 
+  GENERAL_ITEMS, 
+  GENERAL_ON_THE_WAY, 
+  GENERAL_ORDER_WILL_BE_WITH_YOU_SOON, 
+  GENERAL_PAYMENT, 
+  GENERAL_PAYMENT_METHOD, 
+  GENERAL_PRICE, 
+  GENERAL_QUANTITY, 
+  GENERAL_SHIPPING, 
+  GENERAL_SHIPPING_ADDRESS, 
+  GENERAL_SHIPPING_METHOD, 
+  GENERAL_SUMMARY,
+  GENERAL_THANK_YOU, 
+  GENERAL_TOTAL, 
+  GENERAL_YOUR_ORDER, 
+  LOADING_YOUR_ORDERS, 
+  NO_ORDER_PROVIDED, 
+  SUBTOTAL_INCLUDING_TAX, 
+  YOUR_INFORMATION 
+} from '@components/utils/textVariables'
 
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState(defaultModel)
@@ -211,6 +234,13 @@ export default function OrderConfirmation() {
             </div>
           </section>
         ) : null}
+        <div className="max-w-xl">
+          <Link href={`/`} passHref>
+            <a href='/' className='text-indigo-600 font-medium hover:text-indigo-500'>
+              {BTN_BACK_TO_HOME}
+            </a>
+          </Link>
+        </div>
       </div>
     </main>
   )
