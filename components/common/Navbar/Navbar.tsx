@@ -14,17 +14,17 @@ import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
 import LanguageSwitcher from './LanguageSwitcher'
 import Cookies from 'js-cookie'
-import { 
-  BTN_SIGN_OUT, 
-  GENERAL_LOGIN, 
-  GENERAL_MY_ORDERS, 
-  GENERAL_RECENTLY_VIEWED, 
-  GENERAL_REGISTER, 
+import {
+  BTN_SIGN_OUT,
+  GENERAL_LOGIN,
+  GENERAL_MY_ORDERS,
+  GENERAL_RECENTLY_VIEWED,
+  GENERAL_REGISTER,
   MY_ACCOUNT_TITLE,
-  GENERAL_WORKFLOW_TITLE, 
+  GENERAL_WORKFLOW_TITLE,
   SELECT_CURRENCY,
   SELECT_LANGUAGE,
-  GENERAL_ITEM_IN_CART
+  GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
 
 interface Props {
