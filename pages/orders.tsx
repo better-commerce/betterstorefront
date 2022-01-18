@@ -3,7 +3,11 @@ import commerce from '@lib/api/commerce'
 import { Bag } from '@components/icons'
 import { Layout } from '@components/common'
 import { Container, Text } from '@components/ui'
-import { MESSAGE_NO_ORDER_FOUND, MESSAGE_NO_ORDER_FOUND_TEXT } from '@components/utils/textVariables'
+import { 
+  GENERAL_MY_ORDERS, 
+  MESSAGE_NO_ORDER_FOUND, 
+  MESSAGE_NO_ORDER_FOUND_TEXT 
+} from '@components/utils/textVariables'
 
 export async function getStaticProps({
   preview,
@@ -24,7 +28,7 @@ export async function getStaticProps({
 export default function Orders() {
   return (
     <Container>
-      <Text variant="pageHeading">My Orders</Text>
+      <Text variant="pageHeading">{GENERAL_MY_ORDERS}</Text>
       <div className="flex-1 p-24 flex flex-col justify-center items-center ">
         <span className="border border-dashed border-secondary rounded-full flex items-center justify-center w-16 h-16 p-12 bg-primary text-primary">
           <Bag className="absolute" />

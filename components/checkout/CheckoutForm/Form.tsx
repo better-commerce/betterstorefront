@@ -2,7 +2,7 @@ import { Formik, Form, Field } from 'formik'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import { CheckCircleIcon } from '@heroicons/react/solid'
 import { useState } from 'react'
-import { BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS, GENERAL_CANCEL } from '@components/utils/textVariables'
+import { ADD_ADDRESS, BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS, BTN_FIND, BTN_SAVE, ENTER_ADDRESS_MANUALY, GENERAL_CANCEL, GENERAL_CLOSE } from '@components/utils/textVariables'
 
 export default function AddressForm({
   initialValues = {},
@@ -195,7 +195,7 @@ export default function AddressForm({
                             onClick={() => setItemsToHide([])}
                             className="text-gray-400 underline cursor-pointer"
                           >
-                            Enter address manually
+                            {ENTER_ADDRESS_MANUALY}
                           </span>
                         )}
                         {formItem.addressFinder &&
@@ -207,7 +207,7 @@ export default function AddressForm({
                                 onClick={() => setAddressList([])}
                                 className="py-2 px-2 text-white cursor-pointer"
                               >
-                                Close
+                                {GENERAL_CLOSE}
                               </h2>
                             </div>
                             {addressList.map(
@@ -245,7 +245,7 @@ export default function AddressForm({
                           style={{ maxWidth: '20%' }}
                           className="ml-3 mt-8 mb-8 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-2 px-1 flex items-center justify-center font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                         >
-                          Find
+                          {BTN_FIND}
                         </button>
                       ) : null}
                       {errors[formItem.name] && touched[formItem.name] ? (
@@ -265,7 +265,7 @@ export default function AddressForm({
                   onClick={() => handleNewFormButton(values)}
                   className="max-w-xs m-2 flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
-                  {isFormOpen ? 'Save' : 'Add new address'}
+                  {isFormOpen ? BTN_SAVE : ADD_ADDRESS}
                 </button>
                 {isFormOpen && (
                   <button
