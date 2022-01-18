@@ -7,7 +7,11 @@ import { useCustomer } from '@framework/customer'
 import { WishlistCard } from '@components/wishlist'
 import useWishlist from '@framework/wishlist/use-wishlist'
 import rangeMap from '@lib/range-map'
-import { MESSAGE_NO_ORDER_FOUND_TEXT, WISHLIST_SUB_TITLE } from '@components/utils/textVariables'
+import { 
+  GENERAL_WISHLIST, 
+  MESSAGE_NO_ORDER_FOUND_TEXT, 
+  WISHLIST_SUB_TITLE
+} from '@components/utils/textVariables'
 
 export async function getStaticProps({
   preview,
@@ -43,7 +47,9 @@ export default function Wishlist() {
   return (
     <Container>
       <div className="mt-3 mb-20">
-        <Text variant="pageHeading">My Wishlist</Text>
+        <Text variant="pageHeading">
+          {GENERAL_WISHLIST}
+        </Text>
         <div className="group flex flex-col">
           {isLoading ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
