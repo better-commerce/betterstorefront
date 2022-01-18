@@ -23,7 +23,10 @@ import SearchWrapper from '@components/search/index'
 import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import Router from 'next/router'
 import ProgressBar from '@components/ui/ProgressBar'
-import { BTN_ACCEPT_COOKIE, GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
+import {
+  BTN_ACCEPT_COOKIE,
+  GENERAL_COOKIE_TEXT,
+} from '@components/utils/textVariables'
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center fixed z-50 justify-center p-3">
     <LoadingDots />
@@ -130,6 +133,10 @@ const Layout: FC<Props> = ({
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
+
+  const sortedData = data.nav.sort(
+    (a: any, b: any) => a.displayOrder - b.displayOrder
+  )
   return (
     <CommerceProvider locale={locale}>
       <Script
@@ -144,7 +151,7 @@ const Layout: FC<Props> = ({
         )}
         <Navbar
           currencies={config.currencies}
-          config={data.nav}
+          config={sortedData}
           languages={config.languages}
         />
         <main className="fit">{children}</main>
