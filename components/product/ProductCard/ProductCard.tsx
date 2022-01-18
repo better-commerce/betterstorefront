@@ -122,7 +122,7 @@ const ProductCard: FC<Props> = ({ product }) => {
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: {GENERAL_ADD_TO_BASKET},
+      title: GENERAL_ADD_TO_BASKET,
       action: async () => {
         const item = await cartHandler().addToCart(
           {
