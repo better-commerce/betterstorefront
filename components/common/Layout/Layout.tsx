@@ -134,8 +134,9 @@ const Layout: FC<Props> = ({
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
-  const { locale = 'en-US' } = useRouter()
+  const { locale = 'en-US', ...rest } = useRouter()
 
+  console.log(useRouter())
   const sortedData = data.nav.sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
