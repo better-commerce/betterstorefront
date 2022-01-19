@@ -80,8 +80,36 @@ const getKeywords = async function () {
   })
 }
 
+const getMicrosites = () => {
+  const microSitesHandler = async () => {
+    const token = await getToken()
+    const url = new URL('/api/v2/content/microsite/all', BASE_URL).href
+    const { data } = await axios({
+      method: 'get',
+      url: url,
+      headers: {
+        DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        Authorization: 'Bearer ' + token,
+      },
+    })
+    return {
+      locales: data.result.map((i) => i.defaultLangCulture),
+      defaultLocale: 'en-US',
+    }
+  }
+  return microSitesHandler()
+}
 handler()
 
+const localeStore = {}
+
+let func = (async () => {
+  let microsites = await getMicrosites()
+  console.log(microsites)
+  localeStore.i18n = microsites
+})()
+
+console.log(localeStore)
 module.exports = {
   //https://nextjs.org/docs/api-reference/next.config.js/redirects nextjs documentation on redirects
   commerce,
@@ -89,4 +117,10 @@ module.exports = {
     const keywords = await getKeywords()
     return keywords
   },
+  i18n: localeStore,
 }
+
+console.log(
+  'next.config.js bettercommerce',
+  JSON.stringify(module.exports, null, 2)
+)
