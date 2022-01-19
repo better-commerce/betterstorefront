@@ -2,7 +2,6 @@ const commerce = require('./commerce.config.json')
 // const fetcher = require('./fetcher')
 const axios = require('axios')
 const path = require('path')
-console.log(__dirname)
 
 const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
 const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
@@ -56,44 +55,6 @@ const getSeoConfig = async function (token) {
     )
   } catch (error) {}
 }
-// getToken().then((res) => {
-//   const INFRA_URL = new URL(INFRA_ENDPOINT, BASE_URL).href
-// axios({
-//   method: 'get',
-//   url: new URL('/api/v2/content/redirects', BASE_URL).href,
-//   headers: {
-//     DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-//     Authorization: 'Bearer ' + res.data.access_token,
-//   },
-//   }).then((redirects) => console.log(redirects))
-// axios({
-//   url: `${INFRA_URL}`,
-//   method: 'get',
-//   headers: {
-//     DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-//     Authorization: 'Bearer ' + res.data.access_token,
-//   },
-// })
-//   .then((infra) => {
-//     const seoConfig = infra.data.result.configSettings
-//       .find((i) => i.configType === 'SeoSettings')
-//       ?.configKeys.reduce((acc, obj) => {
-//         if (obj.key === 'SeoSettings.DefaultTitle')
-//           acc['title'] = obj.value || JSON.stringify(obj.value)
-//         if (obj.key === 'SeoSettings.DefaultMetaDescription')
-//           acc['description'] = obj.value || JSON.stringify(obj.value)
-//         if (obj.key === 'SeoSettings.DefaultMetaKeywords')
-//           acc['keywords'] = obj.value || JSON.stringify(obj.value)
-//         return acc
-//       }, {})
-//     fs.writeFileSync(
-//       path.join(__dirname, '/config/seo.json'),
-//       JSON.stringify(seoConfig),
-//       (err) => console.log(err)
-//     )
-//   })
-//     .catch((err) => console.log(err))
-// })
 
 const handler = async () => {
   const token = await getToken()
@@ -120,7 +81,6 @@ const getKeywords = async function () {
 }
 
 handler()
-getKeywords().then((res) => console.log(res))
 
 module.exports = {
   //https://nextjs.org/docs/api-reference/next.config.js/redirects nextjs documentation on redirects
