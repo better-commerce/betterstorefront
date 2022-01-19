@@ -11,16 +11,15 @@ import {
   SessionIdCookieKey,
   DeviceIdKey,
   NEXT_INFRA_ENDPOINT,
+  NEXT_API_KEYWORDS_ENDPOINT,
 } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import analytics from '@components/services/analytics/analytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { useUI } from '@components/ui/context'
 import setSessionIdCookie from '@components/utils/setSessionId'
+import axios from 'axios'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -53,6 +52,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [appConfig, setAppConfig] = useState({})
   const [location, setUserLocation] = useState({ Ip: '' })
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
+  const [keywordsData, setKeywordsData] = useState([])
   const [isAppLoading, setAppIsLoading] = useState(true)
 
   const Layout = (Component as any).Layout || Noop
@@ -75,10 +75,20 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       TagManager.initialize(tagManagerArgs)
   }
 
+  const fetchKeywords = async function () {
+    try {
+      const { data }: any = await axios.get(NEXT_API_KEYWORDS_ENDPOINT)
+      setKeywordsData(data.result)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     initializeGTM()
     document.body.classList?.remove('loading')
     fetchAppConfig()
+    fetchKeywords()
   }, [])
 
   useLayoutEffect(() => {
@@ -129,6 +139,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
               footer={footer}
               config={appConfig}
               pageProps={pageProps}
+              keywords={keywordsData}
             >
               <Component
                 {...pageProps}
