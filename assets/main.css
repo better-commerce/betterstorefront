@@ -80,3 +80,23 @@
   height: 100%;
   object-fit: cover;
 }
+
+.max-panel{
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.max-panel::-webkit-scrollbar {
+  width: 6px
+}
+
+.max-panel::-webkit-scrollbar-track {
+  background: #fff;
+  opacity: 1
+}
+
+.max-panel::-webkit-scrollbar-thumb {
+  background: #d3d3d36e !important;
+  width: 6px;
+  border-radius: 6px
+}

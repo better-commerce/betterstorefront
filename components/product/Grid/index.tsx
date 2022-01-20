@@ -23,7 +23,7 @@ export default function Grid({
   return (
     <section
       aria-labelledby="products-heading"
-      className="max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8"
+      className="max-w-7xl overflow-hidden sm:px-6 lg:px-8"
     >
       <h2 id="products-heading" className="sr-only">
         {TITLE_PRODUCTS}
@@ -37,9 +37,9 @@ export default function Grid({
           component={
             <div
               className={`-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 ${
-                products.results.length < 4
-                  ? `lg:grid-cols-3`
-                  : 'lg:grid-cols-4'
+                products.results.length < 3
+                  ? `lg:grid-cols-2`
+                  : 'lg:grid-cols-3'
               }`}
             >
               {!products.results.length &&
