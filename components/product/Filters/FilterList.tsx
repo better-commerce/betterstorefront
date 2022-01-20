@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ACTION_TYPES } from 'pages/search'
-import { GENERAL_SEARCH_BRAND } from '@components/utils/textVariables'
+import { BTN_SEARCH } from '@components/utils/textVariables'
 
 const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
@@ -106,14 +106,14 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
       <label htmlFor="search-input" className="sr-only">
-        Brand
+      {BTN_SEARCH}
       </label>
       <input
         id="search-input"
         type="text"
         onChange={(e) => handleSearch(e.target.value)}
-        autoComplete="brand"
-        placeholder={GENERAL_SEARCH_BRAND}
+        autoComplete={BTN_SEARCH}
+        placeholder={BTN_SEARCH}
         className="appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-1 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
       />
     </>
@@ -123,6 +123,12 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
 const getCustomComponent = (type: string) => {
   switch (type) {
     case FILTER_KEYS.BRAND:
+      return (props: any) => <SearchInput {...props} />
+    case FILTER_KEYS.CATEGORY:
+      return (props: any) => <SearchInput {...props} />
+    case FILTER_KEYS.SIZE:
+      return (props: any) => <SearchInput {...props} />
+    case FILTER_KEYS.OCCASION:
       return (props: any) => <SearchInput {...props} />
     default:
       return () => null
@@ -148,6 +154,15 @@ export default function FilterList({
 
   const PROPS_LIST = {
     [FILTER_KEYS.BRAND]: {
+      handleSearch: (value: string) => handleSearch(value),
+    },
+    [FILTER_KEYS.CATEGORY]: {
+      handleSearch: (value: string) => handleSearch(value),
+    },
+    [FILTER_KEYS.SIZE]: {
+      handleSearch: (value: string) => handleSearch(value),
+    },
+    [FILTER_KEYS.OCCASION]: {
       handleSearch: (value: string) => handleSearch(value),
     },
     [FILTER_KEYS.COLOR]: {

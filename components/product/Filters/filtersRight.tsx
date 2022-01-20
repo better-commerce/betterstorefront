@@ -1,6 +1,3 @@
-import { Disclosure } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/solid'
-import classNames from '@components/utils/classNames'
 import FilterList from './FilterList'
 import { GENERAL_FILTER_TITLE } from '@components/utils/textVariables'
 
@@ -33,7 +30,7 @@ export default function FiltersRightOpen({
                   >
                    
                       <>
-                        <h3 className="-mx-2 -my-3 flow-root">
+                        <h3 className="-mx-2 -my-3">
                           <div className="px-2 py-3 bg-white w-full flex items-center justify-between text-sm text-gray-400">
                             <span className="font-medium text-gray-900">
                               {section.name}
@@ -42,7 +39,7 @@ export default function FiltersRightOpen({
                           </div>
                         </h3>
                         <div className="pt-6">
-                          <div className="space-y-6">
+                          <div className="space-y-3 max-panel">
                             <FilterList
                               handleFilters={handleFilters}
                               sectionKey={section.key}
