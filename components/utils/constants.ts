@@ -6,6 +6,7 @@ export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
 export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
 export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
+export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
 export const LOOKBOOK_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook`
 export const SITEVIEW_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/content/siteview`
