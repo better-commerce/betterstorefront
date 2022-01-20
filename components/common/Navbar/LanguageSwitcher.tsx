@@ -35,7 +35,7 @@ export default function CurrencySwitcher({ config, title, action }: any) {
                             'text-left p-2 cursor-pointer hover:bg-gray-200'
                           }
                           onClick={() =>
-                            action({ Language: item.languageCode })
+                            action({ Language: item.languageCulture })
                           }
                         >
                           {item.languageCode} - {item.name}

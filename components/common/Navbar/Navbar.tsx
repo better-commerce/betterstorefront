@@ -94,11 +94,14 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   const configAction = (pair: any) => {
     const value: any = Object.values(pair)[0]
     const key = Object.keys(pair)[0]
+    const { pathname, asPath, query } = Router
     Cookies.set(key, value)
     axios
       .post(NEXT_SET_CONFIG, { obj: pair })
       .then(() => {
-        Router.reload()
+        Router.push({ pathname, query }, asPath, { locale: value })
+
+        // Router.reload()
       })
       .catch((err: any) => console.log(err))
   }

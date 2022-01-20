@@ -9,8 +9,8 @@ import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import {
-  CLOSE_PANEL, 
+import useTranslation, {
+  CLOSE_PANEL,
   GENERAL_SHOPPING_CART,
   WISHLIST_SIDEBAR_MESSAGE,
   GENERAL_CATALOG,
@@ -22,7 +22,7 @@ import {
   GENERAL_TOTAL,
   GENERAL_CHECKOUT,
   GENERAL_CONTINUE_SHOPPING,
-  GENERAL_OR_TEXT
+  GENERAL_OR_TEXT,
 } from '@components/utils/textVariables'
 
 const CartSidebarView: FC = () => {
@@ -30,6 +30,9 @@ const CartSidebarView: FC = () => {
   const { getCart, addToCart } = useCart()
   const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
   const { Basket } = EVENTS_MAP.ENTITY_TYPES
+
+  const content = useTranslation()
+
   useEffect(() => {
     const handleCartitems = async () => {
       const items = await getCart({ basketId })
@@ -137,14 +140,14 @@ const CartSidebarView: FC = () => {
                       <div className="flow-root">
                         {isEmpty && (
                           <div className="text-gray-900 h-full w-full flex flex-col justify-center items-center">
-                             {WISHLIST_SIDEBAR_MESSAGE}
+                            {WISHLIST_SIDEBAR_MESSAGE}
                             <Link href="/search">
                               <button
                                 type="button"
                                 className="text-indigo-600 font-medium hover:text-indigo-500"
                                 onClick={handleClose}
                               >
-                                  {GENERAL_CATALOG}
+                                {GENERAL_CATALOG}
                                 <span aria-hidden="true"> &rarr;</span>
                               </button>
                             </Link>
@@ -190,7 +193,7 @@ const CartSidebarView: FC = () => {
                                           handleItem(product, 'delete')
                                         }
                                       >
-                                         {GENERAL_REMOVE}
+                                        {GENERAL_REMOVE}
                                       </button>
                                       <div className="border px-4 text-gray-900 flex flex-row">
                                         <MinusSmIcon
@@ -292,19 +295,19 @@ const CartSidebarView: FC = () => {
                             className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                             href="/cart"
                           >
-                             {GENERAL_CHECKOUT}
+                            {content.GENERAL_CHECKOUT}
                           </a>
                         </Link>
                       </div>
                       <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
                         <p>
-                        {GENERAL_OR_TEXT}{' '}
+                          {GENERAL_OR_TEXT}{' '}
                           <button
                             type="button"
                             className="text-indigo-600 font-medium hover:text-indigo-500"
                             onClick={handleClose}
                           >
-                             {GENERAL_CONTINUE_SHOPPING}
+                            {GENERAL_CONTINUE_SHOPPING}
                             <span aria-hidden="true"> &rarr;</span>
                           </button>
                         </p>
