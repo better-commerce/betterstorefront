@@ -38,8 +38,8 @@ export default function FiltersRightOpen({
                            
                           </div>
                         </h3>
-                        <div className="pt-6">
-                          <div className="space-y-3 max-panel">
+                        <div className="pt-3">
+                          <div className="space-y-3">
                             <FilterList
                               handleFilters={handleFilters}
                               sectionKey={section.key}
