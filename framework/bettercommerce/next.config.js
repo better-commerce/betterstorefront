@@ -9,6 +9,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BETTERCOMMERCE_BASE_URL
 const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config`
 const fs = require('fs')
+const locales = require('./locales.json')
 
 const url = new URL('oAuth/token', AUTH_URL)
 
@@ -117,7 +118,7 @@ module.exports = {
     const keywords = await getKeywords()
     return keywords
   },
-  i18n: localeStore,
+  i18n: locales,
 }
 
 console.log(
