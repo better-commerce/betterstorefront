@@ -281,7 +281,7 @@ function Search({ query, setEntities, recordEvent }: any) {
             {data.products.total} results
           </h1>
         </div>
-        <div className='grid grid-cols-12 gap-1 max-w-9xl mx-auto overflow-hidden sm:px-6 lg:px-8'>
+        <div className='grid grid-cols-12 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8'>
           {/* <div className='col-span-12 mx-auto'>
             <ProductFilters 
              handleFilters={handleFilters}
