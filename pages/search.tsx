@@ -5,6 +5,8 @@ import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
 import ProductFilters from '@components/product/Filters'
+import ProductFilterRight from '@components/product/Filters/filtersRight'
+import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -279,20 +281,49 @@ function Search({ query, setEntities, recordEvent }: any) {
             {data.products.total} results
           </h1>
         </div>
-        <ProductFilters
-          handleFilters={handleFilters}
-          products={data.products}
-          handleSortBy={handleSortBy}
-          routerFilters={state.filters}
-          clearAll={clearAll}
-          routerSortOption={state.sortBy}
-        />
-        <ProductGrid
-          products={productDataToPass}
-          currentPage={state.currentPage}
-          handlePageChange={handlePageChange}
-          handleInfiniteScroll={handleInfiniteScroll}
-        />
+        <div className='grid grid-cols-12 gap-1 max-w-9xl mx-auto overflow-hidden sm:px-6 lg:px-8'>
+          {/* <div className='col-span-12 mx-auto'>
+            <ProductFilters 
+             handleFilters={handleFilters}
+             handleSortBy={handleSortBy}
+             products={data.products}
+             routerFilters={state.filters}
+             clearAll={clearAll}
+            routerSortOption={state.sortBy}
+            />
+            <ProductGrid
+              products={productDataToPass}
+              currentPage={state.currentPage}
+              handlePageChange={handlePageChange}
+              handleInfiniteScroll={handleInfiniteScroll}
+            />
+          </div> */}
+          <div className='col-span-3'>
+            <ProductFilterRight
+              handleFilters={handleFilters}
+              products={data.products}
+              routerFilters={state.filters}
+            />
+          </div>
+          <div className='col-span-9'>
+            <ProductFiltersTopBar
+              products={data.products}
+              handleSortBy={handleSortBy}
+              routerFilters={state.filters}
+              clearAll={clearAll}
+              routerSortOption={state.sortBy}
+            />
+            <ProductGrid
+              products={productDataToPass}
+              currentPage={state.currentPage}
+              handlePageChange={handlePageChange}
+              handleInfiniteScroll={handleInfiniteScroll}
+            />
+          </div>
+          <div></div>
+        </div>
+        
+        
       </main>
     </div>
   )
