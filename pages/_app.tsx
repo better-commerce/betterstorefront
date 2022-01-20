@@ -20,6 +20,7 @@ import TagManager from 'react-gtm-module'
 import analytics from '@components/services/analytics/analytics'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -55,6 +56,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [keywordsData, setKeywordsData] = useState([])
   const [isAppLoading, setAppIsLoading] = useState(true)
 
+  const router = useRouter()
+  console.log(router)
   const Layout = (Component as any).Layout || Noop
 
   const fetchAppConfig = async () => {
