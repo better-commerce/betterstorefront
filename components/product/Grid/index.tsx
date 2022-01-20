@@ -23,7 +23,7 @@ export default function Grid({
   return (
     <section
       aria-labelledby="products-heading"
-      className="max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8"
+      className="max-w-7xl overflow-hidden sm:px-6 lg:px-8"
     >
       <h2 id="products-heading" className="sr-only">
         {TITLE_PRODUCTS}
