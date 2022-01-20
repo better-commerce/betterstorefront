@@ -118,7 +118,10 @@ module.exports = {
     const keywords = await getKeywords()
     return keywords
   },
-  i18n: locales,
+  i18n: {
+    ...locales,
+    localeDetection: false,
+  },
 }
 
 console.log(
