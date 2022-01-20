@@ -2,8 +2,8 @@
   "name": "nextjs-commerce",
   "version": "1.0.0",
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev",
-    "build": "next build",
+    "dev": "node generate-locales.js && NODE_OPTIONS='--inspect' next dev",
+    "build": "node generate-locales.js && next build",
     "start": "next start",
     "analyze": "BUNDLE_ANALYZE=both yarn build",
     "lint": "next lint",
@@ -32,6 +32,7 @@
     "body-scroll-lock": "^3.1.5",
     "classnames": "^2.3.1",
     "cookie": "^0.4.1",
+    "dotenv": "^14.2.0",
     "email-validator": "^2.0.4",
     "formik": "^2.2.9",
     "immutability-helper": "^3.1.1",
