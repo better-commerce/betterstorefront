@@ -62,7 +62,7 @@ const FilterItem = ({
         <label
           htmlFor={`${optionIdx}-input[]`}
           onClick={handleCheckbox}
-          className="cursor-pointer ml-3 text-sm text-gray-500 relative filter-label"
+          className="cursor-pointer ml-0 text-sm text-gray-500 relative filter-label"
         >
           {isCheckboxChecked && !isCheckboxTickDisabled && (
             <div
@@ -180,21 +180,23 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      {filterItems.map((option: any, optionIdx: number) => {
-        const isChecked = isDefaultChecked(sectionKey, option.name)
-        return (
-          <FilterItem
-            sectionKey={sectionKey}
-            option={option}
-            onSelect={handleFilters}
-            optionIdx={optionIdx}
-            key={optionIdx}
-            isChecked={isChecked}
-            closeSidebar={closeSidebar}
-            {...PROPS_LIST[sectionKey]}
-          />
-        )
-      })}
+      <div className='max-panel space-y-2'>
+        {filterItems.map((option: any, optionIdx: number) => {
+          const isChecked = isDefaultChecked(sectionKey, option.name)
+          return (
+            <FilterItem
+              sectionKey={sectionKey}
+              option={option}
+              onSelect={handleFilters}
+              optionIdx={optionIdx}
+              key={optionIdx}
+              isChecked={isChecked}
+              closeSidebar={closeSidebar}
+              {...PROPS_LIST[sectionKey]}
+            />
+          )
+        })}
+      </div>
     </>
   )
 }
