@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
 import { SearchIcon } from '@heroicons/react/outline'
 import axios from 'axios'
 import { NEXT_SEARCH_PRODUCTS } from '@components/utils/constants'
@@ -11,7 +11,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import { BTN_SEARCH } from '@components/utils/textVariables'
 
-export default function Search({ closeWrapper = () => {} }: any) {
+export default function Search({ closeWrapper = () => {}, keywords }: any) {
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])
@@ -49,6 +49,20 @@ export default function Search({ closeWrapper = () => {} }: any) {
     if (inputValue.length > 2) fetchItems()
   }, [inputValue])
 
+  const handleEnterPress = (e: any) => {
+    const keyword = keywords.find(
+      (keyword: any) => keyword.keywords === inputValue
+    )
+    if (e.key === 'Enter' && keyword) {
+      Router.push(keyword.url)
+    }
+  }
+
+  useLayoutEffect(() => {
+    document.addEventListener('keypress', handleEnterPress)
+    return () => document.removeEventListener('keypress', handleEnterPress)
+  }, [])
+
   useEffect(() => {
     if (path !== Router.asPath) {
       closeWrapper()
@@ -67,7 +81,7 @@ export default function Search({ closeWrapper = () => {} }: any) {
         <div className="flex flex-row mb-10">
           <div className="min-w-searchbar flex flex-row border border-gray-300 rounded-md py-2 px-4 shadow-sm ">
             <label className="hidden" htmlFor={'search-bar'}>
-            {BTN_SEARCH}
+              {BTN_SEARCH}
             </label>
             <input
               id={'search-bar'}

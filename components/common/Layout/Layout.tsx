@@ -51,6 +51,7 @@ interface Props {
   footer: []
   isLocationLoaded: boolean
   config: any
+  keywords: []
 }
 
 const ModalView: FC<{ modalView: string; closeModal(): any }> = ({
@@ -101,6 +102,7 @@ const Layout: FC<Props> = ({
   children,
   config,
   pageProps: { categories = [], ...pageProps },
+  keywords,
   isLocationLoaded,
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
@@ -147,7 +149,10 @@ const Layout: FC<Props> = ({
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
         {showSearchBar && (
-          <SearchWrapper closeWrapper={() => setShowSearchBar(false)} />
+          <SearchWrapper
+            keywords={keywords}
+            closeWrapper={() => setShowSearchBar(false)}
+          />
         )}
         <Navbar
           currencies={config.currencies}
