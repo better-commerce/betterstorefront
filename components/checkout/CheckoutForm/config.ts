@@ -17,8 +17,7 @@ import {
   GENERAL_COUNTRY,
   GENERAL_PHONE,
   GENERAL_ENTER_POSTCODE,
-  GENERAL_ADDRESS_FINDER
-
+  GENERAL_ADDRESS_FINDER,
 } from '@components/utils/textVariables'
 
 export const PANELS = [
@@ -79,6 +78,7 @@ export const shippingFormConfig = [
     placeholder: GENERAL_ENTER_POSTCODE,
     label: GENERAL_ADDRESS_FINDER,
     isFullWidth: true,
+    addressFinder: true,
   },
   {
     type: 'text',
@@ -157,7 +157,7 @@ export const billingFormConfig = [
   {
     type: 'text',
     name: 'firstName',
-    placeholder:GENERAL_FIRST_NAME,
+    placeholder: GENERAL_FIRST_NAME,
     label: GENERAL_FIRST_NAME,
   },
   {
