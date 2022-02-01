@@ -15,7 +15,7 @@ export default function useAddress() {
       City: query.city,
       PostCode: query.postCode,
       Country: query.country,
-      CountryCode: countryCode,
+      CountryCode: query.countryCode || countryCode,
       CustomerId: query.userId,
       PhoneNo: query.phoneNo,
       isDefault: query.isDefault,
@@ -23,6 +23,7 @@ export default function useAddress() {
       isDefaultDelivery: query.isDefaultDelivery || false,
       isDefaultSubscription: query.isDefaultSubscription || false,
     }
+    console.log(data)
     try {
       const response: any = await fetcher({
         url: `${CREATE_ADDRESS_ENDPOINT}`,

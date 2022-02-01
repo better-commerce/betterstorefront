@@ -26,13 +26,13 @@ import { asyncHandler } from '@components/account/Address/AddressBook'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import setSessionIdCookie from '@components/utils/setSessionId'
-import { 
-  BILLING_INFORMATION, 
-  BTN_DELIVER_TO_THIS_ADDRESS, 
-  GENERAL_CHECKOUT, 
-  GENERAL_PAYMENT, 
-  GENERAL_SAVE_CHANGES, 
-  SHIPPING_INFORMATION 
+import {
+  BILLING_INFORMATION,
+  BTN_DELIVER_TO_THIS_ADDRESS,
+  GENERAL_CHECKOUT,
+  GENERAL_PAYMENT,
+  GENERAL_SAVE_CHANGES,
+  SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
 
 export default function CheckoutForm({
@@ -179,9 +179,10 @@ export default function CheckoutForm({
     const newValues = {
       ...values,
       userId: user.userId,
-      country: state.deliveryMethod.value,
-      countryCode: state.deliveryMethod.code,
+      country: state.deliveryMethod.name,
+      countryCode: state.deliveryMethod.twoLetterIsoCode,
     }
+
     createAddress(newValues)
       .then((response: any) => {
         callback()
@@ -282,13 +283,13 @@ export default function CheckoutForm({
       const data = {
         billingAddress: {
           ...billingInfoClone,
-          country: state.deliveryMethod.value,
-          countryCode: state.deliveryMethod.code,
+          country: state.deliveryMethod.name,
+          countryCode: state.deliveryMethod.twoLetterIsoCode,
         },
         shippingAddress: {
           ...shippingClone,
-          country: state.deliveryMethod.value,
-          countryCode: state.deliveryMethod.code,
+          country: state.deliveryMethod.name,
+          countryCode: state.deliveryMethod.twoLetterIsoCode,
         },
       }
 
@@ -365,13 +366,13 @@ export default function CheckoutForm({
       basket: cartItems,
       billingAddress: {
         ...billingInfoClone,
-        country: state.deliveryMethod.value,
-        countryCode: state.deliveryMethod.code,
+        country: state.deliveryMethod.name,
+        countryCode: state.deliveryMethod.twoLetterIsoCode,
       },
       shippingAddress: {
         ...shippingClone,
-        country: state.deliveryMethod.value,
-        countryCode: state.deliveryMethod.code,
+        country: state.deliveryMethod.name,
+        countryCode: state.deliveryMethod.twoLetterIsoCode,
       },
       selectedShipping: state.shippingMethod,
       selectedPayment: method,
@@ -635,7 +636,7 @@ export default function CheckoutForm({
             {state.isCNC || isShippingDisabled ? null : (
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <h2 className="text-lg font-semibold text-gray-900">
-                 {SHIPPING_INFORMATION}
+                  {SHIPPING_INFORMATION}
                 </h2>
                 {state?.isDeliveryMethodSelected ? (
                   <>
@@ -671,7 +672,7 @@ export default function CheckoutForm({
             {/* Payment */}
             <div className="mt-6 border-t border-gray-200 pt-6">
               <h2 className="text-lg font-semibold text-gray-900">
-              {BILLING_INFORMATION}
+                {BILLING_INFORMATION}
               </h2>
               {(state?.isShippingInformationCompleted ||
                 state.isCNC ||
@@ -701,7 +702,9 @@ export default function CheckoutForm({
               )}
             </div>
             <div className="mt-6 border-t border-gray-200 pt-6">
-              <h2 className="text-lg font-semibold text-gray-900">{GENERAL_PAYMENT}</h2>
+              <h2 className="text-lg font-semibold text-gray-900">
+                {GENERAL_PAYMENT}
+              </h2>
               {state.isPaymentInformationCompleted && (
                 <Payments
                   handlePaymentMethod={handlePaymentMethod}
