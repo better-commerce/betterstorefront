@@ -24,7 +24,14 @@ export default function loqateAddress() {
         if (response.data.Items.length == 0) {
           return { response: { message: 'No items found', data: [] } }
         } else {
-          return { response: { message: '', data: response.data.Items } }
+          return {
+            response: {
+              message: '',
+              data: response.data.Items.filter(
+                (i: any) => i.Type === 'Address'
+              ),
+            },
+          }
         }
       }
     } catch (error: any) {
