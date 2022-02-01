@@ -13,6 +13,7 @@ export default function loqateAddress() {
       `?Key=${process.env.LOQATE_KEY}&Text=${postCode}&Countries=${country}`
     try {
       const response: any = await axios.post(findAddressUrl)
+      console.log(response.data.Items)
       if (
         response.data.Items.length == 1 &&
         typeof response.data.Items[0].Error != 'undefined'
