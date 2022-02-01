@@ -124,8 +124,7 @@ export const shippingSchema = Yup.object({
   phoneNo: Yup.string().required(),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
-  address2: Yup.string(),
-  title: Yup.string().nullable(),
+  address2: Yup.string().required('Please provide a valid address'),
   city: Yup.string().required(),
 })
 
@@ -218,7 +217,6 @@ export const billingSchema = Yup.object({
   phoneNo: Yup.string().required(),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
-  address2: Yup.string(),
-  title: Yup.string().nullable(),
+  address2: Yup.string().required('Please provide a valid address'),
   city: Yup.string().required(),
 })
