@@ -63,11 +63,18 @@ export default function AddressForm({
 
   const handleNewFormButton = (values?: any, errors?: any) => {
     if (!isFormOpen) {
+      formikRef.current.setValues({})
       setNewFormOpen(true)
     } else {
       if (itemsToHide.length > 0) {
         setItemsToHide([])
       }
+
+      const touchedValidationObject = config.reduce((acc: any, next: any) => {
+        acc[next.name] = true
+        return acc
+      }, {})
+      formikRef.current.setTouched(touchedValidationObject)
       formikRef.current.validateForm()
       if (!Object.keys(errors).length) {
         handleNewAddress(values, () => setNewFormOpen(false))
