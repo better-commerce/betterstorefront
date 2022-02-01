@@ -187,6 +187,7 @@ export default function CheckoutForm({
       .then((response: any) => {
         callback()
         fetchAddress()
+        setShippingInformation({ ...newValues, id: response.id })
       })
       .catch((error: any) => console.log(error))
   }
@@ -319,9 +320,11 @@ export default function CheckoutForm({
   }
 
   useEffect(() => {
-    setShippingInformation(defaultShippingAddress)
-    setBillingInformation(defaultBillingAddress, false)
-  }, [])
+    if (!Object.keys(state.shippingInformation).length) {
+      setShippingInformation(defaultShippingAddress)
+      setBillingInformation(defaultBillingAddress, false)
+    }
+  }, [defaultShippingAddress])
 
   const handlePayments = (method: any) => {
     // const isTestUrl = state.selectedPaymentMethod.settings.find((method:any) => method.key === 'UseSandbox').value === 'True';

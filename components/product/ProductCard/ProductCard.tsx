@@ -8,11 +8,11 @@ import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import {
-  ALERT_SUCCESS_WISHLIST_MESSAGE, 
-  BTN_ADD_TO_WISHLIST, 
-  BTN_NOTIFY_ME, 
-  BTN_PRE_ORDER, 
-  GENERAL_ADD_TO_BASKET
+  ALERT_SUCCESS_WISHLIST_MESSAGE,
+  BTN_ADD_TO_WISHLIST,
+  BTN_NOTIFY_ME,
+  BTN_PRE_ORDER,
+  GENERAL_ADD_TO_BASKET,
 } from '@components/utils/textVariables'
 
 interface Props {
@@ -145,9 +145,11 @@ const ProductCard: FC<Props> = ({ product }) => {
       buttonConfig.title = BTN_NOTIFY_ME
       buttonConfig.isNotifyMeEnabled = true
       buttonConfig.action = async () => handleNotification()
+      buttonConfig.buttonType = 'button'
     } else if (!product.currentStock && product.preOrder.isEnabled) {
       buttonConfig.title = BTN_PRE_ORDER
       buttonConfig.isPreOrderEnabled = true
+      buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product.preOrder.shortMessage
     }
     return buttonConfig
@@ -211,6 +213,7 @@ const ProductCard: FC<Props> = ({ product }) => {
               title={buttonConfig.title}
               action={buttonConfig.action}
               type="button"
+              buttonType={buttonConfig.buttonType || 'cart'}
             />
             {isInWishList ? (
               <span className="text-gray-900">
