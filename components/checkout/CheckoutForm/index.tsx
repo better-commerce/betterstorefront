@@ -671,14 +671,15 @@ export default function CheckoutForm({
                 ) : null}
               </div>
             )}
-
             {/* Payment */}
             <div className="mt-6 border-t border-gray-200 pt-6">
               <h2 className="text-lg font-semibold text-gray-900">
                 {BILLING_INFORMATION}
               </h2>
+
               {(state?.isShippingInformationCompleted ||
                 state.isCNC ||
+                !state.isSameAddress ||
                 isShippingDisabled) && (
                 <Form
                   toggleAction={() =>

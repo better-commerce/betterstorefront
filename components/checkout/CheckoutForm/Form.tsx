@@ -319,9 +319,9 @@ export default function AddressForm({
                   type="checkbox"
                   defaultChecked={isSameAddress}
                   onChange={(e) => {
-                    if (e.target.checked) {
-                      sameAddressAction(values)
-                    }
+                    // if (e.target.checked) {
+                    sameAddressAction(values)
+                    // }
                   }}
                   className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
                 />
