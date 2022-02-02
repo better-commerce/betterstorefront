@@ -61,6 +61,11 @@ export default function AddressForm({
     )
   }
 
+  const touchedValidationObject = config.reduce((acc: any, next: any) => {
+    acc[next.name] = true
+    return acc
+  }, {})
+
   const handleNewFormButton = (values?: any, errors?: any) => {
     if (!isFormOpen) {
       formikRef.current.setValues({})
@@ -70,10 +75,6 @@ export default function AddressForm({
         setItemsToHide([])
       }
 
-      const touchedValidationObject = config.reduce((acc: any, next: any) => {
-        acc[next.name] = true
-        return acc
-      }, {})
       formikRef.current.setTouched(touchedValidationObject)
       formikRef.current.validateForm()
       if (!Object.keys(errors).length) {
@@ -108,6 +109,12 @@ export default function AddressForm({
         setItemsToHide([])
       }
     }
+  }
+
+  const handleFormSubmit = (handleSubmit: any, ...args: any) => {
+    formikRef.current.validateForm()
+    handleSubmit(...args)
+    formikRef.current.setTouched(touchedValidationObject)
   }
 
   return (
@@ -327,7 +334,7 @@ export default function AddressForm({
             <div className="mt-10 flex sm:flex-col1 w-full justify-center">
               <button
                 type="submit"
-                onClick={handleSubmit}
+                onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
                 className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
               >
                 {btnTitle}
