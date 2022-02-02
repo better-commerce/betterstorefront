@@ -114,6 +114,9 @@ export default function AddressForm({
   const handleFormSubmit = (handleSubmit: any, ...args: any) => {
     formikRef.current.validateForm()
     handleSubmit(...args)
+    if (itemsToHide.length > 0) {
+      setItemsToHide([])
+    }
     formikRef.current.setTouched(touchedValidationObject)
   }
 
