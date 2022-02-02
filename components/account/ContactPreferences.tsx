@@ -5,23 +5,24 @@ import { handleSubmit, URLS } from './common'
 import Button from '@components/ui/IndigoButton'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {GENERAL_WANT_RECEIVE_OFFERS, 
+import {
+  GENERAL_WANT_RECEIVE_OFFERS,
   GENERAL_NOT_WANT_RECEIVE_OFFERS,
   CONTACT_PREFERENCES_TITLE,
   CONTACT_PREFERENCES_SUBTITLE,
-  GENERAL_SAVE_CHANGES
+  GENERAL_SAVE_CHANGES,
 } from '@components/utils/textVariables'
 const radioBtnsConfig = [
   {
     type: 'radio',
-    title: {GENERAL_WANT_RECEIVE_OFFERS},
+    title: GENERAL_WANT_RECEIVE_OFFERS,
     items: config,
     id: 1,
   },
   {
     type: 'radio',
     id: 2,
-    title: {GENERAL_NOT_WANT_RECEIVE_OFFERS},
+    title: GENERAL_NOT_WANT_RECEIVE_OFFERS,
     items: [],
     default: true,
     unsubscribe: true,
@@ -128,14 +129,8 @@ export default function ContactPreferences() {
             {title}
           </h1>
           <p className="mt-2 text-sm flex flex-col text-gray-500">
-            <span>
-              {' '}
-              {CONTACT_PREFERENCES_TITLE}
-            </span>
-            <span className="mt-5">
-              {' '}
-              {CONTACT_PREFERENCES_SUBTITLE}
-            </span>
+            <span> {CONTACT_PREFERENCES_TITLE}</span>
+            <span className="mt-5"> {CONTACT_PREFERENCES_SUBTITLE}</span>
           </p>
         </div>
       </div>

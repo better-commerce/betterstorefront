@@ -18,7 +18,7 @@ export default function useAddress() {
       CountryCode: query.countryCode || countryCode,
       CustomerId: query.userId,
       PhoneNo: query.phoneNo,
-      isDefault: query.isDefault,
+      isDefault: query.isDefault || false,
       isDefaultBilling: query.isDefaultBilling || false,
       isDefaultDelivery: query.isDefaultDelivery || false,
       isDefaultSubscription: query.isDefaultSubscription || false,
