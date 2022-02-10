@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { CheckCircleIcon } from '@heroicons/react/solid'
 import Button from '@components/ui/IndigoButton'
 import { GENERAL_CONFIRM } from '@components/utils/textVariables'
+import getStripe from '@components/utils/get-stripe'
 
 export default function PaymentMethods({
   paymentData,
@@ -18,6 +19,11 @@ export default function PaymentMethods({
       .catch((err: any) => console.log(err))
   }, [])
 
+  const stripeMethod = [
+    {
+      type: 'stripe',
+    },
+  ]
   return (
     <ul className={`text-gray-900 mt-10`}>
       {methods?.map((item: any, idx: number) => {

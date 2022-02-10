@@ -5,6 +5,7 @@ import cartHandler from '@components/services/cart'
 import Delivery from './Delivery'
 import Summary from './Summary'
 import Form from './Form'
+import Stripe from './Stripe'
 import axios from 'axios'
 import {
   NEXT_UPDATE_CHECKOUT_ADDRESS,
@@ -26,13 +27,13 @@ import { asyncHandler } from '@components/account/Address/AddressBook'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import setSessionIdCookie from '@components/utils/setSessionId'
-import { 
-  BILLING_INFORMATION, 
-  BTN_DELIVER_TO_THIS_ADDRESS, 
-  GENERAL_CHECKOUT, 
-  GENERAL_PAYMENT, 
-  GENERAL_SAVE_CHANGES, 
-  SHIPPING_INFORMATION 
+import {
+  BILLING_INFORMATION,
+  BTN_DELIVER_TO_THIS_ADDRESS,
+  GENERAL_CHECKOUT,
+  GENERAL_PAYMENT,
+  GENERAL_SAVE_CHANGES,
+  SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
 
 export default function CheckoutForm({
@@ -635,7 +636,7 @@ export default function CheckoutForm({
             {state.isCNC || isShippingDisabled ? null : (
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <h2 className="text-lg font-semibold text-gray-900">
-                 {SHIPPING_INFORMATION}
+                  {SHIPPING_INFORMATION}
                 </h2>
                 {state?.isDeliveryMethodSelected ? (
                   <>
@@ -671,7 +672,7 @@ export default function CheckoutForm({
             {/* Payment */}
             <div className="mt-6 border-t border-gray-200 pt-6">
               <h2 className="text-lg font-semibold text-gray-900">
-              {BILLING_INFORMATION}
+                {BILLING_INFORMATION}
               </h2>
               {(state?.isShippingInformationCompleted ||
                 state.isCNC ||
@@ -701,7 +702,9 @@ export default function CheckoutForm({
               )}
             </div>
             <div className="mt-6 border-t border-gray-200 pt-6">
-              <h2 className="text-lg font-semibold text-gray-900">{GENERAL_PAYMENT}</h2>
+              <h2 className="text-lg font-semibold text-gray-900">
+                {GENERAL_PAYMENT}
+              </h2>
               {state.isPaymentInformationCompleted && (
                 <Payments
                   handlePaymentMethod={handlePaymentMethod}
@@ -709,6 +712,7 @@ export default function CheckoutForm({
                   selectedPaymentMethod={state.selectedPaymentMethod}
                 />
               )}
+              <Stripe />
               {state.error && (
                 <h4 className="py-5 text-lg font-semibold text-red-500">
                   {state.error}
