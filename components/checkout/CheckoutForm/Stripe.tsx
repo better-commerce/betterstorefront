@@ -3,14 +3,153 @@ import {
   Elements,
   useElements,
   useStripe,
+  PaymentElement,
 } from '@stripe/react-stripe-js'
 import getStripe from '@components/utils/get-stripe'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import {
+  STRIPE_CHECKOUT_SESSION,
+  UPDATE_ORDER_STATUS,
+} from '@components/utils/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { useUI, basketId as generateBasketId } from '@components/ui/context'
+import Cookies from 'js-cookie'
+import setSessionIdCookie from '@components/utils/setSessionId'
+import cartHandler from '@components/services/cart'
+import Router from 'next/router'
+import { getItem } from '@components/utils/localStorage'
+const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
+const { Order } = EVENTS_MAP.ENTITY_TYPES
 
-function CheckoutForm({ callback }: any) {
-  const [errors, setErrors] = useState(null)
+function CheckoutForm({
+  handlePayments,
+  orderResponse,
+  clientSecret,
+  setPaymentIntent,
+}: any) {
+  const [message, setMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
   const stripe = useStripe()
   const elements = useElements()
+
+  const { cartItems, basketId, setBasketId, setCartItems, setOrderId } = useUI()
+  const { associateCart } = cartHandler()
+
+  const handleUserAfterPayment = async (paymentIntent: any) => {
+    console.log(paymentIntent)
+    const orderResponseFromLocalStorage: any = getItem('orderResponse')
+    await axios.post(UPDATE_ORDER_STATUS, {
+      paymentIntent: paymentIntent.id,
+      id: orderResponseFromLocalStorage.id,
+    })
+    const { orderNo, grandTotal } = orderResponseFromLocalStorage
+    eventDispatcher(CheckoutConfirmation, {
+      basketItemCount: cartItems.lineItems.length,
+      basketTotal: grandTotal?.raw?.withTax,
+      shippingCost: cartItems.shippingCharge?.raw?.withTax,
+      promoCodes: cartItems.promotionsApplied,
+      basketItems: JSON.stringify(
+        cartItems.lineItems.map((i: any) => {
+          return {
+            categories: i.categoryItems,
+            discountAmt: i.discount?.raw?.withTax,
+            id: i.id,
+            img: i.image,
+            isSubscription: i.isSubscription,
+            itemType: i.itemType,
+            manufacturer: i.manufacturer || '',
+            name: i.name,
+            price: i.price?.raw?.withTax,
+            productId: i.productId,
+            qty: i.qty,
+            rootManufacturer: i.rootManufacturer || '',
+            stockCode: i.stockCode,
+            subManufacturer: i.subManufacturer,
+            tax: i.totalPrice?.raw?.withTax,
+          }
+        })
+      ),
+      entity: JSON.stringify({
+        basketId: basketId,
+        billingAddress: orderResponseFromLocalStorage.billingAddress,
+        customerId: orderResponseFromLocalStorage.customerId,
+        discount: orderResponseFromLocalStorage.discount?.raw?.withTax,
+        grandTotal: grandTotal?.raw?.withTax,
+        id: orderResponseFromLocalStorage.id,
+        lineitems: orderResponseFromLocalStorage.items,
+        orderNo: orderNo,
+        paidAmount: paymentIntent.amount / 100,
+        payments: [
+          {
+            methodName: 'stripe',
+            paymentGateway: 'stripe',
+            amount: paymentIntent.amount / 100,
+          },
+        ],
+        promoCode: orderResponseFromLocalStorage.promotionsApplied,
+        shipCharge: orderResponseFromLocalStorage.shippingCharge?.raw?.withTax,
+        shippingAddress: orderResponseFromLocalStorage.shippingAddress,
+        shippingMethod: orderResponseFromLocalStorage.shipping,
+        status: paymentIntent.status,
+        subTotal: orderResponseFromLocalStorage.subTotal?.raw?.withTax,
+        tax: grandTotal?.raw?.withTax,
+        taxPercent: orderResponseFromLocalStorage.taxPercent,
+        timestamp: orderResponseFromLocalStorage.orderDate,
+      }),
+      entityId: orderResponseFromLocalStorage.id,
+      entityName: orderNo,
+      entityType: Order,
+      eventType: CheckoutConfirmation,
+    })
+    Cookies.remove('sessionId')
+    setSessionIdCookie()
+    Cookies.remove('basketId')
+    const generatedBasketId = generateBasketId()
+    setBasketId(generatedBasketId)
+    const userId = cartItems.userId
+    const newCart = await associateCart(userId, generatedBasketId)
+    setCartItems(newCart.data)
+    setOrderId(orderResponseFromLocalStorage.id)
+    Router.push('/thank-you')
+  }
+  useEffect(() => {
+    if (!stripe) {
+      return
+    }
+
+    const urlClientSecret: any = new URLSearchParams(
+      window.location.search
+    ).get('payment_intent_client_secret')
+
+    if (!urlClientSecret || clientSecret) {
+      return
+    }
+
+    setPaymentIntent(true)
+
+    stripe
+      .retrievePaymentIntent(urlClientSecret)
+      .then(({ paymentIntent }: any) => {
+        switch (paymentIntent.status) {
+          case 'succeeded':
+            setMessage('Payment succeeded!')
+            handleUserAfterPayment(paymentIntent)
+            break
+          case 'processing':
+            setMessage('Your payment is processing.')
+            break
+          case 'requires_payment_method':
+            setMessage('Your payment was not successful, please try again.')
+            break
+          default:
+            setMessage('Something went wrong.')
+            break
+        }
+      })
+  }, [stripe])
 
   const handleSubmit = async () => {
     // Block native form submission.
@@ -20,67 +159,159 @@ function CheckoutForm({ callback }: any) {
       return
     }
 
+    setIsLoading(true)
     // Get a reference to a mounted CardElement. Elements knows how
     // to find your CardElement because there can only ever be one of
     // each type of element.
-    const card = elements.getElement(CardElement)
-
-    if (card == null) {
-      return
-    }
-
     // Use your card Element with other Stripe.js APIs
-    const { error, paymentMethod }: any = await stripe.createPaymentMethod({
-      type: 'card',
-      card,
+    const { error }: any = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        // Make sure to change this to your payment completion page
+        return_url: window.location.origin + Router.pathname,
+      },
     })
 
+    // if (clientSecret) {
+    //   payload = await stripe.confirmCardPayment(clientSecret, {
+    //     payment_method: {
+    //       card,
+    //     },
+    //   })
+    // }
+
     if (error) {
-      setErrors(error.message)
+      setMessage(error.message)
     } else {
-      callback()
+      // eventDispatcher(CheckoutConfirmation, {
+      //   basketItemCount: cartItems.lineItems.length,
+      //   basketTotal: grandTotal?.raw?.withTax,
+      //   shippingCost: cartItems.shippingCharge?.raw?.withTax,
+      //   promoCodes: cartItems.promotionsApplied,
+      //   basketItems: JSON.stringify(
+      //     cartItems.lineItems.map((i: any) => {
+      //       return {
+      //         categories: i.categoryItems,
+      //         discountAmt: i.discount?.raw?.withTax,
+      //         id: i.id,
+      //         img: i.image,
+      //         isSubscription: i.isSubscription,
+      //         itemType: i.itemType,
+      //         manufacturer: i.manufacturer || '',
+      //         name: i.name,
+      //         price: i.price?.raw?.withTax,
+      //         productId: i.productId,
+      //         qty: i.qty,
+      //         rootManufacturer: i.rootManufacturer || '',
+      //         stockCode: i.stockCode,
+      //         subManufacturer: i.subManufacturer,
+      //         tax: i.totalPrice?.raw?.withTax,
+      //       }
+      //     })
+      //   ),
+      //   entity: JSON.stringify({
+      //     basketId: basketId,
+      //     billingAddress: orderResponse.billingAddress,
+      //     customerId: orderResponse.customerId,
+      //     discount: orderResponse.discount?.raw?.withTax,
+      //     grandTotal: grandTotal?.raw?.withTax,
+      //     id: orderResponse.id,
+      //     lineitems: orderResponse.items,
+      //     orderNo: orderNo,
+      //     paidAmount: payload.paymentIntent.amount / 100,
+      //     payments: [
+      //       {
+      //         methodName: 'stripe',
+      //         paymentGateway: 'stripe',
+      //         amount: payload.paymentIntent.amount / 100,
+      //       },
+      //     ],
+      //     promoCode: orderResponse.promotionsApplied,
+      //     shipCharge: orderResponse.shippingCharge?.raw?.withTax,
+      //     shippingAddress: orderResponse.shippingAddress,
+      //     shippingMethod: orderResponse.shipping,
+      //     status: payload.paymentIntent.status,
+      //     subTotal: orderResponse.subTotal?.raw?.withTax,
+      //     tax: grandTotal?.raw?.withTax,
+      //     taxPercent: orderResponse.taxPercent,
+      //     timestamp: orderResponse.orderDate,
+      //   }),
+      //   entityId: orderResponse.id,
+      //   entityName: orderNo,
+      //   entityType: Order,
+      //   eventType: CheckoutConfirmation,
+      // })
+      // Cookies.remove('sessionId')
+      // setSessionIdCookie()
+      // Cookies.remove('basketId')
+      // const generatedBasketId = generateBasketId()
+      // setBasketId(generatedBasketId)
+      // const userId = cartItems.userId
+      // const newCart = await associateCart(userId, generatedBasketId)
+      // setCartItems(newCart.data)
+      // setOrderId(orderResponse.id)
+      // Router.push('/thank-you')
     }
+    setIsLoading(false)
   }
 
+  console.log(Router)
   return (
-    <form onSubmit={handleSubmit}>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: '16px',
-              color: '#424770',
-              '::placeholder': {
-                color: '#aab7c4',
-              },
-            },
-            invalid: {
-              color: '#9e2146',
-            },
-          },
-        }}
-      />
-      {errors && <span className="text-red-400">{errors}</span>}
-      <div className="flex justify-center items-center py-4">
-        <button
-          className={`text-white max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:bg-indigo-600 sm:w-full`}
-          type="button"
-          disabled={!stripe}
-          onClick={handleSubmit}
-        >
-          Pay
-        </button>
-      </div>
+    <form id="payment-form">
+      <PaymentElement id="payment-element" />
+      <button
+        disabled={isLoading || !stripe || !elements}
+        type="button"
+        onClick={handleSubmit}
+        id="payment-submit"
+      >
+        <span id="button-text">
+          {isLoading ? (
+            <div className="stripe-spinner" id="stripe-spinner"></div>
+          ) : (
+            'Pay now'
+          )}
+        </span>
+      </button>
+      {/* Show any error or success messages */}
+      {message && <div id="payment-message">{message}</div>}
     </form>
   )
 }
 
-export default function StripeWrapper({ callback = () => {} }) {
+export default function StripeWrapper(props: any) {
+  const [clientSecret, setClientSecret] = useState('')
+
   const stripePromise = getStripe()
 
-  return (
-    <Elements stripe={stripePromise}>
-      <CheckoutForm callback={callback} />
+  const appearance = {
+    theme: 'stripe',
+  }
+
+  const { cartItems } = useUI()
+  useEffect(() => {
+    const { orderNo, grandTotal } = props.orderResponse
+
+    const fetchClientSecret = async () => {
+      const client: any = await axios.post(STRIPE_CHECKOUT_SESSION, {
+        amount: grandTotal.raw.withTax,
+        user_email: cartItems.userEmail,
+        orderNo: orderNo,
+      })
+      setClientSecret(client.data.clientSecret)
+    }
+    console.log(props)
+    !props.isPaymentIntent && fetchClientSecret()
+  }, [])
+
+  const options: any = {
+    clientSecret: clientSecret || props.isPaymentIntent,
+    appearance,
+  }
+
+  return options.clientSecret ? (
+    <Elements stripe={stripePromise} options={options}>
+      <CheckoutForm {...props} />
     </Elements>
-  )
+  ) : null
 }

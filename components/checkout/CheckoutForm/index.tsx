@@ -36,6 +36,15 @@ import {
   SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
 
+const Spinner = () => {
+  return (
+    <main className="fit bg-white">
+      <div className="fixed top-0 right-0 h-screen w-screen z-50 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    </main>
+  )
+}
 export default function CheckoutForm({
   cart,
   user,
@@ -77,6 +86,11 @@ export default function CheckoutForm({
     storeId: '',
     isCNC: false,
     error: '',
+    orderResponse: {},
+    showStripe: false,
+    isPaymentIntent: new URLSearchParams(window.location.search).get(
+      'payment_intent_client_secret'
+    ),
   }
 
   interface stateInterface {
@@ -92,6 +106,9 @@ export default function CheckoutForm({
     storeId: string
     isCNC: boolean
     error: string
+    orderResponse: any
+    showStripe: boolean
+    isPaymentIntent: boolean
   }
   interface actionInterface {
     type?: string
@@ -162,6 +179,24 @@ export default function CheckoutForm({
           error: payload,
         }
       }
+      case 'SET_ORDER_RESPONSE': {
+        return {
+          ...state,
+          orderResponse: payload,
+        }
+      }
+      case 'TRIGGER_STRIPE': {
+        return {
+          ...state,
+          showStripe: payload,
+        }
+      }
+      case 'SET_PAYMENT_INTENT': {
+        return {
+          ...state,
+          isPaymentIntent: payload,
+        }
+      }
       default: {
         return state
       }
@@ -179,7 +214,7 @@ export default function CheckoutForm({
   const handleNewAddress = (values: any, callback: any = () => {}) => {
     const newValues = {
       ...values,
-      userId: user.userId,
+      userId: cartItems.userId,
       country: state.deliveryMethod.value,
       countryCode: state.deliveryMethod.code,
     }
@@ -427,8 +462,16 @@ export default function CheckoutForm({
         if (state.error) dispatch({ type: 'SET_ERROR', payload: '' })
 
         if (response.data?.result?.id) {
-          handlePayments(method)
+          // handlePayments(method)
           //@TODO temporary move to BE
+          dispatch({
+            type: 'SET_ORDER_RESPONSE',
+            payload: response.data.result,
+          })
+          localStorage.setItem(
+            'orderResponse',
+            JSON.stringify(response.data.result)
+          )
 
           const orderModel = {
             id: response.data.result.payment.id,
@@ -469,6 +512,10 @@ export default function CheckoutForm({
             upFrontAmount: '0.00',
             upFrontTerm: '76245369',
             isPrePaid: false,
+          }
+          if (method.systemName === 'stripe') {
+            // const stripeResponse = await handleStripeSubmit(response.data.result.grandTotal.raw.withTax, );
+            dispatch({ type: 'TRIGGER_STRIPE', payload: true })
           }
           if (method.systemName === 'COD') {
             const orderModelResponse: any = await axios.post(
@@ -617,119 +664,137 @@ export default function CheckoutForm({
     }
   }
 
+  const setPaymentIntent = (payload: boolean) =>
+    dispatch({ type: 'SET_PAYMENT_INTENT', payload })
+
   return (
-    <div className="bg-gray-50 relative">
-      <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
-        <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-          <div>
-            {!isShippingDisabled && (
-              <Delivery
-                appConfig={config}
-                geoData={location}
-                setParentShipping={setShippingMethod}
-                toggleDelivery={toggleDelivery}
-                isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
-              />
-            )}
-
-            {state.isCNC || isShippingDisabled ? null : (
-              <div className="mt-4 border-t border-gray-200 pt-4">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  {SHIPPING_INFORMATION}
-                </h2>
-                {state?.isDeliveryMethodSelected ? (
-                  <>
-                    <Form
-                      toggleAction={toggleShipping}
-                      appConfig={config}
-                      values={state?.shippingInformation}
-                      updateAddress={updateAddress}
-                      onSubmit={handleShippingSubmit}
-                      infoType="SHIPPING"
-                      schema={shippingSchema}
-                      loqateAddress={loqateAddress}
-                      config={shippingFormConfig}
-                      initialValues={defaultShippingAddress}
-                      isInfoCompleted={state?.isShippingInformationCompleted}
-                      btnTitle={BTN_DELIVER_TO_THIS_ADDRESS}
-                      addresses={addresses}
-                      retrieveAddress={retrieveAddress}
-                      handleNewAddress={handleNewAddress}
-                      setAddress={setShippingInformation}
-                      isGuest={cartItems.isGuestCheckout}
-                      isSameAddress={state?.isSameAddress}
-                      isSameAddressCheckboxEnabled={true}
-                      sameAddressAction={() => {
-                        dispatch({ type: 'SET_SAME_ADDRESS' })
-                      }}
-                    />
-                  </>
-                ) : null}
-              </div>
-            )}
-
-            {/* Payment */}
-            <div className="mt-6 border-t border-gray-200 pt-6">
-              <h2 className="text-lg font-semibold text-gray-900">
-                {BILLING_INFORMATION}
-              </h2>
-              {(state?.isShippingInformationCompleted ||
-                state.isCNC ||
-                isShippingDisabled) && (
-                <Form
-                  toggleAction={() =>
-                    togglePayment(!state.isPaymentInformationCompleted)
-                  }
-                  onSubmit={handleBillingSubmit}
+    <>
+      {state.isPaymentIntent && <Spinner />}
+      <div
+        className={`bg-gray-50 relative ${
+          state.isPaymentIntent
+            ? 'pointer-events-none hidden overflow-hidden'
+            : ''
+        }`}
+      >
+        <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+          <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
+          <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+            <div>
+              {!isShippingDisabled && (
+                <Delivery
                   appConfig={config}
-                  values={state?.billingInformation}
-                  schema={billingSchema}
-                  updateAddress={updateAddress}
-                  infoType="BILLING"
-                  loqateAddress={loqateAddress}
-                  config={billingFormConfig}
-                  handleNewAddress={handleNewAddress}
-                  initialValues={defaultBillingAddress}
-                  retrieveAddress={retrieveAddress}
-                  isInfoCompleted={state?.isPaymentInformationCompleted}
-                  btnTitle={GENERAL_SAVE_CHANGES}
-                  addresses={addresses}
-                  isGuest={cartItems.isGuestCheckout}
-                  setAddress={setBillingInformation}
-                  isSameAddressCheckboxEnabled={false}
+                  geoData={location}
+                  setParentShipping={setShippingMethod}
+                  toggleDelivery={toggleDelivery}
+                  isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
                 />
               )}
-            </div>
-            <div className="mt-6 border-t border-gray-200 pt-6">
-              <h2 className="text-lg font-semibold text-gray-900">
-                {GENERAL_PAYMENT}
-              </h2>
-              {state.isPaymentInformationCompleted && (
-                <Payments
-                  handlePaymentMethod={handlePaymentMethod}
-                  paymentData={paymentData}
-                  selectedPaymentMethod={state.selectedPaymentMethod}
-                />
-              )}
-              <Stripe />
-              {state.error && (
-                <h4 className="py-5 text-lg font-semibold text-red-500">
-                  {state.error}
-                </h4>
-              )}
-            </div>
-          </div>
 
-          {/* Order summary */}
-          <Summary
-            confirmOrder={confirmOrder}
-            isShippingDisabled={isShippingDisabled}
-            cart={cartItems}
-            handleItem={handleItem}
-          />
-        </form>
+              {state.isCNC || isShippingDisabled ? null : (
+                <div className="mt-4 border-t border-gray-200 pt-4">
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    {SHIPPING_INFORMATION}
+                  </h2>
+                  {state?.isDeliveryMethodSelected ? (
+                    <>
+                      <Form
+                        toggleAction={toggleShipping}
+                        appConfig={config}
+                        values={state?.shippingInformation}
+                        updateAddress={updateAddress}
+                        onSubmit={handleShippingSubmit}
+                        infoType="SHIPPING"
+                        schema={shippingSchema}
+                        loqateAddress={loqateAddress}
+                        config={shippingFormConfig}
+                        initialValues={defaultShippingAddress}
+                        isInfoCompleted={state?.isShippingInformationCompleted}
+                        btnTitle={BTN_DELIVER_TO_THIS_ADDRESS}
+                        addresses={addresses}
+                        retrieveAddress={retrieveAddress}
+                        handleNewAddress={handleNewAddress}
+                        setAddress={setShippingInformation}
+                        isGuest={cartItems.isGuestCheckout}
+                        isSameAddress={state?.isSameAddress}
+                        isSameAddressCheckboxEnabled={true}
+                        sameAddressAction={() => {
+                          dispatch({ type: 'SET_SAME_ADDRESS' })
+                        }}
+                      />
+                    </>
+                  ) : null}
+                </div>
+              )}
+
+              {/* Payment */}
+              <div className="mt-6 border-t border-gray-200 pt-6">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {BILLING_INFORMATION}
+                </h2>
+                {(state?.isShippingInformationCompleted ||
+                  state.isCNC ||
+                  isShippingDisabled) && (
+                  <Form
+                    toggleAction={() =>
+                      togglePayment(!state.isPaymentInformationCompleted)
+                    }
+                    onSubmit={handleBillingSubmit}
+                    appConfig={config}
+                    values={state?.billingInformation}
+                    schema={billingSchema}
+                    updateAddress={updateAddress}
+                    infoType="BILLING"
+                    loqateAddress={loqateAddress}
+                    config={billingFormConfig}
+                    handleNewAddress={handleNewAddress}
+                    initialValues={defaultBillingAddress}
+                    retrieveAddress={retrieveAddress}
+                    isInfoCompleted={state?.isPaymentInformationCompleted}
+                    btnTitle={GENERAL_SAVE_CHANGES}
+                    addresses={addresses}
+                    isGuest={cartItems.isGuestCheckout}
+                    setAddress={setBillingInformation}
+                    isSameAddressCheckboxEnabled={false}
+                  />
+                )}
+              </div>
+              <div className="mt-6 border-t border-gray-200 pt-6">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {GENERAL_PAYMENT}
+                </h2>
+                {state.isPaymentInformationCompleted && (
+                  <Payments
+                    handlePaymentMethod={handlePaymentMethod}
+                    paymentData={paymentData}
+                    selectedPaymentMethod={state.selectedPaymentMethod}
+                  />
+                )}
+                {(state.showStripe || !!state.isPaymentIntent) && (
+                  <Stripe
+                    setPaymentIntent={setPaymentIntent}
+                    orderResponse={state.orderResponse}
+                    isPaymentIntent={state.isPaymentIntent}
+                  />
+                )}
+                {state.error && (
+                  <h4 className="py-5 text-lg font-semibold text-red-500">
+                    {state.error}
+                  </h4>
+                )}
+              </div>
+            </div>
+
+            {/* Order summary */}
+            <Summary
+              confirmOrder={confirmOrder}
+              isShippingDisabled={isShippingDisabled}
+              cart={cartItems}
+              handleItem={handleItem}
+            />
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
