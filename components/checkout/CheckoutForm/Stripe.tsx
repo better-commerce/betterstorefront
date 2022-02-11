@@ -1,5 +1,4 @@
 import {
-  CardElement,
   Elements,
   useElements,
   useStripe,
@@ -39,7 +38,6 @@ function CheckoutForm({
   const { associateCart } = cartHandler()
 
   const handleUserAfterPayment = async (paymentIntent: any) => {
-    console.log(paymentIntent)
     const orderResponseFromLocalStorage: any = getItem('orderResponse')
     await axios.post(UPDATE_ORDER_STATUS, {
       paymentIntent: paymentIntent.id,
@@ -172,90 +170,13 @@ function CheckoutForm({
       },
     })
 
-    // if (clientSecret) {
-    //   payload = await stripe.confirmCardPayment(clientSecret, {
-    //     payment_method: {
-    //       card,
-    //     },
-    //   })
-    // }
-
     if (error) {
       setMessage(error.message)
     } else {
-      // eventDispatcher(CheckoutConfirmation, {
-      //   basketItemCount: cartItems.lineItems.length,
-      //   basketTotal: grandTotal?.raw?.withTax,
-      //   shippingCost: cartItems.shippingCharge?.raw?.withTax,
-      //   promoCodes: cartItems.promotionsApplied,
-      //   basketItems: JSON.stringify(
-      //     cartItems.lineItems.map((i: any) => {
-      //       return {
-      //         categories: i.categoryItems,
-      //         discountAmt: i.discount?.raw?.withTax,
-      //         id: i.id,
-      //         img: i.image,
-      //         isSubscription: i.isSubscription,
-      //         itemType: i.itemType,
-      //         manufacturer: i.manufacturer || '',
-      //         name: i.name,
-      //         price: i.price?.raw?.withTax,
-      //         productId: i.productId,
-      //         qty: i.qty,
-      //         rootManufacturer: i.rootManufacturer || '',
-      //         stockCode: i.stockCode,
-      //         subManufacturer: i.subManufacturer,
-      //         tax: i.totalPrice?.raw?.withTax,
-      //       }
-      //     })
-      //   ),
-      //   entity: JSON.stringify({
-      //     basketId: basketId,
-      //     billingAddress: orderResponse.billingAddress,
-      //     customerId: orderResponse.customerId,
-      //     discount: orderResponse.discount?.raw?.withTax,
-      //     grandTotal: grandTotal?.raw?.withTax,
-      //     id: orderResponse.id,
-      //     lineitems: orderResponse.items,
-      //     orderNo: orderNo,
-      //     paidAmount: payload.paymentIntent.amount / 100,
-      //     payments: [
-      //       {
-      //         methodName: 'stripe',
-      //         paymentGateway: 'stripe',
-      //         amount: payload.paymentIntent.amount / 100,
-      //       },
-      //     ],
-      //     promoCode: orderResponse.promotionsApplied,
-      //     shipCharge: orderResponse.shippingCharge?.raw?.withTax,
-      //     shippingAddress: orderResponse.shippingAddress,
-      //     shippingMethod: orderResponse.shipping,
-      //     status: payload.paymentIntent.status,
-      //     subTotal: orderResponse.subTotal?.raw?.withTax,
-      //     tax: grandTotal?.raw?.withTax,
-      //     taxPercent: orderResponse.taxPercent,
-      //     timestamp: orderResponse.orderDate,
-      //   }),
-      //   entityId: orderResponse.id,
-      //   entityName: orderNo,
-      //   entityType: Order,
-      //   eventType: CheckoutConfirmation,
-      // })
-      // Cookies.remove('sessionId')
-      // setSessionIdCookie()
-      // Cookies.remove('basketId')
-      // const generatedBasketId = generateBasketId()
-      // setBasketId(generatedBasketId)
-      // const userId = cartItems.userId
-      // const newCart = await associateCart(userId, generatedBasketId)
-      // setCartItems(newCart.data)
-      // setOrderId(orderResponse.id)
-      // Router.push('/thank-you')
     }
     setIsLoading(false)
   }
 
-  console.log(Router)
   return (
     <form id="payment-form">
       <PaymentElement id="payment-element" />
@@ -300,7 +221,6 @@ export default function StripeWrapper(props: any) {
       })
       setClientSecret(client.data.clientSecret)
     }
-    console.log(props)
     !props.isPaymentIntent && fetchClientSecret()
   }, [])
 
