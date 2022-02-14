@@ -5,7 +5,6 @@ import cartHandler from '@components/services/cart'
 import Delivery from './Delivery'
 import Summary from './Summary'
 import Form from './Form'
-import Stripe from './Stripe'
 import axios from 'axios'
 import {
   NEXT_UPDATE_CHECKOUT_ADDRESS,
@@ -35,6 +34,7 @@ import {
   GENERAL_SAVE_CHANGES,
   SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
+import PaymentWidget from '@components/checkout/PaymentWidget'
 
 const Spinner = () => {
   return (
@@ -91,6 +91,7 @@ export default function CheckoutForm({
     isPaymentIntent: new URLSearchParams(window.location.search).get(
       'payment_intent_client_secret'
     ),
+    isPaymentWidgetActive: false,
   }
 
   interface stateInterface {
@@ -109,12 +110,25 @@ export default function CheckoutForm({
     orderResponse: any
     showStripe: boolean
     isPaymentIntent: boolean
+    isPaymentWidgetActive: boolean
   }
   interface actionInterface {
     type?: string
     payload?: any
   }
 
+  const checkoutCallback = async (orderId: any) => {
+    Cookies.remove('sessionId')
+    setSessionIdCookie()
+    Cookies.remove('basketId')
+    const generatedBasketId = generateBasketId()
+    setBasketId(generatedBasketId)
+    const userId = cartItems.userId
+    const newCart = await associateCart(userId, generatedBasketId)
+    setCartItems(newCart.data)
+    setOrderId(orderId)
+    Router.push('/thank-you')
+  }
   function reducer(state: stateInterface, { type, payload }: actionInterface) {
     switch (type) {
       case 'SET_SHIPPING_METHOD': {
@@ -195,6 +209,12 @@ export default function CheckoutForm({
         return {
           ...state,
           isPaymentIntent: payload,
+        }
+      }
+      case 'TRIGGER_PAYMENT_WIDGET': {
+        return {
+          ...state,
+          isPaymentWidgetActive: payload,
         }
       }
       default: {
@@ -375,16 +395,6 @@ export default function CheckoutForm({
       }
       return acc
     }, {})
-    //@TODO temporary
-    // switch (method.inputType) {
-    //   case 15:
-    //     paymentObject.isTestUrl
-    //       ? window.open(paymentObject.testUrl, '_self')
-    //       : window.open(paymentObject.prodUrl, '_self')
-    //     break
-    //   default:
-    //     return false
-    // }
   }
 
   const confirmOrder = (method: any) => {
@@ -513,110 +523,7 @@ export default function CheckoutForm({
             upFrontTerm: '76245369',
             isPrePaid: false,
           }
-          if (method.systemName === 'stripe') {
-            // const stripeResponse = await handleStripeSubmit(response.data.result.grandTotal.raw.withTax, );
-            dispatch({ type: 'TRIGGER_STRIPE', payload: true })
-          }
-          if (method.systemName === 'COD') {
-            const orderModelResponse: any = await axios.post(
-              NEXT_POST_PAYMENT_RESPONSE,
-              {
-                model: orderModel,
-                orderId: response.data?.result?.id,
-              }
-            )
-
-            if (orderModelResponse.data.success) {
-              const {
-                basketId,
-                customerId,
-                billingAddress,
-                discount,
-                grandTotal,
-                id,
-                items,
-                orderNo,
-                paidAmount,
-                payments,
-                promotionsApplied,
-                shippingCharge,
-                shippingAddress,
-                shipping,
-                orderStatus,
-                subTotal,
-                taxPercent,
-                orderDate,
-              } = orderModelResponse.data.result
-              eventDispatcher(CheckoutConfirmation, {
-                basketItemCount: items.length,
-                basketTotal: grandTotal?.raw?.withTax,
-                shippingCost: shippingCharge?.raw?.withTax,
-                promoCodes: promotionsApplied,
-                basketItems: JSON.stringify(
-                  items.map((i: any) => {
-                    return {
-                      categories: i.categoryItems,
-                      discountAmt: i.discountAmt?.raw?.withTax,
-                      id: i.id,
-                      img: i.image,
-                      isSubscription: i.isSubscription,
-                      itemType: i.itemType,
-                      manufacturer: i.manufacturer,
-                      name: i.name,
-                      price: i.price?.raw?.withTax,
-                      productId: i.productId,
-                      qty: i.qty,
-                      rootManufacturer: i.rootManufacturer || '',
-                      stockCode: i.stockCode,
-                      subManufacturer: i.subManufacturer,
-                      tax: i.totalPrice?.raw?.withTax,
-                    }
-                  })
-                ),
-                entity: JSON.stringify({
-                  basketId: basketId,
-                  billingAddress: billingAddress,
-                  customerId: customerId,
-                  discount: discount?.raw?.withTax,
-                  grandTotal: grandTotal?.raw?.withTax,
-                  id: id,
-                  lineitems: items,
-                  orderNo: orderNo,
-                  paidAmount: paidAmount?.raw?.withTax,
-                  payments: payments.map((i: any) => {
-                    return {
-                      methodName: i.paymentMethod,
-                      paymentGateway: i.paymentGateway,
-                      amount: i.paidAmount,
-                    }
-                  }),
-                  promoCode: promotionsApplied,
-                  shipCharge: shippingCharge?.raw?.withTax,
-                  shippingAddress: shippingAddress,
-                  shippingMethod: shipping,
-                  status: orderStatus,
-                  subTotal: subTotal?.raw?.withTax,
-                  tax: grandTotal?.raw?.withTax,
-                  taxPercent: taxPercent,
-                  timestamp: orderDate,
-                }),
-                entityId: response.data.result.id,
-                entityName: orderNo,
-                entityType: Order,
-                eventType: CheckoutConfirmation,
-              })
-              Cookies.remove('sessionId')
-              setSessionIdCookie()
-              Cookies.remove('basketId')
-              const generatedBasketId = generateBasketId()
-              setBasketId(generatedBasketId)
-              const userId = cartItems.userId
-              const newCart = await associateCart(userId, generatedBasketId)
-              setCartItems(newCart.data)
-              setOrderId(response.data.result.id)
-              Router.push('/thank-you')
-            }
-          }
+          dispatch({ type: 'TRIGGER_PAYMENT_WIDGET', payload: true })
         } else {
           dispatch({ type: 'SET_ERROR', payload: response.data.message })
         }
@@ -770,11 +677,11 @@ export default function CheckoutForm({
                     selectedPaymentMethod={state.selectedPaymentMethod}
                   />
                 )}
-                {(state.showStripe || !!state.isPaymentIntent) && (
-                  <Stripe
-                    setPaymentIntent={setPaymentIntent}
-                    orderResponse={state.orderResponse}
-                    isPaymentIntent={state.isPaymentIntent}
+                {(state.isPaymentWidgetActive || !!state.isPaymentIntent) && (
+                  <PaymentWidget
+                    paymentMethod={state.selectedPaymentMethod}
+                    checkoutCallback={checkoutCallback}
+                    orderModelResponse={state.orderResponse}
                   />
                 )}
                 {state.error && (

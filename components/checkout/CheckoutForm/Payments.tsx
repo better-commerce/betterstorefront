@@ -19,18 +19,9 @@ export default function PaymentMethods({
       .catch((err: any) => console.log(err))
   }, [])
 
-  const stripeMethod = {
-    type: 'stripe',
-    systemName: 'stripe',
-    id: '1',
-    gateway: 'stripe',
-    description: 'stripe description',
-    displayName: 'Stripe',
-  }
-
   return (
     <ul className={`text-gray-900 mt-10`}>
-      {[...methods, stripeMethod]?.map((item: any, idx: number) => {
+      {methods?.map((item: any, idx: number) => {
         return (
           <li
             key={idx}
