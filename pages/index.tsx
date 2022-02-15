@@ -16,6 +16,8 @@ export async function getStaticProps({
   const slugsPromise = commerce.getSlugs({ slug: HOMEPAGE_SLUG })
   const slugs = await slugsPromise
 
+  console.log(slugs)
+
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { pages } = await pagesPromise
@@ -37,30 +39,33 @@ const PAGE_TYPE = PAGE_TYPES.Home
 function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
 
-  useAnalytics(PageViewed, {
-    entity: JSON.stringify({
-      id: slugs.id,
-      name: slugs.name,
-      metaTitle: slugs.metaTitle,
-      MetaKeywords: slugs.metaKeywords,
-      MetaDescription: slugs.metaDescription,
-      Slug: slugs.slug,
-      Title: slugs.title,
-      ViewType: slugs.viewType,
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: slugs.title,
-    entityType: 'Page',
-    entityId: slugs.id,
-    eventType: 'PageViewed',
-  })
+  if (slugs) {
+    useAnalytics(PageViewed, {
+      entity: JSON.stringify({
+        id: slugs.id,
+        name: slugs.name,
+        metaTitle: slugs.metaTitle,
+        MetaKeywords: slugs.metaKeywords,
+        MetaDescription: slugs.metaDescription,
+        Slug: slugs.slug,
+        Title: slugs.title,
+        ViewType: slugs.viewType,
+      }),
+      entityName: PAGE_TYPE,
+      pageTitle: slugs.title,
+      entityType: 'Page',
+      entityId: slugs.id,
+      eventType: 'PageViewed',
+    })
 
-  return (
-    <>
-      <Hero banners={slugs.components[0].images} />
-      <ProductSlider config={slugs.components[3]} />
-    </>
-  )
+    return (
+      <>
+        <Hero banners={slugs.components[0].images} />
+        <ProductSlider config={slugs.components[3]} />
+      </>
+    )
+  }
+  return null
 }
 
 Home.Layout = Layout
