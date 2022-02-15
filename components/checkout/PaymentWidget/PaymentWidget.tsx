@@ -1,5 +1,5 @@
 import { useReducer, useEffect } from 'react'
-import Stripe from './Stripe'
+import Stripe from '@components/payments/Stripe/Stripe'
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -44,7 +44,6 @@ export default function PaymentWidget({
   const PAYMENT_METHOD_MAP: any = {
     COD: () => dispatch({ type: 'TRIGGER_COD', payload: true }),
     Stripe: () => {
-      console.log('here')
       dispatch({ type: 'TRIGGER_STRIPE', payload: true })
     },
     undefined: () => {},

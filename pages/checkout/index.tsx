@@ -30,7 +30,6 @@ function Checkout({ cart, config, location }: any) {
       setCartItems(newCartClone)
       setIsLoggedIn(!!response.data.userEmail)
       setUser({ userId: response.data.userId, email: response.data.userEmail })
-      console.log(response.data)
     }
     handleAsync()
   }

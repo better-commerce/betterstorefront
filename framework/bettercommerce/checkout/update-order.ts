@@ -2,9 +2,16 @@ import { ORDERS_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
-export async function updateOrder(id: string, paymentIntent: string) {
+export async function updateOrder(
+  id: string,
+  paymentIntent: string,
+  status?: string,
+  externalStatus?: string,
+  comment?: string,
+  ignoreEmailTrigger?: boolean,
+  lastUpdatedBy?: string
+) {
   const intent = await stripe.paymentIntents.retrieve(paymentIntent)
-  console.log(intent)
   if (intent.status === 'succeeded') {
     const url = ORDERS_ENDPOINT + `/${id}/status`
     try {
@@ -14,18 +21,17 @@ export async function updateOrder(id: string, paymentIntent: string) {
         data: {
           id: id,
           orderStatusModel: {
-            status: 'complete',
-            externalStatus: 'complete',
-            comment: 'updated from stripe',
-            ignoreEmailTrigger: true,
-            lastUpdatedBy: 'stripe',
+            status: status || 'complete',
+            externalStatus: externalStatus || 'complete',
+            comment: comment || 'updated from stripe',
+            ignoreEmailTrigger: ignoreEmailTrigger || true,
+            lastUpdatedBy: lastUpdatedBy || 'stripe',
           },
         },
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
-      console.log(response)
       return response
     } catch (error: any) {
       console.log(error, 'err')
