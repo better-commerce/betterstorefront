@@ -55,10 +55,32 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
   const [keywordsData, setKeywordsData] = useState([])
   const [isAppLoading, setAppIsLoading] = useState(true)
+  const [language, setLanguage] = useState('')
 
   const router = useRouter()
-  console.log(router)
   const Layout = (Component as any).Layout || Noop
+
+  const googleTranslateElementInit = () => {
+    const windowClone: any = window
+    new windowClone.google.translate.TranslateElement(
+      {
+        pageLanguage: 'en',
+        layout:
+          windowClone.google.translate.TranslateElement.FloatPosition.TOP_LEFT,
+      },
+      'google_translate_element'
+    )
+  }
+
+  useEffect(() => {
+    const addScript = document.createElement('script')
+    addScript.setAttribute(
+      'src',
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+    )
+    document.body.appendChild(addScript)
+    ;(window as any).googleTranslateElementInit = googleTranslateElementInit
+  }, [])
 
   const fetchAppConfig = async () => {
     try {
@@ -128,6 +150,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   return (
     <>
       <Head />
+      <div id="google_translate_element" />
+
       <ManagedUIContext>
         {isAppLoading && !location.Ip ? (
           <main className="fit bg-white">
