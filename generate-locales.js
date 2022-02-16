@@ -1,10 +1,14 @@
 const axios = require('axios')
 require('dotenv').config()
 
+const path = require('path')
+
 const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
 const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
 const BASE_URL = process.env.NEXT_PUBLIC_BETTERCOMMERCE_BASE_URL
 const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
+const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config`
+
 const fs = require('fs')
 
 const getToken = async () => {
@@ -48,4 +52,39 @@ const getMicrosites = () => {
   microSitesHandler()
 }
 
+const getSeoConfig = async function () {
+  console.log('here')
+  try {
+    const INFRA_URL = new URL(INFRA_ENDPOINT, BASE_URL).href
+    const token = await getToken()
+    const infra = await axios({
+      url: `${INFRA_URL}`,
+      method: 'get',
+      headers: {
+        DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        Authorization: 'Bearer ' + token,
+      },
+    })
+    const seoConfig = infra.data.result.configSettings
+      .find((i) => i.configType === 'SeoSettings')
+      ?.configKeys.reduce((acc, obj) => {
+        if (obj.key === 'SeoSettings.DefaultTitle')
+          acc['title'] = obj.value || JSON.stringify(obj.value)
+        if (obj.key === 'SeoSettings.DefaultMetaDescription')
+          acc['description'] = obj.value || JSON.stringify(obj.value)
+        if (obj.key === 'SeoSettings.DefaultMetaKeywords')
+          acc['keywords'] = obj.value || JSON.stringify(obj.value)
+        return acc
+      }, {})
+    fs.writeFileSync(
+      path.join(__dirname, '/framework/bettercommerce/seo.json'),
+      JSON.stringify(seoConfig),
+      (err) => console.log(err)
+    )
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+getSeoConfig()
 getMicrosites()
