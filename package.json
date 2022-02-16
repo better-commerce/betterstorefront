@@ -23,6 +23,8 @@
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
     "@react-spring/web": "^9.2.1",
+    "@stripe/react-stripe-js": "^1.7.0",
+    "@stripe/stripe-js": "^1.22.0",
     "@types/qs": "^6.9.7",
     "@types/react-gtm-module": "^2.0.1",
     "@types/store": "^2.0.2",
