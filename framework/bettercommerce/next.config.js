@@ -49,6 +49,7 @@ const getSeoConfig = async function (token) {
           acc['keywords'] = obj.value || JSON.stringify(obj.value)
         return acc
       }, {})
+    console.log(path.join(__dirname), '====')
     fs.writeFileSync(
       path.join(__dirname, '/config/seo.json'),
       JSON.stringify(seoConfig),

@@ -39,33 +39,30 @@ const PAGE_TYPE = PAGE_TYPES.Home
 function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
 
-  if (slugs) {
-    useAnalytics(PageViewed, {
-      entity: JSON.stringify({
-        id: slugs.id,
-        name: slugs.name,
-        metaTitle: slugs.metaTitle,
-        MetaKeywords: slugs.metaKeywords,
-        MetaDescription: slugs.metaDescription,
-        Slug: slugs.slug,
-        Title: slugs.title,
-        ViewType: slugs.viewType,
-      }),
-      entityName: PAGE_TYPE,
-      pageTitle: slugs.title,
-      entityType: 'Page',
-      entityId: slugs.id,
-      eventType: 'PageViewed',
-    })
+  useAnalytics(PageViewed, {
+    entity: JSON.stringify({
+      id: slugs.id,
+      name: slugs.name,
+      metaTitle: slugs.metaTitle,
+      MetaKeywords: slugs.metaKeywords,
+      MetaDescription: slugs.metaDescription,
+      Slug: slugs.slug,
+      Title: slugs.title,
+      ViewType: slugs.viewType,
+    }),
+    entityName: PAGE_TYPE,
+    pageTitle: slugs.title,
+    entityType: 'Page',
+    entityId: slugs.id,
+    eventType: 'PageViewed',
+  })
 
-    return (
-      <>
-        <Hero banners={slugs.components[0].images} />
-        <ProductSlider config={slugs.components[3]} />
-      </>
-    )
-  }
-  return null
+  return (
+    <>
+      <Hero banners={slugs.components[0].images} />
+      <ProductSlider config={slugs.components[3]} />
+    </>
+  )
 }
 
 Home.Layout = Layout
