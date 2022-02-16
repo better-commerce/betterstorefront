@@ -58,7 +58,9 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
   return (
     <>
       <Hero banners={slugs.components[0].images} />
-      <ProductSlider config={slugs.components[3]} />
+      <ProductSlider
+        config={slugs.components.find((i: any) => i.componentType === 52)}
+      />
     </>
   )
 }
