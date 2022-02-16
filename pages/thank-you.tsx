@@ -6,29 +6,30 @@ import axios from 'axios'
 import { NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
 const defaultModel: any = {}
 import { LoadingDots } from '@components/ui'
-import { 
-  BTN_BACK_TO_HOME, 
-  GENERAL_ADDRESSES, 
-  GENERAL_BILLING_ADDRESS, 
-  GENERAL_DELIVERED_BY, 
-  GENERAL_ITEMS, 
-  GENERAL_ON_THE_WAY, 
-  GENERAL_ORDER_WILL_BE_WITH_YOU_SOON, 
-  GENERAL_PAYMENT, 
-  GENERAL_PAYMENT_METHOD, 
-  GENERAL_PRICE, 
-  GENERAL_QUANTITY, 
-  GENERAL_SHIPPING, 
-  GENERAL_SHIPPING_ADDRESS, 
-  GENERAL_SHIPPING_METHOD, 
+import { removeItem } from '@components/utils/localStorage'
+import {
+  BTN_BACK_TO_HOME,
+  GENERAL_ADDRESSES,
+  GENERAL_BILLING_ADDRESS,
+  GENERAL_DELIVERED_BY,
+  GENERAL_ITEMS,
+  GENERAL_ON_THE_WAY,
+  GENERAL_ORDER_WILL_BE_WITH_YOU_SOON,
+  GENERAL_PAYMENT,
+  GENERAL_PAYMENT_METHOD,
+  GENERAL_PRICE,
+  GENERAL_QUANTITY,
+  GENERAL_SHIPPING,
+  GENERAL_SHIPPING_ADDRESS,
+  GENERAL_SHIPPING_METHOD,
   GENERAL_SUMMARY,
-  GENERAL_THANK_YOU, 
-  GENERAL_TOTAL, 
-  GENERAL_YOUR_ORDER, 
-  LOADING_YOUR_ORDERS, 
-  NO_ORDER_PROVIDED, 
-  SUBTOTAL_INCLUDING_TAX, 
-  YOUR_INFORMATION 
+  GENERAL_THANK_YOU,
+  GENERAL_TOTAL,
+  GENERAL_YOUR_ORDER,
+  LOADING_YOUR_ORDERS,
+  NO_ORDER_PROVIDED,
+  SUBTOTAL_INCLUDING_TAX,
+  YOUR_INFORMATION,
 } from '@components/utils/textVariables'
 
 export default function OrderConfirmation() {
@@ -44,6 +45,7 @@ export default function OrderConfirmation() {
       setOrderData(data.order)
       setIsLoading(false)
     }
+    removeItem('orderResponse')
     if (orderId) fetchOrder()
     if (!orderId) setIsLoading(false)
     return function cleanup() {
@@ -75,7 +77,8 @@ export default function OrderConfirmation() {
           </p>
           {order.orderNo ? (
             <p className="mt-2 text-black text-gray-500">
-              {GENERAL_YOUR_ORDER} {order.orderNo} {GENERAL_ORDER_WILL_BE_WITH_YOU_SOON}
+              {GENERAL_YOUR_ORDER} {order.orderNo}{' '}
+              {GENERAL_ORDER_WILL_BE_WITH_YOU_SOON}
             </p>
           ) : null}
         </div>
@@ -201,9 +204,7 @@ export default function OrderConfirmation() {
                 </div>
               </dl>
 
-              <h3 className="sr-only">
-                {GENERAL_SUMMARY}
-              </h3>
+              <h3 className="sr-only">{GENERAL_SUMMARY}</h3>
 
               <dl className="space-y-6 border-t border-gray-200 text-sm pt-10">
                 <div className="flex justify-between">
@@ -223,9 +224,7 @@ export default function OrderConfirmation() {
                   </dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="font-medium text-gray-900">
-                    {GENERAL_TOTAL}
-                  </dt>
+                  <dt className="font-medium text-gray-900">{GENERAL_TOTAL}</dt>
                   <dd className="text-gray-900">
                     {order.grandTotal?.formatted?.withTax}
                   </dd>
@@ -236,7 +235,10 @@ export default function OrderConfirmation() {
         ) : null}
         <div className="max-w-xl">
           <Link href={`/`} passHref>
-            <a href='/' className='text-indigo-600 font-medium hover:text-indigo-500'>
+            <a
+              href="/"
+              className="text-indigo-600 font-medium hover:text-indigo-500"
+            >
               {BTN_BACK_TO_HOME}
             </a>
           </Link>

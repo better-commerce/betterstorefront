@@ -26,15 +26,25 @@ import { asyncHandler } from '@components/account/Address/AddressBook'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import setSessionIdCookie from '@components/utils/setSessionId'
-import { 
-  BILLING_INFORMATION, 
-  BTN_DELIVER_TO_THIS_ADDRESS, 
-  GENERAL_CHECKOUT, 
-  GENERAL_PAYMENT, 
-  GENERAL_SAVE_CHANGES, 
-  SHIPPING_INFORMATION 
+import {
+  BILLING_INFORMATION,
+  BTN_DELIVER_TO_THIS_ADDRESS,
+  GENERAL_CHECKOUT,
+  GENERAL_PAYMENT,
+  GENERAL_SAVE_CHANGES,
+  SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
+import PaymentWidget from '@components/checkout/PaymentWidget'
 
+const Spinner = () => {
+  return (
+    <main className="fit bg-white">
+      <div className="fixed top-0 right-0 h-screen w-screen z-50 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    </main>
+  )
+}
 export default function CheckoutForm({
   cart,
   user,
@@ -76,6 +86,12 @@ export default function CheckoutForm({
     storeId: '',
     isCNC: false,
     error: '',
+    orderResponse: {},
+    showStripe: false,
+    isPaymentIntent: new URLSearchParams(window.location.search).get(
+      'payment_intent_client_secret'
+    ),
+    isPaymentWidgetActive: false,
   }
 
   interface stateInterface {
@@ -91,12 +107,28 @@ export default function CheckoutForm({
     storeId: string
     isCNC: boolean
     error: string
+    orderResponse: any
+    showStripe: boolean
+    isPaymentIntent: boolean
+    isPaymentWidgetActive: boolean
   }
   interface actionInterface {
     type?: string
     payload?: any
   }
 
+  const checkoutCallback = async (orderId: any) => {
+    Cookies.remove('sessionId')
+    setSessionIdCookie()
+    Cookies.remove('basketId')
+    const generatedBasketId = generateBasketId()
+    setBasketId(generatedBasketId)
+    const userId = cartItems.userId
+    const newCart = await associateCart(userId, generatedBasketId)
+    setCartItems(newCart.data)
+    setOrderId(orderId)
+    Router.push('/thank-you')
+  }
   function reducer(state: stateInterface, { type, payload }: actionInterface) {
     switch (type) {
       case 'SET_SHIPPING_METHOD': {
@@ -161,6 +193,30 @@ export default function CheckoutForm({
           error: payload,
         }
       }
+      case 'SET_ORDER_RESPONSE': {
+        return {
+          ...state,
+          orderResponse: payload,
+        }
+      }
+      case 'TRIGGER_STRIPE': {
+        return {
+          ...state,
+          showStripe: payload,
+        }
+      }
+      case 'SET_PAYMENT_INTENT': {
+        return {
+          ...state,
+          isPaymentIntent: payload,
+        }
+      }
+      case 'TRIGGER_PAYMENT_WIDGET': {
+        return {
+          ...state,
+          isPaymentWidgetActive: payload,
+        }
+      }
       default: {
         return state
       }
@@ -178,7 +234,7 @@ export default function CheckoutForm({
   const handleNewAddress = (values: any, callback: any = () => {}) => {
     const newValues = {
       ...values,
-      userId: user.userId,
+      userId: cartItems.userId,
       country: state.deliveryMethod.value,
       countryCode: state.deliveryMethod.code,
     }
@@ -339,16 +395,6 @@ export default function CheckoutForm({
       }
       return acc
     }, {})
-    //@TODO temporary
-    // switch (method.inputType) {
-    //   case 15:
-    //     paymentObject.isTestUrl
-    //       ? window.open(paymentObject.testUrl, '_self')
-    //       : window.open(paymentObject.prodUrl, '_self')
-    //     break
-    //   default:
-    //     return false
-    // }
   }
 
   const confirmOrder = (method: any) => {
@@ -426,8 +472,16 @@ export default function CheckoutForm({
         if (state.error) dispatch({ type: 'SET_ERROR', payload: '' })
 
         if (response.data?.result?.id) {
-          handlePayments(method)
+          // handlePayments(method)
           //@TODO temporary move to BE
+          dispatch({
+            type: 'SET_ORDER_RESPONSE',
+            payload: response.data.result,
+          })
+          localStorage.setItem(
+            'orderResponse',
+            JSON.stringify(response.data.result)
+          )
 
           const orderModel = {
             id: response.data.result.payment.id,
@@ -469,106 +523,7 @@ export default function CheckoutForm({
             upFrontTerm: '76245369',
             isPrePaid: false,
           }
-          if (method.systemName === 'COD') {
-            const orderModelResponse: any = await axios.post(
-              NEXT_POST_PAYMENT_RESPONSE,
-              {
-                model: orderModel,
-                orderId: response.data?.result?.id,
-              }
-            )
-
-            if (orderModelResponse.data.success) {
-              const {
-                basketId,
-                customerId,
-                billingAddress,
-                discount,
-                grandTotal,
-                id,
-                items,
-                orderNo,
-                paidAmount,
-                payments,
-                promotionsApplied,
-                shippingCharge,
-                shippingAddress,
-                shipping,
-                orderStatus,
-                subTotal,
-                taxPercent,
-                orderDate,
-              } = orderModelResponse.data.result
-              eventDispatcher(CheckoutConfirmation, {
-                basketItemCount: items.length,
-                basketTotal: grandTotal?.raw?.withTax,
-                shippingCost: shippingCharge?.raw?.withTax,
-                promoCodes: promotionsApplied,
-                basketItems: JSON.stringify(
-                  items.map((i: any) => {
-                    return {
-                      categories: i.categoryItems,
-                      discountAmt: i.discountAmt?.raw?.withTax,
-                      id: i.id,
-                      img: i.image,
-                      isSubscription: i.isSubscription,
-                      itemType: i.itemType,
-                      manufacturer: i.manufacturer,
-                      name: i.name,
-                      price: i.price?.raw?.withTax,
-                      productId: i.productId,
-                      qty: i.qty,
-                      rootManufacturer: i.rootManufacturer || '',
-                      stockCode: i.stockCode,
-                      subManufacturer: i.subManufacturer,
-                      tax: i.totalPrice?.raw?.withTax,
-                    }
-                  })
-                ),
-                entity: JSON.stringify({
-                  basketId: basketId,
-                  billingAddress: billingAddress,
-                  customerId: customerId,
-                  discount: discount?.raw?.withTax,
-                  grandTotal: grandTotal?.raw?.withTax,
-                  id: id,
-                  lineitems: items,
-                  orderNo: orderNo,
-                  paidAmount: paidAmount?.raw?.withTax,
-                  payments: payments.map((i: any) => {
-                    return {
-                      methodName: i.paymentMethod,
-                      paymentGateway: i.paymentGateway,
-                      amount: i.paidAmount,
-                    }
-                  }),
-                  promoCode: promotionsApplied,
-                  shipCharge: shippingCharge?.raw?.withTax,
-                  shippingAddress: shippingAddress,
-                  shippingMethod: shipping,
-                  status: orderStatus,
-                  subTotal: subTotal?.raw?.withTax,
-                  tax: grandTotal?.raw?.withTax,
-                  taxPercent: taxPercent,
-                  timestamp: orderDate,
-                }),
-                entityId: response.data.result.id,
-                entityName: orderNo,
-                entityType: Order,
-                eventType: CheckoutConfirmation,
-              })
-              Cookies.remove('sessionId')
-              setSessionIdCookie()
-              Cookies.remove('basketId')
-              const generatedBasketId = generateBasketId()
-              setBasketId(generatedBasketId)
-              const userId = cartItems.userId
-              const newCart = await associateCart(userId, generatedBasketId)
-              setCartItems(newCart.data)
-              setOrderId(response.data.result.id)
-              Router.push('/thank-you')
-            }
-          }
+          dispatch({ type: 'TRIGGER_PAYMENT_WIDGET', payload: true })
         } else {
           dispatch({ type: 'SET_ERROR', payload: response.data.message })
         }
@@ -616,116 +571,137 @@ export default function CheckoutForm({
     }
   }
 
+  const setPaymentIntent = (payload: boolean) =>
+    dispatch({ type: 'SET_PAYMENT_INTENT', payload })
+
   return (
-    <div className="bg-gray-50 relative">
-      <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
-        <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-          <div>
-            {!isShippingDisabled && (
-              <Delivery
-                appConfig={config}
-                geoData={location}
-                setParentShipping={setShippingMethod}
-                toggleDelivery={toggleDelivery}
-                isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
-              />
-            )}
-
-            {state.isCNC || isShippingDisabled ? null : (
-              <div className="mt-4 border-t border-gray-200 pt-4">
-                <h2 className="text-lg font-semibold text-gray-900">
-                 {SHIPPING_INFORMATION}
-                </h2>
-                {state?.isDeliveryMethodSelected ? (
-                  <>
-                    <Form
-                      toggleAction={toggleShipping}
-                      appConfig={config}
-                      values={state?.shippingInformation}
-                      updateAddress={updateAddress}
-                      onSubmit={handleShippingSubmit}
-                      infoType="SHIPPING"
-                      schema={shippingSchema}
-                      loqateAddress={loqateAddress}
-                      config={shippingFormConfig}
-                      initialValues={defaultShippingAddress}
-                      isInfoCompleted={state?.isShippingInformationCompleted}
-                      btnTitle={BTN_DELIVER_TO_THIS_ADDRESS}
-                      addresses={addresses}
-                      retrieveAddress={retrieveAddress}
-                      handleNewAddress={handleNewAddress}
-                      setAddress={setShippingInformation}
-                      isGuest={cartItems.isGuestCheckout}
-                      isSameAddress={state?.isSameAddress}
-                      isSameAddressCheckboxEnabled={true}
-                      sameAddressAction={() => {
-                        dispatch({ type: 'SET_SAME_ADDRESS' })
-                      }}
-                    />
-                  </>
-                ) : null}
-              </div>
-            )}
-
-            {/* Payment */}
-            <div className="mt-6 border-t border-gray-200 pt-6">
-              <h2 className="text-lg font-semibold text-gray-900">
-              {BILLING_INFORMATION}
-              </h2>
-              {(state?.isShippingInformationCompleted ||
-                state.isCNC ||
-                isShippingDisabled) && (
-                <Form
-                  toggleAction={() =>
-                    togglePayment(!state.isPaymentInformationCompleted)
-                  }
-                  onSubmit={handleBillingSubmit}
+    <>
+      {state.isPaymentIntent && <Spinner />}
+      <div
+        className={`bg-gray-50 relative ${
+          state.isPaymentIntent
+            ? 'pointer-events-none hidden overflow-hidden'
+            : ''
+        }`}
+      >
+        <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+          <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
+          <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+            <div>
+              {!isShippingDisabled && (
+                <Delivery
                   appConfig={config}
-                  values={state?.billingInformation}
-                  schema={billingSchema}
-                  updateAddress={updateAddress}
-                  infoType="BILLING"
-                  loqateAddress={loqateAddress}
-                  config={billingFormConfig}
-                  handleNewAddress={handleNewAddress}
-                  initialValues={defaultBillingAddress}
-                  retrieveAddress={retrieveAddress}
-                  isInfoCompleted={state?.isPaymentInformationCompleted}
-                  btnTitle={GENERAL_SAVE_CHANGES}
-                  addresses={addresses}
-                  isGuest={cartItems.isGuestCheckout}
-                  setAddress={setBillingInformation}
-                  isSameAddressCheckboxEnabled={false}
+                  geoData={location}
+                  setParentShipping={setShippingMethod}
+                  toggleDelivery={toggleDelivery}
+                  isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
                 />
               )}
-            </div>
-            <div className="mt-6 border-t border-gray-200 pt-6">
-              <h2 className="text-lg font-semibold text-gray-900">{GENERAL_PAYMENT}</h2>
-              {state.isPaymentInformationCompleted && (
-                <Payments
-                  handlePaymentMethod={handlePaymentMethod}
-                  paymentData={paymentData}
-                  selectedPaymentMethod={state.selectedPaymentMethod}
-                />
-              )}
-              {state.error && (
-                <h4 className="py-5 text-lg font-semibold text-red-500">
-                  {state.error}
-                </h4>
-              )}
-            </div>
-          </div>
 
-          {/* Order summary */}
-          <Summary
-            confirmOrder={confirmOrder}
-            isShippingDisabled={isShippingDisabled}
-            cart={cartItems}
-            handleItem={handleItem}
-          />
-        </form>
+              {state.isCNC || isShippingDisabled ? null : (
+                <div className="mt-4 border-t border-gray-200 pt-4">
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    {SHIPPING_INFORMATION}
+                  </h2>
+                  {state?.isDeliveryMethodSelected ? (
+                    <>
+                      <Form
+                        toggleAction={toggleShipping}
+                        appConfig={config}
+                        values={state?.shippingInformation}
+                        updateAddress={updateAddress}
+                        onSubmit={handleShippingSubmit}
+                        infoType="SHIPPING"
+                        schema={shippingSchema}
+                        loqateAddress={loqateAddress}
+                        config={shippingFormConfig}
+                        initialValues={defaultShippingAddress}
+                        isInfoCompleted={state?.isShippingInformationCompleted}
+                        btnTitle={BTN_DELIVER_TO_THIS_ADDRESS}
+                        addresses={addresses}
+                        retrieveAddress={retrieveAddress}
+                        handleNewAddress={handleNewAddress}
+                        setAddress={setShippingInformation}
+                        isGuest={cartItems.isGuestCheckout}
+                        isSameAddress={state?.isSameAddress}
+                        isSameAddressCheckboxEnabled={true}
+                        sameAddressAction={() => {
+                          dispatch({ type: 'SET_SAME_ADDRESS' })
+                        }}
+                      />
+                    </>
+                  ) : null}
+                </div>
+              )}
+
+              {/* Payment */}
+              <div className="mt-6 border-t border-gray-200 pt-6">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {BILLING_INFORMATION}
+                </h2>
+                {(state?.isShippingInformationCompleted ||
+                  state.isCNC ||
+                  isShippingDisabled) && (
+                  <Form
+                    toggleAction={() =>
+                      togglePayment(!state.isPaymentInformationCompleted)
+                    }
+                    onSubmit={handleBillingSubmit}
+                    appConfig={config}
+                    values={state?.billingInformation}
+                    schema={billingSchema}
+                    updateAddress={updateAddress}
+                    infoType="BILLING"
+                    loqateAddress={loqateAddress}
+                    config={billingFormConfig}
+                    handleNewAddress={handleNewAddress}
+                    initialValues={defaultBillingAddress}
+                    retrieveAddress={retrieveAddress}
+                    isInfoCompleted={state?.isPaymentInformationCompleted}
+                    btnTitle={GENERAL_SAVE_CHANGES}
+                    addresses={addresses}
+                    isGuest={cartItems.isGuestCheckout}
+                    setAddress={setBillingInformation}
+                    isSameAddressCheckboxEnabled={false}
+                  />
+                )}
+              </div>
+              <div className="mt-6 border-t border-gray-200 pt-6">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {GENERAL_PAYMENT}
+                </h2>
+                {state.isPaymentInformationCompleted && (
+                  <Payments
+                    handlePaymentMethod={handlePaymentMethod}
+                    paymentData={paymentData}
+                    selectedPaymentMethod={state.selectedPaymentMethod}
+                  />
+                )}
+                {(state.isPaymentWidgetActive || !!state.isPaymentIntent) && (
+                  <PaymentWidget
+                    paymentMethod={state.selectedPaymentMethod}
+                    checkoutCallback={checkoutCallback}
+                    orderModelResponse={state.orderResponse}
+                  />
+                )}
+                {state.error && (
+                  <h4 className="py-5 text-lg font-semibold text-red-500">
+                    {state.error}
+                  </h4>
+                )}
+              </div>
+            </div>
+
+            {/* Order summary */}
+            <Summary
+              confirmOrder={confirmOrder}
+              isShippingDisabled={isShippingDisabled}
+              cart={cartItems}
+              handleItem={handleItem}
+            />
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
