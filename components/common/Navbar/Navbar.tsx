@@ -100,9 +100,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
     axios
       .post(NEXT_SET_CONFIG, { obj: pair })
       .then(() => {
-        Router.push({ pathname, query }, asPath, { locale: value })
-
-        // Router.reload()
+        Router.reload()
       })
       .catch((err: any) => console.log(err))
   }
