@@ -101,7 +101,6 @@ const getMicrosites = () => {
   }
   return microSitesHandler()
 }
-handler()
 
 const localeStore = {}
 
