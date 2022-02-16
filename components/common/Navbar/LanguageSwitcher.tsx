@@ -38,7 +38,7 @@ export default function CurrencySwitcher({ config, title, action }: any) {
                           }
                           onClick={() => {
                             Cookies.set('googtrans', `/en/${item.languageCode}`)
-                            action({ Language: item.languageCulture })
+                            action({ Language: item.languageCode })
                           }}
                         >
                           {item.languageCode} - {item.name}
