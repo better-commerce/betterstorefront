@@ -33,6 +33,6 @@ package-lock.json
 
 .env.production.local
 framework/bettercommerce/config/seo.json
-
+framework/bettercommerce/locales.json
 # vercel
 .vercel
