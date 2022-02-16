@@ -51,7 +51,7 @@ const getSeoConfig = async function (token) {
       }, {})
     console.log(path.join(__dirname), '====')
     fs.writeFileSync(
-      path.join(__dirname, '/config/seo.json'),
+      path.join(__dirname, '/seo.json'),
       JSON.stringify(seoConfig),
       (err) => console.log(err)
     )
