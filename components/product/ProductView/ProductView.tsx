@@ -408,7 +408,7 @@ export default function ProductView({
             {/* Product info */}
             <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
               <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-                {selectedAttrData.name}
+                {selectedAttrData.name || selectedAttrData.productName}
               </h1>
 
               <p className="text-gray-500 text-md">
