@@ -39,11 +39,11 @@ export default function Summary({
                 <div className="flex">
                   <div className="min-w-0 flex-1">
                     <h4 className="text-sm">
-                      <h3 className="py-2 text-md font-bold text-gray-900">
+                      <span className="py-2 text-md font-bold text-gray-900 block">
                         {product.brand}
-                      </h3>
+                      </span>
                       <Link href={`/${product.slug}`}>
-                        <a className="font-medium text-gray-700 hover:text-gray-800">
+                        <a className="font-medium text-gray-700 hover:text-gray-800 block">
                           {product.name}
                         </a>
                       </Link>
