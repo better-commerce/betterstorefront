@@ -87,6 +87,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
   let accountDropdownConfig = accountDropDownConfigUnauthorized
   let title = user.userId ? `Hi, ${user.firstName}` : 'My account'
+
   if (user.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
@@ -94,6 +95,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   const configAction = (pair: any) => {
     const value: any = Object.values(pair)[0]
     const key = Object.keys(pair)[0]
+    const { pathname, asPath, query } = Router
     Cookies.set(key, value)
     axios
       .post(NEXT_SET_CONFIG, { obj: pair })

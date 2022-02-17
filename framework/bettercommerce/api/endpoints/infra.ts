@@ -33,7 +33,7 @@ export default function useInfra(req: any) {
                 (item: any) =>
                   item.key === 'RegionalSettings.DefaultLanguageCode'
               ).value ||
-            'en'
+            'en-GB'
         )
       }
       return {

@@ -9,6 +9,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BETTERCOMMERCE_BASE_URL
 const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config`
 const fs = require('fs')
+const locales = require('./locales.json')
 
 const url = new URL('oAuth/token', AUTH_URL)
 
@@ -48,8 +49,9 @@ const getSeoConfig = async function (token) {
           acc['keywords'] = obj.value || JSON.stringify(obj.value)
         return acc
       }, {})
+    console.log(path.join(__dirname), '====')
     fs.writeFileSync(
-      path.join(__dirname, '/config/seo.json'),
+      path.join(__dirname, '/seo.json'),
       JSON.stringify(seoConfig),
       (err) => console.log(err)
     )
@@ -80,8 +82,35 @@ const getKeywords = async function () {
   })
 }
 
-handler()
+const getMicrosites = () => {
+  const microSitesHandler = async () => {
+    const token = await getToken()
+    const url = new URL('/api/v2/content/microsite/all', BASE_URL).href
+    const { data } = await axios({
+      method: 'get',
+      url: url,
+      headers: {
+        DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        Authorization: 'Bearer ' + token,
+      },
+    })
+    return {
+      locales: data.result.map((i) => i.defaultLangCulture),
+      defaultLocale: 'en-US',
+    }
+  }
+  return microSitesHandler()
+}
 
+const localeStore = {}
+
+let func = (async () => {
+  let microsites = await getMicrosites()
+  console.log(microsites)
+  localeStore.i18n = microsites
+})()
+
+console.log(localeStore)
 module.exports = {
   //https://nextjs.org/docs/api-reference/next.config.js/redirects nextjs documentation on redirects
   commerce,
@@ -89,4 +118,13 @@ module.exports = {
     const keywords = await getKeywords()
     return keywords
   },
+  i18n: {
+    ...locales,
+    localeDetection: false,
+  },
 }
+
+console.log(
+  'next.config.js bettercommerce',
+  JSON.stringify(module.exports, null, 2)
+)

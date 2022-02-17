@@ -97,10 +97,16 @@ body {
   position: relative;
   min-height: 100%;
   margin: 0;
+  top: 0 !important;
 }
 
 a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.skiptranslate.goog-te-gadget,
+.goog-te-banner-frame.skiptranslate {
+  display: none;
 }
 
 .animated {
