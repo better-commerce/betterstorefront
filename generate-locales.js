@@ -53,7 +53,6 @@ const getMicrosites = () => {
 }
 
 const getSeoConfig = async function () {
-  console.log('here')
   try {
     const INFRA_URL = new URL(INFRA_ENDPOINT, BASE_URL).href
     const token = await getToken()
