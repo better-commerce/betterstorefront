@@ -24,7 +24,6 @@ function BrandPage({ brandDetails }: any) {
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
 
-  console.log(widgetsConfig)
   return (
     <>
       {widgetsConfig.map((widget: any, idx: number) => {
