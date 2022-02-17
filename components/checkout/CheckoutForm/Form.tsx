@@ -1,14 +1,15 @@
 import { Formik, Form, Field } from 'formik'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import { CheckCircleIcon } from '@heroicons/react/solid'
-import { useState } from 'react'
-import { 
-  ADD_ADDRESS, 
-  BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS, 
-  BTN_FIND, BTN_SAVE, 
-  ENTER_ADDRESS_MANUALY, 
-  GENERAL_CANCEL, 
-  GENERAL_CLOSE 
+import { useState, useRef } from 'react'
+import {
+  ADD_ADDRESS,
+  BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS,
+  BTN_FIND,
+  BTN_SAVE,
+  ENTER_ADDRESS_MANUALY,
+  GENERAL_CANCEL,
+  GENERAL_CLOSE,
 } from '@components/utils/textVariables'
 
 export default function AddressForm({
@@ -42,6 +43,8 @@ export default function AddressForm({
   const IS_LOQATE_AVAILABLE =
     process.env.NEXT_PUBLIC_IS_LOQATE_AVAILABLE === 'true'
 
+  const formikRef: any = useRef(null)
+
   if (isInfoCompleted) {
     return (
       <ConfirmedGeneralComponent
@@ -58,11 +61,25 @@ export default function AddressForm({
     )
   }
 
-  const handleNewFormButton = (values?: any) => {
+  const touchedValidationObject = config.reduce((acc: any, next: any) => {
+    acc[next.name] = true
+    return acc
+  }, {})
+
+  const handleNewFormButton = (values?: any, errors?: any) => {
     if (!isFormOpen) {
+      formikRef.current.setValues({})
       setNewFormOpen(true)
     } else {
-      handleNewAddress(values, () => setNewFormOpen(false))
+      if (itemsToHide.length > 0) {
+        setItemsToHide([])
+      }
+
+      formikRef.current.setTouched(touchedValidationObject)
+      formikRef.current.validateForm()
+      if (!Object.keys(errors).length) {
+        handleNewAddress(values, () => setNewFormOpen(false))
+      }
     }
   }
 
@@ -94,11 +111,21 @@ export default function AddressForm({
     }
   }
 
+  const handleFormSubmit = (handleSubmit: any, ...args: any) => {
+    formikRef.current.validateForm()
+    handleSubmit(...args)
+    if (itemsToHide.length > 0) {
+      setItemsToHide([])
+    }
+    formikRef.current.setTouched(touchedValidationObject)
+  }
+
   return (
     <Formik
       validationSchema={schema}
       initialValues={initState}
       onSubmit={onSubmit}
+      innerRef={formikRef}
     >
       {({
         errors,
@@ -269,7 +296,7 @@ export default function AddressForm({
               <div className="flex">
                 <button
                   type="button"
-                  onClick={() => handleNewFormButton(values)}
+                  onClick={() => handleNewFormButton(values, errors)}
                   className="max-w-xs m-2 flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
                   {isFormOpen ? BTN_SAVE : ADD_ADDRESS}
@@ -292,9 +319,9 @@ export default function AddressForm({
                   type="checkbox"
                   defaultChecked={isSameAddress}
                   onChange={(e) => {
-                    if (e.target.checked) {
-                      sameAddressAction(values)
-                    }
+                    // if (e.target.checked) {
+                    sameAddressAction(values)
+                    // }
                   }}
                   className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
                 />
@@ -310,7 +337,7 @@ export default function AddressForm({
             <div className="mt-10 flex sm:flex-col1 w-full justify-center">
               <button
                 type="submit"
-                onClick={handleSubmit}
+                onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
                 className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
               >
                 {btnTitle}

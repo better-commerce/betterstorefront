@@ -235,13 +235,15 @@ export default function CheckoutForm({
     const newValues = {
       ...values,
       userId: cartItems.userId,
-      country: state.deliveryMethod.value,
-      countryCode: state.deliveryMethod.code,
+      country: state.deliveryMethod.name,
+      countryCode: state.deliveryMethod.twoLetterIsoCode,
     }
+
     createAddress(newValues)
       .then((response: any) => {
         callback()
         fetchAddress()
+        setShippingInformation({ ...newValues, id: response.id })
       })
       .catch((error: any) => console.log(error))
   }
@@ -338,13 +340,13 @@ export default function CheckoutForm({
       const data = {
         billingAddress: {
           ...billingInfoClone,
-          country: state.deliveryMethod.value,
-          countryCode: state.deliveryMethod.code,
+          country: state.deliveryMethod.name,
+          countryCode: state.deliveryMethod.twoLetterIsoCode,
         },
         shippingAddress: {
           ...shippingClone,
-          country: state.deliveryMethod.value,
-          countryCode: state.deliveryMethod.code,
+          country: state.deliveryMethod.name,
+          countryCode: state.deliveryMethod.twoLetterIsoCode,
         },
       }
 
@@ -374,9 +376,11 @@ export default function CheckoutForm({
   }
 
   useEffect(() => {
-    setShippingInformation(defaultShippingAddress)
-    setBillingInformation(defaultBillingAddress, false)
-  }, [])
+    if (!Object.keys(state.shippingInformation).length) {
+      setShippingInformation(defaultShippingAddress)
+      setBillingInformation(defaultBillingAddress, false)
+    }
+  }, [defaultShippingAddress])
 
   const handlePayments = (method: any) => {
     // const isTestUrl = state.selectedPaymentMethod.settings.find((method:any) => method.key === 'UseSandbox').value === 'True';
@@ -411,13 +415,13 @@ export default function CheckoutForm({
       basket: cartItems,
       billingAddress: {
         ...billingInfoClone,
-        country: state.deliveryMethod.value,
-        countryCode: state.deliveryMethod.code,
+        country: state.deliveryMethod.name,
+        countryCode: state.deliveryMethod.twoLetterIsoCode,
       },
       shippingAddress: {
         ...shippingClone,
-        country: state.deliveryMethod.value,
-        countryCode: state.deliveryMethod.code,
+        country: state.deliveryMethod.name,
+        countryCode: state.deliveryMethod.twoLetterIsoCode,
       },
       selectedShipping: state.shippingMethod,
       selectedPayment: method,
