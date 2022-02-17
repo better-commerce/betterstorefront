@@ -121,11 +121,10 @@ export const shippingFormConfig = [
 export const shippingSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phoneNo: Yup.string().required(),
+  phoneNo: Yup.string().required().min(10),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
-  address2: Yup.string(),
-  title: Yup.string().nullable(),
+  address2: Yup.string().nullable(),
   city: Yup.string().required(),
 })
 
@@ -215,10 +214,9 @@ export const billingFormConfig = [
 export const billingSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phoneNo: Yup.string().required(),
+  phoneNo: Yup.string().required().min(10),
   postCode: Yup.string().required(),
   address1: Yup.string().required(),
-  address2: Yup.string(),
-  title: Yup.string().nullable(),
+  address2: Yup.string().nullable(),
   city: Yup.string().required(),
 })

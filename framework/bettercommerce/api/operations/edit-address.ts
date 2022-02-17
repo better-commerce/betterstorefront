@@ -26,7 +26,7 @@ export default function useAddress() {
     try {
       const response: any = await fetcher({
         url: `${ADDRESS_ENDPOINT}${query.id}/update`,
-        method: 'post',
+        method: 'put',
         data: data,
       })
       return response.result
