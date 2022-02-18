@@ -143,8 +143,14 @@ const PAGE_TYPE = PAGE_TYPES['Page']
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const data = await getLookbooks()
+  let paths = data.map((lookbook: any) => {
+    if (!lookbook.slug.includes('lookbook/')) {
+      return `/lookbook/${lookbook.slug}`
+    } else return `/${lookbook.slug}`
+  })
+
   return {
-    paths: data.map((lookbook: any) => `/${lookbook.slug}`),
+    paths: paths,
     fallback: 'blocking',
   }
 }
