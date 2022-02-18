@@ -281,31 +281,15 @@ function Search({ query, setEntities, recordEvent }: any) {
             {data.products.total} results
           </h1>
         </div>
-        <div className='grid grid-cols-12 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8'>
-          {/* <div className='col-span-12 mx-auto'>
-            <ProductFilters 
-             handleFilters={handleFilters}
-             handleSortBy={handleSortBy}
-             products={data.products}
-             routerFilters={state.filters}
-             clearAll={clearAll}
-            routerSortOption={state.sortBy}
-            />
-            <ProductGrid
-              products={productDataToPass}
-              currentPage={state.currentPage}
-              handlePageChange={handlePageChange}
-              handleInfiniteScroll={handleInfiniteScroll}
-            />
-          </div> */}
-          <div className='col-span-3'>
+        <div className="grid grid-cols-12 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
+          <div className="col-span-3">
             <ProductFilterRight
               handleFilters={handleFilters}
               products={data.products}
               routerFilters={state.filters}
             />
           </div>
-          <div className='col-span-9'>
+          <div className="col-span-9">
             <ProductFiltersTopBar
               products={data.products}
               handleSortBy={handleSortBy}
@@ -322,8 +306,6 @@ function Search({ query, setEntities, recordEvent }: any) {
           </div>
           <div></div>
         </div>
-        
-        
       </main>
     </div>
   )
