@@ -33,7 +33,11 @@ export async function getStaticProps(context: any) {
 const generateCategories = (categories: any) => {
   const categoryMap: any = []
   const generateCategory = (category: any) => {
-    if (category.link) categoryMap.push(`/${category.link}`)
+    if (category.link) {
+      category.link.includes('category/')
+        ? categoryMap.push(`/${category.link}`)
+        : categoryMap.push(`/category/${category.link}`)
+    }
     if (category.subCategories) {
       category.subCategories.forEach((i: any) => generateCategory(i))
     }
