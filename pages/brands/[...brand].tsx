@@ -5,6 +5,7 @@ import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
 import getBrands from '@framework/api/endpoints/catalog/brands'
+import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import ProductSort from '@components/product/ProductSort'
@@ -113,7 +114,7 @@ function BrandDetailPage({
       filters: [
         {
           Key: 'brandNoAnlz',
-          Value: brandDetails.manufacturerName,
+          Value: brandDetails.name,
           IsSelected: true,
         },
       ],
@@ -278,10 +279,10 @@ function BrandDetailPage({
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await getBrands({ brandIds: context.query.id })
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const response = await getBrandBySlug(`brands/${context.query.brand.pop()}`)
   return {
-    props: { query: context.query, brandDetails: response.result.results[0] }, // will be passed to the page component as props
+    props: { query: context.query, brandDetails: response.result }, // will be passed to the page component as props
   }
 }
 
