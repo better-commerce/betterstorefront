@@ -11,7 +11,6 @@ export default async function getBrands(query: any) {
     })
     return response
   } catch (error) {
-    console.log(error)
     return { hasError: true, error }
   }
 }
