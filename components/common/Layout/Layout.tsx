@@ -115,11 +115,9 @@ const Layout: FC<Props> = ({
   useEffect(() => {
     const fetchLayout = async () => {
       try {
-        if (!data.nav.length) {
-          const response: any = await getData(NEXT_GET_NAVIGATION)
-          setData(response)
-          setItem('navTree', response)
-        }
+        const response: any = await getData(NEXT_GET_NAVIGATION)
+        setData(response)
+        setItem('navTree', response)
       } catch (error) {
         console.log(error, 'error')
       }
