@@ -4,6 +4,8 @@ import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import ProductGrid from '@components/product/Grid'
 import ProductSort from '@components/product/ProductSort'
+import Link from 'next/link'
+import ProductFilterRight from '@components/product/Filters/filtersRight'
 
 const PAGE_TYPE = PAGE_TYPES.Category
 
@@ -128,6 +130,14 @@ function CategoryPage({ category, products }: any) {
     })
   }
 
+  const handleFilters = (filter: null, type: string) => {
+    dispatch({
+      type,
+      payload: filter,
+    })
+    dispatch({ type: PAGE, payload: 1 })
+  }
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -143,15 +153,36 @@ function CategoryPage({ category, products }: any) {
             </h1>
           )}
         </div>
+        <div className="flex justify-center items-center w-full">
+          {category.subCategories.map((subcateg: any, idx: number) => {
+            return (
+              <Link href={subcateg.link}>
+                <div className="flex justify-center items-center flex-col">
+                  <img
+                    className="h-12 w-12 rounded-full"
+                    src={
+                      subcateg.image ||
+                      'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
+                    }
+                  />
+                  <h4 className="text-gray-900 font-semibold text-md">
+                    {subcateg.name}
+                  </h4>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
         {!!products && (
           <>
             <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
-              <ProductSort
+              {/* <ProductSort
                 routerSortOption={state.sortBy}
                 products={products}
                 action={handleSortBy}
-              />
+              /> */}
             </div>
+
             <ProductGrid
               products={products}
               currentPage={products.currentPage}
