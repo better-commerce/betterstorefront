@@ -112,6 +112,7 @@ const Layout: FC<Props> = ({
 
   const { appConfig, setAppConfig } = useUI()
 
+  //check if nav data is avaialbel in LocalStorage, then dont fetch from Server/API
   useEffect(() => {
     const fetchLayout = async () => {
       try {
