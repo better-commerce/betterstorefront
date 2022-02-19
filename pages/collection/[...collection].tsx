@@ -1,16 +1,19 @@
+import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
+import getCollections from '@framework/api/content/getCollections'
+import { Layout } from '@components/common'
+import Link from 'next/link'
+import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
+import ProductFilterRight from '@components/product/Filters/filtersRight'
+import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
+import ProductGrid from '@components/product/Grid'
+import { data } from 'autoprefixer'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import { GetServerSideProps } from 'next'
-import ProductGrid from '@components/product/Grid'
-import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-import ProductSort from '@components/product/ProductSort'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import useAnalytics from '@components/services/analytics/useAnalytics'
-
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -79,26 +82,9 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({
-  query,
-  setEntities,
-  recordEvent,
-  brandDetails,
-}: any) {
-  const adaptedQuery = { ...query }
-  const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
-
-  useAnalytics(BrandViewed, {
-    entity: JSON.stringify({
-      id: brandDetails.id,
-      name: brandDetails.name || '',
-      manufName: brandDetails.manufacturerName,
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: brandDetails.manufacturerName,
-    entityType: 'Brand',
-    eventType: 'BrandViewed',
-  })
+export default function CollectionPage(props: any) {
+  const router = useRouter()
+  const adaptedQuery: any = { ...router.query }
 
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -109,30 +95,12 @@ function BrandDetailPage({
 
   const initialState = {
     ...DEFAULT_STATE,
-    ...{
-      filters: [
-        {
-          Key: 'brandNoAnlz',
-          Value: brandDetails.name,
-          IsSelected: true,
-        },
-      ],
-    },
+    filters: adaptedQuery.filters || [],
+    collectionId: props.id,
   }
 
-  const [productListMemory, setProductListMemory] = useState({
-    products: {
-      results: [],
-      sortList: [],
-      pages: 0,
-      total: 0,
-      currentPage: 1,
-      filters: [],
-    },
-  })
-
-  const router = useRouter()
   const [state, dispatch] = useReducer(reducer, initialState)
+
   const {
     data = {
       products: {
@@ -142,10 +110,27 @@ function BrandDetailPage({
         total: 0,
         currentPage: 1,
         filters: [],
+        collectionId: props.id,
       },
     },
     error,
   } = useSwr(['/api/catalog/products', state], postData)
+
+  const [productListMemory, setProductListMemory] = useState({
+    products: {
+      results: [],
+      sortList: [],
+      pages: 0,
+      total: 0,
+      currentPage: 1,
+      filters: [],
+      collectionId: props.id,
+    },
+  })
+
+  const productDataToPass = IS_INFINITE_SCROLL
+    ? productListMemory.products
+    : props.products
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
@@ -193,6 +178,14 @@ function BrandDetailPage({
     }
   }
 
+  const handleFilters = (filter: null, type: string) => {
+    dispatch({
+      type,
+      payload: filter,
+    })
+    dispatch({ type: PAGE, payload: 1 })
+  }
+
   const handleSortBy = (payload: any) => {
     dispatch({
       type: SORT_BY,
@@ -200,91 +193,77 @@ function BrandDetailPage({
     })
   }
 
-  useEffect(() => {
-    const entity = {
-      allowFacet: true,
-      brand: null,
-      brandId: null,
-      breadCrumb: null,
-      category: null,
-      categoryId: null,
-      categoryIds: null,
-      collection: null,
-      collectionId: null,
-      currentPage: state.currentPage,
-      excludedBrandIds: null,
-      excludedCategoryIds: null,
-      facet: null,
-      facetOnly: false,
-      filters: state.filters,
-      freeText: '',
-      gender: null,
-      ignoreDisplayInSerach: false,
-      includeExcludedBrand: false,
-      page: state.currentPage,
-      pageSize: 0,
-      promoCode: null,
-      resultCount: data.products.total,
-      sortBy: state.sortBy,
-      sortOrder: state.sortOrder,
-    }
-    setEntities({
-      [KEYS_MAP.entityId]: '',
-      [KEYS_MAP.entityName]: '',
-      [KEYS_MAP.entityType]: 'Search',
-      [KEYS_MAP.entity]: JSON.stringify(entity),
-    })
-
-    recordEvent(EVENTS.FreeText)
-  })
-
-  const productDataToPass = IS_INFINITE_SCROLL
-    ? productListMemory.products
-    : data.products
-
   return (
-    <div className="bg-white">
-      {/* Mobile menu */}
-      <main className="pb-24">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-            {state.filters[0]?.Value}
-          </h1>
-          <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
-            {data.products.total} results
-          </h1>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: brandDetails.description,
-            }}
-            className="py-10 px-5 mt-5 text-gray-900"
+    <main className="pb-24">
+      <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+          {props.name}
+        </h1>
+        <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+          {props.products.total} results
+        </h1>
+      </div>
+      <div>
+        {props.images.map((img: any, idx: number) => {
+          return (
+            <img
+              key={idx}
+              src={img.url || 'error'}
+              className="object-cover object-center w-full h-full"
+            />
+          )
+        })}
+      </div>
+      <div className="grid grid-cols-12 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
+        {props.allowFacets && (
+          <div className="col-span-3">
+            <ProductFilterRight
+              handleFilters={handleFilters}
+              products={props.products}
+              routerFilters={state.filters}
+            />
+          </div>
+        )}
+        <div className="col-span-9">
+          <ProductGrid
+            products={productDataToPass}
+            currentPage={props.currentPage}
+            handlePageChange={handlePageChange}
+            handleInfiniteScroll={handleInfiniteScroll}
           />
         </div>
-        <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
-          <ProductSort
-            routerSortOption={state.sortBy}
-            products={data.products}
-            action={handleSortBy}
-          />
-        </div>
-        <ProductGrid
-          products={productDataToPass}
-          currentPage={state.currentPage}
-          handlePageChange={handlePageChange}
-          handleInfiniteScroll={handleInfiniteScroll}
-        />
-      </main>
-    </div>
+        <div></div>
+      </div>
+    </main>
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const response = await getBrandBySlug(`brands/${context.query.brand.pop()}`)
+CollectionPage.Layout = Layout
+
+export async function getStaticProps({ params, ...context }: any) {
+  const slug: any = params!.collection
+  const data = await getCollectionBySlug(slug[0])
+  console.log(context)
   return {
-    props: { query: context.query, brandDetails: response.result }, // will be passed to the page component as props
+    props: {
+      ...data,
+      query: context,
+      slug: params!.collection[0],
+    },
+    revalidate: 60,
   }
 }
 
-const PAGE_TYPE = PAGE_TYPES['Brand']
-
-export default withDataLayer(BrandDetailPage, PAGE_TYPE)
+export async function getStaticPaths() {
+  const data = await getCollections()
+  return {
+    paths: data
+      .map((col: any) => {
+        if (col.slug) {
+          return `/collection/${col.slug}`
+        }
+      })
+      .filter((i: any) => !!i),
+    fallback: 'blocking',
+  }
+}
