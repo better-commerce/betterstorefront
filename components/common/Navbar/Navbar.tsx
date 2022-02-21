@@ -127,23 +127,36 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                       <Popover key={idx} className="flex">
                         {({ open }) => (
                           <>
-                            <Link href={`/${item.hyperlink}`} passHref>
-                              <a
-                                className="relative flex"
-                                href={item.hyperlink}
-                              >
-                                <Popover.Button
-                                  className={classNames(
-                                    open
-                                      ? 'border-indigo-600 text-indigo-600'
-                                      : 'border-transparent text-gray-700 hover:text-gray-800',
-                                    'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                  )}
+                            {!item.navBlocks.length ? (
+                              <Link href={`/${item.hyperlink}`} passHref>
+                                <a
+                                  className="relative flex"
+                                  href={item.hyperlink}
                                 >
-                                  {item.caption}
-                                </Popover.Button>
-                              </a>
-                            </Link>
+                                  <Popover.Button
+                                    className={classNames(
+                                      open
+                                        ? 'border-indigo-600 text-indigo-600'
+                                        : 'border-transparent text-gray-700 hover:text-gray-800',
+                                      'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                    )}
+                                  >
+                                    {item.caption}
+                                  </Popover.Button>
+                                </a>
+                              </Link>
+                            ) : (
+                              <Popover.Button
+                                className={classNames(
+                                  open
+                                    ? 'border-indigo-600 text-indigo-600'
+                                    : 'border-transparent text-gray-700 hover:text-gray-800',
+                                  'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                )}
+                              >
+                                {item.caption}
+                              </Popover.Button>
+                            )}
                             {item.navBlocks.length ? (
                               <Transition
                                 as={Fragment}
@@ -188,22 +201,24 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                               navItem.caption
                                                             }
                                                             className="flex my-2"
-                                                          >                                                            
+                                                          >
                                                             <Link
                                                               href={`/${navItem.itemLink}`}
                                                               passHref
                                                             >
                                                               <a className="hover:text-gray-800">
-                                                                  <Popover.Button
-                                                                      className={classNames(
-                                                                        open
-                                                                          ? ''
-                                                                          : 'border-transparent text-gray-700 hover:text-gray-800',
-                                                                        'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm -mb-px pt-px'
-                                                                      )}
-                                                                    >
-                                                                      {navItem.caption}
-                                                                  </Popover.Button>
+                                                                <Popover.Button
+                                                                  className={classNames(
+                                                                    open
+                                                                      ? ''
+                                                                      : 'border-transparent text-gray-700 hover:text-gray-800',
+                                                                    'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm -mb-px pt-px'
+                                                                  )}
+                                                                >
+                                                                  {
+                                                                    navItem.caption
+                                                                  }
+                                                                </Popover.Button>
                                                               </a>
                                                             </Link>
                                                           </li>
