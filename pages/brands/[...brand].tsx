@@ -10,6 +10,8 @@ import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import ProductSort from '@components/product/ProductSort'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { NextSeo } from 'next-seo'
+import  Link from 'next/link'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -87,6 +89,13 @@ function BrandDetailPage({
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  // IMPLEMENT HANDLING FOR NULL OBJECT
+  if(brandDetails === null){
+    return <div>
+        This is a bad url. please go back to  <Link href="/brands"><a>all brands</a></Link>
+      </div>
+  }
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -274,12 +283,37 @@ function BrandDetailPage({
           handleInfiniteScroll={handleInfiniteScroll}
         />
       </main>
+      <NextSeo
+          title={brandDetails.name}
+          description={brandDetails.description}
+          additionalMetaTags={[
+            {
+              name: 'keywords',
+              content: brandDetails.metaKeywords,
+            },
+          ]}
+          openGraph={{
+            type: 'website',
+            title: brandDetails.metaTitle,
+            description: brandDetails.metaDescription,
+            images: [
+              {
+                url: brandDetails.Image ,
+                width: 800,
+                height: 600,
+                alt: brandDetails.name,
+              },
+            ],
+          }}
+        />
     </div>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const response = await getBrandBySlug(`brands/${context.query.brand.pop()}`)
+  debugger
+  console.log(response.result);
   return {
     props: { query: context.query, brandDetails: response.result }, // will be passed to the page component as props
   }
