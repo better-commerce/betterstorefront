@@ -129,7 +129,7 @@ export default function ProductView({
     if (snippets) {
       snippets.forEach((snippet: any) => {
         const domElement = document.querySelector(
-          PLACEMENTS_MAP[snippet.placement].element
+          PLACEMENTS_MAP[snippet.placement]?.element
         )
         if (domElement) {
           domElement.insertAdjacentHTML(
