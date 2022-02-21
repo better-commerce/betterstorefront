@@ -14,7 +14,7 @@ export default function getProductOperation({
     query?: string
   } = {}): Promise<any> {
     const response: any = await fetcher({
-      url: `${PRODUCT_API_ENDPOINT}slug?slug=products/${query}`,
+      url: `${PRODUCT_API_ENDPOINT}slug?slug=${query}`,
       method: 'post',
     })
     return {

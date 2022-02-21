@@ -39,7 +39,7 @@ const getMicrosites = () => {
       },
     })
     let locales = {
-      locales: data.result.map((i) => i.defaultLangCulture),
+      locales: [...new Set(data.result.map((i) => i.defaultLangCulture))],
       defaultLocale: 'en-US',
     }
     // fs.writeFileSync(__dirname.join('/'))

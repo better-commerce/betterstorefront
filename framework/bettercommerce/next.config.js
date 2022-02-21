@@ -110,7 +110,7 @@ let func = (async () => {
   localeStore.i18n = microsites
 })()
 
-console.log(localeStore)
+console.log(locales, '====')
 module.exports = {
   //https://nextjs.org/docs/api-reference/next.config.js/redirects nextjs documentation on redirects
   commerce,
@@ -118,6 +118,7 @@ module.exports = {
     const keywords = await getKeywords()
     return keywords
   },
+
   i18n: {
     ...locales,
     localeDetection: false,
