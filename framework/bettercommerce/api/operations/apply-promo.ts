@@ -3,10 +3,11 @@ import { BASKET_ENDPOINT } from '@components/utils/constants'
 export default function applyPromo() {
   async function applyPromoAsync(query: any) {
     const { basketId, promoCode, method = 'apply' } = query
+    let httpMethod =  method === 'remove' ? 'delete' : 'post';
     try {
       const response: any = await fetcher({
         url: `${BASKET_ENDPOINT}/${basketId}/promo/${promoCode}/${method}`,
-        method: 'post',
+        method: httpMethod,
       })
       return response
     } catch (error: any) {

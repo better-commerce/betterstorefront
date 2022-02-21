@@ -5,7 +5,7 @@ export default async function getBrands(query: any) {
   try {
     const response: any = await fetcher({
       url: `${CATALOG_ENDPOINT}/all?page=${query.page || 1}&sortBy=${
-        query.sortBy || 'bestSeller'
+        query.sortBy || 'manufacturerName'
       }&sortOrder=${query.sortOrder || 'asc'}&brandIds=${query.brandIds || ''}`,
       method: 'get',
     })
