@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "node generate-locales.js && NODE_OPTIONS='--inspect' next dev",
-    "dev-windows": "node generate-locales.js && cross-env NODE_OPTIONS='--inspect' next dev",
+    "dev-windows": "node generate-locales.js && cross-env NODE_OPTIONS='--inspect=5009' next dev",
     "build": "node generate-locales.js && next build",
     "start": "next start",
     "analyze": "BUNDLE_ANALYZE=both yarn build",
