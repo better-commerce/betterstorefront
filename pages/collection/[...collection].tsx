@@ -260,7 +260,11 @@ export async function getStaticPaths() {
     paths: data
       .map((col: any) => {
         if (col.slug) {
-          return `/collection/${col.slug}`
+          let collectionSlug =
+            col.slug[0] === '/'
+              ? `/collection${col.slug}`
+              : `/collection/${col.slug}`
+          return collectionSlug
         }
       })
       .filter((i: any) => !!i),
