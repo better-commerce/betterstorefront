@@ -179,7 +179,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                     <ul
                                                       role="list"
                                                       aria-labelledby="clothing-heading"
-                                                      className="space-y-4 sm:space-y-3 grid grid-cols-4"
+                                                      className="grid grid-cols-4"
                                                     >
                                                       {navBlock.navItems.map(
                                                         (navItem: any) => (
@@ -187,16 +187,23 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                             key={
                                                               navItem.caption
                                                             }
-                                                            className="flex"
-                                                          >
+                                                            className="flex my-2"
+                                                          >                                                            
                                                             <Link
                                                               href={`/${navItem.itemLink}`}
                                                               passHref
                                                             >
                                                               <a className="hover:text-gray-800">
-                                                                {
-                                                                  navItem.caption
-                                                                }
+                                                                  <Popover.Button
+                                                                      className={classNames(
+                                                                        open
+                                                                          ? ''
+                                                                          : 'border-transparent text-gray-700 hover:text-gray-800',
+                                                                        'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm -mb-px pt-px'
+                                                                      )}
+                                                                    >
+                                                                      {navItem.caption}
+                                                                  </Popover.Button>
                                                               </a>
                                                             </Link>
                                                           </li>
