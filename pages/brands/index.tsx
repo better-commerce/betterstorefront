@@ -77,7 +77,7 @@ function BrandsPage({ brands }: any) {
               )
               if (brandExists) {
                 return (
-                  <Link key={key} passHref href={`#${letter}`}>
+                  <Link key={key} passHref href={`#${letter.toUpperCase()}`}>
                     <a className="hover:bg-indigo-600 hover:text-white mr-3 mt-5 py-2 px-4 text-gray-900 border font-extrabold text-lg">
                       {letter.toUpperCase()}
                     </a>
@@ -115,7 +115,7 @@ function BrandsPage({ brands }: any) {
           return (
             <div
               key={idx}
-              className="sm:px-6 lg:px-8 px-4 flex flex-col border-t py-10"
+              className="sm:px-6 lg:px-8 px-4 flex flex-col border-t py-10" id={brand.title}
             >
               <h1
                 id={brand.title}
