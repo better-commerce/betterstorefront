@@ -78,7 +78,7 @@ function BrandsPage({ brands }: any) {
               if (brandExists) {
                 return (
                   <Link key={key} passHref href={`#${letter.toUpperCase()}`}>
-                    <a className="hover:bg-indigo-600 hover:text-white mr-3 mt-5 py-2 px-4 text-gray-900 border font-extrabold text-lg">
+                    <a className="hover:bg-gray-400 hover:text-white mr-3 mt-5 py-1 px-3 text-gray-900 border font-bold text-lg">
                       {letter.toUpperCase()}
                     </a>
                   </Link>
@@ -87,7 +87,7 @@ function BrandsPage({ brands }: any) {
               return (
                 <span
                   key={key}
-                  className="mr-3 mt-5 py-2 px-4 text-gray-900 border font-extrabold text-lg opacity-40 pointer-events-none"
+                  className="mr-3 mt-5 py-1 px-3 text-gray-900 border font-bold text-lg opacity-40 pointer-events-none"
                 >
                   {letter.toUpperCase()}
                 </span>
@@ -115,20 +115,20 @@ function BrandsPage({ brands }: any) {
           return (
             <div
               key={idx}
-              className="sm:px-6 lg:px-8 px-4 flex flex-col border-t py-10" id={brand.title}
+              className="sm:px-6 lg:px-8 px-4 flex flex-col border-t py-5" id={brand.title.toUpperCase()}
             >
               <h1
                 id={brand.title}
-                className="text-gray-900 text-4xl font-extrabold"
+                className="text-gray-900 text-4xl font-bold"
               >
-                {brand.title}
+                {brand.title.toUpperCase()}
               </h1>
-              <div className="flex justify-between items-center py-2 flex-wrap">
+              <div className="flex items-center py-1 flex-wrap">
                 {brand.results.map((result: any, key: number) => {
                   return (
                     <div
                       key={key}
-                      style={{ flex: '0 0 33.333333%' }}
+                      style={{ flex: '0 0 25%' }}
                       className="text-gray-900 sm:inline-flex flex "
                     >
                       <Link

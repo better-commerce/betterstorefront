@@ -163,7 +163,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
                                   <div className="relative bg-white">
                                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                                      <div className="grid grid-cols-1 items-start gap-y-10 gap-x-6 pt-10 pb-12 md:grid-cols-2 lg:gap-x-8">
+                                      <div className="grid grid-cols-1 items-start gap-y-10 gap-x-6 pt-10 pb-12 md:grid-cols-1 lg:gap-x-8">
                                         {item.navBlocks.map(
                                           (navBlock: any, navIdx: number) => {
                                             return (
@@ -172,14 +172,14 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                 className="grid grid-cols-1 gap-y-10 gap-x-6 lg:gap-x-8"
                                               >
                                                 <div>
-                                                  <p className="font-medium text-gray-900">
+                                                  <p className="font-semibold capitalize text-xl text-gray-900">
                                                     {navBlock.boxTitle}
                                                   </p>
-                                                  <div className="mt-4 border-t border-gray-200 pt-6 sm:grid sm:grid-cols-2 sm:gap-x-6">
+                                                  <div className="mt-4 border-t border-gray-100 pt-6 sm:grid sm:grid-cols-1 sm:gap-x-6">
                                                     <ul
                                                       role="list"
                                                       aria-labelledby="clothing-heading"
-                                                      className="space-y-6 sm:space-y-4"
+                                                      className="space-y-4 sm:space-y-3 grid grid-cols-4"
                                                     >
                                                       {navBlock.navItems.map(
                                                         (navItem: any) => (
@@ -190,9 +190,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                             className="flex"
                                                           >
                                                             <Link
-                                                              href={
-                                                                navItem.itemLink
-                                                              }
+                                                              href={`/${navItem.itemLink}`}
                                                               passHref
                                                             >
                                                               <a className="hover:text-gray-800">
