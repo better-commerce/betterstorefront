@@ -161,7 +161,7 @@ function CategoryPage({ category, products }: any) {
           {category.subCategories.map((subcateg: any, idx: number) => {
             return (
               <Link href={subcateg.link} key={idx}>
-                <div className="flex justify-center items-center flex-col">
+                <div className="flex justify-center items-center flex-col px-2">
                   <img
                     className="h-12 w-12 rounded-full"
                     src={
