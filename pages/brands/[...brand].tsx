@@ -115,7 +115,7 @@ function BrandDetailPage({
       filters: [
         {
           Key: 'brandNoAnlz',
-          Value: brandDetails.name,
+          Value: brandDetails?.name,
           IsSelected: true,
         },
       ],
