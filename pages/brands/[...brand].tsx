@@ -90,21 +90,14 @@ function BrandDetailPage({
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
 
-  // IMPLEMENT HANDLING FOR NULL OBJECT
-  if(brandDetails === null){
-    return <div>
-        This is a bad url. please go back to  <Link href="/brands"><a>all brands</a></Link>
-      </div>
-  }
-
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
-      id: brandDetails.id,
-      name: brandDetails.name || '',
-      manufName: brandDetails.manufacturerName,
+      id: brandDetails?.id,
+      name: brandDetails?.name || '',
+      manufName: brandDetails?.manufacturerName,
     }),
     entityName: PAGE_TYPE,
-    pageTitle: brandDetails.manufacturerName,
+    pageTitle: brandDetails?.manufacturerName,
     entityType: 'Brand',
     eventType: 'BrandViewed',
   })
@@ -250,6 +243,13 @@ function BrandDetailPage({
   const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory.products
     : data.products
+
+  // IMPLEMENT HANDLING FOR NULL OBJECT
+  if(brandDetails === null){
+    return <div>
+        This is a bad url. please go back to  <Link href="/brands"><a>all brands</a></Link>
+      </div>
+  }
 
   return (
     <div className="bg-white">
