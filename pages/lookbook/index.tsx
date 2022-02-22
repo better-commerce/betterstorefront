@@ -16,9 +16,6 @@ SwiperCore.use([Navigation])
 const IMG_PLACEHOLDER =
   'https://images.unsplash.com/photo-1640767514388-eef1b79eb036'
 
-const DESCRIPTION_PLACEHOLDER =
-  'My ideal home is a personalized handpicked furniture items set that gives you the touch of royalty and the feel of contemporary world yet keeping your living area cool and peace making.'
-
 function LookbookPage({ data }: any) {
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const {} = EVENTS_MAP.ENTITY_TYPES
@@ -69,7 +66,7 @@ function LookbookPage({ data }: any) {
                         {lookbook.name}
                       </h3>
                       <p className="text-md sm:text-lg py-5 text-gray-900 text-left">
-                        {DESCRIPTION_PLACEHOLDER}
+                        {lookbook.description}
                       </p>
                       <Link href={`/${lookbook.slug}`}>
                         <button
