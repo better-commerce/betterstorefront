@@ -14,10 +14,10 @@ export default function CategoryList(props: any) {
 
         <div className="py-10 grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:gap-x-8">
           {props.data.map((category: any, key: number) => (
-            <Link key={key} href={`/category/${category.slug}`}>
+            <Link key={key} href={`/${category.link}`}>
               <a
                 key={category.id}
-                href={`/category/${category.slug}`}
+                href={`/${category.link}`}
                 className="group"
               >
                 <div className="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
