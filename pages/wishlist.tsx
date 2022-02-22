@@ -41,7 +41,7 @@ export async function getStaticProps({
 
 export default function Wishlist() {
   const { data: customer } = useCustomer()
-  // @ts-ignore Shopify - Fix this types
+  // @ts-ignore  - Fix this types
   const { data, isLoading, isEmpty } = useWishlist({ includeProducts: true })
 
   return (
@@ -74,7 +74,7 @@ export default function Wishlist() {
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data &&
-                // @ts-ignore Shopify - Fix this types
+                // @ts-ignore  - Fix this types
                 data.items?.map((item) => (
                   <WishlistCard key={item.id} product={item.product! as any} />
                 ))}
