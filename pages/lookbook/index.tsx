@@ -59,7 +59,7 @@ function LookbookPage({ data }: any) {
                   <div className="group relative flex flex-col sm:flex-row justify-between items-center">
                     <div className="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
                       <img
-                        src={lookbook.image || IMG_PLACEHOLDER}
+                        src={lookbook.mainImage || IMG_PLACEHOLDER}
                         alt={lookbook.name}
                         className="w-full h-full object-center object-cover hover:opacity-75"
                       />
