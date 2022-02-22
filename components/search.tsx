@@ -239,7 +239,7 @@
 //                         className={cn(
 //                           'block text-sm leading-5 text-accent-4 hover:bg-accent-1 lg:hover:bg-transparent hover:text-accent-8 focus:outline-none focus:bg-accent-1 focus:text-accent-8',
 //                           {
-//                             // @ts-ignore Shopify - Fix this types
+//                             // @ts-ignore  - Fix this types
 //                             underline: activeBrand?.entityId === node.entityId,
 //                           }
 //                         )}
