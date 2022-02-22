@@ -6,10 +6,6 @@ const {
 
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
-const isShopify = provider === 'shopify'
-const isSaleor = provider === 'saleor'
-const isSwell = provider === 'swell'
-const isVendure = provider === 'vendure'
 const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({
@@ -20,7 +16,7 @@ module.exports = withCommerceConfig({
   },
   rewrites() {
     return [
-      (isBC || isShopify || isSwell || isVendure || isSaleor) && {
+      (isBC ) && {
         source: '/checkout',
         destination: '/api/checkout',
       },
@@ -32,11 +28,7 @@ module.exports = withCommerceConfig({
       },
       // For Vendure, rewrite the local api url to the remote (external) api url. This is required
       // to make the session cookies work.
-      isVendure &&
-        process.env.NEXT_PUBLIC_VENDURE_LOCAL_URL && {
-          source: `${process.env.NEXT_PUBLIC_VENDURE_LOCAL_URL}/:path*`,
-          destination: `${process.env.NEXT_PUBLIC_VENDURE_SHOP_API_URL}/:path*`,
-        },
+    
     ].filter(Boolean)
   },
 })
