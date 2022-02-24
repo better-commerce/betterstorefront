@@ -172,6 +172,13 @@ function CategoryPage({ category, products }: any) {
           )}
         </div>
         <div className="flex justify-center items-center w-full">
+          {category.images.map((image: any, idx:number)=>{
+            return(
+              <img key={idx} className="h-12 w-12" src={image.url ||'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'}/>
+            )
+          })}
+        </div>
+        <div className="flex justify-center items-center w-full">
           {category.subCategories.map((subcateg: any, idx: number) => {
             return (
               <Link href={'/' + subcateg.link} key={idx}>
