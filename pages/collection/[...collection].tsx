@@ -10,6 +10,7 @@ import { data } from 'autoprefixer'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
+import { NextSeo } from 'next-seo'
 import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
@@ -199,6 +200,7 @@ export default function CollectionPage(props: any) {
         <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
           {props.name}
         </h1>
+        <h2>{props.description}</h2>
         <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
           {props.products.total} results
         </h1>
@@ -234,6 +236,29 @@ export default function CollectionPage(props: any) {
         </div>
         <div></div>
       </div>
+      <NextSeo
+        title={props.name}
+        description={props.description}
+        additionalMetaTags={[
+          {
+            name: 'keywords',
+            content: props.metaKeywords,
+          },
+        ]}
+        openGraph={{
+          type: 'website',
+          title: props.metaTitle,
+          description: props.metaDescription,
+          images: [
+            {
+              url: props.image,
+              width: 800,
+              height: 600,
+              alt: props.name,
+            },
+          ],
+        }}
+      />
     </main>
   )
 }

@@ -12,6 +12,7 @@ import {
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
+import { NextSeo } from 'next-seo'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 function LookbookDetailPage({ data, slug }: any) {
@@ -93,6 +94,7 @@ function LookbookDetailPage({ data, slug }: any) {
           <h1 className="py-5 text-4xl font-extrabold tracking-tight text-gray-900">
             {data.name}
           </h1>
+          <h2>{data.description}</h2>
           <div className="w-full sm:w-1/4 bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
             <img
               src={data.mainImage}
@@ -116,6 +118,29 @@ function LookbookDetailPage({ data, slug }: any) {
           </div>
         </div>
       </main>
+      <NextSeo
+        title={data.name}
+        description={data.description}
+        additionalMetaTags={[
+          {
+            name: 'keywords',
+            content: data.metaKeywords,
+          },
+        ]}
+        openGraph={{
+          type: 'website',
+          title: data.metaTitle,
+          description: data.metaDescription,
+          images: [
+            {
+              url: data.mainImage,
+              width: 800,
+              height: 600,
+              alt: data.name,
+            },
+          ],
+        }}
+      />
     </div>
   )
 }
