@@ -190,7 +190,7 @@ const CategoryCard: FC<Props> = ({ product }) => {
 
         <div className="pt-4 pb-2 text-left grid sm:grid-cols-12 grid-cols-1">
           <div className='sm:col-span-8'>
-              <h3 className="min-h-50px text-sm font-medium text-gray-900">
+              <h3 className="min-h-50px text-sm font-medium text-gray-900 line-clip-2">
                 <Link href={`/${currentProductData.link}`}>
                   <a href={`/${currentProductData.link}`}>{product.name}</a>
                 </Link>
@@ -211,7 +211,7 @@ const CategoryCard: FC<Props> = ({ product }) => {
               link={currentProductData.link}
             />
           ) : (
-            <div className="h-1 w-1 inline-block" />
+            <div className="h-10 w-10 inline-block" />
           )}
           <div className="flex flex-col">
             <Button

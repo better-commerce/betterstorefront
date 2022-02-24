@@ -230,7 +230,7 @@ export default function CollectionPage(props: any) {
         </h1>
       </div>
       
-      <div className="grid grid-cols-12 mx-auto overflow-hidden">
+      <div className="grid grid-cols-12 mx-auto overflow-hidden sm:max-w-7xl mx-auto">
         {props.allowFacets && (
           <>
             <div className="col-span-3">
