@@ -6,7 +6,8 @@ import ProductGrid from '@components/product/Grid'
 import ProductSort from '@components/product/ProductSort'
 import Link from 'next/link'
 import ProductFilterRight from '@components/product/Filters/filtersRight'
-import { BiUnlink } from "react-icons/bi";
+import { NextSeo } from 'next-seo'
+//import { BiUnlink } from "react-icons/bi";
 
 const PAGE_TYPE = PAGE_TYPES.Category
 
@@ -146,7 +147,6 @@ function CategoryPage({ category, products }: any) {
   if (category === null) {
     return (
       <div className='container mx-auto py-10 text-center relative top-20'>
-        <BiUnlink className='text-6xl mx-auto text-gray-200'></BiUnlink>
         <h4 className='text-3xl font-medium text-gray-400 pb-6'>This is a bad url. please go back to{' '}</h4>        
         <Link href="/category">
             <a className="text-indigo-500 capitalize border border-indigo-500 hover:bg-indigo-500 hover:text-white px-3 py-2 my-5">all category</a>
@@ -162,6 +162,7 @@ function CategoryPage({ category, products }: any) {
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
             {category.name}
           </h1>
+          <h2>{category.description}</h2>
 
           {!!products && (
             <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
@@ -208,6 +209,29 @@ function CategoryPage({ category, products }: any) {
           </>
         )}
       </main>
+      <NextSeo
+        title={category.name}
+        description={category.description}
+        additionalMetaTags={[
+          {
+            name: 'keywords',
+            content: category.metaKeywords,
+          },
+        ]}
+        openGraph={{
+          type: 'website',
+          title: category.metaTitle,
+          description: category.metaDescription,
+          images: [
+            {
+              url: category.image,
+              width: 800,
+              height: 600,
+              alt: category.name,
+            },
+          ],
+        }}
+      />
     </div>
   )
 }
