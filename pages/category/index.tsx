@@ -8,42 +8,42 @@ export default function CategoryList(props: any) {
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
       <section aria-labelledby="products-heading" className="mt-8">
-        <h2 className="text-gray-900 font-bold text-center text-2xl m-8">
-          Categories
+        <h2 className="text-4xl font-extrabold text-center tracking-tight text-gray-900">
+          Shop by Category
         </h2>
 
-        <div className="py-10 grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:gap-x-8">
-          {props.data.map((category: any, key: number) => (
-            <Link key={key} href={`/${category.link}`}>
-              <a
-                key={category.id}
-                href={`/${category.link}`}
-                className="group"
-              >
-                <div className="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
-                  <img
-                    src={
-                      category.image ||
-                      'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-01.jpg'
-                    }
-                    // alt={category.imageAlt}
-                    className="w-full h-full object-center object-cover group-hover:opacity-75"
-                  />
-                  <h1
-                    style={{
-                      backgroundColor: 'rgba(255,255,255,0.4',
-                      paddingLeft: '5%',
-                      top: '90%',
-                    }}
-                    className="w-8/10 px-2 absolute text-gray-900 font-bold text-xl"
-                  >
-                    {category.name}
-                  </h1>
-                </div>
-              </a>
-            </Link>
-          ))}
+        <div className="mt-6 flow-root">
+          <div className="my-2">
+            <div className="box-content py-2 relative">
+              <div className="min-w-screen-xl px-4 flex space-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:grid xl:grid-cols-5 xl:gap-8">
+                {props.data.map((category: any, key: number) => (
+                  <Link key={key} href={`/${category.link}`}>
+                      <a
+                        key={category.id}
+                        href={`/${category.link}`}
+                        className="relative w-56 h-80 rounded-lg p-6 flex flex-col overflow-hidden hover:opacity-75 xl:w-auto"
+                      >
+                        <span
+                      aria-hidden="true"
+                      className="absolute inset-x-0 top-0 h-2/3 bg-gradient-to-b from-gray-200 opacity-50"
+                    />
+                    <span aria-hidden="true" className="absolute inset-0">
+                      <img src={category.image || '/noimagefound.png' } alt="" className="w-full h-full object-center object-cover" />
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-gray-800 opacity-50"
+                    />
+                    <span className="relative mt-auto text-center text-xl font-bold text-white">{category.name}</span>
+                  </a>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
+
+       
       </section>
     </main>
   )
