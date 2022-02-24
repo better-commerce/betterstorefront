@@ -147,11 +147,12 @@ function CategoryPage({ category, products }: any) {
   if (category === null) {
     return (
       <div className='container mx-auto py-10 text-center relative top-20'>
-        <h4 className='text-3xl font-medium text-gray-400 pb-6'>This is a bad url. please go back to{' '}</h4>        
+      <h4 className='text-3xl font-medium text-gray-400 pb-6'>This is a bad url. please go back to
         <Link href="/category">
-            <a className="text-indigo-500 capitalize border border-indigo-500 hover:bg-indigo-500 hover:text-white px-3 py-2 my-5">all category</a>
+            <a className="text-indigo-500 px-3">all categories</a>
         </Link>
-      </div>
+      </h4>
+    </div>
     )
   }
   return (
