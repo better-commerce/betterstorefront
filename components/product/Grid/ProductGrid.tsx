@@ -1,6 +1,6 @@
 import Pagination from '@components/product/Pagination'
 import rangeMap from '@lib/range-map'
-import CategoryCard from '@components/product/ProductCard/CategoryCard'
+import CategoryCard from '@components/product/ProductCard/ProductCard'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
 import { TITLE_PRODUCTS } from '@components/utils/textVariables'
 
