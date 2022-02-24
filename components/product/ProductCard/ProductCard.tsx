@@ -172,7 +172,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                 alt={product.name}
                 onMouseEnter={() => handleHover('enter')}
                 onMouseLeave={() => handleHover('leave')}
-                className="w-full h-64 object-center object-cover"
+                className="w-full h-96 object-top object-cover"
               />
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">

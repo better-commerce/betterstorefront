@@ -6,6 +6,7 @@ import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 import ProductFilterRight from '@components/product/Filters/filtersRight'
 import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
 import ProductGrid from '@components/product/Grid/ProductGrid'
+import ProductGridWithFacet from '@components/product/Grid'
 import { data } from 'autoprefixer'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -241,7 +242,7 @@ export default function CollectionPage(props: any) {
               />
             </div>
             <div className="col-span-9">
-            <ProductGrid
+            <ProductGridWithFacet
               products={productDataToPass}
               currentPage={props.currentPage}
               handlePageChange={handlePageChange}
