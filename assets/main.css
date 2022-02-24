@@ -225,4 +225,5 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   max-height: 45px;
+  min-height: 45px;
 }
