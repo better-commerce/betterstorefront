@@ -5,7 +5,8 @@ import Link from 'next/link'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 import ProductFilterRight from '@components/product/Filters/filtersRight'
 import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
-import ProductGrid from '@components/product/Grid'
+import ProductGrid from '@components/product/Grid/ProductGrid'
+import ProductGridWithFacet from '@components/product/Grid'
 import { data } from 'autoprefixer'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -15,6 +16,13 @@ import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+
+import { Swiper, SwiperSlide } from 'swiper/react'
+// Import Swiper styles
+import 'swiper/css'
+import 'swiper/css/navigation'
+
+import SwiperCore, { Navigation } from 'swiper'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -195,8 +203,25 @@ export default function CollectionPage(props: any) {
   }
 
   return (
-    <main className="pb-24">
-      <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
+    <main className="pb-0">
+      <div className="sm:max-w-7xl sm:px-7 mx-auto mt-4 flex justify-center items-center w-full">
+          <Swiper navigation={true} loop={true} className="mySwiper">
+            {props.images.map((img: any, idx: number) => {
+              return (
+                <SwiperSlide key={idx}>
+                  <Link href={img.link || '#'}>
+                    <img
+                      src={img.url || 'error'}
+                      alt=""
+                      className="cursor-pointer w-full h-96 max-h-96 object-center object-cover rounded-md"
+                    />
+                  </Link>
+                </SwiperSlide>
+              )
+            })}
+          </Swiper>         
+        </div>
+      <div className="text-center py-8 px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
           {props.name}
         </h1>
@@ -205,35 +230,39 @@ export default function CollectionPage(props: any) {
           {props.products.total} results
         </h1>
       </div>
-      <div>
-        {props.images.map((img: any, idx: number) => {
-          return (
-            <img
-              key={idx}
-              src={img.url || 'error'}
-              className="object-cover object-center w-full h-full"
-            />
-          )
-        })}
-      </div>
-      <div className="grid grid-cols-12 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
+      
+      <div className="grid grid-cols-12 mx-auto overflow-hidden sm:max-w-7xl mx-auto">
         {props.allowFacets && (
-          <div className="col-span-3">
-            <ProductFilterRight
-              handleFilters={handleFilters}
-              products={props.products}
-              routerFilters={state.filters}
+          <>
+            <div className="col-span-3">
+              <ProductFilterRight
+                handleFilters={handleFilters}
+                products={props.products}
+                routerFilters={state.filters}
+              />
+            </div>
+            <div className="col-span-9">
+            <ProductGridWithFacet
+              products={productDataToPass}
+              currentPage={props.currentPage}
+              handlePageChange={handlePageChange}
+              handleInfiniteScroll={handleInfiniteScroll}
             />
           </div>
+          </>
         )}
-        <div className="col-span-9">
-          <ProductGrid
-            products={productDataToPass}
-            currentPage={props.currentPage}
-            handlePageChange={handlePageChange}
-            handleInfiniteScroll={handleInfiniteScroll}
-          />
-        </div>
+        {!props.allowFacets && (
+          <>
+            <div className="col-span-12">
+            <ProductGrid
+              products={productDataToPass}
+              currentPage={props.currentPage}
+              handlePageChange={handlePageChange}
+              handleInfiniteScroll={handleInfiniteScroll}
+            />
+          </div>
+          </>
+        )}
         <div></div>
       </div>
       <NextSeo

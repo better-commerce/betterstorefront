@@ -1,6 +1,6 @@
 import Pagination from '@components/product/Pagination'
 import rangeMap from '@lib/range-map'
-import ProductCard from '@components/product/ProductCard/SearchProductCard'
+import CategoryCard from '@components/product/ProductCard/ProductCard'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
 import { TITLE_PRODUCTS } from '@components/utils/textVariables'
 
@@ -11,7 +11,7 @@ interface Props {
   handleInfiniteScroll: any
 }
 
-export default function Grid({
+export default function CategoryGrid({
   products,
   currentPage,
   handlePageChange = () => {},
@@ -36,10 +36,10 @@ export default function Grid({
           currentNumber={products.results.length}
           component={
             <div
-              className={`-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 ${
-                products.results.length < 3
-                  ? `lg:grid-cols-2`
-                  : 'lg:grid-cols-3'
+              className={`-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-4 ${
+                products.results.length < 4
+                  ? `lg:grid-cols-4`
+                  : 'lg:grid-cols-4'
               }`}
             >
               {!products.results.length &&
@@ -57,7 +57,7 @@ export default function Grid({
                   </div>
                 ))}
               {products.results.map((product: any, productIdx: number) => (
-                <ProductCard key={productIdx} product={product} />
+                <CategoryCard key={productIdx} product={product} />
               ))}
             </div>
           }
@@ -81,7 +81,7 @@ export default function Grid({
                 </div>
               ))}
             {products.results.map((product: any, productIdx: number) => (
-              <ProductCard key={productIdx} product={product} />
+              <CategoryCard key={productIdx} product={product} />
             ))}
           </div>
           {products.pages > 1 && (
