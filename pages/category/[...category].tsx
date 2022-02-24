@@ -183,21 +183,25 @@ function CategoryPage({ category, products }: any) {
             })}
           </Swiper>         
         </div>
-        <div className="text-center py-8 px-4 sm:px-6 lg:px-8">
+        <div className="text-center pt-6 mb-4 px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
             {category.name}
           </h1>
           <h2>{category.description}</h2>
-
+             {!!products && (
+                <h1 className="text-lg mt-2 font-medium tracking-tight text-gray-500">
+                  {products.total} results
+                </h1>
+              )}
          
         </div>
-        <div className='sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-2 py-2 sm:grid-cols-12'>
-          <div className='sm:col-span-9 border-t border-gray-200 py-2'>
-            <div className="flex w-full">
+        <div className='sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-2 sm:grid-cols-12'>
+          <div className='sm:col-span-12 border-t border-gray-200 py-2'>
+            <div className="flex w-full text-center align-center justify-center">
               {category.subCategories.map((subcateg: any, idx: number) => {
                 return (
                   <Link href={'/' + subcateg.link} key={idx}>
-                    <div className="flex justify-start items-center flex-col px-2 cursor-pointer">
+                    <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
                       <img
                         className="h-8 w-8 rounded-full"
                         src={
@@ -213,13 +217,6 @@ function CategoryPage({ category, products }: any) {
                 )
               })}
             </div>
-          </div>
-          <div className='sm:col-span-3 border-t border-gray-200 py-2 text-right justify-end'>
-             {!!products && (
-                <h1 className="text-lg mt-2 font-medium tracking-tight text-gray-500">
-                  {products.total} results
-                </h1>
-              )}
           </div>
         </div>
 

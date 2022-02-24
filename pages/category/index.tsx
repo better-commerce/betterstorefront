@@ -8,11 +8,11 @@ export default function CategoryList(props: any) {
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
       <section aria-labelledby="products-heading" className="mt-8">
-        <h2 className="text-4xl font-extrabold text-center tracking-tight text-gray-900">
+        <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
           Shop by Category
         </h2>
 
-        <div className="mt-6 flow-root">
+        <div className="mt-4 flow-root">
           <div className="my-2">
             <div className="box-content py-2 relative">
               <div className="min-w-screen-xl px-4 flex space-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:grid xl:grid-cols-5 xl:gap-8">
@@ -25,14 +25,14 @@ export default function CategoryList(props: any) {
                       >
                         <span
                       aria-hidden="true"
-                      className="absolute inset-x-0 top-0 h-2/3 bg-gradient-to-b from-gray-200 opacity-50"
+                      className="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-gray-100 opacity-90"
                     />
                     <span aria-hidden="true" className="absolute inset-0">
-                      <img src={category.image || '/noimagefound.png' } alt="" className="w-full h-full object-center object-cover" />
+                      <img src={category.image || 'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-11.jpg' } alt="" className="object-center object-cover" />
                     </span>
                     <span
                       aria-hidden="true"
-                      className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-gray-800 opacity-50"
+                      className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 opacity-40"
                     />
                     <span className="relative mt-auto text-center text-xl font-bold text-white">{category.name}</span>
                   </a>
