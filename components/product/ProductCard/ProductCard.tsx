@@ -158,8 +158,8 @@ const ProductCard: FC<Props> = ({ product }) => {
   const buttonConfig = buttonTitle()
 
   return (
-    <div className="border-r border-b border-gray-200">
-      <div key={product.id} className="group relative p-4 sm:p-6">
+    <div className="border-b border-r border-gray-200">
+      <div key={product.id} className="group relative p-2 sm:p-6">
         <Link
           passHref
           href={`/${currentProductData.link}`}
@@ -188,17 +188,23 @@ const ProductCard: FC<Props> = ({ product }) => {
           </a>
         </Link>
 
-        <div className="pt-10 pb-4 text-center">
-          <h3 className="min-h-50px text-sm font-medium text-gray-900">
-            <Link href={`/${currentProductData.link}`}>
-              <a href={`/${currentProductData.link}`}>{product.name}</a>
-            </Link>
-          </h3>
-
-          <p className="mt-4 font-medium text-gray-900">
-            {product?.price?.formatted?.withTax}
-          </p>
-          {hasColorVariation ? (
+        <div className="pt-4 pb-2 text-left grid sm:grid-cols-12 grid-cols-1">
+          <div className='sm:col-span-8'>
+              <h3 className="min-h-50px text-sm font-medium text-gray-900 line-clip-2">
+                <Link href={`/${currentProductData.link}`}>
+                  <a href={`/${currentProductData.link}`}>{product.name}</a>
+                </Link>
+              </h3>
+          </div>
+          <div className='sm:col-span-4'>
+            <p className="font-bold text-gray-900 text-right">
+              {product?.price?.formatted?.withTax}
+            </p>
+          </div>
+        </div>
+        <div className='grid grid-cols-1 align-center text-center'>
+          <div>
+            {hasColorVariation ? (
             <AttributeSelector
               attributes={product.variantProductsAttributeMinimal}
               onChange={handleVariableProduct}
@@ -209,7 +215,7 @@ const ProductCard: FC<Props> = ({ product }) => {
           )}
           <div className="flex flex-col">
             <Button
-              className="mt-5"
+              className="mt-2"
               title={buttonConfig.title}
               action={buttonConfig.action}
               type="button"
@@ -221,13 +227,14 @@ const ProductCard: FC<Props> = ({ product }) => {
               </span>
             ) : (
               <Button
-                className="mt-5"
+                className="mt-2"
                 action={handleWishList}
                 buttonType="wishlist"
                 colorScheme={WISHLIST_BUTTON_COLOR_SCHEME}
                 title={BTN_ADD_TO_WISHLIST}
               />
             )}
+          </div>
           </div>
         </div>
       </div>
