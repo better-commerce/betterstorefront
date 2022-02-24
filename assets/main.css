@@ -218,3 +218,11 @@
     min-width: initial;
   }
 }
+
+.line-clip-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  max-height: 210px;
+}

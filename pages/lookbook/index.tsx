@@ -65,15 +65,15 @@ function LookbookPage({ data }: any) {
                       <h3 className="font-extrabold w-full text-left text-2xl sm:text-4xl text-gray-900">
                         {lookbook.name}
                       </h3>
-                      <p className="text-md sm:text-lg py-5 text-gray-900 text-left">
+                      <p className="text-md py-5 text-gray-900 text-left line-clip-3">
                         {lookbook.description}
                       </p>
                       <Link href={`/${lookbook.slug}`}>
                         <button
                           type="button"
-                          className="mt-5 cursor-pointer font-extrabold border border-gray-900 text-gray-900 py-3 px-3"
+                          className="mt-5 cursor-pointer font-bold border border-gray-900 text-gray-900 py-3 px-3 hover:bg-gray-100"
                         >
-                          Shop lookbook
+                          Shop The Look
                         </button>
                       </Link>
                     </div>
