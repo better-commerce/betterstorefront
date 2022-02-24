@@ -168,7 +168,10 @@ const ProductCard: FC<Props> = ({ product }) => {
           <a href={currentProductData.link}>
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
               <img
-                src={currentProductData.image}
+                src={
+                      currentProductData.image ||
+                      '/noimagefound.png'
+                    }
                 alt={product.name}
                 onMouseEnter={() => handleHover('enter')}
                 onMouseLeave={() => handleHover('leave')}
@@ -188,7 +191,7 @@ const ProductCard: FC<Props> = ({ product }) => {
           </a>
         </Link>
 
-        <div className="pt-10 pb-4 text-center">
+        <div className="pt-6 pb-4 text-center">
           <h3 className="min-h-50px text-sm font-medium text-gray-900">
             <Link href={`/${currentProductData.link}`}>
               <a href={`/${currentProductData.link}`}>{product.name}</a>

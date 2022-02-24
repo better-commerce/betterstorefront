@@ -9,6 +9,9 @@ const isBC = provider === 'bigcommerce'
 const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({
+  images: {
+    domains: ['liveocxstorage.blob.core.windows.net'],
+  },
   commerce,
   i18n: {
     locales: ['en-US', 'es'],

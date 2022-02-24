@@ -4,7 +4,7 @@ import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
-import ProductGrid from '@components/product/Grid'
+import ProductGrid from '@components/product/Grid/categoryGrid'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
@@ -90,12 +90,12 @@ function LookbookDetailPage({ data, slug }: any) {
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8 flex items-center flex-col">
+        <div className="text-center py-4 px-4 sm:px-6 lg:px-8 flex items-center flex-col">
           <h1 className="py-5 text-4xl font-extrabold tracking-tight text-gray-900">
             {data.name}
           </h1>
-          <h2>{data.description}</h2>
-          <div className="w-full sm:w-1/4 bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
+          <h2 className='max-w-6xl mx-auto font-lg text-gray-700'>{data.description}</h2>
+          <div className="w-full sm:w-1/4 bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1 mt-6">
             <img
               src={data.mainImage}
               alt={data.name}
@@ -108,7 +108,7 @@ function LookbookDetailPage({ data, slug }: any) {
               Shop the look
             </button>
           </div>
-          <div className="mt-5">
+          <div className="m-10">
             <ProductGrid
               products={products}
               currentPage={products.currentpage}

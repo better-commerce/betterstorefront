@@ -25,13 +25,13 @@ const ProductSlider: FC<Props> = ({ config }) => {
     <section aria-labelledby="trending-heading" className="bg-white">
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
+          <h2 className="text-6xl font-bold text-center tracking-tight text-gray-900">
             {config.title}
           </h2>
-          <h2 className="py-5 text-4xl text-center font-extrabold tracking-tight text-gray-900">
+          <h2 className="py-5 text-4xl text-center font-medium tracking-tight text-gray-900">
             {config.subTitle}
           </h2>
-          <p className="py-5 text-xl tracking-tight text-center max-w-40p text-gray-900">
+          <p className="pb-5 text-xl tracking-tight text-center max-w-40p text-gray-900">
             {config.paragraph}
           </p>
         </div>

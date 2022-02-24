@@ -48,7 +48,7 @@ function LookbookPage({ data }: any) {
             className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8"
           >
             {data?.map((lookbook: any) => (
-              <SwiperSlide className="px-5" key={lookbook.slug}>
+              <SwiperSlide className="pr-5" key={lookbook.slug}>
                 <li
                   key={lookbook.id}
                   className="w-64 inline-flex flex-col text-center lg:w-auto"
@@ -58,10 +58,10 @@ function LookbookPage({ data }: any) {
                       <img
                         src={lookbook.mainImage || IMG_PLACEHOLDER}
                         alt={lookbook.name}
-                        className="w-full h-full object-center object-cover hover:opacity-75"
+                        className="w-full sm:max-h-screen sm:min-h-screen min-h-full object-center object-cover hover:opacity-75"
                       />
                     </div>
-                    <div className="w-full sm:w-1/2 p-5 flex justify-between flex-col items-center">
+                    <div className="w-full sm:w-1/2 p-5 flex justify-between flex-col">
                       <h3 className="font-extrabold w-full text-left text-2xl sm:text-4xl text-gray-900">
                         {lookbook.name}
                       </h3>

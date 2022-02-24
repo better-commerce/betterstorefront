@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
-import ProductGrid from '@components/product/Grid'
+import ProductGrid from '@components/product/Grid/categoryGrid'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
@@ -261,7 +261,7 @@ function BrandDetailPage({
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
+        <div className="text-center pt-16 px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
             {state.filters[0]?.Value}
           </h1>
@@ -272,7 +272,7 @@ function BrandDetailPage({
             dangerouslySetInnerHTML={{
               __html: brandDetails.description,
             }}
-            className="py-10 px-5 mt-5 text-gray-900"
+            className="py-5 px-5 mt-5 text-gray-900"
           />
         </div>
         <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
