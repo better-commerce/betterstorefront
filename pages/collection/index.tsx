@@ -4,10 +4,11 @@ import { Layout } from '@components/common'
 import Link from 'next/link'
 
 export default function CollectionList(props: any) {
+  
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
       <section aria-labelledby="products-heading" className="mt-8">
-        <h2 className="text-gray-900 font-bold text-center text-2xl m-8">
+        <h2 className="text-4xl font-extrabold text-center tracking-tight text-gray-900">
           Collections
         </h2>
 
@@ -27,17 +28,20 @@ export default function CollectionList(props: any) {
                     }
                     // alt={collection.imageAlt}
                     className="w-full h-full object-center object-cover group-hover:opacity-75"
-                  />
-                  <h1
-                    style={{
-                      backgroundColor: 'rgba(255,255,255,0.4',
-                      paddingLeft: '5%',
-                      top: '90%',
-                    }}
-                    className="w-8/10 px-2 absolute text-gray-900 font-bold text-xl"
+                  />                 
+                </div>
+                <div className='flex-1'>
+                   <h1
+                    className="pt-2 text-gray-900 font-medium text-xl flex w-full"
                   >
                     {collection.name}
                   </h1>
+
+                   <h4
+                    className="pt-1 text-gray-500 font-normal text-sm w-full"
+                  >
+                    {collection.noOfRecords}{' '} <span className='italic'>Products available</span>
+                  </h4>
                 </div>
               </a>
             </Link>

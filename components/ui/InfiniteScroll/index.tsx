@@ -13,7 +13,7 @@ export default function InfiniteScrollComponent({
       hasMore={currentNumber < total}
       loader={<h4>Loading...</h4>}
       endMessage={
-        <p style={{ textAlign: 'center' }}>
+        <p className='py-5' style={{ textAlign: 'center' }}>
           <b>You have seen it all</b>
         </p>
       }

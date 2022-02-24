@@ -2,11 +2,18 @@ import { useReducer } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import ProductGrid from '@components/product/Grid'
+import ProductGrid from '@components/product/Grid/CategoryGrid'
 import ProductSort from '@components/product/ProductSort'
 import Link from 'next/link'
 import ProductFilterRight from '@components/product/Filters/filtersRight'
 import { NextSeo } from 'next-seo'
+
+import { Swiper, SwiperSlide } from 'swiper/react'
+// Import Swiper styles
+import 'swiper/css'
+import 'swiper/css/navigation'
+
+import SwiperCore, { Navigation } from 'swiper'
 //import { BiUnlink } from "react-icons/bi";
 
 const PAGE_TYPE = PAGE_TYPES.Category
@@ -158,56 +165,76 @@ function CategoryPage({ category, products }: any) {
   return (
     <div className="bg-white">
       {/* Mobile menu */}
-      <main className="pb-24">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
+      <main className="pb-0">
+        <div className="sm:max-w-7xl sm:px-7 mx-auto mt-4 flex justify-center items-center w-full">
+          <Swiper navigation={true} loop={true} className="mySwiper">
+            {category.images.map((image: any, idx:number)=>{
+              return (
+                <SwiperSlide key={idx}>
+                  <Link href={image.link || '#'}>
+                    <img
+                      src={image.url}
+                      alt=""
+                      className="cursor-pointer w-full h-96 max-h-96 object-center object-cover rounded-md"
+                    />
+                  </Link>
+                </SwiperSlide>
+              )
+            })}
+          </Swiper>         
+        </div>
+        <div className="text-center py-8 px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
             {category.name}
           </h1>
           <h2>{category.description}</h2>
 
-          {!!products && (
-            <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
-              {products.total} results
-            </h1>
-          )}
+         
         </div>
-        <div className="flex justify-center items-center w-full">
-          {category.images.map((image: any, idx:number)=>{
-            return(
-              <img key={idx} className="h-12 w-12" src={image.url ||'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'}/>
-            )
-          })}
+        <div className='sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-2 py-2 sm:grid-cols-12'>
+          <div className='sm:col-span-9 border-t border-gray-200 py-2'>
+            <div className="flex w-full">
+              {category.subCategories.map((subcateg: any, idx: number) => {
+                return (
+                  <Link href={'/' + subcateg.link} key={idx}>
+                    <div className="flex justify-start items-center flex-col px-2 cursor-pointer">
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src={
+                          subcateg.image ||
+                          'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
+                        }
+                      />
+                      <h4 className="text-gray-900 font-semibold text-sm">
+                        {subcateg.name}
+                      </h4>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+          <div className='sm:col-span-3 border-t border-gray-200 py-2 text-right justify-end'>
+             {!!products && (
+                <h1 className="text-lg mt-2 font-medium tracking-tight text-gray-500">
+                  {products.total} results
+                </h1>
+              )}
+          </div>
         </div>
-        <div className="flex justify-center items-center w-full">
-          {category.subCategories.map((subcateg: any, idx: number) => {
-            return (
-              <Link href={'/' + subcateg.link} key={idx}>
-                <div className="flex justify-center items-center flex-col px-2">
-                  <img
-                    className="h-12 w-12 rounded-full"
-                    src={
-                      subcateg.image ||
-                      'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
-                    }
-                  />
-                  <h4 className="text-gray-900 font-semibold text-md">
-                    {subcateg.name}
-                  </h4>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
+
+
+        
         {!!products && (
           <>
-            <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
-              {/* <ProductSort
+            {/* <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
+              <ProductSort
                 routerSortOption={state.sortBy}
                 products={products}
                 action={handleSortBy}
-              /> */}
-            </div>
-
+              />
+            </div> */}
+          
             <ProductGrid
               products={products}
               currentPage={products.currentPage}

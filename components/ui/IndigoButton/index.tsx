@@ -48,7 +48,7 @@ const DefaultButton: FC<Props> = ({
     <button
       onClick={handleAction}
       type="button"
-      className={`max-w-xs flex-1 ${bgColor} border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className}`}
+      className={`xs:max-w-xs flex-1 ${bgColor} border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className}`}
     >
       {isLoading ? <LoadingDots /> : title}
     </button>
