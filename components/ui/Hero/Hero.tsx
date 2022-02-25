@@ -23,7 +23,7 @@ SwiperCore.use([Navigation])
 const Hero: FC<HeroProps> = ({ banners = [] }) => {
   return (
     <div className="relative bg-gray-900">
-      <Swiper navigation={true} className="mySwiper">
+      <Swiper navigation={true} loop={true} className="mySwiper">
         {banners.map((banner: BannerProps, idx: number) => {
           return (
             <SwiperSlide key={idx}>
@@ -31,7 +31,7 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
                 <img
                   src={banner.url}
                   alt=""
-                  className="cursor-pointer w-full h-full object-center object-cover"
+                  className="cursor-pointer w-full h-full object-center object-cover sm:min-h-screen sm:max-h-screen"
                 />
               </Link>
             </SwiperSlide>
