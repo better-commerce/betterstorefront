@@ -227,3 +227,11 @@
   max-height: 45px;
   min-height: 45px;
 }
+
+.line-clip-7 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  max-height: 210px;
+}
