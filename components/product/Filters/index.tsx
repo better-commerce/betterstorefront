@@ -81,12 +81,12 @@ export default function Filters({
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <div className="ml-auto relative max-w-xs w-full h-full bg-white shadow-xl py-4 pb-6 flex flex-col overflow-y-auto">
+            <div className="ml-auto relative max-w-xs w-full h-full bg-white shadow-xl py-2 sm:py-4 sm:pb-6 pb-2 flex flex-col overflow-y-auto">
               <div className="px-4 flex items-center justify-between">
                 <h2 className="text-lg font-medium text-gray-900">{GENERAL_FILTER_TITLE}</h2>
                 <button
                   type="button"
-                  className="-mr-2 w-10 h-10 bg-white p-2 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="-mr-2 w-10 sm:h-10 h-6 bg-white p-2 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   onClick={() => setOpen(false)}
                 >
                   <span className="sr-only">{GENERAL_CLOSE}</span>
@@ -95,12 +95,12 @@ export default function Filters({
               </div>
 
               {/* Filters */}
-              <form className="mt-4">
+              <form className="sm:mt-4 mt-2">
                 {products.filters?.map((section: any) => (
                   <Disclosure
                     as="div"
                     key={section.name}
-                    className="border-t border-gray-200 px-4 py-6"
+                    className="border-t border-gray-200 px-4 py-3"
                   >
                     {({ open }) => (
                       <>
@@ -141,20 +141,20 @@ export default function Filters({
         </Dialog>
       </Transition.Root>
 
-      <div className="max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="px-0 text-center sm:px-6 lg:max-w-7xl lg:px-8">
         <section
           aria-labelledby="filter-heading"
-          className="border-t border-gray-200 py-6"
+          className="border-t border-gray-200 py-0"
         >
           <h2 id="filter-heading" className="sr-only">
             {PRODUCT_FILTER}
           </h2>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pr-4">
             <h2 id="filter-heading" className="sr-only">
               {GENERAL_FILTER_TITLE}
             </h2>
-            <div className="relative col-start-1 row-start-1 py-4">
+            <div className="relative col-start-1 row-start-1 py-3">
               <div className="max-w-7xl mx-auto flex space-x-6 divide-x divide-gray-200 text-sm px-4 sm:px-6 lg:px-8">
                 <div>
                   <button
@@ -162,10 +162,10 @@ export default function Filters({
                     className="group text-gray-700 font-medium flex items-center"
                   >
                     <FilterIcon
-                      className="flex-none w-5 h-5 mr-2 text-gray-400 group-hover:text-gray-500"
+                      className="flex-none w-5 h-5 mr-2 text-gray-900 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
-                    {generateFiltersTitle(routerFilters.length)}
+                    {routerFilters.length}
                   </button>
                 </div>
                 <div className="pl-6">
@@ -177,30 +177,33 @@ export default function Filters({
                     {BTN_CLEAR_ALL}
                   </button>
                 </div>
-                <div className="pl-6 flex justify-center flex-col items-baseline">
-                  {appliedFilters.map((appliedFilter: any, idx: number) => {
-                    return (
-                      <div
-                        key={`applied-filter-${idx}`}
-                        className="flex justify-center items-center text-gray-600"
-                      >
-                        {appliedFilter.name ? (
-                          <>
-                            <span>{appliedFilter.name}: </span>
-                            <span className="ml-1">{appliedFilter.Value}</span>
-                          </>
-                        ) : null}
-                      </div>
-                    )
-                  })}
-                </div>
               </div>
             </div>
-            <ProductSort
+            <ProductSort              
               routerSortOption={routerSortOption}
               products={products}
               action={handleSortBy}
             />
+          </div>
+          <div className='flex flex-col px-4 grid grid-cols-1 border-t border-gray-100 py-2'>
+              <h4 className='text-sm font-bold flex w-full mb-2'>Applied Filters</h4>
+              <div className='grid grid-cols-2'>
+                {appliedFilters.map((appliedFilter: any, idx: number) => {
+                    return (
+                        <div
+                          key={`applied-filter-${idx}`}
+                          className="flex-1 justify-left items-left text-left text-xs text-gray-600"
+                        >
+                            {appliedFilter.name ? (
+                              <>
+                                <span className='font-medium'>{appliedFilter.name}: </span>
+                                <span className="ml-1">{appliedFilter.Value}</span>
+                              </>
+                            ) : null}
+                        </div>
+                    )
+                })}
+              </div>
           </div>
         </section>
       </div>
