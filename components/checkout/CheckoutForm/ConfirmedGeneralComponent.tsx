@@ -7,7 +7,7 @@ export default function ConfirmedGeneralComponent({
   return (
     <div className="text-gray-900 flex flex-col">
       <div className="flex">
-        <ul className={`text-gray-900 mt-3 flex`}>
+        <ul className={`text-gray-900 mt-3 sm:flex xs:flex-col`}>
           {Object.keys(content).map((item: any, idx: number) => {
             return (
               <li key={idx} className="font-normal d-inline font-sm pr-1">

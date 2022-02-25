@@ -104,7 +104,7 @@ export default function Dropdown({
       <Listbox.Label
         className={`${
           isDisabled ? 'opacity-40' : ''
-        } block text-sm font-medium text-gray-700`}
+        } block text-sm font-medium text-gray-800 text-left`}
       >
         {label}
       </Listbox.Label>

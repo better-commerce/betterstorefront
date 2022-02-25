@@ -166,7 +166,7 @@ function CategoryPage({ category, products }: any) {
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-0">
-        <div className="sm:max-w-7xl sm:px-7 mx-auto mt-4 flex justify-center items-center w-full">
+        <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
           <Swiper navigation={true} loop={true} className="mySwiper">
             {category.images.map((image: any, idx:number)=>{
               return (
@@ -175,7 +175,7 @@ function CategoryPage({ category, products }: any) {
                     <img
                       src={image.url}
                       alt=""
-                      className="cursor-pointer w-full h-96 max-h-96 object-center object-cover rounded-md"
+                      className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
                     />
                   </Link>
                 </SwiperSlide>
@@ -184,18 +184,18 @@ function CategoryPage({ category, products }: any) {
           </Swiper>         
         </div>
         <div className="text-center pt-6 mb-4 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+          <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
             {category.name}
           </h1>
           <h2>{category.description}</h2>
              {!!products && (
-                <h1 className="text-lg mt-2 font-medium tracking-tight text-gray-500">
+                <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
                   {products.total} results
                 </h1>
               )}
          
         </div>
-        <div className='sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-2 sm:grid-cols-12'>
+        <div className='sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12'>
           <div className='sm:col-span-12 border-t border-gray-200 py-2'>
             <div className="flex w-full text-center align-center justify-center">
               {category.subCategories.map((subcateg: any, idx: number) => {
@@ -209,7 +209,7 @@ function CategoryPage({ category, products }: any) {
                           'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
                         }
                       />
-                      <h4 className="text-gray-900 font-semibold text-sm">
+                      <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
                         {subcateg.name}
                       </h4>
                     </div>

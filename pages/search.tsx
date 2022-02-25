@@ -4,7 +4,7 @@ import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
-import ProductFilters from '@components/product/Filters'
+import ProductMobileFilters from '@components/product/Filters'
 import ProductFilterRight from '@components/product/Filters/filtersRight'
 import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -273,30 +273,51 @@ function Search({ query, setEntities, recordEvent }: any) {
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+        <div className="text-center sm:py-16 py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
             Catalog
           </h1>
-          <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+          <h1 className="sm:text-xl text-lg mt-2 font-medium tracking-tight text-gray-500">
             {data.products.total} results
           </h1>
         </div>
-        <div className="grid grid-cols-12 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
-          <div className="col-span-3">
+        <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
+          
+          {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+          
+          <div className="sm:col-span-3 sm:hidden flex flex-col">
+            <ProductMobileFilters
+              handleFilters={handleFilters}
+              products={data.products}
+              routerFilters={state.filters}
+              handleSortBy={handleSortBy}              
+              clearAll={clearAll}
+              routerSortOption={state.sortBy}
+            />
+          </div>
+
+          {/* {FILTER PANEL SHOW ONLY IN DESKTOP VERSION} */}
+
+          <div className="sm:col-span-3 sm:block hidden">
             <ProductFilterRight
               handleFilters={handleFilters}
               products={data.products}
               routerFilters={state.filters}
             />
           </div>
-          <div className="col-span-9">
-            <ProductFiltersTopBar
-              products={data.products}
-              handleSortBy={handleSortBy}
-              routerFilters={state.filters}
-              clearAll={clearAll}
-              routerSortOption={state.sortBy}
-            />
+          <div className="sm:col-span-9">
+
+            {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+
+            <div className='flex-1 sm:block hidden'>
+              <ProductFiltersTopBar
+                products={data.products}
+                handleSortBy={handleSortBy}
+                routerFilters={state.filters}
+                clearAll={clearAll}
+                routerSortOption={state.sortBy}               
+              />  
+            </div>            
             <ProductGrid
               products={productDataToPass}
               currentPage={state.currentPage}

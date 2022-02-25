@@ -63,11 +63,11 @@ function BrandsPage({ brands }: any) {
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-24 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+        <div className="text-center sm:py-16 py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
             Brands
           </h1>
-          <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+          <h1 className="sm:text-xl text-md mt-2 font-medium tracking-tight text-gray-500">
             {totalResults} results
           </h1>
           <div className="w-full py-5 flex justify-center items-center flex-wrap">
@@ -79,7 +79,7 @@ function BrandsPage({ brands }: any) {
               if (brandExists) {
                 return (
                   <Link key={key} passHref href={`#${letter.toUpperCase()}`}>
-                    <a className="hover:bg-indigo-600 hover:text-white mr-3 mt-5 py-2 px-4 text-gray-900 border font-extrabold text-lg">
+                    <a className="hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 mr-1 mt-2 py-1 px-2 text-gray-900 border font-extrabold sm:text-lg text-sm">
                       {letter.toUpperCase()}
                     </a>
                   </Link>
@@ -88,7 +88,7 @@ function BrandsPage({ brands }: any) {
               return (
                 <span
                   key={key}
-                  className="mr-3 mt-5 py-2 px-4 text-gray-900 border font-extrabold text-lg opacity-40 pointer-events-none"
+                  className="sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 mr-1 mt-2 py-1 px-2 text-gray-900 border font-extrabold sm:text-lg text-sm opacity-40 pointer-events-none"
                 >
                   {letter.toUpperCase()}
                 </span>
@@ -116,15 +116,15 @@ function BrandsPage({ brands }: any) {
           return (
             <div
               key={idx}
-              className="sm:px-6 lg:px-8 px-4 flex flex-col border-t py-10"
+              className="sm:px-6 lg:px-8 px-4 flex flex-col border-t sm:py-10 py-4"
             >
               <h2
                 id={brand.title.toUpperCase()}
-                className="text-gray-900 text-4xl font-extrabold"
+                className="text-gray-900 sm:text-4xl text-2xl font-extrabold"
               >
                 {brand.title.toUpperCase()}
               </h2>
-              <div className="flex justify-between items-center py-2 flex-wrap">
+              <div className="flex justify-between items-center sm:py-2 py-0 flex-wrap">
                 {brand.results.map((result: any, key: number) => {
                   return (
                     <div
@@ -141,7 +141,7 @@ function BrandsPage({ brands }: any) {
                           },
                         }}
                       >
-                        <a className="text-lg py-5 hover:underline cursor-pointer">
+                        <a className="sm:text-lg text-sm sm:py-5 py-2 hover:underline cursor-pointer">
                           {result.manufacturerName}
                         </a>
                       </Link>
