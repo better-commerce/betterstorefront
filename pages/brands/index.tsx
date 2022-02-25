@@ -1,3 +1,4 @@
+import type { GetStaticPropsContext } from 'next'
 import { GetServerSideProps } from 'next'
 import { useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -156,6 +157,22 @@ function BrandsPage({ brands }: any) {
   )
 }
 
+export async function getStaticProps({
+  params,
+  locale,
+  locales,
+  preview,
+}: GetStaticPropsContext) {
+  const response = await getBrands({})
+  return {
+    props: {
+      brands: response.result,
+      snippets: response.snippets,
+    },
+    revalidate: 200,
+  }
+}
+/*
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const response = await getBrands({})
     //CAN WE PUT SOME CODE HERE TO EXEC AFTER GETBRANDS ???
@@ -166,7 +183,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }, // will be passed to the page component as props
   }
 }
-
+*/
 BrandsPage.Layout = Layout
 
 const PAGE_TYPE = PAGE_TYPES['Brand']

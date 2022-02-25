@@ -44,6 +44,7 @@ import {
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
 
+
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -336,6 +337,12 @@ export default function ProductView({
   const filteredRelatedProductList = product.relatedProductList?.filter(
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
+
+  /*if (product === null) {
+    return {
+      notFound: true,
+    }
+  }*/
 
   return (
     <div className="bg-white page-container">
