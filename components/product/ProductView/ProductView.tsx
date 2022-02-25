@@ -346,10 +346,11 @@ export default function ProductView({
 
   return (
     <div className="bg-white page-container">
+      
       {/* Mobile menu */}
       <div className="max-w-7xl mx-auto pt-2 px-2 sm:pt-6 sm:px-6 lg:px-8">
         {product.breadCrumbs && (
-          <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />
+          <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />          
         )}
       </div>
       <main className="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
@@ -468,7 +469,7 @@ export default function ProductView({
                   setSelectedAttrData={setSelectedAttrData}
                 />
               </div>
-              <p
+              {/* <p
                 className="text-gray-900 sm:text-md text-sm cursor-pointer hover:underline"
                 onClick={() => showPriceMatchModal(true)}
               >
@@ -476,9 +477,9 @@ export default function ProductView({
                 <span>
                   {''} {PRICEMATCH_BEST_PRICE}
                 </span>
-              </p>
+              </p> */}
 
-              <section aria-labelledby="details-heading" className="sm:mt-12 mt-4">
+              <section aria-labelledby="details-heading" className="sm:mt-2 mt-4">
                 <h2 id="details-heading" className="sr-only">
                   {PRICEMATCH_ADDITIONAL_DETAILS}
                 </h2>

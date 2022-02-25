@@ -277,9 +277,9 @@ function Search({ query, setEntities, recordEvent }: any) {
           <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
             Catalog
           </h1>
-          <h1 className="sm:text-xl text-lg mt-2 font-medium tracking-tight text-gray-500">
+          {/* <h1 className="sm:text-xl text-lg mt-2 font-medium tracking-tight text-gray-500">
             {data.products.total} results
-          </h1>
+          </h1> */}
         </div>
         <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
           

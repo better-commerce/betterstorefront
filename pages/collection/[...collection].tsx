@@ -228,9 +228,9 @@ export default function CollectionPage(props: any) {
           {props.name}
         </h1>
         <h2>{props.description}</h2>
-        <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
+        {/* <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
           {props.products.total} results
-        </h1>
+        </h1> */}
       </div>
       
       <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">

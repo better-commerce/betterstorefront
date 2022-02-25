@@ -75,6 +75,20 @@
   box-sizing: inherit;
 }
 
+@font-face {
+  font-family: 'CreHearttree P';
+  src: url('/41e23cdc33cbfd9fcea6e5b9c93126e5.eot'); /* IE9*/
+  src: url('/41e23cdc33cbfd9fcea6e5b9c93126e5.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('/41e23cdc33cbfd9fcea6e5b9c93126e5.woff2') format('woff2'),
+    /* chrome、firefox */ url('/41e23cdc33cbfd9fcea6e5b9c93126e5.woff')
+      format('woff'),
+    /* chrome、firefox */ url('/41e23cdc33cbfd9fcea6e5b9c93126e5.ttf')
+      format('truetype'),
+    /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+      url('/41e23cdc33cbfd9fcea6e5b9c93126e5.svg#CreHearttree P') format('svg'); /* iOS 4.1- */
+}
+
 html {
   height: 100%;
   box-sizing: border-box;
@@ -86,7 +100,7 @@ html {
 
 html,
 body {
-  font-family: var(--font-Missguided);
+  font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -141,18 +155,4 @@ a {
   to {
     opacity: 1;
   }
-}
-
-@font-face {
-  font-family: 'CreHearttree P';
-  src: url('/41e23cdc33cbfd9fcea6e5b9c93126e5.eot'); /* IE9*/
-  src: url('/41e23cdc33cbfd9fcea6e5b9c93126e5.eot?#iefix')
-      format('embedded-opentype'),
-    /* IE6-IE8 */ url('/41e23cdc33cbfd9fcea6e5b9c93126e5.woff2') format('woff2'),
-    /* chrome、firefox */ url('/41e23cdc33cbfd9fcea6e5b9c93126e5.woff')
-      format('woff'),
-    /* chrome、firefox */ url('/41e23cdc33cbfd9fcea6e5b9c93126e5.ttf')
-      format('truetype'),
-    /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-      url('/41e23cdc33cbfd9fcea6e5b9c93126e5.svg#CreHearttree P') format('svg'); /* iOS 4.1- */
 }
