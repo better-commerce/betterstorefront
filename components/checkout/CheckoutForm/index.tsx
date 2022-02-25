@@ -588,7 +588,7 @@ export default function CheckoutForm({
             : ''
         }`}
       >
-        <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <div className="max-w-2xl mx-auto sm:pt-16 pt-2 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
           <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
             <div>
