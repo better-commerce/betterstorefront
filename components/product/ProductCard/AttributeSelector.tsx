@@ -23,7 +23,7 @@ const ColorSelector = ({ attr, onChange, link }: any) => {
               key={idx}
               onMouseEnter={() => onChange(item, 'enter')}
               onMouseLeave={() => onChange(item, 'leave')}
-              className="h-8 w-8 inline-block rounded-full mr-2 mt-2 border border-gray-100"
+              className="sm:h-8 sm:w-8 h-5 w-5 inline-block rounded-full sm:mr-2 mr-1 mt-2 border border-gray-100"
               style={{ backgroundColor: item.fieldValue }}
             />
           </Link>

@@ -347,7 +347,7 @@ export default function ProductView({
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}
-      <div className="max-w-7xl mx-auto sm:pt-6 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto pt-2 px-2 sm:pt-6 sm:px-6 lg:px-8">
         {product.breadCrumbs && (
           <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />
         )}
@@ -387,14 +387,14 @@ export default function ProductView({
                 </Tab.List>
               </div>
 
-              <Tab.Panels className="w-full aspect-w-1 aspect-h-1">
+              <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0">
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
                       <img
                         src={image.image}
                         alt={image.name}
-                        className="w-full h-full object-center object-cover sm:rounded-lg"
+                        className="w-full h-full object-center object-cover rounded-lg"
                       />
                     ) : (
                       <iframe
@@ -413,18 +413,18 @@ export default function ProductView({
             </Tab.Group>
 
             {/* Product info */}
-            <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
-              <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+            <div className="sm:mt-10 mt-2 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+              <h1 className="sm:text-3xl text-xl font-bold sm:font-extrabold tracking-tight text-gray-900">
                 {selectedAttrData.name || selectedAttrData.productName}
               </h1>
 
-              <p className="text-gray-500 text-md">
+              <p className="text-gray-500 sm:text-md text-sm mt-2 sm:mt-0">
                 {GENERAL_REFERENCE}: {selectedAttrData.stockCode}
               </p>
               <div className="mt-3">
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
                 {updatedProduct ? (
-                  <p className="text-3xl text-gray-900">
+                  <p className="sm:text-3xl text-2xl font-bold sm:font-medium text-gray-900">
                     {selectedAttrData.price?.formatted?.withTax}
                     {selectedAttrData.listPrice?.raw.tax > 0 ? (
                       <span className="px-5 text-sm line-through text-gray-500">
@@ -441,8 +441,8 @@ export default function ProductView({
               {/* Reviews */}
               <div className="mt-3">
                 <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
-                <div className="flex items-center">
-                  <div className="flex items-center">
+                <div className="flex items-center xs:flex-col">
+                  <div className="flex items-center xs:text-center align-center">
                     {[0, 1, 2, 3, 4].map((rating) => (
                       <StarIcon
                         key={rating}
@@ -469,7 +469,7 @@ export default function ProductView({
                 />
               </div>
               <p
-                className="text-gray-900 text-md cursor-pointer hover:underline"
+                className="text-gray-900 sm:text-md text-sm cursor-pointer hover:underline"
                 onClick={() => showPriceMatchModal(true)}
               >
                 <span className="font-bold">{PRICEMATCH_SEEN_IT_CHEAPER}</span>
@@ -478,7 +478,7 @@ export default function ProductView({
                 </span>
               </p>
 
-              <section aria-labelledby="details-heading" className="mt-12">
+              <section aria-labelledby="details-heading" className="sm:mt-12 mt-4">
                 <h2 id="details-heading" className="sr-only">
                   {PRICEMATCH_ADDITIONAL_DETAILS}
                 </h2>
@@ -490,7 +490,7 @@ export default function ProductView({
                 />
                 {updatedProduct ? (
                   <>
-                    <div className="mt-10 flex sm:flex-col1">
+                    <div className="sm:mt-10 mt-6 flex sm:flex-col1">
                       <Button
                         title={buttonConfig.title}
                         action={buttonConfig.action}
@@ -524,7 +524,7 @@ export default function ProductView({
                     )}
                   </>
                 ) : null}
-                <div className="border-t divide-y divide-gray-200 mt-10">
+                <div className="border-t divide-y divide-gray-200 sm:mt-10 mt-6">
                   <p className="text-gray-900 text-lg">
                     {selectedAttrData.currentStock > 0
                       ? product.deliveryMessage

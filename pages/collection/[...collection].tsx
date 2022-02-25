@@ -4,6 +4,7 @@ import { Layout } from '@components/common'
 import Link from 'next/link'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 import ProductFilterRight from '@components/product/Filters/filtersRight'
+import ProductMobileFilters from '@components/product/Filters'
 import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
 import ProductGrid from '@components/product/Grid/ProductGrid'
 import ProductGridWithFacet from '@components/product/Grid'
@@ -201,10 +202,11 @@ export default function CollectionPage(props: any) {
       payload: payload,
     })
   }
+  const clearAll = () => dispatch({ type: CLEAR })
 
   return (
     <main className="pb-0">
-      <div className="sm:max-w-7xl sm:px-7 mx-auto mt-4 flex justify-center items-center w-full">
+      <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
           <Swiper navigation={true} loop={true} className="mySwiper">
             {props.images.map((img: any, idx: number) => {
               return (
@@ -213,7 +215,7 @@ export default function CollectionPage(props: any) {
                     <img
                       src={img.url || 'error'}
                       alt=""
-                      className="cursor-pointer w-full h-96 max-h-96 object-center object-cover rounded-md"
+                      className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
                     />
                   </Link>
                 </SwiperSlide>
@@ -221,27 +223,50 @@ export default function CollectionPage(props: any) {
             })}
           </Swiper>         
         </div>
-      <div className="text-center py-8 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+      <div className="text-center sm:py-8 py-4 px-4 sm:px-6 lg:px-8">
+        <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
           {props.name}
         </h1>
         <h2>{props.description}</h2>
-        <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+        <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
           {props.products.total} results
         </h1>
       </div>
       
-      <div className="grid grid-cols-12 mx-auto overflow-hidden sm:max-w-7xl mx-auto">
+      <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
         {props.allowFacets && (
           <>
-            <div className="col-span-3">
+          {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+          
+            <div className="sm:col-span-3 sm:hidden flex flex-col">
+              <ProductMobileFilters
+                handleFilters={handleFilters}
+                products={props.products}
+                routerFilters={state.filters}
+                handleSortBy={handleSortBy}              
+                clearAll={clearAll}
+                routerSortOption={state.sortBy}
+              />
+            </div>
+            <div className="sm:col-span-3 sm:block hidden">
               <ProductFilterRight
                 handleFilters={handleFilters}
                 products={props.products}
                 routerFilters={state.filters}
               />
             </div>
-            <div className="col-span-9">
+            <div className="sm:col-span-9">
+              {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+
+            <div className='flex-1 sm:block hidden'>
+              <ProductFiltersTopBar
+                products={data.products}
+                handleSortBy={handleSortBy}
+                routerFilters={state.filters}
+                clearAll={clearAll}
+                routerSortOption={state.sortBy}               
+              />  
+            </div>  
             <ProductGridWithFacet
               products={productDataToPass}
               currentPage={props.currentPage}

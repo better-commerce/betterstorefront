@@ -26,6 +26,7 @@ module.exports = {
       },
       minHeight: {
         '50px': '50px',
+        '40px': '40px',
       },
       transitionProperty: {
         width: 'width',

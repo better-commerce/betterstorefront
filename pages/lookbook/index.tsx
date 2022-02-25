@@ -27,12 +27,12 @@ function LookbookPage({ data }: any) {
   })
 
   return (
-    <div className="mt-8 relative mb-5">
-      <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
+    <div className="mt-0 relative mb-5">
+      <div className="text-center pt-8 pb-12 px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
           Shop by Lifestyle
         </h1>
-        <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+        <h1 className="text-xl mt-2 font-medium tracking-tight text-gray-500">
           {data.length} results
         </h1>
       </div>
@@ -48,7 +48,7 @@ function LookbookPage({ data }: any) {
             className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8"
           >
             {data?.map((lookbook: any) => (
-              <SwiperSlide className="px-5" key={lookbook.slug}>
+              <SwiperSlide className="pr-5" key={lookbook.slug}>
                 <li
                   key={lookbook.id}
                   className="w-64 inline-flex flex-col text-center lg:w-auto"
@@ -58,22 +58,22 @@ function LookbookPage({ data }: any) {
                       <img
                         src={lookbook.mainImage || IMG_PLACEHOLDER}
                         alt={lookbook.name}
-                        className="w-full h-full object-center object-cover hover:opacity-75"
+                        className="w-auto h-96 object-center object-cover hover:opacity-75 sm:min-h-screen sm:max-h-screen"
                       />
                     </div>
-                    <div className="w-full sm:w-1/2 p-5 flex justify-between flex-col items-center">
+                    <div className="w-full sm:w-1/2 p-5 flex justify-center flex-col items-center">
                       <h3 className="font-extrabold w-full text-left text-2xl sm:text-4xl text-gray-900">
                         {lookbook.name}
                       </h3>
-                      <p className="text-md sm:text-lg py-5 text-gray-900 text-left">
+                      <p className="text-md sm:text-lg py-5 text-gray-900 text-left line-clip-7">
                         {lookbook.description}
                       </p>
                       <Link href={`/${lookbook.slug}`}>
                         <button
                           type="button"
-                          className="mt-5 cursor-pointer font-extrabold border border-gray-900 text-gray-900 py-3 px-3"
+                          className="mt-6 cursor-pointer align-left justify-start flex-col font-extrabold border border-gray-900 text-gray-900 py-3 px-3 hover:bg-gray-100"
                         >
-                          Shop lookbook
+                          Shop the look
                         </button>
                       </Link>
                     </div>

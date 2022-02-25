@@ -116,12 +116,12 @@ function Cart({ cart }: any) {
 
   return (
     <div className="bg-white">
-      <main className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+      <main className="max-w-2xl mx-auto sm:pt-16 pt-6 sm:pb-24 pb-0 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           {GENERAL_SHOPPING_CART}
         </h1>
         {!isEmpty && (
-          <form className="relative mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
+          <form className="relative sm:mt-12 mt-8 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
             <section aria-labelledby="cart-heading" className="lg:col-span-7">
               <h2 id="cart-heading" className="sr-only">
                 {ITEMS_IN_YOUR_CART}
@@ -132,23 +132,23 @@ function Cart({ cart }: any) {
                 className="border-t border-b border-gray-200 divide-y divide-gray-200"
               >
                 {userCart.lineItems?.map((product: any, productIdx: number) => (
-                  <li key={productIdx} className="flex py-6 sm:py-10">
+                  <li key={productIdx} className="flex py-4 sm:py-10">
                     <div className="flex-shrink-0">
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
+                        className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48"
                       />
                     </div>
                     <div className="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-                      <div className="relative pr-9 flex justify-between sm:pr-0 h-full">
+                      <div className="relative sm:pr-9 pr-6 flex justify-between sm:pr-0 h-full">
                         <div className="flex flex-col justify-between h-full">
                           <div>
                             <div className="flex justify-between flex-col">
-                              <h3 className="py-2 text-md font-bold text-gray-900">
+                              <h3 className="sm:py-2 py-0 sm:text-md text-sm font-bold text-gray-900">
                                 {product.brand}
                               </h3>
-                              <h3 className="text-sm">
+                              <h3 className="sm:text-sm text-xs my-2 sm:my-0">
                                 <Link href={`/${product.slug}`}>
                                   <a
                                     href={product.slug}
@@ -160,7 +160,7 @@ function Cart({ cart }: any) {
                               </h3>
                             </div>
 
-                            <p className="mt-1 text-sm font-medium text-gray-900">
+                            <p className="mt-1 text-sm sm:font-medium font-bold text-gray-900">
                               {product.price?.formatted?.withTax}
                             </p>
                             {product.children?.map(
@@ -208,18 +208,18 @@ function Cart({ cart }: any) {
                               }
                             )}
                           </div>
-                          <p className="py-5 text-sm font-medium text-gray-900">
+                          <p className="py-5 text-sm font-medium text-gray-900 sm:block hidden">
                             {product.shippingPlan?.shippingSpeed}
                           </p>
                         </div>
 
-                        <div className="mt-4 sm:mt-0 sm:pr-9">
-                          <div className="border px-4 text-gray-900 flex flex-row">
+                        <div className="mt-0 sm:mt-0 sm:pr-9 pl-2 pr-0">
+                          <div className="border sm:px-4 px-2 text-gray-900 flex flex-row">
                             <MinusSmIcon
                               onClick={() => handleItem(product, 'decrease')}
                               className="w-4 cursor-pointer"
                             />
-                            <span className="text-md px-2 py-2">
+                            <span className="text-md px-2 sm:py-2 py-1">
                               {product.qty}
                             </span>
                             <PlusSmIcon
@@ -236,11 +236,16 @@ function Cart({ cart }: any) {
                           >
                             <span className="sr-only">{GENERAL_REMOVE}</span>
                             <XIconSolid
-                              className="h-5 w-5"
+                              className="sm:h-5 sm:w-5 h-4 w-4 text-red-400 mt-2"
                               aria-hidden="true"
                             />
                           </button>
                         </div>
+                      </div>
+                      <div className='flex flex-col sm:hidden block'>
+                         <p className="pt-3 sm:text-sm text-xs font-bold text-gray-700">
+                            {product.shippingPlan?.shippingSpeed}
+                          </p>
                       </div>
                     </div>
                   </li>
@@ -250,7 +255,7 @@ function Cart({ cart }: any) {
             {/* Order summary */}
             <section
               aria-labelledby="summary-heading"
-              className="md:sticky top-0 mt-16 bg-gray-50 rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5"
+              className="md:sticky top-0 sm:mt-16 mt-4 bg-gray-50 rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5"
             >
               <h2
                 id="summary-heading"
@@ -259,7 +264,7 @@ function Cart({ cart }: any) {
                 {GENERAL_ORDER_SUMMARY}
               </h2>
 
-              <dl className="mt-6 space-y-4">
+              <dl className="mt-6 sm:space-y-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">
                     {SUBTOTAL_INCLUDING_TAX}
@@ -268,7 +273,7 @@ function Cart({ cart }: any) {
                     {cartItems.subTotal?.formatted?.withTax}
                   </dd>
                 </div>
-                <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
+                <div className="border-t border-gray-200 sm:pt-4 pt-2 flex items-center justify-between">
                   <dt className="flex items-center text-sm text-gray-600">
                     <span>{GENERAL_SHIPPING}</span>
                   </dt>
@@ -276,7 +281,7 @@ function Cart({ cart }: any) {
                     {cartItems.shippingCharge?.formatted?.withTax}
                   </dd>
                 </div>
-                <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
+                <div className="border-t border-gray-200 sm:pt-4 pt-2 flex items-center justify-between">
                   {userCart.promotionsApplied?.length > 0 && (
                     <>
                       <dt className="flex items-center text-sm text-indigo-600">

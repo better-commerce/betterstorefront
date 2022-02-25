@@ -1,6 +1,6 @@
-import { FC, Fragment } from 'react'
+import { FC, Fragment, useState } from 'react'
 import { classNames } from '../../utils'
-import { Popover, Transition } from '@headlessui/react'
+import { Popover, Transition, Dialog, Tab } from '@headlessui/react'
 import { ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/outline'
 import { Searchbar } from '@components/common'
 import { Logo } from '@components/ui'
@@ -14,6 +14,8 @@ import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
 import LanguageSwitcher from './LanguageSwitcher'
 import Cookies from 'js-cookie'
+import { MenuIcon, SearchIcon, XIcon } from '@heroicons/react/outline'
+
 import {
   BTN_SIGN_OUT,
   GENERAL_LOGIN,
@@ -26,6 +28,7 @@ import {
   SELECT_LANGUAGE,
   GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
+
 
 interface Props {
   config: []
@@ -104,14 +107,158 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
       })
       .catch((err: any) => console.log(err))
   }
-
+  const [open, setOpen] = useState(false)
   return (
     <div className="bg-white">
+      {/* Mobile menu */}
+      <Transition.Root show={open} as={Fragment}>
+        <Dialog as="div" className="fixed inset-0 flex z-40 lg:hidden" onClose={setOpen}>
+          <Transition.Child
+            as={Fragment}
+            enter="transition-opacity ease-linear duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity ease-linear duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <Transition.Child
+            as={Fragment}
+            enter="transition ease-in-out duration-300 transform"
+            enterFrom="-translate-x-full"
+            enterTo="translate-x-0"
+            leave="transition ease-in-out duration-300 transform"
+            leaveFrom="translate-x-0"
+            leaveTo="-translate-x-full"
+          >
+            <div className="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto">
+              <div className="px-4 pt-5 pb-2 flex">
+                <button
+                  type="button"
+                  className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-gray-400"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="sr-only">Close menu</span>
+                  <XIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
+              </div>
+
+              {/* Links */}
+              <Tab.Group as="div" className="mt-2">
+                <div className="border-b border-gray-200">
+                  {config.map((item:any, idx:number) =>{
+                    return(
+                      <>
+                        {!item.navBlocks.length ? (
+                          <Link href={`/${item.hyperlink}`} passHref>
+                            <a  onClick={() => setOpen(false)} className='flex flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium' href={item.hyperlink}>{item.caption}</a>
+                          </Link>
+                        ):(
+                          <>
+                            <Tab.List className="-mb-px flex flex-col px-0 space-x-0">
+                              <Tab
+                                  key={item.caption}
+                                  className={({ selected }) =>
+                                    classNames(
+                                      selected ? 'text-gray-900' : 'text-gray-900',
+                                      'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium'
+                                    )
+                                  }
+                                >
+                                {item.caption}
+                              </Tab>
+                            </Tab.List>
+
+                            <Tab.Panels as={Fragment}>
+                              <Tab.Panel key={item.caption} className="pt-2 pb-0 px-0 space-y-10">
+                                  <div className="space-y-4">
+                                    {item.navBlocks.length ? (                                    
+                                        <div className="relative bg-white">
+                                            <div className="max-w-7xl mx-auto px-0 sm:px-0 lg:px-0">
+                                              <div className="grid grid-cols-1 items-start md:grid-cols-1 lg:gap-x-8">
+                                                {item.navBlocks.map(
+                                                  (navBlock: any, navIdx: number) => {
+                                                    return (
+                                                      <div
+                                                        key={navIdx}
+                                                        className="grid grid-cols-1 gap-y-0 gap-x-0 lg:gap-x-0"
+                                                      >
+                                                        <div>
+                                                          <p className="font-semibold capitalize text-xl text-gray-900 p-2">
+                                                            {navBlock.boxTitle}
+                                                          </p>
+                                                          <div className="mt-1 border-t py-2 px-6 border-gray-100 pt-2 sm:grid sm:grid-cols-1 sm:gap-x-6">
+                                                            <ul
+                                                              role="list"
+                                                              aria-labelledby="clothing-heading"
+                                                              className="grid grid-cols-1"
+                                                            >
+                                                              {navBlock.navItems.map(
+                                                                (navItem: any) => (
+                                                                  <li
+                                                                    key={
+                                                                      navItem.caption
+                                                                    }
+                                                                    className="flex my-1 border-b pb-2"
+                                                                  >
+                                                                    <Link
+                                                                      href={`/${navItem.itemLink}`}
+                                                                      passHref
+                                                                      
+                                                                    >
+                                                                      <a onClick={() => setOpen(false)} className="hover:text-gray-800 text-sm">
+                                                                          {
+                                                                            navItem.caption
+                                                                          }
+                                                                      </a>
+                                                                    </Link>
+                                                                  </li>
+                                                                )
+                                                              )}
+                                                            </ul>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    )
+                                                  }
+                                                )}
+                                              </div>
+                                            </div>
+                                          </div>
+                                    ) : null}
+                                  </div>
+                                </Tab.Panel>          
+                            </Tab.Panels>
+                          </>
+                        )}
+                      </>
+                    )
+                  })}
+                </div>                         
+              </Tab.Group>
+
+            </div>
+          </Transition.Child>
+        </Dialog>
+      </Transition.Root>
+
       <header className="relative bg-white">
         <nav aria-label="Top" className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="border-b border-gray-200 px-4 pb-14 sm:px-0 sm:pb-0">
+          <div className="border-b border-gray-200 px-4 pb-0 sm:px-0 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
               {/* Logo */}
+               <button
+                  type="button"
+                  className="-ml-2 bg-white p-2 rounded-md text-gray-400 sm:hidden"
+                  onClick={() => setOpen(true)}
+                >
+                  <span className="sr-only">Open menu</span>
+                  <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
+
               <Link href="/">
                 <div className="w-auto flex cursor-pointer">
                   <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
@@ -120,7 +267,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               </Link>
 
               {/* Flyout menus */}
-              <Popover.Group className="absolute bottom-0 inset-x-0 sm:static w-full sm:self-stretch">
+              <Popover.Group className="absolute bottom-0 inset-x-0 sm:static w-full sm:self-stretch sm:block hidden">
                 <div className="border-t h-14 px-4 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-center sm:overflow-visible sm:pb-0">
                   {config.map((item: any, idx: number) => {
                     return (
@@ -250,16 +397,19 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 {/* account */}
                 <Account title={title} config={accountDropdownConfig} />
                 {/* currency */}
-                <CurrencySwitcher
-                  config={currencies}
-                  title={SELECT_CURRENCY}
-                  action={configAction}
-                />
-                <LanguageSwitcher
-                  title={SELECT_LANGUAGE}
-                  action={configAction}
-                  config={languages}
-                />
+                <div className='sm:flex hidden'>
+                  <CurrencySwitcher
+                    config={currencies}
+                    title={SELECT_CURRENCY}
+                    action={configAction}
+                  />
+                  <LanguageSwitcher
+                    title={SELECT_LANGUAGE}
+                    action={configAction}
+                    config={languages}
+                  />
+                </div>
+                
                 {/* Wishlist*/}
 
                 <div className="px-2 flow-root">
