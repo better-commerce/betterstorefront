@@ -43,9 +43,9 @@ export default function PromotionInput() {
   return (
     <div className="flex items-center">
       <div>
-        <label className="text-gray-700 text-sm">{APPLY_PROMOTION}</label>
+        <label className="text-gray-700 font-medium text-sm">{APPLY_PROMOTION}</label>
         <div className="flex flex-col">
-          <div className="flex justify-start flex-col my-5">
+          <div className="flex justify-start flex-col sm:my-5 my-0">
             {cartItems.promotionsApplied?.length
               ? cartItems.promotionsApplied.map((promo: any, key: number) => {
                   return (
