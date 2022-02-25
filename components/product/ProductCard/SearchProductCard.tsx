@@ -158,8 +158,8 @@ const SearchProductCard: FC<Props> = ({ product }) => {
   const buttonConfig = buttonTitle()
 
   return (
-    <div className="border-r border-b border-gray-200">
-      <div key={product.id} className="group relative p-4 sm:p-6">
+    <div className="border-r border-b border-gray-100">
+      <div key={product.id} className="group relative p-3 sm:p-6">
         <Link
           passHref
           href={`/${currentProductData.link}`}
@@ -172,7 +172,7 @@ const SearchProductCard: FC<Props> = ({ product }) => {
                 alt={product.name}
                 onMouseEnter={() => handleHover('enter')}
                 onMouseLeave={() => handleHover('leave')}
-                className="w-full h-64 object-center object-cover"
+                className="w-full sm:h-64 h-48 object-center object-cover"
               />
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
@@ -180,7 +180,7 @@ const SearchProductCard: FC<Props> = ({ product }) => {
                 </div>
               )}
               {buttonConfig.isNotifyMeEnabled && (
-                <div className="bg-indigo-400 absolute py-1 px-1 rounded-sm top-2">
+                <div className="bg-red-400 text-white absolute py-1 px-1 rounded-sm top-2">
                   {BTN_NOTIFY_ME}
                 </div>
               )}
@@ -188,14 +188,14 @@ const SearchProductCard: FC<Props> = ({ product }) => {
           </a>
         </Link>
 
-        <div className="pt-10 pb-4 text-center">
-          <h3 className="min-h-50px text-sm font-medium text-gray-900">
+        <div className="sm:pt-10 pt-4 text-center">
+          <h3 className="sm:min-h-50px min-h-40px sm:text-sm text-xs font-medium text-gray-900">
             <Link href={`/${currentProductData.link}`}>
               <a href={`/${currentProductData.link}`}>{product.name}</a>
             </Link>
           </h3>
 
-          <p className="mt-4 font-medium text-gray-900">
+          <p className="sm:mt-4 mt-1 font-medium text-gray-900">
             {product?.price?.formatted?.withTax}
           </p>
           {hasColorVariation ? (
@@ -205,11 +205,11 @@ const SearchProductCard: FC<Props> = ({ product }) => {
               link={currentProductData.link}
             />
           ) : (
-            <div className="h-10 w-10 inline-block" />
+            <div className="sm:h-10 sm:w-10 h-5 w-5 sm:mr-2 mr-1 mt-2 inline-block" />
           )}
           <div className="flex flex-col">
             <Button
-              className="mt-5"
+              className="mt-2"
               title={buttonConfig.title}
               action={buttonConfig.action}
               type="button"
@@ -221,7 +221,7 @@ const SearchProductCard: FC<Props> = ({ product }) => {
               </span>
             ) : (
               <Button
-                className="mt-5"
+                className="mt-2"
                 action={handleWishList}
                 buttonType="wishlist"
                 colorScheme={WISHLIST_BUTTON_COLOR_SCHEME}
