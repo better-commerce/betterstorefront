@@ -204,7 +204,7 @@ export default function CollectionPage(props: any) {
 
   return (
     <main className="pb-0">
-      <div className="sm:max-w-7xl sm:px-7 mx-auto mt-4 flex justify-center items-center w-full">
+      <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
           <Swiper navigation={true} loop={true} className="mySwiper">
             {props.images.map((img: any, idx: number) => {
               return (
@@ -213,7 +213,7 @@ export default function CollectionPage(props: any) {
                     <img
                       src={img.url || 'error'}
                       alt=""
-                      className="cursor-pointer w-full h-96 max-h-96 object-center object-cover rounded-md"
+                      className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
                     />
                   </Link>
                 </SwiperSlide>
@@ -221,12 +221,12 @@ export default function CollectionPage(props: any) {
             })}
           </Swiper>         
         </div>
-      <div className="text-center py-8 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+      <div className="text-center sm:py-8 py-4 px-4 sm:px-6 lg:px-8">
+        <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
           {props.name}
         </h1>
         <h2>{props.description}</h2>
-        <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+        <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
           {props.products.total} results
         </h1>
       </div>

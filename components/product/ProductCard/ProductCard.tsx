@@ -172,7 +172,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                 alt={product.name}
                 onMouseEnter={() => handleHover('enter')}
                 onMouseLeave={() => handleHover('leave')}
-                className="w-full h-72 object-top object-cover"
+                className="w-full sm:h-72 h-48 object-top object-cover"
               />
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
@@ -180,7 +180,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                 </div>
               )}
               {buttonConfig.isNotifyMeEnabled && (
-                <div className="bg-indigo-400 absolute py-1 px-1 rounded-sm top-2">
+                <div className="bg-red-300 text-white absolute py-1 px-1 rounded-sm top-2">
                   {BTN_NOTIFY_ME}
                 </div>
               )}
@@ -190,14 +190,14 @@ const ProductCard: FC<Props> = ({ product }) => {
 
         <div className="pt-4 pb-2 text-left grid sm:grid-cols-12 grid-cols-1">
           <div className='sm:col-span-8'>
-              <h3 className="min-h-50px text-sm font-medium text-gray-900 line-clip-2">
+              <h3 className="sm:min-h-50px sm:text-sm text-xs font-medium text-gray-900 line-clip-2 text-center sm:text-left">
                 <Link href={`/${currentProductData.link}`}>
                   <a href={`/${currentProductData.link}`}>{product.name}</a>
                 </Link>
               </h3>
           </div>
           <div className='sm:col-span-4'>
-            <p className="font-bold text-gray-900 text-right">
+            <p className="font-bold text-gray-900 sm:text-right text-center">
               {product?.price?.formatted?.withTax}
             </p>
           </div>
@@ -211,7 +211,7 @@ const ProductCard: FC<Props> = ({ product }) => {
               link={currentProductData.link}
             />
           ) : (
-            <div className="h-10 w-10 inline-block" />
+            <div className="sm:h-10 sm:w-10 h-5 w-5 sm:mr-2 mr-1 mt-2 inline-block" />
           )}
           <div className="flex flex-col">
             <Button

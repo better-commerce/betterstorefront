@@ -12,7 +12,7 @@ export default function CollectionList(props: any) {
           Shop by Collection
         </h2>
 
-        <div className="py-10 grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-5 xl:gap-x-8">
+        <div className="py-10 grid grid-cols-2 sm:gap-y-10 gap-y-6 sm:grid-cols-4 gap-x-6 lg:grid-cols-5 xl:gap-x-8">
           {props.data.map((collection: any, key: any) => (
             <Link key={key} href={`/collection/${collection.slug}`}>
               <a
@@ -32,13 +32,13 @@ export default function CollectionList(props: any) {
                 </div>
                 <div className='flex-1'>
                    <h1
-                    className="pt-2 text-gray-900 font-medium text-xl flex w-full"
+                    className="pt-2 text-gray-900 font-medium sm:text-xl text-md flex w-full"
                   >
                     {collection.name}
                   </h1>
 
                    <h4
-                    className="pt-1 text-gray-500 font-normal text-sm w-full"
+                    className="pt-1 text-gray-500 font-normal sm:text-sm text-xs w-full"
                   >
                     {collection.noOfRecords}{' '} <span className='italic'>Products available</span>
                   </h4>
