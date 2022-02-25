@@ -1,7 +1,7 @@
 const Logo = ({ className = '', ...props }) => (
   <img
-    className="h-8 w-auto"
-    src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
+    className="h-6 sm:h-10 w-auto pl-2"
+    src="/mg-logo.svg"
     alt=""
   />
 )

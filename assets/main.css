@@ -237,3 +237,11 @@
   -webkit-line-clamp: 7;
   max-height: 210px;
 }
+
+.theme-mg-bg-orange {
+  background-color: #fff3f1 !important;
+}
+
+.theme-mg-bg-orange-dark {
+  background-color: #ffded9 !important;
+}

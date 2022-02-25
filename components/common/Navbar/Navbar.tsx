@@ -15,6 +15,7 @@ import Router from 'next/router'
 import LanguageSwitcher from './LanguageSwitcher'
 import Cookies from 'js-cookie'
 import { MenuIcon, SearchIcon, XIcon } from '@heroicons/react/outline'
+import StripBanner from './StripBanner'
 
 import {
   BTN_SIGN_OUT,
@@ -134,7 +135,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto">
+            <div className="relative w-full theme-mg-bg-orange shadow-xl pb-12 flex flex-col overflow-y-auto">
               <div className="px-4 pt-5 pb-2 flex">
                 <button
                   type="button"
@@ -148,13 +149,13 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
               {/* Links */}
               <Tab.Group as="div" className="mt-2">
-                <div className="border-b border-gray-200">
+                <div className="border-b border-gray-100">
                   {config.map((item:any, idx:number) =>{
                     return(
                       <>
                         {!item.navBlocks.length ? (
                           <Link href={`/${item.hyperlink}`} passHref>
-                            <a  onClick={() => setOpen(false)} className='flex flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium' href={item.hyperlink}>{item.caption}</a>
+                            <a  onClick={() => setOpen(false)} className='flex flex-col whitespace-nowrap py-4 px-4 border-b border-white text-md font-medium' href={item.hyperlink}>{item.caption}</a>
                           </Link>
                         ):(
                           <>
@@ -164,7 +165,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                   className={({ selected }) =>
                                     classNames(
                                       selected ? 'text-gray-900' : 'text-gray-900',
-                                      'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium'
+                                      'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b text-md font-medium'
                                     )
                                   }
                                 >
@@ -246,8 +247,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
       </Transition.Root>
 
       <header className="relative bg-white">
-        <nav aria-label="Top" className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="border-b border-gray-200 px-4 pb-0 sm:px-0 sm:pb-0">
+        <nav aria-label="Top" className="max-w-full mx-auto sm:px-6 lg:px-0">
+          <div className="border-b border-gray-200 px-2 pb-0 sm:px-8 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
               {/* Logo */}
                <button
@@ -394,8 +395,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               <div className="flex-1 flex items-center justify-end">
                 {/* Search */}
                 <Searchbar onClick={setShowSearchBar} />
-                {/* account */}
-                <Account title={title} config={accountDropdownConfig} />
+               
                 {/* currency */}
                 <div className='sm:flex hidden'>
                   <CurrencySwitcher
@@ -414,41 +414,53 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
                 <div className="px-2 flow-root">
                   <button
-                    className="group -m-2 p-2 flex items-center"
+                    className="group -m-2 p-1 flex items-center relative"
                     onClick={openWishlist}
                   >
                     <HeartIcon
-                      className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                      className="flex-shrink-0 h-7 w-7 text-gray-800 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      {wishListItems.length}
-                    </span>
-                    <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                     {wishListItems.length > 0 && (
+                     <>                       
+                        <span className="ml-2 text-xs font-medium text-gray-700 group-hover:text-gray-800 absolute top-3 right-4">
+                          {wishListItems.length}
+                        </span>
+                        <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                    </>
+                   )}
                   </button>
                 </div>
                 {/* Cart */}
 
                 <div className="px-2 flow-root">
                   <button
-                    className="group -m-2 p-2 flex items-center"
+                    className="group -m-2 p-1 flex items-center relative"
                     onClick={openCart}
                   >
                     <ShoppingBagIcon
-                      className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                      className="flex-shrink-0 h-7 w-7 text-gray-800 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      {cartItems.lineItems?.length}
-                    </span>
-                    <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                   {cartItems.lineItems?.length > 0 && (
+                     <>
+                        <span className="ml-2 text-xs font-medium text-gray-700 group-hover:text-gray-800 absolute top-3 right-4">
+                          {cartItems.lineItems?.length}
+                        </span>
+                        <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                    </>
+                   )}
+                   
                   </button>
                 </div>
+                 {/* account */}
+                <Account title={title} config={accountDropdownConfig} />
               </div>
             </div>
           </div>
         </nav>
       </header>
+      <StripBanner></StripBanner>
     </div>
   )
 }

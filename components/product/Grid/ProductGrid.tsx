@@ -36,7 +36,7 @@ export default function CategoryGrid({
           currentNumber={products.results.length}
           component={
             <div
-              className={`-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-4 ${
+              className={`-mx-px border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-4 ${
                 products.results.length < 4
                   ? `lg:grid-cols-4`
                   : 'lg:grid-cols-4'
@@ -65,7 +65,7 @@ export default function CategoryGrid({
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+          <div className="-mx-px border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
             {!products.results.length &&
               rangeMap(12, (i) => (
                 <div
