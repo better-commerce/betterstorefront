@@ -165,7 +165,10 @@ export default function Filters({
                       className="flex-none w-5 h-5 mr-2 text-gray-900 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
-                    {routerFilters.length}
+                    {appliedFilters?.length >0 && (
+                      routerFilters.length
+                    )}
+                    
                   </button>
                 </div>
                 <div className="pl-6">
@@ -185,26 +188,29 @@ export default function Filters({
               action={handleSortBy}
             />
           </div>
-          <div className='flex flex-col px-4 grid grid-cols-1 border-t border-gray-100 py-2'>
-              <h4 className='text-sm font-bold flex w-full mb-2'>Applied Filters</h4>
-              <div className='grid grid-cols-2'>
-                {appliedFilters.map((appliedFilter: any, idx: number) => {
-                    return (
-                        <div
-                          key={`applied-filter-${idx}`}
-                          className="flex-1 justify-left items-left text-left text-xs text-gray-600"
-                        >
-                            {appliedFilter.name ? (
-                              <>
-                                <span className='font-medium'>{appliedFilter.name}: </span>
-                                <span className="ml-1">{appliedFilter.Value}</span>
-                              </>
-                            ) : null}
-                        </div>
-                    )
-                })}
+           {appliedFilters?.length >0 && (
+              <div className='flex flex-col px-4 grid grid-cols-1 border-t border-gray-100 py-2'>
+                  <h4 className='text-sm font-bold flex w-full mb-2'>Applied Filters</h4>
+                  <div className='grid grid-cols-2'>
+                    {appliedFilters.map((appliedFilter: any, idx: number) => {
+                        return (
+                            <div
+                              key={`applied-filter-${idx}`}
+                              className="flex-1 justify-left items-left text-left text-xs text-gray-600"
+                            >
+                                {appliedFilter.name ? (
+                                  <>
+                                    <span className='font-medium'>{appliedFilter.name}: </span>
+                                    <span className="ml-1">{appliedFilter.Value}</span>
+                                  </>
+                                ) : null}
+                            </div>
+                        )
+                    })}
+                  </div>
               </div>
-          </div>
+            )}
+          
         </section>
       </div>
     </div>
