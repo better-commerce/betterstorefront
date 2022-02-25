@@ -338,11 +338,11 @@ export default function ProductView({
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
-  if (product === null) {
+  /*if (product === null) {
     return {
       notFound: true,
     }
-  }
+  }*/
 
   return (
     <div className="bg-white page-container">
