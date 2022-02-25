@@ -79,7 +79,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
   }
 
   return (
-    <div className="py-5">
+    <div className="pt-5 pb-16">
       <h2 className="text-lg font-medium text-gray-900">{POST_YOUR_REVIEW}</h2>
       {asyncMessage ? (
         <div>
@@ -91,7 +91,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             placeholder={REVIEW_TITLE}
             onChange={handleCommentTitle}
             value={commentTitle}
-            className="w-1/3 mb-2 mt-2 mb-5 appearance-none min-w-0 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+            className="sm:w-1/3 w-full mb-2 mt-2 mb-5 appearance-none min-w-0 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
           />
           <textarea
             className="text-gray-900 bg-gray-100 rounded border border-gray-400 leading-normal w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"

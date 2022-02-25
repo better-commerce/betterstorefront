@@ -5,13 +5,15 @@ import { GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE } from '@components/utils/t
 export default function Reviews({ data, productId }: any) {
   return (
     <div className="bg-white">
-      <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="max-w-2xl mx-auto py-0 px-4 sm:py-0 sm:px-0 lg:max-w-7xl lg:px-0 sm:border-t sm:mt-10">
         <div>
           <ReviewInput productId={productId} />
         </div>
         {data?.length && (
           <h2 className="text-lg font-medium text-gray-900">{GENERAL_REVIEWS}</h2>
         )}
+
+        {data?.length && (
         <div className="mt-6 pb-10 border-t border-b border-gray-200 divide-y divide-gray-200 space-y-10">
           {data?.map((review: any, reviewIdx: number) => (
             <div
@@ -66,6 +68,7 @@ export default function Reviews({ data, productId }: any) {
             </div>
           ))}
         </div>
+        )}
       </div>
     </div>
   )

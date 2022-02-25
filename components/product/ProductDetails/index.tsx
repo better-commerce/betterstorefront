@@ -38,7 +38,7 @@ export default function ProductDetails({ product, description }: any) {
       title: PRODUCT_DESCRIPTION,
       InnerComponent: (props: any) => (
         <div
-          className="text-gray-700 space-y-6"
+          className="text-gray-700 sm:space-y-6 space-y-2"
           dangerouslySetInnerHTML={{ __html: description || '' }}
         />
       ),
@@ -66,13 +66,13 @@ export default function ProductDetails({ product, description }: any) {
   ]
 
   return (
-    <div className="border-t divide-y divide-gray-200">
+    <div className="border-b divide-y divide-gray-200">
       {detailsConfig.map((detail: any, idx: number) => (
         <Disclosure as="div" key={`${idx}-detail-item`}>
           {({ open }) => (
             <>
               <h3>
-                <Disclosure.Button className="group relative w-full py-6 flex justify-between items-center text-left">
+                <Disclosure.Button className="group relative w-full sm:py-6 py-2 pr-2 flex justify-between items-center text-left">
                   <span
                     className={classNames(
                       open ? 'text-indigo-600' : 'text-gray-900',
