@@ -160,35 +160,36 @@ const SearchProductCard: FC<Props> = ({ product }) => {
 
   return (
     <div className="border-gray-100">
-      <div key={product.id} className="group relative p-3 sm:p-6">
+      <div key={product.id} className="relative p-3 sm:p-6">
+        {isInWishList ? (
+                  <span className="text-gray-900">
+                      {ALERT_SUCCESS_WISHLIST_MESSAGE}
+                  </span>
+              ) : (
+
+               <button
+                  className="absolute right-2 top-2 z-99"
+                  onClick={handleWishList}
+                >
+                  <HeartIcon
+                    className="flex-shrink-0 h-8 w-8 z-50 text-gray-800 hover:text-gray-500 rounded-3xl p-1 opacity-80"
+                    aria-hidden="true"
+                  />
+                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                    
+                  </span>
+                  <span className="sr-only">f</span>
+                </button>
+                 
+              )}   
         <Link
           passHref
           href={`/${currentProductData.link}`}
           key={'data-product' + currentProductData.link}
         >
           <a href={currentProductData.link}>
-            <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-              {isInWishList ? (
-                  <span className="text-gray-900">
-                      {ALERT_SUCCESS_WISHLIST_MESSAGE}
-                  </span>
-              ) : (
-
-                <button
-                    className="absolute right-2 top-2 "
-                    onClick={handleWishList}
-                  >
-                    <HeartIcon
-                      className="flex-shrink-0 h-8 w-8 text-red-800 group-hover:text-gray-500 bg-gray-100 rounded-3xl p-1 opacity-80"
-                      aria-hidden="true"
-                    />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                     
-                    </span>
-                    <span className="sr-only">f</span>
-                  </button>
-                 
-              )}              
+            <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 hover:opacity-75">
+                         
               <img
                 src={currentProductData.image}
                 alt={product.name}

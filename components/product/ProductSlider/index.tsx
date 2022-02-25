@@ -14,9 +14,9 @@ interface Props {
   config: {
     title?: string
     products?: Array<[]>
-    paragraph?: string
+    paragraph: string
     buttonText?: string
-    subTitle?: string
+    subTitle: string
   }
 }
 
@@ -65,12 +65,10 @@ const ProductSlider: FC<Props> = ({ config }) => {
             {config.title}
           </h2>
           <h2 className="sm:py-5 py-3 sm:text-4xl text-xl text-center font-bold tracking-tight text-gray-900">
-            {/* <div dangerouslySetInnerHTML={{ __html: config.subTitle }}></div> */}
-            {config.subTitle}
+               <div dangerouslySetInnerHTML={{ __html: config.subTitle }}></div>     
           </h2>
           <p className="sm:py-5 py-3 sm:text-xl text-md tracking-tight text-center sm:max-w-40p text-gray-900">
-            {/* <div dangerouslySetInnerHTML={{ __html: config.paragraph }}></div>             */}
-            {config.paragraph}
+            <div dangerouslySetInnerHTML={{ __html: config.paragraph }}></div>                        
           </p>
         </div>
 
