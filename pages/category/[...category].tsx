@@ -209,7 +209,7 @@ function CategoryPage({ category, products }: any) {
                           'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
                         }
                       />
-                      <h4 className="text-gray-900 font-semibold text-sm">
+                      <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
                         {subcateg.name}
                       </h4>
                     </div>
