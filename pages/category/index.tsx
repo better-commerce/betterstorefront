@@ -12,29 +12,29 @@ export default function CategoryList(props: any) {
           Shop by Category
         </h2>
 
-        <div className="mt-4 flow-root">
-          <div className="my-2">
-            <div className="box-content py-2 relative">
-              <div className="min-w-screen-xl px-4 flex space-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:grid xl:grid-cols-5 xl:gap-8">
+        <div className="sm:mt-4 mt-8 flow-root">
+          <div className="my-0">
+            <div className="box-content relative">
+              <div className="sm:py-6 py-1 grid grid-cols-2 sm:gap-y-8 gap-y-6 sm:grid-cols-4 gap-x-6 lg:grid-cols-5 xl:gap-x-8">
                 {props.data.map((category: any, key: number) => (
                   <Link key={key} href={`/${category.link}`}>
                       <a
                         key={category.id}
                         href={`/${category.link}`}
-                        className="relative w-56 h-80 rounded-lg p-6 flex flex-col overflow-hidden hover:opacity-75 xl:w-auto"
+                        className="relative sm:w-56 sm:h-80 h-60 w-full rounded-lg p-6 flex flex-col overflow-hidden hover:opacity-75 xl:w-auto"
                       >
                         <span
                       aria-hidden="true"
                       className="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-gray-100 opacity-90"
                     />
                     <span aria-hidden="true" className="absolute inset-0">
-                      <img src={category.image || 'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-11.jpg' } alt="" className="object-center object-cover" />
+                      <img src={category.image || 'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-11.jpg' } alt="" className="w-full h-full object-center object-cover group-hover:opacity-75" />
                     </span>
                     <span
                       aria-hidden="true"
                       className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 opacity-40"
                     />
-                    <span className="relative mt-auto text-center text-xl font-bold text-white">{category.name}</span>
+                    <span className="relative mt-auto text-center sm:text-xl text-sm font-bold text-white">{category.name}</span>
                   </a>
                   </Link>
                 ))}
