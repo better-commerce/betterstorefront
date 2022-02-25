@@ -226,8 +226,8 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  max-height: 45px;
-  min-height: 45px;
+  max-height: 42px;
+  min-height: 42px !important;
 }
 
 .line-clip-7 {
