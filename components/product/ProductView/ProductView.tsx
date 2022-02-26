@@ -42,6 +42,7 @@ import {
   PRICEMATCH_SEEN_IT_CHEAPER,
   PRODUCT_INFORMATION,
   YOUTUBE_VIDEO_PLAYER,
+  SLUG_TYPE_MANUFACTURER
 } from '@components/utils/textVariables'
 
 
@@ -338,6 +339,9 @@ export default function ProductView({
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
+  const breadcrumbs = product.breadCrumbs?.filter(
+    (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
+  )
   /*if (product === null) {
     return {
       notFound: true,
@@ -349,8 +353,8 @@ export default function ProductView({
       
       {/* Mobile menu */}
       <div className="max-w-7xl mx-auto pt-2 px-2 sm:pt-6 sm:px-6 lg:px-8">
-        {product.breadCrumbs && (
-          <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />          
+        {breadcrumbs && (
+          <BreadCrumbs items={breadcrumbs} currentProduct={product} />          
         )}
       </div>
       <main className="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
