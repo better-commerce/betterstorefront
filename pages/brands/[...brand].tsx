@@ -247,11 +247,12 @@ function BrandDetailPage({
   // IMPLEMENT HANDLING FOR NULL OBJECT
   if (brandDetails === null) {
     return (
-      <div className='container mx-auto py-10 text-center relative top-20'>
-        <h4 className='text-3xl font-medium text-gray-400 pb-6'>This is a bad url. please go back to
-        <Link href="/brands">
+      <div className="container mx-auto py-10 text-center relative top-20">
+        <h4 className="text-3xl font-medium text-gray-400 pb-6">
+          This is a bad url. please go back to
+          <Link href="/brands">
             <a className="text-indigo-500 px-3">all brands</a>
-        </Link>
+          </Link>
         </h4>
       </div>
     )
@@ -318,7 +319,6 @@ function BrandDetailPage({
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const response = await getBrandBySlug(`brands/${context.query.brand.pop()}`)
-  debugger
   console.log(response.result)
   return {
     props: { query: context.query, brandDetails: response.result }, // will be passed to the page component as props
