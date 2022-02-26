@@ -8,15 +8,11 @@ import ProductMobileFilters from '@components/product/Filters'
 import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
 import ProductGrid from '@components/product/Grid/ProductGrid'
 import ProductGridWithFacet from '@components/product/Grid'
-import { data } from 'autoprefixer'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { NextSeo } from 'next-seo'
 import { postData } from '@components/utils/clientFetcher'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 // Import Swiper styles
@@ -207,22 +203,22 @@ export default function CollectionPage(props: any) {
   return (
     <main className="pb-0">
       <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
-          <Swiper navigation={true} loop={true} className="mySwiper">
-            {props.images.map((img: any, idx: number) => {
-              return (
-                <SwiperSlide key={idx}>
-                  <Link href={img.link || '#'}>
-                    <img
-                      src={img.url || 'error'}
-                      alt=""
-                      className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
-                    />
-                  </Link>
-                </SwiperSlide>
-              )
-            })}
-          </Swiper>         
-        </div>
+        <Swiper navigation={true} loop={true} className="mySwiper">
+          {props.images.map((img: any, idx: number) => {
+            return (
+              <SwiperSlide key={idx}>
+                <Link href={img.link || '#'}>
+                  <img
+                    src={img.url || 'error'}
+                    alt=""
+                    className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
+                  />
+                </Link>
+              </SwiperSlide>
+            )
+          })}
+        </Swiper>
+      </div>
       <div className="text-center sm:py-8 py-4 px-4 sm:px-6 lg:px-8">
         <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
           {props.name}
@@ -232,18 +228,18 @@ export default function CollectionPage(props: any) {
           {props.products.total} results
         </h1>
       </div>
-      
+
       <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
         {props.allowFacets && (
           <>
-          {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
-          
+            {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+
             <div className="sm:col-span-3 sm:hidden flex flex-col">
               <ProductMobileFilters
                 handleFilters={handleFilters}
                 products={props.products}
                 routerFilters={state.filters}
-                handleSortBy={handleSortBy}              
+                handleSortBy={handleSortBy}
                 clearAll={clearAll}
                 routerSortOption={state.sortBy}
               />
@@ -258,34 +254,34 @@ export default function CollectionPage(props: any) {
             <div className="sm:col-span-9">
               {/* {HIDE FILTER TOP BAR IN MOBILE} */}
 
-            <div className='flex-1 sm:block hidden'>
-              <ProductFiltersTopBar
-                products={data.products}
-                handleSortBy={handleSortBy}
-                routerFilters={state.filters}
-                clearAll={clearAll}
-                routerSortOption={state.sortBy}               
-              />  
-            </div>  
-            <ProductGridWithFacet
-              products={productDataToPass}
-              currentPage={props.currentPage}
-              handlePageChange={handlePageChange}
-              handleInfiniteScroll={handleInfiniteScroll}
-            />
-          </div>
+              <div className="flex-1 sm:block hidden">
+                <ProductFiltersTopBar
+                  products={data.products}
+                  handleSortBy={handleSortBy}
+                  routerFilters={state.filters}
+                  clearAll={clearAll}
+                  routerSortOption={state.sortBy}
+                />
+              </div>
+              <ProductGridWithFacet
+                products={productDataToPass}
+                currentPage={props.currentPage}
+                handlePageChange={handlePageChange}
+                handleInfiniteScroll={handleInfiniteScroll}
+              />
+            </div>
           </>
         )}
         {!props.allowFacets && (
           <>
             <div className="col-span-12">
-            <ProductGrid
-              products={productDataToPass}
-              currentPage={props.currentPage}
-              handlePageChange={handlePageChange}
-              handleInfiniteScroll={handleInfiniteScroll}
-            />
-          </div>
+              <ProductGrid
+                products={productDataToPass}
+                currentPage={props.currentPage}
+                handlePageChange={handlePageChange}
+                handleInfiniteScroll={handleInfiniteScroll}
+              />
+            </div>
           </>
         )}
         <div></div>

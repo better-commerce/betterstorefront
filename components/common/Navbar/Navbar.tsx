@@ -29,7 +29,6 @@ import {
   GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
 
-
 interface Props {
   config: []
   currencies: []
@@ -107,12 +106,21 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
       })
       .catch((err: any) => console.log(err))
   }
+
+  const hyperlinkHandler = (hyperlink: string) => {
+    return hyperlink[0] === '/' ? hyperlink : `/${hyperlink}`
+  }
+
   const [open, setOpen] = useState(false)
   return (
     <div className="bg-white">
       {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="fixed inset-0 flex z-40 lg:hidden" onClose={setOpen}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 flex z-40 lg:hidden"
+          onClose={setOpen}
+        >
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -149,97 +157,116 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               {/* Links */}
               <Tab.Group as="div" className="mt-2">
                 <div className="border-b border-gray-200">
-                  {config.map((item:any, idx:number) =>{
-                    return(
+                  {config.map((item: any, idx: number) => {
+                    return (
                       <>
                         {!item.navBlocks.length ? (
-                          <Link href={`/${item.hyperlink}`} passHref>
-                            <a  onClick={() => setOpen(false)} className='flex flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium' href={item.hyperlink}>{item.caption}</a>
+                          <Link
+                            href={hyperlinkHandler(item.hyperlink)}
+                            passHref
+                          >
+                            <a
+                              onClick={() => setOpen(false)}
+                              className="flex flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium"
+                              href={item.hyperlink}
+                            >
+                              {item.caption}
+                            </a>
                           </Link>
-                        ):(
+                        ) : (
                           <>
                             <Tab.List className="-mb-px flex flex-col px-0 space-x-0">
                               <Tab
-                                  key={item.caption}
-                                  className={({ selected }) =>
-                                    classNames(
-                                      selected ? 'text-gray-900' : 'text-gray-900',
-                                      'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium'
-                                    )
-                                  }
-                                >
+                                key={item.caption}
+                                className={({ selected }) =>
+                                  classNames(
+                                    selected
+                                      ? 'text-gray-900'
+                                      : 'text-gray-900',
+                                    'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium'
+                                  )
+                                }
+                              >
                                 {item.caption}
                               </Tab>
                             </Tab.List>
 
                             <Tab.Panels as={Fragment}>
-                              <Tab.Panel key={item.caption} className="pt-2 pb-0 px-0 space-y-10">
-                                  <div className="space-y-4">
-                                    {item.navBlocks.length ? (                                    
-                                        <div className="relative bg-white">
-                                            <div className="max-w-7xl mx-auto px-0 sm:px-0 lg:px-0">
-                                              <div className="grid grid-cols-1 items-start md:grid-cols-1 lg:gap-x-8">
-                                                {item.navBlocks.map(
-                                                  (navBlock: any, navIdx: number) => {
-                                                    return (
-                                                      <div
-                                                        key={navIdx}
-                                                        className="grid grid-cols-1 gap-y-0 gap-x-0 lg:gap-x-0"
+                              <Tab.Panel
+                                key={item.caption}
+                                className="pt-2 pb-0 px-0 space-y-10"
+                              >
+                                <div className="space-y-4">
+                                  {item.navBlocks.length ? (
+                                    <div className="relative bg-white">
+                                      <div className="max-w-7xl mx-auto px-0 sm:px-0 lg:px-0">
+                                        <div className="grid grid-cols-1 items-start md:grid-cols-1 lg:gap-x-8">
+                                          {item.navBlocks.map(
+                                            (navBlock: any, navIdx: number) => {
+                                              return (
+                                                <div
+                                                  key={navIdx}
+                                                  className="grid grid-cols-1 gap-y-0 gap-x-0 lg:gap-x-0"
+                                                >
+                                                  <div>
+                                                    <p className="font-semibold capitalize text-xl text-gray-900 p-2">
+                                                      {navBlock.boxTitle}
+                                                    </p>
+                                                    <div className="mt-1 border-t py-2 px-6 border-gray-100 pt-2 sm:grid sm:grid-cols-1 sm:gap-x-6">
+                                                      <ul
+                                                        role="list"
+                                                        aria-labelledby="clothing-heading"
+                                                        className="grid grid-cols-1"
                                                       >
-                                                        <div>
-                                                          <p className="font-semibold capitalize text-xl text-gray-900 p-2">
-                                                            {navBlock.boxTitle}
-                                                          </p>
-                                                          <div className="mt-1 border-t py-2 px-6 border-gray-100 pt-2 sm:grid sm:grid-cols-1 sm:gap-x-6">
-                                                            <ul
-                                                              role="list"
-                                                              aria-labelledby="clothing-heading"
-                                                              className="grid grid-cols-1"
+                                                        {navBlock.navItems.map(
+                                                          (navItem: any) => (
+                                                            <li
+                                                              key={
+                                                                navItem.caption
+                                                              }
+                                                              className="flex my-1 border-b pb-2"
                                                             >
-                                                              {navBlock.navItems.map(
-                                                                (navItem: any) => (
-                                                                  <li
-                                                                    key={
-                                                                      navItem.caption
-                                                                    }
-                                                                    className="flex my-1 border-b pb-2"
-                                                                  >
-                                                                    <Link
-                                                                      href={`/${navItem.itemLink}`}
-                                                                      passHref
-                                                                      
-                                                                    >
-                                                                      <a onClick={() => setOpen(false)} className="hover:text-gray-800 text-sm">
-                                                                          {
-                                                                            navItem.caption
-                                                                          }
-                                                                      </a>
-                                                                    </Link>
-                                                                  </li>
-                                                                )
-                                                              )}
-                                                            </ul>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    )
-                                                  }
-                                                )}
-                                              </div>
-                                            </div>
-                                          </div>
-                                    ) : null}
-                                  </div>
-                                </Tab.Panel>          
+                                                              <Link
+                                                                href={`/${navItem.itemLink}`}
+                                                                passHref
+                                                              >
+                                                                <a
+                                                                  onClick={() =>
+                                                                    setOpen(
+                                                                      false
+                                                                    )
+                                                                  }
+                                                                  className="hover:text-gray-800 text-sm"
+                                                                >
+                                                                  {
+                                                                    navItem.caption
+                                                                  }
+                                                                </a>
+                                                              </Link>
+                                                            </li>
+                                                          )
+                                                        )}
+                                                      </ul>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )
+                                            }
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : null}
+                                </div>
+                              </Tab.Panel>
                             </Tab.Panels>
                           </>
                         )}
                       </>
                     )
                   })}
-                </div>                         
+                </div>
               </Tab.Group>
-
             </div>
           </Transition.Child>
         </Dialog>
@@ -250,14 +277,14 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
           <div className="border-b border-gray-200 px-4 pb-0 sm:px-0 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
               {/* Logo */}
-               <button
-                  type="button"
-                  className="-ml-2 bg-white p-2 rounded-md text-gray-400 sm:hidden"
-                  onClick={() => setOpen(true)}
-                >
-                  <span className="sr-only">Open menu</span>
-                  <MenuIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+              <button
+                type="button"
+                className="-ml-2 bg-white p-2 rounded-md text-gray-400 sm:hidden"
+                onClick={() => setOpen(true)}
+              >
+                <span className="sr-only">Open menu</span>
+                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
 
               <Link href="/">
                 <div className="w-auto flex cursor-pointer">
@@ -275,7 +302,10 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                         {({ open }) => (
                           <>
                             {!item.navBlocks.length ? (
-                              <Link href={`/${item.hyperlink}`} passHref>
+                              <Link
+                                href={hyperlinkHandler(item.hyperlink)}
+                                passHref
+                              >
                                 <a
                                   className="relative flex"
                                   href={item.hyperlink}
@@ -350,7 +380,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                             className="flex my-2"
                                                           >
                                                             <Link
-                                                              href={`/${navItem.itemLink}`}
+                                                              href={hyperlinkHandler(
+                                                                navItem.itemLink
+                                                              )}
                                                               passHref
                                                             >
                                                               <a className="hover:text-gray-800">
@@ -397,7 +429,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 {/* account */}
                 <Account title={title} config={accountDropdownConfig} />
                 {/* currency */}
-                <div className='sm:flex hidden'>
+                <div className="sm:flex hidden">
                   <CurrencySwitcher
                     config={currencies}
                     title={SELECT_CURRENCY}
@@ -409,7 +441,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                     config={languages}
                   />
                 </div>
-                
+
                 {/* Wishlist*/}
 
                 <div className="px-2 flow-root">
