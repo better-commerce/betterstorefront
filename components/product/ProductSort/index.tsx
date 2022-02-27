@@ -51,7 +51,7 @@ export default function ProductSort({
                     <div>
                       <Link
                         href={{
-                          pathname: '/search',
+                          pathname: router.pathname,
                           query: {
                             ...router.query,
                             sortBy: option.key,
