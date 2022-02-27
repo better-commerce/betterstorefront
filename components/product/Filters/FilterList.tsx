@@ -106,7 +106,7 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
       <label htmlFor="search-input" className="sr-only">
-      {BTN_SEARCH}
+        {BTN_SEARCH}
       </label>
       <input
         id="search-input"
@@ -180,7 +180,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className='max-panel space-y-2'>
+      <div className="max-panel space-y-2">
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (
