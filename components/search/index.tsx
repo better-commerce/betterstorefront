@@ -79,7 +79,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
       </div>
       <div className="w-full mt-20 justify-center items-center flex flex-col px-10 py-5">
         <div className="flex flex-row mb-10">
-          <div className="min-w-searchbar flex flex-row border border-gray-300 rounded-md py-2 px-4 shadow-sm ">
+          <div className="min-w-3xl flex flex-row border border-gray-300 rounded-md py-2 px-4 shadow-sm ">
             <label className="hidden" htmlFor={'search-bar'}>
               {BTN_SEARCH}
             </label>
@@ -94,7 +94,8 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
             </div>
           </div>
         </div>
-        <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+        <div className='flex flex-col max-h-screen min-h-screen h-64 overflow-y-auto'>
+            <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-4 lg:grid-cols-6">
           {isLoading &&
             rangeMap(12, (i) => (
               <div
@@ -143,6 +144,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
             )
           })}
         </div>
+        </div>        
       </div>
     </div>
   )

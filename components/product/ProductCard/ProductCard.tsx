@@ -175,7 +175,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                     className="flex-shrink-0 h-8 w-8 z-50 text-gray-800 group-hover:text-gray-500 rounded-3xl p-1 opacity-80"
                     aria-hidden="true"
                   />
-                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                  <span className="ml-2 text-sm font-medium text-gray-700 hover:text-red-800">
                     
                   </span>
                   <span className="sr-only">f</span>
