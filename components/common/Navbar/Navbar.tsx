@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from 'react'
+import { FC, Fragment, useState, useRef } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition, Dialog, Tab } from '@headlessui/react'
 import { ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/outline'
@@ -112,6 +112,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   }
 
   const [open, setOpen] = useState(false)
+  
+  const buttonRef = useRef<HTMLButtonElement>(null) // useRef<HTMLButtonElement>(null)
+  const [openState, setOpenState] = useState(-1)
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -295,133 +298,92 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
               {/* Flyout menus */}
               <Popover.Group className="absolute bottom-0 inset-x-0 sm:static w-full sm:self-stretch sm:block hidden">
-                <div className="border-t h-14 px-4 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-center sm:overflow-visible sm:pb-0">
-                  {config.map((item: any, idx: number) => {
-                    return (
-                      <Popover key={idx} className="flex">
-                        {({ open }) => (
-                          <>
-                            {!item.navBlocks.length ? (
-                              <Link
-                                href={hyperlinkHandler(item.hyperlink)}
-                                passHref
-                              >
-                                <a
-                                  className="relative flex"
-                                  href={item.hyperlink}
-                                >
-                                  <Popover.Button
-                                    className={classNames(
-                                      open
-                                        ? 'border-indigo-600 text-indigo-600'
-                                        : 'border-transparent text-gray-700 hover:text-gray-800',
-                                      'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                    )}
-                                  >
-                                    {item.caption}
-                                  </Popover.Button>
-                                </a>
-                              </Link>
-                            ) : (
-                              <Popover.Button
-                                className={classNames(
-                                  open
-                                    ? 'border-indigo-600 text-indigo-600'
-                                    : 'border-transparent text-gray-700 hover:text-gray-800',
-                                  'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                )}
-                              >
-                                {item.caption}
-                              </Popover.Button>
-                            )}
-                            {item.navBlocks.length ? (
-                              <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-200"
-                                enterFrom="opacity-0"
-                                enterTo="opacity-100"
-                                leave="transition ease-in duration-150"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <Popover.Panel className="absolute top-full z-50 inset-x-0 text-gray-500 sm:text-sm">
-                                  {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
+                  <div className="border-t h-14 px-4 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-center sm:overflow-visible sm:pb-0">
+                      {config.map((item: any, idx: number) => {
+                          return (
+                              <>
                                   <div
-                                    className="absolute inset-0 top-1/2 bg-white shadow"
-                                    aria-hidden="true"
-                                  />
-
-                                  <div className="relative bg-white">
-                                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                                      <div className="grid grid-cols-1 items-start gap-y-10 gap-x-6 pt-10 pb-12 md:grid-cols-1 lg:gap-x-8">
-                                        {item.navBlocks.map(
-                                          (navBlock: any, navIdx: number) => {
-                                            return (
-                                              <div
-                                                key={navIdx}
-                                                className="grid grid-cols-1 gap-y-10 gap-x-6 lg:gap-x-8"
+                                      onMouseEnter={() => setOpenState(idx)}
+                                      onMouseLeave={() => setOpenState(-1)}                              
+                                      className='py-5'
+                                  >
+                                      {!item.navBlocks.length ? (
+                                          <Link href={`/${item.hyperlink}`} passHref>
+                                              <a
+                                                  className="relative flex font-semibold text-gray-700 text-sm"
+                                                  href={item.hyperlink}
                                               >
-                                                <div>
-                                                  <p className="font-semibold capitalize text-xl text-gray-900">
-                                                    {navBlock.boxTitle}
-                                                  </p>
-                                                  <div className="mt-4 border-t border-gray-100 pt-6 sm:grid sm:grid-cols-1 sm:gap-x-6">
-                                                    <ul
-                                                      role="list"
-                                                      aria-labelledby="clothing-heading"
-                                                      className="grid grid-cols-4"
-                                                    >
-                                                      {navBlock.navItems.map(
-                                                        (navItem: any) => (
-                                                          <li
-                                                            key={
-                                                              navItem.caption
-                                                            }
-                                                            className="flex my-2"
-                                                          >
-                                                            <Link
-                                                              href={hyperlinkHandler(
-                                                                navItem.itemLink
-                                                              )}
-                                                              passHref
-                                                            >
-                                                              <a className="hover:text-gray-800">
-                                                                <Popover.Button
-                                                                  className={classNames(
-                                                                    open
-                                                                      ? ''
-                                                                      : 'border-transparent text-gray-700 hover:text-gray-800',
-                                                                    'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm -mb-px pt-px'
-                                                                  )}
-                                                                >
-                                                                  {
-                                                                    navItem.caption
-                                                                  }
-                                                                </Popover.Button>
-                                                              </a>
-                                                            </Link>
-                                                          </li>
-                                                        )
-                                                      )}
-                                                    </ul>
+                                                  {item.caption}
+                                              </a>
+                                          </Link>
+                                      ) : (
+
+                                          <Link href={`/${item.hyperlink}`} passHref>
+                                              <a                                                
+                                                  className="relative flex font-semibold text-gray-700 text-sm hover:text-indigo-600 hover:border-b"
+                                                  href={item.hyperlink}
+                                              >
+                                                  {item.caption}
+                                              </a>
+                                          </Link>                                                      
+                                      )}
+                                      {item.navBlocks.length ? (
+                                          <>                               
+                                              <div className={`absolute bg-white top-full z-50 inset-x-0 text-gray-500 sm:text-sm absolute inset-0 top-1/2 bg-white shadow ${openState === idx ? "" : "hidden"}`}
+                                                  aria-hidden="true">
+                                                  <div className="max-w-full bg-white shadow mx-auto px-0">
+                                                      <div className="max-w-7xl mx-auto grid grid-cols-1 items-start gap-y-10 gap-x-6 pt-10 pb-12 md:grid-cols-1 lg:gap-x-8">
+                                                          {item.navBlocks.map(
+                                                              (navBlock: any, navIdx: number) => {
+                                                                  return (
+                                                                      <div
+                                                                          key={navIdx}
+                                                                          className="grid grid-cols-1 gap-y-10 gap-x-6 lg:gap-x-8"
+                                                                      >
+                                                                          <div>
+                                                                              <p className="font-semibold capitalize text-xl text-gray-900">
+                                                                                  {navBlock.boxTitle}
+                                                                              </p>
+                                                                              <div className="mt-4 border-t border-gray-100 pt-6 sm:grid sm:grid-cols-1 sm:gap-x-6">
+                                                                                  <ul
+                                                                                      role="list"
+                                                                                      aria-labelledby="clothing-heading"
+                                                                                      className="grid grid-cols-4"
+                                                                                  >
+                                                                                      {navBlock.navItems.map(
+                                                                                          (navItem: any) => (
+                                                                                              <li
+                                                                                                  key={navItem.caption}
+                                                                                                  className="flex my-2"
+                                                                                              >
+                                                                                                  <Link
+                                                                                                      href={`/${navItem.itemLink}`}
+                                                                                                      passHref
+                                                                                                  >
+                                                                                                      <a  href={`/${navItem.itemLink}`} className="text-gray-900 text-sm hover:text-indigo-600 hover:font-bold">
+                                                                                                          {navItem.caption}
+                                                                                                      </a>
+                                                                                                  </Link>
+                                                                                              </li>
+                                                                                          )
+                                                                                      )}
+                                                                                  </ul>
+                                                                              </div>
+                                                                          </div>
+                                                                      </div>
+                                                                  )
+                                                              }
+                                                          )}
+                                                      </div>
                                                   </div>
-                                                </div>
                                               </div>
-                                            )
-                                          }
-                                        )}
-                                      </div>
-                                    </div>
+                                          </>
+                                      ) : null}
                                   </div>
-                                </Popover.Panel>
-                              </Transition>
-                            ) : null}
-                          </>
-                        )}
-                      </Popover>
-                    )
-                  })}
-                </div>
+                              </>
+                          )
+                      })}
+                  </div>
               </Popover.Group>
               <div className="flex-1 flex items-center justify-end">
                 {/* Search */}

@@ -1,6 +1,6 @@
 import Pagination from '@components/product/Pagination'
 import rangeMap from '@lib/range-map'
-import CategoryCard from '@components/product/ProductCard/ProductCard'
+import ProductCard from '@components/product/ProductCard/ProductCard'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
 import { TITLE_PRODUCTS } from '@components/utils/textVariables'
 
@@ -57,7 +57,7 @@ export default function CategoryGrid({
                   </div>
                 ))}
               {products.results.map((product: any, productIdx: number) => (
-                <CategoryCard key={productIdx} product={product} />
+                <ProductCard key={productIdx} product={product} />
               ))}
             </div>
           }
@@ -81,7 +81,7 @@ export default function CategoryGrid({
                 </div>
               ))}
             {products.results.map((product: any, productIdx: number) => (
-              <CategoryCard key={productIdx} product={product} />
+              <ProductCard key={productIdx} product={product} />
             ))}
           </div>
           {products.pages > 1 && (
