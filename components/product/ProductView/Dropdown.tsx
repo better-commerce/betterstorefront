@@ -1,11 +1,10 @@
 import { Fragment, useState, useEffect } from 'react'
-import { Listbox, Transition, RadioGroup } from '@headlessui/react'
+import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import { getProductFromAttributes } from '@components/utils/attributesGenerator'
-import Link from 'next/Link'
 
 export default function Dropdown({
   items = [],

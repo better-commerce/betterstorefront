@@ -5,7 +5,6 @@ import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import { getProductFromAttributes } from '@components/utils/attributesGenerator'
-import Link from 'next/Link'
 
 export default function Dropdown({
   items = [],
