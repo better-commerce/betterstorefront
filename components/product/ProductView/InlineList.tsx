@@ -16,8 +16,8 @@ export default function InlineList({
 
   return (
     <>
-      <h3 className="text-sm text-gray-800 font-medium text-left">{label}</h3>
-      <RadioGroup value={'ring-gray-700'} onChange={() => {}} className="mt-2">
+      <h3 className="text-sm text-gray-800 font-medium text-center">{label}</h3>
+      <RadioGroup value={'ring-gray-700'} onChange={() => {}} className="mt-2 text-center align-center justify-center attribute-center">
         <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
         <div className="flex items-center space-x-3">
           {items.map((item: any, idx: any) => {

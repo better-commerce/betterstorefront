@@ -106,7 +106,7 @@ export default function Dropdown({
             <div className='flex flex-wrap justify-center justify-self-center'>
                   <RadioGroup value={selected.currentAttribute} onChange={handleOnChange} className="mt-2">
                         <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
-                              <div className="grid grid-cols-6 text-center gap-x-4 justify-self-center flex item-center content-center">
+                              <div className="grid grid-cols-6 text-center gap-x-4 attribute-center justify-self-center flex item-center content-center">
                                     {items.map((item: any) => {
                                           const stockAmount = getStockPerAttribute(fieldCode, item.fieldValue).stock                                                
                                           return (

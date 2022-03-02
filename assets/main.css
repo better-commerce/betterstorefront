@@ -261,3 +261,9 @@
   top: 30px;
   right: 30px;
 }
+
+.attribute-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
