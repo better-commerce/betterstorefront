@@ -13,11 +13,11 @@ interface Props {
 }
 
 const DEFAULT_COLOR_SCHEME = {
-  bgColor: 'bg-indigo-600',
-  hoverBgColor: 'bg-indigo-500',
-  focusRingColor: 'ring-indigo-500',
-  paddingTop: 'py-6',
-  fontSize: 'text-xl'
+  bgColor: 'bg-black',
+  hoverBgColor: 'bg-gray-800',
+  focusRingColor: 'ring-gray-800',
+  paddingTop: 'py-3',
+  fontSize: ''
 }
 
 const DefaultButton: FC<Props> = ({
