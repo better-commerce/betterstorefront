@@ -399,10 +399,145 @@ const DEFAULT_COLOR_SCHEME = {
                       )}
                     </Tab>
                   ))}
+                  {content?.map((image: any, idx) => (
+                    <Tab
+                      key={`${idx}`}
+                      className="relative h-40 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                    >
+                      {() => (
+                        <>
+                          <span className="sr-only">{image.name}</span>
+                          <span className="absolute inset-0 rounded-md overflow-hidden border">
+                            {image.image ? (
+                              <img
+                                src={image.image}
+                                alt=""
+                                className="w-full h-full object-center object-cover"
+                              />
+                              
+                            ) : (
+                              <PlayIcon className="h-full w-full object-center object-cover" />
+                            )}
+                          </span>
+                        </>
+                      )}
+                    </Tab>
+                  ))}
+                  {content?.map((image: any, idx) => (
+                    <Tab
+                      key={`${idx}-tab1`}
+                      className="relative h-40 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                    >
+                      {() => (
+                        <>
+                          <span className="sr-only">{image.name}</span>
+                          <span className="absolute inset-0 rounded-md overflow-hidden border">
+                            {image.image ? (
+                              <img
+                                src={image.image}
+                                alt=""
+                                className="w-full h-full object-center object-cover"
+                              />
+                              
+                            ) : (
+                              <PlayIcon className="h-full w-full object-center object-cover" />
+                            )}
+                          </span>
+                        </>
+                      )}
+                    </Tab>
+                  ))}
+                  {content?.map((image: any, idx) => (
+                    <Tab
+                      key={`${idx}-tab2`}
+                      className="relative h-40 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                    >
+                      {() => (
+                        <>
+                          <span className="sr-only">{image.name}</span>
+                          <span className="absolute inset-0 rounded-md overflow-hidden border">
+                            {image.image ? (
+                              <img
+                                src={image.image}
+                                alt=""
+                                className="w-full h-full object-center object-cover"
+                              />
+                              
+                            ) : (
+                              <PlayIcon className="h-full w-full object-center object-cover" />
+                            )}
+                          </span>
+                        </>
+                      )}
+                    </Tab>
+                  ))}
                 </Tab.List>
               </div>
 
               <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0">
+                {content?.map((image: any) => (
+                  <Tab.Panel key={image.name + 'tab-panel'}>
+                    {image.image ? (
+                      <img
+                        src={image.image}
+                        alt={image.name}
+                        className="w-full h-full object-center object-cover rounded-lg"
+                      />
+                    ) : (
+                      <iframe
+                        width="560"
+                        height="315"
+                        src={image.url}
+                        title={YOUTUBE_VIDEO_PLAYER}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    )}
+                  </Tab.Panel>
+                ))}
+                {content?.map((image: any) => (
+                  <Tab.Panel key={image.name + 'tab-panel'}>
+                    {image.image ? (
+                      <img
+                        src={image.image}
+                        alt={image.name}
+                        className="w-full h-full object-center object-cover rounded-lg"
+                      />
+                    ) : (
+                      <iframe
+                        width="560"
+                        height="315"
+                        src={image.url}
+                        title={YOUTUBE_VIDEO_PLAYER}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    )}
+                  </Tab.Panel>
+                ))}
+                {content?.map((image: any) => (
+                  <Tab.Panel key={image.name + 'tab-panel'}>
+                    {image.image ? (
+                      <img
+                        src={image.image}
+                        alt={image.name}
+                        className="w-full h-full object-center object-cover rounded-lg"
+                      />
+                    ) : (
+                      <iframe
+                        width="560"
+                        height="315"
+                        src={image.url}
+                        title={YOUTUBE_VIDEO_PLAYER}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    )}
+                  </Tab.Panel>
+                ))}
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
