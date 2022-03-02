@@ -39,7 +39,13 @@ export default function PromotionInput() {
       console.log(error)
     }
   }
-
+const DEFAULT_COLOR_SCHEME = {
+  bgColor: 'bg-gray-900',
+  hoverBgColor: 'bg-gray-800',
+  focusRingColor: 'ring-gray-900',
+  paddingTop: 'py-2',
+  fontSize: ''
+}
   return (
     <div className="flex items-center">
       <div>
@@ -76,7 +82,8 @@ export default function PromotionInput() {
               action={async () => await handleSubmit('apply')}
               type="button"
               title={GENERAL_APPLY_TEXT}
-              className={`max-w-xs flex-1 ml-5 bg-black border border-transparent rounded-md py-1 px-4 flex items-center justify-center font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-800 sm:w-full`}
+              colorScheme = {DEFAULT_COLOR_SCHEME}
+              className={`max-w-xs flex-1 ml-5 bg-black border border-transparent rounded-md px-4 flex items-center justify-center font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-800 sm:w-full`}
             />
           </div>
         </div>
