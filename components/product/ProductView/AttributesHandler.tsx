@@ -1,4 +1,5 @@
 import Dropdown from './Dropdown'
+import HorizontalAttributes from './HorizontalAttributes'
 import InlineList from './InlineList'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -8,13 +9,13 @@ import attributesGenerator, {
 } from '@components/utils/attributesGenerator'
 
 const ATTR_COMPONENTS: any = {
-  Dropdown: (props: any) => <Dropdown {...props} />,
+  HorizontalAttributes: (props: any) => <HorizontalAttributes {...props} />,
   HorizontalList: (props: any) => <InlineList {...props} />,
   undefined: () => null,
 }
 
 const TEMP_MAP: any = {
-  'clothing.size': ATTR_COMPONENTS['Dropdown'],
+  'clothing.size': ATTR_COMPONENTS['HorizontalAttributes'],
   'global.colour': ATTR_COMPONENTS['HorizontalList'],
 }
 

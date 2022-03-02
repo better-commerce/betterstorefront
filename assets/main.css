@@ -82,22 +82,29 @@
     object-fit: cover;
   }
 }
-
+.max-modal-panel {
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 .max-panel {
   max-height: 250px;
   overflow-y: auto;
   overflow-x: hidden;
 }
-.max-panel::-webkit-scrollbar {
+.max-panel::-webkit-scrollbar,
+.max-modal-panel::-webkit-scrollbar {
   width: 6px;
 }
 
-.max-panel::-webkit-scrollbar-track {
+.max-panel::-webkit-scrollbar-track,
+.max-modal-panel::-webkit-scrollbar-track {
   background: #fff;
   opacity: 1;
 }
 
-.max-panel::-webkit-scrollbar-thumb {
+.max-panel::-webkit-scrollbar-thumb,
+.max-modal-panel::-webkit-scrollbar-thumb {
   background: #d3d3d36e !important;
   width: 6px;
   border-radius: 6px;

@@ -8,13 +8,13 @@ const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i
 
 const Attributes = ({ attributes = [] }: any) => {
   return (
-    <table className="text-gray-900">
+    <table className="text-gray-900 w-full table">
       <tbody>
         {attributes.map((attr: any, idx: number) => {
           return (
             <tr key={idx}>
-              <th className="border text-left px-5 py-5">{attr.display}</th>
-              <td className="border text-left px-5 py-5">
+              <th className="border text-left px-5 py-3">{attr.display}</th>
+              <td className="border text-left px-5 py-3">
                 {colorRegex.test(attr.value) ? (
                   <div
                     className="h-6 w-6 rounded-full mr-2 mt-2 border border-gray-100"
@@ -33,16 +33,18 @@ const Attributes = ({ attributes = [] }: any) => {
 }
 
 export default function ProductDetails({ product, description }: any) {
-  const detailsConfig = [
+  const detailDescription = [
     {
       title: PRODUCT_DESCRIPTION,
       InnerComponent: (props: any) => (
         <div
-          className="text-gray-700 sm:space-y-6 space-y-2"
+          className="text-gray-700 sm:space-y-6 space-y-2 text-md leading-7 font-normal mt-4"
           dangerouslySetInnerHTML={{ __html: description || '' }}
         />
       ),
-    },
+    }
+  ]
+  const detailsConfig = [
     {
       title: PRODUCT_SPECIFICATION,
       InnerComponent: (props: any) => <Attributes {...props} />,
@@ -66,45 +68,58 @@ export default function ProductDetails({ product, description }: any) {
   ]
 
   return (
-    <div className="border-b divide-y divide-gray-200">
-      {detailsConfig.map((detail: any, idx: number) => (
-        <Disclosure as="div" key={`${idx}-detail-item`}>
-          {({ open }) => (
-            <>
-              <h3>
-                <Disclosure.Button className="group relative w-full sm:py-6 py-2 pr-2 flex justify-between items-center text-left">
-                  <span
-                    className={classNames(
-                      open ? 'text-indigo-600' : 'text-gray-900',
-                      'text-sm font-medium'
-                    )}
-                  >
-                    {detail.title}
-                  </span>
-                  <span className="ml-6 flex items-center">
-                    {open ? (
-                      <MinusSmIcon
-                        className="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <PlusSmIcon
-                        className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                        aria-hidden="true"
-                      />
-                    )}
-                  </span>
-                </Disclosure.Button>
-              </h3>
-              <Disclosure.Panel as="div" className="pb-6 prose prose-sm">
-                {detail.InnerComponent({
-                  attributes: product.customAttributes || product.attributes,
-                })}
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-      ))}
-    </div>
+    <>
+      <div className='flex flex-col'>
+        {detailDescription.map((desc: any, idcx: number) =>(
+          <>
+            {/* <h3 className='text-sm font-medium border-b pb-3'>{desc.title}</h3> */}
+             {desc.InnerComponent({
+                attributes: product.customAttributes || product.attributes,
+              })}
+          </>
+        ))}
+      </div>
+      <div className="border-b divide-y divide-gray-200 mt-4 hidden">
+        {detailsConfig.map((detail: any, idx: number) => (
+          <Disclosure as="div" key={`${idx}-detail-item`}>
+            {({ open }) => (
+              <>
+                <h3>
+                  <Disclosure.Button className="group relative w-full sm:py-3 py-2 pr-2 flex justify-between items-center text-left">
+                    <span
+                      className={classNames(
+                        open ? 'text-indigo-600' : 'text-gray-900',
+                        'text-sm font-semibold uppercase'
+                      )}
+                    >
+                      {detail.title}
+                    </span>
+                    <span className="ml-6 flex items-center">
+                      {open ? (
+                        <MinusSmIcon
+                          className="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <PlusSmIcon
+                          className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </span>
+                  </Disclosure.Button>
+                </h3>
+                <Disclosure.Panel as="div" className="pb-6 prose prose-sm">
+                  {detail.InnerComponent({
+                    attributes: product.customAttributes || product.attributes,
+                  })}
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        ))}
+      </div>
+    </>
+    
   )
 }

@@ -109,6 +109,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
       .catch((err: any) => console.log(err))
   }
   const [open, setOpen] = useState(false)
+  
+  const [openState, setOpenState] = useState(-1)
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -272,7 +274,10 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 <div className="border-t h-14 px-4 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-center sm:overflow-visible sm:pb-0">
                   {config.map((item: any, idx: number) => {
                     return (
-                      <Popover key={idx} className="flex">
+                      <Popover key={idx} className="flex"
+                          onMouseEnter={() => setOpenState(idx)}
+                          onMouseLeave={() => setOpenState(-1)}
+                      >
                         {({ open }) => (
                           <>
                             {!item.navBlocks.length ? (
@@ -283,7 +288,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                 >
                                   <Popover.Button
                                     className={classNames(
-                                      open
+                                      openState == idx
                                         ? 'border-indigo-600 text-indigo-600'
                                         : 'border-transparent text-gray-700 hover:text-gray-800',
                                       'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
@@ -296,7 +301,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                             ) : (
                               <Popover.Button
                                 className={classNames(
-                                  open
+                                  openState == idx
                                     ? 'border-indigo-600 text-indigo-600'
                                     : 'border-transparent text-gray-700 hover:text-gray-800',
                                   'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
@@ -307,6 +312,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                             )}
                             {item.navBlocks.length ? (
                               <Transition
+                                show={openState == idx}
                                 as={Fragment}
                                 enter="transition ease-out duration-200"
                                 enterFrom="opacity-0"
@@ -357,7 +363,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                               <a className="hover:text-gray-800">
                                                                 <Popover.Button
                                                                   className={classNames(
-                                                                    open
+                                                                    openState == idx
                                                                       ? ''
                                                                       : 'border-transparent text-gray-700 hover:text-gray-800',
                                                                     'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm -mb-px pt-px'

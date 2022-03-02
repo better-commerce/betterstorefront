@@ -15,6 +15,8 @@ import Engraving from '@components/product/Engraving'
 import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
+import DeliveryInstruction from './DeliveryInstructions'
+
 import axios from 'axios'
 import {
   NEXT_CREATE_WISHLIST,
@@ -42,7 +44,8 @@ import {
   PRICEMATCH_SEEN_IT_CHEAPER,
   PRODUCT_INFORMATION,
   YOUTUBE_VIDEO_PLAYER,
-  SLUG_TYPE_MANUFACTURER
+  SLUG_TYPE_MANUFACTURER,
+  BTN_ADD_TO_WISHLIST
 } from '@components/utils/textVariables'
 
 
@@ -170,7 +173,13 @@ export default function ProductView({
         index === self.findIndex((t: any) => t.image === value.image)
     )
   }
-
+const DEFAULT_COLOR_SCHEME = {
+  bgColor: 'bg-gray-900',
+  hoverBgColor: 'bg-gray-800',
+  focusRingColor: 'ring-gray-900',
+  paddingTop: 'py-5',
+  fontSize: 'text-xl'
+}
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
@@ -369,18 +378,19 @@ export default function ProductView({
                   {content?.map((image: any, idx) => (
                     <Tab
                       key={`${idx}-tab`}
-                      className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                      className="relative h-40 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
                     >
                       {() => (
                         <>
                           <span className="sr-only">{image.name}</span>
-                          <span className="absolute inset-0 rounded-md overflow-hidden">
+                          <span className="absolute inset-0 rounded-md overflow-hidden border">
                             {image.image ? (
                               <img
                                 src={image.image}
                                 alt=""
                                 className="w-full h-full object-center object-cover"
                               />
+                              
                             ) : (
                               <PlayIcon className="h-full w-full object-center object-cover" />
                             )}
@@ -418,12 +428,12 @@ export default function ProductView({
             </Tab.Group>
 
             {/* Product info */}
-            <div className="sm:mt-10 mt-2 px-4 sm:px-0 sm:mt-16 lg:mt-0">
-              <h1 className="sm:text-3xl text-xl font-bold sm:font-extrabold tracking-tight text-gray-900">
+            <div className="sm:mt-10 mt-2 px-4 sm:px-10 sm:mt-16 lg:mt-0 text-center">
+              <h1 className="sm:text-3xl text-xl font-bold sm:font-semibold lowercase tracking-tight text-gray-900">
                 {selectedAttrData.name || selectedAttrData.productName}
               </h1>
 
-              <p className="text-gray-500 sm:text-md text-sm mt-2 sm:mt-0">
+              <p className="text-gray-500 sm:text-md text-sm mt-2 sm:mt-1">
                 {GENERAL_REFERENCE}: {selectedAttrData.stockCode}
               </p>
               <div className="mt-3">
@@ -444,10 +454,10 @@ export default function ProductView({
               </div>
 
               {/* Reviews */}
-              <div className="mt-3">
+              <div className="mt-6">
                 <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
-                <div className="flex items-center xs:flex-col">
-                  <div className="flex items-center xs:text-center align-center">
+                <div className="flex items-center flex-col">
+                  <div className="flex items-center text-center align-center">
                     {[0, 1, 2, 3, 4].map((rating) => (
                       <StarIcon
                         key={rating}
@@ -466,13 +476,14 @@ export default function ProductView({
                   </p>
                 </div>
               </div>
-              <div className="w-full sm:w-6/12">
+              <div className="w-full sm:w-full">
                 <AttributesHandler
                   product={product}
                   variant={selectedAttrData}
                   setSelectedAttrData={setSelectedAttrData}
                 />
               </div>
+
               {/* <p
                 className="text-gray-900 sm:text-md text-sm cursor-pointer hover:underline"
                 onClick={() => showPriceMatchModal(true)}
@@ -482,23 +493,13 @@ export default function ProductView({
                   {''} {PRICEMATCH_BEST_PRICE}
                 </span>
               </p> */}
-
-              <section aria-labelledby="details-heading" className="sm:mt-2 mt-4">
-                <h2 id="details-heading" className="sr-only">
-                  {PRICEMATCH_ADDITIONAL_DETAILS}
-                </h2>
-                <ProductDetails
-                  product={product}
-                  description={
-                    selectedAttrData.description || product.description
-                  }
-                />
-                {updatedProduct ? (
+              {updatedProduct ? (
                   <>
-                    <div className="sm:mt-10 mt-6 flex sm:flex-col1">
+                    <div className="sm:mt-4 mt-6 flex sm:flex-col1 grid grid-cols-1 sm:px-16">
                       <Button
                         title={buttonConfig.title}
                         action={buttonConfig.action}
+                        colorScheme = {DEFAULT_COLOR_SCHEME}
                         buttonType={buttonConfig.type || 'cart'}
                       />
 
@@ -509,12 +510,14 @@ export default function ProductView({
                             handleWishList()
                           }
                         }}
-                        className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+                        className="mt-3 py-3 px-3 rounded-md flex items-center justify-center text-gray-600 block flex hover:text-gray-900"
                       >
                         {isInWishList ? (
                           <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
                         ) : (
-                          <HeartIcon className="h-6 w-6 flex-shrink-0" />
+                          <>
+                            <HeartIcon className="h-6 w-6 flex-shrink-0" /> <span>{BTN_ADD_TO_WISHLIST}</span>
+                          </>
                         )}
                         <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
                       </button>
@@ -528,14 +531,25 @@ export default function ProductView({
                       </button>
                     )}
                   </>
-                ) : null}
-                <div className="border-t divide-y divide-gray-200 sm:mt-10 mt-6">
+                ) : null}                
+              <section aria-labelledby="details-heading" className="sm:mt-2 mt-4">
+                <h2 id="details-heading" className="sr-only">
+                  {PRICEMATCH_ADDITIONAL_DETAILS}
+                </h2>
+                <ProductDetails
+                  product={product}
+                  description={
+                    selectedAttrData.description || product.description
+                  }
+                />    
+                <DeliveryInstruction></DeliveryInstruction>   
+                <div className="divide-gray-200 sm:mt-10 mt-6">
                   <p className="text-gray-900 text-lg">
                     {selectedAttrData.currentStock > 0
                       ? product.deliveryMessage
                       : product.stockAvailabilityMessage}
                   </p>
-                </div>
+                </div>         
               </section>
             </div>
           </div>
