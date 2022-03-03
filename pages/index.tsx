@@ -16,7 +16,7 @@ export async function getStaticProps({
   const slugsPromise = commerce.getSlugs({ slug: HOMEPAGE_SLUG })
   const slugs = await slugsPromise
 
-  console.log(slugs)
+  //console.log(slugs)
 
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
