@@ -44,7 +44,6 @@ import {
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
 
-
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -201,13 +200,43 @@ export default function ProductView({
         buttonConfig.type = 'button'
       }
     } else if (product.preOrder.isEnabled && !selectedAttrData.currentStock) {
-      if (product.preOrder.currentStock < product.preOrder.maxStock) {
+      if (
+        product.preOrder.currentStock < product.preOrder.maxStock &&
+        (!product.flags.sellWithoutInventory ||
+          selectedAttrData.sellWithoutInventory)
+      ) {
         buttonConfig.title = BTN_PRE_ORDER
         buttonConfig.shortMessage = product.preOrder.shortMessage
+        return buttonConfig
+      } else if (
+        product.flags.sellWithoutInventory ||
+        selectedAttrData.sellWithoutInventory
+      ) {
+        buttonConfig = {
+          title: GENERAL_ADD_TO_BASKET,
+          action: async () => {
+            const item = await cartHandler().addToCart(
+              {
+                basketId: basketId,
+                productId: selectedAttrData.productId,
+                qty: 1,
+                manualUnitPrice: product.price.raw.withTax,
+                stockCode: selectedAttrData.stockCode,
+                userId: user.userId,
+                isAssociated: user.isAssociated,
+              },
+              'ADD',
+              { product: selectedAttrData }
+            )
+            setCartItems(item)
+          },
+          shortMessage: '',
+        }
       } else {
         buttonConfig.title = BTN_NOTIFY_ME
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
+        return buttonConfig
       }
     }
     return buttonConfig
@@ -478,7 +507,10 @@ export default function ProductView({
                 </span>
               </p>
 
-              <section aria-labelledby="details-heading" className="sm:mt-12 mt-4">
+              <section
+                aria-labelledby="details-heading"
+                className="sm:mt-12 mt-4"
+              >
                 <h2 id="details-heading" className="sr-only">
                   {PRICEMATCH_ADDITIONAL_DETAILS}
                 </h2>

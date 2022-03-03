@@ -4,7 +4,7 @@ export default function removeFromWishlist() {
   async function removeFromWishlistAsync({ query }: any) {
     try {
       const response: any = await fetcher({
-        url: `${CUSTOMER_BASE_API}${query.id}/wishlist/remove-item?productId=${query.productId}&flag=${query.flag}`,
+        url: `${CUSTOMER_BASE_API}${query.id}/wishlist/remove-item?productId=${query.productId}&saveForLater=${query.flag}`,
         method: 'delete',
         data: query,
       })
