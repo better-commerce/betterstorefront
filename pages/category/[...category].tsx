@@ -6,6 +6,7 @@ import ProductFilterRight from '@components/product/Filters/filtersRight'
 import ProductMobileFilters from '@components/product/Filters'
 import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
 import ProductGridWithFacet from '@components/product/Grid'
+import ProductGrid from '@components/product/Grid/ProductGrid'
 import Link from 'next/link'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
@@ -281,32 +282,49 @@ function CategoryPage({ category, products }: any) {
             })}
           </Swiper>
         </div>
-        <div className="text-center pt-6 mb-4 px-4 sm:px-6 lg:px-8">
+        <div className="text-center pt-6 mb-4 px-4 sm:px-6 lg:px-8 sm:max-w-7xl mx-auto">
           <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
             {category.name}
           </h1>
-          <h2>{category.description}</h2>
-          {!!products && (
+          <h2 className='text-sm sm:text-md py-4'>{category.description}</h2>
+          {/* {!!products && (
             <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
               {products.total} results
             </h1>
-          )}
+          )} */}
+        </div>
+        <div className='sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12 mb-4'>
+          <div className='sm:col-span-12 py-2'>
+            <div className="grid grid-cols-3 sm:grid-cols-5 text-left">
+              {category.subCategories.map((subcateg: any, idx: number) => {
+                return (
+                  <Link href={'/' + subcateg.link} key={idx}>
+                    <div className="flex flex-col px-2 text-center cursor-pointer">
+                      <h4 className="text-gray-800 text-center font-normal sm:text-sm text-xs underline">
+                        {subcateg.name}
+                      </h4>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
         </div>
         <div className="sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12">
-          <div className="sm:col-span-12 border-t border-gray-200 py-2">
+          <div className="sm:col-span-12 border-b border-gray-200 py-2">
             <div className="flex w-full text-center align-center justify-center">
-              {category.subCategories.map((subcateg: any, idx: number) => {
+              {category.subCategories.slice(0,5).map((subcateg: any, idx: number) => {
                 return (
                   <Link href={'/' + subcateg.link} key={idx}>
                     <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
                       <img
-                        className="h-8 w-8 rounded-full"
+                        className="h-8 w-8 sm:h-20 sm:w-20 rounded-full"
                         src={
                           subcateg.image ||
                           'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
                         }
                       />
-                      <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
+                      <h4 className="min-h-40px text-gray-800 font-normal sm:text-sm text-xs">
                         {subcateg.name}
                       </h4>
                     </div>
@@ -319,45 +337,62 @@ function CategoryPage({ category, products }: any) {
 
         <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
           {!!products && (
-            <>
-              {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+            <>              
+              {state.filters.length>0 &&
+                <>
+                  {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
-              <div className="sm:col-span-3 sm:hidden flex flex-col">
-                <ProductMobileFilters
-                  handleFilters={handleFilters}
-                  products={products}
-                  routerFilters={state.filters}
-                  handleSortBy={handleSortBy}
-                  clearAll={clearAll}
-                  routerSortOption={state.sortBy}
-                />
-              </div>
-              <div className="sm:col-span-3 sm:block hidden">
-                <ProductFilterRight
-                  handleFilters={handleFilters}
-                  products={products}
-                  routerFilters={state.filters}
-                />
-              </div>
-              <div className="sm:col-span-9">
-                {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+                  <div className="sm:col-span-3 sm:hidden flex flex-col">
+                    <ProductMobileFilters
+                      handleFilters={handleFilters}
+                      products={products}
+                      routerFilters={state.filters}
+                      handleSortBy={handleSortBy}
+                      clearAll={clearAll}
+                      routerSortOption={state.sortBy}
+                    />
+                  </div>
+                  <div className="sm:col-span-3 sm:block hidden">
+                      <ProductFilterRight
+                        handleFilters={handleFilters}
+                        products={products}
+                        routerFilters={state.filters}
+                      />
+                  </div>
+                  <div className="sm:col-span-9">
+                        {/* {HIDE FILTER TOP BAR IN MOBILE} */}
 
-                <div className="flex-1 sm:block hidden">
-                  <ProductFiltersTopBar
-                    products={products}
-                    handleSortBy={handleSortBy}
-                    routerFilters={state.filters}
-                    clearAll={clearAll}
-                    routerSortOption={state.sortBy}
-                  />
-                </div>
-                <ProductGridWithFacet
-                  products={productDataToPass}
-                  currentPage={products.currentPage}
-                  handlePageChange={handlePageChange}
-                  handleInfiniteScroll={handleInfiniteScroll}
-                />
-              </div>
+                        <div className="flex-1 sm:block hidden">
+                          <ProductFiltersTopBar
+                            products={products}
+                            handleSortBy={handleSortBy}
+                            routerFilters={state.filters}
+                            clearAll={clearAll}
+                            routerSortOption={state.sortBy}
+                          />
+                        </div>
+                        <ProductGridWithFacet
+                          products={productDataToPass}
+                          currentPage={products.currentPage}
+                          handlePageChange={handlePageChange}
+                          handleInfiniteScroll={handleInfiniteScroll}
+                        />
+                  </div>
+                </>              
+              }      
+              {state.filters.length == 0 &&
+                <>
+                    <div className="sm:col-span-12">
+                      {/* {HIDE FILTER TOP BAR IN MOBILE} */}               
+                        <ProductGrid
+                            products={productDataToPass}
+                            currentPage={products.currentPage}
+                            handlePageChange={handlePageChange}
+                            handleInfiniteScroll={handleInfiniteScroll}
+                        />
+                    </div>
+                </>              
+              }             
             </>
           )}
         </div>
