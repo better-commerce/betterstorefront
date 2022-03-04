@@ -70,22 +70,22 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
   }, [Router.asPath])
 
   return (
-    <div className="z-50 w-full h-full bg-white absolute">
+    <div className="z-50 w-full h-full bg-white fixed right-0 top-0">
       <div
         className="h-9 text-gray-900 w-9 right-10 top-10 absolute cursor-pointer"
         onClick={closeWrapper}
       >
         <XIcon />
       </div>
-      <div className="w-full mt-20 justify-center items-center flex flex-col px-10 py-5">
-        <div className="flex flex-row mb-10">
+      <div className="w-full mt-5 justify-center items-center flex flex-col px-10 py-5">
+        <div className="flex flex-row mb-6">
           <div className="min-w-3xl flex flex-row border border-gray-300 rounded-md py-2 px-4 shadow-sm ">
             <label className="hidden" htmlFor={'search-bar'}>
               {BTN_SEARCH}
             </label>
             <input
               id={'search-bar'}
-              className="text-gray-700 appearance-none min-w-0 w-full bg-white  placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              className="text-gray-700 appearance-none min-w-4xl w-full bg-white  placeholder-gray-500 focus:outline-none"
               placeholder={BTN_SEARCH}
               onChange={(e: any) => setInputValue(e.target.value)}
             />
@@ -94,13 +94,13 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
             </div>
           </div>
         </div>
-        <div className='flex flex-col max-h-screen min-h-screen h-64 overflow-y-auto'>
-            <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-4 lg:grid-cols-6">
+        <div className='flex flex-col search-result'>
+            <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-5">
           {isLoading &&
             rangeMap(12, (i) => (
               <div
                 key={i}
-                className="shadow-md w-60 h-72 rounded-md mx-auto mt-20"
+                className="shadow-md w-60 h-72 rounded-md mx-auto mt-10"
               >
                 <div className="flex animate-pulse flex-row items-center h-full justify-center space-x-5">
                   <div className="flex flex-col space-y-3">
@@ -113,21 +113,21 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
           {products?.map((product: any, idx: number) => {
             return (
               <div className="border-r border-b border-gray-200" key={idx}>
-                <div className="group relative p-4 sm:p-6">
+                <div className="group relative p-2 sm:p-3">
                   <Link passHref href={`/${product.slug}`}>
                     <a href={`/${product.slug}`}>
-                      <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
+                      <div className="relative image-container rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
                         <img
                           src={product.image}
                           alt={product.name}
-                          className="w-full h-64 object-center object-cover"
+                          className="w-full h-64 object-center object-cover image"
                         />
                       </div>
                     </a>
                   </Link>
 
-                  <div className="pt-10 pb-4 text-center">
-                    <h3 className="min-h-50px text-sm font-medium text-gray-900">
+                  <div className="pt-3 text-center">
+                    <h3 className="min-h-40px text-sm font-medium text-gray-900">
                       <Link href={`/${product.slug}`}>
                         <a href={`/${product.slug}`}>{product.name}</a>
                       </Link>

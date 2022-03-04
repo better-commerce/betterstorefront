@@ -92,23 +92,7 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-.max-panel::-webkit-scrollbar,
-.max-modal-panel::-webkit-scrollbar {
-  width: 6px;
-}
 
-.max-panel::-webkit-scrollbar-track,
-.max-modal-panel::-webkit-scrollbar-track {
-  background: #fff;
-  opacity: 1;
-}
-
-.max-panel::-webkit-scrollbar-thumb,
-.max-modal-panel::-webkit-scrollbar-thumb {
-  background: #d3d3d36e !important;
-  width: 6px;
-  border-radius: 6px;
-}
 #payment-form {
   width: 30vw;
   min-width: 500px;
@@ -283,4 +267,31 @@
   width: 100% !important;
   position: relative !important;
   height: unset !important;
+}
+
+.search-result {
+  max-height: 84vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.max-panel::-webkit-scrollbar,
+.max-modal-panel::-webkit-scrollbar,
+.search-result::-webkit-scrollbar {
+  width: 6px;
+}
+
+.max-panel::-webkit-scrollbar-track,
+.max-modal-panel::-webkit-scrollbar-track,
+.search-result::-webkit-scrollbar-track {
+  background: #fff;
+  opacity: 1;
+}
+
+.max-panel::-webkit-scrollbar-thumb,
+.max-modal-panel::-webkit-scrollbar-thumb,
+.search-result::-webkit-scrollbar-thumb {
+  background: #d3d3d36e !important;
+  width: 6px;
+  border-radius: 6px;
 }
