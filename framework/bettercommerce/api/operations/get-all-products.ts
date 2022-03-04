@@ -10,10 +10,17 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
   }: {
     query?: any
   } = {}): Promise<any> {
-    const { filters, sortBy, sortOrder, currentPage, collectionId = '' } = query
-
+    const {
+      freeText = '',
+      filters,
+      sortBy,
+      sortOrder,
+      currentPage,
+      collectionId = '',
+      categoryId = '',
+    } = query
     const data: any = {
-      freeText: '',
+      freeText,
       pageSize: 20,
       allowFacet: true,
       facetOnly: false,
@@ -21,6 +28,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       sortOrder,
       currentPage,
       collectionId,
+      categoryId,
     }
 
     if (filters.length) {
