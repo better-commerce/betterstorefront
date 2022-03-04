@@ -77,6 +77,7 @@ export const ACTION_TYPES = {
   HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
+  SET_CATEGORY_ID: 'SET_CATEGORY_ID',
 }
 
 interface actionInterface {
@@ -89,6 +90,7 @@ interface stateInterface {
   currentPage?: string | number
   sortOrder?: string
   filters: any
+  categoryId: any
 }
 
 const IS_INFINITE_SCROLL =
@@ -102,6 +104,7 @@ const {
   HANDLE_FILTERS_UI,
   ADD_FILTERS,
   REMOVE_FILTERS,
+  SET_CATEGORY_ID,
 } = ACTION_TYPES
 
 const DEFAULT_STATE = {
@@ -109,6 +112,7 @@ const DEFAULT_STATE = {
   sortOrder: 'asc',
   currentPage: 1,
   filters: [],
+  categoryId: '',
 }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -123,6 +127,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
+    case SET_CATEGORY_ID:
+      return { ...state, categoryId: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
@@ -182,6 +188,11 @@ function CategoryPage({ category, products }: any) {
       categoryId: category.id,
     },
   })
+
+  useEffect(() => {
+    if (category.id !== state.categoryId)
+      dispatch({ type: SET_CATEGORY_ID, payload: category.id })
+  }, [category.id])
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
