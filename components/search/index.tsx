@@ -55,6 +55,8 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
     )
     if (e.key === 'Enter' && keyword) {
       Router.push(keyword.url)
+    } else if (e.key === 'Enter' && !keyword) {
+      Router.push('/search?freeText=' + e.target.value)
     }
   }
 

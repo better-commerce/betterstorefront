@@ -20,6 +20,7 @@ export const ACTION_TYPES = {
   HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
+  FREE_TEXT: 'FREE_TEXT',
 }
 
 interface actionInterface {
@@ -32,6 +33,7 @@ interface stateInterface {
   currentPage?: string | number
   sortOrder?: string
   filters: any
+  freeText: string
 }
 
 const IS_INFINITE_SCROLL =
@@ -47,6 +49,7 @@ const {
   HANDLE_FILTERS_UI,
   ADD_FILTERS,
   REMOVE_FILTERS,
+  FREE_TEXT,
 } = ACTION_TYPES
 
 const DEFAULT_STATE = {
@@ -54,6 +57,7 @@ const DEFAULT_STATE = {
   sortOrder: 'asc',
   currentPage: 1,
   filters: [],
+  freeText: '',
 }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -70,6 +74,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, areFiltersOpen: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case FREE_TEXT:
+      return { ...state, freeText: payload || '' }
     case REMOVE_FILTERS:
       return {
         ...state,
@@ -119,14 +125,19 @@ function Search({ query, setEntities, recordEvent }: any) {
         total: 0,
         currentPage: 1,
         filters: [],
+        freeText: query.freeText || '',
       },
     },
     error,
   } = useSwr(['/api/catalog/products', state], postData)
 
-  console.log(data.products.filters)
-
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
+
+  useEffect(() => {
+    if (router.query.freeText !== state.freeText) {
+      dispatch({ type: FREE_TEXT, payload: query.freeText })
+    }
+  }, [router.query.freeText])
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
