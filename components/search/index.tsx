@@ -51,7 +51,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
 
   const handleEnterPress = (e: any) => {
     const keyword = keywords.find(
-      (keyword: any) => keyword.keywords === inputValue
+      (keyword: any) => keyword.keywords === e.target.value
     )
     if (e.key === 'Enter' && keyword) {
       Router.push(keyword.url)

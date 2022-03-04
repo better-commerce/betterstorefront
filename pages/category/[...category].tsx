@@ -1,12 +1,16 @@
-import { useReducer } from 'react'
+import { useReducer, useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import ProductGrid from '@components/product/Grid/ProductGrid'
-import ProductSort from '@components/product/ProductSort'
-import Link from 'next/link'
 import ProductFilterRight from '@components/product/Filters/filtersRight'
+import ProductMobileFilters from '@components/product/Filters'
+import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
+import ProductGridWithFacet from '@components/product/Grid'
+import Link from 'next/link'
 import { NextSeo } from 'next-seo'
+import { useRouter } from 'next/router'
+import useSwr from 'swr'
+import { postData } from '@components/utils/clientFetcher'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 // Import Swiper styles
@@ -134,13 +138,92 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function CategoryPage({ category, products }: any) {
-  const [state, dispatch] = useReducer(reducer, DEFAULT_STATE)
+  const router = useRouter()
+  const adaptedQuery: any = { ...router.query }
 
-  const handleSortBy = (payload: any) => {
-    dispatch({
-      type: SORT_BY,
-      payload: payload,
+  adaptedQuery.currentPage
+    ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
+    : false
+  adaptedQuery.filters
+    ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
+    : false
+
+  const initialState = {
+    ...DEFAULT_STATE,
+    filters: adaptedQuery.filters || [],
+    categoryId: category.id,
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  const {
+    data = {
+      products: {
+        results: [],
+        sortList: [],
+        pages: 0,
+        total: 0,
+        currentPage: 1,
+        filters: [],
+        categoryId: category.id,
+      },
+    },
+    error,
+  } = useSwr(['/api/catalog/products', state], postData)
+
+  const [productListMemory, setProductListMemory] = useState({
+    products: {
+      results: [],
+      sortList: [],
+      pages: 0,
+      total: 0,
+      currentPage: 1,
+      filters: [],
+      categoryId: category.id,
+    },
+  })
+
+  useEffect(() => {
+    if (IS_INFINITE_SCROLL) {
+      if (
+        data.products.currentPage !== productListMemory.products.currentPage ||
+        data.products.total !== productListMemory.products.total
+      ) {
+        setProductListMemory((prevData: any) => {
+          let dataClone = { ...data }
+          if (state.currentPage > 1) {
+            dataClone.products.results = [
+              ...prevData.products.results,
+              ...dataClone.products.results,
+            ]
+          }
+          return dataClone
+        })
+      }
+    }
+  }, [data.products.results.length])
+
+  const handlePageChange = (page: any) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, currentPage: page.selected + 1 },
+      },
+      undefined,
+      { shallow: true }
+    )
+    dispatch({ type: PAGE, payload: page.selected + 1 })
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
     })
+  }
+
+  const handleInfiniteScroll = () => {
+    if (products.pages && products.currentPage < products.pages) {
+      dispatch({ type: PAGE, payload: products.currentPage + 1 })
+    }
   }
 
   const handleFilters = (filter: null, type: string) => {
@@ -150,25 +233,40 @@ function CategoryPage({ category, products }: any) {
     })
     dispatch({ type: PAGE, payload: 1 })
   }
-// IMPLEMENT HANDLING FOR NULL OBJECT
+
+  const handleSortBy = (payload: any) => {
+    dispatch({
+      type: SORT_BY,
+      payload: payload,
+    })
+  }
+  const clearAll = () => dispatch({ type: CLEAR })
+
+  // IMPLEMENT HANDLING FOR NULL OBJECT
   if (category === null) {
     return (
-      <div className='container mx-auto py-10 text-center relative top-20'>
-      <h4 className='text-3xl font-medium text-gray-400 pb-6'>This is a bad url. please go back to
-        <Link href="/category">
+      <div className="container mx-auto py-10 text-center relative top-20">
+        <h4 className="text-3xl font-medium text-gray-400 pb-6">
+          This is a bad url. please go back to
+          <Link href="/category">
             <a className="text-indigo-500 px-3">all categories</a>
-        </Link>
-      </h4>
-    </div>
+          </Link>
+        </h4>
+      </div>
     )
   }
+
+  const productDataToPass = IS_INFINITE_SCROLL
+    ? productListMemory.products
+    : products
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-0">
         <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
           <Swiper navigation={true} loop={true} className="mySwiper">
-            {category.images.map((image: any, idx:number)=>{
+            {category.images.map((image: any, idx: number) => {
               return (
                 <SwiperSlide key={idx}>
                   <Link href={image.link || '#'}>
@@ -181,54 +279,34 @@ function CategoryPage({ category, products }: any) {
                 </SwiperSlide>
               )
             })}
-          </Swiper>         
+          </Swiper>
         </div>
-        <div className="text-center pt-6 mb-4 px-4 sm:px-6 lg:px-8 sm:max-w-7xl mx-auto ">
+        <div className="text-center pt-6 mb-4 px-4 sm:px-6 lg:px-8">
           <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
             {category.name}
           </h1>
-          <h2 className='text-sm sm:text-md py-4'>{category.description}</h2>
-             {/* {!!products && (
-                <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
-                  {products.total} results
-                </h1>
-              )} */}
-         
+          <h2>{category.description}</h2>
+          {!!products && (
+            <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
+              {products.total} results
+            </h1>
+          )}
         </div>
-        
-        <div className='sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12 mb-4'>
-          <div className='sm:col-span-12 py-2'>
-            <div className="grid grid-cols-3 sm:grid-cols-5 text-left">
-              {category.subCategories.map((subcateg: any, idx: number) => {
-                return (
-                  <Link href={'/' + subcateg.link} key={idx}>
-                    <div className="flex flex-col px-2 text-center cursor-pointer">
-                      <h4 className="text-gray-800 text-center font-normal sm:text-sm text-xs underline">
-                        {subcateg.name}
-                      </h4>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className='sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12'>
-          <div className='sm:col-span-12 border-b border-gray-200 py-2'>
+        <div className="sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12">
+          <div className="sm:col-span-12 border-t border-gray-200 py-2">
             <div className="flex w-full text-center align-center justify-center">
-              {category.subCategories.slice(0,5).map((subcateg: any, idx: number) => {
+              {category.subCategories.map((subcateg: any, idx: number) => {
                 return (
                   <Link href={'/' + subcateg.link} key={idx}>
                     <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
                       <img
-                        className="h-8 w-8 sm:h-20 sm:w-20 rounded-full"
+                        className="h-8 w-8 rounded-full"
                         src={
                           subcateg.image ||
                           'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
                         }
                       />
-                      <h4 className="min-h-40px text-gray-800 font-normal sm:text-sm text-xs">
+                      <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
                         {subcateg.name}
                       </h4>
                     </div>
@@ -239,26 +317,50 @@ function CategoryPage({ category, products }: any) {
           </div>
         </div>
 
+        <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
+          {!!products && (
+            <>
+              {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
-        
-        {!!products && (
-          <>
-            {/* <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
-              <ProductSort
-                routerSortOption={state.sortBy}
-                products={products}
-                action={handleSortBy}
-              />
-            </div> */}
-          
-            <ProductGrid
-              products={products}
-              currentPage={products.currentPage}
-              handlePageChange={() => {}}
-              handleInfiniteScroll={() => {}}
-            />
-          </>
-        )}
+              <div className="sm:col-span-3 sm:hidden flex flex-col">
+                <ProductMobileFilters
+                  handleFilters={handleFilters}
+                  products={products}
+                  routerFilters={state.filters}
+                  handleSortBy={handleSortBy}
+                  clearAll={clearAll}
+                  routerSortOption={state.sortBy}
+                />
+              </div>
+              <div className="sm:col-span-3 sm:block hidden">
+                <ProductFilterRight
+                  handleFilters={handleFilters}
+                  products={products}
+                  routerFilters={state.filters}
+                />
+              </div>
+              <div className="sm:col-span-9">
+                {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+
+                <div className="flex-1 sm:block hidden">
+                  <ProductFiltersTopBar
+                    products={products}
+                    handleSortBy={handleSortBy}
+                    routerFilters={state.filters}
+                    clearAll={clearAll}
+                    routerSortOption={state.sortBy}
+                  />
+                </div>
+                <ProductGridWithFacet
+                  products={productDataToPass}
+                  currentPage={products.currentPage}
+                  handlePageChange={handlePageChange}
+                  handleInfiniteScroll={handleInfiniteScroll}
+                />
+              </div>
+            </>
+          )}
+        </div>
       </main>
       <NextSeo
         title={category.name}

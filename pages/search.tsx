@@ -124,6 +124,8 @@ function Search({ query, setEntities, recordEvent }: any) {
     error,
   } = useSwr(['/api/catalog/products', state], postData)
 
+  console.log(data.products.filters)
+
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
@@ -282,15 +284,14 @@ function Search({ query, setEntities, recordEvent }: any) {
           </h1> */}
         </div>
         <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
-          
           {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
-          
+
           <div className="sm:col-span-3 sm:hidden flex flex-col">
             <ProductMobileFilters
               handleFilters={handleFilters}
               products={data.products}
               routerFilters={state.filters}
-              handleSortBy={handleSortBy}              
+              handleSortBy={handleSortBy}
               clearAll={clearAll}
               routerSortOption={state.sortBy}
             />
@@ -306,18 +307,17 @@ function Search({ query, setEntities, recordEvent }: any) {
             />
           </div>
           <div className="sm:col-span-9">
-
             {/* {HIDE FILTER TOP BAR IN MOBILE} */}
 
-            <div className='flex-1 sm:block hidden'>
+            <div className="flex-1 sm:block hidden">
               <ProductFiltersTopBar
                 products={data.products}
                 handleSortBy={handleSortBy}
                 routerFilters={state.filters}
                 clearAll={clearAll}
-                routerSortOption={state.sortBy}               
-              />  
-            </div>            
+                routerSortOption={state.sortBy}
+              />
+            </div>
             <ProductGrid
               products={productDataToPass}
               currentPage={state.currentPage}
