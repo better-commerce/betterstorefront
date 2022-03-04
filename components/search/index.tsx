@@ -94,8 +94,8 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
             </div>
           </div>
         </div>
-        <div className='xl:container xl:mx-auto flex flex-col search-result'>
-            <div className="-mx-px grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-5">
+        <div className='flex flex-col search-result'>
+            <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-5">
           {isLoading &&
             rangeMap(12, (i) => (
               <div
@@ -112,7 +112,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
             ))}
           {products?.map((product: any, idx: number) => {
             return (
-              <div className="" key={idx}>
+              <div className="border-r border-b border-gray-200" key={idx}>
                 <div className="group relative p-2 sm:p-3">
                   <Link passHref href={`/${product.slug}`}>
                     <a href={`/${product.slug}`}>
