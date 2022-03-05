@@ -12,48 +12,42 @@ export default function useInfra(req: any) {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
+
+      const languageCookie =
+        req.cookies.Language === 'undefined' ? '' : req.cookies.Language
+
+      const currencyCookie =
+        req.cookies.Currency === 'undefined' ? '' : req.cookies.Currency
+
+      const defaultCurrency =
+        currencyCookie ||
+        response.result.configSettings
+          .find((setting: any) => setting.configType === 'RegionalSettings')
+          .configKeys.find(
+            (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
+          ).value ||
+        'GBP'
+
+      const defaultLanguage =
+        languageCookie ||
+        response.result.configSettings
+          .find((setting: any) => setting.configType === 'RegionalSettings')
+          .configKeys.find(
+            (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
+          ).value ||
+        'en-GB'
+
+      console.log(defaultCurrency)
+      console.log(defaultLanguage)
       if (setHeader) {
-        setGeneralParams(
-          'Currency',
-          req.cookies.Currency ||
-            response.result.configSettings
-              .find((setting: any) => setting.configType === 'RegionalSettings')
-              .configKeys.find(
-                (item: any) =>
-                  item.key === 'RegionalSettings.DefaultCurrencyCode'
-              ).value ||
-            'GBP'
-        )
-        setGeneralParams(
-          'Language',
-          req.cookies.Language ||
-            response.result.configSettings
-              .find((setting: any) => setting.configType === 'RegionalSettings')
-              .configKeys.find(
-                (item: any) =>
-                  item.key === 'RegionalSettings.DefaultLanguageCode'
-              ).value ||
-            'en-GB'
-        )
+        setGeneralParams('Currency', defaultCurrency)
+        setGeneralParams('Language', defaultLanguage)
       }
+
       return {
         result: response.result,
-        defaultCurrency:
-          req.cookies.Currency ||
-          response.result.configSettings
-            .find((setting: any) => setting.configType === 'RegionalSettings')
-            .configKeys.find(
-              (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
-            ).value ||
-          'GBP',
-        defaultLanguage:
-          req.cookies.Language ||
-          response.result.configSettings
-            .find((setting: any) => setting.configType === 'RegionalSettings')
-            .configKeys.find(
-              (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
-            ).value ||
-          'en',
+        defaultCurrency,
+        defaultLanguage,
       }
     } catch (error: any) {
       console.log(error)
