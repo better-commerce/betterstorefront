@@ -50,7 +50,6 @@ const SingletonFactory = (function () {
           data: `client_id=${CLIENT_ID}&client_secret=${SHARED_SECRET}&grant_type=client_credentials`,
         })
           .then((res: any) => {
-            console.log(res.data.access_token)
             setToken(res.data.access_token)
             error.response.config.headers['Authorization'] =
               'Bearer ' + res.data.access_token
