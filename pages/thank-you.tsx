@@ -46,6 +46,7 @@ export default function OrderConfirmation() {
       setIsLoading(false)
     }
     removeItem('orderResponse')
+    removeItem('orderModelPayment')
     if (orderId) fetchOrder()
     if (!orderId) setIsLoading(false)
     return function cleanup() {

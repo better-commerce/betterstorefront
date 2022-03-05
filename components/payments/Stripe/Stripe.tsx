@@ -10,6 +10,7 @@ import axios from 'axios'
 import {
   STRIPE_CHECKOUT_SESSION,
   UPDATE_ORDER_STATUS,
+  NEXT_POST_PAYMENT_RESPONSE,
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -27,6 +28,7 @@ function CheckoutForm({
   orderResponse,
   clientSecret,
   setPaymentIntent,
+  orderModel,
 }: any) {
   const [message, setMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -39,10 +41,13 @@ function CheckoutForm({
 
   const handleUserAfterPayment = async (paymentIntent: any) => {
     const orderResponseFromLocalStorage: any = getItem('orderResponse')
-    await axios.post(UPDATE_ORDER_STATUS, {
-      paymentIntent: paymentIntent.id,
-      id: orderResponseFromLocalStorage.id,
+    const orderModelFromLocalStorage: any = getItem('orderModelPayment')
+
+    const res: any = await axios.post(NEXT_POST_PAYMENT_RESPONSE, {
+      model: orderModelFromLocalStorage,
+      orderId: orderResponseFromLocalStorage.id,
     })
+
     const { orderNo, grandTotal } = orderResponseFromLocalStorage
     eventDispatcher(CheckoutConfirmation, {
       basketItemCount: cartItems.lineItems.length,
