@@ -268,9 +268,10 @@ function CategoryPage({ category, products }: any) {
     )
   }
 
-  const productDataToPass = IS_INFINITE_SCROLL
-    ? productListMemory.products
-    : products
+  const productDataToPass =
+    IS_INFINITE_SCROLL && productListMemory.products?.results?.length
+      ? productListMemory.products
+      : products
 
   return (
     <div className="bg-white">
