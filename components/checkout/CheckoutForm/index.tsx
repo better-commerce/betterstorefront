@@ -527,6 +527,8 @@ export default function CheckoutForm({
             upFrontTerm: '76245369',
             isPrePaid: false,
           }
+          localStorage.setItem('orderModelPayment', JSON.stringify(orderModel))
+
           dispatch({ type: 'TRIGGER_PAYMENT_WIDGET', payload: true })
         } else {
           dispatch({ type: 'SET_ERROR', payload: response.data.message })
