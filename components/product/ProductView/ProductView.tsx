@@ -190,7 +190,7 @@ export default function ProductView({
       },
       shortMessage: '',
     }
-    if (!selectedAttrData.currentStock && !product.preOrder.isEnabled) {
+    if (selectedAttrData.currentStock <= 0 && !product.preOrder.isEnabled) {
       if (
         !product.flags.sellWithoutInventory ||
         !selectedAttrData.sellWithoutInventory
@@ -199,7 +199,10 @@ export default function ProductView({
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
       }
-    } else if (product.preOrder.isEnabled && !selectedAttrData.currentStock) {
+    } else if (
+      product.preOrder.isEnabled &&
+      selectedAttrData.currentStock <= 0
+    ) {
       if (
         product.preOrder.currentStock < product.preOrder.maxStock &&
         (!product.flags.sellWithoutInventory ||

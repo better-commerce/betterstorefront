@@ -68,9 +68,9 @@ export default function Dropdown({
   const isPreOrderEnabled = productData.isPreOrderEnabled
 
   const generateItemOption = (value: any, stock: number) => {
-    if (stock === 0 && !isPreOrderEnabled)
+    if (stock <= 0 && !isPreOrderEnabled)
       return `${value.toUpperCase()} - NOTIFY ME`
-    if (stock === 0 && isPreOrderEnabled) {
+    if (stock <= 0 && isPreOrderEnabled) {
       return `${value.toUpperCase()} - PRE-ORDER`
     }
     if ((stock < 5 && stock > 0) || isPreOrderEnabled)
