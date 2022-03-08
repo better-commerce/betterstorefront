@@ -16,6 +16,7 @@ import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import axios from 'axios'
+import Image from 'next/image'
 import {
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
@@ -403,11 +404,19 @@ export default function ProductView({
                           <span className="sr-only">{image.name}</span>
                           <span className="absolute inset-0 rounded-md overflow-hidden">
                             {image.image ? (
-                              <img
-                                src={image.image}
-                                alt=""
-                                className="w-full h-full object-center object-cover"
-                              />
+                              <div className='image-container'>
+                                <Image
+                                  src={image.image}
+                                  alt=""
+                                  className="w-full h-full object-center object-cover image"
+                                  layout='fill'
+                                ></Image>  
+                              </div>
+                              // <img
+                              //   src={image.image}
+                              //   alt=""
+                              //   className="w-full h-full object-center object-cover"
+                              // />
                             ) : (
                               <PlayIcon className="h-full w-full object-center object-cover" />
                             )}
@@ -423,11 +432,19 @@ export default function ProductView({
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
-                      <img
-                        src={image.image}
-                        alt={image.name}
-                        className="w-full h-full object-center object-cover rounded-lg"
-                      />
+                      <div className='image-container'>
+                        <Image
+                          src={image.image}
+                          alt={image.name}
+                          className="w-full h-full object-center object-cover image rounded-lg"
+                          layout='fill'
+                        ></Image>  
+                      </div>
+                      // <img
+                      //   src={image.image}
+                      //   alt={image.name}
+                      //   className="w-full h-full object-center object-cover rounded-lg"
+                      // />
                     ) : (
                       <iframe
                         width="560"

@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import Link from 'next/link'
 import { Swiper, SwiperSlide } from 'swiper/react'
-
+import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
@@ -105,11 +105,18 @@ const ProductSlider: FC<Props> = ({ config }) => {
                       >
                         <div className="group relative">
                           <div className="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
-                            <img
+                            {/* <img
                               src={product.image}
                               alt={product.name}
                               className="w-full h-full object-center object-cover group-hover:opacity-75"
-                            />
+                            /> */}
+                            <Image priority
+                              src={product.image} 
+                              alt={product.name} 
+                              layout="responsive" 
+                              width={257} 
+                              height={362}
+                              className="w-full h-full object-center object-cover group-hover:opacity-75"></Image> 
                           </div>
                           <div className="mt-6">
                             <p className="text-sm text-gray-500">

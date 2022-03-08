@@ -7,6 +7,7 @@ import ProductMobileFilters from '@components/product/Filters'
 import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
 import ProductGridWithFacet from '@components/product/Grid'
 import Link from 'next/link'
+import Image from 'next/image'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
@@ -282,11 +283,19 @@ function CategoryPage({ category, products }: any) {
               return (
                 <SwiperSlide key={idx}>
                   <Link href={image.link || '#'}>
-                    <img
+                    <Image
+                      layout='fixed'
+                      width={1920} 
+                      height={460}
+                      src={image.url}
+                      alt="Category Banner"
+                      className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
+                    ></Image>
+                    {/* <img
                       src={image.url}
                       alt=""
                       className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
-                    />
+                    /> */}
                   </Link>
                 </SwiperSlide>
               )
@@ -311,13 +320,24 @@ function CategoryPage({ category, products }: any) {
                 return (
                   <Link href={'/' + subcateg.link} key={idx}>
                     <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
-                      <img
+                      <Image
+                          layout='fixed'
+                          width={80}
+                          height={80}
+                          className="h-8 w-8 sm:h-20 sm:w-20 rounded-full image"
+                          src={
+                              subcateg.image ||
+                              'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
+                          }
+                        ></Image>
+                      
+                      {/* <img
                         className="h-8 w-8 rounded-full"
                         src={
                           subcateg.image ||
                           'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
                         }
-                      />
+                      /> */}
                       <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
                         {subcateg.name}
                       </h4>

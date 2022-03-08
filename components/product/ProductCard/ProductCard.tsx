@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import AttributeSelector from './AttributeSelector'
 import Button from '@components/ui/IndigoButton'
 import cartHandler from '@components/services/cart'
@@ -167,13 +168,20 @@ const ProductCard: FC<Props> = ({ product }) => {
         >
           <a href={currentProductData.link}>
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-              <img
+              <Image 
                 src={currentProductData.image}
                 alt={product.name}
                 onMouseEnter={() => handleHover('enter')}
                 onMouseLeave={() => handleHover('leave')}
                 className="w-full sm:h-72 h-48 object-top object-cover"
-              />
+                layout='responsive' width={3} height={4}></Image> 
+              {/* <img
+                src={currentProductData.image}
+                alt={product.name}
+                onMouseEnter={() => handleHover('enter')}
+                onMouseLeave={() => handleHover('leave')}
+                className="w-full sm:h-72 h-48 object-top object-cover"
+              /> */}
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
                   {BTN_PRE_ORDER}

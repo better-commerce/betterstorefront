@@ -1,6 +1,7 @@
 import type { GetStaticPropsContext } from 'next'
 import { getAllCategories } from '@framework/category'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Layout } from '@components/common'
 
 export default function CategoryList(props: any) {
@@ -28,7 +29,16 @@ export default function CategoryList(props: any) {
                       className="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-gray-100 opacity-90"
                     />
                     <span aria-hidden="true" className="absolute inset-0">
-                      <img src={category.image || 'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-11.jpg' } alt="" className="w-full h-full object-center object-cover group-hover:opacity-75" />
+                      <div className='image-container'>
+                        <Image 
+                            src={category.image || 'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-11.jpg' } 
+                            alt="Category Banner" 
+                            className="w-full h-full object-center object-cover group-hover:opacity-75 image"
+                            layout='fill'
+                        ></Image>  
+                      </div>
+                      
+                      {/* <img src={category.image || 'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-11.jpg' } alt="" className="w-full h-full object-center object-cover group-hover:opacity-75" /> */}
                     </span>
                     <span
                       aria-hidden="true"
