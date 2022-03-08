@@ -37,10 +37,9 @@ const dynamicProps = {
   loading: Loading,
 }
 
-const FeatureBar = dynamic(
-  () => import('@components/common/FeatureBar'),
-  dynamicProps
-)
+const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
+  ...dynamicProps,
+})
 
 interface Props {
   pageProps: {
