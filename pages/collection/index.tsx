@@ -2,7 +2,7 @@ import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import Link from 'next/link'
-
+import Image from 'next/image'
 export default function CollectionList(props: any) {
   
   return (
@@ -21,14 +21,25 @@ export default function CollectionList(props: any) {
                 className="group"
               >
                 <div className="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
-                  <img
+                  <div className='image-container'>
+                        <Image 
+                            src={
+                              collection.mainImage ||
+                              'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-01.jpg'
+                            }
+                            alt="Collection Banner" 
+                            className="w-full h-full object-center object-cover group-hover:opacity-75 image"
+                            layout='fill'
+                        ></Image>  
+                      </div>
+                  {/* <img
                     src={
                       collection.mainImage ||
                       'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-01.jpg'
                     }
                     // alt={collection.imageAlt}
                     className="w-full h-full object-center object-cover group-hover:opacity-75"
-                  />                 
+                  />                  */}
                 </div>
                 <div className='flex-1'>
                    <h1

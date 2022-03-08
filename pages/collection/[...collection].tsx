@@ -11,6 +11,7 @@ import ProductGridWithFacet from '@components/product/Grid'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
+import Image from 'next/image'
 import { NextSeo } from 'next-seo'
 import { postData } from '@components/utils/clientFetcher'
 
@@ -208,11 +209,20 @@ export default function CollectionPage(props: any) {
             return (
               <SwiperSlide key={idx}>
                 <Link href={img.link || '#'}>
-                  <img
+                  <Image
+                      layout='fixed'
+                      width={1920} 
+                      height={460}
+                      src={img.url}
+                      alt="Collection Banner"
+                      className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
+                    ></Image>
+                  
+                  {/* <img
                     src={img.url || 'error'}
                     alt=""
                     className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
-                  />
+                  /> */}
                 </Link>
               </SwiperSlide>
             )
