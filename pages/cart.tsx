@@ -139,7 +139,7 @@ function Cart({ cart }: any) {
                           layout='fixed'
                           width={160}
                           height={160}
-                          src={product.image}
+                          src={`${product.image}&w=200&q=100`}
                           alt={product.name}
                           className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48 image"
                         ></Image>  
