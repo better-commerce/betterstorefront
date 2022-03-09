@@ -249,8 +249,19 @@
 }
 
 .image-container .image {
-  object-fit: contain !important;
+  object-fit: cover !important;
   width: 100% !important;
   position: relative !important;
-  height: unset !important;
+  object-position: top !important;
+}
+.sm\:h-64 {
+  height: 16rem !important;
+}
+
+.sm\:h-72 {
+  height: 18rem !important;
+}
+
+.sm\:min-h-screen {
+  min-height: 100vh !important;
 }
