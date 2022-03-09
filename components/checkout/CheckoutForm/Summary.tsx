@@ -33,7 +33,7 @@ export default function Summary({
                   layout='fixed'
                   width={80}
                   height={80}
-                  src={product.image}
+                  src={`${product.image}&w=120&q=100`}
                   alt={product.name}
                   className="w-20 rounded-md"
                 ></Image>

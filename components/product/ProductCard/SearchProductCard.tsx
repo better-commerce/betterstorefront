@@ -15,7 +15,6 @@ import {
   BTN_PRE_ORDER,
   GENERAL_ADD_TO_BASKET,
 } from '@components/utils/textVariables'
-
 interface Props {
   product: any
 }
@@ -168,13 +167,14 @@ const SearchProductCard: FC<Props> = ({ product }) => {
         >
           <a href={currentProductData.link}>
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-              <Image 
-                src={currentProductData.image}
-                alt={product.name}
-                onMouseEnter={() => handleHover('enter')}
-                onMouseLeave={() => handleHover('leave')}
-                className="w-full sm:h-72 h-48 object-top object-cover"
-                layout='responsive' width={3} height={4}></Image> 
+             <div className='image-container'>
+                <Image 
+                  src={`${currentProductData.image}&w=450&q=100`}
+                  alt={product.name}
+                  onMouseEnter={() => handleHover('enter')}
+                  onMouseLeave={() => handleHover('leave')}
+                  layout='fill' className='w-full sm:h-64 h-48 object-center object-cover image'></Image>
+             </div>
               {/* <img
                 src={currentProductData.image}
                 alt={product.name}

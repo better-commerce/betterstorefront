@@ -406,7 +406,7 @@ export default function ProductView({
                             {image.image ? (
                               <div className='image-container'>
                                 <Image
-                                  src={image.image}
+                                  src={`${image.image}&w=300&q=100`}                                  
                                   alt=""
                                   className="w-full h-full object-center object-cover image"
                                   layout='fill'
@@ -434,7 +434,8 @@ export default function ProductView({
                     {image.image ? (
                       <div className='image-container'>
                         <Image
-                          src={image.image}
+                          src={`${image.image}&w=1000&q=100`}
+                          // src={image.image}
                           alt={image.name}
                           className="w-full h-full object-center object-cover image rounded-lg"
                           layout='fill'
