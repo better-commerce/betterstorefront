@@ -173,7 +173,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                   alt={product.name}
                   onMouseEnter={() => handleHover('enter')}
                   onMouseLeave={() => handleHover('leave')}
-                  layout='fill' className='w-full sm:h-64 h-48 object-center object-cover image'></Image>
+                  layout='fill' className='w-full sm:h-72 h-48 object-center object-cover image'></Image>
              </div>
               {/* <img
                 src={`${currentProductData.image}&w=200&h=300&q=90`}
