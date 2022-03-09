@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { TrashIcon } from '@heroicons/react/solid'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '@components/cart/PromotionInput'
@@ -28,11 +29,19 @@ export default function Summary({
           {cart.lineItems?.map((product: any) => (
             <li key={product.id} className="flex py-6 px-4 sm:px-6">
               <div className="flex-shrink-0">
-                <img
+                <Image
+                  layout='fixed'
+                  width={80}
+                  height={80}
                   src={product.image}
                   alt={product.name}
                   className="w-20 rounded-md"
-                />
+                ></Image>
+                {/* <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-20 rounded-md"
+                /> */}
               </div>
 
               <div className="ml-6 flex-1 flex flex-col">
