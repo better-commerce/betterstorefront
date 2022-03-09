@@ -167,7 +167,7 @@ const SearchProductCard: FC<Props> = ({ product }) => {
         >
           <a href={currentProductData.link}>
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-              <div className='image-container sm:h-64 h-48'>
+              <div className='image-container'>
                   <Image 
                       src={`${currentProductData.image}&w=350&q=100`}
                       alt={product.name}
