@@ -265,3 +265,11 @@
 .sm\:min-h-screen {
   min-height: 100vh !important;
 }
+
+.h-full {
+  height: 100% !important;
+}
+
+.sm\:h-44 {
+  height: 11rem !important;
+}
