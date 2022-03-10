@@ -61,10 +61,10 @@ export default function cartHandler() {
         entity: JSON.stringify({
           basketId,
           id: productId,
-          name: data.product.name,
-          price: data.product.price.raw.withTax,
+          name: data?.product?.name,
+          price: data?.product?.price?.raw?.withTax,
           quantity: qty,
-          stockCode: data.product.stockCode,
+          stockCode: data?.product?.stockCode,
         }),
         basketItems: JSON.stringify(
           response.data.lineItems.map((obj: any) => {
@@ -76,16 +76,16 @@ export default function cartHandler() {
               price: obj.price?.raw?.withTax,
               qty: obj.qty,
               stockCode: obj.stockCode,
-              tax: obj.price.raw.tax,
+              tax: obj.price?.raw?.tax,
             }
           })
         ),
         basketItemCount: response.data?.lineItems?.length || 0,
         basketTotal: response.data.grandTotal?.raw?.withTax,
-        entityId: data.product.recordId,
+        entityId: data.product?.recordId,
         entityType: 'product',
         eventType: BasketItemAdded,
-        entityName: data.product.name,
+        entityName: data.product?.name,
       }
 
       if (qty && qty > 0) {

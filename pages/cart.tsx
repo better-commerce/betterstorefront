@@ -85,7 +85,7 @@ function Cart({ cart }: any) {
     }
   }, [])
 
-  const handleItem = (product: any, type = 'increase') => {
+  const handleItem = (product: any, type = 'increase',prodIndex:number) => {
     const asyncHandleItem = async () => {
       const data: any = {
         basketId,
@@ -100,8 +100,8 @@ function Cart({ cart }: any) {
       }
       if (type === 'delete') {
         data.qty = 0;
-        const index = userCart?.lineItems.indexOf(product.id);
-        userCart?.lineItems.slice(index, 1);
+        userCart.lineItems=userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)
+        console.log(userCart.lineItems);
       }
       try {
         const item = await addToCart(data)
@@ -114,7 +114,6 @@ function Cart({ cart }: any) {
   }
 
   const userCart = cartItems
-
   const isEmpty: boolean = userCart?.lineItems?.length === 0
 
   return (
@@ -203,7 +202,7 @@ function Cart({ cart }: any) {
                                       <button
                                         type="button"
                                         onClick={() =>
-                                          handleItem(child, 'delete')
+                                          handleItem(child, 'delete',productIdx)
                                         }
                                         className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                                       >
@@ -227,7 +226,7 @@ function Cart({ cart }: any) {
                         <div className="mt-0 sm:mt-0 sm:pr-9 pl-2 pr-0">
                           <div className="border sm:px-4 px-2 text-gray-900 flex flex-row">
                             <MinusSmIcon
-                              onClick={() => handleItem(product, 'decrease')}
+                              onClick={() => handleItem(product, 'decrease',productIdx)}
                               className="w-4 cursor-pointer"
                             />
                             <span className="text-md px-2 sm:py-2 py-1">
@@ -235,14 +234,14 @@ function Cart({ cart }: any) {
                             </span>
                             <PlusSmIcon
                               className="w-4 cursor-pointer"
-                              onClick={() => handleItem(product, 'increase')}
+                              onClick={() => handleItem(product, 'increase',productIdx)}
                             />
                           </div>
                         </div>
                         <div className="absolute top-0 right-0">
                           <button
                             type="button"
-                            onClick={() => handleItem(product, 'delete')}
+                            onClick={() => handleItem(product, 'delete',productIdx)}
                             className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                           >
                             <span className="sr-only">{GENERAL_REMOVE}</span>
