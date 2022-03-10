@@ -105,7 +105,7 @@ function Cart({ cart }: any) {
         const item = await addToCart(data)
         setCartItems(item)
       } catch (error) {
-        console.log(error)
+        console.log(error + " Type" + type + " data" + data)
       }
     }
     asyncHandleItem()
