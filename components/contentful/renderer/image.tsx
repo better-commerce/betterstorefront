@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import React from 'react'
 
 import { TypeComponent_image } from '@lib/contentful/types'

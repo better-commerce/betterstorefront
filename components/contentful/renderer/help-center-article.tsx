@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import React from 'react'
 
 import { getSummary } from '@lib/contentful/rich-text'

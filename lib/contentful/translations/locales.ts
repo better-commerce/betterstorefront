@@ -1,13 +1,13 @@
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
-export type Locale = string;
+export type Locale = string
 // cheap trick
-export const UnknownLocale = Symbol('unknown-locale');
+export const UnknownLocale = Symbol('unknown-locale')
 
-export const defaultLocale: Locale = 'en-US';
+export const defaultLocale: Locale = 'en-US'
 
 // need to be in sync with space
-export const availableLocales: Locale[] = [defaultLocale, 'de-DE'];
+export const availableLocales: Locale[] = [defaultLocale, 'de-DE']
 
 // for a potential locale picker
 // export const languageNames = {
@@ -17,7 +17,7 @@ export const availableLocales: Locale[] = [defaultLocale, 'de-DE'];
 // }
 
 export function findLocale(current: Locale): Locale | undefined {
-  return availableLocales.find((locale) => current === locale);
+  return availableLocales.find((locale) => current === locale)
 }
 
 /**
@@ -28,32 +28,32 @@ export const getLocale = (
   locale: string | string[] | undefined
 ): Locale | typeof UnknownLocale | undefined => {
   if (!locale) {
-    return;
+    return
   }
 
-  const actualLocale = findLocale(String(locale));
+  const actualLocale = findLocale(String(locale))
 
-  return actualLocale ?? UnknownLocale;
-};
+  return actualLocale ?? UnknownLocale
+}
 
 export const withLocale = (
   fn: (
     locale: Locale,
-    context: GetServerSidePropsContext
+    context: any
   ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>
 ) => {
   return (context: GetServerSidePropsContext) => {
-    const locale = getLocale(context.params.locale);
+    const locale = getLocale(context?.params?.locale)
 
     switch (locale) {
       case UnknownLocale:
-        context.res.writeHead(302, { Location: '/' }).end();
-        break;
+        context.res.writeHead(302, { Location: '/' }).end()
+        break
       case undefined:
-        context.res.statusCode = 404;
-        break;
+        context.res.statusCode = 404
+        break
       default:
-        return fn(locale, context);
+        return fn(locale, context)
     }
-  };
-};
+  }
+}

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import React from 'react'
 
 import { BlockRenderer } from '@components/contentful/renderer/block-renderer'

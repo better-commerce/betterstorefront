@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { Link } from '@components/contentful/link'
 
 import { TypeComponent_hero } from '@lib/contentful/types'
