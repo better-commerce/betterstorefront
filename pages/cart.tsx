@@ -99,13 +99,15 @@ function Cart({ cart }: any) {
         data.qty = 1
       }
       if (type === 'delete') {
-        data.qty = 0
+        data.qty = 0;
+        const index = cartItems.indexOf(product.id);
+        cartItems.slice(index, 1);
       }
       try {
         const item = await addToCart(data)
         setCartItems(item)
       } catch (error) {
-        console.log(error + " Type" + type + " data" + data)
+        console.log(error)
       }
     }
     asyncHandleItem()
