@@ -1,6 +1,7 @@
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { GetStaticPropsContext } from 'next'
 import getLookbooks from '@framework/api/content/lookbook'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -55,11 +56,19 @@ function LookbookPage({ data }: any) {
                 >
                   <div className="group relative flex flex-col sm:flex-row justify-between items-center">
                     <div className="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
-                      <img
+                      <div className='image-container'>
+                        <Image
+                          layout='fill'
+                          src={lookbook.mainImage || IMG_PLACEHOLDER}
+                          alt={lookbook.name}
+                          className="w-auto h-96 object-center object-cover hover:opacity-75 sm:min-h-screen sm:max-h-screen image"
+                        ></Image>  
+                      </div>
+                      {/* <img
                         src={lookbook.mainImage || IMG_PLACEHOLDER}
                         alt={lookbook.name}
                         className="w-auto h-96 object-center object-cover hover:opacity-75 sm:min-h-screen sm:max-h-screen"
-                      />
+                      /> */}
                     </div>
                     <div className="w-full sm:w-1/2 p-5 flex justify-center flex-col items-center">
                       <h3 className="font-extrabold w-full text-left text-2xl sm:text-4xl text-gray-900">

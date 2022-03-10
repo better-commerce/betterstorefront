@@ -13,6 +13,7 @@ import {
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
 import { NextSeo } from 'next-seo'
+import Image from 'next/image'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 function LookbookDetailPage({ data, slug }: any) {
@@ -87,7 +88,7 @@ function LookbookDetailPage({ data, slug }: any) {
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-white max-w-7xl mx-auto">
       {/* Mobile menu */}
       <main className="pb-24">
         <div className="text-center py-16 px-4 sm:px-6 lg:px-8 flex items-center flex-col">
@@ -95,12 +96,20 @@ function LookbookDetailPage({ data, slug }: any) {
             {data.name}
           </h1>
           <h2>{data.description}</h2>
-          <div className="w-full sm:w-1/4 bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
-            <img
+          <div className="w-full sm:w-2/4 bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1 mt-10">
+              <div className='image-container'>
+                <Image
+                  layout='fill'
+                  src={data.mainImage}
+                  alt={data.name}
+                  className="w-full h-full object-center object-cover hover:opacity-75 image"
+              ></Image>    
+              </div>
+            {/* <img
               src={data.mainImage}
               alt={data.name}
               className="w-full h-full object-center object-cover hover:opacity-75"
-            />
+            /> */}
             <button
               onClick={handleBulk}
               className="font-bold text-xl py-2 w-full bg-gray-900 text-white"
