@@ -99,6 +99,7 @@ function Cart({ cart }: any) {
       }
       if (type === 'delete') {
         data.qty = 0
+        userCart.lineItems=userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)
       }
       try {
         const item = await addToCart(data)
