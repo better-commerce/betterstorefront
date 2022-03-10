@@ -85,7 +85,7 @@ function Cart({ cart }: any) {
     }
   }, [])
 
-  const handleItem = (product: any, type = 'increase',prodIndex:number) => {
+  const handleItem = (product: any, type = 'increase') => {
     const asyncHandleItem = async () => {
       const data: any = {
         basketId,
@@ -100,8 +100,7 @@ function Cart({ cart }: any) {
       }
       if (type === 'delete') {
         data.qty = 0;
-        userCart.lineItems=userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)
-        console.log(userCart.lineItems);
+        userCart.lineItems=userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)        
       }
       try {
         const item = await addToCart(data)
@@ -202,7 +201,7 @@ function Cart({ cart }: any) {
                                       <button
                                         type="button"
                                         onClick={() =>
-                                          handleItem(child, 'delete',productIdx)
+                                          handleItem(child, 'delete')
                                         }
                                         className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                                       >
@@ -226,7 +225,7 @@ function Cart({ cart }: any) {
                         <div className="mt-0 sm:mt-0 sm:pr-9 pl-2 pr-0">
                           <div className="border sm:px-4 px-2 text-gray-900 flex flex-row">
                             <MinusSmIcon
-                              onClick={() => handleItem(product, 'decrease',productIdx)}
+                              onClick={() => handleItem(product, 'decrease')}
                               className="w-4 cursor-pointer"
                             />
                             <span className="text-md px-2 sm:py-2 py-1">
@@ -234,14 +233,14 @@ function Cart({ cart }: any) {
                             </span>
                             <PlusSmIcon
                               className="w-4 cursor-pointer"
-                              onClick={() => handleItem(product, 'increase',productIdx)}
+                              onClick={() => handleItem(product, 'increase')}
                             />
                           </div>
                         </div>
                         <div className="absolute top-0 right-0">
                           <button
                             type="button"
-                            onClick={() => handleItem(product, 'delete',productIdx)}
+                            onClick={() => handleItem(product, 'delete')}
                             className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                           >
                             <span className="sr-only">{GENERAL_REMOVE}</span>
