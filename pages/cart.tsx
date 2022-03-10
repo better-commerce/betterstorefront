@@ -100,8 +100,8 @@ function Cart({ cart }: any) {
       }
       if (type === 'delete') {
         data.qty = 0;
-        const index = cartItems.indexOf(product.id);
-        cartItems.slice(index, 1);
+        const index = userCart?.lineItems.indexOf(product.id);
+        userCart?.lineItems.slice(index, 1);
       }
       try {
         const item = await addToCart(data)
