@@ -397,7 +397,7 @@ export default function ProductView({
                   {content?.map((image: any, idx) => (
                     <Tab
                       key={`${idx}-tab`}
-                      className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                      className="relative h-24 sm:h-44 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
                     >
                       {() => (
                         <>
@@ -408,7 +408,7 @@ export default function ProductView({
                                 <Image
                                   src={`${image.image}&w=300&q=100`}                                  
                                   alt=""
-                                  className="w-full h-full object-center object-cover image"
+                                  className="w-full h-full sm:h-44 object-center object-cover image"
                                   layout='fill'
                                 ></Image>  
                               </div>
