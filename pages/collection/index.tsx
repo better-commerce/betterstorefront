@@ -25,7 +25,7 @@ export default function CollectionList(props: any) {
                 href={`/collection/${collection.slug}`}
                 className="group"
               >
-                <div className="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
+                <div className="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3 bg-gray-100">
                   <div className='image-container'>
                         <Image 
                             src={collection.mainImage || IMG_PLACEHOLDER }
