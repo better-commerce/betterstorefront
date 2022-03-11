@@ -170,7 +170,7 @@ const ProductCard: FC<Props> = ({ product }) => {
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
              <div className='image-container'>
                 <Image 
-                  src={`${currentProductData.image}&w=450&q=100` || IMG_PLACEHOLDER}
+                  src={currentProductData.image || IMG_PLACEHOLDER}
                   alt={product.name}
                   onMouseEnter={() => handleHover('enter')}
                   onMouseLeave={() => handleHover('leave')}
