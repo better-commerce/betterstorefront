@@ -6,7 +6,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
-import { BTN_SEE_EVERYTHING } from '@components/utils/textVariables'
+import { BTN_SEE_EVERYTHING, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 SwiperCore.use([Navigation])
 
@@ -105,13 +105,8 @@ const ProductSlider: FC<Props> = ({ config }) => {
                       >
                         <div className="group relative">
                           <div className="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
-                            {/* <img
-                              src={product.image}
-                              alt={product.name}
-                              className="w-full h-full object-center object-cover group-hover:opacity-75"
-                            /> */}
                             <Image priority
-                              src={product.image} 
+                              src={product.image || IMG_PLACEHOLDER} 
                               alt={product.name} 
                               layout="responsive" 
                               width={257} 

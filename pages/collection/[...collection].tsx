@@ -14,7 +14,7 @@ import useSwr from 'swr'
 import Image from 'next/image'
 import { NextSeo } from 'next-seo'
 import { postData } from '@components/utils/clientFetcher'
-
+import { IMG_PLACEHOLDER, RESULTS } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
 // Import Swiper styles
 import 'swiper/css'
@@ -200,7 +200,7 @@ export default function CollectionPage(props: any) {
     })
   }
   const clearAll = () => dispatch({ type: CLEAR })
-
+  
   return (
     <main className="pb-0">
       <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
@@ -213,16 +213,10 @@ export default function CollectionPage(props: any) {
                       layout='fixed'
                       width={1920} 
                       height={460}
-                      src={img.url}
-                      alt="Collection Banner"
+                      src={img.url || IMG_PLACEHOLDER}
+                      alt={props.name}
                       className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
                     ></Image>
-                  
-                  {/* <img
-                    src={img.url || 'error'}
-                    alt=""
-                    className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
-                  /> */}
                 </Link>
               </SwiperSlide>
             )
@@ -235,7 +229,7 @@ export default function CollectionPage(props: any) {
         </h1>
         <h2>{props.description}</h2>
         <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
-          {props.products.total} results
+          {props.products.total}{' '}{RESULTS}
         </h1>
       </div>
 

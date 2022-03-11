@@ -14,6 +14,7 @@ import {
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
   GENERAL_ADD_TO_BASKET,
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 interface Props {
   product: any
@@ -169,7 +170,7 @@ const SearchProductCard: FC<Props> = ({ product }) => {
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
               <div className='image-container'>
                   <Image 
-                      src={`${currentProductData.image}&w=350&q=100`}
+                      src={`${currentProductData.image}&w=350&q=100` || IMG_PLACEHOLDER}
                       alt={product.name}
                       onMouseEnter={() => handleHover('enter')}
                       onMouseLeave={() => handleHover('leave')}
@@ -177,13 +178,6 @@ const SearchProductCard: FC<Props> = ({ product }) => {
                       className='w-full sm:h-72 h-48 object-center object-cover image'>
                   </Image>
               </div>
-              {/* <img
-                src={currentProductData.image}
-                alt={product.name}
-                onMouseEnter={() => handleHover('enter')}
-                onMouseLeave={() => handleHover('leave')}
-                className="w-full sm:h-64 h-48 object-center object-cover"
-              /> */}
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
                   {BTN_PRE_ORDER}
