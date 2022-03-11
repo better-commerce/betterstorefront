@@ -12,7 +12,7 @@ import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-
+import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER, RESULTS } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
 // Import Swiper styles
 import 'swiper/css'
@@ -259,9 +259,9 @@ function CategoryPage({ category, products }: any) {
     return (
       <div className="container mx-auto py-10 text-center relative top-20">
         <h4 className="text-3xl font-medium text-gray-400 pb-6">
-          This is a bad url. please go back to
+          {BAD_URL_TEXT}
           <Link href="/category">
-            <a className="text-indigo-500 px-3">all categories</a>
+            <a className="text-indigo-500 px-3">{ALL_CATEGORY}</a>
           </Link>
         </h4>
       </div>
@@ -287,15 +287,10 @@ function CategoryPage({ category, products }: any) {
                       layout='fixed'
                       width={1920} 
                       height={460}
-                      src={image.url}
-                      alt="Category Banner"
+                      src={image.url || IMG_PLACEHOLDER}
+                      alt={category.name}
                       className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
                     ></Image>
-                    {/* <img
-                      src={image.url}
-                      alt=""
-                      className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
-                    /> */}
                   </Link>
                 </SwiperSlide>
               )
@@ -309,7 +304,7 @@ function CategoryPage({ category, products }: any) {
           <h2>{category.description}</h2>
           {!!products && (
             <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
-              {products.total} results
+              {products.total}{' '}{RESULTS} 
             </h1>
           )}
         </div>
@@ -325,19 +320,9 @@ function CategoryPage({ category, products }: any) {
                           width={80}
                           height={80}
                           className="h-8 w-8 sm:h-20 sm:w-20 rounded-full image"
-                          src={
-                              subcateg.image ||
-                              'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
-                          }
+                          src={ subcateg.image || IMG_PLACEHOLDER }
+                          alt={subcateg.name}
                         ></Image>
-                      
-                      {/* <img
-                        className="h-8 w-8 rounded-full"
-                        src={
-                          subcateg.image ||
-                          'https://liveocxstorage.blob.core.windows.net/betterstore/products/tara_drop_one62.jpg'
-                        }
-                      /> */}
                       <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
                         {subcateg.name}
                       </h4>

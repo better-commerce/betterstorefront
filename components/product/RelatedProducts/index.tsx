@@ -3,8 +3,8 @@ import Engraving from '@components/product/Engraving'
 import { useState } from 'react'
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
-import { GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
-
+import { GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
+import Image from 'next/image'
 export default function RelatedProducts({
   relatedProducts = [],
   relatedProductList = [],
@@ -90,11 +90,14 @@ export default function RelatedProducts({
                             <div className="relative">
                               <div className="relative w-full h-72 rounded-lg overflow-hidden">
                                 <Link href={`/${product.slug}`} passHref>
-                                  <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="w-full h-full object-center object-cover"
-                                  />
+                                  <div className='image-container'>
+                                    <Image
+                                      layout='fill'
+                                      src={product.image || IMG_PLACEHOLDER}
+                                      alt={product.name}
+                                      className="w-full h-full object-center object-cover image">                                      
+                                    </Image>  
+                                  </div>
                                 </Link>
                               </div>
                               <div className="relative mt-4">

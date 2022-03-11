@@ -16,6 +16,7 @@ import { NextSeo } from 'next-seo'
 import Image from 'next/image'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import {IMG_PLACEHOLDER, SHOP_THE_LOOK} from '@components/utils/textVariables'
 function LookbookDetailPage({ data, slug }: any) {
   const router = useRouter()
   const { basketId, openCart, setCartItems } = useUI()
@@ -100,21 +101,16 @@ function LookbookDetailPage({ data, slug }: any) {
               <div className='image-container'>
                 <Image
                   layout='fill'
-                  src={data.mainImage}
+                  src={data.mainImage || IMG_PLACEHOLDER}
                   alt={data.name}
                   className="w-full h-full object-center object-cover hover:opacity-75 image"
               ></Image>    
               </div>
-            {/* <img
-              src={data.mainImage}
-              alt={data.name}
-              className="w-full h-full object-center object-cover hover:opacity-75"
-            /> */}
             <button
               onClick={handleBulk}
               className="font-bold text-xl py-2 w-full bg-gray-900 text-white"
             >
-              Shop the look
+              {SHOP_THE_LOOK}
             </button>
           </div>
           <div className="mt-5">

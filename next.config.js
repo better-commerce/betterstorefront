@@ -11,7 +11,7 @@ const isBetterCommerce = provider === 'bettercommerce'
 module.exports = withCommerceConfig({
   commerce,
   images: {
-    domains: ['media.missguided.com', 'liveocxcdn.azureedge.net','liveocxstorage.blob.core.windows.net','tailwindui.com'],
+    domains: ['liveocxcdn.azureedge.net'],
   },
   i18n: {
     locales: ['en-US', 'es'],

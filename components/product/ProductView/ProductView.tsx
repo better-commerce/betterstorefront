@@ -37,6 +37,7 @@ import {
   GENERAL_REFERENCE,
   GENERAL_REVIEWS,
   GENERAL_REVIEW_OUT_OF_FIVE,
+  IMG_PLACEHOLDER,
   ITEM_TYPE_ADDON,
   PRICEMATCH_ADDITIONAL_DETAILS,
   PRICEMATCH_BEST_PRICE,
@@ -406,17 +407,12 @@ export default function ProductView({
                             {image.image ? (
                               <div className='image-container'>
                                 <Image
-                                  src={`${image.image}&w=300&q=100`}                                  
-                                  alt=""
+                                  src={`${image.image}&w=300&q=100` || IMG_PLACEHOLDER}                                  
+                                  alt={image.name}
                                   className="w-full h-full sm:h-44 object-center object-cover image"
                                   layout='fill'
                                 ></Image>  
                               </div>
-                              // <img
-                              //   src={image.image}
-                              //   alt=""
-                              //   className="w-full h-full object-center object-cover"
-                              // />
                             ) : (
                               <PlayIcon className="h-full w-full object-center object-cover" />
                             )}
@@ -434,18 +430,12 @@ export default function ProductView({
                     {image.image ? (
                       <div className='image-container'>
                         <Image
-                          src={`${image.image}&w=1000&q=100`}
-                          // src={image.image}
+                          src={`${image.image}&w=1000&q=100` || IMG_PLACEHOLDER}
                           alt={image.name}
                           className="w-full h-full object-center object-cover image rounded-lg"
                           layout='fill'
                         ></Image>  
-                      </div>
-                      // <img
-                      //   src={image.image}
-                      //   alt={image.name}
-                      //   className="w-full h-full object-center object-cover rounded-lg"
-                      // />
+                      </div>                     
                     ) : (
                       <iframe
                         width="560"
