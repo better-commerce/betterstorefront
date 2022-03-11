@@ -23,7 +23,6 @@ import SwiperCore, { Navigation } from 'swiper'
 SwiperCore.use([Navigation])
 
 const Hero: FC<HeroProps> = ({ banners = [] }) => {
-  console.log(banners);
 
   return (
     <div className="relative bg-gray-900">
