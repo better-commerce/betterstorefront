@@ -14,7 +14,7 @@ export default function useRemoveItem() {
     try {
       const response: any = await fetcher({
         url: `${BASKET_ENDPOINT}/${basketId}/items/${productId}/remove`,
-        method: 'post',
+        method: 'delete',
         data,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
