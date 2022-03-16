@@ -16,6 +16,7 @@ import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import axios from 'axios'
+import Image from 'next/image'
 import {
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
@@ -36,6 +37,7 @@ import {
   GENERAL_REFERENCE,
   GENERAL_REVIEWS,
   GENERAL_REVIEW_OUT_OF_FIVE,
+  IMG_PLACEHOLDER,
   ITEM_TYPE_ADDON,
   PRICEMATCH_ADDITIONAL_DETAILS,
   PRICEMATCH_BEST_PRICE,
@@ -396,18 +398,21 @@ export default function ProductView({
                   {content?.map((image: any, idx) => (
                     <Tab
                       key={`${idx}-tab`}
-                      className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                      className="relative h-24 sm:h-44 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
                     >
                       {() => (
                         <>
                           <span className="sr-only">{image.name}</span>
                           <span className="absolute inset-0 rounded-md overflow-hidden">
                             {image.image ? (
-                              <img
-                                src={image.image}
-                                alt=""
-                                className="w-full h-full object-center object-cover"
-                              />
+                              <div className='image-container'>
+                                <Image
+                                  src={`${image.image}&w=300&q=100` || IMG_PLACEHOLDER}                                  
+                                  alt={image.name}
+                                  className="w-full h-full sm:h-44 object-center object-cover image"
+                                  layout='fill'
+                                ></Image>  
+                              </div>
                             ) : (
                               <PlayIcon className="h-full w-full object-center object-cover" />
                             )}
@@ -423,11 +428,14 @@ export default function ProductView({
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
-                      <img
-                        src={image.image}
-                        alt={image.name}
-                        className="w-full h-full object-center object-cover rounded-lg"
-                      />
+                      <div className='image-container'>
+                        <Image
+                          src={`${image.image}&w=1000&q=100` || IMG_PLACEHOLDER}
+                          alt={image.name}
+                          className="w-full h-full object-center object-cover image rounded-lg"
+                          layout='fill'
+                        ></Image>  
+                      </div>                     
                     ) : (
                       <iframe
                         width="560"

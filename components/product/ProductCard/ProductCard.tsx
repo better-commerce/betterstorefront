@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import AttributeSelector from './AttributeSelector'
 import Button from '@components/ui/IndigoButton'
 import cartHandler from '@components/services/cart'
@@ -13,12 +14,12 @@ import {
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
   GENERAL_ADD_TO_BASKET,
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 
 interface Props {
   product: any
 }
-
 const colorKey = 'global.colour'
 
 const WISHLIST_BUTTON_COLOR_SCHEME = {
@@ -167,13 +168,21 @@ const ProductCard: FC<Props> = ({ product }) => {
         >
           <a href={currentProductData.link}>
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-              <img
-                src={currentProductData.image}
+             <div className='image-container'>
+                <Image 
+                  src={currentProductData.image || IMG_PLACEHOLDER}
+                  alt={product.name}
+                  onMouseEnter={() => handleHover('enter')}
+                  onMouseLeave={() => handleHover('leave')}
+                  layout='fill' className='w-full sm:h-72 h-48 object-center object-cover image'></Image>
+             </div>
+              {/* <img
+                src={`${currentProductData.image}&w=200&h=300&q=90`}
                 alt={product.name}
                 onMouseEnter={() => handleHover('enter')}
                 onMouseLeave={() => handleHover('leave')}
                 className="w-full sm:h-72 h-48 object-top object-cover"
-              />
+              /> */}
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
                   {BTN_PRE_ORDER}

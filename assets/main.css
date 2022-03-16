@@ -237,3 +237,39 @@
   -webkit-line-clamp: 7;
   max-height: 210px;
 }
+
+.image-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.image-container > div,
+.image-container > span {
+  position: unset !important;
+}
+
+.image-container .image {
+  object-fit: cover !important;
+  width: 100% !important;
+  position: relative !important;
+  object-position: top !important;
+}
+.sm\:h-64 {
+  height: 16rem !important;
+}
+
+.sm\:h-72 {
+  height: 18rem !important;
+}
+
+.sm\:min-h-screen {
+  min-height: 100vh !important;
+}
+
+.h-full {
+  height: 100% !important;
+}
+
+.sm\:h-44 {
+  height: 11rem !important;
+}

@@ -10,6 +10,9 @@ const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({
   commerce,
+  images: {
+    domains: ['liveocxcdn.azureedge.net'],
+  },
   i18n: {
     locales: ['en-US', 'es'],
     defaultLocale: 'en-US',

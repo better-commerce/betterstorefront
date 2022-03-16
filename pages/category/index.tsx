@@ -1,15 +1,16 @@
 import type { GetStaticPropsContext } from 'next'
 import { getAllCategories } from '@framework/category'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Layout } from '@components/common'
-
+import { IMG_PLACEHOLDER, SHOP_BY_CATEGORY } from '@components/utils/textVariables'
 export default function CategoryList(props: any) {
   console.log(props.data)
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
       <section aria-labelledby="products-heading" className="mt-8">
         <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
-          Shop by Category
+          {SHOP_BY_CATEGORY}
         </h2>
 
         <div className="sm:mt-4 mt-8 flow-root">
@@ -28,7 +29,14 @@ export default function CategoryList(props: any) {
                       className="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-gray-100 opacity-90"
                     />
                     <span aria-hidden="true" className="absolute inset-0">
-                      <img src={category.image || 'https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-11.jpg' } alt="" className="w-full h-full object-center object-cover group-hover:opacity-75" />
+                      <div className='image-container'>
+                        <Image 
+                            src={category.image || IMG_PLACEHOLDER } 
+                            alt={category.name}
+                            className="w-full h-full object-center object-cover group-hover:opacity-75 image"
+                            layout='fill'
+                        ></Image>  
+                      </div>
                     </span>
                     <span
                       aria-hidden="true"
@@ -41,9 +49,7 @@ export default function CategoryList(props: any) {
               </div>
             </div>
           </div>
-        </div>
-
-       
+        </div>       
       </section>
     </main>
   )

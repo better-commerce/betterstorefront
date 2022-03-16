@@ -82,10 +82,10 @@ export default function cartHandler() {
         ),
         basketItemCount: response.data?.lineItems?.length || 0,
         basketTotal: response.data.grandTotal?.raw?.withTax,
-        entityId: data?.product?.recordId,
+        entityId: data.product?.recordId,
         entityType: 'product',
         eventType: BasketItemAdded,
-        entityName: data?.product?.name,
+        entityName: data.product?.name,
       }
 
       if (qty && qty > 0) {
