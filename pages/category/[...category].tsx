@@ -347,7 +347,7 @@ function CategoryPage({ category, products }: any) {
               <div className="sm:col-span-3 sm:block hidden">
                 <ProductFilterRight
                   handleFilters={handleFilters}
-                  products={products}
+                  products={productDataToPass}
                   routerFilters={state.filters}
                 />
               </div>
