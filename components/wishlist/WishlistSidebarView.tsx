@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { FC } from 'react'
 import { useUI } from '@components/ui/context'
 import { useEffect, Fragment, useState } from 'react'
@@ -155,11 +156,18 @@ const WishlistSidebar: FC = () => {
                           {wishListItems.map((product: any) => (
                             <li key={product.id} className="py-6 flex">
                               <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-                                <img
+                                <Image 
+                                  layout='responsive'
+                                  width={80}
+                                  height={80}
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-full h-full object-center object-cover"></Image>
+                                {/* <img
                                   src={product.image}
                                   alt={product.name}
                                   className="w-full h-full object-center object-cover"
-                                />
+                                /> */}
                               </div>
 
                               <div className="ml-4 flex-1 flex flex-col">

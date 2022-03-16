@@ -11,6 +11,7 @@ import cartHandler from '@components/services/cart'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '../components/cart/PromotionInput'
 import { useEffect } from 'react'
+import Image from 'next/image'
 import axios from 'axios'
 import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
 import { BTN_CHECKOUT_NOW, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TOTAL, ITEMS_IN_YOUR_CART, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
@@ -98,8 +99,8 @@ function Cart({ cart }: any) {
         data.qty = 1
       }
       if (type === 'delete') {
-        data.qty = 0
-        userCart.lineItems=userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)
+        data.qty = 0;
+        userCart.lineItems=userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)        
       }
       try {
         const item = await addToCart(data)
@@ -112,7 +113,6 @@ function Cart({ cart }: any) {
   }
 
   const userCart = cartItems
-
   const isEmpty: boolean = userCart?.lineItems?.length === 0
 
   return (
@@ -135,11 +135,19 @@ function Cart({ cart }: any) {
                 {userCart.lineItems?.map((product: any, productIdx: number) => (
                   <li key={productIdx} className="flex py-4 sm:py-10">
                     <div className="flex-shrink-0">
-                      <img
+                      <Image
+                          layout='fixed'
+                          width={160}
+                          height={160}
+                          src={`${product.image}&w=200&q=100`}
+                          alt={product.name}
+                          className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48 image"
+                        ></Image>  
+                      {/* <img
                         src={product.image}
                         alt={product.name}
                         className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48"
-                      />
+                      /> */}
                     </div>
                     <div className="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
                       <div className="relative sm:pr-9 pr-6 flex justify-between sm:pr-0 h-full">
