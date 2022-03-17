@@ -1,6 +1,6 @@
 import fetcher from '../fetcher'
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
-export default async function forgotPassword(token: string) {
+export default async function validateToken(token: string) {
   try {
     const endpoint = `${CUSTOMER_BASE_API}/validate-token?token=${token}`
     const res = await fetcher({ url: endpoint, method: 'get' })
