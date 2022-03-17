@@ -8,9 +8,9 @@ export default async function forgotPassword(email: string) {
     const res: any = await fetcher({ url: endpoint, method: 'post' })
     if (res.result.isValid) {
       const validate = await validateToken(res.result.recordId)
-      console.log(validate)
+      return { forgotRes: res, validate }
     }
-    return res
+    return { forgotRes: res }
   } catch (error: any) {
     throw new Error(error)
   }
