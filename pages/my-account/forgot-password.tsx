@@ -70,12 +70,12 @@ export default function ForgotPasswordPage() {
     if (isValidEmail) {
       let { data }: any = await axios.post(NEXT_FORGOT_PASSWORD, { email })
 
-      if (!data.validate.result.isValid) {
+      if (!data.forgotRes.result.isValid) {
         setEmailStatus(EMAIL_STATUSES_MAP.INVALID_EMAIL)
       } else {
-        const recordIdToken: any = data.validate.result.recordId
+        const recordIdToken: any = data.forgotRes.result.recordId
         setToken(recordIdToken)
-        setIsValid(data.validate.result.isValid)
+        setIsValid(data.forgotRes.result.isValid)
         setEmailStatus(EMAIL_STATUSES_MAP.VALID_EMAIL)
       }
       setForm({ ...form, userName: email })
