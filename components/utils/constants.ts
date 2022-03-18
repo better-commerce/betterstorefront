@@ -30,6 +30,7 @@ export const BASE_SEARCH_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/
 export const SHIPPING_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/shipping-method`
 export const CHECKOUT_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout`
 export const PAYMENTS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout/payment-methods`
+export const RETURNS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/return`
 export const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config`
 export const KEYWORDS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/keyword-redirections`
 export const LOQATE_ADDRESS = '/api/loqate'
@@ -82,6 +83,8 @@ export const NEXT_POST_PAYMENT_RESPONSE = '/api/payment-response'
 export const NEXT_FORGOT_PASSWORD = '/api/customer/forgot-password'
 export const NEXT_RESET_PASSWORD = '/api/customer/reset-password'
 export const NEXT_VALIDATE_TOKEN = '/api/customer/validate-token'
+export const NEXT_GET_RETURN_DATA = '/api/return/get-return-data'
+export const NEXT_CREATE_RETURN_DATA = '/api/return/create'
 //CONSTANTS
 
 export const SessionIdCookieKey: string = `sessionId`
