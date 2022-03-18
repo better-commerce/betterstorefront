@@ -1,20 +1,3 @@
-/*
-  This example requires Tailwind CSS v2.0+
-
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
 import { Fragment, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import Image from 'next/image'
@@ -42,9 +25,8 @@ import {
   GENERAL_DELIVERED,
   GENERAL_ON_TEXT,
   ORDER_STATUS_OUT_FOR_DELIVERY,
-  ORDER_STATUS_CANCELLED
+  ORDER_STATUS_CANCELLED,
 } from '@components/utils/textVariables'
-
 
 const navigation = {
   categories: [
@@ -244,9 +226,7 @@ export default function MyReturns() {
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
               {RETURN_ORDER_TITLE}
             </h1>
-            <p className="mt-2 text-sm text-gray-500">
-              {RETURN_ORDER_TEXT}
-            </p>
+            <p className="mt-2 text-sm text-gray-500">{RETURN_ORDER_TEXT}</p>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
@@ -360,25 +340,18 @@ export default function MyReturns() {
                               ) : product.status === 'out-for-delivery' ? (
                                 <p>{ORDER_STATUS_OUT_FOR_DELIVERY}</p>
                               ) : product.status === 'cancelled' ? (
-                                <p className="text-gray-500">{ORDER_STATUS_CANCELLED}</p>
+                                <p className="text-gray-500">
+                                  {ORDER_STATUS_CANCELLED}
+                                </p>
                               ) : null}
                             </div>
                           </div>
                           <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
-                            <Image
-                              width={200}
-                              height={200}
-                              layout='fixed'
-                              src={product.imageSrc}
-                              alt={product.imageAlt}
-                              className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"                            
-                            >
-                            </Image>
-                            {/* <img
+                            <img
                               src={product.imageSrc}
                               alt={product.imageAlt}
                               className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
-                            /> */}
+                            />
                           </div>
                         </div>
                       ))}

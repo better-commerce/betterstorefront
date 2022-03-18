@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
-import { CheckIcon } from '@heroicons/react/outline'
 import axios from 'axios'
-import { NEXT_GET_ORDERS } from '@components/utils/constants'
+import {
+  NEXT_GET_ORDERS,
+  NEXT_CREATE_RETURN_DATA,
+} from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
-import { 
-  MY_ORDERS_TEXT, 
+import {
+  MY_ORDERS_TEXT,
   GENERAL_RECENT_ORDERS,
   GENERAL_ORDER_NUMBER,
   GENERAL_DATE_PLACED,
@@ -15,12 +17,15 @@ import {
   GENERAL_ADD_TO_BASKET,
   ORDER_HISTORY_TITLE,
   GENERAL_TOTAL,
-  GENERAL_ORDER_PLACED_ON
+  GENERAL_ORDER_PLACED_ON,
+  GENERAL_CREATE_RETURN,
 } from '@components/utils/textVariables'
+import ReturnModal from '@components/returns/Modal'
 
 export default function MyOrders() {
   const [data, setData] = useState([])
 
+  const [returnData, setReturnData] = useState({ product: {}, order: {} })
   const { user, basketId, setCartItems, openCart } = useUI()
 
   useEffect(() => {
@@ -35,6 +40,37 @@ export default function MyOrders() {
     fetchOrders()
   }, [])
 
+  const handleCreateReturn = (product: any, order: any) => {
+    setReturnData({ product: product, order: order })
+  }
+
+  const handlePostReturn = async (data: any) => {
+    const returnInfo: any = returnData
+    const model = {
+      orderId: returnInfo.order.id,
+      lineItems: [
+        {
+          productId: returnInfo.product.id,
+          stockCode: returnInfo.product.stockCode,
+          returnQtyRequested: returnInfo.product.qty,
+          returnQtyRecd: 0,
+          reasonForReturnId: data.reasonsForReturn,
+          requiredActionId: data.requiredActions,
+        },
+      ],
+      faultReason: data.faultReason,
+      uploadFileUrls: data.uploadFileUrls,
+    }
+    console.log(model)
+    try {
+      const { data }: any = await axios.post(NEXT_CREATE_RETURN_DATA, { model })
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleClose = () => setReturnData({ product: {}, order: {} })
   const handleAddToCart = (product: any) => {
     cartHandler()
       .addToCart(
@@ -78,11 +114,13 @@ export default function MyOrders() {
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
               {ORDER_HISTORY_TITLE}
             </h1>
-            <p className="mt-2 text-sm text-gray-500">
-              {MY_ORDERS_TEXT}
-            </p>
+            <p className="mt-2 text-sm text-gray-500">{MY_ORDERS_TEXT}</p>
           </div>
-
+          <ReturnModal
+            handlePostReturn={handlePostReturn}
+            handleClose={handleClose}
+            returnData={returnData}
+          />
           <section aria-labelledby="recent-heading" className="mt-16">
             <h2 id="recent-heading" className="sr-only">
               {GENERAL_RECENT_ORDERS}
@@ -97,7 +135,7 @@ export default function MyOrders() {
                       {new Date(order.orderDate).toLocaleDateString()}
                     </time>
                   </h3>
-
+                  {console.log(order)}
                   <div className="bg-gray-50 px-4 py-8 sm:rounded-lg sm:p-8 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-10">
                     <dl className="divide-y divide-gray-200 space-y-6 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-5 md:gap-x-10 w-full lg:flex-none lg:gap-x-10">
                       <div className="flex justify-between md:block">
@@ -164,7 +202,10 @@ export default function MyOrders() {
                               </div>
                               <div className="mt-2 flex text-sm font-medium sm:mt-4">
                                 <Link href={`/${product.slug || '#'}`}>
-                                  <a href={product.slug || '#'} className="text-indigo-600 hover:text-indigo-500">
+                                  <a
+                                    href={product.slug || '#'}
+                                    className="text-indigo-600 hover:text-indigo-500"
+                                  >
                                     {GENERAL_VIEW_PRODUCT}
                                   </a>
                                 </Link>
@@ -174,6 +215,19 @@ export default function MyOrders() {
                                     className="text-indigo-600 hover:text-indigo-500"
                                   >
                                     {GENERAL_ADD_TO_BASKET}
+                                  </button>
+                                </div>
+                                <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
+                                  <button
+                                    onClick={() =>
+                                      handleCreateReturn(product, order)
+                                    }
+                                    type="button"
+                                    className="text-indigo-600 hover:text-indigo-500"
+                                  >
+                                    {product.shippedQty < product.qty
+                                      ? 'Cancel'
+                                      : GENERAL_CREATE_RETURN}
                                   </button>
                                 </div>
                               </div>
