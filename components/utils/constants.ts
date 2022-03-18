@@ -79,6 +79,9 @@ export const NEXT_CONFIRM_ORDER = '/api/confirm-order'
 export const NEXT_INFRA_ENDPOINT = '/api/infra'
 export const NEXT_SET_CONFIG = '/api/set-config'
 export const NEXT_POST_PAYMENT_RESPONSE = '/api/payment-response'
+export const NEXT_FORGOT_PASSWORD = '/api/customer/forgot-password'
+export const NEXT_RESET_PASSWORD = '/api/customer/reset-password'
+export const NEXT_VALIDATE_TOKEN = '/api/customer/validate-token'
 //CONSTANTS
 
 export const SessionIdCookieKey: string = `sessionId`
