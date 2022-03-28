@@ -50,7 +50,7 @@ export default function MyOrders() {
       orderId: returnInfo.order.id,
       lineItems: [
         {
-          productId: returnInfo.product.id,
+          productId: returnInfo.product.productId,
           stockCode: returnInfo.product.stockCode,
           returnQtyRequested: returnInfo.product.qty,
           returnQtyRecd: 0,
@@ -61,7 +61,6 @@ export default function MyOrders() {
       faultReason: data.faultReason,
       uploadFileUrls: data.uploadFileUrls,
     }
-    console.log(model)
     try {
       const { data }: any = await axios.post(NEXT_CREATE_RETURN_DATA, { model })
       console.log(data)
