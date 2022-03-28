@@ -85,6 +85,7 @@ export const NEXT_RESET_PASSWORD = '/api/customer/reset-password'
 export const NEXT_VALIDATE_TOKEN = '/api/customer/validate-token'
 export const NEXT_GET_RETURN_DATA = '/api/return/get-return-data'
 export const NEXT_CREATE_RETURN_DATA = '/api/return/create'
+export const NEXT_GET_RETURNS = '/api/return/get-user-returns'
 //CONSTANTS
 
 export const SessionIdCookieKey: string = `sessionId`

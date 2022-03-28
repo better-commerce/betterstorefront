@@ -7,6 +7,10 @@ export default async function createReturn(model: any) {
       url: RETURNS_ENDPOINT + '/create',
       method: 'post',
       data: JSON.stringify({ ...model }),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
     })
     return res
   } catch (error: any) {
