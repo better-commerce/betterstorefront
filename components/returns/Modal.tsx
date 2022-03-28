@@ -16,7 +16,6 @@ export default function ReturnModal({
   const [isOpen, setIsOpen] = useState(false)
   const [orderReturnData, setOrderReturnData] = useState(null)
 
-  console.log(orderReturnData)
   useEffect(() => {
     if (!isOpen && returnData.order.id) handleClose()
   }, [isOpen])
@@ -49,6 +48,7 @@ export default function ReturnModal({
   if (!isOpen) return null
 
   const validationSchema = Yup.object({
+    comment: Yup.string().min(5).required('Please leave a comment'),
     reasonsForReturn: Yup.string().required(),
     requiredActions: Yup.string().required(),
   })
@@ -66,17 +66,24 @@ export default function ReturnModal({
       as: 'select',
       name: 'requiredActions',
     },
+    {
+      placeholder: 'Comment',
+      label: 'Leave a comment',
+      as: 'text',
+      name: 'comment',
+    },
   ]
 
   let isLoading = isOpen && !orderReturnData
 
   const handleDataSubmit = (data: any) => {
-    handlePostReturn({
+    const isCreated = handlePostReturn({
       ...data,
       faultReason: (orderReturnData as any).faultReason,
       uploadFileUrls: (orderReturnData as any).uploadFileUrls,
     })
     setOrderReturnData(null)
+    if (isCreated) onClose()
   }
 
   return (
@@ -148,14 +155,13 @@ export default function ReturnModal({
                             handleBlur,
                           }: any) => (
                             <Form onSubmit={handleSubmit}>
-                              {console.log(errors)}
-                              {console.log(values)}
                               {!!orderReturnData &&
                                 config.map((item: any, idx: number) => {
-                                  const findItemInOrderData: any =
-                                    orderReturnData[item.name]
+                                  const findItemInOrderData: any = (
+                                    orderReturnData as any
+                                  )[item.name]
                                   const sortedItems: any =
-                                    findItemInOrderData.sort(
+                                    findItemInOrderData?.sort(
                                       (a: any, b: any) =>
                                         a.displayOrder - b.displayOrder
                                     )
@@ -164,23 +170,38 @@ export default function ReturnModal({
                                       <label className="text-gray-700 text-md font-semibold">
                                         {item.label}
                                       </label>
-                                      <select
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        name={item.name}
-                                        value={values[item.name]}
-                                        className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
-                                      >
-                                        {sortedItems.map(
-                                          (i: any, idx: number) => {
-                                            return (
-                                              <option value={i.itemValue}>
-                                                {i.itemText}
-                                              </option>
-                                            )
-                                          }
-                                        )}
-                                      </select>
+                                      {item.as === 'select' ? (
+                                        <select
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          name={item.name}
+                                          value={values[item.name]}
+                                          className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                                        >
+                                          {sortedItems.map(
+                                            (i: any, sortedIdx: number) => {
+                                              return (
+                                                <option
+                                                  key={sortedIdx + i.itemValue}
+                                                  value={i.itemValue}
+                                                >
+                                                  {i.itemText}
+                                                </option>
+                                              )
+                                            }
+                                          )}
+                                        </select>
+                                      ) : (
+                                        <textarea
+                                          className="text-gray-900 bg-gray-100 rounded border border-gray-400 leading-normal w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                                          placeholder={item.placeholder}
+                                          value={values[item.name]}
+                                          name={item.name}
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          required
+                                        />
+                                      )}
                                     </div>
                                   )
                                 })}

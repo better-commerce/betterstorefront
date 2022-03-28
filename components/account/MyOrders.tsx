@@ -24,7 +24,7 @@ import ReturnModal from '@components/returns/Modal'
 
 export default function MyOrders() {
   const [data, setData] = useState([])
-
+  const [productIdsInReturn, setProductIdsInReturn] = useState([''])
   const [returnData, setReturnData] = useState({ product: {}, order: {} })
   const { user, basketId, setCartItems, openCart } = useUI()
 
@@ -56,15 +56,25 @@ export default function MyOrders() {
           returnQtyRecd: 0,
           reasonForReturnId: data.reasonsForReturn,
           requiredActionId: data.requiredActions,
+          comment: data.comment,
         },
       ],
-      faultReason: data.faultReason,
-      uploadFileUrls: data.uploadFileUrls,
+      faultReason: data.reasonsForReturn,
+      uploadFileUrls: ['string'],
     }
     try {
-      const { data }: any = await axios.post(NEXT_CREATE_RETURN_DATA, { model })
-      console.log(data)
+      const responseData: any = await axios.post(NEXT_CREATE_RETURN_DATA, {
+        model,
+      })
+      setProductIdsInReturn([
+        ...productIdsInReturn,
+        ...responseData.data.response.result.lineItems.map(
+          (item: any) => item.productId
+        ),
+      ])
+      return true
     } catch (error) {
+      alert('Woops! Could not create a return')
       console.log(error)
     }
   }
@@ -134,7 +144,6 @@ export default function MyOrders() {
                       {new Date(order.orderDate).toLocaleDateString()}
                     </time>
                   </h3>
-                  {console.log(order)}
                   <div className="bg-gray-50 px-4 py-8 sm:rounded-lg sm:p-8 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-10">
                     <dl className="divide-y divide-gray-200 space-y-6 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-5 md:gap-x-10 w-full lg:flex-none lg:gap-x-10">
                       <div className="flex justify-between md:block">
@@ -216,19 +225,32 @@ export default function MyOrders() {
                                     {GENERAL_ADD_TO_BASKET}
                                   </button>
                                 </div>
-                                <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
-                                  <button
-                                    onClick={() =>
-                                      handleCreateReturn(product, order)
-                                    }
-                                    type="button"
-                                    className="text-indigo-600 hover:text-indigo-500"
-                                  >
-                                    {product.shippedQty < product.qty
-                                      ? 'Cancel'
-                                      : GENERAL_CREATE_RETURN}
-                                  </button>
-                                </div>
+                                {productIdsInReturn.includes(
+                                  product.productId
+                                ) ? (
+                                  <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
+                                    <button
+                                      type="button"
+                                      className="text-indigo-600 hover:text-indigo-500"
+                                    >
+                                      Return is created
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
+                                    <button
+                                      onClick={() =>
+                                        handleCreateReturn(product, order)
+                                      }
+                                      type="button"
+                                      className="text-indigo-600 hover:text-indigo-500"
+                                    >
+                                      {product.shippedQty < product.qty
+                                        ? 'Cancel'
+                                        : GENERAL_CREATE_RETURN}
+                                    </button>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
