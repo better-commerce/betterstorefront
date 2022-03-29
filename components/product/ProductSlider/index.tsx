@@ -96,7 +96,7 @@ const ProductSlider: FC<Props> = ({ config }) => {
                 role="list"
                 className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8"
               >
-                {config.products?.map((product: any) => (
+                {config?.products?.map((product?: any) => (
                   <SwiperSlide className="px-5" key={product?.slug}>
                     <Link href={product?.slug}>
                       <li
