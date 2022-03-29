@@ -30,14 +30,14 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
         {banners.map((banner: BannerProps, idx: number) => {
           return (
             <SwiperSlide key={idx}>
-              <Link href={banner.link || '#'}>
+              <Link href={banner?.link || '#'}>
                 <div className='image-container'>
-                <Image
-                  priority 
-                  src={banner.url} 
-                  alt={banner.alt}
-                  layout="fill"                   
-                  className='sm:max-h-screen sm:min-h-screen image'></Image>
+                  <Image
+                    priority
+                    src={banner?.url}
+                    alt={banner?.alt}
+                    layout="fill"
+                    className='sm:max-h-screen sm:min-h-screen image'></Image>
                 </div>
               </Link>
             </SwiperSlide>

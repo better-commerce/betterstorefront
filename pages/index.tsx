@@ -39,27 +39,27 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
 
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
-      id: slugs.id,
-      name: slugs.name,
-      metaTitle: slugs.metaTitle,
-      MetaKeywords: slugs.metaKeywords,
-      MetaDescription: slugs.metaDescription,
-      Slug: slugs.slug,
-      Title: slugs.title,
-      ViewType: slugs.viewType,
+      id: slugs?.id,
+      name: slugs?.name,
+      metaTitle: slugs?.metaTitle,
+      MetaKeywords: slugs?.metaKeywords,
+      MetaDescription: slugs?.metaDescription,
+      Slug: slugs?.slug,
+      Title: slugs?.title,
+      ViewType: slugs?.viewType,
     }),
     entityName: PAGE_TYPE,
-    pageTitle: slugs.title,
+    pageTitle: slugs?.title,
     entityType: 'Page',
-    entityId: slugs.id,
+    entityId: slugs?.id,
     eventType: 'PageViewed',
   })
 
   return (
     <>
-      <Hero banners={slugs.components[0].images} />
+      <Hero banners={slugs?.components[0]?.images} />
       <ProductSlider
-        config={slugs.components.find((i: any) => i.componentType === 52)}
+        config={slugs?.components?.find((i?: any) => i.componentType === 52)}
       />
     </>
   )
