@@ -38,3 +38,7 @@ framework/bettercommerce/locales.json
 # vercel
 .vercel
 yarn.lock
+
+
+#tailwind screenshots and templates
+tw.ecommerce
