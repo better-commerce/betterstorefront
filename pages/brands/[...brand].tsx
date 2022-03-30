@@ -226,9 +226,9 @@ function BrandDetailPage({
       page: state.currentPage,
       pageSize: 0,
       promoCode: null,
-      resultCount: data.products.total,
-      sortBy: state.sortBy,
-      sortOrder: state.sortOrder,
+      resultCount: data?.products?.total,
+      sortBy: state?.sortBy,
+      sortOrder: state?.sortOrder,
     }
     setEntities({
       [KEYS_MAP.entityId]: '',
