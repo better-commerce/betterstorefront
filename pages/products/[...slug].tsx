@@ -12,7 +12,9 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ slug: string }>) {
-  const productPromise = commerce.getProduct({ query: params!.slug[0] })
+  const productPromise = commerce.getProduct({
+    query: params!.slug[params!.slug.length - 1],
+  })
   const product = await productPromise
   return {
     props: {

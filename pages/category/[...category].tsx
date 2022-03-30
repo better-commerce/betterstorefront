@@ -12,7 +12,12 @@ import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER, RESULTS } from '@components/utils/textVariables'
+import {
+  ALL_CATEGORY,
+  BAD_URL_TEXT,
+  IMG_PLACEHOLDER,
+  RESULTS,
+} from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
 // Import Swiper styles
 import 'swiper/css'
@@ -25,7 +30,11 @@ const PAGE_TYPE = PAGE_TYPES.Category
 
 export async function getStaticProps(context: any) {
   const slugName = Object.keys(context.params)[0]
+  //category
+  //category/jackets/blazers
+  console.log(slugName)
   const slug = slugName + '/' + context.params[slugName].join('/')
+  console.log(slug)
   const category = await getCategoryBySlug(slug)
   if (category) {
     const categoryProducts = await getCategoryProducts(category.id)
@@ -284,8 +293,8 @@ function CategoryPage({ category, products }: any) {
                 <SwiperSlide key={idx}>
                   <Link href={image.link || '#'}>
                     <Image
-                      layout='fixed'
-                      width={1920} 
+                      layout="fixed"
+                      width={1920}
                       height={460}
                       src={image.url || IMG_PLACEHOLDER}
                       alt={category.name}
@@ -304,7 +313,7 @@ function CategoryPage({ category, products }: any) {
           <h2>{category.description}</h2>
           {!!products && (
             <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
-              {products.total}{' '}{RESULTS} 
+              {products.total} {RESULTS}
             </h1>
           )}
         </div>
@@ -316,13 +325,13 @@ function CategoryPage({ category, products }: any) {
                   <Link href={'/' + subcateg.link} key={idx}>
                     <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
                       <Image
-                          layout='fixed'
-                          width={80}
-                          height={80}
-                          className="h-8 w-8 sm:h-20 sm:w-20 rounded-full image"
-                          src={ subcateg.image || IMG_PLACEHOLDER }
-                          alt={subcateg.name}
-                        ></Image>
+                        layout="fixed"
+                        width={80}
+                        height={80}
+                        className="h-8 w-8 sm:h-20 sm:w-20 rounded-full image"
+                        src={subcateg.image || IMG_PLACEHOLDER}
+                        alt={subcateg.name}
+                      ></Image>
                       <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
                         {subcateg.name}
                       </h4>

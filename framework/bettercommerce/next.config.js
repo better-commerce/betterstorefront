@@ -118,7 +118,26 @@ module.exports = {
     const keywords = await getKeywords()
     return keywords
   },
-
+  async rewrites() {
+    return [
+      {
+        //brand
+        source: '/:path/b',
+        destination: '/brands/:path',
+      },
+      {
+        //plp
+        source: '/:path*/l',
+        destination: '/category/:path*',
+      },
+      {
+        //pdp
+        // dior/sauvage/eau-de-parfum-spray/p/40251
+        source: '/:path*/p/:id*',
+        destination: '/products/:path*',
+      },
+    ]
+  },
   i18n: {
     ...locales,
     localeDetection: false,
