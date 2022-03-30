@@ -407,11 +407,11 @@ export default function ProductView({
                             {image.image ? (
                               <div className='image-container'>
                                 <Image
-                                  src={`${image.image}&w=300&q=100` || IMG_PLACEHOLDER}                                  
+                                  src={`${image.image}` || IMG_PLACEHOLDER}
                                   alt={image.name}
                                   className="w-full h-full sm:h-44 object-center object-cover image"
                                   layout='fill'
-                                ></Image>  
+                                ></Image>
                               </div>
                             ) : (
                               <PlayIcon className="h-full w-full object-center object-cover" />
@@ -430,12 +430,12 @@ export default function ProductView({
                     {image.image ? (
                       <div className='image-container'>
                         <Image
-                          src={`${image.image}&w=1000&q=100` || IMG_PLACEHOLDER}
+                          src={`${image.image}` || IMG_PLACEHOLDER}
                           alt={image.name}
                           className="w-full h-full object-center object-cover image rounded-lg"
                           layout='fill'
-                        ></Image>  
-                      </div>                     
+                        ></Image>
+                      </div>
                     ) : (
                       <iframe
                         width="560"
