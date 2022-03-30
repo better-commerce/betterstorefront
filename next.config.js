@@ -11,7 +11,8 @@ const isBetterCommerce = provider === 'bettercommerce'
 module.exports = withCommerceConfig({
   commerce,
   images: {
-    domains: ['liveocxcdn.azureedge.net'],
+    domains: ['liveocxcdn.azureedge.net', 'res.cloudinary.com', '99yrs.co.in'],
+    // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
   i18n: {
     locales: ['en-US', 'es'],
@@ -19,7 +20,7 @@ module.exports = withCommerceConfig({
   },
   rewrites() {
     return [
-      (isBC ) && {
+      (isBC) && {
         source: '/checkout',
         destination: '/api/checkout',
       },
@@ -31,7 +32,7 @@ module.exports = withCommerceConfig({
       },
       // For Vendure, rewrite the local api url to the remote (external) api url. This is required
       // to make the session cookies work.
-    
+
     ].filter(Boolean)
   },
 })
