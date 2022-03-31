@@ -7,6 +7,7 @@ export default async function getAllCategories() {
       url: CATEGORY_ENDPOINT,
       method: 'get',
     })
+    console.log(response)
     return response.result
   } catch (error: any) {
     throw new Error(error)
