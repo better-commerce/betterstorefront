@@ -87,6 +87,7 @@ const fetcher = async ({
   const newConfig = {
     Currency: store.get('Currency') || 'GBP',
     Language: store.get('Language') || 'en',
+    Country: store.get('Country') || 'GB',
   }
   const config: any = {
     method: method,
