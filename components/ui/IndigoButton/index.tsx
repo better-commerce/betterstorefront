@@ -22,7 +22,7 @@ const DefaultButton: FC<Props> = ({
   className = '',
   title = 'Add to bag',
   buttonType = 'cart',
-  action = () => {},
+  action = () => { },
   colorScheme = DEFAULT_COLOR_SCHEME,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -32,12 +32,12 @@ const DefaultButton: FC<Props> = ({
   const handleAction = () => {
     setIsLoading(true)
     if (buttonType === 'cart') {
-      action().then(() => {
+      action()?.then(() => {
         setIsLoading(false)
         openCart()
       })
     } else
-      action().then(() => {
+      action()?.then(() => {
         setIsLoading(false)
       })
   }
