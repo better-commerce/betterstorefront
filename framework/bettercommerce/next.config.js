@@ -126,9 +126,19 @@ module.exports = {
         destination: '/brands/:path',
       },
       {
-        //plp
+        //collection plp
         source: '/:path*/l',
+        destination: '/collection/:path*',
+      },
+      {
+        //category plp
+        source: '/:path*/c',
         destination: '/category/:path*',
+      },
+      {
+        //lookbook plp
+        source: '/:path*/lb',
+        destination: '/lookbook/:path*',
       },
       {
         //pdp
