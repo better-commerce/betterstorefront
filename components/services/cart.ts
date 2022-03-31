@@ -67,25 +67,25 @@ export default function cartHandler() {
           stockCode: data?.product?.stockCode,
         }),
         basketItems: JSON.stringify(
-          response.data.lineItems.map((obj: any) => {
+          response?.data?.lineItems?.map((obj: any) => {
             return {
               basketId,
-              id: obj.id,
-              img: obj.image,
-              name: obj.name,
-              price: obj.price?.raw?.withTax,
-              qty: obj.qty,
-              stockCode: obj.stockCode,
-              tax: obj.price?.raw?.tax,
+              id: obj?.id,
+              img: obj?.image,
+              name: obj?.name,
+              price: obj?.price?.raw?.withTax,
+              qty: obj?.qty,
+              stockCode: obj?.stockCode,
+              tax: obj?.price?.raw?.tax,
             }
           })
         ),
-        basketItemCount: response.data?.lineItems?.length || 0,
-        basketTotal: response.data.grandTotal?.raw?.withTax,
-        entityId: data.product?.recordId,
+        basketItemCount: response?.data?.lineItems?.length || 0,
+        basketTotal: response?.data?.grandTotal?.raw?.withTax,
+        entityId: data?.product?.recordId,
         entityType: 'product',
         eventType: BasketItemAdded,
-        entityName: data.product?.name,
+        entityName: data?.product?.name,
       }
 
       if (qty && qty > 0) {
