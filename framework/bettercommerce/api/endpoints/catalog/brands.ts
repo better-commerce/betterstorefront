@@ -9,6 +9,7 @@ export default async function getBrands(query: any) {
       }&sortOrder=${query.sortOrder || 'asc'}&brandIds=${query.brandIds || ''}`,
       method: 'get',
     })
+
     return response
   } catch (error) {
     return { hasError: true, error }
