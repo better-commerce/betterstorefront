@@ -12,7 +12,6 @@ export default async function handler(req: any, res: any) {
       receipt_email: user_email,
       description: `orderNo: ${orderNo}`,
     })
-    console.log(paymentIntent)
     return paymentIntent
   }
 
