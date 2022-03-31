@@ -96,7 +96,7 @@ const getMicrosites = () => {
     })
     return {
       locales: data.result.map((i) => i.defaultLangCulture),
-      defaultLocale: 'en-US',
+      defaultLocale: 'en-GB',
     }
   }
   return microSitesHandler()
