@@ -79,7 +79,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
     )
     document.body.appendChild(addScript)
-    ;(window as any).googleTranslateElementInit = googleTranslateElementInit
+      ; (window as any).googleTranslateElementInit = googleTranslateElementInit
   }, [])
 
   const fetchAppConfig = async () => {
@@ -90,6 +90,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       setAppConfig(response.result)
       Cookies.set('Currency', response.defaultCurrency)
       Cookies.set('Language', response.defaultLanguage)
+      Cookies.set('Country', response.defaultCountry)
     } catch (error) {
       console.log(error, 'error')
     }

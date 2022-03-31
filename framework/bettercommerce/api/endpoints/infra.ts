@@ -19,6 +19,9 @@ export default function useInfra(req: any) {
       const currencyCookie =
         req.cookies.Currency === 'undefined' ? '' : req.cookies.Currency
 
+      const countryCookie =
+        req.cookies.Country === 'undefined' ? '' : req.cookies.Country
+
       const defaultCurrency =
         currencyCookie ||
         response.result.configSettings
@@ -27,6 +30,15 @@ export default function useInfra(req: any) {
             (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
           ).value ||
         'GBP'
+
+      const defaultCountry =
+        countryCookie ||
+        response.result.configSettings
+          .find((setting: any) => setting.configType === 'RegionalSettings')
+          .configKeys.find(
+            (item: any) => item.key === 'RegionalSettings.DefaultCountry'
+          ).value ||
+        'US'
 
       const defaultLanguage =
         languageCookie ||
@@ -39,15 +51,18 @@ export default function useInfra(req: any) {
 
       console.log(defaultCurrency)
       console.log(defaultLanguage)
+      console.log(defaultCountry)
       if (setHeader) {
         setGeneralParams('Currency', defaultCurrency)
         setGeneralParams('Language', defaultLanguage)
+        setGeneralParams('Country', defaultCountry)
       }
 
       return {
         result: response.result,
         defaultCurrency,
         defaultLanguage,
+        defaultCountry,
       }
     } catch (error: any) {
       console.log(error)

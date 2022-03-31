@@ -100,7 +100,7 @@ function Cart({ cart }: any) {
       }
       if (type === 'delete') {
         data.qty = 0;
-        userCart.lineItems=userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)        
+        userCart.lineItems = userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)
       }
       try {
         const item = await addToCart(data)
@@ -136,13 +136,13 @@ function Cart({ cart }: any) {
                   <li key={productIdx} className="flex py-4 sm:py-10">
                     <div className="flex-shrink-0">
                       <Image
-                          layout='fixed'
-                          width={160}
-                          height={160}
-                          src={`${product.image}&w=200&q=100`}
-                          alt={product.name}
-                          className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48 image"
-                        ></Image>  
+                        layout='fixed'
+                        width={160}
+                        height={160}
+                        src={`${product.image}`}
+                        alt={product.name}
+                        className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48 image"
+                      ></Image>
                       {/* <img
                         src={product.image}
                         alt={product.name}
@@ -252,9 +252,9 @@ function Cart({ cart }: any) {
                         </div>
                       </div>
                       <div className='flex flex-col sm:hidden block'>
-                         <p className="pt-3 sm:text-sm text-xs font-bold text-gray-700">
-                            {product.shippingPlan?.shippingSpeed}
-                          </p>
+                        <p className="pt-3 sm:text-sm text-xs font-bold text-gray-700">
+                          {product.shippingPlan?.shippingSpeed}
+                        </p>
                       </div>
                     </div>
                   </li>

@@ -54,59 +54,59 @@ const initialState = {
 
 type Action =
   | {
-      type: 'OPEN_SIDEBAR'
-    }
+    type: 'OPEN_SIDEBAR'
+  }
   | {
-      type: 'CLOSE_SIDEBAR'
-    }
+    type: 'CLOSE_SIDEBAR'
+  }
   | {
-      type: 'OPEN_DROPDOWN'
-    }
+    type: 'OPEN_DROPDOWN'
+  }
   | {
-      type: 'CLOSE_DROPDOWN'
-    }
+    type: 'CLOSE_DROPDOWN'
+  }
   | {
-      type: 'OPEN_MODAL'
-    }
+    type: 'OPEN_MODAL'
+  }
   | {
-      type: 'OPEN_NOTIFY_USER_POPUP'
-      payload: string
-    }
+    type: 'OPEN_NOTIFY_USER_POPUP'
+    payload: string
+  }
   | {
-      type: 'CLOSE_NOTIFY_USER_POPUP'
-    }
+    type: 'CLOSE_NOTIFY_USER_POPUP'
+  }
   | {
-      type: 'CLOSE_MODAL'
-    }
+    type: 'CLOSE_MODAL'
+  }
   | {
-      type: 'SET_MODAL_VIEW'
-      view: MODAL_VIEWS
-    }
+    type: 'SET_MODAL_VIEW'
+    view: MODAL_VIEWS
+  }
   | {
-      type: 'SET_SIDEBAR_VIEW'
-      view: SIDEBAR_VIEWS
-    }
+    type: 'SET_SIDEBAR_VIEW'
+    view: SIDEBAR_VIEWS
+  }
   | {
-      type: 'SET_USER_AVATAR'
-      value: string
-    }
+    type: 'SET_USER_AVATAR'
+    value: string
+  }
   | {
-      type: 'ADD_TO_WISHLIST'
-      payload: any
-    }
+    type: 'ADD_TO_WISHLIST'
+    payload: any
+  }
   | {
-      type: 'ADD_TO_CART'
-      payload: any
-    }
+    type: 'ADD_TO_CART'
+    payload: any
+  }
   | {
-      type: 'REMOVE_FROM_CART'
-      payload: any
-    }
+    type: 'REMOVE_FROM_CART'
+    payload: any
+  }
   | { type: 'SET_CART_ITEMS'; payload: any }
   | {
-      type: 'SET_USER'
-      payload: any
-    }
+    type: 'SET_USER'
+    payload: any
+  }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -397,9 +397,9 @@ export const UIProvider: FC = (props) => {
   const setCartItems = useCallback(
     (payload: any) => {
       const newCartDataClone: any = { ...payload }
-      newCartDataClone.lineItems.forEach((element: any, idx: number) => {
-        newCartDataClone.lineItems.forEach((i: any) => {
-          if (element.parentProductId === i.productId) {
+      newCartDataClone?.lineItems?.forEach((element: any, idx: number) => {
+        newCartDataClone?.lineItems?.forEach((i: any) => {
+          if (element?.parentProductId === i.productId) {
             i.children = i.children ? [...i.children, element] : [element]
             newCartDataClone.lineItems.splice(idx, 1)
           }

@@ -3,14 +3,14 @@ import Image from 'next/image'
 import { TrashIcon } from '@heroicons/react/solid'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '@components/cart/PromotionInput'
-import { 
-  GENERAL_CONFIRM_ORDER, 
-  GENERAL_DISCOUNT, 
-  GENERAL_ORDER_SUMMARY, 
-  GENERAL_SHIPPING, 
-  GENERAL_TOTAL, 
-  ITEMS_IN_YOUR_CART, 
-  SUBTOTAL_INCLUDING_TAX 
+import {
+  GENERAL_CONFIRM_ORDER,
+  GENERAL_DISCOUNT,
+  GENERAL_ORDER_SUMMARY,
+  GENERAL_SHIPPING,
+  GENERAL_TOTAL,
+  ITEMS_IN_YOUR_CART,
+  SUBTOTAL_INCLUDING_TAX
 } from '@components/utils/textVariables'
 
 export default function Summary({
@@ -33,7 +33,7 @@ export default function Summary({
                   layout='fixed'
                   width={80}
                   height={80}
-                  src={`${product.image}&w=120&q=100`}
+                  src={`${product.image}`}
                   alt={product.name}
                   className="w-20 rounded-md"
                 ></Image>
