@@ -163,13 +163,13 @@ const CartSidebarView: FC = () => {
                             <li key={product.id} className="">
                               <div className="py-6 flex">
                                 <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-                                  <Image 
-                                      width={100}
-                                      height={100}
-                                      layout='fixed'
-                                      src={`${product.image}&w=150&q=100`}
-                                      alt={product.name}
-                                      className="w-full h-full object-center object-cover"
+                                  <Image
+                                    width={100}
+                                    height={100}
+                                    layout='fixed'
+                                    src={`${product.image}`}
+                                    alt={product.name}
+                                    className="w-full h-full object-center object-cover"
                                   ></Image>
                                   {/* <img
                                     src={product.image}
@@ -232,14 +232,14 @@ const CartSidebarView: FC = () => {
                                     <div className="flex" key={idx}>
                                       <div className="ml-10 flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
                                         <div className='image-container'>
-                                            <Image
-                                              layout='fill'
-                                              src={child.image}
-                                              alt={child.name}
-                                              className="w-full h-full object-center object-cover image"
-                                            ></Image>
+                                          <Image
+                                            layout='fill'
+                                            src={child.image}
+                                            alt={child.name}
+                                            className="w-full h-full object-center object-cover image"
+                                          ></Image>
                                         </div>
-                                       {/* <img
+                                        {/* <img
                                           src={child.image}
                                           alt={child.name}
                                           className="w-full h-full object-center object-cover"
