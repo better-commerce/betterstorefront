@@ -11,15 +11,31 @@ export async function getStaticProps({
   locale,
   locales,
   preview,
-}: GetStaticPropsContext<{ slug: string }>) {
-  const productPromise = commerce.getProduct({
-    query: params!.slug[params!.slug.length - 1],
-  })
-  const product = await productPromise
+  ...rest
+}: GetStaticPropsContext<{ slug: any }>) {
+  // const productPromise = commerce.getProduct({
+  //   query: 'products/' + params!.slug[params!.slug.length - 1],
+  // })
+
+  //our format is /products/:path*/:id* which means path will be all the items until the last item which is the id
+  //everytime you change next.config.js rewrites you have to adapt these functions to accomodate the new format
+  const productIdFromSlug = params!.slug[params!.slug.length - 1]
+
+  const productSlug = params!.slug.slice(0, params!.slug.length - 1)
+
+  const rewrittenFormat = productSlug.join('/') + '/p/' + productIdFromSlug
+
+  const productPromise = () =>
+    commerce.getProduct({
+      query: rewrittenFormat,
+    })
+  const product = await productPromise()
   return {
     props: {
       data: product,
-      slug: params!.slug[0],
+      //we need to return the updated slug format
+      // slug: params!.slug[0],
+      slug: rewrittenFormat,
     },
     revalidate: 200,
   }

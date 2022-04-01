@@ -144,7 +144,7 @@ module.exports = {
         //pdp
         // dior/sauvage/eau-de-parfum-spray/p/40251
         source: '/:path*/p/:id*',
-        destination: '/products/:path*',
+        destination: '/products/:path*/:id*',
       },
     ]
   },
