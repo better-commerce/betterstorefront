@@ -318,9 +318,24 @@ function CategoryPage({ category, products }: any) {
           )}
         </div>
         <div className="sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12">
+          <div className='sm:col-span-12 py-2'>
+            <div className="grid grid-cols-3 sm:grid-cols-5 text-left">
+              {category.subCategories.map((subcateg: any, idx: number) => {
+                return (
+                  <Link href={'/' + subcateg.link} key={idx}>
+                    <div className="flex flex-col px-2 text-center cursor-pointer">
+                      <h4 className="text-gray-800 text-center font-normal sm:text-sm text-xs underline">
+                        {subcateg.name}
+                      </h4>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
           <div className="sm:col-span-12 border-t border-gray-200 py-2">
             <div className="flex w-full text-center align-center justify-center">
-              {category.subCategories.map((subcateg: any, idx: number) => {
+              {category.subCategories.slice(0, 5).map((subcateg: any, idx: number) => {
                 return (
                   <Link href={'/' + subcateg.link} key={idx}>
                     <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
