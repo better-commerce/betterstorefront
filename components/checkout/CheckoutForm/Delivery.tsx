@@ -15,7 +15,7 @@ import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import axios from 'axios'
 import CncList from './CncList'
 import {
-  ADDRESS_OF_YOUR_CHOICE, 
+  ADDRESS_OF_YOUR_CHOICE,
   IN_STORE_OR_COLLECT_PLUS,
   GENERAL_SELECT_COUNTRY,
   GENERAL_EDIT,
@@ -128,7 +128,7 @@ export default function Delivery({
 
       if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
       else
-        setSelectedCountry({ name: 'United Kingdon', twoLetterIsoCode: 'GB' })
+        setSelectedCountry({ name: 'United Kingdom', twoLetterIsoCode: 'GB' })
     }
     if (Object.keys(appConfig).length) getDefaultCountry()
   }, [appConfig])
@@ -198,7 +198,7 @@ export default function Delivery({
         <>
           <div className="py-5">
             <h1 className="text-lg font-semibold text-gray-900">
-            {GENERAL_SELECT_COUNTRY}
+              {GENERAL_SELECT_COUNTRY}
             </h1>
 
             {isSelected ? (
@@ -212,7 +212,7 @@ export default function Delivery({
                     className="btn text-indigo-500 font-xs"
                     type="button"
                   >
-                      {GENERAL_EDIT}
+                    {GENERAL_EDIT}
                   </button>
                 </div>
               </div>
@@ -321,9 +321,8 @@ export default function Delivery({
                   <div key={idx} className="flex flex-col">
                     <li
                       onClick={() => handleShippingMethod(item)}
-                      className={`${
-                        shippingMethod.id === item.id ? 'border-indigo-600' : ''
-                      }  pointer border-t border py-5 px-5 flex justify-between flex-row`}
+                      className={`${shippingMethod.id === item.id ? 'border-indigo-600' : ''
+                        }  pointer border-t border py-5 px-5 flex justify-between flex-row`}
                     >
                       <div>
                         <h3 className="font-bold">{item.displayName}</h3>
