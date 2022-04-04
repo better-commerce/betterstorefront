@@ -95,6 +95,7 @@ export default function ProductView({
 
   const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
+    console.log(slug)
     const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
@@ -405,12 +406,12 @@ export default function ProductView({
                           <span className="sr-only">{image.name}</span>
                           <span className="absolute inset-0 rounded-md overflow-hidden">
                             {image.image ? (
-                              <div className='image-container'>
+                              <div className="image-container">
                                 <Image
                                   src={`${image.image}` || IMG_PLACEHOLDER}
                                   alt={image.name}
                                   className="w-full h-full sm:h-44 object-center object-cover image"
-                                  layout='fill'
+                                  layout="fill"
                                 ></Image>
                               </div>
                             ) : (
@@ -428,12 +429,12 @@ export default function ProductView({
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
-                      <div className='image-container'>
+                      <div className="image-container">
                         <Image
                           src={`${image.image}` || IMG_PLACEHOLDER}
                           alt={image.name}
                           className="w-full h-full object-center object-cover image rounded-lg"
-                          layout='fill'
+                          layout="fill"
                         ></Image>
                       </div>
                     ) : (

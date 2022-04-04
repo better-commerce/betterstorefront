@@ -3,13 +3,12 @@ import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import Link from 'next/link'
 import Image from 'next/image'
-import { 
-  IMG_PLACEHOLDER, 
-  PRODUCTS_AVAILABLE, 
-  SHOP_BY_COLLECTION 
+import {
+  IMG_PLACEHOLDER,
+  PRODUCTS_AVAILABLE,
+  SHOP_BY_COLLECTION,
 } from '@components/utils/textVariables'
 export default function CollectionList(props: any) {
-  
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
       <section aria-labelledby="products-heading" className="mt-8">
@@ -26,26 +25,23 @@ export default function CollectionList(props: any) {
                 className="group"
               >
                 <div className="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3 bg-gray-100">
-                  <div className='image-container'>
-                        <Image 
-                            src={collection.mainImage || IMG_PLACEHOLDER }
-                            alt={collection.name}
-                            className="w-full h-full object-center object-cover group-hover:opacity-75 image"
-                            layout='fill'
-                        ></Image>  
-                      </div>
+                  <div className="image-container">
+                    <Image
+                      src={collection.mainImage || IMG_PLACEHOLDER}
+                      alt={collection.name}
+                      className="w-full h-full object-center object-cover group-hover:opacity-75 image"
+                      layout="fill"
+                    ></Image>
+                  </div>
                 </div>
-                <div className='flex-1'>
-                   <h1
-                    className="pt-2 text-gray-900 font-medium sm:text-xl text-md flex w-full"
-                  >
+                <div className="flex-1">
+                  <h1 className="pt-2 text-gray-900 font-medium sm:text-xl text-md flex w-full">
                     {collection.name}
                   </h1>
 
-                   <h4
-                    className="pt-1 text-gray-500 font-normal sm:text-sm text-xs w-full"
-                  >
-                    {collection.noOfRecords}{' '} <span className='italic'>{PRODUCTS_AVAILABLE}</span>
+                  <h4 className="pt-1 text-gray-500 font-normal sm:text-sm text-xs w-full">
+                    {collection.noOfRecords}{' '}
+                    <span className="italic">{PRODUCTS_AVAILABLE}</span>
                   </h4>
                 </div>
               </a>
@@ -68,7 +64,7 @@ export async function getStaticProps({
   const collectionData = await getCollections()
   return {
     props: {
-      data: collectionData,
+      data: collectionData || [],
     },
     revalidate: 200,
   }

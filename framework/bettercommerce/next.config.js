@@ -96,7 +96,7 @@ const getMicrosites = () => {
     })
     return {
       locales: data.result.map((i) => i.defaultLangCulture),
-      defaultLocale: 'en-US',
+      defaultLocale: 'en-GB',
     }
   }
   return microSitesHandler()
@@ -118,7 +118,36 @@ module.exports = {
     const keywords = await getKeywords()
     return keywords
   },
-
+  async rewrites() {
+    return [
+      {
+        //brand
+        source: '/:path/b',
+        destination: '/brands/:path',
+      },
+      {
+        //collection plp
+        source: '/:path*/l',
+        destination: '/collection/:path*',
+      },
+      {
+        //category plp
+        source: '/:path*/c',
+        destination: '/category/:path*',
+      },
+      {
+        //lookbook plp
+        source: '/:path*/lb',
+        destination: '/lookbook/:path*',
+      },
+      {
+        //pdp
+        // dior/sauvage/eau-de-parfum-spray/p/40251
+        source: '/:path*/p/:id*',
+        destination: '/products/:path*/:id*',
+      },
+    ]
+  },
   i18n: {
     ...locales,
     localeDetection: false,

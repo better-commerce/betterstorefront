@@ -20,6 +20,7 @@ const COMPONENTS_MAP: any = {
 }
 
 function BrandPage({ brandDetails }: any) {
+  console.log(brandDetails)
   const widgetsConfig = JSON.parse(brandDetails.result.widgetsConfig).sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
@@ -45,7 +46,8 @@ const PAGE_TYPE = PAGE_TYPES['Brand']
 export default withDataLayer(BrandPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const slug: any = context?.query?.pages[0] || ''
+  let slug: any = context?.query?.pages[0] || ''
+  if (!slug.includes('brands/')) slug = 'brands/' + slug
   const response = await getBrandBySlug(slug)
   return {
     props: { query: context.query, brandDetails: response }, // will be passed to the page component as props

@@ -15,7 +15,8 @@ const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 const dataNormalizr = (data: any = []) => {
   return data.reduce((acc: any, item: any) => {
     let ref = acc.findIndex(
-      (i: any) => i.title.toLowerCase() === item.manufacturerName.charAt(0).toLowerCase()
+      (i: any) =>
+        i.title.toLowerCase() === item.manufacturerName.charAt(0).toLowerCase()
     )
     if (ref >= 0) {
       acc[ref].results = [...acc[ref].results, item]
@@ -166,8 +167,8 @@ export async function getStaticProps({
   const response = await getBrands({})
   return {
     props: {
-      brands: response.result,
-      snippets: response.snippets,
+      brands: response.result || [],
+      snippets: response.snippets || [],
     },
     revalidate: 200,
   }
