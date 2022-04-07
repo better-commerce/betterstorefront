@@ -304,6 +304,10 @@
     border-color: transparent;
   }
 
+  .mobile-border-lime {
+    border-color: #3e4509;
+  }
+
   .mobile-banner {
     height: auto !important;
     min-height: 1px !important;

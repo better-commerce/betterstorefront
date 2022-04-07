@@ -170,7 +170,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                           >
                             <a
                               onClick={() => setOpen(false)}
-                              className="flex flex-col whitespace-nowrap py-4 px-4 text-white border-b border-lime-light uppercase text-sm font-medium"
+                              className="flex flex-col whitespace-nowrap py-4 px-4 text-white border-b mobile-border-lime uppercase text-sm font-medium"
                               href={item.hyperlink}
                             >
                               {item.caption}
@@ -184,9 +184,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                 className={({ selected }) =>
                                   classNames(
                                     selected
-                                      ? 'text-lime-300'
-                                      : 'text-lime-400',
-                                    'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium'
+                                      ? 'text-white'
+                                      : 'text-white',
+                                    'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b mobile-border-lime text-sm font-medium'
                                   )
                                 }
                               >
@@ -212,7 +212,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                   className="grid grid-cols-1 gap-y-0 gap-x-0 lg:gap-x-0"
                                                 >
                                                   <div>
-                                                    <p className="font-semibold capitalize text-xl text-gray-900 p-2">
+                                                    <p className="font-semibold capitalize text-xl text-white p-2">
                                                       {navBlock.boxTitle}
                                                     </p>
                                                     <div className="mt-1 border-t py-2 px-6 border-gray-100 pt-2 sm:grid sm:grid-cols-1 sm:gap-x-6">
@@ -227,7 +227,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                               key={
                                                                 navItem.caption
                                                               }
-                                                              className="flex my-1 border-b pb-2"
+                                                              className="flex my-1 border-b mobile-border-lime pb-2"
                                                             >
                                                               <Link
                                                                 href={`/${navItem.itemLink}`}
@@ -239,7 +239,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                                       false
                                                                     )
                                                                   }
-                                                                  className="hover:text-gray-800 text-sm"
+                                                                  className="hover:text-gray-200 text-white text-sm"
                                                                 >
                                                                   {
                                                                     navItem.caption
