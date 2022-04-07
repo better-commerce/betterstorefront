@@ -19,6 +19,7 @@ import {
   GENERAL_PAYMENT_METHOD,
   GENERAL_PRICE,
   GENERAL_QUANTITY,
+  GENERAL_REMOVE,
   GENERAL_SHIPPING,
   GENERAL_SHIPPING_ADDRESS,
   GENERAL_SHIPPING_METHOD,
@@ -26,6 +27,7 @@ import {
   GENERAL_THANK_YOU,
   GENERAL_TOTAL,
   GENERAL_YOUR_ORDER,
+  IMG_PLACEHOLDER,
   LOADING_YOUR_ORDERS,
   NO_ORDER_PROVIDED,
   SUBTOTAL_INCLUDING_TAX,
@@ -100,7 +102,7 @@ export default function OrderConfirmation() {
                 className="py-10 border-b border-gray-200 flex space-x-6"
               >
                 <img
-                  src={product.image}
+                  src={product.image || IMG_PLACEHOLDER}
                   alt={product.name}
                   className="flex-none w-20 h-20 object-center object-cover bg-gray-100 rounded-lg sm:w-40 sm:h-40"
                 />
@@ -137,6 +139,43 @@ export default function OrderConfirmation() {
                       </div>
                     </dl>
                   </div>
+                  {product.children?.map(
+                    (child: any, idx: number) => {
+                      return (
+                        <div
+                          className="flex"
+                          key={'child' + idx}
+                        >
+                          <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
+                            <img
+                              src={child.image || IMG_PLACEHOLDER}
+                              alt={child.name}
+                              className="w-full h-full object-center object-cover"
+                            />
+                          </div>
+                          <div className="flex flex-col ml-5 flex-col font-medium text-gray-900">
+                            {child.name}
+                            <p>
+                              <span className='block font-sm font-normal'>
+                                {child.customInfo1}
+                              </span>
+                              <span className='block font-sm font-normal'>
+                                {child.customInfo2}
+                              </span>
+                              <span className='block font-sm font-normal'>
+                                {child.customInfo3}
+                              </span>
+                            </p>
+                          </div>
+                          <div className='flex-1 flex justify-right'>
+                            <p className="ml-10">
+                              {child.price?.formatted?.withTax}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    }
+                  )}
                 </div>
               </div>
             ))}
