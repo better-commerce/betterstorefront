@@ -96,7 +96,7 @@ export default function OrderConfirmation() {
             </h2>
 
             <h3 className="sr-only">{GENERAL_ITEMS}</h3>
-            {order.items.map((product: any) => (
+            {order?.items?.map((product: any) => (
               <div
                 key={product.id}
                 className="py-10 border-b border-gray-200 flex space-x-6"
@@ -120,6 +120,17 @@ export default function OrderConfirmation() {
                       }}
                       className="mt-2 text-sm text-gray-500"
                     />
+                    <div>
+                      <span className='block font-sm font-normal'>
+                        {product?.customInfo1}
+                      </span>
+                      <span className='block font-sm font-normal'>
+                        {product?.customInfo2}
+                      </span>
+                      <span className='block font-sm font-normal'>
+                        {product?.customInfo3}
+                      </span>
+                    </div>
                   </div>
                   <div className="mt-6 flex-1 flex items-end">
                     <dl className="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6">
@@ -139,43 +150,6 @@ export default function OrderConfirmation() {
                       </div>
                     </dl>
                   </div>
-                  {product.children?.map(
-                    (child: any, idx: number) => {
-                      return (
-                        <div
-                          className="flex"
-                          key={'child' + idx}
-                        >
-                          <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
-                            <img
-                              src={child.image || IMG_PLACEHOLDER}
-                              alt={child.name}
-                              className="w-full h-full object-center object-cover"
-                            />
-                          </div>
-                          <div className="flex flex-col ml-5 flex-col font-medium text-gray-900">
-                            {child.name}
-                            <p>
-                              <span className='block font-sm font-normal'>
-                                {child.customInfo1}
-                              </span>
-                              <span className='block font-sm font-normal'>
-                                {child.customInfo2}
-                              </span>
-                              <span className='block font-sm font-normal'>
-                                {child.customInfo3}
-                              </span>
-                            </p>
-                          </div>
-                          <div className='flex-1 flex justify-right'>
-                            <p className="ml-10">
-                              {child.price?.formatted?.withTax}
-                            </p>
-                          </div>
-                        </div>
-                      )
-                    }
-                  )}
                 </div>
               </div>
             ))}
