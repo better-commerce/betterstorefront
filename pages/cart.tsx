@@ -172,68 +172,68 @@ function Cart({ cart }: any) {
                             <p className="mt-1 text-sm sm:font-medium font-bold text-gray-900">
                               {product.price?.formatted?.withTax}
                             </p>
-                            {product.children?.map(
-                              (child: any, idx: number) => {
-                                return (
-                                  <div
-                                    className="flex mt-10"
-                                    key={'child' + idx}
-                                  >
-                                    <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
-                                      <img
-                                        src={child.image || IMG_PLACEHOLDER}
-                                        alt={child.name}
-                                        className="w-full h-full object-center object-cover"
-                                      />
-                                    </div>
-                                    <div className="flex ml-5 justify-between font-medium text-gray-900">
-                                      <Link href={`/${child.slug}`}>
-                                        {child.name}
-                                      </Link>
-                                      <p>
-                                        <span className='block font-sm font-normal'>
-                                          {child.customInfo1}
-                                        </span>
-                                        <span className='block font-sm font-normal'>
-                                          {child.customInfo2}
-                                        </span>
-                                        <span className='block font-sm font-normal'>
-                                          {child.customInfo3}
-                                        </span>
-                                      </p>
-
-                                      <p className="ml-4">
-                                        {child.price?.formatted?.withTax}
-                                      </p>
-                                      {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
-                                    </div>
-                                    <div className="flex-1 flex items-center justify-end text-sm">
-                                      {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
-
-                                      <button
-                                        type="button"
-                                        onClick={() =>
-                                          handleItem(child, 'delete')
-                                        }
-                                        className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
-                                      >
-                                        <span className="sr-only">{GENERAL_REMOVE}</span>
-                                        <XIconSolid
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </button>
-                                    </div>
-                                  </div>
-                                )
-                              }
-                            )}
                           </div>
                           <p className="py-5 text-sm font-medium text-gray-900 sm:block hidden">
                             {product.shippingPlan?.shippingSpeed}
                           </p>
                         </div>
+                        {product.children?.map(
+                          (child: any, idx: number) => {
+                            return (
+                              <div
+                                className="flex"
+                                key={'child' + idx}
+                              >
+                                <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
+                                  <img
+                                    src={child.image || IMG_PLACEHOLDER}
+                                    alt={child.name}
+                                    className="w-full h-full object-center object-cover"
+                                  />
+                                </div>
+                                <div className="flex flex-col ml-5 flex-col font-medium text-gray-900">
+                                  <Link href={`/${child.slug}`}>
+                                    {child.name}
+                                  </Link>
+                                  <p>
+                                    <span className='block font-sm font-normal'>
+                                      {child.customInfo1}
+                                    </span>
+                                    <span className='block font-sm font-normal'>
+                                      {child.customInfo2}
+                                    </span>
+                                    <span className='block font-sm font-normal'>
+                                      {child.customInfo3}
+                                    </span>
+                                  </p>
+                                  {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
+                                </div>
+                                <div className='flex-1 flex justify-right'>
+                                  <p className="ml-10">
+                                    {child.price?.formatted?.withTax}
+                                  </p>
+                                </div>
+                                <div className="flex-1 flex items-center justify-end text-sm">
+                                  {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleItem(child, 'delete')
+                                    }
+                                    className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                                  >
+                                    <span className="sr-only">{GENERAL_REMOVE}</span>
+                                    <XIconSolid
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          }
+                        )}
                         <div className="mt-0 sm:mt-0 sm:pr-9 pl-2 pr-0">
                           <div className="border sm:px-4 px-2 text-gray-900 flex flex-row">
                             <MinusSmIcon
