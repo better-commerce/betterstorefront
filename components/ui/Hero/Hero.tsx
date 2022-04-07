@@ -37,7 +37,7 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
                     src={banner?.url}
                     alt={banner?.alt}
                     layout="fill"
-                    className='sm:max-h-screen sm:min-h-screen image'></Image>
+                    className='sm:max-h-screen sm:min-h-screen image mobile-banner'></Image>
                 </div>
               </Link>
             </SwiperSlide>

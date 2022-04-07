@@ -303,4 +303,9 @@
   .border-lime-light {
     border-color: transparent;
   }
+
+  .mobile-banner {
+    height: auto !important;
+    min-height: 1px !important;
+  }
 }
