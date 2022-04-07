@@ -177,63 +177,7 @@ function Cart({ cart }: any) {
                             {product.shippingPlan?.shippingSpeed}
                           </p>
                         </div>
-                        {product.children?.map(
-                          (child: any, idx: number) => {
-                            return (
-                              <div
-                                className="flex"
-                                key={'child' + idx}
-                              >
-                                <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
-                                  <img
-                                    src={child.image || IMG_PLACEHOLDER}
-                                    alt={child.name}
-                                    className="w-full h-full object-center object-cover"
-                                  />
-                                </div>
-                                <div className="flex flex-col ml-5 flex-col font-medium text-gray-900">
-                                  <Link href={`/${child.slug}`}>
-                                    {child.name}
-                                  </Link>
-                                  <p>
-                                    <span className='block font-sm font-normal'>
-                                      {child.customInfo1}
-                                    </span>
-                                    <span className='block font-sm font-normal'>
-                                      {child.customInfo2}
-                                    </span>
-                                    <span className='block font-sm font-normal'>
-                                      {child.customInfo3}
-                                    </span>
-                                  </p>
-                                  {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
-                                </div>
-                                <div className='flex-1 flex justify-right'>
-                                  <p className="ml-10">
-                                    {child.price?.formatted?.withTax}
-                                  </p>
-                                </div>
-                                <div className="flex-1 flex items-center justify-end text-sm">
-                                  {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      handleItem(child, 'delete')
-                                    }
-                                    className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
-                                  >
-                                    <span className="sr-only">{GENERAL_REMOVE}</span>
-                                    <XIconSolid
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                </div>
-                              </div>
-                            )
-                          }
-                        )}
                         <div className="mt-0 sm:mt-0 sm:pr-9 pl-2 pr-0">
                           <div className="border sm:px-4 px-2 text-gray-900 flex flex-row">
                             <MinusSmIcon
@@ -263,6 +207,63 @@ function Cart({ cart }: any) {
                           </button>
                         </div>
                       </div>
+                      {product.children?.map(
+                        (child: any, idx: number) => {
+                          return (
+                            <div
+                              className="flex"
+                              key={'child' + idx}
+                            >
+                              <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
+                                <img
+                                  src={child.image || IMG_PLACEHOLDER}
+                                  alt={child.name}
+                                  className="w-full h-full object-center object-cover"
+                                />
+                              </div>
+                              <div className="flex flex-col ml-5 flex-col font-medium text-gray-900">
+                                <Link href={`/${child.slug}`}>
+                                  {child.name}
+                                </Link>
+                                <p>
+                                  <span className='block font-sm font-normal'>
+                                    {child.customInfo1}
+                                  </span>
+                                  <span className='block font-sm font-normal'>
+                                    {child.customInfo2}
+                                  </span>
+                                  <span className='block font-sm font-normal'>
+                                    {child.customInfo3}
+                                  </span>
+                                </p>
+                                {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
+                              </div>
+                              <div className='flex-1 flex justify-right'>
+                                <p className="ml-10">
+                                  {child.price?.formatted?.withTax}
+                                </p>
+                              </div>
+                              <div className="flex-1 flex items-center justify-end text-sm">
+                                {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
+
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleItem(child, 'delete')
+                                  }
+                                  className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                                >
+                                  <span className="sr-only">{GENERAL_REMOVE}</span>
+                                  <XIconSolid
+                                    className="h-5 w-5"
+                                    aria-hidden="true"
+                                  />
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        }
+                      )}
                       <div className='flex flex-col sm:hidden block'>
                         <p className="pt-3 sm:text-sm text-xs font-bold text-gray-700">
                           {product.shippingPlan?.shippingSpeed}
@@ -328,7 +329,7 @@ function Cart({ cart }: any) {
                 <Link href="/checkout">
                   <a
                     type="submit"
-                    className="text-center w-full bg-black border border-transparent rounded-xs shadow-sm py-3 px-4 font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700"
+                    className="text-center w-full bg-black border uppercase border-transparent rounded-xs shadow-sm py-3 px-4 font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700"
                   >
                     {BTN_CHECKOUT_NOW}
                   </a>

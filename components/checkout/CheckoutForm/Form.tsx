@@ -276,7 +276,7 @@ export default function AddressForm({
                             handleAddressList(values[formItem.name])
                           }
                           style={{ maxWidth: '20%' }}
-                          className="ml-3 mt-8 mb-8 max-w-xs flex-1 bg-black border border-transparent rounded-md py-2 px-1 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700 sm:w-full"
+                          className="ml-3 mt-8 mb-8 max-w-xs flex-1 bg-black border uppercase border-transparent rounded-xs py-2 px-1 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700 sm:w-full"
                         >
                           {BTN_FIND}
                         </button>
@@ -296,7 +296,7 @@ export default function AddressForm({
                 <button
                   type="button"
                   onClick={() => handleNewFormButton(values, errors)}
-                  className="max-w-xs m-2 flex-1 bg-black border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                  className="max-w-xs m-2 flex-1 bg-black uppercase border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                 >
                   {isFormOpen ? BTN_SAVE : ADD_ADDRESS}
                 </button>
@@ -304,7 +304,7 @@ export default function AddressForm({
                   <button
                     type="button"
                     onClick={() => setNewFormOpen(false)}
-                    className="max-w-xs m-2 flex-1 bg-gray-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                    className="max-w-xs m-2 flex-1 bg-gray-600 uppercase border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                   >
                     {GENERAL_CANCEL}
                   </button>
@@ -337,7 +337,7 @@ export default function AddressForm({
               <button
                 type="submit"
                 onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
-                className="max-w-xs flex-1 bg-black border border-transparent rounded-xs py-3 px-8 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700 sm:w-full"
+                className="max-w-xs flex-1 bg-black border uppercase border-transparent rounded-xs py-3 px-8 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700 sm:w-full"
               >
                 {btnTitle}
               </button>

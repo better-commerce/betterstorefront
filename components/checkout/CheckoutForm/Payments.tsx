@@ -26,15 +26,14 @@ export default function PaymentMethods({
           <li
             key={idx}
             onClick={() => setActivePaymentMethod(item)}
-            className={`${
-              activePaymentMethod.id === item.id ? 'border-indigo-600' : ''
-            }  pointer border-t border py-5 px-5 flex justify-start flex-row`}
+            className={`${activePaymentMethod.id === item.id ? 'border-black' : ''
+              }  pointer border-t border py-5 px-5 flex justify-start flex-row`}
           >
             <div className="flex flex-row justify-center items-center">
               {activePaymentMethod.id === item.id ? (
                 <div>
                   <CheckCircleIcon
-                    className="h-5 pr-4 text-indigo-600"
+                    className="h-5 pr-4 text-black"
                     aria-hidden="true"
                   />
                 </div>
@@ -56,7 +55,7 @@ export default function PaymentMethods({
         )
       })}
       {activePaymentMethod.id &&
-      selectedPaymentMethod?.id !== activePaymentMethod.id ? (
+        selectedPaymentMethod?.id !== activePaymentMethod.id ? (
         <div className="py-5 flex justify-center w-full">
           <Button
             buttonType="button"
