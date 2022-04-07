@@ -310,7 +310,7 @@ const CartSidebarView: FC = () => {
                         <Link href="/cart" passHref>
                           <a
                             onClick={handleClose}
-                            className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                            className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-lime bg-black hover:bg-gray-700"
                             href="/cart"
                           >
                             {content.GENERAL_CHECKOUT}
@@ -322,7 +322,7 @@ const CartSidebarView: FC = () => {
                           {GENERAL_OR_TEXT}{' '}
                           <button
                             type="button"
-                            className="text-indigo-600 font-medium hover:text-indigo-500"
+                            className="text-lime font-medium hover:text-indigo-500"
                             onClick={handleClose}
                           >
                             {GENERAL_CONTINUE_SHOPPING}

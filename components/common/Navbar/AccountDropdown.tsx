@@ -6,9 +6,9 @@ import Link from 'next/link'
 export default function Account({ config, title }: any) {
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className="p-2 text-gray-400 hover:text-gray-500 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+      <Menu.Button className="p-2 text-lime hover:text-gray-100 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
         <UserIcon
-          className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+          className="flex-shrink-0 h-6 w-6 text-lime group-hover:text-gray-100"
           aria-hidden="true"
         />
       </Menu.Button>
@@ -22,7 +22,7 @@ export default function Account({ config, title }: any) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute z-50 right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="px-1 py-1 flex flex-col text-gray-900 divide-y divide-gray-100">
+          <div className="px-1 py-1 flex flex-col text-lime divide-y divide-gray-100">
             <Menu.Item>
               {({ active }) => {
                 return (

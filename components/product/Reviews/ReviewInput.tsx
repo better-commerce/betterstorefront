@@ -2,14 +2,14 @@ import withAuth from '@components/utils/withAuth'
 import { StarIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
 import { useState } from 'react'
-import { 
-  BTN_SUBMIT, 
-  ERROR_WOOPS_SOMETHING_WENT_WRONG, 
-  GENERAL_REVIEW_OUT_OF_FIVE, 
-  MESSAGE_CHARACTERS_LEFT, 
-  MIN_BODY_LENGTH_ERROR, 
-  POST_YOUR_REVIEW, 
-  REVIEW_COMMENT, REVIEW_TITLE 
+import {
+  BTN_SUBMIT,
+  ERROR_WOOPS_SOMETHING_WENT_WRONG,
+  GENERAL_REVIEW_OUT_OF_FIVE,
+  MESSAGE_CHARACTERS_LEFT,
+  MIN_BODY_LENGTH_ERROR,
+  POST_YOUR_REVIEW,
+  REVIEW_COMMENT, REVIEW_TITLE
 } from '@components/utils/textVariables'
 
 import { NEXT_CREATE_REVIEW } from '@components/utils/constants'
@@ -124,7 +124,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
           <button
             type="button"
             onClick={handleSubmit}
-            className="max-w-xs float-right flex-1 bg-indigo-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+            className="max-w-xs float-right flex-1 bg-black border border-transparent rounded-xs py-2 px-4 flex items-center justify-center font-medium text-lime hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
           >
             {BTN_SUBMIT}
           </button>

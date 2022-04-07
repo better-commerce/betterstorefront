@@ -391,69 +391,77 @@ export default function ProductView({
           {/* Product */}
           <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
             {/* Image gallery */}
-            <Tab.Group as="div" className="flex flex-col-reverse">
-              {/* Image selector */}
-              <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
-                <Tab.List className="grid grid-cols-4 gap-6">
-                  {content?.map((image: any, idx) => (
-                    <Tab
-                      key={`${idx}-tab`}
-                      className="relative h-24 sm:h-44 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
-                    >
-                      {() => (
-                        <>
-                          <span className="sr-only">{image.name}</span>
-                          <span className="absolute inset-0 rounded-md overflow-hidden">
-                            {image.image ? (
-                              <div className='image-container'>
-                                <Image
-                                  src={`${image.image}` || IMG_PLACEHOLDER}
-                                  alt={image.name}
-                                  className="w-full h-full sm:h-44 object-center object-cover image"
-                                  layout='fill'
-                                ></Image>
-                              </div>
-                            ) : (
-                              <PlayIcon className="h-full w-full object-center object-cover" />
-                            )}
-                          </span>
-                        </>
-                      )}
-                    </Tab>
-                  ))}
-                </Tab.List>
+            <Tab.Group as="div" className="flex flex-col-reverse border p-4">
+              <div className='grid grid-cols-12'>
+                <div className='col-span-2'>
+                  <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
+                    <Tab.List className="grid grid-cols-1 gap-2 border">
+                      {content?.map((image: any, idx) => (
+                        <Tab
+                          key={`${idx}-tab`}
+                          className="relative h-20 sm:h-20 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                        >
+                          {() => (
+                            <>
+                              <span className="sr-only">{image.name}</span>
+                              <span className="absolute inset-0 rounded-md overflow-hidden">
+                                {image.image ? (
+                                  <div className='image-container'>
+                                    <Image
+                                      src={`${image.image}` || IMG_PLACEHOLDER}
+                                      alt={image.name}
+                                      className="w-full h-full sm:h-20 object-center object-cover image"
+                                      layout='fill'
+                                    ></Image>
+                                  </div>
+                                ) : (
+                                  <PlayIcon className="h-full w-full object-center object-cover" />
+                                )}
+                              </span>
+                            </>
+                          )}
+                        </Tab>
+                      ))}
+                    </Tab.List>
+                  </div>
+                </div>
+                <div className='col-span-10'>
+                  <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0">
+                    {content?.map((image: any) => (
+                      <Tab.Panel key={image.name + 'tab-panel'}>
+                        {image.image ? (
+                          <div className='image-container'>
+                            <Image
+                              src={`${image.image}` || IMG_PLACEHOLDER}
+                              alt={image.name}
+                              className="w-full h-full object-center object-cover image rounded-lg"
+                              layout='fill'
+                            ></Image>
+                          </div>
+                        ) : (
+                          <iframe
+                            width="560"
+                            height="315"
+                            src={image.url}
+                            title={YOUTUBE_VIDEO_PLAYER}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        )}
+                      </Tab.Panel>
+                    ))}
+                  </Tab.Panels>
+                </div>
               </div>
+              {/* Image selector */}
 
-              <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0">
-                {content?.map((image: any) => (
-                  <Tab.Panel key={image.name + 'tab-panel'}>
-                    {image.image ? (
-                      <div className='image-container'>
-                        <Image
-                          src={`${image.image}` || IMG_PLACEHOLDER}
-                          alt={image.name}
-                          className="w-full h-full object-center object-cover image rounded-lg"
-                          layout='fill'
-                        ></Image>
-                      </div>
-                    ) : (
-                      <iframe
-                        width="560"
-                        height="315"
-                        src={image.url}
-                        title={YOUTUBE_VIDEO_PLAYER}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    )}
-                  </Tab.Panel>
-                ))}
-              </Tab.Panels>
+
+
             </Tab.Group>
 
             {/* Product info */}
-            <div className="sm:mt-10 mt-2 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+            <div className="sm:mt-10 mt-2 p-4 sm:mt-16 lg:mt-0 border border-t-lime">
               <h1 className="sm:text-3xl text-xl font-bold sm:font-extrabold tracking-tight text-gray-900">
                 {selectedAttrData.name || selectedAttrData.productName}
               </h1>
@@ -559,7 +567,7 @@ export default function ProductView({
                     </div>
                     {isEngravingAvailable && (
                       <button
-                        className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                        className="max-w-xs flex-1 mt-5 bg-white border border-4 border-black rounded-xs py-3 px-8 flex items-center justify-center font-medium text-black hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                         onClick={() => showEngravingModal(true)}
                       >
                         <span className="font-bold">{GENERAL_ENGRAVING}</span>

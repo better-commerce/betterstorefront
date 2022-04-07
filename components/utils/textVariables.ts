@@ -214,6 +214,8 @@ export const VALIDATION_PLEASE_COMPLETE_THIS_FIELD =
 export const GENERAL_ENGRAVING = 'Engraving'
 export const GENERAL_ENGRAVING_PERSONALIZE_BOTTLE =
   'Personalize your bottle for only'
+export const GENERAL_ENGRAVING_PERSONALIZE_PRODUCT =
+  'Personalize your product for only'
 export const GENERAL_SEARCH_BRAND = 'Search Brand'
 export const GENERAL_BRAND = 'Brand'
 export const GENERAL_FILTER_TITLE = 'Filters'

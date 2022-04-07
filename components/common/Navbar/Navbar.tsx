@@ -112,11 +112,11 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   }
 
   const [open, setOpen] = useState(false)
-  
+
   const buttonRef = useRef<HTMLButtonElement>(null) // useRef<HTMLButtonElement>(null)
   const [openState, setOpenState] = useState(-1)
   return (
-    <div className="bg-white">
+    <div className="bg-gray-900">
       {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog
@@ -145,7 +145,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto">
+            <div className="relative max-w-xs w-full bg-gray-900 shadow-xl pb-12 flex flex-col overflow-y-auto">
               <div className="px-4 pt-5 pb-2 flex">
                 <button
                   type="button"
@@ -184,8 +184,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                 className={({ selected }) =>
                                   classNames(
                                     selected
-                                      ? 'text-gray-900'
-                                      : 'text-gray-900',
+                                      ? 'text-lime-300'
+                                      : 'text-lime-400',
                                     'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium'
                                   )
                                 }
@@ -275,14 +275,14 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
         </Dialog>
       </Transition.Root>
 
-      <header className="relative bg-white">
+      <header className="relative bg-gray-800">
         <nav aria-label="Top" className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="border-b border-gray-200 px-4 pb-0 sm:px-0 sm:pb-0">
+          <div className="border-b border-gray-900 px-4 pb-0 sm:px-0 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
               {/* Logo */}
               <button
                 type="button"
-                className="-ml-2 bg-white p-2 rounded-md text-gray-400 sm:hidden"
+                className="-ml-2 bg-gray-900 p-2 rounded-md text-lime-300 sm:hidden"
                 onClick={() => setOpen(true)}
               >
                 <span className="sr-only">Open menu</span>
@@ -301,9 +301,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 <div className="border-t h-14 px-4 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-center sm:overflow-visible sm:pb-0">
                   {config.map((item: any, idx: number) => {
                     return (
-                      <Popover key={idx} className="flex" 
-                          onMouseEnter={() => setOpenState(idx)}
-                          onMouseLeave={() => setOpenState(-1)}  >
+                      <Popover key={idx} className="flex"
+                        onMouseEnter={() => setOpenState(idx)}
+                        onMouseLeave={() => setOpenState(-1)}  >
                         {({ open }) => (
                           <>
                             {!item.navBlocks.length ? (
@@ -315,8 +315,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                   <Popover.Button
                                     className={classNames(
                                       openState == idx
-                                        ? 'border-indigo-600 text-indigo-600'
-                                        : 'border-transparent text-gray-700 hover:text-gray-800',
+                                        ? 'border-gray-300 text-white'
+                                        : 'border-transparent text-white hover:text-gray-400',
                                       'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                                     )}
                                   >
@@ -328,8 +328,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                               <Popover.Button
                                 className={classNames(
                                   openState == idx
-                                    ? 'border-indigo-600 text-indigo-600'
-                                    : 'border-transparent text-gray-700 hover:text-gray-800',
+                                    ? 'border-gray-300 text-white'
+                                    : 'border-transparent text-white hover:text-gray-400',
                                   'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                                 )}
                               >
@@ -451,10 +451,10 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                     onClick={openWishlist}
                   >
                     <HeartIcon
-                      className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                      className="flex-shrink-0 h-6 w-6 text-lime group-hover:text-gray-100"
                       aria-hidden="true"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                    <span className="ml-2 text-sm font-medium text-white group-hover:text-gray-800">
                       {wishListItems.length}
                     </span>
                     <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
@@ -468,10 +468,10 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                     onClick={openCart}
                   >
                     <ShoppingBagIcon
-                      className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                      className="flex-shrink-0 h-6 w-6 text-lime group-hover:text-gray-100"
                       aria-hidden="true"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                    <span className="ml-2 text-sm font-medium text-white group-hover:text-gray-800">
                       {cartItems.lineItems?.length}
                     </span>
                     <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>

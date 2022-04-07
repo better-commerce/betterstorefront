@@ -4,10 +4,10 @@ import { Fragment } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import axios from 'axios'
 import Form from './form'
-import { GENERAL_CLOSE, GENERAL_ENGRAVING, GENERAL_ENGRAVING_PERSONALIZE_BOTTLE } from '@components/utils/textVariables'
+import { GENERAL_CLOSE, GENERAL_ENGRAVING, GENERAL_ENGRAVING_PERSONALIZE_PRODUCT } from '@components/utils/textVariables'
 export default function Engraving({
-  onClose = () => {},
-  engravingPrice = '5.99$',
+  onClose = () => { },
+  engravingPrice = '£2.99',
   show = false,
   submitForm,
 }: any) {
@@ -51,7 +51,7 @@ export default function Engraving({
             leaveTo="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
           >
             <div className="flex text-base text-left transform transition w-full md:inline-block md:max-w-lg md:px-4 md:my-8 md:align-middle lg:max-w-xl">
-              <div className="w-full relative flex items-center bg-white px-4 pt-14 pb-8 overflow-hidden shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+              <div className="w-full relative flex items-center rounded-xl bg-white px-4 pt-4 pb-8 overflow-hidden shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-2">
                 <button
                   type="button"
                   className="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8"
@@ -63,9 +63,9 @@ export default function Engraving({
                 {/* <div className="text-gray-900">hello</div>  */}
                 <section className="flex p-10 w-full flex-col">
                   <div className="py-5 flex flex-col">
-                    <h1 className="text-gray-900 text-lg">{GENERAL_ENGRAVING}</h1>
+                    <h1 className="text-gray-900 text-lg font-bold">{GENERAL_ENGRAVING}</h1>
                     <span className="py-2 text-gray-700 text-md">
-                      {GENERAL_ENGRAVING_PERSONALIZE_BOTTLE} {engravingPrice}{' '}
+                      {GENERAL_ENGRAVING_PERSONALIZE_PRODUCT} <b>{engravingPrice}{' '}</b>
                     </span>
                   </div>
                   <Form submitForm={submitForm} />
