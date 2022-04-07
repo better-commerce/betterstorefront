@@ -190,6 +190,18 @@ function Cart({ cart }: any) {
                                       <Link href={`/${child.slug}`}>
                                         {child.name}
                                       </Link>
+                                      <p>
+                                        <span className='block font-sm font-normal'>
+                                          {child.customInfo1}
+                                        </span>
+                                        <span className='block font-sm font-normal'>
+                                          {child.customInfo2}
+                                        </span>
+                                        <span className='block font-sm font-normal'>
+                                          {child.customInfo3}
+                                        </span>
+                                      </p>
+
                                       <p className="ml-4">
                                         {child.price?.formatted?.withTax}
                                       </p>
