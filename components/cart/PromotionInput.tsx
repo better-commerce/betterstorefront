@@ -48,18 +48,18 @@ export default function PromotionInput() {
           <div className="flex justify-start flex-col sm:my-5 my-0">
             {cartItems.promotionsApplied?.length
               ? cartItems.promotionsApplied.map((promo: any, key: number) => {
-                  return (
-                    <div className="flex items-center py-2" key={promo.name}>
-                      <span className="text-indigo-500">
-                        {promo.name} {APPLY_PROMOTION_SUCCESS_MESSAGE}
-                      </span>
-                      <TrashIcon
-                        className="ml-5 cursor-pointer text-gray-500 hover:text-indigo-700 max-w-xs h-7"
-                        onClick={() => handleSubmit('remove', promo.promoCode)}
-                      />
-                    </div>
-                  )
-                })
+                return (
+                  <div className="flex items-center py-2" key={promo.name}>
+                    <span className="text-indigo-500">
+                      {promo.name} {APPLY_PROMOTION_SUCCESS_MESSAGE}
+                    </span>
+                    <TrashIcon
+                      className="ml-5 cursor-pointer text-gray-500 hover:text-indigo-700 max-w-xs h-7"
+                      onClick={() => handleSubmit('remove', promo.promoCode)}
+                    />
+                  </div>
+                )
+              })
               : null}
           </div>
 
@@ -76,7 +76,7 @@ export default function PromotionInput() {
               action={async () => await handleSubmit('apply')}
               type="button"
               title={GENERAL_APPLY_TEXT}
-              className={`max-w-xs flex-1 ml-5 bg-indigo-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-600 sm:w-full`}
+              className={`max-w-xs flex-1 ml-5 bg-black border border-transparent rounded-xs py-2 px-4 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-600 sm:w-full`}
             />
           </div>
         </div>

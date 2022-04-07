@@ -316,7 +316,7 @@ function Cart({ cart }: any) {
                 <Link href="/checkout">
                   <a
                     type="submit"
-                    className="text-center w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                    className="text-center w-full bg-black border border-transparent rounded-xs shadow-sm py-3 px-4 font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700"
                   >
                     {BTN_CHECKOUT_NOW}
                   </a>
@@ -331,7 +331,7 @@ function Cart({ cart }: any) {
             <Link href="/search">
               <button
                 type="button"
-                className="text-indigo-600 font-medium hover:text-indigo-500"
+                className="text-black font-medium hover:text-gray-800"
               >
                 {GENERAL_CATALOG}
                 <span aria-hidden="true"> &rarr;</span>
