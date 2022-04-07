@@ -290,3 +290,11 @@
 .border-t-lime {
   border-top: 4px solid #d2f000;
 }
+
+.border-lime-light {
+  border-color: #3e4509;
+}
+
+.bg-header-900 {
+  background-color: #212121 !important;
+}

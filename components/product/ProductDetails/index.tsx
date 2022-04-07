@@ -70,17 +70,6 @@ export default function ProductDetails({ product, description }: any) {
 
   return (
     <>
-      <div className='flex flex-col'>
-        {detailDescription.map((desc: any, idcx: number) => (
-          <>
-            {/* <h3 className='text-sm font-medium border-b pb-3'>{desc.title}</h3> */}
-            {desc.InnerComponent({
-              attributes: product.customAttributes || product.attributes,
-            })}
-          </>
-        ))}
-      </div>
-
       <div className="border-b divide-y divide-gray-200 mt-4">
         {detailsConfig.map((detail: any, idx: number) => (
           <Disclosure as="div" key={`${idx}-detail-item`}>

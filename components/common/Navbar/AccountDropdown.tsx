@@ -5,12 +5,14 @@ import Link from 'next/link'
 
 export default function Account({ config, title }: any) {
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className="p-2 text-lime hover:text-gray-100 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+    <Menu as="div" className="relative inline-block text-left border-r border-l border-lime-light">
+      <Menu.Button className="px-4 grid grid-cols-1 text-center text-lime hover:text-gray-100 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+
         <UserIcon
-          className="flex-shrink-0 h-6 w-6 text-lime group-hover:text-gray-100"
+          className="flex-shrink-0 mx-auto h-6 w-6 text-lime group-hover:text-gray-100"
           aria-hidden="true"
         />
+        <span className='text-lime pr-2 font-normal text-sm'>My Account</span>
       </Menu.Button>
       <Transition
         as={Fragment}
