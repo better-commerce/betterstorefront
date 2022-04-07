@@ -14,7 +14,7 @@ import { useEffect } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
 import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
-import { BTN_CHECKOUT_NOW, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TOTAL, ITEMS_IN_YOUR_CART, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
+import { BTN_CHECKOUT_NOW, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TOTAL, IMG_PLACEHOLDER, ITEMS_IN_YOUR_CART, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
 
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
@@ -139,7 +139,7 @@ function Cart({ cart }: any) {
                         layout='fixed'
                         width={160}
                         height={160}
-                        src={`${product.image}`}
+                        src={`${product.image || IMG_PLACEHOLDER}`}
                         alt={product.name}
                         className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48 image"
                       ></Image>
@@ -181,7 +181,7 @@ function Cart({ cart }: any) {
                                   >
                                     <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
                                       <img
-                                        src={child.image}
+                                        src={child.image || IMG_PLACEHOLDER}
                                         alt={child.name}
                                         className="w-full h-full object-center object-cover"
                                       />
