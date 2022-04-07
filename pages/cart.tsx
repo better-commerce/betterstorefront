@@ -189,15 +189,6 @@ function Cart({ cart }: any) {
                                     <div className="flex ml-5 justify-between font-medium text-gray-900">
                                       <Link href={`/${child.slug}`}>
                                         {child.name}
-                                        <span className='block font-sm font-normal'>
-                                          {child.customInfo1}
-                                        </span>
-                                        <span className='block font-sm font-normal'>
-                                          {child.customInfo2}
-                                        </span>
-                                        <span className='block font-sm font-normal'>
-                                          {child.customInfo3}
-                                        </span>
                                       </Link>
                                       <p className="ml-4">
                                         {child.price?.formatted?.withTax}
