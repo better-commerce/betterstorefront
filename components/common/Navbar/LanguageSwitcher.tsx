@@ -7,7 +7,7 @@ import { Router } from 'next/router'
 export default function CurrencySwitcher({ config, title, action }: any) {
   return (
     <Menu as="div" className="relative inline-block text-left border-r border-lime-light">
-      <Menu.Button className="px-4  grid grid-cols-1 text-center text-lime hover:text-gray-100 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+      <Menu.Button className="px-2 sm:px-4 grid grid-cols-1 text-center text-lime hover:text-gray-100 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
         <FlagIcon
           className="flex-shrink-0 mx-auto h-6 w-6 text-lime group-hover:text-gray-100"
           aria-hidden="true"

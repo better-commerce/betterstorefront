@@ -318,7 +318,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
                 {/* Wishlist*/}
 
-                <div className="px-4 flow-root border-r border-lime-light">
+                <div className="px-2 sm:px-4 flow-root border-r border-lime-light">
                   <button
                     className="group -m-2 p-2 relative flex items-center  grid grid-cols-1 text-center"
                     onClick={openWishlist}
@@ -340,7 +340,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 </div>
                 {/* Cart */}
 
-                <div className="px-4 flow-root">
+                <div className="px-2 sm:px-4 flow-root">
                   <button
                     className="group relative -m-2 p-2 flex items-center grid grid-cols-1 text-center"
                     onClick={openCart}
