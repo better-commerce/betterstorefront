@@ -12,7 +12,7 @@ export default function CurrencySwitcher({ config, title, action }: any) {
           className="flex-shrink-0 mx-auto h-6 w-6 text-lime group-hover:text-gray-100"
           aria-hidden="true"
         />
-        <span className='text-lime pr-2 font-normal text-sm'>Language</span>
+        <span className='text-lime pr-2 font-normal text-sm hidden sm:block'>Language</span>
       </Menu.Button>
       <Transition
         as={Fragment}

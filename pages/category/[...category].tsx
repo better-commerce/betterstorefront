@@ -49,13 +49,13 @@ export async function getStaticProps(context: any) {
 const generateCategories = (categories: any) => {
   const categoryMap: any = []
   const generateCategory = (category: any) => {
-    if (category.link) {
+    if (category?.link) {
       category.link.includes('category/')
         ? categoryMap.push(`/${category.link}`)
         : categoryMap.push(`/category/${category.link}`)
     }
-    if (category.subCategories) {
-      category.subCategories.forEach((i: any) => generateCategory(i))
+    if (category?.subCategories) {
+      category?.subCategories?.forEach((i: any) => generateCategory(i))
     }
   }
   categories.forEach((category: any) => generateCategory(category))
@@ -90,8 +90,8 @@ interface stateInterface {
   sortBy?: string
   currentPage?: string | number
   sortOrder?: string
-  filters: any
-  categoryId: any
+  filters?: any
+  categoryId?: any
 }
 
 const IS_INFINITE_SCROLL =
@@ -158,7 +158,7 @@ function CategoryPage({ category, products }: any) {
   const initialState = {
     ...DEFAULT_STATE,
     filters: adaptedQuery.filters || [],
-    categoryId: category.id,
+    categoryId: category?.id,
   }
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -172,7 +172,7 @@ function CategoryPage({ category, products }: any) {
         total: 0,
         currentPage: 1,
         filters: [],
-        categoryId: category.id,
+        categoryId: category?.id,
       },
     },
     error,
@@ -186,14 +186,14 @@ function CategoryPage({ category, products }: any) {
       total: 0,
       currentPage: 1,
       filters: [],
-      categoryId: category.id,
+      categoryId: category?.id,
     },
   })
 
   useEffect(() => {
-    if (category.id !== state.categoryId)
-      dispatch({ type: SET_CATEGORY_ID, payload: category.id })
-  }, [category.id])
+    if (category?.id !== state.categoryId)
+      dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
+  }, [category?.id])
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
@@ -285,7 +285,7 @@ function CategoryPage({ category, products }: any) {
                   <Link href={image.link || '#'}>
                     <Image
                       layout='fixed'
-                      width={1920} 
+                      width={1920}
                       height={460}
                       src={image.url || IMG_PLACEHOLDER}
                       alt={category.name}
@@ -304,7 +304,7 @@ function CategoryPage({ category, products }: any) {
           <h2>{category.description}</h2>
           {!!products && (
             <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
-              {products.total}{' '}{RESULTS} 
+              {products.total}{' '}{RESULTS}
             </h1>
           )}
         </div>
@@ -316,13 +316,13 @@ function CategoryPage({ category, products }: any) {
                   <Link href={'/' + subcateg.link} key={idx}>
                     <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
                       <Image
-                          layout='fixed'
-                          width={80}
-                          height={80}
-                          className="h-8 w-8 sm:h-20 sm:w-20 rounded-full image"
-                          src={ subcateg.image || IMG_PLACEHOLDER }
-                          alt={subcateg.name}
-                        ></Image>
+                        layout='fixed'
+                        width={80}
+                        height={80}
+                        className="h-8 w-8 sm:h-20 sm:w-20 rounded-full image"
+                        src={subcateg.image || IMG_PLACEHOLDER}
+                        alt={subcateg.name}
+                      ></Image>
                       <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
                         {subcateg.name}
                       </h4>

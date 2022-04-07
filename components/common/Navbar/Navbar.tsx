@@ -145,21 +145,21 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative max-w-xs w-full bg-gray-900 shadow-xl pb-12 flex flex-col overflow-y-auto">
+            <div className="relative max-w-xs w-full bg-header-900 shadow-xl pb-12 flex flex-col overflow-y-auto">
               <div className="px-4 pt-5 pb-2 flex">
                 <button
                   type="button"
-                  className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-gray-400"
+                  className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-lime"
                   onClick={() => setOpen(false)}
                 >
                   <span className="sr-only">Close menu</span>
-                  <XIcon className="h-6 w-6" aria-hidden="true" />
+                  <XIcon className="h-6 w-6 text-lime" aria-hidden="true" />
                 </button>
               </div>
 
               {/* Links */}
               <Tab.Group as="div" className="mt-2">
-                <div className="border-b border-gray-200">
+                <div className="">
                   {config.map((item: any, idx: number) => {
                     return (
                       <>
@@ -170,7 +170,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                           >
                             <a
                               onClick={() => setOpen(false)}
-                              className="flex flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium"
+                              className="flex flex-col whitespace-nowrap py-4 px-4 text-white border-b border-lime-light uppercase text-sm font-medium"
                               href={item.hyperlink}
                             >
                               {item.caption}
@@ -286,7 +286,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 onClick={() => setOpen(true)}
               >
                 <span className="sr-only">Open menu</span>
-                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                <MenuIcon className="h-6 w-6 text-white" aria-hidden="true" />
               </button>
 
               <Link href="/">
@@ -320,18 +320,21 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
                 <div className="px-4 flow-root border-r border-lime-light">
                   <button
-                    className="group -m-2 p-2 flex items-center  grid grid-cols-1 text-center"
+                    className="group -m-2 p-2 relative flex items-center  grid grid-cols-1 text-center"
                     onClick={openWishlist}
                   >
                     <HeartIcon
                       className="flex-shrink-0 mx-auto h-6 w-6 text-lime group-hover:text-gray-100"
                       aria-hidden="true"
                     />
-                    <span className='text-lime pr- font-normal text-sm'>Wishlist
+                    <span className='text-lime pr- font-normal text-sm hidden sm:block'>Wishlist
                       <span className="ml-1 text-sm font-medium text-white group-hover:text-lime">
                         ({wishListItems.length})
-                      </span></span>
-
+                      </span>
+                    </span>
+                    <span className="ml-1 text-sm font-medium text-white group-hover:text-lime flex absolute bottom-0 right-0 sm:hidden">
+                      {wishListItems.length}
+                    </span>
                     <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
                   </button>
                 </div>
@@ -339,7 +342,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
                 <div className="px-4 flow-root">
                   <button
-                    className="group -m-2 p-2 flex items-center grid grid-cols-1 text-center"
+                    className="group relative -m-2 p-2 flex items-center grid grid-cols-1 text-center"
                     onClick={openCart}
                   >
 
@@ -347,12 +350,14 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                       className="flex-shrink-0 mx-auto h-6 w-6 text-lime group-hover:text-gray-100"
                       aria-hidden="true"
                     />
-                    <span className='text-lime pr-2 font-normal text-sm'>Cart
+                    <span className='text-lime pr-2 font-normal text-sm hidden sm:block'>Cart
                       <span className="ml-1 text-sm font-medium text-white group-hover:text-lime">
                         ({cartItems.lineItems?.length})
                       </span>
                     </span>
-
+                    <span className="ml-1 text-sm font-medium text-white group-hover:text-lime flex absolute bottom-0 right-0 sm:hidden">
+                      {cartItems.lineItems?.length}
+                    </span>
                     <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
                   </button>
                 </div>
