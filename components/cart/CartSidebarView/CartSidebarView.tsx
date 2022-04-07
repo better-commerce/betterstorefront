@@ -25,6 +25,7 @@ import useTranslation, {
   GENERAL_CHECKOUT,
   GENERAL_CONTINUE_SHOPPING,
   GENERAL_OR_TEXT,
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 
 const CartSidebarView: FC = () => {
@@ -167,15 +168,10 @@ const CartSidebarView: FC = () => {
                                     width={100}
                                     height={100}
                                     layout='fixed'
-                                    src={`${product.image}`}
+                                    src={`${product.image || IMG_PLACEHOLDER}`}
                                     alt={product.name}
                                     className="w-full h-full object-center object-cover"
                                   ></Image>
-                                  {/* <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="w-full h-full object-center object-cover"
-                                  /> */}
                                 </div>
 
                                 <div className="ml-4 flex-1 flex flex-col">
@@ -234,16 +230,11 @@ const CartSidebarView: FC = () => {
                                         <div className='image-container'>
                                           <Image
                                             layout='fill'
-                                            src={child.image}
+                                            src={child.image || IMG_PLACEHOLDER}
                                             alt={child.name}
                                             className="w-full h-full object-center object-cover image"
                                           ></Image>
                                         </div>
-                                        {/* <img
-                                          src={child.image}
-                                          alt={child.name}
-                                          className="w-full h-full object-center object-cover"
-                                        /> */}
                                       </div>
                                       <div className="ml-4 flex-1 flex flex-col">
                                         <div>
@@ -252,6 +243,15 @@ const CartSidebarView: FC = () => {
                                               <Link href={`/${child.slug}`}>
                                                 {child.name}
                                               </Link>
+                                              <span className='block font-sm font-normal'>
+                                                {child.customInfo1}
+                                              </span>
+                                              <span className='block font-sm font-normal'>
+                                                {child.customInfo2}
+                                              </span>
+                                              <span className='block font-sm font-normal'>
+                                                {child.customInfo3}
+                                              </span>
                                             </h3>
                                             <p className="ml-4">
                                               {child.price?.formatted?.withTax}

@@ -328,7 +328,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                       aria-hidden="true"
                     />
                     <span className='text-lime pr- font-normal text-sm'>Wishlist
-                      <span className="ml-1 text-sm font-medium text-white group-hover:text-gray-800">
+                      <span className="ml-1 text-sm font-medium text-white group-hover:text-lime">
                         ({wishListItems.length})
                       </span></span>
 
@@ -348,7 +348,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                       aria-hidden="true"
                     />
                     <span className='text-lime pr-2 font-normal text-sm'>Cart
-                      <span className="ml-1 text-sm font-medium text-white group-hover:text-gray-800">
+                      <span className="ml-1 text-sm font-medium text-white group-hover:text-lime">
                         ({cartItems.lineItems?.length})
                       </span>
                     </span>
