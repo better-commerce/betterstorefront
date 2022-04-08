@@ -20,10 +20,10 @@ function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
   const { addToCart } = cartHandler()
 
-  const mapShippingPlansToItems = (plans: any, items: any) => {
+  const mapShippingPlansToItems = (plans?: any, items?: any) => {
     const itemsClone = [...items]
     return plans.reduce((acc: any, obj: any) => {
-      acc.forEach((cartItem: any) => {
+      acc?.forEach((cartItem?: any) => {
         const foundShippingPlan = obj.items.find((item: any) => {
           return (
             item.productId.toLowerCase() === cartItem.productId.toLowerCase()
@@ -47,10 +47,10 @@ function Cart({ cart }: any) {
       OrderId: '00000000-0000-0000-0000-000000000000',
       PostCode: '',
       ShippingMethodType: shippingMethodItem.type,
-      ShippingMethodId: cart.shippingMethodId,
+      ShippingMethodId: cart?.shippingMethodId,
       ShippingMethodName: shippingMethodItem.displayName,
       ShippingMethodCode: shippingMethodItem.shippingCode,
-      DeliveryItems: cart.lineItems.map((item: any) => {
+      DeliveryItems: cart?.lineItems?.map((item: any) => {
         return {
           BasketLineId: Number(item.id),
           OrderLineRecordId: '00000000-0000-0000-0000-000000000000',
@@ -79,7 +79,7 @@ function Cart({ cart }: any) {
   }
 
   useEffect(() => {
-    if (cart.shippingMethods.length > 0) fetchShippingPlans()
+    if (cart?.shippingMethods.length > 0) fetchShippingPlans()
     else {
       setCartItems(cart)
     }
