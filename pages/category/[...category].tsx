@@ -279,7 +279,7 @@ function CategoryPage({ category, products }: any) {
       <main className="pb-0">
         <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
           <Swiper navigation={true} loop={true} className="mySwiper">
-            {category.images.map((image: any, idx: number) => {
+            {category?.images?.map((image: any, idx: number) => {
               return (
                 <SwiperSlide key={idx}>
                   <Link href={image.link || '#'}>
@@ -308,7 +308,7 @@ function CategoryPage({ category, products }: any) {
         <div className='sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12 mb-4'>
           <div className='sm:col-span-12 py-2'>
             <div className="grid grid-cols-3 sm:grid-cols-5 text-left">
-              {category.subCategories.map((subcateg: any, idx: number) => {
+              {category?.subCategories?.map((subcateg: any, idx: number) => {
                 return (
                   <Link href={'/' + subcateg.link} key={idx}>
                     <div className="flex flex-col px-2 text-center cursor-pointer">
@@ -325,7 +325,7 @@ function CategoryPage({ category, products }: any) {
         <div className="sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12">
           <div className="sm:col-span-12 border-b border-gray-200 py-2">
             <div className="flex w-full text-center align-center justify-center">
-              {category.subCategories.slice(0, 5).map((subcateg: any, idx: number) => {
+              {category?.subCategories?.slice(0, 5).map((subcateg: any, idx: number) => {
                 return (
                   <Link href={'/' + subcateg.link} key={idx}>
                     <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
