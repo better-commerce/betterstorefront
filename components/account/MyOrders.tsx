@@ -19,6 +19,7 @@ import {
   GENERAL_TOTAL,
   GENERAL_ORDER_PLACED_ON,
   GENERAL_CREATE_RETURN,
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import ReturnModal from '@components/returns/Modal'
 
@@ -256,7 +257,7 @@ export default function MyOrders() {
                           </div>
                           <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
                             <img
-                              src={product.image}
+                              src={product.image || IMG_PLACEHOLDER}
                               alt={product.name}
                               className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
                             />

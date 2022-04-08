@@ -10,7 +10,7 @@ const COMPONENTS_MAP: any = {
 
 export default function AddressForm({
   initialValues = {},
-  onSubmit = () => {},
+  onSubmit = () => { },
   closeEditMode,
 }: any) {
   return (
@@ -78,7 +78,7 @@ export default function AddressForm({
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                className="max-w-xs flex-1 bg-black border border-lime rounded-xs py-3 px-8 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700 sm:w-full"
               >
                 {isSubmitting ? <LoadingDots /> : 'Save changes'}
               </button>
@@ -86,7 +86,7 @@ export default function AddressForm({
                 <button
                   type="button"
                   onClick={closeEditMode}
-                  className="max-w-xs flex-1 bg-gray-500 border border-transparent rounded-md py-3 ml-5 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                  className="max-w-xs flex-1 bg-gray-500 border border-lime rounded-xs py-3 ml-5 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
                   {GENERAL_CANCEL}
                 </button>

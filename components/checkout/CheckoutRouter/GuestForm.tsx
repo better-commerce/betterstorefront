@@ -111,7 +111,7 @@ export default function GuestForm({ onSubmit = () => { } }: any) {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="max-w-xs flex-1 bg-black border border-transparent rounded-xs py-3 px-8 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700 sm:w-full"
+                className="max-w-xs flex-1 bg-black border border-lime rounded-xs py-3 px-8 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700 sm:w-full"
               >
                 {BTN_CHECKOUT_SECURELY}
               </button>

@@ -329,7 +329,7 @@ function Cart({ cart }: any) {
                 <Link href="/checkout">
                   <a
                     type="submit"
-                    className="text-center w-full bg-black border uppercase border-transparent rounded-xs shadow-sm py-3 px-4 font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700"
+                    className="text-center w-full bg-black border uppercase border-lime rounded-xs shadow-sm py-3 px-4 font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700"
                   >
                     {BTN_CHECKOUT_NOW}
                   </a>

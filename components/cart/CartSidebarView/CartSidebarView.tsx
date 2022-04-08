@@ -310,7 +310,7 @@ const CartSidebarView: FC = () => {
                         <Link href="/cart" passHref>
                           <a
                             onClick={handleClose}
-                            className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-lime bg-black hover:bg-gray-700"
+                            className="flex justify-center items-center px-6 py-3 border border-lime rounded-xs shadow-sm font-medium text-lime bg-black hover:bg-gray-700"
                             href="/cart"
                           >
                             {content.GENERAL_CHECKOUT}

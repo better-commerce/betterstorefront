@@ -140,7 +140,7 @@ const WishlistSidebar: FC = () => {
                             <Link href="/search">
                               <button
                                 type="button"
-                                className="text-indigo-600 font-medium hover:text-indigo-500"
+                                className="text-black font-medium hover:text-indigo-500"
                                 onClick={handleClose}
                               >
                                 {GENERAL_CATALOG}
@@ -156,7 +156,7 @@ const WishlistSidebar: FC = () => {
                           {wishListItems.map((product: any) => (
                             <li key={product.id} className="py-6 flex">
                               <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-                                <Image 
+                                <Image
                                   layout='responsive'
                                   width={80}
                                   height={80}
@@ -229,7 +229,7 @@ const WishlistSidebar: FC = () => {
                       <p>
                         <button
                           type="button"
-                          className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                          className="flex justify-center items-center px-6 py-3 border border-lime rounded-xs shadow-sm font-medium text-white bg-black hover:bg-gray-700"
                           onClick={handleClose}
                         >
                           {GENERAL_CONTINUE_SHOPPING}
