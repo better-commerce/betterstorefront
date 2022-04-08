@@ -48,14 +48,14 @@ export async function getStaticProps(context: any) {
 
 const generateCategories = (categories: any) => {
   const categoryMap: any = []
-  const generateCategory = (category: any) => {
-    if (category.link) {
-      category.link.includes('category/')
+  const generateCategory = (category?: any) => {
+    if (category?.link) {
+      category?.link.includes('category/')
         ? categoryMap.push(`/${category.link}`)
         : categoryMap.push(`/category/${category.link}`)
     }
-    if (category.subCategories) {
-      category.subCategories.forEach((i: any) => generateCategory(i))
+    if (category?.subCategories) {
+      category?.subCategories?.forEach((i: any) => generateCategory(i))
     }
   }
   categories.forEach((category: any) => generateCategory(category))
@@ -90,8 +90,8 @@ interface stateInterface {
   sortBy?: string
   currentPage?: string | number
   sortOrder?: string
-  filters: any
-  categoryId: any
+  filters?: any
+  categoryId?: any
 }
 
 const IS_INFINITE_SCROLL =
@@ -158,7 +158,7 @@ function CategoryPage({ category, products }: any) {
   const initialState = {
     ...DEFAULT_STATE,
     filters: adaptedQuery.filters || [],
-    categoryId: category.id,
+    categoryId: category?.id,
   }
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -172,7 +172,7 @@ function CategoryPage({ category, products }: any) {
         total: 0,
         currentPage: 1,
         filters: [],
-        categoryId: category.id,
+        categoryId: category?.id,
       },
     },
     error,
@@ -186,13 +186,13 @@ function CategoryPage({ category, products }: any) {
       total: 0,
       currentPage: 1,
       filters: [],
-      categoryId: category.id,
+      categoryId: category?.id,
     },
   })
 
   useEffect(() => {
-    if (category.id !== state.categoryId)
-      dispatch({ type: SET_CATEGORY_ID, payload: category.id })
+    if (category?.id !== state.categoryId)
+      dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
   }, [category.id])
 
   useEffect(() => {
@@ -325,7 +325,7 @@ function CategoryPage({ category, products }: any) {
         <div className="sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12">
           <div className="sm:col-span-12 border-b border-gray-200 py-2">
             <div className="flex w-full text-center align-center justify-center">
-              {category.subCategories.slice(0,5).map((subcateg: any, idx: number) => {
+              {category.subCategories.slice(0, 5).map((subcateg: any, idx: number) => {
                 return (
                   <Link href={'/' + subcateg.link} key={idx}>
                     <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
@@ -349,8 +349,8 @@ function CategoryPage({ category, products }: any) {
 
         <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
           {!!products && (
-            <>              
-              {state.filters.length>0 &&
+            <>
+              {state.filters.length > 0 &&
                 <>
                   {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
@@ -365,46 +365,46 @@ function CategoryPage({ category, products }: any) {
                     />
                   </div>
                   <div className="sm:col-span-3 sm:block hidden">
-                      <ProductFilterRight
-                        handleFilters={handleFilters}
-                        products={products}
-                        routerFilters={state.filters}
-                      />
+                    <ProductFilterRight
+                      handleFilters={handleFilters}
+                      products={products}
+                      routerFilters={state.filters}
+                    />
                   </div>
                   <div className="sm:col-span-9">
-                        {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+                    {/* {HIDE FILTER TOP BAR IN MOBILE} */}
 
-                        <div className="flex-1 sm:block hidden">
-                          <ProductFiltersTopBar
-                            products={products}
-                            handleSortBy={handleSortBy}
-                            routerFilters={state.filters}
-                            clearAll={clearAll}
-                            routerSortOption={state.sortBy}
-                          />
-                        </div>
-                        <ProductGridWithFacet
-                          products={productDataToPass}
-                          currentPage={products.currentPage}
-                          handlePageChange={handlePageChange}
-                          handleInfiniteScroll={handleInfiniteScroll}
-                        />
+                    <div className="flex-1 sm:block hidden">
+                      <ProductFiltersTopBar
+                        products={products}
+                        handleSortBy={handleSortBy}
+                        routerFilters={state.filters}
+                        clearAll={clearAll}
+                        routerSortOption={state.sortBy}
+                      />
+                    </div>
+                    <ProductGridWithFacet
+                      products={productDataToPass}
+                      currentPage={products.currentPage}
+                      handlePageChange={handlePageChange}
+                      handleInfiniteScroll={handleInfiniteScroll}
+                    />
                   </div>
-                </>              
-              }      
+                </>
+              }
               {state.filters.length == 0 &&
                 <>
-                    <div className="sm:col-span-12">
-                      {/* {HIDE FILTER TOP BAR IN MOBILE} */}               
-                        <ProductGrid
-                            products={productDataToPass}
-                            currentPage={products.currentPage}
-                            handlePageChange={handlePageChange}
-                            handleInfiniteScroll={handleInfiniteScroll}
-                        />
-                    </div>
-                </>              
-              }             
+                  <div className="sm:col-span-12">
+                    {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+                    <ProductGrid
+                      products={productDataToPass}
+                      currentPage={products.currentPage}
+                      handlePageChange={handlePageChange}
+                      handleInfiniteScroll={handleInfiniteScroll}
+                    />
+                  </div>
+                </>
+              }
             </>
           )}
         </div>

@@ -101,7 +101,7 @@ export default function Dropdown({
 
       return (
             <>
-                  <div className='flex flex-col max-w-4xl mx-auto align-center justify-center text-center item-center mt-4 sm:px-32' >
+                  <div className='flex flex-col max-w-4xl mx-auto align-center justify-center text-center item-center mt-4 px-4 sm:px-32' >
                         <label className='block font-semibold text-sm sr-only'>{label}</label>
                         <div className='flex flex-wrap justify-center justify-self-center'>
                               <RadioGroup value={selected.currentAttribute} onChange={handleOnChange} className="mt-2">
