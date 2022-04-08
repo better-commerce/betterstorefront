@@ -395,17 +395,17 @@ export default function ProductView({
               <Tab.Group as="div" className="flex flex-col-reverse border p-4">
                 <div className='grid grid-cols-12'>
                   <div className='col-span-2'>
-                    <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
+                    <div className="hidden mt-3 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                       <Tab.List className="grid grid-cols-1 gap-2 border">
                         {content?.map((image: any, idx) => (
                           <Tab
                             key={`${idx}-tab`}
-                            className="relative h-20 sm:h-20 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                            className="relative h-20 sm:h-20 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50 p-2"
                           >
                             {() => (
                               <>
                                 <span className="sr-only">{image.name}</span>
-                                <span className="absolute inset-0 rounded-md overflow-hidden">
+                                <span className="absolute inset-0 rounded-md overflow-hidden p-1">
                                   {image.image ? (
                                     <div className='image-container'>
                                       <Image
