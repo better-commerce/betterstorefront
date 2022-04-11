@@ -146,13 +146,13 @@ export default function AddressForm({
                       setValues(item)
                       setAddress(item)
                     }}
-                    className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex justify-between items-center ${item.id === defaultValues.id ? 'border-indigo-600' : ''
+                    className={`w-full cursor-pointer text-gray-900 rounded-xs py-2 px-5 mb-0 mt-3 flex justify-between items-center ${item.id === defaultValues.id ? 'border-black border-2' : 'border'
                       }`}
                   >
                     <div>
                       {item.id === defaultValues.id ? (
                         <CheckCircleIcon
-                          className="h-5 pr-4 text-left align-left text-indigo-600"
+                          className="h-5 pr-4 text-left align-left text-black"
                           aria-hidden="true"
                         />
                       ) : null}
@@ -165,7 +165,7 @@ export default function AddressForm({
                       <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end"></div>
                     </div>
                     <div className="flex text-md font-regular flex-wrap =">
-                      <span className="font-semibold pr-1">
+                      <span className="font-semibold text-black pr-1">
                         {item.firstName + ' ' + item.lastName},
                       </span>
                       <span className="pr-1">{item.address1}, </span>
@@ -296,7 +296,7 @@ export default function AddressForm({
                 <button
                   type="button"
                   onClick={() => handleNewFormButton(values, errors)}
-                  className="max-w-xs m-2 flex-1 bg-black uppercase border border-lime rounded-md py-3 px-8 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                  className="max-w-xs m-2 flex-1 bg-black uppercase border border-lime rounded-xs py-3 px-8 flex items-center justify-center font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                 >
                   {isFormOpen ? BTN_SAVE : ADD_ADDRESS}
                 </button>
@@ -304,7 +304,7 @@ export default function AddressForm({
                   <button
                     type="button"
                     onClick={() => setNewFormOpen(false)}
-                    className="max-w-xs m-2 flex-1 bg-gray-600 uppercase border border-lime rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                    className="max-w-xs m-2 flex-1 bg-gray-100 uppercase border border-black rounded-xs py-3 px-8 flex items-center justify-center font-medium text-black hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-200 sm:w-full"
                   >
                     {GENERAL_CANCEL}
                   </button>
