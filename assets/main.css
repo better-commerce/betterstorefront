@@ -29,6 +29,7 @@
 .filter-input {
   display: none;
 }
+
 .swiper-button-next::after {
   font-size: 25px !important;
 }
@@ -88,6 +89,7 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
 .max-panel::-webkit-scrollbar {
   width: 6px;
 }
@@ -102,6 +104,7 @@
   width: 6px;
   border-radius: 6px;
 }
+
 #payment-form {
   width: 30vw;
   min-width: 500px;
@@ -208,6 +211,7 @@
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -243,8 +247,8 @@
   max-width: 100%;
 }
 
-.image-container > div,
-.image-container > span {
+.image-container>div,
+.image-container>span {
   position: unset !important;
 }
 
@@ -254,6 +258,7 @@
   position: relative !important;
   object-position: top !important;
 }
+
 .sm\:h-64 {
   height: 16rem !important;
 }
@@ -272,4 +277,8 @@
 
 .sm\:h-44 {
   height: 11rem !important;
+}
+
+.strong-space strong {
+  padding-right: 5px;
 }

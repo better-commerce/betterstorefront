@@ -102,8 +102,8 @@ export default function Summary({
           <PromotionInput />
 
           <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-            <dt className="font-medium text-gray-900">{GENERAL_TOTAL}</dt>
-            <dd className="font-medium text-gray-900">
+            <dt className="font-medium text-gray-900 font-bold">{GENERAL_TOTAL}</dt>
+            <dd className="font-2xl text-gray-900 font-bold">
               {cart.grandTotal?.formatted?.withTax}
             </dd>
           </div>
