@@ -26,16 +26,30 @@ import {
 const DELIVERY_METHODS_TYPE = [
   {
     id: 1,
-    title: 'Deliver',
-    content: ADDRESS_OF_YOUR_CHOICE,
+    title: 'Collect',
+    content: IN_STORE_OR_COLLECT_PLUS,
     children: [],
-    type: 2,
+    type: 4,
   },
   {
     id: 2,
     type: 1,
-    title: 'Collect',
-    content: IN_STORE_OR_COLLECT_PLUS,
+    title: 'Deliver',
+    content: ADDRESS_OF_YOUR_CHOICE,
+    children: [],
+  },
+  {
+    id: 3,
+    type: 2,
+    title: 'Standard',
+    content: ADDRESS_OF_YOUR_CHOICE,
+    children: [],
+  },
+  {
+    id: 4,
+    type: 0,
+    title: 'Others',
+    content: ADDRESS_OF_YOUR_CHOICE,
     children: [],
   },
 ]
@@ -103,9 +117,10 @@ export default function Delivery({
     if (response.length) {
       let tempArr = deliveryMethods.reduce((acc: any, obj: any) => {
         let itemWithChildren = { ...obj }
+        itemWithChildren.children = [];
         response.forEach((item: any) => {
           if (item.type === obj.type) {
-            itemWithChildren.children = [item]
+            itemWithChildren.children.push(item);
           }
         })
         acc.push(itemWithChildren)
@@ -220,7 +235,7 @@ export default function Delivery({
               <>
                 <select
                   onChange={handleChange}
-                  className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                  className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-xs shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
                 >
                   {appConfig.shippingCountries?.map(
                     (country: any, idx: number) => {
@@ -236,7 +251,7 @@ export default function Delivery({
                     }
                   )}
                 </select>
-                <div className="py-2 h-12 flex justify-left w-full">
+                <div className="h-12 flex justify-left w-full">
                   <Button
                     buttonType="button"
                     action={async () => setIsSelected(true)}
@@ -321,15 +336,15 @@ export default function Delivery({
                   <div key={idx} className="flex flex-col">
                     <li
                       onClick={() => handleShippingMethod(item)}
-                      className={`${shippingMethod.id === item.id ? 'border-black' : ''
-                        }  pointer border-t border py-5 px-5 flex justify-between flex-row`}
+                      className={`${shippingMethod.id === item.id ? 'border-black border-2' : ' border'
+                        }  pointer py-5 px-5 flex justify-between cursor-pointer flex-row`}
                     >
-                      <div>
-                        <h3 className="font-bold">{item.displayName}</h3>
-                        <p className="text-sm py-2">{item.description}</p>
+                      <div className='pr-10'>
+                        <h3 className="font-bold strong-space" dangerouslySetInnerHTML={{ __html: item.displayName || '' }}></h3>
+                        <p className="text-xs text-gray-500 strong-space py-2" dangerouslySetInnerHTML={{ __html: item.description || '' }}></p>
                       </div>
                       <div className="flex flex-row justify-center items-center">
-                        <h3>{item.price.formatted.withTax}</h3>
+                        <h3 className='font-bold text-black'>{item.price.formatted.withTax}</h3>
                         {shippingMethod.id === item.id ? (
                           <div className="ml-5">
                             <CheckCircleIcon
