@@ -73,6 +73,7 @@ const axiosInstance = SingletonFactory.axiosInstance
 Object.freeze(axiosInstance)
 
 export const setGeneralParams = (param: any, value: any) => {
+  store.remove(param)
   store.set(param, value)
 }
 
