@@ -5,6 +5,7 @@ export default async (req: any, res: any) => {
     const response = await commerce.notifyMe({
       email: req.query.email,
       productId: req.query.productId,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {

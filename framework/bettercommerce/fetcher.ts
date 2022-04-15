@@ -83,12 +83,13 @@ const fetcher = async ({
   data = {},
   params = {},
   headers = {},
+  cookies = {},
 }: any) => {
   const computedUrl = new URL(url, BASE_URL)
   const newConfig = {
-    Currency: store.get('Currency') || 'GBP',
-    Language: store.get('Language') || 'en',
-    Country: store.get('Country') || 'GB',
+    Currency: cookies.Currency || store.get('Currency') || 'GBP',
+    Language: cookies.Language || store.get('Language') || 'en',
+    Country: cookies.Country || store.get('Country') || 'GB',
   }
   const config: any = {
     method: method,

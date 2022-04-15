@@ -106,6 +106,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const response = await getCart()({
     basketId: basketRef,
+    cookies: context.req.cookies,
   })
 
   return {

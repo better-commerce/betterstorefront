@@ -20,7 +20,7 @@ import {
   GENERAL_SELECT_COUNTRY,
   GENERAL_EDIT,
   GENERAL_CONFIRM,
-  GENERAL_DELIVERY_METHOD
+  GENERAL_DELIVERY_METHOD,
 } from '@components/utils/textVariables'
 
 const DELIVERY_METHODS_TYPE = [
@@ -127,8 +127,13 @@ export default function Delivery({
       )
 
       if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
-      else
-        setSelectedCountry({ name: 'United Kingdom', twoLetterIsoCode: 'GB' })
+      else {
+        const defaultCountry = appConfig.shippingCountries[0] || {
+          name: 'United Kingdom',
+          twoLetterIsoCode: 'GB',
+        }
+        setSelectedCountry(defaultCountry)
+      }
     }
     if (Object.keys(appConfig).length) getDefaultCountry()
   }, [appConfig])
@@ -321,8 +326,9 @@ export default function Delivery({
                   <div key={idx} className="flex flex-col">
                     <li
                       onClick={() => handleShippingMethod(item)}
-                      className={`${shippingMethod.id === item.id ? 'border-indigo-600' : ''
-                        }  pointer border-t border py-5 px-5 flex justify-between flex-row`}
+                      className={`${
+                        shippingMethod.id === item.id ? 'border-indigo-600' : ''
+                      }  pointer border-t border py-5 px-5 flex justify-between flex-row`}
                     >
                       <div>
                         <h3 className="font-bold">{item.displayName}</h3>

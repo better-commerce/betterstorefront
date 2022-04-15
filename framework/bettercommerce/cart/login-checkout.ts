@@ -4,10 +4,11 @@ interface Props {
   basketId: string
   email: string
   password: string
+  cookies?: any
 }
 
 export default function useLoginCheckout() {
-  return async function handler({ basketId, email, password }: Props) {
+  return async function handler({ basketId, email, password, cookies }: Props) {
     try {
       const response: any = await fetcher({
         url: `${CHECKOUT_ENDPOINT}/${basketId}/login-checkout`,
@@ -16,6 +17,7 @@ export default function useLoginCheckout() {
           email,
           password,
         },
+        cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
