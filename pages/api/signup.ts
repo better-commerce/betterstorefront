@@ -9,6 +9,7 @@ export default async (req: any, res: any) => {
       confirmPassword,
       firstName,
       lastName,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error: any) {

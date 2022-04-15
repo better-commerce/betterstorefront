@@ -11,6 +11,7 @@ export default async (req: any, res: any) => {
     const response = await clickAndCollect()({
       items,
       postCode,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {

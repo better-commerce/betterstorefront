@@ -318,8 +318,10 @@ function BrandDetailPage({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const response = await getBrandBySlug(`brands/${context.query.brand.pop()}`)
-  console.log(response.result)
+  const response = await getBrandBySlug(
+    `brands/${context.query.brand.pop()}`,
+    context.req.cookies
+  )
   return {
     props: { query: context.query, brandDetails: response.result }, // will be passed to the page component as props
   }

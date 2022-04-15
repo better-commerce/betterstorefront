@@ -6,6 +6,7 @@ interface Props {
   notifyByEmail: boolean
   notifyBySms: boolean
   notifyByPost: boolean
+  cookies: any
 }
 
 export default function useGuestCheckout() {
@@ -15,6 +16,7 @@ export default function useGuestCheckout() {
     notifyByEmail,
     notifyBySms,
     notifyByPost,
+    cookies,
   }: Props) {
     try {
       const response: any = await fetcher({
@@ -29,6 +31,7 @@ export default function useGuestCheckout() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies,
       })
       return response.result
     } catch (error: any) {
