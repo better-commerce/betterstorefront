@@ -26,7 +26,7 @@ export default function Bundles({ price = '', products = [] }: any) {
         <div className="flex py-5 grid grid-cols-3 text-left gap-x-5 align-center content-center ">
           {products.map((product: any, productIdx: number) => {
             return (
-              <div key={productIdx} className='grid grid-cols-12 gap-x-2 border p-3 rounded-md align-center content-center border-gray-100 hover:border-indigo-100'>
+              <div key={productIdx} className='grid grid-cols-12 gap-x-2 border p-3 rounded-md align-center content-center border-gray-200 hover:border-indigo-200'>
                 <div onClick={() => handleProduct(product)} className='col-span-4 image-container cursor-pointer'>
                   <img
                     className="mx-auto object-center object-cover image rounded-md"
