@@ -2,7 +2,7 @@ import { EVENTS_MAP } from './constants'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const endpoint = 'https://omnilytics.omnicx.com/data'
+const endpoint = 'https://omnilytics.bettercommerce.io/data'
 
 const publisher = async (data: any, event: string) => {
   const windowClone: any = typeof window !== 'undefined' ? window : {}
