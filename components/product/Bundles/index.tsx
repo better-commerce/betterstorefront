@@ -39,7 +39,7 @@ export default function Bundles({ price = '', products = [] }: any) {
                     <h3 onClick={() => handleProduct(product)} className='text-sm text-gray-700 font-semibold hover:text-indigo-600 mt-1 cursor-pointer'>{product.name}</h3>   
                     <h4 className='text-sm text-black mt-2'>
                       <span className='inline-block font-semibold'>£88.60</span>  
-                      <span className='inline-block pl-3 text-red-400 text-xs line-through'>£32.39</span>  
+                      <span className='inline-block pl-3 text-red-400 text-xs font-semibold line-through'>£32.39</span>  
                     </h4> 
                     <h4 className='text-sm mt-1'>
                         <span className='uppercase text-xs font-bold  tex-black inline-block'>Colour:</span>
