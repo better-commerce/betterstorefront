@@ -372,6 +372,8 @@ export default function ProductView({
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
+  console.log("Check Bundle:" + JSON.stringify(product));
+
   /*if (product === null) {
     return {
       notFound: true,
