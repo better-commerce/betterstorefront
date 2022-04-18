@@ -11,40 +11,66 @@ export default function Bundles({ price = '', products = [] }: any) {
   return (
     <section
       aria-labelledby="bundles-heading"
-      className="border-t border-gray-200 py-8 px-4 sm:px-0"
+      className="border-t border-gray-200 pt-4 px-4 sm:px-0"
     >
       <h2
         id="bundles-heading"
-        className="text-center text-xl font-bold text-gray-900"
+        className="text-center text-3xl font-bold text-gray-900"
       >
         {YOUR_BUNDLE_INCLUDE}
       </h2>
-      <p className="text-center text-gray-900">
+      <p className="text-center text-sm text-gray-400">
         {BUNDLE_TEXT}
       </p>
-      <div className="flex justify-between items-center">
-        <div className="flex py-5">
+      <div className="flex justify-between items-center mt-3">
+        <div className="flex py-5 grid grid-cols-3 text-left gap-x-5 align-center content-center ">
           {products.map((product: any, productIdx: number) => {
             return (
-              <div onClick={() => handleProduct(product)} key={productIdx}>
-                <img
-                  className="h-40 w-40 object-center object-cover"
-                  src={product.image || product.images[0]?.image}
-                />
+              <div key={productIdx} className='grid grid-cols-12 gap-x-2 border p-3 rounded-md align-center content-center border-gray-100 hover:border-indigo-100'>
+                <div onClick={() => handleProduct(product)} className='col-span-4 image-container cursor-pointer'>
+                  <img
+                    className="mx-auto object-center object-cover image rounded-md"
+                    src={product.image || product.images[0]?.image}
+                  />
+                </div>
+                <div className='col-span-8'>
+                  <div className='flex flex-col'>
+                    <h3 className='text-xs font-semibold text-gray-400'>{product.brand}</h3>
+                    <h3 onClick={() => handleProduct(product)} className='text-sm text-gray-700 font-semibold hover:text-indigo-600 mt-1 cursor-pointer'>{product.name}</h3>   
+                    <h4 className='text-sm text-black mt-2'>
+                      <span className='inline-block font-semibold'>£88.60</span>  
+                      <span className='inline-block pl-3 text-red-400 text-xs line-through'>£32.39</span>  
+                    </h4> 
+                    <h4 className='text-sm mt-1'>
+                        <span className='uppercase text-xs font-bold  tex-black inline-block'>Colour:</span>
+                        <span className='text-gray-600 inline-block pl-1'>Mono Check</span>
+                    </h4> 
+                  </div>
+                  <div className='flex flex-col mt-1'>
+                    <label className='font-semibold text-black text-sm'>Size:</label>
+                    <select className='p-2 border border-gray-400 rounded-sm font-semibold text-sm text-black'>
+                        <option value="">Please Select</option>
+                        <option value="s">S</option>
+                        <option value="m">M</option>
+                        <option value="l">L</option>
+                        <option value="xl">XL</option>
+                    </select>
+                  </div>
+                </div>   
               </div>
             )
           })}
-        </div>
-        <div className="flex sm:flex-col1 w-1/3 h-1/5 flex-col items-center justify-center">
-          <p className="text-gray-900 text-3xl font-bold py-5">{price}</p>
-          <button
-            type="submit"
-            onClick={() => {}}
-            className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-          >
-            {GENERAL_ADD_TO_BASKET}
-          </button>
-        </div>
+        </div>        
+      </div>
+      <div className="flex flex-col border border-gray-100 rounded-md bg-gray-50 p-3 items-right justify-end">
+        <p className="text-gray-900 text-3xl font-bold flex-col flex align-right item-right pb-2 text-right">{price}</p>
+        <button
+          type="submit"
+          onClick={() => {}}
+          className="max-w-xs flex bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex-col ml-auto items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+        >
+          {GENERAL_ADD_TO_BASKET}
+        </button>
       </div>
       {productData && (
         <BundleCard
