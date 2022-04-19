@@ -5,10 +5,11 @@ import qs from 'qs'
 interface Props {
   data: any
   id: string
+  cookies?: any
 }
 
 export default function getShippingPlans() {
-  return async function handler({ data, id }: Props) {
+  return async function handler({ data, id, cookies }: Props) {
     const url = `${BASKET_ENDPOINT}/${id}/delivery/plan`
 
     try {
@@ -19,6 +20,7 @@ export default function getShippingPlans() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies,
       })
       return response
     } catch (error: any) {

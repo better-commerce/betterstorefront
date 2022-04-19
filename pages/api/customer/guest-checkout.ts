@@ -9,6 +9,7 @@ export default async (req: any, res: any) => {
       notifyByEmail,
       notifyBySms,
       notifyByPost,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {

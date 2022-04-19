@@ -11,6 +11,7 @@ export default function useInfra(req: any) {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies: req.cookies,
       })
 
       const languageCookie =

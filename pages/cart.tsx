@@ -14,7 +14,18 @@ import { useEffect } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
 import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
-import { BTN_CHECKOUT_NOW, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TOTAL, ITEMS_IN_YOUR_CART, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
+import {
+  BTN_CHECKOUT_NOW,
+  GENERAL_CATALOG,
+  GENERAL_DISCOUNT,
+  GENERAL_ORDER_SUMMARY,
+  GENERAL_REMOVE,
+  GENERAL_SHIPPING,
+  GENERAL_SHOPPING_CART,
+  GENERAL_TOTAL,
+  ITEMS_IN_YOUR_CART,
+  SUBTOTAL_INCLUDING_TAX,
+} from '@components/utils/textVariables'
 
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
@@ -99,8 +110,10 @@ function Cart({ cart }: any) {
         data.qty = 1
       }
       if (type === 'delete') {
-        data.qty = 0;
-        userCart.lineItems = userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)
+        data.qty = 0
+        userCart.lineItems = userCart.lineItems.filter(
+          (item: { id: any }) => item.id !== product.id
+        )
       }
       try {
         const item = await addToCart(data)
@@ -136,7 +149,7 @@ function Cart({ cart }: any) {
                   <li key={productIdx} className="flex py-4 sm:py-10">
                     <div className="flex-shrink-0">
                       <Image
-                        layout='fixed'
+                        layout="fixed"
                         width={160}
                         height={160}
                         src={`${product.image}`}
@@ -205,7 +218,9 @@ function Cart({ cart }: any) {
                                         }
                                         className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                                       >
-                                        <span className="sr-only">{GENERAL_REMOVE}</span>
+                                        <span className="sr-only">
+                                          {GENERAL_REMOVE}
+                                        </span>
                                         <XIconSolid
                                           className="h-5 w-5"
                                           aria-hidden="true"
@@ -251,7 +266,7 @@ function Cart({ cart }: any) {
                           </button>
                         </div>
                       </div>
-                      <div className='flex flex-col sm:hidden block'>
+                      <div className="flex flex-col sm:hidden block">
                         <p className="pt-3 sm:text-sm text-xs font-bold text-gray-700">
                           {product.shippingPlan?.shippingSpeed}
                         </p>
@@ -357,6 +372,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const response = await getCart()({
     basketId: basketRef,
+    cookies: context.req.cookies,
   })
 
   return {

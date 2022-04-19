@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default function getOrderDetails() {
-  return async function handler(id?: string) {
+  return async function handler(id?: string, cookies?: any) {
     const url = ORDERS_ENDPOINT + `/${id}`
     try {
       const response: any = await fetcher({
@@ -15,6 +15,7 @@ export default function getOrderDetails() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies,
       })
       return response
     } catch (error: any) {
