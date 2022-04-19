@@ -10,12 +10,15 @@ export default function getProductOperation({
 }: OperationContext<any>) {
   async function getProduct<T extends GetProductOperation>({
     query = '',
+    cookies = {},
   }: {
     query?: string
+    cookies?: any
   } = {}): Promise<any> {
     const response: any = await fetcher({
       url: `${PRODUCT_API_ENDPOINT}slug?slug=products/${query}`,
       method: 'post',
+      cookies,
     })
     return {
       product: response.result,

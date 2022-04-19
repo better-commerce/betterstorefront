@@ -5,6 +5,7 @@ export default async (req: any, res: any) => {
     console.group(req.body, 'req body')
     const response = await commerce.editAddress({
       query: req.body,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {

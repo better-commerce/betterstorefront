@@ -2,7 +2,7 @@ import { useForgotPassword } from '@framework/customer'
 
 export default async function ForgotPassword(req: any, res: any) {
   const { email } = req.body
-  const response = await useForgotPassword(email)
+  const response = await useForgotPassword(email, req.cookies)
   res.status(200).json(response)
   try {
   } catch (error) {

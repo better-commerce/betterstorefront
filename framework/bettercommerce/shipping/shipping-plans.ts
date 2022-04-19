@@ -4,10 +4,11 @@ import fetcher from '../fetcher'
 
 interface Props {
   model: any
+  cookies?: any
 }
 
 export default function getShippingPlans() {
-  return async function handler({ model }: Props) {
+  return async function handler({ model, cookies }: Props) {
     const url = new URL(OMS_SHIPPING_PLANS, OMS_BASE_URL)
     const enhancedModel = {
       ...model,
@@ -21,6 +22,7 @@ export default function getShippingPlans() {
         data: {
           ...enhancedModel,
         },
+        cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },

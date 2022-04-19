@@ -6,6 +6,7 @@ export default async (req: any, res: any) => {
       basketId: req.body.basketId,
       promoCode: req.body.promoCode,
       method: req.body.method,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {
