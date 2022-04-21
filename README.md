@@ -1,4 +1,4 @@
-[![Deploy with Vercel](https://vercel.com/button)](https%3A%2F%2Fgithub.com%2Fvercel%2Fcommerce%26project-name%3Dcommerce%26repo-name%3Dcommerce%26demo-title%3DNext.js%20Commerce%26demo-description%3DAn%20all-in-one%20starter%20kit%20for%20high-performance%20e-commerce%20sites.%26demo-url%3Dhttps%3A%2F%2Fdemo.vercel.store%26demo-image%3Dhttps%3A%2F%2Favatars.githubusercontent.com%2Fu%2F22865887%3Fs%3D400%26u%3D39f1404d7795dcf15ae6b7c1b3499a94d6c8308c%26v%3D4%26integration-ids%3Doac_MuWZiE4jtmQ2ejZQaQ7ncuDT)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fvercel.com%2Fnew%2Fclone%3Frepository-url%26repo-name%3Dcommerce%26demo-title%3DNext.js%20Commerce%26demo-description%3DAn%20all-in-one%20starter%20kit%20for%20high-performance%20e-commerce%20sites.%26demo-url%3Dhttps%3A%2F%2Fdemo.vercel.store%26demo-image%3Dhttps%3A%2F%2Favatars.githubusercontent.com%2Fu%2F22865887%3Fs%3D400%26u%3D39f1404d7795dcf15ae6b7c1b3499a94d6c8308c%26v%3D4%26integration-ids%3Doac_MuWZiE4jtmQ2ejZQaQ7ncuDT)
 
 ## Getting Started
 
