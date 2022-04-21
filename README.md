@@ -135,6 +135,6 @@ That's it!
 
 ## Work in progress
 
-We're using Github Projects to keep track of issues in progress and todo's. Here is our [Board](https://github.com/orgs/Better-Commerce/projects/2)
+We're using Github Projects to keep track of issues in progress and todo's. Here is our [Board](https://github.com/Better-Commerce/betterstorefront/projects/1)
 
 People actively working on this project: @vikrmsaxena, @Lamperoyge, @JaiswalShailendra, @gagandeep-gingh-bt & @amitkumar1403
