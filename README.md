@@ -86,21 +86,12 @@ Next.js Commerce integrates out-of-the-box with BigCommerce, Shopify, Swell, Sal
 - If you inspect the request in pages/api/REQUEST you will see that it is calling a different method from the Bettercommerce API
 
 ## Folder Structure
-- components - here we define all the components and utils to use in the app. A general rule of thumb for components design is to use functional components and make them as encapsulated and small as possible.
-- framework - In here you will find all the functions used to communicate with the API
-- pages - This is a special folder used by NextJS. Do not rename this. For every file / folder in page NextJS will create a new page. For example if you put a /hello.tsx in pages, the content will be rendered on hostname/hello. Read more here: https://nextjs.org/docs/basic-features/pages
-
-
-## Considerations
-
-- `framework/commerce` contains all types, helpers and functions to be used as base to build a new **provider**.
-- **Providers** live under `framework`'s root folder and they will extend Next.js Commerce types and functionality (`framework/commerce`).
-- We have a **Features API** to ensure feature parity between the UI and the Provider. The UI should update accordingly and no extra code should be bundled. All extra configuration for features will live under `features` in `commerce.config.json` and if needed it can also be accessed programatically.
-- Each **provider** should add its corresponding `next.config.js` and `commerce.config.json` adding specific data related to the provider. For example in case of BigCommerce, the images CDN and additional API routes.
-- **Providers don't depend on anything that's specific to the application they're used in**. They only depend on `framework/commerce`, on their own framework folder and on some dependencies included in `package.json`
-
-
-
+- `assets` - css files used in the application.
+- `components` - All the components and utils to use in the app. A general rule of thumb for components design is to use functional components and make them as encapsulated and small as possible.
+- `config` - basic store config.
+- `framework` - All the functions used to communicate with the API.
+- `pages` - This is a special folder used by NextJS. Do not rename this. For every file / folder in page NextJS will create a new page. For example if you put a /hello.tsx in pages, the content will be rendered on hostname/hello. Read more here: https://nextjs.org/docs/basic-features/pages
+- `public` - images and other assets used publicly.
 
 ## Configuration
 
