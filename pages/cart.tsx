@@ -14,18 +14,7 @@ import { useEffect } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
 import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
-import {
-  BTN_CHECKOUT_NOW,
-  GENERAL_CATALOG,
-  GENERAL_DISCOUNT,
-  GENERAL_ORDER_SUMMARY,
-  GENERAL_REMOVE,
-  GENERAL_SHIPPING,
-  GENERAL_SHOPPING_CART,
-  GENERAL_TOTAL,
-  ITEMS_IN_YOUR_CART,
-  SUBTOTAL_INCLUDING_TAX,
-} from '@components/utils/textVariables'
+import { BTN_CHECKOUT_NOW, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TOTAL, IMG_PLACEHOLDER, ITEMS_IN_YOUR_CART, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
 
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
@@ -110,10 +99,8 @@ function Cart({ cart }: any) {
         data.qty = 1
       }
       if (type === 'delete') {
-        data.qty = 0
-        userCart.lineItems = userCart.lineItems.filter(
-          (item: { id: any }) => item.id !== product.id
-        )
+        data.qty = 0;
+        userCart.lineItems = userCart.lineItems.filter((item: { id: any }) => item.id !== product.id)
       }
       try {
         const item = await addToCart(data)
@@ -149,10 +136,10 @@ function Cart({ cart }: any) {
                   <li key={productIdx} className="flex py-4 sm:py-10">
                     <div className="flex-shrink-0">
                       <Image
-                        layout="fixed"
+                        layout='fixed'
                         width={160}
                         height={160}
-                        src={`${product.image}`}
+                        src={`${product.image || IMG_PLACEHOLDER}`}
                         alt={product.name}
                         className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48 image"
                       ></Image>
@@ -185,52 +172,6 @@ function Cart({ cart }: any) {
                             <p className="mt-1 text-sm sm:font-medium font-bold text-gray-900">
                               {product.price?.formatted?.withTax}
                             </p>
-                            {product.children?.map(
-                              (child: any, idx: number) => {
-                                return (
-                                  <div
-                                    className="flex mt-10"
-                                    key={'child' + idx}
-                                  >
-                                    <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
-                                      <img
-                                        src={child.image}
-                                        alt={child.name}
-                                        className="w-full h-full object-center object-cover"
-                                      />
-                                    </div>
-                                    <div className="flex ml-5 justify-between font-medium text-gray-900">
-                                      <Link href={`/${child.slug}`}>
-                                        {child.name}
-                                      </Link>
-                                      <p className="ml-4">
-                                        {child.price?.formatted?.withTax}
-                                      </p>
-                                      {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
-                                    </div>
-                                    <div className="flex-1 flex items-center justify-end text-sm">
-                                      {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
-
-                                      <button
-                                        type="button"
-                                        onClick={() =>
-                                          handleItem(child, 'delete')
-                                        }
-                                        className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
-                                      >
-                                        <span className="sr-only">
-                                          {GENERAL_REMOVE}
-                                        </span>
-                                        <XIconSolid
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </button>
-                                    </div>
-                                  </div>
-                                )
-                              }
-                            )}
                           </div>
                           <p className="py-5 text-sm font-medium text-gray-900 sm:block hidden">
                             {product.shippingPlan?.shippingSpeed}
@@ -266,7 +207,64 @@ function Cart({ cart }: any) {
                           </button>
                         </div>
                       </div>
-                      <div className="flex flex-col sm:hidden block">
+                      {product.children?.map(
+                        (child: any, idx: number) => {
+                          return (
+                            <div
+                              className="flex"
+                              key={'child' + idx}
+                            >
+                              <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
+                                <img
+                                  src={child.image || IMG_PLACEHOLDER}
+                                  alt={child.name}
+                                  className="w-full h-full object-center object-cover"
+                                />
+                              </div>
+                              <div className="flex flex-col ml-5 flex-col font-medium text-gray-900">
+                                <Link href={`/${child.slug}`}>
+                                  {child.name}
+                                </Link>
+                                <p>
+                                  <span className='block font-sm font-normal'>
+                                    {child.customInfo1}
+                                  </span>
+                                  <span className='block font-sm font-normal'>
+                                    {child.customInfo2}
+                                  </span>
+                                  <span className='block font-sm font-normal'>
+                                    {child.customInfo3}
+                                  </span>
+                                </p>
+                                {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
+                              </div>
+                              <div className='flex-1 flex justify-right'>
+                                <p className="ml-10">
+                                  {child.price?.formatted?.withTax}
+                                </p>
+                              </div>
+                              <div className="flex-1 flex items-center justify-end text-sm">
+                                {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
+
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleItem(child, 'delete')
+                                  }
+                                  className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                                >
+                                  <span className="sr-only">{GENERAL_REMOVE}</span>
+                                  <XIconSolid
+                                    className="h-5 w-5"
+                                    aria-hidden="true"
+                                  />
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        }
+                      )}
+                      <div className='flex flex-col sm:hidden block'>
                         <p className="pt-3 sm:text-sm text-xs font-bold text-gray-700">
                           {product.shippingPlan?.shippingSpeed}
                         </p>
@@ -331,7 +329,7 @@ function Cart({ cart }: any) {
                 <Link href="/checkout">
                   <a
                     type="submit"
-                    className="text-center w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                    className="text-center w-full bg-black border uppercase border-lime rounded-xs shadow-sm py-3 px-4 font-medium text-lime hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700"
                   >
                     {BTN_CHECKOUT_NOW}
                   </a>
@@ -346,7 +344,7 @@ function Cart({ cart }: any) {
             <Link href="/search">
               <button
                 type="button"
-                className="text-indigo-600 font-medium hover:text-indigo-500"
+                className="text-black font-medium hover:text-gray-800"
               >
                 {GENERAL_CATALOG}
                 <span aria-hidden="true"> &rarr;</span>
