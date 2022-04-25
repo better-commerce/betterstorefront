@@ -8,7 +8,8 @@ interface ForgotPassword {
 }
 
 export default async function resetPassword(
-  forgotPasswordData: ForgotPassword
+  forgotPasswordData: ForgotPassword,
+  cookies?: any
 ) {
   try {
     const res = await fetcher({
@@ -16,6 +17,7 @@ export default async function resetPassword(
       method: 'post',
       data: forgotPasswordData,
     })
+    cookies
     return res
   } catch (error) {
     console.log(error)

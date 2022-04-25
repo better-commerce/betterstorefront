@@ -7,8 +7,10 @@ import { SEARCH_MINIMAL_ENDPOINT } from '@components/utils/constants'
 export default function getAllProductsOperation({}: OperationContext<any>) {
   async function getAllProducts<T extends GetAllProductsOperation>({
     query = '',
+    cookies = {},
   }: {
     query?: any
+    cookies?: any
   } = {}): Promise<any> {
     const {
       freeText = '',
@@ -40,6 +42,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
         url: SEARCH_MINIMAL_ENDPOINT,
         method: 'post',
         data: qs.stringify(data),
+        cookies,
       })
 
       return {

@@ -5,10 +5,11 @@ import fetcher from '../fetcher'
 interface Props {
   items: []
   postCode: string
+  cookies?: any
 }
 
 export default function getClickAndCollectPlans() {
-  return async function handler({ items, postCode }: Props) {
+  return async function handler({ items, postCode, cookies }: Props) {
     const url = new URL(OMS_CLICK_AND_COLLECT, OMS_BASE_URL)
 
     try {
@@ -20,6 +21,7 @@ export default function getClickAndCollectPlans() {
           postCode,
           items,
         },
+        cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },

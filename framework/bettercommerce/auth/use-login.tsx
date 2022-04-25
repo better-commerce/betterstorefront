@@ -4,11 +4,12 @@ import qs from 'qs'
 
 interface Props {
   email: string
+  cookies?: any
   password: string
 }
 
 export default function useLogin() {
-  return async function handler({ email, password }: Props) {
+  return async function handler({ email, password, cookies }: Props) {
     const data = {
       username: email,
       password,
@@ -19,6 +20,7 @@ export default function useLogin() {
         url: `${AUTHENTICATE_CUSTOMER}`,
         method: 'post',
         data,
+        cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
