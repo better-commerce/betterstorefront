@@ -8,6 +8,7 @@ interface Props {
   confirmPassword: string
   firstName: string
   lastName: string
+  cookies?: any
 }
 
 export default function useSignup() {
@@ -17,6 +18,7 @@ export default function useSignup() {
     confirmPassword,
     firstName,
     lastName,
+    cookies,
   }: Props) {
     const data = {
       email: Email,
@@ -31,6 +33,7 @@ export default function useSignup() {
         url: `${REGISTER_CUSTOMER}`,
         method: 'post',
         data,
+        cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },

@@ -1,7 +1,7 @@
 import '@assets/main.css'
 import '@assets/chrome-bug.css'
 import 'keen-slider/keen-slider.min.css'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useLayoutEffect } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
 import 'swiper/css/bundle'
@@ -11,11 +11,16 @@ import {
   SessionIdCookieKey,
   DeviceIdKey,
   NEXT_INFRA_ENDPOINT,
+  NEXT_API_KEYWORDS_ENDPOINT,
 } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
+import analytics from '@components/services/analytics/analytics'
+import setSessionIdCookie from '@components/utils/setSessionId'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -33,32 +38,49 @@ const TEST_GEO_DATA = {
   Message: null,
   IsValid: false,
 }
-const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
-  if (!Cookies.get(SessionIdCookieKey) || isCalledByTimeout) {
-    const expiryTime: any = new Date(new Date().getTime() + 30 * 60 * 1000)
-    const sessionIdGenerator: string = uuid_v4()
-    Cookies.set(SessionIdCookieKey, sessionIdGenerator, {
-      expires: expiryTime,
-    })
-    DataLayerInstance.setItemInDataLayer(SessionIdCookieKey, sessionIdGenerator)
-    setTimeout(() => {
-      setSessionIdCookie(true)
-    }, 1800000)
-  }
-}
 
 const setDeviceIdCookie = () => {
   if (!Cookies.get(DeviceIdKey)) {
     const deviceId = uuid_v4()
     Cookies.set(DeviceIdKey, deviceId)
     DataLayerInstance.setItemInDataLayer(DeviceIdKey, deviceId)
+  } else {
+    DataLayerInstance.setItemInDataLayer(DeviceIdKey, Cookies.get(DeviceIdKey))
   }
 }
 
-function MyApp({ Component, pageProps, nav, footer }: any) {
+function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [appConfig, setAppConfig] = useState({})
-  const [location, setUserLocation] = useState({})
+  const [location, setUserLocation] = useState({ Ip: '' })
+  const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
+  const [keywordsData, setKeywordsData] = useState([])
+  const [isAppLoading, setAppIsLoading] = useState(true)
+  const [language, setLanguage] = useState('')
+
+  const router = useRouter()
   const Layout = (Component as any).Layout || Noop
+
+  const googleTranslateElementInit = () => {
+    const windowClone: any = window
+    new windowClone.google.translate.TranslateElement(
+      {
+        pageLanguage: 'en',
+        layout:
+          windowClone.google.translate.TranslateElement.FloatPosition.TOP_LEFT,
+      },
+      'google_translate_element'
+    )
+  }
+
+  useEffect(() => {
+    const addScript = document.createElement('script')
+    addScript.setAttribute(
+      'src',
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+    )
+    document.body.appendChild(addScript)
+      ; (window as any).googleTranslateElementInit = googleTranslateElementInit
+  }, [])
 
   const fetchAppConfig = async () => {
     try {
@@ -68,6 +90,7 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
       setAppConfig(response.result)
       Cookies.set('Currency', response.defaultCurrency)
       Cookies.set('Language', response.defaultLanguage)
+      Cookies.set('Country', response.defaultCountry)
     } catch (error) {
       console.log(error, 'error')
     }
@@ -77,27 +100,50 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
     if (process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID)
       TagManager.initialize(tagManagerArgs)
   }
+
+  const fetchKeywords = async function () {
+    try {
+      const { data }: any = await axios.get(NEXT_API_KEYWORDS_ENDPOINT)
+      setKeywordsData(data.result)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     initializeGTM()
+    document.body.classList?.remove('loading')
+    fetchAppConfig()
+    fetchKeywords()
+  }, [])
+
+  useLayoutEffect(() => {
     DataLayerInstance.setDataLayer()
+
     if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
       geoData()
         .then((response) => {
-          setUserLocation(response)
           DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
+          DataLayerInstance.setItemInDataLayer('city', response.City)
+          DataLayerInstance.setItemInDataLayer('country', response.Country)
+          setUserLocation(response)
+          setAppIsLoading(false)
         })
-        .catch((err) =>
+        .catch((err) => {
           DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
-        )
+        })
     } else {
-      setUserLocation(TEST_GEO_DATA)
+      DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
       DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
+      setUserLocation(TEST_GEO_DATA)
+      setAppIsLoading(false)
     }
+    let analyticsCb = analytics()
+    setAnalyticsEnabled(true)
     setSessionIdCookie()
     setDeviceIdCookie()
-    document.body.classList?.remove('loading')
-    fetchAppConfig()
     return function cleanup() {
+      analyticsCb.removeListeners()
       Cookies.remove(SessionIdCookieKey)
     }
   }, [])
@@ -105,15 +151,33 @@ function MyApp({ Component, pageProps, nav, footer }: any) {
   return (
     <>
       <Head />
+      <div id="google_translate_element" />
+
       <ManagedUIContext>
-        <Layout
-          nav={nav}
-          footer={footer}
-          config={appConfig}
-          pageProps={pageProps}
-        >
-          <Component {...pageProps} location={location} config={appConfig} />
-        </Layout>
+        {isAppLoading && !location.Ip ? (
+          <main className="fit bg-white">
+            <div className="fixed top-0 right-0 h-screen w-screen z-50 flex justify-center items-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+            </div>
+          </main>
+        ) : (
+          <>
+            <Layout
+              nav={nav}
+              footer={footer}
+              config={appConfig}
+              pageProps={pageProps}
+              keywords={keywordsData}
+            >
+              <Component
+                {...pageProps}
+                location={location}
+                ipAddress={location.Ip}
+                config={appConfig}
+              />
+            </Layout>
+          </>
+        )}
       </ManagedUIContext>
     </>
   )

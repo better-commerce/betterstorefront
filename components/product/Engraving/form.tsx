@@ -1,9 +1,10 @@
+import { GENERAL_ADD_TO_BASKET, VALIDATION_PLEASE_COMPLETE_THIS_FIELD } from '@components/utils/textVariables'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { config } from './config'
 
 const schema = Yup.object().shape({
-  line1: Yup.string().required('Please compelte this field'),
+  line1: Yup.string().required(VALIDATION_PLEASE_COMPLETE_THIS_FIELD),
   line2: Yup.string(),
   line3: Yup.string(),
 })
@@ -48,7 +49,7 @@ export default function EngravingForm({ submitForm }: any) {
                 onClick={handleSubmit}
                 className="w-full max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
               >
-                Add to bag
+                {GENERAL_ADD_TO_BASKET}
               </button>
             </div>
           </Form>

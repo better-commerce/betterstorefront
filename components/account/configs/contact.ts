@@ -1,18 +1,20 @@
+import {
+  GENERAL_SMS,
+  GENERAL_EMAIL,
+  GENERAL_POST,
+} from '@components/utils/textVariables'
+
 export const config = [
-  // {
-  //   key: 'newsLetterSubscribed',
-  //   label: "I don't want to receive offers",
-  // },
   {
     key: 'notifyByEmail',
-    label: 'Email',
+    label: GENERAL_EMAIL,
   },
   {
     key: 'notifyByPost',
-    label: 'Post',
+    label: GENERAL_POST,
   },
   {
     key: 'notifyBySMS',
-    label: 'SMS',
+    label: GENERAL_SMS,
   },
 ]

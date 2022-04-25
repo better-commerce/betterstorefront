@@ -13,6 +13,7 @@ export default function loqateAddress() {
       `?Key=${process.env.LOQATE_KEY}&Text=${postCode}&Countries=${country}`
     try {
       const response: any = await axios.post(findAddressUrl)
+      console.log(response.data.Items)
       if (
         response.data.Items.length == 1 &&
         typeof response.data.Items[0].Error != 'undefined'
@@ -23,7 +24,14 @@ export default function loqateAddress() {
         if (response.data.Items.length == 0) {
           return { response: { message: 'No items found', data: [] } }
         } else {
-          return { response: { message: '', data: response.data.Items } }
+          return {
+            response: {
+              message: '',
+              data: response.data.Items.filter(
+                (i: any) => i.Type === 'Address'
+              ),
+            },
+          }
         }
       }
     } catch (error: any) {
@@ -34,7 +42,7 @@ export default function loqateAddress() {
 }
 
 export const retrieveAddress = () => {
-  return async function handler(id: string) {
+  return async function handler(id: string, cookies?: any) {
     try {
       const retrieveAddress =
         retrieveUrl +

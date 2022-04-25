@@ -4,6 +4,13 @@ import type { Page } from '@commerce/types/page'
 import { Logo } from '@components/ui'
 import config from './config'
 import { useRouter } from 'next/router'
+import { 
+  BTN_SIGN_UP, 
+  COPYRIGHT_FOOTER_INFO, 
+  GENERAL_EMAIL_ADDRESS, 
+  SIGN_UP_FOR_NEWSLETTER, 
+  SIGN_UP_TEXT 
+} from '@components/utils/textVariables'
 
 interface Props {
   config: []
@@ -69,14 +76,14 @@ const Footer: FC<Props> = ({ config }) => {
             {/* Newsletter section */}
             <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-9 lg:col-span-4">
               <h3 className="text-sm font-medium text-gray-900">
-                Sign up for our newsletter
+                {SIGN_UP_FOR_NEWSLETTER}
               </h3>
               <p className="mt-6 text-sm text-gray-500">
-                The latest deals and savings, sent to your inbox weekly.
+                {SIGN_UP_TEXT}
               </p>
               <form className="mt-2 flex sm:max-w-md">
                 <label htmlFor="email-address" className="sr-only">
-                  Email address
+                  {GENERAL_EMAIL_ADDRESS}
                 </label>
                 <input
                   id="email-address"
@@ -90,7 +97,7 @@ const Footer: FC<Props> = ({ config }) => {
                     type="submit"
                     className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
-                    Sign up
+                    {BTN_SIGN_UP}
                   </button>
                 </div>
               </form>
@@ -100,7 +107,7 @@ const Footer: FC<Props> = ({ config }) => {
 
         <div className="border-t border-gray-100 py-10 text-center">
           <p className="text-sm text-gray-500">
-            &copy; 2021 Workflow, Inc. All rights reserved.
+            &copy; {COPYRIGHT_FOOTER_INFO}
           </p>
         </div>
       </div>

@@ -11,6 +11,7 @@ import type { Product } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 import useAddItem from '@framework/cart/use-add-item'
 import useRemoveItem from '@framework/wishlist/use-remove-item'
+import {GENERAL_ADD_TO_BASKET} from '@components/utils/textVariables'
 
 interface Props {
   product: Product
@@ -68,7 +69,7 @@ const WishlistCard: FC<Props> = ({ product }) => {
           <Text html={product.description} />
         </div>
         <Button
-          aria-label="Add to Cart"
+          aria-label={GENERAL_ADD_TO_BASKET}
           type="button"
           className={
             'py-1 px-3 border border-secondary rounded-md shadow-sm hover:bg-primary-hover'
@@ -76,7 +77,7 @@ const WishlistCard: FC<Props> = ({ product }) => {
           onClick={addToCart}
           loading={loading}
         >
-          Add to Cart
+          {GENERAL_ADD_TO_BASKET}
         </Button>
       </div>
       <div className="col-span-2 flex flex-col justify-between">

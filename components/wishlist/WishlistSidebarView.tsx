@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { FC } from 'react'
 import { useUI } from '@components/ui/context'
 import { useEffect, Fragment, useState } from 'react'
@@ -6,6 +7,16 @@ import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon, CheckCircleIcon } from '@heroicons/react/outline'
 import useWishlist from '@components/services/wishlist'
+import {
+  WISHLIST_TITLE,
+  WISHLIST_SIDEBAR_MESSAGE,
+  GENERAL_CATALOG,
+  GENERAL_REMOVE,
+  GENERAL_ADD_TO_BASKET,
+  WISHLIST_SUCCESS_MESSAGE,
+  GENERAL_CONTINUE_SHOPPING
+} from '@components/utils/textVariables'
+
 const WishlistSidebar: FC = () => {
   const {
     closeSidebar,
@@ -45,15 +56,19 @@ const WishlistSidebar: FC = () => {
   }
 
   const handleAddToCart = (product: any) => {
-    addToCart({
-      basketId,
-      productId: product.recordId,
-      qty: 1,
-      manualUnitPrice: product.price.raw.withTax,
-      stockCode: product.stockCode,
-      userId: user.userId,
-      isAssociated: user.isAssociated,
-    })
+    addToCart(
+      {
+        basketId,
+        productId: product.recordId,
+        qty: 1,
+        manualUnitPrice: product.price.raw.withTax,
+        stockCode: product.stockCode,
+        userId: user.userId,
+        isAssociated: user.isAssociated,
+      },
+      'ADD',
+      { product }
+    )
       .then((response: any) => {
         setCartItems(response)
         setItemInCart(true)
@@ -103,7 +118,7 @@ const WishlistSidebar: FC = () => {
                   <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
                     <div className="flex items-start justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
-                        Wishlist
+                        {WISHLIST_TITLE}
                       </Dialog.Title>
                       <div className="ml-3 h-7 flex items-center">
                         <button
@@ -121,14 +136,14 @@ const WishlistSidebar: FC = () => {
                       <div className="flow-root">
                         {isEmpty && (
                           <div className="text-gray-900 h-full w-full flex flex-col justify-center items-center">
-                            Uh-oh, you don't have any items in here
+                            {WISHLIST_SIDEBAR_MESSAGE}
                             <Link href="/search">
                               <button
                                 type="button"
                                 className="text-indigo-600 font-medium hover:text-indigo-500"
                                 onClick={handleClose}
                               >
-                                Catalog
+                                {GENERAL_CATALOG}
                                 <span aria-hidden="true"> &rarr;</span>
                               </button>
                             </Link>
@@ -141,11 +156,18 @@ const WishlistSidebar: FC = () => {
                           {wishListItems.map((product: any) => (
                             <li key={product.id} className="py-6 flex">
                               <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-                                <img
+                                <Image 
+                                  layout='responsive'
+                                  width={80}
+                                  height={80}
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-full h-full object-center object-cover"></Image>
+                                {/* <img
                                   src={product.image}
                                   alt={product.name}
                                   className="w-full h-full object-center object-cover"
-                                />
+                                /> */}
                               </div>
 
                               <div className="ml-4 flex-1 flex flex-col">
@@ -173,7 +195,7 @@ const WishlistSidebar: FC = () => {
                                         deleteItemFromWishlist(product.recordId)
                                       }
                                     >
-                                      Remove
+                                      {GENERAL_REMOVE}
                                     </button>
                                   </div>
                                   <div className="flex justify-between w-full">
@@ -182,7 +204,7 @@ const WishlistSidebar: FC = () => {
                                       className="font-medium text-indigo-600 hover:text-indigo-500"
                                       onClick={() => handleAddToCart(product)}
                                     >
-                                      Add to cart
+                                      {GENERAL_ADD_TO_BASKET}
                                     </button>
                                   </div>
                                 </div>
@@ -199,7 +221,7 @@ const WishlistSidebar: FC = () => {
                       <div className="text-gray-500 py-5 text-xl w-full justify-center items-center h-full">
                         <CheckCircleIcon className="h-12 text-center flex justify-center w-full items-center text-indigo-600" />
                         <p className="mt-5 text-center">
-                          Item was added in the cart
+                          {WISHLIST_SUCCESS_MESSAGE}
                         </p>
                       </div>
                     )}
@@ -210,7 +232,7 @@ const WishlistSidebar: FC = () => {
                           className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                           onClick={handleClose}
                         >
-                          Continue Shopping
+                          {GENERAL_CONTINUE_SHOPPING}
                           <span className="ml-2" aria-hidden="true">
                             {' '}
                             &rarr;

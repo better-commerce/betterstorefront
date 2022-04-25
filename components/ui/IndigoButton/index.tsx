@@ -22,7 +22,7 @@ const DefaultButton: FC<Props> = ({
   className = '',
   title = 'Add to bag',
   buttonType = 'cart',
-  action = () => {},
+  action = () => { },
   colorScheme = DEFAULT_COLOR_SCHEME,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -32,12 +32,12 @@ const DefaultButton: FC<Props> = ({
   const handleAction = () => {
     setIsLoading(true)
     if (buttonType === 'cart') {
-      action().then(() => {
+      action()?.then(() => {
         setIsLoading(false)
         openCart()
       })
     } else
-      action().then(() => {
+      action()?.then(() => {
         setIsLoading(false)
       })
   }
@@ -48,7 +48,7 @@ const DefaultButton: FC<Props> = ({
     <button
       onClick={handleAction}
       type="button"
-      className={`max-w-xs flex-1 ${bgColor} border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className}`}
+      className={`xs:max-w-xs flex-1 ${bgColor} border border-transparent rounded-md sm:py-3 py-1 sm:px-8 px-1 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className}`}
     >
       {isLoading ? <LoadingDots /> : title}
     </button>

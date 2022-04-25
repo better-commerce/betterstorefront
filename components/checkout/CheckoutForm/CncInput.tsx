@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import Button from '@components/ui/IndigoButton'
+import {
+  ENTER_POSTCODE,
+  GENERAL_APPLY_TEXT
+} from '@components/utils/textVariables'
 
 export default function CncInput({
   handleSubmit,
-  placeholder = 'Enter your postcode',
+  placeholder = ENTER_POSTCODE,
 }: any) {
   const [value, setValue] = useState('')
 
@@ -22,7 +26,7 @@ export default function CncInput({
       <Button
         action={async () => await handleSubmit(value)}
         type="button"
-        title="Apply"
+        title={GENERAL_APPLY_TEXT}
         className={`max-w-xs flex-1 ml-5 bg-indigo-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-600 sm:w-full`}
       />
     </div>

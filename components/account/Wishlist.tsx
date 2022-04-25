@@ -8,6 +8,15 @@ import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { LoadingDots } from '@components/ui'
+import Image from 'next/image'
+import {
+  WISHLIST_TITLE,
+  WISHLIST_SUB_TITLE,
+  GENERAL_VIEW_PRODUCT,
+  GENERAL_ADD_TO_BASKET,
+  GENERAL_REMOVE
+} from '@components/utils/textVariables'
+
 export default function Wishlist() {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -35,15 +44,19 @@ export default function Wishlist() {
 
   const handleAddToCart = (product: any) => {
     cartHandler()
-      .addToCart({
-        basketId,
-        productId: product.recordId,
-        qty: 1,
-        manualUnitPrice: product.price.raw.withTax,
-        stockCode: product.stockCode,
-        userId: user.userId,
-        isAssociated: user.isAssociated,
-      })
+      .addToCart(
+        {
+          basketId,
+          productId: product.recordId,
+          qty: 1,
+          manualUnitPrice: product.price.raw.withTax,
+          stockCode: product.stockCode,
+          userId: user.userId,
+          isAssociated: user.isAssociated,
+        },
+        'ADD',
+        { product }
+      )
       .then((response: any) => {
         setCartItems(response)
         openCart()
@@ -75,13 +88,13 @@ export default function Wishlist() {
         <div className="max-w-4xl mx-auto">
           <div className="px-4 sm:px-0">
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-              Wishlist
+              {WISHLIST_TITLE}
             </h1>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
             {!data.length && !isLoading && (
-              <div>Oh-no! Your wishlist is empty.</div>
+              <div>{WISHLIST_SUB_TITLE}</div>
             )}
             {isLoading ? <LoadingDots /> : null}
             <div className="space-y-16 sm:space-y-24">
@@ -113,7 +126,7 @@ export default function Wishlist() {
                                 href={product.slug}
                                 className="text-indigo-600 hover:text-indigo-500"
                               >
-                                View Product
+                                {GENERAL_VIEW_PRODUCT}
                               </a>
                             </Link>
                             <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
@@ -121,7 +134,7 @@ export default function Wishlist() {
                                 onClick={() => handleAddToCart(product)}
                                 className="text-indigo-600 hover:text-indigo-500"
                               >
-                                Add to basket
+                                {GENERAL_ADD_TO_BASKET}
                               </button>
                             </div>
                             <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
@@ -131,18 +144,26 @@ export default function Wishlist() {
                                 }
                                 className="text-red-600 hover:text-red-500"
                               >
-                                Remove
+                                {GENERAL_REMOVE}
                               </button>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
-                        <img
+                       <Image
+                            width={80}
+                            height={80}
+                            layout='fixed'
+                            src={product.image}
+                            alt={product.name}
+                            className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52 image"
+                          ></Image>
+                        {/* <img
                           src={product.image}
                           alt={product.name}
                           className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
-                        />
+                        /> */}
                       </div>
                     </div>
                   ))}

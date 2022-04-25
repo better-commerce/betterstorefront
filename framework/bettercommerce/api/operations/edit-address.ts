@@ -3,7 +3,7 @@ import { ADDRESS_ENDPOINT } from '@components/utils/constants'
 import countryList from '@components/utils/countryList'
 
 export default function useAddress() {
-  async function getAdressAsync({ query }: any) {
+  async function getAdressAsync({ query, cookies }: any) {
     const countryCode = countryList.find(
       (country) => country.value === query.country
     )?.code
@@ -26,8 +26,9 @@ export default function useAddress() {
     try {
       const response: any = await fetcher({
         url: `${ADDRESS_ENDPOINT}${query.id}/update`,
-        method: 'post',
+        method: 'put',
         data: data,
+        cookies,
       })
       return response.result
     } catch (error: any) {

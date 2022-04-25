@@ -4,6 +4,7 @@ export default async (req: any, res: any) => {
   try {
     const response = await commerce.getProduct({
       query: req.body.slug,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {

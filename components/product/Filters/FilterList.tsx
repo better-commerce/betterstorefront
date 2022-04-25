@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ACTION_TYPES } from 'pages/search'
+import { BTN_SEARCH } from '@components/utils/textVariables'
 
 const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
@@ -61,7 +62,7 @@ const FilterItem = ({
         <label
           htmlFor={`${optionIdx}-input[]`}
           onClick={handleCheckbox}
-          className="cursor-pointer ml-3 text-sm text-gray-500 relative filter-label"
+          className="cursor-pointer ml-0 text-sm text-gray-500 relative filter-label"
         >
           {isCheckboxChecked && !isCheckboxTickDisabled && (
             <div
@@ -105,14 +106,14 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
       <label htmlFor="search-input" className="sr-only">
-        Brand
+        {BTN_SEARCH}
       </label>
       <input
         id="search-input"
         type="text"
         onChange={(e) => handleSearch(e.target.value)}
-        autoComplete="brand"
-        placeholder="Search brands"
+        autoComplete={BTN_SEARCH}
+        placeholder={BTN_SEARCH}
         className="appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-1 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
       />
     </>
@@ -122,6 +123,12 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
 const getCustomComponent = (type: string) => {
   switch (type) {
     case FILTER_KEYS.BRAND:
+      return (props: any) => <SearchInput {...props} />
+    case FILTER_KEYS.CATEGORY:
+      return (props: any) => <SearchInput {...props} />
+    case FILTER_KEYS.SIZE:
+      return (props: any) => <SearchInput {...props} />
+    case FILTER_KEYS.OCCASION:
       return (props: any) => <SearchInput {...props} />
     default:
       return () => null
@@ -149,6 +156,15 @@ export default function FilterList({
     [FILTER_KEYS.BRAND]: {
       handleSearch: (value: string) => handleSearch(value),
     },
+    [FILTER_KEYS.CATEGORY]: {
+      handleSearch: (value: string) => handleSearch(value),
+    },
+    [FILTER_KEYS.SIZE]: {
+      handleSearch: (value: string) => handleSearch(value),
+    },
+    [FILTER_KEYS.OCCASION]: {
+      handleSearch: (value: string) => handleSearch(value),
+    },
     [FILTER_KEYS.COLOR]: {
       isCheckboxTickDisabled: true,
       bgColor: (item: any) => item.name.split('|')[0],
@@ -164,21 +180,23 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      {filterItems.map((option: any, optionIdx: number) => {
-        const isChecked = isDefaultChecked(sectionKey, option.name)
-        return (
-          <FilterItem
-            sectionKey={sectionKey}
-            option={option}
-            onSelect={handleFilters}
-            optionIdx={optionIdx}
-            key={optionIdx}
-            isChecked={isChecked}
-            closeSidebar={closeSidebar}
-            {...PROPS_LIST[sectionKey]}
-          />
-        )
-      })}
+      <div className="max-panel space-y-2">
+        {filterItems.map((option: any, optionIdx: number) => {
+          const isChecked = isDefaultChecked(sectionKey, option.name)
+          return (
+            <FilterItem
+              sectionKey={sectionKey}
+              option={option}
+              onSelect={handleFilters}
+              optionIdx={optionIdx}
+              key={optionIdx}
+              isChecked={isChecked}
+              closeSidebar={closeSidebar}
+              {...PROPS_LIST[sectionKey]}
+            />
+          )
+        })}
+      </div>
     </>
   )
 }
