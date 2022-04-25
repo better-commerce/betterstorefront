@@ -7,6 +7,7 @@ interface Props {
   manualUnitPrice?: number
   displayOrder?: number
   stockCode?: string
+  cookies?: any
 }
 
 export default function useAddItem() {
@@ -17,6 +18,7 @@ export default function useAddItem() {
     manualUnitPrice,
     displayOrder,
     stockCode,
+    cookies,
   }: Props) {
     const data = {
       basketId,
@@ -28,9 +30,10 @@ export default function useAddItem() {
     }
     try {
       const response: any = await fetcher({
-        url: `${BASKET_ENDPOINT}/${basketId}/add`,
-        method: 'post',
+        url: `${BASKET_ENDPOINT}/${basketId}/items/add`,
+        method: 'put',
         data,
+        cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },

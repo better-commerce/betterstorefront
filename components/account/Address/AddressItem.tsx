@@ -1,5 +1,13 @@
 import { useState } from 'react'
 import Form from './AddressBookForm'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import {
+  GENERAL_EDIT,
+  GENERAL_DELETE,
+  GENERAL_DEFAULT_DELIVERY_ADDRESS,
+  GENERAL_DEFAULT_BILLING_ADDRESS,
+} from '@components/utils/textVariables'
 
 export default function AddressItem({
   item,
@@ -26,17 +34,53 @@ export default function AddressItem({
     isDefaultDelivery,
     isDefaultSubscription,
     countryCode,
+    user,
   } = item
+
+  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const handleAddressSubmit = async (values: any) => {
     return updateAddress({ ...item, ...values, ...{ userId } })
-      .then(() => successCallback() && setEditMode(false))
+      .then(
+        () =>
+          successCallback() &&
+          setEditMode(false) &&
+          eventDispatcher(CustomerUpdated, {
+            entity: JSON.stringify({
+              id: user.userId,
+              name: user.username,
+              dateOfBirth: user.yearOfBirth,
+              gender: user.gender,
+              email: user.email,
+              postCode: user.postCode,
+            }),
+            entityId: user.userId,
+            entityName: user.firstName + user.lastName,
+            eventType: CustomerUpdated,
+          })
+      )
       .catch(() => errCallback())
   }
 
   const deleteItem = () => {
     deleteAddress({ userId, addressId: item.id })
-      .then(() => successCallback())
+      .then(
+        () =>
+          successCallback() &&
+          eventDispatcher(CustomerUpdated, {
+            entity: JSON.stringify({
+              id: user.userId,
+              name: user.username,
+              dateOfBirth: user.yearOfBirth,
+              gender: user.gender,
+              email: user.email,
+              postCode: user.postCode,
+            }),
+            entityId: user.userId,
+            entityName: user.firstName + user.lastName,
+            eventType: CustomerUpdated,
+          })
+      )
       .catch(() => errCallback)
   }
 
@@ -85,24 +129,24 @@ export default function AddressItem({
                   onClick={() => setEditMode(true)}
                   className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                 >
-                  Edit
+                  {GENERAL_EDIT}
                 </button>
                 <button
                   onClick={deleteItem}
                   className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                 >
-                  Delete
+                  {GENERAL_DELETE}
                 </button>
               </div>
               <div className="mt-5 flex justify-between items-center">
                 {item.isDefaultDelivery && (
                   <div className="px-2 py-2 mr-2 border">
-                    Default delivery address
+                    {GENERAL_DEFAULT_DELIVERY_ADDRESS}
                   </div>
                 )}
                 {item.isDefaultBilling && (
                   <div className="px-2 py-2 border">
-                    Default billing address
+                    {GENERAL_DEFAULT_BILLING_ADDRESS}
                   </div>
                 )}
               </div>

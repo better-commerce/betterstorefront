@@ -1,3 +1,5 @@
+import {GENERAL_EDIT} from '@components/utils/textVariables'
+
 export default function ConfirmedGeneralComponent({
   onStateChange,
   content = {},
@@ -5,7 +7,7 @@ export default function ConfirmedGeneralComponent({
   return (
     <div className="text-gray-900 flex flex-col">
       <div className="flex">
-        <ul className={`text-gray-900 mt-3 flex`}>
+        <ul className={`text-gray-900 mt-3 sm:flex xs:flex-col`}>
           {Object.keys(content).map((item: any, idx: number) => {
             return (
               <li key={idx} className="font-normal d-inline font-sm pr-1">
@@ -17,11 +19,9 @@ export default function ConfirmedGeneralComponent({
       </div>
       <div className="flex">
         <button onClick={onStateChange} className="btn text-indigo-500 font-xs" type="button">
-          Edit
+          {GENERAL_EDIT}
         </button>
       </div>
-      
-     
     </div>
   )
 }

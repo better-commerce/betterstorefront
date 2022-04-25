@@ -4,10 +4,14 @@ import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
-import getBrands from '@framework/api/endpoints/catalog/brands'
+import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import ProductSort from '@components/product/ProductSort'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { NextSeo } from 'next-seo'
+import Link from 'next/link'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -84,6 +88,20 @@ function BrandDetailPage({
   brandDetails,
 }: any) {
   const adaptedQuery = { ...query }
+  const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  useAnalytics(BrandViewed, {
+    entity: JSON.stringify({
+      id: brandDetails?.id,
+      name: brandDetails?.name || '',
+      manufName: brandDetails?.manufacturerName,
+    }),
+    entityName: PAGE_TYPE,
+    pageTitle: brandDetails?.manufacturerName,
+    entityType: 'Brand',
+    eventType: 'BrandViewed',
+  })
+
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
     : false
@@ -97,7 +115,7 @@ function BrandDetailPage({
       filters: [
         {
           Key: 'brandNoAnlz',
-          Value: brandDetails.manufacturerName,
+          Value: brandDetails?.name,
           IsSelected: true,
         },
       ],
@@ -208,9 +226,9 @@ function BrandDetailPage({
       page: state.currentPage,
       pageSize: 0,
       promoCode: null,
-      resultCount: data.products.total,
-      sortBy: state.sortBy,
-      sortOrder: state.sortOrder,
+      resultCount: data?.products?.total,
+      sortBy: state?.sortBy,
+      sortOrder: state?.sortOrder,
     }
     setEntities({
       [KEYS_MAP.entityId]: '',
@@ -226,25 +244,39 @@ function BrandDetailPage({
     ? productListMemory.products
     : data.products
 
+  // IMPLEMENT HANDLING FOR NULL OBJECT
+  if (brandDetails === null) {
+    return (
+      <div className="container mx-auto py-10 text-center relative top-20">
+        <h4 className="text-3xl font-medium text-gray-400 pb-6">
+          This is a bad url. please go back to
+          <Link href="/brands">
+            <a className="text-indigo-500 px-3">all brands</a>
+          </Link>
+        </h4>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+        <div className="text-center sm:py-16 py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
             {state.filters[0]?.Value}
           </h1>
-          <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+          <h1 className="sm:text-xl text-lg mt-2 font-medium tracking-tight text-gray-500">
             {data.products.total} results
           </h1>
           <div
             dangerouslySetInnerHTML={{
               __html: brandDetails.description,
             }}
-            className="py-10 px-5 mt-5 text-gray-900"
+            className="sm:py-10 py-4 px-5 sm:mt-5 mt-2 text-gray-900"
           />
         </div>
-        <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
+        <div className="sm:py-5 py-2 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
           <ProductSort
             routerSortOption={state.sortBy}
             products={data.products}
@@ -258,14 +290,40 @@ function BrandDetailPage({
           handleInfiniteScroll={handleInfiniteScroll}
         />
       </main>
+      <NextSeo
+        title={brandDetails.name}
+        description={brandDetails.description}
+        additionalMetaTags={[
+          {
+            name: 'keywords',
+            content: brandDetails.metaKeywords,
+          },
+        ]}
+        openGraph={{
+          type: 'website',
+          title: brandDetails.metaTitle,
+          description: brandDetails.metaDescription,
+          images: [
+            {
+              url: brandDetails.Image,
+              width: 800,
+              height: 600,
+              alt: brandDetails.name,
+            },
+          ],
+        }}
+      />
     </div>
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await getBrands({ brandIds: context.query.id })
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const response = await getBrandBySlug(
+    `brands/${context.query.brand.pop()}`,
+    context.req.cookies
+  )
   return {
-    props: { query: context.query, brandDetails: response.result.results[0] }, // will be passed to the page component as props
+    props: { query: context.query, brandDetails: response.result }, // will be passed to the page component as props
   }
 }
 

@@ -16,6 +16,7 @@ import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import axios from 'axios'
+import Image from 'next/image'
 import {
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
@@ -23,6 +24,27 @@ import {
   NEXT_GET_PRODUCT,
 } from '@components/utils/constants'
 import Button from '@components/ui/IndigoButton'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import {
+  ALERT_SUCCESS_WISHLIST_MESSAGE,
+  BTN_ADD_TO_FAVORITES,
+  BTN_NOTIFY_ME,
+  BTN_PRE_ORDER,
+  GENERAL_ADD_TO_BASKET,
+  GENERAL_ENGRAVING,
+  GENERAL_PRICE_LABEL_RRP,
+  GENERAL_REFERENCE,
+  GENERAL_REVIEWS,
+  GENERAL_REVIEW_OUT_OF_FIVE,
+  IMG_PLACEHOLDER,
+  ITEM_TYPE_ADDON,
+  PRICEMATCH_ADDITIONAL_DETAILS,
+  PRICEMATCH_BEST_PRICE,
+  PRICEMATCH_SEEN_IT_CHEAPER,
+  PRODUCT_INFORMATION,
+  YOUTUBE_VIDEO_PLAYER,
+} from '@components/utils/textVariables'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -69,9 +91,26 @@ export default function ProductView({
     ...product,
   })
 
+  const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
+
+  const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
     const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
     if (response?.data?.product) {
+      eventDispatcher(ProductViewed, {
+        entity: JSON.stringify({
+          id: response.data.product.recordId,
+          sku: response.data.product.sku,
+          name: response.data.product.name,
+          stockCode: response.data.product.stockCode,
+          img: response.data.product.image,
+        }),
+        entityId: response.data.product.recordId,
+        entityName: response.data.product.name,
+        entityType: Product,
+        eventType: ProductViewed,
+        omniImg: response.data.product.image,
+      })
       setUpdatedProduct(response.data.product)
       setSelectedAttrData({
         productId: response.data.product.recordId,
@@ -87,17 +126,12 @@ export default function ProductView({
 
   useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
-    setEntities({
-      [entityId]: product.recordId,
-      [entityName]: product.name,
-      [entityType]: 'Product',
-      [entity]: JSON.stringify(product),
-    })
+
     recordEvent(EVENTS.ProductViewed)
     if (snippets) {
       snippets.forEach((snippet: any) => {
         const domElement = document.querySelector(
-          PLACEMENTS_MAP[snippet.placement].element
+          PLACEMENTS_MAP[snippet.placement]?.element
         )
         if (domElement) {
           domElement.insertAdjacentHTML(
@@ -139,35 +173,75 @@ export default function ProductView({
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: 'Add to bag',
+      title: GENERAL_ADD_TO_BASKET,
       action: async () => {
-        const item = await cartHandler().addToCart({
-          basketId: basketId,
-          productId: selectedAttrData.productId,
-          qty: 1,
-          manualUnitPrice: product.price.raw.withTax,
-          stockCode: selectedAttrData.stockCode,
-          userId: user.userId,
-          isAssociated: user.isAssociated,
-        })
+        const item = await cartHandler().addToCart(
+          {
+            basketId: basketId,
+            productId: selectedAttrData.productId,
+            qty: 1,
+            manualUnitPrice: product.price.raw.withTax,
+            stockCode: selectedAttrData.stockCode,
+            userId: user.userId,
+            isAssociated: user.isAssociated,
+          },
+          'ADD',
+          { product: selectedAttrData }
+        )
         setCartItems(item)
       },
       shortMessage: '',
     }
-    if (!selectedAttrData.currentStock && !product.preOrder.isEnabled) {
-      if (!product.flags.sellWithoutInventory) {
-        buttonConfig.title = 'Notify me'
-        buttonConfig.action = () => handleNotification()
+    if (selectedAttrData.currentStock <= 0 && !product.preOrder.isEnabled) {
+      if (
+        !product.flags.sellWithoutInventory ||
+        !selectedAttrData.sellWithoutInventory
+      ) {
+        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
       }
-    } else if (product.preOrder.isEnabled && !selectedAttrData.currentStock) {
-      if (product.preOrder.currentStock < product.preOrder.maxStock) {
-        buttonConfig.title = 'Pre-order'
+    } else if (
+      product.preOrder.isEnabled &&
+      selectedAttrData.currentStock <= 0
+    ) {
+      if (
+        product.preOrder.currentStock < product.preOrder.maxStock &&
+        (!product.flags.sellWithoutInventory ||
+          selectedAttrData.sellWithoutInventory)
+      ) {
+        buttonConfig.title = BTN_PRE_ORDER
         buttonConfig.shortMessage = product.preOrder.shortMessage
+        return buttonConfig
+      } else if (
+        product.flags.sellWithoutInventory ||
+        selectedAttrData.sellWithoutInventory
+      ) {
+        buttonConfig = {
+          title: GENERAL_ADD_TO_BASKET,
+          action: async () => {
+            const item = await cartHandler().addToCart(
+              {
+                basketId: basketId,
+                productId: selectedAttrData.productId,
+                qty: 1,
+                manualUnitPrice: product.price.raw.withTax,
+                stockCode: selectedAttrData.stockCode,
+                userId: user.userId,
+                isAssociated: user.isAssociated,
+              },
+              'ADD',
+              { product: selectedAttrData }
+            )
+            setCartItems(item)
+          },
+          shortMessage: '',
+        }
       } else {
-        buttonConfig.title = 'Notify me'
+        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
-        buttonConfig.action = () => handleNotification()
+        return buttonConfig
       }
     }
     return buttonConfig
@@ -183,8 +257,8 @@ export default function ProductView({
         stockCode: selectedAttrData.stockCode,
       },
     }
-    const addonProducts = product.relatedProducts.filter(
-      (item: any) => item.stockCode === 'ADDON'
+    const addonProducts = product.relatedProducts?.filter(
+      (item: any) => item.stockCode === ITEM_TYPE_ADDON
     )
     const addonProductsWithParentProduct = addonProducts.map((item: any) => {
       item.parentProductId = product.recordId
@@ -261,10 +335,11 @@ export default function ProductView({
     asyncHandler()
   }
 
-  const isEngravingAvailable = !!product.relatedProducts.filter(
-    (item: any) => item.stockCode === 'ADDON'
+  const isEngravingAvailable = !!product.relatedProducts?.filter(
+    (item: any) => item.stockCode === ITEM_TYPE_ADDON
   ).length
 
+  //TODO no additionalProperties key found on product object
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
@@ -290,17 +365,23 @@ export default function ProductView({
   }
 
   const filteredRelatedProducts = product.relatedProducts?.filter(
-    (item: any) => item.stockCode !== 'ADDON'
+    (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
   const filteredRelatedProductList = product.relatedProductList?.filter(
-    (item: any) => item.stockCode !== 'ADDON'
+    (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
+
+  /*if (product === null) {
+    return {
+      notFound: true,
+    }
+  }*/
 
   return (
     <div className="bg-white page-container">
       {/* Mobile menu */}
-      <div className="max-w-7xl mx-auto sm:pt-6 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto pt-2 px-2 sm:pt-6 sm:px-6 lg:px-8">
         {product.breadCrumbs && (
           <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />
         )}
@@ -317,18 +398,21 @@ export default function ProductView({
                   {content?.map((image: any, idx) => (
                     <Tab
                       key={`${idx}-tab`}
-                      className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                      className="relative h-24 sm:h-44 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
                     >
                       {() => (
                         <>
                           <span className="sr-only">{image.name}</span>
                           <span className="absolute inset-0 rounded-md overflow-hidden">
                             {image.image ? (
-                              <img
-                                src={image.image}
-                                alt=""
-                                className="w-full h-full object-center object-cover"
-                              />
+                              <div className='image-container'>
+                                <Image
+                                  src={`${image.image}` || IMG_PLACEHOLDER}
+                                  alt={image.name}
+                                  className="w-full h-full sm:h-44 object-center object-cover image"
+                                  layout='fill'
+                                ></Image>
+                              </div>
                             ) : (
                               <PlayIcon className="h-full w-full object-center object-cover" />
                             )}
@@ -340,21 +424,24 @@ export default function ProductView({
                 </Tab.List>
               </div>
 
-              <Tab.Panels className="w-full aspect-w-1 aspect-h-1">
+              <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0">
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
-                      <img
-                        src={image.image}
-                        alt={image.name}
-                        className="w-full h-full object-center object-cover sm:rounded-lg"
-                      />
+                      <div className='image-container'>
+                        <Image
+                          src={`${image.image}` || IMG_PLACEHOLDER}
+                          alt={image.name}
+                          className="w-full h-full object-center object-cover image rounded-lg"
+                          layout='fill'
+                        ></Image>
+                      </div>
                     ) : (
                       <iframe
                         width="560"
                         height="315"
                         src={image.url}
-                        title="YouTube video player"
+                        title={YOUTUBE_VIDEO_PLAYER}
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -366,22 +453,23 @@ export default function ProductView({
             </Tab.Group>
 
             {/* Product info */}
-            <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
-              <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-                {selectedAttrData.name}
+            <div className="sm:mt-10 mt-2 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+              <h1 className="sm:text-3xl text-xl font-bold sm:font-extrabold tracking-tight text-gray-900">
+                {selectedAttrData.name || selectedAttrData.productName}
               </h1>
 
-              <p className="text-gray-500 text-md">
-                Ref: {selectedAttrData.stockCode}
+              <p className="text-gray-500 sm:text-md text-sm mt-2 sm:mt-0">
+                {GENERAL_REFERENCE}: {selectedAttrData.stockCode}
               </p>
               <div className="mt-3">
-                <h2 className="sr-only">Product information</h2>
+                <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
                 {updatedProduct ? (
-                  <p className="text-3xl text-gray-900">
+                  <p className="sm:text-3xl text-2xl font-bold sm:font-medium text-gray-900">
                     {selectedAttrData.price?.formatted?.withTax}
                     {selectedAttrData.listPrice?.raw.tax > 0 ? (
                       <span className="px-5 text-sm line-through text-gray-500">
-                        RRP {product.listPrice.formatted.withTax}
+                        {GENERAL_PRICE_LABEL_RRP}{' '}
+                        {product.listPrice.formatted.withTax}
                       </span>
                     ) : null}
                   </p>
@@ -392,9 +480,9 @@ export default function ProductView({
 
               {/* Reviews */}
               <div className="mt-3">
-                <h3 className="sr-only">Reviews</h3>
-                <div className="flex items-center">
-                  <div className="flex items-center">
+                <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
+                <div className="flex items-center xs:flex-col">
+                  <div className="flex items-center xs:text-center align-center">
                     {[0, 1, 2, 3, 4].map((rating) => (
                       <StarIcon
                         key={rating}
@@ -408,7 +496,9 @@ export default function ProductView({
                       />
                     ))}
                   </div>
-                  <p className="sr-only">{product.rating} out of 5 stars</p>
+                  <p className="sr-only">
+                    {product.rating} {GENERAL_REVIEW_OUT_OF_FIVE}
+                  </p>
                 </div>
               </div>
               <div className="w-full sm:w-6/12">
@@ -419,22 +509,31 @@ export default function ProductView({
                 />
               </div>
               <p
-                className="text-gray-900 text-md cursor-pointer hover:underline"
+                className="text-gray-900 sm:text-md text-sm cursor-pointer hover:underline"
                 onClick={() => showPriceMatchModal(true)}
               >
-                <span className="font-bold">Seen it cheaper?</span>
-                <span>{''} We'll match the best price</span>
+                <span className="font-bold">{PRICEMATCH_SEEN_IT_CHEAPER}</span>
+                <span>
+                  {''} {PRICEMATCH_BEST_PRICE}
+                </span>
               </p>
 
-              <section aria-labelledby="details-heading" className="mt-12">
+              <section
+                aria-labelledby="details-heading"
+                className="sm:mt-12 mt-4"
+              >
                 <h2 id="details-heading" className="sr-only">
-                  Additional details
+                  {PRICEMATCH_ADDITIONAL_DETAILS}
                 </h2>
-                <ProductDetails product={product} />
-
+                <ProductDetails
+                  product={product}
+                  description={
+                    selectedAttrData.description || product.description
+                  }
+                />
                 {updatedProduct ? (
                   <>
-                    <div className="mt-10 flex sm:flex-col1">
+                    <div className="sm:mt-10 mt-6 flex sm:flex-col1">
                       <Button
                         title={buttonConfig.title}
                         action={buttonConfig.action}
@@ -451,11 +550,11 @@ export default function ProductView({
                         className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                       >
                         {isInWishList ? (
-                          <span>Item was added in wishlist</span>
+                          <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
                         ) : (
                           <HeartIcon className="h-6 w-6 flex-shrink-0" />
                         )}
-                        <span className="sr-only">Add to favorites</span>
+                        <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
                       </button>
                     </div>
                     {isEngravingAvailable && (
@@ -463,12 +562,12 @@ export default function ProductView({
                         className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                         onClick={() => showEngravingModal(true)}
                       >
-                        <span className="font-bold">Engraving</span>
+                        <span className="font-bold">{GENERAL_ENGRAVING}</span>
                       </button>
                     )}
                   </>
                 ) : null}
-                <div className="border-t divide-y divide-gray-200 mt-10">
+                <div className="border-t divide-y divide-gray-200 sm:mt-10 mt-6">
                   <p className="text-gray-900 text-lg">
                     {selectedAttrData.currentStock > 0
                       ? product.deliveryMessage

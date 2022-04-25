@@ -23,6 +23,10 @@ import SearchWrapper from '@components/search/index'
 import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import Router from 'next/router'
 import ProgressBar from '@components/ui/ProgressBar'
+import {
+  BTN_ACCEPT_COOKIE,
+  GENERAL_COOKIE_TEXT,
+} from '@components/utils/textVariables'
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center fixed z-50 justify-center p-3">
     <LoadingDots />
@@ -33,10 +37,9 @@ const dynamicProps = {
   loading: Loading,
 }
 
-const FeatureBar = dynamic(
-  () => import('@components/common/FeatureBar'),
-  dynamicProps
-)
+const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
+  ...dynamicProps,
+})
 
 interface Props {
   pageProps: {
@@ -45,7 +48,9 @@ interface Props {
   }
   nav: []
   footer: []
+  isLocationLoaded: boolean
   config: any
+  keywords: []
 }
 
 const ModalView: FC<{ modalView: string; closeModal(): any }> = ({
@@ -96,6 +101,8 @@ const Layout: FC<Props> = ({
   children,
   config,
   pageProps: { categories = [], ...pageProps },
+  keywords,
+  isLocationLoaded,
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
   const [isLoading, setIsLoading] = useState(false)
@@ -104,6 +111,7 @@ const Layout: FC<Props> = ({
 
   const { appConfig, setAppConfig } = useUI()
 
+  //check if nav data is avaialbel in LocalStorage, then dont fetch from Server/API
   useEffect(() => {
     const fetchLayout = async () => {
       try {
@@ -124,21 +132,29 @@ const Layout: FC<Props> = ({
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
-  const { locale = 'en-US' } = useRouter()
+  const { locale = 'en-US', ...rest } = useRouter()
+
+  const sortedData = data.nav.sort(
+    (a: any, b: any) => a.displayOrder - b.displayOrder
+  )
   return (
     <CommerceProvider locale={locale}>
       <Script
         src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
         strategy="beforeInteractive"
       />
+
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
         {showSearchBar && (
-          <SearchWrapper closeWrapper={() => setShowSearchBar(false)} />
+          <SearchWrapper
+            keywords={keywords}
+            closeWrapper={() => setShowSearchBar(false)}
+          />
         )}
         <Navbar
           currencies={config.currencies}
-          config={data.nav}
+          config={sortedData}
           languages={config.languages}
         />
         <main className="fit">{children}</main>
@@ -146,11 +162,11 @@ const Layout: FC<Props> = ({
         <ModalUI />
         <SidebarUI />
         <FeatureBar
-          title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
+          title={GENERAL_COOKIE_TEXT}
           hide={acceptedCookies}
           action={
             <Button className="mx-5" onClick={() => onAcceptCookies()}>
-              Accept cookies
+              {BTN_ACCEPT_COOKIE}
             </Button>
           }
         />

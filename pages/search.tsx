@@ -4,10 +4,14 @@ import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import ProductGrid from '@components/product/Grid'
-import ProductFilters from '@components/product/Filters'
+import ProductMobileFilters from '@components/product/Filters'
+import ProductFilterRight from '@components/product/Filters/filtersRight'
+import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { useUI } from '@components/ui/context'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -16,6 +20,7 @@ export const ACTION_TYPES = {
   HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
+  FREE_TEXT: 'FREE_TEXT',
 }
 
 interface actionInterface {
@@ -28,10 +33,13 @@ interface stateInterface {
   currentPage?: string | number
   sortOrder?: string
   filters: any
+  freeText: string
 }
 
 const IS_INFINITE_SCROLL =
   process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+
+const PAGE_TYPE = PAGE_TYPES['Search']
 
 const {
   SORT_BY,
@@ -41,6 +49,7 @@ const {
   HANDLE_FILTERS_UI,
   ADD_FILTERS,
   REMOVE_FILTERS,
+  FREE_TEXT,
 } = ACTION_TYPES
 
 const DEFAULT_STATE = {
@@ -48,6 +57,7 @@ const DEFAULT_STATE = {
   sortOrder: 'asc',
   currentPage: 1,
   filters: [],
+  freeText: '',
 }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -64,6 +74,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, areFiltersOpen: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case FREE_TEXT:
+      return { ...state, freeText: payload || '' }
     case REMOVE_FILTERS:
       return {
         ...state,
@@ -90,6 +102,7 @@ function Search({ query, setEntities, recordEvent }: any) {
     ...adaptedQuery,
   }
 
+  const { user } = useUI()
   const [productListMemory, setProductListMemory] = useState({
     products: {
       results: [],
@@ -112,10 +125,19 @@ function Search({ query, setEntities, recordEvent }: any) {
         total: 0,
         currentPage: 1,
         filters: [],
+        freeText: query.freeText || '',
       },
     },
     error,
   } = useSwr(['/api/catalog/products', state], postData)
+
+  const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
+
+  useEffect(() => {
+    if (router.query.freeText !== state.freeText) {
+      dispatch({ type: FREE_TEXT, payload: query.freeText })
+    }
+  }, [router.query.freeText])
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
@@ -153,6 +175,34 @@ function Search({ query, setEntities, recordEvent }: any) {
       behavior: 'smooth',
     })
   }
+
+  const BrandFilter = state.filters.find(
+    (filter: any) => filter.name === 'Brand'
+  )
+  const CategoryFilter = state.filters.find(
+    (filter: any) => filter.name === 'Category'
+  )
+
+  useAnalytics(FacetSearch, {
+    entity: JSON.stringify({
+      FreeText: '',
+      Page: state.currentPage,
+      SortBy: state.sortBy,
+      SortOrder: state.sortOrder,
+      Brand: BrandFilter ? BrandFilter.value : null,
+      Category: CategoryFilter ? CategoryFilter.value : null,
+      Gender: user.gender,
+      CurrentPage: state.currentPage,
+      PageSize: 20,
+      Filters: state.filters,
+      AllowFacet: true,
+      ResultCount: data.products.total,
+    }),
+    entityName: PAGE_TYPE,
+    pageTitle: 'Catalog',
+    entityType: 'Page',
+    eventType: 'Search',
+  })
 
   const handleInfiniteScroll = () => {
     if (
@@ -236,28 +286,58 @@ function Search({ query, setEntities, recordEvent }: any) {
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+        <div className="text-center sm:py-16 py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
             Catalog
           </h1>
-          <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+          <h1 className="sm:text-xl text-lg mt-2 font-medium tracking-tight text-gray-500">
             {data.products.total} results
           </h1>
         </div>
-        <ProductFilters
-          handleFilters={handleFilters}
-          products={data.products}
-          handleSortBy={handleSortBy}
-          routerFilters={state.filters}
-          clearAll={clearAll}
-          routerSortOption={state.sortBy}
-        />
-        <ProductGrid
-          products={productDataToPass}
-          currentPage={state.currentPage}
-          handlePageChange={handlePageChange}
-          handleInfiniteScroll={handleInfiniteScroll}
-        />
+        <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
+          {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+
+          <div className="sm:col-span-3 sm:hidden flex flex-col">
+            <ProductMobileFilters
+              handleFilters={handleFilters}
+              products={data.products}
+              routerFilters={state.filters}
+              handleSortBy={handleSortBy}
+              clearAll={clearAll}
+              routerSortOption={state.sortBy}
+            />
+          </div>
+
+          {/* {FILTER PANEL SHOW ONLY IN DESKTOP VERSION} */}
+
+          <div className="sm:col-span-3 sm:block hidden">
+            <ProductFilterRight
+              handleFilters={handleFilters}
+              products={data.products}
+              routerFilters={state.filters}
+            />
+          </div>
+          <div className="sm:col-span-9">
+            {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+
+            <div className="flex-1 sm:block hidden">
+              <ProductFiltersTopBar
+                products={data.products}
+                handleSortBy={handleSortBy}
+                routerFilters={state.filters}
+                clearAll={clearAll}
+                routerSortOption={state.sortBy}
+              />
+            </div>
+            <ProductGrid
+              products={productDataToPass}
+              currentPage={state.currentPage}
+              handlePageChange={handlePageChange}
+              handleInfiniteScroll={handleInfiniteScroll}
+            />
+          </div>
+          <div></div>
+        </div>
       </main>
     </div>
   )
@@ -268,7 +348,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: { query: context.query }, // will be passed to the page component as props
   }
 }
-
-const PAGE_TYPE = PAGE_TYPES['Search']
 
 export default withDataLayer(Search, PAGE_TYPE)

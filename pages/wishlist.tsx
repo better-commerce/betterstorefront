@@ -7,6 +7,11 @@ import { useCustomer } from '@framework/customer'
 import { WishlistCard } from '@components/wishlist'
 import useWishlist from '@framework/wishlist/use-wishlist'
 import rangeMap from '@lib/range-map'
+import { 
+  GENERAL_WISHLIST, 
+  MESSAGE_NO_ORDER_FOUND_TEXT, 
+  WISHLIST_SUB_TITLE
+} from '@components/utils/textVariables'
 
 export async function getStaticProps({
   preview,
@@ -36,13 +41,15 @@ export async function getStaticProps({
 
 export default function Wishlist() {
   const { data: customer } = useCustomer()
-  // @ts-ignore Shopify - Fix this types
+  // @ts-ignore  - Fix this types
   const { data, isLoading, isEmpty } = useWishlist({ includeProducts: true })
 
   return (
     <Container>
       <div className="mt-3 mb-20">
-        <Text variant="pageHeading">My Wishlist</Text>
+        <Text variant="pageHeading">
+          {GENERAL_WISHLIST}
+        </Text>
         <div className="group flex flex-col">
           {isLoading ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -58,16 +65,16 @@ export default function Wishlist() {
                 <Heart className="absolute" />
               </span>
               <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
-                Your wishlist is empty
+                {WISHLIST_SUB_TITLE}
               </h2>
               <p className="text-accent-6 px-10 text-center pt-2">
-                Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.
+                {MESSAGE_NO_ORDER_FOUND_TEXT}
               </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data &&
-                // @ts-ignore Shopify - Fix this types
+                // @ts-ignore  - Fix this types
                 data.items?.map((item) => (
                   <WishlistCard key={item.id} product={item.product! as any} />
                 ))}

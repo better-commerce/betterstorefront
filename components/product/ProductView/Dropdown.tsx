@@ -32,7 +32,7 @@ export default function Dropdown({
 
   const [selected, setSelected] = useState({
     currentAttribute,
-    stock: productData.stock,
+    stock: productData.currentStock,
     productId: productData.productId,
     stockCode: productData.stockCode,
   })
@@ -45,7 +45,7 @@ export default function Dropdown({
     setProductData(getStockPerAttrData)
     setSelected({
       currentAttribute,
-      stock: getStockPerAttrData.stock,
+      stock: getStockPerAttrData.currentStock,
       productId: getStockPerAttrData.productId,
       stockCode: getStockPerAttrData.stockCode,
     })
@@ -59,7 +59,7 @@ export default function Dropdown({
     setProductData(getStockPerAttrData)
     setSelected({
       currentAttribute,
-      stock: getStockPerAttrData.stock,
+      stock: getStockPerAttrData.currentStock,
       productId: getStockPerAttrData.productId,
       stockCode: getStockPerAttrData.stockCode,
     })
@@ -68,9 +68,9 @@ export default function Dropdown({
   const isPreOrderEnabled = productData.isPreOrderEnabled
 
   const generateItemOption = (value: any, stock: number) => {
-    if (stock === 0 && !isPreOrderEnabled)
+    if (stock <= 0 && !isPreOrderEnabled)
       return `${value.toUpperCase()} - NOTIFY ME`
-    if (stock === 0 && isPreOrderEnabled) {
+    if (stock <= 0 && isPreOrderEnabled) {
       return `${value.toUpperCase()} - PRE-ORDER`
     }
     if ((stock < 5 && stock > 0) || isPreOrderEnabled)
@@ -83,6 +83,7 @@ export default function Dropdown({
     //   fieldCode,
     //   value.currentAttribute
     // )
+
     const stockPerAttrValue = getProductFromAttributes(
       fieldCode,
       value.currentAttribute,
@@ -103,7 +104,7 @@ export default function Dropdown({
       <Listbox.Label
         className={`${
           isDisabled ? 'opacity-40' : ''
-        } block text-sm font-medium text-gray-700`}
+        } block text-sm font-medium text-gray-800 text-left`}
       >
         {label}
       </Listbox.Label>

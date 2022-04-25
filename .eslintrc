@@ -2,6 +2,6 @@
   "extends": ["next", "prettier"],
   "rules": {
     "react/no-unescaped-entities": "off",
-    "react/display-name": "off"
+    "react/display-name": "off"    
   }
 }

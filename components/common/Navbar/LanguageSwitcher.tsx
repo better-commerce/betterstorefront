@@ -1,6 +1,8 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { FlagIcon } from '@heroicons/react/outline'
+import Cookies from 'js-cookie'
+import { Router } from 'next/router'
 
 export default function CurrencySwitcher({ config, title, action }: any) {
   return (
@@ -34,9 +36,10 @@ export default function CurrencySwitcher({ config, title, action }: any) {
                           className={
                             'text-left p-2 cursor-pointer hover:bg-gray-200'
                           }
-                          onClick={() =>
+                          onClick={() => {
+                            Cookies.set('googtrans', `/en/${item.languageCode}`)
                             action({ Language: item.languageCode })
-                          }
+                          }}
                         >
                           {item.languageCode} - {item.name}
                         </div>

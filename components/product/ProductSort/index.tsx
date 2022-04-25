@@ -4,6 +4,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { GENERAL_SORT } from '@components/utils/textVariables'
 interface Props {
   products: any
   action: any
@@ -24,7 +25,7 @@ export default function ProductSort({
     <Menu as="div" className="relative inline-block">
       <div className="flex">
         <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-          Sort
+          {GENERAL_SORT}
           <ChevronDownIcon
             className="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"
             aria-hidden="true"
@@ -50,7 +51,7 @@ export default function ProductSort({
                     <div>
                       <Link
                         href={{
-                          pathname: '/search',
+                          pathname: router.pathname,
                           query: {
                             ...router.query,
                             sortBy: option.key,

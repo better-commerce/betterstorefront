@@ -24,7 +24,6 @@ function BrandPage({ brandDetails }: any) {
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
 
-  console.log(widgetsConfig)
   return (
     <>
       {widgetsConfig.map((widget: any, idx: number) => {
@@ -47,7 +46,7 @@ export default withDataLayer(BrandPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const slug: any = context?.query?.pages[0] || ''
-  const response = await getBrandBySlug(slug)
+  const response = await getBrandBySlug(slug, context.req.cookies)
   return {
     props: { query: context.query, brandDetails: response }, // will be passed to the page component as props
   }

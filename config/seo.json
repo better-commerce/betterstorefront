@@ -1,20 +1,20 @@
 {
-  "title": "ACME Storefront | Powered by Next.js Commerce",
-  "titleTemplate": "%s - ACME Storefront",
-  "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+  "title": "BetterCommerce Demo Storefront | Powered by Next.js and BetterCommerce",
+  "titleTemplate": "%s - Demo Storefront",
+  "description": "BetterCommerce - https://bettercommerce.io",
   "openGraph": {
-    "title": "ACME Storefront | Powered by Next.js Commerce",
-    "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+    "title": "BetterCommerce Demo Storefront | Powered by Next.js and BetterCommerce",
+    "description": "BetterCommerce - https://bettercommerce.io",
     "type": "website",
-    "locale": "en_IE",
-    "url": "https://nextjs.org/commerce",
-    "site_name": "Next.js Commerce",
+    "locale": "en_GB",
+    "url": "https://bettercommerce.io",
+    "site_name": "BetterCommerce",
     "images": [
       {
         "url": "/card.png",
         "width": 800,
         "height": 600,
-        "alt": "Next.js Commerce"
+        "alt": "BetterCommerce"
       }
     ]
   },

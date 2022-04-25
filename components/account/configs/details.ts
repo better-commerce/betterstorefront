@@ -1,35 +1,41 @@
 import * as Yup from 'yup'
-
+import {
+  GENERAL_EMAIL,
+  GENERAL_FIRST_NAME,
+  GENERAL_LAST_NAME,
+  GENERAL_MOBILE_NUMBER,
+  GENERAL_PHONE,
+} from '@components/utils/textVariables'
 export const formConfig = [
   {
     type: 'text',
     name: 'firstName',
-    placeholder: 'First name',
-    label: 'First name',
+    placeholder: GENERAL_FIRST_NAME,
+    label: GENERAL_FIRST_NAME,
   },
   {
     type: 'text',
     name: 'lastName',
-    placeholder: 'Last name',
-    label: 'Last name',
+    placeholder: GENERAL_LAST_NAME,
+    label: GENERAL_LAST_NAME,
   },
   {
     type: 'email',
     name: 'email',
-    placeholder: 'Email',
-    label: 'Email',
+    placeholder: GENERAL_EMAIL,
+    label: GENERAL_EMAIL,
   },
   {
     type: 'mobile',
     name: 'mobile',
-    placeholder: 'Mobile Number',
-    label: 'Mobile Number',
+    placeholder: GENERAL_MOBILE_NUMBER,
+    label: GENERAL_MOBILE_NUMBER,
   },
   {
     type: 'phone',
     name: 'phone',
-    placeholder: 'Phone number',
-    label: 'Phone number',
+    placeholder: GENERAL_PHONE,
+    label: GENERAL_PHONE,
   },
 ]
 

@@ -3,10 +3,11 @@ import fetcher from '../fetcher'
 interface Props {
   basketId?: string
   productId?: string
+  cookies?: any
 }
 
 export default function useRemoveItem() {
-  return async function handler({ basketId, productId }: Props) {
+  return async function handler({ basketId, productId, cookies }: Props) {
     const data = {
       basketId,
       productId,
@@ -14,11 +15,12 @@ export default function useRemoveItem() {
     try {
       const response: any = await fetcher({
         url: `${BASKET_ENDPOINT}/${basketId}/items/${productId}/remove`,
-        method: 'post',
+        method: 'delete',
         data,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies,
       })
       return response.result
     } catch (error: any) {

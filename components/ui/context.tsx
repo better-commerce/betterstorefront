@@ -30,6 +30,7 @@ export interface State {
   showSearchBar: boolean
   appConfig: any
   orderId: string
+  userIp: string
 }
 
 const initialState = {
@@ -48,69 +49,71 @@ const initialState = {
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
+  userIp: '',
 }
 
 type Action =
   | {
-      type: 'OPEN_SIDEBAR'
-    }
+    type: 'OPEN_SIDEBAR'
+  }
   | {
-      type: 'CLOSE_SIDEBAR'
-    }
+    type: 'CLOSE_SIDEBAR'
+  }
   | {
-      type: 'OPEN_DROPDOWN'
-    }
+    type: 'OPEN_DROPDOWN'
+  }
   | {
-      type: 'CLOSE_DROPDOWN'
-    }
+    type: 'CLOSE_DROPDOWN'
+  }
   | {
-      type: 'OPEN_MODAL'
-    }
+    type: 'OPEN_MODAL'
+  }
   | {
-      type: 'OPEN_NOTIFY_USER_POPUP'
-      payload: string
-    }
+    type: 'OPEN_NOTIFY_USER_POPUP'
+    payload: string
+  }
   | {
-      type: 'CLOSE_NOTIFY_USER_POPUP'
-    }
+    type: 'CLOSE_NOTIFY_USER_POPUP'
+  }
   | {
-      type: 'CLOSE_MODAL'
-    }
+    type: 'CLOSE_MODAL'
+  }
   | {
-      type: 'SET_MODAL_VIEW'
-      view: MODAL_VIEWS
-    }
+    type: 'SET_MODAL_VIEW'
+    view: MODAL_VIEWS
+  }
   | {
-      type: 'SET_SIDEBAR_VIEW'
-      view: SIDEBAR_VIEWS
-    }
+    type: 'SET_SIDEBAR_VIEW'
+    view: SIDEBAR_VIEWS
+  }
   | {
-      type: 'SET_USER_AVATAR'
-      value: string
-    }
+    type: 'SET_USER_AVATAR'
+    value: string
+  }
   | {
-      type: 'ADD_TO_WISHLIST'
-      payload: any
-    }
+    type: 'ADD_TO_WISHLIST'
+    payload: any
+  }
   | {
-      type: 'ADD_TO_CART'
-      payload: any
-    }
+    type: 'ADD_TO_CART'
+    payload: any
+  }
   | {
-      type: 'REMOVE_FROM_CART'
-      payload: any
-    }
+    type: 'REMOVE_FROM_CART'
+    payload: any
+  }
   | { type: 'SET_CART_ITEMS'; payload: any }
   | {
-      type: 'SET_USER'
-      payload: any
-    }
+    type: 'SET_USER'
+    payload: any
+  }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
   | { type: 'SHOW_SEARCH_BAR'; payload: boolean }
   | { type: 'SET_APP_CONFIG'; payload: any }
   | { type: 'SET_ORDER_ID'; payload: any }
+  | { type: 'SET_USER_IP'; payload: string }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -138,6 +141,13 @@ function uiReducer(state: State, action: Action) {
         displaySidebar: true,
       }
     }
+    case 'SET_USER_IP': {
+      return {
+        ...state,
+        userIp: action.payload,
+      }
+    }
+
     case 'CLOSE_SIDEBAR': {
       return {
         ...state,
@@ -281,6 +291,12 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const setUserIp = useCallback(
+    (payload: string) => {
+      dispatch({ type: 'SET_USER_IP', payload })
+    },
+    [dispatch]
+  )
   const removeFromWishlist = useCallback(
     (payload: any) => {
       const items = state.wishListItems.filter(
@@ -381,9 +397,9 @@ export const UIProvider: FC = (props) => {
   const setCartItems = useCallback(
     (payload: any) => {
       const newCartDataClone: any = { ...payload }
-      newCartDataClone.lineItems.forEach((element: any, idx: number) => {
-        newCartDataClone.lineItems.forEach((i: any) => {
-          if (element.parentProductId === i.productId) {
+      newCartDataClone?.lineItems?.forEach((element: any, idx: number) => {
+        newCartDataClone?.lineItems?.forEach((i: any) => {
+          if (element?.parentProductId === i.productId) {
             i.children = i.children ? [...i.children, element] : [element]
             newCartDataClone.lineItems.splice(idx, 1)
           }
@@ -489,6 +505,7 @@ export const UIProvider: FC = (props) => {
       setShowSearchBar,
       setAppConfig,
       setOrderId,
+      setUserIp,
     }),
     [state]
   )

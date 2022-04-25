@@ -3,11 +3,12 @@ import { CREATE_ADDRESS_ENDPOINT } from '@components/utils/constants'
 import countryList from '@components/utils/countryList'
 
 export default function useAddress() {
-  async function getAdressAsync({ query }: any) {
+  async function getAdressAsync({ query, cookies }: any) {
     const countryCode = countryList.find(
       (country) => country.value === query.country
     )?.code
     const data = {
+      title: query.title || '',
       firstName: query.firstName,
       lastName: query.lastName,
       Address1: query.address1,
@@ -15,10 +16,10 @@ export default function useAddress() {
       City: query.city,
       PostCode: query.postCode,
       Country: query.country,
-      CountryCode: countryCode,
+      CountryCode: query.countryCode || countryCode,
       CustomerId: query.userId,
       PhoneNo: query.phoneNo,
-      isDefault: query.isDefault,
+      isDefault: query.isDefault || false,
       isDefaultBilling: query.isDefaultBilling || false,
       isDefaultDelivery: query.isDefaultDelivery || false,
       isDefaultSubscription: query.isDefaultSubscription || false,
@@ -28,6 +29,7 @@ export default function useAddress() {
         url: `${CREATE_ADDRESS_ENDPOINT}`,
         method: 'post',
         data,
+        cookies,
       })
       return response.result
     } catch (error: any) {

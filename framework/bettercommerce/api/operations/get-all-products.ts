@@ -7,13 +7,22 @@ import { SEARCH_MINIMAL_ENDPOINT } from '@components/utils/constants'
 export default function getAllProductsOperation({}: OperationContext<any>) {
   async function getAllProducts<T extends GetAllProductsOperation>({
     query = '',
+    cookies = {},
   }: {
     query?: any
+    cookies?: any
   } = {}): Promise<any> {
-    const { filters, sortBy, sortOrder, currentPage, collectionId = '' } = query
-
+    const {
+      freeText = '',
+      filters,
+      sortBy,
+      sortOrder,
+      currentPage,
+      collectionId = '',
+      categoryId = '',
+    } = query
     const data: any = {
-      freeText: '',
+      freeText,
       pageSize: 20,
       allowFacet: true,
       facetOnly: false,
@@ -21,6 +30,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       sortOrder,
       currentPage,
       collectionId,
+      categoryId,
     }
 
     if (filters.length) {
@@ -32,6 +42,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
         url: SEARCH_MINIMAL_ENDPOINT,
         method: 'post',
         data: qs.stringify(data),
+        cookies,
       })
 
       return {

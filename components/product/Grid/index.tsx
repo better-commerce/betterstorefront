@@ -1,7 +1,8 @@
 import Pagination from '@components/product/Pagination'
 import rangeMap from '@lib/range-map'
-import ProductCard from '@components/product/ProductCard/ProductCard'
+import ProductCard from '@components/product/ProductCard/SearchProductCard'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
+import { TITLE_PRODUCTS } from '@components/utils/textVariables'
 
 interface Props {
   products: any
@@ -22,10 +23,10 @@ export default function Grid({
   return (
     <section
       aria-labelledby="products-heading"
-      className="max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8"
+      className="max-w-7xl overflow-hidden sm:px-6 lg:px-8 mx-auto"
     >
       <h2 id="products-heading" className="sr-only">
-        Products
+        {TITLE_PRODUCTS}
       </h2>
 
       {IS_INFINITE_SCROLL && (
@@ -34,7 +35,13 @@ export default function Grid({
           total={products.total}
           currentNumber={products.results.length}
           component={
-            <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+            <div
+              className={`-mx-px border-l border-t border-gray-100 grid grid-cols-2 sm:mx-0 md:grid-cols-3 ${
+                products.results.length < 3
+                  ? `lg:grid-cols-2`
+                  : 'lg:grid-cols-3'
+              }`}
+            >
               {!products.results.length &&
                 rangeMap(12, (i) => (
                   <div

@@ -9,6 +9,7 @@ export default async (req: any, res: any) => {
   try {
     const response = await getShippingPlans()({
       model,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {

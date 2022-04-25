@@ -2,6 +2,7 @@ import { Tab, Disclosure } from '@headlessui/react'
 import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
+import {PRODUCT_DESCRIPTION,PRODUCT_SPECIFICATION,GENERAL_SHIPPING,GENERAL_RETURNS} from '@components/utils/textVariables'
 
 const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i
 
@@ -31,23 +32,23 @@ const Attributes = ({ attributes = [] }: any) => {
   )
 }
 
-export default function ProductDetails({ product }: any) {
+export default function ProductDetails({ product, description }: any) {
   const detailsConfig = [
     {
-      title: 'Description',
+      title: PRODUCT_DESCRIPTION,
       InnerComponent: (props: any) => (
         <div
-          className="text-gray-700 space-y-6"
-          dangerouslySetInnerHTML={{ __html: product.description }}
+          className="text-gray-700 sm:space-y-6 space-y-2"
+          dangerouslySetInnerHTML={{ __html: description || '' }}
         />
       ),
     },
     {
-      title: 'Product specification',
+      title: PRODUCT_SPECIFICATION,
       InnerComponent: (props: any) => <Attributes {...props} />,
     },
     {
-      title: 'Shipping',
+      title: GENERAL_SHIPPING,
       InnerComponent: (props: any) => (
         <p className="text-gray-900">
           {props.shippingMessage || 'SHIPPING CONTENT TO BE ADDED'}
@@ -55,7 +56,7 @@ export default function ProductDetails({ product }: any) {
       ),
     },
     {
-      title: 'Returns',
+      title: GENERAL_RETURNS,
       InnerComponent: (props: any) => (
         <p className="text-gray-900">
           {props.returnsMessage || 'RETURNS CONTENT TO BE ADDED'}
@@ -63,14 +64,15 @@ export default function ProductDetails({ product }: any) {
       ),
     },
   ]
+
   return (
-    <div className="border-t divide-y divide-gray-200">
+    <div className="border-b divide-y divide-gray-200">
       {detailsConfig.map((detail: any, idx: number) => (
         <Disclosure as="div" key={`${idx}-detail-item`}>
           {({ open }) => (
             <>
               <h3>
-                <Disclosure.Button className="group relative w-full py-6 flex justify-between items-center text-left">
+                <Disclosure.Button className="group relative w-full sm:py-6 py-2 pr-2 flex justify-between items-center text-left">
                   <span
                     className={classNames(
                       open ? 'text-indigo-600' : 'text-gray-900',
@@ -95,7 +97,9 @@ export default function ProductDetails({ product }: any) {
                 </Disclosure.Button>
               </h3>
               <Disclosure.Panel as="div" className="pb-6 prose prose-sm">
-                {detail.InnerComponent({ attributes: product.attributes })}
+                {detail.InnerComponent({
+                  attributes: product.customAttributes || product.attributes,
+                })}
               </Disclosure.Panel>
             </>
           )}
