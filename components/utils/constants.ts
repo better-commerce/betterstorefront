@@ -106,4 +106,3 @@ export const NEXT_GEO_ENDPOINT =
   process.env.NEXT_PUBLIC_GEO_ENDPOINT ||
   'https://omnilytics.bettercommerce.io/api/v1/IpInfo?ipAddress='
 export const UPDATE_ORDER_STATUS = '/api/update-order-status'
-
