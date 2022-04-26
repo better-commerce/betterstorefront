@@ -35,15 +35,6 @@ const Attributes = ({ attributes = [] }: any) => {
 export default function ProductDetails({ product, description }: any) {
   const detailsConfig = [
     {
-      title: PRODUCT_DESCRIPTION,
-      InnerComponent: (props: any) => (
-        <div
-          className="text-gray-700 sm:space-y-6 space-y-2"
-          dangerouslySetInnerHTML={{ __html: description || '' }}
-        />
-      ),
-    },
-    {
       title: PRODUCT_SPECIFICATION,
       InnerComponent: (props: any) => <Attributes {...props} />,
     },
@@ -67,6 +58,12 @@ export default function ProductDetails({ product, description }: any) {
 
   return (
     <div className="border-b divide-y divide-gray-200">
+       <div className='flex-1 mt-6 py-3'>
+          <div
+            className="text-gray-800 text- leading-7 font-normal"
+            dangerouslySetInnerHTML={{ __html: product.description || '' }}
+          />
+        </div>
       {detailsConfig.map((detail: any, idx: number) => (
         <Disclosure as="div" key={`${idx}-detail-item`}>
           {({ open }) => (

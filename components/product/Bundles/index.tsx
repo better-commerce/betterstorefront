@@ -1,7 +1,14 @@
-import ProductCard from '@components/product/ProductCard'
-import { BUNDLE_TEXT, GENERAL_ADD_TO_BASKET, YOUR_BUNDLE_INCLUDE } from '@components/utils/textVariables'
 import { useState } from 'react'
 import BundleCard from './BundleCard'
+
+import { 
+  BUNDLE_TEXT, 
+  GENERAL_ADD_TO_BASKET, 
+  GENERAL_COLOUR, 
+  GENERAL_SIZE, 
+  YOUR_BUNDLE_INCLUDE 
+} from '@components/utils/textVariables'
+
 
 export default function Bundles({ price = '', products = [] }: any) {
   const [productData, setProductData] = useState(null)
@@ -42,12 +49,12 @@ export default function Bundles({ price = '', products = [] }: any) {
                       <span className='inline-block pl-3 text-red-400 text-xs font-semibold line-through'>£32.39</span>  
                     </h4> 
                     <h4 className='text-sm mt-1'>
-                        <span className='uppercase text-xs font-bold  tex-black inline-block'>Colour:</span>
+                        <span className='uppercase text-xs font-bold  tex-black inline-block'>{GENERAL_COLOUR}:</span>
                         <span className='text-gray-600 inline-block pl-1'>Mono Check</span>
                     </h4> 
                   </div>
                   <div className='flex flex-col mt-1'>
-                    <label className='font-semibold text-black text-sm'>Size:</label>
+                    <label className='font-semibold text-black text-sm'>{GENERAL_SIZE}:</label>
                     <select className='p-2 border border-gray-400 rounded-sm font-semibold text-sm text-black'>
                         <option value="">Please Select</option>
                         <option value="s">S</option>
