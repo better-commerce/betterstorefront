@@ -1,5 +1,5 @@
-import '@assets/main.css'
-import '@assets/chrome-bug.css'
+import '@assets/css/main.css'
+import '@assets/css/chrome-bug.css'
 import 'keen-slider/keen-slider.min.css'
 import { FC, useEffect, useState, useLayoutEffect } from 'react'
 import { Head } from '@components/common'
@@ -21,6 +21,7 @@ import analytics from '@components/services/analytics/analytics'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import EngageAI from '@components/common/EngageAI'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -162,6 +163,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
           </main>
         ) : (
           <>
+            <EngageAI {...pageProps.slugs} />
             <Layout
               nav={nav}
               footer={footer}

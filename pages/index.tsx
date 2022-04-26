@@ -1,12 +1,17 @@
+// Base Imports
+import React from 'react'
+import type { GetStaticPropsContext } from 'next'
+
+// Other Imports
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
-import type { GetStaticPropsContext } from 'next'
 import { HOMEPAGE_SLUG } from '@components/utils/constants'
 import ProductSlider from '@components/product/ProductSlider'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+
 export async function getStaticProps({
   preview,
   locale,
@@ -35,7 +40,7 @@ export async function getStaticProps({
 const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+  const { PageViewed } = EVENTS_MAP.EVENT_TYPES;
 
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
@@ -53,7 +58,7 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
     entityType: 'Page',
     entityId: slugs?.id,
     eventType: 'PageViewed',
-  })
+  });
 
   return (
     <>
