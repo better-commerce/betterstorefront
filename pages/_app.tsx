@@ -22,6 +22,7 @@ import setSessionIdCookie from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import ContentSnippet from '@components/common/Content'
+import { resetSnippetElements } from "@framework/content/use-content-snippet"
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -81,7 +82,20 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     )
     document.body.appendChild(addScript)
       ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    // Listener for snippet injector reset.
+    router.events.on("routeChangeStart", () => {
+      resetSnippetElements();
+    });
+
+    // Dispose listener.
+    return () => {
+      router.events.off("routeChangeComplete", () => {
+      });
+    };
+  }, [router.events]);
 
   const fetchAppConfig = async () => {
     try {
@@ -149,7 +163,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }, [])
 
-  //console.log(pageProps.slugs?.snippets);
+  //debugger;
+  //console.log(pageProps);
 
   return (
     <>
@@ -165,7 +180,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
           </main>
         ) : (
           <>
-            <ContentSnippet {...pageProps.slugs} />
+            <ContentSnippet {...pageProps} />
             <Layout
               nav={nav}
               footer={footer}

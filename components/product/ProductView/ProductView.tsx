@@ -590,6 +590,11 @@ export default function ProductView({
               relatedProductList={filteredRelatedProductList}
             />
           ) : null}
+          
+          {/* Placeholder for pdp snippet */}
+          <div data-bc-pdp-snippet></div>
+
+
           <Reviews data={product.reviews} productId={product.recordId} />
           {isEngravingAvailable && (
             <Engraving

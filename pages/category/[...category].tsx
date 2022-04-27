@@ -33,6 +33,7 @@ export async function getStaticProps(context: any) {
       props: {
         category,
         products: categoryProducts,
+        snippets: category?.snippets
       },
       revalidate: 60,
     }
