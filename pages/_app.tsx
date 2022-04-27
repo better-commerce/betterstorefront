@@ -21,7 +21,7 @@ import analytics from '@components/services/analytics/analytics'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import EngageAI from '@components/common/EngageAI'
+import ContentSnippet from '@components/common/Content'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -149,6 +149,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }, [])
 
+  console.log(pageProps.slugs?.snippets);
+
   return (
     <>
       <Head />
@@ -163,7 +165,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
           </main>
         ) : (
           <>
-            <EngageAI {...pageProps.slugs} />
+            <ContentSnippet {...pageProps.slugs} />
             <Layout
               nav={nav}
               footer={footer}

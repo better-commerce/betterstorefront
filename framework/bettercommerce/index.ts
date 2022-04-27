@@ -1,6 +1,6 @@
 import { getCommerceProvider, useCommerce as useCoreCommerce } from '@commerce'
 import { betterCommerceProvider, BetterCommerceProvider } from './provider'
-import useEngageAI from './analytics/use-engage-ai';
+import useContentSnippet from './content/use-content-snippet';
 
 export { betterCommerceProvider }
 export type { BetterCommerceProvider }
@@ -8,4 +8,4 @@ export type { BetterCommerceProvider }
 export const CommerceProvider = getCommerceProvider(betterCommerceProvider)
 
 export const useCommerce = () => useCoreCommerce<BetterCommerceProvider>()
-export { useEngageAI };
+export { useContentSnippet };
