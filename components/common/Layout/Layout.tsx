@@ -139,10 +139,10 @@ const Layout: FC<Props> = ({
   )
   return (
     <CommerceProvider locale={locale}>
-      <Script
+      {/* <Script
         src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
         strategy="beforeInteractive"
-      />
+      /> */}
 
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
