@@ -3,8 +3,8 @@ import { domReader } from "./dom-reader";
 export { domReader };
 
 // Style Loader
-import { styleElementLoader } from "./style-loader";
-export { styleElementLoader };
+import { domElementLoader } from "./dom-loader";
+export { domElementLoader };
 
 // Script Loader
 import { scriptElementLoader, scriptLoader } from "./script-loader";

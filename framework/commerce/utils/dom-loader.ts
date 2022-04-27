@@ -1,7 +1,7 @@
 
-export const styleElementLoader = (element: any, insertAtTop: boolean, attrs?: object, node?: HTMLElement, skip?: boolean) => {
+export const domElementLoader = (element: any, insertAtTop: boolean, attrs?: object, node?: HTMLElement, skip?: boolean) => {
     //debugger;
-    const loadStyle = (element: any, insertAtTop: boolean, attrs?: object, parentNode?: HTMLElement) => {
+    const loadDOM = (element: any, insertAtTop: boolean, attrs?: object, parentNode?: HTMLElement) => {
         return new Promise((resolve, reject) => {
             //const style = Object.create(element); // JSON.parse(JSON.stringify(element));
 
@@ -21,7 +21,7 @@ export const styleElementLoader = (element: any, insertAtTop: boolean, attrs?: o
     };
 
     if (!skip) {
-        return loadStyle(element, insertAtTop, attrs, node)
+        return loadDOM(element, insertAtTop, attrs, node)
             .then(style => {
                 return { style: style as HTMLStyleElement };
             })
