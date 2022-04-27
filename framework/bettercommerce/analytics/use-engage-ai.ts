@@ -4,8 +4,8 @@ import { useEffect } from "react";
 // Type Imports
 import { GUIDType } from "@core/types";
 import { TagNameType } from "@lib/hooks/useDOMReader";
-import { domReader } from "@commerce/utils/dom-reader";
-import { scriptElementLoader, styleElementLoader } from "@commerce/utils";
+import { domReader, scriptElementLoader, styleElementLoader } from "@commerce/utils";
+import { IDomReference } from "@commerce/utils/dom-reader";
 
 enum EngageSnippetPlacementType {
     HEAD = "Head",
@@ -40,10 +40,12 @@ interface IEngageSnippet {
 const ENGAGE_ELEM_ATTR = "data-ai-";
 const ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS = ["engage-scr-top-head", "engage-scr-head"];
 const ENGAGE_HEAD_STYLE_ELEM_SELECTORS = ["engage-stl-top-head", "engage-stl-head"];
+const ENGAGE_BODY_SCRIPT_ELEM_SELECTORS = ["engage-scr-body-start", "engage-scr-body-end"];
+const ENGAGE_BODY_STYLE_ELEM_SELECTORS = ["engage-stl-body-start", "engage-stl-body-end"];
 
 const useEngageAI = (snippets: Array<any>): void => {
 
-    const resetEngageElem = () => {
+    const resetEngageElem = (): void => {
         const head = document.querySelector("head");
         if (head) {
             const scrSelectors = ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS.map(x => `[${ENGAGE_ELEM_ATTR}${x}]`).join(", ");
@@ -62,13 +64,32 @@ const useEngageAI = (snippets: Array<any>): void => {
                 })
             }
         }
-    }
+    };
+
+    const injectScriptElements = (elements: Array<IDomReference> | undefined, parentNode: HTMLElement, attrs: Object, insertAtTop: boolean = false): void => {
+        if (elements && elements.length) {
+            elements.filter(x => x.type === TagNameType.SCRIPT)?.forEach(x => {
+                scriptElementLoader(x.element, insertAtTop, attrs, parentNode);
+            });
+        }
+    };
+
+    const injectStyleElements = (elements: Array<IDomReference> | undefined, parentNode: HTMLElement, attrs: Object, insertAtTop: boolean = false): void => {
+        if (elements && elements.length) {
+            elements.filter(x => x.type === TagNameType.STYLE)?.forEach(x => {
+                styleElementLoader(x.element, insertAtTop, attrs, parentNode);
+            });
+        }
+    };
 
     useEffect(() => {
         //debugger;
         resetEngageElem();
         if (snippets && snippets.length) {
+            let attrs: any = {};
             try {
+                const headElem: any = document.querySelector("head");
+                const bodyElem: any = document.querySelector("body");
                 snippets.forEach((snippet: IEngageSnippet) => {
 
                     if (snippet.content) {
@@ -79,20 +100,12 @@ const useEngageAI = (snippets: Array<any>): void => {
                             // For "TopHead"
                             case EngageSnippetPlacementType.TOP_HEAD:
 
-                                if (elements && elements.length) {
-                                    const headElem: any = document.querySelector("head");
-                                    elements.filter(x => x.type === TagNameType.SCRIPT)?.forEach(x => {
-                                        let attrs: any = new Object();
-                                        attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS[0]}`] = "";
-                                        scriptElementLoader(x.element, true, attrs, headElem);
-                                    });
+                                attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS[0]}`] = "";
+                                injectScriptElements(elements, headElem, attrs, true);
 
-                                    elements.filter(x => x.type === TagNameType.STYLE)?.forEach(x => {
-                                        let attrs: any = new Object();
-                                        attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_STYLE_ELEM_SELECTORS[0]}`] = "";
-                                        styleElementLoader(x.element, true, attrs, headElem);
-                                    });
-                                }
+                                attrs = new Object();
+                                attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_STYLE_ELEM_SELECTORS[0]}`] = "";
+                                injectStyleElements(elements, headElem, attrs, true);
                                 break;
 
                             // For "Head"
@@ -100,21 +113,35 @@ const useEngageAI = (snippets: Array<any>): void => {
 
                                 //console.log(elements);
                                 //debugger;
-                                if (elements && elements.length) {
-                                    const headElem: any = document.querySelector("head");
-                                    elements.filter(x => x.type === TagNameType.SCRIPT)?.forEach(x => {
-                                        let attrs: any = new Object();
-                                        attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS[1]}`] = "";
-                                        scriptElementLoader(x.element, false, attrs, headElem);
-                                    });
+                                attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS[1]}`] = "";
+                                injectScriptElements(elements, headElem, attrs);
 
-                                    elements.filter(x => x.type === TagNameType.STYLE)?.forEach(x => {
-                                        let attrs: any = new Object();
-                                        attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_STYLE_ELEM_SELECTORS[1]}`] = "";
-                                        styleElementLoader(x.element, false, attrs, headElem);
-                                    });
-                                }
+                                attrs = new Object();
+                                attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_STYLE_ELEM_SELECTORS[1]}`] = "";
+                                injectStyleElements(elements, headElem, attrs);
 
+                                break;
+
+                            // For "BodyStartHtmlTagAfter"
+                            case EngageSnippetPlacementType.BODY_START_HTML_TAG_AFTER:
+
+                                attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_BODY_SCRIPT_ELEM_SELECTORS[0]}`] = "";
+                                injectScriptElements(elements, bodyElem, attrs, true);
+
+                                attrs = new Object();
+                                attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_BODY_STYLE_ELEM_SELECTORS[0]}`] = "";
+                                injectStyleElements(elements, bodyElem, attrs, true);
+                                break;
+
+                            // For "BodyEndHtmlTagBefore"
+                            case EngageSnippetPlacementType.BODY_END_HTML_TAG_BEFORE:
+
+                                attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_BODY_SCRIPT_ELEM_SELECTORS[1]}`] = "";
+                                injectScriptElements(elements, bodyElem, attrs);
+
+                                attrs = new Object();
+                                attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_BODY_STYLE_ELEM_SELECTORS[1]}`] = "";
+                                injectStyleElements(elements, bodyElem, attrs);
                                 break;
                             default:
                                 break;

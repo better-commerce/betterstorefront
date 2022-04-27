@@ -8,7 +8,7 @@ export enum TagNameType {
     OTHER = "OTHER"
 }
 
-interface IDomReference {
+export interface IDomReference {
     readonly element: any;
     readonly type: string;
 }
