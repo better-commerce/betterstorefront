@@ -1,10 +1,6 @@
-// DOM Reader
-import { domReader } from "./dom-reader";
-export { domReader };
-
-// Style Loader
-import { domElementLoader } from "./dom-loader";
-export { domElementLoader };
+// DOM Util
+import { domReader, domElementLoader, insertAdjacentHTML } from "./dom-util";
+export { domReader, domElementLoader, insertAdjacentHTML };
 
 // Script Loader
 import { scriptElementLoader, scriptLoader } from "./script-loader";

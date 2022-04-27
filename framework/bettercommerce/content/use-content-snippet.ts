@@ -3,20 +3,25 @@ import { useEffect } from "react";
 
 // Type Imports
 import { GUIDType } from "@core/types";
-import { TagNameType } from "@lib/hooks/useDOMReader";
-import { domReader, scriptElementLoader, domElementLoader } from "@commerce/utils";
-import { IDomReference } from "@commerce/utils/dom-reader";
+import { insertAdjacentHTML } from "@commerce/utils";
+import { IDomReference } from "@commerce/utils/dom-util";
+
+export enum SnippetContentType {
+    JAVASCRIPT = "Javascript",
+    HTML = "Html",
+    TEXT = "Text"
+}
 
 enum SnippetPlacementType {
     HEAD = "Head",
     ERROR_HEAD = "ErrorHead",
     BODY_START_HTML_TAG_AFTER = "BodyStartHtmlTagAfter",
+    BODY_END_HTML_TAG_BEFORE = "BodyEndHtmlTagBefore",
     PAGE_CONTAINER_AFTER = "PageContainerAfter",
     HEADER_MENU_BEFORE = "HeaderMenuBefore",
     HEADER_MENU_AFTER = "HeaderMenuAfter",
     FOOTER_BEFORE = "FooterBefore",
     FOOTER_AFTER = "FooterAfter",
-    BODY_END_HTML_TAG_BEFORE = "BodyEndHtmlTagBefore",
     H1 = "H1",
     PRODUCT_AND_BRAND_DESC = "ProductAndBrandDescription",
     LEFT_PANEL = "LeftPanel",
@@ -43,215 +48,67 @@ interface ISnippet {
 const ELEM_ATTR = "data-bc-snippet-";
 
 /**
- * Attribute names for starting & ending JS snippet injections inside <head>.
+ * Attribute names for snippet injections inside <head>.
  */
-const HEAD_SCRIPT_ELEM_SELECTORS = ["scr-top-head", "scr-head"];
+const HEAD_ELEM_SELECTORS = ["top-head", "head"];
 
 /**
- * Attribute names for starting & ending style snippet injections inside <head>.
+ * Attribute names for snippet injections inside <body>.
  */
-const HEAD_STYLE_ELEM_SELECTORS = ["stl-top-head", "stl-head"];
+const BODY_ELEM_SELECTORS = ["body-start", "body-end"];
 
 /**
- * Attribute names for starting & ending JS snippet injections inside <body>.
+ * Attribute names for snippet injections inside <main>.
  */
-const BODY_SCRIPT_ELEM_SELECTORS = ["scr-body-start", "scr-body-end"];
+const PAGE_CONTAINER_ELEM_SELECTORS = ["page-container-start", "page-container-end"];
 
 /**
- * Attribute names for starting & ending style snippet injections inside <body>.
+ * Attribute names for snippet injections around <header>.
  */
-const BODY_STYLE_ELEM_SELECTORS = ["stl-body-start", "stl-body-end"];
-const BODY_HTML_ELEM_SELECTORS = ["htm-body-start"];
+const HEADER_MENU_ELEM_SELECTORS = ["header-before-start", "header-after-end"];
 
 /**
- * Attribute names for starting & ending JS snippet injections inside page container.
+ * Attribute names for snippet injections around <header>.
  */
-const PAGE_CONTAINER_SCRIPT_ELEM_SELECTORS = ["scr-page-container-start", "scr-page-container-end"];
+const FOOTER_ELEM_SELECTORS = ["footer-before-start", "footer-after-end"];
 
-/**
- * Attribute names for starting & ending style snippet injections inside page container.
- */
-const PAGE_CONTAINER_STYLE_ELEM_SELECTORS = ["stl-page-container-start", "stl-page-container-end"];
-const PAGE_CONTAINER_HTML_ELEM_SELECTORS = ["htm-page-container-start"];
-
-const useContentSnippet = (snippets: Array<any>): void => {
-    const injectScriptElements = (elements: Array<IDomReference> | undefined, parentNode: HTMLElement, attrs: Object, insertAtTop: boolean = false): void => {
-        if (elements && elements.length) {
-            elements.filter(x => x.type === TagNameType.SCRIPT)?.forEach(x => {
-                scriptElementLoader(x.element, insertAtTop, attrs, parentNode);
-            });
-        }
-    };
-
-    const injectStyleElements = (elements: Array<IDomReference> | undefined, parentNode: HTMLElement, attrs: Object, insertAtTop: boolean = false): void => {
-        if (elements && elements.length) {
-            elements.filter(x => x.type === TagNameType.STYLE)?.forEach(x => {
-                domElementLoader(x.element, insertAtTop, attrs, parentNode);
-            });
-        }
-    };
-
-    const injectHtmlElements = (elements: Array<IDomReference> | undefined, parentNode: HTMLElement, attrs: Object, insertAtTop: boolean = false): void => {
-        if (elements && elements.length) {
-            elements.filter(x => x.type === TagNameType.HTML)?.forEach(x => {
-                domElementLoader(x.element.parentNode, insertAtTop, attrs, parentNode);
-            });
-        }
-    };
-
-    const removeInjections = (elemSelectors: Array<string>, parentNode: HTMLElement) => {
-        const selectors = elemSelectors.map(x => `[${ELEM_ATTR}${x}]`).join(", ");
-        const nodes = parentNode.querySelectorAll(selectors);
-        if (nodes && nodes.length) {
-            nodes.forEach(elem => {
-                parentNode.removeChild(elem);
-            })
-        }
-    };
-
-    const resetSnippetElements = (): void => {
-        const head = document.querySelector("head");
-        if (head) {
-            // Remove script injections in <head>.
-            removeInjections(HEAD_SCRIPT_ELEM_SELECTORS, head);
-
-            // Remove style injections in <head>.
-            removeInjections(HEAD_STYLE_ELEM_SELECTORS, head);
-        }
-
-        const body = document.querySelector("body") as HTMLElement;
-        if (head) {
-            // Remove script injections in <body>.
-            removeInjections(BODY_SCRIPT_ELEM_SELECTORS, body);
-
-            // Remove style injections in <body>.
-            removeInjections(BODY_STYLE_ELEM_SELECTORS, body);
-
-            // Remove style injections in <body>.
-            removeInjections(BODY_HTML_ELEM_SELECTORS, body);
-        }
-
-        const pageContainer = document.querySelector("main") as HTMLElement;
-        if (head) {
-            // Remove script injections in <body>.
-            removeInjections(PAGE_CONTAINER_SCRIPT_ELEM_SELECTORS, pageContainer);
-
-            // Remove style injections in <body>.
-            removeInjections(PAGE_CONTAINER_STYLE_ELEM_SELECTORS, pageContainer);
-
-            // Remove html injections in <body>.
-            removeInjections(PAGE_CONTAINER_HTML_ELEM_SELECTORS, pageContainer);
-        }
-    };
-
+const useContentSnippet = (snippets: Array<ISnippet>): void => {
     useEffect(() => {
         //debugger;
         resetSnippetElements();
         if (snippets && snippets.length) {
-            let attrs: any = {};
             try {
-                const headElem: any = document.querySelector("head");
 
                 snippets.forEach((snippet: ISnippet) => {
                     console.log(snippet);
                     if (snippet.content) {
+                        if (snippet.placement === SnippetPlacementType.TOP_HEAD) { // For "TopHead"
 
-                        const { elements } = domReader(snippet.content);
-                        if (snippet.placement === SnippetPlacementType.TOP_HEAD) {
-                            // For "TopHead"
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${HEAD_SCRIPT_ELEM_SELECTORS[0]}`] = "";
-                            injectScriptElements(elements, headElem, attrs, true);
+                            topHead(snippet);
+                        } else if (snippet.placement === SnippetPlacementType.HEAD) { // For "Head"
 
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${HEAD_STYLE_ELEM_SELECTORS[0]}`] = "";
-                            injectStyleElements(elements, headElem, attrs, true);
-                        } else if (snippet.placement === SnippetPlacementType.HEAD) {
-                            // For "Head"
+                            head(snippet);
+                        } else if (snippet.placement === SnippetPlacementType.BODY_START_HTML_TAG_AFTER) { // For "BodyStartHtmlTagAfter"
 
-                            //console.log(elements);
-                            //debugger;
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${HEAD_SCRIPT_ELEM_SELECTORS[1]}`] = "";
-                            injectScriptElements(elements, headElem, attrs);
+                            bodyStartHtmlTagAfter(snippet);
+                        } else if (snippet.placement === SnippetPlacementType.BODY_END_HTML_TAG_BEFORE) { // For "BodyEndHtmlTagBefore"
 
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${HEAD_STYLE_ELEM_SELECTORS[1]}`] = "";
-                            injectStyleElements(elements, headElem, attrs);
-                        } else if (snippet.placement === SnippetPlacementType.BODY_START_HTML_TAG_AFTER) {
-                            // For "BodyStartHtmlTagAfter"
-                            const bodyElem: any = document.querySelector("body");
+                            bodyEndHtmlTagBefore(snippet);
+                        } else if (snippet.placement === SnippetPlacementType.PAGE_CONTAINER_AFTER) { // For "PageContainerAfter"
 
-                            /**
-                             * Inject scripts for body-start.
-                             */
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${BODY_SCRIPT_ELEM_SELECTORS[0]}`] = "";
-                            injectScriptElements(elements, bodyElem, attrs, true);
+                            pageContainerAfter(snippet);
+                        } else if (snippet.placement === SnippetPlacementType.HEADER_MENU_BEFORE) { // For "HeaderMenuBefore"
 
-                            /**
-                             * Inject styles for body-start.
-                             */
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${BODY_STYLE_ELEM_SELECTORS[0]}`] = "";
-                            injectStyleElements(elements, bodyElem, attrs, true);
+                            headerMenuBefore(snippet);
+                        } else if (snippet.placement === SnippetPlacementType.HEADER_MENU_AFTER) { // For "HeaderMenuAfter"
 
-                            /**
-                             * Inject htmls for body-start.
-                             */
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${BODY_HTML_ELEM_SELECTORS[0]}`] = "";
-                            injectHtmlElements(elements, bodyElem, attrs, true);
-                        } else if (snippet.placement === SnippetPlacementType.BODY_END_HTML_TAG_BEFORE) {
-                            // For "BodyEndHtmlTagBefore"
-                            const bodyElem: any = document.querySelector("body");
+                            HeaderMenuAfter(snippet);
+                        } else if (snippet.placement === SnippetPlacementType.FOOTER_BEFORE) { // For "FooterBefore"
 
-                            /**
-                             * Inject scripts for body-end.
-                             */
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${BODY_SCRIPT_ELEM_SELECTORS[1]}`] = "";
-                            injectScriptElements(elements, bodyElem, attrs);
+                            footerBefore(snippet);
+                        } else if (snippet.placement === SnippetPlacementType.FOOTER_AFTER) { // For "FooterAfter"
 
-                            /**
-                             * Inject styles for body-end.
-                             */
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${BODY_STYLE_ELEM_SELECTORS[1]}`] = "";
-                            injectStyleElements(elements, bodyElem, attrs);
-
-                            /**
-                             * Inject htmls for body-end.
-                             */
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${BODY_HTML_ELEM_SELECTORS[0]}`] = "";
-                            injectHtmlElements(elements, bodyElem, attrs);
-                        } else if (snippet.placement === SnippetPlacementType.PAGE_CONTAINER_AFTER) {
-                            // For "PageContainerAfter"
-                            const pageContainerElem: any = document.querySelector("main");
-
-                            //const pageContainerElems = elements?.filter(x => x.)
-
-                            /**
-                             * Inject scripts for page-container-start.
-                             */
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${PAGE_CONTAINER_SCRIPT_ELEM_SELECTORS[0]}`] = "";
-                            injectScriptElements(elements, pageContainerElem, attrs, true);
-
-                            /**
-                             * Inject styles for page-container-start.
-                             */
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${PAGE_CONTAINER_STYLE_ELEM_SELECTORS[0]}`] = "";
-                            injectStyleElements(elements, pageContainerElem, attrs, true);
-
-                            /**
-                             * Inject htmls for page-container-start.
-                             */
-                            attrs = new Object();
-                            attrs[`${ELEM_ATTR}${PAGE_CONTAINER_HTML_ELEM_SELECTORS[0]}`] = "";
-                            injectHtmlElements(elements, pageContainerElem, attrs, true);
+                            footerAfter(snippet);
                         }
                     }
                 });
@@ -262,5 +119,148 @@ const useContentSnippet = (snippets: Array<any>): void => {
         }
     }, []);
 }
+
+/**
+ * Inject first child inside <head>.
+ * @param elements 
+ */
+const topHead = (snippet: ISnippet) => {
+    let attrs: any = {};
+    const headElem: any = document.querySelector("head");
+    attrs = new Object();
+    attrs[`${ELEM_ATTR}${HEAD_ELEM_SELECTORS[0]}`] = "";
+    insertAdjacentHTML(snippet.content, headElem, attrs, "afterbegin");
+};
+
+/**
+ * Inject last child inside <head>.
+ * @param elements 
+ */
+const head = (snippet: ISnippet) => {
+    let attrs: any = {};
+    const headElem: any = document.querySelector("head");
+    attrs = new Object();
+    attrs[`${ELEM_ATTR}${HEAD_ELEM_SELECTORS[1]}`] = "";
+    insertAdjacentHTML(snippet.content, headElem, attrs, "beforeend");
+};
+
+/**
+ * Inject first child inside <body>.
+ * @param snippet 
+ * @param elements 
+ */
+const bodyStartHtmlTagAfter = (snippet: ISnippet) => {
+    let attrs: any = {};
+    const bodyElem: any = document.querySelector("body");
+    attrs = new Object();
+    attrs[`${ELEM_ATTR}${BODY_ELEM_SELECTORS[0]}`] = "";
+    insertAdjacentHTML(snippet.content, bodyElem, attrs, "afterbegin");
+};
+
+/**
+ * Inject last child inside <body>.
+ * @param snippet 
+ * @param elements 
+ */
+const bodyEndHtmlTagBefore = (snippet: ISnippet) => {
+    let attrs: any = {};
+    const bodyElem: any = document.querySelector("body");
+    attrs = new Object();
+    attrs[`${ELEM_ATTR}${BODY_ELEM_SELECTORS[1]}`] = "";
+    insertAdjacentHTML(snippet.content, bodyElem, attrs, "beforeend");
+};
+
+/**
+ * Inject after <main>.
+ * @param snippet 
+ * @param elements 
+ */
+const pageContainerAfter = (snippet: ISnippet) => {
+    let attrs: any = {};
+    const pageContainerElem: any = document.querySelector("main");
+    attrs = new Object();
+    attrs[`${ELEM_ATTR}${PAGE_CONTAINER_ELEM_SELECTORS[0]}`] = "";
+    insertAdjacentHTML(snippet.content, pageContainerElem, attrs, "afterend");
+};
+
+/**
+ * Inject before <header>.
+ * @param snippet 
+ */
+const headerMenuBefore = (snippet: ISnippet) => {
+    let attrs: any = {};
+    const headerElem: any = document.querySelector("header");
+    attrs = new Object();
+    attrs[`${ELEM_ATTR}${HEADER_MENU_ELEM_SELECTORS[0]}`] = "";
+    insertAdjacentHTML(snippet.content, headerElem, attrs, "beforebegin");
+};
+
+/**
+ * Inject after <header>.
+ * @param snippet 
+ */
+const HeaderMenuAfter = (snippet: ISnippet) => {
+    let attrs: any = {};
+    const headerElem: any = document.querySelector("header");
+    attrs = new Object();
+    attrs[`${ELEM_ATTR}${HEADER_MENU_ELEM_SELECTORS[0]}`] = "";
+    insertAdjacentHTML(snippet.content, headerElem, attrs, "afterend");
+};
+
+/**
+ * Inject before <footer>.
+ * @param snippet 
+ */
+const footerBefore = (snippet: ISnippet) => {
+    let attrs: any = {};
+    const footerElem: any = document.querySelector("footer");
+    attrs = new Object();
+    attrs[`${ELEM_ATTR}${FOOTER_ELEM_SELECTORS[0]}`] = "";
+    insertAdjacentHTML(snippet.content, footerElem, attrs, "beforebegin");
+};
+
+/**
+ * Inject after <footer>.
+ * @param snippet 
+ */
+const footerAfter = (snippet: ISnippet) => {
+    let attrs: any = {};
+    const footerElem: any = document.querySelector("footer");
+    attrs = new Object();
+    attrs[`${ELEM_ATTR}${FOOTER_ELEM_SELECTORS[0]}`] = "";
+    insertAdjacentHTML(snippet.content, footerElem, attrs, "afterend");
+};
+
+const removeInjections = (elemSelectors: Array<string>, parentNode: HTMLElement) => {
+    const selectors = elemSelectors.map(x => `[${ELEM_ATTR}${x}]`).join(", ");
+    const nodes = parentNode.querySelectorAll(selectors);
+    if (nodes && nodes.length) {
+        nodes.forEach(elem => {
+            parentNode.removeChild(elem);
+        })
+    }
+};
+
+const resetSnippetElements = (): void => {
+    const head = document.querySelector("head");
+    if (head) {
+        // Remove snippet injections in <head>.
+        removeInjections(HEAD_ELEM_SELECTORS, head);
+    }
+
+    const body = document.querySelector("body") as HTMLElement;
+    if (head) {
+        // Remove snippet injections in <body>.
+        removeInjections(BODY_ELEM_SELECTORS, body);
+        removeInjections(HEADER_MENU_ELEM_SELECTORS, body);
+        removeInjections(FOOTER_ELEM_SELECTORS, body);
+    }
+
+    const pageContainer = document.querySelector("main") as HTMLElement;
+    if (head) {
+        // Remove script injections in <body>.
+        removeInjections(PAGE_CONTAINER_ELEM_SELECTORS, pageContainer);
+    }
+};
 
 export default useContentSnippet;

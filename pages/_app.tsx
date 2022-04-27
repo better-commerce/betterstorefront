@@ -149,7 +149,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }, [])
 
-  console.log(pageProps.slugs?.snippets);
+  //console.log(pageProps.slugs?.snippets);
 
   return (
     <>
