@@ -23,6 +23,19 @@
         "pattern": "started server on .+, url: (https?://.+)",
         "uriFormat": "%s",
         "action": "debugWithChrome"
+      },
+      "sourceMapPathOverrides": {
+        "webpack://_N_E/*": "${webRoot}/*"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch via NPM",
+      "runtimeExecutable": "${workspaceFolder}\\node_modules\\.bin\\next",
+      "port": 9229,
+      "env": {
+        "NODE_OPTIONS": "--inspect"
       }
     }
   ]
