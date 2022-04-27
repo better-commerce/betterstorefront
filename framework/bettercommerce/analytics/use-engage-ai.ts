@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { GUIDType } from "@core/types";
 import { TagNameType } from "@lib/hooks/useDOMReader";
 import { domReader } from "@commerce/utils/dom-reader";
-import { scriptElementLoader, ScriptLoaderType } from "@commerce/utils/script-loader";
+import { scriptElementLoader, styleElementLoader } from "@commerce/utils";
 
 enum EngageSnippetPlacementType {
     HEAD = "Head",
@@ -37,14 +37,27 @@ interface IEngageSnippet {
     readonly microsites: Array<GUIDType>;
 }
 
+const ENGAGE_ELEM_ATTR = "data-ai-";
+const ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS = ["engage-scr-top-head", "engage-scr-head"];
+const ENGAGE_HEAD_STYLE_ELEM_SELECTORS = ["engage-stl-top-head", "engage-stl-head"];
+
 const useEngageAI = (snippets: Array<any>): void => {
 
     const resetEngageElem = () => {
         const head = document.querySelector("head");
         if (head) {
-            const allScripts = head.querySelectorAll("script.engage-head");
-            if (allScripts && allScripts.length) {
-                allScripts.forEach(elem => {
+            const scrSelectors = ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS.map(x => `[${ENGAGE_ELEM_ATTR}${x}]`).join(", ");
+            const allHeadScripts = head.querySelectorAll(scrSelectors);
+            if (allHeadScripts && allHeadScripts.length) {
+                allHeadScripts.forEach(elem => {
+                    head.removeChild(elem);
+                })
+            }
+
+            const stlSelectors = ENGAGE_HEAD_STYLE_ELEM_SELECTORS.map(x => `[${ENGAGE_ELEM_ATTR}${x}]`).join(", ");
+            const allHeadStyles = head.querySelectorAll(stlSelectors);
+            if (allHeadStyles && allHeadStyles.length) {
+                allHeadStyles.forEach(elem => {
                     head.removeChild(elem);
                 })
             }
@@ -57,22 +70,55 @@ const useEngageAI = (snippets: Array<any>): void => {
         if (snippets && snippets.length) {
             try {
                 snippets.forEach((snippet: IEngageSnippet) => {
-                    switch (snippet.placement) {
-                        case EngageSnippetPlacementType.HEAD:
-                            if (snippet.content) {
-                                const { elements } = domReader(snippet.content);
+
+                    if (snippet.content) {
+
+                        const { elements } = domReader(snippet.content);
+                        switch (snippet.placement) {
+
+                            // For "TopHead"
+                            case EngageSnippetPlacementType.TOP_HEAD:
+
+                                if (elements && elements.length) {
+                                    const headElem: any = document.querySelector("head");
+                                    elements.filter(x => x.type === TagNameType.SCRIPT)?.forEach(x => {
+                                        let attrs: any = new Object();
+                                        attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS[0]}`] = "";
+                                        scriptElementLoader(x.element, true, attrs, headElem);
+                                    });
+
+                                    elements.filter(x => x.type === TagNameType.STYLE)?.forEach(x => {
+                                        let attrs: any = new Object();
+                                        attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_STYLE_ELEM_SELECTORS[0]}`] = "";
+                                        styleElementLoader(x.element, true, attrs, headElem);
+                                    });
+                                }
+                                break;
+
+                            // For "Head"
+                            case EngageSnippetPlacementType.HEAD:
+
                                 //console.log(elements);
                                 //debugger;
                                 if (elements && elements.length) {
                                     const headElem: any = document.querySelector("head");
                                     elements.filter(x => x.type === TagNameType.SCRIPT)?.forEach(x => {
-                                        scriptElementLoader(x.element, { "class": "engage-head" }, headElem);
+                                        let attrs: any = new Object();
+                                        attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_SCRIPT_ELEM_SELECTORS[1]}`] = "";
+                                        scriptElementLoader(x.element, false, attrs, headElem);
+                                    });
+
+                                    elements.filter(x => x.type === TagNameType.STYLE)?.forEach(x => {
+                                        let attrs: any = new Object();
+                                        attrs[`${ENGAGE_ELEM_ATTR}${ENGAGE_HEAD_STYLE_ELEM_SELECTORS[1]}`] = "";
+                                        styleElementLoader(x.element, false, attrs, headElem);
                                     });
                                 }
-                            }
-                            break;
-                        default:
-                            break;
+
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 });
             } catch (e) {

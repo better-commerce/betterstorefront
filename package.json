@@ -120,6 +120,12 @@
       "@assets/*": [
         "assets/*"
       ],
+      "@assets/css/*": [
+        "assets/css/*"
+      ],
+      "@assets/js/*": [
+        "assets/js/*"
+      ],
       "@config/*": [
         "config/*"
       ],

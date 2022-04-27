@@ -3,16 +3,16 @@ export enum ScriptLoaderType {
     TEXT = 2
 }
 
-export const scriptElementLoader = (element: any, attrs?: object, node?: HTMLElement, skip?: boolean) => {
+export const scriptElementLoader = (element: any, insertAtTop: boolean, attrs?: object, node?: HTMLElement, skip?: boolean) => {
     //debugger;
-    const loadScript = (element: any, attrs?: object, parentNode?: HTMLElement) => {
+    const loadScript = (element: any, insertAtTop: boolean, attrs?: object, parentNode?: HTMLElement) => {
         return new Promise((resolve, reject) => {
             //const script = Object.create(element); // JSON.parse(JSON.stringify(element));
-            
+
             for (const [k, v] of Object.entries(attrs || {})) {
                 element.setAttribute(k, v);
             }
-            
+
             element.onload = () => {
                 element.onerror = element.onload = null;
                 resolve(element);
@@ -23,13 +23,17 @@ export const scriptElementLoader = (element: any, attrs?: object, node?: HTMLEle
                 reject(new Error(`Failed to load script`));
             }
 
-            const node = parentNode || document.head; // || document.getElementsByTagName('head')[0];
-            node.appendChild(element);
+            const node = parentNode || document.head || document.getElementsByTagName('head')[0];
+            if (insertAtTop) {
+                node.insertBefore(element, node.firstChild);
+            } else {
+                node.appendChild(element);
+            }
         });
     };
 
     if (!skip) {
-        return loadScript(element, attrs, node)
+        return loadScript(element, insertAtTop, attrs, node)
             .then(script => {
                 return { script: script as HTMLScriptElement };
             })
@@ -70,10 +74,10 @@ export const scriptLoader = (type: ScriptLoaderType, content: string, attrs?: ob
 
             const node = parentNode || document.head || document.getElementsByTagName('head')[0];
             node.appendChild(script);
+            
         })
     };
 
-    //debugger;
     const scripts: HTMLScriptElement[] = Array.from(document.scripts);
     for (let i = 0; i < scripts.length; i++) {
 
