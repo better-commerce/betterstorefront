@@ -1,6 +1,8 @@
 // Package Imports
 //import { DOMParser } from "@xmldom/xmldom";
 
+import { SnippetContentType } from "@framework/content/use-content-snippet";
+
 export enum TagNameType {
     SCRIPT = "SCRIPT",
     STYLE = "STYLE",
@@ -93,16 +95,20 @@ export const domElementLoader = (element: any, insertAtTop: boolean, attrs?: obj
     return {};
 };
 
-export const insertAdjacentHTML = (content: string, node: HTMLElement, attrs: Object, position: HtmlElementPosition) => {
+export const insertAdjacentHTML = (content: string, contentType: string, node: HTMLElement, attrs: Object, position: HtmlElementPosition) => {
     if (node) {
         let container = document.createElement("div");
         container.insertAdjacentHTML("beforeend", content);
         //console.log(container);
         //const arrNodes = container.querySelectorAll("*");
 
-
-        // TODO: This is currently a workaround. Need to handle all first level children inside parent.
-        const arrNodes = [container.children[0]];
+        let arrNodes: NodeListOf<Element> | Element[];
+        if (contentType === SnippetContentType.JAVASCRIPT) {
+            arrNodes = container.querySelectorAll("*");
+        } else {
+            // TODO: This is currently a workaround. Need to handle all first level children inside parent.
+            arrNodes = [container.children[0]];
+        }
         if (arrNodes && arrNodes.length) {
             arrNodes.forEach(node => {
                 for (const [k, v] of Object.entries(attrs || {})) {
