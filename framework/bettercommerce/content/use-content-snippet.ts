@@ -85,15 +85,14 @@ export const PDP_ELEM_SELECTORS = ["pdp"];
 export const ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS = ["ordconf-aftprgbar"];
 
 const useContentSnippet = (snippets: Array<ISnippet>): void => {
-
-    useEffect(() => {
-        console.log(snippets);
-        resetSnippetElements();
+    
+    const injectSnippets = (snippets: Array<ISnippet>): void => {
+        //console.log(snippets);
         if (snippets && snippets.length) {
             try {
 
                 snippets.forEach((snippet: ISnippet) => {
-                    console.log(snippet);
+                    //console.log(snippet);
                     if (snippet.content) {
                         if (snippet.placement === SnippetPlacementType.HEAD_AFTER_OPEN) { // For "TopHead"
 
@@ -123,7 +122,7 @@ const useContentSnippet = (snippets: Array<ISnippet>): void => {
 
                             footerAfter(snippet);
                         } /*else if (snippet.placement === SnippetPlacementType.SITE_LOGO) { // For "SiteLogo"
-
+    
                             siteLogo(snippet);
                         }*/ else if (snippet.placement === SnippetPlacementType.PRODUCT_AND_BRAND_DESC) { // For "ProductAndBrandDescription"
 
@@ -137,10 +136,14 @@ const useContentSnippet = (snippets: Array<ISnippet>): void => {
             } catch (e) {
                 console.log(e);
             }
-
         }
-    }, [snippets]);
+    };
 
+    useEffect(() => {
+        //debugger;
+        resetSnippetElements();
+        injectSnippets(snippets);
+    }, [snippets]);
 }
 
 /**
@@ -284,7 +287,7 @@ const removeInjections = (elemSelectors: Array<string>, parentNode?: HTMLElement
     } else {
         nodes = document.querySelectorAll(selectors);
     }
-    console.log(nodes);
+    //console.log(nodes);
     if (nodes && nodes.length) {
         nodes.forEach(elem => {
             try {

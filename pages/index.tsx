@@ -17,9 +17,11 @@ export async function getStaticProps({
   locale,
   locales,
 }: GetStaticPropsContext) {
-  const config = { locale, locales }
-  const slugsPromise = commerce.getSlugs({ slug: HOMEPAGE_SLUG })
-  const slugs = await slugsPromise
+  const config = { locale, locales };
+  const slugsPromise = commerce.getSlugs({ slug: HOMEPAGE_SLUG });
+  const slugs = await slugsPromise;
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
 
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
@@ -32,6 +34,7 @@ export async function getStaticProps({
       brands,
       pages,
       slugs,
+      globalSnippets: infra?.snippets,
       snippets: slugs?.snippets
     },
     revalidate: 60,
