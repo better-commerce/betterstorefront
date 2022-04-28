@@ -153,7 +153,7 @@ const useContentSnippet = (snippets: Array<ISnippet>): void => {
 const topHead = (snippet: ISnippet) => {
     const headElem: any = document.querySelector("head");
     const attrs = buildAttrs([HEAD_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, headElem, attrs, "afterbegin");
+    insertAdjacentHTML(snippet.content, snippet.type, headElem, attrs, "afterbegin");
 };
 
 /**
@@ -163,7 +163,7 @@ const topHead = (snippet: ISnippet) => {
 const head = (snippet: ISnippet) => {
     const headElem: any = document.querySelector("head");
     const attrs = buildAttrs([HEAD_ELEM_SELECTORS[1]]);
-    insertAdjacentHTML(snippet.content, headElem, attrs, "beforeend");
+    insertAdjacentHTML(snippet.content, snippet.type, headElem, attrs, "beforeend");
 };
 
 /**
@@ -174,7 +174,7 @@ const head = (snippet: ISnippet) => {
 const bodyStartHtmlTagAfter = (snippet: ISnippet) => {
     const bodyElem: any = document.querySelector("body");
     const attrs = buildAttrs([BODY_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, bodyElem, attrs, "afterbegin");
+    insertAdjacentHTML(snippet.content, snippet.type, bodyElem, attrs, "afterbegin");
 };
 
 /**
@@ -185,7 +185,7 @@ const bodyStartHtmlTagAfter = (snippet: ISnippet) => {
 const bodyEndHtmlTagBefore = (snippet: ISnippet) => {
     const bodyElem: any = document.querySelector("body");
     const attrs = buildAttrs([BODY_ELEM_SELECTORS[1]]);
-    insertAdjacentHTML(snippet.content, bodyElem, attrs, "beforeend");
+    insertAdjacentHTML(snippet.content, snippet.type, bodyElem, attrs, "beforeend");
 };
 
 /**
@@ -196,7 +196,7 @@ const bodyEndHtmlTagBefore = (snippet: ISnippet) => {
 const pageContainerAfter = (snippet: ISnippet) => {
     const pageContainerElem: any = document.querySelector("main");
     const attrs = buildAttrs([PAGE_CONTAINER_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, pageContainerElem, attrs, "afterend");
+    insertAdjacentHTML(snippet.content, snippet.type, pageContainerElem, attrs, "afterend");
 };
 
 /**
@@ -206,7 +206,7 @@ const pageContainerAfter = (snippet: ISnippet) => {
 const headerMenuBefore = (snippet: ISnippet) => {
     const headerElem: any = document.querySelector("header");
     const attrs = buildAttrs([HEADER_MENU_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, headerElem, attrs, "beforebegin");
+    insertAdjacentHTML(snippet.content, snippet.type, headerElem, attrs, "beforebegin");
 };
 
 /**
@@ -216,7 +216,7 @@ const headerMenuBefore = (snippet: ISnippet) => {
 const HeaderMenuAfter = (snippet: ISnippet) => {
     const headerElem: any = document.querySelector("header");
     const attrs = buildAttrs([HEADER_MENU_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, headerElem, attrs, "afterend");
+    insertAdjacentHTML(snippet.content, snippet.type, headerElem, attrs, "afterend");
 };
 
 /**
@@ -226,7 +226,7 @@ const HeaderMenuAfter = (snippet: ISnippet) => {
 const footerBefore = (snippet: ISnippet) => {
     const footerElem: any = document.querySelector("footer");
     const attrs = buildAttrs([FOOTER_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, footerElem, attrs, "beforebegin");
+    insertAdjacentHTML(snippet.content, snippet.type, footerElem, attrs, "beforebegin");
 };
 
 /**
@@ -236,7 +236,7 @@ const footerBefore = (snippet: ISnippet) => {
 const footerAfter = (snippet: ISnippet) => {
     const footerElem: any = document.querySelector("footer");
     const attrs = buildAttrs([FOOTER_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, footerElem, attrs, "afterend");
+    insertAdjacentHTML(snippet.content, snippet.type, footerElem, attrs, "afterend");
 };
 
 /**
@@ -247,7 +247,7 @@ const footerAfter = (snippet: ISnippet) => {
 const siteLogo = (snippet: ISnippet) => {
     const parentElem: any = document.querySelector("div.site-logo");
     const attrs = buildAttrs([SITE_LOGO_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, parentElem, attrs, "beforeend");
+    insertAdjacentHTML(snippet.content, snippet.type, parentElem, attrs, "beforeend");
 };
 
 /**
@@ -257,13 +257,13 @@ const siteLogo = (snippet: ISnippet) => {
 const productAndBrandDescription = (snippet: ISnippet) => {
     const parentElem: any = document.querySelector(`.${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`);
     const attrs = buildAttrs([PDP_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, parentElem, attrs, "beforeend");
+    insertAdjacentHTML(snippet.content, snippet.type, parentElem, attrs, "beforeend");
 };
 
 const orderConfirmationAfterProgressBar = (snippet: ISnippet) => {
     const parentElem: any = document.querySelector(`.${ELEM_ATTR}${ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS[0]}`);
     const attrs = buildAttrs([ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS[0]]);
-    insertAdjacentHTML(snippet.content, parentElem, attrs, "beforeend");
+    insertAdjacentHTML(snippet.content, snippet.type, parentElem, attrs, "beforeend");
 };
 
 const buildAttrs = (attrSet: Array<string>): object => {
