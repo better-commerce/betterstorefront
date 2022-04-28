@@ -45,6 +45,7 @@ import {
   PRODUCT_INFORMATION,
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
+import { PDPContentSnippet } from '@components/common/Content'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -590,9 +591,9 @@ export default function ProductView({
               relatedProductList={filteredRelatedProductList}
             />
           ) : null}
-          
+
           {/* Placeholder for pdp snippet */}
-          <div data-bc-pdp-snippet></div>
+          <PDPContentSnippet />
 
 
           <Reviews data={product.reviews} productId={product.recordId} />

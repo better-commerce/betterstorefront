@@ -9,10 +9,10 @@ export enum TagNameType {
 }
 
 export type HtmlElementPosition =
-| "beforebegin"
-| "afterbegin"
-| "beforeend"
-| "afterend";
+    | "beforebegin"
+    | "afterbegin"
+    | "beforeend"
+    | "afterend";
 
 export interface IDomReference {
     readonly element: any;
@@ -94,20 +94,22 @@ export const domElementLoader = (element: any, insertAtTop: boolean, attrs?: obj
 };
 
 export const insertAdjacentHTML = (content: string, node: HTMLElement, attrs: Object, position: HtmlElementPosition) => {
-    let container = document.createElement("div");
-    container.insertAdjacentHTML("beforeend", content);
-    //console.log(container);
-    //const arrNodes = container.querySelectorAll("*");
+    if (node) {
+        let container = document.createElement("div");
+        container.insertAdjacentHTML("beforeend", content);
+        //console.log(container);
+        //const arrNodes = container.querySelectorAll("*");
 
 
-    // TODO: This is currently a workaround. Need to handle all first level children inside parent.
-    const arrNodes = [container.children[0]];
-    if (arrNodes && arrNodes.length) {
-        arrNodes.forEach(node => {
-            for (const [k, v] of Object.entries(attrs || {})) {
-                node.setAttribute(k, v);
-            }
-        });
+        // TODO: This is currently a workaround. Need to handle all first level children inside parent.
+        const arrNodes = [container.children[0]];
+        if (arrNodes && arrNodes.length) {
+            arrNodes.forEach(node => {
+                for (const [k, v] of Object.entries(attrs || {})) {
+                    node.setAttribute(k, v);
+                }
+            });
+        }
+        node.insertAdjacentHTML(position, container.innerHTML);
     }
-    node.insertAdjacentHTML(position, container.innerHTML);
 };

@@ -25,10 +25,10 @@ enum SnippetPlacementType {
     PRODUCT_AND_BRAND_DESC = "ProductAndBrandDescription", // Inject after display section.
     LEFT_PANEL = "LeftPanel", // Not used
     RIGHT_PANEL = "RightPanel", // Not used
-    SITE_WALLPAPER = "SiteWallpaper",
+    SITE_WALLPAPER = "SiteWallpaper", // Not used
     SITE_LOGO = "SiteLogo",
     CHILD = "Child", // Not used
-    ORDER_CONFIRMATION_AFTER_PROGRESS_BAR = "OrderConfirmationAfterProgressBar", // TODO: Inject before footer on thank you page.
+    ORDER_CONFIRMATION_AFTER_PROGRESS_BAR = "OrderConfirmationAfterProgressBar", // Inject before footer on thank you page.
     TOP_HEAD = "TopHead"
 }
 
@@ -81,6 +81,11 @@ const SITE_LOGO_ELEM_SELECTORS = ["site-logo"];
  */
 const PDP_ELEM_SELECTORS = ["pdp"];
 
+/**
+ * Attribute names for snippet injections inside thank you page.
+ */
+const ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS = ["ordconf-aftprgbar"];
+
 const useContentSnippet = (snippets: Array<ISnippet>): void => {
 
     useEffect(() => {
@@ -125,8 +130,10 @@ const useContentSnippet = (snippets: Array<ISnippet>): void => {
                         } else if (snippet.placement === SnippetPlacementType.PRODUCT_AND_BRAND_DESC) { // For "ProductAndBrandDescription"
 
                             productAndBrandDescription(snippet);
-                        }
+                        } else if (snippet.placement === SnippetPlacementType.ORDER_CONFIRMATION_AFTER_PROGRESS_BAR) { // For "OrderConfirmationAfterProgressBar"
 
+                            orderConfirmationAfterProgressBar(snippet);
+                        }
                     }
                 });
             } catch (e) {
@@ -143,10 +150,8 @@ const useContentSnippet = (snippets: Array<ISnippet>): void => {
  * @param elements 
  */
 const topHead = (snippet: ISnippet) => {
-    let attrs: any = {};
     const headElem: any = document.querySelector("head");
-    attrs = new Object();
-    attrs[`${ELEM_ATTR}${HEAD_ELEM_SELECTORS[0]}`] = "";
+    const attrs = buildAttrs([HEAD_ELEM_SELECTORS[0]]);
     insertAdjacentHTML(snippet.content, headElem, attrs, "afterbegin");
 };
 
@@ -248,8 +253,14 @@ const siteLogo = (snippet: ISnippet) => {
  * @param snippet 
  */
 const productAndBrandDescription = (snippet: ISnippet) => {
-    const parentElem: any = document.querySelector("[data-bc-pdp-snippet]");
+    const parentElem: any = document.querySelector(`.${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`);
     const attrs = buildAttrs([PDP_ELEM_SELECTORS[0]]);
+    insertAdjacentHTML(snippet.content, parentElem, attrs, "beforeend");
+};
+
+const orderConfirmationAfterProgressBar = (snippet: ISnippet) => {
+    const parentElem: any = document.querySelector(`.${ELEM_ATTR}${ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS[0]}`);
+    const attrs = buildAttrs([ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS[0]]);
     insertAdjacentHTML(snippet.content, parentElem, attrs, "beforeend");
 };
 
