@@ -11,6 +11,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { IMG_PLACEHOLDER, RESULTS, SHOP_BY_LIFESTYLRE, SHOP_THE_LOOK } from '@components/utils/textVariables'
 import SwiperCore, { Navigation } from 'swiper'
+import commerce from '@lib/api/commerce'
 
 SwiperCore.use([Navigation])
 
@@ -100,13 +101,19 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
-  const lookbookData = await getLookbooks()
+  const lookbookData = await getLookbooks();
+
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
+
   return {
     props: {
       data: lookbookData,
+      globalSnippets: infra?.snippets,
+      snippets: []
     },
     revalidate: 200,
-  }
+  };
 }
 
 export default withDataLayer(LookbookPage, PAGE_TYPE)

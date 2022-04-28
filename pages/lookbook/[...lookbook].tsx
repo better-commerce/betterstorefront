@@ -17,6 +17,7 @@ import Image from 'next/image'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import {IMG_PLACEHOLDER, SHOP_THE_LOOK} from '@components/utils/textVariables'
+import commerce from '@lib/api/commerce'
 function LookbookDetailPage({ data, slug }: any) {
   const router = useRouter()
   const { basketId, openCart, setCartItems } = useUI()
@@ -156,12 +157,17 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
-  const slug: any = params!.lookbook
-  const response = await getSingleLookbook(slug[0])
+  const slug: any = params!.lookbook;
+  const response = await getSingleLookbook(slug[0]);
+
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
   return {
     props: {
       data: response,
       slug: slug[0],
+      globalSnippets: infra?.snippets,
+      snippets: response?.snippets
     },
     revalidate: 200,
   }
