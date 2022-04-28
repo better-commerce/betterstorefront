@@ -129,6 +129,13 @@ const Layout: FC<Props> = ({
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
+
+    return () => {
+      Router.events.off('routeChangeStart', () => {
+      });
+      Router.events.off('routeChangeComplete', () => {
+      });
+    }
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()

@@ -19,6 +19,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
+import commerce from '@lib/api/commerce'
 //import { BiUnlink } from "react-icons/bi";
 
 const PAGE_TYPE = PAGE_TYPES.Category
@@ -27,12 +28,15 @@ export async function getStaticProps(context: any) {
   const slugName = Object.keys(context.params)[0]
   const slug = slugName + '/' + context.params[slugName].join('/')
   const category = await getCategoryBySlug(slug)
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
   if (category) {
     const categoryProducts = await getCategoryProducts(category.id)
     return {
       props: {
         category,
         products: categoryProducts,
+        globalSnippets: infra?.snippets,
         snippets: category?.snippets
       },
       revalidate: 60,
@@ -42,6 +46,8 @@ export async function getStaticProps(context: any) {
       props: {
         category,
         products: null,
+        globalSnippets: infra?.snippets,
+        snippets: category?.snippets
       },
       revalidate: 60,
     }
