@@ -12,24 +12,20 @@ export enum SnippetContentType {
 }
 
 enum SnippetPlacementType {
-    HEAD = "Head",
+    HEAD_AFTER_OPEN = "TopHead",
+    HEAD_BEFORE_CLOSE = "Head",
     ERROR_HEAD = "ErrorHead", // TODO: Introduce error page in better storefront first.
-    BODY_START_HTML_TAG_AFTER = "BodyStartHtmlTagAfter",
-    BODY_END_HTML_TAG_BEFORE = "BodyEndHtmlTagBefore",
+    BODY_AFTER_OPEN = "BodyStartHtmlTagAfter",
+    BODY_BEFORE_CLOSE = "BodyEndHtmlTagBefore",
     PAGE_CONTAINER_AFTER = "PageContainerAfter",
     HEADER_MENU_BEFORE = "HeaderMenuBefore",
     HEADER_MENU_AFTER = "HeaderMenuAfter",
     FOOTER_BEFORE = "FooterBefore",
     FOOTER_AFTER = "FooterAfter",
-    H1 = "H1", // Not used
-    PRODUCT_AND_BRAND_DESC = "ProductAndBrandDescription", // Inject after display section.
-    LEFT_PANEL = "LeftPanel", // Not used
-    RIGHT_PANEL = "RightPanel", // Not used
-    SITE_WALLPAPER = "SiteWallpaper", // Not used
-    SITE_LOGO = "SiteLogo",
-    CHILD = "Child", // Not used
-    ORDER_CONFIRMATION_AFTER_PROGRESS_BAR = "OrderConfirmationAfterProgressBar", // Inject before footer on thank you page.
-    TOP_HEAD = "TopHead"
+    //H1 = "H1", // Not used
+    PRODUCT_AND_BRAND_DESC = "ProductAndBrandDescription", // Inject after product details display section.
+    //SITE_LOGO = "SiteLogo", // Obsolete
+    ORDER_CONFIRMATION = "OrderConfirmationAfterProgressBar" // Inject before footer on thank you page.
 }
 
 interface ISnippet {
@@ -44,7 +40,7 @@ interface ISnippet {
 /**
  * Suffix for attribute name.
  */
-const ELEM_ATTR = "data-bc-snippet-";
+export const ELEM_ATTR = "data-bc-snippet-";
 
 /**
  * Attribute names for snippet injections inside <head>.
@@ -72,19 +68,21 @@ const HEADER_MENU_ELEM_SELECTORS = ["header-before-start", "header-after-end"];
 const FOOTER_ELEM_SELECTORS = ["footer-before-start", "footer-after-end"];
 
 /**
+ * /// Obsolete ///
  * Attribute names for snippet injections around site log.
+ * 
  */
 const SITE_LOGO_ELEM_SELECTORS = ["site-logo"];
 
 /**
  * Attribute names for snippet injections inside pdp page.
  */
-const PDP_ELEM_SELECTORS = ["pdp"];
+export const PDP_ELEM_SELECTORS = ["pdp"];
 
 /**
  * Attribute names for snippet injections inside thank you page.
  */
-const ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS = ["ordconf-aftprgbar"];
+export const ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS = ["ordconf-aftprgbar"];
 
 const useContentSnippet = (snippets: Array<ISnippet>): void => {
 
@@ -97,16 +95,16 @@ const useContentSnippet = (snippets: Array<ISnippet>): void => {
                 snippets.forEach((snippet: ISnippet) => {
                     console.log(snippet);
                     if (snippet.content) {
-                        if (snippet.placement === SnippetPlacementType.TOP_HEAD) { // For "TopHead"
+                        if (snippet.placement === SnippetPlacementType.HEAD_AFTER_OPEN) { // For "TopHead"
 
                             topHead(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.HEAD) { // For "Head"
+                        } else if (snippet.placement === SnippetPlacementType.HEAD_BEFORE_CLOSE) { // For "Head"
 
                             head(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.BODY_START_HTML_TAG_AFTER) { // For "BodyStartHtmlTagAfter"
+                        } else if (snippet.placement === SnippetPlacementType.BODY_AFTER_OPEN) { // For "BodyStartHtmlTagAfter"
 
                             bodyStartHtmlTagAfter(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.BODY_END_HTML_TAG_BEFORE) { // For "BodyEndHtmlTagBefore"
+                        } else if (snippet.placement === SnippetPlacementType.BODY_BEFORE_CLOSE) { // For "BodyEndHtmlTagBefore"
 
                             bodyEndHtmlTagBefore(snippet);
                         } else if (snippet.placement === SnippetPlacementType.PAGE_CONTAINER_AFTER) { // For "PageContainerAfter"
@@ -124,13 +122,13 @@ const useContentSnippet = (snippets: Array<ISnippet>): void => {
                         } else if (snippet.placement === SnippetPlacementType.FOOTER_AFTER) { // For "FooterAfter"
 
                             footerAfter(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.SITE_LOGO) { // For "SiteLogo"
+                        } /*else if (snippet.placement === SnippetPlacementType.SITE_LOGO) { // For "SiteLogo"
 
                             siteLogo(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.PRODUCT_AND_BRAND_DESC) { // For "ProductAndBrandDescription"
+                        }*/ else if (snippet.placement === SnippetPlacementType.PRODUCT_AND_BRAND_DESC) { // For "ProductAndBrandDescription"
 
                             productAndBrandDescription(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.ORDER_CONFIRMATION_AFTER_PROGRESS_BAR) { // For "OrderConfirmationAfterProgressBar"
+                        } else if (snippet.placement === SnippetPlacementType.ORDER_CONFIRMATION) { // For "OrderConfirmationAfterProgressBar"
 
                             orderConfirmationAfterProgressBar(snippet);
                         }
@@ -239,6 +237,7 @@ const footerAfter = (snippet: ISnippet) => {
 };
 
 /**
+ * /// Obsolete ///
  * Inject inside site logo.
  * @param snippet 
  */
