@@ -31,7 +31,7 @@ import {
   SUBTOTAL_INCLUDING_TAX,
   YOUR_INFORMATION,
 } from '@components/utils/textVariables'
-import { OrderConfirmationAfterProgressBar } from '@components/common/Content'
+import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState(defaultModel)
@@ -250,7 +250,7 @@ export default function OrderConfirmation() {
       </main>
 
       {/* Placeholder for order confirmation after progress bar snippet */}
-      <OrderConfirmationAfterProgressBar />
+      <div className={`${ELEM_ATTR}${ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS[0]}`}></div>
     </>
   );
 }

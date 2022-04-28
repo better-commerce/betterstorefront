@@ -45,7 +45,7 @@ import {
   PRODUCT_INFORMATION,
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
-import { PDPContentSnippet } from '@components/common/Content'
+import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -593,7 +593,7 @@ export default function ProductView({
           ) : null}
 
           {/* Placeholder for pdp snippet */}
-          <PDPContentSnippet />
+          <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
 
 
           <Reviews data={product.reviews} productId={product.recordId} />
