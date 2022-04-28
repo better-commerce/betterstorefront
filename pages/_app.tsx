@@ -21,8 +21,8 @@ import analytics from '@components/services/analytics/analytics'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import ContentSnippet from '@components/common/Content'
 import { resetSnippetElements } from "@framework/content/use-content-snippet"
+import { ContentSnippet } from "@components/common/Content"
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
