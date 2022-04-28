@@ -1,9 +1,9 @@
 // Base Imports
 import { useEffect } from "react";
 
-// Type Imports
-import { GUIDType } from "@core/types";
+// Other Imports
 import { insertAdjacentHTML } from "@commerce/utils";
+import { GUIDType } from "@commerce/types";
 
 export enum SnippetContentType {
     JAVASCRIPT = "Javascript",
