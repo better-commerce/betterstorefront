@@ -12,6 +12,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { NextSeo } from 'next-seo'
 import Link from 'next/link'
+import commerce from '@lib/api/commerce'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -321,10 +322,18 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const response = await getBrandBySlug(
     `brands/${context.query.brand.pop()}`,
     context.req.cookies
-  )
+  );
+
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
   return {
-    props: { query: context.query, brandDetails: response.result }, // will be passed to the page component as props
-  }
+    props: {
+      query: context.query,
+      brandDetails: response.result,
+      globalSnippets: infra?.snippets,
+      snippets: response?.snippets
+    }, // will be passed to the page component as props
+  };
 }
 
 const PAGE_TYPE = PAGE_TYPES['Brand']
