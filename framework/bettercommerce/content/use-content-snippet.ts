@@ -87,7 +87,7 @@ export const ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS = ["ordconf-af
 const useContentSnippet = (snippets: Array<ISnippet>): void => {
     
     const injectSnippets = (snippets: Array<ISnippet>): void => {
-        //console.log(snippets);
+        console.log(snippets);
         if (snippets && snippets.length) {
             try {
 
@@ -215,7 +215,7 @@ const headerMenuBefore = (snippet: ISnippet) => {
  */
 const HeaderMenuAfter = (snippet: ISnippet) => {
     const headerElem: any = document.querySelector("header");
-    const attrs = buildAttrs([HEADER_MENU_ELEM_SELECTORS[0]]);
+    const attrs = buildAttrs([HEADER_MENU_ELEM_SELECTORS[1]]);
     insertAdjacentHTML(snippet.content, snippet.type, headerElem, attrs, "afterend");
 };
 
@@ -235,7 +235,7 @@ const footerBefore = (snippet: ISnippet) => {
  */
 const footerAfter = (snippet: ISnippet) => {
     const footerElem: any = document.querySelector("footer");
-    const attrs = buildAttrs([FOOTER_ELEM_SELECTORS[0]]);
+    const attrs = buildAttrs([FOOTER_ELEM_SELECTORS[1]]);
     insertAdjacentHTML(snippet.content, snippet.type, footerElem, attrs, "afterend");
 };
 
