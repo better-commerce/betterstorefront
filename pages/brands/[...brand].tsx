@@ -330,8 +330,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     props: {
       query: context.query,
       brandDetails: response.result,
-      globalSnippets: infra?.snippets,
-      snippets: response?.snippets
+      globalSnippets: infra?.snippets ?? [],
+      snippets: response?.snippets ?? []
     }, // will be passed to the page component as props
   };
 }
