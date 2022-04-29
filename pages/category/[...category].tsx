@@ -36,8 +36,8 @@ export async function getStaticProps(context: any) {
       props: {
         category,
         products: categoryProducts,
-        globalSnippets: infra?.snippets,
-        snippets: category?.snippets
+        globalSnippets: infra?.snippets ?? [],
+        snippets: category?.snippets ?? []
       },
       revalidate: 60,
     }
@@ -46,8 +46,8 @@ export async function getStaticProps(context: any) {
       props: {
         category,
         products: null,
-        globalSnippets: infra?.snippets,
-        snippets: category?.snippets
+        globalSnippets: infra?.snippets ?? [],
+        snippets: category?.snippets ?? []
       },
       revalidate: 60,
     }
