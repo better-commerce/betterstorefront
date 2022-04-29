@@ -87,7 +87,7 @@ export const ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS = ["ordconf-af
 const useContentSnippet = (snippets: Array<ISnippet>): void => {
     
     const injectSnippets = (snippets: Array<ISnippet>): void => {
-        console.log(snippets);
+        //console.log(snippets);
         if (snippets && snippets.length) {
             try {
 
