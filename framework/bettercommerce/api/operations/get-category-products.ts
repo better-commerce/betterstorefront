@@ -12,7 +12,7 @@ export default async function getCategoryProducts(
       data: { categoryId },
       cookies,
     })
-    return response.result
+    return { ...response.result, ...{snippets: response?.snippets} };
   } catch (error: any) {
     throw new Error(error)
   }
