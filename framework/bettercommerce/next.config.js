@@ -74,7 +74,7 @@ const getKeywords = async function () {
     },
   })
   return response.data.result.map((item) => {
-    var pathName = "";
+    let pathName = "";
     try {
       pathName = new URL(item.oldUrl).pathname;
     } catch (e) {
