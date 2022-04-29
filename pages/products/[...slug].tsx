@@ -14,10 +14,15 @@ export async function getStaticProps({
 }: GetStaticPropsContext<{ slug: string }>) {
   const productPromise = commerce.getProduct({ query: params!.slug[0] })
   const product = await productPromise
+
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
   return {
     props: {
       data: product,
       slug: params!.slug[0],
+      globalSnippets: infra?.snippets,
+      snippets: product?.snippets
     },
     revalidate: 200,
   }

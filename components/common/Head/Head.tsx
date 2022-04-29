@@ -1,5 +1,8 @@
+// Base Imports
 import { FC } from 'react'
 import NextHead from 'next/head'
+
+// Other Imports
 import { DefaultSeo } from 'next-seo'
 import config from '@framework/seo.json'
 
