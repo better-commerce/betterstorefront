@@ -21,13 +21,21 @@ const COMPONENTS_MAP: any = {
 }
 
 function BrandPage({ brandDetails }: any) {
-  const widgetsConfig = JSON.parse(brandDetails.result.widgetsConfig).sort(
+  let widgetsConfig = [];
+  if (brandDetails.result?.widgetsConfig) {
+    widgetsConfig = JSON.parse(brandDetails.result?.widgetsConfig)?.sort(
+      (a: any, b: any) => a.displayOrder - b.displayOrder
+    );
+  }
+
+  // For testing error page, this statement throws runtime error when brand details are not found.
+  /*const widgetsConfig = JSON.parse(brandDetails.result.widgetsConfig).sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
-  )
+  );*/
 
   return (
     <>
-      {widgetsConfig.map((widget: any, idx: number) => {
+      {widgetsConfig && widgetsConfig.length && (widgetsConfig.map((widget: any, idx: number) => {
         const enhancedProps = { ...widget, brandDetails: brandDetails.result }
         return (
           <div key={idx}>
@@ -36,7 +44,7 @@ function BrandPage({ brandDetails }: any) {
               : null}
           </div>
         )
-      })}
+      }))}
     </>
   )
 }
