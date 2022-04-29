@@ -21,6 +21,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
+import commerce from '@lib/api/commerce'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -321,13 +322,19 @@ CollectionPage.Layout = Layout
 
 export async function getStaticProps({ params, ...context }: any) {
   const slug: any = params!.collection
-  const data = await getCollectionBySlug(slug[0])
-  console.log(context)
+  const data = await getCollectionBySlug(slug[0]);
+
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
+
+  //console.log(context)
   return {
     props: {
       ...data,
       query: context,
       slug: params!.collection[0],
+      globalSnippets: infra?.snippets,
+      snippets: data?.snippets
     },
     revalidate: 60,
   }

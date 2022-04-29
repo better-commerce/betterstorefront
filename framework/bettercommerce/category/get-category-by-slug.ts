@@ -6,9 +6,10 @@ export default async function getCategoryBySlug(slug: string) {
     const response: any = await fetcher({
       url: CATEGORY_ENDPOINT + `/slug?slug=${slug}`,
       method: 'post',
-    })
-    return response.result
+    });
+    console.log(response);
+    return { ...response.result, ...{ snippets: response.snippets } };
   } catch (error: any) {
-    throw new Error(error)
+    throw new Error(error);
   }
 }

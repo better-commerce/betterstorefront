@@ -23,6 +23,7 @@ export const OPERATIONS = [
   'getAllProductPaths',
   'getAllProducts',
   'getProduct',
+  'getInfra',
   'getSlugs',
   'notifyMe',
   'priceMatch',
@@ -64,6 +65,7 @@ export type Operations<P extends APIProvider> = {
       } & OperationOptions
     ): Promise<T['data']>
   }
+  getInfra: {}
   getSlugs: {}
   notifyMe: {}
   applyPromo: {}
