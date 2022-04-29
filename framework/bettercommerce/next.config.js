@@ -55,7 +55,7 @@ const getSeoConfig = async function (token) {
       JSON.stringify(seoConfig),
       (err) => console.log(err)
     )
-  } catch (error) {}
+  } catch (error) { }
 }
 
 const handler = async () => {
@@ -74,10 +74,19 @@ const getKeywords = async function () {
     },
   })
   return response.data.result.map((item) => {
-    return {
-      source: new URL(item.oldUrl).pathname,
-      destination: item.newUrl,
-      permanent: true,
+    var pathName = "";
+    try {
+      pathName = new URL(item.oldUrl).pathname;
+    } catch (e) {
+      // Do nothing
+    }
+
+    if (pathName) {
+      return {
+        source: pathName, //new URL(item.oldUrl).pathname,
+        destination: item.newUrl,
+        permanent: true,
+      }
     }
   })
 }
