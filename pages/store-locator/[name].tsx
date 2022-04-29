@@ -23,7 +23,7 @@ export async function getStaticPaths() {
   //this would require an endpoint to fetch all existing stores
   const response = await getStores('')
   return {
-    paths: response?.map((store: any) => `/store-locator/${store.name}`),
+    paths: response ? response?.map((store: any) => `/store-locator/${store.name}`) : [],
     fallback: 'blocking',
   }
 }
