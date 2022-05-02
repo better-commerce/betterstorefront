@@ -17,9 +17,11 @@
     "incremental": true,
     "paths": {
       "@lib/*": ["lib/*"],
+      "@core/*": ["core/*"],
       "@utils/*": ["utils/*"],
       "@config/*": ["config/*"],
       "@assets/*": ["assets/*"],
+      "@assets/css/*": ["assets/css/*"],
       "@components/*": ["components/*"],
       "@commerce": ["framework/commerce"],
       "@commerce/*": ["framework/commerce/*"],

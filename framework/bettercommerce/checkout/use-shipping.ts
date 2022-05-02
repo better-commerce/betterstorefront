@@ -11,6 +11,7 @@ interface Props {
   postCode?: string
   type?: string
   method?: string
+  cookies?: any
 }
 
 const TYPES_MAP_TO_ACTIONS: any = {
@@ -26,6 +27,7 @@ export default function getShippingMethods() {
     countryCode,
     postCode,
     method = 'GET_ALL',
+    cookies,
   }: Props) {
     const url =
       SHIPPING_ENDPOINT +
@@ -37,6 +39,7 @@ export default function getShippingMethods() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies,
       })
       return response.result
     } catch (error: any) {

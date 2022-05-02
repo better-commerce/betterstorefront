@@ -1,117 +1,120 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fcommerce&project-name=commerce&repo-name=commerce&demo-title=Next.js%20Commerce&demo-description=An%20all-in-one%20starter%20kit%20for%20high-performance%20e-commerce%20sites.&demo-url=https%3A%2F%2Fdemo.vercel.store&demo-image=https%3A%2F%2Fbigcommerce-demo-asset-ksvtgfvnd.vercel.app%2Fbigcommerce.png&integration-ids=oac_MuWZiE4jtmQ2ejZQaQ7ncuDT)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fvercel.com%2Fnew%2Fclone%3Frepository-url%26repo-name%3Dcommerce%26demo-title%3DNext.js%20Commerce%26demo-description%3DAn%20all-in-one%20starter%20kit%20for%20high-performance%20e-commerce%20sites.%26demo-url%3Dhttps%3A%2F%2Fdemo.vercel.store%26demo-image%3Dhttps%3A%2F%2Favatars.githubusercontent.com%2Fu%2F22865887%3Fs%3D400%26u%3D39f1404d7795dcf15ae6b7c1b3499a94d6c8308c%26v%3D4%26integration-ids%3Doac_MuWZiE4jtmQ2ejZQaQ7ncuDT)
 
 ## Getting Started
 
 Run the following command to create a new project with this Starter:
 
 ```
-yarn create next-app [project-name] -e https://github.com/BetterCommerc/betterstorefront
+yarn create next-app [project-name] -e https://github.com/Better-Commerce/betterstorefront
 # or
-npx create-next-app [project-name] -e https://github.com/BetterCommerc/betterstorefront
+npx create-next-app [project-name] -e https://github.com/Better-Commerce/betterstorefront
 ```
 
-# Next.js Commerce
+### Run Locally
+- In the root folder create an .env file - use .env.template as a reference
+- Run command: `yarn` or if you want to use npm use `npm install`
+- To run it locally enter the next command `yarn dev` or `npm run dev`
+- Visit http://localhost:3000
 
-The all-in-one starter kit for high-performance e-commerce sites. With a few clicks, Next.js developers can clone, deploy and fully customize their own store.
-Start right now at [nextjs.org/commerce](https://nextjs.org/commerce)
+### Pre-requisites
+- Request a sandbox with BetterCommerce platform by getting in touch letstalk@bettercommerce.io 
+- Once you have the sandbox, you can login and generate the API Key & Shared Secret.
 
-Demo live at: [demo.vercel.store](https://demo.vercel.store/)
 
-- Shopify Demo: https://shopify.vercel.store/
-- Swell Demo: https://swell.vercel.store/
-- BigCommerce Demo: https://bigcommerce.vercel.store/
-- Vendure Demo: https://vendure.vercel.store
-- Saleor Demo: https://saleor.vercel.store/
-- Ordercloud Demo: https://ordercloud.vercel.store/
+# BetterCommerce Storefront on Next.js 
+
+BetterCommerce is a **Headless**, **API-First SaaS based**  suite of independent **composable** modules **Ecommerce, PIM, OMS**, **AI Product Recommendations** and **Analytics** that work independently with other platforms as well as it works fully integrated as an end-to-end commerce solution. 
+
+This storefront is an all-in-one storefront based on Next.js, for high-performance e-commerce sites. With a few clicks, developers can clone, deploy and fully customize their own store. The storefront by default works out-of-the-box with BetterCommerce suite of APIs, however can be customized to work with other headless commerce API providers as well. 
+
+Start right now at [bettercommerce.io](https://bettercommerce.io)
+
+LIVE demo at: [demostore.bettercommerce.io](https://demostore.bettercommerce.io/)
+
 
 ## Features
 
 - Performant by default
 - SEO Ready
-- Internationalization
 - Responsive
-- UI Components
-- Theming
-- Standardized Data Hooks
-- Integrations - Integrate seamlessly with the most common ecommerce platforms.
-- Dark Mode Support
+- Shopping Cart
+- Wishlist
+- Checkout 
+- Internationalization
+    - Multi-lingual
+    - Multi-currency
+- CMS driven 
+    - Mega menu
+    - Home page 
+    - Support pages
+- Search
+    - Typeahead search
+    - Search Keyword Redirection
+    - Integrated Elastic Search
+- Product List Page (PLP)
+    - Product Collection Pages
+    - Category Landing Pages
+    - Brand Landing Pages
+    - Lookbooks
+- Product Detail Page (PDP)
+    - Meta Information
+    - Structured Data
+    - Media - images & videos
+    - Dynamic breadcrumbs
+    - Reviews 
+    - Variants
+    - Bundles & Components
+    - Related Products
+- My Account
+    - Registration / Login 
+    - Profile
+    - Wishlist
+    - Address Book
+    - Order History
+    - Returns / Cancel
+- Integrations - Integrate seamlessly with the most common plugins needed - google analytics, post code locator, marketing platforms, etc. 
+- And lot many more features...
 
 ## Integrations
 
 Next.js Commerce integrates out-of-the-box with BigCommerce, Shopify, Swell, Saleor and Vendure. We plan to support all major ecommerce backends.
 
-## Considerations
+## Request flow
+- The client side is making requests to NextJS server.
+- NextJS server then fetches from the bettercommerce API and returns the data
+- You can observe this by opening network tab, you'll see most of the requests are redirected to hostname/api/REQUEST
+- If you inspect the request in pages/api/REQUEST you will see that it is calling a different method from the Bettercommerce API
 
-- `framework/commerce` contains all types, helpers and functions to be used as base to build a new **provider**.
-- **Providers** live under `framework`'s root folder and they will extend Next.js Commerce types and functionality (`framework/commerce`).
-- We have a **Features API** to ensure feature parity between the UI and the Provider. The UI should update accordingly and no extra code should be bundled. All extra configuration for features will live under `features` in `commerce.config.json` and if needed it can also be accessed programatically.
-- Each **provider** should add its corresponding `next.config.js` and `commerce.config.json` adding specific data related to the provider. For example in case of BigCommerce, the images CDN and additional API routes.
-- **Providers don't depend on anything that's specific to the application they're used in**. They only depend on `framework/commerce`, on their own framework folder and on some dependencies included in `package.json`
+## Folder Structure
+- `assets` - css files used in the application.
+- `components` - All the components and utils to use in the app. A general rule of thumb for components design is to use functional components and make them as encapsulated and small as possible.
+- `config` - basic store config.
+- `framework` - All the functions used to communicate with the API.
+- `pages` - This is a special folder used by NextJS. Do not rename this. For every file / folder in page NextJS will create a new page. For example if you put a /hello.tsx in pages, the content will be rendered on hostname/hello. Read more here: https://nextjs.org/docs/basic-features/pages
+- `public` - images and other assets used publicly.
 
 ## Configuration
 
-### How to change providers
+### Environment Variables
 
-Open `.env.local` and change the value of `COMMERCE_PROVIDER` to the provider you would like to use, then set the environment variables for that provider (use `.env.template` as the base).
-
-The setup for Shopify would look like this for example:
-
-```
-COMMERCE_PROVIDER=shopify
-NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN=xxxxxxx.myshopify.com
-```
-
-And check that the `tsconfig.json` resolves to the chosen provider:
-
-```
-  "@framework": ["framework/shopify"],
-  "@framework/*": ["framework/shopify/*"]
-```
+| Key  |Description   | Default Value   |
+|---|---|---|
+|COMMERCE_PROVIDER|Identify commerce provider being used in the storefront|Bettercommerce|
+|BETTERCOMMERCE_CLIENT_ID|API Key|Available in the Settings > API Token|
+|BETTERCOMMERCE_SHARED_SECRET|API Shared Secret|Available in the Settings > API Token|
+|BETTERCOMMERCE_BASE_URL|Base URL for the BC API|https://api20.bettercommerce.io|
+|BETTERCOMMERCE_AUTH_URL|API Auth URL which provides the API token|https://auth.bettercommerce.io|
+|NEXT_PUBLIC_ORG_ID|Unique OrgId created for your org|Provided by your BC Account Manager|
+|NEXT_PUBLIC_DOMAIN_ID|Unique Domain Id for domain|Provided by your BC Account Manager|
+|NEXT_PUBLIC_API_VERSION|version of the API used|v2|
+|NEXT_PUBLIC_ENABLE_INFINITE_SCROLL|Should the infinite scroll be enabled on PLPs or standard paging|TRUE|
+|NEXT_PUBLIC_OMNILYTICS_ID|If Omnilytics is enabled for realtime event capture, then this value to be provided|Provided by your BC Account Manager|
+|NEXT_PUBLIC_GEO_ENDPOINT|If Omnilytics is enabled for realtime event capture, then this value to be provided|Provided by your BC Account Manager|
+|OMS_BASE_URL|OMS API Url which is used for fetching basket delivery plan, split shipment, inventory|https://omsapi20.bettercommerce.io/|
 
 That's it!
 
-### Features
-
-Every provider defines the features that it supports under `framework/{provider}/commerce.config.json`
-
-#### Features Available
-
-The following features can be enabled or disabled. This means that the UI will remove all code related to the feature.
-For example: Turning `cart` off will disable Cart capabilities.
-
-- cart
-- search
-- wishlist
-- customerAuth
-- customCheckout
-
-#### How to turn Features on and off
-
-> NOTE: The selected provider should support the feature that you are toggling. (This means that you can't turn wishlist on if the provider doesn't support this functionality out the box)
-
-- Open `commerce.config.json`
-- You'll see a config file like this:
-  ```json
-  {
-    "features": {
-      "wishlist": false,
-      "customCheckout": true
-    }
-  }
-  ```
-- Turn `wishlist` on by setting `wishlist` to `true`.
-- Run the app and the wishlist functionality should be back on.
-
-### How to create a new provider
-
-Follow our docs for [Adding a new Commerce Provider](framework/commerce/new-provider.md).
-
-If you succeeded building a provider, submit a PR with a valid demo and we'll review it asap.
-
 ## Contribute
-
-Our commitment to Open Source can be found [here](https://vercel.com/oss).
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device.
 2. Create a new branch `git checkout -b MY_BRANCH_NAME`
@@ -123,44 +126,6 @@ Our commitment to Open Source can be found [here](https://vercel.com/oss).
 
 ## Work in progress
 
-We're using Github Projects to keep track of issues in progress and todo's. Here is our [Board](https://github.com/vercel/commerce/projects/1)
+We're using Github Projects to keep track of issues in progress and todo's. Here is our [Board](https://github.com/Better-Commerce/betterstorefront/projects/1)
 
-People actively working on this project: @okbel & @lfades.
-
-## Troubleshoot
-
-<details>
-<summary>I already own a BigCommerce store. What should I do?</summary>
-<br>
-First thing you do is: <b>set your environment variables</b>
-<br>
-<br>
-.env.local
-
-```sh
-BIGCOMMERCE_STOREFRONT_API_URL=<>
-BIGCOMMERCE_STOREFRONT_API_TOKEN=<>
-BIGCOMMERCE_STORE_API_URL=<>
-BIGCOMMERCE_STORE_API_TOKEN=<>
-BIGCOMMERCE_STORE_API_CLIENT_ID=<>
-BIGCOMMERCE_CHANNEL_ID=<>
-```
-
-If your project was started with a "Deploy with Vercel" button, you can use Vercel's CLI to retrieve these credentials.
-
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and Github accounts (creates .vercel file): `vercel link`
-3. Download your environment variables: `vercel env pull .env.local`
-
-Next, you're free to customize the starter. More updates coming soon. Stay tuned.
-
-</details>
-
-<details>
-<summary>BigCommerce shows a Coming Soon page and requests a Preview Code</summary>
-<br>
-After Email confirmation, Checkout should be manually enabled through BigCommerce platform. Look for "Review & test your store" section through BigCommerce's dashboard.
-<br>
-<br>
-BigCommerce team has been notified and they plan to add more details about this subject.
-</details>
+People actively working on this project: @vikrmsaxena, @Lamperoyge, @JaiswalShailendra, @gagandeep-gingh-bt & @amitkumar1403

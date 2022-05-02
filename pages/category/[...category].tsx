@@ -19,6 +19,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
+import commerce from '@lib/api/commerce'
 //import { BiUnlink } from "react-icons/bi";
 
 const PAGE_TYPE = PAGE_TYPES.Category
@@ -27,12 +28,16 @@ export async function getStaticProps(context: any) {
   const slugName = Object.keys(context.params)[0]
   const slug = slugName + '/' + context.params[slugName].join('/')
   const category = await getCategoryBySlug(slug)
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
   if (category) {
     const categoryProducts = await getCategoryProducts(category.id)
     return {
       props: {
         category,
         products: categoryProducts,
+        globalSnippets: infra?.snippets ?? [],
+        snippets: category?.snippets ?? []
       },
       revalidate: 60,
     }
@@ -41,6 +46,8 @@ export async function getStaticProps(context: any) {
       props: {
         category,
         products: null,
+        globalSnippets: infra?.snippets ?? [],
+        snippets: category?.snippets ?? []
       },
       revalidate: 60,
     }
@@ -278,24 +285,30 @@ function CategoryPage({ category, products }: any) {
       {/* Mobile menu */}
       <main className="pb-0">
         <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
-          <Swiper navigation={true} loop={true} className="mySwiper">
-            {category.images.map((image: any, idx: number) => {
-              return (
-                <SwiperSlide key={idx}>
-                  <Link href={image.link || '#'}>
-                    <Image
-                      layout='fixed'
-                      width={1920} 
-                      height={460}
-                      src={image.url || IMG_PLACEHOLDER}
-                      alt={category.name}
-                      className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
-                    ></Image>
-                  </Link>
-                </SwiperSlide>
-              )
-            })}
-          </Swiper>
+          {
+            category && category.images && category.images.length ? (
+              <Swiper navigation={true} loop={true} className="mySwiper">
+                {category.images.map((image: any, idx: number) => {
+                  return (
+                    <SwiperSlide key={idx}>
+                      <Link href={image.link || '#'}>
+                        <Image
+                          layout='fixed'
+                          width={1920}
+                          height={460}
+                          src={image.url || IMG_PLACEHOLDER}
+                          alt={category.name}
+                          className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
+                        ></Image>
+                      </Link>
+                    </SwiperSlide>
+                  )
+                })}
+              </Swiper>
+            ) : (
+              <></>
+            )
+          }
         </div>
         <div className="text-center pt-6 mb-4 px-4 sm:px-6 lg:px-8">
           <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
@@ -304,32 +317,38 @@ function CategoryPage({ category, products }: any) {
           <h2>{category.description}</h2>
           {!!products && (
             <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
-              {products.total}{' '}{RESULTS} 
+              {products.total}{' '}{RESULTS}
             </h1>
           )}
         </div>
         <div className="sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12">
           <div className="sm:col-span-12 border-t border-gray-200 py-2">
             <div className="flex w-full text-center align-center justify-center">
-              {category.subCategories.map((subcateg: any, idx: number) => {
-                return (
-                  <Link href={'/' + subcateg.link} key={idx}>
-                    <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
-                      <Image
-                          layout='fixed'
-                          width={80}
-                          height={80}
-                          className="h-8 w-8 sm:h-20 sm:w-20 rounded-full image"
-                          src={ subcateg.image || IMG_PLACEHOLDER }
-                          alt={subcateg.name}
-                        ></Image>
-                      <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
-                        {subcateg.name}
-                      </h4>
-                    </div>
-                  </Link>
+              {
+                category && category.subCategories && category.subCategories.length ? (
+                  category.subCategories.map((subcateg: any, idx: number) => {
+                    return (
+                      <Link href={'/' + subcateg.link} key={idx}>
+                        <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
+                          <Image
+                            layout='fixed'
+                            width={80}
+                            height={80}
+                            className="h-8 w-8 sm:h-20 sm:w-20 rounded-full image"
+                            src={subcateg.image || IMG_PLACEHOLDER}
+                            alt={subcateg.name}
+                          ></Image>
+                          <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
+                            {subcateg.name}
+                          </h4>
+                        </div>
+                      </Link>
+                    )
+                  })
+                ) : (
+                  <></>
                 )
-              })}
+              }
             </div>
           </div>
         </div>

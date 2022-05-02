@@ -5,6 +5,7 @@ export default async (req: any, res: any) => {
     const response = await getPaymentMethods()({
       countryCode,
       currencyCode,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {

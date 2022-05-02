@@ -10,6 +10,11 @@ import * as Signup from './signup'
 import * as Site from './site'
 import * as Wishlist from './wishlist'
 
+import { Guid } from './guid';
+export { Guid };
+
+export type GUIDType = string & { isGuid: true };
+
 export type {
   Cart,
   Checkout,
