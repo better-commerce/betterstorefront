@@ -3,6 +3,7 @@ import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
 import {PRODUCT_DESCRIPTION,PRODUCT_SPECIFICATION,GENERAL_SHIPPING,GENERAL_RETURNS} from '@components/utils/textVariables'
+import Bundles from '@components/product/Bundles'
 
 const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i
 
@@ -58,6 +59,7 @@ export default function ProductDetails({ product, description }: any) {
 
   return (
     <div className="border-b divide-y divide-gray-200">
+      
        <div className='flex-1 mt-6 py-3'>
           <div
             className="text-gray-800 text- leading-7 font-normal"

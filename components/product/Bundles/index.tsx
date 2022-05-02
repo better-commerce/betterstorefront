@@ -30,7 +30,7 @@ export default function Bundles({ price = '', products = [] }: any) {
         {BUNDLE_TEXT}
       </p>
       <div className="flex justify-between items-center mt-3">
-        <div className="flex py-5 grid grid-cols-3 text-left gap-x-5 align-center content-center ">
+        <div className="flex py-5 grid md:grid-cols-3 sm:grid-cols-2 xl-grid-cols-3 text-left gap-x-5 align-center content-center ">
           {products.map((product: any, productIdx: number) => {
             return (
               <div key={productIdx} className='grid grid-cols-12 gap-x-2 border p-3 rounded-md align-center content-center border-gray-200 hover:border-indigo-200'>
@@ -47,11 +47,11 @@ export default function Bundles({ price = '', products = [] }: any) {
                     <h4 className='text-sm mt-1'>
                         <span className='uppercase text-xs font-bold  tex-black inline-block'>SKU:</span>
                         <span className='text-gray-600 inline-block pl-1'>{product.stockCode}</span>
-                    </h4> 
+                    </h4>
                     <h4 className='text-sm text-black mt-2'>
-                      <span className='inline-block font-semibold'>{product.price.formatted.withoutTax}</span>  
-                      <span className='inline-block pl-3 text-red-400 text-xs font-semibold line-through'>{product.listPrice.formatted.withoutTax}</span>  
-                    </h4>                    
+                      <span className='inline-block font-semibold'>{product.price.formatted.withoutTax}</span>
+                      <span className='inline-block pl-3 text-red-400 text-xs font-semibold line-through'>{product.listPrice.formatted.withoutTax}</span>
+                    </h4>
                   </div>
                   <div className='flex flex-col mt-1'>
                       {product.variantAttributes.map((attribute:any, aid:number) => {
@@ -64,29 +64,30 @@ export default function Bundles({ price = '', products = [] }: any) {
                                             <option value="">Please Select</option>
                                             {attribute.fieldValues.map((size:any, vdx:number)=>{
                                                 return(<option className='uppercase' key={vdx} value={size.fieldValue}>{size.fieldValue}</option>)
-                                            })}                            
-                                        </select>  
-                                    </div>                              
+                                            })}
+                                        </select>
+                                    </div>
                                 </>
                               )
-                          }                       
-                      })}                  
+                          }
+                      })}
                   </div>
-                </div>   
+                </div>
               </div>
             )
           })}
-        </div>        
+        </div>
       </div>
       <div className="flex flex-col border border-gray-100 rounded-md bg-gray-50 p-3 items-right justify-end">
+        <p className="text-md font-semibold text-black flext-col align-right item-right text-right">Bundle Price</p>
         <p className="text-gray-900 text-3xl font-bold flex-col flex align-right item-right pb-2 text-right">{price}</p>
-        <button
+        {/* <button
           type="submit"
           onClick={() => {}}
           className="max-w-xs flex bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex-col ml-auto items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
         >
           {GENERAL_ADD_TO_BASKET}
-        </button>
+        </button> */}
       </div>
       {productData && (
         <BundleCard
