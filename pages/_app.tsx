@@ -1,5 +1,5 @@
-import '@assets/main.css'
-import '@assets/chrome-bug.css'
+import "@assets/css/main.css"
+import "@assets/css/chrome-bug.css"
 import 'keen-slider/keen-slider.min.css'
 import { FC, useEffect, useState, useLayoutEffect } from 'react'
 import { Head } from '@components/common'
@@ -21,6 +21,8 @@ import analytics from '@components/services/analytics/analytics'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { resetSnippetElements } from "@framework/content/use-content-snippet"
+import { ContentSnippet } from "@components/common/Content"
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -57,6 +59,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [isAppLoading, setAppIsLoading] = useState(true)
   const [language, setLanguage] = useState('')
 
+  const snippets = [...pageProps?.globalSnippets ?? [], ...pageProps?.snippets ?? []];
+
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
 
@@ -80,7 +84,20 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     )
     document.body.appendChild(addScript)
       ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    // Listener for snippet injector reset.
+    router.events.on("routeChangeStart", () => {
+      resetSnippetElements();
+    });
+
+    // Dispose listener.
+    return () => {
+      router.events.off("routeChangeComplete", () => {
+      });
+    };
+  }, [router.events]);
 
   const fetchAppConfig = async () => {
     try {
@@ -148,6 +165,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }, [])
 
+  //debugger;
+
   return (
     <>
       <Head />
@@ -162,6 +181,12 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
           </main>
         ) : (
           <>
+            {snippets ? (
+              <ContentSnippet {...{ snippets }} />
+            ) : (
+              <></>
+            )}
+
             <Layout
               nav={nav}
               footer={footer}

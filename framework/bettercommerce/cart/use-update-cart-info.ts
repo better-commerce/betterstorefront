@@ -4,10 +4,11 @@ interface Props {
   basketId?: string
   info: any
   lineInfo: any
+  cookies?: any
 }
 
 export default function useUpdateCartInfo() {
-  return async function handler({ basketId, info, lineInfo }: Props) {
+  return async function handler({ basketId, info, lineInfo, cookies }: Props) {
     const params: any = {}
     info.forEach((item: any, index: number) => {
       params[`customInfo${index + 1}`] = item
@@ -20,6 +21,7 @@ export default function useUpdateCartInfo() {
         data: {
           ...params,
         },
+        cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },

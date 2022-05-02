@@ -2,6 +2,7 @@ import type { CommerceAPI, CommerceAPIConfig } from '@commerce/api'
 import { getCommerceApi as commerceApi } from '@commerce/api'
 import createFetcher from './utils/fetch-local'
 import {
+  getInfra,
   getSlugs,
   getProduct,
   getAllProducts,
@@ -45,6 +46,7 @@ const operations = {
   getAllProductPaths,
   getAllProducts,
   getProduct,
+  getInfra,
   getSlugs,
   notifyMe,
   priceMatch,

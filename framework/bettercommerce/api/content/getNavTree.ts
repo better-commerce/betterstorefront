@@ -1,11 +1,12 @@
 import fetcher from '../../fetcher'
 import { NAV_ENDPOINT } from '@components/utils/constants'
-export default function getNavTree() {
+export default function getNavTree(cookies?: any) {
   async function getNavTreeAsync() {
     try {
       const response: any = await fetcher({
         url: NAV_ENDPOINT,
         method: 'GET',
+        cookies,
       })
       return response.result
     } catch (error: any) {

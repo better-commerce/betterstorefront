@@ -4,10 +4,11 @@ import qs from 'qs'
 interface Props {
   basketId?: string
   products: any
+  cookies?: any
 }
 
 export default function useBulkAdd() {
-  return async function handler({ basketId, products }: Props) {
+  return async function handler({ basketId, products, cookies }: Props) {
     try {
       const response: any = await fetcher({
         url: `${BASKET_ENDPOINT}/${basketId}/items/add-bulk`,

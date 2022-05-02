@@ -9,6 +9,7 @@ import {
   ImageCollection,
 } from '@components/brand'
 import React from 'react'
+import commerce from '@lib/api/commerce'
 
 const COMPONENTS_MAP: any = {
   PlainText: (props: any) => <PlainText {...props} />,
@@ -46,8 +47,16 @@ export default withDataLayer(BrandPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const slug: any = context?.query?.pages[0] || ''
-  const response = await getBrandBySlug(slug)
+  const response = await getBrandBySlug(slug, context.req.cookies)
+
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
   return {
-    props: { query: context.query, brandDetails: response }, // will be passed to the page component as props
+    props: {
+      query: context.query,
+      brandDetails: response,
+      globalSnippets: infra?.snippets,
+      snippets: response?.snippets
+    }, // will be passed to the page component as props
   }
 }

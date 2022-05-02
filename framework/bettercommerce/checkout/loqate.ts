@@ -42,7 +42,7 @@ export default function loqateAddress() {
 }
 
 export const retrieveAddress = () => {
-  return async function handler(id: string) {
+  return async function handler(id: string, cookies?: any) {
     try {
       const retrieveAddress =
         retrieveUrl +

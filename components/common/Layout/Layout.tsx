@@ -129,6 +129,13 @@ const Layout: FC<Props> = ({
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
+
+    return () => {
+      Router.events.off('routeChangeStart', () => {
+      });
+      Router.events.off('routeChangeComplete', () => {
+      });
+    }
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
@@ -139,10 +146,10 @@ const Layout: FC<Props> = ({
   )
   return (
     <CommerceProvider locale={locale}>
-      <Script
+      {/* <Script
         src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
         strategy="beforeInteractive"
-      />
+      /> */}
 
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
