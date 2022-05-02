@@ -534,6 +534,7 @@ export default function ProductView({
                     selectedAttrData.description || product.description
                   }
                 />
+                 
                 {updatedProduct ? (
                   <>
                     <div className="sm:mt-10 mt-6 flex sm:flex-col1">
@@ -587,6 +588,7 @@ export default function ProductView({
               products={product.componentProducts}
             />
           )}
+          
           {filteredRelatedProducts ? (
             <RelatedProducts
               relatedProducts={filteredRelatedProducts}
