@@ -1,6 +1,6 @@
 import { Fetcher } from '@commerce/utils/types'
 import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import store from 'store'
 
 const SingletonFactory = (function () {
@@ -77,6 +77,19 @@ export const setGeneralParams = (param: any, value: any) => {
   store.set(param, value)
 }
 
+export const ensureToken = async () => {
+  const url = new URL('oAuth/token', AUTH_URL)
+  const res: AxiosResponse<any> = await axiosInstance({
+    url: url.href,
+    method: 'post',
+    data: `client_id=${CLIENT_ID}&client_secret=${SHARED_SECRET}&grant_type=client_credentials`,
+  });
+  if (res) {
+    return res.data.access_token;
+  }
+  return "";
+}
+
 const fetcher = async ({
   url = '',
   method = 'post',
@@ -84,8 +97,10 @@ const fetcher = async ({
   params = {},
   headers = {},
   cookies = {},
+  baseUrl = ""
 }: any) => {
-  const computedUrl = new URL(url, BASE_URL)
+  const computedUrl = new URL(url, baseUrl || BASE_URL)
+  //console.log(computedUrl.href);
   const newConfig = {
     Currency: cookies.Currency || store.get('Currency') || 'GBP',
     Language: cookies.Language || store.get('Language') || 'en',
@@ -109,7 +124,8 @@ const fetcher = async ({
     const response = await axiosInstance(config)
     return response.data
   } catch (error: any) {
-    console.log(error, 'error inside fetcher')
+    console.log('error inside fetcher')
+    //console.log(JSON.stringify(error));
     throw new Error(error.response.data.message)
   }
 }
