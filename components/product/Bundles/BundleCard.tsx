@@ -14,6 +14,7 @@ export default function BundleCard({ productData, closeModal }: any) {
   const [activeImage, setActiveImage] = useState(
     productData.image || productData.images[0]?.image
   )
+  
   return (
     <Transition.Root show={true} as={Fragment}>
       <Dialog
@@ -73,9 +74,18 @@ export default function BundleCard({ productData, closeModal }: any) {
                     />
                   </div>
                   <div className="sm:col-span-8 lg:col-span-7">
-                    <h2 className="text-2xl font-semibold text-gray-900 sm:pr-12">
-                      {productData.name}
-                    </h2>
+                  <div className='flex flex-col'>
+                    <h3 className='text-xs font-semibold text-gray-400'>{productData.brand}</h3>
+                    <h3 className='text-2xl font-semibold text-gray-900 sm:pr-12'>{productData.name}</h3>   
+                    <h4 className='text-sm mt-1'>
+                        <span className='uppercase text-xs font-bold  tex-black inline-block'>SKU:</span>
+                        <span className='text-gray-600 inline-block pl-1'>{productData.stockCode}</span>
+                    </h4>
+                    <h4 className='text-sm text-black mt-2'>
+                      <span className='inline-block font-semibold'>{productData.price.formatted.withoutTax}</span>
+                      <span className='inline-block pl-3 text-red-400 text-xs font-semibold line-through'>{productData.listPrice.formatted.withoutTax}</span>
+                    </h4>
+                  </div>
 
                     <section
                       aria-labelledby="information-heading"
