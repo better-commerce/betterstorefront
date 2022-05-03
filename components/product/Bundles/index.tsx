@@ -94,6 +94,7 @@ export default function Bundles({ price = '', products = [] }: any) {
           closeModal={() => handleProduct(null)}
           productData={productData}
         />
+        
       )}
     </section>
   )
