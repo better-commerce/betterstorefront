@@ -117,7 +117,7 @@ import { handler as useLogin } from './auth/use-login'
 import { handler as useLogout } from './auth/use-logout'
 import { handler as useSignup } from './auth/use-signup'
 
-import fetcher from './fetcher'
+import fetcher from './fetcherV2'
 
 export const bigcommerceProvider = {
   locale: 'en-us',
