@@ -1,4 +1,4 @@
-import fetcher from '../../fetcher'
+import fetcher from '../../fetcherV2'
 import { COLLECTIONS_ENDPOINT } from '@components/utils/constants'
 export default function getCollectionBySlug(slug: string) {
   async function getCollectionBySlugAsync() {
