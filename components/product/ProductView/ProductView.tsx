@@ -79,7 +79,7 @@ export default function ProductView({
     openCart,
   } = useUI()
 
-  const [updatedProduct, setUpdatedProduct] = useState(null)
+  const [updatedProduct, setUpdatedProduct] = useState<any>(null)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
@@ -91,7 +91,7 @@ export default function ProductView({
     stockCode: product.stockCode,
     ...product,
   })
-
+  
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
 
   const { Product } = EVENTS_MAP.ENTITY_TYPES
@@ -357,6 +357,16 @@ export default function ProductView({
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
+  const handleProductBundleUpdate = (bundledProduct: any) => {
+    //debugger;
+    if (bundledProduct && bundledProduct.id) {
+      let clonedProduct = Object.assign({}, updatedProduct);
+      if (clonedProduct && clonedProduct.componentProducts) {
+        setUpdatedProduct(clonedProduct);
+      }
+    }
+  }
+
   //console.log("Check Bundle:" + JSON.stringify(product));
 
   /*if (product === null) {
@@ -518,7 +528,7 @@ export default function ProductView({
                     selectedAttrData.description || product.description
                   }
                 />
-                 
+
                 {updatedProduct ? (
                   <>
                     <div className="sm:mt-10 mt-6 flex sm:flex-col1">
@@ -570,9 +580,10 @@ export default function ProductView({
             <Bundles
               price={product.price.formatted.withTax}
               products={product.componentProducts}
+              productBundleUpdate={handleProductBundleUpdate}
             />
           )}
-          
+
           {filteredRelatedProducts ? (
             <RelatedProducts
               relatedProducts={filteredRelatedProducts}
