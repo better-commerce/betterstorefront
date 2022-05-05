@@ -69,11 +69,8 @@ export default function Bundles({ price = '', products = [], productBundleUpdate
                 <div className='col-span-8'>
                   <div className='flex flex-col'>
                     <h3 className='text-xs font-semibold text-gray-400'>{product.brand}</h3>
-                    <h3 onClick={() => handleProduct(product)} className='text-sm text-gray-700 font-semibold hover:text-indigo-600 mt-1 cursor-pointer'>{product.name}</h3>
-                    <h4 className='text-sm mt-1'>
-                      <span className='uppercase text-xs font-bold  tex-black inline-block'>SKU:</span>
-                      <span className='text-gray-600 inline-block pl-1'>{product.stockCode}</span>
-                    </h4>
+                    <h3 onClick={() => handleProduct(product)} className='text-sm text-gray-700 font-semibold hover:text-indigo-600 mt-1 cursor-pointer'>{product.name}</h3>   
+                   
                     <h4 className='text-sm text-black mt-2'>
                       <span className='inline-block font-semibold'>{product.price.formatted.withoutTax}</span>
                       <span className='inline-block pl-3 text-red-400 text-xs font-semibold line-through'>{product.listPrice.formatted.withoutTax}</span>
