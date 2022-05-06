@@ -31,7 +31,7 @@ import {
   SUBTOTAL_INCLUDING_TAX,
   YOUR_INFORMATION,
 } from '@components/utils/textVariables'
-import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
+import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@components/common/Content/ContentSnippet'
 
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState(defaultModel)
