@@ -343,11 +343,13 @@ export default function CheckoutForm({
           ...billingInfoClone,
           country: state.deliveryMethod.name,
           countryCode: state.deliveryMethod.twoLetterIsoCode,
+          customerId: user.userId,
         },
         shippingAddress: {
           ...shippingClone,
           country: state.deliveryMethod.name,
           countryCode: state.deliveryMethod.twoLetterIsoCode,
+          customerId: user.userId,
         },
       }
 
