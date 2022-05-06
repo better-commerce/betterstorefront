@@ -27,6 +27,7 @@ export interface State {
   cartItems: any
   basketId: string
   user: any
+  isGuestUser: boolean,
   showSearchBar: boolean
   appConfig: any
   orderId: string
@@ -46,6 +47,7 @@ const initialState = {
   cartItems: getItem('cartItems') || { lineItems: [] },
   basketId: basketId(),
   user: getItem('user') || {},
+  isGuestUser: true,
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
@@ -106,6 +108,10 @@ type Action =
   | {
     type: 'SET_USER'
     payload: any
+  }
+  | {
+    type: 'SET_IS_GUEST_USER'
+    payload: boolean
   }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
@@ -242,6 +248,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         user: action.payload,
+      }
+    }
+    case 'SET_IS_GUEST_USER': {
+      return {
+        ...state,
+        isGuestUser: action.payload,
       }
     }
     case 'REMOVE_USER': {
@@ -420,6 +432,14 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
+  const setIsGuestUser = useCallback(
+    (payload: boolean) => {
+      setItem('isGuest', payload)
+      dispatch({ type: 'SET_IS_GUEST_USER', payload })
+    },
+    [dispatch]
+  )
+
   const deleteUser = useCallback(
     (payload: any) => {
       Router.push('/').then(() => {
@@ -496,6 +516,7 @@ export const UIProvider: FC = (props) => {
       removeFromCart,
       setCartItems,
       setUser,
+      setIsGuestUser,
       deleteUser,
       openCart,
       openWishlist,
