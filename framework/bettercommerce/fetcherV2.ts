@@ -61,13 +61,8 @@ class Axios {
             async (config: any) => {
                 //debugger;
                 const token = this.getToken()
-                console.log("--------------------------------------------------");
-                console.log(token);
-                // if (typeof window !== 'undefined') {
-                //     console.log('Rendering on browser or client')
-                // } else {
-                //     console.log('Rendering on server');
-                // }
+                //console.log("--------------------------------------------------");
+                //console.log(token);
 
                 //this is to be changed when we implement currency / language switcher
                 if (token) {

@@ -57,7 +57,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
   const [userEmail, setUserEmail] = useState('')
-  const { user, basketId } = useUI()
+  const { setIsGuestUser, user, basketId } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const { addToCart, associateCart } = cartHandler()
@@ -100,6 +100,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
     })
     await handleBasketAssociation(response.data.recordId)
     setSuccessMessage('Success!')
+    setIsGuestUser(false)
     Router.push('/my-account/login')
   }
 

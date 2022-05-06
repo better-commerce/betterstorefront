@@ -19,6 +19,8 @@ import Link from 'next/link'
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
   const {
+    isGuestUser,
+    setIsGuestUser,
     setUser,
     user,
     wishListItems,
@@ -36,10 +38,11 @@ function LoginPage({ recordEvent, setEntities }: any) {
     eventType: PageViewed,
   })
 
-  if (user.userId) {
+  if (!isGuestUser && user.userId) {
     Router.push('/')
   }
-  if (user.userId) {
+  
+  if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
         {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
@@ -71,6 +74,7 @@ function LoginPage({ recordEvent, setEntities }: any) {
           userObj.isAssociated = false
         }
         setUser(userObj)
+        setIsGuestUser(false)
         Router.push('/')
       }
     }
