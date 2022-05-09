@@ -47,7 +47,7 @@ const initialState = {
   cartItems: getItem('cartItems') || { lineItems: [] },
   basketId: basketId(),
   user: getItem('user') || {},
-  isGuestUser: true,
+  isGuestUser: getItem('isGuest') || false,
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',

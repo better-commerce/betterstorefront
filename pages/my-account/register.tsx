@@ -57,7 +57,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
   const [userEmail, setUserEmail] = useState('')
-  const { setIsGuestUser, user, basketId } = useUI()
+  const { isGuestUser, setIsGuestUser, user, basketId } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const { addToCart, associateCart } = cartHandler()
@@ -71,10 +71,10 @@ function RegisterPage({ recordEvent, setEntities }: any) {
     setError('')
   }, [userEmail])
 
-  if (user.userId) {
+  if (!isGuestUser && user.userId) {
     Router.push('/')
   }
-  if (user.userId) {
+  if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
@@ -109,7 +109,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
       const { data }: any = await axios.post(NEXT_VALIDATE_EMAIL, {
         data: email,
       })
-      if (!data.length) {
+      if (!data.length || (data.length && !data[0]?.isRegistered)) {
         setHasPassedEmailValidation(true)
       } else {
         setError(VALIDATION_EMAIL_ALREADY_IN_USE)
