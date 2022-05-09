@@ -77,19 +77,6 @@ export const setGeneralParams = (param: any, value: any) => {
   store.set(param, value)
 }
 
-export const ensureToken = async () => {
-  const url = new URL('oAuth/token', AUTH_URL)
-  const res: AxiosResponse<any> = await axiosInstance({
-    url: url.href,
-    method: 'post',
-    data: `client_id=${CLIENT_ID}&client_secret=${SHARED_SECRET}&grant_type=client_credentials`,
-  });
-  if (res) {
-    return res.data.access_token;
-  }
-  return "";
-}
-
 const fetcher = async ({
   url = '',
   method = 'post',
