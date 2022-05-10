@@ -19,7 +19,8 @@ export const PAGE_TYPES = {
 export default function withDataLayer(
   Component: any,
   pageType: string,
-  showLayout = true
+  entityType = undefined,
+  showLayout = true,
 ) {
   function WrappedComponent(props: any) {
     //console.log(props);
@@ -36,7 +37,13 @@ export default function withDataLayer(
 
     return (
       <>
-        <DataLayerSnippet slugs={props?.slugs} entityName={pageType} entityType="Page" eventType={PageViewed} />
+        {/* Conditional rendering based on entity type */}
+        {
+          entityType && (
+            <DataLayerSnippet entityObject={props?.slugs} entityName={pageType} entityType={entityType} eventType={PageViewed} />
+          )
+        }
+
         <Component
           {...props}
           setEntities={setEntities}
