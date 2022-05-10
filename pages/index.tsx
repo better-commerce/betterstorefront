@@ -11,6 +11,7 @@ import ProductSlider from '@components/product/ProductSlider'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { DataLayerSnippet, WebhookEventType } from '@components/common/Content'
 
 export async function getStaticProps({
   preview,
@@ -61,11 +62,12 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
     pageTitle: slugs?.title,
     entityType: 'Page',
     entityId: slugs?.id,
-    eventType: 'PageViewed',
+    eventType: WebhookEventType.PAGE_VIEWED,
   });
 
   return (
     <>
+      <DataLayerSnippet slugs={slugs} entityName={PAGE_TYPE} entityType="Page" eventType={WebhookEventType.PAGE_VIEWED} />
       <Hero banners={slugs?.components[0]?.images} />
       <ProductSlider
         config={slugs?.components?.find((i?: any) => i.componentType === 52)}

@@ -11,7 +11,7 @@ export enum SnippetContentType {
     TEXT = "Text"
 }
 
-enum SnippetPlacementType {
+export enum SnippetPlacementType {
     HEAD_AFTER_OPEN = "TopHead",
     HEAD_BEFORE_CLOSE = "Head",
     ERROR_HEAD = "ErrorHead", // TODO: Introduce error page in better storefront first.
@@ -87,76 +87,68 @@ export const ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS = ["ordconf-af
 const ContentSnippet: React.FC<any> = ({ snippets }: any) => {
     //debugger;
 
-    const injectSnippets = (snippets: Array<ISnippet>): void => {
-        //console.log(snippets);
-        if (snippets && snippets.length) {
-            try {
-
-                snippets.forEach((snippet: ISnippet) => {
-                    //console.log(snippet);
-                    if (snippet.content) {
-                        if (snippet.placement === SnippetPlacementType.HEAD_AFTER_OPEN) { // For "TopHead"
-
-                            topHead(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.HEAD_BEFORE_CLOSE) { // For "Head"
-
-                            head(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.BODY_AFTER_OPEN) { // For "BodyStartHtmlTagAfter"
-
-                            bodyStartHtmlTagAfter(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.BODY_BEFORE_CLOSE) { // For "BodyEndHtmlTagBefore"
-
-                            bodyEndHtmlTagBefore(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.PAGE_CONTAINER_AFTER) { // For "PageContainerAfter"
-
-                            pageContainerAfter(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.HEADER_MENU_BEFORE) { // For "HeaderMenuBefore"
-
-                            headerMenuBefore(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.HEADER_MENU_AFTER) { // For "HeaderMenuAfter"
-
-                            HeaderMenuAfter(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.FOOTER_BEFORE) { // For "FooterBefore"
-
-                            footerBefore(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.FOOTER_AFTER) { // For "FooterAfter"
-
-                            footerAfter(snippet);
-                        } /*else if (snippet.placement === SnippetPlacementType.SITE_LOGO) { // For "SiteLogo"
-    
-                            siteLogo(snippet);
-                        }*/ else if (snippet.placement === SnippetPlacementType.PRODUCT_AND_BRAND_DESC) { // For "ProductAndBrandDescription"
-
-                            productAndBrandDescription(snippet);
-                        } else if (snippet.placement === SnippetPlacementType.ORDER_CONFIRMATION) { // For "OrderConfirmationAfterProgressBar"
-
-                            orderConfirmationAfterProgressBar(snippet);
-                        }
-                    }
-                });
-            } catch (e) {
-                console.log(e);
-            }
-        }
-    };
-
     useEffect(() => {
         //console.log(snippets);
         resetSnippetElements();
-
-        injectSnippets([{
-            // TODO: Replace the hardcoded omnilytics data layer script with actual fetch implementation.
-            content: '<script>var entity = [{"eventType":"PageViewed","entityId":"84eb4e71-318e-4989-8837-58fcfc9e5066","entityName":"Home","entity":"{\\"id\\":\\"84eb4e71-318e-4989-8837-58fcfc9e5066\\",\\"name\\":\\"Home\\",\\"metaTitle\\":\\"Home\\",\\"metaKeywords\\":null,\\"metaDescription\\":null,\\"slug\\":\\"/\\",\\"title\\":\\"Home\\",\\"viewType\\":\\"home\\"}","entityType":"Page"}];</script>',
-            name: "test",
-            placement: SnippetPlacementType.HEAD_BEFORE_CLOSE,
-            type: SnippetContentType.JAVASCRIPT
-        }]);
         injectSnippets(snippets);
 
     }, []);
     return (
         <></>
     );
+};
+
+export const injectSnippets = (snippets: Array<ISnippet>): void => {
+    //console.log(snippets);
+    if (snippets && snippets.length) {
+        try {
+
+            snippets.forEach((snippet: ISnippet) => {
+                //console.log(snippet);
+                if (snippet.content) {
+                    if (snippet.placement === SnippetPlacementType.HEAD_AFTER_OPEN) { // For "TopHead"
+
+                        topHead(snippet);
+                    } else if (snippet.placement === SnippetPlacementType.HEAD_BEFORE_CLOSE) { // For "Head"
+
+                        head(snippet);
+                    } else if (snippet.placement === SnippetPlacementType.BODY_AFTER_OPEN) { // For "BodyStartHtmlTagAfter"
+
+                        bodyStartHtmlTagAfter(snippet);
+                    } else if (snippet.placement === SnippetPlacementType.BODY_BEFORE_CLOSE) { // For "BodyEndHtmlTagBefore"
+
+                        bodyEndHtmlTagBefore(snippet);
+                    } else if (snippet.placement === SnippetPlacementType.PAGE_CONTAINER_AFTER) { // For "PageContainerAfter"
+
+                        pageContainerAfter(snippet);
+                    } else if (snippet.placement === SnippetPlacementType.HEADER_MENU_BEFORE) { // For "HeaderMenuBefore"
+
+                        headerMenuBefore(snippet);
+                    } else if (snippet.placement === SnippetPlacementType.HEADER_MENU_AFTER) { // For "HeaderMenuAfter"
+
+                        HeaderMenuAfter(snippet);
+                    } else if (snippet.placement === SnippetPlacementType.FOOTER_BEFORE) { // For "FooterBefore"
+
+                        footerBefore(snippet);
+                    } else if (snippet.placement === SnippetPlacementType.FOOTER_AFTER) { // For "FooterAfter"
+
+                        footerAfter(snippet);
+                    } /*else if (snippet.placement === SnippetPlacementType.SITE_LOGO) { // For "SiteLogo"
+
+                        siteLogo(snippet);
+                    }*/ else if (snippet.placement === SnippetPlacementType.PRODUCT_AND_BRAND_DESC) { // For "ProductAndBrandDescription"
+
+                        productAndBrandDescription(snippet);
+                    } else if (snippet.placement === SnippetPlacementType.ORDER_CONFIRMATION) { // For "OrderConfirmationAfterProgressBar"
+
+                        orderConfirmationAfterProgressBar(snippet);
+                    }
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
 };
 
 /**
