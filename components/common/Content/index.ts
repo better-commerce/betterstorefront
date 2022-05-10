@@ -1,2 +1,2 @@
 export { default as ContentSnippet } from "./ContentSnippet";
-export { WebhookEventType, default as DataLayerSnippet } from "./DataLayerSnippet";
+export { default as DataLayerSnippet } from "./DataLayerSnippet";

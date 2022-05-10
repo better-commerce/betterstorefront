@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import DataLayerInstance, { KEYS_MAP } from '@components/utils/dataLayer'
 import { Layout } from '@components/common'
+import { DataLayerSnippet } from './common/Content';
+import { EVENTS_MAP } from './services/analytics/constants';
 
 export const PAGE_TYPES = {
   Blog: 'Blog',
@@ -20,6 +22,8 @@ export default function withDataLayer(
   showLayout = true
 ) {
   function WrappedComponent(props: any) {
+    //console.log(props);
+    const { PageViewed } = EVENTS_MAP.EVENT_TYPES;
     useEffect(() => {
       DataLayerInstance.setItemInDataLayer('pageCategory', pageType)
     }, [])
@@ -31,11 +35,15 @@ export default function withDataLayer(
       DataLayerInstance.setItemInDataLayer(KEYS_MAP.eventType, event)
 
     return (
-      <Component
-        {...props}
-        setEntities={setEntities}
-        recordEvent={recordEvent}
-      />
+      <>
+        <DataLayerSnippet slugs={props?.slugs} entityName={pageType} entityType="Page" eventType={PageViewed} />
+        <Component
+          {...props}
+          setEntities={setEntities}
+          recordEvent={recordEvent}
+        />
+      </>
+
     )
   }
 
