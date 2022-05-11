@@ -1,3 +1,6 @@
+// Base Imports
+import { useEffect, useState } from 'react'
+
 // Package Imports
 import * as Yup from 'yup'
 import { Formik, Form, Field } from 'formik'
@@ -22,10 +25,6 @@ const b2bRegisterSchema = Yup.object({
   isRequestTradingAccount: Yup.boolean(),
   companyName: Yup.string().required(),
   registeredNumber: Yup.string().required(),
-  tradingAcountPassword: Yup.string().min(8).max(24).required(),
-  tradingAcountConfirmPassword: Yup.string()
-    .oneOf([Yup.ref('companyPassword'), null], VALIDATION_PASSWORD_MUST_MATCH)
-    .required(),
   email: Yup.string().max(255).required(),
   address1: Yup.string().required(),
   city: Yup.string().required(),
@@ -49,8 +48,6 @@ const b2bRegisterInitialValues = {
   isRequestTradingAccount: false,
   companyName: '',
   registeredNumber: '',
-  tradingAcountPassword: '',
-  tradingAcountConfirmPassword: '',
   email: '',
   address1: '',
   city: '',
@@ -84,14 +81,22 @@ export default function CustomerForm({
   type = 'register',
   onSubmit = () => { },
   btnText = GENERAL_REGISTER,
-  b2bSettings = new Array<{ key: string, value: string }>()
+  email = "",
+  b2bSettings = new Array<{ key: string, value: string }>(),
+  apiError = ""
 }: any) {
   const b2bEnabled = b2bSettings && b2bSettings.length ? stringToBoolean(b2bSettings.find((x: any) => x.key === "B2BSettings.EnableB2B")?.value) : false;
   const { config, initialValues, schema } = VALUES_MAP[type];
-  const extendedInitialValues = (type === "register") ? (b2bEnabled ? { ...initialValues, ...b2bRegisterInitialValues, ...{ isRequestTradingAccount: b2bEnabled } } : initialValues) : initialValues;
+  const extendedInitialValues = (type === "register") ? (b2bEnabled ? { ...initialValues, ...b2bRegisterInitialValues, ...{ isRequestTradingAccount: b2bEnabled, email: email } } : initialValues) : initialValues;
   const extendedConfig = (type === "register") ? (b2bEnabled ? [...config, ...b2bRegistrationConfig] : config) : config;
   const extendedSchema = (type === "register") ? (b2bEnabled ? mergeSchema(schema, b2bRegisterSchema) : schema) : schema;
-  console.log(schema);
+  //console.log(schema);
+
+  const [error, setError] = useState(apiError)
+
+  useEffect(() => {
+    setError(apiError)
+  }, [apiError])
 
   return (
     <Formik
@@ -147,6 +152,7 @@ export default function CustomerForm({
                 )
               })}
             </Form>
+            {error ? <span className="text-red-500 capitalize">{error}</span> : null}
             <div className="mt-10 flex sm:flex-col1">
               <button
                 type="submit"
