@@ -1,7 +1,7 @@
 import { useSignup } from '@framework/auth'
 export default async (req: any, res: any) => {
-  const { email, password, confirmPassword, firstName, lastName }: any =
-    req.body.data
+  const { email, password, confirmPassword, firstName, lastName }: any = req.body.data
+  //debugger;
   try {
     const response = await useSignup()({
       Email: email,
