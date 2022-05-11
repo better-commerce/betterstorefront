@@ -54,18 +54,6 @@ export const b2bRegistrationConfig = [
     placeholder: 'Registered number',
   },
   {
-    key: 'tradingAcountPassword',
-    label: 'Trading Account Password',
-    type: 'password',
-    placeholder: 'Strong password',
-  },
-  {
-    key: 'tradingAcountConfirmPassword',
-    label: 'Confirm Password',
-    type: 'password',
-    placeholder: 'Confirm password',
-  },
-  {
     key: 'email',
     id: 'email',
     name: 'email',

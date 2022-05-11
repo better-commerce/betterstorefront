@@ -12,14 +12,15 @@ import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_ASSOCIATE_CART, } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_ASSOCIATE_CART, NEXT_SIGN_UP_TRADING_ACCOUNT } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Button from '@components/ui/IndigoButton'
 import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { BTN_REGISTER_FOR_FREE, GENERAL_EMAIL, VALIDATION_EMAIL_ALREADY_IN_USE, VALIDATION_ENTER_A_VALID_EMAIL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
+import { BTN_REGISTER_FOR_FREE, ERROR_GENERIC_MESSAGE, GENERAL_EMAIL, VALIDATION_EMAIL_ALREADY_IN_USE, VALIDATION_ENTER_A_VALID_EMAIL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
+import { Guid } from '@commerce/types'
 
 const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   const [error, setError] = useState(apiError)
@@ -91,22 +92,45 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
   }
 
   const handleUserRegister = async (values: any) => {
-    //debugger;
-    const response: any = await axios.post(NEXT_SIGN_UP, {
-      data: { ...values, email: userEmail },
-    })
-    eventDispatcher(CustomerCreated, {
-      entity: JSON.stringify({
-        id: response.data.recordId,
-        name: values.firstName + values.lastName,
-        email: values.email,
-      }),
-      eventType: CustomerCreated,
-    })
-    await handleBasketAssociation(response.data.recordId)
-    setSuccessMessage('Success!')
-    setIsGuestUser(false)
-    Router.push('/my-account/login')
+    let userCreated = false;
+    let recordId = Guid.empty;
+    const reqData = { ...values, email: userEmail };
+
+    // Register trading account, if opted for
+    if (values.isRequestTradingAccount) {
+      const tradingAccountResponse: any = await axios.post(NEXT_SIGN_UP_TRADING_ACCOUNT, {
+        data: reqData,
+      });
+      //debugger;
+      userCreated = (tradingAccountResponse && tradingAccountResponse.data?.id) ?? false;
+      recordId = tradingAccountResponse.data?.recordId;
+    } else {
+      const response: any = await axios.post(NEXT_SIGN_UP, {
+        data: reqData,
+      });
+      //debugger;
+      userCreated = (response && response.data?.id) ?? false;
+      recordId = response.data?.recordId;
+    }
+
+    if (!userCreated) {
+      setError(ERROR_GENERIC_MESSAGE);
+    }
+
+    if (userCreated) {
+      eventDispatcher(CustomerCreated, {
+        entity: JSON.stringify({
+          id: recordId,
+          name: values.firstName + values.lastName,
+          email: values.email,
+        }),
+        eventType: CustomerCreated,
+      })
+      await handleBasketAssociation(recordId)
+      setSuccessMessage('Success!')
+      setIsGuestUser(false)
+      Router.push('/my-account/login')
+    }
   }
 
   const handleEmailSubmit = async (email: string) => {
@@ -141,7 +165,7 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
                 apiError={error}
               />
             ) : (
-              <Form type="register" onSubmit={handleUserRegister} b2bSettings={b2bSettings} />
+              <Form type="register" onSubmit={handleUserRegister} b2bSettings={b2bSettings} email={userEmail} apiError={error} />
             )}
           </>
         )}
