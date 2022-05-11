@@ -1,9 +1,14 @@
-import { Formik, Form, Field } from 'formik'
+// Package Imports
 import * as Yup from 'yup'
+import { Formik, Form, Field } from 'formik'
+
+// Other Imports
 import { registrationConfig, loginConfig, b2bRegistrationConfig } from './config'
 import LoadingDots from '@components/ui/LoadingDots'
 import { GENERAL_REGISTER, VALIDATION_PASSWORD_MUST_MATCH } from '@components/utils/textVariables'
 import { Checkbox } from '@components/account/Address'
+import { mergeSchema, stringToBoolean } from '@framework/utils'
+
 const registerSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
@@ -14,8 +19,13 @@ const registerSchema = Yup.object({
 })
 
 const b2bRegisterSchema = Yup.object({
+  isRequestTradingAccount: Yup.boolean(),
   companyName: Yup.string().required(),
   registeredNumber: Yup.string().required(),
+  tradingAcountPassword: Yup.string().min(8).max(24).required(),
+  tradingAcountConfirmPassword: Yup.string()
+    .oneOf([Yup.ref('companyPassword'), null], VALIDATION_PASSWORD_MUST_MATCH)
+    .required(),
   email: Yup.string().max(255).required(),
   address1: Yup.string().required(),
   city: Yup.string().required(),
@@ -33,6 +43,19 @@ const registerInitialValues = {
   lastName: '',
   password: '',
   confirmPassword: '',
+}
+
+const b2bRegisterInitialValues = {
+  isRequestTradingAccount: false,
+  companyName: '',
+  registeredNumber: '',
+  tradingAcountPassword: '',
+  tradingAcountConfirmPassword: '',
+  email: '',
+  address1: '',
+  city: '',
+  country: '',
+  postCode: '',
 }
 
 const loginInitialValues = {
@@ -61,16 +84,20 @@ export default function CustomerForm({
   type = 'register',
   onSubmit = () => { },
   btnText = GENERAL_REGISTER,
+  b2bSettings = new Array<{ key: string, value: string }>()
 }: any) {
-  const { config, initialValues, schema } = VALUES_MAP[type]
-  const extendedConfig = (type === "register") ? [...config, ...b2bRegistrationConfig] : config
-  //const extendedSchema = (type === "register") ? { ...schema, ...b2bRegisterSchema } : schema
+  const b2bEnabled = b2bSettings && b2bSettings.length ? stringToBoolean(b2bSettings.find((x: any) => x.key === "B2BSettings.EnableB2B")?.value) : false;
+  const { config, initialValues, schema } = VALUES_MAP[type];
+  const extendedInitialValues = (type === "register") ? (b2bEnabled ? { ...initialValues, ...b2bRegisterInitialValues, ...{ isRequestTradingAccount: b2bEnabled } } : initialValues) : initialValues;
+  const extendedConfig = (type === "register") ? (b2bEnabled ? [...config, ...b2bRegistrationConfig] : config) : config;
+  const extendedSchema = (type === "register") ? (b2bEnabled ? mergeSchema(schema, b2bRegisterSchema) : schema) : schema;
+  console.log(schema);
 
   return (
     <Formik
-      validationSchema={schema}
+      validationSchema={extendedSchema}
       onSubmit={onSubmit}
-      initialValues={initialValues}
+      initialValues={extendedInitialValues}
     >
       {({
         errors,
@@ -86,9 +113,6 @@ export default function CustomerForm({
               {extendedConfig.map((formItem: any, idx: number) => {
                 return (
                   <div key={`${formItem.key}_${idx}`} className={`form-field ${idx + 1}`}>
-                    <label className="text-gray-700 text-sm">
-                      {formItem.label}
-                    </label>
                     {
                       formItem.customComponent ? (
                         COMPONENTS_MAP[formItem.customComponent]({
@@ -97,23 +121,28 @@ export default function CustomerForm({
                           handleChange,
                         })
                       ) : (
-                        <Field
-                          key={idx}
-                          name={formItem.key}
-                          placeholder={formItem.placeholder}
-                          onChange={handleChange}
-                          value={values[formItem.key]}
-                          type={formItem.type}
-                          className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
-                        />
+                        <>
+                          <label className="text-gray-700 text-sm">
+                            {formItem.label}
+                          </label>
+                          <Field
+                            key={idx}
+                            name={formItem.key}
+                            placeholder={formItem.placeholder}
+                            onChange={handleChange}
+                            value={values[formItem.key]}
+                            type={formItem.type}
+                            className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                          />
+
+                          {errors[formItem.key] && touched[formItem.key] ? (
+                            <div className="text-red-400 text-xs capitalize mb-2">
+                              {errors[formItem.key]}
+                            </div>
+                          ) : null}
+                        </>
                       )
                     }
-
-                    {errors[formItem.key] && touched[formItem.key] ? (
-                      <div className="text-red-400 text-xs capitalize mb-2">
-                        {errors[formItem.key]}
-                      </div>
-                    ) : null}
                   </div>
                 )
               })}

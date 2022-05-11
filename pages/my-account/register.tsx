@@ -1,17 +1,20 @@
+// Base Imports
+import Router from 'next/router'
+import { useState, useEffect } from 'react'
+import { GetServerSideProps } from 'next'
+
+// Package Imports
+import axios from 'axios'
+import { validate } from 'email-validator'
+
+// Other Imports
+import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
-import axios from 'axios'
-import {
-  NEXT_SIGN_UP,
-  NEXT_VALIDATE_EMAIL,
-  NEXT_ASSOCIATE_CART,
-} from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_ASSOCIATE_CART, } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
-import Router from 'next/router'
-import { useState, useEffect } from 'react'
 import Button from '@components/ui/IndigoButton'
-import { validate } from 'email-validator'
 import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -53,7 +56,8 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
     </div>
   )
 }
-function RegisterPage({ recordEvent, setEntities }: any) {
+function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
+  //console.log(b2bSettings)
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
   const [userEmail, setUserEmail] = useState('')
@@ -77,7 +81,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-       {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
       </div>
     )
   }
@@ -87,6 +91,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   }
 
   const handleUserRegister = async (values: any) => {
+    //debugger;
     const response: any = await axios.post(NEXT_SIGN_UP, {
       data: { ...values, email: userEmail },
     })
@@ -123,7 +128,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
-          {BTN_REGISTER_FOR_FREE}
+            {BTN_REGISTER_FOR_FREE}
           </h2>
         </div>
         {!successMessage && (
@@ -136,7 +141,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
                 apiError={error}
               />
             ) : (
-              <Form type="register" onSubmit={handleUserRegister} />
+              <Form type="register" onSubmit={handleUserRegister} b2bSettings={b2bSettings} />
             )}
           </>
         )}
@@ -146,6 +151,20 @@ function RegisterPage({ recordEvent, setEntities }: any) {
       </div>
     </section>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  //console.log(context);
+  const infraPromise = commerce.getInfra();
+  const infra = await infraPromise;
+  const b2bSettings = infra && infra.configSettings ? infra.configSettings.find((x: any) => x.configType === "B2BSettings")?.configKeys : [];
+  //console.log(b2bSettings);
+  return {
+    props: {
+      query: context.query,
+      b2bSettings: b2bSettings,
+    }, // will be passed to the page component as props
+  };
 }
 
 RegisterPage.Layout = Layout
