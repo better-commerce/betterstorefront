@@ -28,6 +28,41 @@ const DataLayerSnippet: React.FC<IDataLayerProps> = (props: IDataLayerProps) => 
     } else if (entityType === Order) { // OrderModel
     } else if (entityType === Product) { // ProductDetailModel
     } else if (entityType === Search) { // SearchRequestModel
+        /*entity = [
+            {
+                eventType: "FreeText",
+                entityId: "jacket",
+                entityName: "jacket",
+                entity: {
+                    freeText: "jacket",
+                    page: 1,
+                    sortBy: null,
+                    sortOrder: null,
+                    collectionId: null,
+                    collection: null,
+                    brandId: null,
+                    excludedBrandIds: null,
+                    brand: null,
+                    facet: null,
+                    categoryId: null,
+                    categoryIds: null,
+                    excludedCategoryIds: null,
+                    category: null,
+                    gender: null,
+                    currentPage: 1,
+                    pageSize: 0,
+                    filters: null,
+                    allowFacet: true,
+                    breadCrumb: null,
+                    resultCount: 9,
+                    includeExcludedBrand: false,
+                    facetOnly: false,
+                    ignoreDisplayInSerach: false,
+                    promoCode: null
+                },
+                entityType: entityType
+            }
+        ]*/
     } else if (entityType === Page) { // SiteViewModel
         entity = [
             {

@@ -25,6 +25,8 @@ export default function withDataLayer(
   function WrappedComponent(props: any) {
     //console.log(props);
     const { PageViewed } = EVENTS_MAP.EVENT_TYPES;
+    const { Basket, Blog, Brand, Category, CmsPage, Collection, Customer, Order, Page, Product, Search } = EVENTS_MAP.ENTITY_TYPES;
+
     useEffect(() => {
       DataLayerInstance.setItemInDataLayer('pageCategory', pageType)
     }, [])
@@ -39,7 +41,7 @@ export default function withDataLayer(
       <>
         {/* Conditional rendering based on entity type */}
         {
-          entityType && (
+          (entityType && entityType == Page) && (
             <DataLayerSnippet entityObject={props?.slugs} entityName={pageType} entityType={entityType} eventType={PageViewed} />
           )
         }

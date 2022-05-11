@@ -344,9 +344,10 @@ function Search({ query, setEntities, recordEvent }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  //console.log(context);
   return {
     props: { query: context.query }, // will be passed to the page component as props
   }
 }
 
-export default withDataLayer(Search, PAGE_TYPE)
+export default withDataLayer(Search, PAGE_TYPE, EVENTS_MAP.ENTITY_TYPES['Search'])
