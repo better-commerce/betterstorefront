@@ -30,37 +30,37 @@ const b2bRegisterSchema = Yup.object({
   companyName: Yup.string().when("isRequestTradingAccount", {
     is: (val: boolean) => val == true,
     then: Yup.string().required(),
-  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
 
   registeredNumber: Yup.string().when("isRequestTradingAccount", {
     is: (val: boolean) => val == true,
     then: Yup.string().required(),
-  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
 
   email: Yup.string().when("isRequestTradingAccount", {
     is: (val: boolean) => val == true,
     then: Yup.string().max(255).required(),
-  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
 
   address1: Yup.string().when("isRequestTradingAccount", {
     is: (val: boolean) => val == true,
     then: Yup.string().required(),
-  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
 
   city: Yup.string().when("isRequestTradingAccount", {
     is: (val: boolean) => val == true,
     then: Yup.string().required(),
-  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
 
   country: Yup.string().when("isRequestTradingAccount", {
     is: (val: boolean) => val == true,
     then: Yup.string().required(),
-  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
 
   postCode: Yup.string().when("isRequestTradingAccount", {
     is: (val: boolean) => val == true,
     then: Yup.string().required(),
-  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
 })
 
 const loginSchema = Yup.object({
@@ -173,8 +173,8 @@ export default function CustomerForm({
                       ) : (
                         <>
                           {
-                            // 1. Renders {formItem} even if show() method is undefined.
-                            // 2. Renders {formItems} if show() method is defined and its execution result is TRUE.
+                            // 1. Renders {formItem} when show() method is undefined (handles non-registration forms).
+                            // 2. Renders {formItems} if show() method is defined and its execution result is TRUE (handles registration form).
                             (!formItem.show || (formItem.show && formItem.show(values))) ? (
                               <>
                                 <label className="text-gray-700 text-sm">
@@ -208,7 +208,10 @@ export default function CustomerForm({
                 )
               })}
             </Form>
+            
+            {/* Display error received from parent, if any */}
             {error ? <span className="text-red-500 capitalize">{error}</span> : null}
+
             <div className="mt-10 flex sm:flex-col1">
               <button
                 type="submit"
