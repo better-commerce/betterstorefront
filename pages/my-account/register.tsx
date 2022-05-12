@@ -58,7 +58,6 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   )
 }
 function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
-  //console.log(b2bSettings)
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
   const [userEmail, setUserEmail] = useState('')
@@ -96,27 +95,33 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
     let recordId = Guid.empty;
     const reqData = { ...values, email: userEmail };
 
-    // Register trading account, if opted for
+    // Register trading account, if opted for.
     if (values.isRequestTradingAccount) {
+
       const tradingAccountResponse: any = await axios.post(NEXT_SIGN_UP_TRADING_ACCOUNT, {
         data: reqData,
       });
-      //debugger;
+      
       userCreated = (tradingAccountResponse && tradingAccountResponse.data?.id) ?? false;
       recordId = tradingAccountResponse.data?.recordId;
-    } else {
+
+    } else { // Otherwise, consider it as user registration.
+
       const response: any = await axios.post(NEXT_SIGN_UP, {
         data: reqData,
       });
-      //debugger;
+      
       userCreated = (response && response.data?.id) ?? false;
       recordId = response.data?.recordId;
+
     }
 
+    // Trigger error message for failed registration.
     if (!userCreated) {
       setError(ERROR_GENERIC_MESSAGE);
     }
 
+    // If registration is SUCCESS
     if (userCreated) {
       eventDispatcher(CustomerCreated, {
         entity: JSON.stringify({
