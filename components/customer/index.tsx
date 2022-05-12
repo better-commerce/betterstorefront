@@ -137,12 +137,6 @@ export default function CustomerForm({
   // Note: Schema is extended for "registration" only, based on B2B settings.
   const extendedSchema = (type === "register") ? (b2bEnabled ? mergeSchema(schema, b2bRegisterSchema) : schema) : schema;
 
-  const [error, setError] = useState(apiError)
-
-  useEffect(() => {
-    setError(apiError)
-  }, [apiError])
-
   return (
     <Formik
       validationSchema={extendedSchema}
