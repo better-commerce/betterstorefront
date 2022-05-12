@@ -333,10 +333,11 @@ export default function CheckoutForm({
 
   const setBillingInformation = (payload: any, update = true) => {
     const handleAsync = async () => {
+      //debugger;
       const billingInfoClone = { ...payload }
-      delete billingInfoClone.id
+      //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
       const shippingClone = { ...state.shippingInformation }
-      delete shippingClone.id
+      //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
       const data = {
         billingAddress: {
@@ -365,6 +366,7 @@ export default function CheckoutForm({
   }
 
   const handleShippingSubmit = (values: any) => {
+    //debugger;
     toggleShipping()
     if (state.isSameAddress) {
       setBillingInformation(values)
@@ -405,12 +407,13 @@ export default function CheckoutForm({
   }
 
   const confirmOrder = (method: any) => {
+    //debugger;
     dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
 
     const billingInfoClone = { ...state.billingInformation }
-    delete billingInfoClone.id
+    //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
     const shippingClone = { ...state.shippingInformation }
-    delete shippingClone.id
+    //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
     const data = {
       basketId,
