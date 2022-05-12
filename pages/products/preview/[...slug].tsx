@@ -53,6 +53,7 @@ function Slug({ data, setEntities, recordEvent, slug }: any) {
         data={data.product}
         slug={slug}
         snippets={data.snippets}
+        isPreview={true}
       />
     )
   )

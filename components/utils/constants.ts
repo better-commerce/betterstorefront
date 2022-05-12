@@ -78,6 +78,7 @@ export const NEXT_GUEST_CHECKOUT = '/api/customer/guest-checkout'
 export const NEXT_LOGIN_CHECKOUT = '/api/customer/login-checkout'
 export const NEXT_SEARCH_PRODUCTS = `/api/catalog/search`
 export const NEXT_GET_PRODUCT = '/api/catalog/get-product'
+export const NEXT_GET_PRODUCT_PREVIEW = '/api/catalog/get-product-preview'
 export const NEXT_PAYMENT_METHODS = '/api/payment-methods'
 export const NEXT_CONFIRM_ORDER = '/api/confirm-order'
 export const NEXT_INFRA_ENDPOINT = '/api/infra'

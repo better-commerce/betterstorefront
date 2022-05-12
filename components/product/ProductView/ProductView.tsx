@@ -22,6 +22,7 @@ import {
   NEXT_BULK_ADD_TO_CART,
   NEXT_UPDATE_CART_INFO,
   NEXT_GET_PRODUCT,
+  NEXT_GET_PRODUCT_PREVIEW,
 } from '@components/utils/constants'
 import Button from '@components/ui/IndigoButton'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -68,6 +69,7 @@ export default function ProductView({
   setEntities,
   recordEvent,
   slug,
+  isPreview = false
 }: any) {
   const {
     openNotifyUser,
@@ -96,7 +98,9 @@ export default function ProductView({
 
   const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
-    const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
+    const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW;;
+    const response: any = await axios.post(url, { slug: slug })
+    //console.log(JSON.stringify(response?.data))
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
         entity: JSON.stringify({
@@ -464,7 +468,7 @@ export default function ProductView({
               </p>
               <div className="mt-3">
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
-                {updatedProduct ? (
+                {isPreview || updatedProduct ? (
                   <p className="sm:text-3xl text-2xl font-bold sm:font-medium text-gray-900">
                     {selectedAttrData.price?.formatted?.withTax}
                     {selectedAttrData.listPrice?.raw.tax > 0 ? (
