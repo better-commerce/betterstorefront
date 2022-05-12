@@ -208,9 +208,6 @@ export default function CustomerForm({
                 )
               })}
             </Form>
-            
-            {/* Display error received from parent, if any */}
-            {error ? <span className="text-red-500 capitalize">{error}</span> : null}
 
             <div className="mt-10 flex sm:flex-col1">
               <button
@@ -218,7 +215,7 @@ export default function CustomerForm({
                 onClick={handleSubmit}
                 className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
               >
-                {isSubmitting ? <LoadingDots /> : btnText}
+                {apiError ? btnText : isSubmitting ? <LoadingDots /> : btnText}
               </button>
             </div>
           </div>
