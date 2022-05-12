@@ -21,15 +21,46 @@ const registerSchema = Yup.object({
     .required(),
 })
 
+/**
+ * This is a schema for registration to enable Trading account registration.
+ */
 const b2bRegisterSchema = Yup.object({
   isRequestTradingAccount: Yup.boolean(),
-  companyName: Yup.string().required(),
-  registeredNumber: Yup.string().required(),
-  email: Yup.string().max(255).required(),
-  address1: Yup.string().required(),
-  city: Yup.string().required(),
-  country: Yup.string().required(),
-  postCode: Yup.string().required(),
+
+  companyName: Yup.string().when("isRequestTradingAccount", {
+    is: (val: boolean) => val == true,
+    then: Yup.string().required(),
+  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+
+  registeredNumber: Yup.string().when("isRequestTradingAccount", {
+    is: (val: boolean) => val == true,
+    then: Yup.string().required(),
+  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+
+  email: Yup.string().when("isRequestTradingAccount", {
+    is: (val: boolean) => val == true,
+    then: Yup.string().max(255).required(),
+  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+
+  address1: Yup.string().when("isRequestTradingAccount", {
+    is: (val: boolean) => val == true,
+    then: Yup.string().required(),
+  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+
+  city: Yup.string().when("isRequestTradingAccount", {
+    is: (val: boolean) => val == true,
+    then: Yup.string().required(),
+  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+
+  country: Yup.string().when("isRequestTradingAccount", {
+    is: (val: boolean) => val == true,
+    then: Yup.string().required(),
+  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+
+  postCode: Yup.string().when("isRequestTradingAccount", {
+    is: (val: boolean) => val == true,
+    then: Yup.string().required(),
+  }), // Required attribute of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
 })
 
 const loginSchema = Yup.object({
@@ -44,8 +75,11 @@ const registerInitialValues = {
   confirmPassword: '',
 }
 
+/**
+ * This is initial values object for registration to enable Trading account registration.
+ */
 const b2bRegisterInitialValues = {
-  isRequestTradingAccount: false,
+  isRequestTradingAccount: false, // "Request trading account" checkbox checked value is FALSE by default.
   companyName: '',
   registeredNumber: '',
   email: '',
@@ -81,16 +115,27 @@ export default function CustomerForm({
   type = 'register',
   onSubmit = () => { },
   btnText = GENERAL_REGISTER,
-  email = "",
-  b2bSettings = new Array<{ key: string, value: string }>(),
-  apiError = ""
+  email = "", // This prop contains the value of "Email Address" that is validated for availability at first step.
+  b2bSettings = new Array<{ key: string, value: string }>(), // B2B settings passed from parent.
+  apiError = "" // Runtime error passed from parent.
 }: any) {
-  const b2bEnabled = b2bSettings && b2bSettings.length ? stringToBoolean(b2bSettings.find((x: any) => x.key === "B2BSettings.EnableB2B")?.value) : false;
+
   const { config, initialValues, schema } = VALUES_MAP[type];
+
+  // Read b2b enabled value from settings
+  const b2bEnabled = b2bSettings && b2bSettings.length ? stringToBoolean(b2bSettings.find((x: any) => x.key === "B2BSettings.EnableB2B")?.value) : false;
+
+  // Extend initial values based on form type & b2b setting.
+  // Note: Values are extended for "registration" only, based on B2B settings.
   const extendedInitialValues = (type === "register") ? (b2bEnabled ? { ...initialValues, ...b2bRegisterInitialValues, ...{ isRequestTradingAccount: b2bEnabled, email: email } } : initialValues) : initialValues;
+
+  // Extend form config based on form type & b2b setting.
+  // Note: Config is extended for "registration" only, based on B2B settings.
   const extendedConfig = (type === "register") ? (b2bEnabled ? [...config, ...b2bRegistrationConfig] : config) : config;
+
+  // Extend from schema based on form type & b2b setting.
+  // Note: Schema is extended for "registration" only, based on B2B settings.
   const extendedSchema = (type === "register") ? (b2bEnabled ? mergeSchema(schema, b2bRegisterSchema) : schema) : schema;
-  //console.log(schema);
 
   const [error, setError] = useState(apiError)
 
@@ -127,24 +172,35 @@ export default function CustomerForm({
                         })
                       ) : (
                         <>
-                          <label className="text-gray-700 text-sm">
-                            {formItem.label}
-                          </label>
-                          <Field
-                            key={idx}
-                            name={formItem.key}
-                            placeholder={formItem.placeholder}
-                            onChange={handleChange}
-                            value={values[formItem.key]}
-                            type={formItem.type}
-                            className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
-                          />
+                          {
+                            // 1. Renders {formItem} even if show() method is undefined.
+                            // 2. Renders {formItems} if show() method is defined and its execution result is TRUE.
+                            (!formItem.show || (formItem.show && formItem.show(values))) ? (
+                              <>
+                                <label className="text-gray-700 text-sm">
+                                  {formItem.label}
+                                </label>
 
-                          {errors[formItem.key] && touched[formItem.key] ? (
-                            <div className="text-red-400 text-xs capitalize mb-2">
-                              {errors[formItem.key]}
-                            </div>
-                          ) : null}
+                                <Field
+                                  key={idx}
+                                  name={formItem.key}
+                                  placeholder={formItem.placeholder}
+                                  onChange={handleChange}
+                                  value={values[formItem.key]}
+                                  type={formItem.type}
+                                  className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                                />
+
+                                {errors[formItem.key] && touched[formItem.key] ? (
+                                  <div className="text-red-400 text-xs capitalize mb-2">
+                                    {errors[formItem.key]}
+                                  </div>
+                                ) : null}
+                              </>
+                            ) : (
+                              <></>
+                            )
+                          }
                         </>
                       )
                     }

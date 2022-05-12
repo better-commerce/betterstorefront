@@ -1,6 +1,15 @@
 import countryList from '@components/utils/countryList'
 import { GENERAL_ADDRESS_LINE1, GENERAL_ADDRESS_LINE2, GENERAL_CITY, GENERAL_POSTCODE, GENERAL_COUNTRY, GENERAL_PHONE } from '@components/utils/textVariables'
 
+/**
+ * This method is responsible for toggling field based on dynamic change of "Request trading account" checkbox.
+ * @param values 
+ * @returns 
+ */
+const showTradingField = (values: any): boolean => {
+  return values["isRequestTradingAccount"];
+};
+
 export const registrationConfig = [
   {
     key: 'firstName',
@@ -28,6 +37,9 @@ export const registrationConfig = [
   },
 ]
 
+/**
+ * This is fields config for registration to enable Trading account registration.
+ */
 export const b2bRegistrationConfig = [
   {
     key: 'isRequestTradingAccount',
@@ -36,6 +48,15 @@ export const b2bRegistrationConfig = [
     label: 'Create trading account',
     customComponent: 'CustomCheckbox',
     className: 'flex-inline',
+
+    /**
+     * This method ALWAYS returns true to show "Request trading account" checkbox on form.
+     * @param values 
+     * @returns 
+     */
+    show: (values: any) => {
+      return true;
+    }
   },
   {
     key: 'companyName',
@@ -44,6 +65,7 @@ export const b2bRegistrationConfig = [
     label: 'Company Name',
     type: 'text',
     placeholder: 'Stark Industries',
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
     key: 'registeredNumber',
@@ -52,6 +74,7 @@ export const b2bRegistrationConfig = [
     label: "Registered Number",
     type: 'phone',
     placeholder: 'Registered number',
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
     key: 'email',
@@ -60,6 +83,7 @@ export const b2bRegistrationConfig = [
     label: 'Email',
     type: 'email',
     placeholder: 'john@doe.com',
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
     key: 'mobileNumber',
@@ -68,6 +92,7 @@ export const b2bRegistrationConfig = [
     label: "Mobile Number",
     type: 'phone',
     placeholder: 'Mobile number',
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
     key: 'phoneNumber',
@@ -76,6 +101,7 @@ export const b2bRegistrationConfig = [
     label: "Phone Number",
     type: 'phone',
     placeholder: 'Phone number',
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
     key: 'address1',
@@ -84,6 +110,7 @@ export const b2bRegistrationConfig = [
     label: GENERAL_ADDRESS_LINE1,
     type: 'text',
     placeholder: GENERAL_ADDRESS_LINE1,
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
     key: 'address2',
@@ -92,6 +119,7 @@ export const b2bRegistrationConfig = [
     label: GENERAL_ADDRESS_LINE2,
     type: 'text',
     placeholder: GENERAL_ADDRESS_LINE2,
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
     key: 'city',
@@ -100,6 +128,7 @@ export const b2bRegistrationConfig = [
     label: GENERAL_CITY,
     type: 'text',
     placeholder: GENERAL_CITY,
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
     key: 'postCode',
@@ -108,6 +137,7 @@ export const b2bRegistrationConfig = [
     label: GENERAL_POSTCODE,
     type: 'text',
     placeholder: GENERAL_POSTCODE,
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
     key: 'country',
@@ -116,6 +146,7 @@ export const b2bRegistrationConfig = [
     as: 'select',
     options: countryList,
     label: GENERAL_COUNTRY,
+    show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
 ]
 
