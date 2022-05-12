@@ -42,3 +42,4 @@ yarn.lock
 
 #tailwind screenshots and templates
 tw.ecommerce
+tsconfig.tsbuildinfo
