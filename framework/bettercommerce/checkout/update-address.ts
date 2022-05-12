@@ -1,5 +1,5 @@
 import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
-import fetcher from '../fetcherV2'
+import fetcher from '@framework/fetcherV2'
 
 interface Props {
   basketId?: string
@@ -18,6 +18,7 @@ export default function updateShippingMethod() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
+      console.log(response.result);
       return response.result
     } catch (error: any) {
       console.log(error)
