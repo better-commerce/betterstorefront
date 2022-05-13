@@ -85,10 +85,10 @@ export default function ProductView({
   const [isInWishList, setItemsInWishList] = useState(false)
 
   const product = updatedProduct || data
-
+  
   const [selectedAttrData, setSelectedAttrData] = useState({
-    productId: product.recordId,
-    stockCode: product.stockCode,
+    productId: product?.recordId,
+    stockCode: product?.stockCode,
     ...product,
   })
 
