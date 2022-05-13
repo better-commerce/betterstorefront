@@ -176,6 +176,7 @@ export default function ProductView({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       action: async () => {
+        //debugger;
         const item = await cartHandler().addToCart(
           {
             basketId: basketId,
