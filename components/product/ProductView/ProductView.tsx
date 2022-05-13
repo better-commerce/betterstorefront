@@ -74,6 +74,7 @@ export default function ProductView({
     addToWishlist,
     openWishlist,
     basketId,
+    cartItems,
     setCartItems,
     user,
     openCart,
@@ -369,6 +370,7 @@ export default function ProductView({
   }
 
   //console.log("Check Bundle:" + JSON.stringify(product));
+  //console.log(product);
 
   /*if (product === null) {
     return {
@@ -581,6 +583,8 @@ export default function ProductView({
             <Bundles
               price={product.price.formatted.withTax}
               products={product.componentProducts}
+              lineItems={cartItems.lineItems}
+              parentProductId={product.productId}
               productBundleUpdate={handleProductBundleUpdate}
             />
           )}

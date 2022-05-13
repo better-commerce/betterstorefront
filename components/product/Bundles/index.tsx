@@ -8,9 +8,10 @@ import {
   //GENERAL_SIZE,
   YOUR_BUNDLE_INCLUDE
 } from '@components/utils/textVariables'
+import { Guid } from '@commerce/types'
 
 
-export default function Bundles({ price = '', products = [], productBundleUpdate = () => { } }: any) {
+export default function Bundles({ price = '', products = [], lineItems = [], parentProductId = '00000000-0000-0000-0000-000000000000', productBundleUpdate = () => { } }: any) {
   const [productData, setProductData] = useState(null)
   const handleProduct = (product: any) => {
     setProductData(product);
@@ -19,9 +20,37 @@ export default function Bundles({ price = '', products = [], productBundleUpdate
     }
   }
 
+  const getCartProduct = (childProduct: any) => {
+    if (parentProductId && parentProductId != Guid.empty) {
+      const parentProduct = lineItems.find((x: any) => x.productId.toLowerCase() === parentProductId.toLowerCase());
+      if (parentProduct && parentProduct.productId && parentProduct.children && parentProduct.children.length) {
+        const cartChildProduct = parentProduct.children.find((x: any) => x.productId.toLowerCase() === childProduct.productId.toLowerCase());
+        if (cartChildProduct) {
+          return cartChildProduct;
+        }
+      }
+    }
+    return undefined;
+  };
+
+  const getStockCode = (childProduct: any) => {
+    //debugger;
+    const cartChildProduct = getCartProduct(childProduct);
+    if (cartChildProduct) {
+      return cartChildProduct.stockCode;
+    }
+    return childProduct.stockCode;
+  }
+
   const getSizeSelection = (value: string, product: any) => {
     if (product && product.stockCode) {
-      const stockCode = product.stockCode;
+      let stockCode;
+      const cartChildProduct = getCartProduct(product);
+      if (cartChildProduct) {
+        stockCode = getStockCode(product);
+      } else {
+        stockCode = product.stockCode;
+      }
       const productSize = stockCode.substring(stockCode.lastIndexOf("-") + 1);
       return (productSize && productSize.toLowerCase() === value.toLowerCase());
     }
@@ -72,9 +101,9 @@ export default function Bundles({ price = '', products = [], productBundleUpdate
                     <h3 onClick={() => handleProduct(product)} className='text-sm text-gray-700 font-semibold hover:text-indigo-600 mt-1 cursor-pointer'>{product.name}</h3>
                     <h4 className='text-sm mt-1'>
                       <span className='uppercase text-xs font-bold  tex-black inline-block'>SKU:</span>
-                      <span className='text-gray-600 inline-block pl-1'>{product.stockCode}</span>
+                      <span className='text-gray-600 inline-block pl-1'>{getStockCode(product)}</span>
                     </h4>
-                   
+
                     <h4 className='text-sm text-black mt-2'>
                       <span className='inline-block font-semibold'>{product.price.formatted.withoutTax}</span>
                       <span className='inline-block pl-3 text-red-400 text-xs font-semibold line-through'>{product.listPrice.formatted.withoutTax}</span>
