@@ -92,14 +92,14 @@ const ProductSlider: FC<Props> = ({ config }) => {
                 },
               }}
             >
-              <ul
+              <div
                 role="list"
                 className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8"
               >
                 {config?.products?.map((product?: any) => (
                   <SwiperSlide className="px-5" key={product?.slug}>
                     <Link href={product?.slug}>
-                      <li
+                      <div
                         key={product?.id}
                         className="cursor-pointer w-64 inline-flex flex-col text-center lg:w-auto"
                       >
@@ -126,11 +126,11 @@ const ProductSlider: FC<Props> = ({ config }) => {
                             </p>
                           </div>
                         </div>
-                      </li>
+                      </div>
                     </Link>
                   </SwiperSlide>
                 ))}
-              </ul>
+              </div>
             </Swiper>
           </div>
         </div>

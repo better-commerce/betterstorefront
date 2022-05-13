@@ -6,7 +6,7 @@ import { setCookie } from '@components/utils/cookieHandler'
 export default function CurrencySwitcher({ config = [], title, action }: any) {
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className="p-2 text-gray-400 hover:text-gray-500 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+      <Menu.Button className="p-2 text-gray-400 hover:text-gray-500 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75" aria-label="Currency">
         <CurrencyDollarIcon
           className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
           aria-hidden="true" aria-label="Currency"
