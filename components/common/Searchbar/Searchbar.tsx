@@ -16,7 +16,7 @@ const Searchbar: FC<Props> = ({ id = 'search', onClick }) => {
         className="p-2 text-gray-400 hover:text-gray-500"
       >
         <span className="sr-only">{BTN_SEARCH}</span>
-        <SearchIcon className="w-6 h-6" aria-hidden="true" />
+        <SearchIcon className="w-6 h-6" aria-hidden="true" aria-label="Search" />
       </button>
     </div>
   )
