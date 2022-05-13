@@ -115,6 +115,10 @@ class Axios {
     }
 }
 
+export const setGeneralParams = (param: any, value: any) => {
+    store.remove(param)
+    store.set(param, value)
+}
 
 const instance = Axios.instance;
 
