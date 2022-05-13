@@ -4,8 +4,8 @@ import BundleCard from './BundleCard'
 import {
   BUNDLE_TEXT,
   GENERAL_ADD_TO_BASKET,
-  GENERAL_COLOUR,
-  GENERAL_SIZE,
+  //GENERAL_COLOUR,
+  //GENERAL_SIZE,
   YOUR_BUNDLE_INCLUDE
 } from '@components/utils/textVariables'
 
