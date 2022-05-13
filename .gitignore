@@ -42,3 +42,6 @@ yarn.lock
 
 #tailwind screenshots and templates
 tw.ecommerce
+
+# typescript compiler
+tsconfig.tsbuildinfo
