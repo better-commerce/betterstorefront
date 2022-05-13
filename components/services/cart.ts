@@ -1,10 +1,4 @@
-import {
-  NEXT_ADD_TO_CART,
-  NEXT_GET_CART,
-  NEXT_GET_USER_CART,
-  NEXT_ASSOCIATE_CART,
-  NEXT_MERGE_CART,
-} from '@components/utils/constants'
+import { NEXT_ADD_TO_CART, NEXT_BULK_ADD_TO_CART, NEXT_GET_CART, NEXT_GET_USER_CART, NEXT_ASSOCIATE_CART, NEXT_MERGE_CART, } from '@components/utils/constants'
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -44,15 +38,46 @@ export default function cartHandler() {
       type = 'ADD',
       data: any = {}
     ) => {
-      const response: any = await axios.post(NEXT_ADD_TO_CART, {
-        data: {
+      let url = NEXT_ADD_TO_CART; // Set default url
+      let postData: any = {
+        basketId,
+        productId,
+        qty,
+        manualUnitPrice,
+        displayOrder,
+        stockCode,
+      }; // Set default post data
+
+      const isBundledProduct = (data.product.componentProducts && data.product.componentProducts.length > 0);
+
+      // If the selected product is a bundle.
+      if (isBundledProduct) {
+        url = NEXT_BULK_ADD_TO_CART; // Modify url
+        const mainProduct = [{
+          productId: data.product.productId ?? data.product.recordId,
+          stockCode: data.product.stockCode,
+          productName: data.product.name,
+          qty: 1,
+        }];
+        const bundledProducts = data.product.componentProducts.map((x: any) => {
+          return {
+            productId: x.productId ?? x.recordId,
+            stockCode: x.stockCode,
+            productName: x.name,
+            parentProductId: productId,
+            qty: 1,
+          }
+        });
+        const products = [...mainProduct, ...bundledProducts]
+
+        postData = {
           basketId,
-          productId,
-          qty,
-          manualUnitPrice,
-          displayOrder,
-          stockCode,
-        },
+          products,
+        }; // Modify post data
+      }
+
+      const response: any = await axios.post(url, {
+        data: postData,
       })
       if (userId && !isAssociated) {
         await cartHandler().associateCart(userId, basketId)

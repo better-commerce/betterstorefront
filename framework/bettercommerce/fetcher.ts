@@ -104,7 +104,7 @@ const fetcher = async ({
   if (Object.keys(data).length) {
     config.data = data
   }
-  console.log(config)
+  //console.log(config)
   try {
     const response = await axiosInstance(config)
     return response.data
