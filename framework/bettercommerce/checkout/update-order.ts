@@ -1,5 +1,5 @@
 import { ORDERS_ENDPOINT } from '@components/utils/constants'
-import fetcher from '../fetcher'
+import fetcher from '../fetcherV2'
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 export async function updateOrder(

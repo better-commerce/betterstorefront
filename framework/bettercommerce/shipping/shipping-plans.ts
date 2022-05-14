@@ -1,6 +1,6 @@
 import { OMS_SHIPPING_PLANS } from '@components/utils/constants'
 import { OMS_BASE_URL } from '@framework/utils/constants'
-import fetcher from '../fetcher'
+import fetcher from '../fetcherV2'
 
 interface Props {
   model: any
@@ -15,6 +15,8 @@ export default function getShippingPlans() {
       DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
       OrgId: process.env.NEXT_PUBLIC_ORG_ID,
     }
+
+    //const token = await ensureToken()
     try {
       const response: any = await fetcher({
         url: url,
@@ -25,9 +27,11 @@ export default function getShippingPlans() {
         cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+          //Authorization: `Bearer ${token}`
         },
+        baseUrl: OMS_BASE_URL,
       })
-      return response.result
+      return response.Result
     } catch (error: any) {
       console.log(error)
       // throw new Error(error.message)

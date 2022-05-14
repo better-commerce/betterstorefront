@@ -1,4 +1,4 @@
-import fetcher from '../../fetcher'
+import fetcher from '../../fetcherV2'
 import { CATALOG_SEARCH } from '@components/utils/constants'
 
 export type GetAllProductPathsResult = {

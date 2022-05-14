@@ -1,6 +1,6 @@
 import { OMS_CLICK_AND_COLLECT } from '@components/utils/constants'
 import { OMS_BASE_URL } from '@framework/utils/constants'
-import fetcher from '../fetcher'
+import fetcher from '../fetcherV2'
 
 interface Props {
   items: []
