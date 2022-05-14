@@ -583,8 +583,6 @@ export default function ProductView({
             <Bundles
               price={product.price.formatted.withTax}
               products={product.componentProducts}
-              lineItems={cartItems.lineItems}
-              parentProductId={product.productId}
               productBundleUpdate={handleProductBundleUpdate}
             />
           )}

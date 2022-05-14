@@ -11,7 +11,7 @@ import {
 import { Guid } from '@commerce/types'
 
 
-export default function Bundles({ price = '', products = [], lineItems = [], parentProductId = '00000000-0000-0000-0000-000000000000', productBundleUpdate = () => { } }: any) {
+export default function Bundles({ price = '', products = [], productBundleUpdate = () => { } }: any) {
   const [productData, setProductData] = useState(null)
   const handleProduct = (product: any) => {
     setProductData(product);
@@ -20,41 +20,13 @@ export default function Bundles({ price = '', products = [], lineItems = [], par
     }
   }
 
-  const getCartProduct = (childProduct: any) => {
-    if (parentProductId && parentProductId != Guid.empty) {
-      const parentProduct = lineItems.find((x: any) => x.productId.toLowerCase() === parentProductId.toLowerCase());
-      if (parentProduct && parentProduct.productId && parentProduct.children && parentProduct.children.length) {
-        const cartChildProduct = parentProduct.children.find((x: any) => x.productId.toLowerCase() === childProduct.productId.toLowerCase());
-        if (cartChildProduct) {
-          return cartChildProduct;
-        }
-      }
-    }
-    return undefined;
-  };
-
-  const getStockCode = (childProduct: any) => {
-    //debugger;
-    const cartChildProduct = getCartProduct(childProduct);
-    if (cartChildProduct) {
-      return cartChildProduct.stockCode;
-    }
-    return childProduct.stockCode;
-  }
-
   const getSizeSelection = (value: string, product: any) => {
     if (product && product.stockCode) {
-      let stockCode;
-      const cartChildProduct = getCartProduct(product);
-      if (cartChildProduct) {
-        stockCode = getStockCode(product);
-      } else {
-        stockCode = product.stockCode;
-      }
+      const stockCode = product.stockCode;
       const productSize = stockCode.substring(stockCode.lastIndexOf("-") + 1);
       return (productSize && productSize.toLowerCase() === value.toLowerCase());
     }
-    return false;
+    return "";
   };
 
   const handleSizeChanged = (ev: ChangeEvent<HTMLSelectElement>, product: any) => {
@@ -101,7 +73,7 @@ export default function Bundles({ price = '', products = [], lineItems = [], par
                     <h3 onClick={() => handleProduct(product)} className='text-sm text-gray-700 font-semibold hover:text-indigo-600 mt-1 cursor-pointer'>{product.name}</h3>
                     <h4 className='text-sm mt-1'>
                       <span className='uppercase text-xs font-bold  tex-black inline-block'>SKU:</span>
-                      <span className='text-gray-600 inline-block pl-1'>{getStockCode(product)}</span>
+                      <span className='text-gray-600 inline-block pl-1'>{product.stockCode}</span>
                     </h4>
 
                     <h4 className='text-sm text-black mt-2'>
