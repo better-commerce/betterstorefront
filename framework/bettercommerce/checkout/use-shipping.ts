@@ -2,7 +2,7 @@ import {
   CHECKOUT_ENDPOINT,
   SHIPPING_ENDPOINT,
 } from '@components/utils/constants'
-import fetcher from '../fetcher'
+import fetcher from '../fetcherV2'
 
 interface Props {
   userId?: string

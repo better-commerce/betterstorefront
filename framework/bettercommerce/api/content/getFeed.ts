@@ -1,4 +1,4 @@
-import fetcher from '../../fetcher'
+import fetcher from '../../fetcherV2'
 import { XML_FEED } from '@components/utils/constants'
 export default async function getFeed(slug: string) {
   const url = `${XML_FEED}?slug=feed/${slug}`
