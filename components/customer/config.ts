@@ -64,7 +64,7 @@ export const b2bRegistrationConfig = [
     name: 'companyName',
     label: 'Company Name',
     type: 'text',
-    placeholder: 'Stark Industries',
+    placeholder: 'Company name',
     show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
   },
   {
