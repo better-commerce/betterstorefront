@@ -11,13 +11,16 @@
  * @returns 
  */
 export const stringToBoolean = (stringValue: string | undefined): boolean => {
-    try {
-        if (stringValue) {
-            return JSON.parse(stringValue);
+    if (stringValue) {
+        switch (stringValue.toLowerCase()) {
+            case "true":
+            case "1":
+            case "on":
+            case "yes":
+                return true;
+            default:
+                return false;
         }
-    }
-    catch (e) {
-        return false;
     }
     return false;
 };
