@@ -1,7 +1,8 @@
 // Package Imports
 //import { DOMParser } from "@xmldom/xmldom";
 
-import { SnippetContentType } from "@framework/content/use-content-snippet";
+// Other Imports
+import { SnippetContentType } from "@components/common/Content/ContentSnippet";
 
 export enum TagNameType {
     SCRIPT = "SCRIPT",
@@ -116,6 +117,38 @@ export const insertAdjacentHTML = (content: string, contentType: string, node: H
                 }
             });
         }
-        node.insertAdjacentHTML(position, container.innerHTML);
+
+        if (contentType === SnippetContentType.JAVASCRIPT) {
+            arrNodes.forEach(elem => {
+                createAndLoadScript(elem, node, position);
+            });
+        } else {
+            node.insertAdjacentHTML(position, container.innerHTML);
+        }
     }
+};
+
+const createAndLoadScript = (scriptNode: Element | any, parent: HTMLElement, position: HtmlElementPosition, callback?: Function) => {
+
+    const script = document.createElement('script');
+    if (scriptNode.src) {
+        script.src = scriptNode.src;
+    }
+    if (scriptNode.innerText) {
+        script.innerText = scriptNode.innerText;
+    }
+    for (const [k, v] of Object.entries(scriptNode.attributes || {})) {
+        script.setAttribute((<any>v).name, (<any>v).value);
+    }
+
+    if (position === "afterbegin") {
+        parent.insertBefore(<any>parent.firstChild, script);
+    } else if (position === "beforeend") {
+        parent.appendChild(script);
+    }
+    parent.appendChild(script);
+
+    script.onload = () => {
+        if (callback) callback();
+    };
 };

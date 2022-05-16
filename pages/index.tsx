@@ -59,9 +59,9 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
     }),
     entityName: PAGE_TYPE,
     pageTitle: slugs?.title,
-    entityType: 'Page',
+    entityType: EVENTS_MAP.ENTITY_TYPES['Page'],
     entityId: slugs?.id,
-    eventType: 'PageViewed',
+    eventType: PageViewed,
   });
 
   return (
@@ -76,4 +76,4 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
 
 Home.Layout = Layout
 
-export default withDataLayer(Home, PAGE_TYPE)
+export default withDataLayer(Home, PAGE_TYPE, EVENTS_MAP.ENTITY_TYPES['Page'])

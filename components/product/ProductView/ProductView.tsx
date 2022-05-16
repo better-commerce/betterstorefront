@@ -45,7 +45,7 @@ import {
   PRODUCT_INFORMATION,
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
-import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
+import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@components/common/Content/ContentSnippet'
 
 const PLACEMENTS_MAP: any = {
   Head: {

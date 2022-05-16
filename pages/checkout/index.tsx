@@ -116,4 +116,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const PAGE_TYPE = PAGE_TYPES['Checkout']
 
-export default withDataLayer(Checkout, PAGE_TYPE, false)
+export default withDataLayer(Checkout, PAGE_TYPE, undefined, false)

@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import DataLayerInstance, { KEYS_MAP } from '@components/utils/dataLayer'
 import { Layout } from '@components/common'
+import { EVENTS_MAP } from './services/analytics/constants';
+import DataLayerSnippet from './common/Content/DataLayerSnippet';
 
 export const PAGE_TYPES = {
   Blog: 'Blog',
@@ -17,9 +19,14 @@ export const PAGE_TYPES = {
 export default function withDataLayer(
   Component: any,
   pageType: string,
-  showLayout = true
+  entityType = "",
+  showLayout = true,
 ) {
   function WrappedComponent(props: any) {
+    //console.log(props);
+    const { PageViewed } = EVENTS_MAP.EVENT_TYPES;
+    const { Basket, Blog, Brand, Category, CmsPage, Collection, Customer, Order, Page, Product, Search } = EVENTS_MAP.ENTITY_TYPES;
+
     useEffect(() => {
       DataLayerInstance.setItemInDataLayer('pageCategory', pageType)
     }, [])
@@ -31,11 +38,21 @@ export default function withDataLayer(
       DataLayerInstance.setItemInDataLayer(KEYS_MAP.eventType, event)
 
     return (
-      <Component
-        {...props}
-        setEntities={setEntities}
-        recordEvent={recordEvent}
-      />
+      <>
+        {/* Conditional rendering based on entity type */}
+        {
+          (entityType && entityType == Page) && (
+            <DataLayerSnippet entityObject={props?.slugs} entityName={pageType} entityType={entityType} eventType={PageViewed} />
+          )
+        }
+
+        <Component
+          {...props}
+          setEntities={setEntities}
+          recordEvent={recordEvent}
+        />
+      </>
+
     )
   }
 

@@ -21,7 +21,7 @@ import analytics from '@components/services/analytics/analytics'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import { resetSnippetElements } from "@framework/content/use-content-snippet"
+import { resetSnippetElements } from "@components/common/Content/ContentSnippet"
 import { ContentSnippet } from "@components/common/Content"
 
 const tagManagerArgs: any = {
