@@ -19,7 +19,7 @@ export const PAGE_TYPES = {
 export default function withDataLayer(
   Component: any,
   pageType: string,
-  entityType = "" || undefined,
+  entityType = "",
   showLayout = true,
 ) {
   function WrappedComponent(props: any) {
