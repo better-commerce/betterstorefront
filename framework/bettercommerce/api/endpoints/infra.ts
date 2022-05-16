@@ -1,5 +1,5 @@
 import { INFRA_ENDPOINT } from '@components/utils/constants'
-import fetcher, { setGeneralParams } from '../../fetcherV2'
+import fetcher, { setGeneralParams } from '../../fetcher'
 
 export default function useInfra(req: any) {
   //TODO change based on location

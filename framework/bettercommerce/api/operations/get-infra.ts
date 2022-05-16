@@ -1,4 +1,4 @@
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 import { INFRA_ENDPOINT } from '@components/utils/constants'
 
 export default function getInfraOperation() {

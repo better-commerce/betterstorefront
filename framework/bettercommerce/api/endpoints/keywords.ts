@@ -1,5 +1,5 @@
 import { KEYWORDS_ENDPOINT } from '@components/utils/constants'
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 
 export default async function useKeywords(cookies?: any) {
   try {
