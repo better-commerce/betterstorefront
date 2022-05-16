@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import DataLayerInstance, { KEYS_MAP } from '@components/utils/dataLayer'
 import { Layout } from '@components/common'
-import { DataLayerSnippet } from './common/Content';
 import { EVENTS_MAP } from './services/analytics/constants';
+import DataLayerSnippet from './common/Content/DataLayerSnippet';
 
 export const PAGE_TYPES = {
   Blog: 'Blog',
