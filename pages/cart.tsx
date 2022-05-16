@@ -109,7 +109,7 @@ function Cart({ cart }: any) {
 
   const handleItem = (product: any, type = 'increase') => {
     const asyncHandleItem = async () => {
-      const data: any = {
+      let data: any = {
         basketId,
         productId: product.id,
         stockCode: product.stockCode,
