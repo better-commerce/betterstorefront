@@ -48,7 +48,7 @@ export default function cartHandler() {
         stockCode,
       }; // Set default post data
 
-      const isBundledProduct = (data.product.componentProducts && data.product.componentProducts.length > 0);
+      const isBundledProduct = (data.product?.componentProducts && data.product?.componentProducts.length > 0);
 
       // If the selected product is a bundle.
       if (isBundledProduct) {
