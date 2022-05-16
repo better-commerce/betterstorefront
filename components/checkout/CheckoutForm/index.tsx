@@ -51,6 +51,7 @@ export default function CheckoutForm({
   defaultShippingAddress,
   defaultBillingAddress,
   addresses = [],
+  getAddress,
   fetchAddress,
   config,
   location,
@@ -333,7 +334,7 @@ export default function CheckoutForm({
 
   const setBillingInformation = (payload: any, update = true) => {
     const handleAsync = async () => {
-      //debugger;
+      debugger;
       const billingInfoClone = { ...payload }
       //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
       const shippingClone = { ...state.shippingInformation }
@@ -359,6 +360,9 @@ export default function CheckoutForm({
           basketId,
           model: data,
         })
+
+        const response = await getAddress(user.userId)
+        debugger
       } catch (error) { }
     }
     dispatch({ type: 'SET_BILLING_INFORMATION', payload })

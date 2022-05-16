@@ -84,6 +84,7 @@ function Checkout({ cart, config, location }: any) {
         defaultBillingAddress={defaultBillingAddress}
         defaultShippingAddress={defaultShippingAddress}
         user={user}
+        getAddress={getAddress}
         fetchAddress={fetchAddress}
         config={config}
         location={location}

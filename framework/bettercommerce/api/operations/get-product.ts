@@ -3,7 +3,7 @@ import { Product } from '@commerce/types/product'
 import { GetProductOperation } from '@commerce/types/product'
 import data from '../../data.json'
 import type { OperationContext } from '@commerce/api/operations'
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 import { PRODUCT_API_ENDPOINT } from '@components/utils/constants'
 export default function getProductOperation({
   commerce,

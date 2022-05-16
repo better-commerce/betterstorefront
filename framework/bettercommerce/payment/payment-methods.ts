@@ -1,5 +1,5 @@
 import { PAYMENTS_ENDPOINT } from '@components/utils/constants'
-import fetcher from '../fetcherV2'
+import fetcher from '../fetcher'
 interface Props {
   countryCode: string
   currencyCode: string

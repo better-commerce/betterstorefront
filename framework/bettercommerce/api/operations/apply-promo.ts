@@ -1,4 +1,4 @@
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 import { BASKET_ENDPOINT } from '@components/utils/constants'
 export default function applyPromo() {
   async function applyPromoAsync(query: any) {
