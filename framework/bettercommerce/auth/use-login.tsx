@@ -1,5 +1,5 @@
 import { AUTHENTICATE_CUSTOMER } from '@components/utils/constants'
-import fetcher from '../fetcherV2'
+import fetcher from '../fetcher'
 import qs from 'qs'
 
 interface Props {

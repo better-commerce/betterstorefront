@@ -1,6 +1,6 @@
 import { GetAllProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 import qs from 'qs'
 import { SEARCH_MINIMAL_ENDPOINT } from '@components/utils/constants'
 

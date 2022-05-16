@@ -1,4 +1,4 @@
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 import { SEARCH_ADVANCED_ENDPOINT } from '@components/utils/constants'
 
 export default async function getCategoryProducts(
