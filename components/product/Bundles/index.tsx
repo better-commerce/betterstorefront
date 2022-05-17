@@ -9,6 +9,7 @@ import {
   YOUR_BUNDLE_INCLUDE
 } from '@components/utils/textVariables'
 import { Guid } from '@commerce/types'
+import { ColorFilledSquare } from '@components/ui/ColorFilledSquare'
 
 
 export default function Bundles({ price = '', products = [], productBundleUpdate = () => { } }: any) {
@@ -42,6 +43,16 @@ export default function Bundles({ price = '', products = [], productBundleUpdate
     }
   };
 
+  const getProductColorHexCode = (product: any) => {
+    if (product && product.customAttributes && product.customAttributes.length) {
+      const colorAttr = product.customAttributes.find((attr: any) => attr.key === "global.colour");
+      if (colorAttr) {
+        return colorAttr.value;
+      }
+    }
+    return "#FFF";
+  }
+
   return (
     <section
       aria-labelledby="bundles-heading"
@@ -61,6 +72,7 @@ export default function Bundles({ price = '', products = [], productBundleUpdate
           {products.map((product: any, productIdx: number) => {
             return (
               <div key={productIdx} className='grid grid-cols-12 gap-x-2 border p-3 rounded-md align-center content-center border-gray-200 hover:border-indigo-200'>
+                {/*JSON.stringify(product)*/}
                 <div onClick={() => handleProduct(product)} className='col-span-4 image-container cursor-pointer'>
                   <img
                     className="mx-auto object-center object-cover image rounded-md"
@@ -75,10 +87,18 @@ export default function Bundles({ price = '', products = [], productBundleUpdate
                       <span className='uppercase text-xs font-bold  tex-black inline-block'>SKU:</span>
                       <span className='text-gray-600 inline-block pl-1'>{product.stockCode}</span>
                     </h4>
-
                     <h4 className='text-sm text-black mt-2'>
                       <span className='inline-block font-semibold'>{product.price.formatted.withoutTax}</span>
-                      <span className='inline-block pl-3 text-red-400 text-xs font-semibold line-through'>{product.listPrice.formatted.withoutTax}</span>
+                      {
+                        (product.listPrice.raw.withoutTax > 0) && (
+                          <span className='inline-block pl-3 text-red-400 text-xs font-semibold line-through'>{product.listPrice.formatted.withoutTax}</span>
+                        )}
+                    </h4>
+                    <h4 className='text-sm mt-1'>
+                      <span className='uppercase text-xs font-bold  tex-black inline-block'>Colour:</span>
+                      <span className='text-gray-600 inline-block pl-1'>
+                        <ColorFilledSquare width={10} height={10} bgColor={getProductColorHexCode(product)} />
+                      </span>
                     </h4>
                   </div>
                   <div className='flex flex-col mt-1'>
@@ -89,7 +109,7 @@ export default function Bundles({ price = '', products = [], productBundleUpdate
                             <div className='flex flex-col mt-1' key={aid}>
                               <label className='font-semibold text-black text-sm'>{attribute.fieldName}:</label>
                               <select className='p-2 border border-gray-400 rounded-sm font-semibold text-sm text-black uppercase' onChange={(ev) => handleSizeChanged(ev, product)}>
-                                <option value="">Please Select</option>
+                                {/*<option value="">Please Select</option>*/}
                                 {attribute.fieldValues.map((size: any, vdx: number) => {
                                   return (<option className='uppercase' key={vdx} value={size.fieldValue} selected={getSizeSelection(size.fieldValue, product)}>{size.fieldValue}</option>)
                                 })}
