@@ -45,7 +45,7 @@ export const b2bRegistrationConfig = [
     key: 'isRequestTradingAccount',
     id: 'isRequestTradingAccount',
     name: 'isRequestTradingAccount',
-    label: 'Create trading account',
+    label: 'Request trading account',
     customComponent: 'CustomCheckbox',
     className: 'flex-inline',
 
