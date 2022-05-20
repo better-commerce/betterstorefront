@@ -93,7 +93,70 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
   const handleUserRegister = async (values: any) => {
     let userCreated = false;
     let recordId = Guid.empty;
-    const reqData = { ...values, email: userEmail };
+    const reqData = {
+      ...values, email: userEmail, address: {
+        title: values?.title ?? "",
+        firstName: values?.firstName ?? "",
+        lastName: values?.lastName ?? "",
+        address1: values?.address1 ?? "",
+        address2: values?.address2 ?? "",
+        address3: values?.address3 ?? "",
+        city: values?.city ?? "",
+        state: values?.state ?? "",
+        country: values?.country ?? "",
+        countryCode: values?.countryCode ?? "",
+        postCode: values?.postCode ?? "",
+        companyName: values?.companyName ?? ""
+      },
+      title: values?.title ?? "",
+      gender: values?.gender ?? "",
+      nickName: values?.nickName ?? "",
+      dayOfBirth: values?.dayOfBirth ?? "0",
+      monthOfBirth: values?.monthOfBirth ?? "0",
+      yearOfBirth: values?.yearOfBirth ?? "0",
+      birthDate: values?.birthDate ?? "",
+      newsLetterSubscribed: values?.newsLetterSubscribed ?? true,
+      userSourceType: values?.userSourceType ?? 1,
+      referralType: values?.referralType ?? "Direct",
+      userReferrer: values?.userReferrer ?? "",
+      notifyByEmail: values?.notifyByEmail ?? true,
+      notifyBySMS: values?.notifyBySMS ?? true,
+      notifyByPost: values?.notifyByPost ?? true,
+      registrationSource: values?.registrationSource ?? "",
+      companyId: values?.companyId ?? Guid.empty,
+      businessType: values?.businessType ?? "",
+      priceListId: values?.priceListId ?? Guid.empty,
+      companyUserRole: values?.companyUserRole ?? 0,
+      customerGroupId: values?.customerGroupId ?? Guid.empty,
+    };
+
+    if (reqData?.address1) {
+      delete reqData.address1;
+    }
+
+    if (reqData?.address2) {
+      delete reqData.address2;
+    }
+
+    if (reqData?.address3) {
+      delete reqData.address3;
+    }
+
+    if (reqData?.city) {
+      delete reqData.city;
+    }
+
+    if (reqData?.state) {
+      delete reqData.state;
+    }
+
+    if (reqData?.country) {
+      delete reqData.country;
+    }
+
+    if (reqData?.countryCode) {
+      delete reqData.countryCode;
+    }
 
     // Register trading account, if opted for.
     if (values.isRequestTradingAccount) {
@@ -101,7 +164,7 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
       const tradingAccountResponse: any = await axios.post(NEXT_SIGN_UP_TRADING_ACCOUNT, {
         data: reqData,
       });
-      
+
       userCreated = (tradingAccountResponse && tradingAccountResponse.data?.id) ?? false;
       recordId = tradingAccountResponse.data?.recordId;
 
@@ -110,7 +173,7 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
       const response: any = await axios.post(NEXT_SIGN_UP, {
         data: reqData,
       });
-      
+
       userCreated = (response && response.data?.id) ?? false;
       recordId = response.data?.recordId;
 
