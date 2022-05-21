@@ -1,18 +1,22 @@
 import { useSignupTradingAccount } from '@framework/auth'
 export default async (req: any, res: any) => {
-  const { firstName, lastName, email, password, companyName, registeredNumber, mobileNumber, phoneNumber, address1, address2, city, postCode, country }: any = req.body.data
+  const { title, firstName, lastName, email, password, companyName, registeredNumber, mobileNumber, phoneNumber, address1, address2, address3, city, postCode, state, country, countryCode, }: any = req.body.data
   try {
     const response = await useSignupTradingAccount()({
+      title: title,
+      address1: address1,
+      address2: address2,
+      address3: address3,
+      city: city,
+      state: state,
+      country: country,
+      countryCode: countryCode,
+      postCode: postCode,
       registeredNumber: registeredNumber,
       firstName: firstName,
       lastName: lastName,
       email: email,
       password: password,
-      address1: address1,
-      address2: address2,
-      city: city,
-      country: country,
-      postCode: postCode,
       phoneNumber: phoneNumber,
       mobileNumber: mobileNumber,
       companyName: companyName,

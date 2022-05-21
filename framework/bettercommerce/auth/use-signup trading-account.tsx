@@ -4,25 +4,29 @@ import qs from 'qs'
 import { Guid } from '@commerce/types';
 
 interface Props {
+  readonly title: string;
   readonly firstName: string;
   readonly lastName: string;
   readonly email: string;
+  readonly address1: string;
+  readonly address2: string;
+  readonly address3: string;
   readonly password: string;
   readonly companyName: string;
   readonly registeredNumber: string;
   readonly mobileNumber: string;
   readonly phoneNumber: string;
-  readonly address1: string;
-  readonly address2: string;
   readonly city: string;
   readonly postCode: string;
+  readonly state: string;
+  readonly countryCode: string;
   readonly country: string;
-  readonly cookies?: any
+  readonly cookies?: any;
 }
 
 export default function useSignupTradingAccount() {
   return async function handler(props: Props) {
-    const { firstName, lastName, email, password, companyName, registeredNumber, mobileNumber, phoneNumber, address1, address2, city, postCode, country, cookies, } = props;
+    const { title, firstName, lastName, email, password, companyName, registeredNumber, mobileNumber, phoneNumber, address1, address2, address3, city, postCode, state, countryCode, country, cookies, } = props;
     const data = {
       companyId: Guid.empty,
       businessType: "",
@@ -31,17 +35,16 @@ export default function useSignupTradingAccount() {
       companyUserRole: 0,
       customerGroupId: Guid.empty,
       address: {
-        id: 0,
-        title: "",
+        title: title,
         firstName: firstName,
         lastName: lastName,
         address1: address1,
-        address2: "",
-        address3: "",
+        address2: address2,
+        address3: address3,
         city: city,
-        state: "",
+        state: state,
         country: country,
-        countryCode: "",
+        countryCode: countryCode,
         postCode: postCode,
         phoneNo: phoneNumber,
         mobileNo: mobileNumber,
@@ -76,15 +79,6 @@ export default function useSignupTradingAccount() {
     let response: any = {};
 
     try {
-      /*console.log(JSON.stringify({
-        url: `${REGISTER_CUSTOMER_TRADING_ACCOUNT}`,
-        method: 'post',
-        data,
-        cookies,
-        headers: {
-          DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-        },
-      }))*/
       response = await fetcher({
         url: `${REGISTER_CUSTOMER_TRADING_ACCOUNT}`,
         method: 'post',
@@ -94,8 +88,6 @@ export default function useSignupTradingAccount() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       });
-
-      //console.log(JSON.stringify(response));
 
       if (response.statusCode == 200) {
         return response.result;
