@@ -94,40 +94,20 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
     let userCreated = false;
     let recordId = Guid.empty;
     const reqData = {
-      ...values, email: userEmail, address: {
-        title: values?.title ?? "",
-        firstName: values?.firstName ?? "",
-        lastName: values?.lastName ?? "",
-        address1: values?.address1 ?? "",
-        address2: values?.address2 ?? "",
-        address3: values?.address3 ?? "",
-        city: values?.city ?? "",
-        state: values?.state ?? "",
-        country: values?.country ?? "",
-        countryCode: values?.countryCode ?? "",
-        postCode: values?.postCode ?? "",
-        companyName: values?.companyName ?? ""
-      },
+      ...values, email: userEmail,
       title: values?.title ?? "",
       gender: values?.gender ?? "",
-      nickName: values?.nickName ?? "",
-      dayOfBirth: values?.dayOfBirth ?? "0",
-      monthOfBirth: values?.monthOfBirth ?? "0",
-      yearOfBirth: values?.yearOfBirth ?? "0",
-      birthDate: values?.birthDate ?? "",
-      newsLetterSubscribed: values?.newsLetterSubscribed ?? true,
-      userSourceType: values?.userSourceType ?? 1,
-      referralType: values?.referralType ?? "Direct",
-      userReferrer: values?.userReferrer ?? "",
-      notifyByEmail: values?.notifyByEmail ?? true,
-      notifyBySMS: values?.notifyBySMS ?? true,
-      notifyByPost: values?.notifyByPost ?? true,
-      registrationSource: values?.registrationSource ?? "",
-      companyId: values?.companyId ?? Guid.empty,
-      businessType: values?.businessType ?? "",
-      priceListId: values?.priceListId ?? Guid.empty,
-      companyUserRole: values?.companyUserRole ?? 0,
-      customerGroupId: values?.customerGroupId ?? Guid.empty,
+      firstName: values?.firstName ?? "",
+      lastName: values?.lastName ?? "",
+      address1: values?.address1 ?? "",
+      address2: values?.address2 ?? "",
+      address3: values?.address3 ?? "",
+      city: values?.city ?? "",
+      state: values?.state ?? "",
+      country: values?.country ?? "",
+      countryCode: values?.countryCode ?? "",
+      postCode: values?.postCode ?? "",
+      companyName: values?.companyName ?? ""
     };
 
     if (reqData?.address1) {
