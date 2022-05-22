@@ -46,8 +46,8 @@ export default function useSignupTradingAccount() {
         country: country,
         countryCode: countryCode,
         postCode: postCode,
-        phoneNo: phoneNumber,
-        mobileNo: mobileNumber,
+        //phoneNo: phoneNumber,
+        //mobileNo: mobileNumber,
         companyName: companyName
       },
       username: email,
@@ -55,8 +55,6 @@ export default function useSignupTradingAccount() {
       lastName: lastName,
       email: email,
       title: "",
-      telephone: phoneNumber,
-      mobile: mobileNumber,
       gender: "",
       password: password,
       nickName: "",
@@ -88,16 +86,8 @@ export default function useSignupTradingAccount() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       });
-
-      if (response.statusCode == 200) {
-        return response.result;
-      }
-
-      return {
-        statusCode: response.statusCode,
-        message: response?.message,
-        messageCode: response?.messageCode,
-      };
+      //console.log(response.result);
+      return response.result;
 
     } catch (error: any) {
       //console.log(error)
