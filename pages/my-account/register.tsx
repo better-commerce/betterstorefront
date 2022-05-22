@@ -110,34 +110,6 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
       companyName: values?.companyName ?? ""
     };
 
-    if (reqData?.address1) {
-      delete reqData.address1;
-    }
-
-    if (reqData?.address2) {
-      delete reqData.address2;
-    }
-
-    if (reqData?.address3) {
-      delete reqData.address3;
-    }
-
-    if (reqData?.city) {
-      delete reqData.city;
-    }
-
-    if (reqData?.state) {
-      delete reqData.state;
-    }
-
-    if (reqData?.country) {
-      delete reqData.country;
-    }
-
-    if (reqData?.countryCode) {
-      delete reqData.countryCode;
-    }
-
     // Register trading account, if opted for.
     if (values.isRequestTradingAccount) {
 
@@ -145,7 +117,7 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
         data: reqData,
       });
 
-      userCreated = (tradingAccountResponse && tradingAccountResponse.data?.id) ?? false;
+      userCreated = (tradingAccountResponse && tradingAccountResponse.data?.recordId && tradingAccountResponse.data?.recordId != Guid.empty) ? true : false;
       recordId = tradingAccountResponse.data?.recordId;
 
     } else { // Otherwise, consider it as user registration.
