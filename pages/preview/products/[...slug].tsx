@@ -31,9 +31,9 @@ export async function getStaticProps({
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const { products } = await commerce.getAllProductPaths()
   let paths = products.map((product: any) => {
-    if (!product.slug.includes('products/preview/')) {
-      return `/products/preview/${product.slug}`
-    } else return `/products/preview/${product.slug}`
+    if (!product.slug.includes('preview/products/')) {
+      return `/preview/products/${product.slug}`
+    } else return `/preview/products/${product.slug}`
   })
   return {
     paths: paths,
