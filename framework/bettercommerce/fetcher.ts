@@ -5,6 +5,7 @@ import { isEmpty, merge, assign } from 'lodash';
 
 // Other Imports
 import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants';
+import { writeFetcherLog } from './utils';
 
 const singletonEnforcer = Symbol();
 
@@ -73,7 +74,7 @@ class Axios {
 
                 // return getAuthToken().finally(createAxiosResponseInterceptor)
                 const authUrl = new URL('/oAuth/token', AUTH_URL);
-                
+
                 return client({
                     url: authUrl.href,
                     method: 'post',
@@ -109,7 +110,8 @@ const fetcher = async ({
     params = {},
     headers = {},
     cookies = {},
-    baseUrl = ""
+    baseUrl = "",
+    logRequest = false,
 }: any) => {
     const computedUrl = new URL(url, baseUrl || BASE_URL)
     const newConfig = {
@@ -135,6 +137,9 @@ const fetcher = async ({
         if (instance && instance.client()) {
             const client = instance.client();
             const response: AxiosResponse<any> = await client(config);
+            if (logRequest) {
+                writeFetcherLog(config, response?.data);
+            }
             return response.data
         }
         return null;
