@@ -62,16 +62,17 @@ export default function cartHandler() {
           qty: 1,
         }];
         const findComplementaryStatus = data.product.componentProducts.filter((x: any) => x.bundleType === BundleType.COMPLEMENTARY);
+        const isComplementary = (findComplementaryStatus && findComplementaryStatus.length);
         const bundledProducts = data.product.componentProducts.map((x: any) => {
           return {
             productId: x.productId, // ?? x.recordId,
             stockCode: x.stockCode,
             productName: x.name,
-            parentProductId: (findComplementaryStatus && findComplementaryStatus.length) ? Guid.empty : productId,
+            parentProductId: isComplementary ? Guid.empty : productId,
             qty: 1,
           }
         });
-        const products = [...mainProduct, ...bundledProducts]
+        const products = isComplementary ? bundledProducts : [...mainProduct, ...bundledProducts]
 
         postData = {
           basketId,
