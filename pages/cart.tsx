@@ -215,13 +215,13 @@ function Cart({ cart }: any) {
                                         {child.name}
                                       </Link>
                                       <p className="ml-4">
-                                        {child.price?.formatted?.withTax}
+                                        {child.price?.formatted?.withTax > 0 ? child.price?.formatted?.withTax : ""}
                                       </p>
                                       {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                     </div>
 
                                     {
-                                      !child.parentProductId && (
+                                      !child.parentProductId ? (
                                         <div className="flex-1 flex items-center justify-end text-sm">
                                           {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
@@ -240,6 +240,14 @@ function Cart({ cart }: any) {
                                               aria-hidden="true"
                                             />
                                           </button>
+                                        </div>
+                                      ) : (
+                                        <div className="mt-0 sm:mt-0 sm:pr-9 pl-2 pr-0">
+                                          <div className="border sm:px-4 px-2 text-gray-900 flex flex-row">
+                                            <span className="text-md px-2 sm:py-2 py-1">
+                                              {child.qty}
+                                            </span>
+                                          </div>
                                         </div>
                                       )
                                     }

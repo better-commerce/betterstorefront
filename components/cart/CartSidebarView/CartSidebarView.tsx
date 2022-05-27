@@ -259,7 +259,7 @@ const CartSidebarView: FC = () => {
                                               </Link>
                                             </h3>
                                             <p className="ml-4">
-                                              {child.price?.formatted?.withTax}
+                                              {child.price?.formatted?.withTax > 0 ? child.price?.formatted?.withTax : ""}
                                             </p>
                                           </div>
                                           {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
@@ -267,7 +267,7 @@ const CartSidebarView: FC = () => {
                                       </div>
 
                                       {
-                                        (child.parentProductId === "" || child.parentProductId === Guid.empty) && (
+                                        (child.parentProductId === "" || child.parentProductId === Guid.empty) ? (
                                           <div className="flex-1 flex items-end justify-end text-sm">
                                             {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
@@ -280,6 +280,12 @@ const CartSidebarView: FC = () => {
                                             >
                                               {GENERAL_REMOVE}
                                             </button>
+                                          </div>
+                                        ) : (
+                                          <div className="border px-4 text-gray-900 flex flex-row">
+                                            <span className="text-md px-2 py-2">
+                                              {child.qty}
+                                            </span>
                                           </div>
                                         )
                                       }
