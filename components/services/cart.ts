@@ -3,6 +3,8 @@ import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
+import { BundleType } from '@framework/utils/enums'
+import { Guid } from '@commerce/types'
 
 interface CartItem {
   basketId?: string
@@ -59,12 +61,13 @@ export default function cartHandler() {
           productName: data.product.name,
           qty: 1,
         }];
+        const findComplementaryStatus = data.product.componentProducts.filter((x: any) => x.bundleType === BundleType.COMPLEMENTARY);
         const bundledProducts = data.product.componentProducts.map((x: any) => {
           return {
             productId: x.productId, // ?? x.recordId,
             stockCode: x.stockCode,
             productName: x.name,
-            parentProductId: productId,
+            parentProductId: (findComplementaryStatus && findComplementaryStatus.length) ? Guid.empty : productId,
             qty: 1,
           }
         });
