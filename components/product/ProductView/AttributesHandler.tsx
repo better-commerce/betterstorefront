@@ -22,6 +22,7 @@ export default function AttributesHandler({
   product,
   setSelectedAttrData,
   variant,
+  isPreview = false,
 }: any) {
   const { attributes, variantAttributes = [], variantProducts } = product
 
@@ -165,9 +166,11 @@ export default function AttributesHandler({
     <>
       {variantAttributes?.map((option: any, idx: number) => {
         const optionsToPass = generateOptions(option)
-        const originalAttribute = isCustomAttr
-          ? stateAttributes[option.fieldCode]
-          : originalAttributes[option.fieldCode]
+        const originalAttribute = isPreview 
+          ? product.customAttributes.find((x: any) => x.key === option.fieldCode)?.value ?? ""
+          : isCustomAttr
+            ? stateAttributes[option.fieldCode]
+            : originalAttributes[option.fieldCode]
         const Component =
           ATTR_COMPONENTS[option.inputType] ||
           TEMP_MAP[option.fieldCode] ||
