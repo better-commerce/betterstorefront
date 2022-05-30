@@ -115,8 +115,13 @@ export default function AttributesHandler({
             }
           })
           .filter((el) => el)
-      } else return option.fieldValues
-    } else return []
+      } else {
+        return option.fieldValues
+      }
+    } else  {
+      return option.fieldValues
+      //return []
+    }
   }
 
   const handleAttrCombinations = (key: string, value: any) => {
