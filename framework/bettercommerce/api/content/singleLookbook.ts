@@ -1,4 +1,4 @@
-import fetcher from '../../fetcher'
+import fetcher from '../../fetcherV2'
 import { LOOKBOOK_ENDPOINT } from '@components/utils/constants'
 export default function getSingleLookbook(slug: string, cookies?: any) {
   async function getSingleLookbookAsync() {
