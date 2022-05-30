@@ -511,6 +511,7 @@ export default function ProductView({
                   product={product}
                   variant={selectedAttrData}
                   setSelectedAttrData={setSelectedAttrData}
+                  isPreview={isPreview}
                 />
               </div>
               <p
