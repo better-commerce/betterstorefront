@@ -13,7 +13,6 @@ import PromotionInput from '../components/cart/PromotionInput'
 import { useEffect } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
-import { getShippingPlans } from '@framework/shipping'
 import {
   BTN_CHECKOUT_NOW,
   GENERAL_CATALOG,
@@ -26,6 +25,7 @@ import {
   ITEMS_IN_YOUR_CART,
   SUBTOTAL_INCLUDING_TAX,
 } from '@components/utils/textVariables'
+import { getShippingPlans } from '@framework/shipping'
 
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
@@ -86,7 +86,6 @@ function Cart({ cart }: any) {
     //const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
     const shippingPlans = await getShippingPlans()({ model: model });
     //console.log(JSON.stringify(shippingPlans));
-
     setCartItems({
       ...cart,
       lineItems: mapShippingPlansToItems(shippingPlans, cart.lineItems),

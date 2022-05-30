@@ -1,4 +1,4 @@
-import fetcher from '../fetcher'
+import fetcher from '../fetcherV2'
 import { CATEGORY_ENDPOINT } from '@components/utils/constants'
 
 export default async function getCategoryBySlug(slug: string) {

@@ -23,6 +23,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import { resetSnippetElements } from "@framework/content/use-content-snippet"
 import { ContentSnippet } from "@components/common/Content"
+import { GlobalErrorHandler } from "@components/ui/Error/GlobalErrorHandler"
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -194,12 +195,14 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
               pageProps={pageProps}
               keywords={keywordsData}
             >
-              <Component
-                {...pageProps}
-                location={location}
-                ipAddress={location.Ip}
-                config={appConfig}
-              />
+              <GlobalErrorHandler router={router}>
+                <Component
+                  {...pageProps}
+                  location={location}
+                  ipAddress={location.Ip}
+                  config={appConfig}
+                />
+              </GlobalErrorHandler>
             </Layout>
           </>
         )}
