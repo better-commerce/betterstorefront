@@ -13,7 +13,7 @@ import PromotionInput from '../components/cart/PromotionInput'
 import { useEffect } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
-import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
+import { getShippingPlans } from '@framework/shipping'
 import {
   BTN_CHECKOUT_NOW,
   GENERAL_CATALOG,
@@ -35,9 +35,9 @@ function Cart({ cart }: any) {
     const itemsClone = [...items]
     return plans.reduce((acc: any, obj: any) => {
       acc?.forEach((cartItem?: any) => {
-        const foundShippingPlan = obj.items.find((item: any) => {
+        const foundShippingPlan = obj.Items.find((item: any) => {
           return (
-            item.productId.toLowerCase() === cartItem.productId.toLowerCase()
+            item.ProductId.toLowerCase() === cartItem.productId.toLowerCase()
           )
         })
         if (foundShippingPlan) {
@@ -82,15 +82,26 @@ function Cart({ cart }: any) {
       OrderNo: null,
       DeliveryCenter: null,
     }
-    const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
+
+    //const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
+    const shippingPlans = await getShippingPlans()({ model: model });
+    //console.log(JSON.stringify(shippingPlans));
+
     setCartItems({
       ...cart,
-      lineItems: mapShippingPlansToItems(response.data, cart.lineItems),
+      lineItems: mapShippingPlansToItems(shippingPlans, cart.lineItems),
     })
   }
 
   useEffect(() => {
-    if (cart?.shippingMethods.length > 0) fetchShippingPlans()
+
+    async function loadShippingPlans() {
+      await fetchShippingPlans();
+    }
+
+    if (cart?.shippingMethods.length > 0) {
+      loadShippingPlans()
+    }
     else {
       setCartItems(cart)
     }
@@ -98,7 +109,7 @@ function Cart({ cart }: any) {
 
   const handleItem = (product: any, type = 'increase') => {
     const asyncHandleItem = async () => {
-      const data: any = {
+      let data: any = {
         basketId,
         productId: product.id,
         stockCode: product.stockCode,
@@ -204,29 +215,42 @@ function Cart({ cart }: any) {
                                         {child.name}
                                       </Link>
                                       <p className="ml-4">
-                                        {child.price?.formatted?.withTax}
+                                        {child.price?.formatted?.withTax > 0 ? child.price?.formatted?.withTax : ""}
                                       </p>
                                       {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                     </div>
-                                    <div className="flex-1 flex items-center justify-end text-sm">
-                                      {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                      <button
-                                        type="button"
-                                        onClick={() =>
-                                          handleItem(child, 'delete')
-                                        }
-                                        className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
-                                      >
-                                        <span className="sr-only">
-                                          {GENERAL_REMOVE}
-                                        </span>
-                                        <XIconSolid
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </button>
-                                    </div>
+                                    {
+                                      !child.parentProductId ? (
+                                        <div className="flex-1 flex items-center justify-end text-sm">
+                                          {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
+
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              handleItem(child, 'delete')
+                                            }
+                                            className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                                          >
+                                            <span className="sr-only">
+                                              {GENERAL_REMOVE}
+                                            </span>
+                                            <XIconSolid
+                                              className="h-5 w-5"
+                                              aria-hidden="true"
+                                            />
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <div className="mt-0 sm:mt-0 sm:pr-9 pl-2 pr-0">
+                                          <div className="border sm:px-4 px-2 text-gray-900 flex flex-row">
+                                            <span className="text-md px-2 sm:py-2 py-1">
+                                              {child.qty}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      )
+                                    }
                                   </div>
                                 )
                               }
