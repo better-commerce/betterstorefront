@@ -1,5 +1,5 @@
 import { REGISTER_CUSTOMER_TRADING_ACCOUNT } from '@components/utils/constants'
-import fetcher from '../fetcherV2'
+import fetcher from '../fetcher'
 import qs from 'qs'
 import { Guid } from '@commerce/types';
 
