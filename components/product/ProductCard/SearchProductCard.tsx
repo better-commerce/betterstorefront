@@ -169,9 +169,9 @@ const SearchProductCard: FC<Props> = ({ product }) => {
           <a href={currentProductData.link}>
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
               <div className='image-container'>
-              {currentProductData.image !=null &&
+              {product.image !=null &&
                   <Image 
-                       src={`${currentProductData.image}&h=200` || IMG_PLACEHOLDER}
+                       src={`${product.image}&h=200` || IMG_PLACEHOLDER}
                       alt={product.name}
                       onMouseEnter={() => handleHover('enter')}
                       onMouseLeave={() => handleHover('leave')}
@@ -186,7 +186,7 @@ const SearchProductCard: FC<Props> = ({ product }) => {
                 </div>
               )}
               {buttonConfig.isNotifyMeEnabled && (
-                <div className="bg-red-400 text-white absolute py-1 px-1 rounded-sm top-2">
+                <div className="bg-red-700 text-white absolute py-1 px-1 rounded-sm top-2">
                   {BTN_NOTIFY_ME}
                 </div>
               )}
