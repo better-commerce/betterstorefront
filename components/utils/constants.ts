@@ -17,6 +17,7 @@ export const SEARCH_ADVANCED_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERS
 export const NEXT_SEARCH_ADVANCED_ENDPOINT =
   '/api/catalog/get-category-products'
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
+export const PRODUCT_PREVIEW_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/preview`
 export const BASKET_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket`
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
 export const REGISTER_CUSTOMER_TRADING_ACCOUNT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/create`
@@ -79,6 +80,7 @@ export const NEXT_GUEST_CHECKOUT = '/api/customer/guest-checkout'
 export const NEXT_LOGIN_CHECKOUT = '/api/customer/login-checkout'
 export const NEXT_SEARCH_PRODUCTS = `/api/catalog/search`
 export const NEXT_GET_PRODUCT = '/api/catalog/get-product'
+export const NEXT_GET_PRODUCT_PREVIEW = '/api/catalog/get-product-preview'
 export const NEXT_PAYMENT_METHODS = '/api/payment-methods'
 export const NEXT_CONFIRM_ORDER = '/api/confirm-order'
 export const NEXT_INFRA_ENDPOINT = '/api/infra'
