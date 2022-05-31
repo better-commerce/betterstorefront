@@ -190,6 +190,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                   {BTN_NOTIFY_ME}
                 </div>
               )}
+              <span className="sr-only">{product.name}</span>
             </div>
           </a>
         </Link>
