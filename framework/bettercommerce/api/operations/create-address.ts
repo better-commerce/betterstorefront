@@ -1,4 +1,4 @@
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 import { CREATE_ADDRESS_ENDPOINT } from '@components/utils/constants'
 import countryList from '@components/utils/countryList'
 

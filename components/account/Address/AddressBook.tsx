@@ -18,7 +18,6 @@ import {
   EMPTY_ADDRESS,
   ADD_ADDRESS,
 } from '@components/utils/textVariables'
-import { CustomerAddressModel } from 'models/customer'
 
 export function asyncHandler() {
   function getAddress() {
@@ -30,13 +29,13 @@ export function asyncHandler() {
     }
   }
   function updateAddress() {
-    return async (data: CustomerAddressModel) => {
+    return async (data: any) => {
       const response = await axios.post(NEXT_EDIT_ADDRESS, data)
       return response.data
     }
   }
   function createAddress() {
-    return async (data: CustomerAddressModel) => {
+    return async (data: any) => {
       const response = await axios.post(NEXT_CREATE_ADDRESS, data)
       return response.data
     }
@@ -95,12 +94,12 @@ export default function AddressBook() {
 
   const addNewAddress = async (values: any) => {
     let newValues = { ...values, userId: user.userId }
-      return createAddress(newValues)
-        .then(() => {
-          setNewFormMode(false)
-          success()
-        })
-        .catch(() => failCb())
+    return createAddress(newValues)
+      .then(() => {
+        setNewFormMode(false)
+        success()
+      })
+      .catch(() => failCb())
   }
   return (
     <main className="sm:px-6 lg:px-8">

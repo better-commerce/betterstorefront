@@ -1,4 +1,4 @@
-import fetcher from './fetcherV2'
+import fetcher from './fetcher'
 import useNavTree from './api/content/getNavTree'
 import { handler as useCart } from '../local/cart/use-cart'
 import { handler as useAddItem } from '../local/cart/use-add-item'
