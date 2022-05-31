@@ -1,4 +1,4 @@
-import fetcher from '../fetcherV2'
+import fetcher from '../fetcher'
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
 export default async function validateToken(token: string, cookies?: any) {
   try {

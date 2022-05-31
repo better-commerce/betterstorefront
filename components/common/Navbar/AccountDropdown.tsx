@@ -27,9 +27,7 @@ export default function Account({ config, title }: any) {
               {({ active }) => {
                 return (
                   <>
-                    {title && (
-                      <h1 className="text-left font-bold p-2">{title}</h1>
-                    )}
+                    <h1 className="text-left font-bold p-2">{title}</h1>
                     {config.map((item: any, idx: number) => {
                       return (
                         <Link key={idx} passHref href={item.href}>

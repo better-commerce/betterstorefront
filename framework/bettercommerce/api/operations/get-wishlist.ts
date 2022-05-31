@@ -1,4 +1,4 @@
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
 export default function getWishlist() {
   async function getWishlistAsync({ query, cookies }: any) {
