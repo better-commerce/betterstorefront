@@ -19,6 +19,7 @@
     "node": ">=14.x"
   },
   "dependencies": {
+    "@engineerapart/nextscript": "^2.0.2",
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
     "@react-spring/web": "^9.2.1",
