@@ -333,7 +333,7 @@ export async function getStaticProps({ params, ...context }: any) {
       ...data,
       query: context,
       slug: params!.collection[0],
-      globalSnippets: infra?.snippets,
+      globalSnippets: infra?.snippets ?? [],
       snippets: data?.snippets
     },
     revalidate: 60,
