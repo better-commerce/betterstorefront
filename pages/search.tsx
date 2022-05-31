@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
+
+//DYNAMINC COMPONENT CALLS
 const ProductGrid = dynamic(() => import('@components/product/Grid'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
