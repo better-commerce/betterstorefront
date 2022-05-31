@@ -1,18 +1,11 @@
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
-import AttributesHandler from './AttributesHandler'
 import { useUI } from '@components/ui/context'
-import BreadCrumbs from '@components/ui/BreadCrumbs'
-import RelatedProducts from '@components/product/RelatedProducts'
-import Bundles from '@components/product/Bundles'
-import Reviews from '@components/product/Reviews'
-import PriceMatch from '@components/product/PriceMatch'
-import Engraving from '@components/product/Engraving'
-import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import axios from 'axios'
@@ -24,7 +17,7 @@ import {
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
 } from '@components/utils/constants'
-import Button from '@components/ui/IndigoButton'
+
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
@@ -47,6 +40,18 @@ import {
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
+
+//DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
+const  AttributesHandler  = dynamic(() => import('./AttributesHandler'));
+const  BreadCrumbs  = dynamic(() => import('@components/ui/BreadCrumbs'));
+const  RelatedProducts  = dynamic(() => import('@components/product/RelatedProducts'));
+const  Bundles  = dynamic(() => import('@components/product/Bundles'));
+const  Reviews  = dynamic(() => import('@components/product/Reviews'));
+const  PriceMatch  = dynamic(() => import('@components/product/PriceMatch'));
+const  Engraving  = dynamic(() => import('@components/product/Engraving'));
+const  ProductDetails  = dynamic(() => import('@components/product/ProductDetails'));
+const  Button  = dynamic(() => import('@components/ui/IndigoButton'));
+
 
 const PLACEMENTS_MAP: any = {
   Head: {
