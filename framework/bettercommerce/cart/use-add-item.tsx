@@ -1,5 +1,5 @@
 import { BASKET_ENDPOINT } from '@components/utils/constants'
-import fetcher from '../fetcherV2'
+import fetcher from '../fetcher'
 interface Props {
   basketId?: string
   productId?: string

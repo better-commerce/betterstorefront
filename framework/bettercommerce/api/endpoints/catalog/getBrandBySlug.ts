@@ -1,4 +1,4 @@
-import fetcher from '../../../fetcherV2'
+import fetcher from '../../../fetcher'
 import { CATALOG_ENDPOINT } from '@components/utils/constants'
 
 export default async function getBrandBySlug(slug: string, cookies?: any) {
@@ -8,7 +8,7 @@ export default async function getBrandBySlug(slug: string, cookies?: any) {
       method: 'post',
       cookies,
     })
-    return { ...response, ...{ snippets: response?.snippets ?? [] } };
+    return { ...response, ...{ snippets: response.snippets } };
   } catch (error) {
     return { hasError: true, error }
   }

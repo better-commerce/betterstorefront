@@ -1,5 +1,5 @@
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
-import fetcher from '../fetcherV2'
+import fetcher from '../fetcher'
 
 export default async function getReturnData(userId: string, cookies?: any) {
   try {
