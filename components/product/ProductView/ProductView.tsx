@@ -74,24 +74,25 @@ export default function ProductView({
     addToWishlist,
     openWishlist,
     basketId,
+    cartItems,
     setCartItems,
     user,
     openCart,
   } = useUI()
 
-  const [updatedProduct, setUpdatedProduct] = useState(null)
+  const [updatedProduct, setUpdatedProduct] = useState<any>(null)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
 
   const product = updatedProduct || data
-
+  
   const [selectedAttrData, setSelectedAttrData] = useState({
-    productId: product.recordId,
-    stockCode: product.stockCode,
+    productId: product?.recordId,
+    stockCode: product?.stockCode,
     ...product,
   })
-
+  
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
 
   const { Product } = EVENTS_MAP.ENTITY_TYPES
@@ -176,6 +177,7 @@ export default function ProductView({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       action: async () => {
+        //debugger;
         const item = await cartHandler().addToCart(
           {
             basketId: basketId,
@@ -278,37 +280,21 @@ export default function ProductView({
         StockCode: obj.stockCode,
         ItemType: obj.itemType || 0,
         CustomInfo1: values.line1 || null,
-
         CustomInfo2: values.line2 || null,
-
         CustomInfo3: values.line3 || null,
-
         CustomInfo4: values.line4 || null,
-
         CustomInfo5: values.line5 || null,
-
         ProductName: obj.name,
-
         ManualUnitPrice: obj.manualUnitPrice || 0.0,
-
         PostCode: obj.postCode || null,
-
         IsSubscription: obj.subscriptionEnabled || false,
-
         IsMembership: obj.hasMembership || false,
-
         SubscriptionPlanId: obj.subscriptionPlanId || null,
-
         SubscriptionTermId: obj.subscriptionTermId || null,
-
         UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
-
         GiftWrapId: obj.giftWrapConfig || null,
-
         IsGiftWrapApplied: obj.isGiftWrapApplied || false,
-
         ItemGroupId: obj.itemGroupId || 0,
-
         PriceMatchReqId:
           obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
       })
@@ -372,6 +358,19 @@ export default function ProductView({
   const filteredRelatedProductList = product.relatedProductList?.filter(
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
+
+  const handleProductBundleUpdate = (bundledProduct: any) => {
+    //debugger;
+    if (bundledProduct && bundledProduct.id) {
+      let clonedProduct = Object.assign({}, updatedProduct);
+      if (clonedProduct && clonedProduct.componentProducts) {
+        setUpdatedProduct(clonedProduct);
+      }
+    }
+  }
+
+  //console.log("Check Bundle:" + JSON.stringify(product));
+  //console.log(product);
 
   /*if (product === null) {
     return {
@@ -532,6 +531,7 @@ export default function ProductView({
                     selectedAttrData.description || product.description
                   }
                 />
+
                 {updatedProduct ? (
                   <>
                     <div className="sm:mt-10 mt-6 flex sm:flex-col1">
@@ -548,7 +548,7 @@ export default function ProductView({
                             handleWishList()
                           }
                         }}
-                        className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+                        className="ml-4 py-3 px-10 rounded-md flex items-center justify-center text-gray-400 hover:bg-red-50 border border-white hover:border-red-300 hover:text-red-500"
                       >
                         {isInWishList ? (
                           <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
@@ -560,10 +560,10 @@ export default function ProductView({
                     </div>
                     {isEngravingAvailable && (
                       <button
-                        className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                        className="max-w-xs flex-1 mt-5 bg-gray-900 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                         onClick={() => showEngravingModal(true)}
                       >
-                        <span className="font-bold">{GENERAL_ENGRAVING}</span>
+                        {GENERAL_ENGRAVING}
                       </button>
                     )}
                   </>
@@ -583,8 +583,10 @@ export default function ProductView({
             <Bundles
               price={product.price.formatted.withTax}
               products={product.componentProducts}
+              productBundleUpdate={handleProductBundleUpdate}
             />
           )}
+
           {filteredRelatedProducts ? (
             <RelatedProducts
               relatedProducts={filteredRelatedProducts}

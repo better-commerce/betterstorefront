@@ -88,7 +88,7 @@ function LoginPage({ recordEvent, setEntities }: any) {
             {GENERAL_LOGIN}
           </h2>
         </div>
-        <Form btnText="Login" type="login" onSubmit={handleUserLogin} />
+        <Form btnText="Login" type="login" onSubmit={handleUserLogin} apiError={noAccount ? VALIDATION_NO_ACCOUNT_FOUND : ""} />
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && (
             <span className="text-red-700 text-lg">
