@@ -1,5 +1,5 @@
 import { BASE_SEARCH_ENDPOINT } from '@components/utils/constants'
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 interface Props {
   value: any
 }

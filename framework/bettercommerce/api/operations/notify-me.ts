@@ -1,4 +1,4 @@
-import fetcher from '../../fetcherV2'
+import fetcher from '../../fetcher'
 import { PRODUCT_API_ENDPOINT } from '@components/utils/constants'
 export default function notifyUser() {
   async function notifyUserAsync(query: any) {

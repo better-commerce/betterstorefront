@@ -231,22 +231,21 @@ export default function CheckoutForm({
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
 
-  const handleNewAddress = (values: any, callback: any = () => { }) => {
+  const handleNewAddress = (values: any, callback: any = () => {}) => {
     const newValues = {
       ...values,
-      customerId: cartItems.userId,
       userId: cartItems.userId,
       country: state.deliveryMethod.name,
       countryCode: state.deliveryMethod.twoLetterIsoCode,
     }
 
-        createAddress(newValues)
-        .then((response: any) => {
-          callback()
-          fetchAddress()
-          setShippingInformation({ ...newValues, id: response.id })
-        })
-        .catch((error: any) => console.log(error));
+    createAddress(newValues)
+      .then((response: any) => {
+        callback()
+        fetchAddress()
+        setShippingInformation({ ...newValues, id: response.id })
+      })
+      .catch((error: any) => console.log(error))
   }
 
   const toggleDelivery = (payload?: any) =>
@@ -343,13 +342,11 @@ export default function CheckoutForm({
           ...billingInfoClone,
           country: state.deliveryMethod.name,
           countryCode: state.deliveryMethod.twoLetterIsoCode,
-          customerId: user.userId,
         },
         shippingAddress: {
           ...shippingClone,
           country: state.deliveryMethod.name,
           countryCode: state.deliveryMethod.twoLetterIsoCode,
-          customerId: user.userId,
         },
       }
 
@@ -358,7 +355,7 @@ export default function CheckoutForm({
           basketId,
           model: data,
         })
-      } catch (error) { }
+      } catch (error) {}
     }
     dispatch({ type: 'SET_BILLING_INFORMATION', payload })
     if (update) handleAsync()
@@ -587,10 +584,11 @@ export default function CheckoutForm({
     <>
       {state.isPaymentIntent && <Spinner />}
       <div
-        className={`bg-gray-50 relative ${state.isPaymentIntent
-          ? 'pointer-events-none hidden overflow-hidden'
-          : ''
-          }`}
+        className={`bg-gray-50 relative ${
+          state.isPaymentIntent
+            ? 'pointer-events-none hidden overflow-hidden'
+            : ''
+        }`}
       >
         <div className="max-w-2xl mx-auto sm:pt-16 pt-2 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
@@ -650,29 +648,29 @@ export default function CheckoutForm({
                 {(state?.isShippingInformationCompleted ||
                   state.isCNC ||
                   isShippingDisabled) && (
-                    <Form
-                      toggleAction={() =>
-                        togglePayment(!state.isPaymentInformationCompleted)
-                      }
-                      onSubmit={handleBillingSubmit}
-                      appConfig={config}
-                      values={state?.billingInformation}
-                      schema={billingSchema}
-                      updateAddress={updateAddress}
-                      infoType="BILLING"
-                      loqateAddress={loqateAddress}
-                      config={billingFormConfig}
-                      handleNewAddress={handleNewAddress}
-                      initialValues={defaultBillingAddress}
-                      retrieveAddress={retrieveAddress}
-                      isInfoCompleted={state?.isPaymentInformationCompleted}
-                      btnTitle={GENERAL_SAVE_CHANGES}
-                      addresses={addresses}
-                      isGuest={cartItems.isGuestCheckout}
-                      setAddress={setBillingInformation}
-                      isSameAddressCheckboxEnabled={false}
-                    />
-                  )}
+                  <Form
+                    toggleAction={() =>
+                      togglePayment(!state.isPaymentInformationCompleted)
+                    }
+                    onSubmit={handleBillingSubmit}
+                    appConfig={config}
+                    values={state?.billingInformation}
+                    schema={billingSchema}
+                    updateAddress={updateAddress}
+                    infoType="BILLING"
+                    loqateAddress={loqateAddress}
+                    config={billingFormConfig}
+                    handleNewAddress={handleNewAddress}
+                    initialValues={defaultBillingAddress}
+                    retrieveAddress={retrieveAddress}
+                    isInfoCompleted={state?.isPaymentInformationCompleted}
+                    btnTitle={GENERAL_SAVE_CHANGES}
+                    addresses={addresses}
+                    isGuest={cartItems.isGuestCheckout}
+                    setAddress={setBillingInformation}
+                    isSameAddressCheckboxEnabled={false}
+                  />
+                )}
               </div>
               <div className="mt-6 border-t border-gray-200 pt-6">
                 <h2 className="text-lg font-semibold text-gray-900">
