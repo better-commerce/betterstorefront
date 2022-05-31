@@ -148,7 +148,6 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
       })
       await handleBasketAssociation(recordId)
       setSuccessMessage('Success!')
-      setIsGuestUser(false)
       Router.push('/my-account/login')
     }
   }
