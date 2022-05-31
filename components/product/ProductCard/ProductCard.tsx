@@ -169,12 +169,15 @@ const ProductCard: FC<Props> = ({ product }) => {
           <a href={currentProductData.link}>
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
               <div className='image-container'>
-                <Image
-                  src={currentProductData.image || IMG_PLACEHOLDER}
-                  alt={product.name}
-                  onMouseEnter={() => handleHover('enter')}
-                  onMouseLeave={() => handleHover('leave')}
-                  layout='fill' className='w-full sm:h-72 h-48 object-center object-cover image'></Image>
+                  {currentProductData.image !=null &&
+                    <img 
+                      src={`${currentProductData.image}&h=200` || IMG_PLACEHOLDER}
+                      className='w-full sm:h-72 h-48 object-center object-cover image'
+                      onMouseEnter={() => handleHover('enter')}
+                      onMouseLeave={() => handleHover('leave')}
+                      alt={product.name}
+                    />
+                  }
               </div>
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
