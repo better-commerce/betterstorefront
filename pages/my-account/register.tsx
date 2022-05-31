@@ -107,7 +107,9 @@ function RegisterPage({ b2bSettings, recordEvent, setEntities }: any) {
       country: values?.country ?? "",
       countryCode: values?.countryCode ?? "",
       postCode: values?.postCode ?? "",
-      companyName: values?.companyName ?? ""
+      companyName: values?.companyName ?? "",
+      phoneNumber: values?.phoneNumber ?? "",
+      mobileNumber: values?.mobileNumber ?? "",
     };
 
     // Register trading account, if opted for.
