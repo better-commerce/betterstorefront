@@ -172,11 +172,12 @@ const SearchProductCard: FC<Props> = ({ product }) => {
               <div className='image-container'>
               {product.image !=null &&
                   <Image 
-                       src={`${product.image}&h=200` || IMG_PLACEHOLDER}
+                      src={`${product.image}&h=200` || IMG_PLACEHOLDER}
                       alt={product.name}
                       onMouseEnter={() => handleHover('enter')}
                       onMouseLeave={() => handleHover('leave')}
                       layout='fill' 
+                      sizes='20vw'
                       className='w-full sm:h-72 h-48 object-center object-cover image'>
                   </Image>                  
                 }
