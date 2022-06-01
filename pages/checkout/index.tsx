@@ -1,7 +1,8 @@
+import dynamic from 'next/dynamic'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import CheckoutRouter from '@components/checkout/CheckoutRouter'
+const CheckoutRouter = dynamic(() => import('@components/checkout/CheckoutRouter'))
+const CheckoutForm = dynamic(() => import('@components/checkout/CheckoutForm'))
 import { useState, useEffect } from 'react'
-import CheckoutForm from '@components/checkout/CheckoutForm'
 import cookie from 'cookie'
 import { basketId as basketIdGenerator } from '@components/ui/context'
 import { useCart as getCart } from '@framework/cart'
