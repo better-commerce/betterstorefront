@@ -447,6 +447,7 @@ export default function ProductView({
                           alt={selectedAttrData.name || selectedAttrData.productName}
                           className="w-full h-full object-center object-cover image rounded-lg"
                           layout='fill'
+                          sizes='20vw'
                         ></Image>
                       </div>
                     ) : (
