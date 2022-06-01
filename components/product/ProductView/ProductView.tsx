@@ -408,6 +408,7 @@ export default function ProductView({
                     <Tab
                       key={`${idx}-tab`}
                       className="relative h-24 sm:h-44 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                      aria-label={selectedAttrData.name || selectedAttrData.productName}
                     >
                       {() => (
                         <>
@@ -418,7 +419,7 @@ export default function ProductView({
                                 <Image
                                   priority
                                   src={`${image.image}` || IMG_PLACEHOLDER}
-                                  alt={image.name}
+                                  alt={selectedAttrData.name || selectedAttrData.productName}
                                   className="w-full h-full sm:h-44 object-center object-cover image"
                                   layout='fill'
                                 ></Image>
@@ -429,6 +430,7 @@ export default function ProductView({
                           </span>
                         </>
                       )}
+                      <span className="sr-only">{selectedAttrData.name || selectedAttrData.productName}</span>
                     </Tab>
                   ))}
                 </Tab.List>
@@ -442,7 +444,7 @@ export default function ProductView({
                         <Image
                           priority
                           src={`${image.image}` || IMG_PLACEHOLDER}
-                          alt={image.name}
+                          alt={selectedAttrData.name || selectedAttrData.productName}
                           className="w-full h-full object-center object-cover image rounded-lg"
                           layout='fill'
                         ></Image>
