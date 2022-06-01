@@ -1,30 +1,32 @@
 import Cookies from 'js-cookie'
-import { SessionCookieKey, SessionIdCookieKey } from '@components/utils/constants'
+import { DefaultSessionCookieKey, SessionIdCookieKey } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { v4 as uuid_v4 } from 'uuid'
 
+const DEFAULT_SESSION_TIMEOUT_IN_MINS = 30;
+
 export const isValidSession = (): boolean => {
-  const session = Cookies.get(SessionCookieKey);
+  const session = Cookies.get(DefaultSessionCookieKey);
   return (session !== undefined);
 };
 
 export const createSession = (isCalledByTimeout: boolean = false) => {
-  if (!Cookies.get(SessionCookieKey) || isCalledByTimeout) {
-    Cookies.set(SessionCookieKey, uuid_v4(), {
-      expires: getExpiry(),
-    })
+  if (!Cookies.get(DefaultSessionCookieKey) || isCalledByTimeout) {
+    Cookies.set(DefaultSessionCookieKey, uuid_v4(), {
+      expires: getExpiry(DEFAULT_SESSION_TIMEOUT_IN_MINS),
+    });
 
     setTimeout(() => {
       createSession(true)
-    }, 1800000)
+    }, DEFAULT_SESSION_TIMEOUT_IN_MINS * 60 * 1000);
   }
-}
+};
 
 const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
   if (!Cookies.get(SessionIdCookieKey) || isCalledByTimeout) {
     const sessionIdGenerator: string = uuid_v4()
     Cookies.set(SessionIdCookieKey, sessionIdGenerator, {
-      expires: getExpiry(),
+      expires: getExpiry(DEFAULT_SESSION_TIMEOUT_IN_MINS),
     })
     DataLayerInstance.setItemInDataLayer(SessionIdCookieKey, sessionIdGenerator)
     setTimeout(() => {
@@ -33,7 +35,8 @@ const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
   }
 }
 
-const getExpiry = () => {
-  return new Date(new Date().getTime() + 30 * 60 * 1000);
-}
+const getExpiry = (expiryInMins: number) => {
+  return new Date(new Date().getTime() + expiryInMins * 60 * 1000);
+};
+
 export default setSessionIdCookie
