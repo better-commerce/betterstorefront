@@ -57,7 +57,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
   const [userEmail, setUserEmail] = useState('')
-  const { user, basketId } = useUI()
+  const { isGuestUser, setIsGuestUser, user, basketId } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const { addToCart, associateCart } = cartHandler()
@@ -71,13 +71,13 @@ function RegisterPage({ recordEvent, setEntities }: any) {
     setError('')
   }, [userEmail])
 
-  if (user.userId) {
+  if (!isGuestUser && user.userId) {
     Router.push('/')
   }
-  if (user.userId) {
+  if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-       {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
       </div>
     )
   }
@@ -100,6 +100,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
     })
     await handleBasketAssociation(response.data.recordId)
     setSuccessMessage('Success!')
+    setIsGuestUser(false)
     Router.push('/my-account/login')
   }
 
@@ -122,7 +123,7 @@ function RegisterPage({ recordEvent, setEntities }: any) {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
-          {BTN_REGISTER_FOR_FREE}
+            {BTN_REGISTER_FOR_FREE}
           </h2>
         </div>
         {!successMessage && (

@@ -1,6 +1,6 @@
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import Cookies from 'js-cookie'
-import { useReducer, useEffect } from 'react'
+import { useReducer, useEffect, useState } from 'react'
 import cartHandler from '@components/services/cart'
 import Delivery from './Delivery'
 import Summary from './Summary'
@@ -51,6 +51,7 @@ export default function CheckoutForm({
   defaultShippingAddress,
   defaultBillingAddress,
   addresses = [],
+  getAddress,
   fetchAddress,
   config,
   location,
@@ -230,10 +231,13 @@ export default function CheckoutForm({
 
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
+  const [billingAddressId, setBillingAddressId] = useState<number>(0);
+  const [shippingAddressId, setShippingAddressId] = useState<number>(0);
 
-  const handleNewAddress = (values: any, callback: any = () => {}) => {
+  const handleNewAddress = (values: any, callback: any = () => { }) => {
     const newValues = {
       ...values,
+      customerId: cartItems.userId,
       userId: cartItems.userId,
       country: state.deliveryMethod.name,
       countryCode: state.deliveryMethod.twoLetterIsoCode,
@@ -245,7 +249,7 @@ export default function CheckoutForm({
         fetchAddress()
         setShippingInformation({ ...newValues, id: response.id })
       })
-      .catch((error: any) => console.log(error))
+      .catch((error: any) => console.log(error));
   }
 
   const toggleDelivery = (payload?: any) =>
@@ -330,38 +334,74 @@ export default function CheckoutForm({
     }
   }
 
-  const setBillingInformation = (payload: any, update = true) => {
+  const setBillingInformation = (payload: any, update: boolean = true, addressId: number = 0, isNewBillingAddress: boolean = false) => {
     const handleAsync = async () => {
-      const billingInfoClone = { ...payload }
-      delete billingInfoClone.id
-      const shippingClone = { ...state.shippingInformation }
-      delete shippingClone.id
+      //debugger;
+      const billingAddrId = isNewBillingAddress
+        ? addressId == -1 ? 0 : (addressId > 0)
+          ? addressId
+          : billingAddressId
+        : (addressId > 0)
+          ? addressId
+          : shippingAddressId;
+      const billingInfoClone = { ...payload, ...{ id: payload.id ?? billingAddrId } }
+      //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
+      //const shippingAddrId = state.isSameAddress ? billingAddrId: shippingAddressId;
+      const shippingClone = { ...state.shippingInformation, ...{ id: state?.shippingInformation?.id ?? shippingAddressId } }
+      //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
-      const data = {
-        billingAddress: {
-          ...billingInfoClone,
-          country: state.deliveryMethod.name,
-          countryCode: state.deliveryMethod.twoLetterIsoCode,
-        },
-        shippingAddress: {
-          ...shippingClone,
-          country: state.deliveryMethod.name,
-          countryCode: state.deliveryMethod.twoLetterIsoCode,
-        },
+      let data = {};
+      if (isNewBillingAddress) {
+        data = {
+          billingAddress: {
+            ...billingInfoClone,
+            country: state.deliveryMethod.name,
+            countryCode: state.deliveryMethod.twoLetterIsoCode,
+            customerId: user.userId,
+            isDefault: false,
+            isDefaultBilling: false,
+            isDefaultDelivery: false,
+          },
+          shippingAddress: {
+            isDefaultBilling: false,
+          },
+        }
+      } else {
+        data = {
+          billingAddress: {
+            ...billingInfoClone,
+            country: state.deliveryMethod.name,
+            countryCode: state.deliveryMethod.twoLetterIsoCode,
+            customerId: user.userId,
+          },
+          shippingAddress: {
+            ...shippingClone,
+            country: state.deliveryMethod.name,
+            countryCode: state.deliveryMethod.twoLetterIsoCode,
+            customerId: user.userId,
+          },
+        }
       }
+
 
       try {
         await axios.post(NEXT_UPDATE_CHECKOUT_ADDRESS, {
           basketId,
           model: data,
         })
-      } catch (error) {}
+
+        await loadAddressIDs();
+      } catch (error) { }
     }
     dispatch({ type: 'SET_BILLING_INFORMATION', payload })
     if (update) handleAsync()
   }
 
   const handleShippingSubmit = (values: any) => {
+    //debugger;
+    if (values.isDirty) {
+      delete values.isDirty;
+    }
     toggleShipping()
     if (state.isSameAddress) {
       setBillingInformation(values)
@@ -371,8 +411,49 @@ export default function CheckoutForm({
   }
 
   const handleBillingSubmit = (values: any) => {
+    //debugger;
     togglePayment()
-    setBillingInformation(values)
+    const addressId = values.isDirty
+      ? (billingAddressId > 0 && shippingAddressId == billingAddressId) ? -1 : billingAddressId
+      : billingAddressId
+
+    if (values.isDirty) {
+      delete values.isDirty;
+    }
+    loadAddressIDs().then((addresses: Array<any>) => {
+      const addrMatches = addresses.filter((x: any, index: number) => {
+        return (index > 0 && x.address1 == values.address1 && x.postCode == values.postCode);
+      });
+      if (addrMatches && addrMatches.length) {
+        const addrId = addrMatches[0].id;
+        setBillingInformation(values, true, addrId, addrId == -1);
+      } else {
+        setBillingInformation(values, true, addressId, addressId == -1);
+      }
+    });
+
+  }
+
+  const loadAddressIDs = async (): Promise<Array<any>> => {
+    //debugger;
+    const response = await getAddress(user.userId)
+    if (response && response.length) {
+      response.forEach((address: any) => {
+        //const address = response[response.length - 1];
+        if (address && address.id) {
+          if (address.isDefaultDelivery) {
+            //updateAddress("SHIPPING", {id: address.id})
+            setShippingAddressId(address.id);
+          }
+
+          if (address.isDefaultBilling) {
+            //updateAddress("BILLING", {id: address.id})
+            setBillingAddressId(address.id);
+          }
+        }
+      });
+    }
+    return response;
   }
 
   useEffect(() => {
@@ -402,12 +483,13 @@ export default function CheckoutForm({
   }
 
   const confirmOrder = (method: any) => {
+    //debugger;
     dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
 
-    const billingInfoClone = { ...state.billingInformation }
-    delete billingInfoClone.id
-    const shippingClone = { ...state.shippingInformation }
-    delete shippingClone.id
+    const billingInfoClone = { ...state.billingInformation, ...{ id: state?.billingInformation?.id ?? billingAddressId } }
+    //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
+    const shippingClone = { ...state.shippingInformation, ...{ id: state?.shippingInformation?.id ?? shippingAddressId } }
+    //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
     const data = {
       basketId,
@@ -584,11 +666,10 @@ export default function CheckoutForm({
     <>
       {state.isPaymentIntent && <Spinner />}
       <div
-        className={`bg-gray-50 relative ${
-          state.isPaymentIntent
-            ? 'pointer-events-none hidden overflow-hidden'
-            : ''
-        }`}
+        className={`bg-gray-50 relative ${state.isPaymentIntent
+          ? 'pointer-events-none hidden overflow-hidden'
+          : ''
+          }`}
       >
         <div className="max-w-2xl mx-auto sm:pt-16 pt-2 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
@@ -648,29 +729,29 @@ export default function CheckoutForm({
                 {(state?.isShippingInformationCompleted ||
                   state.isCNC ||
                   isShippingDisabled) && (
-                  <Form
-                    toggleAction={() =>
-                      togglePayment(!state.isPaymentInformationCompleted)
-                    }
-                    onSubmit={handleBillingSubmit}
-                    appConfig={config}
-                    values={state?.billingInformation}
-                    schema={billingSchema}
-                    updateAddress={updateAddress}
-                    infoType="BILLING"
-                    loqateAddress={loqateAddress}
-                    config={billingFormConfig}
-                    handleNewAddress={handleNewAddress}
-                    initialValues={defaultBillingAddress}
-                    retrieveAddress={retrieveAddress}
-                    isInfoCompleted={state?.isPaymentInformationCompleted}
-                    btnTitle={GENERAL_SAVE_CHANGES}
-                    addresses={addresses}
-                    isGuest={cartItems.isGuestCheckout}
-                    setAddress={setBillingInformation}
-                    isSameAddressCheckboxEnabled={false}
-                  />
-                )}
+                    <Form
+                      toggleAction={() =>
+                        togglePayment(!state.isPaymentInformationCompleted)
+                      }
+                      onSubmit={handleBillingSubmit}
+                      appConfig={config}
+                      values={state?.billingInformation}
+                      schema={billingSchema}
+                      updateAddress={updateAddress}
+                      infoType="BILLING"
+                      loqateAddress={loqateAddress}
+                      config={billingFormConfig}
+                      handleNewAddress={handleNewAddress}
+                      initialValues={defaultBillingAddress}
+                      retrieveAddress={retrieveAddress}
+                      isInfoCompleted={state?.isPaymentInformationCompleted}
+                      btnTitle={GENERAL_SAVE_CHANGES}
+                      addresses={addresses}
+                      isGuest={cartItems.isGuestCheckout}
+                      setAddress={setBillingInformation}
+                      isSameAddressCheckboxEnabled={false}
+                    />
+                  )}
               </div>
               <div className="mt-6 border-t border-gray-200 pt-6">
                 <h2 className="text-lg font-semibold text-gray-900">
