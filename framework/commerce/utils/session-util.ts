@@ -1,4 +1,4 @@
-import * as Cookies from "js-cookie";
+import Cookies from "js-cookie";
 
 /**
  * Returns session id.
@@ -27,7 +27,7 @@ export const isValidSession = (): boolean => {
     const sessionId = getSessionId();
 
     // Check if session is initiated
-    const isSessionInitiated = (getSessionCookie(sessionId) !== undefined);
+    const isSessionInitiated = (getSessionCookie(sessionId) !== undefined) ? true: false;
 
     // If session is not initiated
     if (!isSessionInitiated) {
@@ -42,7 +42,7 @@ export const isValidSession = (): boolean => {
  * @param key 
  * @returns 
  */
-const getSessionCookie = (key: string): any => {
+const getSessionCookie = (key: string) => {
     const sessionCookie = Cookies.get(key);
 
     if (sessionCookie === undefined) {
@@ -57,8 +57,8 @@ const getSessionCookie = (key: string): any => {
  * @param key 
  * @param value 
  */
-const setSessionCookie = (key: string, value: any): void => {
+const setSessionCookie = (key: string, value: any) => {
     Cookies.remove(key);
     const expiryTime: any = new Date(new Date().getTime() + 30 * 60 * 1000)
-    Cookies.set(key, JSON.stringify(value), { expires: expiryTime });
+    Cookies.set(key, value, { expires: expiryTime });
 };
