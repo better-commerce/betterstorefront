@@ -1,9 +1,12 @@
+import dynamic from 'next/dynamic'
 import { FC } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import AttributeSelector from './AttributeSelector'
-import Button from '@components/ui/IndigoButton'
+
+const AttributeSelector = dynamic(() => import('./AttributeSelector'))
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
+
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'

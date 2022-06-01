@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import { FC, Fragment, useState, useRef } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition, Dialog, Tab } from '@headlessui/react'
@@ -7,12 +8,14 @@ import { Logo } from '@components/ui'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui'
-import Account from './AccountDropdown'
-import CurrencySwitcher from './CurrencySwitcher'
+
+const Account = dynamic(() => import('./AccountDropdown'))
+const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
+const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
+
 import axios from 'axios'
 import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
-import LanguageSwitcher from './LanguageSwitcher'
 import Cookies from 'js-cookie'
 import { MenuIcon, SearchIcon, XIcon } from '@heroicons/react/outline'
 

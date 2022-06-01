@@ -1,13 +1,16 @@
+import dynamic from 'next/dynamic'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
-import ProductGrid from '@components/product/Grid'
+
+const ProductGrid = dynamic(() => import('@components/product/Grid'))
+const ProductSort = dynamic(() => import('@components/product/ProductSort'))
+
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-import ProductSort from '@components/product/ProductSort'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { NextSeo } from 'next-seo'
