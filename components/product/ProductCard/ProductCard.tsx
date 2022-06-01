@@ -173,15 +173,15 @@ const ProductCard: FC<Props> = ({ product }) => {
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
               <div className='image-container'>
                 {product.image !=null &&
-                  <Image 
+                  <Image
                       src={`${product.image}&h=200` || IMG_PLACEHOLDER}
                       alt={product.name}
                       onMouseEnter={() => handleHover('enter')}
                       onMouseLeave={() => handleHover('leave')}
-                      layout='fill' 
+                      layout='fill'
                       sizes='20vw'
                       className='w-full sm:h-72 h-48 object-center object-cover image'>
-                  </Image>                  
+                  </Image>
                 }
               </div>
               {buttonConfig.isPreOrderEnabled && (
