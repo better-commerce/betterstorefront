@@ -400,7 +400,7 @@ export default function ProductView({
           {/* Product */}
           <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
             {/* Image gallery */}
-            <Tab.Group as="div" className="flex flex-col-reverse">
+            <Tab.Group as="div" className="flex flex-col-reverse min-mobile-pdp">
               {/* Image selector */}
               <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
@@ -421,7 +421,8 @@ export default function ProductView({
                                   src={`${image.image}` || IMG_PLACEHOLDER}
                                   alt={selectedAttrData.name || selectedAttrData.productName}
                                   className="w-full h-full sm:h-44 object-center object-cover image"
-                                  layout='fill'
+                                  layout="fill"
+                                  sizes="20vw"
                                 ></Image>
                               </div>
                             ) : (
@@ -446,8 +447,8 @@ export default function ProductView({
                           src={`${image.image}` || IMG_PLACEHOLDER}
                           alt={selectedAttrData.name || selectedAttrData.productName}
                           className="w-full h-full object-center object-cover image rounded-lg"
-                          layout='fill'
-                          sizes='20vw'
+                          layout="fill"
+                          sizes="20vw"
                         ></Image>
                       </div>
                     ) : (
