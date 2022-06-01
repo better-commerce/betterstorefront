@@ -14,7 +14,7 @@ import {
 
 export default function AddressForm({
   initialValues = {},
-  onSubmit = () => {},
+  onSubmit = () => { },
   closeEditMode,
   btnTitle = 'Save',
   toggleAction,
@@ -24,7 +24,7 @@ export default function AddressForm({
   config,
   addresses,
   setAddress,
-  sameAddressAction = () => {},
+  sameAddressAction = () => { },
   isSameAddressCheckboxEnabled,
   isSameAddress = true,
   isGuest = false,
@@ -124,7 +124,10 @@ export default function AddressForm({
     <Formik
       validationSchema={schema}
       initialValues={initState}
-      onSubmit={onSubmit}
+      onSubmit={(values: any) => {
+        // Pass on dirty flag to the parent ref.
+        onSubmit({ ...values, ...{ isDirty: formikRef.current.dirty } });
+      }}
       innerRef={formikRef}
     >
       {({
@@ -146,9 +149,8 @@ export default function AddressForm({
                       setValues(item)
                       setAddress(item)
                     }}
-                    className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex justify-between items-center ${
-                      item.id === defaultValues.id ? 'border-indigo-600' : ''
-                    }`}
+                    className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex justify-between items-center ${item.id === defaultValues.id ? 'border-indigo-600' : ''
+                      }`}
                   >
                     <div>
                       {item.id === defaultValues.id ? (
@@ -233,8 +235,8 @@ export default function AddressForm({
                           </span>
                         )}
                         {formItem.addressFinder &&
-                        values[formItem.name] === postCodeValue &&
-                        addressList.length > 0 ? (
+                          values[formItem.name] === postCodeValue &&
+                          addressList.length > 0 ? (
                           <div className="absolute bg-white z-10 w-64 max-h-80 overflow-scroll">
                             <div className="bg-gray-900">
                               <h2
