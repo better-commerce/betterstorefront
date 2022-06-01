@@ -157,6 +157,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
         setUserLocation(TEST_GEO_DATA)
         setAppIsLoading(false)
       }
+    } else {
+      setAppIsLoading(false)
     }
     let analyticsCb = analytics()
     setAnalyticsEnabled(true)
