@@ -92,6 +92,7 @@ export const NEXT_CREATE_RETURN_DATA = '/api/return/create'
 export const NEXT_GET_RETURNS = '/api/return/get-user-returns'
 //CONSTANTS
 
+export const SessionCookieKey: string = `session`
 export const SessionIdCookieKey: string = `sessionId`
 export const DeviceIdKey: string = `deviceId`
 
