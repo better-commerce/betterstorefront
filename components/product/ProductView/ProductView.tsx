@@ -437,7 +437,7 @@ export default function ProductView({
                 </Tab.List>
               </div>
 
-              <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0">
+              <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0 min-mobile-pdp">
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
