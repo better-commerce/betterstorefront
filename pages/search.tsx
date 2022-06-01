@@ -6,10 +6,10 @@ import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 
 //DYNAMINC COMPONENT CALLS
-const ProductGrid = dynamic(() => import('@components/product/Grid'))
-const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
-const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
-const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
+const ProductGrid = dynamic(() => import('@components/product/Grid'), { ssr: false })
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'), { ssr: false })
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'), { ssr: false })
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'), { ssr: false })
 
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
