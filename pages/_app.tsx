@@ -23,6 +23,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import { resetSnippetElements } from "@framework/content/use-content-snippet"
 import { ContentSnippet } from "@components/common/Content"
+import { isValidSession } from "@commerce/utils"
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -138,17 +139,20 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     DataLayerInstance.setDataLayer()
 
     if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
-      geoData()
-        .then((response) => {
-          DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
-          DataLayerInstance.setItemInDataLayer('city', response.City)
-          DataLayerInstance.setItemInDataLayer('country', response.Country)
-          setUserLocation(response)
-          setAppIsLoading(false)
-        })
-        .catch((err) => {
-          DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
-        })
+      const isSessionInitiated = isValidSession();
+      if (!isSessionInitiated) {
+        geoData()
+          .then((response) => {
+            DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
+            DataLayerInstance.setItemInDataLayer('city', response.City)
+            DataLayerInstance.setItemInDataLayer('country', response.Country)
+            setUserLocation(response)
+            setAppIsLoading(false)
+          })
+          .catch((err) => {
+            DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
+          })
+      }
     } else {
       DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
       DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
