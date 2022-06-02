@@ -43,6 +43,15 @@ export const cachedGetData = async (url: string, cookies?: any, headers?: any, c
     }
 };
 
+export const lookupCache = (url: string) => {
+    return cache.get(url);
+};
+
+export const addCache = (url: string, data: any, cacheTimeInMilliSecs?: number) => {
+    const time = cacheTimeInMilliSecs || toNumber(NEXT_PUBLIC_DEFAULT_CACHE_TIME);
+    cache.put(url, data, time);
+};
+
 /**
  * Clears cache for the supplied-in key.
  * Clears everything when no key is supplied.
