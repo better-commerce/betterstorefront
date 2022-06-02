@@ -27,6 +27,7 @@ import {
   BTN_ACCEPT_COOKIE,
   GENERAL_COOKIE_TEXT,
 } from '@components/utils/textVariables'
+import axios from 'axios'
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center fixed z-50 justify-center p-3">
     <LoadingDots />
@@ -115,9 +116,9 @@ const Layout: FC<Props> = ({
   useEffect(() => {
     const fetchLayout = async () => {
       try {
-        const response: any = await getData(NEXT_GET_NAVIGATION)
-        setData(response)
-        setItem('navTree', response)
+        const response: any = await axios.get(NEXT_GET_NAVIGATION)
+        setData(response.data)
+        setItem('navTree', response.data)
       } catch (error) {
         console.log(error, 'error')
       }
@@ -141,7 +142,7 @@ const Layout: FC<Props> = ({
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US', ...rest } = useRouter()
 
-  const sortedData = data.nav.sort(
+  const sortedData = data.nav?.sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
   return (

@@ -68,7 +68,6 @@ export type Operations<P extends APIProvider> = {
     ): Promise<T['data']>
   }
   getInfra: {}
-  getNavTree: {}
   getSlugs: {}
   notifyMe: {}
   applyPromo: {}
