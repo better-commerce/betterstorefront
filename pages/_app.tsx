@@ -137,8 +137,12 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   useLayoutEffect(() => {
     DataLayerInstance.setDataLayer()
 
+    // If browser session is not yet started.
     if (!isValidSession()) {
+
+      // Initiate a new browser session.
       createSession();
+
       if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
         geoData()
           .then((response) => {
