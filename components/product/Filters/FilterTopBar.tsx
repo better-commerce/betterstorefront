@@ -43,15 +43,15 @@ export default function FiltersRightOpen({
       {/* Mobile filter dialog */}
       <div className="max-w-3xl px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
         <section
-          aria-labelledby="filter-heading"
+          aria-labelledby="filter-heading-top"
           className="border-t border-gray-200 py-1"
         >
-          <h2 id="filter-heading" className="sr-only">
+          <h2 className="sr-only">
             {PRODUCT_FILTER}
           </h2>
 
           <div className="flex items-center justify-between">
-            <h2 id="filter-heading" className="sr-only">
+            <h2 id="filter-heading-top" className="sr-only">
               {GENERAL_FILTER_TITLE}
             </h2>
             <div className="relative col-start-1 row-start-1 py-4">

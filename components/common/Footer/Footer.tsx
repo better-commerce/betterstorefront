@@ -22,7 +22,7 @@ const Footer: FC<Props> = ({ config }) => {
   const handleRedirect = (path: string) => (path ? router.push(path) : {})
 
   return (
-    <footer aria-labelledby="footer-heading" className="bg-gray-50">
+    <footer aria-labelledby="footer-heading" className="bg-gray-50 sm:h-96">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
