@@ -33,6 +33,7 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
               <Link href={banner?.link || '#'}>
                 <div className='image-container'>
                   <Image
+                    priority
                     src={banner?.url}
                     alt={banner?.alt}
                     layout="fill"
