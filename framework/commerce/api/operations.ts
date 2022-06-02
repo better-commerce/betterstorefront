@@ -25,7 +25,6 @@ export const OPERATIONS = [
   'getProduct',
   'getProductPreview',
   'getInfra',
-  'getNavTree',
   'getSlugs',
   'notifyMe',
   'priceMatch',
