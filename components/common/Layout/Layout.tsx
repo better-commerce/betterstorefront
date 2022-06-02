@@ -116,9 +116,9 @@ const Layout: FC<Props> = ({
   useEffect(() => {
     const fetchLayout = async () => {
       try {
-        const response: any = await axios.get(NEXT_GET_NAVIGATION)
-        setData(response.data)
-        setItem('navTree', response.data)
+        const response: any = await getData(NEXT_GET_NAVIGATION)
+        setData(response)
+        setItem('navTree', response)
       } catch (error) {
         console.log(error, 'error')
       }
@@ -161,9 +161,9 @@ const Layout: FC<Props> = ({
           />
         )}
         <Navbar
-          currencies={config.currencies}
+          currencies={config?.currencies}
           config={sortedData}
-          languages={config.languages}
+          languages={config?.languages}
         />
         <main className="fit">{children}</main>
         <Footer config={data.footer} />
