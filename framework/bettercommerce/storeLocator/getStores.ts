@@ -8,7 +8,6 @@ export default async function getStores(postCode: string) {
       method: 'get',
       //data: { postCode: postCode },
       baseUrl: OMS_BASE_URL,
-      logRequest: true,
     })
     return response.result
   } catch (error) {

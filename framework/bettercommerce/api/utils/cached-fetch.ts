@@ -16,7 +16,7 @@ import { NEXT_PUBLIC_API_CACHING_LOG_ENABLED, NEXT_PUBLIC_DEFAULT_CACHE_TIME } f
  * @returns 
  */
 export const cachedGetData = async (url: string, cookies?: any, headers?: any, cacheTimeInMilliSecs?: number) => {
-    const LOG_ENABLED = !!Boolean(NEXT_PUBLIC_API_CACHING_LOG_ENABLED);
+    const LOG_ENABLED = NEXT_PUBLIC_API_CACHING_LOG_ENABLED && NEXT_PUBLIC_API_CACHING_LOG_ENABLED === "true";
     const time = cacheTimeInMilliSecs || toNumber(NEXT_PUBLIC_DEFAULT_CACHE_TIME);
     const cachedResponse = cache.get(url);
     if (cachedResponse) {
