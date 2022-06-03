@@ -136,7 +136,7 @@ function Search({ query, setEntities, recordEvent }: any) {
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
-    if (router.query.freeText !== state.freeText) {
+    if (router.query.freeText !== undefined && router.query.freeText !== state.freeText) {
       dispatch({ type: FREE_TEXT, payload: query.freeText })
     }
   }, [router.query.freeText])
