@@ -129,7 +129,9 @@ function Search({ query, setEntities, recordEvent }: any) {
       },
     },
     error,
-  } = useSwr(['/api/catalog/products', state], postData)
+  } = useSwr(['/api/catalog/products', state], postData, {
+    revalidateOnFocus: false,
+  })
 
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
