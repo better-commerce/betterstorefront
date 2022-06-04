@@ -11,7 +11,7 @@ const isBetterCommerce = provider === 'bettercommerce'
 module.exports = withCommerceConfig({
   commerce,
   images: {
-    domains: ['liveocxcdn.azureedge.net', 'res.cloudinary.com', '99yrs.co.in'],
+    domains: ['liveocxcdn.azureedge.net', 'res.cloudinary.com', '99yrs.co.in', 'liveocx.imgix.net'],
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
   i18n: {
@@ -34,6 +34,13 @@ module.exports = withCommerceConfig({
       // to make the session cookies work.
 
     ].filter(Boolean)
+  },
+  env: {
+    BETTERCOMMERCE_AUTH_URL: process.env.BETTERCOMMERCE_AUTH_URL,
+    BETTERCOMMERCE_BASE_URL: process.env.BETTERCOMMERCE_BASE_URL,
+    BETTERCOMMERCE_CLIENT_ID: process.env.BETTERCOMMERCE_CLIENT_ID,
+    BETTERCOMMERCE_SHARED_SECRET: process.env.BETTERCOMMERCE_SHARED_SECRET,
+    OMS_BASE_URL: process.env.OMS_BASE_URL
   },
 })
 

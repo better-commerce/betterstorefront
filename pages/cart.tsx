@@ -13,8 +13,8 @@ import PromotionInput from '../components/cart/PromotionInput'
 import { useEffect } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
-import { NEXT_SHIPPING_PLANS } from '@components/utils/constants'
 import { BTN_CHECKOUT_NOW, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TOTAL, ITEMS_IN_YOUR_CART, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
+import { getShippingPlans } from '@framework/shipping'
 
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
@@ -24,9 +24,9 @@ function Cart({ cart }: any) {
     const itemsClone = [...items]
     return plans.reduce((acc: any, obj: any) => {
       acc?.forEach((cartItem?: any) => {
-        const foundShippingPlan = obj.items.find((item: any) => {
+        const foundShippingPlan = obj.Items.find((item: any) => {
           return (
-            item.productId.toLowerCase() === cartItem.productId.toLowerCase()
+            item.ProductId.toLowerCase() === cartItem.productId.toLowerCase()
           )
         })
         if (foundShippingPlan) {
@@ -46,10 +46,10 @@ function Cart({ cart }: any) {
       BasketId: basketId,
       OrderId: '00000000-0000-0000-0000-000000000000',
       PostCode: '',
-      ShippingMethodType: shippingMethodItem.type,
+      ShippingMethodType: shippingMethodItem?.type,
       ShippingMethodId: cart?.shippingMethodId,
-      ShippingMethodName: shippingMethodItem.displayName,
-      ShippingMethodCode: shippingMethodItem.shippingCode,
+      ShippingMethodName: shippingMethodItem?.displayName,
+      ShippingMethodCode: shippingMethodItem?.shippingCode,
       DeliveryItems: cart?.lineItems?.map((item: any) => {
         return {
           BasketLineId: Number(item.id),
@@ -71,15 +71,23 @@ function Cart({ cart }: any) {
       OrderNo: null,
       DeliveryCenter: null,
     }
-    const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
+    //const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
+    const shippingPlans = await getShippingPlans()({ model: model });
+    //console.log(JSON.stringify(shippingPlans));
     setCartItems({
       ...cart,
-      lineItems: mapShippingPlansToItems(response.data, cart.lineItems),
+      lineItems: mapShippingPlansToItems(shippingPlans, cart.lineItems),
     })
   }
 
   useEffect(() => {
-    if (cart?.shippingMethods.length > 0) fetchShippingPlans()
+    async function loadShippingPlans() {
+      await fetchShippingPlans();
+    }
+
+    if (cart?.shippingMethods.length > 0) {
+      loadShippingPlans()
+    }
     else {
       setCartItems(cart)
     }

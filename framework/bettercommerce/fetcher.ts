@@ -1,6 +1,6 @@
 import { Fetcher } from '@commerce/utils/types'
 import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import store from 'store'
 
 const SingletonFactory = (function () {
@@ -76,14 +76,27 @@ export const setGeneralParams = (param: any, value: any) => {
   store.set(param, value)
 }
 
+export const ensureToken = async () => {
+  const res: AxiosResponse<any> = await axiosInstance({
+    url: `${AUTH_URL}/oAuth/token`,
+    method: 'post',
+    data: `client_id=${CLIENT_ID}&client_secret=${SHARED_SECRET}&grant_type=client_credentials`,
+  });
+  if (res) {
+    return res.data.access_token;
+  }
+  return "";
+}
+
 const fetcher = async ({
   url = '',
   method = 'post',
   data = {},
   params = {},
   headers = {},
+  baseUrl = "",
 }: any) => {
-  const computedUrl = new URL(url, BASE_URL)
+  const computedUrl = new URL(url, baseUrl || BASE_URL)
   const newConfig = {
     Currency: store.get('Currency') || 'GBP',
     Language: store.get('Language') || 'en',
