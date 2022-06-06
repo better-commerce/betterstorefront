@@ -5,9 +5,9 @@ export default async function getStores(postCode: string) {
   try {
     const storeURL = new URL(STORE_LOCATOR_API, OMS_BASE_URL)
     const response: any = await fetcher({
-      url: storeURL,
-      method: 'post',
-      data: { postCode: postCode },
+      url: `${storeURL}/${postCode}`,
+      method: 'get',
+      //data: { postCode: postCode },
     })
     return response.result
   } catch (error) {}
