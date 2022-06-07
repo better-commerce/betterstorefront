@@ -1,4 +1,4 @@
-import fetcher from '../../fetcher'
+import fetcher from '../../fetcfetcherherV2'
 import { LOOKBOOK_ENDPOINT } from '@components/utils/constants'
 export default function getLookbook() {
   async function getLookbookAsync() {

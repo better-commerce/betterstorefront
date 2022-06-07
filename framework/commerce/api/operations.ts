@@ -23,6 +23,7 @@ export const OPERATIONS = [
   'getAllProductPaths',
   'getAllProducts',
   'getProduct',
+  'getProductPreview',
   'getInfra',
   'getSlugs',
   'notifyMe',
@@ -173,6 +174,22 @@ export type Operations<P extends APIProvider> = {
   }
 
   getProduct: {
+    <T extends GetProductOperation>(opts: {
+      variables: T['variables']
+      config?: P['config']
+      preview?: boolean
+    }): Promise<T['data']>
+
+    <T extends GetProductOperation>(
+      opts: {
+        variables: T['variables']
+        config?: P['config']
+        preview?: boolean
+      } & OperationOptions
+    ): Promise<T['data']>
+  }
+
+  getProductPreview: {
     <T extends GetProductOperation>(opts: {
       variables: T['variables']
       config?: P['config']
