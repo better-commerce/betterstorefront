@@ -452,7 +452,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                   >
                     <HeartIcon
                       className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
+                      aria-hidden="true" aria-label="Wishlist"
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                       {wishListItems.length}
@@ -469,7 +469,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                   >
                     <ShoppingBagIcon
                       className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
+                      aria-hidden="true" aria-label="Add to cart"
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                       {cartItems.lineItems?.length}
