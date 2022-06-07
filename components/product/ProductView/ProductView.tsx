@@ -89,8 +89,8 @@ export default function ProductView({
   const product = updatedProduct || data
 
   const [selectedAttrData, setSelectedAttrData] = useState({
-    productId: product.recordId,
-    stockCode: product.stockCode,
+    productId: product?.recordId,
+    stockCode: product?.stockCode,
     ...product,
   })
 
