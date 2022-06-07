@@ -35,6 +35,13 @@ module.exports = withCommerceConfig({
 
     ].filter(Boolean)
   },
+  env: {
+    BETTERCOMMERCE_AUTH_URL: process.env.BETTERCOMMERCE_AUTH_URL,
+    BETTERCOMMERCE_BASE_URL: process.env.BETTERCOMMERCE_BASE_URL,
+    BETTERCOMMERCE_CLIENT_ID: process.env.BETTERCOMMERCE_CLIENT_ID,
+    BETTERCOMMERCE_SHARED_SECRET: process.env.BETTERCOMMERCE_SHARED_SECRET,
+    OMS_BASE_URL: process.env.OMS_BASE_URL
+  },
 })
 
 // Don't delete this console log, useful to see the commerce config in Vercel deployments

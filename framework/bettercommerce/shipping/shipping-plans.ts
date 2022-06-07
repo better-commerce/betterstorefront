@@ -25,9 +25,11 @@ export default function getShippingPlans() {
         cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+          //Authorization: `Bearer ${token}`
         },
+        baseUrl: OMS_BASE_URL,
       })
-      return response.result
+      return response.Result
     } catch (error: any) {
       console.log(error)
       // throw new Error(error.message)

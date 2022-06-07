@@ -2,7 +2,7 @@ import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 import qs from 'qs'
 interface Props {
-  basketId?: string
+  basketId: string
   products: any
   cookies?: any
 }

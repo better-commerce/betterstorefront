@@ -76,12 +76,13 @@ export default function ProductView({
     addToWishlist,
     openWishlist,
     basketId,
+    cartItems,
     setCartItems,
     user,
     openCart,
   } = useUI()
 
-  const [updatedProduct, setUpdatedProduct] = useState(null)
+  const [updatedProduct, setUpdatedProduct] = useState<any>(null)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
@@ -377,6 +378,16 @@ export default function ProductView({
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
+
+  const handleProductBundleUpdate = (bundledProduct: any) => {
+    //debugger;
+    if (bundledProduct && bundledProduct.id) {
+      let clonedProduct = Object.assign({}, updatedProduct);
+      if (clonedProduct && clonedProduct.componentProducts) {
+        setUpdatedProduct(clonedProduct);
+      }
+    }
+  }
   /*if (product === null) {
     return {
       notFound: true,
@@ -553,7 +564,7 @@ export default function ProductView({
                             handleWishList()
                           }
                         }}
-                        className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+                        className="ml-4 py-3 px-10 rounded-md flex items-center justify-center text-gray-400 hover:bg-red-50 border border-white hover:border-red-300 hover:text-red-500"
                       >
                         {isInWishList ? (
                           <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
@@ -565,10 +576,10 @@ export default function ProductView({
                     </div>
                     {isEngravingAvailable && (
                       <button
-                        className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                        onClick={() => showEngravingModal(true)}
+                      className="max-w-xs flex-1 mt-5 bg-gray-900 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                      onClick={() => showEngravingModal(true)}
                       >
-                        <span className="font-bold">{GENERAL_ENGRAVING}</span>
+                       {GENERAL_ENGRAVING}
                       </button>
                     )}
                   </>
@@ -588,6 +599,7 @@ export default function ProductView({
             <Bundles
               price={product.price.formatted.withTax}
               products={product.componentProducts}
+              productBundleUpdate={handleProductBundleUpdate}
             />
           )}
           {filteredRelatedProducts ? (
