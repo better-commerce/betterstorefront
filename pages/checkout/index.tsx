@@ -15,7 +15,7 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 
 function Checkout({ cart, config, location }: any) {
-  const { user, basketId, setCartItems, cartItems, setUser, setIsGuestUser } = useUI()
+  const { user, basketId, setCartItems, cartItems, setUser } = useUI()
   const [isLoggedIn, setIsLoggedIn] = useState(!!cartItems.userEmail)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
@@ -30,7 +30,6 @@ function Checkout({ cart, config, location }: any) {
       setCartItems(newCartClone)
       setIsLoggedIn(!!response.data.userEmail)
       setUser({ userId: response.data.userId, email: response.data.userEmail })
-      setIsGuestUser(true)
     }
     handleAsync()
   }

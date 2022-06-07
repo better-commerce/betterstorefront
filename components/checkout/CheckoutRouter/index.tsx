@@ -30,7 +30,7 @@ export default function CheckoutRouter({
 }: any) {
   const [noAccount, setNoAccount] = useState(false)
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB)
-  const { setUser, setIsGuestUser, wishlistItems, basketId, setCartItems } = useUI()
+  const { setUser, wishlistItems, basketId, setCartItems } = useUI()
   const { getWishlist } = useWishlist()
 
   const handleUserLogin = (values: any) => {
@@ -45,7 +45,6 @@ export default function CheckoutRouter({
         setNoAccount(false)
         setCartItems(result.data)
         setIsLoggedIn(true)
-        setIsGuestUser(false);
         // setUser(result.data)
         // getWishlist(result.data.userId, wishlistItems)
         Router.push('/checkout')

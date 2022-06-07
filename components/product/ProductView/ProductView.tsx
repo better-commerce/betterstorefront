@@ -22,7 +22,6 @@ import {
   NEXT_BULK_ADD_TO_CART,
   NEXT_UPDATE_CART_INFO,
   NEXT_GET_PRODUCT,
-  NEXT_GET_PRODUCT_PREVIEW,
 } from '@components/utils/constants'
 import Button from '@components/ui/IndigoButton'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -69,39 +68,35 @@ export default function ProductView({
   setEntities,
   recordEvent,
   slug,
-  isPreview = false
 }: any) {
   const {
     openNotifyUser,
     addToWishlist,
     openWishlist,
     basketId,
-    cartItems,
     setCartItems,
     user,
     openCart,
   } = useUI()
 
-  const [updatedProduct, setUpdatedProduct] = useState<any>(null)
+  const [updatedProduct, setUpdatedProduct] = useState(null)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
 
   const product = updatedProduct || data
-  
+
   const [selectedAttrData, setSelectedAttrData] = useState({
-    productId: product?.recordId,
-    stockCode: product?.stockCode,
+    productId: product.recordId,
+    stockCode: product.stockCode,
     ...product,
   })
-  
+
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
 
   const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
-    const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW;;
-    const response: any = await axios.post(url, { slug: slug })
-    //console.log(JSON.stringify(response?.data))
+    const response: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
         entity: JSON.stringify({
@@ -181,7 +176,6 @@ export default function ProductView({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       action: async () => {
-        //debugger;
         const item = await cartHandler().addToCart(
           {
             basketId: basketId,
@@ -284,21 +278,37 @@ export default function ProductView({
         StockCode: obj.stockCode,
         ItemType: obj.itemType || 0,
         CustomInfo1: values.line1 || null,
+
         CustomInfo2: values.line2 || null,
+
         CustomInfo3: values.line3 || null,
+
         CustomInfo4: values.line4 || null,
+
         CustomInfo5: values.line5 || null,
+
         ProductName: obj.name,
+
         ManualUnitPrice: obj.manualUnitPrice || 0.0,
+
         PostCode: obj.postCode || null,
+
         IsSubscription: obj.subscriptionEnabled || false,
+
         IsMembership: obj.hasMembership || false,
+
         SubscriptionPlanId: obj.subscriptionPlanId || null,
+
         SubscriptionTermId: obj.subscriptionTermId || null,
+
         UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
+
         GiftWrapId: obj.giftWrapConfig || null,
+
         IsGiftWrapApplied: obj.isGiftWrapApplied || false,
+
         ItemGroupId: obj.itemGroupId || 0,
+
         PriceMatchReqId:
           obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
       })
@@ -362,19 +372,6 @@ export default function ProductView({
   const filteredRelatedProductList = product.relatedProductList?.filter(
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
-
-  const handleProductBundleUpdate = (bundledProduct: any) => {
-    //debugger;
-    if (bundledProduct && bundledProduct.id) {
-      let clonedProduct = Object.assign({}, updatedProduct);
-      if (clonedProduct && clonedProduct.componentProducts) {
-        setUpdatedProduct(clonedProduct);
-      }
-    }
-  }
-
-  //console.log("Check Bundle:" + JSON.stringify(product));
-  //console.log(product);
 
   /*if (product === null) {
     return {
@@ -467,7 +464,7 @@ export default function ProductView({
               </p>
               <div className="mt-3">
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
-                {isPreview || updatedProduct ? (
+                {updatedProduct ? (
                   <p className="sm:text-3xl text-2xl font-bold sm:font-medium text-gray-900">
                     {selectedAttrData.price?.formatted?.withTax}
                     {selectedAttrData.listPrice?.raw.tax > 0 ? (
@@ -510,7 +507,6 @@ export default function ProductView({
                   product={product}
                   variant={selectedAttrData}
                   setSelectedAttrData={setSelectedAttrData}
-                  isPreview={isPreview}
                 />
               </div>
               <p
@@ -536,7 +532,6 @@ export default function ProductView({
                     selectedAttrData.description || product.description
                   }
                 />
-
                 {updatedProduct ? (
                   <>
                     <div className="sm:mt-10 mt-6 flex sm:flex-col1">
@@ -553,7 +548,7 @@ export default function ProductView({
                             handleWishList()
                           }
                         }}
-                        className="ml-4 py-3 px-10 rounded-md flex items-center justify-center text-gray-400 hover:bg-red-50 border border-white hover:border-red-300 hover:text-red-500"
+                        className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                       >
                         {isInWishList ? (
                           <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
@@ -565,10 +560,10 @@ export default function ProductView({
                     </div>
                     {isEngravingAvailable && (
                       <button
-                        className="max-w-xs flex-1 mt-5 bg-gray-900 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                        className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                         onClick={() => showEngravingModal(true)}
                       >
-                        {GENERAL_ENGRAVING}
+                        <span className="font-bold">{GENERAL_ENGRAVING}</span>
                       </button>
                     )}
                   </>
@@ -588,10 +583,8 @@ export default function ProductView({
             <Bundles
               price={product.price.formatted.withTax}
               products={product.componentProducts}
-              productBundleUpdate={handleProductBundleUpdate}
             />
           )}
-
           {filteredRelatedProducts ? (
             <RelatedProducts
               relatedProducts={filteredRelatedProducts}
