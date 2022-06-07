@@ -1,18 +1,11 @@
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
-import AttributesHandler from './AttributesHandler'
 import { useUI } from '@components/ui/context'
-import BreadCrumbs from '@components/ui/BreadCrumbs'
-import RelatedProducts from '@components/product/RelatedProducts'
-import Bundles from '@components/product/Bundles'
-import Reviews from '@components/product/Reviews'
-import PriceMatch from '@components/product/PriceMatch'
-import Engraving from '@components/product/Engraving'
-import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import axios from 'axios'
@@ -24,7 +17,6 @@ import {
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
 } from '@components/utils/constants'
-import Button from '@components/ui/IndigoButton'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
@@ -48,6 +40,16 @@ import {
 } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 
+//DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
+const  AttributesHandler  = dynamic(() => import('./AttributesHandler'));
+const  BreadCrumbs  = dynamic(() => import('@components/ui/BreadCrumbs'));
+const  RelatedProducts  = dynamic(() => import('@components/product/RelatedProducts'));
+const  Bundles  = dynamic(() => import('@components/product/Bundles'));
+const  Reviews  = dynamic(() => import('@components/product/Reviews'));
+const  PriceMatch  = dynamic(() => import('@components/product/PriceMatch'));
+const  Engraving  = dynamic(() => import('@components/product/Engraving'));
+const  ProductDetails  = dynamic(() => import('@components/product/ProductDetails'));
+const  Button  = dynamic(() => import('@components/ui/IndigoButton'));
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -407,7 +409,7 @@ export default function ProductView({
           {/* Product */}
           <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
             {/* Image gallery */}
-            <Tab.Group as="div" className="flex flex-col-reverse">
+            <Tab.Group as="div" className="flex flex-col-reverse min-mobile-pdp">
               {/* Image selector */}
               <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
@@ -415,6 +417,7 @@ export default function ProductView({
                     <Tab
                       key={`${idx}-tab`}
                       className="relative h-24 sm:h-44 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                      aria-label={selectedAttrData.name || selectedAttrData.productName}
                     >
                       {() => (
                         <>
@@ -424,9 +427,10 @@ export default function ProductView({
                               <div className='image-container'>
                                 <Image
                                   src={`${image.image}` || IMG_PLACEHOLDER}
-                                  alt={image.name}
-                                  className="w-full h-full sm:h-44 object-center object-cover image"
-                                  layout='fill'
+                                  alt={selectedAttrData.name || selectedAttrData.productName}
+                                  className="w-full h-full sm:h-44 object-center object-cover image"                                  
+                                  layout="fill"
+                                  sizes="20vw"
                                 ></Image>
                               </div>
                             ) : (
@@ -434,22 +438,24 @@ export default function ProductView({
                             )}
                           </span>
                         </>
-                      )}
+                      )}                      
+                      <span className="sr-only">{selectedAttrData.name || selectedAttrData.productName}</span>
                     </Tab>
                   ))}
                 </Tab.List>
               </div>
 
-              <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0">
+              <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0 min-mobile-pdp">
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
                       <div className='image-container'>
                         <Image
                           src={`${image.image}` || IMG_PLACEHOLDER}
-                          alt={image.name}
+                          alt={selectedAttrData.name || selectedAttrData.productName}
                           className="w-full h-full object-center object-cover image rounded-lg"
-                          layout='fill'
+                          layout="fill"
+                          sizes="20vw"
                         ></Image>
                       </div>
                     ) : (

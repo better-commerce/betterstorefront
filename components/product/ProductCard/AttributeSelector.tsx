@@ -25,7 +25,11 @@ const ColorSelector = ({ attr, onChange, link }: any) => {
               onMouseLeave={() => onChange(item, 'leave')}
               className="sm:h-8 sm:w-8 h-5 w-5 inline-block rounded-full sm:mr-2 mr-1 mt-2 border border-gray-100"
               style={{ backgroundColor: item.fieldValue }}
-            />
+            >
+              <label htmlFor="attr" className="sr-only">
+                attribute
+              </label>
+            </a>
           </Link>
         )
       })}
