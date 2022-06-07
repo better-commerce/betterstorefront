@@ -19,7 +19,7 @@ export default function useAnalytics(
     (<any>window).dataLayer[0].ipAddress
 
   useEffect(() => {
-    //console.count(`inside use effect ${dataLayer}`)
+    console.count(`inside use effect ${dataLayer}`)
     if (dataLayer) eventDispatcher(event, data)
   }, [dataLayer])
 }

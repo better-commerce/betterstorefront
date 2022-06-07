@@ -4,7 +4,6 @@ import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { uuid } from 'uuidv4'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
-import { Guid } from '@commerce/types'
 
 export const basketId = () => {
   if (Cookies.get('basketId')) {
@@ -28,7 +27,6 @@ export interface State {
   cartItems: any
   basketId: string
   user: any
-  isGuestUser: boolean,
   showSearchBar: boolean
   appConfig: any
   orderId: string
@@ -48,7 +46,6 @@ const initialState = {
   cartItems: getItem('cartItems') || { lineItems: [] },
   basketId: basketId(),
   user: getItem('user') || {},
-  isGuestUser: getItem('isGuest') || false,
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
@@ -109,10 +106,6 @@ type Action =
   | {
     type: 'SET_USER'
     payload: any
-  }
-  | {
-    type: 'SET_IS_GUEST_USER'
-    payload: boolean
   }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
@@ -249,12 +242,6 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         user: action.payload,
-      }
-    }
-    case 'SET_IS_GUEST_USER': {
-      return {
-        ...state,
-        isGuestUser: action.payload,
       }
     }
     case 'REMOVE_USER': {
@@ -409,10 +396,17 @@ export const UIProvider: FC = (props) => {
   )
   const setCartItems = useCallback(
     (payload: any) => {
-      const newCartDataClone = consolidateCartItems(payload);
+      const newCartDataClone: any = { ...payload }
+      newCartDataClone?.lineItems?.forEach((element: any, idx: number) => {
+        newCartDataClone?.lineItems?.forEach((i: any) => {
+          if (element?.parentProductId === i.productId) {
+            i.children = i.children ? [...i.children, element] : [element]
+            newCartDataClone.lineItems.splice(idx, 1)
+          }
+        })
+      })
 
-      //debugger;
-      setItem('cartItems', { ...newCartDataClone })
+      setItem('cartItems', { ...payload })
       dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
     },
     [dispatch]
@@ -422,14 +416,6 @@ export const UIProvider: FC = (props) => {
     (payload: any) => {
       setItem('user', payload)
       dispatch({ type: 'SET_USER', payload })
-    },
-    [dispatch]
-  )
-
-  const setIsGuestUser = useCallback(
-    (payload: boolean) => {
-      setItem('isGuest', payload)
-      dispatch({ type: 'SET_IS_GUEST_USER', payload })
     },
     [dispatch]
   )
@@ -489,75 +475,6 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
-  const consolidateCartItems = (payload: any) => {
-
-    let newCartDataClone: any = { ...payload };
-
-    let lineItems = new Array<any>();
-    let parentItemsTemp = new Array<any>();
-
-    // If line items exist
-    if (newCartDataClone?.lineItems?.length) {
-
-      // Find all child items.
-      const allParentProducts = newCartDataClone?.lineItems?.filter((x: any) => !x.parentProductId || (x.parentProductId && (x.parentProductId.trim() === "" || x.parentProductId.trim() === Guid.empty)));
-
-      // If parent items found
-      if (allParentProducts && allParentProducts.length) {
-
-        // Iterate parent items
-        allParentProducts.forEach((parentItem: any) => {
-
-          // Find child items for current item.
-          const childItems = newCartDataClone?.lineItems?.filter((x: any) => x.parentProductId && x.parentProductId.trim() !== "" && x.parentProductId.trim() !== Guid.empty && x.parentProductId.toLowerCase().trim() == parentItem.productId.toLowerCase());
-
-          // If child items exists
-          if (childItems && childItems.length) {
-
-            // Find current item in temp parent items
-            const findParentInTemp = parentItemsTemp.find((x: any) => x.productId.toLowerCase() == parentItem.productId.toLowerCase());
-
-            // If found
-            if (findParentInTemp && findParentInTemp.children) {
-
-              // Concat child items to existing parent item
-              findParentInTemp.children = findParentInTemp.children.concat(childItems);
-            } else {
-
-              // Add new parent with child items
-              parentItemsTemp.push({ ...parentItem, ... { children: childItems } });
-            }
-          }
-
-        });
-      }
-
-      const parentItemsTempIds = (parentItemsTemp.length) ? parentItemsTemp.map((x: any) => x.productId.toLowerCase()) : [];
-      const findUntouchedParentItems = newCartDataClone?.lineItems?.filter((x: any) => (!x.parentProductId || (x.parentProductId && (x.parentProductId.trim() === "" || x.parentProductId.trim() === Guid.empty)) && !parentItemsTempIds.includes(x.productId.toLowerCase())));
-
-      if (findUntouchedParentItems && findUntouchedParentItems.length) {
-        lineItems = lineItems.concat(findUntouchedParentItems);
-      }
-
-      if (parentItemsTemp && parentItemsTemp.length) {
-        lineItems = lineItems.concat(parentItemsTemp);
-      }
-
-      newCartDataClone.lineItems = lineItems;
-    }
-
-    /*newCartDataClone?.lineItems?.forEach((element: any, idx: number) => {
-      newCartDataClone?.lineItems?.forEach((i: any) => {
-        if (element?.parentProductId === i.productId) {
-          i.children = i.children ? [...i.children, element] : [element]
-          newCartDataClone.lineItems.splice(idx, 1)
-        }
-      })
-    })*/
-
-    return newCartDataClone;
-  };
-
   const value = useMemo(
     () => ({
       ...state,
@@ -579,7 +496,6 @@ export const UIProvider: FC = (props) => {
       removeFromCart,
       setCartItems,
       setUser,
-      setIsGuestUser,
       deleteUser,
       openCart,
       openWishlist,

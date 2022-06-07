@@ -56,7 +56,6 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   const {
     wishListItems,
     cartItems,
-    isGuestUser,
     user,
     deleteUser,
     openCart,
@@ -89,9 +88,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   ]
 
   let accountDropdownConfig = accountDropDownConfigUnauthorized
-  let title = !isGuestUser ? (user.userId ? `Hi, ${user.firstName}` : 'My account') : ""
+  let title = user.userId ? `Hi, ${user.firstName}` : 'My account'
 
-  if (!isGuestUser && user.userId) {
+  if (user.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
 
@@ -453,7 +452,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                   >
                     <HeartIcon
                       className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true" aria-label="Wishlist"
+                      aria-hidden="true"
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                       {wishListItems.length}
@@ -470,7 +469,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                   >
                     <ShoppingBagIcon
                       className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true" aria-label="Add to cart"
+                      aria-hidden="true"
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                       {cartItems.lineItems?.length}

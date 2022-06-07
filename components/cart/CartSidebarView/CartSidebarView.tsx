@@ -26,7 +26,6 @@ import useTranslation, {
   GENERAL_CONTINUE_SHOPPING,
   GENERAL_OR_TEXT,
 } from '@components/utils/textVariables'
-import { Guid } from '@commerce/types'
 
 const CartSidebarView: FC = () => {
   const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
@@ -196,38 +195,34 @@ const CartSidebarView: FC = () => {
                                   <div className="flex-1 flex items-end justify-between text-sm">
                                     {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                    {
-                                      (product.parentProductId === "" || product.parentProductId === Guid.empty) && (
-                                        <div className="flex justify-between w-full">
-                                          <button
-                                            type="button"
-                                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                                            onClick={() =>
-                                              handleItem(product, 'delete')
-                                            }
-                                          >
-                                            {GENERAL_REMOVE}
-                                          </button>
-                                          <div className="border px-4 text-gray-900 flex flex-row">
-                                            <MinusSmIcon
-                                              onClick={() =>
-                                                handleItem(product, 'decrease')
-                                              }
-                                              className="w-4 cursor-pointer"
-                                            />
-                                            <span className="text-md px-2 py-2">
-                                              {product.qty}
-                                            </span>
-                                            <PlusSmIcon
-                                              className="w-4 cursor-pointer"
-                                              onClick={() =>
-                                                handleItem(product, 'increase')
-                                              }
-                                            />
-                                          </div>
-                                        </div>
-                                      )
-                                    }
+                                    <div className="flex justify-between w-full">
+                                      <button
+                                        type="button"
+                                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                                        onClick={() =>
+                                          handleItem(product, 'delete')
+                                        }
+                                      >
+                                        {GENERAL_REMOVE}
+                                      </button>
+                                      <div className="border px-4 text-gray-900 flex flex-row">
+                                        <MinusSmIcon
+                                          onClick={() =>
+                                            handleItem(product, 'decrease')
+                                          }
+                                          className="w-4 cursor-pointer"
+                                        />
+                                        <span className="text-md px-2 py-2">
+                                          {product.qty}
+                                        </span>
+                                        <PlusSmIcon
+                                          className="w-4 cursor-pointer"
+                                          onClick={() =>
+                                            handleItem(product, 'increase')
+                                          }
+                                        />
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -259,36 +254,25 @@ const CartSidebarView: FC = () => {
                                               </Link>
                                             </h3>
                                             <p className="ml-4">
-                                              {child.price?.formatted?.withTax > 0 ? child.price?.formatted?.withTax : ""}
+                                              {child.price?.formatted?.withTax}
                                             </p>
                                           </div>
                                           {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                         </div>
                                       </div>
+                                      <div className="flex-1 flex items-end justify-end text-sm">
+                                        {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                      {
-                                        (child.parentProductId === "" || child.parentProductId === Guid.empty) ? (
-                                          <div className="flex-1 flex items-end justify-end text-sm">
-                                            {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
-
-                                            <button
-                                              type="button"
-                                              className="font-medium text-indigo-600 hover:text-indigo-500"
-                                              onClick={() =>
-                                                handleItem(child, GENERAL_DELETE)
-                                              }
-                                            >
-                                              {GENERAL_REMOVE}
-                                            </button>
-                                          </div>
-                                        ) : (
-                                          <div className="border px-4 text-gray-900 flex flex-row">
-                                            <span className="text-md px-2 py-2">
-                                              {child.qty}
-                                            </span>
-                                          </div>
-                                        )
-                                      }
+                                        <button
+                                          type="button"
+                                          className="font-medium text-indigo-600 hover:text-indigo-500"
+                                          onClick={() =>
+                                            handleItem(child, GENERAL_DELETE)
+                                          }
+                                        >
+                                          {GENERAL_REMOVE}
+                                        </button>
+                                      </div>
                                     </div>
                                   )
                                 }

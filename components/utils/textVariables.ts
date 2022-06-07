@@ -288,8 +288,6 @@ export const LOADER_LOADING = 'Loading...'
 export const ERROR_PAGE_NOT_FOUND = 'Not Found'
 export const ERROR_PAGE_NOT_FOUND_MESSAGE =
   "The requested page doesn't exist or you don't have access to it."
-export const ERROR_GENERIC_HEADING = "Error"
-export const ERROR_GENERIC_MESSAGE = "Oops! Something went wrong!"
 export const BTN_CHECKOUT_NOW = 'Checkout now'
 export const MESSAGE_NO_ORDER_FOUND = 'No orders found'
 export const MESSAGE_NO_ORDER_FOUND_TEXT =
@@ -312,5 +310,3 @@ export const SHOP_BY_CATEGORY = 'Shop by Category'
 export const SHOP_BY_COLLECTION = 'Shop by Collection'
 export const SHOP_BY_LIFESTYLRE = 'Shop by Lifestyle'
 export const PRODUCTS_AVAILABLE = 'Products available'
-export const GENERAL_COLOUR = 'Colour'
-export const GENERAL_SIZE = 'Size'

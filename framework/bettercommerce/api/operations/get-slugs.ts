@@ -1,4 +1,4 @@
-import fetcher from '@framework/fetcher';
+import fetcher from '../../fetcher'
 import { SITEVIEW_ENDPOINT } from '@components/utils/constants'
 
 export default function getSlugsOperation() {

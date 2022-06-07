@@ -22,7 +22,6 @@ export default function AttributesHandler({
   product,
   setSelectedAttrData,
   variant,
-  isPreview = false,
 }: any) {
   const { attributes, variantAttributes = [], variantProducts } = product
 
@@ -116,13 +115,8 @@ export default function AttributesHandler({
             }
           })
           .filter((el) => el)
-      } else {
-        return option.fieldValues
-      }
-    } else  {
-      return option.fieldValues
-      //return []
-    }
+      } else return option.fieldValues
+    } else return []
   }
 
   const handleAttrCombinations = (key: string, value: any) => {
@@ -166,11 +160,9 @@ export default function AttributesHandler({
     <>
       {variantAttributes?.map((option: any, idx: number) => {
         const optionsToPass = generateOptions(option)
-        const originalAttribute = isPreview 
-          ? product.customAttributes.find((x: any) => x.key === option.fieldCode)?.value ?? ""
-          : isCustomAttr
-            ? stateAttributes[option.fieldCode]
-            : originalAttributes[option.fieldCode]
+        const originalAttribute = isCustomAttr
+          ? stateAttributes[option.fieldCode]
+          : originalAttributes[option.fieldCode]
         const Component =
           ATTR_COMPONENTS[option.inputType] ||
           TEMP_MAP[option.fieldCode] ||
