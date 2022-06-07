@@ -1,9 +1,10 @@
+import dynamic from 'next/dynamic'
 import { FC } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import AttributeSelector from './AttributeSelector'
-import Button from '@components/ui/IndigoButton'
+const AttributeSelector = dynamic(() => import('./AttributeSelector'))
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
@@ -170,11 +171,12 @@ const SearchProductCard: FC<Props> = ({ product }) => {
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
               <div className='image-container'>
                   <Image 
-                      src={currentProductData.image || IMG_PLACEHOLDER}
+                      src={`${product.image}&h=200` || IMG_PLACEHOLDER}
                       alt={product.name}
                       onMouseEnter={() => handleHover('enter')}
                       onMouseLeave={() => handleHover('leave')}
                       layout='fill' 
+                      sizes='50vw'
                       className='w-full sm:h-72 h-48 object-center object-cover image'>
                   </Image>
               </div>
@@ -184,10 +186,11 @@ const SearchProductCard: FC<Props> = ({ product }) => {
                 </div>
               )}
               {buttonConfig.isNotifyMeEnabled && (
-                <div className="bg-red-400 text-white absolute py-1 px-1 rounded-sm top-2">
+                <div className="bg-red-700 text-white absolute py-1 px-1 rounded-sm top-2">
                   {BTN_NOTIFY_ME}
                 </div>
               )}
+              <span className="sr-only">{product.name}</span>
             </div>
           </a>
         </Link>

@@ -143,15 +143,15 @@ export default function Filters({
 
       <div className="px-0 text-center sm:px-6 lg:max-w-7xl lg:px-8">
         <section
-          aria-labelledby="filter-heading"
+          aria-labelledby="filter-heading-filter"
           className="border-t border-gray-200 py-0"
         >
-          <h2 id="filter-heading" className="sr-only">
+          <h2 className="sr-only">
             {PRODUCT_FILTER}
           </h2>
 
           <div className="flex items-center justify-between pr-4">
-            <h2 id="filter-heading" className="sr-only">
+            <h2 id="filter-heading-filter" className="sr-only">
               {GENERAL_FILTER_TITLE}
             </h2>
             <div className="relative col-start-1 row-start-1 py-3">

@@ -7,22 +7,22 @@ import { useUI } from '@components/ui/context'
 import type { Page } from '@commerce/types/page'
 import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
-import ShippingView from '@components/checkout/ShippingView'
-import CartSidebarView from '@components/cart/CartSidebarView'
+const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
+const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
+const PaymentMethodView = dynamic(() => import('@components/checkout/PaymentMethodView'))
+const CheckoutSidebarView = dynamic(() => import('@components/checkout/CheckoutSidebarView'))
+const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
+const SearchWrapper = dynamic(() => import('@components/search/index'))
+const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
 import { WishlistSidebarView } from '@components/wishlist'
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
-import PaymentMethodView from '@components/checkout/PaymentMethodView'
-import CheckoutSidebarView from '@components/checkout/CheckoutSidebarView'
 import s from './Layout.module.css'
 import { getData } from '../../utils/clientFetcher'
 import { setItem, getItem } from '../../utils/localStorage'
-import NotifyUserPopup from '@components/ui/NotifyPopup'
 import Script from 'next/script'
-import SearchWrapper from '@components/search/index'
 import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import Router from 'next/router'
-import ProgressBar from '@components/ui/ProgressBar'
 import {
   BTN_ACCEPT_COOKIE,
   GENERAL_COOKIE_TEXT,
