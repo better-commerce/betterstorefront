@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import path from 'path';
+import { uuid } from 'uuidv4';
 import Cookies, { CookieAttributes } from 'js-cookie'
 import { FetcherError } from '@commerce/utils/errors'
 
@@ -48,3 +51,27 @@ export const setRefreshToken = (token?: string, options?: CookieAttributes) => {
 }
 export const getRefreshToken = () => Cookies.get('betterCommerce.refreshToken')
 export const clearTokens = () => Cookies.remove('betterCommerce.token')
+
+export { stringToBoolean, stringToNumber } from "./parse-util";
+export { mergeSchema } from "./schema-util";
+
+export const writeFetcherLog = (request: any, response: any) => {
+  const objectStrigified = (obj: any) => {
+    return JSON.stringify(obj, null, "\t");
+  }
+  const MID = "\\.next\\server\\";
+  const workingDir = __dirname;
+  const rootDir = workingDir.substring(0, workingDir.indexOf(MID) + MID.length);
+  const dirPath = path.resolve(`${rootDir}/api-logs`);
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath);
+  }
+
+  const filePath = path.resolve(`${dirPath}/${uuid()}-response.log`);
+  const contents = `Request:\n${objectStrigified(request)}\n\nResponse:\n${objectStrigified(response)}`;
+  fs.writeFile(filePath, contents, function (err) {
+    if (!err) {
+      console.log(`---API Log: ${filePath}---`);
+    }
+  });
+}

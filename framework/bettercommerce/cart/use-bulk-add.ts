@@ -2,7 +2,7 @@ import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 import qs from 'qs'
 interface Props {
-  basketId?: string
+  basketId: string
   products: any
   cookies?: any
 }
@@ -18,6 +18,7 @@ export default function useBulkAdd() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
+      //console.log(response);
       return response.result
     } catch (error: any) {
       throw new Error(error)
