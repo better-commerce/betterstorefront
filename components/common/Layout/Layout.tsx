@@ -141,7 +141,7 @@ const Layout: FC<Props> = ({
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US', ...rest } = useRouter()
 
-  const sortedData = data.nav.sort(
+  const sortedData = data.nav?.sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
   return (
@@ -160,9 +160,9 @@ const Layout: FC<Props> = ({
           />
         )}
         <Navbar
-          currencies={config.currencies}
+          currencies={config?.currencies}
           config={sortedData}
-          languages={config.languages}
+          languages={config?.languages}
         />
         <main className="fit">{children}</main>
         <Footer config={data.footer} />

@@ -18,7 +18,7 @@ import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
 import analytics from '@components/services/analytics/analytics'
-import setSessionIdCookie from '@components/utils/setSessionId'
+import setSessionIdCookie, { createSession, isValidSession } from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { resetSnippetElements } from "@framework/content/use-content-snippet"
@@ -137,22 +137,31 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   useLayoutEffect(() => {
     DataLayerInstance.setDataLayer()
 
-    if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
-      geoData()
-        .then((response) => {
-          DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
-          DataLayerInstance.setItemInDataLayer('city', response.City)
-          DataLayerInstance.setItemInDataLayer('country', response.Country)
-          setUserLocation(response)
-          setAppIsLoading(false)
-        })
-        .catch((err) => {
-          DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
-        })
+    // If browser session is not yet started.
+    if (!isValidSession()) {
+
+      // Initiate a new browser session.
+      createSession();
+
+      if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
+        geoData()
+          .then((response) => {
+            DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
+            DataLayerInstance.setItemInDataLayer('city', response.City)
+            DataLayerInstance.setItemInDataLayer('country', response.Country)
+            setUserLocation(response)
+            setAppIsLoading(false)
+          })
+          .catch((err) => {
+            DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
+          })
+      } else {
+        DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
+        DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
+        setUserLocation(TEST_GEO_DATA)
+        setAppIsLoading(false)
+      }
     } else {
-      DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
-      DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
-      setUserLocation(TEST_GEO_DATA)
       setAppIsLoading(false)
     }
     let analyticsCb = analytics()
@@ -164,8 +173,6 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       Cookies.remove(SessionIdCookieKey)
     }
   }, [])
-
-  //debugger;
 
   return (
     <>
