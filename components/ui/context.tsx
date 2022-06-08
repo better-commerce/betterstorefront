@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
-import { uuid } from 'uuidv4'
+import { v4 as uuid } from "uuid";
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import { Guid } from '@commerce/types'

@@ -161,7 +161,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               {/* Links */}
               <Tab.Group as="div" className="mt-2">
                 <div className="border-b border-gray-200">
-                  {config.map((item: any, idx: number) => {
+                  {config?.map((item: any, idx: number) => {
                     return (
                       <>
                         {!item.navBlocks.length ? (
@@ -300,7 +300,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               {/* Flyout menus */}
               <Popover.Group className="absolute bottom-0 inset-x-0 sm:static w-full sm:self-stretch sm:block hidden sm:h-16">
                 <div className="border-t h-14 px-4 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-center sm:overflow-visible sm:pb-0">
-                  {config.map((item: any, idx: number) => {
+                  {config?.map((item: any, idx: number) => {
                     return (
                       <Popover key={idx} className="flex" 
                           onMouseEnter={() => setOpenState(idx)}

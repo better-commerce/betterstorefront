@@ -85,6 +85,7 @@ function Cart({ cart }: any) {
     //const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
     const shippingPlans = await getShippingPlans()({ model: model });
     //console.log(JSON.stringify(shippingPlans));
+
     setCartItems({
       ...cart,
       lineItems: mapShippingPlansToItems(shippingPlans, cart.lineItems),

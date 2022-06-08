@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import path from 'path';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from "uuid";
 import Cookies, { CookieAttributes } from 'js-cookie'
 import { FetcherError } from '@commerce/utils/errors'
 
@@ -71,4 +71,4 @@ export const writeFetcherLog = (request: any, response: any) => {
       console.log(`---API Log: ${filePath}---`);
     }
   });
-} 
+}
