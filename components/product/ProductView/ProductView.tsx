@@ -426,6 +426,7 @@ export default function ProductView({
                             {image.image ? (
                               <div className='image-container'>
                                 <Image
+                                  priority
                                   src={`${image.image}` || IMG_PLACEHOLDER}
                                   alt={selectedAttrData.name || selectedAttrData.productName}
                                   className="w-full h-full sm:h-44 object-center object-cover image"                                  
@@ -451,6 +452,7 @@ export default function ProductView({
                     {image.image ? (
                       <div className='image-container'>
                         <Image
+                          priority
                           src={`${image.image}` || IMG_PLACEHOLDER}
                           alt={selectedAttrData.name || selectedAttrData.productName}
                           className="w-full h-full object-center object-cover image rounded-lg"
