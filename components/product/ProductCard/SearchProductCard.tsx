@@ -170,6 +170,7 @@ const SearchProductCard: FC<Props> = ({ product }) => {
           <a href={currentProductData.link}>
             <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
               <div className='image-container'>
+              {product.image !=null &&
                   <Image 
                       src={`${product.image}&h=200` || IMG_PLACEHOLDER}
                       alt={product.name}
@@ -178,7 +179,8 @@ const SearchProductCard: FC<Props> = ({ product }) => {
                       layout='fill' 
                       sizes='50vw'
                       className='w-full sm:h-72 h-48 object-center object-cover image'>
-                  </Image>
+                  </Image>                  
+                }
               </div>
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
