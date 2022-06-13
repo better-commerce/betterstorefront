@@ -92,8 +92,8 @@ export default function AttributesHandler({
       Object.keys(originalAttributes).findIndex(
         (i: string) => i === option.fieldCode
       ) -
-        Object.keys(attrCombination).length ===
-        0 || Object.keys(attrCombination).includes(option.fieldCode)
+      Object.keys(attrCombination).length ===
+      0 || Object.keys(attrCombination).includes(option.fieldCode)
 
     const isLastItem = Object.keys(attrCombination).pop() === option.fieldCode
     if (isInOrder) {
@@ -119,7 +119,7 @@ export default function AttributesHandler({
       } else {
         return option.fieldValues
       }
-    } else  {
+    } else {
       return option.fieldValues
       //return []
     }

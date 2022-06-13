@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
-import { uuid } from 'uuidv4'
+import { v4 as uuid } from "uuid";
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import { Guid } from '@commerce/types'
@@ -399,8 +399,8 @@ export const UIProvider: FC = (props) => {
     (payload: any) => {
       const newCartDataClone = consolidateCartItems(payload);
 
-      //debugger;
       setItem('cartItems', { ...newCartDataClone })
+      
       dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
     },
     [dispatch]
@@ -468,7 +468,7 @@ export const UIProvider: FC = (props) => {
     },
     [dispatch]
   )
-
+  
   const consolidateCartItems = (payload: any) => {
 
     let newCartDataClone: any = { ...payload };

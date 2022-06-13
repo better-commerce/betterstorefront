@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic'
+
 import { FC, Fragment, useState, useRef } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition, Dialog, Tab } from '@headlessui/react'
@@ -8,17 +9,14 @@ import { Logo } from '@components/ui'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui'
-
-const Account = dynamic(() => import('./AccountDropdown'))
-const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
-const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
-
 import axios from 'axios'
 import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 import { MenuIcon, SearchIcon, XIcon } from '@heroicons/react/outline'
-
+const Account = dynamic(() => import('./AccountDropdown'))
+const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
+const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
 import {
   BTN_SIGN_OUT,
   GENERAL_LOGIN,
@@ -163,7 +161,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               {/* Links */}
               <Tab.Group as="div" className="mt-2">
                 <div className="border-b border-gray-200">
-                  {config.map((item: any, idx: number) => {
+                  {config?.map((item: any, idx: number) => {
                     return (
                       <>
                         {!item.navBlocks.length ? (
@@ -302,7 +300,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               {/* Flyout menus */}
               <Popover.Group className="absolute bottom-0 inset-x-0 sm:static w-full sm:self-stretch sm:block hidden sm:h-16">
                 <div className="border-t h-14 px-4 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-center sm:overflow-visible sm:pb-0">
-                  {config.map((item: any, idx: number) => {
+                  {config?.map((item: any, idx: number) => {
                     return (
                       <Popover key={idx} className="flex" 
                           onMouseEnter={() => setOpenState(idx)}
@@ -320,8 +318,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                       openState == idx
                                         ? 'border-indigo-600 text-indigo-600'
                                         : 'border-transparent text-gray-700 hover:text-gray-800',
-                                      'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                    )}
+                                        'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                      )}
                                   >
                                     {item.caption}
                                   </Popover.Button>
@@ -333,7 +331,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                   openState == idx
                                     ? 'border-indigo-600 text-indigo-600'
                                     : 'border-transparent text-gray-700 hover:text-gray-800',
-                                  'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                                 )}
                               >
                                 {item.caption}
