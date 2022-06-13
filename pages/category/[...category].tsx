@@ -3,13 +3,11 @@ import { useReducer, useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-
 //DYNAMINC COMPONENT CALLS
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
-
 import Link from 'next/link'
 import Image from 'next/image'
 import { NextSeo } from 'next-seo'

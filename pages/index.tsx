@@ -7,8 +7,8 @@ import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
-const  ProductSlider  = dynamic(() => import('@components/product/ProductSlider'));
 import { HOMEPAGE_SLUG } from '@components/utils/constants'
+const  ProductSlider  = dynamic(() => import('@components/product/ProductSlider'));
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'

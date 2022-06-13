@@ -4,13 +4,11 @@ import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
-
 //DYNAMINC COMPONENT CALLS
 const ProductGrid = dynamic(() => import('@components/product/Grid'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
-
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -133,12 +131,14 @@ function Search({ query, setEntities, recordEvent }: any) {
       },
     },
     error,
-  } = useSwr(['/api/catalog/products', state], postData)
+  } = useSwr(['/api/catalog/products', state], postData, {
+    revalidateOnFocus: false,
+  })
 
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
-    if (router.query.freeText !== state.freeText) {
+    if (router.query.freeText !== undefined && router.query.freeText !== state.freeText) {
       dispatch({ type: FREE_TEXT, payload: query.freeText })
     }
   }, [router.query.freeText])

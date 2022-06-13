@@ -3,10 +3,8 @@ import { FC } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-
 const AttributeSelector = dynamic(() => import('./AttributeSelector'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
@@ -182,7 +180,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                       sizes='50vw'
                       className='w-full sm:h-72 h-48 object-center object-cover image'>
                   </Image>
-                }
+                } 
               </div>
               {buttonConfig.isPreOrderEnabled && (
                 <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
@@ -194,7 +192,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                   {BTN_NOTIFY_ME}
                 </div>
               )}
-              <span className="sr-only">{product.name}</span>
+                <span className="sr-only">{product.name}</span>
             </div>
           </a>
         </Link>

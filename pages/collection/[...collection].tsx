@@ -4,14 +4,12 @@ import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import Link from 'next/link'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
-
 //DYNAMINC COMPONENT CALLS
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
 const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
-
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'

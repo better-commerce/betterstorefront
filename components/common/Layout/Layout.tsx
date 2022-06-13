@@ -7,7 +7,6 @@ import { useUI } from '@components/ui/context'
 import type { Page } from '@commerce/types/page'
 import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
-
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
 const PaymentMethodView = dynamic(() => import('@components/checkout/PaymentMethodView'))
@@ -15,7 +14,6 @@ const CheckoutSidebarView = dynamic(() => import('@components/checkout/CheckoutS
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
 const SearchWrapper = dynamic(() => import('@components/search/index'))
 const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
-
 import { WishlistSidebarView } from '@components/wishlist'
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
@@ -143,7 +141,7 @@ const Layout: FC<Props> = ({
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US', ...rest } = useRouter()
 
-  const sortedData = data.nav.sort(
+  const sortedData = data.nav?.sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
   return (
@@ -162,9 +160,9 @@ const Layout: FC<Props> = ({
           />
         )}
         <Navbar
-          currencies={config.currencies}
+          currencies={config?.currencies}
           config={sortedData}
-          languages={config.languages}
+          languages={config?.languages}
         />
         <main className="fit">{children}</main>
         <Footer config={data.footer} />
