@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
@@ -400,11 +400,7 @@ export default function ProductView({
       notFound: true,
     }
   }*/
-  const [isZoomed, setIsZoomed] = useState(false)
-
-  const handleImgLoad = useCallback(() => {
-    setIsZoomed(true)
-  }, [])
+  
   const breadcrumbs = product.breadCrumbs?.filter(
     (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
   )
@@ -441,7 +437,6 @@ export default function ProductView({
                                       priority
                                       src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}                             
                                       alt={image.name}
-                                      onClick={handleImgLoad}
                                       className="w-full h-full object-center object-cover image"
                                       layout='responsive'
                                       sizes='320 600 1000'
