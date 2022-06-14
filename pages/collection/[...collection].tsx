@@ -226,7 +226,7 @@ export default function CollectionPage(props: any) {
                        height={460}
                        src={img.url || IMG_PLACEHOLDER}
                        alt={props.name}
-                       className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
+                       className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover"
                      ></Image>
                  </Link>
                </SwiperSlide>
@@ -247,7 +247,7 @@ export default function CollectionPage(props: any) {
           <>
             {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
-            <div className="sm:col-span-3 sm:hidden flex flex-col">
+            <div className="sm:col-span-2 sm:hidden flex flex-col">
               <ProductMobileFilters
                 handleFilters={handleFilters}
                 products={props.products}
@@ -257,14 +257,14 @@ export default function CollectionPage(props: any) {
                 routerSortOption={state.sortBy}
               />
             </div>
-            <div className="sm:col-span-3 sm:block hidden">
+            <div className="sm:col-span-2 sm:block hidden">
               <ProductFilterRight
                 handleFilters={handleFilters}
                 products={props.products}
                 routerFilters={state.filters}
               />
             </div>
-            <div className="sm:col-span-9 ">
+            <div className="sm:col-span-10 ">
               {/* {HIDE FILTER TOP BAR IN MOBILE} */}
 
               <div className="flex-1 sm:block hidden">
