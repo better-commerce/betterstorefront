@@ -8,21 +8,20 @@ import attributesGenerator, {
 } from '@components/utils/attributesGenerator'
 
 const ATTR_COMPONENTS: any = {
-  Dropdown: (props: any) => <Dropdown {...props} />,
   HorizontalList: (props: any) => <InlineList {...props} />,
+  Dropdown: (props: any) => <Dropdown {...props} />,
   undefined: () => null,
 }
 
 const TEMP_MAP: any = {
-  'clothing.size': ATTR_COMPONENTS['Dropdown'],
   'global.colour': ATTR_COMPONENTS['HorizontalList'],
+  'clothing.size': ATTR_COMPONENTS['Dropdown'],  
 }
 
 export default function AttributesHandler({
   product,
   setSelectedAttrData,
   variant,
-  isPreview = false,
 }: any) {
   const { attributes, variantAttributes = [], variantProducts } = product
 
@@ -87,13 +86,15 @@ export default function AttributesHandler({
   //temporary until DisplayTemplate is implemented
   const isCustomAttr = product.variantAttributes?.length > 2
 
+  //product.variantAttributes=product.variantAttributes?.reverse();
+
   const generateOptions = (option: any) => {
     const isInOrder =
       Object.keys(originalAttributes).findIndex(
         (i: string) => i === option.fieldCode
       ) -
-      Object.keys(attrCombination).length ===
-      0 || Object.keys(attrCombination).includes(option.fieldCode)
+        Object.keys(attrCombination).length ===
+        0 || Object.keys(attrCombination).includes(option.fieldCode)
 
     const isLastItem = Object.keys(attrCombination).pop() === option.fieldCode
     if (isInOrder) {
@@ -116,13 +117,8 @@ export default function AttributesHandler({
             }
           })
           .filter((el) => el)
-      } else {
-        return option.fieldValues
-      }
-    } else {
-      return option.fieldValues
-      //return []
-    }
+      } else return option.fieldValues
+    } else return []
   }
 
   const handleAttrCombinations = (key: string, value: any) => {
@@ -162,21 +158,41 @@ export default function AttributesHandler({
   const DefaultComponent: any = () => null
   const stateAttributes: any = attrCombination
 
+  let a = [];
+
+  const KEY_SIZE = "clothing.size";
+  const KEY_COLOR = "global.colour";
+  
+  const tempVariantAttrs = variantAttributes?.map((x: any, index: number) => {
+    return {...x, ...{displayOrder: index + 1}};
+  })
+  const newVariantAttrs = JSON?.parse(JSON?.stringify(tempVariantAttrs))?.map((x: any, index: number) => {
+    if (x.fieldCode === KEY_SIZE || x.fieldCode === KEY_COLOR) {
+      if (x.fieldCode === KEY_SIZE) {
+        x.displayOrder = tempVariantAttrs?.find((x: any) => x.fieldCode === KEY_COLOR)?.displayOrder;
+      } else if (x.fieldCode === KEY_COLOR) {
+        x.displayOrder = tempVariantAttrs?.find((x: any) => x.fieldCode === KEY_SIZE)?.displayOrder;
+      }
+      return x;
+    }
+    return x;
+  });
+  
   return (
     <>
-      {variantAttributes?.map((option: any, idx: number) => {
+      {newVariantAttrs?.sort((first: any, second: any) => { 
+        return (first.displayOrder - second.displayOrder);
+      })?.map((option: any, idx: number) => {
         const optionsToPass = generateOptions(option)
-        const originalAttribute = isPreview 
-          ? product.customAttributes.find((x: any) => x.key === option.fieldCode)?.value ?? ""
-          : isCustomAttr
-            ? stateAttributes[option.fieldCode]
-            : originalAttributes[option.fieldCode]
+        const originalAttribute = isCustomAttr
+          ? stateAttributes[option.fieldCode]
+          : originalAttributes[option.fieldCode]
         const Component =
           ATTR_COMPONENTS[option.inputType] ||
           TEMP_MAP[option.fieldCode] ||
           DefaultComponent
         return (
-          <div key={idx} className="py-3">
+          <div key={idx} className="py-2">
             <Component
               currentAttribute={originalAttribute}
               getStockPerAttribute={getStockPerAttribute}
