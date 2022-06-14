@@ -109,7 +109,7 @@ export async function getStaticProps({
   return {
     props: {
       data: lookbookData,
-      globalSnippets: infra?.snippets,
+      globalSnippets: infra?.snippets ?? [],
       snippets: []
     },
     revalidate: 200,
