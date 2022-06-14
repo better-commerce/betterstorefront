@@ -35,7 +35,7 @@ export async function getStaticProps({
       brands,
       pages,
       slugs,
-      globalSnippets: infra?.snippets,
+      globalSnippets: infra?.snippets ?? [],
       snippets: slugs?.snippets
     },
     revalidate: 60,

@@ -21,7 +21,7 @@ export async function getStaticProps({
     props: {
       data: product,
       slug: params!.slug[0],
-      globalSnippets: infra?.snippets,
+      globalSnippets: infra?.snippets ?? [],
       snippets: product?.snippets ?? []
     },
     revalidate: 200,
