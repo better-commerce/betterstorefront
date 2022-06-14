@@ -1,3 +1,5 @@
+import { PROMOTIONS_API_VERSION } from "@framework/utils/constants"
+
 //BETTERCOMMERCE ENDPOINTS
 export const HOMEPAGE_SLUG = `/`
 export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
@@ -19,6 +21,7 @@ export const NEXT_SEARCH_ADVANCED_ENDPOINT =
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
 export const PRODUCT_PREVIEW_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/preview`
 export const BASKET_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket`
+export const PROMOTIONS_ENDPOINT = `/api/${PROMOTIONS_API_VERSION}/commerce/basket`
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
 export const AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/authenticate`
 export const CUSTOMER_BASE_API = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/`
