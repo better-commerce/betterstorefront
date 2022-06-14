@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useState, useEffect, useLayoutEffect } from 'react'
 import { SearchIcon } from '@heroicons/react/outline'
 import axios from 'axios'
@@ -9,7 +10,7 @@ import { useRouter } from 'next/router'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
-import { BTN_SEARCH } from '@components/utils/textVariables'
+import { BTN_SEARCH, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 export default function Search({ closeWrapper = () => {}, keywords }: any) {
   const Router = useRouter()
@@ -118,11 +119,15 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
                   <Link passHref href={`/${product.slug}`}>
                     <a href={`/${product.slug}`}>
                       <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-full h-64 object-center object-cover"
-                        />
+                        <div className='image-container'>
+                            <Image 
+                              src={`${product.image}&h=200` || IMG_PLACEHOLDER}
+                              alt={product.name}
+                              layout='fill' 
+                              sizes='50vw'
+                              className='w-full sm:h-72 h-48 object-center object-cover image'>
+                            </Image> 
+                        </div>
                       </div>
                     </a>
                   </Link>
