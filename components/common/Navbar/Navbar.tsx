@@ -276,9 +276,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
         </Dialog>
       </Transition.Root>
 
-      <header className="relative bg-white">
-        <nav aria-label="Top" className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="border-b border-gray-200 px-4 pb-0 sm:px-0 sm:pb-0">
+      <header className="relative bg-white shadow">
+        <nav aria-label="Top" className="w-full md:w-4/5 mx-auto px-0 sm:px-0 lg:px-0">
+          <div className="pb-0 sm:px-0 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
               {/* Logo */}
               <button
@@ -317,8 +317,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                     className={classNames(
                                       openState == idx
                                         ? 'border-indigo-600 text-indigo-600'
-                                        : 'border-transparent text-gray-700 hover:text-gray-800',
-                                        'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                        : 'border-transparent text-black hover:text-black',
+                                        'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-md font-medium border-b-2 -mb-px pt-px'
                                       )}
                                   >
                                     {item.caption}
@@ -330,8 +330,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                 className={classNames(
                                   openState == idx
                                     ? 'border-indigo-600 text-indigo-600'
-                                    : 'border-transparent text-gray-700 hover:text-gray-800',
-                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                    : 'border-transparent text-black hover:text-black',
+                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-md font-medium border-b-2 -mb-px pt-px'
                                 )}
                               >
                                 {item.caption}

@@ -9,6 +9,7 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { HeartIcon } from '@heroicons/react/outline'
 import {
   ALERT_SUCCESS_WISHLIST_MESSAGE,
   BTN_ADD_TO_WISHLIST,
@@ -18,6 +19,7 @@ import {
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+
 
 interface Props {
   product: any
@@ -161,94 +163,90 @@ const ProductCard: FC<Props> = ({ product }) => {
   const buttonConfig = buttonTitle()
 
   return (
-    <div className="border-b border-r border-gray-200">
-      <div key={product.id} className="group relative p-2 sm:p-6">
-        <Link
-          passHref
-          href={`/${currentProductData.link}`}
-          key={'data-product' + currentProductData.link}
-        >
-          <a href={currentProductData.link}>
-            <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-              <div className='image-container'>
-                {product.image !=null &&
-                  <Image
-                      src={generateUri(product.image, "h=400&fm=webp") || IMG_PLACEHOLDER} 
-                      alt={product.name}
-                      onMouseEnter={() => handleHover('enter')}
-                      onMouseLeave={() => handleHover('leave')}
-                      layout='fill'
-                      sizes='50vw'
-                      className='w-full sm:h-72 h-48 object-center object-cover image'>
-                  </Image>
-                } 
+    <div className="border-gray-200">
+    <div key={product.id} className="relative p-2 sm:p-3">          
+      <Link
+        passHref
+        href={`/${currentProductData.link}`}
+        key={'data-product' + currentProductData.link}
+      >
+        <a href={currentProductData.link}>
+          <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 hover:opacity-75">
+              <Image
+                priority
+                src={generateUri(currentProductData.image, "h=400&fm=webp") || IMG_PLACEHOLDER} 
+                alt={product.name}
+                onMouseEnter={() => handleHover('enter')}
+                onMouseLeave={() => handleHover('leave')}
+                className="w-full sm:h-full h-full object-center object-cover"
+                layout='responsive'
+                width={400}
+                height={600}
+              ></Image> 
+            {buttonConfig.isPreOrderEnabled && (
+              <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
+                {BTN_PRE_ORDER}
               </div>
-              {buttonConfig.isPreOrderEnabled && (
-                <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
-                  {BTN_PRE_ORDER}
-                </div>
-              )}
-              {buttonConfig.isNotifyMeEnabled && (
-                <div className="bg-red-700 text-white absolute py-1 px-1 rounded-sm top-2">
-                  {BTN_NOTIFY_ME}
-                </div>
-              )}
-                <span className="sr-only">{product.name}</span>
-            </div>
-          </a>
-        </Link>
-
-        <div className="pt-4 pb-2 text-left grid sm:grid-cols-12 grid-cols-1">
-          <div className='sm:col-span-8'>
-            <h3 className="sm:min-h-50px sm:text-sm text-xs font-medium text-gray-900 line-clip-2 text-center sm:text-left">
-              <Link href={`/${currentProductData.link}`}>
-                <a href={`/${currentProductData.link}`}>{product.name}</a>
-              </Link>
-            </h3>
-          </div>
-          <div className='sm:col-span-4'>
-            <p className="font-bold text-gray-900 sm:text-right text-center">
-              {product?.price?.formatted?.withTax}
-            </p>
-          </div>
-        </div>
-        <div className='grid grid-cols-1 align-center text-center'>
-          <div>
-            {hasColorVariation ? (
-              <AttributeSelector
-                attributes={product.variantProductsAttributeMinimal}
-                onChange={handleVariableProduct}
-                link={currentProductData.link}
-              />
-            ) : (
-              <div className="sm:h-10 sm:w-10 h-5 w-5 sm:mr-2 mr-1 mt-2 inline-block" />
             )}
-            <div className="flex flex-col">
-              <Button
-                className="mt-2"
-                title={buttonConfig.title}
-                action={buttonConfig.action}
-                type="button"
-                buttonType={buttonConfig.buttonType || 'cart'}
+            {buttonConfig.isNotifyMeEnabled && (
+              <div className="bg-red-300 text-white absolute py-1 px-1 rounded-sm top-2">
+                {BTN_NOTIFY_ME}
+              </div>
+            )}
+            {isInWishList ? (
+              <span className="text-gray-900">
+                {ALERT_SUCCESS_WISHLIST_MESSAGE}
+              </span>
+            ) : (
+
+              <button
+                  className="absolute right-2 bottom-0 z-99 add-wishlist"
+                  onClick={handleWishList}
+              >
+                  <HeartIcon
+                      className="flex-shrink-0 h-8 w-8 z-50 text-gray-800 hover:text-gray-500 rounded-3xl p-1 opacity-80"
+                      aria-hidden="true"
               />
-              {isInWishList ? (
-                <span className="text-gray-900">
-                  {ALERT_SUCCESS_WISHLIST_MESSAGE}
-                </span>
-              ) : (
-                <Button
-                  className="mt-2"
-                  action={handleWishList}
-                  buttonType="wishlist"
-                  colorScheme={WISHLIST_BUTTON_COLOR_SCHEME}
-                  title={BTN_ADD_TO_WISHLIST}
-                />
-              )}
-            </div>
+                  <span className="ml-2 text-sm font-medium text-gray-700 hover:text-red-800"></span>
+                  <span className="sr-only">f</span>
+              </button>            
+            )}   
           </div>
+          
+        </a>
+      </Link>
+
+      <div className="pt-0 text-left">
+        {hasColorVariation ? (
+          <AttributeSelector
+            attributes={product.variantProductsAttributeMinimal}
+            onChange={handleVariableProduct}
+            link={currentProductData.link}
+          />
+        ) : (
+          <div className="sm:h-1 sm:w-1 h-1 w-1 sm:mr-2 mr-1 mt-2 inline-block" />
+        )}
+      
+        <h3 className="sm:text-sm font-normal text-gray-700 truncate">
+          <Link href={`/${currentProductData.link}`}>
+            <a href={`/${currentProductData.link}`}>{product.name}</a>
+          </Link>
+        </h3>
+        <p className="sm:mt-1 mt-1 font-bold text-md text-gray-900">
+          {product?.price?.formatted?.withTax}
+        </p>        
+        <div className="flex flex-col">
+          <Button
+            className="mt-2 hidden"
+            title={buttonConfig.title}
+            action={buttonConfig.action}
+            type="button"
+            buttonType={buttonConfig.buttonType || 'cart'}
+          />            
         </div>
       </div>
     </div>
+  </div>
   )
 }
 

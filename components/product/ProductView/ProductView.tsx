@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
@@ -35,7 +35,11 @@ import {
   PRICEMATCH_ADDITIONAL_DETAILS,
   PRICEMATCH_BEST_PRICE,
   PRICEMATCH_SEEN_IT_CHEAPER,
+  PRODUCT_AVAILABILITY,
   PRODUCT_INFORMATION,
+  PRODUCT_IN_STOCK,
+  PRODUCT_OUT_OF_STOCK,
+  SLUG_TYPE_MANUFACTURER,
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
@@ -396,98 +400,88 @@ export default function ProductView({
       notFound: true,
     }
   }*/
+  const [isZoomed, setIsZoomed] = useState(false)
 
+  const handleImgLoad = useCallback(() => {
+    setIsZoomed(true)
+  }, [])
+  const breadcrumbs = product.breadCrumbs?.filter(
+    (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
+  )
   return (
-    <div className="bg-white page-container">
+    <div className="bg-white page-container md:w-4/5 mx-auto">
       {/* Mobile menu */}
-      <div className="max-w-7xl mx-auto pt-2 px-2 sm:pt-6 sm:px-6 lg:px-8">
-        {product.breadCrumbs && (
-          <BreadCrumbs items={product.breadCrumbs} currentProduct={product} />
+      <div className="pt-2 sm:pt-6 sm:px-0 px-4">
+        {breadcrumbs && (
+          <BreadCrumbs items={breadcrumbs} currentProduct={product} />
         )}
       </div>
-      <main className="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto lg:max-w-none">
+      <main className="sm:pt-8">
+        <div className="lg:max-w-none">
           {/* Product */}
-          <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start">
             {/* Image gallery */}
-            <Tab.Group as="div" className="flex flex-col-reverse min-mobile-pdp">
+            <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp">
               {/* Image selector */}
-              <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
-                <Tab.List className="grid grid-cols-4 gap-6">
-                  {content?.map((image: any, idx) => (
-                    <Tab
-                      key={`${idx}-tab`}
-                      className="relative h-24 sm:h-44 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
-                      aria-label={selectedAttrData.name || selectedAttrData.productName}
-                    >
-                      <span className="sr-only">{image.name}</span>
-                          <span className="rounded-md">
-                            {image.image ? (
-                              <div className='image-container'>
-                                <Image
-                                  priority
-                                  src={generateUri(image.image, "h=200&fm=webp") || IMG_PLACEHOLDER}      
-                                  alt={image.name}
-                                  className="w-full h-full sm:h-44 rounded-md object-center object-cover"                                  
-                                  layout="fill"
-                                ></Image>
-                              </div>
-                            ) : (
-                              <PlayIcon className="h-full w-full object-center object-cover" />
-                            )}
-                          </span>                     
-                      <span className="sr-only">{selectedAttrData.name || selectedAttrData.productName}</span>
-                    </Tab>
-                  ))}
-                </Tab.List>
+              <div className="grid sm:grid-cols-12 grid-cols-1 sm:gap-x-8">
+                <div className='col-span-12'>
+                  <div className="hidden w-full max-w-2xl mx-auto sm:block lg:max-w-none">
+                    <Tab.List className="grid grid-cols-2 gap-6">
+                      {content?.map((image: any, idx) => (
+                        <Tab
+                          key={`${idx}-tab`}
+                        >
+                          {() => (
+                            <>
+                              <span className="sr-only">{image.name}</span>
+                              <span className="relative">
+                                {image.image ? (
+                                  <div className='image-container'>
+                                    <Image
+                                      priority
+                                      src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}                             
+                                      alt={image.name}
+                                      onClick={handleImgLoad}
+                                      className="w-full h-full object-center object-cover image"
+                                      layout='responsive'
+                                      sizes='320 600 1000'
+                                      width={600} height={1000}
+                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}   
+                                    />
+                                  </div>
+                                ) : (
+                                  <PlayIcon className="h-full w-full object-center object-cover" />
+                                )}
+                              </span>
+                            </>
+                          )}
+                        </Tab>
+                      ))}
+                    </Tab.List>
+                  </div>
+                </div>
+                
               </div>
-
-              <Tab.Panels className="w-full sm:min-h-fit aspect-w-1 aspect-h-1 p-3 sm:p-0 min-mobile-pdp">
-                {content?.map((image: any) => (
-                  <Tab.Panel key={image.name + 'tab-panel'}>
-                    {image.image ? (
-                      <div className='image-container'>
-                        <Image
-                          priority
-                          src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}      
-                          alt={selectedAttrData.name || selectedAttrData.productName}
-                          className="w-full h-full object-center object-cover image rounded-lg"
-                          layout="fill"
-                          sizes="20vw"
-                        ></Image>
-                      </div>
-                    ) : (
-                      <iframe
-                        width="560"
-                        height="315"
-                        src={image.url}
-                        title={YOUTUBE_VIDEO_PLAYER}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    )}
-                  </Tab.Panel>
-                ))}
-              </Tab.Panels>
             </Tab.Group>
 
             {/* Product info */}
-            <div className="sm:mt-10 mt-2 px-4 sm:px-0 sm:mt-16 lg:mt-0">
-              <h1 className="sm:text-3xl text-xl font-bold sm:font-extrabold tracking-tight text-gray-900">
+            <div className="sm:mt-10 mt-2 px-4 sm:px-0 sm:mt-16 lg:mt-0 lg:col-span-5">
+              <h3 className="sm:text-md text-sm uppercase font-semibold sm:font-bold tracking-tight text-gray-700 mb-2">
+                {selectedAttrData.brand}
+              </h3>
+              <h1 className="sm:text-2xl text-lg font-normal tracking-tight text-black">
                 {selectedAttrData.name || selectedAttrData.productName}
               </h1>
-
-              <p className="text-gray-500 sm:text-md text-sm mt-2 sm:mt-0">
-                {GENERAL_REFERENCE}: {selectedAttrData.stockCode}
+              <p className="text-gray-500 sm:text-md text-sm mt-3 sm:mt-2 uppercase">
+                <strong>{GENERAL_REFERENCE}:</strong> {selectedAttrData.stockCode}
               </p>
-              <div className="mt-3">
+              <div className="mt-2">
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
-                {isPreview || updatedProduct ? (
-                  <p className="sm:text-3xl text-2xl font-bold sm:font-medium text-gray-900">
+                {updatedProduct ? (
+                  <p className="sm:text-3xl text-2xl font-medium sm:font-semibold text-gray-900">
                     {selectedAttrData.price?.formatted?.withTax}
                     {selectedAttrData.listPrice?.raw.tax > 0 ? (
-                      <span className="px-5 text-sm line-through text-gray-500">
+                      <span className="px-2 text-sm line-through text-red-400">
                         {GENERAL_PRICE_LABEL_RRP}{' '}
                         {product.listPrice.formatted.withTax}
                       </span>
@@ -503,19 +497,20 @@ export default function ProductView({
                 <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
                 <div className="flex items-center xs:flex-col">
                   <div className="flex items-center xs:text-center align-center">
-                    {[0, 1, 2, 3, 4].map((rating) => (
-                      <StarIcon
+                    
+                    {[0, 1, 2, 3, 4].map((rating) => (                     
+                    <StarIcon
                         key={rating}
                         className={classNames(
                           product.rating > rating
-                            ? 'text-indigo-500'
-                            : 'text-gray-300',
-                          'h-5 w-5 flex-shrink-0'
+                            ? 'text-yellow-600 h-5 w-5'
+                            : 'text-white h-1 w-1',
+                          'flex-shrink-0'
                         )}
                         aria-hidden="true"
-                      />
-                    ))}
-                  </div>
+                      />                  
+                    ))}                  
+                  </div>                  
                   <p className="sr-only">
                     {product.rating} {GENERAL_REVIEW_OUT_OF_FIVE}
                   </p>
@@ -526,71 +521,69 @@ export default function ProductView({
                   product={product}
                   variant={selectedAttrData}
                   setSelectedAttrData={setSelectedAttrData}
-                  isPreview={isPreview}
                 />
               </div>
-              <p
-                className="text-gray-900 sm:text-md text-sm cursor-pointer hover:underline"
-                onClick={() => showPriceMatchModal(true)}
-              >
-                <span className="font-bold">{PRICEMATCH_SEEN_IT_CHEAPER}</span>
-                <span>
-                  {''} {PRICEMATCH_BEST_PRICE}
-                </span>
-              </p>
-
-              <section
-                aria-labelledby="details-heading"
-                className="sm:mt-12 mt-4"
-              >
-                <h2 id="details-heading" className="sr-only">
-                  {PRICEMATCH_ADDITIONAL_DETAILS}
-                </h2>
-                <ProductDetails
-                  product={product}
-                  description={
-                    selectedAttrData.description || product.description
-                  }
-                />
-                {updatedProduct ? (
-                  <>
-                    <div className="sm:mt-10 mt-6 flex sm:flex-col1">
-                      <Button
-                        title={buttonConfig.title}
-                        action={buttonConfig.action}
-                        buttonType={buttonConfig.type || 'cart'}
-                      />
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!isInWishList) {
-                            handleWishList()
-                          }
-                        }}
-                        className="ml-4 py-3 px-10 rounded-md flex items-center justify-center text-gray-400 hover:bg-red-50 border border-white hover:border-red-300 hover:text-red-500"
-                      >
-                        {isInWishList ? (
-                          <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
-                        ) : (
-                          <HeartIcon className="h-6 w-6 flex-shrink-0" />
-                        )}
-                        <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
-                      </button>
-                    </div>
-                    {isEngravingAvailable && (
-                      <button
-                      className="max-w-xs flex-1 mt-5 bg-gray-900 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                      onClick={() => showEngravingModal(true)}
-                      >
-                       {GENERAL_ENGRAVING}
-                      </button>
+              <h4 className="text-sm uppercase font-bold sm:font-semibold tracking-tight text-black my-4">
+                {PRODUCT_AVAILABILITY}:{' '} 
+                {product.currentStock > 0 ? (
+                  <span>
+                    {PRODUCT_IN_STOCK}
+                  </span>
+                ):(
+                  <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
+                )}               
+              </h4>
+              {updatedProduct ? (
+                <>
+                  <div className="sm:mt-8 mt-6 flex sm:flex-col1">
+                    <Button
+                      title={buttonConfig.title}
+                      action={buttonConfig.action}
+                      buttonType={buttonConfig.type || 'cart'}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!isInWishList) {
+                          handleWishList()
+                        }
+                      }}
+                      className="ml-4 py-3 px-4 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-pink sm:px-20 hover:border-pink"
+                    >
+                    {isInWishList ? (
+                      <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
+                    ) : (
+                      <HeartIcon className="h-6 w-6 flex-shrink-0" />
                     )}
-                  </>
-                ) : null}
-                <div className="border-t divide-y divide-gray-200 sm:mt-10 mt-6">
-                  <p className="text-gray-900 text-lg">
-                    {selectedAttrData.currentStock > 0
+                      <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
+                    </button>
+                  </div>
+                  {isEngravingAvailable && (
+                    <button
+                      className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                      onClick={() => showEngravingModal(true)}
+                    >
+                      <span className="font-bold">{GENERAL_ENGRAVING}</span>
+                    </button>
+                  )}
+                </>
+              ) : null}
+            <section
+              aria-labelledby="details-heading"
+              className="sm:mt-6 mt-4"
+            >
+              <h2 id="details-heading" className="sr-only">
+                {PRICEMATCH_ADDITIONAL_DETAILS}
+              </h2>
+              <ProductDetails
+                product={product}
+                description={
+                  product.description || product.shortDescription
+                }
+              />              
+              <div className="sm:mt-10 mt-6">
+                <p className="text-gray-900 text-lg">
+                  {selectedAttrData.currentStock > 0
                       ? product.deliveryMessage
                       : product.stockAvailabilityMessage}
                   </p>

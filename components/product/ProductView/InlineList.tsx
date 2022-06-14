@@ -16,7 +16,7 @@ export default function InlineList({
 
   return (
     <>
-      <h3 className="text-sm text-gray-800 font-medium text-left">{label}</h3>
+      <h3 className="text-md text-black font-bold text-left uppercase">{label}</h3>
       <RadioGroup value={'ring-gray-700'} onChange={() => {}} className="mt-2">
         <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
         <div className="flex items-center space-x-3">
@@ -31,7 +31,7 @@ export default function InlineList({
                   classNames(
                     active && checked ? 'ring ring-offset-1' : '',
                     !active && checked ? 'ring-2' : '',
-                    '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
+                    '-m-0.5 relative p-0.5 rounded-full flex items-center mt-1 justify-center cursor-pointer focus:outline-none'
                   )
                 }
               >
@@ -44,7 +44,7 @@ export default function InlineList({
                     onClick={() => handleChange(item.fieldvalue)}
                     className={classNames(
                       item.fieldvalue,
-                      'h-8 w-8 border border-black border-opacity-10 rounded-full'
+                      'h-4 w-4 border shadow-md drop-shadow-md border-black border-opacity-10 rounded-full'
                     )}
                   />
                 </Link>
