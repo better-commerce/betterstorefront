@@ -454,8 +454,7 @@ export default function ProductView({
                       ))}
                     </Tab.List>
                   </div>
-                </div>
-                
+                </div>                
               </div>
             </Tab.Group>
 
