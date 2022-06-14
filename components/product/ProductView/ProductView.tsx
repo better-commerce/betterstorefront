@@ -39,6 +39,7 @@ import {
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
+import { generateUri } from '@commerce/utils/uri-util'
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
 const  AttributesHandler  = dynamic(() => import('./AttributesHandler'));
@@ -453,7 +454,7 @@ export default function ProductView({
                       <div className='image-container'>
                         <Image
                           priority
-                          src={`${image.image}` || IMG_PLACEHOLDER}
+                          src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}      
                           alt={selectedAttrData.name || selectedAttrData.productName}
                           className="w-full h-full object-center object-cover image rounded-lg"
                           layout="fill"

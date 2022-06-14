@@ -17,6 +17,7 @@ import {
   GENERAL_ADD_TO_BASKET,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 interface Props {
   product: any
 }
@@ -172,7 +173,7 @@ const SearchProductCard: FC<Props> = ({ product }) => {
               <div className='image-container'>
               {product.image !=null &&
                   <Image 
-                      src={`${product.image}&h=200` || IMG_PLACEHOLDER}
+                      src={generateUri(currentProductData.image, "h=400&fm=webp") || IMG_PLACEHOLDER} 
                       alt={product.name}
                       onMouseEnter={() => handleHover('enter')}
                       onMouseLeave={() => handleHover('leave')}
