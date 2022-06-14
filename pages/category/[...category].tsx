@@ -290,7 +290,7 @@ function CategoryPage({ category, products }: any) {
             <BreadCrumbs items={category.breadCrumbs} currentProduct={category} />
           )}
         </div>     
-        <div className="sm:px-7 flex justify-center items-center w-full">
+        <div className="sm:px-0 flex justify-center items-center w-full">
           {
             category && category.images && category.images.length ? (
               <Swiper navigation={true} loop={true} className="mySwiper sm:mt-4 mt-0">
@@ -304,7 +304,7 @@ function CategoryPage({ category, products }: any) {
                           height={460}
                           src={image.url || IMG_PLACEHOLDER}
                           alt={category.name}
-                          className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
+                          className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover"
                         ></Image>
                       </Link>
                     </SwiperSlide>
@@ -317,7 +317,7 @@ function CategoryPage({ category, products }: any) {
           }
         </div>
         
-        <div className="text-left sm:pt-1 sm:pb-2 pb-2 pt-3 px-3 sm:px-0">
+        <div className="text-left sm:pt-1 sm:pb-6 pb-4 pt-3 px-3 sm:px-0">
           <h1 className="sm:text-xl text-xl font-semibold tracking-tight text-black">
             {category.name} <span className='font-normal text-gray-500 text-sm'>{' -'} {products.total} {' '} {RESULTS}</span>
           </h1>

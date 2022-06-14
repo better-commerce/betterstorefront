@@ -15,15 +15,15 @@ export default function FiltersRightOpen({
   return (
     <div className="bg-transparent">
       {/* Mobile filter dialog */}
-      <div className="ml-auto relative max-w-xs w-full h-full bg-white border-r py-0 pb-6 flex flex-col overflow-y-auto">
-        <div className="px-0 flex items-center justify-between">
+      <div className="ml-auto relative max-w-xs w-full h-full bg-white border-r flex flex-col overflow-y-auto">
+        <div className="px-0 pt-2 flex items-center justify-between">
           <h2 className="text-lg font-medium text-gray-900">
             {GENERAL_FILTER_TITLE}
           </h2>
         </div>
 
         {/* Filters */}
-        <form className="mt-4">
+        <form className="mt-2">
           {products.filters?.map((section: any) => (
             <div
               key={section.name}
