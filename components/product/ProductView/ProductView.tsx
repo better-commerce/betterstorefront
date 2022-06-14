@@ -420,34 +420,29 @@ export default function ProductView({
                       className="relative h-24 sm:h-44 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
                       aria-label={selectedAttrData.name || selectedAttrData.productName}
                     >
-                      {() => (
-                        <>
-                          <span className="sr-only">{image.name}</span>
-                          <span className="absolute inset-0 rounded-md overflow-hidden">
+                      <span className="sr-only">{image.name}</span>
+                          <span className="rounded-md">
                             {image.image ? (
                               <div className='image-container'>
                                 <Image
                                   priority
-                                  src={`${image.image}` || IMG_PLACEHOLDER}
-                                  alt={selectedAttrData.name || selectedAttrData.productName}
-                                  className="w-full h-full sm:h-44 object-center object-cover image"                                  
+                                  src={generateUri(image.image, "h=200&fm=webp") || IMG_PLACEHOLDER}      
+                                  alt={image.name}
+                                  className="w-full h-full sm:h-44 rounded-md object-center object-cover"                                  
                                   layout="fill"
-                                  sizes="20vw"
                                 ></Image>
                               </div>
                             ) : (
                               <PlayIcon className="h-full w-full object-center object-cover" />
                             )}
-                          </span>
-                        </>
-                      )}                      
+                          </span>                     
                       <span className="sr-only">{selectedAttrData.name || selectedAttrData.productName}</span>
                     </Tab>
                   ))}
                 </Tab.List>
               </div>
 
-              <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0 min-mobile-pdp">
+              <Tab.Panels className="w-full sm:min-h-fit aspect-w-1 aspect-h-1 p-3 sm:p-0 min-mobile-pdp">
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
