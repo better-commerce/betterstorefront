@@ -553,7 +553,7 @@ export default function ProductView({
                       className="ml-4 py-3 px-4 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
                     >
                     {isInWishList ? (
-                      <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
+                      <HeartIcon className="h-6 w-6 flex-shrink-0 text-pink" />
                     ) : (
                       <HeartIcon className="h-6 w-6 flex-shrink-0" />
                     )}
