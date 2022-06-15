@@ -94,7 +94,7 @@ const CartSidebarView: FC = () => {
     <Transition.Root show={true} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 overflow-hidden z-999"
+        className="fixed inset-0 overflow-hidden z-9999"
         onClose={handleClose}
       >
         <div className="absolute inset-0 overflow-hidden">
