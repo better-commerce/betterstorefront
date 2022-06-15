@@ -66,17 +66,16 @@ export default function FiltersRightOpen({
                     {BTN_CLEAR_ALL}
                   </button>
                 </div>
-                <div className="pl-6 flex justify-center flex-col items-baseline">
+                <div className="pl-2 grid grid-cols-5">
                   {appliedFilters.map((appliedFilter: any, idx: number) => {
                     return (
                       <div
                         key={`applied-filter-${idx}`}
-                        className="flex justify-center items-center text-gray-600"
+                        className="flex justify-center text-gray-600"
                       >
                         {appliedFilter.name ? (
                           <>
-                            <span>{appliedFilter.name}: </span>
-                            <span className="ml-1">{appliedFilter.Value}</span>
+                           <span className="bg-gray-50 text-gray-600 font-medium text-sm rounded-2xl px-3 border border-gray-200">{appliedFilter.Value}</span>
                           </>
                         ) : null}
                       </div>
