@@ -139,7 +139,7 @@ function Cart({ cart }: any) {
 
   return (
     <div className="bg-white">
-      <main className="w-full sm:w-4/5 mx-auto sm:pt-1 pt-4 sm:pb-16 pb-0 px-4 sm:px-0 lg:px-0">
+      <main className="w-full sm:w-4/5 mx-auto sm:pt-6 pt-6 sm:pb-16 pb-0 px-4 sm:px-0 lg:px-0">
         <h1 className="text-2xl font-semibold tracking-tight text-black sm:text-3xl">
           {GENERAL_SHOPPING_CART}
         </h1>
