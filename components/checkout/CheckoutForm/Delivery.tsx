@@ -190,10 +190,10 @@ export default function Delivery({
   }
 
   return (
-    <div className="py-10 mt-10 border-t border-gray-200">
+    <div className="py-6 mt-0 border border-gray-200 bg-white shadow p-6 rounded-lg">
       {isDeliveryMethodSelected ? (
         <>
-          <h3 className="text-lg font-medium text-gray-900">Delivery method</h3>
+          <h3 className="text-lg font-bold uppercase text-black">Delivery method</h3>
           <ConfirmedGeneralComponent
             onStateChange={toggleDelivery}
             content={content}
@@ -214,7 +214,7 @@ export default function Delivery({
                 <div className="flex">
                   <button
                     onClick={() => setIsSelected(false)}
-                    className="btn text-indigo-500 font-xs"
+                    className="btn text-pink font-xs"
                     type="button"
                   >
                     {GENERAL_EDIT}
@@ -269,7 +269,7 @@ export default function Delivery({
                       className={({ checked, active }) =>
                         classNames(
                           checked ? 'border-transparent' : 'border-gray-300',
-                          active ? 'ring-2 ring-indigo-500' : '',
+                          active ? 'ring-2 ring-black' : '',
                           'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none'
                         )
                       }
@@ -280,7 +280,7 @@ export default function Delivery({
                             <div className="flex flex-col">
                               <RadioGroup.Label
                                 as="span"
-                                className="block text-sm font-medium text-gray-900"
+                                className="block text-md uppercase font-bold text-gray-900"
                               >
                                 {deliveryMethod.title}
                               </RadioGroup.Label>
@@ -300,7 +300,7 @@ export default function Delivery({
                           </div>
                           {checked ? (
                             <CheckCircleIcon
-                              className="h-5 w-5 text-indigo-600"
+                              className="h-5 w-5 text-black"
                               aria-hidden="true"
                             />
                           ) : null}
@@ -308,7 +308,7 @@ export default function Delivery({
                             className={classNames(
                               active ? 'border' : 'border-2',
                               checked
-                                ? 'border-indigo-500'
+                                ? 'border-black'
                                 : 'border-transparent',
                               'absolute -inset-px rounded-lg pointer-events-none'
                             )}
@@ -327,19 +327,19 @@ export default function Delivery({
                     <li
                       onClick={() => handleShippingMethod(item)}
                       className={`${
-                        shippingMethod.id === item.id ? 'border-indigo-600' : ''
-                      }  pointer border-t border py-5 px-5 flex justify-between flex-row`}
+                        shippingMethod.id === item.id ? 'border-black' : ''
+                      }  pointer rounded-md border-2 py-5 px-5 flex justify-between flex-row`}
                     >
                       <div>
-                        <h3 className="font-bold">{item.displayName}</h3>
+                        <h3 className="text-md uppercase font-bold text-gray-900">{item.displayName}</h3>
                         <p className="text-sm py-2">{item.description}</p>
                       </div>
                       <div className="flex flex-row justify-center items-center">
-                        <h3>{item.price.formatted.withTax}</h3>
+                        <h3 className='text-lg uppercase font-bold text-gray-900'>{item.price.formatted.withTax}</h3>
                         {shippingMethod.id === item.id ? (
                           <div className="ml-5">
                             <CheckCircleIcon
-                              className="h-5 w-5 text-indigo-600"
+                              className="h-5 w-5 text-black"
                               aria-hidden="true"
                             />
                           </div>

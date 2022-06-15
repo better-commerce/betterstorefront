@@ -7,7 +7,7 @@ export default function ConfirmedGeneralComponent({
   return (
     <div className="text-gray-900 flex flex-col">
       <div className="flex">
-        <ul className={`text-gray-900 mt-3 sm:flex xs:flex-col`}>
+        <ul className={`text-gray-900 mt-3 sm:flex xs:flex-col grid-cols-1 grid`}>
           {Object.keys(content).map((item: any, idx: number) => {
             return (
               <li key={idx} className="font-normal d-inline font-sm pr-1">
@@ -18,7 +18,7 @@ export default function ConfirmedGeneralComponent({
         </ul>
       </div>
       <div className="flex">
-        <button onClick={onStateChange} className="btn text-indigo-500 font-xs" type="button">
+        <button onClick={onStateChange} className="btn text-pink font-xs" type="button">
           {GENERAL_EDIT}
         </button>
       </div>

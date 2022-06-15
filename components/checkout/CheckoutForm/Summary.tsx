@@ -7,6 +7,7 @@ import {
   GENERAL_CONFIRM_ORDER,
   GENERAL_DISCOUNT,
   GENERAL_ORDER_SUMMARY,
+  GENERAL_PRICE_LABEL_RRP,
   GENERAL_SHIPPING,
   GENERAL_TOTAL,
   ITEMS_IN_YOUR_CART,
@@ -20,90 +21,89 @@ export default function Summary({
   isShippingDisabled,
 }: any) {
   return (
-    <div className="mt-10 lg:mt-0 md:sticky top-0">
-      <h2 className="text-lg font-medium text-gray-900">{GENERAL_ORDER_SUMMARY}</h2>
-
-      <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div className="mt-0 lg:mt-0 md:sticky top-0">
+      <div className="mt-0 bg-white border border-gray-200 rounded-lg shadow-sm">
+        <h2 className="text-lg px-5 uppercase font-bold text-black mb-3 border-b py-4 rounded-t-md bg-gray-200">{GENERAL_ORDER_SUMMARY}</h2>
         <h3 className="sr-only">{ITEMS_IN_YOUR_CART}</h3>
         <ul role="list" className="divide-y divide-gray-200">
           {cart.lineItems?.map((product: any) => (
-            <li key={product.id} className="flex py-6 px-4 sm:px-6">
+            <li key={product.id} className="flex py-3 px-4 sm:px-6">
               <div className="flex-shrink-0">
                 <Image
                   layout='fixed'
                   width={80}
-                  height={80}
+                  height={100}
                   src={`${product.image}`}
                   alt={product.name}
                   className="w-20 rounded-md"
                 ></Image>
-                {/* <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-20 rounded-md"
-                /> */}
               </div>
 
               <div className="ml-6 flex-1 flex flex-col">
                 <div className="flex">
                   <div className="min-w-0 flex-1">
                     <h4 className="text-sm">
-                      <span className="py-2 text-md font-bold text-gray-900 block">
+                      <span className="text-md font-semibold text-black block">
                         {product.brand}
                       </span>
                       <Link href={`/${product.slug}`}>
-                        <a className="font-medium text-gray-700 hover:text-gray-800 block">
+                        <a className="font-normal text-gray-700 hover:text-gray-800 block">
                           {product.name}
                         </a>
                       </Link>
                     </h4>
+                    <p className="mt-1 text-sm font-bold text-black">
+                      {product.price?.formatted?.withTax}
+                        {product.listPrice?.raw.withTax > 0 && product.listPrice?.raw.withTax != product.price?.raw?.withTax ? (
+                          <span className="px-2 text-sm line-through font-normal text-red-400">
+                            {GENERAL_PRICE_LABEL_RRP}{' '}
+                            {product.listPrice.formatted.withTax}
+                          </span>
+                        ) : null}
+                    </p>
                   </div>
-                </div>
-
-                <div className="flex-1 pt-2 flex items-end justify-between">
-                  <p className="mt-1 text-sm font-medium text-gray-900">
-                    {product.price?.formatted?.withTax}
-                  </p>
-                </div>
+                </div>               
               </div>
             </li>
           ))}
         </ul>
-        <dl className="border-t border-gray-200 py-6 px-4 space-y-6 sm:px-6">
+        <div className='sm:p-3 mt-2 border '>
+            <PromotionInput />
+          </div>
+        <dl className="border-t border-gray-200 py-2 px-4 space-y-2 sm:px-6">
           <div className="flex items-center justify-between">
             <dt className="text-sm text-gray-900">
               {' '}
               {SUBTOTAL_INCLUDING_TAX}
             </dt>
-            <dd className="text-sm font-medium text-gray-900">
+            <dd className="text-md font-bold text-black">
               {cart.subTotal?.formatted?.withTax}
             </dd>
           </div>
           {isShippingDisabled ? null : (
             <div className="flex items-center justify-between">
               <dt className="text-sm text-gray-900">{GENERAL_SHIPPING}</dt>
-              <dd className="text-sm font-medium text-gray-900">
+              <dd className="text-md font-bold text-black">
                 {cart.shippingCharge?.formatted?.withTax}
               </dd>
             </div>
           )}
-          <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
+          <div className="pt-2 flex items-center justify-between">
             {cart.promotionsApplied?.length > 0 && (
               <>
                 <dt className="flex items-center text-sm text-indigo-600">
                   <span>{GENERAL_DISCOUNT}</span>
                 </dt>
-                <dd className="text-indigo-600 text-sm font-medium">
+                <dd className="text-indigo-600 text-md font-bold text-black">
                   <p>{cart.discount?.formatted?.withTax}</p>
                 </dd>
               </>
             )}
-          </div>
-          <PromotionInput />
+          </div>          
 
-          <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-            <dt className="font-medium text-gray-900">{GENERAL_TOTAL}</dt>
-            <dd className="font-medium text-gray-900">
+          <div className="border-t pt-3 flex items-center justify-between">
+            <dt className="text-xl font-bold text-black">{GENERAL_TOTAL}</dt>
+            <dd className="text-2xl font-bold text-black">
               {cart.grandTotal?.formatted?.withTax}
             </dd>
           </div>
