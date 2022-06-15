@@ -91,10 +91,10 @@ export default function Summary({
           <div className="pt-2 flex items-center justify-between">
             {cart.promotionsApplied?.length > 0 && (
               <>
-                <dt className="flex items-center text-sm text-indigo-600">
+                <dt className="text-sm text-gray-900">
                   <span>{GENERAL_DISCOUNT}</span>
                 </dt>
-                <dd className="text-indigo-600 text-md font-bold text-black">
+                <dd className="text-md font-bold text-pink">
                   <p>{cart.discount?.formatted?.withTax}</p>
                 </dd>
               </>
