@@ -35,6 +35,7 @@ import {
   SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
 import PaymentWidget from '@components/checkout/PaymentWidget'
+import { AddressType } from '@framework/utils/enums'
 
 const Spinner = () => {
   return (
@@ -231,8 +232,6 @@ export default function CheckoutForm({
 
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
-  const [billingAddressId, setBillingAddressId] = useState<number>(0);
-  const [shippingAddressId, setShippingAddressId] = useState<number>(0);
 
   const handleNewAddress = (values: any, callback: any = () => { }) => {
     const newValues = {
@@ -243,13 +242,20 @@ export default function CheckoutForm({
       countryCode: state.deliveryMethod.twoLetterIsoCode,
     }
 
-    createAddress(newValues)
-      .then((response: any) => {
+    lookupAddressId(newValues).then((addressId: number) => {
+      if (addressId == 0) {
+        createAddress(newValues)
+          .then((response: any) => {
+            callback()
+            fetchAddress()
+            setShippingInformation({ ...newValues, id: response.id })
+          })
+          .catch((error: any) => console.log(error));
+      } else {
         callback()
         fetchAddress()
-        setShippingInformation({ ...newValues, id: response.id })
-      })
-      .catch((error: any) => console.log(error));
+      }
+    }).catch((error: any) => console.log(error));
   }
 
   const toggleDelivery = (payload?: any) =>
@@ -334,127 +340,131 @@ export default function CheckoutForm({
     }
   }
 
-  const setBillingInformation = (payload: any, update: boolean = true, addressId: number = 0, isNewBillingAddress: boolean = false) => {
+  const setBillingInformation = (payload: any, update = true, type = AddressType.BILLING) => {
     const handleAsync = async () => {
-      //debugger;
-      const billingAddrId = isNewBillingAddress
-        ? addressId == -1 ? 0 : (addressId > 0)
-          ? addressId
-          : billingAddressId
-        : (addressId > 0)
-          ? addressId
-          : shippingAddressId;
-      const billingInfoClone = { ...payload, ...{ id: payload.id ?? billingAddrId } }
+      
+      const billingInfoClone = { ...payload }
       //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
-      //const shippingAddrId = state.isSameAddress ? billingAddrId: shippingAddressId;
-      const shippingClone = { ...state.shippingInformation, ...{ id: state?.shippingInformation?.id ?? shippingAddressId } }
+      const shippingClone = { ...state.shippingInformation }
       //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
-      let data = {};
-      if (isNewBillingAddress) {
-        data = {
-          billingAddress: {
-            ...billingInfoClone,
-            country: state.deliveryMethod.name,
-            countryCode: state.deliveryMethod.twoLetterIsoCode,
-            customerId: user.userId,
-            isDefault: false,
-            isDefaultBilling: false,
-            isDefaultDelivery: false,
-          },
-          shippingAddress: {
-            isDefaultBilling: false,
-          },
+      let data;
+      let updateAddress = false;
+      const addresses = await loadAddressIDs();
+
+      if (state.isSameAddress) {
+        const addressId = await lookupAddressId(payload, addresses);
+        updateAddress = (addressId == 0);
+
+        if (updateAddress) {
+          data = {
+            billingAddress: {
+              isDefaultDelivery: false,
+            },
+            shippingAddress: {
+              ...payload,
+              id: addressId,
+              country: state.deliveryMethod.name,
+              countryCode: state.deliveryMethod.twoLetterIsoCode,
+              customerId: user.userId,
+              isDefault: false,
+              isDefaultBilling: false,
+              isDefaultDelivery: false,
+            },
+          };
         }
       } else {
-        data = {
-          billingAddress: {
-            ...billingInfoClone,
-            country: state.deliveryMethod.name,
-            countryCode: state.deliveryMethod.twoLetterIsoCode,
-            customerId: user.userId,
-          },
-          shippingAddress: {
-            ...shippingClone,
-            country: state.deliveryMethod.name,
-            countryCode: state.deliveryMethod.twoLetterIsoCode,
-            customerId: user.userId,
-          },
+        // This case is only valid for billing address.
+
+        const addressId = await lookupAddressId(payload, addresses);
+        updateAddress = (addressId == 0);
+
+        if (updateAddress) {
+          data = {
+            billingAddress: {
+              ...payload,
+              id: addressId,
+              country: state.deliveryMethod.name,
+              countryCode: state.deliveryMethod.twoLetterIsoCode,
+              customerId: user.userId,
+              isDefault: false,
+              isDefaultBilling: false,
+              isDefaultDelivery: false,
+            },
+            shippingAddress: {
+              isDefaultBilling: false,
+            },
+          };
         }
       }
 
-
-      try {
-        await axios.post(NEXT_UPDATE_CHECKOUT_ADDRESS, {
-          basketId,
-          model: data,
-        })
-
-        await loadAddressIDs();
-      } catch (error) { }
+      if (updateAddress) {
+        try {
+          await axios.post(NEXT_UPDATE_CHECKOUT_ADDRESS, {
+            basketId,
+            model: data,
+          })
+        } catch (error) { }
+      }
     }
     dispatch({ type: 'SET_BILLING_INFORMATION', payload })
     if (update) handleAsync()
   }
 
   const handleShippingSubmit = (values: any) => {
-    //debugger;
     if (values.isDirty) {
       delete values.isDirty;
     }
     toggleShipping()
     if (state.isSameAddress) {
-      setBillingInformation(values)
+      setBillingInformation(values, true) // For same addresses: 3rd param (AddressType) can be ignored.
       togglePayment(true)
     }
     setShippingInformation(values)
   }
 
   const handleBillingSubmit = (values: any) => {
-    //debugger;
     togglePayment()
-    const addressId = values.isDirty
-      ? (billingAddressId > 0 && shippingAddressId == billingAddressId) ? -1 : billingAddressId
-      : billingAddressId
-
-    if (values.isDirty) {
-      delete values.isDirty;
-    }
-    loadAddressIDs().then((addresses: Array<any>) => {
-      const addrMatches = addresses.filter((x: any, index: number) => {
-        return (index > 0 && x.address1 == values.address1 && x.postCode == values.postCode);
-      });
-      if (addrMatches && addrMatches.length) {
-        const addrId = addrMatches[0].id;
-        setBillingInformation(values, true, addrId, addrId == -1);
-      } else {
-        setBillingInformation(values, true, addressId, addressId == -1);
-      }
-    });
-
+    setBillingInformation(values, true, AddressType.BILLING)
   }
 
   const loadAddressIDs = async (): Promise<Array<any>> => {
-    //debugger;
     const response = await getAddress(user.userId)
-    if (response && response.length) {
-      response.forEach((address: any) => {
-        //const address = response[response.length - 1];
-        if (address && address.id) {
-          if (address.isDefaultDelivery) {
-            //updateAddress("SHIPPING", {id: address.id})
-            setShippingAddressId(address.id);
-          }
-
-          if (address.isDefaultBilling) {
-            //updateAddress("BILLING", {id: address.id})
-            setBillingAddressId(address.id);
-          }
-        }
-      });
-    }
     return response;
   }
+
+  const lookupAddressId = async (addressInfo: any, addresses?: Array<any>) => {
+
+    if (!addresses) {
+      addresses = await loadAddressIDs();
+    }
+
+    const strVal = (val: string): string => {
+      if (val) {
+        return val.trim().toLowerCase();
+      }
+      return "";
+    };
+
+    let addressId = 0;
+    if (addresses && addresses.length) {
+      const lookupAddress = addresses.filter((address: any) => {
+        const titleMatch = (strVal(address.title) == strVal(addressInfo.title));
+        const firstNameMatch = (strVal(address.firstName) == strVal(addressInfo.firstName));
+        const lastNameMatch = (strVal(address.lastName) == strVal(addressInfo.lastName));
+        const address1Match = (strVal(address.address1) == strVal(addressInfo.address1));
+        const address2Match = (strVal(address.address2) == strVal(addressInfo.address2));
+        const cityMatch = (strVal(address.city) == strVal(addressInfo.city));
+        const postCodeMatch = (strVal(address.postCode) == strVal(addressInfo.postCode));
+        const phoneNoMatch = (strVal(address.phoneNo) == strVal(addressInfo.phoneNo));
+
+        return (titleMatch && firstNameMatch && lastNameMatch && address1Match && address2Match && cityMatch && postCodeMatch && phoneNoMatch);
+      });
+      addressId = (lookupAddress && lookupAddress.length) ? lookupAddress[0].id : 0;
+    }
+
+    return addressId;
+  };
 
   useEffect(() => {
     if (!Object.keys(state.shippingInformation).length) {
@@ -483,12 +493,11 @@ export default function CheckoutForm({
   }
 
   const confirmOrder = (method: any) => {
-    //debugger;
     dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
 
-    const billingInfoClone = { ...state.billingInformation, ...{ id: state?.billingInformation?.id ?? billingAddressId } }
+    const billingInfoClone = { ...state.billingInformation }
     //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
-    const shippingClone = { ...state.shippingInformation, ...{ id: state?.shippingInformation?.id ?? shippingAddressId } }
+    const shippingClone = { ...state.shippingInformation }
     //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
     const data = {
@@ -550,6 +559,10 @@ export default function CheckoutForm({
 
     const handleAsync = async () => {
       try {
+        const billingAddrId = await lookupAddressId(data.billingAddress);
+        data.billingAddress.id = billingAddrId;
+        const shippingAddrId = await lookupAddressId(data.shippingAddress);
+        data.shippingAddress.id = shippingAddrId;
         const response: any = await axios.post(NEXT_CONFIRM_ORDER, {
           basketId,
           model: data,
