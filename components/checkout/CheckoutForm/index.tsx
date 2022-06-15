@@ -63,9 +63,6 @@ export default function CheckoutForm({
     setOrderId,
     orderId,
     setBasketId,
-    isGuestUser,
-    guestUserExcludeAddressIDs,
-    setGuestUserExcludeAddressIDs,
   } = useUI()
 
   const isShippingDisabled =
@@ -131,7 +128,6 @@ export default function CheckoutForm({
     const newCart = await associateCart(userId, generatedBasketId)
     setCartItems(newCart.data)
     setOrderId(orderId)
-    setGuestUserExcludeAddressIDs(new Array());
     Router.push('/thank-you')
   }
   function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -340,6 +336,7 @@ export default function CheckoutForm({
 
   const setBillingInformation = (payload: any, update: boolean = true, addressId: number = 0, isNewBillingAddress: boolean = false) => {
     const handleAsync = async () => {
+      //debugger;
       const billingAddrId = isNewBillingAddress
         ? addressId == -1 ? 0 : (addressId > 0)
           ? addressId
@@ -401,6 +398,7 @@ export default function CheckoutForm({
   }
 
   const handleShippingSubmit = (values: any) => {
+    //debugger;
     if (values.isDirty) {
       delete values.isDirty;
     }
@@ -413,6 +411,7 @@ export default function CheckoutForm({
   }
 
   const handleBillingSubmit = (values: any) => {
+    //debugger;
     togglePayment()
     const addressId = values.isDirty
       ? (billingAddressId > 0 && shippingAddressId == billingAddressId) ? -1 : billingAddressId
@@ -436,6 +435,7 @@ export default function CheckoutForm({
   }
 
   const loadAddressIDs = async (): Promise<Array<any>> => {
+    //debugger;
     const response = await getAddress(user.userId)
     if (response && response.length) {
       response.forEach((address: any) => {
@@ -443,22 +443,18 @@ export default function CheckoutForm({
         if (address && address.id) {
           if (address.isDefaultDelivery) {
             //updateAddress("SHIPPING", {id: address.id})
-            setShippingAddressId(sanitizeAddressID(address.id));
+            setShippingAddressId(address.id);
           }
 
           if (address.isDefaultBilling) {
             //updateAddress("BILLING", {id: address.id})
-            setBillingAddressId(sanitizeAddressID(address.id));
+            setBillingAddressId(address.id);
           }
         }
       });
     }
     return response;
   }
-
-  const sanitizeAddressID = (addressId: number): number => {
-    return (isGuestUser && guestUserExcludeAddressIDs.includes(addressId)) ? 0 : addressId;
-  };
 
   useEffect(() => {
     if (!Object.keys(state.shippingInformation).length) {
@@ -487,6 +483,7 @@ export default function CheckoutForm({
   }
 
   const confirmOrder = (method: any) => {
+    //debugger;
     dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
 
     const billingInfoClone = { ...state.billingInformation, ...{ id: state?.billingInformation?.id ?? billingAddressId } }
