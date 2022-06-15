@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import { XIcon as XIconSolid } from '@heroicons/react/solid'
 import { Layout } from '@components/common'
 import { GetServerSideProps } from 'next'
@@ -9,23 +10,27 @@ import Link from 'next/link'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
-import PromotionInput from '../components/cart/PromotionInput'
+const  PromotionInput  = dynamic(() => import('../components/cart/PromotionInput'));
 import { useEffect } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
 import { getShippingPlans } from '@framework/shipping'
 import {
   BTN_CHECKOUT_NOW,
+  BTN_PLACE_ORDER,
   GENERAL_CATALOG,
   GENERAL_DISCOUNT,
   GENERAL_ORDER_SUMMARY,
+  GENERAL_PRICE_LABEL_RRP,
   GENERAL_REMOVE,
   GENERAL_SHIPPING,
   GENERAL_SHOPPING_CART,
   GENERAL_TOTAL,
+  IMG_PLACEHOLDER,
   ITEMS_IN_YOUR_CART,
   SUBTOTAL_INCLUDING_TAX,
 } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
@@ -138,10 +143,10 @@ function Cart({ cart }: any) {
   const isEmpty: boolean = userCart?.lineItems?.length === 0
 
   return (
-    <div className="bg-white">
-      <main className="w-full sm:w-4/5 mx-auto sm:pt-6 pt-6 sm:pb-16 pb-0 px-4 sm:px-0 lg:px-0">
-        <h1 className="text-2xl font-semibold tracking-tight text-black sm:text-3xl">
-          {GENERAL_SHOPPING_CART}
+    <div className="bg-white w-full sm:w-3/5 mx-auto">
+      <main className="sm:pt-6 pt-6 sm:pb-16 pb-0 px-4 sm:px-0 lg:px-0">
+        <h1 className="text-2xl font-semibold tracking-tight text-black sm:text-2xl uppercase relative">
+          {GENERAL_SHOPPING_CART} <span className='font-semibold text-sm text-gray-400 absolute top-2 pl-2'>{'- '}{userCart.lineItems.length} Items added</span>
         </h1>
         {!isEmpty && (
           <form className="relative sm:mt-6 mt-4 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
@@ -152,47 +157,62 @@ function Cart({ cart }: any) {
 
               <ul
                 role="list"
-                className="border-t border-b border-gray-200 divide-y divide-gray-200"
+                className=""
               >
                 {userCart.lineItems?.map((product: any, productIdx: number) => (
-                  <li key={productIdx} className="flex py-4 sm:py-10">
+                  <li key={productIdx} className="flex p-2 sm:p-3 border border-gray-200 mb-2 rounded-md">
                     <div className="flex-shrink-0">
                       <Image
                         layout="fixed"
-                        width={160}
-                        height={160}
-                        src={`${product.image}`}
+                        width={140}
+                        height={180}
+                        src={generateUri(product.image, "h=200&fm=webp") || IMG_PLACEHOLDER} 
                         alt={product.name}
-                        className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48 image"
-                      ></Image>
-                      {/* <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-16 h-16 rounded-md object-center object-cover sm:w-48 sm:h-48"
-                      /> */}
+                        className="w-16 h-20 rounded-sm object-center object-cover sm:w-48 sm:h-48 image"
+                      />                     
                     </div>
                     <div className="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
                       <div className="relative sm:pr-9 pr-6 flex justify-between sm:pr-0 h-full">
                         <div className="flex flex-col justify-between h-full">
                           <div>
                             <div className="flex justify-between flex-col">
-                              <h3 className="sm:py-2 py-0 sm:text-md text-sm font-bold text-gray-900">
+                              <h3 className="sm:py-0 py-0 sm:text-md text-md font-semibold text-black">
                                 {product.brand}
                               </h3>
-                              <h3 className="sm:text-sm text-xs my-2 sm:my-0">
+                              <h3 className="sm:text-md text-md my-2 sm:my-1">
                                 <Link href={`/${product.slug}`}>
                                   <a
                                     href={product.slug}
-                                    className="font-medium text-gray-700 hover:text-gray-800"
+                                    className="font-normal text-gray-700 hover:text-gray-800"
                                   >
                                     {product.name}
                                   </a>
                                 </Link>
                               </h3>
                             </div>
-
-                            <p className="mt-1 text-sm sm:font-medium font-bold text-gray-900">
+                            <div className="mt-2 sm:mt-2 sm:pr-0 pl-0 pr-0">
+                              <div className="border sm:px-4 px-2 text-gray-900 flex flex-row w-2/6">
+                                <MinusSmIcon
+                                  onClick={() => handleItem(product, 'decrease')}
+                                  className="w-4 cursor-pointer"
+                                />
+                                <span className="text-md px-4 sm:py-1  py-1">
+                                  {product.qty}
+                                </span>
+                                <PlusSmIcon
+                                  className="w-4 cursor-pointer"
+                                  onClick={() => handleItem(product, 'increase')}
+                                />
+                              </div>
+                            </div>
+                            <p className="mt-1 text-md sm:font-medium font-bold text-black">
                               {product.price?.formatted?.withTax}
+                              {product.listPrice?.raw.tax > 0 ? (
+                                <span className="px-2 text-sm line-through text-red-400">
+                                  {GENERAL_PRICE_LABEL_RRP}{' '}
+                                  {product.listPrice.formatted.withTax}
+                                </span>
+                              ) : null}
                             </p>
                             {product.children?.map(
                               (child: any, idx: number) => {
@@ -257,22 +277,7 @@ function Cart({ cart }: any) {
                             {product.shippingPlan?.shippingSpeed}
                           </p>
                         </div>
-
-                        <div className="mt-0 sm:mt-0 sm:pr-9 pl-2 pr-0">
-                          <div className="border sm:px-4 px-2 text-gray-900 flex flex-row">
-                            <MinusSmIcon
-                              onClick={() => handleItem(product, 'decrease')}
-                              className="w-4 cursor-pointer"
-                            />
-                            <span className="text-md px-2 sm:py-2 py-1">
-                              {product.qty}
-                            </span>
-                            <PlusSmIcon
-                              className="w-4 cursor-pointer"
-                              onClick={() => handleItem(product, 'increase')}
-                            />
-                          </div>
-                        </div>
+                        
                         <div className="absolute top-0 right-0">
                           <button
                             type="button"
@@ -281,7 +286,7 @@ function Cart({ cart }: any) {
                           >
                             <span className="sr-only">{GENERAL_REMOVE}</span>
                             <XIconSolid
-                              className="sm:h-5 sm:w-5 h-4 w-4 text-red-400 mt-2"
+                              className="sm:h-5 sm:w-5 h-4 w-4 text-black mt-2"
                               aria-hidden="true"
                             />
                           </button>
@@ -300,33 +305,35 @@ function Cart({ cart }: any) {
             {/* Order summary */}
             <section
               aria-labelledby="summary-heading"
-              className="md:sticky top-0 sm:mt-16 mt-4 bg-gray-50 rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5"
+              className="md:sticky top-20 sm:mt-0 mt-4 bg-white border-l rounded-sm px-4 py-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5"
             >
               <h2
                 id="summary-heading"
-                className="text-lg font-medium text-gray-900"
+                className="text-xl font-semibold text-black uppercase"
               >
                 {GENERAL_ORDER_SUMMARY}
               </h2>
-
-              <dl className="mt-6 sm:space-y-4 space-y-2">
+              <div className='sm:p-3 mt-6 border '>
+                <PromotionInput />
+              </div>
+              <dl className="mt-6 sm:space-y-2 space-y-2">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">
                     {SUBTOTAL_INCLUDING_TAX}
                   </dt>
-                  <dd className="text-sm font-medium text-gray-900">
+                  <dd className="text-md font-semibold text-black">
                     {cartItems.subTotal?.formatted?.withTax}
                   </dd>
                 </div>
-                <div className="border-t border-gray-200 sm:pt-4 pt-2 flex items-center justify-between">
+                <div className="sm:pt-1 pt-2 flex items-center justify-between">
                   <dt className="flex items-center text-sm text-gray-600">
                     <span>{GENERAL_SHIPPING}</span>
                   </dt>
-                  <dd className="text-sm font-medium text-gray-900">
+                  <dd className="text-md font-semibold text-black">
                     {cartItems.shippingCharge?.formatted?.withTax}
                   </dd>
                 </div>
-                <div className="border-t border-gray-200 sm:pt-4 pt-2 flex items-center justify-between">
+                <div className="sm:pt-2 pt-2 flex items-center justify-between">
                   {userCart.promotionsApplied?.length > 0 && (
                     <>
                       <dt className="flex items-center text-sm text-indigo-600">
@@ -337,12 +344,11 @@ function Cart({ cart }: any) {
                       </dd>
                     </>
                   )}
-                </div>
-                <PromotionInput />
+                </div>                
 
-                <div className="text-gray-900 border-t border-gray-200 pt-4 flex items-center justify-between">
-                  <dt className="font-medium text-gray-900">{GENERAL_TOTAL}</dt>
-                  <dd className="font-medium text-gray-900">
+                <div className="border-t pt-2 text-gray-900 flex items-center justify-between">
+                  <dt className="font-bold text-lg text-black">{GENERAL_TOTAL}</dt>
+                  <dd className="font-bold text-xl text-black">
                     {cartItems.grandTotal?.formatted?.withTax}
                   </dd>
                 </div>
@@ -354,7 +360,7 @@ function Cart({ cart }: any) {
                     type="submit"
                     className="text-center w-full bg-black border border-transparent rounded-sm uppercase shadow-sm py-3 px-4 font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black"
                   >
-                    {BTN_CHECKOUT_NOW}
+                    {BTN_PLACE_ORDER}
                   </a>
                 </Link>
               </div>

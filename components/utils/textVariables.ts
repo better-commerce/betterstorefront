@@ -289,6 +289,7 @@ export const ERROR_PAGE_NOT_FOUND = 'Not Found'
 export const ERROR_PAGE_NOT_FOUND_MESSAGE =
   "The requested page doesn't exist or you don't have access to it."
 export const BTN_CHECKOUT_NOW = 'Checkout now'
+export const BTN_PLACE_ORDER = 'Place Order'
 export const MESSAGE_NO_ORDER_FOUND = 'No orders found'
 export const MESSAGE_NO_ORDER_FOUND_TEXT =
   'Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.'

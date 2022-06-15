@@ -6,6 +6,7 @@ import attributesGenerator, {
   getAttributesFromSlug,
   productLookup,
 } from '@components/utils/attributesGenerator'
+import { cloneDeep } from 'lodash'
 
 const ATTR_COMPONENTS: any = {
   HorizontalList: (props: any) => <InlineList {...props} />,
@@ -169,8 +170,10 @@ export default function AttributesHandler({
   const tempVariantAttrs = variantAttributes?.map((x: any, index: number) => {
     return { ...x, ...{ displayOrder: index + 1 } };
   });
+
+  //JSON?.parse(JSON?.stringify(tempVariantAttrs))
   const newVariantAttrs = sortAttributes
-    ? JSON?.parse(JSON?.stringify(tempVariantAttrs))?.map((x: any, index: number) => {
+    ? cloneDeep(tempVariantAttrs)?.map((x: any, index: number) => {
       if (x.fieldCode === KEY_SIZE || x.fieldCode === KEY_COLOR) {
         if (x.fieldCode === KEY_SIZE) {
           x.displayOrder = tempVariantAttrs?.find((x: any) => x.fieldCode === KEY_COLOR)?.displayOrder;
