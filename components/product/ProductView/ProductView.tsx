@@ -454,7 +454,7 @@ export default function ProductView({
                       ))}
                     </Tab.List>
                   </div>
-                </div>                
+                </div>
               </div>
             </Tab.Group>
 
@@ -535,6 +535,14 @@ export default function ProductView({
                       action={buttonConfig.action}
                       buttonType={buttonConfig.type || 'cart'}
                     />
+                    {isEngravingAvailable && (
+                    <button
+                      className="ml-4 max-w-xs flex-1 bg-gray-400 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                      onClick={() => showEngravingModal(true)}
+                    >
+                      <span className="font-bold">{GENERAL_ENGRAVING}</span>
+                    </button>
+                  )}
                     <button
                       type="button"
                       onClick={() => {
@@ -542,7 +550,7 @@ export default function ProductView({
                           handleWishList()
                         }
                       }}
-                      className="ml-4 py-3 px-4 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-pink sm:px-20 hover:border-pink"
+                      className="ml-4 py-3 px-4 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
                     >
                     {isInWishList ? (
                       <span>{ALERT_SUCCESS_WISHLIST_MESSAGE}</span>
@@ -551,15 +559,7 @@ export default function ProductView({
                     )}
                       <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
                     </button>
-                  </div>
-                  {isEngravingAvailable && (
-                    <button
-                      className="max-w-xs flex-1 mt-5 bg-gray-400 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                      onClick={() => showEngravingModal(true)}
-                    >
-                      <span className="font-bold">{GENERAL_ENGRAVING}</span>
-                    </button>
-                  )}
+                  </div>                  
                 </>
               ) : null}
             <section
