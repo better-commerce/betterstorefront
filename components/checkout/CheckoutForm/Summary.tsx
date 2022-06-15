@@ -95,7 +95,7 @@ export default function Summary({
                   <span>{GENERAL_DISCOUNT}</span>
                 </dt>
                 <dd className="text-md font-bold text-pink">
-                  <p>{cart.discount?.formatted?.withTax}</p>
+                  <p>{'-'}{cart.discount?.formatted?.withTax}</p>
                 </dd>
               </>
             )}

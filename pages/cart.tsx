@@ -340,7 +340,7 @@ function Cart({ cart }: any) {
                         <span>{GENERAL_DISCOUNT}</span>
                       </dt>
                       <dd className="text-md font-semibold text-pink">
-                        <p>{cartItems.discount?.formatted?.withTax}</p>
+                        <p>{'-'}{cartItems.discount?.formatted?.withTax}</p>
                       </dd>
                     </>
                   )}
