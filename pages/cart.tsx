@@ -139,12 +139,12 @@ function Cart({ cart }: any) {
 
   return (
     <div className="bg-white">
-      <main className="max-w-2xl mx-auto sm:pt-16 pt-6 sm:pb-24 pb-0 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+      <main className="w-full sm:w-4/5 mx-auto sm:pt-1 pt-4 sm:pb-16 pb-0 px-4 sm:px-0 lg:px-0">
+        <h1 className="text-2xl font-semibold tracking-tight text-black sm:text-3xl">
           {GENERAL_SHOPPING_CART}
         </h1>
         {!isEmpty && (
-          <form className="relative sm:mt-12 mt-8 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
+          <form className="relative sm:mt-6 mt-4 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
             <section aria-labelledby="cart-heading" className="lg:col-span-7">
               <h2 id="cart-heading" className="sr-only">
                 {ITEMS_IN_YOUR_CART}
@@ -352,7 +352,7 @@ function Cart({ cart }: any) {
                 <Link href="/checkout">
                   <a
                     type="submit"
-                    className="text-center w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                    className="text-center w-full bg-black border border-transparent rounded-sm uppercase shadow-sm py-3 px-4 font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black"
                   >
                     {BTN_CHECKOUT_NOW}
                   </a>
