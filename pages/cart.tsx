@@ -207,7 +207,7 @@ function Cart({ cart }: any) {
                             </div>
                             <p className="mt-1 text-md sm:font-medium font-bold text-black">
                               {product.price?.formatted?.withTax}
-                              {product.listPrice?.raw.tax > 0 ? (
+                              {product.listPrice?.raw.withTax > 0 && product.listPrice?.raw.withTax != product.price?.raw?.withTax ? (
                                 <span className="px-2 text-sm line-through text-red-400">
                                   {GENERAL_PRICE_LABEL_RRP}{' '}
                                   {product.listPrice.formatted.withTax}
