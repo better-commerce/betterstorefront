@@ -15,7 +15,7 @@ const ATTR_COMPONENTS: any = {
 
 const TEMP_MAP: any = {
   'global.colour': ATTR_COMPONENTS['HorizontalList'],
-  'clothing.size': ATTR_COMPONENTS['Dropdown'],  
+  'clothing.size': ATTR_COMPONENTS['Dropdown'],
 }
 
 export default function AttributesHandler({
@@ -93,8 +93,8 @@ export default function AttributesHandler({
       Object.keys(originalAttributes).findIndex(
         (i: string) => i === option.fieldCode
       ) -
-        Object.keys(attrCombination).length ===
-        0 || Object.keys(attrCombination).includes(option.fieldCode)
+      Object.keys(attrCombination).length ===
+      0 || Object.keys(attrCombination).includes(option.fieldCode)
 
     const isLastItem = Object.keys(attrCombination).pop() === option.fieldCode
     if (isInOrder) {
@@ -162,25 +162,30 @@ export default function AttributesHandler({
 
   const KEY_SIZE = "clothing.size";
   const KEY_COLOR = "global.colour";
-  
+  const KEY_ATTRIBUTES = [KEY_SIZE, KEY_COLOR];
+
+  const matchAttributes = variantAttributes && variantAttributes.length ? variantAttributes.filter((x: any) => KEY_ATTRIBUTES.includes(x.fieldCode)) : false;
+  const sortAttributes = (matchAttributes && matchAttributes.length === KEY_ATTRIBUTES.length);
   const tempVariantAttrs = variantAttributes?.map((x: any, index: number) => {
-    return {...x, ...{displayOrder: index + 1}};
-  })
-  const newVariantAttrs = JSON?.parse(JSON?.stringify(tempVariantAttrs))?.map((x: any, index: number) => {
-    if (x.fieldCode === KEY_SIZE || x.fieldCode === KEY_COLOR) {
-      if (x.fieldCode === KEY_SIZE) {
-        x.displayOrder = tempVariantAttrs?.find((x: any) => x.fieldCode === KEY_COLOR)?.displayOrder;
-      } else if (x.fieldCode === KEY_COLOR) {
-        x.displayOrder = tempVariantAttrs?.find((x: any) => x.fieldCode === KEY_SIZE)?.displayOrder;
+    return { ...x, ...{ displayOrder: index + 1 } };
+  });
+  const newVariantAttrs = sortAttributes
+    ? JSON?.parse(JSON?.stringify(tempVariantAttrs))?.map((x: any, index: number) => {
+      if (x.fieldCode === KEY_SIZE || x.fieldCode === KEY_COLOR) {
+        if (x.fieldCode === KEY_SIZE) {
+          x.displayOrder = tempVariantAttrs?.find((x: any) => x.fieldCode === KEY_COLOR)?.displayOrder;
+        } else if (x.fieldCode === KEY_COLOR) {
+          x.displayOrder = tempVariantAttrs?.find((x: any) => x.fieldCode === KEY_SIZE)?.displayOrder;
+        }
+        return x;
       }
       return x;
-    }
-    return x;
-  });
-  
+    })
+    : tempVariantAttrs;
+
   return (
     <>
-      {newVariantAttrs?.sort((first: any, second: any) => { 
+      {newVariantAttrs?.sort((first: any, second: any) => {
         return (first.displayOrder - second.displayOrder);
       })?.map((option: any, idx: number) => {
         const optionsToPass = generateOptions(option)
