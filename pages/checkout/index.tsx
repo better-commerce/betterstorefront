@@ -15,13 +15,11 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 
 function Checkout({ cart, config, location }: any) {
-  const { user, isGuestUser, basketId, setCartItems, cartItems, setUser, setIsGuestUser, guestUserExcludeAddressIDs, setGuestUserExcludeAddressIDs } = useUI()
+  const { user, basketId, setCartItems, cartItems, setUser, setIsGuestUser } = useUI()
   const [isLoggedIn, setIsLoggedIn] = useState(!!cartItems.userEmail)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
   const [userAddresses, setUserAddresses] = useState([])
-  const { getAddress } = asyncHandler()
-
   const handleGuestMail = (values: any) => {
     const handleAsync = async () => {
       const response = await axios.post(NEXT_GUEST_CHECKOUT, {
@@ -33,17 +31,14 @@ function Checkout({ cart, config, location }: any) {
       setIsLoggedIn(!!response.data.userEmail)
       setUser({ userId: response.data.userId, email: response.data.userEmail })
       setIsGuestUser(true)
-      await saveGuestUserAddresses(response.data.userId);
     }
     handleAsync()
   }
+  const { getAddress } = asyncHandler()
 
   const fetchAddress = async () => {
     try {
       const response: any = await getAddress(cartItems.userId)
-      if (isLoggedIn && isGuestUser) {
-        await saveGuestUserAddresses(cartItems.userId, response);
-      }
       const billingAddress = response.find((item: any) => item.isDefaultBilling)
       const shippingAddress = response.find(
         (item: any) => item.isDefaultDelivery
@@ -55,18 +50,6 @@ function Checkout({ cart, config, location }: any) {
       console.log(error, 'err')
     }
   }
-
-  const saveGuestUserAddresses = async (userId: string, addrResp?: any) => {
-    if (!guestUserExcludeAddressIDs || (guestUserExcludeAddressIDs && guestUserExcludeAddressIDs.length == 0)) {
-      if (!addrResp) {
-        addrResp = await getAddress(userId);
-      }
-
-      if (addrResp && addrResp.length) {
-        setGuestUserExcludeAddressIDs(addrResp.map((x: any) => x.id));
-      }
-    }
-  };
 
   const { CheckoutStarted } = EVENTS_MAP.EVENT_TYPES
 

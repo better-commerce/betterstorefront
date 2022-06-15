@@ -28,8 +28,7 @@ export interface State {
   cartItems: any
   basketId: string
   user: any
-  isGuestUser: boolean
-  guestUserExcludeAddressIDs: Array<number>
+  isGuestUser: boolean,
   showSearchBar: boolean
   appConfig: any
   orderId: string
@@ -50,7 +49,6 @@ const initialState = {
   basketId: basketId(),
   user: getItem('user') || {},
   isGuestUser: getItem('isGuest') || false,
-  guestUserExcludeAddressIDs: getItem('guestExcludeAddressIDs') || [],
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
@@ -115,10 +113,6 @@ type Action =
   | {
     type: 'SET_IS_GUEST_USER'
     payload: boolean
-  }
-  | {
-    type: 'SET_GUEST_USER_EXCLUDE_ADDRESS_IDS'
-    payload: Array<number>
   }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
@@ -261,12 +255,6 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         isGuestUser: action.payload,
-      }
-    }
-    case 'SET_GUEST_USER_EXCLUDE_ADDRESS_IDS': {
-      return {
-        ...state,
-        guestUserExcludeAddressIDs: action.payload,
       }
     }
     case 'REMOVE_USER': {
@@ -446,14 +434,6 @@ export const UIProvider: FC = (props) => {
     [dispatch]
   )
 
-  const setGuestUserExcludeAddressIDs = useCallback(
-    (payload: Array<number>) => {
-      setItem('guestExcludeAddressIDs', payload)
-      dispatch({ type: 'SET_GUEST_USER_EXCLUDE_ADDRESS_IDS', payload })
-    },
-    [dispatch]
-  )
-
   const deleteUser = useCallback(
     (payload: any) => {
       Router.push('/').then(() => {
@@ -600,7 +580,6 @@ export const UIProvider: FC = (props) => {
       setCartItems,
       setUser,
       setIsGuestUser,
-      setGuestUserExcludeAddressIDs,
       deleteUser,
       openCart,
       openWishlist,
