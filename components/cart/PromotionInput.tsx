@@ -50,11 +50,11 @@ export default function PromotionInput() {
               ? cartItems.promotionsApplied.map((promo: any, key: number) => {
                   return (
                     <div className="flex items-center py-2" key={promo.name}>
-                      <span className="text-indigo-500">
-                        {promo.name} {APPLY_PROMOTION_SUCCESS_MESSAGE}
+                      <span className="text-black">
+                        <span className='text-black p-1 rounded-full border bg-gray-50 text-sm px-4 font-bold'>{promo.name}</span> {' '}{APPLY_PROMOTION_SUCCESS_MESSAGE}
                       </span>
                       <TrashIcon
-                        className="ml-5 cursor-pointer text-gray-500 hover:text-indigo-700 max-w-xs h-7"
+                        className="ml-5 cursor-pointer text-red-500 hover:text-red-700 max-w-xs h-5"
                         onClick={() => handleSubmit('remove', promo.promoCode)}
                       />
                     </div>

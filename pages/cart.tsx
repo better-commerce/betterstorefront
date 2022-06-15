@@ -336,10 +336,10 @@ function Cart({ cart }: any) {
                 <div className="sm:pt-2 pt-2 flex items-center justify-between">
                   {userCart.promotionsApplied?.length > 0 && (
                     <>
-                      <dt className="flex items-center text-sm text-indigo-600">
+                      <dt className="flex items-center text-sm text-gray-600">
                         <span>{GENERAL_DISCOUNT}</span>
                       </dt>
-                      <dd className="text-indigo-600 text-sm font-medium">
+                      <dd className="text-md font-semibold text-pink">
                         <p>{cartItems.discount?.formatted?.withTax}</p>
                       </dd>
                     </>
