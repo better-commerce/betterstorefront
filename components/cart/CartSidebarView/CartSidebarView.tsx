@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import cn from 'classnames'
 import Link from 'next/link'
 import { FC } from 'react'
@@ -6,7 +7,7 @@ import { useEffect, useState, Fragment } from 'react'
 import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
-import PromotionInput from '../PromotionInput'
+const PromotionInput = dynamic(() => import('../PromotionInput'))
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import Image from 'next/image'
@@ -326,7 +327,7 @@ const CartSidebarView: FC = () => {
                         <Link href="/cart" passHref>
                           <a
                             onClick={handleClose}
-                            className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                            className="flex justify-center items-center px-6 py-3 border border-transparent rounded-sm uppercase shadow-sm font-medium text-white bg-black hover:bg-gray-900"
                             href="/cart"
                           >
                             {content.GENERAL_CHECKOUT}
@@ -338,7 +339,7 @@ const CartSidebarView: FC = () => {
                           {GENERAL_OR_TEXT}{' '}
                           <button
                             type="button"
-                            className="text-indigo-600 font-medium hover:text-indigo-500"
+                            className="text-black font-medium hover:text-indigo-500"
                             onClick={handleClose}
                           >
                             {GENERAL_CONTINUE_SHOPPING}

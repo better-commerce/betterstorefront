@@ -3,16 +3,16 @@ import { useRouter } from 'next/router'
 //USE THIS AS TEMPLATE
 const content: any = {
   'en-US': {
-    GENERAL_CHECKOUT: 'Checkout en-US',
+    GENERAL_CHECKOUT: 'Checkout',
   },
   es: {
-    GENERAL_CHECKOUT: 'Checkout es',
+    GENERAL_CHECKOUT: 'Checkout',
   },
   'en-GB': {
-    GENERAL_CHECKOUT: 'Checkout en-GB',
+    GENERAL_CHECKOUT: 'Checkout',
   },
   'es-ES': {
-    GENERAL_CHECKOUT: 'Checkout es-ES',
+    GENERAL_CHECKOUT: 'Checkout',
   },
 }
 
