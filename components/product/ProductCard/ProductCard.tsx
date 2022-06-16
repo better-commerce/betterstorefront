@@ -10,6 +10,7 @@ import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import { HeartIcon } from '@heroicons/react/outline'
+import { round } from 'lodash'
 import {
   ALERT_SUCCESS_WISHLIST_MESSAGE,
   BTN_ADD_TO_WISHLIST,
@@ -161,7 +162,8 @@ const ProductCard: FC<Props> = ({ product }) => {
   }
 
   const buttonConfig = buttonTitle()
-
+  const saving  = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
+  const discount  = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
   return (
     <div className="border-gray-200">
     <div key={product.id} className="relative p-2 sm:p-3">          
@@ -234,6 +236,12 @@ const ProductCard: FC<Props> = ({ product }) => {
         </h3>
         <p className="sm:mt-1 mt-1 font-bold text-md text-gray-900">
           {product?.price?.formatted?.withTax}
+          {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax &&
+              <>
+                <span className='px-2 text-sm line-through font-normal text-gray-400'>{product?.listPrice?.formatted?.withTax}</span>
+                <span className='text-red-600 text-sm font-semibold'>{discount}% Off</span>
+              </>
+            }
         </p>        
         <div className="flex flex-col">
           <Button
