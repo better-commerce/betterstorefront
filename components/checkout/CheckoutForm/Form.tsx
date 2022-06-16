@@ -146,14 +146,14 @@ export default function AddressForm({
                       setValues(item)
                       setAddress(item)
                     }}
-                    className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex justify-between items-center ${
-                      item.id === defaultValues.id ? 'border-indigo-600' : ''
+                    className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex items-center ${
+                      item.id === defaultValues.id ? 'border-black' : ''
                     }`}
                   >
                     <div>
                       {item.id === defaultValues.id ? (
                         <CheckCircleIcon
-                          className="h-5 pr-4 text-left align-left text-indigo-600"
+                          className="h-5 pr-4 text-left align-left text-black"
                           aria-hidden="true"
                         />
                       ) : null}
