@@ -10,6 +10,7 @@ import {
   GENERAL_PRICE_LABEL_RRP,
   GENERAL_SHIPPING,
   GENERAL_TOTAL,
+  IMG_PLACEHOLDER,
   ITEMS_IN_YOUR_CART,
   SUBTOTAL_INCLUDING_TAX
 } from '@components/utils/textVariables'
@@ -33,7 +34,7 @@ export default function Summary({
                   layout='fixed'
                   width={80}
                   height={100}
-                  src={`${product.image}`}
+                  src={`${product.image}` || IMG_PLACEHOLDER}
                   alt={product.name}
                   className="w-20 rounded-md"
                 ></Image>

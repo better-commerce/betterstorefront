@@ -14,7 +14,8 @@ import {
   GENERAL_REMOVE,
   GENERAL_ADD_TO_BASKET,
   WISHLIST_SUCCESS_MESSAGE,
-  GENERAL_CONTINUE_SHOPPING
+  GENERAL_CONTINUE_SHOPPING,
+  IMG_PLACEHOLDER
 } from '@components/utils/textVariables'
 
 const WishlistSidebar: FC = () => {
@@ -160,7 +161,7 @@ const WishlistSidebar: FC = () => {
                                   layout='responsive'
                                   width={80}
                                   height={80}
-                                  src={product.image}
+                                  src={product.image || IMG_PLACEHOLDER}
                                   alt={product.name}
                                   className="w-full h-full object-center object-cover"></Image>
                                 {/* <img
