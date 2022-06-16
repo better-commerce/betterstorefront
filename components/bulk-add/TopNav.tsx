@@ -1,5 +1,5 @@
 // Base Imports
-import React, { MouseEventHandler } from "react";
+import React, { memo } from "react";
 
 // Package Imports
 import { DocumentDuplicateIcon } from '@heroicons/react/outline'
@@ -9,7 +9,7 @@ interface ITopNavProps {
     readonly onClick: any;
 }
 
-export const TopNav: React.FC<ITopNavProps> = (props: ITopNavProps) => {
+const TopNav: React.FC<ITopNavProps> = (props: ITopNavProps) => {
 
     const { b2bSettings, onClick } = props;
 
@@ -23,3 +23,5 @@ export const TopNav: React.FC<ITopNavProps> = (props: ITopNavProps) => {
         </div>
     )
 };
+
+export default memo(TopNav);

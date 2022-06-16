@@ -108,6 +108,7 @@ export const WISHLIST_SUB_TITLE = 'Oh-no! Your wishlist is empty.'
 export const WISHLIST_SIDEBAR_MESSAGE =
   'Uh-oh, you don’t have any items in here'
 export const GENERAL_SHOPPING_CART = 'Shopping cart'
+export const GENERAL_BULK_ORDER_PAD = 'Bulk Order'
 export const CLOSE_PANEL = 'Close panel'
 export const SUBTOTAL_INCLUDING_TAX = 'Subtotal (taxes included)'
 export const GENERAL_SUBTOTAL = 'Subtotal'

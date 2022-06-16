@@ -29,7 +29,7 @@ import {
   SELECT_LANGUAGE,
   GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
-import { TopNav as BulkAddTopNav } from '@components/bulk-add/TopNav'
+import BulkAddTopNav from '@components/bulk-add/TopNav'
 import { stringToBoolean } from '@framework/utils'
 
 interface Props {
