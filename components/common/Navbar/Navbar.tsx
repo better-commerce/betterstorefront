@@ -282,7 +282,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               {/* Logo */}
               <button
                 type="button"
-                className="-ml-2 bg-white py-4 pl-2 pr-6 rounded-md text-gray-400 sm:hidden"
+                className="-ml-2 bg-white py-4 pl-2 pr-2 rounded-md text-gray-400 sm:hidden"
                 onClick={() => setOpen(true)}
               >
                 <span className="sr-only">Open menu</span>
@@ -298,7 +298,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
               {/* Flyout menus */}
               <Popover.Group className="absolute bottom-0 inset-x-0 sm:static w-full sm:self-stretch sm:block hidden sm:h-16">
-                <div className="border-t h-16 px-16 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0">
+                <div className="border-t h-16 px-6 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0">
                   {config?.map((item: any, idx: number) => {
                     return (
                       <Popover key={idx} className="flex" 
@@ -430,7 +430,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 {/* account */}
                 <Account title={title} config={accountDropdownConfig} />
                 {/* currency */}
-                {/* <div className="sm:flex hidden">
+                <div className="sm:flex hidden">
                   <CurrencySwitcher
                     config={currencies}
                     title={SELECT_CURRENCY}
@@ -441,7 +441,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                     action={configAction}
                     config={languages}
                   />
-                </div> */}
+                </div>
 
                 {/* Wishlist*/}
 
