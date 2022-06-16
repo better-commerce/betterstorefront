@@ -355,7 +355,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                   />
 
                                   <div className="relative bg-white">
-                                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                    <div className="w-4/5 mx-auto px-4 sm:px-0 lg:px-0">
                                       <div className="grid grid-cols-1 items-start gap-y-10 gap-x-6 pt-10 pb-12 md:grid-cols-1 lg:gap-x-8">
                                         {item.navBlocks.map(
                                           (navBlock: any, navIdx: number) => {
@@ -372,7 +372,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                     <ul
                                                       role="list"
                                                       aria-labelledby="clothing-heading"
-                                                      className="grid grid-cols-4"
+                                                      className="grid grid-cols-5"
                                                     >
                                                       {navBlock.navItems.map(
                                                         (navItem: any) => (
