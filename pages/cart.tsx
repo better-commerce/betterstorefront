@@ -339,7 +339,7 @@ function Cart({ cart }: any) {
                       <dt className="flex items-center text-sm text-gray-600">
                         <span>{GENERAL_DISCOUNT}</span>
                       </dt>
-                      <dd className="text-md font-semibold text-pink">
+                      <dd className="text-md font-semibold text-red-500">
                         <p>{'-'}{cartItems.discount?.formatted?.withTax}</p>
                       </dd>
                     </>
