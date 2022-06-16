@@ -149,11 +149,11 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
               <div className="px-4 pt-5 pb-2 flex">
                 <button
                   type="button"
-                  className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-gray-400"
+                  className="-m-2 absolute right-4 top-5 p-2 rounded-md inline-flex items-center justify-center text-gray-400"
                   onClick={() => setOpen(false)}
                 >
                   <span className="sr-only">Close menu</span>
-                  <XIcon className="h-6 w-6" aria-hidden="true" />
+                  <XIcon className="h-6 w-6 text-black" aria-hidden="true" />
                 </button>
               </div>
 
@@ -170,7 +170,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                           >
                             <a
                               onClick={() => setOpen(false)}
-                              className="flex flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium"
+                              className="flex flex-col whitespace-nowrap py-4 px-4 text-black border-b text-sm font-bold"
                               href={item.hyperlink}
                             >
                               {item.caption}
@@ -184,9 +184,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                 className={({ selected }) =>
                                   classNames(
                                     selected
-                                      ? 'text-gray-900'
-                                      : 'text-gray-900',
-                                    'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium'
+                                      ? 'text-black'
+                                      : 'text-black',
+                                    'flex flex-col whitespace-nowrap py-4 px-4 text-black border-b text-sm font-bold'
                                   )
                                 }
                               >
@@ -197,7 +197,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                             <Tab.Panels as={Fragment}>
                               <Tab.Panel
                                 key={item.caption}
-                                className="pt-2 pb-0 px-0 space-y-10"
+                                className="pt-2 pb-0 px-4 space-y-10"
                               >
                                 <div className="space-y-4">
                                   {item.navBlocks.length ? (
@@ -212,10 +212,10 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                   className="grid grid-cols-1 gap-y-0 gap-x-0 lg:gap-x-0"
                                                 >
                                                   <div>
-                                                    <p className="font-semibold capitalize text-xl text-gray-900 p-2">
+                                                    <p className="font-semibold capitalize text-md text-black p-2">
                                                       {navBlock.boxTitle}
                                                     </p>
-                                                    <div className="mt-1 border-t py-2 px-6 border-gray-100 pt-2 sm:grid sm:grid-cols-1 sm:gap-x-6">
+                                                    <div className="mt-1 border-t py-2 px-2 border-gray-100 pt-2 sm:grid sm:grid-cols-1 sm:gap-x-6">
                                                       <ul
                                                         role="list"
                                                         aria-labelledby="clothing-heading"
