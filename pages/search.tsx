@@ -1,12 +1,14 @@
+import dynamic from 'next/dynamic'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
-import ProductGrid from '@components/product/Grid'
-import ProductMobileFilters from '@components/product/Filters'
-import ProductFilterRight from '@components/product/Filters/filtersRight'
-import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
+//DYNAMINC COMPONENT CALLS
+const ProductGrid = dynamic(() => import('@components/product/Grid'))
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -129,12 +131,14 @@ function Search({ query, setEntities, recordEvent }: any) {
       },
     },
     error,
-  } = useSwr(['/api/catalog/products', state], postData)
+  } = useSwr(['/api/catalog/products', state], postData, {
+    revalidateOnFocus: false,
+  })
 
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
-    if (router.query.freeText !== state.freeText) {
+    if (router.query.freeText !== undefined && router.query.freeText !== state.freeText) {
       dispatch({ type: FREE_TEXT, payload: query.freeText })
     }
   }, [router.query.freeText])
@@ -290,7 +294,7 @@ function Search({ query, setEntities, recordEvent }: any) {
           <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
             Catalog
           </h1>
-          <h1 className="sm:text-xl text-lg mt-2 font-medium tracking-tight text-gray-500">
+          <h1 className="sm:text-xl text-lg mt-2 font-medium tracking-tight text-gray-500 sm:h-10">
             {data.products.total} results
           </h1>
         </div>

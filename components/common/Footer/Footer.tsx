@@ -22,7 +22,7 @@ const Footer: FC<Props> = ({ config }) => {
   const handleRedirect = (path: string) => (path ? router.push(path) : {})
 
   return (
-    <footer aria-labelledby="footer-heading" className="bg-gray-50">
+    <footer aria-labelledby="footer-heading" className="bg-gray-50 sm:h-96">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -37,7 +37,7 @@ const Footer: FC<Props> = ({ config }) => {
             {/* Sitemap sections */}
             <div className="mt-10 col-span-6 grid grid-cols-2 gap-8 sm:grid-cols-3 md:mt-0 md:row-start-1 md:col-start-3 md:col-span-8 lg:col-start-2 lg:col-span-6">
               <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
-                {config.map((item: any, idx: number) => {
+                {config?.map((item: any, idx: number) => {
                   return (
                     <div key={`${idx}-footer-item`}>
                       <h3 className="text-md font-medium text-gray-900">
