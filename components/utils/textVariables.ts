@@ -109,6 +109,8 @@ export const WISHLIST_SIDEBAR_MESSAGE =
   'Uh-oh, you don’t have any items in here'
 export const GENERAL_SHOPPING_CART = 'Shopping cart'
 export const GENERAL_BULK_ORDER_PAD = 'Bulk Order'
+export const GENERAL_SHOW_MORE_ENTRY_FIELDS = 'Show More Entry Fields'
+export const GENERAL_COPY_AND_PASTE = 'Copy and Paste'
 export const CLOSE_PANEL = 'Close panel'
 export const SUBTOTAL_INCLUDING_TAX = 'Subtotal (taxes included)'
 export const GENERAL_SUBTOTAL = 'Subtotal'
