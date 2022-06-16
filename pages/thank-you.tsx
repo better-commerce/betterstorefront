@@ -69,18 +69,18 @@ export default function OrderConfirmation() {
   }
   return (
     <>
-      <main className="bg-white px-4 pt-16 pb-24 sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
-        <div className="max-w-3xl mx-auto">
+      <main className="bg-gray-50 px-4 pt-6 pb-24 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
+        <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-md p-4">
           <div className="max-w-xl">
             <h1 className="text-sm font-semibold uppercase tracking-wide text-indigo-600">
               {order.orderNo ? GENERAL_THANK_YOU : null}
             </h1>
-            <p className="mt-2 text-4xl text-black font-extrabold tracking-tight sm:text-5xl">
+            <p className="mt-2 text-4xl text-black font-bold tracking-tight sm:text-3xl uppercase">
               {order.orderNo ? GENERAL_ON_THE_WAY : NO_ORDER_PROVIDED}
             </p>
             {order.orderNo ? (
               <p className="mt-2 text-black text-gray-500">
-                {GENERAL_YOUR_ORDER} {order.orderNo}{' '}
+                {GENERAL_YOUR_ORDER}{' '}<span className='text-black font-bold'>{order.orderNo}</span>{' '}
                 {GENERAL_ORDER_WILL_BE_WITH_YOU_SOON}
               </p>
             ) : null}

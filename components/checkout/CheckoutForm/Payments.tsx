@@ -20,21 +20,21 @@ export default function PaymentMethods({
   }, [])
 
   return (
-    <ul className={`text-gray-900 mt-10`}>
+    <ul className={`text-gray-900 mt-4`}>
       {methods?.map((item: any, idx: number) => {
         return (
           <li
             key={idx}
             onClick={() => setActivePaymentMethod(item)}
             className={`${
-              activePaymentMethod.id === item.id ? 'border-indigo-600' : ''
-            }  pointer border-t border py-5 px-5 flex justify-start flex-row`}
+              activePaymentMethod.id === item.id ? 'border-black border-t-2 border-2' : 'border-t border border-gray-300'
+            }  pointer rounded-md mb-2 py-5 px-5 flex justify-start flex-row`}
           >
             <div className="flex flex-row justify-center items-center">
               {activePaymentMethod.id === item.id ? (
                 <div>
                   <CheckCircleIcon
-                    className="h-5 pr-4 text-indigo-600"
+                    className="h-5 pr-4 text-black"
                     aria-hidden="true"
                   />
                 </div>
@@ -49,8 +49,8 @@ export default function PaymentMethods({
               ) : null}
             </div>
             <div>
-              <h3 className="font-bold">{item.displayName}</h3>
-              <p className="text-sm py-2">{item.description}</p>
+              <h3 className="font-bold uppercase text-md">{item.displayName}</h3>
+              <p className="text-sm py-2 text-gray-400">{item.description}</p>
             </div>
           </li>
         )

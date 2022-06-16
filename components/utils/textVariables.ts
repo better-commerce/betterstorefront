@@ -3,16 +3,16 @@ import { useRouter } from 'next/router'
 //USE THIS AS TEMPLATE
 const content: any = {
   'en-US': {
-    GENERAL_CHECKOUT: 'Checkout en-US',
+    GENERAL_CHECKOUT: 'Checkout',
   },
   es: {
-    GENERAL_CHECKOUT: 'Checkout es',
+    GENERAL_CHECKOUT: 'Checkout',
   },
   'en-GB': {
-    GENERAL_CHECKOUT: 'Checkout en-GB',
+    GENERAL_CHECKOUT: 'Checkout',
   },
   'es-ES': {
-    GENERAL_CHECKOUT: 'Checkout es-ES',
+    GENERAL_CHECKOUT: 'Checkout',
   },
 }
 
@@ -240,7 +240,7 @@ export const BTN_SUBMIT = 'Submit'
 export const BTN_NOTIFY_ME = 'Notify me'
 export const BTN_PRE_ORDER = 'Pre-order'
 export const BTN_ADD_TO_WISHLIST = 'Add to wishlist'
-export const ALERT_SUCCESS_WISHLIST_MESSAGE = 'Item was added in your wishlist'
+export const ALERT_SUCCESS_WISHLIST_MESSAGE = 'Wishlisted'
 export const PRODUCT_SPECIFICATION = 'Product specification'
 export const GENERAL_NOT_AVAILABLE = 'Not Available'
 export const GENERAL_CARE_TITLE = 'Care'
@@ -289,6 +289,7 @@ export const ERROR_PAGE_NOT_FOUND = 'Not Found'
 export const ERROR_PAGE_NOT_FOUND_MESSAGE =
   "The requested page doesn't exist or you don't have access to it."
 export const BTN_CHECKOUT_NOW = 'Checkout now'
+export const BTN_PLACE_ORDER = 'Place Order'
 export const MESSAGE_NO_ORDER_FOUND = 'No orders found'
 export const MESSAGE_NO_ORDER_FOUND_TEXT =
   'Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.'
@@ -312,3 +313,8 @@ export const SHOP_BY_LIFESTYLRE = 'Shop by Lifestyle'
 export const PRODUCTS_AVAILABLE = 'Products available'
 export const GENERAL_COLOUR = 'Colour'
 export const GENERAL_SIZE = 'Size'
+export const PRODUCT_IN_STOCK = 'In Stock'
+export const PRODUCT_OUT_OF_STOCK='Out Of Stock'
+export const PRODUCT_AVAILABILITY='Availability'
+export const SLUG_TYPE_MANUFACTURER = 'Manufacturer'
+export const GENERAL_FOOOTER = "Footer"
