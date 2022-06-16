@@ -49,6 +49,7 @@ import {
 } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
+import { round } from 'lodash'
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
 const  AttributesHandler  = dynamic(() => import('./AttributesHandler'));
@@ -446,6 +447,8 @@ export default function ProductView({
       }
     ]
   };
+  const saving  = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
+  const discount  = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
   return (
     <div className="bg-white page-container md:w-4/5 mx-auto">
       {/* Mobile menu */}
@@ -569,15 +572,17 @@ export default function ProductView({
               <div className="mt-2">
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
                 {updatedProduct ? (
-                  <p className="sm:text-3xl text-2xl font-medium sm:font-semibold text-gray-900">
-                    {selectedAttrData.price?.formatted?.withTax}
-                    {selectedAttrData.listPrice?.raw.tax > 0 ? (
-                      <span className="px-2 text-sm line-through text-red-400">
-                        {GENERAL_PRICE_LABEL_RRP}{' '}
-                        {product.listPrice.formatted.withTax}
-                      </span>
-                    ) : null}
-                  </p>
+                  <p className="sm:text-xl text-2xl font-bold text-black">
+                  {selectedAttrData.price?.formatted?.withTax}
+                  {selectedAttrData.listPrice?.raw.tax > 0 ? (
+                    <>
+                      <span className="px-2 font-xl line-through font-normal text-gray-400">
+                      {product.listPrice.formatted.withTax}                        
+                    </span>
+                    <span className='text-md text-red-500 font-semibold'>{discount}% off</span>
+                    </>
+                  ) : null}
+                </p>
                 ) : (
                   <p className="text-3xl text-gray-900">------</p>
                 )}

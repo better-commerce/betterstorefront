@@ -10,12 +10,14 @@ import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import { HeartIcon } from '@heroicons/react/outline'
+import { round } from 'lodash'
 import {
   ALERT_SUCCESS_WISHLIST_MESSAGE,
   BTN_ADD_TO_WISHLIST,
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
   GENERAL_ADD_TO_BASKET,
+  GENERAL_PRICE_LABEL_RRP,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -160,7 +162,8 @@ const SearchProductCard: FC<Props> = ({ product }) => {
   }
 
   const buttonConfig = buttonTitle()
-
+  const saving  = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
+  const discount  = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
   return (
     <div className="border-gray-100">
     <div key={product.id} className="relative py-3 sm:py-3">
@@ -234,6 +237,12 @@ const SearchProductCard: FC<Props> = ({ product }) => {
 
         <p className="sm:mt-1 mt-1 font-bold text-md text-gray-900">
           {product?.price?.formatted?.withTax}
+          {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax &&
+              <>
+                <span className='px-2 text-sm line-through font-normal text-gray-400'>{product?.listPrice?.formatted?.withTax}</span>
+                <span className='text-red-600 text-sm font-semibold'>{discount}% Off</span>
+              </>
+            }
         </p>            
         <div className="flex flex-col">
           <Button
