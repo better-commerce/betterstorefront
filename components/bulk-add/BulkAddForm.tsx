@@ -47,8 +47,7 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
             {({ errors, values, touched, setValues }) => (
                 <Form>
                     <Field name="noOfFields">
-                        {({ field }) => (
-
+                        {(fieldProps: any) => (
                             <>
                                 {/*<select {...field} className={'form-control' + (errors.noOfFields && touched.noOfFields ? ' is-invalid' : '')} onChange={e => onAddMoreOrderPads(e, field, values, setValues)}>
                                     <option value=""></option>
@@ -56,7 +55,7 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
                                         <option key={i} value={i}>{i}</option>
                                     )}
                                 </select>*/}
-                                <button className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 " onClick={e => onAddMoreOrderPads(e, field, values, setValues)}>
+                                <button className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 " onClick={e => onAddMoreOrderPads(e, fieldProps.field, values, setValues)}>
                                     {GENERAL_SHOW_MORE_ENTRY_FIELDS}
                                 </button>
                             </>
@@ -82,8 +81,10 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
                             <tbody className="bg-white">
                                 <FieldArray name="orderPads">
                                     {() => (values.orderPads.map((orderPad: any, i: number) => {
-                                        const orderPadErrors: any = errors.orderPads?.length && errors.orderPads[i] || {};
-                                        const orderPadTouched: any = touched.orderPads?.length && touched.orderPads[i] || {};
+                                        const errorOrderPads: any = errors.orderPads;
+                                        const orderPadErrors: any = errorOrderPads?.length && errorOrderPads[i] || {};
+                                        const touchedOrderPads: any = touched.orderPads;
+                                        const orderPadTouched: any = touchedOrderPads?.length && touchedOrderPads[i] || {};
                                         return (
                                             <>
                                                 <tr key={i}>
