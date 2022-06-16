@@ -137,7 +137,7 @@ export default function AddressForm({
       }: any) => {
         return (
           <>
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap bg-white">
               {addresses.map((item: any, idx: number) => {
                 return (
                   <div
@@ -146,14 +146,14 @@ export default function AddressForm({
                       setValues(item)
                       setAddress(item)
                     }}
-                    className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex justify-between items-center ${
-                      item.id === defaultValues.id ? 'border-indigo-600' : ''
+                    className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex items-center ${
+                      item.id === defaultValues.id ? 'border-black' : ''
                     }`}
                   >
                     <div>
                       {item.id === defaultValues.id ? (
                         <CheckCircleIcon
-                          className="h-5 pr-4 text-left align-left text-indigo-600"
+                          className="h-5 pr-4 text-left align-left text-black"
                           aria-hidden="true"
                         />
                       ) : null}
@@ -277,7 +277,7 @@ export default function AddressForm({
                             handleAddressList(values[formItem.name])
                           }
                           style={{ maxWidth: '20%' }}
-                          className="ml-3 mt-8 mb-8 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-2 px-1 flex items-center justify-center font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                          className="ml-3 mt-8 mb-8 max-w-xs flex-1 bg-black border border-transparent uppercase rounded-sm py-2 px-6 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
                         >
                           {BTN_FIND}
                         </button>
@@ -297,7 +297,7 @@ export default function AddressForm({
                 <button
                   type="button"
                   onClick={() => handleNewFormButton(values, errors)}
-                  className="max-w-xs m-2 flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                  className="max-w-xs m-2 flex-1 bg-black border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
                 >
                   {isFormOpen ? BTN_SAVE : ADD_ADDRESS}
                 </button>
@@ -338,7 +338,7 @@ export default function AddressForm({
               <button
                 type="submit"
                 onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
-                className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                className="max-w-xs flex-1 bg-black border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
               >
                 {btnTitle}
               </button>

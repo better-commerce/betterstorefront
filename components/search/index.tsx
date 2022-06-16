@@ -74,7 +74,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
   }, [Router.asPath])
 
   return (
-    <div className="z-50 w-full h-full bg-white absolute">
+    <div className="z-9999 w-full h-full bg-white absolute">
       <div
         className="h-9 text-gray-900 w-9 right-10 top-10 absolute cursor-pointer"
         onClick={closeWrapper}

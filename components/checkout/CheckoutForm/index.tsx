@@ -592,8 +592,8 @@ export default function CheckoutForm({
       >
         <div className="max-w-2xl mx-auto sm:pt-16 pt-2 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
-          <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-            <div>
+          <form className="lg:grid lg:grid-cols-5 lg:gap-x-6 xl:gap-x-6">
+            <div className='lg:col-span-3 pb-6'>
               {!isShippingDisabled && (
                 <Delivery
                   appConfig={config}
@@ -605,8 +605,8 @@ export default function CheckoutForm({
               )}
 
               {state.isCNC || isShippingDisabled ? null : (
-                <div className="mt-4 border-t border-gray-200 pt-4">
-                  <h2 className="text-lg font-semibold text-gray-900">
+                <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6 rounded-lg">
+                  <h2 className="text-lg font-bold uppercase text-black">
                     {SHIPPING_INFORMATION}
                   </h2>
                   {state?.isDeliveryMethodSelected ? (
@@ -641,8 +641,8 @@ export default function CheckoutForm({
               )}
 
               {/* Payment */}
-              <div className="mt-6 border-t border-gray-200 pt-6">
-                <h2 className="text-lg font-semibold text-gray-900">
+              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6 rounded-lg">
+                <h2 className="text-lg font-bold uppercase text-black">
                   {BILLING_INFORMATION}
                 </h2>
                 {(state?.isShippingInformationCompleted ||
@@ -672,8 +672,8 @@ export default function CheckoutForm({
                   />
                 )}
               </div>
-              <div className="mt-6 border-t border-gray-200 pt-6">
-                <h2 className="text-lg font-semibold text-gray-900">
+              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6 rounded-lg">
+                <h2 className="text-lg font-bold uppercase text-black">
                   {GENERAL_PAYMENT}
                 </h2>
                 {state.isPaymentInformationCompleted && (
@@ -699,12 +699,14 @@ export default function CheckoutForm({
             </div>
 
             {/* Order summary */}
-            <Summary
-              confirmOrder={confirmOrder}
-              isShippingDisabled={isShippingDisabled}
-              cart={cartItems}
-              handleItem={handleItem}
-            />
+           <div className='lg:col-span-2'>
+              <Summary
+                confirmOrder={confirmOrder}
+                isShippingDisabled={isShippingDisabled}
+                cart={cartItems}
+                handleItem={handleItem}
+              />
+           </div>
           </form>
         </div>
       </div>
