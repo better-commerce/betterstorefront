@@ -152,4 +152,7 @@
   .sm\:h-72 {
     height: 12rem !important;
   }
+  .banner-Image{
+    height: auto!important;
+  }
 }
