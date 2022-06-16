@@ -3,12 +3,15 @@ import React, { FC, Fragment, useState } from "react";
 
 // Package Imports
 import { XIcon } from "@heroicons/react/outline";
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, Transition } from "@headlessui/react";
+
+// Component Imports
+import { BulkAddForm } from "./BulkAddForm";
 
 // Other Imports
 import { useUI } from "@components/ui/context";
-import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
 import { DEFAULT_ENTRY_FIELD_COUNT } from "@components/utils/constants";
+import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE } from "@components/utils/textVariables";
 
 const BulkAddSidebarView: FC = () => {
     const { closeSidebar } = useUI()
@@ -70,9 +73,6 @@ const BulkAddSidebarView: FC = () => {
                                             </div>
                                         </div>
                                         <div className="flex flex-col">
-                                            <button className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 " onClick={handleShowMoreEntryFields}>
-                                                {GENERAL_SHOW_MORE_ENTRY_FIELDS}
-                                            </button>
 
                                             <button className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 ">
                                                 {GENERAL_COPY_AND_PASTE}
@@ -81,43 +81,7 @@ const BulkAddSidebarView: FC = () => {
                                         <div className="mt-8 flex flex-col">
                                             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                                 <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                                                        <table className="min-w-full divide-y divide-gray-300">
-                                                            <thead className="bg-gray-50">
-                                                                <tr>
-                                                                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                                                                        S.No
-                                                                    </th>
-                                                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                                        StockCode
-                                                                    </th>
-                                                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                                        Quantity
-                                                                    </th>
-
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody className="bg-white">
-
-                                                                {
-                                                                    Array.from(Array(entryFieldCount).keys()).map((x: number) => (
-                                                                        <tr>
-                                                                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                                                                {x + 1}
-                                                                            </td>
-                                                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                                                <input type="text" className="p-3 border bg-white text-gray-500 w-full"></input>
-                                                                            </td>
-                                                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                                                <input type="text" className="p-3 border bg-white text-gray-500 w-full"></input>
-                                                                            </td>
-                                                                        </tr>
-                                                                    ))
-                                                                }
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                                    <BulkAddForm entryFieldCount={entryFieldCount} submit={() => { }} />
                                                 </div>
                                             </div>
                                         </div>
