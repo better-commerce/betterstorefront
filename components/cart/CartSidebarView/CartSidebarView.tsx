@@ -294,7 +294,7 @@ const CartSidebarView: FC = () => {
                       {cartItems.promotionsApplied?.length > 0 && (
                         <div className="flex py-2 justify-between font-small text-black">
                           <p className='text-sm'>{GENERAL_DISCOUNT}</p>
-                          <p className='font-bold text-pink'>{'-'}{cartItems.discount?.formatted?.withTax}</p>
+                          <p className='font-bold text-red-500'>{'-'}{cartItems.discount?.formatted?.withTax}</p>
                         </div>
                       )}
                       <div className="flex justify-between font-medium text-black">
