@@ -18,7 +18,6 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
     const { schema, initialValues, config } = VALUES_MAP;
 
     function onAddMoreOrderPads(e: any, field: any, values: any, setValues: any) {
-        debugger;
         // update dynamic form
         const orderPads = [...values.orderPads];
         const noOfFields = (e.target.value || field.value) + 5;
@@ -38,7 +37,7 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
         field.onChange(e);
     }
 
-    function onSubmit(fields: any) {
+    const onSubmit = (fields: any) => {
         // display form field values on success
         alert('SUCCESS!! :-)\n\n' + JSON.stringify(fields, null, 4));
     }
@@ -94,8 +93,8 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
                                                     {
                                                         config?.map((x: any) => (
                                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                                <Field name={`orderPads.${i}.${x.key}`} type="text" className={x.className + (orderPadErrors.name && orderPadTouched.name ? ' is-invalid' : '')} />
-                                                                <ErrorMessage name={`orderPads.${i}.${x.key}`} component="div" className="invalid-feedback" />
+                                                                <Field name={`orderPads.${i}.${x.key}`} type="text" className={x.className + (orderPadErrors[x.key] && orderPadTouched[x.key] ? '  border rounded placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-2 pr-2 pl-12 border-red-500 border-red-500' : '')} />
+                                                                <ErrorMessage name={`orderPads.${i}.${x.key}`} component="div" className=" text-red-500 text-xs mt-1 ml-1" />
                                                             </td>
                                                         ))
                                                     }
