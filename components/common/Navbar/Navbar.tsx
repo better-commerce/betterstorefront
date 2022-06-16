@@ -456,7 +456,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                     />
                     <span className='font-normal hidden text-sm text-black sm:block'>Wishlist</span>
                     {wishListItems.length > 0 &&
-                     <span className="ml-2 absolute top-0 -right-0 w-4 h-4 text-white rounded-full bg-pink text-center text-xs font-medium">                     
+                     <span className="ml-2 hidden sm:block absolute top-0 -right-0 w-4 h-4 text-white rounded-full bg-pink text-center text-xs font-medium">                     
                           {wishListItems.length}
                       </span>
                     }
