@@ -29,11 +29,14 @@ import {
   SELECT_LANGUAGE,
   GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
+import { TopNav as BulkAddTopNav } from '@components/bulk-add/TopNav'
+import { stringToBoolean } from '@framework/utils'
 
 interface Props {
-  config: []
-  currencies: []
-  languages: []
+  config: Array<any>;
+  currencies: Array<any>;
+  languages: Array<any>;
+  configSettings: Array<any>;
 }
 
 const accountDropDownConfigUnauthorized: any = [
@@ -51,8 +54,10 @@ const accountDropDownConfigUnauthorized: any = [
   },
 ]
 
-const Navbar: FC<Props> = ({ config, currencies, languages }) => {
+const Navbar: FC<Props> = ({ configSettings, config, currencies, languages }) => {
   const router = useRouter()
+  const b2bSettings = configSettings && configSettings.length ? configSettings.find((x: any) => x.configType === "B2BSettings")?.configKeys : [];
+  const b2bEnabled = b2bSettings && b2bSettings.length ? stringToBoolean(b2bSettings.find((x: any) => x.key === "B2BSettings.EnableB2B")?.value) : false;
 
   const {
     wishListItems,
@@ -60,6 +65,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
     user,
     deleteUser,
     openCart,
+    openBulkAdd,
     openWishlist,
     setShowSearchBar,
   } = useUI()
@@ -113,7 +119,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   }
 
   const [open, setOpen] = useState(false)
-  
+
   const buttonRef = useRef<HTMLButtonElement>(null) // useRef<HTMLButtonElement>(null)
   const [openState, setOpenState] = useState(-1)
   return (
@@ -302,9 +308,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 <div className="border-t h-14 px-4 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-center sm:overflow-visible sm:pb-0">
                   {config?.map((item: any, idx: number) => {
                     return (
-                      <Popover key={idx} className="flex" 
-                          onMouseEnter={() => setOpenState(idx)}
-                          onMouseLeave={() => setOpenState(-1)}  >
+                      <Popover key={idx} className="flex"
+                        onMouseEnter={() => setOpenState(idx)}
+                        onMouseLeave={() => setOpenState(-1)}  >
                         {({ open }) => (
                           <>
                             {!item.navBlocks.length ? (
@@ -318,8 +324,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                       openState == idx
                                         ? 'border-indigo-600 text-indigo-600'
                                         : 'border-transparent text-gray-700 hover:text-gray-800',
-                                        'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                      )}
+                                      'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                    )}
                                   >
                                     {item.caption}
                                   </Popover.Button>
@@ -331,7 +337,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                   openState == idx
                                     ? 'border-indigo-600 text-indigo-600'
                                     : 'border-transparent text-gray-700 hover:text-gray-800',
-                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                  'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                                 )}
                               >
                                 {item.caption}
@@ -443,6 +449,11 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                     config={languages}
                   />
                 </div>
+
+                {/* Bulk Add */}
+                {b2bEnabled && (
+                  <BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />
+                )}
 
                 {/* Wishlist*/}
 

@@ -160,6 +160,7 @@ const Layout: FC<Props> = ({
           />
         )}
         <Navbar
+          configSettings={config?.configSettings}
           currencies={config?.currencies}
           config={sortedData}
           languages={config?.languages}
