@@ -121,7 +121,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
-          className="fixed inset-0 flex z-40 lg:hidden"
+          className="fixed inset-0 flex z-999 lg:hidden"
           onClose={setOpen}
         >
           <Transition.Child
@@ -145,7 +145,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto">
+            <div className="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto z-9999">
               <div className="px-4 pt-5 pb-2 flex">
                 <button
                   type="button"
@@ -276,17 +276,17 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
       </Transition.Root>
 
       <header className="bg-white shadow-md fixed top-0 right-0 z-999 w-full">
-        <nav aria-label="Top" className="w-full md:w-4/5 mx-auto px-0 sm:px-0 lg:px-0">
+        <nav aria-label="Top" className="w-full md:w-4/5 mx-auto px-4 sm:px-0 lg:px-0">
           <div className="pb-0 sm:px-0 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
               {/* Logo */}
               <button
                 type="button"
-                className="-ml-2 bg-white p-2 rounded-md text-gray-400 sm:hidden"
+                className="-ml-2 bg-white py-4 pl-2 pr-6 rounded-md text-gray-400 sm:hidden"
                 onClick={() => setOpen(true)}
               >
                 <span className="sr-only">Open menu</span>
-                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                <MenuIcon className="h-6 w-6 text-black" aria-hidden="true" />
               </button>
 
               <Link href="/">

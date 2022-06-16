@@ -279,3 +279,9 @@
 .marquee-container .overlay{
   --gradient-color: transparent!important;
 }
+
+@media screen and (max-width:767px) {
+  .sm\:h-72 {
+    height: 12rem !important;
+  }
+}

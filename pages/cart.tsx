@@ -144,7 +144,7 @@ function Cart({ cart }: any) {
 
   return (
     <div className="bg-white w-full sm:w-3/5 mx-auto">
-      <main className="sm:pt-6 pt-6 sm:pb-16 pb-0 px-4 sm:px-0 lg:px-0">
+      <main className="sm:pt-6 pt-6 sm:pb-16 pb-12 sm:pb-0 px-4 sm:px-0 lg:px-0">
         <h1 className="text-2xl font-semibold tracking-tight text-black sm:text-2xl uppercase relative">
           {GENERAL_SHOPPING_CART} <span className='font-semibold text-sm text-gray-400 absolute top-2 pl-2'>{'- '}{userCart.lineItems.length} Items added</span>
         </h1>
@@ -191,7 +191,7 @@ function Cart({ cart }: any) {
                               </h3>
                             </div>
                             <div className="mt-2 sm:mt-2 sm:pr-0 pl-0 pr-0">
-                              <div className="border sm:px-4 px-2 text-gray-900 flex flex-row w-2/6">
+                              <div className="border sm:px-4 px-2 text-gray-900 flex flex-row sm:w-2/6 w-4/6">
                                 <MinusSmIcon
                                   onClick={() => handleItem(product, 'decrease')}
                                   className="w-4 cursor-pointer"
@@ -313,7 +313,7 @@ function Cart({ cart }: any) {
               >
                 {GENERAL_ORDER_SUMMARY}
               </h2>
-              <div className='sm:p-3 mt-6 border '>
+              <div className='sm:p-3 p-3 mt-6 border '>
                 <PromotionInput />
               </div>
               <dl className="mt-6 sm:space-y-2 space-y-2">

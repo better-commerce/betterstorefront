@@ -67,7 +67,7 @@ export default function Summary({
             </li>
           ))}
         </ul>
-        <div className='sm:p-3 mt-2 border '>
+        <div className='sm:p-3 p-3 mt-2 border '>
             <PromotionInput />
           </div>
         <dl className="border-t border-gray-200 py-2 px-4 space-y-2 sm:px-6">
