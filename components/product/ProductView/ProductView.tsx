@@ -52,15 +52,15 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { round } from 'lodash'
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
-const  AttributesHandler  = dynamic(() => import('./AttributesHandler'));
-const  BreadCrumbs  = dynamic(() => import('@components/ui/BreadCrumbs'));
-const  RelatedProducts  = dynamic(() => import('@components/product/RelatedProducts'));
-const  Bundles  = dynamic(() => import('@components/product/Bundles'));
-const  Reviews  = dynamic(() => import('@components/product/Reviews'));
-const  PriceMatch  = dynamic(() => import('@components/product/PriceMatch'));
-const  Engraving  = dynamic(() => import('@components/product/Engraving'));
-const  ProductDetails  = dynamic(() => import('@components/product/ProductDetails'));
-const  Button  = dynamic(() => import('@components/ui/IndigoButton'));
+const AttributesHandler = dynamic(() => import('./AttributesHandler'));
+const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'));
+const RelatedProducts = dynamic(() => import('@components/product/RelatedProducts'));
+const Bundles = dynamic(() => import('@components/product/Bundles'));
+const Reviews = dynamic(() => import('@components/product/Reviews'));
+const PriceMatch = dynamic(() => import('@components/product/PriceMatch'));
+const Engraving = dynamic(() => import('@components/product/Engraving'));
+const ProductDetails = dynamic(() => import('@components/product/ProductDetails'));
+const Button = dynamic(() => import('@components/ui/IndigoButton'));
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -406,7 +406,7 @@ export default function ProductView({
       notFound: true,
     }
   }*/
-  
+
   const breadcrumbs = product.breadCrumbs?.filter(
     (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
   )
@@ -447,8 +447,8 @@ export default function ProductView({
       }
     ]
   };
-  const saving  = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
-  const discount  = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
+  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
+  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
   return (
     <div className="bg-white page-container md:w-4/5 mx-auto">
       {/* Mobile menu */}
@@ -493,28 +493,28 @@ export default function ProductView({
                         {content?.map((image: any, idx) => (
                           <SwiperSlide className="px-0" key={`${idx}-slider`}>
                             <div
-                                key={idx}
-                                className="cursor-pointer w-full inline-flex flex-col text-center lg:w-auto"
-                              >
-                                <div className="group relative">
+                              key={idx}
+                              className="cursor-pointer w-full inline-flex flex-col text-center lg:w-auto"
+                            >
+                              <div className="group relative">
                                 {image.image ? (
                                   <div className='image-container'>
                                     <Image
                                       priority
-                                      src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}                             
+                                      src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}
                                       alt={image.name}
                                       className="w-full h-full object-center object-cover image"
                                       layout='responsive'
                                       sizes='320 600 1000'
                                       width={600} height={1000}
-                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}   
+                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
                                     />
                                   </div>
                                 ) : (
                                   <PlayIcon className="h-full w-full object-center object-cover" />
                                 )}
-                                </div>                               
                               </div>
+                            </div>
                           </SwiperSlide>
                         ))}
                       </div>
@@ -535,13 +535,13 @@ export default function ProductView({
                                   <div className='image-container'>
                                     <Image
                                       priority
-                                      src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}                             
+                                      src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}
                                       alt={image.name}
                                       className="w-full h-full object-center object-cover image"
                                       layout='responsive'
                                       sizes='320 600 1000'
                                       width={600} height={1000}
-                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}   
+                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
                                     />
                                   </div>
                                 ) : (
@@ -573,16 +573,16 @@ export default function ProductView({
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
                 {updatedProduct ? (
                   <p className="sm:text-xl text-2xl font-bold text-black">
-                  {selectedAttrData.price?.formatted?.withTax}
-                  {selectedAttrData.listPrice?.raw.tax > 0 ? (
-                    <>
-                      <span className="px-2 font-xl line-through font-normal text-gray-400">
-                      {product.listPrice.formatted.withTax}                        
-                    </span>
-                    <span className='text-md text-red-500 font-semibold'>{discount}% off</span>
-                    </>
-                  ) : null}
-                </p>
+                    {selectedAttrData.price?.formatted?.withTax}
+                    {selectedAttrData.listPrice?.raw.tax > 0 ? (
+                      <>
+                        <span className="px-2 font-xl line-through font-normal text-gray-400">
+                          {product.listPrice.formatted.withTax}
+                        </span>
+                        <span className='text-md text-red-500 font-semibold'>{discount}% off</span>
+                      </>
+                    ) : null}
+                  </p>
                 ) : (
                   <p className="text-3xl text-gray-900">------</p>
                 )}
@@ -592,9 +592,9 @@ export default function ProductView({
               <div className="mt-3">
                 <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
                 <div className="flex items-center xs:flex-col">
-                  <div className="flex items-center xs:text-center align-center">                    
-                    {[0, 1, 2, 3, 4].map((rating) => (                     
-                    <StarIcon
+                  <div className="flex items-center xs:text-center align-center">
+                    {[0, 1, 2, 3, 4].map((rating) => (
+                      <StarIcon
                         key={rating}
                         className={classNames(
                           product.rating > rating
@@ -603,9 +603,9 @@ export default function ProductView({
                           'flex-shrink-0'
                         )}
                         aria-hidden="true"
-                      />                  
-                    ))}                  
-                  </div>                  
+                      />
+                    ))}
+                  </div>
                   <p className="sr-only">
                     {product.rating} {GENERAL_REVIEW_OUT_OF_FIVE}
                   </p>
@@ -619,67 +619,104 @@ export default function ProductView({
                 />
               </div>
               <h4 className="text-sm uppercase font-bold sm:font-semibold tracking-tight text-black my-4">
-                {PRODUCT_AVAILABILITY}:{' '} 
+                {PRODUCT_AVAILABILITY}:{' '}
                 {product.currentStock > 0 ? (
                   <span>
                     {PRODUCT_IN_STOCK}
                   </span>
-                ):(
+                ) : (
                   <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
-                )}               
+                )}
               </h4>
               {updatedProduct ? (
                 <>
-                  <div className="sm:mt-8 mt-6 flex sm:flex-col1">
-                    <Button
-                      className='w-full'
-                      title={buttonConfig.title}
-                      action={buttonConfig.action}
-                      buttonType={buttonConfig.type || 'cart'}
-                    />
-                    {isEngravingAvailable && (
-                    <button
-                      className="ml-4 max-w-xs flex-1 bg-gray-400 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                      onClick={() => showEngravingModal(true)}
-                    >
-                      <span className="font-bold">{GENERAL_ENGRAVING}</span>
-                    </button>
+                  {!isEngravingAvailable && (
+                    <div className="sm:mt-8 mt-6 flex sm:flex-col1">
+                      <Button
+                        title={buttonConfig.title}
+                        action={buttonConfig.action}
+                        buttonType={buttonConfig.type || 'cart'}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!isInWishList) {
+                            handleWishList()
+                          }
+                        }}
+                        className="ml-4 py-3 px-4 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                      >
+                        {isInWishList ? (
+                          <HeartIcon className="h-6 w-6 flex-shrink-0 text-pink" />
+                        ) : (
+                          <HeartIcon className="h-6 w-6 flex-shrink-0" />
+                        )}
+                        <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
+                      </button>
+                    </div>
                   )}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!isInWishList) {
-                          handleWishList()
-                        }
-                      }}
-                      className="ml-4 py-3 px-4 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                    >
-                    {isInWishList ? (
-                      <HeartIcon className="h-6 w-6 flex-shrink-0 text-pink" />
-                    ) : (
-                      <HeartIcon className="h-6 w-6 flex-shrink-0" />
-                    )}
-                      <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
-                    </button>
-                  </div>                  
+
+                  {isEngravingAvailable && (
+                    <>
+                      <div className="sm:mt-8 mt-6 flex sm:flex-col1">
+                        <Button
+                          className='block sm:hidden py-3'
+                          title={buttonConfig.title}
+                          action={buttonConfig.action}
+                          buttonType={buttonConfig.type || 'cart'}
+                        />
+                      </div>
+                      <div className="sm:mt-8 mt-6 flex sm:flex-col1">
+                        <Button
+                          className='hidden sm:block '
+                          title={buttonConfig.title}
+                          action={buttonConfig.action}
+                          buttonType={buttonConfig.type || 'cart'}
+                        />
+                        <button
+                          className="sm:ml-4 max-w-xs flex-1 bg-gray-400 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                          onClick={() => showEngravingModal(true)}
+                        >
+                          <span className="font-bold">{GENERAL_ENGRAVING}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!isInWishList) {
+                              handleWishList()
+                            }
+                          }}
+                          className="ml-4 py-3 px-4 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                        >
+                          {isInWishList ? (
+                            <HeartIcon className="h-6 w-6 flex-shrink-0 text-pink" />
+                          ) : (
+                            <HeartIcon className="h-6 w-6 flex-shrink-0" />
+                          )}
+                          <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
+                        </button>
+                      </div>
+                    </>
+                  )}
+
                 </>
               ) : null}
-            <section
-              aria-labelledby="details-heading"
-              className="sm:mt-6 mt-4"
-            >
-              <h2 id="details-heading" className="sr-only">
-                {PRICEMATCH_ADDITIONAL_DETAILS}
-              </h2>
-              <ProductDetails
-                product={product}
-                description={
-                  product.description || product.shortDescription
-                }
-              />              
-              <div className="sm:mt-10 mt-6">
-                <p className="text-gray-900 text-lg">
-                  {selectedAttrData.currentStock > 0
+              <section
+                aria-labelledby="details-heading"
+                className="sm:mt-6 mt-4"
+              >
+                <h2 id="details-heading" className="sr-only">
+                  {PRICEMATCH_ADDITIONAL_DETAILS}
+                </h2>
+                <ProductDetails
+                  product={product}
+                  description={
+                    product.description || product.shortDescription
+                  }
+                />
+                <div className="sm:mt-10 mt-6">
+                  <p className="text-gray-900 text-lg">
+                    {selectedAttrData.currentStock > 0
                       ? product.deliveryMessage
                       : product.stockAvailabilityMessage}
                   </p>
