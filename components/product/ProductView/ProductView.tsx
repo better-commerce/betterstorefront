@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
@@ -9,7 +10,11 @@ import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import axios from 'axios'
+import { Swiper, SwiperSlide } from 'swiper/react'
 import Image from 'next/image'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import SwiperCore, { Navigation } from 'swiper'
 import {
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
@@ -404,6 +409,43 @@ export default function ProductView({
   const breadcrumbs = product.breadCrumbs?.filter(
     (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
   )
+  SwiperCore.use([Navigation])
+  var settings = {
+    fade: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 8000,
+    centerMode: false,
+    dots: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          initialSlide: 1
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
   return (
     <div className="bg-white page-container md:w-4/5 mx-auto">
       {/* Mobile menu */}
@@ -420,9 +462,64 @@ export default function ProductView({
             <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp">
               {/* Image selector */}
               <div className="grid sm:grid-cols-12 grid-cols-1 sm:gap-x-8">
-                <div className='col-span-12'>
+                <div className='col-span-12 px-4 sm:px-0'>
+                  {/*MOBILE PRODUCT IMAGE SLIDER*/}
+                  <div className='block sm:hidden w-full mx-auto pt-6 sm:pt-0'>
+                    <Swiper
+                      slidesPerView={1}
+                      spaceBetween={10}
+                      navigation={true}
+                      loop={true}
+
+                      breakpoints={{
+                        640: {
+                          slidesPerView: 1,
+                        },
+                        768: {
+                          slidesPerView: 4,
+                        },
+                        1024: {
+                          slidesPerView: 4,
+                        },
+                      }}
+                    >
+                      <div
+                        role="list"
+                        className="mx-4 inline-flex space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0"
+                      >
+                        {content?.map((image: any, idx) => (
+                          <SwiperSlide className="px-0" key={`${idx}-slider`}>
+                            <div
+                                key={idx}
+                                className="cursor-pointer w-full inline-flex flex-col text-center lg:w-auto"
+                              >
+                                <div className="group relative">
+                                {image.image ? (
+                                  <div className='image-container'>
+                                    <Image
+                                      priority
+                                      src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}                             
+                                      alt={image.name}
+                                      className="w-full h-full object-center object-cover image"
+                                      layout='responsive'
+                                      sizes='320 600 1000'
+                                      width={600} height={1000}
+                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}   
+                                    />
+                                  </div>
+                                ) : (
+                                  <PlayIcon className="h-full w-full object-center object-cover" />
+                                )}
+                                </div>                               
+                              </div>
+                          </SwiperSlide>
+                        ))}
+                      </div>
+                    </Swiper>
+                  </div>
+                  {/*DESKTOP PRODUCT IMAGE SLIDER*/}
                   <div className="hidden w-full max-w-2xl mx-auto sm:block lg:max-w-none">
-                    <Tab.List className="grid grid-cols-2 gap-6">
+                    <Tab.List className="grid sm:grid-cols-2 grid-cols-1 gap-6">
                       {content?.map((image: any, idx) => (
                         <Tab
                           key={`${idx}-tab`}
@@ -490,8 +587,7 @@ export default function ProductView({
               <div className="mt-3">
                 <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
                 <div className="flex items-center xs:flex-col">
-                  <div className="flex items-center xs:text-center align-center">
-                    
+                  <div className="flex items-center xs:text-center align-center">                    
                     {[0, 1, 2, 3, 4].map((rating) => (                     
                     <StarIcon
                         key={rating}
@@ -531,6 +627,7 @@ export default function ProductView({
                 <>
                   <div className="sm:mt-8 mt-6 flex sm:flex-col1">
                     <Button
+                      className='w-full'
                       title={buttonConfig.title}
                       action={buttonConfig.action}
                       buttonType={buttonConfig.type || 'cart'}
