@@ -25,6 +25,7 @@ import useTranslation, {
   GENERAL_CHECKOUT,
   GENERAL_CONTINUE_SHOPPING,
   GENERAL_OR_TEXT,
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 
 const CartSidebarView: FC = () => {
@@ -167,7 +168,7 @@ const CartSidebarView: FC = () => {
                                     width={100}
                                     height={100}
                                     layout='fixed'
-                                    src={`${product.image}`}
+                                    src={`${product.image}`|| IMG_PLACEHOLDER}
                                     alt={product.name}
                                     className="w-full h-full object-center object-cover"
                                   ></Image>
