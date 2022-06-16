@@ -109,7 +109,6 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
         {BTN_SEARCH}
       </label>
       <input
-        id="search-input"
         type="text"
         onChange={(e) => handleSearch(e.target.value)}
         autoComplete={BTN_SEARCH}

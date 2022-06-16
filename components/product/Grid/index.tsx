@@ -1,7 +1,8 @@
-import Pagination from '@components/product/Pagination'
 import rangeMap from '@lib/range-map'
-import ProductCard from '@components/product/ProductCard/SearchProductCard'
-import InfiniteScroll from '@components/ui/InfiniteScroll'
+import dynamic from 'next/dynamic'
+const ProductCard = dynamic(() => import('@components/product/ProductCard/SearchProductCard'))
+const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
+const Pagination = dynamic(() => import('@components/product/Pagination'))
 import { TITLE_PRODUCTS } from '@components/utils/textVariables'
 
 interface Props {

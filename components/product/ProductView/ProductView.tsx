@@ -1,18 +1,11 @@
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
-import AttributesHandler from './AttributesHandler'
 import { useUI } from '@components/ui/context'
-import BreadCrumbs from '@components/ui/BreadCrumbs'
-import RelatedProducts from '@components/product/RelatedProducts'
-import Bundles from '@components/product/Bundles'
-import Reviews from '@components/product/Reviews'
-import PriceMatch from '@components/product/PriceMatch'
-import Engraving from '@components/product/Engraving'
-import ProductDetails from '@components/product/ProductDetails'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import axios from 'axios'
@@ -24,7 +17,6 @@ import {
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
 } from '@components/utils/constants'
-import Button from '@components/ui/IndigoButton'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
@@ -47,7 +39,18 @@ import {
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
+import { generateUri } from '@commerce/utils/uri-util'
 
+//DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
+const  AttributesHandler  = dynamic(() => import('./AttributesHandler'));
+const  BreadCrumbs  = dynamic(() => import('@components/ui/BreadCrumbs'));
+const  RelatedProducts  = dynamic(() => import('@components/product/RelatedProducts'));
+const  Bundles  = dynamic(() => import('@components/product/Bundles'));
+const  Reviews  = dynamic(() => import('@components/product/Reviews'));
+const  PriceMatch  = dynamic(() => import('@components/product/PriceMatch'));
+const  Engraving  = dynamic(() => import('@components/product/Engraving'));
+const  ProductDetails  = dynamic(() => import('@components/product/ProductDetails'));
+const  Button  = dynamic(() => import('@components/ui/IndigoButton'));
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -88,13 +91,13 @@ export default function ProductView({
   const [isInWishList, setItemsInWishList] = useState(false)
 
   const product = updatedProduct || data
-  
+
   const [selectedAttrData, setSelectedAttrData] = useState({
     productId: product?.recordId,
     stockCode: product?.stockCode,
     ...product,
   })
-  
+
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
 
   const { Product } = EVENTS_MAP.ENTITY_TYPES
@@ -181,7 +184,6 @@ export default function ProductView({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       action: async () => {
-        //debugger;
         const item = await cartHandler().addToCart(
           {
             basketId: basketId,
@@ -284,21 +286,37 @@ export default function ProductView({
         StockCode: obj.stockCode,
         ItemType: obj.itemType || 0,
         CustomInfo1: values.line1 || null,
+
         CustomInfo2: values.line2 || null,
+
         CustomInfo3: values.line3 || null,
+
         CustomInfo4: values.line4 || null,
+
         CustomInfo5: values.line5 || null,
+
         ProductName: obj.name,
+
         ManualUnitPrice: obj.manualUnitPrice || 0.0,
+
         PostCode: obj.postCode || null,
+
         IsSubscription: obj.subscriptionEnabled || false,
+
         IsMembership: obj.hasMembership || false,
+
         SubscriptionPlanId: obj.subscriptionPlanId || null,
+
         SubscriptionTermId: obj.subscriptionTermId || null,
+
         UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
+
         GiftWrapId: obj.giftWrapConfig || null,
+
         IsGiftWrapApplied: obj.isGiftWrapApplied || false,
+
         ItemGroupId: obj.itemGroupId || 0,
+
         PriceMatchReqId:
           obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
       })
@@ -363,6 +381,7 @@ export default function ProductView({
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
+
   const handleProductBundleUpdate = (bundledProduct: any) => {
     //debugger;
     if (bundledProduct && bundledProduct.id) {
@@ -372,10 +391,6 @@ export default function ProductView({
       }
     }
   }
-
-  //console.log("Check Bundle:" + JSON.stringify(product));
-  //console.log(product);
-
   /*if (product === null) {
     return {
       notFound: true,
@@ -395,7 +410,7 @@ export default function ProductView({
           {/* Product */}
           <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
             {/* Image gallery */}
-            <Tab.Group as="div" className="flex flex-col-reverse">
+            <Tab.Group as="div" className="flex flex-col-reverse min-mobile-pdp">
               {/* Image selector */}
               <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
@@ -403,41 +418,42 @@ export default function ProductView({
                     <Tab
                       key={`${idx}-tab`}
                       className="relative h-24 sm:h-44 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+                      aria-label={selectedAttrData.name || selectedAttrData.productName}
                     >
-                      {() => (
-                        <>
-                          <span className="sr-only">{image.name}</span>
-                          <span className="absolute inset-0 rounded-md overflow-hidden">
+                      <span className="sr-only">{image.name}</span>
+                          <span className="rounded-md">
                             {image.image ? (
                               <div className='image-container'>
                                 <Image
-                                  src={`${image.image}` || IMG_PLACEHOLDER}
+                                  priority
+                                  src={generateUri(image.image, "h=200&fm=webp") || IMG_PLACEHOLDER}      
                                   alt={image.name}
-                                  className="w-full h-full sm:h-44 object-center object-cover image"
-                                  layout='fill'
+                                  className="w-full h-full sm:h-44 rounded-md object-center object-cover"                                  
+                                  layout="fill"
                                 ></Image>
                               </div>
                             ) : (
                               <PlayIcon className="h-full w-full object-center object-cover" />
                             )}
-                          </span>
-                        </>
-                      )}
+                          </span>                     
+                      <span className="sr-only">{selectedAttrData.name || selectedAttrData.productName}</span>
                     </Tab>
                   ))}
                 </Tab.List>
               </div>
 
-              <Tab.Panels className="w-full aspect-w-1 aspect-h-1 p-3 sm:p-0">
+              <Tab.Panels className="w-full sm:min-h-fit aspect-w-1 aspect-h-1 p-3 sm:p-0 min-mobile-pdp">
                 {content?.map((image: any) => (
                   <Tab.Panel key={image.name + 'tab-panel'}>
                     {image.image ? (
                       <div className='image-container'>
                         <Image
-                          src={`${image.image}` || IMG_PLACEHOLDER}
-                          alt={image.name}
+                          priority
+                          src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}      
+                          alt={selectedAttrData.name || selectedAttrData.productName}
                           className="w-full h-full object-center object-cover image rounded-lg"
-                          layout='fill'
+                          layout="fill"
+                          sizes="20vw"
                         ></Image>
                       </div>
                     ) : (
@@ -536,7 +552,6 @@ export default function ProductView({
                     selectedAttrData.description || product.description
                   }
                 />
-
                 {updatedProduct ? (
                   <>
                     <div className="sm:mt-10 mt-6 flex sm:flex-col1">
@@ -565,10 +580,10 @@ export default function ProductView({
                     </div>
                     {isEngravingAvailable && (
                       <button
-                        className="max-w-xs flex-1 mt-5 bg-gray-900 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                        onClick={() => showEngravingModal(true)}
+                      className="max-w-xs flex-1 mt-5 bg-gray-900 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                      onClick={() => showEngravingModal(true)}
                       >
-                        {GENERAL_ENGRAVING}
+                       {GENERAL_ENGRAVING}
                       </button>
                     )}
                   </>
@@ -591,7 +606,6 @@ export default function ProductView({
               productBundleUpdate={handleProductBundleUpdate}
             />
           )}
-
           {filteredRelatedProducts ? (
             <RelatedProducts
               relatedProducts={filteredRelatedProducts}

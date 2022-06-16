@@ -82,7 +82,6 @@ function Cart({ cart }: any) {
       OrderNo: null,
       DeliveryCenter: null,
     }
-
     //const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
     const shippingPlans = await getShippingPlans()({ model: model });
     //console.log(JSON.stringify(shippingPlans));
@@ -94,7 +93,6 @@ function Cart({ cart }: any) {
   }
 
   useEffect(() => {
-
     async function loadShippingPlans() {
       await fetchShippingPlans();
     }
@@ -219,7 +217,6 @@ function Cart({ cart }: any) {
                                       </p>
                                       {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                     </div>
-
                                     {
                                       !child.parentProductId ? (
                                         <div className="flex-1 flex items-center justify-end text-sm">

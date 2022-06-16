@@ -273,3 +273,9 @@
 .sm\:h-44 {
   height: 11rem !important;
 }
+
+@media screen and (max-width:767px) {
+  .min-mobile-pdp{
+    min-height: 430px!important;
+  }
+} 

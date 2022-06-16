@@ -1,13 +1,15 @@
+import dynamic from 'next/dynamic'
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import Link from 'next/link'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
-import ProductFilterRight from '@components/product/Filters/filtersRight'
-import ProductMobileFilters from '@components/product/Filters'
-import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
-import ProductGrid from '@components/product/Grid/ProductGrid'
-import ProductGridWithFacet from '@components/product/Grid'
+//DYNAMINC COMPONENT CALLS
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
@@ -333,7 +335,7 @@ export async function getStaticProps({ params, ...context }: any) {
       ...data,
       query: context,
       slug: params!.collection[0],
-      globalSnippets: infra?.snippets,
+      globalSnippets: infra?.snippets ?? [],
       snippets: data?.snippets
     },
     revalidate: 60,

@@ -1,10 +1,11 @@
+import dynamic from 'next/dynamic'
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import getLookbooks from '@framework/api/content/lookbook'
 import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
-import ProductGrid from '@components/product/Grid'
+const ProductGrid = dynamic(() => import('@components/product/Grid'))
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
@@ -166,7 +167,7 @@ export async function getStaticProps({
     props: {
       data: response,
       slug: slug[0],
-      globalSnippets: infra?.snippets,
+      globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets
     },
     revalidate: 200,
