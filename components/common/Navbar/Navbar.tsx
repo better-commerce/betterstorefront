@@ -317,7 +317,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                       openState == idx
                                         ? 'border-indigo-600 text-indigo-600'
                                         : 'border-transparent text-black hover:text-black',
-                                        'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-md font-medium border-b-2 -mb-px pt-px'
+                                        'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                                       )}
                                   >
                                     {item.caption}
@@ -330,7 +330,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                   openState == idx
                                     ? 'border-indigo-600 text-indigo-600'
                                     : 'border-transparent text-black hover:text-black',
-                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-md font-medium border-b-2 -mb-px pt-px'
+                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                                 )}
                               >
                                 {item.caption}
