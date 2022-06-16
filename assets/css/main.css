@@ -6,7 +6,13 @@
 
 @tailwind utilities;
 
-
+.inset-0{
+  z-index: 9999!important;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
 .swiper-button-next {
   color: white !important;
   background: rgba(0, 0, 0, 0.2);
