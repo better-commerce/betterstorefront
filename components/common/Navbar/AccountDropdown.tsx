@@ -5,12 +5,13 @@ import Link from 'next/link'
 
 export default function Account({ config, title }: any) {
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className="p-2 text-gray-400 hover:text-gray-500 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"  aria-label="My Account">
+    <Menu as="div" className="relative inline-block text-left px-1 sm:w-16 w-10 flow-root">
+      <Menu.Button className="group grid grid-cols-1 items-center text-center align-center justify-center flex-col mx-auto"  aria-label="My Account">
         <UserIcon
-          className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+          className="flex-shrink-0 h-6 w-6 block text-black group-hover:text-gray-500 mx-auto"
           aria-hidden="true"  aria-label="My Account"
         />
+        <span className='font-normal sm:block hidden text-sm text-black'>Profile</span>
       </Menu.Button>
       <Transition
         as={Fragment}
@@ -27,7 +28,9 @@ export default function Account({ config, title }: any) {
               {({ active }) => {
                 return (
                   <>
-                    <h1 className="text-left font-bold p-2">{title}</h1>
+                    {title && (
+                      <h1 className="text-left font-bold p-2">{title}</h1>
+                    )}
                     {config.map((item: any, idx: number) => {
                       return (
                         <Link key={idx} passHref href={item.href}>

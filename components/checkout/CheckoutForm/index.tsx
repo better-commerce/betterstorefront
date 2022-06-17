@@ -1,6 +1,6 @@
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import Cookies from 'js-cookie'
-import { useReducer, useEffect } from 'react'
+import { useReducer, useEffect, useState } from 'react'
 import cartHandler from '@components/services/cart'
 import Delivery from './Delivery'
 import Summary from './Summary'
@@ -35,6 +35,7 @@ import {
   SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
 import PaymentWidget from '@components/checkout/PaymentWidget'
+import { AddressType } from '@framework/utils/enums'
 
 const Spinner = () => {
   return (
@@ -51,6 +52,7 @@ export default function CheckoutForm({
   defaultShippingAddress,
   defaultBillingAddress,
   addresses = [],
+  getAddress,
   fetchAddress,
   config,
   location,
@@ -231,21 +233,29 @@ export default function CheckoutForm({
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
 
-  const handleNewAddress = (values: any, callback: any = () => {}) => {
+  const handleNewAddress = (values: any, callback: any = () => { }) => {
     const newValues = {
       ...values,
+      customerId: cartItems.userId,
       userId: cartItems.userId,
       country: state.deliveryMethod.name,
       countryCode: state.deliveryMethod.twoLetterIsoCode,
     }
 
-    createAddress(newValues)
-      .then((response: any) => {
+    lookupAddressId(newValues).then((addressId: number) => {
+      if (addressId == 0) {
+        createAddress(newValues)
+          .then((response: any) => {
+            callback()
+            fetchAddress()
+            setShippingInformation({ ...newValues, id: response.id })
+          })
+          .catch((error: any) => console.log(error));
+      } else {
         callback()
         fetchAddress()
-        setShippingInformation({ ...newValues, id: response.id })
-      })
-      .catch((error: any) => console.log(error))
+      }
+    }).catch((error: any) => console.log(error));
   }
 
   const toggleDelivery = (payload?: any) =>
@@ -330,41 +340,84 @@ export default function CheckoutForm({
     }
   }
 
-  const setBillingInformation = (payload: any, update = true) => {
+  const setBillingInformation = (payload: any, update = true, type = AddressType.BILLING) => {
     const handleAsync = async () => {
+      
       const billingInfoClone = { ...payload }
-      delete billingInfoClone.id
+      //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
       const shippingClone = { ...state.shippingInformation }
-      delete shippingClone.id
+      //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
-      const data = {
-        billingAddress: {
-          ...billingInfoClone,
-          country: state.deliveryMethod.name,
-          countryCode: state.deliveryMethod.twoLetterIsoCode,
-        },
-        shippingAddress: {
-          ...shippingClone,
-          country: state.deliveryMethod.name,
-          countryCode: state.deliveryMethod.twoLetterIsoCode,
-        },
+      let data;
+      let updateAddress = false;
+      const addresses = await loadAddressIDs();
+
+      if (state.isSameAddress) {
+        const addressId = await lookupAddressId(payload, addresses);
+        updateAddress = (addressId == 0);
+
+        if (updateAddress) {
+          data = {
+            billingAddress: {
+              isDefaultDelivery: false,
+            },
+            shippingAddress: {
+              ...payload,
+              id: addressId,
+              country: state.deliveryMethod.name,
+              countryCode: state.deliveryMethod.twoLetterIsoCode,
+              customerId: user.userId,
+              isDefault: false,
+              isDefaultBilling: false,
+              isDefaultDelivery: false,
+            },
+          };
+        }
+      } else {
+        // This case is only valid for billing address.
+
+        const addressId = await lookupAddressId(payload, addresses);
+        updateAddress = (addressId == 0);
+
+        if (updateAddress) {
+          data = {
+            billingAddress: {
+              ...payload,
+              id: addressId,
+              country: state.deliveryMethod.name,
+              countryCode: state.deliveryMethod.twoLetterIsoCode,
+              customerId: user.userId,
+              isDefault: false,
+              isDefaultBilling: false,
+              isDefaultDelivery: false,
+            },
+            shippingAddress: {
+              isDefaultBilling: false,
+            },
+          };
+        }
       }
 
-      try {
-        await axios.post(NEXT_UPDATE_CHECKOUT_ADDRESS, {
-          basketId,
-          model: data,
-        })
-      } catch (error) {}
+      if (updateAddress) {
+        try {
+          await axios.post(NEXT_UPDATE_CHECKOUT_ADDRESS, {
+            basketId,
+            model: data,
+          })
+        } catch (error) { }
+      }
     }
     dispatch({ type: 'SET_BILLING_INFORMATION', payload })
     if (update) handleAsync()
   }
 
   const handleShippingSubmit = (values: any) => {
+    if (values.isDirty) {
+      delete values.isDirty;
+    }
     toggleShipping()
     if (state.isSameAddress) {
-      setBillingInformation(values)
+      setBillingInformation(values, true) // For same addresses: 3rd param (AddressType) can be ignored.
       togglePayment(true)
     }
     setShippingInformation(values)
@@ -372,8 +425,46 @@ export default function CheckoutForm({
 
   const handleBillingSubmit = (values: any) => {
     togglePayment()
-    setBillingInformation(values)
+    setBillingInformation(values, true, AddressType.BILLING)
   }
+
+  const loadAddressIDs = async (): Promise<Array<any>> => {
+    const response = await getAddress(user.userId)
+    return response;
+  }
+
+  const lookupAddressId = async (addressInfo: any, addresses?: Array<any>) => {
+
+    if (!addresses) {
+      addresses = await loadAddressIDs();
+    }
+
+    const strVal = (val: string): string => {
+      if (val) {
+        return val.trim().toLowerCase();
+      }
+      return "";
+    };
+
+    let addressId = 0;
+    if (addresses && addresses.length) {
+      const lookupAddress = addresses.filter((address: any) => {
+        const titleMatch = (strVal(address.title) == strVal(addressInfo.title));
+        const firstNameMatch = (strVal(address.firstName) == strVal(addressInfo.firstName));
+        const lastNameMatch = (strVal(address.lastName) == strVal(addressInfo.lastName));
+        const address1Match = (strVal(address.address1) == strVal(addressInfo.address1));
+        const address2Match = (strVal(address.address2) == strVal(addressInfo.address2));
+        const cityMatch = (strVal(address.city) == strVal(addressInfo.city));
+        const postCodeMatch = (strVal(address.postCode) == strVal(addressInfo.postCode));
+        const phoneNoMatch = (strVal(address.phoneNo) == strVal(addressInfo.phoneNo));
+
+        return (titleMatch && firstNameMatch && lastNameMatch && address1Match && address2Match && cityMatch && postCodeMatch && phoneNoMatch);
+      });
+      addressId = (lookupAddress && lookupAddress.length) ? lookupAddress[0].id : 0;
+    }
+
+    return addressId;
+  };
 
   useEffect(() => {
     if (!Object.keys(state.shippingInformation).length) {
@@ -405,9 +496,9 @@ export default function CheckoutForm({
     dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
 
     const billingInfoClone = { ...state.billingInformation }
-    delete billingInfoClone.id
+    //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
     const shippingClone = { ...state.shippingInformation }
-    delete shippingClone.id
+    //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
     const data = {
       basketId,
@@ -468,6 +559,10 @@ export default function CheckoutForm({
 
     const handleAsync = async () => {
       try {
+        const billingAddrId = await lookupAddressId(data.billingAddress);
+        data.billingAddress.id = billingAddrId;
+        const shippingAddrId = await lookupAddressId(data.shippingAddress);
+        data.shippingAddress.id = shippingAddrId;
         const response: any = await axios.post(NEXT_CONFIRM_ORDER, {
           basketId,
           model: data,
@@ -584,16 +679,15 @@ export default function CheckoutForm({
     <>
       {state.isPaymentIntent && <Spinner />}
       <div
-        className={`bg-gray-50 relative ${
-          state.isPaymentIntent
-            ? 'pointer-events-none hidden overflow-hidden'
-            : ''
-        }`}
+        className={`bg-gray-50 relative ${state.isPaymentIntent
+          ? 'pointer-events-none hidden overflow-hidden'
+          : ''
+          }`}
       >
         <div className="max-w-2xl mx-auto sm:pt-16 pt-2 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
-          <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-            <div>
+          <form className="lg:grid lg:grid-cols-5 lg:gap-x-6 xl:gap-x-6">
+            <div className='lg:col-span-3 pb-6'>
               {!isShippingDisabled && (
                 <Delivery
                   appConfig={config}
@@ -605,8 +699,8 @@ export default function CheckoutForm({
               )}
 
               {state.isCNC || isShippingDisabled ? null : (
-                <div className="mt-4 border-t border-gray-200 pt-4">
-                  <h2 className="text-lg font-semibold text-gray-900">
+                <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6 rounded-lg">
+                  <h2 className="text-lg font-bold uppercase text-black">
                     {SHIPPING_INFORMATION}
                   </h2>
                   {state?.isDeliveryMethodSelected ? (
@@ -641,39 +735,39 @@ export default function CheckoutForm({
               )}
 
               {/* Payment */}
-              <div className="mt-6 border-t border-gray-200 pt-6">
-                <h2 className="text-lg font-semibold text-gray-900">
+              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6 rounded-lg">
+                <h2 className="text-lg font-bold uppercase text-black">
                   {BILLING_INFORMATION}
                 </h2>
                 {(state?.isShippingInformationCompleted ||
                   state.isCNC ||
                   isShippingDisabled) && (
-                  <Form
-                    toggleAction={() =>
-                      togglePayment(!state.isPaymentInformationCompleted)
-                    }
-                    onSubmit={handleBillingSubmit}
-                    appConfig={config}
-                    values={state?.billingInformation}
-                    schema={billingSchema}
-                    updateAddress={updateAddress}
-                    infoType="BILLING"
-                    loqateAddress={loqateAddress}
-                    config={billingFormConfig}
-                    handleNewAddress={handleNewAddress}
-                    initialValues={defaultBillingAddress}
-                    retrieveAddress={retrieveAddress}
-                    isInfoCompleted={state?.isPaymentInformationCompleted}
-                    btnTitle={GENERAL_SAVE_CHANGES}
-                    addresses={addresses}
-                    isGuest={cartItems.isGuestCheckout}
-                    setAddress={setBillingInformation}
-                    isSameAddressCheckboxEnabled={false}
-                  />
-                )}
+                    <Form
+                      toggleAction={() =>
+                        togglePayment(!state.isPaymentInformationCompleted)
+                      }
+                      onSubmit={handleBillingSubmit}
+                      appConfig={config}
+                      values={state?.billingInformation}
+                      schema={billingSchema}
+                      updateAddress={updateAddress}
+                      infoType="BILLING"
+                      loqateAddress={loqateAddress}
+                      config={billingFormConfig}
+                      handleNewAddress={handleNewAddress}
+                      initialValues={defaultBillingAddress}
+                      retrieveAddress={retrieveAddress}
+                      isInfoCompleted={state?.isPaymentInformationCompleted}
+                      btnTitle={GENERAL_SAVE_CHANGES}
+                      addresses={addresses}
+                      isGuest={cartItems.isGuestCheckout}
+                      setAddress={setBillingInformation}
+                      isSameAddressCheckboxEnabled={false}
+                    />
+                  )}
               </div>
-              <div className="mt-6 border-t border-gray-200 pt-6">
-                <h2 className="text-lg font-semibold text-gray-900">
+              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6 rounded-lg">
+                <h2 className="text-lg font-bold uppercase text-black">
                   {GENERAL_PAYMENT}
                 </h2>
                 {state.isPaymentInformationCompleted && (
@@ -699,12 +793,14 @@ export default function CheckoutForm({
             </div>
 
             {/* Order summary */}
-            <Summary
-              confirmOrder={confirmOrder}
-              isShippingDisabled={isShippingDisabled}
-              cart={cartItems}
-              handleItem={handleItem}
-            />
+           <div className='lg:col-span-2'>
+              <Summary
+                confirmOrder={confirmOrder}
+                isShippingDisabled={isShippingDisabled}
+                cart={cartItems}
+                handleItem={handleItem}
+              />
+           </div>
           </form>
         </div>
       </div>

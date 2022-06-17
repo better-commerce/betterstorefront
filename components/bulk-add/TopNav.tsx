@@ -2,7 +2,10 @@
 import React, { memo } from "react";
 
 // Package Imports
-import { DocumentDuplicateIcon } from '@heroicons/react/outline'
+import { DocumentDuplicateIcon } from "@heroicons/react/outline";
+
+// Other Imports
+import { GENERAL_BULK_ORDER_PAD } from "@components/utils/textVariables";
 
 interface ITopNavProps {
     readonly b2bSettings: Array<{ key: string, value: string }>;
@@ -14,11 +17,15 @@ const TopNav: React.FC<ITopNavProps> = (props: ITopNavProps) => {
     const { b2bSettings, onClick } = props;
 
     return (
-        <div className="flex flex-row">
-            <button onClick={onClick}
-                className="p-2 text-gray-400 hover:text-gray-500" aria-label="BulkAdd"
-            >
-                <DocumentDuplicateIcon className="w-6 h-6" aria-hidden="true" aria-label="BulkAdd" />
+        <div className="px-1 w-10 sm:w-16 flow-root">
+            <button
+                className="relative group grid grid-cols-1 items-center text-center align-center justify-center flex-col mx-auto"
+                onClick={onClick}>
+                <DocumentDuplicateIcon
+                    className="flex-shrink-0 h-6 w-6 block text-black group-hover:text-red-600 mx-auto"
+                    aria-hidden="true" aria-label="Bulk Add"
+                />
+                <span className='font-normal hidden text-sm text-black sm:block'>Quick Order</span>
             </button>
         </div>
     )

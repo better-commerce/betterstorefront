@@ -30,7 +30,7 @@ export default function CheckoutRouter({
 }: any) {
   const [noAccount, setNoAccount] = useState(false)
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB)
-  const { setUser, wishlistItems, basketId, setCartItems } = useUI()
+  const { setUser, setIsGuestUser, wishlistItems, basketId, setCartItems } = useUI()
   const { getWishlist } = useWishlist()
 
   const handleUserLogin = (values: any) => {
@@ -45,6 +45,7 @@ export default function CheckoutRouter({
         setNoAccount(false)
         setCartItems(result.data)
         setIsLoggedIn(true)
+        setIsGuestUser(false);
         // setUser(result.data)
         // getWishlist(result.data.userId, wishlistItems)
         Router.push('/checkout')
@@ -66,7 +67,7 @@ export default function CheckoutRouter({
     <section aria-labelledby="trending-heading" className="bg-white">
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
+          <h2 className="sm:text-6xl text-3xl uppercase font-bold text-center tracking-tight text-gray-900">
             {BTN_CHECKOUT_SECURELY}
           </h2>
         </div>
@@ -76,7 +77,7 @@ export default function CheckoutRouter({
               <div
                 key={idx}
                 onClick={() => handleTabChange(item.key)}
-                className={`cursor-pointer py-2 font-semibold text-gray-900 w-1/4 text-center border-b-2 ${
+                className={`cursor-pointer py-2 font-semibold text-gray-900 sm:w-1/4 w-2/3 sm:px-12 px-6 text-center border-b-2 ${
                   activeTab.key === item.key
                     ? 'border-gray-900'
                     : 'border-gray-300'

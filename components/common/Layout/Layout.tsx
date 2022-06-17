@@ -132,6 +132,10 @@ const Layout: FC<Props> = ({
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
 
+    if (!document.title) {
+      document.title = document.location.host;
+    }
+
     return () => {
       Router.events.off('routeChangeStart', () => {
       });
@@ -167,7 +171,7 @@ const Layout: FC<Props> = ({
           config={sortedData}
           languages={config?.languages}
         />
-        <main className="fit">{children}</main>
+        <main className="fit pt-16">{children}</main>
         <Footer config={data.footer} />
         <ModalUI />
         <SidebarUI />
