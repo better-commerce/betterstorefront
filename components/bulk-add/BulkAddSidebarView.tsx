@@ -1,5 +1,5 @@
 // Base Imports
-import React, { FC, Fragment, useState } from "react";
+import React, { FC, Fragment } from "react";
 
 // Package Imports
 import { XIcon } from "@heroicons/react/outline";
@@ -10,16 +10,17 @@ import { BulkAddForm } from "./BulkAddForm";
 
 // Other Imports
 import { useUI } from "@components/ui/context";
-import { DEFAULT_ENTRY_FIELD_COUNT } from "@components/utils/constants";
 import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE } from "@components/utils/textVariables";
 
 const BulkAddSidebarView: FC = () => {
-    const { closeSidebar } = useUI()
-    const [entryFieldCount, setEntryFieldCount] = useState<number>(DEFAULT_ENTRY_FIELD_COUNT);
+    const { closeSidebar } = useUI();
 
-    const handleShowMoreEntryFields = () => {
-        setEntryFieldCount(entryFieldCount + 5);
+    const onGridSubmit = (data: Array<{ stockCode: string, quantity: string }>) => {
     };
+
+    const onCSVSubmit = (data: any) => {
+    };
+
     const handleClose = () => closeSidebar();
 
     return (
@@ -81,7 +82,7 @@ const BulkAddSidebarView: FC = () => {
                                         <div className="mt-8 flex flex-col">
                                             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                                 <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                                    <BulkAddForm entryFieldCount={entryFieldCount} submit={() => { }} />
+                                                    <BulkAddForm onGridSubmit={onGridSubmit} onCSVSubmit={onCSVSubmit} />
                                                 </div>
                                             </div>
                                         </div>

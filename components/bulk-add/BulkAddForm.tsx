@@ -9,12 +9,12 @@ import { VALUES_MAP } from ".";
 import { GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
 
 interface IBulkAddFormProps {
-    readonly entryFieldCount: number;
-    readonly submit: any;
+    readonly onGridSubmit: any;
+    readonly onCSVSubmit: any;
 }
 
 export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => {
-    const { entryFieldCount, submit } = props;
+    const { onGridSubmit, onCSVSubmit } = props;
     const { headerValues, schema, initialValues, config } = VALUES_MAP;
 
     const onAddMoreOrderPads = (e: any, field: any, values: any, setValues: any) => {
@@ -37,12 +37,8 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
         field.onChange(e);
     }
 
-    const onSubmit = (fields: any) => {
-        //alert(JSON.stringify(fields, null, 4));
-    }
-
     return (
-        <Formik initialValues={initialValues} validationSchema={schema} onSubmit={onSubmit} enableReinitialize={true}>
+        <Formik initialValues={initialValues} validationSchema={schema} onSubmit={onGridSubmit} enableReinitialize={true}>
             {({ errors, values, touched, setValues }) => (
                 <Form>
                     <Field name="noOfFields">
