@@ -53,7 +53,7 @@ import {
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { round } from 'lodash'
-
+import ImageZoom from "react-image-zooom";
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
 const AttributesHandler = dynamic(() => import('./AttributesHandler'));
@@ -846,12 +846,13 @@ export default function ProductView({
                       {
                         previewImg && (
                           <div key={previewImg.name + 'tab-panel'}>
-                            <img
+                            {/*<img
                               src={previewImg}
                               alt={previewImg.name}
                               className="w-full h-auto object-center object-cover rounded-lg"
                               height={1000}
-                            />
+                            />*/}
+                            <ImageZoom src={previewImg} alt={previewImg.name} />
                           </div>
                         )
                       }
