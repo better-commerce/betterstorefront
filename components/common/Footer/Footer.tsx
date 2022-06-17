@@ -31,14 +31,14 @@ const Footer: FC<Props> = ({ config }) => {
         <div className="py-20">
           <div className="grid grid-cols-1 md:grid-cols-12 md:grid-flow-col md:gap-x-8 md:gap-y-16 md:auto-rows-min">
             {/* Image section */}
-            <div className="col-span-1 md:col-span-2 lg:row-start-1 lg:col-start-1">
+            <div className="col-span-1 md:col-span-2 lg:row-start-1 lg:col-start-1 opacity-70">
               <Logo />
             </div>
 
             {/* Sitemap sections */}
             <div className="mt-10 col-span-6 grid grid-cols-2 gap-8 sm:grid-cols-3 md:mt-0 md:row-start-1 md:col-start-3 md:col-span-8 lg:col-start-2 lg:col-span-6">
               <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
-                {config?.map((item: any, idx: number) => {
+                {/* {config?.map((item: any, idx: number) => {
                   return (
                     <div key={`${idx}-footer-item`}>
                       <h3 className="text-md font-medium text-gray-900">
@@ -71,15 +71,53 @@ const Footer: FC<Props> = ({ config }) => {
                       </ul>
                     </div>
                   )
-                })}
+                })} */}
+                <div>
+                  <h3 className="text-md font-bold text-gray-900">INFORMATION</h3>
+                  <ul role="list" className="mt-6 space-y-6">
+                    <li className="text-sm">
+                      <h3 className="text-sm font-medium text-gray-900">Contact Us</h3>
+                      <ul></ul>
+                    </li>
+                    <li className="text-sm">
+                      <h3 className="text-sm font-medium text-gray-900">My Account</h3>
+                      <ul></ul>
+                    </li>
+                    <li className="text-sm">
+                      <h3 className="text-sm font-medium text-gray-900">About Us</h3>
+                      <ul></ul>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-md font-bold text-gray-900">HELP</h3>
+                  <ul role="list" className="mt-6 space-y-6">
+                    <li className="text-sm">
+                      <h3 className="text-sm font-medium text-gray-900">Support</h3>
+                      <ul></ul>
+                    </li>
+                    <li className="text-sm">
+                      <h3 className="text-sm font-medium text-gray-900">Cookie Policy</h3>
+                      <ul></ul>
+                    </li>
+                    <li className="text-sm">
+                      <h3 className="text-sm font-medium text-gray-900">Privacy Policy</h3>
+                      <ul></ul>
+                    </li>
+                    <li className="text-sm">
+                      <h3 className="text-sm font-medium text-gray-900">Terms and Conditions</h3>
+                      <ul></ul>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
             {/* Newsletter section */}
-            <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-9 lg:col-span-4">
-              <h3 className="text-xl uppercase font-bold text-black">
+            <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-7 lg:col-span-6">
+              <h3 className="text-2xl uppercase font-bold text-black">
                 {SIGN_UP_FOR_NEWSLETTER}
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-md text-gray-500">
                 {SIGN_UP_TEXT}
               </p>
               <form className="mt-6 flex sm:max-w-md">
