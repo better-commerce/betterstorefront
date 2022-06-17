@@ -6,12 +6,13 @@ import { Router } from 'next/router'
 
 export default function CurrencySwitcher({ config, title, action }: any) {
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className="p-2 text-gray-400 hover:text-gray-500 inline-flex justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"  aria-label="Currency">
+    <Menu as="div" className="relative inline-block text-left px-1 sm:w-16 w-10 flow-root">
+      <Menu.Button className="group grid grid-cols-1 items-center text-center align-center justify-center flex-col mx-auto"  aria-label="Language">
         <FlagIcon
-          className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+          className="flex-shrink-0 h-6 w-6 block text-black group-hover:text-gray-500 mx-auto"
           aria-hidden="true"  aria-label="Flags"
         />
+        <span className='font-normal sm:block hidden text-sm text-black'>Lang</span>
       </Menu.Button>
       <Transition
         as={Fragment}

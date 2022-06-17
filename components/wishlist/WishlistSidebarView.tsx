@@ -14,7 +14,8 @@ import {
   GENERAL_REMOVE,
   GENERAL_ADD_TO_BASKET,
   WISHLIST_SUCCESS_MESSAGE,
-  GENERAL_CONTINUE_SHOPPING
+  GENERAL_CONTINUE_SHOPPING,
+  IMG_PLACEHOLDER
 } from '@components/utils/textVariables'
 
 const WishlistSidebar: FC = () => {
@@ -87,10 +88,10 @@ const WishlistSidebar: FC = () => {
     <Transition.Root show={true} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 overflow-hidden z-50"
+        className="fixed inset-0 overflow-hidden z-999"
         onClose={handleClose}
       >
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden z-999">
           <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-500"
@@ -100,7 +101,7 @@ const WishlistSidebar: FC = () => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="" />
+            <Dialog.Overlay className="w-full h-screen" onClick={handleClose} />
           </Transition.Child>
 
           <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
@@ -160,7 +161,7 @@ const WishlistSidebar: FC = () => {
                                   layout='responsive'
                                   width={80}
                                   height={80}
-                                  src={product.image}
+                                  src={product.image || IMG_PLACEHOLDER}
                                   alt={product.name}
                                   className="w-full h-full object-center object-cover"></Image>
                                 {/* <img
@@ -190,7 +191,7 @@ const WishlistSidebar: FC = () => {
                                   <div className="flex justify-between w-full">
                                     <button
                                       type="button"
-                                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                                      className="font-medium text-red-300 hover:text-red-500"
                                       onClick={() =>
                                         deleteItemFromWishlist(product.recordId)
                                       }
@@ -201,7 +202,7 @@ const WishlistSidebar: FC = () => {
                                   <div className="flex justify-between w-full">
                                     <button
                                       type="button"
-                                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                                      className="font-medium text-black hover:text-indigo-500"
                                       onClick={() => handleAddToCart(product)}
                                     >
                                       {GENERAL_ADD_TO_BASKET}
@@ -229,7 +230,7 @@ const WishlistSidebar: FC = () => {
                       <p>
                         <button
                           type="button"
-                          className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                          className="flex justify-center items-center px-6 py-3 border border-transparent uppercase rounded-sm shadow-sm font-medium text-white bg-black hover:bg-pink"
                           onClick={handleClose}
                         >
                           {GENERAL_CONTINUE_SHOPPING}

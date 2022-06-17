@@ -41,7 +41,7 @@ export default function Filters({
     return `${filtersLength} Filters`
   }
 
-  const appliedFilters = products.filters.reduce(
+  const appliedFilters = products?.filters?.reduce(
     (acc: any, obj: any) => {
       acc.forEach((item: any) => {
         if (item.Key === obj.key) {
@@ -59,7 +59,7 @@ export default function Filters({
     <div className="bg-transparent">
       {/* Mobile filter dialog */}
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="fixed inset-0 flex z-40" onClose={setOpen}>
+        <Dialog as="div" className="fixed inset-0 flex z-999" onClose={setOpen}>
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -81,7 +81,7 @@ export default function Filters({
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <div className="ml-auto relative max-w-xs w-full h-full bg-white shadow-xl py-2 sm:py-4 sm:pb-6 pb-2 flex flex-col overflow-y-auto">
+            <div className="ml-auto relative max-w-xs w-full h-full bg-white shadow-xl py-2 sm:py-4 sm:pb-6 pb-2 flex flex-col overflow-y-auto z-9999">
               <div className="px-4 flex items-center justify-between">
                 <h2 className="text-lg font-medium text-gray-900">{GENERAL_FILTER_TITLE}</h2>
                 <button

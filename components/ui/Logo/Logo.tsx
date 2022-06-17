@@ -3,10 +3,9 @@ import React from "react";
 const Logo = ({ className = '', ...props }) => {
   return (
     <img
-      className="h-8 w-auto"
-      src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
+      src="/logo-cx-commerce.png"
       alt=""
-      width={26} height={32}
+      width={50} height={36}
     />
   );
 }
