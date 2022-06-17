@@ -1,9 +1,6 @@
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { useEffect, Fragment, useState, useCallback, MouseEventHandler } from 'react'
-import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
-import Zoom from 'react-medium-image-zoom'
-import 'react-medium-image-zoom/dist/styles.css'
+import {useState, useEffect, Fragment,  useCallback } from 'react'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
@@ -106,6 +103,7 @@ export default function ProductView({
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
+  const [previewImg, setPreviewImg] = useState<any>();
 
   const product = updatedProduct || data
 
@@ -115,7 +113,7 @@ export default function ProductView({
     ...product,
   })
 
-  const [open, setOpen] = useState(false)
+  
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
 
   const { Product } = EVENTS_MAP.ENTITY_TYPES
@@ -197,21 +195,11 @@ export default function ProductView({
         index === self.findIndex((t: any) => t.image === value.image)
     )
   }
-  const [isZoomedT, setIsZoomedT] = useState(false)
-
-  // const handleImgLoadT = useCallback(() => {
-  //   setIsZoomedT(true)
-  // }, [])
-
-  const [previewImg, setPreviewImg] = useState<any>();
 
   const handleImgLoadT = (image: any) => {
     setPreviewImg(image);
   }
 
-  const handleZoomChangeT = useCallback(shouldZoomT => {
-    setIsZoomedT(shouldZoomT)
-  }, [])
 
   const handlePreviewClose= ()=>{
     setPreviewImg(undefined);
