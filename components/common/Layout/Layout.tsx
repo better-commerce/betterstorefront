@@ -130,6 +130,10 @@ const Layout: FC<Props> = ({
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
 
+    if (!document.title) {
+      document.title = document.location.host;
+    }
+
     return () => {
       Router.events.off('routeChangeStart', () => {
       });
