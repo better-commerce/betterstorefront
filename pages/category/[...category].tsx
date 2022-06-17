@@ -1,13 +1,11 @@
-import dynamic from 'next/dynamic'
 import { useReducer, useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-//DYNAMINC COMPONENT CALLS
-const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
-const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
-const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
-const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
+import ProductFilterRight from '@components/product/Filters/filtersRight'
+import ProductMobileFilters from '@components/product/Filters'
+import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
+import ProductGridWithFacet from '@components/product/Grid'
 import Link from 'next/link'
 import Image from 'next/image'
 import { NextSeo } from 'next-seo'
@@ -16,6 +14,7 @@ import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER, RESULTS } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import BreadCrumbs from '@components/ui/BreadCrumbs'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -281,15 +280,20 @@ function CategoryPage({ category, products }: any) {
     IS_INFINITE_SCROLL && productListMemory.products?.results?.length
       ? productListMemory.products
       : products
-
+  
   return (
-    <div className="bg-white">
+    <div className="bg-white md:w-4/5 mx-auto">
       {/* Mobile menu */}
-      <main className="pb-0">
-        <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
+      <main className="pb-0">   
+        <div className="pt-2 sm:pt-4 sm:px-0 px-3">
+          {category.breadCrumbs && (
+            <BreadCrumbs items={category.breadCrumbs} currentProduct={category} />
+          )}
+        </div>     
+        <div className="sm:px-0 flex justify-center items-center w-full">
           {
             category && category.images && category.images.length ? (
-              <Swiper navigation={true} loop={true} className="mySwiper">
+              <Swiper navigation={true} loop={true} className="mySwiper sm:mt-4 mt-0">
                 {category.images.map((image: any, idx: number) => {
                   return (
                     <SwiperSlide key={idx}>
@@ -300,7 +304,7 @@ function CategoryPage({ category, products }: any) {
                           height={460}
                           src={image.url || IMG_PLACEHOLDER}
                           alt={category.name}
-                          className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
+                          className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover"
                         ></Image>
                       </Link>
                     </SwiperSlide>
@@ -312,93 +316,85 @@ function CategoryPage({ category, products }: any) {
             )
           }
         </div>
-        <div className="text-center pt-6 mb-4 px-4 sm:px-6 lg:px-8">
-          <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
-            {category.name}
+        
+        <div className="text-left sm:pt-1 sm:pb-6 pb-4 pt-3 px-3 sm:px-0">
+          <h4><span className='font-normal text-gray-500 text-sm'>Showing {products.total} {' '} {RESULTS}</span></h4>
+          <h1 className="sm:text-xl text-xl font-semibold tracking-tight text-black">
+            {category.name} 
           </h1>
-          <h2>{category.description}</h2>
-          {!!products && (
-            <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
-              {products.total}{' '}{RESULTS}
-            </h1>
-          )}
+          <h2 className='sm:text-md text-gray-500'>{category.description}</h2>          
         </div>
-        <div className="sm:max-w-7xl sm:px-7 mx-auto grid grid-cols-1 sm:grid-cols-12">
-          <div className="sm:col-span-12 border-t border-gray-200 py-2">
-            <div className="flex w-full text-center align-center justify-center">
-              {
-                category && category.subCategories && category.subCategories.length ? (
-                  category.subCategories.map((subcateg: any, idx: number) => {
+        
+        {category?.subCategories?.length > 0 &&
+            <div className='grid grid-cols-1 sm:grid-cols-12'>
+              <div className='sm:col-span-12'>
+                <div className="grid grid-cols-2 sm:grid-cols-5 text-left border-t border-l border-r mt-2 py-2 bg-gray-50">
+                  {category?.subCategories?.map((subcateg: any, idx: number) => {
                     return (
                       <Link href={'/' + subcateg.link} key={idx}>
-                        <div className="flex justify-center text-center items-center flex-col px-2 cursor-pointer">
-                          <Image
-                            layout='fixed'
-                            width={80}
-                            height={80}
-                            className="h-8 w-8 sm:h-20 sm:w-20 rounded-full image"
-                            src={subcateg.image || IMG_PLACEHOLDER}
-                            alt={subcateg.name}
-                          ></Image>
-                          <h4 className="min-h-40px text-gray-900 font-semibold text-sm">
+                        <div className="flex flex-col text-center cursor-pointer">
+                          <h4 className="text-gray-800 font-medium sm:text-sm text-xs underline hover:text-pink">
                             {subcateg.name}
                           </h4>
                         </div>
                       </Link>
                     )
-                  })
-                ) : (
-                  <></>
-                )
-              }
-            </div>
-          </div>
-        </div>
-
-        <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
-          {!!products && (
-            <>
-              {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
-
-              <div className="sm:col-span-3 sm:hidden flex flex-col">
-                <ProductMobileFilters
-                  handleFilters={handleFilters}
-                  products={products}
-                  routerFilters={state.filters}
-                  handleSortBy={handleSortBy}
-                  clearAll={clearAll}
-                  routerSortOption={state.sortBy}
-                />
-              </div>
-              <div className="sm:col-span-3 sm:block hidden">
-                <ProductFilterRight
-                  handleFilters={handleFilters}
-                  products={productDataToPass}
-                  routerFilters={state.filters}
-                />
-              </div>
-              <div className="sm:col-span-9">
-                {/* {HIDE FILTER TOP BAR IN MOBILE} */}
-
-                <div className="flex-1 sm:block hidden">
-                  <ProductFiltersTopBar
-                    products={products}
-                    handleSortBy={handleSortBy}
-                    routerFilters={state.filters}
-                    clearAll={clearAll}
-                    routerSortOption={state.sortBy}
-                  />
+                  })}
                 </div>
-                <ProductGridWithFacet
-                  products={productDataToPass}
-                  currentPage={products.currentPage}
-                  handlePageChange={handlePageChange}
-                  handleInfiniteScroll={handleInfiniteScroll}
-                />
               </div>
-            </>
-          )}
-        </div>
+            </div>
+        }
+        {products.total>0 &&
+            <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 w-full mx-auto overflow-hidden sm:border-t sm:border-gray-200">
+              {!!products && (
+                <>
+                  {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+
+                  <div className="sm:col-span-2 sm:hidden flex flex-col">
+                    <ProductMobileFilters
+                      handleFilters={handleFilters}
+                      products={products}
+                      routerFilters={state.filters}
+                      handleSortBy={handleSortBy}
+                      clearAll={clearAll}
+                      routerSortOption={state.sortBy}
+                    />
+                  </div>
+                  <div className="sm:col-span-2 sm:block hidden">
+                    <ProductFilterRight
+                      handleFilters={handleFilters}
+                      products={productDataToPass}
+                      routerFilters={state.filters}
+                    />
+                  </div>
+                  <div className="sm:col-span-10 sm:px-0 px-4 overflow-hidden">
+                    {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+
+                    <div className="flex-1 sm:block hidden">
+                      <ProductFiltersTopBar
+                        products={products}
+                        handleSortBy={handleSortBy}
+                        routerFilters={state.filters}
+                        clearAll={clearAll}
+                        routerSortOption={state.sortBy}
+                      />
+                    </div>
+                    <ProductGridWithFacet
+                      products={productDataToPass}
+                      currentPage={products.currentPage}
+                      handlePageChange={handlePageChange}
+                      handleInfiniteScroll={handleInfiniteScroll}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+        }
+        {products.total == 0 &&
+            <div className='max-w-7xl mx-auto p-32 text-center'>
+                <h4 className='text-3xl font-bold text-gray-300'>No Products availabe in {category.name}</h4>
+            </div>
+        }
       </main>
       <NextSeo
         title={category.name}

@@ -18,11 +18,11 @@ export default function EngravingForm({ submitForm }: any) {
     >
       {({ errors, touched, handleSubmit, values, handleChange }: any) => {
         return (
-          <Form className="w-full font-semibold">
+          <Form className="w-full font-semibold mt-4">
             {config.map((itemForm: any, itemIdx: number) => {
               return (
                 <>
-                  <label className="text-gray-700 text-sm">
+                  <label className="text-black font-semibold uppercase text-xs">
                     {itemForm.label}
                   </label>
 
@@ -33,7 +33,7 @@ export default function EngravingForm({ submitForm }: any) {
                     onChange={handleChange}
                     value={values[itemForm.key]}
                     type={itemForm.type}
-                    className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                    className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
                   />
                   {errors[itemForm.key] && touched[itemForm.key] ? (
                     <div className="text-red-400 text-xs capitalize mb-2">
@@ -47,7 +47,7 @@ export default function EngravingForm({ submitForm }: any) {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="w-full max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                className="w-full max-w-xs flex-1 uppercase bg-black border border-transparent rounded-sm py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
               >
                 {GENERAL_ADD_TO_BASKET}
               </button>

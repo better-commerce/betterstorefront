@@ -91,31 +91,33 @@ function LookbookDetailPage({ data, slug }: any) {
   }
 
   return (
-    <div className="bg-white max-w-7xl mx-auto">
+    <div className="bg-white w-full mx-auto">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8 flex items-center flex-col">
-          <h1 className="py-5 text-4xl font-extrabold tracking-tight text-gray-900">
-            {data.name}
-          </h1>
-          <h2>{data.description}</h2>
-          <div className="w-full sm:w-2/4 bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1 mt-10">
-              <div className='image-container'>
+        <div className="text-left py-0 px-4 sm:px-0 lg:px-0 flex items-center flex-col">
+          <div className="w-full bg-gray-200 rounded-sm overflow-hidden">
+              <div className='image-container lookbook-image'>
                 <Image
                   layout='fill'
                   src={data.mainImage || IMG_PLACEHOLDER}
                   alt={data.name}
-                  className="w-full h-full object-center object-cover hover:opacity-75 image"
-              ></Image>    
-              </div>
-            <button
-              onClick={handleBulk}
-              className="font-bold text-xl py-2 w-full bg-gray-900 text-white"
-            >
-              {SHOP_THE_LOOK}
-            </button>
+                  className="w-full h-screen min-h-screen object-center object-cover image"
+                />
+                <div className='lookbook-data'>
+                    <h1 className="py-1 text-4xl font-semibold tracking-tight text-white">
+                      {data.name}
+                    </h1>
+                    <h2 className="pt-4 text-md sm:w-1/3 font-normal tracking-tight text-white">{data.description}</h2>
+                    <button
+                      onClick={handleBulk}
+                      className="font-semibold uppercase bg-black hover:bg-gray-900 text-lg py-3 px-10 mt-5 text-white"
+                    >
+                      {SHOP_THE_LOOK}
+                    </button>
+                </div>
+              </div>            
           </div>
-          <div className="mt-5">
+          <div className="mt-5 sm:w-4/5 mx-auto">
             <ProductGrid
               products={products}
               currentPage={products.currentpage}
