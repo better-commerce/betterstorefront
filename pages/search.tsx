@@ -292,9 +292,11 @@ function Search({ query, setEntities, recordEvent }: any) {
       {/* Mobile menu */}
       <main className="pb-24">
         <div className="text-left sm:py-5 py-4 px-4 sm:px-0 lg:px-0">
+          <h4><span className='text-sm font-normal'>Showing {data.products.total} Results for</span></h4>
           <h1 className="sm:text-2xl text-xl font-semibold tracking-tight text-black">
-            {GENERAL_CATALOG} <span className='text-sm font-normal'>{'-'} {data.products.total} items</span>
+            {GENERAL_CATALOG} 
           </h1>
+          
         </div>
         <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 w-full mx-auto overflow-hidden px-4 sm:px-0 lg:px-0">
           {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}

@@ -23,11 +23,11 @@ function LookbookPage({ data }: any) {
   useAnalytics(PageViewed, {
     eventType: PageViewed,
     pageCategory: 'Lookbook',
-    omniImg: data[0].image,
+    omniImg: data[0]?.image,
   })
 
   return (
-    <div className="mt-0 relative mb-5">
+    <div className="mt-6 relative mb-5">
       <div className="text-left pt-0 pb-6 px-4 sm:px-0 lg:px-0">
         <h1 className="sm:w-4/5 mx-auto w-full text-3xl font-semibold tracking-tight text-black">
           {SHOP_BY_LIFESTYLRE}
@@ -36,6 +36,7 @@ function LookbookPage({ data }: any) {
           {data.length}{' '}{RESULTS}
         </h1>
       </div>
+      {data.length > 0 &&
       <div className="relative w-full overflow-x-auto">
         <Swiper
           slidesPerView={1.5}
@@ -87,6 +88,14 @@ function LookbookPage({ data }: any) {
           </ul>
         </Swiper>
       </div>
+      }
+      {data.length == 0 &&
+        <>
+          <div className='flex flex-col text-center py-32'>
+            <h2 className='text-4xl font-bold text-gray-200 w-full mx-auto'>No Lookbook Available</h2>
+          </div>
+        </>
+      }
     </div>
   )
 }
