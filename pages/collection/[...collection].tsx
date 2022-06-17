@@ -236,8 +236,9 @@ export default function CollectionPage(props: any) {
        </div>
    }
    <div className="sm:py-3 py-2 px-4 sm:px-0">
+    <h4><span className='font-normal text-gray-500 text-sm'>Showing {props.products.total} {' '} {RESULTS}</span></h4>
      <h1 className="sm:text-xl text-xl font-semibold tracking-tight text-black">
-       {props.name} <span className='font-normal text-gray-500 text-sm'>{' -'} {props.products.total} {' '} {RESULTS}</span>
+       {props.name}
      </h1>
      <h2>{props.description}</h2>
    </div>
