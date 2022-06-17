@@ -1,5 +1,5 @@
 // Base Imports
-import React, { FC, Fragment } from "react";
+import React, { FC, Fragment, useState } from "react";
 
 // Package Imports
 import { XIcon } from "@heroicons/react/outline";
@@ -14,6 +14,7 @@ import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LI
 
 const BulkAddSidebarView: FC = () => {
     const { closeSidebar } = useUI();
+    const [isLineByLine, setIsLineByLine] = useState<boolean>(true);
 
     const onGridSubmit = (data: Array<{ stockCode: string, quantity: string }>) => {
     };
@@ -64,12 +65,19 @@ const BulkAddSidebarView: FC = () => {
 
                                             </Dialog.Title>
                                             <div className="flex">
-                                                <button className="flex justify-center px-6 mr-3 text-sm items-center py-2 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 ">
-                                                    {GENERAL_COPY_AND_PASTE}
-                                                </button>
-                                                <button className="flex justify-center px-6 mr-3 text-sm items-center py-2 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 ">
-                                                    {GENERAL_LINE_BY_LINE}
-                                                </button>
+                                                {
+                                                    isLineByLine ? (
+                                                        <button className="flex justify-center px-6 mr-3 text-sm items-center py-2 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 " onClick={() => setIsLineByLine(false)}>
+                                                            {GENERAL_COPY_AND_PASTE}
+                                                        </button>
+
+                                                    ) : (
+                                                        <button className="flex justify-center px-6 mr-3 text-sm items-center py-2 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 " onClick={() => setIsLineByLine(true)}>
+                                                            {GENERAL_LINE_BY_LINE}
+                                                        </button>
+                                                    )
+                                                }
+
                                                 <button
                                                     type="button"
                                                     className="-m-2 p-2 text-gray-400 hover:text-gray-500"
@@ -82,31 +90,40 @@ const BulkAddSidebarView: FC = () => {
                                         </div>
 
                                         {/*LINE BY LINE PANEL*/}
-                                        <div className="flex flex-col px-6">
-                                            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                                    <BulkAddForm onGridSubmit={onGridSubmit} onCSVSubmit={onCSVSubmit} />
+                                        {
+                                            isLineByLine && (
+                                                <div className="flex flex-col px-6">
+                                                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                                        <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                                                            <BulkAddForm onGridSubmit={onGridSubmit} onCSVSubmit={onCSVSubmit} />
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            )
+                                        }
 
                                         {/*COPY AND PASTE PANEL*/}
-                                        <div className="flex flex-col mt-4 px-6">
-                                            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                                    <label className="font-bold text-sm leading-light">Copy and paste your file in following format: STOCKCODE[comma]Quantity</label>
-                                                    <textarea rows={6} cols={12} className="p-4 rounded-md bg-white border text-sm w-full border-gray-300" placeholder="Copy and paste your file in following format: STOCKCODE[comma]Quantity"></textarea>
+                                        {
+                                            !isLineByLine && (
+                                                <div className="flex flex-col mt-4 px-6">
+                                                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                                        <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                                                            <label className="font-bold text-sm leading-light">Copy and paste your file in following format: STOCKCODE[comma]Quantity</label>
+                                                            <textarea rows={6} cols={12} className="p-4 rounded-md bg-white border text-sm w-full border-gray-300" placeholder="Copy and paste your file in following format: STOCKCODE[comma]Quantity"></textarea>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            )
+                                        }
+
                                     </div>
                                 </div>
                             </div>
                         </Transition.Child>
                     </div>
                 </div>
-            </Dialog>
-        </Transition.Root>
+            </Dialog >
+        </Transition.Root >
     );
 
 };
