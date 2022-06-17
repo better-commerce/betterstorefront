@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
+import {useState, useEffect, Fragment,  useCallback } from 'react'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/solid'
@@ -15,6 +15,8 @@ import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
+import { Dialog, Transition } from '@headlessui/react'
+import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import {
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
@@ -29,6 +31,7 @@ import {
   BTN_ADD_TO_FAVORITES,
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
+  CLOSE_PANEL,
   GENERAL_ADD_TO_BASKET,
   GENERAL_ENGRAVING,
   GENERAL_PRICE_LABEL_RRP,
@@ -50,6 +53,7 @@ import {
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { round } from 'lodash'
+
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
 const AttributesHandler = dynamic(() => import('./AttributesHandler'));
@@ -99,6 +103,7 @@ export default function ProductView({
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
+  const [previewImg, setPreviewImg] = useState<any>();
 
   const product = updatedProduct || data
 
@@ -108,6 +113,7 @@ export default function ProductView({
     ...product,
   })
 
+  
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
 
   const { Product } = EVENTS_MAP.ENTITY_TYPES
@@ -190,6 +196,14 @@ export default function ProductView({
     )
   }
 
+  const handleImgLoadT = (image: any) => {
+    setPreviewImg(image);
+  }
+
+
+  const handlePreviewClose= ()=>{
+    setPreviewImg(undefined);
+  }
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
@@ -533,6 +547,7 @@ export default function ProductView({
                               <span className="relative">
                                 {image.image ? (
                                   <div className='image-container'>
+                                    {/* <ControlledZoom isZoomed={isZoomedT} onZoomChange={handleZoomChangeT}> */}
                                     <Image
                                       priority
                                       src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}
@@ -541,8 +556,10 @@ export default function ProductView({
                                       layout='responsive'
                                       sizes='320 600 1000'
                                       width={600} height={1000}
+                                      onClick={(ev: any) => handleImgLoadT(image.image)}
                                       blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
                                     />
+                                    {/* </ControlledZoom> */}
                                   </div>
                                 ) : (
                                   <PlayIcon className="h-full w-full object-center object-cover" />
@@ -788,6 +805,66 @@ export default function ProductView({
           }}
         />
       </main>
+      <Transition.Root show={previewImg != undefined} as={Fragment} >
+        <Dialog as="div" className="relative z-999 top-4 mt-4" onClose={handlePreviewClose}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={handlePreviewClose} />
+          </Transition.Child>
+
+          <div className="fixed z-9999 top-0 left-0 w-full overflow-y-auto">
+            <div className="flex items-end sm:items-center justify-center min-h-screen h-screen p-4 text-center sm:p-0 mx-auto">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <div className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:w-2/6 sm:p-2 mx-auto">
+                  <div>
+                    <div className="flex items-center">
+                        <button
+                          type="button"
+                          className="p-2 text-gray-400 hover:text-gray-500 absolute right-2 top-2"
+                          onClick={handlePreviewClose}
+                        >
+                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <XIcon className="h-6 w-6 text-black" aria-hidden="true" />
+                        </button>
+                      </div>
+                    <div className="text-center">
+                      {
+                        previewImg && (
+                          <div key={previewImg.name + 'tab-panel'}>
+                            <img
+                              src={previewImg}
+                              alt={previewImg.name}
+                              className="w-full h-auto object-center object-cover rounded-lg"
+                              height={1000}
+                            />
+                          </div>
+                        )
+                      }
+
+                    </div>
+                  </div>
+
+                </div>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
     </div>
   )
 }

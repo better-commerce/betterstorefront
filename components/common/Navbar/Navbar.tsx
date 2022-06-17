@@ -12,7 +12,7 @@ import axios from 'axios'
 import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
-import { MenuIcon, SearchIcon, XIcon, ShoppingCartIcon, ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/solid'
+import { MenuIcon, SearchIcon, XIcon, ShoppingCartIcon, ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/outline'
 const Account = dynamic(() => import('./AccountDropdown'))
 const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))

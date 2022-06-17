@@ -318,8 +318,9 @@ function CategoryPage({ category, products }: any) {
         </div>
         
         <div className="text-left sm:pt-1 sm:pb-6 pb-4 pt-3 px-3 sm:px-0">
+          <h4><span className='font-normal text-gray-500 text-sm'>Showing {products.total} {' '} {RESULTS}</span></h4>
           <h1 className="sm:text-xl text-xl font-semibold tracking-tight text-black">
-            {category.name} <span className='font-normal text-gray-500 text-sm'>{' -'} {products.total} {' '} {RESULTS}</span>
+            {category.name} 
           </h1>
           <h2 className='sm:text-md text-gray-500'>{category.description}</h2>          
         </div>

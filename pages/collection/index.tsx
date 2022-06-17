@@ -16,7 +16,7 @@ export default function CollectionList(props: any) {
         <h2 className="text-2xl font-bold uppercase tracking-tight text-gray-900">
           {SHOP_BY_COLLECTION}
         </h2>
-
+        {props?.data.length > 0 &&
         <div className="py-10 grid grid-cols-2 sm:gap-y-10 gap-y-6 sm:grid-cols-4 gap-x-6 lg:grid-cols-6 xl:gap-x-8">
           {props.data.map((collection: any, key: any) => (
             <Link key={key} href={`/collection/${collection.slug}`}>
@@ -52,6 +52,14 @@ export default function CollectionList(props: any) {
             </Link>
           ))}
         </div>
+        }
+        {props?.data.length == 0 &&
+        <>
+          <div className='flex flex-col text-center py-32'>
+            <h2 className='text-4xl font-bold text-gray-200 w-full mx-auto'>No Collection Available</h2>
+          </div>
+        </>
+      }
       </section>
     </main>
   )
