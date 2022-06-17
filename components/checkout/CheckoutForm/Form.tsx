@@ -14,7 +14,7 @@ import {
 
 export default function AddressForm({
   initialValues = {},
-  onSubmit = () => {},
+  onSubmit = () => { },
   closeEditMode,
   btnTitle = 'Save',
   toggleAction,
@@ -24,7 +24,7 @@ export default function AddressForm({
   config,
   addresses,
   setAddress,
-  sameAddressAction = () => {},
+  sameAddressAction = () => { },
   isSameAddressCheckboxEnabled,
   isSameAddress = true,
   isGuest = false,
@@ -124,7 +124,10 @@ export default function AddressForm({
     <Formik
       validationSchema={schema}
       initialValues={initState}
-      onSubmit={onSubmit}
+      onSubmit={(values: any) => {
+        // Pass on dirty flag to the parent ref.
+        onSubmit({ ...values, ...{ isDirty: formikRef.current.dirty } });
+      }}
       innerRef={formikRef}
     >
       {({
@@ -233,8 +236,8 @@ export default function AddressForm({
                           </span>
                         )}
                         {formItem.addressFinder &&
-                        values[formItem.name] === postCodeValue &&
-                        addressList.length > 0 ? (
+                          values[formItem.name] === postCodeValue &&
+                          addressList.length > 0 ? (
                           <div className="absolute bg-white z-10 w-64 max-h-80 overflow-scroll">
                             <div className="bg-gray-900">
                               <h2
