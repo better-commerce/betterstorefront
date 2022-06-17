@@ -548,7 +548,7 @@ export default function ProductView({
                                 {image.image ? (
                                   <div className='image-container'>
                                     {/* <ControlledZoom isZoomed={isZoomedT} onZoomChange={handleZoomChangeT}> */}
-                                    <ImageZoom  src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}  alt={image.name} 
+                                    <ImageZoom src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}  alt={image.name} 
                                      priority
                                      className="w-full h-full object-center object-cover image"
                                      layout='responsive'
