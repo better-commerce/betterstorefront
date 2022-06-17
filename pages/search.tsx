@@ -1,17 +1,20 @@
+import dynamic from 'next/dynamic'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
-import ProductGrid from '@components/product/Grid'
-import ProductMobileFilters from '@components/product/Filters'
-import ProductFilterRight from '@components/product/Filters/filtersRight'
-import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
+//DYNAMINC COMPONENT CALLS
+const ProductGrid = dynamic(() => import('@components/product/Grid'))
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { GENERAL_CATALOG } from '@components/utils/textVariables'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -129,12 +132,14 @@ function Search({ query, setEntities, recordEvent }: any) {
       },
     },
     error,
-  } = useSwr(['/api/catalog/products', state], postData)
+  } = useSwr(['/api/catalog/products', state], postData, {
+    revalidateOnFocus: false,
+  })
 
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
-    if (router.query.freeText !== state.freeText) {
+    if (router.query.freeText !== undefined && router.query.freeText !== state.freeText) {
       dispatch({ type: FREE_TEXT, payload: query.freeText })
     }
   }, [router.query.freeText])
@@ -283,21 +288,18 @@ function Search({ query, setEntities, recordEvent }: any) {
     : data.products
 
   return (
-    <div className="bg-white">
+    <div className="bg-white md:w-4/5 mx-auto">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-center sm:py-16 py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
-            Catalog
-          </h1>
-          <h1 className="sm:text-xl text-lg mt-2 font-medium tracking-tight text-gray-500">
-            {data.products.total} results
+        <div className="text-left sm:py-5 py-4 px-4 sm:px-0 lg:px-0">
+          <h1 className="sm:text-2xl text-xl font-semibold tracking-tight text-black">
+            {GENERAL_CATALOG} <span className='text-sm font-normal'>{'-'} {data.products.total} items</span>
           </h1>
         </div>
-        <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
+        <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 w-full mx-auto overflow-hidden px-4 sm:px-0 lg:px-0">
           {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
-          <div className="sm:col-span-3 sm:hidden flex flex-col">
+          <div className="sm:col-span-2 sm:hidden flex flex-col">
             <ProductMobileFilters
               handleFilters={handleFilters}
               products={data.products}
@@ -310,14 +312,14 @@ function Search({ query, setEntities, recordEvent }: any) {
 
           {/* {FILTER PANEL SHOW ONLY IN DESKTOP VERSION} */}
 
-          <div className="sm:col-span-3 sm:block hidden">
+          <div className="sm:col-span-2 sm:block hidden">
             <ProductFilterRight
               handleFilters={handleFilters}
               products={data.products}
               routerFilters={state.filters}
             />
           </div>
-          <div className="sm:col-span-9">
+          <div className="sm:col-span-10">
             {/* {HIDE FILTER TOP BAR IN MOBILE} */}
 
             <div className="flex-1 sm:block hidden">

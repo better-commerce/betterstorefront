@@ -14,7 +14,6 @@ export default function BundleCard({ productData, closeModal }: any) {
   const [activeImage, setActiveImage] = useState(
     productData.image || productData.images[0]?.image
   )
-  
   return (
     <Transition.Root show={true} as={Fragment}>
       <Dialog

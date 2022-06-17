@@ -1,11 +1,12 @@
+import dynamic from 'next/dynamic'
 import { StarIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
-import ReviewInput from './ReviewInput'
+const ReviewInput = dynamic(() => import('./ReviewInput'))
 import { GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE } from '@components/utils/textVariables'
 export default function Reviews({ data, productId }: any) {
   return (
     <div className="bg-white">
-      <div className="max-w-2xl mx-auto py-0 px-4 sm:py-0 sm:px-0 lg:max-w-7xl lg:px-0 sm:border-t sm:mt-10">
+      <div className="w-full mx-auto py-0 px-4 sm:py-0 sm:px-0 lg:px-0 sm:mt-2">
         <div>
           <ReviewInput productId={productId} />
         </div>

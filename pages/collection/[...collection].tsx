@@ -1,13 +1,16 @@
+import dynamic from 'next/dynamic'
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import Link from 'next/link'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
-import ProductFilterRight from '@components/product/Filters/filtersRight'
-import ProductMobileFilters from '@components/product/Filters'
-import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
-import ProductGrid from '@components/product/Grid/ProductGrid'
-import ProductGridWithFacet from '@components/product/Grid'
+//DYNAMINC COMPONENT CALLS
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
+const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
@@ -16,6 +19,7 @@ import { NextSeo } from 'next-seo'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER, RESULTS } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { ArrowLeftIcon, ChevronLeftIcon } from '@heroicons/react/outline'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -203,43 +207,47 @@ export default function CollectionPage(props: any) {
   const clearAll = () => dispatch({ type: CLEAR })
   
   return (
-    <main className="pb-0">
-      <div className="sm:max-w-7xl sm:px-7 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
-        <Swiper navigation={true} loop={true} className="mySwiper">
-          {props.images.map((img: any, idx: number) => {
-            return (
-              <SwiperSlide key={idx}>
-                <Link href={img.link || '#'}>
-                  <Image
-                      layout='fixed'
-                      width={1920} 
-                      height={460}
-                      src={img.url || IMG_PLACEHOLDER}
-                      alt={props.name}
-                      className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover sm:rounded-md"
-                    ></Image>
-                </Link>
-              </SwiperSlide>
-            )
-          })}
-        </Swiper>
-      </div>
-      <div className="text-center sm:py-8 py-4 px-4 sm:px-6 lg:px-8">
-        <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
-          {props.name}
-        </h1>
-        <h2>{props.description}</h2>
-        <h1 className="sm:text-xl text-md mt-2 font-bold tracking-tight text-gray-500">
-          {props.products.total}{' '}{RESULTS}
-        </h1>
-      </div>
-
-      <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
+    <main className="pb-0 md:w-4/5 mx-auto">
+    <div className="pt-2 sm:pt-4">
+       {props.breadCrumbs && (
+         <BreadCrumbs items={props.breadCrumbs} currentProduct={props} />
+       )}
+     </div>   
+   {props.images.length > 0 &&
+       <div className="sm:px-0 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
+         <Swiper navigation={true} loop={true} className="mySwiper">
+           {props.images.map((img: any, idx: number) => {
+             return (
+               <SwiperSlide key={idx}>
+                 <Link href={img.link || '#'}>
+                   <Image
+                       layout='fixed'
+                       width={1920} 
+                       height={460}
+                       src={img.url || IMG_PLACEHOLDER}
+                       alt={props.name}
+                       className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover"
+                     ></Image>
+                 </Link>
+               </SwiperSlide>
+             )
+           })}
+         </Swiper>
+       </div>
+   }
+   <div className="sm:py-3 py-2 px-4 sm:px-0">
+     <h1 className="sm:text-xl text-xl font-semibold tracking-tight text-black">
+       {props.name} <span className='font-normal text-gray-500 text-sm'>{' -'} {props.products.total} {' '} {RESULTS}</span>
+     </h1>
+     <h2>{props.description}</h2>
+   </div>
+    {props.products.total > 0 &&
+      <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 overflow-hidden">
         {props.allowFacets && (
           <>
             {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
-            <div className="sm:col-span-3 sm:hidden flex flex-col">
+            <div className="sm:col-span-2 sm:hidden flex flex-col">
               <ProductMobileFilters
                 handleFilters={handleFilters}
                 products={props.products}
@@ -249,14 +257,14 @@ export default function CollectionPage(props: any) {
                 routerSortOption={state.sortBy}
               />
             </div>
-            <div className="sm:col-span-3 sm:block hidden">
+            <div className="sm:col-span-2 sm:block hidden">
               <ProductFilterRight
                 handleFilters={handleFilters}
                 products={props.products}
                 routerFilters={state.filters}
               />
             </div>
-            <div className="sm:col-span-9">
+            <div className="sm:col-span-10 ">
               {/* {HIDE FILTER TOP BAR IN MOBILE} */}
 
               <div className="flex-1 sm:block hidden">
@@ -291,30 +299,39 @@ export default function CollectionPage(props: any) {
         )}
         <div></div>
       </div>
-      <NextSeo
-        title={props.name}
-        description={props.description}
-        additionalMetaTags={[
-          {
-            name: 'keywords',
-            content: props.metaKeywords,
-          },
-        ]}
-        openGraph={{
-          type: 'website',
-          title: props.metaTitle,
-          description: props.metaDescription,
-          images: [
-            {
-              url: props.image,
-              width: 800,
-              height: 600,
-              alt: props.name,
-            },
-          ],
-        }}
-      />
-    </main>
+    }
+     {props.products.total == 0 &&
+        <div className='w-full mx-auto text-center py-32'>
+          <h3 className='text-3xl font-semibold text-gray-200 py-3'>No Item Availabe in {props.name} Collection!</h3>
+          <Link href="/collection">
+            <a href='/collection' className='text-lg font-semibold text-indigo-500'><ChevronLeftIcon className='h-4 w-4 inline-block relative top-0'></ChevronLeftIcon> Back to collections</a>
+          </Link>
+        </div>
+     }
+   <NextSeo
+     title={props.name}
+     description={props.description}
+     additionalMetaTags={[
+       {
+         name: 'keywords',
+         content: props.metaKeywords,
+       },
+     ]}
+     openGraph={{
+       type: 'website',
+       title: props.metaTitle,
+       description: props.metaDescription,
+       images: [
+         {
+           url: props.image,
+           width: 800,
+           height: 600,
+           alt: props.name,
+         },
+       ],
+     }}
+   />
+ </main>
   )
 }
 
@@ -333,7 +350,7 @@ export async function getStaticProps({ params, ...context }: any) {
       ...data,
       query: context,
       slug: params!.collection[0],
-      globalSnippets: infra?.snippets,
+      globalSnippets: infra?.snippets ?? [],
       snippets: data?.snippets
     },
     revalidate: 60,

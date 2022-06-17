@@ -25,8 +25,8 @@ import useTranslation, {
   GENERAL_CHECKOUT,
   GENERAL_CONTINUE_SHOPPING,
   GENERAL_OR_TEXT,
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
-import { Guid } from '@commerce/types'
 
 const CartSidebarView: FC = () => {
   const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
@@ -94,10 +94,10 @@ const CartSidebarView: FC = () => {
     <Transition.Root show={true} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 overflow-hidden z-50"
+        className="fixed inset-0 overflow-hidden z-999"
         onClose={handleClose}
       >
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden z-999">
           <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-500"
@@ -107,7 +107,7 @@ const CartSidebarView: FC = () => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="" />
+            <Dialog.Overlay className="w-full h-screen" onClick={handleClose} />
           </Transition.Child>
 
           <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
@@ -168,7 +168,7 @@ const CartSidebarView: FC = () => {
                                     width={100}
                                     height={100}
                                     layout='fixed'
-                                    src={`${product.image}`}
+                                    src={`${product.image}`|| IMG_PLACEHOLDER}
                                     alt={product.name}
                                     className="w-full h-full object-center object-cover"
                                   ></Image>
@@ -181,7 +181,7 @@ const CartSidebarView: FC = () => {
 
                                 <div className="ml-4 flex-1 flex flex-col">
                                   <div>
-                                    <div className="flex justify-between font-medium text-gray-900">
+                                    <div className="flex justify-between font-sm font-semibold text-gray-900">
                                       <h3 onClick={handleClose}>
                                         <Link href={`/${product.slug}`}>
                                           {product.name}
@@ -196,38 +196,34 @@ const CartSidebarView: FC = () => {
                                   <div className="flex-1 flex items-end justify-between text-sm">
                                     {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                    {
-                                      (product.parentProductId === "" || product.parentProductId === Guid.empty) && (
-                                        <div className="flex justify-between w-full">
-                                          <button
-                                            type="button"
-                                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                                            onClick={() =>
-                                              handleItem(product, 'delete')
-                                            }
-                                          >
-                                            {GENERAL_REMOVE}
-                                          </button>
-                                          <div className="border px-4 text-gray-900 flex flex-row">
-                                            <MinusSmIcon
-                                              onClick={() =>
-                                                handleItem(product, 'decrease')
-                                              }
-                                              className="w-4 cursor-pointer"
-                                            />
-                                            <span className="text-md px-2 py-2">
-                                              {product.qty}
-                                            </span>
-                                            <PlusSmIcon
-                                              className="w-4 cursor-pointer"
-                                              onClick={() =>
-                                                handleItem(product, 'increase')
-                                              }
-                                            />
-                                          </div>
-                                        </div>
-                                      )
-                                    }
+                                    <div className="flex justify-between w-full">
+                                      <button
+                                        type="button"
+                                        className="font-medium text-red-300 hover:text-red-500"
+                                        onClick={() =>
+                                          handleItem(product, 'delete')
+                                        }
+                                      >
+                                        {GENERAL_REMOVE}
+                                      </button>
+                                      <div className="border px-4 text-gray-900 flex flex-row">
+                                        <MinusSmIcon
+                                          onClick={() =>
+                                            handleItem(product, 'decrease')
+                                          }
+                                          className="w-4 cursor-pointer"
+                                        />
+                                        <span className="text-md px-2 py-2">
+                                          {product.qty}
+                                        </span>
+                                        <PlusSmIcon
+                                          className="w-4 cursor-pointer"
+                                          onClick={() =>
+                                            handleItem(product, 'increase')
+                                          }
+                                        />
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -239,16 +235,11 @@ const CartSidebarView: FC = () => {
                                         <div className='image-container'>
                                           <Image
                                             layout='fill'
-                                            src={child.image}
+                                            src={`${child.image}?w=100&h=100&fm=webp`}
                                             alt={child.name}
                                             className="w-full h-full object-center object-cover image"
                                           ></Image>
                                         </div>
-                                        {/* <img
-                                          src={child.image}
-                                          alt={child.name}
-                                          className="w-full h-full object-center object-cover"
-                                        /> */}
                                       </div>
                                       <div className="ml-4 flex-1 flex flex-col">
                                         <div>
@@ -259,36 +250,25 @@ const CartSidebarView: FC = () => {
                                               </Link>
                                             </h3>
                                             <p className="ml-4">
-                                              {child.price?.formatted?.withTax > 0 ? child.price?.formatted?.withTax : ""}
+                                              {child.price?.formatted?.withTax}
                                             </p>
                                           </div>
                                           {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                         </div>
                                       </div>
+                                      <div className="flex-1 flex items-end justify-end text-sm">
+                                        {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                      {
-                                        (child.parentProductId === "" || child.parentProductId === Guid.empty) ? (
-                                          <div className="flex-1 flex items-end justify-end text-sm">
-                                            {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
-
-                                            <button
-                                              type="button"
-                                              className="font-medium text-indigo-600 hover:text-indigo-500"
-                                              onClick={() =>
-                                                handleItem(child, GENERAL_DELETE)
-                                              }
-                                            >
-                                              {GENERAL_REMOVE}
-                                            </button>
-                                          </div>
-                                        ) : (
-                                          <div className="border px-4 text-gray-900 flex flex-row">
-                                            <span className="text-md px-2 py-2">
-                                              {child.qty}
-                                            </span>
-                                          </div>
-                                        )
-                                      }
+                                        <button
+                                          type="button"
+                                          className="font-medium text-indigo-600 hover:text-indigo-500"
+                                          onClick={() =>
+                                            handleItem(child, GENERAL_DELETE)
+                                          }
+                                        >
+                                          {GENERAL_REMOVE}
+                                        </button>
+                                      </div>
                                     </div>
                                   )
                                 }
@@ -304,29 +284,29 @@ const CartSidebarView: FC = () => {
                     <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                       <PromotionInput />
                       <div className="flex py-2 justify-between font-small text-gray-900">
-                        <p>{SUBTOTAL_INCLUDING_TAX}</p>
-                        <p>{cartItems.subTotal?.formatted?.withTax}</p>
+                        <p className='text-sm'>{SUBTOTAL_INCLUDING_TAX}</p>
+                        <p className='font-bold text-black'>{cartItems.subTotal?.formatted?.withTax}</p>
                       </div>
-                      <div className="flex py-2 justify-between font-small text-gray-900">
+                      <div className="flex py-2 justify-between font-small text-black">
                         <p>{GENERAL_SHIPPING}</p>
-                        <p>{cartItems.shippingCharge?.formatted?.withTax}</p>
+                        <p className='font-bold text-black'>{cartItems.shippingCharge?.formatted?.withTax}</p>
                       </div>
 
                       {cartItems.promotionsApplied?.length > 0 && (
-                        <div className="flex py-2 justify-between font-small text-indigo-600">
-                          <p>{GENERAL_DISCOUNT}</p>
-                          <p>{cartItems.discount?.formatted?.withTax}</p>
+                        <div className="flex py-2 justify-between font-small text-black">
+                          <p className='text-sm'>{GENERAL_DISCOUNT}</p>
+                          <p className='font-bold text-red-500'>{'-'}{cartItems.discount?.formatted?.withTax}</p>
                         </div>
                       )}
-                      <div className="flex justify-between font-medium text-gray-900">
-                        <p>{GENERAL_TOTAL}</p>
-                        <p>{cartItems.grandTotal?.formatted?.withTax}</p>
+                      <div className="flex justify-between font-medium text-black">
+                        <p className='text-xl'>{GENERAL_TOTAL}</p>
+                        <p className='font-bold text-xl text-black'>{cartItems.grandTotal?.formatted?.withTax}</p>
                       </div>
                       <div className="mt-6">
                         <Link href="/cart" passHref>
                           <a
                             onClick={handleClose}
-                            className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                            className="flex justify-center items-center px-6 py-3 border border-transparent rounded-sm uppercase shadow-sm font-medium text-white bg-black hover:bg-gray-900"
                             href="/cart"
                           >
                             {content.GENERAL_CHECKOUT}
@@ -338,7 +318,7 @@ const CartSidebarView: FC = () => {
                           {GENERAL_OR_TEXT}{' '}
                           <button
                             type="button"
-                            className="text-indigo-600 font-medium hover:text-indigo-500"
+                            className="text-black font-medium hover:text-indigo-500"
                             onClick={handleClose}
                           >
                             {GENERAL_CONTINUE_SHOPPING}

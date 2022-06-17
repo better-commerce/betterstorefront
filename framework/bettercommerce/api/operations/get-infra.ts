@@ -1,14 +1,10 @@
-import fetcher from '../../fetcher'
 import { INFRA_ENDPOINT } from '@components/utils/constants'
+import { cachedGetData } from '../utils/cached-fetch';
 
 export default function getInfraOperation() {
   async function getInfra() {
-    //console.log(slug);
     try {
-      const response: any = await fetcher({
-        url: `${INFRA_ENDPOINT}`,
-        method: 'get',
-      });
+      const response: any = await cachedGetData(INFRA_ENDPOINT);
       return response?.result;
     } catch (error) {
       console.log(error);

@@ -1,7 +1,8 @@
-import Pagination from '@components/product/Pagination'
 import rangeMap from '@lib/range-map'
-import ProductCard from '@components/product/ProductCard/SearchProductCard'
-import InfiniteScroll from '@components/ui/InfiniteScroll'
+import dynamic from 'next/dynamic'
+const ProductCard = dynamic(() => import('@components/product/ProductCard/SearchProductCard'))
+const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
+const Pagination = dynamic(() => import('@components/product/Pagination'))
 import { TITLE_PRODUCTS } from '@components/utils/textVariables'
 
 interface Props {
@@ -23,7 +24,7 @@ export default function Grid({
   return (
     <section
       aria-labelledby="products-heading"
-      className="max-w-7xl overflow-hidden sm:px-6 lg:px-8 mx-auto"
+      className="w-full overflow-hidden mx-auto sm:pl-4"
     >
       <h2 id="products-heading" className="sr-only">
         {TITLE_PRODUCTS}
@@ -36,10 +37,10 @@ export default function Grid({
           currentNumber={products.results.length}
           component={
             <div
-              className={`-mx-px border-l border-t border-gray-100 grid grid-cols-2 sm:mx-0 md:grid-cols-3 ${
-                products.results.length < 3
-                  ? `lg:grid-cols-2`
-                  : 'lg:grid-cols-3'
+              className={`border-gray-100 gap-x-8 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 ${
+                products.results.length < 6
+                  ? `lg:grid-cols-5`
+                  : 'lg:grid-cols-5'
               }`}
             >
               {!products.results.length &&
@@ -65,7 +66,7 @@ export default function Grid({
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+          <div className="border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-4 lg:grid-cols-4">
             {!products.results.length &&
               rangeMap(12, (i) => (
                 <div

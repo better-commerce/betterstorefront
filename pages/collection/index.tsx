@@ -11,13 +11,13 @@ import {
 export default function CollectionList(props: any) {
   
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+    <main className="w-full mx-auto md:w-4/5 px-6 sm:px-0">
       <section aria-labelledby="products-heading" className="mt-8">
-        <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
+        <h2 className="text-2xl font-bold uppercase tracking-tight text-gray-900">
           {SHOP_BY_COLLECTION}
         </h2>
 
-        <div className="py-10 grid grid-cols-2 sm:gap-y-10 gap-y-6 sm:grid-cols-4 gap-x-6 lg:grid-cols-5 xl:gap-x-8">
+        <div className="py-10 grid grid-cols-2 sm:gap-y-10 gap-y-6 sm:grid-cols-4 gap-x-6 lg:grid-cols-6 xl:gap-x-8">
           {props.data.map((collection: any, key: any) => (
             <Link key={key} href={`/collection/${collection.slug}`}>
               <a

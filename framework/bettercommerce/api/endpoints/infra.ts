@@ -1,18 +1,16 @@
 import { INFRA_ENDPOINT } from '@components/utils/constants'
-import fetcher, { setGeneralParams } from '../../fetcher'
+import { setGeneralParams } from '../../fetcher'
+import { cachedGetData } from '../utils/cached-fetch';
 
 export default function useInfra(req: any) {
   //TODO change based on location
   return async function handler(setHeader = false) {
+    const headers = {
+      DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+    };
+    
     try {
-      const response: any = await fetcher({
-        url: `${INFRA_ENDPOINT}`,
-        method: 'get',
-        headers: {
-          DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-        },
-        cookies: req.cookies,
-      })
+      const response: any = await cachedGetData(INFRA_ENDPOINT, req.cookies, headers);
 
       const languageCookie =
         req.cookies.Language === 'undefined' ? '' : req.cookies.Language

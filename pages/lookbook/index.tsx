@@ -28,11 +28,11 @@ function LookbookPage({ data }: any) {
 
   return (
     <div className="mt-0 relative mb-5">
-      <div className="text-center pt-8 pb-12 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+      <div className="text-left pt-0 pb-6 px-4 sm:px-0 lg:px-0">
+        <h1 className="sm:w-4/5 mx-auto w-full text-3xl font-semibold tracking-tight text-black">
           {SHOP_BY_LIFESTYLRE}
         </h1>
-        <h1 className="text-xl mt-2 font-medium tracking-tight text-gray-500">
+        <h1 className="sm:w-4/5 mx-auto w-full text-md mt-2 font-normal tracking-tight text-gray-500">
           {data.length}{' '}{RESULTS}
         </h1>
       </div>
@@ -54,7 +54,7 @@ function LookbookPage({ data }: any) {
                   className="w-64 inline-flex flex-col text-center lg:w-auto"
                 >
                   <div className="group relative flex flex-col sm:flex-row justify-between items-center">
-                    <div className="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
+                    <div className="w-full bg-gray-200 rounded-sm overflow-hidden aspect-w-1 aspect-h-1">
                       <div className='image-container'>
                         <Image
                           layout='fill'
@@ -64,17 +64,17 @@ function LookbookPage({ data }: any) {
                         ></Image>  
                       </div>
                     </div>
-                    <div className="w-full sm:w-1/2 p-5 flex justify-center flex-col items-center">
-                      <h3 className="font-extrabold w-full text-left text-2xl sm:text-4xl text-gray-900">
+                    <div className="w-full sm:w-1/2 p-5 flex justify-left flex-col items-center">
+                      <h3 className="font-semibold w-full text-left text-xl sm:text-3xl text-gray-900">
                         {lookbook.name}
                       </h3>
-                      <p className="text-md sm:text-lg py-5 text-gray-900 text-left line-clip-7">
+                      <p className="text-md sm:text-md py-5 text-gray-500 text-left line-clip-7">
                         {lookbook.description}
                       </p>
                       <Link href={`/${lookbook.slug}`}>
                         <button
                           type="button"
-                          className="mt-6 cursor-pointer align-left justify-start flex-col font-extrabold border border-gray-900 text-gray-900 py-3 px-3 hover:bg-gray-100"
+                          className="mt-6 cursor-pointer align-left justify-start flex-col font-semibold uppercase border border-gray-900 text-gray-900 py-2 px-5 hover:bg-gray-100"
                         >
                           {SHOP_THE_LOOK}
                         </button>
@@ -109,7 +109,7 @@ export async function getStaticProps({
   return {
     props: {
       data: lookbookData,
-      globalSnippets: infra?.snippets,
+      globalSnippets: infra?.snippets ?? [],
       snippets: []
     },
     revalidate: 200,

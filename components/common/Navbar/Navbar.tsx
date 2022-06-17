@@ -1,21 +1,21 @@
+import dynamic from 'next/dynamic'
+
 import { FC, Fragment, useState, useRef } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition, Dialog, Tab } from '@headlessui/react'
-import { ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/outline'
 import { Searchbar } from '@components/common'
 import { Logo } from '@components/ui'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui'
-import Account from './AccountDropdown'
-import CurrencySwitcher from './CurrencySwitcher'
 import axios from 'axios'
 import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
-import LanguageSwitcher from './LanguageSwitcher'
 import Cookies from 'js-cookie'
-import { MenuIcon, SearchIcon, XIcon } from '@heroicons/react/outline'
-
+import { MenuIcon, SearchIcon, XIcon, ShoppingCartIcon, ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/solid'
+const Account = dynamic(() => import('./AccountDropdown'))
+const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
+const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
 import {
   BTN_SIGN_OUT,
   GENERAL_LOGIN,
@@ -121,7 +121,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
-          className="fixed inset-0 flex z-40 lg:hidden"
+          className="fixed inset-0 flex z-999 lg:hidden"
           onClose={setOpen}
         >
           <Transition.Child
@@ -145,22 +145,22 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto">
+            <div className="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto z-9999">
               <div className="px-4 pt-5 pb-2 flex">
                 <button
                   type="button"
-                  className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-gray-400"
+                  className="-m-2 absolute right-4 top-5 p-2 rounded-md inline-flex items-center justify-center text-gray-400"
                   onClick={() => setOpen(false)}
                 >
                   <span className="sr-only">Close menu</span>
-                  <XIcon className="h-6 w-6" aria-hidden="true" />
+                  <XIcon className="h-6 w-6 text-black" aria-hidden="true" />
                 </button>
               </div>
 
               {/* Links */}
               <Tab.Group as="div" className="mt-2">
                 <div className="border-b border-gray-200">
-                  {config.map((item: any, idx: number) => {
+                  {config?.map((item: any, idx: number) => {
                     return (
                       <>
                         {!item.navBlocks.length ? (
@@ -170,7 +170,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                           >
                             <a
                               onClick={() => setOpen(false)}
-                              className="flex flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium"
+                              className="flex flex-col whitespace-nowrap py-4 px-4 text-black border-b text-sm font-bold"
                               href={item.hyperlink}
                             >
                               {item.caption}
@@ -184,9 +184,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                 className={({ selected }) =>
                                   classNames(
                                     selected
-                                      ? 'text-gray-900'
-                                      : 'text-gray-900',
-                                    'flex-1 flex-col whitespace-nowrap py-4 px-1 border-b text-sm font-medium'
+                                      ? 'text-black'
+                                      : 'text-black',
+                                    'flex flex-col whitespace-nowrap py-4 px-4 text-black border-b text-sm font-bold'
                                   )
                                 }
                               >
@@ -197,7 +197,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                             <Tab.Panels as={Fragment}>
                               <Tab.Panel
                                 key={item.caption}
-                                className="pt-2 pb-0 px-0 space-y-10"
+                                className="pt-2 pb-0 px-4 space-y-10"
                               >
                                 <div className="space-y-4">
                                   {item.navBlocks.length ? (
@@ -212,10 +212,10 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                   className="grid grid-cols-1 gap-y-0 gap-x-0 lg:gap-x-0"
                                                 >
                                                   <div>
-                                                    <p className="font-semibold capitalize text-xl text-gray-900 p-2">
+                                                    <p className="font-semibold capitalize text-md text-black p-2">
                                                       {navBlock.boxTitle}
                                                     </p>
-                                                    <div className="mt-1 border-t py-2 px-6 border-gray-100 pt-2 sm:grid sm:grid-cols-1 sm:gap-x-6">
+                                                    <div className="mt-1 border-t py-2 px-2 border-gray-100 pt-2 sm:grid sm:grid-cols-1 sm:gap-x-6">
                                                       <ul
                                                         role="list"
                                                         aria-labelledby="clothing-heading"
@@ -275,31 +275,31 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
         </Dialog>
       </Transition.Root>
 
-      <header className="relative bg-white">
-        <nav aria-label="Top" className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="border-b border-gray-200 px-4 pb-0 sm:px-0 sm:pb-0">
+      <header className="bg-white shadow-md fixed top-0 right-0 z-999 w-full">
+        <nav aria-label="Top" className="w-full md:w-4/5 mx-auto px-4 sm:px-0 lg:px-0">
+          <div className="pb-0 sm:px-0 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
               {/* Logo */}
               <button
                 type="button"
-                className="-ml-2 bg-white p-2 rounded-md text-gray-400 sm:hidden"
+                className="-ml-2 bg-white py-4 pl-2 pr-2 rounded-md text-gray-400 sm:hidden"
                 onClick={() => setOpen(true)}
               >
                 <span className="sr-only">Open menu</span>
-                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                <MenuIcon className="h-6 w-6 text-black" aria-hidden="true" />
               </button>
 
               <Link href="/">
-                <div className="w-auto flex cursor-pointer">
+                <div className="w-32 flex cursor-pointer">
                   <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
                   <Logo />
                 </div>
               </Link>
 
               {/* Flyout menus */}
-              <Popover.Group className="absolute bottom-0 inset-x-0 sm:static w-full sm:self-stretch sm:block hidden">
-                <div className="border-t h-14 px-4 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-center sm:overflow-visible sm:pb-0">
-                  {config.map((item: any, idx: number) => {
+              <Popover.Group className="absolute bottom-0 inset-x-0 sm:static w-full sm:self-stretch sm:block hidden sm:h-16">
+                <div className="border-t h-16 px-6 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0">
+                  {config?.map((item: any, idx: number) => {
                     return (
                       <Popover key={idx} className="flex" 
                           onMouseEnter={() => setOpenState(idx)}
@@ -316,9 +316,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                     className={classNames(
                                       openState == idx
                                         ? 'border-indigo-600 text-indigo-600'
-                                        : 'border-transparent text-gray-700 hover:text-gray-800',
-                                      'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                    )}
+                                        : 'border-transparent text-black hover:text-black',
+                                        'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                      )}
                                   >
                                     {item.caption}
                                   </Popover.Button>
@@ -329,8 +329,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                 className={classNames(
                                   openState == idx
                                     ? 'border-indigo-600 text-indigo-600'
-                                    : 'border-transparent text-gray-700 hover:text-gray-800',
-                                  'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                    : 'border-transparent text-black hover:text-black',
+                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                                 )}
                               >
                                 {item.caption}
@@ -347,15 +347,15 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                               >
-                                <Popover.Panel className="absolute top-full z-50 inset-x-0 text-gray-500 sm:text-sm">
+                                <Popover.Panel className="absolute top-full z-999 inset-x-0 text-gray-500 sm:text-sm">
                                   {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
                                   <div
-                                    className="absolute inset-0 top-1/2 bg-white shadow"
+                                    className="absolute top-1/2 bg-white shadow"
                                     aria-hidden="true"
                                   />
 
                                   <div className="relative bg-white">
-                                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                    <div className="w-4/5 mx-auto px-4 sm:px-0 lg:px-0">
                                       <div className="grid grid-cols-1 items-start gap-y-10 gap-x-6 pt-10 pb-12 md:grid-cols-1 lg:gap-x-8">
                                         {item.navBlocks.map(
                                           (navBlock: any, navIdx: number) => {
@@ -372,7 +372,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                     <ul
                                                       role="list"
                                                       aria-labelledby="clothing-heading"
-                                                      className="grid grid-cols-4"
+                                                      className="grid grid-cols-5"
                                                     >
                                                       {navBlock.navItems.map(
                                                         (navItem: any) => (
@@ -391,8 +391,8 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                                                                   className={classNames(
                                                                     openState == idx
                                                                       ? ''
-                                                                      : 'border-transparent text-gray-700 hover:text-gray-800',
-                                                                    'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm -mb-px pt-px'
+                                                                      : 'border-gray-200 text-gray-700 hover:text-gray-800',
+                                                                    'relative z-10 flex items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
                                                                   )}
                                                                 >
                                                                   {
@@ -445,35 +445,41 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
 
                 {/* Wishlist*/}
 
-                <div className="px-2 flow-root">
+                <div className="px-1 w-10 sm:w-16 flow-root">
                   <button
-                    className="group -m-2 p-2 flex items-center"
+                    className="relative group grid grid-cols-1 items-center text-center align-center justify-center flex-col mx-auto"
                     onClick={openWishlist}
                   >
                     <HeartIcon
-                      className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                      className="flex-shrink-0 h-6 w-6 block text-black group-hover:text-red-600 mx-auto"
                       aria-hidden="true" aria-label="Wishlist"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      {wishListItems.length}
-                    </span>
-                    <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                    <span className='font-normal hidden text-sm text-black sm:block'>Wishlist</span>
+                    {wishListItems.length > 0 &&
+                     <span className="ml-2 hidden sm:block absolute top-0 -right-0 w-4 h-4 text-white rounded-full bg-pink text-center text-xs font-medium">                     
+                          {wishListItems.length}
+                      </span>
+                    }
+                      <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>                    
                   </button>
                 </div>
                 {/* Cart */}
 
-                <div className="px-2 flow-root">
+                <div className="px-1 sm:w-16 w-10 flow-root">
                   <button
-                    className="group -m-2 p-2 flex items-center"
+                    className="group grid relative grid-cols-1 items-center text-center align-center justify-center flex-col mx-auto"
                     onClick={openCart}
                   >
-                    <ShoppingBagIcon
-                      className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                    <ShoppingCartIcon
+                      className="flex-shrink-0 h-6 w-6 block text-black group-hover:text-gray-500 mx-auto"
                       aria-hidden="true" aria-label="Add to cart"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                     <span className='font-normal hidden text-sm text-black sm:block'>Cart</span>
+                     {cartItems.lineItems?.length > 0 &&
+                        <span className="ml-2 absolute -top-1 -right-2 w-4 h-4 text-white rounded-full bg-gray-500 text-center text-xs font-medium">                     
                       {cartItems.lineItems?.length}
                     </span>
+}
                     <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
                   </button>
                 </div>

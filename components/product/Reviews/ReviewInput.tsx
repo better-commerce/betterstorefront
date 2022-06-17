@@ -91,10 +91,10 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             placeholder={REVIEW_TITLE}
             onChange={handleCommentTitle}
             value={commentTitle}
-            className="sm:w-1/3 w-full mb-2 mt-2 mb-5 appearance-none min-w-0 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+            className="sm:w-1/3 w-full mb-2 mt-2 mb-5 appearance-none min-w-0 bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
           />
           <textarea
-            className="text-gray-900 bg-gray-100 rounded border border-gray-400 leading-normal w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+            className="text-gray-900 bg-gray-50 rounded-sm border border-gray-400 leading-normal w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
             placeholder={REVIEW_COMMENT}
             value={commentBody}
             onChange={handleCommentChange}
@@ -124,7 +124,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
           <button
             type="button"
             onClick={handleSubmit}
-            className="max-w-xs float-right flex-1 bg-indigo-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+            className="max-w-xs float-right flex-1 bg-black border border-transparent rounded-sm uppercase py-2 px-4 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
           >
             {BTN_SUBMIT}
           </button>

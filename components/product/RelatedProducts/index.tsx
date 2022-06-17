@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import Engraving from '@components/product/Engraving'
+import dynamic from 'next/dynamic'
+const Engraving = dynamic(() => import('@components/product/Engraving'))
 import { useState } from 'react'
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 interface Props {
@@ -33,17 +33,18 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
     return map
   }
 
-  const [flattenedItems, setFlattenedItems] = useState(createBreadcrumbs(items))
+  //const [flattenedItems, setFlattenedItems] = useState(createBreadcrumbs(items))
+  const flattenedItems = createBreadcrumbs(items)
   return (
-    <ol role="list" className="flex items-center sm:space-x-2 space-x-0">
+    <ol role="list" className="flex items-center sm:space-x-0 space-x-0">
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li key={breadcrumbIdx}>
           <div className="flex items-center sm:text-sm text-xs">
             <Link href={`/${breadcrumb.slug}`} passHref>
               <a
                 href={breadcrumb.slug}
-                className={`font-medium hover:text-gray-900 ${
-                  breadcrumb.isCurrent ? 'text-gray-900' : 'text-gray-500'
+                className={`font-normal hover:text-gray-900 ${
+                  breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-gray-400'
                 }`}
               >
                 {breadcrumb.title}
@@ -55,7 +56,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
                 aria-hidden="true"
-                className="sm:ml-2 ml-0 flex-shrink-0 h-5 w-5 text-gray-300"
+                className="sm:ml-0 ml-0 flex-shrink-0 h-4 w-4 text-gray-300"
               >
                 <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
               </svg>

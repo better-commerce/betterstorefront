@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useState, useEffect, useLayoutEffect } from 'react'
 import { SearchIcon } from '@heroicons/react/outline'
 import axios from 'axios'
@@ -9,7 +10,8 @@ import { useRouter } from 'next/router'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
-import { BTN_SEARCH } from '@components/utils/textVariables'
+import { BTN_SEARCH, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 export default function Search({ closeWrapper = () => {}, keywords }: any) {
   const Router = useRouter()
@@ -72,31 +74,32 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
   }, [Router.asPath])
 
   return (
-    <div className="z-50 w-full h-full bg-white absolute">
+    <div className="z-9999 w-full h-full bg-white absolute">
       <div
         className="h-9 text-gray-900 w-9 right-10 top-10 absolute cursor-pointer"
         onClick={closeWrapper}
       >
         <XIcon />
       </div>
-      <div className="w-full mt-20 justify-center items-center flex flex-col px-10 py-5">
-        <div className="flex flex-row mb-10">
-          <div className="min-w-searchbar flex flex-row border border-gray-300 rounded-md py-2 px-4 shadow-sm ">
+      <div className="w-full mt-10 justify-center items-center flex flex-col sm:px-10 px-4 py-5">
+        <div className="mb-4 sm:w-3/5 w-full mx-auto">
+          <div className="flex flex-row  rounded-sm px-1">
             <label className="hidden" htmlFor={'search-bar'}>
               {BTN_SEARCH}
             </label>
             <input
               id={'search-bar'}
-              className="text-gray-700 appearance-none min-w-0 w-full bg-white  placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              autoFocus
+              className="text-gray-700 appearance-none min-w-0 w-full bg-white border-b border-0 border-gray-300 px-3 py-4 placeholder-gray-500 text-xl focus:outline-none focus:border-white focus:ring-0 focus:ring-white focus:border-gray-700"
               placeholder={BTN_SEARCH}
               onChange={(e: any) => setInputValue(e.target.value)}
             />
-            <div className="text-gray-400">
+            <div className="text-gray-400 py-4 relative right-10">
               <SearchIcon className="w-6 h-6" aria-hidden="true" />
             </div>
           </div>
         </div>
-        <div className="-mx-px border-l border-t border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+        <div className="sm:w-3/5 w-full grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
           {isLoading &&
             rangeMap(12, (i) => (
               <div
@@ -118,11 +121,17 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
                   <Link passHref href={`/${product.slug}`}>
                     <a href={`/${product.slug}`}>
                       <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-full h-64 object-center object-cover"
-                        />
+                        <div className='image-container'>
+                           {product.image &&
+                              <Image 
+                                src={generateUri(product.image, "h=200&fm=webp") || IMG_PLACEHOLDER}                              
+                                alt={product.name}
+                                layout='fill' 
+                                sizes='50vw'
+                                className='w-full sm:h-72 h-48 object-center object-cover image'>
+                              </Image> 
+                            }
+                        </div>
                       </div>
                     </a>
                   </Link>

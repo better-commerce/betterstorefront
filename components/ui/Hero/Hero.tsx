@@ -33,10 +33,11 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
               <Link href={banner?.link || '#'}>
                 <div className='image-container'>
                   <Image
+                    priority
                     src={banner?.url}
                     alt={banner?.alt}
                     layout="fill"
-                    className='sm:max-h-screen sm:min-h-screen image'></Image>
+                    className='sm:max-h-screen sm:min-h-screen image banner-Image'></Image>
                 </div>
               </Link>
             </SwiperSlide>

@@ -1,21 +1,26 @@
+import dynamic from 'next/dynamic'
 import { FC } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import AttributeSelector from './AttributeSelector'
-import Button from '@components/ui/IndigoButton'
+const AttributeSelector = dynamic(() => import('./AttributeSelector'))
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { HeartIcon } from '@heroicons/react/outline'
+import { round } from 'lodash'
 import {
   ALERT_SUCCESS_WISHLIST_MESSAGE,
   BTN_ADD_TO_WISHLIST,
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
   GENERAL_ADD_TO_BASKET,
+  GENERAL_PRICE_LABEL_RRP,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 interface Props {
   product: any
 }
@@ -157,85 +162,100 @@ const SearchProductCard: FC<Props> = ({ product }) => {
   }
 
   const buttonConfig = buttonTitle()
-
+  const saving  = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
+  const discount  = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
   return (
-    <div className="border-r border-b border-gray-100">
-      <div key={product.id} className="group relative p-3 sm:p-6">
-        <Link
-          passHref
-          href={`/${currentProductData.link}`}
-          key={'data-product' + currentProductData.link}
-        >
-          <a href={currentProductData.link}>
-            <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 group-hover:opacity-75">
-              <div className='image-container'>
-                  <Image 
-                      src={currentProductData.image || IMG_PLACEHOLDER}
-                      alt={product.name}
-                      onMouseEnter={() => handleHover('enter')}
-                      onMouseLeave={() => handleHover('leave')}
-                      layout='fill' 
-                      className='w-full sm:h-72 h-48 object-center object-cover image'>
-                  </Image>
+    <div className="border-gray-100">
+    <div key={product.id} className="relative py-3 sm:py-3">
+        
+      <Link
+        passHref
+        href={`/${currentProductData.link}`}
+        key={'data-product' + currentProductData.link}
+      >
+        <a href={currentProductData.link}>
+          <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 hover:opacity-75">
+              <Image
+                priority
+                src={generateUri(currentProductData.image, "h=400&fm=webp") || IMG_PLACEHOLDER} 
+                alt={product.name}
+                onMouseEnter={() => handleHover('enter')}
+                onMouseLeave={() => handleHover('leave')}
+                className="w-full sm:h-full h-full object-center object-cover"
+                layout='responsive'
+                width={400}
+                height={600}
+              ></Image>   
+            {buttonConfig.isPreOrderEnabled && (
+              <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
+                {BTN_PRE_ORDER}
               </div>
-              {buttonConfig.isPreOrderEnabled && (
-                <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
-                  {BTN_PRE_ORDER}
-                </div>
-              )}
-              {buttonConfig.isNotifyMeEnabled && (
-                <div className="bg-red-400 text-white absolute py-1 px-1 rounded-sm top-2">
-                  {BTN_NOTIFY_ME}
-                </div>
-              )}
-            </div>
-          </a>
-        </Link>
-
-        <div className="sm:pt-10 pt-4 text-center">
-          <h3 className="sm:min-h-50px min-h-40px sm:text-sm text-xs font-medium text-gray-900">
-            <Link href={`/${currentProductData.link}`}>
-              <a href={`/${currentProductData.link}`}>{product.name}</a>
-            </Link>
-          </h3>
-
-          <p className="sm:mt-4 mt-1 font-medium text-gray-900">
-            {product?.price?.formatted?.withTax}
-          </p>
-          {hasColorVariation ? (
-            <AttributeSelector
-              attributes={product.variantProductsAttributeMinimal}
-              onChange={handleVariableProduct}
-              link={currentProductData.link}
-            />
-          ) : (
-            <div className="sm:h-10 sm:w-10 h-5 w-5 sm:mr-2 mr-1 mt-2 inline-block" />
-          )}
-          <div className="flex flex-col">
-            <Button
-              className="mt-2"
-              title={buttonConfig.title}
-              action={buttonConfig.action}
-              type="button"
-              buttonType={buttonConfig.buttonType || 'cart'}
-            />
+            )}
+            {buttonConfig.isNotifyMeEnabled && (
+              <div className="bg-red-400 text-white absolute py-1 px-1 rounded-sm top-2">
+                {BTN_NOTIFY_ME}
+              </div>
+            )}
             {isInWishList ? (
               <span className="text-gray-900">
                 {ALERT_SUCCESS_WISHLIST_MESSAGE}
               </span>
             ) : (
-              <Button
-                className="mt-2"
-                action={handleWishList}
-                buttonType="wishlist"
-                colorScheme={WISHLIST_BUTTON_COLOR_SCHEME}
-                title={BTN_ADD_TO_WISHLIST}
+
+              <button
+                  className="absolute right-2 bottom-0 z-99 add-wishlist"
+                  onClick={handleWishList}
+              >
+                  <HeartIcon
+                      className="flex-shrink-0 h-8 w-8 z-50 text-gray-800 hover:text-gray-500 rounded-3xl p-1 opacity-80"
+                      aria-hidden="true"
               />
-            )}
+                  <span className="ml-2 text-sm font-medium text-gray-700 hover:text-red-800"></span>
+                  <span className="sr-only">f</span>
+              </button>            
+            )}   
           </div>
+        </a>
+      </Link>
+
+      <div className="pt-0 text-left">
+        {hasColorVariation ? (
+          <AttributeSelector
+            attributes={product.variantProductsAttributeMinimal}
+            onChange={handleVariableProduct}
+            link={currentProductData.link}
+          />
+        ) : (
+          <div className="sm:h-1 sm:w-1 h-1 w-1 sm:mr-2 mr-1 mt-2 inline-block" />
+        )}
+        
+        <h3 className="sm:text-sm text-xs font-normal text-gray-700 truncate">
+          <Link href={`/${currentProductData.link}`}>
+            <a href={`/${currentProductData.link}`}>{product.name}</a>
+          </Link>
+        </h3>
+
+        <p className="sm:mt-1 mt-1 font-bold text-md text-gray-900">
+          {product?.price?.formatted?.withTax}
+          {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax &&
+              <>
+                <span className='px-2 text-sm line-through font-normal text-gray-400'>{product?.listPrice?.formatted?.withTax}</span>
+                <span className='text-red-600 text-sm font-semibold'>{discount}% Off</span>
+              </>
+            }
+        </p>            
+        <div className="flex flex-col">
+          <Button
+            className="mt-2 hidden"
+            title={buttonConfig.title}
+            action={buttonConfig.action}
+            type="button"
+            buttonType={buttonConfig.buttonType || 'cart'}
+          />            
         </div>
       </div>
     </div>
+  </div>
   )
 }
 

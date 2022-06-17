@@ -15,7 +15,7 @@ interface Attributes {
 
 const ColorSelector = ({ attr, onChange, link }: any) => {
   return (
-    <div>
+    <div className="border-b border-gray-200 mb-1">
       {attr.fieldValues.map((item: any, idx: number) => {
         return (
           <Link key={idx} href={link || '#'} passHref>
@@ -23,7 +23,7 @@ const ColorSelector = ({ attr, onChange, link }: any) => {
               key={idx}
               onMouseEnter={() => onChange(item, 'enter')}
               onMouseLeave={() => onChange(item, 'leave')}
-              className="sm:h-8 sm:w-8 h-5 w-5 inline-block rounded-full sm:mr-2 mr-1 mt-2 border border-gray-100"
+              className="sm:h-5 sm:w-5 h-5 w-5 inline-block rounded-full sm:mr-2 mr-1 mt-2 border border-gray-200 shadow-md drop-shadow-md"
               style={{ backgroundColor: item.fieldValue }}
             />
           </Link>
