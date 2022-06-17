@@ -56,6 +56,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   const {
     wishListItems,
     cartItems,
+    isGuestUser,
     user,
     deleteUser,
     openCart,
@@ -88,9 +89,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   ]
 
   let accountDropdownConfig = accountDropDownConfigUnauthorized
-  let title = user.userId ? `Hi, ${user.firstName}` : 'My account'
+  let title = !isGuestUser ? (user.userId ? `Hi, ${user.firstName}` : 'My account') : ""
 
-  if (user.userId) {
+  if (!isGuestUser && user.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
 
