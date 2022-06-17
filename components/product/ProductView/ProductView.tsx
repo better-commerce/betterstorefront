@@ -849,17 +849,10 @@ export default function ProductView({
                           {
                             previewImg && (
                               <div key={previewImg.name + 'tab-panel'}>
-                              {/*<img
-                                src={previewImg}
-                                alt={previewImg.name}
-                                className="w-full h-auto object-center object-cover rounded-lg"
-                                height={1000}
-                              />*/}
                                 <ImageZoom src={previewImg} alt={previewImg.name} />
                               </div>
                             )
                           }
-
                         </div>
                       </div>
 
