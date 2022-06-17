@@ -548,7 +548,14 @@ export default function ProductView({
                                 {image.image ? (
                                   <div className='image-container'>
                                     {/* <ControlledZoom isZoomed={isZoomedT} onZoomChange={handleZoomChangeT}> */}
-                                    <Image
+                                    <ImageZoom  src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}  alt={image.name} 
+                                     priority
+                                     className="w-full h-full object-center object-cover image"
+                                     layout='responsive'
+                                     sizes='320 600 1000'
+                                     width={600} height={1000}
+                                    />
+                                    {/* <Image
                                       priority
                                       src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}
                                       alt={image.name}
@@ -558,7 +565,7 @@ export default function ProductView({
                                       width={600} height={1000}
                                       onClick={(ev: any) => handleImgLoadT(image.image)}
                                       blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
-                                    />
+                                    /> */}
                                     {/* </ControlledZoom> */}
                                   </div>
                                 ) : (
