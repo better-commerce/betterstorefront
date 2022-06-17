@@ -24,7 +24,7 @@ export default function FiltersRightOpen({
   clearAll,
   routerSortOption,
 }: Props) {
-  const appliedFilters = products.filters.reduce(
+  const appliedFilters = products?.filters?.reduce(
     (acc: any, obj: any) => {
       acc.forEach((item: any) => {
         if (item.Key === obj.key) {
@@ -67,7 +67,7 @@ export default function FiltersRightOpen({
                   </button>
                 </div>
                 <div className="pl-2 grid grid-cols-5">
-                  {appliedFilters.map((appliedFilter: any, idx: number) => {
+                  {appliedFilters?.map((appliedFilter: any, idx: number) => {
                     return (
                       <div
                         key={`applied-filter-${idx}`}
