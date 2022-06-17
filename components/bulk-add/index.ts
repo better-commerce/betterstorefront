@@ -33,11 +33,14 @@ const validationSchema = Yup.object().shape({
             stockCode: Yup.string()
                 .required("Stockcode is required"),
             quantity: Yup.string()
-                .required("quantity is required")
-                .matches(
-                    /^[1-9]{1}[0-9]*$/,
-                    "quantity should be whole number"
-                ),
+                .notRequired()
+                .test("qty", "quantity should be a whole number", (value) => {
+                    if (value && value.length > 0) {
+                        const regExp = new RegExp(/^[1-9]{1}[0-9]*$/);
+                        return regExp.test(value.trim());
+                    }
+                    return true;
+                }),
         }),
     ),
 });
