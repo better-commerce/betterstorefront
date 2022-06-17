@@ -31,20 +31,15 @@ const validationSchema = Yup.object().shape({
     orderPads: Yup.array().of(
         Yup.object().shape({
             stockCode: Yup.string()
-                .when("code", {
-                    is: (value: string) => value && value.trim().length > 0,
-                    then: Yup.string()
-                        .required('Stockcode is required'),
-                }),
-            quantity: Yup.number().min(1)
-                .when("qty", {
-                    is: (value: number) => value && value > 0,
-                    then: Yup.number()
-                        .min(1)
-                        .required('quantity is required'),
-                }),
-        })
-    )
+                .required("Stockcode is required"),
+            quantity: Yup.string()
+                .required("quantity is required")
+                .matches(
+                    /^[1-9]{1}[0-9]*$/,
+                    "quantity should be whole number"
+                ),
+        }),
+    ),
 });
 
 export const bulkAddConfig = [
