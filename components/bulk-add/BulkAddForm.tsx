@@ -6,7 +6,7 @@ import { Formik, Form, Field, FieldArray, ErrorMessage, FormikTouched } from "fo
 
 // Other Imports
 import { VALUES_MAP } from ".";
-import { GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
+import { GENERAL_COPY_AND_PASTE, GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
 import { DEFAULT_ENTRY_FIELD_COUNT } from "@components/utils/constants";
 
 interface IBulkAddFormProps {
@@ -45,16 +45,21 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
                     <Field name="noOfFields">
                         {(fieldProps: any) => (
                             <>
-                                <button className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 " onClick={e => onAddMoreOrderPads(e, fieldProps.field, values, setValues)}>
-                                    {GENERAL_SHOW_MORE_ENTRY_FIELDS}
-                                </button>
+                            <div  className="grid grid-cols-2 gap-x-2 mt-4">
+                                <div>
+                                    <button className="flex justify-center w-full text-sm items-center py-2 border border-gray-800 rounded-sm shadow-sm font-medium text-white hover:text-white bg-gray-400 hover:bg-gray-900 " onClick={e => onAddMoreOrderPads(e, fieldProps.field, values, setValues)}>
+                                        {GENERAL_SHOW_MORE_ENTRY_FIELDS}
+                                    </button>
+                                </div>
+                                
+                                </div>
                             </>
                         )}
                     </Field>
 
-                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-sm mt-4">
                         <table className="min-w-full divide-y divide-gray-300">
-                            <thead className="bg-gray-50">
+                            <thead className="bg-gray-100">
                                 <tr key={"header"}>
                                     {
                                         headerValues.map((x: any, idx: number) => (

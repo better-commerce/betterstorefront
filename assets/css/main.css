@@ -279,3 +279,6 @@
     min-height: 430px!important;
   }
 } 
+.max-w-md {
+  max-width: 29.4rem!important;
+}

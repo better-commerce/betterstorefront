@@ -10,7 +10,7 @@ import { BulkAddForm } from "./BulkAddForm";
 
 // Other Imports
 import { useUI } from "@components/ui/context";
-import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE } from "@components/utils/textVariables";
+import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LINE_BY_LINE } from "@components/utils/textVariables";
 
 const BulkAddSidebarView: FC = () => {
     const { closeSidebar } = useUI();
@@ -27,7 +27,7 @@ const BulkAddSidebarView: FC = () => {
         <Transition.Root show={true} as={Fragment}>
             <Dialog
                 as="div"
-                className="fixed inset-0 overflow-hidden z-50"
+                className="fixed inset-0 overflow-hidden z-50 overflow-x-hidden"
                 onClose={handleClose}
             >
                 <div className="absolute inset-0 overflow-hidden">
@@ -43,7 +43,7 @@ const BulkAddSidebarView: FC = () => {
                         <Dialog.Overlay className="" />
                     </Transition.Child>
 
-                    <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+                    <div className="fixed inset-y-0 right-0 pl-0 max-w-full flex overflow-x-hidden">
                         <Transition.Child
                             as={Fragment}
                             enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -53,16 +53,23 @@ const BulkAddSidebarView: FC = () => {
                             leaveFrom="translate-x-0"
                             leaveTo="translate-x-full"
                         >
-                            <div className="w-screen max-w-md">
-                                <div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
-                                    <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
+                            <div className="w-screen max-w-md overflow-x-hidden">
+                                <div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll overflow-x-hidden">
+                                    <div className="flex-1 py-6 overflow-y-auto px-0 sm:px-0 overflow-x-hidden">
 
                                         {/* Dialog title */}
-                                        <div className="flex items-start justify-between">
-                                            <Dialog.Title className="text-lg font-medium text-gray-900">
+                                        <div className="flex items-start justify-between border-b pb-3">
+                                            <Dialog.Title className="text-lg font-medium text-gray-900 pl-6">
                                                 {GENERAL_BULK_ORDER_PAD}
+
                                             </Dialog.Title>
-                                            <div className="ml-3 h-7 flex items-center">
+                                            <div className="flex">
+                                                <button className="flex justify-center px-6 mr-3 text-sm items-center py-2 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 ">
+                                                    {GENERAL_COPY_AND_PASTE}
+                                                </button>
+                                                <button className="flex justify-center px-6 mr-3 text-sm items-center py-2 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 ">
+                                                    {GENERAL_LINE_BY_LINE}
+                                                </button>
                                                 <button
                                                     type="button"
                                                     className="-m-2 p-2 text-gray-400 hover:text-gray-500"
@@ -73,16 +80,22 @@ const BulkAddSidebarView: FC = () => {
                                                 </button>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col">
 
-                                            <button className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 ">
-                                                {GENERAL_COPY_AND_PASTE}
-                                            </button>
-                                        </div>
-                                        <div className="mt-8 flex flex-col">
-                                            <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                        {/*LINE BY LINE PANEL*/}
+                                        <div className="flex flex-col px-6">
+                                            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                                 <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                                                     <BulkAddForm onGridSubmit={onGridSubmit} onCSVSubmit={onCSVSubmit} />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/*COPY AND PASTE PANEL*/}
+                                        <div className="flex flex-col mt-4 px-6">
+                                            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                                                    <label className="font-bold text-sm leading-light">Copy and paste your file in following format: STOCKCODE[comma]Quantity</label>
+                                                    <textarea rows={6} cols={12} className="p-4 rounded-md bg-white border text-sm w-full border-gray-300" placeholder="Copy and paste your file in following format: STOCKCODE[comma]Quantity"></textarea>
                                                 </div>
                                             </div>
                                         </div>
