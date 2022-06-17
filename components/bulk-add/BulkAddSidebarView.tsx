@@ -10,7 +10,7 @@ import { BulkAddForm } from "./BulkAddForm";
 
 // Other Imports
 import { useUI } from "@components/ui/context";
-import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LINE_BY_LINE } from "@components/utils/textVariables";
+import { CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LINE_BY_LINE } from "@components/utils/textVariables";
 
 const BulkAddSidebarView: FC = () => {
     const { closeSidebar } = useUI();
@@ -54,7 +54,7 @@ const BulkAddSidebarView: FC = () => {
                             leaveFrom="translate-x-0"
                             leaveTo="translate-x-full"
                         >
-                            <div className="w-screen max-w-md overflow-x-hidden">
+                            <div className="w-screen max-w-md relative overflow-x-hidden">
                                 <div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll overflow-x-hidden">
                                     <div className="flex-1 py-6 overflow-y-auto px-0 sm:px-0 overflow-x-hidden">
 
@@ -92,7 +92,7 @@ const BulkAddSidebarView: FC = () => {
                                         {/*LINE BY LINE PANEL*/}
                                         {
                                             isLineByLine && (
-                                                <div className="flex flex-col px-6">
+                                                <div className="flex flex-col px-6 pb-24">
                                                     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                                                             <BulkAddForm onGridSubmit={onGridSubmit} onCSVSubmit={onCSVSubmit} />
@@ -117,6 +117,11 @@ const BulkAddSidebarView: FC = () => {
                                         }
 
                                     </div>
+                                </div>
+                                <div className="flex flex-col grid absolute justify-items-end align-right bottom-0 right-0 z-999 w-full px-4 bg-gray-50 border-t py-4">
+                                    <button className="flex justify-center w-2/5 px-6 mr-3 relative right-0 text-sm items-center py-3 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 ">
+                                        {GENERAL_ADD_TO_BASKET}
+                                    </button>
                                 </div>
                             </div>
                         </Transition.Child>
