@@ -41,7 +41,7 @@ export default function Filters({
     return `${filtersLength} Filters`
   }
 
-  const appliedFilters = products.filters.reduce(
+  const appliedFilters = products?.filters?.reduce(
     (acc: any, obj: any) => {
       acc.forEach((item: any) => {
         if (item.Key === obj.key) {
