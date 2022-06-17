@@ -14,7 +14,7 @@ export default function CategoryList(props: any) {
       <h2 className="text-2xl font-bold uppercase tracking-tight text-gray-900">
         {SHOP_BY_CATEGORY}
       </h2>
-
+    {props?.data.length>0 &&
       <div className="sm:mt-0 mt-1 flow-root">
         <div className="my-0">
           <div className="box-content relative">
@@ -64,6 +64,14 @@ export default function CategoryList(props: any) {
           </div>
         </div>
       </div>
+      }
+      {props?.data.length == 0 &&
+        <>
+          <div className='flex flex-col text-center py-32'>
+            <h2 className='text-4xl font-bold text-gray-200 w-full mx-auto'>No Category Available</h2>
+          </div>
+        </>
+      }
     </section>
   </main>
   )
