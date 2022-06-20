@@ -4,7 +4,7 @@ import * as Yup from "yup";
 // Other Imports
 import { DEFAULT_ENTRY_FIELD_COUNT } from "@components/utils/constants";
 
-const headerValues = [{
+const gridHeaderValues = [{
     text: "S.No",
     className: "py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
 }, {
@@ -16,17 +16,17 @@ const headerValues = [{
 },
 ];
 
-const initialValues = {
+const gridInitialValues = {
     noOfFields: DEFAULT_ENTRY_FIELD_COUNT,
     orderPads: [{ stockCode: "", quantity: "" },
-                { stockCode: "", quantity: "" },
-                { stockCode: "", quantity: "" },
-                { stockCode: "", quantity: "" },
-                { stockCode: "", quantity: "" },
-            ], //Array.from(Array(DEFAULT_ENTRY_FIELD_COUNT).map((x: any) => { return { stockCode: "", quantity: ""} })),
+    { stockCode: "", quantity: "" },
+    { stockCode: "", quantity: "" },
+    { stockCode: "", quantity: "" },
+    { stockCode: "", quantity: "" },
+    ], //Array.from(Array(DEFAULT_ENTRY_FIELD_COUNT).map((x: any) => { return { stockCode: "", quantity: ""} })),
 };
 
-const validationSchema = Yup.object().shape({
+const gridValidationSchema = Yup.object().shape({
     noOfFields: Yup.number(),
     orderPads: Yup.array().of(
         Yup.object().shape({
@@ -57,7 +57,7 @@ const validationSchema = Yup.object().shape({
     ),
 });
 
-export const bulkAddConfig = [
+export const gridBulkAddConfig = [
     {
         key: "stockCode",
         label: "Stock Code",
@@ -74,11 +74,26 @@ export const bulkAddConfig = [
     },
 ];
 
+const csvInitialValues = {
+    data: "",
+};
+
+const csvValidationSchema = Yup.object().shape({
+    data: Yup.string()
+        .required("CSV data is required"),
+});
+
 export const VALUES_MAP: any = {
-    headerValues: headerValues,
-    schema: validationSchema,
-    initialValues: initialValues,
-    config: bulkAddConfig,
+    bulkAddViaGrid: {
+        headerValues: gridHeaderValues,
+        schema: gridValidationSchema,
+        initialValues: gridInitialValues,
+        config: gridBulkAddConfig,
+    },
+    bulkAddViaCSV: {
+        schema: csvValidationSchema,
+        initialValues: csvInitialValues,
+    }
 };
 
 export { default } from "./BulkAddSidebarView";

@@ -6,11 +6,13 @@ import { XIcon } from "@heroicons/react/outline";
 import { Dialog, Transition } from "@headlessui/react";
 
 // Component Imports
+import { CSVForm } from "./CSVForm";
 import { BulkAddForm } from "./BulkAddForm";
 
 // Other Imports
 import { useUI } from "@components/ui/context";
-import { CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LINE_BY_LINE } from "@components/utils/textVariables";
+import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LINE_BY_LINE } from "@components/utils/textVariables";
+
 
 const BulkAddSidebarView: FC = () => {
     const { closeSidebar } = useUI();
@@ -95,7 +97,7 @@ const BulkAddSidebarView: FC = () => {
                                                 <div className="flex flex-col px-6 pb-24">
                                                     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                                            <BulkAddForm onGridSubmit={onGridSubmit} onCSVSubmit={onCSVSubmit} />
+                                                            <BulkAddForm onGridSubmit={onGridSubmit} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -108,8 +110,7 @@ const BulkAddSidebarView: FC = () => {
                                                 <div className="flex flex-col mt-4 px-6">
                                                     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                                            <label className="font-bold text-sm leading-light">Copy and paste your file in following format: STOCKCODE[comma]Quantity</label>
-                                                            <textarea rows={6} cols={12} className="p-4 rounded-md bg-white border text-sm w-full border-gray-300" placeholder="Copy and paste your file in following format: STOCKCODE[comma]Quantity"></textarea>
+                                                            <CSVForm onCSVSubmit={onCSVSubmit} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -117,11 +118,6 @@ const BulkAddSidebarView: FC = () => {
                                         }
 
                                     </div>
-                                </div>
-                                <div className="flex flex-col grid absolute justify-items-end align-right bottom-0 right-0 z-999 w-full px-4 bg-gray-50 border-t py-4">
-                                    <button className="flex justify-center w-2/5 px-6 mr-3 relative right-0 text-sm items-center py-3 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 ">
-                                        {GENERAL_ADD_TO_BASKET}
-                                    </button>
                                 </div>
                             </div>
                         </Transition.Child>

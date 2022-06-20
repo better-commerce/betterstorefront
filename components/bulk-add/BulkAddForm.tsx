@@ -2,21 +2,21 @@
 import React, { FC } from "react";
 
 // Package Imports
-import { Formik, Form, Field, FieldArray, ErrorMessage, FormikTouched } from "formik";
+import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 
 // Other Imports
 import { VALUES_MAP } from ".";
-import { GENERAL_COPY_AND_PASTE, GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
+import { GENERAL_ADD_TO_BASKET, GENERAL_COPY_AND_PASTE, GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
 import { DEFAULT_ENTRY_FIELD_COUNT } from "@components/utils/constants";
+import { AddToBasketButton } from "./AddToBasketButon";
 
 interface IBulkAddFormProps {
     readonly onGridSubmit: any;
-    readonly onCSVSubmit: any;
+    readonly type?: string;
 }
 
-export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => {
-    const { onGridSubmit, onCSVSubmit } = props;
-    const { headerValues, schema, initialValues, config } = VALUES_MAP;
+export const BulkAddForm: FC<IBulkAddFormProps> = ({ onGridSubmit, type = "bulkAddViaGrid" }: IBulkAddFormProps) => {
+    const { headerValues, schema, initialValues, config } = VALUES_MAP[type];
 
     const onAddMoreOrderPads = (e: any, field: any, values: any, setValues: any) => {
         // update dynamic form
@@ -45,13 +45,13 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
                     <Field name="noOfFields">
                         {(fieldProps: any) => (
                             <>
-                            <div  className="grid grid-cols-2 gap-x-2 mt-4">
-                                <div>
-                                    <button className="flex justify-center w-full text-sm items-center py-2 border border-gray-800 rounded-sm shadow-sm font-medium text-white hover:text-white bg-gray-400 hover:bg-gray-900 " onClick={e => onAddMoreOrderPads(e, fieldProps.field, values, setValues)}>
-                                        {GENERAL_SHOW_MORE_ENTRY_FIELDS}
-                                    </button>
-                                </div>
-                                
+                                <div className="grid grid-cols-2 gap-x-2 mt-4">
+                                    <div>
+                                        <button className="flex justify-center w-full text-sm items-center py-2 border border-gray-800 rounded-sm shadow-sm font-medium text-white hover:text-white bg-gray-400 hover:bg-gray-900 " onClick={e => onAddMoreOrderPads(e, fieldProps.field, values, setValues)}>
+                                            {GENERAL_SHOW_MORE_ENTRY_FIELDS}
+                                        </button>
+                                    </div>
+
                                 </div>
                             </>
                         )}
@@ -97,6 +97,9 @@ export const BulkAddForm: FC<IBulkAddFormProps> = (props: IBulkAddFormProps) => 
                             </tbody>
                         </table>
                     </div>
+
+                    {/*Add to cart button*/}
+                    <AddToBasketButton buttonText={GENERAL_ADD_TO_BASKET} />
                 </Form>
             )}
         </Formik>
