@@ -7,7 +7,7 @@ import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 // Other Imports
 import { VALUES_MAP } from ".";
 import { GENERAL_ADD_TO_BASKET, GENERAL_COPY_AND_PASTE, GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
-import { DEFAULT_ENTRY_FIELD_COUNT } from "@components/utils/constants";
+import { BulkOrder } from "@components/utils/constants";
 import { AddToBasketButton } from "./AddToBasketButon";
 
 interface IBulkAddFormProps {
@@ -21,7 +21,7 @@ export const BulkAddForm: FC<IBulkAddFormProps> = ({ onGridSubmit, type = "bulkA
     const onAddMoreOrderPads = (e: any, field: any, values: any, setValues: any) => {
         // update dynamic form
         const orderPads = [...values.orderPads];
-        const noOfFields = (e.target.value || field.value) + DEFAULT_ENTRY_FIELD_COUNT;
+        const noOfFields = (e.target.value || field.value) + BulkOrder.DEFAULT_ENTRY_FIELD_COUNT;
         const previousNumber = parseInt(field.value || '0');
         if (previousNumber < noOfFields) {
             for (let i = previousNumber; i < noOfFields; i++) {

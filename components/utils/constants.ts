@@ -113,4 +113,10 @@ export const UPDATE_ORDER_STATUS = '/api/update-order-status'
 export const NEXT_PUBLIC_DEFAULT_CACHE_TIME = process.env.NEXT_PUBLIC_DEFAULT_CACHE_TIME_IN_MILLI_SECS;
 export const NEXT_PUBLIC_API_CACHING_LOG_ENABLED = process.env.NEXT_PUBLIC_API_CACHING_LOG_ENABLED;
 
-export const DEFAULT_ENTRY_FIELD_COUNT = 5;
+export module BulkOrder {
+  export const DEFAULT_ENTRY_FIELD_COUNT = 5;
+
+  export const STOCK_CODE_REGEX = /^[a-zA-Z0-9\\-]+$/g
+  export const QUANTITY_REGEX = /^[1-9]{1}[0-9]*$/g
+  export const CSV_DATA_REGEX = /^[a-zA-Z0-9]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
+}

@@ -5,24 +5,114 @@ import React, { FC, Fragment, useState } from "react";
 import { XIcon } from "@heroicons/react/outline";
 import { Dialog, Transition } from "@headlessui/react";
 
+// Model Imports
+import { IBulkAddData } from ".";
+
 // Component Imports
 import { CSVForm } from "./CSVForm";
 import { BulkAddForm } from "./BulkAddForm";
 
 // Other Imports
+import { Guid } from "@commerce/types";
 import { useUI } from "@components/ui/context";
+import { stringToNumber } from "@framework/utils";
+import cartHandler from "@components/services/cart";
+import { BulkOrder } from "@components/utils/constants";
 import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LINE_BY_LINE } from "@components/utils/textVariables";
 
 
 const BulkAddSidebarView: FC = () => {
-    const { closeSidebar } = useUI();
+    const { user, basketId, setCartItems, closeSidebar } = useUI();
     const [isLineByLine, setIsLineByLine] = useState<boolean>(true);
 
-    const onGridSubmit = (data: Array<{ stockCode: string, quantity: string }>) => {
+    /**
+     * Transforms input to basket line input for API endpoint.
+     * @param data 
+     * @returns 
+     */
+    const basketLine = (data: Array<{ stockCode: string, quantity: string }>): Array<any> => {
+        return data.map((x: { stockCode: string, quantity: string }) => {
+            return {
+                productId: Guid.empty,
+                stockCode: x.stockCode,
+                productName: null,
+                parentProductId: null,
+                qty: stringToNumber(x.quantity),
+                itemType: 0,
+                customInfo1: null,
+                customInfo2: null,
+                customInfo3: null,
+                customInfo4: null,
+                customInfo5: null,
+                customInfo1Formatted: null,
+                customInfo2Formatted: null,
+                customInfo3Formatted: null,
+                customInfo4Formatted: null,
+                customInfo5Formatted: null,
+                postCode: null,
+                isSubscription: false,
+                subscriptionPlanId: Guid.empty,
+                subscriptionTermId: Guid.empty,
+                userSubscriptionPricing: 0,
+                displayOrder: 0,
+            }
+        });
     };
 
-    const onCSVSubmit = (data: any) => {
+    /**
+     * Line by line submit event handler.
+     * @param data 
+     */
+    const onGridSubmit = async (data: IBulkAddData) => {
+        if (data && data.orderPads && data.orderPads.length) {
+            const values = data.orderPads.filter((x: { stockCode: string, quantity: string }) => {
+                return (x.stockCode && x.quantity);
+            });
+
+            if (values && values.length) {
+                await onAddToCart(values);
+            }
+        }
     };
+
+    /**
+     * CSV submit event handler.
+     * @param data 
+     */
+    const onCSVSubmit = async (data: any) => {
+        if (data) {
+            const regExp = new RegExp(BulkOrder.CSV_DATA_REGEX);
+            const matches: RegExpMatchArray | null = data.trim().match(regExp);
+            let csvData = new Array<{ stockCode: string, quantity: string }>();
+            if (matches && matches.length) {
+                matches.forEach(m => {
+                    const row = m.split(",");
+                    csvData.push({
+                        stockCode: row[0],
+                        quantity: row[1],
+                    });
+                });
+            }
+
+            if (csvData && csvData.length) {
+                await onAddToCart(csvData);
+            }
+        }
+    };
+
+    /**
+     * Add to cart event handler.
+     * @param data 
+     */
+    const onAddToCart = async (data: Array<{ stockCode: string, quantity: string }>) => {
+        const items = basketLine(data);
+        if (items && items.length) {
+            const item = await cartHandler().bulkAddToCart(user.userId, basketId, user.isAssociated, "ADD", items);
+            if (item) {
+                setCartItems(item);
+            }
+        }
+    }
 
     const handleClose = () => closeSidebar();
 

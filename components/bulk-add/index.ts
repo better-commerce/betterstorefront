@@ -2,7 +2,12 @@
 import * as Yup from "yup";
 
 // Other Imports
-import { DEFAULT_ENTRY_FIELD_COUNT } from "@components/utils/constants";
+import { BulkOrder } from "@components/utils/constants";
+
+export interface IBulkAddData {
+    readonly noOfFields: number;
+    readonly orderPads: Array<{ stockCode: string, quantity: string }>;
+}
 
 const gridHeaderValues = [{
     text: "S.No",
@@ -16,14 +21,14 @@ const gridHeaderValues = [{
 },
 ];
 
-const gridInitialValues = {
-    noOfFields: DEFAULT_ENTRY_FIELD_COUNT,
+const gridInitialValues: IBulkAddData = {
+    noOfFields: BulkOrder.DEFAULT_ENTRY_FIELD_COUNT,
     orderPads: [{ stockCode: "", quantity: "" },
     { stockCode: "", quantity: "" },
     { stockCode: "", quantity: "" },
     { stockCode: "", quantity: "" },
     { stockCode: "", quantity: "" },
-    ], //Array.from(Array(DEFAULT_ENTRY_FIELD_COUNT).map((x: any) => { return { stockCode: "", quantity: ""} })),
+    ], //Array.from(Array(BulkOrder.DEFAULT_ENTRY_FIELD_COUNT).map((x: any) => { return { stockCode: "", quantity: ""} })),
 };
 
 const gridValidationSchema = Yup.object().shape({
@@ -38,7 +43,7 @@ const gridValidationSchema = Yup.object().shape({
                 })*/
                 .test("code", "stockCode is invalid", (value) => {
                     if (value && value.trim().length) {
-                        const regExp = new RegExp(/^[a-zA-Z0-9\\-]+$/);
+                        const regExp = new RegExp(BulkOrder.STOCK_CODE_REGEX);
                         return regExp.test(value.trim());
                     }
                     return true;
@@ -48,7 +53,7 @@ const gridValidationSchema = Yup.object().shape({
                 .notRequired()
                 .test("qty", "quantity should be a whole number", (value) => {
                     if (value && value.trim().length) {
-                        const regExp = new RegExp(/^[1-9]{1}[0-9]*$/);
+                        const regExp = new RegExp(BulkOrder.QUANTITY_REGEX);
                         return regExp.test(value.trim());
                     }
                     return true;
@@ -80,7 +85,21 @@ const csvInitialValues = {
 
 const csvValidationSchema = Yup.object().shape({
     data: Yup.string()
-        .required("CSV data is required"),
+        .required("CSV data is required")
+        .test("csvData", "data is not in valid format", (value) => {
+            const lines = (value: string) => { 
+                const parsedLines = value.split(/\r*\n/);
+                return parsedLines.length;
+            };
+            if (value && value.trim().length) {
+                const regExp = new RegExp(BulkOrder.CSV_DATA_REGEX);
+                const matches = value.trim().match(regExp);
+                if (!matches || matches && (matches.length === lines(value.trim()))) {
+                    return false;
+                }
+            }
+            return true;
+        }),
 });
 
 export const VALUES_MAP: any = {
