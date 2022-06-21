@@ -63,7 +63,6 @@ const BulkAddSidebarView: FC = () => {
      * @param data 
      */
     const onCSVSubmit = async (data: any) => {
-        console.log(data);
         if (data && data.data && data.data.trim().length) {
             const value = data.data.trim();
             const regExp = new RegExp(BulkOrder.CSV_DATA_REGEX);
@@ -78,7 +77,7 @@ const BulkAddSidebarView: FC = () => {
                     });
                 });
             }
-            console.log(csvData)
+
             if (csvData && csvData.length) {
                 await onAddToCart(csvData);
             }
