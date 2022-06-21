@@ -208,7 +208,7 @@ export default function CollectionPage(props: any) {
   
   return (
     <main className="pb-0 md:w-4/5 mx-auto">
-    <div className="pt-2 sm:pt-4">
+    <div className="pt-6 sm:pt-6">
        {props.breadCrumbs && (
          <BreadCrumbs items={props.breadCrumbs} currentProduct={props} />
        )}
