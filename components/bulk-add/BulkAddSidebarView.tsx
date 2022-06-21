@@ -10,7 +10,7 @@ import { IBulkAddData } from ".";
 
 // Component Imports
 import { CSVForm } from "./CSVForm";
-import { BulkAddForm } from "./BulkAddForm";
+import { GridForm } from "./GridForm";
 import { AddToBasketButton } from "./AddToBasketButon";
 
 // Other Imports
@@ -180,7 +180,7 @@ const BulkAddSidebarView: FC = () => {
                                                 <div className="flex flex-col px-6 pb-24">
                                                     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                                            <BulkAddForm onGridSubmit={onGridSubmit} addToBasketBtn={addToBasketBtn} />
+                                                            <GridForm onGridSubmit={onGridSubmit} addToBasketBtn={addToBasketBtn} />
                                                         </div>
                                                     </div>
                                                 </div>

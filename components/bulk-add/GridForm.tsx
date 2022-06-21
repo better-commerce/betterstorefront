@@ -9,13 +9,13 @@ import { VALUES_MAP } from ".";
 import { GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
 import { BulkOrder } from "@components/utils/constants";
 
-interface IBulkAddFormProps {
+interface IGridFormProps {
     readonly onGridSubmit: any;
     readonly addToBasketBtn: any;
     readonly type?: string;
 }
 
-export const BulkAddForm: FC<IBulkAddFormProps> = ({ onGridSubmit, addToBasketBtn, type = "bulkAddViaGrid" }: IBulkAddFormProps) => {
+export const GridForm: FC<IGridFormProps> = ({ onGridSubmit, addToBasketBtn, type = "bulkAddViaGrid" }: IGridFormProps) => {
     const { headerValues, schema, initialValues, config } = VALUES_MAP[type];
 
     const onAddMoreOrderPads = (e: any, field: any, values: any, setValues: any) => {
