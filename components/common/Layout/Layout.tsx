@@ -171,7 +171,7 @@ const Layout: FC<Props> = ({
           config={sortedData}
           languages={config?.languages}
         />
-        <main className="fit pt-16">{children}</main>
+        <main className="fit pt-24">{children}</main>
         <Footer config={data.footer} />
         <ModalUI />
         <SidebarUI />

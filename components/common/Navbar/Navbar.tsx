@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic'
-
 import { FC, Fragment, useState, useRef } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition, Dialog, Tab } from '@headlessui/react'
@@ -16,6 +15,8 @@ import { MenuIcon, SearchIcon, XIcon, ShoppingCartIcon, ShoppingBagIcon, HeartIc
 const Account = dynamic(() => import('./AccountDropdown'))
 const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
+const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
+
 import {
   BTN_SIGN_OUT,
   GENERAL_LOGIN,
@@ -28,7 +29,6 @@ import {
   SELECT_LANGUAGE,
   GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
-import BulkAddTopNav from '@components/bulk-add/TopNav'
 import { stringToBoolean } from '@framework/utils'
 
 interface Props {
@@ -283,6 +283,24 @@ const Navbar: FC<Props> = ({ configSettings, config, currencies, languages }) =>
       </Transition.Root>
 
       <header className="bg-white shadow-md fixed top-0 right-0 z-999 w-full">
+        <div className='py-2 bg-gray-800 w-full text-right px-4'>
+           <div className='w-full md:w-4/5 mx-auto flex flex-row justify-end'>
+              {/* Bulk Add */}
+              {b2bEnabled && (
+                <BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />
+              )}
+              <CurrencySwitcher
+                config={currencies}
+                title={SELECT_CURRENCY}
+                action={configAction}
+              />
+              <LanguageSwitcher
+                title={SELECT_LANGUAGE}
+                action={configAction}
+                config={languages}
+              />
+           </div>
+        </div>
         <nav aria-label="Top" className="w-full md:w-4/5 mx-auto px-4 sm:px-0 lg:px-0">
           <div className="pb-0 sm:px-0 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
@@ -436,25 +454,7 @@ const Navbar: FC<Props> = ({ configSettings, config, currencies, languages }) =>
                 <Searchbar onClick={setShowSearchBar} />
                 {/* account */}
                 <Account title={title} config={accountDropdownConfig} />
-                {/* currency */}
-                <div className="sm:flex hidden">
-                  <CurrencySwitcher
-                    config={currencies}
-                    title={SELECT_CURRENCY}
-                    action={configAction}
-                  />
-                  <LanguageSwitcher
-                    title={SELECT_LANGUAGE}
-                    action={configAction}
-                    config={languages}
-                  />
-                </div>
-
-                {/* Bulk Add */}
-                {b2bEnabled && (
-                  <BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />
-                )}
-
+               
                 {/* Wishlist*/}
 
                 <div className="px-1 w-10 sm:w-16 flow-root">

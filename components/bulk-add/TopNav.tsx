@@ -17,15 +17,15 @@ const TopNav: React.FC<ITopNavProps> = (props: ITopNavProps) => {
     const { b2bSettings, onClick } = props;
 
     return (
-        <div className="px-1 w-10 sm:w-16 flow-root">
+        <div className="px-3 flow-root border-r mr-2">
             <button
-                className="relative group grid grid-cols-1 items-center text-center align-center justify-center flex-col mx-auto"
+                className="relative group items-center text-center align-center justify-center flex-col mx-auto"
                 onClick={onClick}>
                 <DocumentDuplicateIcon
-                    className="flex-shrink-0 h-6 w-6 block text-black group-hover:text-red-600 mx-auto"
+                    className="flex-shrink-0 h-5 w-5 inline-block text-white group-hover:text-gray-300 mx-auto"
                     aria-hidden="true" aria-label="Bulk Add"
                 />
-                <span className='font-normal hidden text-sm text-black sm:block'>Quick Order</span>
+                <span className='font-semibold text-sm text-white pl-1 hover:text-gray-300'>Quick Order</span>
             </button>
         </div>
     )
