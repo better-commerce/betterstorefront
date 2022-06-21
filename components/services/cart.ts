@@ -131,7 +131,7 @@ export default function cartHandler() {
       const url = NEXT_BULK_ADD_TO_CART;
       const postData = {
         basketId,
-        data,
+        products: data,
       };
       const response: any = await axios.post(url, {
         data: postData,

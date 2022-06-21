@@ -22,7 +22,7 @@ import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LI
 
 
 const BulkAddSidebarView: FC = () => {
-    const { user, basketId, setCartItems, closeSidebar } = useUI();
+    const { user, basketId, setCartItems, openCart, closeSidebar } = useUI();
     const [isLineByLine, setIsLineByLine] = useState<boolean>(true);
 
     /**
@@ -35,26 +35,8 @@ const BulkAddSidebarView: FC = () => {
             return {
                 productId: Guid.empty,
                 stockCode: x.stockCode,
-                productName: null,
-                parentProductId: null,
+                parentProductId: Guid.empty,
                 qty: stringToNumber(x.quantity),
-                itemType: 0,
-                customInfo1: null,
-                customInfo2: null,
-                customInfo3: null,
-                customInfo4: null,
-                customInfo5: null,
-                customInfo1Formatted: null,
-                customInfo2Formatted: null,
-                customInfo3Formatted: null,
-                customInfo4Formatted: null,
-                customInfo5Formatted: null,
-                postCode: null,
-                isSubscription: false,
-                subscriptionPlanId: Guid.empty,
-                subscriptionTermId: Guid.empty,
-                userSubscriptionPricing: 0,
-                displayOrder: 0,
             }
         });
     };
@@ -109,7 +91,12 @@ const BulkAddSidebarView: FC = () => {
         if (items && items.length) {
             const item = await cartHandler().bulkAddToCart(user.userId, basketId, user.isAssociated, "ADD", items);
             if (item) {
+                closeSidebar();
                 setCartItems(item);
+                setTimeout(() => {
+                    openCart();
+                }, 50);
+
             }
         }
     }
