@@ -118,5 +118,5 @@ export module BulkOrder {
 
   export const STOCK_CODE_REGEX = /^[a-zA-Z0-9\\-]+$/g
   export const QUANTITY_REGEX = /^[1-9]{1}[0-9]*$/g
-  export const CSV_DATA_REGEX = /^[a-zA-Z0-9]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
+  export const CSV_DATA_REGEX = /^[a-zA-Z0-9\-]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
 }

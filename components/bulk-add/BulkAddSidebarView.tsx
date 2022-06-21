@@ -11,6 +11,7 @@ import { IBulkAddData } from ".";
 // Component Imports
 import { CSVForm } from "./CSVForm";
 import { BulkAddForm } from "./BulkAddForm";
+import { AddToBasketButton } from "./AddToBasketButon";
 
 // Other Imports
 import { Guid } from "@commerce/types";
@@ -18,7 +19,7 @@ import { useUI } from "@components/ui/context";
 import { stringToNumber } from "@framework/utils";
 import cartHandler from "@components/services/cart";
 import { BulkOrder } from "@components/utils/constants";
-import { CLOSE_PANEL, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LINE_BY_LINE } from "@components/utils/textVariables";
+import { CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_BULK_ORDER_PAD, GENERAL_COPY_AND_PASTE, GENERAL_LINE_BY_LINE } from "@components/utils/textVariables";
 
 
 const BulkAddSidebarView: FC = () => {
@@ -62,9 +63,11 @@ const BulkAddSidebarView: FC = () => {
      * @param data 
      */
     const onCSVSubmit = async (data: any) => {
-        if (data) {
+        console.log(data);
+        if (data && data.data && data.data.trim().length) {
+            const value = data.data.trim();
             const regExp = new RegExp(BulkOrder.CSV_DATA_REGEX);
-            const matches: RegExpMatchArray | null = data.trim().match(regExp);
+            const matches: RegExpMatchArray | null = value.trim().match(regExp);
             let csvData = new Array<{ stockCode: string, quantity: string }>();
             if (matches && matches.length) {
                 matches.forEach(m => {
@@ -75,7 +78,7 @@ const BulkAddSidebarView: FC = () => {
                     });
                 });
             }
-
+            console.log(csvData)
             if (csvData && csvData.length) {
                 await onAddToCart(csvData);
             }
@@ -102,6 +105,10 @@ const BulkAddSidebarView: FC = () => {
     }
 
     const handleClose = () => closeSidebar();
+
+    const addToBasketBtn = (
+        <AddToBasketButton buttonText={GENERAL_ADD_TO_BASKET} />
+    );
 
     return (
         <Transition.Root show={true} as={Fragment}>
@@ -174,7 +181,7 @@ const BulkAddSidebarView: FC = () => {
                                                 <div className="flex flex-col px-6 pb-24">
                                                     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                                            <BulkAddForm onGridSubmit={onGridSubmit} />
+                                                            <BulkAddForm onGridSubmit={onGridSubmit} addToBasketBtn={addToBasketBtn} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -187,7 +194,7 @@ const BulkAddSidebarView: FC = () => {
                                                 <div className="flex flex-col mt-4 px-6">
                                                     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                                            <CSVForm onCSVSubmit={onCSVSubmit} />
+                                                            <CSVForm onCSVSubmit={onCSVSubmit} addToBasketBtn={addToBasketBtn} />
                                                         </div>
                                                     </div>
                                                 </div>

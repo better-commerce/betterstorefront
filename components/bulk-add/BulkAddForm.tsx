@@ -6,16 +6,16 @@ import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 
 // Other Imports
 import { VALUES_MAP } from ".";
-import { GENERAL_ADD_TO_BASKET, GENERAL_COPY_AND_PASTE, GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
+import { GENERAL_SHOW_MORE_ENTRY_FIELDS } from "@components/utils/textVariables";
 import { BulkOrder } from "@components/utils/constants";
-import { AddToBasketButton } from "./AddToBasketButon";
 
 interface IBulkAddFormProps {
     readonly onGridSubmit: any;
+    readonly addToBasketBtn: any;
     readonly type?: string;
 }
 
-export const BulkAddForm: FC<IBulkAddFormProps> = ({ onGridSubmit, type = "bulkAddViaGrid" }: IBulkAddFormProps) => {
+export const BulkAddForm: FC<IBulkAddFormProps> = ({ onGridSubmit, addToBasketBtn, type = "bulkAddViaGrid" }: IBulkAddFormProps) => {
     const { headerValues, schema, initialValues, config } = VALUES_MAP[type];
 
     const onAddMoreOrderPads = (e: any, field: any, values: any, setValues: any) => {
@@ -99,7 +99,7 @@ export const BulkAddForm: FC<IBulkAddFormProps> = ({ onGridSubmit, type = "bulkA
                     </div>
 
                     {/*Add to cart button*/}
-                    <AddToBasketButton buttonText={GENERAL_ADD_TO_BASKET} />
+                    {addToBasketBtn}
                 </Form>
             )}
         </Formik>

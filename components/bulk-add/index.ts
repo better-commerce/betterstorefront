@@ -85,16 +85,18 @@ const csvInitialValues = {
 
 const csvValidationSchema = Yup.object().shape({
     data: Yup.string()
-        .required("CSV data is required")
-        .test("csvData", "data is not in valid format", (value) => {
-            const lines = (value: string) => { 
+        .required("data is required")
+        .test("csvData", "data is not in valid format", (value: string | undefined, context: any) => {
+            const lines = (value: string) => {
                 const parsedLines = value.split(/\r*\n/);
                 return parsedLines.length;
             };
-            if (value && value.trim().length) {
+
+            const fieldValue = context.originalValue;
+            if (fieldValue && fieldValue.trim().length) {
                 const regExp = new RegExp(BulkOrder.CSV_DATA_REGEX);
-                const matches = value.trim().match(regExp);
-                if (!matches || matches && (matches.length === lines(value.trim()))) {
+                const matches = fieldValue.trim().match(regExp);
+                if (!matches || matches && (matches.length != lines(fieldValue.trim()))) {
                     return false;
                 }
             }
