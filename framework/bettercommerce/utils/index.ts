@@ -52,6 +52,8 @@ export const setRefreshToken = (token?: string, options?: CookieAttributes) => {
 export const getRefreshToken = () => Cookies.get('betterCommerce.refreshToken')
 export const clearTokens = () => Cookies.remove('betterCommerce.token')
 
+export { stringToBoolean, stringToNumber } from "./parse-util";
+
 export const writeFetcherLog = (request: any, response: any) => {
   const objectStrigified = (obj: any) => {
     return JSON.stringify(obj, null, "\t");

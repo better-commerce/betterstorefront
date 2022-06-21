@@ -285,7 +285,7 @@ function CategoryPage({ category, products }: any) {
     <div className="bg-white md:w-4/5 mx-auto">
       {/* Mobile menu */}
       <main className="pb-0">   
-        <div className="pt-2 sm:pt-4 sm:px-0 px-3">
+        <div className="pt-6 sm:pt-6 sm:px-0 px-3">
           {category.breadCrumbs && (
             <BreadCrumbs items={category.breadCrumbs} currentProduct={category} />
           )}

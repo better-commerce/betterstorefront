@@ -5,13 +5,13 @@ import { setCookie } from '@components/utils/cookieHandler'
 
 export default function CurrencySwitcher({ config = [], title, action }: any) {
   return (
-    <Menu as="div" className="relative inline-block text-left px-1 sm:w-16 w-10 flow-root">
-      <Menu.Button className="group grid grid-cols-1 items-center text-center align-center justify-center flex-col mx-auto" aria-label="Currency">
+    <Menu as="div" className="pr-3 flow-root border-r mr-2 relative">
+      <Menu.Button className="group items-center text-center align-center justify-center flex-col mx-auto" aria-label="Currency">
         <CurrencyDollarIcon
-          className="flex-shrink-0 h-6 w-6 block text-black group-hover:text-gray-500 mx-auto"
+          className="flex-shrink-0 h-5 w-5 inline-block text-white group-hover:text-gray-300 mx-auto"
           aria-hidden="true" aria-label="Currency"
         />
-         <span className='font-normal sm:block hidden text-sm text-black'>Currency</span>
+         <span className='font-semibold text-sm text-white pl-1 hover:text-gray-300'>Currency</span>
       </Menu.Button>
       <Transition
         as={Fragment}
@@ -28,7 +28,7 @@ export default function CurrencySwitcher({ config = [], title, action }: any) {
               {({ active }) => {
                 return (
                   <>
-                    <h1 className="text-left font-bold p-2">{title}</h1>
+                    <h1 className="text-left font-semibold font-sm uppercase p-2">{title}</h1>
                     {config.map((item: any, idx: number) => {
                       return (
                         <div
@@ -40,7 +40,7 @@ export default function CurrencySwitcher({ config = [], title, action }: any) {
                             action({ Currency: item.currencyCode })
                           }
                         >
-                          {item.currencyCode} - {item.currencySymbol}
+                          {item.currencySymbol} {'-'} {item.currencyCode}
                         </div>
                       )
                     })}

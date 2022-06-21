@@ -41,6 +41,7 @@ const initialState = {
   displayModal: false,
   modalView: 'LOGIN_VIEW',
   sidebarView: 'CART_VIEW',
+  bulkAddView: 'BULK_ADD_VIEW',
   userAvatar: '',
   productId: '',
   notifyUser: false,
@@ -132,6 +133,7 @@ type MODAL_VIEWS =
 
 type SIDEBAR_VIEWS =
   | 'CART_VIEW'
+  | 'BULK_ADD_VIEW'
   | 'CHECKOUT_VIEW'
   | 'PAYMENT_METHOD_VIEW'
   | 'WISHLIST_VIEW'
@@ -464,6 +466,11 @@ export const UIProvider: FC = (props) => {
     openSidebar()
   }
 
+  const openBulkAdd = () => {
+    setSidebarView('BULK_ADD_VIEW')
+    openSidebar()
+  }
+
   const setBasketId = useCallback(
     (basketId: string) => {
       Cookies.set('basketId', basketId)
@@ -582,6 +589,7 @@ export const UIProvider: FC = (props) => {
       setIsGuestUser,
       deleteUser,
       openCart,
+      openBulkAdd,
       openWishlist,
       setWishlist,
       removeFromWishlist,

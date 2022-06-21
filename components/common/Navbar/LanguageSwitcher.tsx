@@ -6,13 +6,13 @@ import { Router } from 'next/router'
 
 export default function CurrencySwitcher({ config, title, action }: any) {
   return (
-    <Menu as="div" className="relative inline-block text-left px-1 sm:w-16 w-10 flow-root">
-      <Menu.Button className="group grid grid-cols-1 items-center text-center align-center justify-center flex-col mx-auto"  aria-label="Language">
+    <Menu as="div" className="px-1 flow-root relative">
+      <Menu.Button className="flex-shrink-0 inline-block text-white group-hover:text-gray-300 mx-auto"  aria-label="Language">
         <FlagIcon
-          className="flex-shrink-0 h-6 w-6 block text-black group-hover:text-gray-500 mx-auto"
+          className="flex-shrink-0 5-4 w-5 inline-block text-white group-hover:text-gray-300 mx-auto"
           aria-hidden="true"  aria-label="Flags"
         />
-        <span className='font-normal sm:block hidden text-sm text-black'>Lang</span>
+        <span className='font-semibold text-sm text-white hover:text-gray-300 pl-2'>Language</span>
       </Menu.Button>
       <Transition
         as={Fragment}
@@ -29,7 +29,7 @@ export default function CurrencySwitcher({ config, title, action }: any) {
               {({ active }) => {
                 return (
                   <>
-                    <h1 className="text-left font-bold p-2">{title}</h1>
+                    <h1 className="text-left font-semibold font-sm uppercase p-2">{title}</h1>
                     {config.map((item: any, idx: number) => {
                       return (
                         <div

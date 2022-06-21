@@ -9,6 +9,7 @@ import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
+const BulkAddSidebarView = dynamic(() => import('@components/bulk-add'))
 const PaymentMethodView = dynamic(() => import('@components/checkout/PaymentMethodView'))
 const CheckoutSidebarView = dynamic(() => import('@components/checkout/CheckoutSidebarView'))
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
@@ -77,6 +78,7 @@ const SidebarView: FC<{ sidebarView: string; closeSidebar(): any }> = ({
   return (
     <Sidebar onClose={closeSidebar}>
       {sidebarView === 'CART_VIEW' && <CartSidebarView />}
+      {sidebarView === 'BULK_ADD_VIEW' && <BulkAddSidebarView />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
       {sidebarView === 'PAYMENT_VIEW' && <PaymentMethodView />}
@@ -164,11 +166,12 @@ const Layout: FC<Props> = ({
           />
         )}
         <Navbar
+          configSettings={config?.configSettings}
           currencies={config?.currencies}
           config={sortedData}
           languages={config?.languages}
         />
-        <main className="fit pt-16">{children}</main>
+        <main className="fit pt-24">{children}</main>
         <Footer config={data.footer} />
         <ModalUI />
         <SidebarUI />

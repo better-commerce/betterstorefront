@@ -466,7 +466,7 @@ export default function ProductView({
   return (
     <div className="bg-white page-container md:w-4/5 mx-auto">
       {/* Mobile menu */}
-      <div className="pt-2 sm:pt-6 sm:px-0 px-4">
+      <div className="pt-6 sm:pt-8 sm:px-0 px-4">
         {breadcrumbs && (
           <BreadCrumbs items={breadcrumbs} currentProduct={product} />
         )}

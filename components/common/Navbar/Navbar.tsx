@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic'
-
 import { FC, Fragment, useState, useRef } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition, Dialog, Tab } from '@headlessui/react'
@@ -16,6 +15,8 @@ import { MenuIcon, SearchIcon, XIcon, ShoppingCartIcon, ShoppingBagIcon, HeartIc
 const Account = dynamic(() => import('./AccountDropdown'))
 const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
+const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
+
 import {
   BTN_SIGN_OUT,
   GENERAL_LOGIN,
@@ -28,11 +29,13 @@ import {
   SELECT_LANGUAGE,
   GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
+import { stringToBoolean } from '@framework/utils'
 
 interface Props {
-  config: []
-  currencies: []
-  languages: []
+  config: Array<any>;
+  currencies: Array<any>;
+  languages: Array<any>;
+  configSettings: Array<any>;
 }
 
 const accountDropDownConfigUnauthorized: any = [
@@ -50,8 +53,10 @@ const accountDropDownConfigUnauthorized: any = [
   },
 ]
 
-const Navbar: FC<Props> = ({ config, currencies, languages }) => {
+const Navbar: FC<Props> = ({ configSettings, config, currencies, languages }) => {
   const router = useRouter()
+  const b2bSettings = configSettings && configSettings.length ? configSettings.find((x: any) => x.configType === "B2BSettings")?.configKeys : [];
+  const b2bEnabled = b2bSettings && b2bSettings.length ? stringToBoolean(b2bSettings.find((x: any) => x.key === "B2BSettings.EnableB2B")?.value) : false;
 
   const {
     wishListItems,
@@ -60,6 +65,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
     user,
     deleteUser,
     openCart,
+    openBulkAdd,
     openWishlist,
     setShowSearchBar,
   } = useUI()
@@ -113,7 +119,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
   }
 
   const [open, setOpen] = useState(false)
-  
+
   const buttonRef = useRef<HTMLButtonElement>(null) // useRef<HTMLButtonElement>(null)
   const [openState, setOpenState] = useState(-1)
   return (
@@ -277,6 +283,24 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
       </Transition.Root>
 
       <header className="bg-white shadow-md fixed top-0 right-0 z-999 w-full">
+        <div className='py-2 bg-gray-800 w-full text-right px-4'>
+           <div className='w-full md:w-4/5 mx-auto flex flex-row justify-end'>
+              {/* Bulk Add */}
+              {b2bEnabled && (
+                <BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />
+              )}
+              <CurrencySwitcher
+                config={currencies}
+                title={SELECT_CURRENCY}
+                action={configAction}
+              />
+              <LanguageSwitcher
+                title={SELECT_LANGUAGE}
+                action={configAction}
+                config={languages}
+              />
+           </div>
+        </div>
         <nav aria-label="Top" className="w-full md:w-4/5 mx-auto px-4 sm:px-0 lg:px-0">
           <div className="pb-0 sm:px-0 sm:pb-0">
             <div className="h-16 flex items-center justify-between">
@@ -302,9 +326,9 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 <div className="border-t h-16 px-6 flex space-x-8 overflow-x-auto pb-px sm:h-full sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0">
                   {config?.map((item: any, idx: number) => {
                     return (
-                      <Popover key={idx} className="flex" 
-                          onMouseEnter={() => setOpenState(idx)}
-                          onMouseLeave={() => setOpenState(-1)}  >
+                      <Popover key={idx} className="flex"
+                        onMouseEnter={() => setOpenState(idx)}
+                        onMouseLeave={() => setOpenState(-1)}  >
                         {({ open }) => (
                           <>
                             {!item.navBlocks.length ? (
@@ -430,20 +454,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 <Searchbar onClick={setShowSearchBar} />
                 {/* account */}
                 <Account title={title} config={accountDropdownConfig} />
-                {/* currency */}
-                <div className="sm:flex hidden">
-                  <CurrencySwitcher
-                    config={currencies}
-                    title={SELECT_CURRENCY}
-                    action={configAction}
-                  />
-                  <LanguageSwitcher
-                    title={SELECT_LANGUAGE}
-                    action={configAction}
-                    config={languages}
-                  />
-                </div>
-
+               
                 {/* Wishlist*/}
 
                 <div className="px-1 w-10 sm:w-16 flow-root">
