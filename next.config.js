@@ -11,7 +11,7 @@ const isBetterCommerce = provider === 'bettercommerce'
 module.exports = withCommerceConfig({
   commerce,
   images: {
-    domains: ['liveocxcdn.azureedge.net', 'cdnbs.bettercommerce.io', 'cdn.shopify.com','liveocx.imgix.net','devocxblob.blob.core.windows.net'],
+    domains: ['liveocxcdn.azureedge.net', 'cdnbs.bettercommerce.io', 'cdn.shopify.com', 'liveocx.imgix.net', 'devocxblob.blob.core.windows.net'],
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
   i18n: {
@@ -40,7 +40,13 @@ module.exports = withCommerceConfig({
     BETTERCOMMERCE_BASE_URL: process.env.BETTERCOMMERCE_BASE_URL,
     BETTERCOMMERCE_CLIENT_ID: process.env.BETTERCOMMERCE_CLIENT_ID,
     BETTERCOMMERCE_SHARED_SECRET: process.env.BETTERCOMMERCE_SHARED_SECRET,
-    OMS_BASE_URL: process.env.OMS_BASE_URL
+    OMS_BASE_URL: process.env.OMS_BASE_URL,
+    BETTERCOMMERCE_DEFAULT_CURRENCY: process.env.BETTERCOMMERCE_DEFAULT_CURRENCY,
+    BETTERCOMMERCE_DEFAULT_LANGUAGE: process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE,
+    BETTERCOMMERCE_DEFAULT_COUNTRY: process.env.BETTERCOMMERCE_DEFAULT_COUNTRY,
+    BETTERCOMMERCE_CURRENCY: process.env.BETTERCOMMERCE_CURRENCY,
+    BETTERCOMMERCE_LANGUAGE: process.env.BETTERCOMMERCE_LANGUAGE,
+    BETTERCOMMERCE_COUNTRY: process.env.BETTERCOMMERCE_COUNTRY,
   },
 })
 
