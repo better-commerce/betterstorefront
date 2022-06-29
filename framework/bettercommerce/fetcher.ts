@@ -112,7 +112,7 @@ const fetcher = async ({
     try {
         const response = await axiosInstance(config)
         if (logRequest || NEXT_PUBLIC_API_CACHING_LOG_ENABLED) {
-            writeFetcherLog({ ...config, ...{ inputCookies: cookies } }, response?.data);
+            writeFetcherLog(config, response?.data);
         }
         return response.data
     } catch (error: any) {
