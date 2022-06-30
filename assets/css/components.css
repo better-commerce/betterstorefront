@@ -148,6 +148,10 @@
   left: 0px;
 }
 
+.min-height-footer{
+  min-height: 480px!important;
+}
+
 @media screen and (max-width:767px) {
   .sm\:h-72 {
     height: 12rem !important;
@@ -155,4 +159,8 @@
   .banner-Image{
     height: auto!important;
   }
+  
+  .min-height-footer{
+    min-height: 890px!important;
+}
 }

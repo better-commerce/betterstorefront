@@ -23,12 +23,12 @@ const Footer: FC<Props> = ({ config }) => {
   const handleRedirect = (path: string) => (path ? router.push(path) : {})
 
   return (
-    <footer aria-labelledby="footer-heading" className="bg-gray-100 sm:h-96 shadow-inner sm:mt-10">
+    <footer aria-labelledby="footer-heading" className="bg-gray-100 min-height-footer shadow-inner sm:mt-10">
       <h2 id="footer-heading" className="sr-only">
         {GENERAL_FOOOTER}
       </h2>
       <div className="mx-auto w-full sm:w-4/5 px-4 sm:px-0 lg:px-0">
-        <div className="py-20">
+        <div className="sm:py-20 py-6">
           <div className="grid grid-cols-1 md:grid-cols-12 md:grid-flow-col md:gap-x-8 md:gap-y-16 md:auto-rows-min">
             {/* Image section */}
             <div className="col-span-1 md:col-span-2 lg:row-start-1 lg:col-start-1 opacity-70">

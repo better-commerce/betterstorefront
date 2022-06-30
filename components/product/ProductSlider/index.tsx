@@ -59,20 +59,20 @@ const ProductSlider: FC<Props> = ({ config }) => {
   };
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="py-8 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
+      <div className="py-8 sm:py-12 lg:max-w-7xl lg:mx-auto lg:py-20 lg:px-8 sm:min-h-screen">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h2 className="sm:text-6xl text-4xl font-extrabold text-center tracking-tight text-gray-900">
+          <h2 className="sm:text-6xl text-4xl font-bold text-center tracking-tight text-gray-900">
             {config?.title}
           </h2>
-          <h2 className="sm:py-5 py-3 sm:text-4xl text-xl text-center font-bold tracking-tight text-gray-900">
+          <h2 className="sm:py-4 py-3 sm:text-2xl text-xl text-center font-semibold tracking-tight text-gray-900">
             {config?.subTitle}
           </h2>
-          <p className="sm:py-5 py-3 sm:text-xl text-md tracking-tight text-center sm:max-w-40p text-gray-900">
+          <p className="sm:py-0 py-3 sm:text-lg text-sm tracking-tight text-center sm:max-w-60p text-gray-600">
             {config?.paragraph}
           </p>
         </div>
 
-        <div className="mt-8 relative">
+        <div className="mt-10 relative">
           <div className="relative w-full overflow-x-auto">
             <Swiper
               slidesPerView={1}
