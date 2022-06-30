@@ -18,6 +18,8 @@ interface BannerProps {
 
 // import Swiper core and required modules
 import SwiperCore, { Navigation } from 'swiper'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 // install Swiper modules
 SwiperCore.use([Navigation])
@@ -34,7 +36,7 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
                 <div className='image-container'>
                   <Image
                     priority
-                    src={banner?.url}
+                    src={generateUri(banner?.url, "h=1200&fm=webp") || IMG_PLACEHOLDER}                      
                     alt={banner?.alt}
                     layout="fill"
                     className='sm:max-h-screen sm:min-h-screen image banner-Image'></Image>
