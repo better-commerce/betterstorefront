@@ -31,20 +31,23 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
       <Swiper navigation={true} loop={true} className="mySwiper">
         {banners.map((banner: BannerProps, idx: number) => {
           return (
-            <SwiperSlide key={idx}>
-              <Link href={banner?.link || '#'}>
-                <div className='image-container'>
-                  <Image
-                    priority
-                    src={generateUri(banner?.url, "h=1200&fm=webp") || IMG_PLACEHOLDER}
-                    alt={banner?.alt}
-                    layout="fill"
-                    blurDataURL={banner?.url}
-                    placeholder="blur"
-                    className='sm:max-h-screen sm:min-h-screen image banner-Image'></Image>
-                </div>
-              </Link>
-            </SwiperSlide>
+            <>
+              <link rel="preload" as="image" href={banner?.url} />
+              <SwiperSlide key={idx}>
+                <Link href={banner?.link || '#'}>
+                  <div className='image-container'>
+                    <Image
+                      priority
+                      src={generateUri(banner?.url, "h=1200&fm=webp") || IMG_PLACEHOLDER}
+                      alt={banner?.alt}
+                      layout="fill"
+                      blurDataURL={banner?.url}
+                      placeholder="blur"
+                      className='sm:max-h-screen sm:min-h-screen image banner-Image'></Image>
+                  </div>
+                </Link>
+              </SwiperSlide>
+            </>
           )
         })}
       </Swiper>
