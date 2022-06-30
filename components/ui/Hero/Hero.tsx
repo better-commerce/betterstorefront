@@ -34,11 +34,13 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
             <SwiperSlide key={idx}>
               <Link href={banner?.link || '#'}>
                 <div className='image-container'>
+                  <Link rel='preload' href={banner?.url} />
                   <Image
                     priority
                     src={generateUri(banner?.url, "h=1200&fm=webp") || IMG_PLACEHOLDER}                      
                     alt={banner?.alt}
                     layout="fill"
+                    placeholder="blur"
                     className='sm:max-h-screen sm:min-h-screen image banner-Image'></Image>
                 </div>
               </Link>
