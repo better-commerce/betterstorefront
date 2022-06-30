@@ -292,7 +292,7 @@ function Search({ query, setEntities, recordEvent }: any) {
       {/* Mobile menu */}
       <main className="pb-24">
         <div className="text-left sm:py-5 py-4 px-4 sm:px-0 lg:px-0">
-          <h4><span className='text-sm font-normal'>Showing {data.products.total} Results for</span></h4>
+          <h4 className="h-6"><span className='text-sm font-normal'>Showing {data.products.total} Results for</span></h4>
           <h1 className="sm:text-2xl text-xl font-semibold tracking-tight text-black">
             {GENERAL_CATALOG} 
           </h1>
