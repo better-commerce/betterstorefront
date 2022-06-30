@@ -59,7 +59,7 @@ const ProductSlider: FC<Props> = ({ config }) => {
   };
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="py-8 sm:py-12 lg:max-w-7xl lg:mx-auto lg:py-20 lg:px-8 sm:min-h-screen">
+      <div className="py-8 sm:py-12 lg:max-w-7xl lg:mx-auto lg:py-20 lg:px-8 sm:min-h-screen min-height-footer">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h2 className="sm:text-6xl text-4xl font-bold text-center tracking-tight text-gray-900">
             {config?.title}
@@ -106,7 +106,7 @@ const ProductSlider: FC<Props> = ({ config }) => {
                         <div className="group relative">
                           <div className="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
                             <Image priority
-                              src={generateUri(product?.image, "h=400&fm=webp") || IMG_PLACEHOLDER}                             
+                              src={generateUri(product?.image, "h=400&fm=webp") || IMG_PLACEHOLDER}
                               alt={product?.name}
                               layout="responsive"
                               width={257}
