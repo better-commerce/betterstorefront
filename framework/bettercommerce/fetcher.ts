@@ -3,6 +3,7 @@ import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
 import axios from 'axios'
 import store from 'store'
 import { writeFetcherLog } from './utils';
+import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, NEXT_PUBLIC_API_CACHING_LOG_ENABLED } from '@components/utils/constants';
 
 const SingletonFactory = (function () {
     let accessToken = ''
@@ -90,9 +91,9 @@ const fetcher = async ({
 }: any) => {
     const computedUrl = new URL(url, baseUrl || BASE_URL)
     const newConfig = {
-        Currency: cookies.Currency || store.get('Currency') || 'GBP',
-        Language: cookies.Language || store.get('Language') || 'en',
-        Country: cookies.Country || store.get('Country') || 'GB',
+        Currency: cookies.Currency || store.get('Currency') || BETTERCOMMERCE_CURRENCY || BETTERCOMMERCE_DEFAULT_CURRENCY,
+        Language: cookies.Language || store.get('Language') || BETTERCOMMERCE_LANGUAGE || BETTERCOMMERCE_DEFAULT_LANGUAGE,
+        Country: cookies.Country || store.get('Country') || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
     }
     const config: any = {
         method: method,

@@ -112,3 +112,13 @@ export const UPDATE_ORDER_STATUS = '/api/update-order-status'
 
 export const NEXT_PUBLIC_DEFAULT_CACHE_TIME = process.env.NEXT_PUBLIC_DEFAULT_CACHE_TIME_IN_MILLI_SECS;
 export const NEXT_PUBLIC_API_CACHING_LOG_ENABLED = process.env.NEXT_PUBLIC_API_CACHING_LOG_ENABLED;
+
+// Default currency, language & country settings.
+export const BETTERCOMMERCE_DEFAULT_CURRENCY = process.env.BETTERCOMMERCE_DEFAULT_CURRENCY;
+export const BETTERCOMMERCE_DEFAULT_LANGUAGE = process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE;
+export const BETTERCOMMERCE_DEFAULT_COUNTRY = process.env.BETTERCOMMERCE_DEFAULT_COUNTRY;
+
+// Override currency, language & country settings ONLY FOR specific storefronts WHEREVER REQUIRED.
+export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY;
+export const BETTERCOMMERCE_LANGUAGE = process.env.BETTERCOMMERCE_LANGUAGE;
+export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY;
