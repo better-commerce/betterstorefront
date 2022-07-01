@@ -241,7 +241,7 @@ const ProductCard: FC<Props> = ({ product }) => {
             {product?.price?.formatted?.withTax}
             {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax &&
               <>
-                <span className='px-2 text-sm line-through font-normal text-gray-400'>{product?.listPrice?.formatted?.withTax}</span>
+                <span className='px-2 text-sm line-through font-normal text-gray-800'>{product?.listPrice?.formatted?.withTax}</span>
                 <span className='text-red-600 text-sm font-semibold'>{discount}% Off</span>
               </>
             }
