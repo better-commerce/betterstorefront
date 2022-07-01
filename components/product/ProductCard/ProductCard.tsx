@@ -182,7 +182,7 @@ const ProductCard: FC<Props> = ({ product }) => {
                 onMouseLeave={() => handleHover('leave')}
                 className="w-full sm:h-full h-full object-center object-cover"
                 layout='responsive'
-                blurDataURL={currentProductData.image}
+                blurDataURL={IMG_PLACEHOLDER}
                 placeholder="blur"
                 width={400}
                 height={600}

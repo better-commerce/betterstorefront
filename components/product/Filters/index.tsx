@@ -163,7 +163,7 @@ export default function Filters({
                   >
                     <FilterIcon
                       className="flex-none w-5 h-5 mr-2 text-gray-900 group-hover:text-gray-500"
-                      aria-hidden="true"
+                      aria-hidden="true" aria-label='Apply Filter'
                     />
                     {appliedFilters?.length >0 && (
                       routerFilters.length
