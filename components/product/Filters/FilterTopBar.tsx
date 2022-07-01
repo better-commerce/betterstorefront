@@ -1,5 +1,5 @@
 import ProductSort from '@components/product/ProductSort'
-import { BTN_CLEAR_ALL,  GENERAL_FILTER_TITLE, PRODUCT_FILTER } from '@components/utils/textVariables'
+import { BTN_CLEAR_ALL, GENERAL_FILTER_TITLE, PRODUCT_FILTER } from '@components/utils/textVariables'
 
 /**
  *
@@ -56,7 +56,7 @@ export default function FiltersRightOpen({
             </h2>
             <div className="relative col-start-1 row-start-1 py-2">
               <div className="max-w-7xl mx-auto flex space-x-6 divide-x divide-gray-200 text-sm px-0 sm:px-0 lg:px-0">
-                
+
                 <div className="pl-0">
                   <button
                     onClick={clearAll}
@@ -75,7 +75,7 @@ export default function FiltersRightOpen({
                       >
                         {appliedFilter.name ? (
                           <>
-                           <span className="bg-gray-50 text-gray-600 font-medium text-sm rounded-2xl px-3 border border-gray-200">{appliedFilter.Value}</span>
+                            <span className="bg-gray-50 text-gray-600 font-medium text-sm rounded-2xl px-3 border border-gray-200">{appliedFilter.Value}</span>
                           </>
                         ) : null}
                       </div>
@@ -91,7 +91,7 @@ export default function FiltersRightOpen({
             />
           </div>
         </section>
-      </div>   
+      </div>
     </div>
   )
 }

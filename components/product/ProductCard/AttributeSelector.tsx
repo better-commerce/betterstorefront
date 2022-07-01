@@ -25,7 +25,7 @@ const ColorSelector = ({ attr, onChange, link }: any) => {
               onMouseEnter={() => onChange(item, 'enter')}
               onMouseLeave={() => onChange(item, 'leave')}
               className="sm:h-5 sm:w-5 h-5 w-5 inline-block rounded-full sm:mr-2 mr-1 mt-2 border border-gray-200 shadow-md drop-shadow-md"
-              style={{ backgroundColor: item.fieldValue }}              
+              style={{ backgroundColor: item.fieldValue }}
             >
               <span className="sr-only">
                 {item.fieldValue}
