@@ -556,18 +556,6 @@ export default function ProductView({
                                      sizes='320 600 1000'
                                      width={600} height={1000}
                                     />
-                                    {/* <Image
-                                      priority
-                                      src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}
-                                      alt={image.name}
-                                      className="w-full h-full object-center object-cover image"
-                                      layout='responsive'
-                                      sizes='320 600 1000'
-                                      width={600} height={1000}
-                                      onClick={(ev: any) => handleImgLoadT(image.image)}
-                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
-                                    /> */}
-                                    {/* </ControlledZoom> */}
                                   </div>
                                 ) : (
                                   <PlayIcon className="h-full w-full object-center object-cover" />

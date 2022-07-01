@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { CHOOSE_A_COLOR } from '@components/utils/textVariables'
 export default function InlineList({
   items = [],
-  onChange = () => {},
+  onChange = () => { },
   label = CHOOSE_A_COLOR,
   fieldCode = 'global.colour',
   currentAttribute = 'black',
-  generateLink = () => {},
+  generateLink = () => { },
 }: any) {
   const handleChange = (value: any) => {
     return onChange(fieldCode, value)
@@ -17,7 +17,7 @@ export default function InlineList({
   return (
     <>
       <h3 className="text-md text-black font-bold text-left uppercase">{label}</h3>
-      <RadioGroup value={'ring-gray-700'} onChange={() => {}} className="mt-2">
+      <RadioGroup value={'ring-gray-700'} onChange={() => { }} className="mt-2">
         <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
         <div className="flex items-center space-x-3">
           {items.map((item: any, idx: any) => {
@@ -40,13 +40,18 @@ export default function InlineList({
                 </RadioGroup.Label>
                 <Link href={`/${path}`} passHref>
                   <a
+                    aria-label={item.fieldvalue}
                     aria-hidden="true"
                     onClick={() => handleChange(item.fieldvalue)}
                     className={classNames(
                       item.fieldvalue,
                       'h-4 w-4 border shadow-md drop-shadow-md border-black border-opacity-10 rounded-full'
                     )}
-                  />
+                  >
+                    <span className="sr-only">
+                      {item.fieldvalue}
+                    </span>
+                  </a>
                 </Link>
               </RadioGroup.Option>
             )
