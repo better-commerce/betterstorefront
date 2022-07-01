@@ -19,6 +19,10 @@ module.exports = {
       maxWidth: {
         '8xl': '1920px',
         '40p': '40%',
+        '50p': '50%',
+        '60p': '60%',
+        '70p': '70%',
+        '80p': '80%',
       },
       opacity: ['disabled'],
       minWidth: {
