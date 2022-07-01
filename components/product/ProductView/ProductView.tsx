@@ -513,6 +513,7 @@ export default function ProductView({
                               <div className="group relative">
                                 {image.image ? (
                                   <div className='image-container'>
+                                    <link rel="preload" as="image" href={image.image} />
                                     <Image
                                       priority
                                       src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}
@@ -547,7 +548,7 @@ export default function ProductView({
                               <span className="relative">
                                 {image.image ? (
                                   <div className='image-container'>
-                                    {/* <ControlledZoom isZoomed={isZoomedT} onZoomChange={handleZoomChangeT}> */}
+                                    <link rel="preload" as="image" href={image.image} />
                                     <ImageZoom src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}  alt={image.name} 
                                      priority
                                      className="w-full h-full object-center object-cover image"
