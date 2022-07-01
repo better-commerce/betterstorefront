@@ -40,8 +40,7 @@ export default function InlineList({
                 </RadioGroup.Label>
                 <Link href={`/${path}`} passHref>
                   <a
-                    aria-label={item.fieldvalue}
-                    aria-hidden="true"
+                    aria-label={item.fieldvalue}                   
                     onClick={() => handleChange(item.fieldvalue)}
                     className={classNames(
                       item.fieldvalue,
