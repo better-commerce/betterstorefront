@@ -38,7 +38,7 @@ export const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/
 export const KEYWORDS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/keyword-redirections`
 export const LOQATE_ADDRESS = '/api/loqate'
 export const RETRIEVE_ADDRESS = '/api/retrieve-address'
-export const PAGE_CONTENT_ENDPOINT = `api/${process.env.BETTERCMS_API_VERSION}/page/content`
+export const PAGE_CONTENT_ENDPOINT = `api/${process.env.BETTERCMS_API_VERSION}/content-entry`; //`api/${process.env.BETTERCMS_API_VERSION}/page`;
 //LOCAL ENDPOINTS
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'

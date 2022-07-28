@@ -1,23 +1,26 @@
-import dynamic from 'next/dynamic'
+
 // Base Imports
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import type { GetStaticPropsContext } from 'next'
+import dynamic from 'next/dynamic'
 
 // Other Imports
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
-import { HOMEPAGE_SLUG } from '@components/utils/constants'
-const  ProductSlider  = dynamic(() => import('@components/product/ProductSlider'));
-const  CategoryCollection  = dynamic(() => import('@components/home/categoryCollection'));
-const  OfferZone  = dynamic(() => import('@components/home/offerZone'));
-const  ProductCollection  = dynamic(() => import('@components/home/productCollection'));
-const  ShopCollection  = dynamic(() => import('@components/home/ShopCollection'));
-const  FashionIdea  = dynamic(() => import('@components/home/fashionIdea'));
-const  Information  = dynamic(() => import('@components/home/infoPanel'));
+import { HOMEPAGE_SLUG, NEXT_GET_PAGE_CONTENT } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+
+const ProductSlider = dynamic(() => import('@components/product/ProductSlider'));
+const CategoryCollection = dynamic(() => import('@components/home/categoryCollection'));
+const OfferZone = dynamic(() => import('@components/home/offerZone'));
+const ProductCollection = dynamic(() => import('@components/home/productCollection'));
+const ShopCollection = dynamic(() => import('@components/home/ShopCollection'));
+const FashionIdea = dynamic(() => import('@components/home/fashionIdea'));
+const Information = dynamic(() => import('@components/home/infoPanel'));
 
 export async function getStaticProps({
   preview,
@@ -51,7 +54,9 @@ export async function getStaticProps({
 const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
+  debugger;
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES;
+  const [pageContent, setPageContent] = useState<any>();
 
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
@@ -70,6 +75,20 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
     entityId: slugs?.id,
     eventType: 'PageViewed',
   });
+
+  useEffect(() => {
+    const getPageContent = async (id: string, slug?: string) => {
+      try {
+        const { data }: any = await axios.get(`${NEXT_GET_PAGE_CONTENT}?id=${id}&slug=${slugs?.slug}`);
+        //console.log(data);
+        setPageContent(data.result);
+      } catch (error) {
+        console.log(error)
+      }
+    };
+
+    getPageContent("05905b59-84a7-41a3-b992-5137c11f86f7");
+  }, []);
 
   return (
     <>
