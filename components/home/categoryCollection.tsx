@@ -15,25 +15,21 @@ const CategoryCollection: FC = () => {
                   <div className='flex flex-1'>
                      <Image src="/assets/images/Whatsnew-section_popcorn.webp" layout='fixed' width={500} height={450}></Image>
                   </div>
-                  <div className='flex flex-1'></div>
                </div>
                <div>
                   <div className='flex flex-1'>
                      <Image src="/assets/images/Whatsnew-section_raw.webp" layout='fixed' width={500} height={450}></Image>
                   </div>
-                  <div className='flex flex-1'></div>
                </div>
                <div>
                   <div className='flex flex-1'>
                      <Image src="/assets/images/Whatsnew-section_popcorn.webp" layout='fixed' width={500} height={450}></Image>
                   </div>
-                  <div className='flex flex-1'></div>
                </div>
                <div>
                   <div className='flex flex-1'>
                      <Image src="/assets/images/Whatsnew-section_raw.webp" layout='fixed' width={500} height={450}></Image>
                   </div>
-                  <div className='flex flex-1'></div>
                </div>
             </div>
          </div>
