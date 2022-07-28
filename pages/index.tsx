@@ -9,6 +9,12 @@ import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
 import { HOMEPAGE_SLUG } from '@components/utils/constants'
 const  ProductSlider  = dynamic(() => import('@components/product/ProductSlider'));
+const  CategoryCollection  = dynamic(() => import('@components/home/categoryCollection'));
+const  OfferZone  = dynamic(() => import('@components/home/offerZone'));
+const  ProductCollection  = dynamic(() => import('@components/home/productCollection'));
+const  ShopCollection  = dynamic(() => import('@components/home/ShopCollection'));
+const  FashionIdea  = dynamic(() => import('@components/home/fashionIdea'));
+const  Information  = dynamic(() => import('@components/home/infoPanel'));
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -68,9 +74,15 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
   return (
     <>
       <Hero banners={slugs?.components[0]?.images} />
+      <CategoryCollection ></CategoryCollection>
+      <OfferZone></OfferZone>
+      <ProductCollection></ProductCollection>
       <ProductSlider
         config={slugs?.components?.find((i?: any) => i.componentType === 52)}
       />
+      <ShopCollection></ShopCollection>
+      <FashionIdea></FashionIdea>
+      <Information></Information>
     </>
   )
 }

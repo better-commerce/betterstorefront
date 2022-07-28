@@ -24,7 +24,7 @@ const ProductSlider: FC<Props> = ({ config }) => {
   var settings = {
     fade: false,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 6,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 8000,
@@ -59,17 +59,17 @@ const ProductSlider: FC<Props> = ({ config }) => {
   };
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="py-8 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-        <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h2 className="sm:text-6xl text-4xl font-extrabold text-center tracking-tight text-gray-900">
-            {config?.title}
+      <div className="py-8 lg:w-full lg:mx-auto lg:py-10 lg:px-4">
+        <div className="px-4 flex flex-col justify-center sm:px-6 lg:px-0">
+          <h2 className="heading-h2 sm:text-3xl text-xl font-bold text-left tracking-tight text-gray-900">
+            <span className='bg-white'> {config?.title}</span>
           </h2>
-          <h2 className="sm:py-5 py-3 sm:text-4xl text-xl text-center font-bold tracking-tight text-gray-900">
+          {/* <h2 className="sm:py-2 py-3 sm:text-2xl text-xl text-center font-medium tracking-tight text-gray-900">
             {config?.subTitle}
           </h2>
-          <p className="sm:py-5 py-3 sm:text-xl text-md tracking-tight text-center sm:max-w-40p text-gray-900">
+          <p className="sm:py-0 py-1 sm:text-md text-md tracking-tight text-center sm:max-w-40p text-gray-500">
             {config?.paragraph}
-          </p>
+          </p> */}
         </div>
 
         <div className="mt-8 relative">
@@ -85,16 +85,16 @@ const ProductSlider: FC<Props> = ({ config }) => {
                   slidesPerView: 1,
                 },
                 768: {
-                  slidesPerView: 4,
+                  slidesPerView: 6,
                 },
                 1024: {
-                  slidesPerView: 4,
+                  slidesPerView: 6,
                 },
               }}
             >
               <div
                 role="list"
-                className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8"
+                className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-6 lg:gap-x-8"
               >
                 {config?.products?.map((product?: any) => (
                   <SwiperSlide className="px-5" key={product?.slug}>
