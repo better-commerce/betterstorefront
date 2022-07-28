@@ -53,8 +53,7 @@ export async function getStaticProps({
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
-  debugger;
+function Home({ slugs, setEntities, recordEvent, ipAddress, }: any) {
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES;
   const [pageContent, setPageContent] = useState<any>();
 
@@ -80,8 +79,8 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
     const getPageContent = async (id: string, slug?: string) => {
       try {
         const { data }: any = await axios.get(`${NEXT_GET_PAGE_CONTENT}?id=${id}&slug=${slugs?.slug}`);
-        //console.log(data);
-        setPageContent(data.result);
+        console.log(data);
+        setPageContent(data);
       } catch (error) {
         console.log(error)
       }
@@ -91,18 +90,23 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
   }, []);
 
   return (
-    <>
-      <Hero banners={slugs?.components[0]?.images} />
-      <CategoryCollection ></CategoryCollection>
-      <OfferZone></OfferZone>
-      <ProductCollection></ProductCollection>
-      <ProductSlider
-        config={slugs?.components?.find((i?: any) => i.componentType === 52)}
-      />
-      <ShopCollection></ShopCollection>
-      <FashionIdea></FashionIdea>
-      <Information></Information>
-    </>
+    !pageContent ? (
+      <>loading...</>
+    ) : (
+      <>
+        <Hero banners={slugs?.components[0]?.images} />
+        <CategoryCollection data={pageContent?.whatsNewSection} />
+        <OfferZone data={pageContent?.offerZoneSection}></OfferZone>
+        <OfferZone data={pageContent?.shopValuePackSection}></OfferZone>
+        <ProductCollection></ProductCollection>
+        <ProductSlider
+          config={slugs?.components?.find((i?: any) => i.componentType === 52)}
+        />
+        <ShopCollection data={pageContent?.shopByCollections}></ShopCollection>
+        <FashionIdea data={pageContent?.fashionThatThinksSection}></FashionIdea>
+        <Information></Information>
+      </>
+    )
   )
 }
 

@@ -294,12 +294,6 @@
   --gradient-color: transparent !important;
 }
 
-@media screen and (max-width:767px) {
-  .sm\:h-72 {
-    height: 12rem !important;
-  }
-}
-
 .heading-h2 {
   position: relative;
   font-size: 2rem !important;
@@ -347,4 +341,59 @@
   background-color: #ef6902;
   top: 30px;
   right: 0px;
+}
+
+@media screen and (max-width:767px) {
+  .sm\:h-72 {
+    height: 12rem !important;
+  }
+
+  .heading-h2 {
+    position: relative;
+    font-size: 1rem !important;
+    font-weight: 700;
+    color: rgb(19, 19, 21);
+    text-align: left;
+  }
+
+  .heading-h2 span {
+    padding: 4px 10px 4px 0;
+    position: relative;
+    z-index: 9;
+  }
+
+  .heading-h2:after {
+    position: absolute;
+    width: 100% !important;
+    height: 2px;
+    content: "";
+    background-color: #ef6902;
+    top: 15px;
+    left: 0px;
+  }
+
+
+  .heading-h3 {
+    position: relative;
+    font-size: 1.5rem !important;
+    font-weight: 500;
+    color: rgb(19, 19, 21);
+    text-align: right;
+  }
+
+  .heading-h3 span {
+    padding: 10px 0px 10px 20px;
+    position: relative;
+    z-index: 9;
+  }
+
+  .heading-h3:after {
+    position: absolute;
+    width: 85% !important;
+    height: 2px;
+    content: "";
+    background-color: #ef6902;
+    top: 30px;
+    right: 0px;
+  }
 }
