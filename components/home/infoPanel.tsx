@@ -12,8 +12,8 @@ const Information: FC = () => {
                   <div className='col-span-1'>
                      <Image src="/assets/images/tryon-icon.png" layout='fixed' width={40} height={40}></Image>
                   </div>
-                  <div className='col-span-11 pl-4'>
-                     <h4 className='text-white font-bold text-lg mb-2'>Try On Guarantee On Innerwear</h4>
+                  <div className='col-span-11 sm:pl-4 pl-8'>
+                     <h4 className='text-white font-bold text-sm sm:text-lg mb-2'>Try On Guarantee On Innerwear</h4>
                      <p className='text-white font-regular text-sm mb-2'>Get your first pair. Don’t love it? It’s on us It’ll be on us.</p>
                      <Link href="/" passHref><a className='text-sm font-bold text-white text-right underline'>Know more <ChevronRightIcon className='w-3 h-3 text-white inline-block'></ChevronRightIcon></a></Link>
                   </div>
@@ -24,8 +24,8 @@ const Information: FC = () => {
                <div className='col-span-1'>
                      <Image src="/assets/images/easy-30-days-return-icon.png" layout='fixed' width={40} height={40}></Image>
                   </div>
-                  <div className='col-span-11 pl-4'>
-                     <h4 className='text-white font-bold text-lg mb-2'>Easy 15-Days Returns And Exchange Available On Loungewear</h4>                    
+                  <div className='col-span-11 sm:pl-4 pl-8'>
+                     <h4 className='text-white font-bold text-sm sm:text-lg mb-2'>Easy 15-Days Returns And Exchange Available On Loungewear</h4>                    
                      <Link href="/" passHref><a className='text-sm font-bold text-white text-right underline'>Know more <ChevronRightIcon className='w-3 h-3 text-white inline-block'></ChevronRightIcon></a></Link>
                   </div>
                </div>
@@ -36,8 +36,8 @@ const Information: FC = () => {
                <div className='col-span-1'>
                      <Image src="/assets/images/Free-shipping-icon.png" layout='fixed' width={60} height={40}></Image>
                   </div>
-                  <div className='col-span-9 pl-4'>
-                     <h4 className='text-white font-bold text-lg mb-2'>Get Free Shipping</h4>
+                  <div className='col-span-9 sm:pl-4 pl-8'>
+                     <h4 className='text-white font-bold text-sm sm:text-lg mb-2'>Get Free Shipping</h4>
                      <p className='text-white font-regular text-sm mb-2'>For all orders above Rs. 600, we'll ship your product free of delivery charge. No matter where in India you are. No coupon code.</p>
                      <Link href="/" passHref><a className='text-sm font-bold text-white text-right underline'>Know more <ChevronRightIcon className='w-3 h-3 text-white inline-block'></ChevronRightIcon></a></Link>
                   </div>

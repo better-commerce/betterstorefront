@@ -13,9 +13,9 @@ const ProductCollection = ({ data }: any) => {
                </h2>
             </div>
             <div className='flex flex-col sm:mt-10 mt-4 grid sm:grid-cols-6 grid-cols-2 gap-4'>
-               {data["productCollection"].slice(0, 12).map((product?: any) => (
+               {data["productCollection"].slice(0, 12).map((product?: any, ipx?:number) => (
                   <>
-                     <div className='relative'>
+                     <div className='relative' key={ipx}>
                         <div className='image-container sm:block hidden'>
                            <Link href={product.slug} passHref><a className='flex flex-1'>
                               <Image src={product.image} layout='fixed' width={400} height={300}></Image>
