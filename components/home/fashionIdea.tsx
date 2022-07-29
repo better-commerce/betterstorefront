@@ -4,13 +4,15 @@ import Link from '@components/ui/Link'
 import { ChevronRightIcon } from '@heroicons/react/outline'
 
 const FashionIdea = ({ data }: any) => {
-   debugger;
+
    return (
       <>
-         <div className='mt-10 flex items-center content-center px-4 grid sm:grid-cols-12 grid-cols-2 gap-6'>
+         <div className='mt-10 flex items-center content-center px-4 grid sm:grid-cols-12 grid-cols-1 gap-6'>
             <div className='sm:col-span-5'>
                <div className='flex flex-1'>
-                  <Image src={data["infoBannerImage"].image} layout='fixed' width={800} height={700}></Image>
+                  <div className='image-container'>
+                     <Image src={data["infoBannerImage"].image} alt={data["Heading-headingTitle"]} layout='fill' className='image'></Image>
+                  </div>
                </div>
             </div>
             <div className='sm:col-span-7 text-right'>

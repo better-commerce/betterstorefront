@@ -87,7 +87,7 @@
   .swiper-slide img {
     display: block;
     width: 100%;
-    height: 100%;
+    height: auto !important;
     object-fit: cover;
   }
 }
@@ -396,4 +396,25 @@
     top: 30px;
     right: 0px;
   }
+
+}
+
+.bg-black-transparent {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.image-container {
+
+  width: 100%;
+}
+
+.image-container>div {
+  position: unset !important;
+}
+
+.image-container .image {
+  object-fit: contain;
+  width: 100% !important;
+  position: relative !important;
+  height: unset !important;
 }

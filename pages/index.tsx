@@ -94,14 +94,15 @@ function Home({ slugs, setEntities, recordEvent, ipAddress, }: any) {
       <>loading...</>
     ) : (
       <>
-        <Hero banners={slugs?.components[0]?.images} />
+        <Hero data={pageContent?.banner} />
         <CategoryCollection data={pageContent?.whatsNewSection} />
         <OfferZone data={pageContent?.offerZoneSection}></OfferZone>
         <OfferZone data={pageContent?.shopValuePackSection}></OfferZone>
-        <ProductCollection></ProductCollection>
-        <ProductSlider
+        <ProductCollection data={pageContent["500DayCollection"]}></ProductCollection>
+        <ProductCollection data={pageContent?.shopInnerwearCollection}></ProductCollection>
+        {/* <ProductSlider
           config={slugs?.components?.find((i?: any) => i.componentType === 52)}
-        />
+        /> */}
         <ShopCollection data={pageContent?.shopByCollections}></ShopCollection>
         <FashionIdea data={pageContent?.fashionThatThinksSection}></FashionIdea>
         <Information></Information>
