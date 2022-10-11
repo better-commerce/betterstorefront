@@ -71,7 +71,7 @@ function Home({ slugs, setEntities, recordEvent, ipAddress }: any) {
       <ProductSlider
         config={slugs?.components?.find((i?: any) => i.componentType === 52)}
       />
-    </>
+    </> 
   )
 }
 
