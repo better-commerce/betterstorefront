@@ -48,11 +48,11 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   useAnalytics(CustomerProfileViewed, loggedInEventData)
 
   return (
-    <section className="text-gray-900 relative py-10">
-      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div className="justify-between flex flex-col md:flex-row">
+    <section className="relative py-10 text-gray-900">
+      <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="flex flex-col justify-between md:flex-row">
           <Tab.Group vertical defaultIndex={defaultView}>
-            <Tab.List className="sticky top-0 flex flex-col w-full md:w-1/4 bg-gray-50 h-full rounded-lg">
+            <Tab.List className="sticky top-0 flex flex-col w-full h-full rounded-lg md:w-1/4 bg-gray-50">
               {config.map((item: any, idx: number) => {
                 return (
                   <Tab
@@ -77,7 +77,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                       passHref
                       shallow={true}
                     >
-                      <a className="px-5 py-5 block h-full">{item.text}</a>
+                      <a className="block h-full px-5 py-5">{item.text}</a>
                     </Link>
                   </Tab>
                 )
@@ -94,7 +94,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                     <Component />
                   </Tab.Panel>
                 )
-              })}
+              })} 
             </Tab.Panels>
           </Tab.Group>
         </div>
