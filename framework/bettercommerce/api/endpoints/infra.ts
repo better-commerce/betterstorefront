@@ -48,9 +48,9 @@ export default function useInfra(req: any) {
           ).value ||
         'en-GB'
 
-      console.log(defaultCurrency)
-      console.log(defaultLanguage)
-      console.log(defaultCountry)
+      // console.log(defaultCurrency)
+      // console.log(defaultLanguage)
+      // console.log(defaultCountry)
       if (setHeader) {
         setGeneralParams('Currency', defaultCurrency)
         setGeneralParams('Language', defaultLanguage)
