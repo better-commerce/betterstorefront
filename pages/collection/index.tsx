@@ -11,52 +11,51 @@ import {
 export default function CollectionList(props: any) {
   
   return (
-    <main className="w-full mx-auto md:w-4/5 px-6 sm:px-0">
+    <main className="w-full px-6 mx-auto md:w-4/5 sm:px-0">
       <section aria-labelledby="products-heading" className="mt-8">
-        <h2 className="text-2xl font-bold uppercase tracking-tight text-gray-900">
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
           {SHOP_BY_COLLECTION}
         </h2>
         {props?.data.length > 0 &&
-        <div className="py-10 grid grid-cols-2 sm:gap-y-10 gap-y-6 sm:grid-cols-4 gap-x-6 lg:grid-cols-6 xl:gap-x-8">
+        <div className="grid grid-cols-2 py-10 sm:gap-y-10 gap-y-6 sm:grid-cols-4 gap-x-6 lg:grid-cols-6 xl:gap-x-8">
           {props.data.map((collection: any, key: any) => (
-            <Link key={key} href={`/collection/${collection.slug}`}>
-              <a
+            <Link key={key} passHref href={`/collection/${collection.slug}`}>
+              <span
                 key={collection.id}
-                href={`/collection/${collection.slug}`}
                 className="group"
               >
-                <div className="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3 bg-gray-100">
+                <div className="relative w-full overflow-hidden bg-gray-100 rounded-lg aspect-w-1 aspect-h-1 sm:aspect-w-2 sm:aspect-h-3">
                   <div className='image-container'>
                         <Image 
                             src={collection.mainImage || IMG_PLACEHOLDER }
                             alt={collection.name}
-                            className="w-full h-full object-center object-cover group-hover:opacity-75 image"
+                            className="object-cover object-center w-full h-full group-hover:opacity-75 image"
                             layout='fill'
                         ></Image>  
                       </div>
                 </div>
                 <div className='flex-1'>
                    <h1
-                    className="pt-2 text-gray-900 font-medium sm:text-xl text-md flex w-full"
+                    className="flex w-full pt-2 font-medium text-gray-900 sm:text-xl text-md"
                   >
                     {collection.name}
                   </h1>
 
                    <h4
-                    className="pt-1 text-gray-500 font-normal sm:text-sm text-xs w-full"
+                    className="w-full pt-1 text-xs font-normal text-gray-500 sm:text-sm"
                   >
                     {collection.noOfRecords}{' '} <span className='italic'>{PRODUCTS_AVAILABLE}</span>
                   </h4>
                 </div>
-              </a>
+              </span>
             </Link>
           ))}
         </div>
         }
         {props?.data.length == 0 &&
         <>
-          <div className='flex flex-col text-center py-32'>
-            <h2 className='text-4xl font-bold text-gray-200 w-full mx-auto'>No Collection Available</h2>
+          <div className='flex flex-col py-32 text-center'>
+            <h2 className='w-full mx-auto text-4xl font-bold text-gray-200'>No Collection Available</h2>
           </div>
         </>
       }

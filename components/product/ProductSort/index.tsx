@@ -24,10 +24,10 @@ export default function ProductSort({
   return (
     <Menu as="div" className="relative inline-block">
       <div className="flex">
-        <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+        <Menu.Button className="inline-flex justify-center text-sm font-medium text-gray-700 group hover:text-gray-900">
           {GENERAL_SORT}
           <ChevronDownIcon
-            className="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+            className="flex-shrink-0 w-5 h-5 ml-1 -mr-1 text-gray-400 group-hover:text-gray-500"
             aria-hidden="true"
           />
         </Menu.Button>
@@ -42,7 +42,7 @@ export default function ProductSort({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="z-10 origin-top-right text-left absolute right-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 w-40 mt-2 text-left origin-top-right bg-white rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             {products.sortList.length &&
               products.sortList.map((option: any) => (
@@ -59,8 +59,7 @@ export default function ProductSort({
                         }}
                         passHref
                       >
-                        <a
-                          href={option.href}
+                        <span
                           onClick={() => action(option.key)}
                           className={classNames(
                             'text-gray-500 hover:bg-gray-100',
@@ -71,7 +70,7 @@ export default function ProductSort({
                           )}
                         >
                           {option.value}
-                        </a>
+                        </span>
                       </Link>
                     </div>
                   )}

@@ -60,10 +60,8 @@ const WishlistCard: FC<Props> = ({ product }) => {
       </div>
 
       <div className="col-span-7">
-        <h3 className="text-2xl mb-2">
-          <Link href={`/product${product.path}`}>
-            <a>{product.name}</a>
-          </Link>
+        <h3 className="mb-2 text-2xl">
+          <Link href={`/product${product.path}`}>{product.name}</Link>
         </h3>
         <div className="mb-4">
           <Text html={product.description} />
@@ -80,7 +78,7 @@ const WishlistCard: FC<Props> = ({ product }) => {
           {GENERAL_ADD_TO_BASKET}
         </Button>
       </div>
-      <div className="col-span-2 flex flex-col justify-between">
+      <div className="flex flex-col justify-between col-span-2">
         <div className="flex justify-end font-bold">{price}</div>
         <div className="flex justify-end">
           <button onClick={handleRemove}>

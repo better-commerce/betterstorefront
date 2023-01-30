@@ -288,7 +288,7 @@ function Search({ query, setEntities, recordEvent }: any) {
     : data.products
 
   return (
-    <div className="bg-white md:w-4/5 mx-auto">
+    <div className="bg-transparent md:w-4/5 mx-auto">
       {/* Mobile menu */}
       <main className="pb-24">
         <div className="text-left sm:py-5 py-4 px-4 sm:px-0 lg:px-0">

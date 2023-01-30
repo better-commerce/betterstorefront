@@ -65,7 +65,7 @@ export default function RelatedProducts({
   return (
     <section
       aria-labelledby="related-heading"
-      className="mt-10 border-t border-gray-200 py-8 px-4 sm:px-0"
+      className="px-4 py-8 mt-10 border-t border-gray-200 sm:px-0"
     >
       <div>
         {Object.keys(computedItems).map(
@@ -75,12 +75,12 @@ export default function RelatedProducts({
                 {computedItems[relatedItem].relatedProducts && (
                   <h2
                     id="related-heading"
-                    className="text-xl mt-6 font-bold text-gray-900"
+                    className="mt-6 text-xl font-bold text-gray-900"
                   >
                     {computedItems[relatedItem].name}
                   </h2>
                 )}
-                <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+                <div className="grid grid-cols-1 mt-8 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                   {computedItems[relatedItem].relatedProducts &&
                     computedItems[relatedItem].relatedProducts.map(
                       (product: any) => {
@@ -89,31 +89,27 @@ export default function RelatedProducts({
                         return (
                           <div key={product.id}>
                             <div className="relative">
-                              <div className="relative w-full h-72 rounded-lg overflow-hidden">
+                              <div className="relative w-full overflow-hidden rounded-lg h-72">
                                 <Link href={`/${product.slug}`} passHref>
                                   <div className='image-container'>
                                     <Image
                                       layout='fill'
                                       src={product.image || IMG_PLACEHOLDER}
                                       alt={product.name}
-                                      className="w-full h-full object-center object-cover image">                                      
+                                      className="object-cover object-center w-full h-full image">                                      
                                     </Image>  
                                   </div>
                                 </Link>
                               </div>
                               <div className="relative mt-4">
-                                <h3 className="min-h-50px text-sm font-medium text-gray-900">
-                                  <Link href={`/${product.slug}`} passHref>
-                                    <a href={`/${product.slug}`}>
-                                      {product.name}
-                                    </a>
-                                  </Link>
+                                <h3 className="text-sm font-medium text-gray-900 min-h-50px">
+                                  <Link href={`/${product.slug}`} passHref>{product.name}</Link>
                                 </h3>
                               </div>
-                              <div className="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
+                              <div className="absolute inset-x-0 top-0 flex items-end justify-end p-4 overflow-hidden rounded-lg h-72">
                                 <div
                                   aria-hidden="true"
-                                  className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
+                                  className="absolute inset-x-0 bottom-0 opacity-50 h-36 bg-gradient-to-t from-black"
                                 />
                                 <p className="relative text-lg font-semibold text-white">
                                   {product.price.formatted.withTax}
@@ -124,19 +120,15 @@ export default function RelatedProducts({
                               <button
                                 onClick={() => addToCart(product)}
                                 type="button"
-                                className="w-full relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200"
+                                className="relative flex items-center justify-center w-full px-8 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-transparent rounded-md hover:bg-gray-200"
                               >
                                 {GENERAL_ADD_TO_BASKET}
                               </button>
-                              <Link href={`/${product.slug}`} passHref>
-                                <span className="sr-only">
-                                  , {product.name}
-                                </span>
-                              </Link>
+                              <Link href={`/${product.slug}`} passHref>, {product.name}</Link>
                               {isEngravingAvailable && (
                                 <>
                                   <button
-                                    className="w-full relative flex bg-gray-400 border border-transparent rounded-md py-2 mt-2 items-center justify-center text-sm font-medium text-white hover:bg-gray-500"
+                                    className="relative flex items-center justify-center w-full py-2 mt-2 text-sm font-medium text-white bg-gray-400 border border-transparent rounded-md hover:bg-gray-500"
                                     onClick={() => showEngravingModal(true)}
                                   >
                                     <span className="font-bold">{GENERAL_ENGRAVING}</span>

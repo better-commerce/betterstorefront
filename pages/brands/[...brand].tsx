@@ -249,11 +249,11 @@ function BrandDetailPage({
   // IMPLEMENT HANDLING FOR NULL OBJECT
   if (brandDetails === null) {
     return (
-      <div className="container mx-auto py-10 text-center relative top-20">
-        <h4 className="text-3xl font-medium text-gray-400 pb-6">
+      <div className="container relative py-10 mx-auto text-center top-20">
+        <h4 className="pb-6 text-3xl font-medium text-gray-400">
           This is a bad url. please go back to
           <Link href="/brands">
-            <a className="text-indigo-500 px-3">all brands</a>
+            <span className="px-3 text-indigo-500">all brands</span>
           </Link>
         </h4>
       </div>
@@ -264,21 +264,21 @@ function BrandDetailPage({
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-center sm:py-16 py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
+        <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-8">
+          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
             {state.filters[0]?.Value}
           </h1>
-          <h1 className="sm:text-xl text-lg mt-2 font-medium tracking-tight text-gray-500">
+          <h1 className="mt-2 text-lg font-medium tracking-tight text-gray-500 sm:text-xl">
             {data.products.total} results
           </h1>
           <div
             dangerouslySetInnerHTML={{
               __html: brandDetails.description,
             }}
-            className="sm:py-10 py-4 px-5 sm:mt-5 mt-2 text-gray-900"
+            className="px-5 py-4 mt-2 text-gray-900 sm:py-10 sm:mt-5"
           />
         </div>
-        <div className="sm:py-5 py-2 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
+        <div className="flex justify-end w-full max-w-3xl px-4 py-2 mx-auto text-center sm:py-5 sm:px-6 lg:max-w-7xl lg:px-8">
           <ProductSort
             routerSortOption={state.sortBy}
             products={data.products}
