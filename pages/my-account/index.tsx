@@ -77,7 +77,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                       passHref
                       shallow={true}
                     >
-                      <a className="block h-full px-5 py-5">{item.text}</a>
+                      <span className="block h-full px-5 py-5">{item.text}</span>
                     </Link>
                   </Tab>
                 )

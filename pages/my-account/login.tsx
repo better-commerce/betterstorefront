@@ -98,9 +98,9 @@ function LoginPage({ recordEvent, setEntities }: any) {
         </div>
         <div className="w-full flex justify-center items-center">
           <Link href="/my-account/forgot-password" passHref>
-            <a className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
+            <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
               Forgot password?
-            </a>
+            </span>
           </Link>
         </div>
       </div>

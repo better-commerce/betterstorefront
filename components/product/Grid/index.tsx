@@ -24,7 +24,7 @@ export default function Grid({
   return (
     <section
       aria-labelledby="products-heading"
-      className="w-full overflow-hidden mx-auto sm:pl-4"
+      className="w-full mx-auto overflow-hidden sm:pl-4"
     >
       <h2 id="products-heading" className="sr-only">
         {TITLE_PRODUCTS}
@@ -37,7 +37,7 @@ export default function Grid({
           currentNumber={products.results.length}
           component={
             <div
-              className={`border-gray-100 gap-x-8 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 ${
+              className={`border-gray-100 gap-x-2 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 ${
                 products.results.length < 6
                   ? `lg:grid-cols-5`
                   : 'lg:grid-cols-5'
@@ -47,12 +47,12 @@ export default function Grid({
                 rangeMap(12, (i) => (
                   <div
                     key={i}
-                    className="shadow-md w-60 h-72 rounded-md mx-auto mt-20"
+                    className="mx-auto mt-20 rounded-md shadow-md w-60 h-72"
                   >
-                    <div className="flex animate-pulse flex-row items-center h-full justify-center space-x-5">
+                    <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
                       <div className="flex flex-col space-y-3">
-                        <div className="w-full bg-gray-100 h-48 rounded-md "></div>
-                        <div className="w-36 bg-gray-100 h-6 mt-40 rounded-md "></div>
+                        <div className="w-full h-48 bg-gray-100 rounded-md "></div>
+                        <div className="h-6 mt-40 bg-gray-100 rounded-md w-36 "></div>
                       </div>
                     </div>
                   </div>
@@ -66,17 +66,17 @@ export default function Grid({
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className="border-gray-200 grid grid-cols-2 sm:mx-0 md:grid-cols-4 lg:grid-cols-4">
+          <div className="grid grid-cols-2 border-gray-200 sm:mx-0 md:grid-cols-4 lg:grid-cols-4">
             {!products.results.length &&
               rangeMap(12, (i) => (
                 <div
                   key={i}
-                  className="shadow-md w-60 h-72 rounded-md mx-auto mt-20"
+                  className="mx-auto mt-20 rounded-md shadow-md w-60 h-72"
                 >
-                  <div className="flex animate-pulse flex-row items-center h-full justify-center space-x-5">
+                  <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
                     <div className="flex flex-col space-y-3">
-                      <div className="w-full bg-gray-100 h-48 rounded-md "></div>
-                      <div className="w-36 bg-gray-100 h-6 mt-40 rounded-md "></div>
+                      <div className="w-full h-48 bg-gray-100 rounded-md "></div>
+                      <div className="h-6 mt-40 bg-gray-100 rounded-md w-36 "></div>
                     </div>
                   </div>
                 </div>

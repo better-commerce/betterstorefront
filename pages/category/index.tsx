@@ -9,22 +9,21 @@ import {
 } from '@components/utils/textVariables'
 export default function CategoryList(props: any) {
   return (
-    <main className="w-full mx-auto px-4 sm:px-0 md:w-4/5 lg:px-0">
+    <main className="w-full px-4 mx-auto sm:px-0 md:w-4/5 lg:px-0">
     <section aria-labelledby="products-heading" className="mt-8">
-      <h2 className="text-2xl font-bold uppercase tracking-tight text-gray-900">
+      <h2 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
         {SHOP_BY_CATEGORY}
       </h2>
     {props?.data.length>0 &&
-      <div className="sm:mt-0 mt-1 flow-root">
+      <div className="flow-root mt-1 sm:mt-0">
         <div className="my-0">
           <div className="box-content relative">
-            <div className="sm:py-6 py-1 grid grid-cols-2 sm:gap-y-8 gap-y-6 sm:grid-cols-5 gap-x-6 lg:grid-cols-6 xl:gap-x-8">
+            <div className="grid grid-cols-2 py-1 sm:py-6 sm:gap-y-8 gap-y-6 sm:grid-cols-5 gap-x-6 lg:grid-cols-6 xl:gap-x-8">
               {props?.data?.map((category: any, key: number) => (
                 <Link key={key} href={`/${category.link}`}>
-                  <a
+                  <span
                     key={category.id}
-                    href={`/${category.link}`}
-                    className="relative sm:w-56 sm:h-80 h-60 w-full p-6 flex flex-col overflow-hidden hover:opacity-75 xl:w-auto"
+                    className="relative flex flex-col w-full p-6 overflow-hidden sm:w-56 sm:h-80 h-60 hover:opacity-75 xl:w-auto"
                   >
                     <span
                       aria-hidden="true"
@@ -37,7 +36,7 @@ export default function CategoryList(props: any) {
                             <Image
                               src={`${category?.image}?fm=webp&h=300&w=200` || IMG_PLACEHOLDER}
                               alt={category.name}
-                              className="w-full h-full object-center object-cover group-hover:opacity-75 image"
+                              className="object-cover object-center w-full h-full group-hover:opacity-75 image"
                               layout="fill"
                             ></Image>
                           </div>
@@ -45,7 +44,7 @@ export default function CategoryList(props: any) {
                           <Image
                               src={IMG_PLACEHOLDER}
                               alt={category.name}
-                              className="w-full h-full object-center object-cover group-hover:opacity-75 image"
+                              className="object-cover object-center w-full h-full group-hover:opacity-75 image"
                               layout="fill"
                             ></Image>
                         )}                    
@@ -54,10 +53,10 @@ export default function CategoryList(props: any) {
                       aria-hidden="true"
                       className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 opacity-40"
                     />
-                    <span className="relative mt-auto uppercase text-center sm:text-lg text-sm font-bold text-white">
+                    <span className="relative mt-auto text-sm font-bold text-center text-white uppercase sm:text-lg">
                       {category.name}                        
                     </span>
-                  </a>
+                  </span>
                 </Link>
               ))}
             </div>
@@ -67,8 +66,8 @@ export default function CategoryList(props: any) {
       }
       {props?.data.length == 0 &&
         <>
-          <div className='flex flex-col text-center py-32'>
-            <h2 className='text-4xl font-bold text-gray-200 w-full mx-auto'>No Category Available</h2>
+          <div className='flex flex-col py-32 text-center'>
+            <h2 className='w-full mx-auto text-4xl font-bold text-gray-200'>No Category Available</h2>
           </div>
         </>
       }

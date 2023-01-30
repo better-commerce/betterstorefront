@@ -57,11 +57,11 @@ export default function OrderConfirmation() {
 
   if (isLoading) {
     return (
-      <main className="bg-white px-4 pt-16 pb-24 sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
-        <h1 className="text-5xl text-center w-full font-extrabold uppercase tracking-light text-gray-600">
+      <main className="px-4 pt-16 pb-24 bg-white sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
+        <h1 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
           {LOADING_YOUR_ORDERS}
         </h1>
-        <div className="mt-10 flex justify-center items-center text-gray-900 w-full">
+        <div className="flex items-center justify-center w-full mt-10 text-gray-900">
           <LoadingDots />
         </div>
       </main>
@@ -69,18 +69,18 @@ export default function OrderConfirmation() {
   }
   return (
     <>
-      <main className="bg-gray-50 px-4 pt-6 pb-24 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
-        <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-md p-4">
+      <main className="px-4 pt-6 pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
+        <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
-            <h1 className="text-sm font-semibold uppercase tracking-wide text-indigo-600">
+            <h1 className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
               {order.orderNo ? GENERAL_THANK_YOU : null}
             </h1>
-            <p className="mt-2 text-4xl text-black font-bold tracking-tight sm:text-3xl uppercase">
+            <p className="mt-2 text-4xl font-bold tracking-tight text-black uppercase sm:text-3xl">
               {order.orderNo ? GENERAL_ON_THE_WAY : NO_ORDER_PROVIDED}
             </p>
             {order.orderNo ? (
-              <p className="mt-2 text-black text-gray-500">
-                {GENERAL_YOUR_ORDER}{' '}<span className='text-black font-bold'>{order.orderNo}</span>{' '}
+              <p className="mt-2 text-black">
+                {GENERAL_YOUR_ORDER}{' '}<span className='font-bold text-black'>{order.orderNo}</span>{' '}
                 {GENERAL_ORDER_WILL_BE_WITH_YOU_SOON}
               </p>
             ) : null}
@@ -99,19 +99,17 @@ export default function OrderConfirmation() {
               {order.items.map((product: any) => (
                 <div
                   key={product.id}
-                  className="py-10 border-b border-gray-200 flex space-x-6"
+                  className="flex py-10 space-x-6 border-b border-gray-200"
                 >
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="flex-none w-20 h-20 object-center object-cover bg-gray-100 rounded-lg sm:w-40 sm:h-40"
+                    className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
                   />
-                  <div className="flex-auto flex flex-col">
+                  <div className="flex flex-col flex-auto">
                     <div>
                       <h4 className="font-medium text-gray-900">
-                        <Link href={`/${product.slug}`}>
-                          <a>{product.name}</a>
-                        </Link>
+                        <Link href={`/${product.slug}`}>{product.name}</Link>
                       </h4>
 
                       <div
@@ -121,15 +119,15 @@ export default function OrderConfirmation() {
                         className="mt-2 text-sm text-gray-500"
                       />
                     </div>
-                    <div className="mt-6 flex-1 flex items-end">
-                      <dl className="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6">
+                    <div className="flex items-end flex-1 mt-6">
+                      <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
                         <div className="flex">
                           <dt className="font-medium text-gray-900">
                             {GENERAL_QUANTITY}
                           </dt>
                           <dd className="ml-2 text-gray-700">{product.qty}</dd>
                         </div>
-                        <div className="pl-4 flex sm:pl-6">
+                        <div className="flex pl-4 sm:pl-6">
                           <dt className="font-medium text-gray-900">
                             {GENERAL_PRICE}
                           </dt>
@@ -147,7 +145,7 @@ export default function OrderConfirmation() {
                 <h3 className="sr-only">{YOUR_INFORMATION}</h3>
 
                 <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>
-                <dl className="grid grid-cols-2 gap-x-6 text-sm py-10">
+                <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                   <div>
                     <dt className="font-medium text-gray-900">
                       {GENERAL_SHIPPING_ADDRESS}
@@ -179,7 +177,7 @@ export default function OrderConfirmation() {
                 </dl>
 
                 <h4 className="sr-only">{GENERAL_PAYMENT}</h4>
-                <dl className="grid grid-cols-2 gap-x-6 border-t border-gray-200 text-sm py-10">
+                <dl className="grid grid-cols-2 py-10 text-sm border-t border-gray-200 gap-x-6">
                   {order.payments && (
                     <div>
                       <dt className="font-medium text-gray-900">
@@ -209,7 +207,7 @@ export default function OrderConfirmation() {
 
                 <h3 className="sr-only">{GENERAL_SUMMARY}</h3>
 
-                <dl className="space-y-6 border-t border-gray-200 text-sm pt-10">
+                <dl className="pt-10 space-y-6 text-sm border-t border-gray-200">
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
                       {SUBTOTAL_INCLUDING_TAX}
@@ -238,12 +236,11 @@ export default function OrderConfirmation() {
           ) : null}
           <div className="max-w-xl">
             <Link href={`/`} passHref>
-              <a
-                href="/"
-                className="text-indigo-600 font-medium hover:text-indigo-500"
+              <span
+                className="font-medium text-indigo-600 hover:text-indigo-500"
               >
                 {BTN_BACK_TO_HOME}
-              </a>
+              </span>
             </Link>
           </div>
         </div>

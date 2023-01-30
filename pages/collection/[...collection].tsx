@@ -207,14 +207,14 @@ export default function CollectionPage(props: any) {
   const clearAll = () => dispatch({ type: CLEAR })
   
   return (
-    <main className="pb-0 md:w-4/5 mx-auto">
+    <main className="pb-0 mx-auto md:w-4/5">
     <div className="pt-2 sm:pt-4">
        {props.breadCrumbs && (
          <BreadCrumbs items={props.breadCrumbs} currentProduct={props} />
        )}
      </div>   
    {props.images.length > 0 &&
-       <div className="sm:px-0 mx-auto sm:mt-4 mt-0 flex justify-center items-center w-full">
+       <div className="flex items-center justify-center w-full mx-auto mt-0 sm:px-0 sm:mt-4">
          <Swiper navigation={true} loop={true} className="mySwiper">
            {props.images.map((img: any, idx: number) => {
              return (
@@ -226,7 +226,7 @@ export default function CollectionPage(props: any) {
                        height={460}
                        src={img.url || IMG_PLACEHOLDER}
                        alt={props.name}
-                       className="cursor-pointer w-full h-48 sm:h-96 sm:max-h-96 object-center object-cover"
+                       className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
                      ></Image>
                  </Link>
                </SwiperSlide>
@@ -235,20 +235,20 @@ export default function CollectionPage(props: any) {
          </Swiper>
        </div>
    }
-   <div className="sm:py-3 py-2 px-4 sm:px-0">
-    <h4><span className='font-normal text-gray-500 text-sm'>Showing {props.products.total} {' '} {RESULTS}</span></h4>
-     <h1 className="sm:text-xl text-xl font-semibold tracking-tight text-black">
+   <div className="px-4 py-2 sm:py-3 sm:px-0">
+    <h4><span className='text-sm font-normal text-gray-500'>Showing {props.products.total} {' '} {RESULTS}</span></h4>
+     <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">
        {props.name}
      </h1>
      <h2>{props.description}</h2>
    </div>
     {props.products.total > 0 &&
-      <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 overflow-hidden">
+      <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
         {props.allowFacets && (
           <>
             {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
-            <div className="sm:col-span-2 sm:hidden flex flex-col">
+            <div className="flex flex-col sm:col-span-2 sm:hidden">
               <ProductMobileFilters
                 handleFilters={handleFilters}
                 products={props.products}
@@ -258,7 +258,7 @@ export default function CollectionPage(props: any) {
                 routerSortOption={state.sortBy}
               />
             </div>
-            <div className="sm:col-span-2 sm:block hidden">
+            <div className="hidden sm:col-span-2 sm:block">
               <ProductFilterRight
                 handleFilters={handleFilters}
                 products={props.products}
@@ -268,7 +268,7 @@ export default function CollectionPage(props: any) {
             <div className="sm:col-span-10 ">
               {/* {HIDE FILTER TOP BAR IN MOBILE} */}
 
-              <div className="flex-1 sm:block hidden">
+              <div className="flex-1 hidden sm:block">
                 <ProductFiltersTopBar
                   products={data.products}
                   handleSortBy={handleSortBy}
@@ -302,10 +302,10 @@ export default function CollectionPage(props: any) {
       </div>
     }
      {props.products.total == 0 &&
-        <div className='w-full mx-auto text-center py-32'>
-          <h3 className='text-3xl font-semibold text-gray-200 py-3'>No Item Availabe in {props.name} Collection!</h3>
-          <Link href="/collection">
-            <a href='/collection' className='text-lg font-semibold text-indigo-500'><ChevronLeftIcon className='h-4 w-4 inline-block relative top-0'></ChevronLeftIcon> Back to collections</a>
+        <div className='w-full py-32 mx-auto text-center'>
+          <h3 className='py-3 text-3xl font-semibold text-gray-200'>No Item Availabe in {props.name} Collection!</h3>
+          <Link href="/collection" passHref>
+            <span className='text-lg font-semibold text-indigo-500'><ChevronLeftIcon className='relative top-0 inline-block w-4 h-4'></ChevronLeftIcon> Back to collections</span>
           </Link>
         </div>
      }

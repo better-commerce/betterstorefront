@@ -15,7 +15,7 @@ module.exports = withCommerceConfig({
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
   i18n: {
-    locales: ['en-US', 'es'],
+    locales: ['es'],
     defaultLocale: 'en-US',
   },
   rewrites() {

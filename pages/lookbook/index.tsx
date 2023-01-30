@@ -27,12 +27,12 @@ function LookbookPage({ data }: any) {
   })
 
   return (
-    <div className="mt-6 relative mb-5">
-      <div className="text-left pt-0 pb-6 px-4 sm:px-0 lg:px-0">
-        <h1 className="sm:w-4/5 mx-auto w-full text-3xl font-semibold tracking-tight text-black">
+    <div className="relative mt-6 mb-5">
+      <div className="px-4 pt-0 pb-6 text-left sm:px-0 lg:px-0">
+        <h1 className="w-full mx-auto text-3xl font-semibold tracking-tight text-black sm:w-4/5">
           {SHOP_BY_LIFESTYLRE}
         </h1>
-        <h1 className="sm:w-4/5 mx-auto w-full text-md mt-2 font-normal tracking-tight text-gray-500">
+        <h1 className="w-full mx-auto mt-2 font-normal tracking-tight text-gray-500 sm:w-4/5 text-md">
           {data.length}{' '}{RESULTS}
         </h1>
       </div>
@@ -46,36 +46,36 @@ function LookbookPage({ data }: any) {
         >
           <ul
             role="list"
-            className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8"
+            className="inline-flex mx-4 space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8"
           >
             {data?.map((lookbook: any) => (
               <SwiperSlide className="pr-5" key={lookbook.slug}>
                 <li
                   key={lookbook.id}
-                  className="w-64 inline-flex flex-col text-center lg:w-auto"
+                  className="inline-flex flex-col w-64 text-center lg:w-auto"
                 >
-                  <div className="group relative flex flex-col sm:flex-row justify-between items-center">
-                    <div className="w-full bg-gray-200 rounded-sm overflow-hidden aspect-w-1 aspect-h-1">
+                  <div className="relative flex flex-col items-center justify-between group sm:flex-row">
+                    <div className="w-full overflow-hidden bg-gray-200 rounded-sm aspect-w-1 aspect-h-1">
                       <div className='image-container'>
                         <Image
                           layout='fill'
                           src={lookbook.mainImage || IMG_PLACEHOLDER}
                           alt={lookbook.name}
-                          className="w-auto h-96 object-center object-cover hover:opacity-75 sm:min-h-screen sm:max-h-screen image"
+                          className="object-cover object-center w-auto h-96 hover:opacity-75 sm:min-h-screen sm:max-h-screen image"
                         ></Image>  
                       </div>
                     </div>
-                    <div className="w-full sm:w-1/2 p-5 flex justify-left flex-col items-center">
-                      <h3 className="font-semibold w-full text-left text-xl sm:text-3xl text-gray-900">
+                    <div className="flex flex-col items-center w-full p-5 sm:w-1/2 justify-left">
+                      <h3 className="w-full text-xl font-semibold text-left text-gray-900 sm:text-3xl">
                         {lookbook.name}
                       </h3>
-                      <p className="text-md sm:text-md py-5 text-gray-500 text-left line-clip-7">
+                      <p className="py-5 text-left text-gray-500 text-md sm:text-md line-clip-7">
                         {lookbook.description}
                       </p>
-                      <Link href={`/${lookbook.slug}`}>
+                      <Link href={`/${lookbook.slug}`} passHref>
                         <button
                           type="button"
-                          className="mt-6 cursor-pointer align-left justify-start flex-col font-semibold uppercase border border-gray-900 text-gray-900 py-2 px-5 hover:bg-gray-100"
+                          className="flex-col justify-start px-5 py-2 mt-6 font-semibold text-gray-900 uppercase border border-gray-900 cursor-pointer align-left hover:bg-gray-100"
                         >
                           {SHOP_THE_LOOK}
                         </button>
@@ -91,8 +91,8 @@ function LookbookPage({ data }: any) {
       }
       {data.length == 0 &&
         <>
-          <div className='flex flex-col text-center py-32'>
-            <h2 className='text-4xl font-bold text-gray-200 w-full mx-auto'>No Lookbook Available</h2>
+          <div className='flex flex-col py-32 text-center'>
+            <h2 className='w-full mx-auto text-4xl font-bold text-gray-200'>No Lookbook Available</h2>
           </div>
         </>
       }

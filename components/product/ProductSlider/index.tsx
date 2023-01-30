@@ -60,19 +60,19 @@ const ProductSlider: FC<Props> = ({ config }) => {
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
       <div className="py-8 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-        <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h2 className="sm:text-6xl text-4xl font-extrabold text-center tracking-tight text-gray-900">
+        <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+          <h2 className="text-4xl font-extrabold tracking-tight text-center text-gray-900 sm:text-6xl">
             {config?.title}
           </h2>
-          <h2 className="sm:py-5 py-3 sm:text-4xl text-xl text-center font-bold tracking-tight text-gray-900">
+          <h2 className="py-3 text-xl font-bold tracking-tight text-center text-gray-900 sm:py-5 sm:text-4xl">
             {config?.subTitle}
           </h2>
-          <p className="sm:py-5 py-3 sm:text-xl text-md tracking-tight text-center sm:max-w-40p text-gray-900">
+          <p className="py-3 tracking-tight text-center text-gray-900 sm:py-5 sm:text-xl text-md sm:max-w-40p">
             {config?.paragraph}
           </p>
         </div>
 
-        <div className="mt-8 relative">
+        <div className="relative mt-8">
           <div className="relative w-full overflow-x-auto">
             <Swiper
               slidesPerView={1}
@@ -94,24 +94,24 @@ const ProductSlider: FC<Props> = ({ config }) => {
             >
               <div
                 role="list"
-                className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8"
+                className="inline-flex mx-4 space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8"
               >
                 {config?.products?.map((product?: any) => (
                   <SwiperSlide className="px-5" key={product?.slug}>
                     <Link href={product?.slug}>
                       <div
                         key={product?.id}
-                        className="cursor-pointer w-64 inline-flex flex-col text-center lg:w-auto"
+                        className="inline-flex flex-col w-64 text-center cursor-pointer lg:w-auto"
                       >
-                        <div className="group relative">
-                          <div className="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
+                        <div className="relative group">
+                          <div className="w-full overflow-hidden bg-gray-200 rounded-md aspect-w-1 aspect-h-1">
                             <Image priority
                               src={product?.image || IMG_PLACEHOLDER}
                               alt={product?.name}
                               layout="responsive"
                               width={257}
                               height={362}
-                              className="w-full h-full object-center object-cover group-hover:opacity-75"></Image>
+                              className="object-cover object-center w-full h-full group-hover:opacity-75"></Image>
                           </div>
                           <div className="mt-6">
                             <p className="text-sm text-gray-500">

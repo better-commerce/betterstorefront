@@ -16,7 +16,7 @@ export default function InlineList({
 
   return (
     <>
-      <h3 className="text-md text-black font-bold text-left uppercase">{label}</h3>
+      <h3 className="font-bold text-left text-black uppercase text-md">{label}</h3>
       <RadioGroup value={'ring-gray-700'} onChange={() => {}} className="mt-2">
         <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
         <div className="flex items-center space-x-3">
@@ -39,12 +39,12 @@ export default function InlineList({
                   {item.fieldName}
                 </RadioGroup.Label>
                 <Link href={`/${path}`} passHref>
-                  <a
+                  <span
                     aria-hidden="true"
                     onClick={() => handleChange(item.fieldvalue)}
                     className={classNames(
                       item.fieldvalue,
-                      'h-4 w-4 border shadow-md drop-shadow-md border-black border-opacity-10 rounded-full'
+                      'h-4 block w-4 border shadow-md drop-shadow-md border-black border-opacity-10 rounded-full'
                     )}
                   />
                 </Link>
