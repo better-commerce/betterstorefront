@@ -467,7 +467,7 @@ export default function ProductView({
   }
   const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
-  const css ={ maxWidth: '100%', height: 'auto'}
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className="mx-auto bg-white page-container md:w-4/5">
       {/* Mobile menu */}
@@ -579,14 +579,25 @@ export default function ProductView({
                                     /> */}
                                     <Image
                                       priority
-                                      src={generateUri(image.image, "h=700&fm=webp") || IMG_PLACEHOLDER}
+                                      src={
+                                        generateUri(
+                                          image.image,
+                                          'h=700&fm=webp'
+                                        ) || IMG_PLACEHOLDER
+                                      }
                                       alt={image.name}
                                       className="o`bject-cover object-center w-full h-full image"
                                       style={css}
-                                      sizes='320 600 1000'
-                                      width={600} height={1000}
-                                      onClick={(ev: any) => handleImgLoadT(image.image)}
-                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
+                                      sizes="320 600 1000"
+                                      width={600}
+                                      height={1000}
+                                      onClick={(ev: any) =>
+                                        handleImgLoadT(image.image)
+                                      }
+                                      blurDataURL={
+                                        `${image.image}?h=600&w=400&fm=webp` ||
+                                        IMG_PLACEHOLDER
+                                      }
                                     />
                                     {/* </ControlledZoom> */}
                                   </div>
@@ -885,10 +896,14 @@ export default function ProductView({
                       <div className="text-center">
                         {previewImg && (
                           <div key={previewImg.name + 'tab-panel'}>
-                            <ImageZoom src={previewImg || IMG_PLACEHOLDER} alt={previewImg.name}   blurDataURL={
-                                        `${previewImg}?h=600&w=400&fm=webp` ||
-                                        IMG_PLACEHOLDER
-                                      }/>
+                            <ImageZoom
+                              src={previewImg || IMG_PLACEHOLDER}
+                              alt={previewImg.name}
+                              blurDataURL={
+                                `${previewImg}?h=600&w=400&fm=webp` ||
+                                IMG_PLACEHOLDER
+                              }
+                            />
                           </div>
                         )}
                       </div>
