@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useUI } from '@components/ui/context'
 import { NEXT_APPLY_PROMOTION } from '@components/utils/constants'
 import { PROMO_ERROR } from '@components/utils/textVariables'
-import { TrashIcon } from '@heroicons/react/outline'
+import { TrashIcon } from '@heroicons/react/24/outline'
 import Button from '@components/ui/IndigoButton'
 import {
   APPLY_PROMOTION,

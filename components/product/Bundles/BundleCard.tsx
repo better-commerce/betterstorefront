@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { 
   BTN_SEE_MORE_DETAILS, 
@@ -61,7 +61,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                   onClick={closeModal}
                 >
                   <span className="sr-only">{GENERAL_CLOSE}</span>
-                  <XIcon className="w-6 h-6" aria-hidden="true" />
+                  <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                 </button>
 
                 <div className="grid items-start w-full grid-cols-1 gap-y-8 gap-x-6 sm:grid-cols-12 lg:gap-x-8">

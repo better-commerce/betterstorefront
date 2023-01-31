@@ -5,7 +5,7 @@ import { useUI } from '@components/ui/context'
 import { useEffect, Fragment, useState } from 'react'
 import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
-import { XIcon, CheckCircleIcon } from '@heroicons/react/outline'
+import { XMarkIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 import useWishlist from '@components/services/wishlist'
 import {
   WISHLIST_TITLE,
@@ -130,7 +130,7 @@ const WishlistSidebar: FC = () => {
                           onClick={handleClose}
                         >
                           <span className="sr-only">Close panel</span>
-                          <XIcon className="w-6 h-6" aria-hidden="true" />
+                          <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                       </div>
                     </div>

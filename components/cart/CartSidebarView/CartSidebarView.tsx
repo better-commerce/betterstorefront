@@ -5,7 +5,7 @@ import { useUI } from '@components/ui/context'
 import { useEffect, useState, Fragment } from 'react'
 import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
-import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
+import { XMarkIcon, PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -136,7 +136,7 @@ const CartSidebarView: FC = () => {
                           onClick={handleClose}
                         >
                           <span className="sr-only">{CLOSE_PANEL}</span>
-                          <XIcon className="w-6 h-6" aria-hidden="true" />
+                          <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                       </div>
                     </div>
@@ -211,7 +211,7 @@ const CartSidebarView: FC = () => {
                                         {GENERAL_REMOVE}
                                       </button>
                                       <div className="flex flex-row px-4 text-gray-900 border">
-                                        <MinusSmIcon
+                                        <MinusSmallIcon
                                           onClick={() =>
                                             handleItem(product, 'decrease')
                                           }
@@ -220,7 +220,7 @@ const CartSidebarView: FC = () => {
                                         <span className="px-2 py-2 text-md">
                                           {product.qty}
                                         </span>
-                                        <PlusSmIcon
+                                        <PlusSmallIcon
                                           className="w-4 cursor-pointer"
                                           onClick={() =>
                                             handleItem(product, 'increase')
