@@ -10,6 +10,8 @@ import usePrice from '@framework/product/use-price'
 import useUpdateItem from '@framework/cart/use-update-item'
 import useRemoveItem from '@framework/cart/use-remove-item'
 import Quantity from '@components/ui/Quantity'
+import { generateUri } from '@commerce/utils/uri-util'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 type ItemOption = {
   name: string
@@ -84,7 +86,9 @@ const CartItem = ({
               className={s.productImage}
               width={150}
               height={150}
-              src={item.image}
+              src={
+                generateUri(item.image, 'h=300&fm=webp') || IMG_PLACEHOLDER
+              }
               alt={item.name}
               unoptimized
             />

@@ -17,6 +17,7 @@ import {
   GENERAL_CONTINUE_SHOPPING,
   IMG_PLACEHOLDER
 } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 const WishlistSidebar: FC = () => {
   const {
@@ -84,6 +85,7 @@ const WishlistSidebar: FC = () => {
 
   const isEmpty: boolean = wishListItems?.length === 0
 
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <Transition.Root show={true} as={Fragment}>
       <Dialog
@@ -104,7 +106,7 @@ const WishlistSidebar: FC = () => {
             <Dialog.Overlay className="w-full h-screen" onClick={handleClose} />
           </Transition.Child>
 
-          <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+          <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -115,20 +117,20 @@ const WishlistSidebar: FC = () => {
               leaveTo="translate-x-full"
             >
               <div className="w-screen max-w-md">
-                <div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
-                  <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
+                <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
+                  <div className="flex-1 px-4 py-6 overflow-y-auto sm:px-6">
                     <div className="flex items-start justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
                         {WISHLIST_TITLE}
                       </Dialog.Title>
-                      <div className="ml-3 h-7 flex items-center">
+                      <div className="flex items-center ml-3 h-7">
                         <button
                           type="button"
-                          className="-m-2 p-2 text-gray-400 hover:text-gray-500"
+                          className="p-2 -m-2 text-gray-400 hover:text-gray-500"
                           onClick={handleClose}
                         >
                           <span className="sr-only">Close panel</span>
-                          <XIcon className="h-6 w-6" aria-hidden="true" />
+                          <XIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                       </div>
                     </div>
@@ -136,12 +138,12 @@ const WishlistSidebar: FC = () => {
                     <div className="mt-8">
                       <div className="flow-root">
                         {isEmpty && (
-                          <div className="text-gray-900 h-full w-full flex flex-col justify-center items-center">
+                          <div className="flex flex-col items-center justify-center w-full h-full text-gray-900">
                             {WISHLIST_SIDEBAR_MESSAGE}
                             <Link href="/search">
                               <button
                                 type="button"
-                                className="text-indigo-600 font-medium hover:text-indigo-500"
+                                className="font-medium text-indigo-600 hover:text-indigo-500"
                                 onClick={handleClose}
                               >
                                 {GENERAL_CATALOG}
@@ -155,23 +157,26 @@ const WishlistSidebar: FC = () => {
                           className="-my-6 divide-y divide-gray-200"
                         >
                           {wishListItems.map((product: any) => (
-                            <li key={product.id} className="py-6 flex">
-                              <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+                            <li key={product.id} className="flex py-6">
+                              <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
                                 <Image 
-                                  layout='responsive'
+                                  style={css}
                                   width={80}
                                   height={80}
-                                  src={product.image || IMG_PLACEHOLDER}
+                                  src={
+                                    generateUri(product.image, 'h=200&fm=webp') ||
+                                    IMG_PLACEHOLDER
+                                  }
                                   alt={product.name}
-                                  className="w-full h-full object-center object-cover"></Image>
+                                  className="object-cover object-center w-full h-full"></Image>
                                 {/* <img
                                   src={product.image}
                                   alt={product.name}
-                                  className="w-full h-full object-center object-cover"
+                                  className="object-cover object-center w-full h-full"
                                 /> */}
                               </div>
 
-                              <div className="ml-4 flex-1 flex flex-col">
+                              <div className="flex flex-col flex-1 ml-4">
                                 <div>
                                   <div className="flex justify-between font-medium text-gray-900">
                                     <h3 onClick={handleClose}>
@@ -185,7 +190,7 @@ const WishlistSidebar: FC = () => {
                                   </div>
                                   {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                 </div>
-                                <div className="flex-1 flex items-end justify-between text-sm">
+                                <div className="flex items-end justify-between flex-1 text-sm">
                                   {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
                                   <div className="flex justify-between w-full">
@@ -217,20 +222,20 @@ const WishlistSidebar: FC = () => {
                     </div>
                   </div>
 
-                  <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                  <div className="px-4 py-6 border-t border-gray-200 sm:px-6">
                     {isItemInCart && (
-                      <div className="text-gray-500 py-5 text-xl w-full justify-center items-center h-full">
-                        <CheckCircleIcon className="h-12 text-center flex justify-center w-full items-center text-indigo-600" />
+                      <div className="items-center justify-center w-full h-full py-5 text-xl text-gray-500">
+                        <CheckCircleIcon className="flex items-center justify-center w-full h-12 text-center text-indigo-600" />
                         <p className="mt-5 text-center">
                           {WISHLIST_SUCCESS_MESSAGE}
                         </p>
                       </div>
                     )}
-                    <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
+                    <div className="flex justify-center mt-6 text-sm text-center text-gray-500">
                       <p>
                         <button
                           type="button"
-                          className="flex justify-center items-center px-6 py-3 border border-transparent uppercase rounded-sm shadow-sm font-medium text-white bg-black hover:bg-pink"
+                          className="flex items-center justify-center px-6 py-3 font-medium text-white uppercase bg-black border border-transparent rounded-sm shadow-sm hover:bg-pink"
                           onClick={handleClose}
                         >
                           {GENERAL_CONTINUE_SHOPPING}

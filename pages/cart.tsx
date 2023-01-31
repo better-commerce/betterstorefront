@@ -141,6 +141,7 @@ function Cart({ cart }: any) {
 
   const userCart = cartItems
   const isEmpty: boolean = userCart?.lineItems?.length === 0
+  const css = { maxWidth: '100%', height: 'auto' }
 
   return (
     <div className="w-full mx-auto bg-white sm:w-3/5">
@@ -163,7 +164,7 @@ function Cart({ cart }: any) {
                   <li key={productIdx} className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3">
                     <div className="flex-shrink-0">
                       <Image
-                        layout="fixed"
+                        style={css}
                         width={140}
                         height={180}
                         src={generateUri(product.image, "h=200&fm=webp") || IMG_PLACEHOLDER} 

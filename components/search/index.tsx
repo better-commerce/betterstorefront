@@ -73,6 +73,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
     }
   }, [Router.asPath])
 
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className="absolute w-full h-full bg-white z-9999">
       <div
@@ -128,7 +129,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
                               IMG_PLACEHOLDER
                             }
                             alt={product.name}
-                            layout="fill"
+                            style={css}
                             sizes="50vw"
                             className="object-cover object-center w-full h-48 sm:h-72 image"
                           ></Image>
