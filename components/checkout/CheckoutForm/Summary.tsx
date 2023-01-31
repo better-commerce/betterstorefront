@@ -14,6 +14,7 @@ import {
   ITEMS_IN_YOUR_CART,
   SUBTOTAL_INCLUDING_TAX,
 } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 export default function Summary({
   cart,
@@ -21,6 +22,8 @@ export default function Summary({
   confirmOrder,
   isShippingDisabled,
 }: any) {
+  
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className="top-0 mt-0 lg:mt-0 md:sticky">
       <div className="mt-0 bg-white border border-gray-200 rounded-lg shadow-sm">
@@ -33,10 +36,12 @@ export default function Summary({
             <li key={product.id} className="flex px-4 py-3 sm:px-6">
               <div className="flex-shrink-0">
                 <Image
-                  layout="fixed"
+                  style={css}
                   width={80}
                   height={100}
-                  src={`${product.image}` || IMG_PLACEHOLDER}
+                  src={
+                    generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER
+                  }
                   alt={product.name}
                   className="w-20 rounded-md"
                 ></Image>

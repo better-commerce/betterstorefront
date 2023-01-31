@@ -6,6 +6,7 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import { GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import Image from 'next/image'
+import { generateUri } from '@commerce/utils/uri-util'
 export default function RelatedProducts({
   relatedProducts = [],
   relatedProductList = [],
@@ -62,6 +63,7 @@ export default function RelatedProducts({
     asyncAddToCart()
   }
 
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <section
       aria-labelledby="related-heading"
@@ -93,8 +95,11 @@ export default function RelatedProducts({
                                 <Link href={`/${product.slug}`} passHref>
                                   <div className='image-container'>
                                     <Image
-                                      layout='fill'
-                                      src={product.image || IMG_PLACEHOLDER}
+                                      style={css}
+                                      src={
+                                        generateUri(product.image, 'h=500&fm=webp') ||
+                                        IMG_PLACEHOLDER
+                                      }
                                       alt={product.name}
                                       className="object-cover object-center w-full h-full image">                                      
                                     </Image>  

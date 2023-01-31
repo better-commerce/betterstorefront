@@ -17,8 +17,9 @@ import { NextSeo } from 'next-seo'
 import Image from 'next/image'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import {IMG_PLACEHOLDER, SHOP_THE_LOOK} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, SHOP_THE_LOOK } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
+import { generateUri } from '@commerce/utils/uri-util'
 function LookbookDetailPage({ data, slug }: any) {
   const router = useRouter()
   const { basketId, openCart, setCartItems } = useUI()
@@ -90,32 +91,39 @@ function LookbookDetailPage({ data, slug }: any) {
     }
   }
 
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className="w-full mx-auto bg-white">
       {/* Mobile menu */}
       <main className="pb-24">
         <div className="flex flex-col items-center px-4 py-0 text-left sm:px-0 lg:px-0">
           <div className="w-full overflow-hidden bg-gray-200 rounded-sm">
-              <div className='image-container lookbook-image'>
-                <Image
-                  layout='fill'
-                  src={data.mainImage || IMG_PLACEHOLDER}
-                  alt={data.name}
-                  className="object-cover object-center w-full h-screen min-h-screen image"
-                />
-                <div className='lookbook-data'>
-                    <h1 className="py-1 text-4xl font-semibold tracking-tight text-white">
-                      {data.name}
-                    </h1>
-                    <h2 className="pt-4 font-normal tracking-tight text-white text-md sm:w-1/3">{data.description}</h2>
-                    <button
-                      onClick={handleBulk}
-                      className="px-10 py-3 mt-5 text-lg font-semibold text-white uppercase bg-black hover:bg-gray-900"
-                    >
-                      {SHOP_THE_LOOK}
-                    </button>
-                </div>
-              </div>            
+            <div className="image-container lookbook-image">
+              <Image
+                style={css}
+                width={1000}
+                height={400}
+                src={
+                  generateUri(data.mainImage, 'h=800&fm=webp') || IMG_PLACEHOLDER
+                }
+                alt={data.name}
+                className="object-cover object-center w-full h-screen min-h-screen image"
+              />
+              <div className="lookbook-data">
+                <h1 className="py-1 text-4xl font-semibold tracking-tight text-white">
+                  {data.name}
+                </h1>
+                <h2 className="pt-4 font-normal tracking-tight text-white text-md sm:w-1/3">
+                  {data.description}
+                </h2>
+                <button
+                  onClick={handleBulk}
+                  className="px-10 py-3 mt-5 text-lg font-semibold text-white uppercase bg-black hover:bg-gray-900"
+                >
+                  {SHOP_THE_LOOK}
+                </button>
+              </div>
+            </div>
           </div>
           <div className="mx-auto mt-5 sm:w-4/5">
             <ProductGrid
@@ -160,17 +168,17 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
-  const slug: any = params!.lookbook;
-  const response = await getSingleLookbook(slug[0]);
+  const slug: any = params!.lookbook
+  const response = await getSingleLookbook(slug[0])
 
-  const infraPromise = commerce.getInfra();
-  const infra = await infraPromise;
+  const infraPromise = commerce.getInfra()
+  const infra = await infraPromise
   return {
     props: {
       data: response,
       slug: slug[0],
       globalSnippets: infra?.snippets ?? [],
-      snippets: response?.snippets
+      snippets: response?.snippets,
     },
     revalidate: 200,
   }

@@ -27,6 +27,7 @@ import useTranslation, {
   GENERAL_OR_TEXT,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 const CartSidebarView: FC = () => {
   const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
@@ -90,6 +91,7 @@ const CartSidebarView: FC = () => {
 
   const isEmpty: boolean = cartItems?.lineItems?.length === 0
 
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <Transition.Root show={true} as={Fragment}>
       <Dialog
@@ -167,8 +169,10 @@ const CartSidebarView: FC = () => {
                                   <Image
                                     width={100}
                                     height={100}
-                                    layout="fixed"
-                                    src={`${product.image}` || IMG_PLACEHOLDER}
+                                    style={css}
+                                    src={
+                                      generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER
+                                    }
                                     alt={product.name}
                                     className="object-cover object-center w-full h-full"
                                   ></Image>
@@ -234,8 +238,10 @@ const CartSidebarView: FC = () => {
                                       <div className="flex-shrink-0 w-12 h-12 ml-10 overflow-hidden border border-gray-200 rounded-md">
                                         <div className="image-container">
                                           <Image
-                                            layout="fill"
-                                            src={`${child.image}?w=100&h=100&fm=webp`}
+                                            style={css}
+                                            src={
+                                              generateUri(child.image, 'h=200&fm=webp') || IMG_PLACEHOLDER
+                                            }
                                             alt={child.name}
                                             className="object-cover object-center w-full h-full image"
                                           ></Image>

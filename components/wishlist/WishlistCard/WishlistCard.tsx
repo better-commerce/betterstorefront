@@ -11,7 +11,11 @@ import type { Product } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 import useAddItem from '@framework/cart/use-add-item'
 import useRemoveItem from '@framework/wishlist/use-remove-item'
-import {GENERAL_ADD_TO_BASKET} from '@components/utils/textVariables'
+import {
+  GENERAL_ADD_TO_BASKET,
+  IMG_PLACEHOLDER,
+} from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 interface Props {
   product: Product
@@ -48,14 +52,19 @@ const WishlistCard: FC<Props> = ({ product }) => {
   }
   const addToCart = async () => {}
 
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className={cn(s.root, { 'opacity-75 pointer-events-none': removing })}>
       <div className={`col-span-3 ${s.productBg}`}>
         <Image
-          src={product.images[0]?.url || placeholderImg}
+          src={
+            generateUri(product.images[0]?.url, 'h=500&fm=webp') ||
+            IMG_PLACEHOLDER
+          }
           width={400}
           height={400}
           alt={product.images[0]?.alt || 'Product Image'}
+          style={css}
         />
       </div>
 

@@ -6,7 +6,11 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
-import { BTN_SEE_EVERYTHING, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import {
+  BTN_SEE_EVERYTHING,
+  IMG_PLACEHOLDER,
+} from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 SwiperCore.use([Navigation])
 
@@ -37,26 +41,27 @@ const ProductSlider: FC<Props> = ({ config }) => {
           slidesToShow: 2,
           slidesToScroll: 1,
           infinite: true,
-          dots: true
-        }
+          dots: true,
+        },
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          initialSlide: 1
-        }
+          initialSlide: 1,
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
-  };
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  }
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
       <div className="py-8 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
@@ -79,7 +84,6 @@ const ProductSlider: FC<Props> = ({ config }) => {
               spaceBetween={10}
               navigation={true}
               loop={true}
-
               breakpoints={{
                 640: {
                   slidesPerView: 1,
@@ -105,13 +109,18 @@ const ProductSlider: FC<Props> = ({ config }) => {
                       >
                         <div className="relative group">
                           <div className="w-full overflow-hidden bg-gray-200 rounded-md aspect-w-1 aspect-h-1">
-                            <Image priority
-                              src={product?.image || IMG_PLACEHOLDER}
+                            <Image
+                              priority
+                              src={
+                                generateUri(product.image, 'h=500&fm=webp') ||
+                                IMG_PLACEHOLDER
+                              }
                               alt={product?.name}
-                              layout="responsive"
+                              style={css}
                               width={257}
                               height={362}
-                              className="object-cover object-center w-full h-full group-hover:opacity-75"></Image>
+                              className="object-cover object-center w-full h-full group-hover:opacity-75"
+                            ></Image>
                           </div>
                           <div className="mt-6">
                             <p className="text-sm text-gray-500">

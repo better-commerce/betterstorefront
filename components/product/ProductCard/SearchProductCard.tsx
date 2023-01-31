@@ -177,7 +177,7 @@ const SearchProductCard: FC<Props> = ({ product }) => {
             <Image
               priority
               src={
-                generateUri(currentProductData.image, 'h=400&fm=webp') ||
+                generateUri(currentProductData.image, 'h=500&fm=webp') ||
                 IMG_PLACEHOLDER
               }
               alt={product.name}
