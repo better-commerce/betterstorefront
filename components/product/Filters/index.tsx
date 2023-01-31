@@ -189,7 +189,7 @@ export default function Filters({
             />
           </div>
            {appliedFilters?.length >0 && (
-              <div className='flex grid flex-col grid-cols-1 px-4 py-2 border-t border-gray-100'>
+              <div className='grid flex-col grid-cols-1 px-4 py-2 border-t border-gray-100'>
                   <h4 className='flex w-full mb-2 text-sm font-bold'>Applied Filters</h4>
                   <div className='grid grid-cols-2'>
                     {appliedFilters.map((appliedFilter: any, idx: number) => {
