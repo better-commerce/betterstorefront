@@ -26,12 +26,18 @@ import {
   GENERAL_THANK_YOU,
   GENERAL_TOTAL,
   GENERAL_YOUR_ORDER,
+  IMG_PLACEHOLDER,
   LOADING_YOUR_ORDERS,
   NO_ORDER_PROVIDED,
   SUBTOTAL_INCLUDING_TAX,
   YOUR_INFORMATION,
 } from '@components/utils/textVariables'
-import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
+import {
+  ELEM_ATTR,
+  ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS,
+} from '@framework/content/use-content-snippet'
+import Image from 'next/image'
+import { generateUri } from '@commerce/utils/uri-util'
 
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState(defaultModel)
@@ -67,6 +73,7 @@ export default function OrderConfirmation() {
       </main>
     )
   }
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
     <>
       <main className="px-4 pt-6 pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
@@ -80,7 +87,8 @@ export default function OrderConfirmation() {
             </p>
             {order.orderNo ? (
               <p className="mt-2 text-black">
-                {GENERAL_YOUR_ORDER}{' '}<span className='font-bold text-black'>{order.orderNo}</span>{' '}
+                {GENERAL_YOUR_ORDER}{' '}
+                <span className="font-bold text-black">{order.orderNo}</span>{' '}
                 {GENERAL_ORDER_WILL_BE_WITH_YOU_SOON}
               </p>
             ) : null}
@@ -101,11 +109,17 @@ export default function OrderConfirmation() {
                   key={product.id}
                   className="flex py-10 space-x-6 border-b border-gray-200"
                 >
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
-                  />
+                  <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
+                    <Image
+                      style={css}
+                      src={
+                        generateUri(product.image, 'h=200&fm=webp') ||
+                        IMG_PLACEHOLDER
+                      }
+                      alt={product.name}
+                      className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
+                    ></Image>
+                  </div>
                   <div className="flex flex-col flex-auto">
                     <div>
                       <h4 className="font-medium text-gray-900">
@@ -225,7 +239,9 @@ export default function OrderConfirmation() {
                     </dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="font-medium text-gray-900">{GENERAL_TOTAL}</dt>
+                    <dt className="font-medium text-gray-900">
+                      {GENERAL_TOTAL}
+                    </dt>
                     <dd className="text-gray-900">
                       {order.grandTotal?.formatted?.withTax}
                     </dd>
@@ -236,9 +252,7 @@ export default function OrderConfirmation() {
           ) : null}
           <div className="max-w-xl">
             <Link href={`/`} passHref>
-              <span
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
+              <span className="font-medium text-indigo-600 hover:text-indigo-500">
                 {BTN_BACK_TO_HOME}
               </span>
             </Link>
@@ -247,7 +261,9 @@ export default function OrderConfirmation() {
       </main>
 
       {/* Placeholder for order confirmation after progress bar snippet */}
-      <div className={`${ELEM_ATTR}${ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS[0]}`}></div>
+      <div
+        className={`${ELEM_ATTR}${ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS[0]}`}
+      ></div>
     </>
-  );
+  )
 }
