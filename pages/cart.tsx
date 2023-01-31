@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { XMarkIcon as XMarkIconSolid } from '@heroicons/react/24/solid'
+import { XIcon as XIconSolid } from '@heroicons/react/solid'
 import { Layout } from '@components/common'
 import { GetServerSideProps } from 'next'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -9,7 +9,7 @@ import { basketId as basketIdGenerator } from '@components/ui/context'
 import Link from 'next/link'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
-import { PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
+import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 const  PromotionInput  = dynamic(() => import('../components/cart/PromotionInput'));
 import { useEffect } from 'react'
 import Image from 'next/image'
@@ -192,14 +192,14 @@ function Cart({ cart }: any) {
                             </div>
                             <div className="pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
                               <div className="flex flex-row w-4/6 px-2 text-gray-900 border sm:px-4 sm:w-2/6">
-                                <MinusSmallIcon
+                                <MinusSmIcon
                                   onClick={() => handleItem(product, 'decrease')}
                                   className="w-4 cursor-pointer"
                                 />
                                 <span className="px-4 py-1 text-md sm:py-1">
                                   {product.qty}
                                 </span>
-                                <PlusSmallIcon
+                                <PlusSmIcon
                                   className="w-4 cursor-pointer"
                                   onClick={() => handleItem(product, 'increase')}
                                 />
@@ -252,7 +252,7 @@ function Cart({ cart }: any) {
                                             <span className="sr-only">
                                               {GENERAL_REMOVE}
                                             </span>
-                                            <XMarkIconSolid
+                                            <XIconSolid
                                               className="w-5 h-5"
                                               aria-hidden="true"
                                             />
@@ -285,7 +285,7 @@ function Cart({ cart }: any) {
                             className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
                           >
                             <span className="sr-only">{GENERAL_REMOVE}</span>
-                            <XMarkIconSolid
+                            <XIconSolid
                               className="w-4 h-4 mt-2 text-black sm:h-5 sm:w-5"
                               aria-hidden="true"
                             />

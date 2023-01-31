@@ -1,6 +1,6 @@
 import { Formik, Form, Field } from 'formik'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { CheckCircleIcon } from '@heroicons/react/solid'
 import { useState, useRef } from 'react'
 import {
   ADD_ADDRESS,

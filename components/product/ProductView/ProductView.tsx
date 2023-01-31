@@ -2,8 +2,8 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { useState, useEffect, Fragment, useCallback } from 'react'
 import { Tab } from '@headlessui/react'
-import { HeartIcon } from '@heroicons/react/24/outline'
-import { StarIcon, PlayIcon } from '@heroicons/react/24/solid'
+import { HeartIcon } from '@heroicons/react/outline'
+import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
@@ -16,7 +16,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon, PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
+import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import {
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
@@ -887,7 +887,7 @@ export default function ProductView({
                           onClick={handlePreviewClose}
                         >
                           <span className="sr-only">{CLOSE_PANEL}</span>
-                          <XMarkIcon
+                          <XIcon
                             className="w-6 h-6 text-black"
                             aria-hidden="true"
                           />

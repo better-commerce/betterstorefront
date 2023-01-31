@@ -9,7 +9,7 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
-import { HeartIcon } from '@heroicons/react/24/outline'
+import { HeartIcon } from '@heroicons/react/outline'
 import { round } from 'lodash'
 import {
   ALERT_SUCCESS_WISHLIST_MESSAGE,

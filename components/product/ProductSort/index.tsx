@@ -1,7 +1,7 @@
 import classNames from '@components/utils/classNames'
 import { Fragment, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/24/solid'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { GENERAL_SORT } from '@components/utils/textVariables'

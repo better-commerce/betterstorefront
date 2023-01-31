@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { TrashIcon } from '@heroicons/react/24/solid'
-import { PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
+import { TrashIcon } from '@heroicons/react/solid'
+import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
 import PromotionInput from '@components/cart/PromotionInput'
 import {
   GENERAL_CONFIRM_ORDER,

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { CheckCircleIcon } from '@heroicons/react/solid'
 import Button from '@components/ui/IndigoButton'
 import {
   GENERAL_DISTANCE_MILES,
