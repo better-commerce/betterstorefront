@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { UserIcon } from '@heroicons/react/outline'
+import { UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
 export default function Account({ config, title }: any) {
