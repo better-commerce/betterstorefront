@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/24/solid'
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
 import { useRouter } from 'next/router'

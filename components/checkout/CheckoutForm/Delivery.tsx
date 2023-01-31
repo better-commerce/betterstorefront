@@ -1,7 +1,7 @@
 import classNames from '@components/utils/classNames'
 import React, { useState, useEffect, SyntheticEvent } from 'react'
 import { RadioGroup } from '@headlessui/react'
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { CheckCircleIcon } from '@heroicons/react/solid'
 import CncInput from './CncInput'
 import { postData } from '@components/utils/clientFetcher'
 import {

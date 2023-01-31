@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { XIcon } from '@heroicons/react/outline'
 import Form from './form'
 import axios from 'axios'
 import { NEXT_API_PRICE_MATCH_ENDPOINT } from '@components/utils/constants'
@@ -89,7 +89,7 @@ export default function PriceMatch({
                   onClick={() => onClose(false)}
                 >
                   <span className="sr-only">Close</span>
-                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                  <XIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
                 {/* <div className="text-gray-900">hello</div>  */}
                 <section className="flex py-10">

@@ -6,7 +6,7 @@ import { Layout } from '@components/common'
 import getBrands from '@framework/api/endpoints/catalog/brands'
 import { useState } from 'react'
 import Link from 'next/link'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { SearchIcon } from '@heroicons/react/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 
@@ -107,7 +107,7 @@ function BrandsPage({ brands }: any) {
                 onChange={(e: any) => handleSearch(e.target.value)}
               />
               <div className="text-gray-400">
-                <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
+                <SearchIcon className="w-6 h-6" aria-hidden="true" />
               </div>
             </div>
           </div>

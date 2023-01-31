@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { XIcon } from '@heroicons/react/outline'
 import axios from 'axios'
 import Form from './form'
 import { GENERAL_CLOSE, GENERAL_ENGRAVING, GENERAL_ENGRAVING_PERSONALIZE_BOTTLE } from '@components/utils/textVariables'
@@ -58,7 +58,7 @@ export default function Engraving({
                   onClick={() => onClose(false)}
                 >
                   <span className="sr-only">{GENERAL_CLOSE}</span>
-                  <XMarkIcon className="h-6 w-6 text-black" aria-hidden="true" />
+                  <XIcon className="h-6 w-6 text-black" aria-hidden="true" />
                 </button>
                 {/* <div className="text-gray-900">hello</div>  */}
                 <section className="flex p-0 w-full flex-col">

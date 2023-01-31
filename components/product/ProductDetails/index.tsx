@@ -1,6 +1,6 @@
 import { Tab, Disclosure } from '@headlessui/react'
-import { HeartIcon, MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
-import { StarIcon, PlayIcon } from '@heroicons/react/24/solid'
+import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
+import { StarIcon, PlayIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
 import {PRODUCT_DESCRIPTION,PRODUCT_SPECIFICATION,GENERAL_SHIPPING,GENERAL_RETURNS} from '@components/utils/textVariables'
 
@@ -87,12 +87,12 @@ export default function ProductDetails({ product, description }: any) {
                    </span>
                    <span className="ml-6 flex items-center">
                      {open ? (
-                       <MinusSmallIcon
+                       <MinusSmIcon
                          className="block h-6 w-6 text-black group-hover:text-gray-700"
                          aria-hidden="true"
                        />
                      ) : (
-                       <PlusSmallIcon
+                       <PlusSmIcon
                          className="block h-6 w-6 text-black group-hover:text-gray-700"
                          aria-hidden="true"
                        />
@@ -128,12 +128,12 @@ export default function ProductDetails({ product, description }: any) {
                     </span>
                     <span className="ml-6 flex items-center">
                       {open ? (
-                        <MinusSmallIcon
+                        <MinusSmIcon
                           className="block h-6 w-6 text-black group-hover:text-gray-700"
                           aria-hidden="true"
                         />
                       ) : (
-                        <PlusSmallIcon
+                        <PlusSmIcon
                           className="block h-6 w-6 text-black group-hover:text-gray-700"
                           aria-hidden="true"
                         />
