@@ -2666,7 +2666,7 @@ dataloader@2.1.0:
   resolved "https://registry.npmjs.org/dataloader/-/dataloader-2.1.0.tgz"
   integrity sha512-qTcEYLen3r7ojZNgVUaRggOI+KM7jrKxXeSHhogh/TWxYMeONEMqY+hmkobiYQozsGIyg9OYVzO4ZIfoB4I0pQ==
 
-debounce@^1.2.0:
+debounce@^1.2.0, debounce@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/debounce/-/debounce-1.2.1.tgz"
   integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
@@ -5745,10 +5745,10 @@ react-gtm-module@^2.0.11:
   resolved "https://registry.npmjs.org/react-gtm-module/-/react-gtm-module-2.0.11.tgz"
   integrity sha512-8gyj4TTxeP7eEyc2QKawEuQoAZdjKvMY4pgWfycGmqGByhs17fR+zEBs0JUDq4US/l+vbTl+6zvUIx27iDo/Vw==
 
-react-icons@^4.3.1:
-  version "4.3.1"
-  resolved "https://registry.npmjs.org/react-icons/-/react-icons-4.3.1.tgz"
-  integrity sha512-cB10MXLTs3gVuXimblAdI71jrJx8njrJZmNMEMC+sQu5B/BIOmlsAjskdqpn81y8UBVEGuHODd7/ci5DvoSzTQ==
+react-icons@^4.7.1:
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.7.1.tgz#0f4b25a5694e6972677cb189d2a72eabea7a8345"
+  integrity sha512-yHd3oKGMgm7zxo3EA7H2n7vxSoiGmHk5t6Ou4bXsfcgWyhfDKMpyKfhHR6Bjnn63c+YXBLBPUql9H4wPJM6sXw==
 
 react-image-zoom@^1.3.1:
   version "1.3.1"
@@ -5758,10 +5758,10 @@ react-image-zoom@^1.3.1:
     js-image-zoom "^0.7.0"
     prop-types "^15.7.2"
 
-react-image-zooom@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/react-image-zooom/-/react-image-zooom-1.0.4.tgz"
-  integrity sha512-Mqi++XgazQ1aG9P2rDprKTUQr/h/VNMrbNGIWtxfgi2dCI2oqI/Gx/9MP5nLyrWityzbGccxWZpuCj1DxAUo/Q==
+react-image-zooom@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-image-zooom/-/react-image-zooom-1.1.0.tgz#1aef69d6f493cec7428d45baf05dcdaaf824ae3d"
+  integrity sha512-LceDGGX+XFZ9wbiOBsHkqB1I5sAc+nbXDFZEle2nJS3HD+oCw1sI7ncL+M1Fm2iIhBUmPopO+KAKWEYGX4txhQ==
 
 react-infinite-scroll-component@^6.1.0:
   version "6.1.0"
@@ -5793,11 +5793,11 @@ react-public-ip@^1.0.0:
   integrity sha512-ne3UUnkYa8xLppXeNSFDFLkw0BklHh0di1ednz6RgHbDd/iwwzi1p/hFFOxOT+b67R4sffzyTQhOeH3WgkwQsg==
 
 react-use-measure@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.npmjs.org/react-use-measure/-/react-use-measure-2.0.4.tgz"
-  integrity sha512-7K2HIGaPMl3Q9ZQiEVjen3tRXl4UDda8LiTPy/QxP8dP2rl5gPBhf7mMH6MVjjRNv3loU7sNzey/ycPNnHVTxQ==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-use-measure/-/react-use-measure-2.1.1.tgz#5824537f4ee01c9469c45d5f7a8446177c6cc4ba"
+  integrity sha512-nocZhN26cproIiIduswYpV5y5lQpSQS1y/4KuvUCjSKmw7ZWIS/+g3aFnX3WdBkyuGUtTLif3UTqnLLhbDoQig==
   dependencies:
-    debounce "^1.2.0"
+    debounce "^1.2.1"
 
 react@^16.10.0:
   version "16.14.0"
