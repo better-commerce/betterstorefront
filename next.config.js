@@ -1,19 +1,22 @@
-const commerce = require('./commerce.config.json')
+/**
+ * @type {import('next').NextConfig}
+ */
+
 const {
   withCommerceConfig,
   getProviderName,
 } = require('./framework/commerce/config')
-
+const commerce = require('./commerce.config.json')
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
 const isBetterCommerce = provider === 'bettercommerce'
 
-module.exports = withCommerceConfig({
-  commerce,
+module.exports = withCommerceConfig({  
   images: {
     domains: ['liveocxcdn.azureedge.net', 'cdnbs.bettercommerce.io', 'cdn.shopify.com', 'liveocx.imgix.net', 'devocxblob.blob.core.windows.net','img.ffx.co.uk'],
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
+  commerce,
   i18n: {
     locales: ['es'],
     defaultLocale: 'en-US',
