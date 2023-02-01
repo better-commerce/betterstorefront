@@ -21,7 +21,7 @@ import {
   GENERAL_TOTAL,
 } from '@components/utils/textVariables'
 
-const CheckoutSidebarView: FC = () => {
+const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
   const { setSidebarView, closeSidebar } = useUI()
   const { data: checkoutData, submit: onCheckout } = useCheckout()
 

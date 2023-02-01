@@ -30,7 +30,7 @@ const LOCALES_MAP: Record<string, LOCALE_DATA> = {
   },
 }
 
-const I18nWidget: FC = () => {
+const I18nWidget: FC<React.PropsWithChildren<unknown>> = () => {
   const [display, setDisplay] = useState(false)
   const {
     locale,

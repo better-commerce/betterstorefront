@@ -29,7 +29,7 @@ import useTranslation, {
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 
-const CartSidebarView: FC = () => {
+const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
   const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
   const { getCart, addToCart } = useCart()
   const { BasketViewed } = EVENTS_MAP.EVENT_TYPES

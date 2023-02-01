@@ -7,7 +7,7 @@ export interface RatingProps {
   value: number
 }
 
-const Quantity: FC<RatingProps> = ({ value = 5 }) => (
+const Quantity: FC<React.PropsWithChildren<RatingProps>> = ({ value = 5 }) => (
   <div className="flex flex-row py-6 text-accent-9">
     {rangeMap(5, (i) => (
       <span

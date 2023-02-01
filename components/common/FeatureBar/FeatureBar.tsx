@@ -9,7 +9,7 @@ interface FeatureBarProps {
   action?: React.ReactNode
 }
 
-const FeatureBar: React.FC<FeatureBarProps> = ({
+const FeatureBar: React.FC<React.PropsWithChildren<FeatureBarProps>> = ({
   title,
   description,
   className,

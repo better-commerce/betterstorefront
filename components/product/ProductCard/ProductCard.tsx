@@ -39,7 +39,7 @@ interface Attribute {
   fieldValues?: []
 }
 
-const ProductCard: FC<Props> = ({ product }) => {
+const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const [isInWishList, setItemsInWishList] = useState(false)
   const [currentProductData, setCurrentProductData] = useState({
     image: product.image,

@@ -14,7 +14,7 @@ interface ModalProps {
   onEnter?: () => void | null
 }
 
-const Modal: FC<ModalProps> = ({ children, onClose }) => {
+const Modal: FC<React.PropsWithChildren<ModalProps>> = ({ children, onClose }) => {
   const ref = useRef() as React.MutableRefObject<HTMLDivElement>
 
   const handleKey = useCallback(

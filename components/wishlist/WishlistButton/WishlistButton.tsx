@@ -14,7 +14,7 @@ type Props = {
   variant: ProductVariant
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
-const WishlistButton: FC<Props> = ({
+const WishlistButton: FC<React.PropsWithChildren<Props>> = ({
   productId,
   variant,
   className,

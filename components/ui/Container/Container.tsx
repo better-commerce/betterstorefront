@@ -8,7 +8,7 @@ interface ContainerProps {
   clean?: boolean
 }
 
-const Container: FC<ContainerProps> = ({
+const Container: FC<React.PropsWithChildren<ContainerProps>> = ({
   children,
   className,
   el = 'div',
@@ -18,7 +18,7 @@ const Container: FC<ContainerProps> = ({
     'mx-auto max-w-8xl px-6': !clean,
   })
 
-  let Component: React.ComponentType<React.HTMLAttributes<HTMLDivElement>> =
+  let Component: React.ComponentType<React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>> =
     el as any
 
   return <Component className={rootClassName}>{children}</Component>

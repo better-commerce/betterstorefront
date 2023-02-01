@@ -23,7 +23,7 @@ interface Props {
 
 const placeholderImg = '/product-img-placeholder.svg'
 
-const WishlistCard: FC<Props> = ({ product }) => {
+const WishlistCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const { price } = usePrice({
     amount: product.price?.value,
     baseAmount: product.price?.retailPrice,

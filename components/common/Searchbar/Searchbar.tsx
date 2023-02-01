@@ -8,7 +8,7 @@ interface Props {
   onClick: any
 }
 
-const Searchbar: FC<Props> = ({ id = 'search', onClick }) => {
+const Searchbar: FC<React.PropsWithChildren<Props>> = ({ id = 'search', onClick }) => {
   return (
     <div className="flex flex-row sm:mr-8 sm:pr-2 sm:bg-gray-100 sm:border rounded-sm">
       <button
