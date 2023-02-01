@@ -116,6 +116,8 @@ export default function OrderConfirmation() {
                         generateUri(product.image, 'h=200&fm=webp') ||
                         IMG_PLACEHOLDER
                       }
+                      width={200}
+                      height={200}
                       alt={product.name}
                       className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
                     ></Image>
