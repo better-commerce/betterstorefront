@@ -77,10 +77,10 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.6.2",
-    "@graphql-codegen/schema-ast": "^1.18.3",
-    "@graphql-codegen/typescript": "^1.22.2",
-    "@graphql-codegen/typescript-operations": "^1.18.1",
+    "@graphql-codegen/cli": "^2.16.5",
+    "@graphql-codegen/schema-ast": "^2.6.1",
+    "@graphql-codegen/typescript": "^2.8.8",
+    "@graphql-codegen/typescript-operations": "^2.5.13",
     "@next/bundle-analyzer": "^10.2.3",
     "@types/body-scroll-lock": "^2.6.1",
     "@types/cookie": "^0.4.0",

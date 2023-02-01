@@ -43,6 +43,8 @@ const Hero: FC<HeroProps> = ({ banners = [] }) => {
                     }
                     alt={banner?.alt}
                     style={css}
+                    width={2000}
+                    height={1000}
                     className='sm:max-h-screen sm:min-h-screen image banner-Image'></Image>
                 </div>
               </Link>
