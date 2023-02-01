@@ -7,7 +7,7 @@ interface Props {
   onPageChange?: Function
   pageCount?: string | number
 }
-const Pagination: FC<Props> = ({
+const Pagination: FC<React.PropsWithChildren<Props>> = ({
   currentPage = '1',
   onPageChange = () => {},
   pageCount = 20,

@@ -24,7 +24,7 @@ interface Props {
   }
 }
 
-const ProductSlider: FC<Props> = ({ config }) => {
+const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
   var settings = {
     fade: false,
     speed: 500,

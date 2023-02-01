@@ -12,7 +12,7 @@ interface SidebarProps {
   onClose: () => void
 }
 
-const Sidebar: FC<SidebarProps> = ({ children, onClose }) => {
+const Sidebar: FC<React.PropsWithChildren<SidebarProps>> = ({ children, onClose }) => {
   const sidebarRef = useRef() as React.MutableRefObject<HTMLDivElement>
   const contentRef = useRef() as React.MutableRefObject<HTMLDivElement>
 

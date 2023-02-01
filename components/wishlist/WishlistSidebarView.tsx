@@ -19,7 +19,7 @@ import {
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 
-const WishlistSidebar: FC = () => {
+const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
   const {
     closeSidebar,
     setWishlist,

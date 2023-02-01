@@ -24,7 +24,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 // install Swiper modules
 SwiperCore.use([Navigation])
 
-const Hero: FC<HeroProps> = ({ banners = [] }) => {
+const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
 
   const css = { maxWidth: '100%', height: 'auto' }
   return (

@@ -6,7 +6,7 @@ import NextHead from 'next/head'
 import { DefaultSeo } from 'next-seo'
 import config from '@framework/seo.json'
 
-const Head: FC = () => {
+const Head: FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <>
       <DefaultSeo {...config} />

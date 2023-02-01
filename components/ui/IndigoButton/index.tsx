@@ -18,7 +18,7 @@ const DEFAULT_COLOR_SCHEME = {
   focusRingColor: 'ring-black',
 }
 
-const DefaultButton: FC<Props> = ({
+const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
   className = '',
   title = 'Add to bag',
   buttonType = 'cart',

@@ -53,7 +53,7 @@ interface Props {
   keywords: []
 }
 
-const ModalView: FC<{ modalView: string; closeModal(): any }> = ({
+const ModalView: FC<React.PropsWithChildren<{ modalView: string; closeModal(): any }>> = ({
   modalView,
   closeModal,
 }) => {
@@ -62,7 +62,7 @@ const ModalView: FC<{ modalView: string; closeModal(): any }> = ({
   )
 }
 
-const ModalUI: FC = () => {
+const ModalUI: FC<React.PropsWithChildren<unknown>> = () => {
   const { displayModal, closeModal, modalView, notifyUser, productId } = useUI()
   if (notifyUser) return <NotifyUserPopup />
   if (displayModal)
@@ -70,7 +70,7 @@ const ModalUI: FC = () => {
   return null
 }
 
-const SidebarView: FC<{ sidebarView: string; closeSidebar(): any }> = ({
+const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSidebar(): any }>> = ({
   sidebarView,
   closeSidebar,
 }) => {
@@ -85,7 +85,7 @@ const SidebarView: FC<{ sidebarView: string; closeSidebar(): any }> = ({
   )
 }
 
-const SidebarUI: FC = () => {
+const SidebarUI: FC<React.PropsWithChildren<unknown>> = () => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
     <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} />
@@ -97,7 +97,7 @@ interface LayoutProps {
   footer: []
 }
 
-const Layout: FC<Props> = ({
+const Layout: FC<React.PropsWithChildren<Props>> = ({
   children,
   config,
   pageProps: { categories = [], ...pageProps },

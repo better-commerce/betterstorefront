@@ -50,7 +50,7 @@ const accountDropDownConfigUnauthorized: any = [
   },
 ]
 
-const Navbar: FC<Props> = ({ config, currencies, languages }) => {
+const Navbar: FC<React.PropsWithChildren<Props>> = ({ config, currencies, languages }) => {
   const router = useRouter()
 
   const {

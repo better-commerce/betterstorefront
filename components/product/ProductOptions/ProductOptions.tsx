@@ -9,7 +9,7 @@ interface ProductOptionsProps {
   setSelectedOptions: React.Dispatch<React.SetStateAction<SelectedOptions>>
 }
 
-const ProductOptions: React.FC<ProductOptionsProps> = ({
+const ProductOptions: React.FC<React.PropsWithChildren<ProductOptionsProps>> = ({
   options,
   selectedOptions,
   setSelectedOptions,

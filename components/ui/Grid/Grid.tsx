@@ -9,7 +9,7 @@ interface GridProps {
   variant?: 'default' | 'filled'
 }
 
-const Grid: FC<GridProps> = ({
+const Grid: FC<React.PropsWithChildren<GridProps>> = ({
   className,
   layout = 'A',
   children,

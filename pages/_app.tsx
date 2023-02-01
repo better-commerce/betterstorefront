@@ -28,7 +28,7 @@ const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
 }
 
-const Noop: FC = ({ children }) => <>{children}</>
+const Noop: FC<React.PropsWithChildren<unknown>> = ({ children }) => <>{children}</>
 
 const TEST_GEO_DATA = {
   Ip: '81.196.3.147',
@@ -59,7 +59,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [isAppLoading, setAppIsLoading] = useState(true)
   const [language, setLanguage] = useState('')
 
-  const snippets = [...pageProps?.globalSnippets ?? [], ...pageProps?.snippets ?? []];
+  const snippets = [...(pageProps?.globalSnippets ?? []), ...(pageProps?.snippets ?? [])];
 
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
