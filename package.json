@@ -89,7 +89,7 @@
     "@types/lodash.random": "^3.2.7",
     "@types/lodash.throttle": "^4.1.7",
     "@types/memory-cache": "^0.2.2",
-    "@types/node": "^15.12.4",
+    "@types/node": "^18.11.18",
     "@types/react": "^17.0.8",
     "deepmerge": "^4.2.2",
     "eslint": "^7.31.0",
