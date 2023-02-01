@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
-import { XIcon } from '@heroicons/react/outline'
-import { ChevronDownIcon, FilterIcon } from '@heroicons/react/solid'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
@@ -90,7 +90,7 @@ export default function Filters({
                   onClick={() => setOpen(false)}
                 >
                   <span className="sr-only">{GENERAL_CLOSE}</span>
-                  <XIcon className="w-6 h-6" aria-hidden="true" />
+                  <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                 </button>
               </div>
 
@@ -161,7 +161,7 @@ export default function Filters({
                     onClick={() => setOpen(true)}
                     className="flex items-center font-medium text-gray-700 group"
                   >
-                    <FilterIcon
+                    <FunnelIcon
                       className="flex-none w-5 h-5 mr-2 text-gray-900 group-hover:text-gray-500"
                       aria-hidden="true"
                     />

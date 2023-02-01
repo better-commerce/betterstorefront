@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import { useState, useEffect, useLayoutEffect } from 'react'
-import { SearchIcon } from '@heroicons/react/outline'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import { NEXT_SEARCH_PRODUCTS } from '@components/utils/constants'
 import Link from 'next/link'
-import { XIcon } from '@heroicons/react/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import rangeMap from '@lib/range-map'
 import { useRouter } from 'next/router'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -80,7 +80,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
         className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10"
         onClick={closeWrapper}
       >
-        <XIcon />
+        <XMarkIcon />
       </div>
       <div className="flex flex-col items-center justify-center w-full px-4 py-5 mt-10 sm:px-10">
         <div className="w-full mx-auto mb-4 sm:w-3/5">
@@ -96,7 +96,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
               onChange={(e: any) => setInputValue(e.target.value)}
             />
             <div className="relative py-4 text-gray-400 right-10">
-              <SearchIcon className="w-6 h-6" aria-hidden="true" />
+              <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
             </div>
           </div>
         </div>

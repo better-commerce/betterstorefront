@@ -27,7 +27,7 @@ import { NextSeo } from 'next-seo'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER, RESULTS } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { ArrowLeftIcon, ChevronLeftIcon } from '@heroicons/react/outline'
+import { ArrowLeftIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
