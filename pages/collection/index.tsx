@@ -31,7 +31,7 @@ export default function CollectionList(props: any) {
                         }
                         alt={collection.name}
                         className="object-cover object-center w-full h-full group-hover:opacity-75 image"
-                        style={css}
+                        fill
                       ></Image>
                     </div>
                   </div>
