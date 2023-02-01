@@ -1,5 +1,5 @@
 import withAuth from '@components/utils/withAuth'
-import { StarIcon } from '@heroicons/react/solid'
+import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import { useState } from 'react'
 import { 

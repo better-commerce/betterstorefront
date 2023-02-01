@@ -12,7 +12,7 @@ import axios from 'axios'
 import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
-import { MenuIcon, SearchIcon, XIcon, ShoppingCartIcon, ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/outline'
+import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon, ShoppingCartIcon, ShoppingBagIcon, HeartIcon, UserIcon } from '@heroicons/react/24/outline'
 const Account = dynamic(() => import('./AccountDropdown'))
 const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
@@ -154,7 +154,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                   onClick={() => setOpen(false)}
                 >
                   <span className="sr-only">Close menu</span>
-                  <XIcon className="w-6 h-6 text-black" aria-hidden="true" />
+                  <XMarkIcon className="w-6 h-6 text-black" aria-hidden="true" />
                 </button>
               </div>
 
@@ -280,7 +280,7 @@ const Navbar: FC<Props> = ({ config, currencies, languages }) => {
                 onClick={() => setOpen(true)}
               >
                 <span className="sr-only">Open menu</span>
-                <MenuIcon className="w-6 h-6 text-black" aria-hidden="true" />
+                <Bars3Icon className="w-6 h-6 text-black" aria-hidden="true" />
               </button>
 
               <Link href="/">

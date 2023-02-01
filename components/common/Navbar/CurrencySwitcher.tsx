@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { CurrencyDollarIcon } from '@heroicons/react/outline'
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import { setCookie } from '@components/utils/cookieHandler'
 
 export default function CurrencySwitcher({ config = [], title, action }: any) {

@@ -1,6 +1,5 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationIcon } from '@heroicons/react/outline'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_API_NOTIFY_ME_ENDPOINT } from '@components/utils/constants'

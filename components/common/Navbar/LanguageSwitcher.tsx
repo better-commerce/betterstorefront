@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { FlagIcon } from '@heroicons/react/outline'
+import { FlagIcon } from '@heroicons/react/24/outline'
 import Cookies from 'js-cookie'
 import { Router } from 'next/router'
 
