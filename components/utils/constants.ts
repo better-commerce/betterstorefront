@@ -92,6 +92,9 @@ export const NEXT_CREATE_RETURN_DATA = '/api/return/create'
 export const NEXT_GET_RETURNS = '/api/return/get-user-returns'
 //CONSTANTS
 
+export const NEXT_GET_PRODUCT_QUICK_VIEW = "/api/catalog/get-product-quick-view"
+
+export const NEXT_GET_PRODUCT_REVIEW = '/api/catalog/get-product-review';
 export const DefaultSessionCookieKey: string = `defaultSession`
 export const SessionIdCookieKey: string = `sessionId`
 export const DeviceIdKey: string = `deviceId`
@@ -122,3 +125,124 @@ export const BETTERCOMMERCE_DEFAULT_COUNTRY = process.env.BETTERCOMMERCE_DEFAULT
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY;
 export const BETTERCOMMERCE_LANGUAGE = process.env.BETTERCOMMERCE_LANGUAGE;
 export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY;
+
+export module Messages {
+
+  export module Validations {
+
+    export module RegularExpressions {
+      export const MOBILE_NUMBER = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+      export const EMAIL = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      export const FULL_NAME = /^[a-zA-Z 0-9\-]*$/;
+      export const ADDRESS_LINE = /^[a-zA-Z 0-9\-\,\/\.]*$/;
+      export const ADDRESS_LABEL = /^[a-zA-Z 0-9\-]*$/;
+      export const CARD_NUMBER = /^[0-9]*$/;
+      export const CARD_EXPIRY = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/;
+      export const CARD_CVV = /^[0-9]*$/;
+      export const URL = /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
+      export const FIND_EMPTY_CHARACTERS = /\s/g;
+      export const REPLACE_DEFAULT_UPI_WEB_PREFIX_URL = /upi:\/\//g;
+    }
+
+    export const Login: any = {
+      "MOBILE_NUMBER_REQUIRED": "Mobile number is a required field",
+      "MOBILE_NUMBER_INPUT": "Mobile number should only contain numbers",
+      "MOBILE_NUMBER_LENGTH": "Mobile number should be 10 characters",
+    };
+
+    export const Profile: any = {
+      "NAME_REQUIRED": "Full name is a required field",
+      "NAME_MIN_LENGTH": "Full name must be at least 3 characters",
+      "NAME_INPUT": "Full name should only contain alpha-numerics",
+
+      "MOBILE_NUMBER_REQUIRED": "Mobile number is a required field",
+      "MOBILE_NUMBER_INPUT": "Mobile number should only contain numbers",
+      "CHANGED_MOBILE_NUMBER_INPUT": "New mobile number entered is currently in use",
+      "EMAIL_REQUIRED": "Email is a required field",
+      "EMAIL_INPUT": "Email is not valid",
+    };
+
+    export const AddNewAddress: any = {
+      "PIN_CODE_REQUIRED": "Pincode is a required field",
+      "PIN_CODE_UNREACHABLE": "Pincode non-serviceable",
+      "PIN_CODE_NUM": "Pincode should contain only digits",
+      "CITY_REQUIRED": "City is a required field",
+      "STATE_REQUIRED": "State is a required field",
+
+      "ADDRESS_1_REQUIRED": "House / Flat/ Office Number is a required field",
+      "ADDRESS_1_INPUT": "House / Flat/ Office Number should only contain alpha-numerics",
+      "ADDRESS_2_INPUT": "Road Name / Area/ Colony should only contain alpha-numerics",
+
+      "NAME_REQUIRED": "Name is a required field",
+      "NAME_MIN_LENGTH": "Name must be at least 3 characters",
+      "NAME_INPUT": "Name should only contain alpha-numerics",
+
+      "MOBILE_NUMBER_REQUIRED": "Mobile number is a required field",
+      "MOBILE_NUMBER_INPUT": "Mobile number should only contain numbers",
+
+      "ADDRESS_TYPE_REQUIRED": "Address is a required field",
+      "ADDRESS_TYPE_MIN_LENGTH": "House/ Flat/ Office Number should be more than 3 characters",
+      "ADDRESS_TYPE_INPUT": "Address should only contain alpha-numerics",
+    };
+
+    export const AddNewCard: any = {
+      "CARD_NUMBER_REQUIRED": "Card number is a required field",
+      "CARD_NUMBER_MIN_LENGTH": "Card Number must be at least 14 characters",
+      "CARD_NUMBER_INPUT": "Card number should contain only digits",
+
+      "EXPIRY_REQUIRED": "Expiry is a required field",
+      "EXPIRY_INPUT": "Expiry should be in MM/YY format",
+
+      "CVV_REQUIRED": "CVV is a required field",
+      "CVV_INPUT": "CVV should only contain alpha-numerics",
+
+      "NAME_REQUIRED": "Name is a required field",
+      "NAME_MIN_LENGTH": "Name must be at least 3 characters",
+      "NAME_INPUT": "Name should only contain alpha-numerics",
+    };
+
+    export const SaveUPI: any = {
+      "VPA_REQUIRED": "VPA / UPI ID is a required field",
+    };
+
+    export const DeliveryInfo: any = {
+      "PIN_CODE_REQUIRED": "Pincode is a required field",
+      "PIN_CODE_MIN_LENGTH": "Pincode must be at least 6 characters",
+      "VALID_PIN": "Please enter a valid pincode",
+      "PIN_CODE_MAX_LENGTH": "Pincode must be at max 6 characters",
+      "PIN_CODE_INPUT": "Pincode should only contain numbers",
+    };
+  };
+
+  export const Messages: any = {
+    "RETURN_SUCCESS": "Return success",
+    "EXCHANGE_SUCCESS": "Exchange successful",
+  };
+
+  export const Warnings: any = {
+
+  };
+
+  export const Errors: any = {
+    "INVALID_REQUEST": "The information provided is incomplete. Please try again.",
+    "ERR_BAD_REQUEST": "The information provided is incomplete. Please try again.",
+    "CARD_NOT_SUPPORTED": "Card type is not supported. Please try again.",
+    "INVALID_OTP_SUPPLIED": "OTP is not valid. Please try again.",
+    "ERROR_UPDATE_ADDITIONAL_CHARGES": "Error applying COD additional charges. Please try again after sometime.",
+    "UNSUPPORTED_UPI_APP": "UPI payment is unsupported.",
+    "NOT_FOUND": "Your request could not be processed. Please try again after sometime.",
+    "USERNAME_ALREADY_EXISTS": "User already exists",
+    "CUSTOMER_NOT_FOUND": "Customer not found.",
+    "GENERIC_ERROR": "Your request could not be processed. Please try again after sometime.",
+    "CART_EMPTY": "Your cart is empty",
+    "CART_ITEM_QTY_LIMIT_EXCEEDED": "Max allowed quantity is 5.",
+    "BASKET_VALIDATION_FAILED": "Basket validation failed",
+  };
+}
+
+
+export const ALERT_TIMER = 5000
+
+export const DATE_FORMAT = "DD-MMM-yy";
+export const DATE_TIME_FORMAT = "DD-MMM-yy HH:mm";
+export const PRODUCTS_SLUG_PREFIX = "products/";
