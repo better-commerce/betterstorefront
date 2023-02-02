@@ -1,16 +1,30 @@
 import {
+  NEXT_BULK_ADD_TO_CART,
+  NEXT_CREATE_WISHLIST,
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_QUICK_VIEW,
   NEXT_GET_PRODUCT_REVIEW,
+  NEXT_UPDATE_CART_INFO,
   PRODUCTS_SLUG_PREFIX,
 } from '@components/utils/constants'
 import {
+  BTN_ADD_TO_FAVORITES,
+  BTN_NOTIFY_ME,
+  BTN_PRE_ORDER,
   CLOSE_PANEL,
+  GENERAL_ADD_TO_BASKET,
+  GENERAL_ENGRAVING,
   GENERAL_SHOPPING_CART,
   IMG_PLACEHOLDER,
+  ITEM_TYPE_ADDON,
 } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
-import { PlayIcon, StarIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  HeartIcon,
+  PlayIcon,
+  StarIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import axios from 'axios'
 import { Fragment, useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -24,6 +38,10 @@ import Link from 'next/link'
 import { round } from 'lodash'
 import { priceFormat } from '@framework/utils/parse-util'
 import AttributesHandler from '../ProductView/AttributesHandler'
+import dynamic from 'next/dynamic'
+import { useUI } from '@components/ui'
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
+import cartHandler from '@components/services/cart'
 SwiperCore.use([Navigation])
 var settings = {
   fade: true,
@@ -73,12 +91,217 @@ export default function ProductQuickView({
   const [close, setClose] = useState(isQuickviewOpen)
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
   const [reviewData, setReviewData] = useState<any>(undefined)
+  const [isEngravingOpen, showEngravingModal] = useState(false)
+  const [isInWishList, setItemsInWishList] = useState(false)
   const [selectedAttrData, setSelectedAttrData] = useState({
     productId: quickViewData?.recordId,
     stockCode: quickViewData?.stockCode,
     ...quickViewData,
   })
   const product = updatedProduct || productData
+  const handleNotification = () => {
+    openNotifyUser(product.recordId)
+  }
+  const {
+    openNotifyUser,
+    addToWishlist,
+    openWishlist,
+    basketId,
+    cartItems,
+    setCartItems,
+    user,
+    openCart,
+  } = useUI()
+  const buttonTitle = () => {
+    let buttonConfig: any = {
+      title: GENERAL_ADD_TO_BASKET,
+      action: async () => {
+        const item = await cartHandler().addToCart(
+          {
+            basketId: basketId,
+            productId: selectedAttrData.productId,
+            qty: 1,
+            manualUnitPrice: product.price.raw.withTax,
+            stockCode: selectedAttrData.stockCode,
+            userId: user.userId,
+            isAssociated: user.isAssociated,
+          },
+          'ADD',
+          { product: selectedAttrData }
+        )
+        setCartItems(item)
+      },
+      shortMessage: '',
+    }
+    if (selectedAttrData.currentStock <= 0 && !product.preOrder.isEnabled) {
+      if (
+        !product.flags.sellWithoutInventory ||
+        !selectedAttrData.sellWithoutInventory
+      ) {
+        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.action = async () => handleNotification()
+        buttonConfig.type = 'button'
+      }
+    } else if (
+      product?.preOrder?.isEnabled &&
+      selectedAttrData?.currentStock <= 0
+    ) {
+      if (
+        product.preOrder.currentStock < product.preOrder.maxStock &&
+        (!product.flags.sellWithoutInventory ||
+          selectedAttrData.sellWithoutInventory)
+      ) {
+        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.shortMessage = product.preOrder.shortMessage
+        return buttonConfig
+      } else if (
+        product.flags.sellWithoutInventory ||
+        selectedAttrData.sellWithoutInventory
+      ) {
+        buttonConfig = {
+          title: GENERAL_ADD_TO_BASKET,
+          action: async () => {
+            const item = await cartHandler().addToCart(
+              {
+                basketId: basketId,
+                productId: selectedAttrData.productId,
+                qty: 1,
+                manualUnitPrice: product.price.raw.withTax,
+                stockCode: selectedAttrData.stockCode,
+                userId: user.userId,
+                isAssociated: user.isAssociated,
+              },
+              'ADD',
+              { product: selectedAttrData }
+            )
+            setCartItems(item)
+          },
+          shortMessage: '',
+        }
+      } else {
+        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.action = async () => handleNotification()
+        buttonConfig.type = 'button'
+        return buttonConfig
+      }
+    }
+    return buttonConfig
+  }
+
+  const buttonConfig = buttonTitle()
+  //TODO no additionalProperties key found on product object
+  const insertToLocalWishlist = () => {
+    addToWishlist(product)
+    setItemsInWishList(true)
+    openWishlist()
+  }
+  const handleWishList = () => {
+    const accessToken = localStorage.getItem('user')
+    if (accessToken) {
+      const createWishlist = async () => {
+        try {
+          await axios.post(NEXT_CREATE_WISHLIST, {
+            id: user.userId,
+            productId: product.recordId,
+            flag: true,
+          })
+          insertToLocalWishlist()
+        } catch (error) {
+          console.log(error, 'error')
+        }
+      }
+      createWishlist()
+    } else insertToLocalWishlist()
+  }
+  const handleEngravingSubmit = (values: any) => {
+    const updatedProduct = {
+      ...product,
+      ...{
+        recordId: selectedAttrData.productId,
+        stockCode: selectedAttrData.stockCode,
+      },
+    }
+    const addonProducts = product.relatedProducts?.filter(
+      (item: any) => item.stockCode === ITEM_TYPE_ADDON
+    )
+    const addonProductsWithParentProduct = addonProducts.map((item: any) => {
+      item.parentProductId = product.recordId
+      return item
+    })
+    const computedProducts = [
+      ...addonProductsWithParentProduct,
+      updatedProduct,
+    ].reduce((acc: any, obj: any) => {
+      acc.push({
+        ProductId: obj.recordId || obj.productId,
+        BasketId: basketId,
+        ParentProductId: obj.parentProductId || null,
+        Qty: 1,
+        DisplayOrder: obj.displayOrder || 0,
+        StockCode: obj.stockCode,
+        ItemType: obj.itemType || 0,
+        CustomInfo1: values.line1 || null,
+
+        CustomInfo2: values.line2 || null,
+
+        CustomInfo3: values.line3 || null,
+
+        CustomInfo4: values.line4 || null,
+
+        CustomInfo5: values.line5 || null,
+
+        ProductName: obj.name,
+
+        ManualUnitPrice: obj.manualUnitPrice || 0.0,
+
+        PostCode: obj.postCode || null,
+
+        IsSubscription: obj.subscriptionEnabled || false,
+
+        IsMembership: obj.hasMembership || false,
+
+        SubscriptionPlanId: obj.subscriptionPlanId || null,
+
+        SubscriptionTermId: obj.subscriptionTermId || null,
+
+        UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
+
+        GiftWrapId: obj.giftWrapConfig || null,
+
+        IsGiftWrapApplied: obj.isGiftWrapApplied || false,
+
+        ItemGroupId: obj.itemGroupId || 0,
+
+        PriceMatchReqId:
+          obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
+      })
+      return acc
+    }, [])
+
+    const asyncHandler = async () => {
+      try {
+        const newCart = await axios.post(NEXT_BULK_ADD_TO_CART, {
+          basketId,
+          products: computedProducts,
+        })
+        await axios.post(NEXT_UPDATE_CART_INFO, {
+          basketId,
+          info: [...Object.values(values)],
+          lineInfo: computedProducts,
+        })
+
+        setCartItems(newCart.data)
+        showEngravingModal(false)
+      } catch (error) {
+        console.log(error, 'err')
+      }
+    }
+    asyncHandler()
+  }
+
+  const isEngravingAvailable = !!product?.relatedProducts?.filter(
+    (item: any) => item?.stockCode === ITEM_TYPE_ADDON
+  ).length
 
   const fetchProduct = async () => {
     if (productData?.slug) {
@@ -198,8 +421,8 @@ export default function ProductQuickView({
                           </button>
                         </div>
                       </div>
-                      <div className="py-2 mt-2 sm:px-6">
-                        <div className="flex flex-col">
+                      <div className="py-2 mt-2 sm:px-0">
+                        <div className="flex flex-col px-4 sm:px-6">
                           <Swiper
                             slidesPerView={1.2}
                             spaceBetween={4}
@@ -264,7 +487,7 @@ export default function ProductQuickView({
                             </div>
                           </Swiper>
                         </div>
-                        <div className="flex flex-col my-4">
+                        <div className="flex flex-col px-4 my-4 sm:px-6">
                           <h4 className="text-xs font-normal text-gray-400">
                             {productData?.classification?.category}
                           </h4>
@@ -298,7 +521,7 @@ export default function ProductQuickView({
                             </div>
                           </h1>
                         </div>
-                        <div className="flex flex-col mt-4">
+                        <div className="flex flex-col px-4 mt-4 sm:px-6">
                           <p className="mb-2 text-lg font-semibold text-primary sm:text-md">
                             {productData?.price?.formatted?.withTax}
 
@@ -314,7 +537,85 @@ export default function ProductQuickView({
                             ) : null}
                           </p>
                         </div>
-                        <div className="flex flex-col mt-4">
+                        <div className="sticky bottom-0 flex flex-col px-4 py-4 mt-4 bg-white border-t sm:px-6">
+                          {updatedProduct ? (
+                            <>
+                              {!isEngravingAvailable && (
+                                <div className="flex mt-6 sm:mt-0 sm:flex-col1">
+                                  <Button
+                                    title={buttonConfig.title}
+                                    action={buttonConfig.action}
+                                    buttonType={buttonConfig.type || 'cart'}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      if (!isInWishList) {
+                                        handleWishList()
+                                      }
+                                    }}
+                                    className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                                  >
+                                    {isInWishList ? (
+                                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                                    ) : (
+                                      <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                                    )}
+                                    <span className="sr-only">
+                                      {BTN_ADD_TO_FAVORITES}
+                                    </span>
+                                  </button>
+                                </div>
+                              )}
+
+                              {isEngravingAvailable && (
+                                <>
+                                  <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                                    <Button
+                                      className="block py-3 sm:hidden"
+                                      title={buttonConfig.title}
+                                      action={buttonConfig.action}
+                                      buttonType={buttonConfig.type || 'cart'}
+                                    />
+                                  </div>
+                                  <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                                    <Button
+                                      className="hidden sm:block "
+                                      title={buttonConfig.title}
+                                      action={buttonConfig.action}
+                                      buttonType={buttonConfig.type || 'cart'}
+                                    />
+                                    <button
+                                      className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                                      onClick={() => showEngravingModal(true)}
+                                    >
+                                      <span className="font-bold">
+                                        {GENERAL_ENGRAVING}
+                                      </span>
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        if (!isInWishList) {
+                                          handleWishList()
+                                        }
+                                      }}
+                                      className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                                    >
+                                      {isInWishList ? (
+                                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                                      ) : (
+                                        <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                                      )}
+                                      <span className="sr-only">
+                                        {BTN_ADD_TO_FAVORITES}
+                                      </span>
+                                    </button>
+                                  </div>
+                                </>
+                              )}
+                            </>
+                          ) : null}
                           {/* <AttributesHandler
                             product={productData}
                             variant={selectedAttrData}
