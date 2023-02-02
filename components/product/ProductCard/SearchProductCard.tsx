@@ -9,7 +9,7 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
-import { HeartIcon } from '@heroicons/react/24/outline'
+import { ArrowsPointingOutIcon, CursorArrowRaysIcon, EyeIcon, HeartIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
 import { round } from 'lodash'
 import {
   ALERT_SUCCESS_WISHLIST_MESSAGE,
@@ -19,8 +19,10 @@ import {
   GENERAL_ADD_TO_BASKET,
   GENERAL_PRICE_LABEL_RRP,
   IMG_PLACEHOLDER,
+  QUICK_VIEW,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import QuickViewModal from '@components/product/QuickView/ProductQuickView'
 interface Props {
   product: any
 }
@@ -41,6 +43,8 @@ interface Attribute {
 
 const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const [isInWishList, setItemsInWishList] = useState(false)
+  const [isQuickview, setQuickview] = useState(undefined)
+  const [isQuickviewOpen, setQuickviewOpen] = useState(false)
   const [currentProductData, setCurrentProductData] = useState({
     image: product.image,
     link: product.slug,
@@ -165,29 +169,36 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
   const css = { maxWidth: '100%', height: 'auto' }
+  const onViewApiKey = (isQuickview: any) => {
+    setQuickview(isQuickview)
+    setQuickviewOpen(true)
+  }
+
   return (
-    <div className="bg-white">
-      <div key={product.id} className="relative py-3 sm:py-3">
-        <Link
-          passHref
-          href={`/${currentProductData.link}`}
-          key={'data-product' + currentProductData.link}
-        >
+    <>
+      <div className="bg-white">
+        <div key={product.id} className="relative py-3 sm:py-3">
           <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 hover:opacity-75">
-            <Image
-              priority
-              src={
-                generateUri(currentProductData.image, 'h=500&fm=webp') ||
-                IMG_PLACEHOLDER
-              }
-              alt={product.name}
-              onMouseEnter={() => handleHover('enter')}
-              onMouseLeave={() => handleHover('leave')}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image"
-              style={css}
-              width={400}
-              height={600}
-            ></Image>
+            <Link
+              passHref
+              href={`/${currentProductData.link}`}
+              key={'data-product' + currentProductData.link}
+            >
+              <Image
+                priority
+                src={
+                  generateUri(currentProductData.image, 'h=500&fm=webp') ||
+                  IMG_PLACEHOLDER
+                }
+                alt={product.name}
+                onMouseEnter={() => handleHover('enter')}
+                onMouseLeave={() => handleHover('leave')}
+                className="object-cover object-center w-full h-full sm:h-full min-h-image"
+                style={css}
+                width={400}
+                height={600}
+              ></Image>
+            </Link>
             {buttonConfig.isPreOrderEnabled && (
               <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
                 {BTN_PRE_ORDER}
@@ -216,49 +227,67 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
               </button>
             )}
           </div>
-        </Link>
 
-        <div className="pt-0 text-left">
-          {hasColorVariation ? (
-            <AttributeSelector
-              attributes={product.variantProductsAttributeMinimal}
-              onChange={handleVariableProduct}
-              link={currentProductData.link}
-            />
-          ) : (
-            <div className="inline-block w-1 h-1 mt-2 mr-1 sm:h-1 sm:w-1 sm:mr-2" />
-          )}
+          <div className="pt-0 text-left">
+            {hasColorVariation ? (
+              <AttributeSelector
+                attributes={product.variantProductsAttributeMinimal}
+                onChange={handleVariableProduct}
+                link={currentProductData.link}
+              />
+            ) : (
+              <div className="inline-block w-1 h-1 mt-2 mr-1 sm:h-6 sm:w-6 sm:mr-2" />
+            )}
 
-          <h3 className="text-xs font-normal text-gray-700 truncate sm:text-sm">
-            <Link href={`/${currentProductData.link}`}>{product.name}</Link>
-          </h3>
-          <p className="mt-1 font-bold text-gray-900 sm:mt-1 text-md">
-            {product?.price?.formatted?.withTax}
-            {product?.listPrice?.raw?.withTax > 0 &&
-              product?.listPrice?.raw?.withTax !=
-                product?.price?.raw?.withTax && (
-                <>
-                  <span className="px-2 text-sm font-normal text-gray-400 line-through">
-                    {product?.listPrice?.formatted?.withTax}
-                  </span>
-                  <span className="text-sm font-semibold text-red-600">
-                    {discount}% Off
-                  </span>
-                </>
-              )}
-          </p>
-          <div className="flex flex-col">
-            <Button
-              className="hidden mt-2"
-              title={buttonConfig.title}
-              action={buttonConfig.action}
-              type="button"
-              buttonType={buttonConfig.buttonType || 'cart'}
-            />
+            <h3 className="text-xs font-normal text-gray-700 truncate sm:text-sm">
+              <Link href={`/${currentProductData.link}`}>{product.name}</Link>
+            </h3>
+            <div className="grid grid-cols-12">
+              <div className="col-span-9">
+                <p className="mt-1 font-bold text-gray-900 sm:mt-1 text-md">
+                  {product?.price?.formatted?.withTax}
+                  {product?.listPrice?.raw?.withTax > 0 &&
+                    product?.listPrice?.raw?.withTax !=
+                      product?.price?.raw?.withTax && (
+                      <>
+                        <span className="px-2 text-sm font-normal text-gray-400 line-through">
+                          {product?.listPrice?.formatted?.withTax}
+                        </span>
+                        <span className="text-sm font-semibold text-red-600">
+                          {discount}% Off
+                        </span>
+                      </>
+                    )}
+                </p>
+              </div>
+              <div className="relative col-span-3 pr-1 text-right top-0.5">
+                <CursorArrowRaysIcon
+                  className="inline-block w-4 h-4 text-black cursor-pointer hover:text-yellow-700 hover:h-6 hover:w-6"
+                  onClick={() => onViewApiKey(product)}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <Button
+                className="hidden mt-2"
+                title={buttonConfig.title}
+                action={buttonConfig.action}
+                type="button"
+                buttonType={buttonConfig.buttonType || 'cart'}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <QuickViewModal
+        isQuikview={isQuickview}
+        setQuickview={setQuickview}
+        productData={isQuickview}
+        isQuickviewOpen={isQuickviewOpen}
+        setQuickviewOpen={setQuickviewOpen}
+      />
+    </>
   )
 }
 
