@@ -9,7 +9,13 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
-import { ArrowsPointingOutIcon, CursorArrowRaysIcon, EyeIcon, HeartIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowsPointingOutIcon,
+  CursorArrowRaysIcon,
+  EyeIcon,
+  HeartIcon,
+  PlusSmallIcon,
+} from '@heroicons/react/24/outline'
 import { round } from 'lodash'
 import {
   ALERT_SUCCESS_WISHLIST_MESSAGE,
@@ -178,7 +184,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
     <>
       <div className="bg-white">
         <div key={product.id} className="relative py-3 sm:py-3">
-          <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 hover:opacity-75">
+          <div className="relative overflow-hidden group aspect-w-1 aspect-h-1 hover:opacity-75">
             <Link
               passHref
               href={`/${currentProductData.link}`}
@@ -226,6 +232,13 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
                 <span className="sr-only">f</span>
               </button>
             )}
+            {/* <button
+              type="button"
+              className="relative z-10 w-full px-4 py-2 text-sm text-gray-900 bg-white bg-opacity-75 rounded-md opacity-0 focus:opacity-100 group-hover:opacity-100"
+              onClick={() => onViewApiKey(product)}
+            >
+              Quick View
+            </button> */}
           </div>
 
           <div className="pt-0 text-left">
@@ -259,12 +272,6 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
                       </>
                     )}
                 </p>
-              </div>
-              <div className="relative col-span-3 pr-1 text-right top-0.5">
-                <CursorArrowRaysIcon
-                  className="inline-block w-4 h-4 text-black cursor-pointer hover:text-yellow-700 hover:h-6 hover:w-6"
-                  onClick={() => onViewApiKey(product)}
-                />
               </div>
             </div>
 
