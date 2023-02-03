@@ -199,7 +199,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
                 alt={product.name}
                 onMouseEnter={() => handleHover('enter')}
                 onMouseLeave={() => handleHover('leave')}
-                className="object-cover object-center w-full h-full sm:h-full min-h-image"
+                className="object-cover object-center w-full h-full rounded sm:h-full min-h-image"
                 style={css}
                 width={400}
                 height={600}
