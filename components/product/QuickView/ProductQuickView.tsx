@@ -18,7 +18,7 @@ import {
   IMG_PLACEHOLDER,
   ITEM_TYPE_ADDON,
 } from '@components/utils/textVariables'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, RadioGroup, Transition } from '@headlessui/react'
 import {
   HeartIcon,
   PlayIcon,
@@ -79,7 +79,9 @@ var settings = {
     },
   ],
 }
-
+function classNames(...classes: any) {
+  return classes.filter(Boolean).join(' ')
+}
 export default function ProductQuickView({
   isQuickview,
   setQuickview,
@@ -403,7 +405,7 @@ export default function ProductQuickView({
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <div className="w-screen max-w-md">
+                <div className="w-screen max-w-xl">
                   <div className="flex flex-col h-full overflow-y-auto rounded shadow-xl bg-gray-50">
                     <div className="flex-1 px-0 overflow-y-auto">
                       <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
@@ -422,205 +424,220 @@ export default function ProductQuickView({
                         </div>
                       </div>
                       <div className="py-2 mt-2 sm:px-0">
-                        <div className="flex flex-col px-4 sm:px-6">
-                          <Swiper
-                            slidesPerView={1.2}
-                            spaceBetween={4}
-                            navigation={true}
-                            loop={false}
-                            breakpoints={{
-                              640: {
-                                slidesPerView: 1.2,
-                              },
-                              768: {
-                                slidesPerView: 1,
-                              },
-                              1024: {
-                                slidesPerView: 1.2,
-                              },
-                            }}
-                          >
-                            <div
-                              role="list"
-                              className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0"
-                            >
-                              {productData?.images?.map(
-                                (image: any, idx: number) =>
-                                  image?.tag != 'specification' && (
-                                    <SwiperSlide
-                                      className="px-0"
-                                      key={`${idx}-slider`}
-                                    >
-                                      <div
-                                        key={idx}
-                                        className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto"
-                                      >
-                                        <div className="relative group long-image">
-                                          {image?.image ? (
-                                            <div className="image-container">
-                                              <Image
-                                                priority
-                                                src={
-                                                  generateUri(
-                                                    image?.image,
-                                                    'h=1000&fm=webp'
-                                                  ) || IMG_PLACEHOLDER
-                                                }
-                                                alt={image.name}
-                                                className="object-cover object-center w-full h-full image pdp-image"
-                                                fill
-                                                sizes="320 600 1000"
-                                                blurDataURL={
-                                                  `${image?.image}?h=600&w=400&fm=webp` ||
-                                                  IMG_PLACEHOLDER
-                                                }
-                                              />
-                                            </div>
-                                          ) : (
-                                            <PlayIcon className="object-cover object-center w-full h-full" />
-                                          )}
-                                        </div>
-                                      </div>
-                                    </SwiperSlide>
-                                  )
-                              )}
-                            </div>
-                          </Swiper>
-                        </div>
-                        <div className="flex flex-col px-4 my-4 sm:px-6">
-                          <h4 className="text-xs font-normal text-gray-400">
-                            {productData?.classification?.category}
-                          </h4>
-                          <h1 className="grid grid-cols-12 mb-2 text-xl font-bold tracking-tight text-primary sm:text-lg sm:grid-cols-6">
-                            <div className="col-span-8 sm:col-span-4">
-                              <Link
-                                href={`/${productData?.slug}`}
-                                passHref
-                                onClick={() => setQuickview(undefined)}
+                        <div className="grid grid-cols-1 sm:grid-cols-12">
+                          <div className="sm:col-span-5">
+                            <div className="flex flex-col px-4 sm:px-6 sm:pb-3">
+                              <Swiper
+                                slidesPerView={1.2}
+                                spaceBetween={4}
+                                navigation={true}
+                                loop={false}
+                                breakpoints={{
+                                  640: {
+                                    slidesPerView: 1.2,
+                                  },
+                                  768: {
+                                    slidesPerView: 1,
+                                  },
+                                  1024: {
+                                    slidesPerView: 1.2,
+                                  },
+                                }}
                               >
-                                {productData?.name || productData?.name}{' '}
-                              </Link>
-                            </div>
-                            <div className="col-span-4 pr-2 font-semibold text-right sm:col-span-2 sm:pr-0">
-                              {reviewData?.totalRecord > 0 ? (
-                                <>
-                                  <StarIcon className="relative inline-block w-4 h-4 text-yellow-600 -top-1" />
-                                  <span className="relative inline-block pl-1 text-xs -top-1 text-primary">
-                                    {productData?.rating} (
-                                    {reviewData?.totalRecord})
-                                  </span>
-                                </>
-                              ) : (
-                                <>
-                                  <StarIcon className="relative inline-block w-4 h-4 text-gray-400 -top-1" />
-                                  <span className="relative inline-block pl-1 text-xs text-gray-400 -top-1">
-                                    No Reviews
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                          </h1>
-                        </div>
-                        <div className="flex flex-col px-4 mt-4 sm:px-6">
-                          <p className="mb-2 text-lg font-semibold text-primary sm:text-md">
-                            {productData?.price?.formatted?.withTax}
-
-                            {productData?.listPrice?.raw.tax > 0 ? (
-                              <>
-                                <span className="px-2 text-lg font-normal text-gray-500 line-through sm:text-md">
-                                  {productData?.listPrice?.formatted?.withTax}
-                                </span>
-                                <span className="text-lg font-normal text-red-500 sm:text-md">
-                                  {discount}% off
-                                </span>
-                              </>
-                            ) : null}
-                          </p>
-                        </div>
-                        <div className="sticky bottom-0 flex flex-col px-4 py-4 mt-4 bg-white border-t sm:px-6">
-                          {updatedProduct ? (
-                            <>
-                              {!isEngravingAvailable && (
-                                <div className="flex mt-6 sm:mt-0 sm:flex-col1">
-                                  <Button
-                                    title={buttonConfig.title}
-                                    action={buttonConfig.action}
-                                    buttonType={buttonConfig.type || 'cart'}
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      if (!isInWishList) {
-                                        handleWishList()
-                                      }
-                                    }}
-                                    className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                                  >
-                                    {isInWishList ? (
-                                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                                    ) : (
-                                      <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                                    )}
-                                    <span className="sr-only">
-                                      {BTN_ADD_TO_FAVORITES}
-                                    </span>
-                                  </button>
+                                <div
+                                  role="list"
+                                  className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0"
+                                >
+                                  {productData?.images?.map(
+                                    (image: any, idx: number) =>
+                                      image?.tag != 'specification' && (
+                                        <SwiperSlide
+                                          className="px-0"
+                                          key={`${idx}-slider`}
+                                        >
+                                          <div
+                                            key={idx}
+                                            className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto"
+                                          >
+                                            <div className="relative group long-image">
+                                              {image?.image ? (
+                                                <div className="image-container">
+                                                  <Image
+                                                    priority
+                                                    src={
+                                                      generateUri(
+                                                        image?.image,
+                                                        'h=1000&fm=webp'
+                                                      ) || IMG_PLACEHOLDER
+                                                    }
+                                                    alt={image.name}
+                                                    className="object-cover object-center w-full h-full image pdp-image"
+                                                    fill
+                                                    sizes="320 600 1000"
+                                                    blurDataURL={
+                                                      `${image?.image}?h=600&w=400&fm=webp` ||
+                                                      IMG_PLACEHOLDER
+                                                    }
+                                                  />
+                                                </div>
+                                              ) : (
+                                                <PlayIcon className="object-cover object-center w-full h-full" />
+                                              )}
+                                            </div>
+                                          </div>
+                                        </SwiperSlide>
+                                      )
+                                  )}
                                 </div>
-                              )}
+                              </Swiper>
+                            </div>
+                          </div>
+                          <div className="sm:col-span-7">
+                            <div className="flex flex-col px-4 my-1 sm:px-6">
+                              <h4 className="text-xs font-normal text-gray-400">
+                                {productData?.classification?.category}
+                              </h4>
+                              <h1 className="grid grid-cols-12 mb-2 text-xl font-bold tracking-tight text-primary sm:text-2xl sm:grid-cols-6">
+                                <div className="col-span-8 sm:col-span-4">
+                                  <Link
+                                    href={`/${productData?.slug}`}
+                                    passHref
+                                    onClick={() => setQuickview(undefined)}
+                                  >
+                                    {productData?.name || productData?.name}{' '}
+                                  </Link>
+                                </div>
+                                <div className="col-span-4 pr-2 font-semibold text-right sm:col-span-2 sm:pr-0">
+                                  {reviewData?.totalRecord > 0 ? (
+                                    <>
+                                      <StarIcon className="relative inline-block w-4 h-4 text-yellow-600 -top-1" />
+                                      <span className="relative inline-block pl-1 text-xs -top-1 text-primary">
+                                        {productData?.rating} (
+                                        {reviewData?.totalRecord})
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <StarIcon className="relative inline-block w-4 h-4 text-gray-400 -top-1" />
+                                      <span className="relative inline-block pl-1 text-xs text-gray-400 -top-1">
+                                        No Reviews
+                                      </span>
+                                    </>
+                                  )}
+                                </div>
+                              </h1>
+                            </div>
+                            <div className="flex flex-col px-4 mt-1 sm:px-6">
+                              <p className="mb-2 text-lg font-semibold text-primary sm:text-md">
+                                {productData?.price?.formatted?.withTax}
 
-                              {isEngravingAvailable && (
+                                {productData?.listPrice?.raw.tax > 0 ? (
+                                  <>
+                                    <span className="px-2 text-lg font-normal text-gray-500 line-through sm:text-md">
+                                      {
+                                        productData?.listPrice?.formatted
+                                          ?.withTax
+                                      }
+                                    </span>
+                                    <span className="text-lg font-normal text-red-500 sm:text-md">
+                                      {discount}% off
+                                    </span>
+                                  </>
+                                ) : null}
+                              </p>
+                            </div>
+                            <div className="flex flex-col px-4 py-4 sm:px-6">
+                              {updatedProduct ? (
                                 <>
-                                  <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                                    <Button
-                                      className="block py-3 sm:hidden"
-                                      title={buttonConfig.title}
-                                      action={buttonConfig.action}
-                                      buttonType={buttonConfig.type || 'cart'}
-                                    />
-                                  </div>
-                                  <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                                    <Button
-                                      className="hidden sm:block "
-                                      title={buttonConfig.title}
-                                      action={buttonConfig.action}
-                                      buttonType={buttonConfig.type || 'cart'}
-                                    />
-                                    <button
-                                      className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                                      onClick={() => showEngravingModal(true)}
-                                    >
-                                      <span className="font-bold">
-                                        {GENERAL_ENGRAVING}
-                                      </span>
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        if (!isInWishList) {
-                                          handleWishList()
-                                        }
-                                      }}
-                                      className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                                    >
-                                      {isInWishList ? (
-                                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                                      ) : (
-                                        <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                                      )}
-                                      <span className="sr-only">
-                                        {BTN_ADD_TO_FAVORITES}
-                                      </span>
-                                    </button>
-                                  </div>
+                                  {!isEngravingAvailable && (
+                                    <div className="flex mt-6 sm:mt-0 sm:flex-col1">
+                                      <Button
+                                        title={buttonConfig.title}
+                                        action={buttonConfig.action}
+                                        buttonType={buttonConfig.type || 'cart'}
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          if (!isInWishList) {
+                                            handleWishList()
+                                          }
+                                        }}
+                                        className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                                      >
+                                        {isInWishList ? (
+                                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                                        ) : (
+                                          <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                                        )}
+                                        <span className="sr-only">
+                                          {BTN_ADD_TO_FAVORITES}
+                                        </span>
+                                      </button>
+                                    </div>
+                                  )}
+
+                                  {isEngravingAvailable && (
+                                    <>
+                                      <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                                        <Button
+                                          className="block py-3 sm:hidden"
+                                          title={buttonConfig.title}
+                                          action={buttonConfig.action}
+                                          buttonType={
+                                            buttonConfig.type || 'cart'
+                                          }
+                                        />
+                                      </div>
+                                      <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                                        <Button
+                                          className="hidden sm:block "
+                                          title={buttonConfig.title}
+                                          action={buttonConfig.action}
+                                          buttonType={
+                                            buttonConfig.type || 'cart'
+                                          }
+                                        />
+                                        <button
+                                          className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                                          onClick={() =>
+                                            showEngravingModal(true)
+                                          }
+                                        >
+                                          <span className="font-bold">
+                                            {GENERAL_ENGRAVING}
+                                          </span>
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            if (!isInWishList) {
+                                              handleWishList()
+                                            }
+                                          }}
+                                          className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                                        >
+                                          {isInWishList ? (
+                                            <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                                          ) : (
+                                            <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                                          )}
+                                          <span className="sr-only">
+                                            {BTN_ADD_TO_FAVORITES}
+                                          </span>
+                                        </button>
+                                      </div>
+                                    </>
+                                  )}
                                 </>
-                              )}
-                            </>
-                          ) : null}
-                          {/* <AttributesHandler
+                              ) : null}
+                              {/* <AttributesHandler
                             product={productData}
                             variant={selectedAttrData}
                             setSelectedAttrData={setSelectedAttrData}
                           /> */}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
