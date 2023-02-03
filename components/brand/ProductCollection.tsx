@@ -171,21 +171,21 @@ export default function ProductCollection({
     <div className="bg-white">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
+        <div className="px-4 py-16 text-center sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
             {state.filters[0]?.Value}
           </h1>
-          <h1 className="text-xl mt-2 font-bold tracking-tight text-gray-500">
+          <h1 className="mt-2 text-xl font-bold tracking-tight text-gray-500">
             {data.products.total} results
           </h1>
           <div
             dangerouslySetInnerHTML={{
               __html: brandDetails.description,
             }}
-            className="py-10 px-5 mt-5 text-gray-900"
+            className="px-5 py-10 mt-5 text-gray-900"
           />
         </div>
-        {/* <div className="py-5 w-full justify-end flex max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
+        {/* <div className="flex justify-end w-full max-w-3xl px-4 py-5 mx-auto text-center sm:px-6 lg:max-w-7xl lg:px-8">
           <ProductSort
             routerSortOption={state.sortBy}
             products={data.products}
