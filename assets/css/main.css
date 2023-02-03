@@ -298,3 +298,7 @@
 body {
   background-color: #ffffff !important;
 }
+
+.opacity-0 {
+  opacity: 0;
+}

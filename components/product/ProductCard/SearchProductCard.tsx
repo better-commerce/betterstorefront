@@ -232,13 +232,13 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
                 <span className="sr-only">f</span>
               </button>
             )}
-            {/* <button
+            <button
               type="button"
-              className="relative z-10 w-full px-4 py-2 text-sm text-gray-900 bg-white bg-opacity-75 rounded-md opacity-0 focus:opacity-100 group-hover:opacity-100"
+              className="relative z-10 w-11/12 px-4 py-2 mx-2 text-sm text-white bg-black rounded-md opacity-0 bg-opacity-60 focus:opacity-0 group-hover:opacity-100 bottom-12"
               onClick={() => onViewApiKey(product)}
             >
               Quick View
-            </button> */}
+            </button>
           </div>
 
           <div className="pt-0 text-left">
@@ -251,7 +251,6 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
             ) : (
               <div className="inline-block w-1 h-1 mt-2 mr-1 sm:h-6 sm:w-6 sm:mr-2" />
             )}
-
             <h3 className="text-xs font-normal text-gray-700 truncate sm:text-sm">
               <Link href={`/${currentProductData.link}`}>{product.name}</Link>
             </h3>
