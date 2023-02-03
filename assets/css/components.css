@@ -95,7 +95,9 @@
 .max-w-md {
   max-width: 29.2rem !important;
 }
-
+.max-w-xl {
+  max-width: 60rem !important;
+}
 @media screen and (max-width: 767px) {
   .mobile-image-cart > span,
   .mobile-image-cart img {
