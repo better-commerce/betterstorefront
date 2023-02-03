@@ -159,3 +159,7 @@
     height: auto !important;
   }
 }
+.notify-me-pop{
+  z-index: 99999!important;
+  position: relative;
+}
