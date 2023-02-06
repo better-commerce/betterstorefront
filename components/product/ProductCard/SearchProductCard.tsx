@@ -221,7 +221,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
               </span>
             ) : (
               <button
-                className="absolute bottom-0 right-2 z-99 add-wishlist"
+                className="absolute top-2 right-2 z-99"
                 onClick={handleWishList}
               >
                 <HeartIcon
@@ -234,7 +234,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
             )}
             <button
               type="button"
-              className="relative z-10 w-11/12 px-4 py-2 mx-2 text-sm text-white bg-black rounded-md opacity-0 bg-opacity-60 focus:opacity-0 group-hover:opacity-100 bottom-12"
+              className="absolute z-10 w-11/12 px-4 py-2 mx-2 text-sm text-white bg-black rounded-md opacity-0 bg-opacity-60 focus:opacity-0 group-hover:opacity-100 bottom-2"
               onClick={() => onViewApiKey(product)}
             >
               Quick View
