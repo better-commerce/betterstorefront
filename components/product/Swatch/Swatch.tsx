@@ -14,7 +14,7 @@ interface SwatchProps {
   label?: string | null
 }
 
-const Swatch: React.FC<Omit<ButtonProps, 'variant'> & SwatchProps> = React.memo(
+const Swatch: React.FC<React.PropsWithChildren<Omit<ButtonProps, 'variant'> & SwatchProps>> = React.memo(
   ({
     active,
     className,

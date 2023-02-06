@@ -30,7 +30,7 @@ const LOCALES_MAP: Record<string, LOCALE_DATA> = {
   },
 }
 
-const I18nWidget: FC = () => {
+const I18nWidget: FC<React.PropsWithChildren<unknown>> = () => {
   const [display, setDisplay] = useState(false)
   const {
     locale,
@@ -46,14 +46,14 @@ const I18nWidget: FC = () => {
     <ClickOutside active={display} onClick={() => setDisplay(false)}>
       <nav className={s.root}>
         <div
-          className="flex items-center relative"
+          className="relative flex items-center"
           onClick={() => setDisplay(!display)}
         >
           <button className={s.button} aria-label="Language selector">
             <img
               width="20"
               height="20"
-              className="block mr-2 w-5"
+              className="block w-5 mr-2"
               src={`/${LOCALES_MAP[currentLocale].img.filename}`}
               alt={LOCALES_MAP[currentLocale].img.alt}
             />
@@ -73,19 +73,19 @@ const I18nWidget: FC = () => {
                   aria-label="Close panel"
                   className={s.closeButton}
                 >
-                  <Cross className="h-6 w-6" />
+                  <Cross className="w-6 h-6" />
                 </button>
               </div>
               <ul>
                 {options.map((locale) => (
                   <li key={locale}>
-                    <Link href={currentPath} locale={locale}>
-                      <a
-                        className={cn(s.item)}
-                        onClick={() => setDisplay(false)}
-                      >
-                        {LOCALES_MAP[locale].name}
-                      </a>
+                    <Link
+                      href={currentPath}
+                      locale={locale}
+                      className={cn(s.item)}
+                      onClick={() => setDisplay(false)}
+                    >
+                      {LOCALES_MAP[locale].name}
                     </Link>
                   </li>
                 ))}

@@ -14,8 +14,10 @@ import {
   WISHLIST_SUB_TITLE,
   GENERAL_VIEW_PRODUCT,
   GENERAL_ADD_TO_BASKET,
-  GENERAL_REMOVE
+  GENERAL_REMOVE,
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 export default function Wishlist() {
   const [data, setData] = useState([])
@@ -80,6 +82,7 @@ export default function Wishlist() {
     handleAsync()
   }
 
+  const css = { maxWidth: '80px', height: 'auto' }
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -93,16 +96,14 @@ export default function Wishlist() {
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
-            {!data.length && !isLoading && (
-              <div>{WISHLIST_SUB_TITLE}</div>
-            )}
+            {!data.length && !isLoading && <div>{WISHLIST_SUB_TITLE}</div>}
             {isLoading ? <LoadingDots /> : null}
             <div className="space-y-16 sm:space-y-24">
-              <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
+              <div className="flow-root px-4 mt-6 sm:mt-10 sm:px-0">
                 <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
                   {data.map((product: any) => (
                     <div key={product.id} className="flex py-6 sm:py-10">
-                      <div className="min-w-0 flex-1 lg:flex lg:flex-col">
+                      <div className="flex-1 min-w-0 lg:flex lg:flex-col">
                         <div className="lg:flex-1">
                           <div className="sm:flex">
                             <div>
@@ -120,16 +121,14 @@ export default function Wishlist() {
                               {product.price.formatted.withTax}
                             </p>
                           </div>
-                          <div className="mt-2 flex text-sm font-medium sm:mt-4">
-                            <Link href={`/${product.slug}`}>
-                              <a
-                                href={product.slug}
-                                className="text-indigo-600 hover:text-indigo-500"
-                              >
-                                {GENERAL_VIEW_PRODUCT}
-                              </a>
+                          <div className="flex mt-2 text-sm font-medium sm:mt-4">
+                            <Link
+                              href={`/${product.slug}`}
+                              className="text-indigo-600 hover:text-indigo-500"
+                            >
+                              {GENERAL_VIEW_PRODUCT}
                             </Link>
-                            <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
+                            <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
                               <button
                                 onClick={() => handleAddToCart(product)}
                                 className="text-indigo-600 hover:text-indigo-500"
@@ -137,7 +136,7 @@ export default function Wishlist() {
                                 {GENERAL_ADD_TO_BASKET}
                               </button>
                             </div>
-                            <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
+                            <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
                               <button
                                 onClick={() =>
                                   handleRemoveFromWishlist(product)
@@ -150,20 +149,18 @@ export default function Wishlist() {
                           </div>
                         </div>
                       </div>
-                      <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
-                       <Image
-                            width={80}
-                            height={80}
-                            layout='fixed'
-                            src={product.image}
-                            alt={product.name}
-                            className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52 image"
-                          ></Image>
-                        {/* <img
-                          src={product.image}
+                      <div className="flex-shrink-0 ml-4 sm:m-0 sm:mr-6 sm:order-first">
+                        <Image
+                          width={80}
+                          height={80}
+                          style={css}
+                          src={
+                            generateUri(product.image, 'h=200&fm=webp') ||
+                            IMG_PLACEHOLDER
+                          }
                           alt={product.name}
-                          className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
-                        /> */}
+                          className="object-cover object-center w-20 h-20 col-start-2 col-end-3 rounded-lg sm:col-start-1 sm:row-start-1 sm:row-span-2 sm:w-40 sm:h-40 lg:w-52 lg:h-52 image"
+                        ></Image>
                       </div>
                     </div>
                   ))}

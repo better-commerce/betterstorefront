@@ -9,7 +9,7 @@ interface MarqueeProps {
   variant?: 'primary' | 'secondary'
 }
 
-const Marquee: FC<MarqueeProps> = ({
+const Marquee: FC<React.PropsWithChildren<MarqueeProps>> = ({
   className = '',
   children,
   variant = 'primary',

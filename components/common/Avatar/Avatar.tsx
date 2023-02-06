@@ -6,7 +6,7 @@ interface Props {
   children?: any
 }
 
-const Avatar: FC<Props> = ({}) => {
+const Avatar: FC<React.PropsWithChildren<Props>> = ({}) => {
   let ref = useRef() as React.MutableRefObject<HTMLInputElement>
   let { userAvatar } = useUserAvatar()
 

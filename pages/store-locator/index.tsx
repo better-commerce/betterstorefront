@@ -25,7 +25,7 @@ export default function StoreLocatorPage() {
     <div>
       <input onChange={(e: any) => handleChange(e.target.value)} />
       <button
-        className="bg-gray-900 text-white"
+        className="text-white bg-gray-900"
         type="button"
         onClick={handleStoreFind}
       >

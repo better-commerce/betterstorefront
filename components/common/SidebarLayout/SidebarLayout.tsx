@@ -9,7 +9,7 @@ type ComponentProps = { className?: string } & (
   | { handleBack: () => any; handleClose?: never }
 )
 
-const SidebarLayout: FC<ComponentProps> = ({
+const SidebarLayout: FC<React.PropsWithChildren<ComponentProps>> = ({
   children,
   className,
   handleClose,

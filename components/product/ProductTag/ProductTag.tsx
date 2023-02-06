@@ -9,7 +9,7 @@ interface ProductTagProps {
   fontSize?: number
 }
 
-const ProductTag: React.FC<ProductTagProps> = ({
+const ProductTag: React.FC<React.PropsWithChildren<ProductTagProps>> = ({
   name,
   price,
   className = '',

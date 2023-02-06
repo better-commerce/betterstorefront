@@ -6,7 +6,7 @@ import { Layout } from '@components/common'
 import getBrands from '@framework/api/endpoints/catalog/brands'
 import { useState } from 'react'
 import Link from 'next/link'
-import { SearchIcon } from '@heroicons/react/outline'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 
@@ -62,15 +62,15 @@ function BrandsPage({ brands }: any) {
   return (
     <div className="bg-white">
       {/* Mobile menu */}
-      <main className="pb-24 max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
-        <div className="text-center sm:py-16 py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="sm:text-4xl text-2xl font-extrabold tracking-tight text-gray-900">
+      <main className="pb-24 mx-auto overflow-hidden max-w-7xl sm:px-6 lg:px-8">
+        <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-8">
+          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
             Brands
           </h1>
-          <h1 className="sm:text-xl text-md mt-2 font-medium tracking-tight text-gray-500">
+          <h1 className="mt-2 font-medium tracking-tight text-gray-500 sm:text-xl text-md">
             {totalResults} results
           </h1>
-          <div className="w-full py-5 flex justify-center items-center flex-wrap">
+          <div className="flex flex-wrap items-center justify-center w-full py-5">
             {ALPHABET.split('').map((letter: any, key: number) => {
               const brandExists = !!normalizedBrands.find(
                 (brand: any) =>
@@ -79,35 +79,35 @@ function BrandsPage({ brands }: any) {
               if (brandExists) {
                 return (
                   <Link key={key} passHref href={`#${letter.toUpperCase()}`}>
-                    <a className="hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 mr-1 mt-2 py-1 px-2 text-gray-900 border font-extrabold sm:text-lg text-sm">
+                    <span className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg">
                       {letter.toUpperCase()}
-                    </a>
+                    </span>
                   </Link>
                 )
               }
               return (
                 <span
                   key={key}
-                  className="sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 mr-1 mt-2 py-1 px-2 text-gray-900 border font-extrabold sm:text-lg text-sm opacity-40 pointer-events-none"
+                  className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border pointer-events-none sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg opacity-40"
                 >
                   {letter.toUpperCase()}
                 </span>
               )
             })}
           </div>
-          <div className="flex justify-center items-center py-5 w-full">
-            <div className="min-w-searchbar flex w-1/3 flex-row border border-gray-300 rounded-md py-2 px-4 shadow-sm ">
+          <div className="flex items-center justify-center w-full py-5">
+            <div className="flex flex-row w-1/3 px-4 py-2 border border-gray-300 rounded-md shadow-sm min-w-searchbar ">
               <label className="hidden" htmlFor={'search-bar'}>
                 Search
               </label>
               <input
                 id={'search-bar'}
-                className="text-gray-700 appearance-none min-w-0 w-full bg-white  placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                className="w-full min-w-0 text-gray-700 placeholder-gray-500 bg-white appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 placeholder="Search..."
                 onChange={(e: any) => handleSearch(e.target.value)}
               />
               <div className="text-gray-400">
-                <SearchIcon className="w-6 h-6" aria-hidden="true" />
+                <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
               </div>
             </div>
           </div>
@@ -116,21 +116,21 @@ function BrandsPage({ brands }: any) {
           return (
             <div
               key={idx}
-              className="sm:px-6 lg:px-8 px-4 flex flex-col border-t sm:py-10 py-4"
+              className="flex flex-col px-4 py-4 border-t sm:px-6 lg:px-8 sm:py-10"
             >
               <h2
                 id={brand.title.toUpperCase()}
-                className="text-gray-900 sm:text-4xl text-2xl font-extrabold"
+                className="text-2xl font-extrabold text-gray-900 sm:text-4xl"
               >
                 {brand.title.toUpperCase()}
               </h2>
-              <div className="flex justify-between items-center sm:py-2 py-0 flex-wrap">
+              <div className="flex flex-wrap items-center justify-between py-0 sm:py-2">
                 {brand.results.map((result: any, key: number) => {
                   return (
                     <div
                       key={key}
                       style={{ flex: '0 0 33.333333%' }}
-                      className="text-gray-900 sm:inline-flex flex "
+                      className="flex text-gray-900 sm:inline-flex "
                     >
                       <Link
                         passHref
@@ -141,9 +141,9 @@ function BrandsPage({ brands }: any) {
                           },
                         }}
                       >
-                        <a className="sm:text-lg text-sm sm:py-5 py-2 hover:underline cursor-pointer">
+                        <span className="py-2 text-sm cursor-pointer sm:text-lg sm:py-5 hover:underline">
                           {result.manufacturerName}
-                        </a>
+                        </span>
                       </Link>
                     </div>
                   )

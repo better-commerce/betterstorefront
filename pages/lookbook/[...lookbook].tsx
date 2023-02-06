@@ -17,15 +17,16 @@ import { NextSeo } from 'next-seo'
 import Image from 'next/image'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import {IMG_PLACEHOLDER, SHOP_THE_LOOK} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, SHOP_THE_LOOK } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
+import { generateUri } from '@commerce/utils/uri-util'
 function LookbookDetailPage({ data, slug }: any) {
   const router = useRouter()
   const { basketId, openCart, setCartItems } = useUI()
   const [products, setProducts] = useState(data.products)
   const loadProducts = async () => {
     const response: any = await axios.post(NEXT_GET_SINGLE_LOOKBOOK, { slug })
-    setProducts(response.data.products)
+    setProducts(response?.data?.products)
   }
 
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -40,10 +41,10 @@ function LookbookDetailPage({ data, slug }: any) {
     if (slug) loadProducts()
   }, [])
 
-  if (router.isFallback && !data.id) return null
+  if (router?.isFallback && !data?.id) return null
 
   const handleBulk = async () => {
-    const computedProducts = products.results.reduce((acc: any, obj: any) => {
+    const computedProducts = products?.results?.reduce((acc: any, obj: any) => {
       acc.push({
         ProductId: obj.recordId || obj.productId,
         BasketId: basketId,
@@ -84,43 +85,50 @@ function LookbookDetailPage({ data, slug }: any) {
       basketId,
       products: computedProducts,
     })
-    if (newCart.data) {
-      setCartItems(newCart.data)
+    if (newCart?.data) {
+      setCartItems(newCart?.data)
       openCart()
     }
   }
 
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
-    <div className="bg-white w-full mx-auto">
+    <div className="w-full mx-auto bg-white">
       {/* Mobile menu */}
       <main className="pb-24">
-        <div className="text-left py-0 px-4 sm:px-0 lg:px-0 flex items-center flex-col">
-          <div className="w-full bg-gray-200 rounded-sm overflow-hidden">
-              <div className='image-container lookbook-image'>
-                <Image
-                  layout='fill'
-                  src={data.mainImage || IMG_PLACEHOLDER}
-                  alt={data.name}
-                  className="w-full h-screen min-h-screen object-center object-cover image"
-                />
-                <div className='lookbook-data'>
-                    <h1 className="py-1 text-4xl font-semibold tracking-tight text-white">
-                      {data.name}
-                    </h1>
-                    <h2 className="pt-4 text-md sm:w-1/3 font-normal tracking-tight text-white">{data.description}</h2>
-                    <button
-                      onClick={handleBulk}
-                      className="font-semibold uppercase bg-black hover:bg-gray-900 text-lg py-3 px-10 mt-5 text-white"
-                    >
-                      {SHOP_THE_LOOK}
-                    </button>
-                </div>
-              </div>            
+        <div className="flex flex-col items-center px-4 py-0 text-left sm:px-0 lg:px-0">
+          <div className="w-full overflow-hidden bg-gray-200 rounded-sm">
+            <div className="image-container lookbook-image">
+              <Image
+                style={css}
+                width={1000}
+                height={400}
+                src={
+                  generateUri(data.mainImage, 'h=800&fm=webp') || IMG_PLACEHOLDER
+                }
+                alt={data.name}
+                className="object-cover object-center w-full h-screen min-h-screen image"
+              />
+              <div className="lookbook-data">
+                <h1 className="py-1 text-4xl font-semibold tracking-tight text-white">
+                  {data.name}
+                </h1>
+                <h2 className="pt-4 font-normal tracking-tight text-white text-md sm:w-1/3">
+                  {data.description}
+                </h2>
+                <button
+                  onClick={handleBulk}
+                  className="px-10 py-3 mt-5 text-lg font-semibold text-white uppercase bg-black hover:bg-gray-900"
+                >
+                  {SHOP_THE_LOOK}
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="mt-5 sm:w-4/5 mx-auto">
+          <div className="mx-auto mt-5 sm:w-4/5">
             <ProductGrid
               products={products}
-              currentPage={products.currentpage}
+              currentPage={products?.currentpage}
               handlePageChange={() => {}}
               handleInfiniteScroll={() => {}}
             />
@@ -128,24 +136,24 @@ function LookbookDetailPage({ data, slug }: any) {
         </div>
       </main>
       <NextSeo
-        title={data.name}
-        description={data.description}
+        title={data?.name}
+        description={data?.description}
         additionalMetaTags={[
           {
             name: 'keywords',
-            content: data.metaKeywords,
+            content: data?.metaKeywords,
           },
         ]}
         openGraph={{
           type: 'website',
-          title: data.metaTitle,
-          description: data.metaDescription,
+          title: data?.metaTitle,
+          description: data?.metaDescription,
           images: [
             {
-              url: data.mainImage,
+              url: data?.mainImage,
               width: 800,
               height: 600,
-              alt: data.name,
+              alt: data?.name,
             },
           ],
         }}
@@ -160,17 +168,17 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
-  const slug: any = params!.lookbook;
-  const response = await getSingleLookbook(slug[0]);
+  const slug: any = params!.lookbook
+  const response = await getSingleLookbook(slug[0])
 
-  const infraPromise = commerce.getInfra();
-  const infra = await infraPromise;
+  const infraPromise = commerce.getInfra()
+  const infra = await infraPromise
   return {
     props: {
       data: response,
       slug: slug[0],
       globalSnippets: infra?.snippets ?? [],
-      snippets: response?.snippets
+      snippets: response?.snippets,
     },
     revalidate: 200,
   }
@@ -182,10 +190,10 @@ const PAGE_TYPE = PAGE_TYPES['Page']
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const data = await getLookbooks()
-  let paths = data.map((lookbook: any) => {
-    if (!lookbook.slug.includes('lookbook/')) {
-      return `/lookbook/${lookbook.slug}`
-    } else return `/${lookbook.slug}`
+  let paths = data?.map((lookbook: any) => {
+    if (!lookbook?.slug?.includes('lookbook/')) {
+      return `/lookbook/${lookbook?.slug}`
+    } else return `/${lookbook?.slug}`
   })
 
   return {

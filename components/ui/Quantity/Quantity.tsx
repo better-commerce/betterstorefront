@@ -11,7 +11,7 @@ export interface QuantityProps {
   max?: number
 }
 
-const Quantity: FC<QuantityProps> = ({
+const Quantity: FC<React.PropsWithChildren<QuantityProps>> = ({
   value,
   increase,
   decrease,

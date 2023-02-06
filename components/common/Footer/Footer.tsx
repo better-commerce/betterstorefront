@@ -17,7 +17,7 @@ interface Props {
   config: []
 }
 
-const Footer: FC<Props> = ({ config }) => {
+const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
   const router = useRouter()
 
   const handleRedirect = (path: string) => (path ? router.push(path) : {})

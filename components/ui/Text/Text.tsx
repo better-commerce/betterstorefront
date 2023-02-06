@@ -17,7 +17,7 @@ interface TextProps {
 
 type Variant = 'heading' | 'body' | 'pageHeading' | 'sectionHeading'
 
-const Text: FunctionComponent<TextProps> = ({
+const Text: FunctionComponent<React.PropsWithChildren<TextProps>> = ({
   style,
   className = '',
   variant = 'body',
@@ -26,7 +26,7 @@ const Text: FunctionComponent<TextProps> = ({
   onClick,
 }) => {
   const componentsMap: {
-    [P in Variant]: React.ComponentType<any> | string
+    [P in Variant]: React.ComponentType<React.PropsWithChildren<any>> | string
   } = {
     body: 'div',
     heading: 'h1',
@@ -37,7 +37,7 @@ const Text: FunctionComponent<TextProps> = ({
   const Component:
     | JSXElementConstructor<any>
     | React.ReactElement<any>
-    | React.ComponentType<any>
+    | React.ComponentType<React.PropsWithChildren<any>>
     | string = componentsMap![variant!]
 
   const htmlContentProps = html

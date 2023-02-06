@@ -6,8 +6,8 @@
 
 @tailwind utilities;
 
-.inset-0{
-  z-index: 9999!important;
+.inset-0 {
+  z-index: 9999 !important;
   top: 0px;
   right: 0px;
   bottom: 0px;
@@ -269,11 +269,10 @@
   height: 18rem !important;
 }
 
-@media screen and (min-width:768px) {
+@media screen and (min-width: 768px) {
   .sm\:min-h-screen {
     min-height: 100vh !important;
   }
-  
 }
 .h-full {
   height: 100% !important;
@@ -283,12 +282,23 @@
   height: 11rem !important;
 }
 
-.marquee-container .overlay{
-  --gradient-color: transparent!important;
+.marquee-container .overlay {
+  --gradient-color: transparent !important;
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width: 767px) {
   .sm\:h-72 {
     height: 12rem !important;
   }
+}
+.min-h-image {
+  min-height: 330px;
+}
+
+body {
+  background-color: #ffffff !important;
+}
+
+.opacity-0 {
+  opacity: 0;
 }
