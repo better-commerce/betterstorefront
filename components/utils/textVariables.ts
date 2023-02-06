@@ -239,6 +239,9 @@ export const VALIDATION_ENTER_WEBSITE_LINK = 'Please enter website link'
 export const BTN_SUBMIT = 'Submit'
 export const BTN_NOTIFY_ME = 'Notify me'
 export const BTN_PRE_ORDER = 'Pre-order'
+export const CURRENCY_SYMBOL_RUPEE = "₹"
+export const GENERAL_ADD_TO_BAG = 'Add to Bag'
+export const ADDED_TO_WISH = "Added to Wishlist"
 export const BTN_ADD_TO_WISHLIST = 'Add to wishlist'
 export const ALERT_SUCCESS_WISHLIST_MESSAGE = 'Wishlisted'
 export const PRODUCT_SPECIFICATION = 'Product specification'
@@ -304,6 +307,8 @@ export const BTN_BACK_TO_HOME = 'Back to Home'
 export const IMG_PLACEHOLDER =
   'https://liveocxcdn.azureedge.net/betterstore/images/noimagefound.png'
 export const SHOP_THE_LOOK = 'Shop the look'
+
+export const QUICK_VIEW = 'Quick View'
 export const BAD_URL_TEXT = 'This is a bad url. please go back to'
 export const ALL_CATEGORY = 'all categories'
 export const RESULTS = 'results'

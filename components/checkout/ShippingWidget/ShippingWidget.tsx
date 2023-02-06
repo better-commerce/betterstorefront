@@ -9,7 +9,7 @@ interface ComponentProps {
   isValid?: boolean
 }
 
-const ShippingWidget: FC<ComponentProps> = ({ onClick, isValid }) => {
+const ShippingWidget: FC<React.PropsWithChildren<ComponentProps>> = ({ onClick, isValid }) => {
   /* Shipping Address
   Only available with checkout set to true -
   This means that the provider does offer checkout functionality. */

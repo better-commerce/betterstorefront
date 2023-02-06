@@ -290,7 +290,7 @@ function uiReducer(state: State, action: Action) {
   }
 }
 
-export const UIProvider: FC = (props) => {
+export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
   const Router = useRouter()
 
   const [state, dispatch] = React.useReducer(uiReducer, initialState)
@@ -605,7 +605,7 @@ export const useUI = () => {
   return context
 }
 
-export const ManagedUIContext: FC = ({ children }) => (
+export const ManagedUIContext: FC<React.PropsWithChildren<unknown>> = ({ children }) => (
   <UIProvider>
     <ThemeProvider>{children}</ThemeProvider>
   </UIProvider>

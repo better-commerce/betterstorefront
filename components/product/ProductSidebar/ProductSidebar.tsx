@@ -16,7 +16,7 @@ interface ProductSidebarProps {
   className?: string
 }
 
-const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
+const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ product, className }) => {
   const addItem = useAddItem()
   const { openSidebar } = useUI()
   const [loading, setLoading] = useState(false)

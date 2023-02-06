@@ -38,7 +38,7 @@ interface Form extends HTMLFormElement {
   country: HTMLSelectElement
 }
 
-const PaymentMethodView: FC = () => {
+const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
   const { setSidebarView } = useUI()
   const addCard = useAddCard()
 

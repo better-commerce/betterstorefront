@@ -9,7 +9,13 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
-import { HeartIcon } from '@heroicons/react/outline'
+import {
+  ArrowsPointingOutIcon,
+  CursorArrowRaysIcon,
+  EyeIcon,
+  HeartIcon,
+  PlusSmallIcon,
+} from '@heroicons/react/24/outline'
 import { round } from 'lodash'
 import {
   ALERT_SUCCESS_WISHLIST_MESSAGE,
@@ -19,8 +25,10 @@ import {
   GENERAL_ADD_TO_BASKET,
   GENERAL_PRICE_LABEL_RRP,
   IMG_PLACEHOLDER,
+  QUICK_VIEW,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import QuickViewModal from '@components/product/QuickView/ProductQuickView'
 interface Props {
   product: any
 }
@@ -39,8 +47,10 @@ interface Attribute {
   fieldValues?: []
 }
 
-const SearchProductCard: FC<Props> = ({ product }) => {
+const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const [isInWishList, setItemsInWishList] = useState(false)
+  const [isQuickview, setQuickview] = useState(undefined)
+  const [isQuickviewOpen, setQuickviewOpen] = useState(false)
   const [currentProductData, setCurrentProductData] = useState({
     image: product.image,
     link: product.slug,
@@ -162,37 +172,46 @@ const SearchProductCard: FC<Props> = ({ product }) => {
   }
 
   const buttonConfig = buttonTitle()
-  const saving  = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
-  const discount  = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
+  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
+  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
+  const css = { maxWidth: '100%', height: 'auto' }
+  const onViewApiKey = (isQuickview: any) => {
+    setQuickview(isQuickview)
+    setQuickviewOpen(true)
+  }
+
   return (
-    <div className="border-gray-100">
-    <div key={product.id} className="relative py-3 sm:py-3">
-        
-      <Link
-        passHref
-        href={`/${currentProductData.link}`}
-        key={'data-product' + currentProductData.link}
-      >
-        <a href={currentProductData.link}>
-          <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 hover:opacity-75">
+    <>
+      <div className="bg-white">
+        <div key={product.id} className="relative py-3 sm:py-3">
+          <div className="relative overflow-hidden group aspect-w-1 aspect-h-1 hover:opacity-75">
+            <Link
+              passHref
+              href={`/${currentProductData.link}`}
+              key={'data-product' + currentProductData.link}
+            >
               <Image
                 priority
-                src={generateUri(currentProductData.image, "h=400&fm=webp") || IMG_PLACEHOLDER} 
+                src={
+                  generateUri(currentProductData.image, 'h=500&fm=webp') ||
+                  IMG_PLACEHOLDER
+                }
                 alt={product.name}
                 onMouseEnter={() => handleHover('enter')}
                 onMouseLeave={() => handleHover('leave')}
-                className="w-full sm:h-full h-full object-center object-cover"
-                layout='responsive'
+                className="object-cover object-center w-full h-full rounded sm:h-full min-h-image"
+                style={css}
                 width={400}
                 height={600}
-              ></Image>   
+              ></Image>
+            </Link>
             {buttonConfig.isPreOrderEnabled && (
-              <div className="bg-yellow-400 absolute py-1 px-1 rounded-sm top-2">
+              <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
                 {BTN_PRE_ORDER}
               </div>
             )}
             {buttonConfig.isNotifyMeEnabled && (
-              <div className="bg-red-400 text-white absolute py-1 px-1 rounded-sm top-2">
+              <div className="absolute px-1 py-1 text-white bg-red-400 rounded-sm top-2">
                 {BTN_NOTIFY_ME}
               </div>
             )}
@@ -201,61 +220,80 @@ const SearchProductCard: FC<Props> = ({ product }) => {
                 {ALERT_SUCCESS_WISHLIST_MESSAGE}
               </span>
             ) : (
-
               <button
-                  className="absolute right-2 bottom-0 z-99 add-wishlist"
-                  onClick={handleWishList}
+                className="absolute bottom-0 right-2 z-99 add-wishlist"
+                onClick={handleWishList}
               >
-                  <HeartIcon
-                      className="flex-shrink-0 h-8 w-8 z-50 text-gray-800 hover:text-gray-500 rounded-3xl p-1 opacity-80"
-                      aria-hidden="true"
-              />
-                  <span className="ml-2 text-sm font-medium text-gray-700 hover:text-red-800"></span>
-                  <span className="sr-only">f</span>
-              </button>            
-            )}   
+                <HeartIcon
+                  className="z-50 flex-shrink-0 w-8 h-8 p-1 text-gray-800 hover:text-gray-500 rounded-3xl opacity-80"
+                  aria-hidden="true"
+                />
+                <span className="ml-2 text-sm font-medium text-gray-700 hover:text-red-800"></span>
+                <span className="sr-only">f</span>
+              </button>
+            )}
+            <button
+              type="button"
+              className="relative z-10 w-11/12 px-4 py-2 mx-2 text-sm text-white bg-black rounded-md opacity-0 bg-opacity-60 focus:opacity-0 group-hover:opacity-100 bottom-12"
+              onClick={() => onViewApiKey(product)}
+            >
+              Quick View
+            </button>
           </div>
-        </a>
-      </Link>
 
-      <div className="pt-0 text-left">
-        {hasColorVariation ? (
-          <AttributeSelector
-            attributes={product.variantProductsAttributeMinimal}
-            onChange={handleVariableProduct}
-            link={currentProductData.link}
-          />
-        ) : (
-          <div className="sm:h-1 sm:w-1 h-1 w-1 sm:mr-2 mr-1 mt-2 inline-block" />
-        )}
-        
-        <h3 className="sm:text-sm text-xs font-normal text-gray-700 truncate">
-          <Link href={`/${currentProductData.link}`}>
-            <a href={`/${currentProductData.link}`}>{product.name}</a>
-          </Link>
-        </h3>
+          <div className="pt-0 text-left">
+            {hasColorVariation ? (
+              <AttributeSelector
+                attributes={product.variantProductsAttributeMinimal}
+                onChange={handleVariableProduct}
+                link={currentProductData.link}
+              />
+            ) : (
+              <div className="inline-block w-1 h-1 mt-2 mr-1 sm:h-6 sm:w-6 sm:mr-2" />
+            )}
+            <h3 className="text-xs font-normal text-gray-700 truncate sm:text-sm">
+              <Link href={`/${currentProductData.link}`}>{product.name}</Link>
+            </h3>
+            <div className="grid grid-cols-12">
+              <div className="col-span-9">
+                <p className="mt-1 font-bold text-gray-900 sm:mt-1 text-md">
+                  {product?.price?.formatted?.withTax}
+                  {product?.listPrice?.raw?.withTax > 0 &&
+                    product?.listPrice?.raw?.withTax !=
+                      product?.price?.raw?.withTax && (
+                      <>
+                        <span className="px-2 text-sm font-normal text-gray-400 line-through">
+                          {product?.listPrice?.formatted?.withTax}
+                        </span>
+                        <span className="text-sm font-semibold text-red-600">
+                          {discount}% Off
+                        </span>
+                      </>
+                    )}
+                </p>
+              </div>
+            </div>
 
-        <p className="sm:mt-1 mt-1 font-bold text-md text-gray-900">
-          {product?.price?.formatted?.withTax}
-          {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax &&
-              <>
-                <span className='px-2 text-sm line-through font-normal text-gray-400'>{product?.listPrice?.formatted?.withTax}</span>
-                <span className='text-red-600 text-sm font-semibold'>{discount}% Off</span>
-              </>
-            }
-        </p>            
-        <div className="flex flex-col">
-          <Button
-            className="mt-2 hidden"
-            title={buttonConfig.title}
-            action={buttonConfig.action}
-            type="button"
-            buttonType={buttonConfig.buttonType || 'cart'}
-          />            
+            <div className="flex flex-col">
+              <Button
+                className="hidden mt-2"
+                title={buttonConfig.title}
+                action={buttonConfig.action}
+                type="button"
+                buttonType={buttonConfig.buttonType || 'cart'}
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+      <QuickViewModal
+        isQuikview={isQuickview}
+        setQuickview={setQuickview}
+        productData={isQuickview}
+        isQuickviewOpen={isQuickviewOpen}
+        setQuickviewOpen={setQuickviewOpen}
+      />
+    </>
   )
 }
 

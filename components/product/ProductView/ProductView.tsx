@@ -2,8 +2,8 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { useState, useEffect, Fragment, useCallback } from 'react'
 import { Tab } from '@headlessui/react'
-import { HeartIcon } from '@heroicons/react/outline'
-import { StarIcon, PlayIcon } from '@heroicons/react/solid'
+import { HeartIcon } from '@heroicons/react/24/outline'
+import { StarIcon, PlayIcon } from '@heroicons/react/24/solid'
 import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
@@ -16,7 +16,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import { Dialog, Transition } from '@headlessui/react'
-import { XIcon, PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline'
+import { XMarkIcon, PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
 import {
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
@@ -50,21 +50,28 @@ import {
   SLUG_TYPE_MANUFACTURER,
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
-import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
+import {
+  ELEM_ATTR,
+  PDP_ELEM_SELECTORS,
+} from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { round } from 'lodash'
-import ImageZoom from "react-image-zooom";
+import ImageZoom from 'react-image-zooom'
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
-const AttributesHandler = dynamic(() => import('./AttributesHandler'));
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'));
-const RelatedProducts = dynamic(() => import('@components/product/RelatedProducts'));
-const Bundles = dynamic(() => import('@components/product/Bundles'));
-const Reviews = dynamic(() => import('@components/product/Reviews'));
-const PriceMatch = dynamic(() => import('@components/product/PriceMatch'));
-const Engraving = dynamic(() => import('@components/product/Engraving'));
-const ProductDetails = dynamic(() => import('@components/product/ProductDetails'));
-const Button = dynamic(() => import('@components/ui/IndigoButton'));
+const AttributesHandler = dynamic(() => import('./AttributesHandler'))
+const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
+const RelatedProducts = dynamic(
+  () => import('@components/product/RelatedProducts')
+)
+const Bundles = dynamic(() => import('@components/product/Bundles'))
+const Reviews = dynamic(() => import('@components/product/Reviews'))
+const PriceMatch = dynamic(() => import('@components/product/PriceMatch'))
+const Engraving = dynamic(() => import('@components/product/Engraving'))
+const ProductDetails = dynamic(
+  () => import('@components/product/ProductDetails')
+)
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -86,7 +93,7 @@ export default function ProductView({
   setEntities,
   recordEvent,
   slug,
-  isPreview = false
+  isPreview = false,
 }: any) {
   const {
     openNotifyUser,
@@ -103,7 +110,7 @@ export default function ProductView({
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
-  const [previewImg, setPreviewImg] = useState<any>();
+  const [previewImg, setPreviewImg] = useState<any>()
 
   const product = updatedProduct || data
 
@@ -113,12 +120,11 @@ export default function ProductView({
     ...product,
   })
 
-
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
 
   const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
-    const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW;;
+    const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW
     const response: any = await axios.post(url, { slug: slug })
     //console.log(JSON.stringify(response?.data))
     if (response?.data?.product) {
@@ -197,12 +203,11 @@ export default function ProductView({
   }
 
   const handleImgLoadT = (image: any) => {
-    setPreviewImg(image);
+    setPreviewImg(image)
   }
 
-
   const handlePreviewClose = () => {
-    setPreviewImg(undefined);
+    setPreviewImg(undefined)
   }
   const buttonTitle = () => {
     let buttonConfig: any = {
@@ -405,13 +410,12 @@ export default function ProductView({
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
-
   const handleProductBundleUpdate = (bundledProduct: any) => {
     //debugger;
     if (bundledProduct && bundledProduct.id) {
-      let clonedProduct = Object.assign({}, updatedProduct);
+      let clonedProduct = Object.assign({}, updatedProduct)
       if (clonedProduct && clonedProduct.componentProducts) {
-        setUpdatedProduct(clonedProduct);
+        setUpdatedProduct(clonedProduct)
       }
     }
   }
@@ -441,32 +445,33 @@ export default function ProductView({
           slidesToShow: 2,
           slidesToScroll: 1,
           infinite: true,
-          dots: true
-        }
+          dots: true,
+        },
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          initialSlide: 1
-        }
+          initialSlide: 1,
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
-  };
-  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
-  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  }
+  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
+  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
+  const css = { maxWidth: '100%', height: 'auto' }
   return (
-    <div className="bg-white page-container md:w-4/5 mx-auto">
+    <div className="mx-auto bg-white page-container md:w-4/5">
       {/* Mobile menu */}
-      <div className="pt-2 sm:pt-6 sm:px-0 px-4">
+      <div className="px-4 pt-2 sm:pt-6 sm:px-0">
         {breadcrumbs && (
           <BreadCrumbs items={breadcrumbs} currentProduct={product} />
         )}
@@ -476,18 +481,20 @@ export default function ProductView({
           {/* Product */}
           <div className="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start">
             {/* Image gallery */}
-            <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp">
+            <Tab.Group
+              as="div"
+              className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp"
+            >
               {/* Image selector */}
-              <div className="grid sm:grid-cols-12 grid-cols-1 sm:gap-x-8">
-                <div className='col-span-12 px-4 sm:px-0'>
+              <div className="grid grid-cols-1 sm:grid-cols-12 sm:gap-x-8">
+                <div className="col-span-12 px-4 sm:px-0">
                   {/*MOBILE PRODUCT IMAGE SLIDER*/}
-                  <div className='block sm:hidden w-full mx-auto pt-6 sm:pt-0'>
+                  <div className="block w-full pt-6 mx-auto sm:hidden sm:pt-0">
                     <Swiper
                       slidesPerView={1}
-                      spaceBetween={10}
+                      spaceBetween={4}
                       navigation={true}
                       loop={true}
-
                       breakpoints={{
                         640: {
                           slidesPerView: 1,
@@ -502,30 +509,39 @@ export default function ProductView({
                     >
                       <div
                         role="list"
-                        className="mx-4 inline-flex space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0"
+                        className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0"
                       >
                         {content?.map((image: any, idx) => (
                           <SwiperSlide className="px-0" key={`${idx}-slider`}>
                             <div
                               key={idx}
-                              className="cursor-pointer w-full inline-flex flex-col text-center lg:w-auto"
+                              className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto"
                             >
-                              <div className="group relative">
+                              <div className="relative group">
                                 {image.image ? (
-                                  <div className='image-container'>
+                                  <div className="image-container">
                                     <Image
                                       priority
-                                      src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}
+                                      src={
+                                        generateUri(
+                                          image.image,
+                                          'h=1000&fm=webp'
+                                        ) || IMG_PLACEHOLDER
+                                      }
                                       alt={image.name}
-                                      className="w-full h-full object-center object-cover image"
-                                      layout='responsive'
-                                      sizes='320 600 1000'
-                                      width={600} height={1000}
-                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
+                                      className="object-cover object-center w-full h-full image"
+                                      style={css}
+                                      sizes="320 600 1000"
+                                      width={600}
+                                      height={1000}
+                                      blurDataURL={
+                                        `${image.image}?h=600&w=400&fm=webp` ||
+                                        IMG_PLACEHOLDER
+                                      }
                                     />
                                   </div>
                                 ) : (
-                                  <PlayIcon className="h-full w-full object-center object-cover" />
+                                  <PlayIcon className="object-cover object-center w-full h-full" />
                                 )}
                               </div>
                             </div>
@@ -536,40 +552,57 @@ export default function ProductView({
                   </div>
                   {/*DESKTOP PRODUCT IMAGE SLIDER*/}
                   <div className="hidden w-full max-w-2xl mx-auto sm:block lg:max-w-none">
-                    <Tab.List className="grid sm:grid-cols-2 grid-cols-1 gap-6">
+                    <Tab.List className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                       {content?.map((image: any, idx) => (
-                        <Tab
-                          key={`${idx}-tab`}
-                        >
+                        <Tab key={`${idx}-tab`}>
                           {() => (
                             <>
                               <span className="sr-only">{image.name}</span>
                               <span className="relative">
                                 {image.image ? (
-                                  <div className='image-container'>
+                                  <div className="image-container">
                                     {/* <ControlledZoom isZoomed={isZoomedT} onZoomChange={handleZoomChangeT}> */}
-                                    <ImageZoom src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}  alt={image.name} 
-                                     priority
-                                     className="w-full h-full object-center object-cover image"
-                                     layout='responsive'
-                                     sizes='320 600 1000'
-                                     width={600} height={1000}
-                                    />
-                                    {/* <Image
-                                      priority
-                                      src={generateUri(image.image, "h=1000&fm=webp") || IMG_PLACEHOLDER}
+                                    {/* <ImageZoom
+                                      src={
+                                        generateUri(
+                                          image.image,
+                                          'h=1000&fm=webp'
+                                        ) || IMG_PLACEHOLDER
+                                      }
                                       alt={image.name}
-                                      className="w-full h-full object-center object-cover image"
-                                      layout='responsive'
-                                      sizes='320 600 1000'
-                                      width={600} height={1000}
-                                      onClick={(ev: any) => handleImgLoadT(image.image)}
-                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
+                                      priority
+                                      className="object-cover object-center w-full h-full image"
+                                      style={css}
+                                      sizes="320 600 1000"
+                                      width={600}
+                                      height={1000}
                                     /> */}
+                                    <Image
+                                      priority
+                                      src={
+                                        generateUri(
+                                          image.image,
+                                          'h=700&fm=webp'
+                                        ) || IMG_PLACEHOLDER
+                                      }
+                                      alt={image.name}
+                                      className="o`bject-cover object-center w-full h-full image"
+                                      style={css}
+                                      sizes="320 600 1000"
+                                      width={600}
+                                      height={1000}
+                                      onClick={(ev: any) =>
+                                        handleImgLoadT(image.image)
+                                      }
+                                      blurDataURL={
+                                        `${image.image}?h=600&w=400&fm=webp` ||
+                                        IMG_PLACEHOLDER
+                                      }
+                                    />
                                     {/* </ControlledZoom> */}
                                   </div>
                                 ) : (
-                                  <PlayIcon className="h-full w-full object-center object-cover" />
+                                  <PlayIcon className="object-cover object-center w-full h-full" />
                                 )}
                               </span>
                             </>
@@ -583,27 +616,30 @@ export default function ProductView({
             </Tab.Group>
 
             {/* Product info */}
-            <div className="sm:mt-10 mt-2 px-4 sm:px-0 sm:mt-16 lg:mt-0 lg:col-span-5">
-              <h3 className="sm:text-md text-sm uppercase font-semibold sm:font-bold tracking-tight text-gray-700 mb-2">
+            <div className="px-4 mt-2 sm:mt-10 sm:px-0 lg:mt-0 lg:col-span-5">
+              <h3 className="mb-2 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}
               </h3>
-              <h1 className="sm:text-2xl text-lg font-normal tracking-tight text-black">
+              <h1 className="text-lg font-normal tracking-tight text-black sm:text-2xl">
                 {selectedAttrData.name || selectedAttrData.productName}
               </h1>
-              <p className="text-gray-500 sm:text-md text-sm mt-3 sm:mt-2 uppercase">
-                <strong>{GENERAL_REFERENCE}:</strong> {selectedAttrData.stockCode}
+              <p className="mt-3 text-sm text-gray-500 uppercase sm:text-md sm:mt-2">
+                <strong>{GENERAL_REFERENCE}:</strong>{' '}
+                {selectedAttrData.stockCode}
               </p>
               <div className="mt-2">
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
                 {updatedProduct ? (
-                  <p className="sm:text-xl text-2xl font-bold text-black">
+                  <p className="text-2xl font-bold text-black sm:text-xl">
                     {selectedAttrData.price?.formatted?.withTax}
                     {selectedAttrData.listPrice?.raw.tax > 0 ? (
                       <>
-                        <span className="px-2 font-xl line-through font-normal text-gray-400">
+                        <span className="px-2 font-normal text-gray-400 line-through font-xl">
                           {product.listPrice.formatted.withTax}
                         </span>
-                        <span className='text-md text-red-500 font-semibold'>{discount}% off</span>
+                        <span className="font-semibold text-red-500 text-md">
+                          {discount}% off
+                        </span>
                       </>
                     ) : null}
                   </p>
@@ -642,12 +678,10 @@ export default function ProductView({
                   setSelectedAttrData={setSelectedAttrData}
                 />
               </div>
-              <h4 className="text-sm uppercase font-bold sm:font-semibold tracking-tight text-black my-4">
+              <h4 className="my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
                 {PRODUCT_AVAILABILITY}:{' '}
                 {product.currentStock > 0 ? (
-                  <span>
-                    {PRODUCT_IN_STOCK}
-                  </span>
+                  <span>{PRODUCT_IN_STOCK}</span>
                 ) : (
                   <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
                 )}
@@ -655,7 +689,7 @@ export default function ProductView({
               {updatedProduct ? (
                 <>
                   {!isEngravingAvailable && (
-                    <div className="sm:mt-8 mt-6 flex sm:flex-col1">
+                    <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                       <Button
                         title={buttonConfig.title}
                         action={buttonConfig.action}
@@ -668,12 +702,12 @@ export default function ProductView({
                             handleWishList()
                           }
                         }}
-                        className="ml-4 py-3 px-4 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                        className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
                       >
                         {isInWishList ? (
-                          <HeartIcon className="h-6 w-6 flex-shrink-0 text-pink" />
+                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                         ) : (
-                          <HeartIcon className="h-6 w-6 flex-shrink-0" />
+                          <HeartIcon className="flex-shrink-0 w-6 h-6" />
                         )}
                         <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
                       </button>
@@ -682,23 +716,23 @@ export default function ProductView({
 
                   {isEngravingAvailable && (
                     <>
-                      <div className="sm:mt-8 mt-6 flex sm:flex-col1">
+                      <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                         <Button
-                          className='block sm:hidden py-3'
+                          className="block py-3 sm:hidden"
                           title={buttonConfig.title}
                           action={buttonConfig.action}
                           buttonType={buttonConfig.type || 'cart'}
                         />
                       </div>
-                      <div className="sm:mt-8 mt-6 flex sm:flex-col1">
+                      <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                         <Button
-                          className='hidden sm:block '
+                          className="hidden sm:block "
                           title={buttonConfig.title}
                           action={buttonConfig.action}
                           buttonType={buttonConfig.type || 'cart'}
                         />
                         <button
-                          className="sm:ml-4 max-w-xs flex-1 bg-gray-400 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                          className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                           onClick={() => showEngravingModal(true)}
                         >
                           <span className="font-bold">{GENERAL_ENGRAVING}</span>
@@ -710,36 +744,35 @@ export default function ProductView({
                               handleWishList()
                             }
                           }}
-                          className="ml-4 py-3 px-4 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                          className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
                         >
                           {isInWishList ? (
-                            <HeartIcon className="h-6 w-6 flex-shrink-0 text-pink" />
+                            <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                           ) : (
-                            <HeartIcon className="h-6 w-6 flex-shrink-0" />
+                            <HeartIcon className="flex-shrink-0 w-6 h-6" />
                           )}
-                          <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
+                          <span className="sr-only">
+                            {BTN_ADD_TO_FAVORITES}
+                          </span>
                         </button>
                       </div>
                     </>
                   )}
-
                 </>
               ) : null}
               <section
                 aria-labelledby="details-heading"
-                className="sm:mt-6 mt-4"
+                className="mt-4 sm:mt-6"
               >
                 <h2 id="details-heading" className="sr-only">
                   {PRICEMATCH_ADDITIONAL_DETAILS}
                 </h2>
                 <ProductDetails
                   product={product}
-                  description={
-                    product.description || product.shortDescription
-                  }
+                  description={product.description || product.shortDescription}
                 />
-                <div className="sm:mt-10 mt-6">
-                  <p className="text-gray-900 text-lg">
+                <div className="mt-6 sm:mt-10">
+                  <p className="text-lg text-gray-900">
                     {selectedAttrData.currentStock > 0
                       ? product.deliveryMessage
                       : product.stockAvailabilityMessage}
@@ -765,7 +798,6 @@ export default function ProductView({
 
           {/* Placeholder for pdp snippet */}
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
-
 
           <Reviews data={product.reviews} productId={product.recordId} />
           {isEngravingAvailable && (
@@ -813,66 +845,78 @@ export default function ProductView({
         />
       </main>
 
-      {
-        previewImg ? (
-          <Transition.Root show={previewImg != undefined} as={Fragment} >
-            <Dialog as="div" className="relative z-999 top-4 mt-4" onClose={handlePreviewClose}>
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={handlePreviewClose} />
-              </Transition.Child>
+      {previewImg ? (
+        <Transition.Root show={previewImg != undefined} as={Fragment}>
+          <Dialog
+            as="div"
+            className="relative mt-4 z-999 top-4"
+            onClose={handlePreviewClose}
+          >
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div
+                className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+                onClick={handlePreviewClose}
+              />
+            </Transition.Child>
 
-              <div className="fixed z-9999 top-0 left-0 w-full overflow-y-auto">
-                <div className="flex items-end sm:items-center justify-center min-h-screen h-screen p-4 text-center sm:p-0 mx-auto">
-                  <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    enterTo="opacity-100 translate-y-0 sm:scale-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  >
-                    <div className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:w-2/6 sm:p-2 mx-auto">
-                      <div>
-                        <div className="flex items-center">
-                          <button
-                            type="button"
-                            className="p-2 text-gray-400 hover:text-gray-500 absolute right-2 top-2 z-99"
-                            onClick={handlePreviewClose}
-                          >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
-                            <XIcon className="h-6 w-6 text-black" aria-hidden="true" />
-                          </button>
-                        </div>
-                        <div className="text-center">
-                          {
-                            previewImg && (
-                              <div key={previewImg.name + 'tab-panel'}>
-                                <ImageZoom src={previewImg} alt={previewImg.name} />
-                              </div>
-                            )
-                          }
-                        </div>
+            <div className="fixed top-0 left-0 w-full overflow-y-auto z-9999">
+              <div className="flex items-end justify-center h-screen min-h-screen p-4 mx-auto text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <div className="relative px-4 pt-5 pb-4 mx-auto overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-2/6 sm:p-2">
+                    <div>
+                      <div className="flex items-center">
+                        <button
+                          type="button"
+                          className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
+                          onClick={handlePreviewClose}
+                        >
+                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <XMarkIcon
+                            className="w-6 h-6 text-black"
+                            aria-hidden="true"
+                          />
+                        </button>
                       </div>
-
+                      <div className="text-center">
+                        {previewImg && (
+                          <div key={previewImg.name + 'tab-panel'}>
+                            <ImageZoom
+                              src={previewImg || IMG_PLACEHOLDER}
+                              alt={previewImg.name}
+                              blurDataURL={
+                                `${previewImg}?h=600&w=400&fm=webp` ||
+                                IMG_PLACEHOLDER
+                              }
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </Transition.Child>
-                </div>
+                  </div>
+                </Transition.Child>
               </div>
-            </Dialog>
-          </Transition.Root>
-        ) : (
-          <></>
-        )
-      }
+            </div>
+          </Dialog>
+        </Transition.Root>
+      ) : (
+        <></>
+      )}
     </div>
   )
 }

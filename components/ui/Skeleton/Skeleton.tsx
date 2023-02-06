@@ -13,7 +13,7 @@ interface SkeletonProps {
   boxHeight?: string | number
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({
+const Skeleton: React.FC<React.PropsWithChildren<SkeletonProps>> = ({
   style,
   width,
   height,

@@ -10,7 +10,7 @@ interface IColorFilledSquareProps {
     readonly bgColor: string;
 }
 
-export const ColorFilledSquare: FC<IColorFilledSquareProps> = (props: IColorFilledSquareProps) => {
+export const ColorFilledSquare: FC<React.PropsWithChildren<IColorFilledSquareProps>> = (props: IColorFilledSquareProps) => {
     const { width = 0, height = 0, bgColor = "#FFF" } = props;
     return (
         <div className="square" style={{ display: 'flex', width: `${width}px`, height: `${height}px`, backgroundColor: `${bgColor}` }}>

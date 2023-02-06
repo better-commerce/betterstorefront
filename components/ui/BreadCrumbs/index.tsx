@@ -36,19 +36,18 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
   //const [flattenedItems, setFlattenedItems] = useState(createBreadcrumbs(items))
   const flattenedItems = createBreadcrumbs(items)
   return (
-    <ol role="list" className="flex items-center sm:space-x-0 space-x-0">
+    <ol role="list" className="flex items-center space-x-0 sm:space-x-0">
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li key={breadcrumbIdx}>
-          <div className="flex items-center sm:text-sm text-xs">
+          <div className="flex items-center text-xs sm:text-sm">
             <Link href={`/${breadcrumb.slug}`} passHref>
-              <a
-                href={breadcrumb.slug}
+              <span
                 className={`font-normal hover:text-gray-900 ${
                   breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-gray-400'
                 }`}
               >
                 {breadcrumb.title}
-              </a>
+              </span>
             </Link>
             {breadcrumbIdx !== flattenedItems.length - 1 ? (
               <svg
@@ -56,7 +55,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
                 aria-hidden="true"
-                className="sm:ml-0 ml-0 flex-shrink-0 h-4 w-4 text-gray-300"
+                className="flex-shrink-0 w-4 h-4 ml-0 text-gray-300 sm:ml-0"
               >
                 <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
               </svg>

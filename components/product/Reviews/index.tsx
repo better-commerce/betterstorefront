@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { StarIcon } from '@heroicons/react/solid'
+import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 const ReviewInput = dynamic(() => import('./ReviewInput'))
 import { GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE } from '@components/utils/textVariables'

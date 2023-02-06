@@ -10,7 +10,7 @@ export interface CollapseProps {
   children: ReactNode
 }
 
-const Collapse: FC<CollapseProps> = React.memo(({ title, children }) => {
+const Collapse: FC<React.PropsWithChildren<CollapseProps>> = React.memo(({ title, children }) => {
   const [isActive, setActive] = useState(false)
   const [ref, { height: viewHeight }] = useMeasure()
 
