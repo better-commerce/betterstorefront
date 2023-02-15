@@ -1,5 +1,5 @@
 {
-  "name": "my-webpack-project",
+  "name": "nextjs-commerce",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -174,5 +174,5 @@
     "path": false,
     "os": false
   },
-  "description": "My webpack project"
+  "description": "BetterCommerce Demo Store"
 }
