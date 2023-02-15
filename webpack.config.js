@@ -10,7 +10,7 @@ const isProduction = process.env.NODE_ENV == "production";
 const stylesHandler = MiniCssExtractPlugin.loader;
 
 const config = {
-  entry: "",
+  entry: "./pages/index.tsx",
   output: {
     path: path.resolve(__dirname, "dist"),
   },
