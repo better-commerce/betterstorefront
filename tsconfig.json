@@ -31,7 +31,6 @@
     "target": "es5",
     "allowJs": true
   },
-  "files": ["src/index.ts"],
   "include": ["next-env.d.ts", "**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
   "exclude": ["node_modules", "./framework/bigcommerce"]
 }

@@ -57,6 +57,7 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import { round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
+import Imgix from 'react-imgix'
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
 const AttributesHandler = dynamic(() => import('./AttributesHandler'))
@@ -520,7 +521,33 @@ export default function ProductView({
                               <div className="relative group">
                                 {image.image ? (
                                   <div className="image-container">
-                                    <Image
+                                    <Imgix
+                                      sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw"
+                                      src={
+                                        generateUri(
+                                          image.image,
+                                          'h=1000&fm=webp'
+                                        ) || IMG_PLACEHOLDER
+                                      }
+                                      imgixParams={{
+                                        fit: "crop",
+                                        fm: "webp",
+                                        ar: "1:1.35",
+                                        q: "50",
+                                        fill:"blur"
+                                      }}
+                                      onClick={() =>
+                                        handleImgLoadT(image.image)
+                                      }
+                                      blurDataURL={
+                                        `${image.image}?h=600&w=400&fm=webp` ||
+                                        IMG_PLACEHOLDER
+                                      }
+                                      width={600}
+                                      height={1000}
+                                      className="object-cover object-center w-full h-full image"
+                                    />
+                                    {/* <Image
                                       priority
                                       src={
                                         generateUri(
@@ -538,7 +565,7 @@ export default function ProductView({
                                         `${image.image}?h=600&w=400&fm=webp` ||
                                         IMG_PLACEHOLDER
                                       }
-                                    />
+                                    /> */}
                                   </div>
                                 ) : (
                                   <PlayIcon className="object-cover object-center w-full h-full" />
@@ -577,7 +604,34 @@ export default function ProductView({
                                       width={600}
                                       height={1000}
                                     /> */}
-                                    <Image
+                                    <Imgix
+                                      sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw"
+                                      src={
+                                        generateUri(
+                                          image.image,
+                                          'h=700&fm=webp'
+                                        ) || IMG_PLACEHOLDER
+                                      }
+                                      imgixParams={{
+                                        fit: "crop",
+                                        fm: "webp",
+                                        ar: "1:1.35",
+                                        q: "50",
+                                        fill:"blur"
+                                      }}
+                                      alt={image.name}
+                                      width={600}
+                                      height={1000}
+                                      className="object-cover object-center w-full h-full image"
+                                      onClick={() =>
+                                        handleImgLoadT(image.image)
+                                      }
+                                      blurDataURL={
+                                        `${image.image}?h=600&w=400&fm=webp` ||
+                                        IMG_PLACEHOLDER
+                                      }
+                                    />
+                                    {/* <Image
                                       priority
                                       src={
                                         generateUri(
@@ -598,7 +652,7 @@ export default function ProductView({
                                         `${image.image}?h=600&w=400&fm=webp` ||
                                         IMG_PLACEHOLDER
                                       }
-                                    />
+                                    /> */}
                                     {/* </ControlledZoom> */}
                                   </div>
                                 ) : (
