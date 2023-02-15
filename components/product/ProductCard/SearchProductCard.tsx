@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import Imgix from 'react-imgix'
 const AttributeSelector = dynamic(() => import('./AttributeSelector'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
@@ -190,12 +191,23 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
               href={`/${currentProductData.link}`}
               key={'data-product' + currentProductData.link}
             >
-              <Image
+              <Imgix
+                sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw"
+                src={generateUri(currentProductData.image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                imgixParams={{
+                  fit: "crop",
+                  fm: "webp",
+                  ar: "2:3",
+                  q: "50",
+                  fill:"blur"
+                }}
+                width={400}
+                height={600}
+                className="object-cover object-center w-full h-full rounded sm:h-full min-h-image"
+              />
+              {/* <Image
                 priority
-                src={
-                  generateUri(currentProductData.image, 'h=500&fm=webp') ||
-                  IMG_PLACEHOLDER
-                }
+                src={generateUri(currentProductData.image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                 alt={product.name}
                 onMouseEnter={() => handleHover('enter')}
                 onMouseLeave={() => handleHover('leave')}
@@ -203,7 +215,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
                 style={css}
                 width={400}
                 height={600}
-              ></Image>
+              ></Image> */}
             </Link>
             {buttonConfig.isPreOrderEnabled && (
               <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
