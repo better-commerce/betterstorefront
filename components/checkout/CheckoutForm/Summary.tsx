@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import Imgix from 'react-imgix'
 import { TrashIcon } from '@heroicons/react/24/solid'
 import { PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
 import PromotionInput from '@components/cart/PromotionInput'
@@ -35,7 +36,24 @@ export default function Summary({
           {cart.lineItems?.map((product: any) => (
             <li key={product.id} className="flex px-4 py-3 sm:px-6">
               <div className="flex-shrink-0">
-                <Image
+                <Imgix
+                  sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  src={
+                    generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER
+                  }
+                  alt={product.name}
+                  imgixParams={{
+                    fit: "crop",
+                    fm: "webp",
+                    ar: "4:5",
+                    q: "50",
+                    fill:"blur"
+                  }}
+                  width={80}
+                  height={100}
+                  className="w-20 rounded-md"
+                />
+                {/* <Image
                   style={css}
                   width={80}
                   height={100}
@@ -44,7 +62,7 @@ export default function Summary({
                   }
                   alt={product.name}
                   className="w-20 rounded-md"
-                ></Image>
+                ></Image> */}
               </div>
 
               <div className="flex flex-col flex-1 ml-6">

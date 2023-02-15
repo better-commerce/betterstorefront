@@ -10,7 +10,7 @@ import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import Image from 'next/image'
-
+import Imgix from 'react-imgix'
 import useTranslation, {
   CLOSE_PANEL,
   GENERAL_SHOPPING_CART,
@@ -166,7 +166,24 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                             <li key={product.id} className="">
                               <div className="flex py-6">
                                 <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                                  <Image
+                                  <Imgix
+                                    sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw"
+                                    src={
+                                      generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER
+                                    }
+                                    alt={product.name}
+                                    imgixParams={{
+                                      fit: "crop",
+                                      fm: "webp",
+                                      ar: "1:1",
+                                      q: "50",
+                                      fill:"blur"
+                                    }}
+                                    width={94}
+                                    height={94}
+                                    className="object-cover object-center w-full h-full"
+                                  />
+                                  {/* <Image
                                     width={100}
                                     height={100}
                                     style={css}
@@ -175,7 +192,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                     }
                                     alt={product.name}
                                     className="object-cover object-center w-full h-full"
-                                  ></Image>
+                                  ></Image> */}
                                   {/* <img
                                     src={product.image}
                                     alt={product.name}

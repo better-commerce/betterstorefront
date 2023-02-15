@@ -13,6 +13,7 @@ import { PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
 const  PromotionInput  = dynamic(() => import('../components/cart/PromotionInput'));
 import { useEffect } from 'react'
 import Image from 'next/image'
+import Imgix from 'react-imgix'
 import axios from 'axios'
 import { getShippingPlans } from '@framework/shipping'
 import {
@@ -163,14 +164,29 @@ function Cart({ cart }: any) {
                 {userCart.lineItems?.map((product: any, productIdx: number) => (
                   <li key={productIdx} className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3">
                     <div className="flex-shrink-0">
-                      <Image
+                      <Imgix
+                        sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        src={generateUri(product.image, "h=300&fm=webp") || IMG_PLACEHOLDER} 
+                        alt={product.name}
+                        imgixParams={{
+                          fit: "crop",
+                          fm: "webp",
+                          ar: "7:9",
+                          q: "50",
+                          fill:"blur"
+                        }}
+                        width={140}
+                        height={180}
+                        className="object-cover object-center w-16 h-20 rounded-sm sm:w-48 sm:h-48 image"
+                      />
+                      {/* <Image
                         style={css}
                         width={140}
                         height={180}
                         src={generateUri(product.image, "h=200&fm=webp") || IMG_PLACEHOLDER} 
                         alt={product.name}
                         className="object-cover object-center w-16 h-20 rounded-sm sm:w-48 sm:h-48 image"
-                      />                     
+                      />                      */}
                     </div>
                     <div className="flex flex-col justify-between flex-1 ml-4 sm:ml-6">
                       <div className="relative flex justify-between h-full pr-6 sm:pr-0">
