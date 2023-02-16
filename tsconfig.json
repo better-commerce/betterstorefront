@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
+    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -24,14 +27,8 @@
       "@commerce/*": ["framework/commerce/*"],
       "@framework": ["framework/bettercommerce"],
       "@framework/*": ["framework/bettercommerce/*"]
-    },
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "module": "esnext",
-    "target": "es5",
-    "allowJs": true
+    }
   },
-  "files": ["pages/index.tsx"],
   "include": ["next-env.d.ts", "**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
   "exclude": ["node_modules", "./framework/bigcommerce"]
 }

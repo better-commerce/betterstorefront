@@ -1,7 +1,6 @@
 {
   "name": "nextjs-commerce",
   "version": "1.0.0",
-  "private": true,
   "scripts": {
     "dev": "node generate-locales.js && cross-env NODE_OPTIONS='--inspect' next dev",
     "dev-windows": "node generate-locales.js && cross-env NODE_OPTIONS='--inspect=5009' next dev",
@@ -52,7 +51,7 @@
     "next": "^13.1.6",
     "next-seo": "^5.15.0",
     "next-themes": "^0.2.1",
-    "postcss": "^8.4.21",
+    "postcss": "^8.4.16",
     "postcss-nesting": "^10.2.0",
     "qs": "^6.11.0",
     "react": "^18.2.0",
@@ -94,7 +93,6 @@
     "@types/memory-cache": "^0.2.2",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.27",
-    "css-loader": "^6.7.3",
     "deepmerge": "^4.3.0",
     "eslint": "^8.33.0",
     "eslint-config-next": "^13.1.6",
@@ -102,12 +100,10 @@
     "graphql": "^16.6.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.0",
-    "mini-css-extract-plugin": "^2.7.2",
     "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-loader": "^7.0.2",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.8.3",
-    "typescript": "4.9.5"
+    "typescript": "4.3.4"
   },
   "husky": {
     "hooks": {
@@ -161,6 +157,5 @@
     "fs": false,
     "path": false,
     "os": false
-  },
-  "description": "BetterCommerce Demo Store"
+  }
 }
