@@ -1,11 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import Imgix from 'react-imgix'
-import { TrashIcon } from '@heroicons/react/24/solid'
-import { PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
 import PromotionInput from '@components/cart/PromotionInput'
 import {
-  GENERAL_CONFIRM_ORDER,
   GENERAL_DISCOUNT,
   GENERAL_ORDER_SUMMARY,
   GENERAL_PRICE_LABEL_RRP,
