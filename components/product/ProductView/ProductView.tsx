@@ -521,7 +521,7 @@ export default function ProductView({
                               <div className="relative group">
                                 {image.image ? (
                                   <div className="image-container">
-                                    <Imgix
+                                    {/* <Imgix
                                       sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw"
                                       src={
                                         generateUri(
@@ -546,8 +546,8 @@ export default function ProductView({
                                       width={600}
                                       height={1000}
                                       className="object-cover object-center w-full h-full image"
-                                    />
-                                    {/* <Image
+                                    /> */}
+                                    <Image
                                       priority
                                       src={
                                         generateUri(
@@ -565,7 +565,7 @@ export default function ProductView({
                                         `${image.image}?h=600&w=400&fm=webp` ||
                                         IMG_PLACEHOLDER
                                       }
-                                    /> */}
+                                    />
                                   </div>
                                 ) : (
                                   <PlayIcon className="object-cover object-center w-full h-full" />
@@ -604,7 +604,7 @@ export default function ProductView({
                                       width={600}
                                       height={1000}
                                     /> */}
-                                    <Imgix
+                                    {/* <Imgix
                                       sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw"
                                       src={
                                         generateUri(
@@ -630,8 +630,8 @@ export default function ProductView({
                                         `${image.image}?h=600&w=400&fm=webp` ||
                                         IMG_PLACEHOLDER
                                       }
-                                    />
-                                    {/* <Image
+                                    /> */}
+                                    <Image
                                       priority
                                       src={
                                         generateUri(
@@ -652,7 +652,7 @@ export default function ProductView({
                                         `${image.image}?h=600&w=400&fm=webp` ||
                                         IMG_PLACEHOLDER
                                       }
-                                    /> */}
+                                    />
                                     {/* </ControlledZoom> */}
                                   </div>
                                 ) : (
