@@ -26,6 +26,7 @@ const ColorSelector = ({ attr, onChange, link }: any) => {
               className="inline-block w-5 h-5 mt-2 mr-1 border border-gray-200 rounded-full shadow-md sm:h-5 sm:w-5 sm:mr-2 drop-shadow-md"
               style={{ backgroundColor: item.fieldValue }}
             ></span>
+            <span className='sr-only'>{item.fieldValue}</span>
           </Link>
         )
       })}

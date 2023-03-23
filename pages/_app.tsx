@@ -1,6 +1,5 @@
 import "@assets/css/main.css"
 import "@assets/css/chrome-bug.css"
-import 'keen-slider/keen-slider.min.css'
 import { FC, useEffect, useState, useLayoutEffect } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
@@ -181,9 +180,9 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
       <ManagedUIContext>
         {isAppLoading && !location.Ip ? (
-          <main className="fit bg-white">
-            <div className="fixed top-0 right-0 h-screen w-screen z-50 flex justify-center items-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+          <main className="bg-white fit">
+            <div className="fixed top-0 right-0 z-50 flex items-center justify-center w-screen h-screen">
+              <div className="w-32 h-32 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
             </div>
           </main>
         ) : (

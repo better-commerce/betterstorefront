@@ -43,8 +43,7 @@ export default function AddressItem({
     return updateAddress({ ...item, ...values, ...{ userId } })
       .then(
         () =>
-          successCallback() &&
-          setEditMode(false) &&
+          successCallback() && isEditMode &&
           eventDispatcher(CustomerUpdated, {
             entity: JSON.stringify({
               id: user.userId,
@@ -110,7 +109,7 @@ export default function AddressItem({
         />
       ) : (
         <>
-          <div className="border rounded-lg py-5 px-5 mb-5 mt-5 flex flex-row justify-between items-center">
+          <div className="flex flex-row items-center justify-between px-5 py-5 mt-5 mb-5 border rounded-lg">
             <div className="flex flex-col text-md font-regular">
               <span className="text-xl font-bold">
                 {item.firstName + ' ' + item.lastName}
@@ -124,21 +123,21 @@ export default function AddressItem({
               <span>{item.phoneNo}</span>
             </div>
             <div>
-              <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end">
+              <div className="justify-end mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
                 <button
                   onClick={() => setEditMode(true)}
-                  className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                  className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                 >
                   {GENERAL_EDIT}
                 </button>
                 <button
                   onClick={deleteItem}
-                  className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                  className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                 >
                   {GENERAL_DELETE}
                 </button>
               </div>
-              <div className="mt-5 flex justify-between items-center">
+              <div className="flex items-center justify-between mt-5">
                 {item.isDefaultDelivery && (
                   <div className="px-2 py-2 mr-2 border">
                     {GENERAL_DEFAULT_DELIVERY_ADDRESS}

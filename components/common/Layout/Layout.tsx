@@ -7,6 +7,15 @@ import { useUI } from '@components/ui/context'
 import type { Page } from '@commerce/types/page'
 import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
+import { WishlistSidebarView } from '@components/wishlist'
+import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
+import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
+import s from './Layout.module.css'
+import { getData } from '../../utils/clientFetcher'
+import { setItem, getItem } from '../../utils/localStorage'
+import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
+import Router from 'next/router'
+import { BTN_ACCEPT_COOKIE, GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
 const PaymentMethodView = dynamic(() => import('@components/checkout/PaymentMethodView'))
@@ -14,21 +23,8 @@ const CheckoutSidebarView = dynamic(() => import('@components/checkout/CheckoutS
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
 const SearchWrapper = dynamic(() => import('@components/search/index'))
 const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
-import { WishlistSidebarView } from '@components/wishlist'
-import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
-import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
-import s from './Layout.module.css'
-import { getData } from '../../utils/clientFetcher'
-import { setItem, getItem } from '../../utils/localStorage'
-import Script from 'next/script'
-import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
-import Router from 'next/router'
-import {
-  BTN_ACCEPT_COOKIE,
-  GENERAL_COOKIE_TEXT,
-} from '@components/utils/textVariables'
 const Loading = () => (
-  <div className="w-80 h-80 flex items-center text-center fixed z-50 justify-center p-3">
+  <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />
   </div>
 )
@@ -111,7 +107,6 @@ const Layout: FC<React.PropsWithChildren<Props>> = ({
 
   const { appConfig, setAppConfig } = useUI()
 
-  //check if nav data is avaialbel in LocalStorage, then dont fetch from Server/API
   useEffect(() => {
     const fetchLayout = async () => {
       try {
@@ -135,10 +130,8 @@ const Layout: FC<React.PropsWithChildren<Props>> = ({
     }
 
     return () => {
-      Router.events.off('routeChangeStart', () => {
-      });
-      Router.events.off('routeChangeComplete', () => {
-      });
+      Router.events.off('routeChangeStart', () => {});
+      Router.events.off('routeChangeComplete', () => {});
     }
   }, [])
 
@@ -150,35 +143,17 @@ const Layout: FC<React.PropsWithChildren<Props>> = ({
   )
   return (
     <CommerceProvider locale={locale}>
-      {/* <Script
-        src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
-        strategy="beforeInteractive"
-      /> */}
-
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
-        {showSearchBar && (
-          <SearchWrapper
-            keywords={keywords}
-            closeWrapper={() => setShowSearchBar(false)}
-          />
-        )}
-        <Navbar
-          currencies={config?.currencies}
-          config={sortedData}
-          languages={config?.languages}
-        />
-        <main className="fit pt-16">{children}</main>
+        {showSearchBar && (<SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} /> )}
+        <Navbar currencies={config?.currencies} config={sortedData} languages={config?.languages} />
+        <main className="pt-16 fit">{children}</main>
         <Footer config={data.footer} />
         <ModalUI />
         <SidebarUI />
-        <FeatureBar
-          title={GENERAL_COOKIE_TEXT}
-          hide={acceptedCookies}
+        <FeatureBar title={GENERAL_COOKIE_TEXT} hide={acceptedCookies} 
           action={
-            <Button className="mx-5" onClick={() => onAcceptCookies()}>
-              {BTN_ACCEPT_COOKIE}
-            </Button>
+            <Button className="mx-5" onClick={() => onAcceptCookies()}>{BTN_ACCEPT_COOKIE}</Button>
           }
         />
       </div>
