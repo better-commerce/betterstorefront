@@ -267,8 +267,7 @@ const Navbar: FC<React.PropsWithChildren<Props>> = ({ config, currencies, langua
                                 enterTo="opacity-100"
                                 leave="transition ease-in duration-150"
                                 leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
+                                leaveTo="opacity-0">
                                 <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
                                   <div className="absolute bg-white shadow top-1/2" aria-hidden="true" />
                                   <div className="relative w-4/5 px-4 mx-auto bg-white sm:px-0 lg:px-0">
