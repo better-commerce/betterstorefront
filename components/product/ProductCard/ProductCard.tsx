@@ -9,7 +9,7 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
-import { HeartIcon } from '@heroicons/react/24/outline'
+import { HeartIcon, StarIcon } from '@heroicons/react/24/outline'
 import { round } from 'lodash'
 import {
   ALERT_SUCCESS_WISHLIST_MESSAGE,
@@ -162,13 +162,13 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   }
 
   const buttonConfig = buttonTitle()
-  const saving  = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
-  const discount  = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
+  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
+  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className="border-gray-200">
-    <div key={product.id} className="relative p-2 sm:p-3">          
-    <Link
+      <div key={product.id} className="relative p-2 sm:p-3">
+        <Link
           passHref
           href={`/${currentProductData.link}`}
           key={'data-product' + currentProductData.link}
@@ -218,41 +218,47 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
           </div>
         </Link>
 
-      <div className="pt-0 text-left">
-        {hasColorVariation ? (
-          <AttributeSelector
-            attributes={product.variantProductsAttributeMinimal}
-            onChange={handleVariableProduct}
-            link={currentProductData.link}
-          />
-        ) : (
-          <div className="inline-block w-1 h-1 mt-2 mr-1 sm:h-1 sm:w-1 sm:mr-2" />
-        )}
-      
-        <h3 className="font-normal text-gray-700 truncate sm:text-sm">
-          <Link href={`/${currentProductData.link}`}>{product.name}</Link>
-        </h3>
-        <p className="mt-1 font-bold text-gray-900 sm:mt-1 text-md">
-          {product?.price?.formatted?.withTax}
-          {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax &&
+        <div className="pt-0 text-left">
+          {hasColorVariation ? (
+            <AttributeSelector
+              attributes={product.variantProductsAttributeMinimal}
+              onChange={handleVariableProduct}
+              link={currentProductData.link}
+            />
+          ) : (
+            <div className="inline-block w-1 h-1 mt-2 mr-1 sm:h-1 sm:w-1 sm:mr-2" />
+          )}
+          <div className='grid grid-cols-3'>
+            <div className='col-span-2'>
+              <h3 className="font-normal text-gray-700 truncate sm:text-sm">
+                <Link href={`/${currentProductData.link}`}>{product.name}</Link>
+              </h3>
+            </div>
+            <div className='justify-end col-span-1 pr-2 mt-1 text-right'>
+              <h4 className='text-sm font-bold text-gray-600'><StarIcon className='relative inline-block w-4 h-4 text-gray-600 -top-0.5' /> {product?.rating}</h4>
+            </div>
+          </div>
+          <p className="mt-1 font-bold text-gray-900 sm:mt-1 text-md">
+            {product?.price?.formatted?.withTax}
+            {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax &&
               <>
                 <span className='px-2 text-sm font-normal text-gray-400 line-through'>{product?.listPrice?.formatted?.withTax}</span>
                 <span className='text-sm font-semibold text-red-600'>{discount}% Off</span>
               </>
             }
-        </p>        
-        <div className="flex flex-col">
-          <Button
-            className="hidden mt-2"
-            title={buttonConfig.title}
-            action={buttonConfig.action}
-            type="button"
-            buttonType={buttonConfig.buttonType || 'cart'}
-          />            
+          </p>
+          <div className="flex flex-col">
+            <Button
+              className="hidden mt-2"
+              title={buttonConfig.title}
+              action={buttonConfig.action}
+              type="button"
+              buttonType={buttonConfig.buttonType || 'cart'}
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
   )
 }
 
