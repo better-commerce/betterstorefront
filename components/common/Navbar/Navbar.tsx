@@ -211,13 +211,12 @@ const Navbar: FC<React.PropsWithChildren<Props>> = ({ config, currencies, langua
               <button
                 type="button"
                 className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden"
-                onClick={() => setOpen(true)}
-              >
+                onClick={() => setOpen(true)}>
                 <span className="sr-only">Open menu</span>
                 <Bars3Icon className="w-6 h-6 text-black" aria-hidden="true" />
               </button>
 
-              <Link href="/">
+              <Link href="/" passHref>
                 <div className="flex w-32 cursor-pointer">
                   <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
                   <Logo />
@@ -270,7 +269,7 @@ const Navbar: FC<React.PropsWithChildren<Props>> = ({ config, currencies, langua
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                               >
-                                <Popover.Panel className="absolute inset-x-0 text-gray-500 top-full z-999 sm:text-sm">
+                                <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
                                   <div className="absolute bg-white shadow top-1/2" aria-hidden="true" />
                                   <div className="relative w-4/5 px-4 mx-auto bg-white sm:px-0 lg:px-0">
                                     <div className="grid items-start grid-cols-1 pt-10 pb-12 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
