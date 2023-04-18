@@ -30,7 +30,7 @@ const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
       <h2 id="footer-heading" className="sr-only">
         {GENERAL_FOOOTER}
       </h2>
-      <div className="w-full px-4 py-20 mx-auto sm:w-4/5 sm:px-0 lg:px-0">
+      <div className="w-full px-4 pt-20 mx-auto sm:w-4/5 sm:px-0 lg:px-0">
         <div className="grid grid-cols-1 md:grid-cols-12 md:grid-flow-col md:gap-x-8 md:gap-y-16 md:auto-rows-min">
           <div className="col-span-1 md:col-span-2 lg:row-start-1 lg:col-start-1 opacity-70">
             <Logo />
@@ -103,7 +103,7 @@ const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
         </div>
 
         <div className="py-10 text-center border-t border-gray-100">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-black">
             &copy; {COPYRIGHT_FOOTER_INFO}
           </p>
         </div>

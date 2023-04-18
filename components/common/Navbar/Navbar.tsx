@@ -322,7 +322,7 @@ const Navbar: FC<React.PropsWithChildren<Props>> = ({ config, currencies, langua
                     <HeartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                     <span className='hidden text-sm font-normal text-black sm:block'>Wishlist</span>
                     {wishListItems.length > 0 &&
-                      <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-medium text-center text-white rounded-full sm:block -right-0 bg-pink">
+                      <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full sm:block -right-0">
                         {wishListItems.length}
                       </span>
                     }
