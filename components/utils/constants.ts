@@ -14,6 +14,8 @@ export const SITEVIEW_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/con
 export const CATALOG_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/brand`
 export const SEARCH_MINIMAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced/minimal`
 export const SEARCH_ADVANCED_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced`
+export const CACHED_IMAGE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product`
+export const LOOKBOOK_SLUG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook/slug`
 export const NEXT_SEARCH_ADVANCED_ENDPOINT =
   '/api/catalog/get-category-products'
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
@@ -38,7 +40,10 @@ export const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/
 export const KEYWORDS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/keyword-redirections`
 export const LOQATE_ADDRESS = '/api/loqate'
 export const RETRIEVE_ADDRESS = '/api/retrieve-address'
-//LOCAL ENDPOINTS
+export const PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/`
+export const PRODUCT_PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/product-promotions`
+
+//LOCAL ENDPOINTS 
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`

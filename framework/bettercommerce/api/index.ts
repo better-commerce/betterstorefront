@@ -29,6 +29,10 @@ import {
   createReview,
   applyPromo,  
   getRelatedProducts,
+  getPdpLookbook,
+  getPdpLookbookProduct,
+  getPdpCachedImage,
+  getProductPromo,
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -69,6 +73,10 @@ const operations = {
   createReview,
   applyPromo,
   getRelatedProducts,
+  getPdpLookbook,
+  getPdpLookbookProduct,
+  getPdpCachedImage,
+  getProductPromo,
 }
 
 export const provider = { config, operations }

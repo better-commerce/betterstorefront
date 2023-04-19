@@ -12,7 +12,9 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ slug: string, recordId: string }>) {
-  let product = null, relatedProducts = null;
+  let product = null, reviews = null, relatedProducts = null, pdpLookbook = null, pdpCachedImages = null;
+  let availabelPromotions = '';
+  let pdpLookbookProducts = {};
   const productPromise = commerce.getProduct({ query: params!.slug[0] })
   product = await productPromise
 
@@ -20,6 +22,41 @@ export async function getStaticProps({
     query: product?.product?.recordId,
   })
   relatedProducts = await relatedProductsPromise
+
+  // GET SELECTED PRODUCT ALL REVIEWS
+  const pdpLookbookPromise = commerce.getPdpLookbook({
+    query: product?.product?.stockCode,
+  })
+
+  pdpLookbook = await pdpLookbookPromise
+
+  if (pdpLookbook?.lookbooks?.length > 0) {
+    // GET SELECTED PRODUCT ALL REVIEWS
+    const pdpLookbookProductsPromise = commerce.getPdpLookbookProduct({
+      query: pdpLookbook?.lookbooks[0]?.slug,
+    })
+    pdpLookbookProducts = await pdpLookbookProductsPromise
+  }
+
+  try {
+    if (product?.product?.productCode) {
+
+      // GET SELECTED PRODUCT ALL REVIEWS
+      const pdpCachedImagesPromise = commerce.getPdpCachedImage({
+        query: product?.product?.productCode,
+      })
+
+      pdpCachedImages = await pdpCachedImagesPromise
+    }
+  } catch (imageE) {
+  }
+
+  if (product?.product?.recordId != null) {
+    const availabelPromotionsPromise = commerce.getProductPromo({
+      query: product?.product?.recordId,
+    })
+    availabelPromotions = await availabelPromotionsPromise
+  }
 
   const infraPromise = commerce.getInfra();
   const infra = await infraPromise;
@@ -48,7 +85,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent, slug, relatedProducts }: any) {
+function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, pdpLookbookProducts, pdpCachedImages, }: any) {
   const router = useRouter()
   return router.isFallback ? (
     <h1>{LOADER_LOADING}</h1>
@@ -61,6 +98,9 @@ function Slug({ data, setEntities, recordEvent, slug, relatedProducts }: any) {
         slug={slug}
         snippets={data.snippets}
         relatedProducts={relatedProducts}
+        availabelPromotions={availabelPromotions}
+        pdpLookbookProducts={pdpLookbookProducts}
+        pdpCachedImages={pdpCachedImages}
       />
     )
   )
