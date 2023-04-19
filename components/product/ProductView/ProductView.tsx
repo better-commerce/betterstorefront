@@ -474,7 +474,6 @@ export default function ProductView({
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className="mx-auto bg-white page-container md:w-4/5">
-      {/* Mobile menu */}
       <div className="px-4 pt-2 sm:pt-6 sm:px-0">
         {breadcrumbs && (
           <BreadCrumbs items={breadcrumbs} currentProduct={product} />
@@ -482,17 +481,10 @@ export default function ProductView({
       </div>
       <main className="sm:pt-8">
         <div className="lg:max-w-none">
-          {/* Product */}
           <div className="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start">
-            {/* Image gallery */}
-            <Tab.Group
-              as="div"
-              className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp"
-            >
-              {/* Image selector */}
+            <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp">
               <div className="grid grid-cols-1 sm:grid-cols-12 sm:gap-x-8">
                 <div className="col-span-12 px-4 sm:px-0">
-                  {/*MOBILE PRODUCT IMAGE SLIDER*/}
                   <div className="block w-full pt-6 mx-auto sm:hidden sm:pt-0">
                     <Swiper
                       slidesPerView={1}
@@ -616,21 +608,16 @@ export default function ProductView({
                     {selectedAttrData.price?.formatted?.withTax}
                     {selectedAttrData.listPrice?.raw.tax > 0 ? (
                       <>
-                        <span className="px-2 font-normal text-gray-400 line-through font-xl">
-                          {product.listPrice.formatted.withTax}
-                        </span>
-                        <span className="font-semibold text-red-500 text-md">
-                          {discount}% off
-                        </span>
+                        <span className="px-2 font-normal text-gray-400 line-through font-xl">{product.listPrice.formatted.withTax}</span>
+                        <span className="font-semibold text-red-500 text-md">{discount}% off</span>
                       </>
                     ) : null}
                   </p>
                 ) : (
-                  <p className="text-3xl text-gray-900">------</p>
+                  <></>
                 )}
               </div>
 
-              {/* Reviews */}
               <div className="mt-3">
                 <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
                 <div className="flex items-center xs:flex-col">
@@ -773,7 +760,7 @@ export default function ProductView({
           )}
           <div className='flex flex-col justify-center py-3 mt-4 text-center border-t border-black sm:mt-8 sm:py-6'>
             <h3 className='text-2xl font-bold text-black'>You May Also Like</h3>
-            {JSON.stringify(relatedProducts)}
+            
           </div>
           
           {filteredRelatedProducts ? (
