@@ -57,6 +57,7 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import { round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
+import { matchStrings } from '@framework/utils/parse-util'
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
 const AttributesHandler = dynamic(() => import('./AttributesHandler'))
@@ -473,7 +474,7 @@ export default function ProductView({
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
   const css = { maxWidth: '100%', height: 'auto' }
   return (
-    <div className="mx-auto bg-white page-container md:w-4/5">
+    <div className="mx-auto bg-white page-container md:w-full">
       <div className="px-4 pt-2 sm:pt-6 sm:px-0">
         {breadcrumbs && (
           <BreadCrumbs items={breadcrumbs} currentProduct={product} />
@@ -481,7 +482,7 @@ export default function ProductView({
       </div>
       <main className="sm:pt-8">
         <div className="lg:max-w-none">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start">
+          <div className="mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start lg:max-w-none md:w-4/5">
             <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp">
               <div className="grid grid-cols-1 sm:grid-cols-12 sm:gap-x-8">
                 <div className="col-span-12 px-4 sm:px-0">
@@ -758,22 +759,26 @@ export default function ProductView({
               productBundleUpdate={handleProductBundleUpdate}
             />
           )}
-          <div className='flex flex-col justify-center py-3 mt-4 text-center border-t border-black sm:mt-8 sm:py-6'>
-            <h3 className='text-2xl font-bold text-black'>You May Also Like</h3>
-            
+          <div className="flex flex-col">
+            <div className="section-devider"></div>
           </div>
-          
-          {filteredRelatedProducts ? (
-            <RelatedProducts
-              relatedProducts={filteredRelatedProducts}
-              relatedProductList={filteredRelatedProductList}
-            />
+          {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
+            <>
+              <div className="flex flex-col">
+                <div className="section-devider"></div>
+              </div>
+              <div className="px-0 mx-auto sm:container page-container sm:px-6">
+                <div className='flex flex-col justify-center py-3 mt-4 text-center border-t border-black sm:mt-8 sm:py-6'>
+                  <h3 className='text-2xl font-bold text-black'>You May Also Like</h3>
+                </div>
+              </div>
+            </>
           ) : null}
 
           {/* Placeholder for pdp snippet */}
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
 
-          <Reviews data={product.reviews} productId={product.recordId} />
+          <Reviews className="mx-auto md:w-4/5" data={product.reviews} productId={product.recordId} />
           {isEngravingAvailable && (
             <Engraving
               show={isEngravingOpen}

@@ -302,3 +302,13 @@ body {
 .opacity-0 {
   opacity: 0;
 }
+
+.section-devider {
+  width: 100%;
+  float: left;
+  background: #f4f4fd;
+  box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.04);
+  transform: matrix(1, 0, 0, -1, 0, 0);
+  height: 15px;
+  margin: 50px 0;
+}

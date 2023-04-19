@@ -5,8 +5,8 @@ const ReviewInput = dynamic(() => import('./ReviewInput'))
 import { GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE } from '@components/utils/textVariables'
 export default function Reviews({ data, productId }: any) {
   return (
-    <div className="bg-white">
-      <div className="w-full mx-auto py-0 px-4 sm:py-0 sm:px-0 lg:px-0 sm:mt-2">
+    <div className="mx-auto bg-white md:w-4/5">
+      <div className="w-full px-4 py-0 mx-auto sm:py-0 sm:px-0 lg:px-0 sm:mt-2">
         <div>
           <ReviewInput productId={productId} />
         </div>
@@ -15,7 +15,7 @@ export default function Reviews({ data, productId }: any) {
         )}
 
         {data?.length && (
-        <div className="mt-6 pb-10 border-t border-b border-gray-200 divide-y divide-gray-200 space-y-10">
+        <div className="pb-10 mt-6 space-y-10 border-t border-b border-gray-200 divide-y divide-gray-200">
           {data?.map((review: any, reviewIdx: number) => (
             <div
               key={'dataReview' + reviewIdx}
@@ -54,14 +54,14 @@ export default function Reviews({ data, productId }: any) {
                 </div>
               </div>
 
-              <div className="mt-6 flex items-center text-sm lg:mt-0 lg:col-start-1 lg:col-span-4 lg:row-start-1 lg:flex-col lg:items-start xl:col-span-3">
+              <div className="flex items-center mt-6 text-sm lg:mt-0 lg:col-start-1 lg:col-span-4 lg:row-start-1 lg:flex-col lg:items-start xl:col-span-3">
                 <p className="font-medium text-gray-900">{review.nickName}</p>
-                <p className="font-small py-2 text-gray-500">
+                <p className="py-2 text-gray-500 font-small">
                   {review.postedBy}
                 </p>
                 <time
                   dateTime={review.postedOn}
-                  className="ml-4 border-l border-gray-200 pl-4 text-gray-500 lg:ml-0 lg:mt-2 lg:border-0 lg:pl-0"
+                  className="pl-4 ml-4 text-gray-500 border-l border-gray-200 lg:ml-0 lg:mt-2 lg:border-0 lg:pl-0"
                 >
                   {new Date(review.postedOn).toLocaleDateString()}
                 </time>
