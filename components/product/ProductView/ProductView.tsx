@@ -759,9 +759,6 @@ export default function ProductView({
               productBundleUpdate={handleProductBundleUpdate}
             />
           )}
-          <div className="flex flex-col">
-            <div className="section-devider"></div>
-          </div>
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
             <>
               <div className="flex flex-col">
@@ -840,10 +837,7 @@ export default function ProductView({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div
-                className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
-                onClick={handlePreviewClose}
-              />
+              <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={handlePreviewClose} />
             </Transition.Child>
 
             <div className="fixed top-0 left-0 w-full overflow-y-auto z-9999">
@@ -860,16 +854,9 @@ export default function ProductView({
                   <div className="relative px-4 pt-5 pb-4 mx-auto overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-2/6 sm:p-2">
                     <div>
                       <div className="flex items-center">
-                        <button
-                          type="button"
-                          className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
-                          onClick={handlePreviewClose}
-                        >
+                        <button type="button" className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99" onClick={handlePreviewClose}>
                           <span className="sr-only">{CLOSE_PANEL}</span>
-                          <XMarkIcon
-                            className="w-6 h-6 text-black"
-                            aria-hidden="true"
-                          />
+                          <XMarkIcon className="w-6 h-6 text-black" aria-hidden="true" />
                         </button>
                       </div>
                       <div className="text-center">
