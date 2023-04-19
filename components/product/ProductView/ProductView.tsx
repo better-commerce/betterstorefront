@@ -475,7 +475,7 @@ export default function ProductView({
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className="mx-auto bg-white page-container md:w-full">
-      <div className="px-4 pt-2 sm:pt-6 sm:px-0">
+      <div className="px-4 pt-2 mx-auto sm:pt-6 sm:px-0 md:w-4/5">
         {breadcrumbs && (
           <BreadCrumbs items={breadcrumbs} currentProduct={product} />
         )}
