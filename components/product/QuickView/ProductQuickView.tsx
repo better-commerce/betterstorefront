@@ -22,9 +22,11 @@ import { Dialog, RadioGroup, Transition } from '@headlessui/react'
 import {
   HeartIcon,
   PlayIcon,
-  StarIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
+import {
+  StarIcon,
+} from '@heroicons/react/24/solid'
 import axios from 'axios'
 import { Fragment, useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -512,15 +514,14 @@ export default function ProductQuickView({
                                     <>
                                       <StarIcon className="relative inline-block w-4 h-4 text-yellow-600 -top-1" />
                                       <span className="relative inline-block pl-1 text-xs -top-1 text-primary">
-                                        {productData?.rating} (
-                                        {reviewData?.totalRecord})
+                                        {productData?.rating} ({reviewData?.totalRecord})
                                       </span>
                                     </>
                                   ) : (
                                     <>
-                                      <StarIcon className="relative inline-block w-4 h-4 text-gray-400 -top-1" />
+                                      <StarIcon className="relative inline-block w-4 h-5 text-yellow-600 -top-1" />
                                       <span className="relative inline-block pl-1 text-xs text-gray-400 -top-1">
-                                        No Reviews
+                                        {productData?.rating}
                                       </span>
                                     </>
                                   )}
