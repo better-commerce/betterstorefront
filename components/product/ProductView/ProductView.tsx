@@ -765,8 +765,11 @@ export default function ProductView({
                 <div className="section-devider"></div>
               </div>
               <div className="px-0 mx-auto sm:container page-container sm:px-6">
-                <div className='flex flex-col justify-center py-3 mt-4 text-center border-t border-black sm:mt-8 sm:py-6'>
-                  <h3 className='text-2xl font-bold text-black'>You May Also Like</h3>
+                <div className='flex flex-col justify-center text-center'>
+                  <h3 className='text-2xl font-bold text-black'>You May Also Like</h3>                  
+                </div>
+                {JSON.stringify(relatedProducts?.relatedProducts)}
+                <div className='grid grid-cols-6 gap-4'>
                 </div>
               </div>
             </>
@@ -777,11 +780,7 @@ export default function ProductView({
 
           <Reviews className="mx-auto md:w-4/5" data={product.reviews} productId={product.recordId} />
           {isEngravingAvailable && (
-            <Engraving
-              show={isEngravingOpen}
-              submitForm={handleEngravingSubmit}
-              onClose={() => showEngravingModal(false)}
-            />
+            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} />
           )}
 
           <PriceMatch
@@ -823,11 +822,7 @@ export default function ProductView({
 
       {previewImg ? (
         <Transition.Root show={previewImg != undefined} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative mt-4 z-999 top-4"
-            onClose={handlePreviewClose}
-          >
+          <Dialog as="div" className="relative mt-4 z-999 top-4" onClose={handlePreviewClose}>
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -862,14 +857,7 @@ export default function ProductView({
                       <div className="text-center">
                         {previewImg && (
                           <div key={previewImg.name + 'tab-panel'}>
-                            <ImageZoom
-                              src={previewImg || IMG_PLACEHOLDER}
-                              alt={previewImg.name}
-                              blurDataURL={
-                                `${previewImg}?h=600&w=400&fm=webp` ||
-                                IMG_PLACEHOLDER
-                              }
-                            />
+                            <ImageZoom src={previewImg || IMG_PLACEHOLDER} alt={previewImg.name} blurDataURL={`${previewImg}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER} />
                           </div>
                         )}
                       </div>
