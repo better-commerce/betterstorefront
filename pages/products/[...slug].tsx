@@ -11,9 +11,15 @@ export async function getStaticProps({
   locale,
   locales,
   preview,
-}: GetStaticPropsContext<{ slug: string }>) {
+}: GetStaticPropsContext<{ slug: string, recordId: string }>) {
+  let product = null, relatedProducts = null;
   const productPromise = commerce.getProduct({ query: params!.slug[0] })
-  const product = await productPromise
+  product = await productPromise
+
+  const relatedProductsPromise = commerce.getRelatedProducts({
+    query: product?.product?.recordId,
+  })
+  relatedProducts = await relatedProductsPromise
 
   const infraPromise = commerce.getInfra();
   const infra = await infraPromise;
@@ -22,7 +28,8 @@ export async function getStaticProps({
       data: product,
       slug: params!.slug[0],
       globalSnippets: infra?.snippets ?? [],
-      snippets: product?.snippets
+      snippets: product?.snippets,
+      relatedProducts: relatedProducts
     },
     revalidate: 200,
   }
@@ -41,7 +48,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent, slug }: any) {
+function Slug({ data, setEntities, recordEvent, slug, relatedProducts }: any) {
   const router = useRouter()
   return router.isFallback ? (
     <h1>{LOADER_LOADING}</h1>
@@ -53,6 +60,7 @@ function Slug({ data, setEntities, recordEvent, slug }: any) {
         data={data.product}
         slug={slug}
         snippets={data.snippets}
+        relatedProducts={relatedProducts}
       />
     )
   )

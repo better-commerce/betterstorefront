@@ -42,6 +42,7 @@ export const OPERATIONS = [
   'createReview',
   'applyPromo',
   'getProductQuickview',
+  'getRelatedProducts',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -85,6 +86,7 @@ export type Operations<P extends APIProvider> = {
   removeItemFromWishlist: {}
   subscribe: {}
   priceMatch: {}
+  getRelatedProducts:{}
   getAllPages: {
     <T extends GetAllPagesOperation>(opts?: {
       config?: P['config']

@@ -94,6 +94,7 @@ export default function ProductView({
   recordEvent,
   slug,
   isPreview = false,
+  relatedProducts,
 }: any) {
   const {
     openNotifyUser,
@@ -507,16 +508,10 @@ export default function ProductView({
                         },
                       }}
                     >
-                      <div
-                        role="list"
-                        className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0"
-                      >
+                      <div role="list" className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0">
                         {content?.map((image: any, idx) => (
                           <SwiperSlide className="px-0" key={`${idx}-slider`}>
-                            <div
-                              key={idx}
-                              className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto"
-                            >
+                            <div key={idx} className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto">
                               <div className="relative group">
                                 {image.image ? (
                                   <div className="image-container">
@@ -561,22 +556,6 @@ export default function ProductView({
                               <span className="relative">
                                 {image.image ? (
                                   <div className="image-container">
-                                    {/* <ControlledZoom isZoomed={isZoomedT} onZoomChange={handleZoomChangeT}> */}
-                                    {/* <ImageZoom
-                                      src={
-                                        generateUri(
-                                          image.image,
-                                          'h=1000&fm=webp'
-                                        ) || IMG_PLACEHOLDER
-                                      }
-                                      alt={image.name}
-                                      priority
-                                      className="object-cover object-center w-full h-full image"
-                                      style={css}
-                                      sizes="320 600 1000"
-                                      width={600}
-                                      height={1000}
-                                    /> */}
                                     <Image
                                       priority
                                       src={
