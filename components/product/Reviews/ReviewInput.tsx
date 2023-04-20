@@ -91,7 +91,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             placeholder={REVIEW_TITLE}
             onChange={handleCommentTitle}
             value={commentTitle}
-            className="w-full min-w-0 px-4 py-2 mt-2 mb-2 mb-5 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none sm:w-1/3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+            className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none sm:mb-5 sm:w-1/3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
           />
           <textarea
             className="w-full h-20 px-3 py-2 font-medium leading-normal text-gray-900 placeholder-gray-700 border border-gray-400 rounded-sm bg-gray-50 focus:outline-none focus:bg-white"

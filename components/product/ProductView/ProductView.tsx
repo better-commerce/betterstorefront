@@ -659,12 +659,10 @@ export default function ProductView({
                   <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
                 )}
               </h4>
-              {promotions?.promotions?.length > 0 &&
-                <>
-                  <div className="flex-1 order-4 w-full sm:order-3">
-                    <AvailableOffers currency={product?.price} offers={promotions?.promotions} />
-                  </div>
-                </>
+              {promotions?.promotions?.availablePromotions?.length > 0 &&
+                <div className="flex-1 order-4 w-full sm:order-3">
+                  <AvailableOffers currency={product?.price} offers={promotions?.promotions} />
+                </div>
               }
               {updatedProduct ? (
                 <>
