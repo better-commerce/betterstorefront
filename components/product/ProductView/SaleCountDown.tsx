@@ -51,11 +51,7 @@ function ProductSaleCountdown({ startDate, endDate }: any) {
         OFFER ENDS IN
         <span className='pl-1'>
           {timeLeft?.hours || timeLeft?.minutes || timeLeft?.seconds ? (
-            <span>
-              {' '}
-              {timeLeft?.days}d: {timeLeft?.hours}h: {timeLeft?.minutes}m:{' '}
-              {timeLeft?.seconds}s
-            </span>
+            <span>{timeLeft?.days}d{' '}:{' '}{timeLeft?.hours}h{' '}:{' '}{timeLeft?.minutes}m{' '}:{' '}{timeLeft?.seconds}s</span>
           ) : (
             <span>Sale End 🔥</span>
           )}
