@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const SALE_COUNT_DOWN_ENABLE_BEFORE_DAYS = 2
+const SALE_COUNT_DOWN_ENABLE_BEFORE_DAYS = 500
 
 function ProductSaleCountdown({ startDate, endDate }: any) {
   const [shouldSaleCountdownEnable, setShouldSaleCountdownEnable] = useState(false)
@@ -47,7 +47,7 @@ function ProductSaleCountdown({ startDate, endDate }: any) {
 
   return (
     <div className="flex mt-1 fh-28">
-      <h4 className="w-auto px-3 py-1 font-medium text-white text-xxxs sm:text-sm bg-brown text-md-scrn">
+      <h4 className="w-auto px-3 py-1 text-xs font-medium text-white bg-black sm:text-xs bg-brown text-md-scrn">
         OFFER ENDS IN
         <span className='pl-1'>
           {timeLeft?.hours || timeLeft?.minutes || timeLeft?.seconds ? (
