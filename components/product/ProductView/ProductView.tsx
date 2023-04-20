@@ -58,6 +58,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { matchStrings } from '@framework/utils/parse-util'
+import RelatedProductWithGroup from '../RelatedProducts/RelatedProductWithGroup'
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
 const AttributesHandler = dynamic(() => import('./AttributesHandler'))
@@ -592,13 +593,13 @@ export default function ProductView({
 
             {/* Product info */}
             <div className="px-4 mt-2 sm:mt-10 sm:px-0 lg:mt-0 lg:col-span-5">
-              <h3 className="mb-2 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
+              <h3 className="mb-0 font-mono text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}
               </h3>
-              <h1 className="text-lg font-normal tracking-tight text-black sm:text-2xl">
+              <h1 className="font-mono text-lg font-medium tracking-tight text-black sm:text-2xl">
                 {selectedAttrData.name || selectedAttrData.productName}
               </h1>
-              <p className="mt-3 text-sm text-gray-500 uppercase sm:text-md sm:mt-2">
+              <p className="mt-0 font-mono text-sm text-gray-400 uppercase sm:text-md sm:mt-1">
                 <strong>{GENERAL_REFERENCE}:</strong>{' '}
                 {selectedAttrData.stockCode}
               </p>
@@ -656,6 +657,7 @@ export default function ProductView({
                   <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
                 )}
               </h4>
+              
               {updatedProduct ? (
                 <>
                   {!isEngravingAvailable && (
@@ -730,6 +732,7 @@ export default function ProductView({
                   )}
                 </>
               ) : null}
+              
               <section
                 aria-labelledby="details-heading"
                 className="mt-4 sm:mt-6"
@@ -764,13 +767,14 @@ export default function ProductView({
               <div className="flex flex-col">
                 <div className="section-devider"></div>
               </div>
-              <div className="px-0 mx-auto sm:container page-container sm:px-6">
-                <div className='flex flex-col justify-center text-center'>
-                  <h3 className='text-2xl font-bold text-black'>You May Also Like</h3>                  
+              <div className="px-0 mx-auto sm:container page-container">
+                <div className='flex flex-col justify-center pb-8 text-center sm:pb-10'>
+                  <h3 className='font-mono text-3xl font-bold text-black'>You May Also Like</h3>                  
                 </div>
-                {JSON.stringify(relatedProducts?.relatedProducts)}
-                <div className='grid grid-cols-6 gap-4'>
-                </div>
+                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} />
+              </div>
+              <div className="flex flex-col">
+                <div className="section-devider"></div>
               </div>
             </>
           ) : null}
