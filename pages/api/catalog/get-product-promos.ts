@@ -2,7 +2,7 @@ import commerce from '@lib/api/commerce'
 
 export default async (req: any, res: any) => {
   try {
-    const response = await commerce.getProductPromo({
+    const response = await commerce.getProductPromos({
       query: req.body.recordId,
     })
     res.status(200).json(response)

@@ -32,7 +32,7 @@ import {
   getPdpLookbook,
   getPdpLookbookProduct,
   getPdpCachedImage,
-  getProductPromo,
+  getProductPromos,
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -76,7 +76,7 @@ const operations = {
   getPdpLookbook,
   getPdpLookbookProduct,
   getPdpCachedImage,
-  getProductPromo,
+  getProductPromos,
 }
 
 export const provider = { config, operations }

@@ -1,4 +1,3 @@
-
 import fetcher from '../../fetcher'
 import { PRODUCT_PROMOTION_API_ENDPOINT } from '@components/utils/constants'
 export default function useGetProductPromos() {
@@ -6,9 +5,6 @@ export default function useGetProductPromos() {
     try {
       const response: any = await fetcher({
         url: `${PRODUCT_PROMOTION_API_ENDPOINT}?productId=${query}`,
-        params: {
-          productId: query
-        },
         method: 'get',
       })
       return {

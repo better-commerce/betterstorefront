@@ -59,6 +59,7 @@ import { round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { matchStrings } from '@framework/utils/parse-util'
 import RelatedProductWithGroup from '../RelatedProducts/RelatedProductWithGroup'
+import AvailableOffers from './AvailableOffers'
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
 const AttributesHandler = dynamic(() => import('./AttributesHandler'))
@@ -97,7 +98,7 @@ export default function ProductView({
   slug,
   isPreview = false,
   relatedProducts,
-  availabelPromotions,
+  promotions,
   pdpLookbookProducts,
   pdpCachedImages
 }: any) {
@@ -481,6 +482,7 @@ export default function ProductView({
           <BreadCrumbs items={breadcrumbs} currentProduct={product} />
         )}
       </div>
+
       <main className="sm:pt-8">
         <div className="lg:max-w-none">
           <div className="mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start lg:max-w-none md:w-4/5">
@@ -657,7 +659,13 @@ export default function ProductView({
                   <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
                 )}
               </h4>
-              
+              {promotions?.promotions?.length > 0 &&
+                <>
+                  <div className="flex-1 order-4 w-full sm:order-3">
+                    <AvailableOffers currency={product?.price} offers={promotions?.promotions} />
+                  </div>
+                </>
+              }
               {updatedProduct ? (
                 <>
                   {!isEngravingAvailable && (
@@ -732,7 +740,7 @@ export default function ProductView({
                   )}
                 </>
               ) : null}
-              
+
               <section
                 aria-labelledby="details-heading"
                 className="mt-4 sm:mt-6"
@@ -762,6 +770,7 @@ export default function ProductView({
               productBundleUpdate={handleProductBundleUpdate}
             />
           )}
+
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
             <>
               <div className="flex flex-col">
@@ -769,7 +778,7 @@ export default function ProductView({
               </div>
               <div className="px-0 mx-auto sm:container page-container">
                 <div className='flex flex-col justify-center pb-8 text-center sm:pb-10'>
-                  <h3 className='font-mono text-3xl font-bold text-black'>You May Also Like</h3>                  
+                  <h3 className='font-mono text-3xl font-bold text-black'>You May Also Like</h3>
                 </div>
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} />
               </div>

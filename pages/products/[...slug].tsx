@@ -13,15 +13,22 @@ export async function getStaticProps({
   preview,
 }: GetStaticPropsContext<{ slug: string, recordId: string }>) {
   let product = null, reviews = null, relatedProducts = null, pdpLookbook = null, pdpCachedImages = null;
-  let availabelPromotions = '';
+  let availabelPromotions = null;
   let pdpLookbookProducts = {};
   const productPromise = commerce.getProduct({ query: params!.slug[0] })
   product = await productPromise
+
+  const availabelPromotionsPromise = commerce.getProductPromos({
+    query: product?.product?.recordId,
+  })
+  availabelPromotions = await availabelPromotionsPromise
 
   const relatedProductsPromise = commerce.getRelatedProducts({
     query: product?.product?.recordId,
   })
   relatedProducts = await relatedProductsPromise
+
+  console.log(relatedProducts)
 
   // GET SELECTED PRODUCT ALL REVIEWS
   const pdpLookbookPromise = commerce.getPdpLookbook({
@@ -51,12 +58,6 @@ export async function getStaticProps({
   } catch (imageE) {
   }
 
-  if (product?.product?.recordId != null) {
-    const availabelPromotionsPromise = commerce.getProductPromo({
-      query: product?.product?.recordId,
-    })
-    availabelPromotions = await availabelPromotionsPromise
-  }
 
   const infraPromise = commerce.getInfra();
   const infra = await infraPromise;
@@ -66,7 +67,8 @@ export async function getStaticProps({
       slug: params!.slug[0],
       globalSnippets: infra?.snippets ?? [],
       snippets: product?.snippets,
-      relatedProducts: relatedProducts
+      relatedProducts: relatedProducts,
+      availabelPromotions: availabelPromotions,
     },
     revalidate: 200,
   }
@@ -98,7 +100,7 @@ function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabel
         slug={slug}
         snippets={data.snippets}
         relatedProducts={relatedProducts}
-        availabelPromotions={availabelPromotions}
+        promotions={availabelPromotions}
         pdpLookbookProducts={pdpLookbookProducts}
         pdpCachedImages={pdpCachedImages}
       />
