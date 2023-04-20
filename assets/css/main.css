@@ -327,22 +327,21 @@ body {
   margin: 10px 0;
 }
 
-
 .promo-bg {
   background: rgba(0, 25, 137, 0.1);
-  border: 1px dashed #001e89;
+  border: 1px solid #001e89;
   border-radius: 2px !important;
 }
 
 .promo-bg:hover {
   background: rgba(0, 16, 137, 0.1);
-  border: 1px dashed #002b89;
+  border: 1px solid #002b89;
 }
 
 .coupon-panel {
   width: auto;
   background: rgba(0, 57, 137, 0.1);
-  border: 1px dashed #001089;
+  border: 1px solid #001089;
   border-radius: 2px !important;
   position: relative;
   display: table;
@@ -361,12 +360,11 @@ body {
   font-size: 14px;
   line-height: 20px;
   padding: 5px 10px 5px 10px;
-  /* identical to box height, or 143% */
 }
 
 .coupon-copy {
   display: inline-block;
-  border-left: 1px dashed #001989;
+  border-left: 1px solid #001989;
   color: #000e89;
   text-align: center;
   justify-content: center;

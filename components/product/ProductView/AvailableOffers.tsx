@@ -118,7 +118,7 @@ export default function AvailableOffers({ currency, offers }: any) {
                                         className="coupon-copy"
                                         onClick={() => copyCode(offers?.bestAvailablePromotion?.code)}
                                     >
-                                        <Square2StackIcon className="relative inline-block w-5 h-5 cursor-pointer text-green hover:text-orange-600" />
+                                        <Square2StackIcon className="relative inline-block w-5 h-5 text-blue-600 cursor-pointer hover:text-orange-600" />
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@ export default function AvailableOffers({ currency, offers }: any) {
                     >
                         <div
                             role="list"
-                            className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0"
+                            className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0 h-60"
                         >
                             {offers?.availablePromotions?.map((saving: any, sid: number) => {
                                 const percentagePrice = saving?.additionalInfo1
@@ -157,27 +157,27 @@ export default function AvailableOffers({ currency, offers }: any) {
                                 return (
                                     <>
                                         {saving?.additionalInfo8 == 'False' && (
-                                            <SwiperSlide className="h-auto px-0 z-1" key={`promo-${sid}-best-available`}>
+                                            <SwiperSlide className="h-auto px-1 z-1" key={`promo-${sid}-best-available`}>
                                                 <div
-                                                    className="inline-flex flex-col w-full h-full text-left cursor-pointer"
+                                                    className="inline-flex flex-col w-full h-24 text-left cursor-pointer"
                                                     onClick={() => setOfferData(saving)}
                                                 >
                                                     <div className="relative h-full group">
                                                         <div className="h-full p-2 bg-transparent border cursor-pointer promo-bg sm:p-3">
-                                                            <h3 className="text-xs font-bold text-left text-black uppercase break-word-text">
+                                                            <h3 className="font-mono text-xs font-bold text-left text-black uppercase break-word-text">
                                                                 {saving.name}
                                                             </h3>
                                                             {saving?.promoType == 1 && (
                                                                 <span>
                                                                     {saving.additionalInfo2 == 'False' ||
                                                                         saving.additionalInfo2 == 'false' ? (
-                                                                        <p className="mt-1 font-normal text-left text-brown-light text-12 break-word-text">
+                                                                        <p className="mt-1 text-xs font-normal text-left text-brown-light break-word-text">
                                                                             {saving?.code}, Save{' '}
                                                                             {currency?.currencySymbol}
                                                                             {amountPrice} extra
                                                                         </p>
                                                                     ) : (
-                                                                        <p className="mt-1 font-normal text-left text-brown-light text-12 break-word-text">
+                                                                        <p className="mt-1 font-mono text-sm font-normal text-left text-gray-500 break-word-text">
                                                                             {saving?.code}, Save{' '}
                                                                             {currency?.currencySymbol}
                                                                             {percentDiscount?.toFixed(2)} extra
@@ -185,7 +185,7 @@ export default function AvailableOffers({ currency, offers }: any) {
                                                                     )}
                                                                 </span>
                                                             )}
-                                                            <p className="mt-1 font-normal text-left text-brown-light text-12 break-word-text">
+                                                            <p className="mt-1 font-mono text-sm font-bold text-left text-brown-light break-word-text">
                                                                 {saving?.additionalInfo6}
                                                             </p>
                                                         </div>
