@@ -1,8 +1,6 @@
 import { RadioGroup } from '@headlessui/react'
 import cn from 'classnames'
-import classNames from '@components/utils/classNames'
-// import Link from 'next/link'
-import { CHOOSE_A_COLOR, GENERAL_COLOUR } from '@components/utils/textVariables'
+import { GENERAL_COLOUR } from '@components/utils/textVariables'
 import { useState, useEffect } from 'react'
 
 const DEFAULT_OPTIONS_COUNT = 15
@@ -17,9 +15,7 @@ function renderRadioOptions(
 ) {
 
   let defaultItems = items && items.length > 0 ? items.slice(0, itemsCount) : []
-  let remainingItems =
-    items && items.length > 0 ? items.slice(itemsCount, items.length) : []
-  console.log("INLINELIST items looks like:", items);
+  let remainingItems = items && items.length > 0 ? items.slice(itemsCount, items.length) : []
 
   return (
     <div className="flex items-center">
@@ -39,7 +35,6 @@ function renderRadioOptions(
         />
       ))}
 
-      {/* remaining elements as hidden at first */}
       {remainingItems.map((item: any, idx: any) => (
         <RadioGroup.Option
           key={idx}
@@ -48,30 +43,19 @@ function renderRadioOptions(
           style={{ backgroundColor: item.fieldValue }}
           className={cn(
             'pdp-color-swatch-item relative z-99 h-10 w-10  border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
-            {
-              'ring-1 z-999': selectedValue === item.fieldValue,
-              hidden: !openRemainElems,
-            }
+            { 'ring-1 z-999': selectedValue === item.fieldValue, hidden: !openRemainElems, }
           )}
         />
       ))}
 
-      {/* show less button */}
       {openRemainElems && (
-        <button
-          className="relative flex items-center justify-center h-10 px-1 bg-gray-300 z-99 hover:opacity-75 bg-nav"
-          onClick={() => handleToggleOpenRemainElems()}
-        >
+        <button className="relative flex items-center justify-center h-10 px-1 bg-gray-300 z-99 hover:opacity-75 bg-nav" onClick={() => handleToggleOpenRemainElems()}>
           <p className="text-gray-900 text-ms">{'<'}</p>
         </button>
       )}
 
-      {/* show more button */}
       {remainingItems && remainingItems.length > 0 && !openRemainElems && (
-        <div
-          className="relative flex items-center justify-center w-10 h-10 transition duration-100 bg-gray-300 outline-none cursor-pointer z-99 hover:opacity-75 bg-nav"
-          onClick={() => handleToggleOpenRemainElems()}
-        >
+        <div className="relative flex items-center justify-center w-10 h-10 transition duration-100 bg-gray-300 outline-none cursor-pointer z-99 hover:opacity-75 bg-nav" onClick={() => handleToggleOpenRemainElems()}>
           <p className="text-xs text-gray-900">More</p>
         </div>
       )}
