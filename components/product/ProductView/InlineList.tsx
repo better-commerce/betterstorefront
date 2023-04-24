@@ -12,15 +12,15 @@ function renderRadioOptions(
   selectedValue: any,
   openRemainElems: boolean = false,
   handleToggleOpenRemainElems: any,
-  sizeInit:any,
-  setSizeInit:any,
+  sizeInit: any,
+  setSizeInit: any,
 ) {
-  
+
   let defaultItems = items && items.length > 0 ? items.slice(0, itemsCount) : []
   let remainingItems =
     items && items.length > 0 ? items.slice(itemsCount, items.length) : []
-  console.log("INLINELIST items looks like:",items);
-  
+  console.log("INLINELIST items looks like:", items);
+
   return (
     <div className="flex items-center">
       {defaultItems.map((item: any, idx: any) => (
@@ -28,7 +28,7 @@ function renderRadioOptions(
           key={idx}
           value={item.fieldValue}
           title={item.fieldLabel}
-          onClick={()=>{setSizeInit('false')}}
+          onClick={() => { setSizeInit('false') }}
           style={{ backgroundColor: item.fieldValue }}
           className={cn(
             'pdp-color-swatch-item relative z-99 h-10 w-10 border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
@@ -81,12 +81,12 @@ function renderRadioOptions(
 
 export default function InlineList({
   items = [],
-  onChange = () => {},
+  onChange = () => { },
   label = GENERAL_COLOUR,
   fieldCode = 'global.colour',
   currentAttribute = 'black',
-  generateLink = () => {},
-  handleSetProductVariantInfo = () => {},
+  generateLink = () => { },
+  handleSetProductVariantInfo = () => { },
   sizeInit,
   setSizeInit,
   product,
@@ -106,9 +106,9 @@ export default function InlineList({
   }, [currentAttribute])
 
   useEffect(() => {
-    product.customAttributes.map((val:any) => {
+    product.customAttributes.map((val: any) => {
       setValidation(true);
-      if(val.display === "Color"){ 
+      if (val.display === "Color") {
         setColorName(val.valueText)
       }
     })
@@ -121,13 +121,10 @@ export default function InlineList({
   return (
     <>
       <div className="flex">
-      <h3 className="text-gray-700 text-ms">{GENERAL_COLOUR} :</h3>
-      {validation ? <span className='pl-1 font-light text-gray-700 text-ms dark:text-gray-700'>{colorName}</span> : <span className='pl-1 text-sm font-bold text-gray-400'>--</span> }
-        {/* <h3 className='px-2' >{color}</h3>
-      <div style={{ color: `${color}` }}></div> */}
+        <h3 className="text-lg font-semibold text-black">{GENERAL_COLOUR} :</h3>
+        {validation ? <span className='pl-1 font-light text-gray-700 text-ms dark:text-gray-700'>{colorName}</span> : <span className='pl-1 text-sm font-bold text-gray-400'>--</span>}
       </div>
-      <RadioGroup  value='' onChange={handleChange} className="mt-2">
-        {/* <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label> */}
+      <RadioGroup value='' onChange={handleChange} className="mt-2">
         <div>
           {renderRadioOptions(
             items,
@@ -143,69 +140,3 @@ export default function InlineList({
     </>
   )
 }
-
-// import { RadioGroup } from '@headlessui/react'
-// import classNames from '@components/utils/classNames'
-// import Link from 'next/link'
-// import { CHOOSE_A_COLOR } from '@components/utils/textVariables'
-// import { CheckIcon } from '@heroicons/react/outline'
-// export default function InlineList({
-//   items = [],
-//   onChange = () => { },
-//   label = CHOOSE_A_COLOR,
-//   fieldCode = '',
-//   currentAttribute = '',
-//   generateLink = () => { },
-// }: any) {
-//   const handleChange = (value: any) => {
-//     return onChange(fieldCode, value)
-//   }
-
-//   return (
-//     <>
-//       <h3 className="pt-3 text-sm font-medium text-left text-gray-600 uppercase border-t border-gray-200 border-solid">{label}</h3>
-//       <RadioGroup value={'ring-gray-700'} onChange={() => { }} className="mt-4">
-//         <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
-//         <div className="flex items-center space-x-2 border lg-grid lg-grid-cols-8 border-grey-40">
-//           {items.map((item: any, idx: any) => {
-//             const path = generateLink(fieldCode, item.fieldValue)
-//             return (
-//               <RadioGroup.Option
-//                 key={idx}
-//                 value={item.fieldValue}
-//                 style={{ backgroundColor: item.fieldValue }}
-//                 className={({ active, checked }) =>
-//                   classNames(
-//                     currentAttribute == item.fieldValue ? 'border-black' : 'border-gray-400',
-//                     '-m-0.5 relative p-0.5 border border-opacity-1 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
-//                   )
-//                 }
-//               >
-//                 <CheckIcon className={classNames(
-//                   currentAttribute == item.fieldValue ? 'inline-block' : 'hidden',
-//                   'w-5 h-5 text-black absolute'
-//                 )}></CheckIcon>
-//                 <RadioGroup.Label as="p" className="sr-only">
-//                   {item.fieldName} {item.value}
-//                 </RadioGroup.Label>
-//                 <Link href={`/${path}`} passHref>
-//                   <a
-//                     aria-hidden="true"
-//                     onClick={() => handleChange(item.fieldvalue)}
-//                     className={classNames(
-//                       item.fieldvalue,
-//                       'h-6 w-6 rounded-full'
-//                     )}>
-//                   {/* <img src='/pngTemplate.jpg' className={"bg-transparent"} /> */}
-
-//                   </a>
-
-//                 </Link>
-//               </RadioGroup.Option>
-//             )
-//           })}
-//         </div>
-//       </RadioGroup>
-//     </>
-//   )
-// }

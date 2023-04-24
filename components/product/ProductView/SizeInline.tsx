@@ -182,7 +182,7 @@ export default function SizeInline({
       <>
          <div className="flex items-center justify-between my-3" id="productSize">
             <h3 className="text-lg text-gray-700">
-               <span className='font-mono font-bold'>{label}</span> : {selected.attributes ? <span className='pl-1 font-light text-gray-700 text-ms dark:text-gray-700'>{selected.attributes[1].fieldValue}</span> : <></>}
+               <span className='font-semibold text-black'>{label}</span> : {selected.attributes ? <span className='pl-1 font-light text-gray-700 text-ms dark:text-gray-700'>{selected.attributes[1].fieldValue}</span> : <></>}
                <span className="pl-1 text-xs font-bold text-black sm:text-sm">
                   {product?.mappedCategories?.length > 0 &&
                      SizeAttribute?.sizes?.map((attr: any, aid: number) => (
