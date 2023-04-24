@@ -323,3 +323,4 @@ export const PRODUCT_OUT_OF_STOCK='Out Of Stock'
 export const PRODUCT_AVAILABILITY='Availability'
 export const SLUG_TYPE_MANUFACTURER = 'Manufacturer'
 export const GENERAL_FOOOTER = "Footer"
+export const SIZE_CHART = "Size chart"

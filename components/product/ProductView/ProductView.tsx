@@ -118,7 +118,11 @@ export default function ProductView({
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
   const [previewImg, setPreviewImg] = useState<any>()
-
+  const [variantInfo, setVariantInfo] = useState<any>({
+    variantColour: '',
+    variantSize: '',
+  })
+  const [sizeInit, setSizeInit] = useState('');
   const product = updatedProduct || data
 
   const [selectedAttrData, setSelectedAttrData] = useState({
@@ -128,7 +132,20 @@ export default function ProductView({
   })
 
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
-
+  const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
+    if (colour) {
+      setVariantInfo((v: any) => ({
+        ...v,
+        variantColour: colour,
+      }))
+    }
+    if (clothSize) {
+      setVariantInfo((v: any) => ({
+        ...v,
+        variantSize: clothSize,
+      }))
+    }
+  }
   const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
     const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW
@@ -644,11 +661,15 @@ export default function ProductView({
                   </p>
                 </div>
               </div>
-              <div className="w-full sm:w-6/12">
+              <div className="w-full sm:w-full">
                 <AttributesHandler
                   product={product}
                   variant={selectedAttrData}
                   setSelectedAttrData={setSelectedAttrData}
+                  variantInfo={variantInfo}
+                  handleSetProductVariantInfo={handleSetProductVariantInfo}
+                  sizeInit={sizeInit}
+                  setSizeInit={setSizeInit}
                 />
               </div>
               <h4 className="my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
@@ -668,25 +689,13 @@ export default function ProductView({
                 <>
                   {!isEngravingAvailable && (
                     <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                      <Button
-                        title={buttonConfig.title}
-                        action={buttonConfig.action}
-                        buttonType={buttonConfig.type || 'cart'}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!isInWishList) {
-                            handleWishList()
-                          }
-                        }}
+                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                      <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
                         className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
                       >
-                        {isInWishList ? (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                        ) : (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                        )}
+                        {isInWishList ? (<HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />) :
+                          (<HeartIcon className="flex-shrink-0 w-6 h-6" />)
+                        }
                         <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
                       </button>
                     </div>
@@ -695,35 +704,17 @@ export default function ProductView({
                   {isEngravingAvailable && (
                     <>
                       <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                        <Button
-                          className="block py-3 sm:hidden"
-                          title={buttonConfig.title}
-                          action={buttonConfig.action}
-                          buttonType={buttonConfig.type || 'cart'}
-                        />
+                        <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                       </div>
                       <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                        <Button
-                          className="hidden sm:block "
-                          title={buttonConfig.title}
-                          action={buttonConfig.action}
-                          buttonType={buttonConfig.type || 'cart'}
-                        />
-                        <button
-                          className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                        <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                        <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                           onClick={() => showEngravingModal(true)}
                         >
                           <span className="font-bold">{GENERAL_ENGRAVING}</span>
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (!isInWishList) {
-                              handleWishList()
-                            }
-                          }}
-                          className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                        >
+                        <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
+                          className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink">
                           {isInWishList ? (
                             <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                           ) : (
@@ -739,34 +730,18 @@ export default function ProductView({
                 </>
               ) : null}
 
-              <section
-                aria-labelledby="details-heading"
-                className="mt-4 sm:mt-6"
-              >
-                <h2 id="details-heading" className="sr-only">
-                  {PRICEMATCH_ADDITIONAL_DETAILS}
-                </h2>
-                <ProductDetails
-                  product={product}
-                  description={product.description || product.shortDescription}
-                />
+              <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
+                <h2 id="details-heading" className="sr-only">{PRICEMATCH_ADDITIONAL_DETAILS}</h2>
+                <ProductDetails product={product} description={product.description || product.shortDescription} />
                 <div className="mt-6 sm:mt-10">
-                  <p className="text-lg text-gray-900">
-                    {selectedAttrData.currentStock > 0
-                      ? product.deliveryMessage
-                      : product.stockAvailabilityMessage}
-                  </p>
+                  <p className="text-lg text-gray-900">{selectedAttrData.currentStock > 0 ? product.deliveryMessage : product.stockAvailabilityMessage}</p>
                 </div>
               </section>
             </div>
           </div>
 
           {product.componentProducts && (
-            <Bundles
-              price={product.price.formatted.withTax}
-              products={product.componentProducts}
-              productBundleUpdate={handleProductBundleUpdate}
-            />
+            <Bundles price={product.price.formatted.withTax} products={product.componentProducts} productBundleUpdate={handleProductBundleUpdate} />
           )}
 
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
