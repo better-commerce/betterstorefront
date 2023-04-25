@@ -26,7 +26,7 @@ const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
   const handleRedirect = (path: string) => (path ? router.push(path) : {})
 
   return (
-    <footer aria-labelledby="footer-heading" className="bg-gray-100 shadow-inner sm:h-96 sm:mt-10">
+    <footer aria-labelledby="footer-heading" className="bg-gray-100 shadow-inner sm:h-96 sm:mt-2">
       <h2 id="footer-heading" className="sr-only">
         {GENERAL_FOOOTER}
       </h2>

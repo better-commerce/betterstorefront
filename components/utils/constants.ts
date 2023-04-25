@@ -75,6 +75,7 @@ export const NEXT_CREATE_REVIEW = `/api/create-review`
 export const NEXT_GET_NAVIGATION = `/api/get-navigation`
 export const NEXT_GET_PRODUCT_PROMOS = '/api/catalog/get-product-promos';
 export const NEXT_APPLY_PROMOTION = `/api/apply-promo`
+export const PAGE_PREVIEW_CONTENT_ENDPOINT = `api/${process.env.BETTERCMS_API_VERSION}/page`;
 
 export const NEXT_SHIPPING_ENDPOINT = '/api/shipping-options'
 export const NEXT_UPDATE_CHECKOUT_ADDRESS = '/api/update-checkout-address'

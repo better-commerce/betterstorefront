@@ -46,7 +46,7 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
                     width={2000}
                     height={1000}
                     className='sm:max-h-screen sm:min-h-screen image banner-Image'></Image>
-                    <span className='sr-only'>Banner Image</span>
+                    <div className='sr-only'>Banner Image</div>
                 </div>
               </Link>
             </SwiperSlide>

@@ -371,3 +371,35 @@ body {
   padding: 5px 10px;
   border-radius: 2px !important;
 }
+.style-newin_article {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  color: #fff;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 4;
+  overflow: hidden;
+}
+.style-newin_article-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  font-weight: 500;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: 0.25s transform ease;
+  box-sizing: border-box;
+  color: #fff;
+  text-rendering: geometricPrecision;
+  text-align: center;
+  transform: translate(0, 56px);
+}
+
+.style-newin_article:hover .style-newin_article-title {
+  transform: translate(0, 0px);
+}

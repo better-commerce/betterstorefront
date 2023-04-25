@@ -13,7 +13,7 @@ const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({  
   images: {
-    domains: ['liveocxcdn.azureedge.net', 'cdnbs.bettercommerce.io','dev-da-cdn-erf7a6h0byf7e6f0.z01.azurefd.net' , 'cdn.shopify.com', 'liveocx.imgix.net', 'devocxblob.blob.core.windows.net','img.ffx.co.uk'],
+    domains: ['liveocxcdn.azureedge.net','liveocxstorage.blob.core.windows.net', 'cdnbs.bettercommerce.io','dev-da-cdn-erf7a6h0byf7e6f0.z01.azurefd.net' , 'cdn.shopify.com', 'liveocx.imgix.net', 'devocxblob.blob.core.windows.net','img.ffx.co.uk'],
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
   commerce,
@@ -50,6 +50,9 @@ module.exports = withCommerceConfig({
     BETTERCOMMERCE_CURRENCY: process.env.BETTERCOMMERCE_CURRENCY,
     BETTERCOMMERCE_LANGUAGE: process.env.BETTERCOMMERCE_LANGUAGE,
     BETTERCOMMERCE_COUNTRY: process.env.BETTERCOMMERCE_COUNTRY,
+    BETTERCMS_BASE_URL: process.env.BETTERCMS_BASE_URL,
+    BETTERCMS_API_VERSION: process.env.BETTERCMS_API_VERSION,
+    BETTERCMS_API_URL: process.env.BETTERCMS_API_URL,
   },
 })
 
