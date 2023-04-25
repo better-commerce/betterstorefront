@@ -42,7 +42,7 @@ export async function getStaticProps({
   const { categories, brands } = await siteInfoPromise
 
   const PageContentsPromiseWeb = commerce.getPagePreviewContent({
-    id: "a98303b7-0596-429b-ae59-dbdef0f455f8", //pageId,
+    id: "", //pageId,
     slug: HOME_PAGE_DEFAULT_SLUG,
     workingVersion: (process.env.NODE_ENV === "production") ? true : true, // TRUE for preview, FALSE for prod.
     channel: "Web"
@@ -50,7 +50,7 @@ export async function getStaticProps({
   const pageContentsWeb = await PageContentsPromiseWeb;
 
   const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
-    id: "a98303b7-0596-429b-ae59-dbdef0f455f8", //pageId,
+    id: "", //pageId,
     slug: HOME_PAGE_DEFAULT_SLUG,
     workingVersion: (process.env.NODE_ENV === "production") ? true : true, // TRUE for preview, FALSE for prod.
     channel: "MobileWeb"
@@ -76,42 +76,6 @@ export async function getStaticProps({
 const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ slugs, setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb }: any) {
-  var settings = {
-    fade: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 8000,
-    centerMode: false,
-    dots: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          initialSlide: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES;
   const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb;
   useAnalytics(PageViewed, {
@@ -175,5 +139,4 @@ function Home({ slugs, setEntities, recordEvent, ipAddress, pageContentsWeb, pag
 }
 
 Home.Layout = Layout
-
 export default withDataLayer(Home, PAGE_TYPE)
