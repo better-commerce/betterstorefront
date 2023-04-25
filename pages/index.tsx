@@ -135,6 +135,17 @@ function Home({ slugs, setEntities, recordEvent, ipAddress, pageContentsWeb, pag
         <ProductSlider config={pageContents} />
       </div>
 
+      {pageContents?.promotions?.map((banner: any, bId: number) => (
+        <div className='relative flex flex-col justify-center w-full my-4 text-center sm:my-8' key={bId}>
+          <Link href={banner?.promotions_link} passHref legacyBehavior>
+            <a>
+              <Image src={banner?.promotions_image} className='object-cover object-center' alt={banner?.promotions_title} width={2000} height={800} style={css} />
+            </a>
+          </Link>
+          <div className='absolute text-5xl font-medium text-white top-1/2 right-24'>{banner?.promotions_title}</div>
+        </div>
+      ))}
+
       <div className='w-full pb-4 mx-auto bg-gray-50 sm:pb-8'>
         <div className='container py-3 mx-auto sm:py-6'>
           {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
