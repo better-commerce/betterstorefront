@@ -81,7 +81,7 @@ export default function Categories({data}:any) {
                   <div className='flex flex-col w-full px-2 text-center sm:px-4 style-newin_article-title'>
                     <h3 className='pt-1 mb-2 text-sm font-semibold text-white'>{category?.categorylist_name}</h3>
                     <Link href={category?.categorylist_link} passHref legacyBehavior>
-                      <a className='w-full py-1 mb-2 text-sm font-medium text-black bg-white border border-white'>
+                      <a className='w-full py-1 mb-2 text-sm font-medium text-black bg-white border border-white hover:bg-gray-100 hover:border-gray-800 hover:shadow-md'>
                         {category?.categorylist_buttontext}
                       </a>
                     </Link>

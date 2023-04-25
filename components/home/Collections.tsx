@@ -23,7 +23,7 @@ export default function Collections({ data }: any) {
                 className='mb-3 text-sm font-normal text-gray-600 h-14'
               />
               <Link href={collection?.collectionlist_link} passHref legacyBehavior>
-                <a className='px-4 py-2 text-lg font-medium text-center text-black bg-transparent border border-black'>
+                <a className='px-4 py-2 text-lg font-medium text-center text-black bg-transparent border border-black hover:bg-gray-100 hover:shadow-md hover:border-gray-400'>
                   Shop Now
                 </a>
               </Link>

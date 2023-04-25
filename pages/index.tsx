@@ -152,7 +152,7 @@ function Home({ slugs, setEntities, recordEvent, ipAddress, pageContentsWeb, pag
       </div>
 
       {pageContents?.promotions?.map((banner: any, bId: number) => (
-        <div className='relative flex flex-col justify-center w-full my-4 text-center sm:my-8' key={bId}>
+        <div className='relative flex flex-col justify-center w-full text-center' key={bId}>
           <Link href={banner?.promotions_link} passHref legacyBehavior>
             <a>
               <Image src={banner?.promotions_image} className='object-cover object-center' alt={banner?.promotions_title} width={2000} height={800} style={css} />
