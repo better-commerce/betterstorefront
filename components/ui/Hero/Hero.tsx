@@ -45,7 +45,7 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
                     style={css}
                     width={2000}
                     height={1000}
-                    className='sm:max-h-screen sm:min-h-screen image banner-Image'></Image>
+                    className='sm:max-h-screen image banner-Image'></Image>
                     <div className='sr-only'>Banner Image</div>
                 </div>
               </Link>
