@@ -90,7 +90,7 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
               <Link href={product?.slug}>
                 <div
                   key={product?.id}
-                  className="inline-flex flex-col w-64 text-center cursor-pointer lg:w-auto"
+                  className="inline-flex flex-col w-64 text-center shadow-md cursor-pointer lg:w-auto"
                 >
                   <div className="relative group">
                     <div className="w-full overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1">
@@ -107,7 +107,7 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
                         className="object-cover object-center w-full h-full group-hover:opacity-75"
                       ></Image>
                     </div>
-                    <div className="mt-3 text-left">
+                    <div className="px-2 pb-3 mt-3 text-left sm:px-4">
                       <p className="text-sm text-black">
                         {product?.color}
                       </p>
