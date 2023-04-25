@@ -397,7 +397,7 @@ body {
   color: #fff;
   text-rendering: geometricPrecision;
   text-align: center;
-  transform: translate(0, 56px);
+  transform: translate(0, 40px);
 }
 
 .style-newin_article:hover .style-newin_article-title {

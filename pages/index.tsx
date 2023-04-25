@@ -14,8 +14,16 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
 import { isMobile } from 'react-device-detect'
+import { Swiper, SwiperSlide } from 'swiper/react'
 import Image from 'next/image'
+import 'swiper/css'
+import 'swiper/css/navigation'
+
+import SwiperCore, { Navigation } from 'swiper'
 import Link from 'next/link'
+import Heading from '@components/home/Heading'
+import Categories from '@components/home/Categories'
+import Collections from '@components/home/Collections'
 
 export async function getStaticProps({
   preview,
@@ -68,6 +76,42 @@ export async function getStaticProps({
 const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ slugs, setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb }: any) {
+  var settings = {
+    fade: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 8000,
+    centerMode: false,
+    dots: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  }
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES;
   const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb;
   useAnalytics(PageViewed, {
@@ -87,50 +131,22 @@ function Home({ slugs, setEntities, recordEvent, ipAddress, pageContentsWeb, pag
     entityId: slugs?.id,
     eventType: 'PageViewed',
   });
-  const css = { maxWidth: "100%", minHeight: "500px" }
+  const css = { maxWidth: "100%", minHeight: "350px" }
   return (
     <>
       <Hero banners={pageContents?.banner} />
       <div className='w-full pb-4 mx-auto bg-gray-50 sm:pb-8'>
         <div className='container py-3 mx-auto sm:py-6'>
           {pageContents?.heading?.map((heading: any, hId: number) => (
-            <div className='flex flex-col justify-center mt-2 mb-4 text-center sm:mb-8 sm:mt-4' key={hId}>
-              <h3 className='text-3xl font-bold text-black uppercase'>{heading?.heading_title}</h3>
-            </div>
+            <Heading title={heading?.heading_title} subTitle={heading?.heading_subtitle} key={hId} />
           ))}
-
-          <div className='grid grid-cols-2 gap-4 sm:grid-cols-4'>
-            {pageContents?.categorylist?.map((category: any, catId: number) => (
-              <div className='sm:col-span-1' key={catId}>
-                <div className='relative flex flex-col style-newin_article'>
-                  <div className='shadow image-continer group-hover:shadow-md'>
-                    <Link href={category?.categorylist_link} passHref legacyBehavior>
-                      <a>
-                        <Image src={category?.categorylist_image} alt={category?.categorylist_name} width={600} height={800} style={css} />
-                      </a>
-                    </Link>
-                  </div>
-                  <div className='flex flex-col w-full px-6 py-2 text-center style-newin_article-title'>
-                    <h3 className='mb-4 text-xl font-semibold text-white'>{category?.categorylist_name}</h3>
-                    <Link href={category?.categorylist_link} passHref legacyBehavior>
-                      <a className='w-full py-2 text-lg font-medium text-black bg-white border border-white'>
-                        {category?.categorylist_buttontext}
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Categories data={pageContents?.categorylist} />
         </div>
       </div>
 
       <div className='container mx-auto'>
         {pageContents?.productheading?.map((productH: any, Pid: number) => (
-          <div className='flex flex-col justify-center my-4 text-center sm:my-8' key={Pid}>
-            <h3 className='text-5xl font-bold text-black uppercase'>{productH?.productheading_title}</h3>
-            <h5 className='font-normal text-gray-600 text-md sm:mt-2'>{productH?.productheading_subtitle}</h5>
-          </div>
+          <Heading title={productH?.productheading_title} subTitle={productH?.productheading_subtitle} key={Pid} />
         ))}
         <ProductSlider config={pageContents} />
       </div>
@@ -149,42 +165,11 @@ function Home({ slugs, setEntities, recordEvent, ipAddress, pageContentsWeb, pag
       <div className='w-full pb-4 mx-auto bg-gray-50 sm:pb-8'>
         <div className='container py-3 mx-auto sm:py-6'>
           {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
-            <div className='flex flex-col justify-center my-4 text-center sm:my-8' key={cId}>
-              <h3 className='text-3xl font-bold text-black uppercase'>{heading?.collectionheadings_title}</h3>
-            </div>
+            <Heading title={heading?.collectionheadings_title} subTitle={heading?.collectionheadings_subtitle} key={cId} />
           ))}
-
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
-            {pageContents?.collectionlist?.map((collection: any, colId: number) => (
-              <div className='sm:col-span-1' key={colId}>
-                <div className='relative flex flex-col'>
-                  <div className='shadow image-continer group-hover:shadow-md'>
-                    <Link href={collection?.collectionlist_link} passHref legacyBehavior>
-                      <a>
-                        <Image src={collection?.collectionlist_image} className='object-cover object-center' alt={collection?.collectionlist_title} width={600} height={800} style={css} />
-                      </a>
-                    </Link>
-                  </div>
-                  <div className='flex flex-col w-full px-0 py-2 text-left'>
-                    <h3 className='mt-3 mb-2 text-xl font-bold text-black'>{collection?.collectionlist_title}</h3>
-                    <div dangerouslySetInnerHTML={{
-                      __html: collection.collectionlist_shortdescription,
-                    }}
-                      className='mb-3 text-sm font-normal text-gray-600 h-14'
-                    />
-                    <Link href={collection?.collectionlist_link} passHref legacyBehavior>
-                      <a className='px-4 py-2 text-lg font-medium text-center text-black bg-transparent border border-black'>
-                        Shop Now
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Collections data={pageContents?.collectionlist}/>          
         </div>
       </div>
-
     </>
   )
 }

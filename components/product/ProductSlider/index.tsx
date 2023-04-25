@@ -61,7 +61,7 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
       },
     ],
   }
-  const css = { maxWidth: '100%', height: 'auto', minHeight:"500px" }
+  const css = { maxWidth: '100%', height: 'auto', minHeight:"400px" }
   return (
     <section aria-labelledby="trending-heading" className="mb-4 bg-white sm:mb-8">
       <Swiper
@@ -77,7 +77,7 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
             slidesPerView: 4,
           },
           1024: {
-            slidesPerView: 4,
+            slidesPerView: 5,
           },
         }}
       >
