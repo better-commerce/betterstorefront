@@ -533,22 +533,14 @@ export default function ProductView({
                                   <div className="image-container">
                                     <Image
                                       priority
-                                      src={
-                                        generateUri(
-                                          image.image,
-                                          'h=1000&fm=webp'
-                                        ) || IMG_PLACEHOLDER
-                                      }
+                                      src={generateUri(image.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
                                       alt={image.name}
                                       className="object-cover object-center w-full h-full image"
                                       style={css}
                                       sizes="320 600 1000"
                                       width={600}
                                       height={1000}
-                                      blurDataURL={
-                                        `${image.image}?h=600&w=400&fm=webp` ||
-                                        IMG_PLACEHOLDER
-                                      }
+                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
                                     />
                                   </div>
                                 ) : (
