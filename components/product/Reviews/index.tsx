@@ -13,10 +13,9 @@ export default function Reviews({ data, productId }: any) {
         {data?.length && (
           <h2 className="text-lg font-medium text-gray-900">{GENERAL_REVIEWS}</h2>
         )}
-
-        {data?.length && (
+        {data?.productReviews?.length && (
         <div className="pb-10 mt-6 space-y-10 border-t border-b border-gray-200 divide-y divide-gray-200">
-          {data?.map((review: any, reviewIdx: number) => (
+          {data?.productReviews?.map((review: any, reviewIdx: number) => (
             <div
               key={'dataReview' + reviewIdx}
               className="pt-10 lg:grid lg:grid-cols-12 lg:gap-x-8"

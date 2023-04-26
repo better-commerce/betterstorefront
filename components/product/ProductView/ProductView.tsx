@@ -756,7 +756,7 @@ export default function ProductView({
           {/* Placeholder for pdp snippet */}
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
 
-          <Reviews className="mx-auto md:w-4/5" data={product.reviews} productId={product.recordId} />
+          <Reviews className="mx-auto md:w-4/5" data={reviews?.review} productId={product.recordId} />
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} />
           )}
