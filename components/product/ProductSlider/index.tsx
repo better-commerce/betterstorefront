@@ -65,13 +65,13 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
   return (
     <section aria-labelledby="trending-heading" className="mb-4 bg-white sm:mb-8">
       <Swiper
-        slidesPerView={1}
+        slidesPerView={1.5}
         spaceBetween={10}
         navigation={true}
         loop={true}
         breakpoints={{
           640: {
-            slidesPerView: 1,
+            slidesPerView: 1.5,
           },
           768: {
             slidesPerView: 4,

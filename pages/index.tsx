@@ -127,7 +127,7 @@ function Home({ slugs, setEntities, recordEvent, ipAddress, pageContentsWeb, pag
       ))}
 
       <div className='w-full pb-4 mx-auto bg-gray-50 sm:pb-8'>
-        <div className='container py-3 mx-auto sm:py-6'>
+        <div className='container px-4 py-3 mx-auto sm:px-0 sm:py-6'>
           {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
             <Heading title={heading?.collectionheadings_title} subTitle={heading?.collectionheadings_subtitle} key={cId} />
           ))}

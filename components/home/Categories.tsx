@@ -5,6 +5,7 @@ import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
 import Link from 'next/link'
+import { isMobile } from 'react-device-detect'
 export default function Categories({data}:any) {
   var settings = {
     fade: false,
@@ -44,16 +45,17 @@ export default function Categories({data}:any) {
   }
 
   const css = { maxWidth: "100%", minHeight: "350px" }
+  const mobcss = { maxWidth: "100%", minHeight: "150px" }
   return (
     <div className='flex'>
       <Swiper
-        slidesPerView={1.2}
+        slidesPerView={3.2}
         spaceBetween={10}
         navigation={true}
         loop={true}
         breakpoints={{
           640: {
-            slidesPerView: 1.2,
+            slidesPerView: 3.2,
           },
           768: {
             slidesPerView: 4.5,
@@ -74,7 +76,7 @@ export default function Categories({data}:any) {
                   <div className='image-continer'>
                     <Link href={category?.categorylist_link} passHref legacyBehavior>
                       <a>
-                        <Image src={category?.categorylist_image} alt={category?.categorylist_name} width={600} height={800} style={css} />
+                        {isMobile ? <Image src={category?.categorylist_image} alt={category?.categorylist_name} width={300} height={200} style={mobcss} />:<Image src={category?.categorylist_image} alt={category?.categorylist_name} width={600} height={800} style={css} />}
                       </a>
                     </Link>
                   </div>
