@@ -100,7 +100,8 @@ export default function ProductView({
   relatedProducts,
   promotions,
   pdpLookbookProducts,
-  pdpCachedImages
+  pdpCachedImages,
+  reviews
 }: any) {
   const {
     openNotifyUser,
@@ -499,7 +500,6 @@ export default function ProductView({
           <BreadCrumbs items={breadcrumbs} currentProduct={product} />
         )}
       </div>
-
       <main className="sm:pt-8">
         <div className="lg:max-w-none">
           <div className="mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start lg:max-w-none md:w-4/5">

@@ -48,6 +48,7 @@ export const OPERATIONS = [
   'getPdpCachedImage',
   'getProductPromos',
   'getPagePreviewContent',
+  'getProductReview',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -97,6 +98,7 @@ export type Operations<P extends APIProvider> = {
   getPdpCachedImage:{}
   getProductPromos:{}
   getPagePreviewContent:{}
+  getProductReview:{}
 
   getAllPages: {
     <T extends GetAllPagesOperation>(opts?: {

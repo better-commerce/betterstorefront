@@ -30,6 +30,11 @@ export async function getStaticProps({
 
   console.log(relatedProducts)
 
+  const reviewPromise = commerce.getProductReview({
+    query: product?.product?.recordId,
+  })
+  reviews = await reviewPromise
+
   // GET SELECTED PRODUCT ALL REVIEWS
   const pdpLookbookPromise = commerce.getPdpLookbook({
     query: product?.product?.stockCode,
@@ -69,6 +74,7 @@ export async function getStaticProps({
       snippets: product?.snippets,
       relatedProducts: relatedProducts,
       availabelPromotions: availabelPromotions,
+      reviews: reviews,
     },
     revalidate: 200,
   }
@@ -87,7 +93,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, pdpLookbookProducts, pdpCachedImages, }: any) {
+function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, pdpLookbookProducts, pdpCachedImages,reviews }: any) {
   const router = useRouter()
   return router.isFallback ? (
     <h1>{LOADER_LOADING}</h1>
@@ -103,6 +109,7 @@ function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabel
         promotions={availabelPromotions}
         pdpLookbookProducts={pdpLookbookProducts}
         pdpCachedImages={pdpCachedImages}
+        reviews={reviews}
       />
     )
   )
