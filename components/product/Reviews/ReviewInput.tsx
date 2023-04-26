@@ -80,7 +80,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
 
   return (
     <div className="pb-16">
-      <h2 className="mb-2 font-mono text-xl font-bold text-gray-900 sm:mb-4">{POST_YOUR_REVIEW}</h2>
+      <h2 className="mb-6 text-2xl font-semibold text-black">{POST_YOUR_REVIEW}</h2>
       {asyncMessage ? (
         <div>
           <span className="text-2xl text-gray-900">{asyncMessage}</span>
