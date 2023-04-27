@@ -605,15 +605,35 @@ export default function ProductView({
 
             {/* Product info */}
             <div className="px-4 mt-2 sm:mt-10 sm:px-0 lg:mt-0 lg:col-span-5">
-              <h3 className="mb-0 font-mono text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
-                {selectedAttrData.brand}
-              </h3>
+              <div className='flex justify-between gap-4'>
+                <h3 className="mb-0 font-mono text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
+                  {selectedAttrData.brand}
+                </h3>
+
+                <div>
+                  <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
+                  <div className="flex items-center xs:flex-col">
+                    <div className="flex items-center xs:text-center align-center">
+                      {[0, 1, 2, 3, 4].map((rating) => (
+                        <StarIcon
+                          key={rating}
+                          className={classNames(reviews?.review?.ratingAverage > rating ? 'text-yellow-400 h-3 w-3' : 'text-gray-300 h-4 w-4', 'flex-shrink-0')}
+                          aria-hidden="true"
+                        />
+                      ))}
+                    </div>
+                    {reviews?.review?.productReviews?.length > 0 ?
+                      <p className='pl-1 text-xs font-bold'>({reviews?.review?.ratingAverage})</p> : <p className='pl-1 text-xs font-bold'>(0)</p>
+                    }
+                  </div>
+                </div>
+              </div>
+
               <h1 className="font-mono text-lg font-medium tracking-tight text-black sm:text-2xl">
                 {selectedAttrData.name || selectedAttrData.productName}
               </h1>
               <p className="mt-0 font-mono text-sm text-gray-400 uppercase sm:text-md sm:mt-1">
-                <strong>{GENERAL_REFERENCE}:</strong>{' '}
-                {selectedAttrData.stockCode}
+                <strong>{GENERAL_REFERENCE}:</strong>{' '}{selectedAttrData.stockCode}
               </p>
               <div className="mt-2">
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
@@ -632,28 +652,7 @@ export default function ProductView({
                 )}
               </div>
 
-              <div className="mt-3">
-                <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
-                <div className="flex items-center xs:flex-col">
-                  <div className="flex items-center xs:text-center align-center">
-                    {[0, 1, 2, 3, 4].map((rating) => (
-                      <StarIcon
-                        key={rating}
-                        className={classNames(
-                          product.rating > rating
-                            ? 'text-yellow-600 h-5 w-5'
-                            : 'text-white h-1 w-1',
-                          'flex-shrink-0'
-                        )}
-                        aria-hidden="true"
-                      />
-                    ))}
-                  </div>
-                  <p className="sr-only">
-                    {product.rating} {GENERAL_REVIEW_OUT_OF_FIVE}
-                  </p>
-                </div>
-              </div>
+
               <div className="w-full sm:w-full">
                 <AttributesHandler
                   product={product}
