@@ -1,14 +1,22 @@
-import dynamic from 'next/dynamic'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
-const ReviewInput = dynamic(() => import('./ReviewInput'))
 import { GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE } from '@components/utils/textVariables'
-export default function Reviews({ data, productId }: any) {
+export default function Reviews({ data }: any) {
   return (
     <div className="mx-auto bg-white md:w-4/5">
       <div className="w-full px-4 py-0 mx-auto sm:py-0 sm:px-0 lg:px-0 sm:mt-2">
         {data?.productReviews?.length && (
-          <h2 className="mb-6 text-2xl font-semibold text-black">{data?.productReviews?.length}{' '}{GENERAL_REVIEWS} </h2>
+          <>
+            <div className='flex gap-8'>
+              <div>
+                <h3 className='relative pr-0 text-6xl font-bold text-black -top-1'>{data?.ratingAverage} <span className='absolute bottom-0 text-xl font-semibold text-gray-400 -right-4'>/5</span></h3>
+              </div>
+              <div>
+                <h2 className="mb-1 text-2xl font-semibold text-black">{GENERAL_REVIEWS} </h2>
+                <p className='mb-4 text-xs font-medium text-gray-400'>{data?.productReviews?.length} Customer Reviews</p>
+              </div>
+            </div>
+          </>
         )}
         {data?.productReviews?.map((review: any, reviewIdx: number) => (
           <div className='flex flex-col py-6 border-t border-gray-200' key={'dataReview' + reviewIdx}>
@@ -39,9 +47,6 @@ export default function Reviews({ data, productId }: any) {
             </div>
           </div>
         ))}
-      </div>
-      <div className='pt-6 mt-6 border-t border-gray-200'>
-        <ReviewInput productId={productId} />
       </div>
     </div>
   )

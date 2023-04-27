@@ -60,6 +60,7 @@ import ImageZoom from 'react-image-zooom'
 import { matchStrings } from '@framework/utils/parse-util'
 import RelatedProductWithGroup from '../RelatedProducts/RelatedProductWithGroup'
 import AvailableOffers from './AvailableOffers'
+import ReviewInput from '../Reviews/ReviewInput'
 
 //DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
 const AttributesHandler = dynamic(() => import('./AttributesHandler'))
@@ -747,16 +748,24 @@ export default function ProductView({
                 </div>
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} />
               </div>
-              <div className="flex flex-col">
-                <div className="section-devider"></div>
-              </div>
             </>
           ) : null}
 
-          {/* Placeholder for pdp snippet */}
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
-
-          <Reviews className="mx-auto md:w-4/5" data={reviews?.review} productId={product.recordId} />
+          {reviews?.review?.productReviews?.length > 0 &&
+            <>
+              <div className="flex flex-col">
+                <div className="section-devider"></div>
+              </div>
+              <Reviews className="mx-auto md:w-4/5" data={reviews?.review} />
+            </>
+          }
+          <div className="flex flex-col">
+            <div className="section-devider"></div>
+          </div>
+          <div className='mx-auto md:w-4/5'>
+            <ReviewInput productId={product.recordId} />
+          </div>
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} />
           )}
