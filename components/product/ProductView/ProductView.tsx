@@ -321,9 +321,7 @@ export default function ProductView({
         stockCode: selectedAttrData.stockCode,
       },
     }
-    const addonProducts = product.relatedProducts?.filter(
-      (item: any) => item.stockCode === ITEM_TYPE_ADDON
-    )
+    const addonProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode === ITEM_TYPE_ADDON)
     const addonProductsWithParentProduct = addonProducts.map((item: any) => {
       item.parentProductId = product.recordId
       return item
@@ -341,39 +339,22 @@ export default function ProductView({
         StockCode: obj.stockCode,
         ItemType: obj.itemType || 0,
         CustomInfo1: values.line1 || null,
-
         CustomInfo2: values.line2 || null,
-
         CustomInfo3: values.line3 || null,
-
         CustomInfo4: values.line4 || null,
-
         CustomInfo5: values.line5 || null,
-
         ProductName: obj.name,
-
         ManualUnitPrice: obj.manualUnitPrice || 0.0,
-
         PostCode: obj.postCode || null,
-
         IsSubscription: obj.subscriptionEnabled || false,
-
         IsMembership: obj.hasMembership || false,
-
         SubscriptionPlanId: obj.subscriptionPlanId || null,
-
         SubscriptionTermId: obj.subscriptionTermId || null,
-
         UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
-
         GiftWrapId: obj.giftWrapConfig || null,
-
         IsGiftWrapApplied: obj.isGiftWrapApplied || false,
-
         ItemGroupId: obj.itemGroupId || 0,
-
-        PriceMatchReqId:
-          obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
+        PriceMatchReqId: obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
       })
       return acc
     }, [])
@@ -399,9 +380,7 @@ export default function ProductView({
     asyncHandler()
   }
 
-  const isEngravingAvailable = !!product.relatedProducts?.filter(
-    (item: any) => item.stockCode === ITEM_TYPE_ADDON
-  ).length
+  const isEngravingAvailable = !!relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode === ITEM_TYPE_ADDON).length
 
   //TODO no additionalProperties key found on product object
   const insertToLocalWishlist = () => {
@@ -428,16 +407,15 @@ export default function ProductView({
     } else insertToLocalWishlist()
   }
 
-  const filteredRelatedProducts = product.relatedProducts?.filter(
+  const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter(
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
-  const filteredRelatedProductList = product.relatedProductList?.filter(
+  const filteredRelatedProductList = relatedProducts?.relatedProducts?.filter(
     (item: any) => item.stockCode !== ITEM_TYPE_ADDON
   )
 
   const handleProductBundleUpdate = (bundledProduct: any) => {
-    //debugger;
     if (bundledProduct && bundledProduct.id) {
       let clonedProduct = Object.assign({}, updatedProduct)
       if (clonedProduct && clonedProduct.componentProducts) {
@@ -445,52 +423,11 @@ export default function ProductView({
       }
     }
   }
-  /*if (product === null) {
-    return {
-      notFound: true,
-    }
-  }*/
 
   const breadcrumbs = product.breadCrumbs?.filter(
     (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
   )
   SwiperCore.use([Navigation])
-  var settings = {
-    fade: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 8000,
-    centerMode: false,
-    dots: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          initialSlide: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
   const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
   const css = { maxWidth: '100%', height: 'auto' }
