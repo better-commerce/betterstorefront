@@ -3,6 +3,7 @@ import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import Link from 'next/link'
+import Script from 'next/script'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 //DYNAMINC COMPONENT CALLS
 const ProductFilterRight = dynamic(
@@ -23,7 +24,6 @@ import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import Image from 'next/image'
-import { NextSeo } from 'next-seo'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER, RESULTS } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -35,6 +35,9 @@ import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -149,9 +152,38 @@ export default function CollectionPage(props: any) {
     },
   })
 
-  const productDataToPass = IS_INFINITE_SCROLL
-    ? productListMemory.products
-    : props.products
+  const [productDataToPass, setProductDataToPass] = useState(props.products)
+
+  useEffect(() => {
+    if (productDataToPass?.results?.length > 0) {
+      if (typeof window !== 'undefined') {
+        recordGA4Event(window, 'view_item_list', {
+          ecommerce: {
+            items: productDataToPass?.results?.map(
+              (item: any, itemId: number) => ({
+                item_name: item?.name,
+                item_id: item?.sku,
+                price: item?.price?.raw?.withTax,
+                item_brand: item?.brand,
+                item_category1: item?.classification?.mainCategoryName,
+                item_category2: item?.classification?.category,
+                item_variant: item?.variantGroupCode,
+                item_list_name: props?.name,
+                item_list_id: props?.id,
+                index: itemId + 1,
+                item_var_id: item?.stockCode,
+              })
+            ),
+          },
+        })
+      }
+    }
+  }, [productDataToPass])
+
+  useEffect(() => {
+    const data = IS_INFINITE_SCROLL ? productListMemory.products : props.products
+    setProductDataToPass(data)
+  }, [productListMemory.products, props.products])
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
@@ -183,11 +215,13 @@ export default function CollectionPage(props: any) {
       { shallow: true }
     )
     dispatch({ type: PAGE, payload: page.selected + 1 })
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    })
+    if (typeof window !== 'undefined') {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      })
+    }
   }
 
   const handleInfiniteScroll = () => {
@@ -330,29 +364,31 @@ export default function CollectionPage(props: any) {
           </Link>
         </div>
       )}
-      <NextSeo
-        title={props.name}
-        description={props.description}
-        additionalMetaTags={[
-          {
-            name: 'keywords',
-            content: props.metaKeywords,
-          },
-        ]}
-        openGraph={{
-          type: 'website',
-          title: props.metaTitle,
-          description: props.metaDescription,
-          images: [
+      {props?.products?.results?.length > 0 && (
+        <Script
+          type="application/ld+json"
+          id="schema"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
             {
-              url: props.image,
-              width: 800,
-              height: 600,
-              alt: props.name,
-            },
-          ],
-        }}
-      />
+              "@context": "https://schema.org/",
+              "@type": "ItemList",
+              "itemListElement": ${JSON.stringify(
+                props?.products?.results?.map(
+                  (product: any, pId: number) => ({
+                    '@type': 'ListItem',
+                      position: pId + 1,
+                      name: product?.name,
+                      url: `${SITE_ORIGIN_URL}/${product?.slug}`,
+                  })
+                )
+              )}
+            }
+          `,
+          }}
+        />
+      )}
     </main>
   )
 }

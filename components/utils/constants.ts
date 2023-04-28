@@ -131,6 +131,8 @@ export const BETTERCOMMERCE_DEFAULT_COUNTRY = process.env.BETTERCOMMERCE_DEFAULT
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY;
 export const BETTERCOMMERCE_LANGUAGE = process.env.BETTERCOMMERCE_LANGUAGE;
 export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY;
+export const SITE_ORIGIN_URL = process.env.SITE_ORIGIN_URL;
+export const SITE_NAME = process.env.SITE_NAME;
 
 export module Messages {
 
@@ -252,3 +254,4 @@ export const ALERT_TIMER = 5000
 export const DATE_FORMAT = "DD-MMM-yy";
 export const DATE_TIME_FORMAT = "DD-MMM-yy HH:mm";
 export const PRODUCTS_SLUG_PREFIX = "products/";
+export const EmptyGuid = "00000000-0000-0000-0000-000000000000";

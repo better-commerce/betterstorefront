@@ -5,15 +5,31 @@ import { v4 as uuid } from "uuid";
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import { Guid } from '@commerce/types'
+import { DeviceType } from "@commerce/utils/use-device"
+import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId';
 
 export const basketId = () => {
   if (Cookies.get('basketId')) {
     return Cookies.get('basketId') || ''
   }
   const basketId = uuid()
-  Cookies.set('basketId', basketId)
+  Cookies.set('basketId', basketId, {
+    expires: getExpiry(getMinutesInDays(365)),
+  })
   return basketId
 }
+
+export interface IDeviceInfo {
+  readonly isMobile: boolean | undefined;
+  readonly isDesktop: boolean | undefined;
+  readonly isIPadorTablet: boolean | undefined;
+  readonly deviceType: DeviceType;
+}
+
+export interface IOverlayLoaderState {
+  readonly visible: boolean;
+  readonly message?: string;
+};
 
 export interface State {
   displaySidebar: boolean
@@ -33,6 +49,7 @@ export interface State {
   appConfig: any
   orderId: string
   userIp: string
+  overlayLoaderState: IOverlayLoaderState;
 }
 
 const initialState = {
@@ -53,6 +70,10 @@ const initialState = {
   appConfig: {},
   orderId: getItem('orderId') || '',
   userIp: '',
+  overlayLoaderState: {
+    visible: false,
+    message: "",
+  },
 }
 
 type Action =
@@ -121,6 +142,7 @@ type Action =
   | { type: 'SET_APP_CONFIG'; payload: any }
   | { type: 'SET_ORDER_ID'; payload: any }
   | { type: 'SET_USER_IP'; payload: string }
+  | { type: 'SET_OVERLAY_STATE'; payload: IOverlayLoaderState }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -287,6 +309,12 @@ function uiReducer(state: State, action: Action) {
         orderId: action.payload,
       }
     }
+    case 'SET_OVERLAY_STATE': {
+      return {
+        ...state,
+        overlayLoaderState: action.payload,
+      }
+    }
   }
 }
 
@@ -443,7 +471,9 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
         setItem('cartItems', { lineItems: [] })
         dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
         const basketIdRef = uuid()
-        Cookies.set('basketId', basketIdRef)
+        Cookies.set('basketId', basketIdRef, {
+          expires: getExpiry(getMinutesInDays(365)),
+        })
         dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
         dispatch({ type: 'REMOVE_USER', payload: {} })
       })
@@ -466,7 +496,9 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
 
   const setBasketId = useCallback(
     (basketId: string) => {
-      Cookies.set('basketId', basketId)
+      Cookies.set('basketId', basketId, {
+        expires: getExpiry(getMinutesInDays(365)),
+      })
       dispatch({ type: 'SET_BASKET_ID', payload: basketId })
     },
     [dispatch]
@@ -485,6 +517,27 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
         Cookies.remove('orderId')
       }
       dispatch({ type: 'SET_ORDER_ID', payload })
+    },
+    [dispatch]
+  )
+
+  const setOverlayLoaderState = useCallback(
+    (payload: IOverlayLoaderState) => {
+      dispatch({ type: 'SET_OVERLAY_STATE', payload })
+    },
+    [dispatch]
+  )
+
+  const hideOverlayLoaderState = useCallback(
+    (payload: IOverlayLoaderState = {
+      visible: false,
+      message: "",
+    }) => {
+      const data: IOverlayLoaderState = {
+        visible: false,
+        message: "",
+      }
+      dispatch({ type: 'SET_OVERLAY_STATE', payload })
     },
     [dispatch]
   )
@@ -590,6 +643,8 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
       setAppConfig,
       setOrderId,
       setUserIp,
+      setOverlayLoaderState,
+      hideOverlayLoaderState,
     }),
     [state]
   )

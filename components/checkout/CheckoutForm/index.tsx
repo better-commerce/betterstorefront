@@ -56,6 +56,7 @@ export default function CheckoutForm({
   fetchAddress,
   config,
   location,
+  recordShippingInfo,
 }: any) {
   const {
     setCartItems,
@@ -234,6 +235,7 @@ export default function CheckoutForm({
   const { Order } = EVENTS_MAP.ENTITY_TYPES
 
   const handleNewAddress = (values: any, callback: any = () => { }) => {
+    recordShippingInfo()
     const newValues = {
       ...values,
       customerId: cartItems.userId,

@@ -57,8 +57,10 @@ export default function Grid({
                     </div>
                   </div>
                 ))}
-              {products.results.map((product: any, productIdx: number) => (
-                <ProductCard key={productIdx} product={product} />
+              {products?.results?.map((product: any, productIdx: number) => (
+                <div key={productIdx}>
+                  <ProductCard key={productIdx} product={product} />
+                </div>
               ))}
             </div>
           }
