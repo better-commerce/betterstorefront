@@ -19,6 +19,8 @@ import {
   ADD_ADDRESS,
 } from '@components/utils/textVariables'
 import { CustomerAddressModel } from 'models/customer'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import { getCurrentPage } from '@framework/utils/app-util'
 
 export function asyncHandler() {
   function getAddress() {
@@ -95,12 +97,22 @@ export default function AddressBook() {
 
   const addNewAddress = async (values: any) => {
     let newValues = { ...values, userId: user.userId }
-      return createAddress(newValues)
-        .then(() => {
-          setNewFormMode(false)
-          success()
-        })
-        .catch(() => failCb())
+    let currentPage = getCurrentPage()
+
+    if (typeof window !== "undefined") {
+      if (currentPage) {
+        recordGA4Event(window, 'save_new_address', {
+          current_page: currentPage,
+        });
+      }
+    }
+
+    return createAddress(newValues)
+      .then(() => {
+        setNewFormMode(false)
+        success()
+      })
+      .catch(() => failCb())
   }
   return (
     <main className="sm:px-6 lg:px-8">

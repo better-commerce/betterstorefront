@@ -8,6 +8,8 @@ import {
   GENERAL_DEFAULT_DELIVERY_ADDRESS,
   GENERAL_DEFAULT_BILLING_ADDRESS,
 } from '@components/utils/textVariables'
+import { getCurrentPage } from '@framework/utils/app-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 
 export default function AddressItem({
   item,
@@ -40,6 +42,15 @@ export default function AddressItem({
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const handleAddressSubmit = async (values: any) => {
+    let currentPage = getCurrentPage()
+    if (typeof window !== "undefined") {
+      if (currentPage) {
+        recordGA4Event(window, 'address_changes', {
+          delivery_address_name: values?.address1,
+          current_page: currentPage,
+        });
+      }
+    }
     return updateAddress({ ...item, ...values, ...{ userId } })
       .then(
         () =>

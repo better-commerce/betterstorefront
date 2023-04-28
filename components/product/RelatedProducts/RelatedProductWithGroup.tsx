@@ -12,6 +12,9 @@ import cartHandler from '@components/services/cart'
 import Engraving from '../Engraving'
 import { round } from 'lodash'
 import QuickViewModal from '@components/product/QuickView/ProductQuickView'
+import { getCurrentPage } from '@framework/utils/app-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+
 export default function RelatedProductWithGroup({ products }: any) {
     var settings = {
         fade: false,
@@ -52,6 +55,7 @@ export default function RelatedProductWithGroup({ products }: any) {
     const [isQuickview, setQuickview] = useState(undefined)
     const [isQuickviewOpen, setQuickviewOpen] = useState(false)
     const [isEngravingOpen, showEngravingModal] = useState(false)
+    let currentPage = getCurrentPage();
 
     const { basketId, setCartItems, user } = useUI()
 
@@ -102,9 +106,41 @@ export default function RelatedProductWithGroup({ products }: any) {
         }
         asyncAddToCart()
     }
-    const onViewApiKey = (isQuickview: any) => {
-        setQuickview(isQuickview)
+    const onViewApiKey = (product: any, pid: number) => {
+        setQuickview(product)
         setQuickviewOpen(true)
+
+        if (currentPage) {
+            if (typeof window !== "undefined") {
+              recordGA4Event(window, 'popup_view', {
+                product_name: product?.name,
+                category: product?.classification?.mainCategoryName,
+                page: window.location.href,
+                position: pid + 1,
+                color: product?.variantGroupCode,
+                price: product?.price?.raw?.withTax,
+                current_page: currentPage,
+              })
+            }
+          }
+      
+          if (currentPage) {
+            if (typeof window !== "undefined") {
+              recordGA4Event(window, 'quick_view_click', {
+                ecommerce: {
+                  items: {
+                    product_name: product?.name,
+                    position: pid + 1,
+                    product_price: product?.price?.raw?.withTax,
+                    color: product?.variantGroupCode,
+                    category: product?.classification?.mainCategoryName,
+                    current_page: currentPage,
+                    header: 'You May Also Like',
+                  },
+                },
+              })
+            }
+          }
     }
     const css = { maxWidth: '100%', height: 'auto' }
     return (
@@ -154,7 +190,7 @@ export default function RelatedProductWithGroup({ products }: any) {
                                                 <button
                                                     type="button"
                                                     className="absolute z-10 w-11/12 px-4 py-2 mx-2 text-sm text-white bg-black rounded-md opacity-0 left-1 bg-opacity-60 focus:opacity-0 group-hover:opacity-100 bottom-2"
-                                                    onClick={() => onViewApiKey(product)}
+                                                    onClick={() => onViewApiKey(product, pId)}
                                                 >
                                                     Quick View
                                                 </button>

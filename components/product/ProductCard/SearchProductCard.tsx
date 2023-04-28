@@ -204,6 +204,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
                 style={css}
                 width={400}
                 height={600}
+                quality="100"
               ></Image>
             </Link>
             {buttonConfig.isPreOrderEnabled && (

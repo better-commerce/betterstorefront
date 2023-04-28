@@ -30,7 +30,7 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
   return (
     <div className="relative bg-gray-900">
       <Swiper navigation={true} loop={true} className="mySwiper">
-        {banners.map((banner: BannerProps, idx: number) => {
+        {banners && banners?.map((banner: BannerProps, idx: number) => {
           return (
             <SwiperSlide key={idx}>              
               <Link href={banner?.link || '#'}>
@@ -45,6 +45,7 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
                     style={css}
                     width={2000}
                     height={1000}
+                    quality="100"
                     className='sm:max-h-screen image banner-Image'></Image>
                     <div className='sr-only'>Banner Image</div>
                 </div>

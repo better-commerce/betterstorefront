@@ -9,7 +9,7 @@ import attributesGenerator, {
   productLookup,
 } from '@components/utils/attributesGenerator'
 import { cloneDeep } from 'lodash'
-
+import { recordGA4Event } from '@components/services/analytics/ga4'
 
 const ATTR_COMPONENTS: any = {
   HorizontalList: (props: any) => <InlineList {...props} />,
@@ -113,7 +113,34 @@ export default function AttributesHandler({
       [fieldCode]: value,
     }
     
-    
+    if (typeof window !== "undefined") {
+      recordGA4Event(window, 'view_item', {
+        ecommerce: {
+          items: {
+            item_name: product?.name,
+            item_brand: product?.brand,
+            item_category: product?.mappedCategories[1]?.categoryName,
+            item_category2: product?.mappedCategories[0]?.categoryName,
+            item_variant: product?.variantGroupCode,
+            quantity: 1,
+            item_id: product?.productCode,
+            item_var_id: product?.stockCode,
+            price: product?.price?.raw?.withTax,
+          },
+          section_title: "PLP",
+          value: product?.price?.raw?.withTax,
+        },
+      })
+      recordGA4Event(window, 'color_change', {
+        category: product?.mappedCategories[1]?.categoryName,
+        color_clicked: updatedFieldData[KEY_COLOR],
+        // color_category: objValue?.fieldGroupName,
+        product_name: product?.name,
+        item_var_id: product?.stockCode,
+        item_id: product?.productCode,
+        // position: idx + 1
+      });
+    }
 
     // for quickview
     if (isQuickView) {

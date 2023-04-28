@@ -1,3 +1,5 @@
+import { stringToBoolean } from "./parse-util"
+
 export const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
 export const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
 export const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL
@@ -10,3 +12,6 @@ export const BETTERCMS_API_VERSION = process.env.BETTERCMS_API_VERSION
 export const BETTERCMS_API_URL = process.env.BETTERCMS_API_URL
 export const HOME_PAGE_DEFAULT_SLUG = "home";
 
+// google analytics
+export const GA4_DISABLED = stringToBoolean(process.env.GA4_DISABLED);
+export const GA4_MEASUREMENT_ID = process.env.GA4_MEASUREMENT_ID;

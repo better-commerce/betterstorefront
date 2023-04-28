@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { CommerceProvider } from '@framework'
-import { useUI } from '@components/ui/context'
+import { IDeviceInfo, useUI } from '@components/ui/context'
 import type { Page } from '@commerce/types/page'
 import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
@@ -38,6 +38,7 @@ const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
 })
 
 interface Props {
+  children: any
   pageProps: {
     pages?: Page[]
     categories: Category[]
@@ -93,12 +94,17 @@ interface LayoutProps {
   footer: []
 }
 
-const Layout: FC<React.PropsWithChildren<Props>> = ({
+export interface IExtraProps {
+  readonly deviceInfo: IDeviceInfo;
+}
+
+const Layout: FC<Props & IExtraProps> = ({
   children,
   config,
   pageProps: { categories = [], ...pageProps },
   keywords,
   isLocationLoaded,
+  deviceInfo,
 }) => {
   const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
   const [isLoading, setIsLoading] = useState(false)
@@ -146,9 +152,14 @@ const Layout: FC<React.PropsWithChildren<Props>> = ({
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
         {showSearchBar && (<SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} /> )}
-        <Navbar currencies={config?.currencies} config={sortedData} languages={config?.languages} />
+        <Navbar
+          currencies={config?.currencies}
+          config={sortedData}
+          languages={config?.languages}
+          deviceInfo={deviceInfo}
+        />
         <main className="pt-16 fit">{children}</main>
-        <Footer config={data.footer} />
+        <Footer config={data.footer} deviceInfo={deviceInfo} />
         <ModalUI />
         <SidebarUI />
         <FeatureBar title={GENERAL_COOKIE_TEXT} hide={acceptedCookies} 

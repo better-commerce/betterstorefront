@@ -28,13 +28,19 @@ import useTranslation, {
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import {
+  EmptyGuid,
+} from '@components/utils/constants'
+import { getCurrentPage } from '@framework/utils/app-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import { tryParseJson } from '@framework/utils/parse-util'
 
 const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
-  const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
+  const { closeSidebar, setCartItems, cartItems, basketId, user } = useUI()
   const { getCart, addToCart } = useCart()
   const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
   const { Basket } = EVENTS_MAP.ENTITY_TYPES
-
+  let currentPage = getCurrentPage();
   const content = useTranslation()
 
   useEffect(() => {
@@ -73,9 +79,40 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
       }
       if (type === 'increase') {
         data.qty = 1
+        if (currentPage) {
+          if (typeof window !== "undefined") {
+            recordGA4Event(window, 'select_quantity', {
+              category: product?.categoryItems?.length ? product?.categoryItems[0]?.categoryName : "",
+              final_quantity: data.qty,
+              current_page: currentPage,
+              number_of_plus_clicked: 1,
+              number_of_minus_clicked: 0,
+            });
+          }
+        }
       }
       if (type === 'delete') {
         data.qty = 0
+        if (typeof window !== "undefined") {
+          recordGA4Event(window, 'remove_from_cart', {
+            ecommerce: {
+              items: [
+                {
+                  item_name: product?.name,
+                  price: product?.price?.raw?.withTax,
+                  quantity: product?.qty,
+                  item_id: product?.sku,
+                  item_size: getLineItemSizeWithoutSlug(product),
+                  item_brand: product?.brand,
+                  item_variant: product?.colorName,
+                  item_var_id: product?.stockCode
+                }
+              ],
+              loggedin: (user?.userId && user?.userId !== EmptyGuid),
+              current_page: "Cart"
+            }
+          });
+        }
       }
       try {
         const item = await addToCart(data, type, { product })
@@ -85,6 +122,39 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
       }
     }
     asyncHandleItem()
+  }
+
+  const getLineItemSizeWithoutSlug = (product: any) => {
+    const productData: any = tryParseJson(product?.attributesJson || {})
+    return productData?.Size
+  }
+
+  const beginCheckout = (cartItems: any) => {
+    if (typeof window !== "undefined") {
+      recordGA4Event(window, 'begin_checkout', {
+        ecommerce: {
+          items: [
+            cartItems?.lineItems?.map((item: any, itemId: number) => (
+              {
+                item_name: item?.name,
+                price: item?.price?.raw?.withTax,
+                quantity: item?.qty,
+                item_brand: item?.brand,
+                item_id: item?.sku,
+                item_size: getLineItemSizeWithoutSlug(item),
+                item_variant: item?.colorName,
+              }
+            ))
+          ],
+          current_page: "Checkout",
+          loggedin_status: (user?.userId && user?.userId !== EmptyGuid),
+          paymode: "",
+          address: "",
+          value: cartItems?.grandTotal?.raw?.withTax,
+          item_var_id: cartItems?.lineItems[0]?.stockCode,
+        }
+      });
+    }
   }
 
   const handleClose = () => closeSidebar()
@@ -320,8 +390,11 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                       <div className="mt-6">
                         <Link
                           href="/cart"
+                          onClick={() => {
+                            handleClose()
+                            beginCheckout(cartItems)
+                          }}
                           passHref
-                          onClick={handleClose}
                           className="flex items-center justify-center px-6 py-3 font-medium text-white uppercase bg-black border border-transparent rounded-sm shadow-sm hover:bg-gray-900"
                         >
                           {content.GENERAL_CHECKOUT}

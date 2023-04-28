@@ -44,7 +44,11 @@ import dynamic from 'next/dynamic'
 import { useUI } from '@components/ui'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import { getCurrentPage } from '@framework/utils/app-util'
+
 SwiperCore.use([Navigation])
+
 var settings = {
   fade: true,
   speed: 500,
@@ -116,6 +120,8 @@ export default function ProductQuickView({
     user,
     openCart,
   } = useUI()
+  let currentPage = getCurrentPage()
+  
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
@@ -134,6 +140,55 @@ export default function ProductQuickView({
           { product: selectedAttrData }
         )
         setCartItems(item)
+        if (typeof window !== "undefined") {
+          recordGA4Event(window, 'add_to_cart', {
+            ecommerce: {
+              items: [
+                {
+                  item_name: product?.name,
+                  item_brand: product?.brand,
+                  item_category2: product?.mappedCategories[1]?.categoryName,
+                  item_variant: product?.variantGroupCode,
+                  quantity: 1,
+                  item_id: product?.productCode,
+                  price: product?.price?.raw?.withTax,
+                  item_var_id: product?.stockCode,
+                  item_list_name: product?.mappedCategories[2]?.categoryName,
+                  // index: position,
+                },
+              ],
+              cart_quantity: 1,
+              total_value: product?.price?.raw?.withTax,
+              current_page: "PLP ",
+              section_title: 'Quick View',
+            },
+          })
+    
+          if (currentPage) {
+            recordGA4Event(window, 'view_cart', {
+              ecommerce: {
+                items: cartItems?.lineItems?.map((items: any, itemId: number) => (
+                  {
+                    item_name: items?.name,
+                    item_id: items?.sku,
+                    price: items?.price?.raw?.withTax,
+                    item_brand: items?.brand,
+                    item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : "",
+                    item_variant: items?.colorName,
+                    item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : "",
+                    item_list_id: "",
+                    index: itemId,
+                    quantity: items?.qty,
+                    item_var_id: items?.stockCode,
+                  }
+                )),
+                // device: deviceCheck,
+                current_page: currentPage
+              },
+            })
+          }
+    
+        }
       },
       shortMessage: '',
     }
@@ -179,6 +234,55 @@ export default function ProductQuickView({
               { product: selectedAttrData }
             )
             setCartItems(item)
+            if (typeof window !== "undefined") {
+              recordGA4Event(window, 'add_to_cart', {
+                ecommerce: {
+                  items: [
+                    {
+                      item_name: product?.name,
+                      item_brand: product?.brand,
+                      item_category2: product?.mappedCategories[1]?.categoryName,
+                      item_variant: product?.variantGroupCode,
+                      quantity: 1,
+                      item_id: product?.productCode,
+                      price: product?.price?.raw?.withTax,
+                      item_var_id: product?.stockCode,
+                      item_list_name: product?.mappedCategories[2]?.categoryName,
+                      // index: position,
+                    },
+                  ],
+                  cart_quantity: 1,
+                  total_value: product?.price?.raw?.withTax,
+                  current_page: "PLP ",
+                  section_title: 'Quick View',
+                },
+              })
+        
+              if (currentPage) {
+                recordGA4Event(window, 'view_cart', {
+                  ecommerce: {
+                    items: cartItems?.lineItems?.map((items: any, itemId: number) => (
+                      {
+                        item_name: items?.name,
+                        item_id: items?.sku,
+                        price: items?.price?.raw?.withTax,
+                        item_brand: items?.brand,
+                        item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : "",
+                        item_variant: items?.colorName,
+                        item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : "",
+                        item_list_id: "",
+                        index: itemId,
+                        quantity: items?.qty,
+                        item_var_id: items?.stockCode,
+                      }
+                    )),
+                    // device: deviceCheck,
+                    current_page: currentPage
+                  },
+                })
+              }
+        
+            }
           },
           shortMessage: '',
         }
@@ -200,6 +304,54 @@ export default function ProductQuickView({
     openWishlist()
   }
   const handleWishList = () => {
+    let productAvailability = 'Yes'
+    if (product?.currentStock > 0) {
+      productAvailability = 'Yes'
+    } else {
+      productAvailability = 'No'
+    }
+
+    if (typeof window !== "undefined") {
+      recordGA4Event(window, 'wishlist', {
+        ecommerce: {
+          header: "PLP",
+          current_page: 'Quick view ',
+        },
+      })
+
+      recordGA4Event(window, 'add_to_wishlist', {
+        ecommerce: {
+          items: [
+            {
+              item_name: product?.name,
+              item_brand: product?.brand,
+              item_category: product?.classification?.mainCategoryName,
+              item_category2: product?.classification?.category,
+              item_variant: product?.variantGroupCode,
+              quantity: 1,
+              item_id: product?.sku,
+              price: product?.price?.raw?.withTax,
+            },
+          ],
+          item_var_id: product?.stockCode,
+          header: "Quick View",
+          current_page: 'Quick View',
+          availability: productAvailability,
+        },
+      })
+    }
+
+    if (currentPage) {
+      if (typeof window !== "undefined") {
+        recordGA4Event(window, 'wishlist', {
+          ecommerce: {
+            header: "Quick View",
+            current_page: currentPage,
+          },
+        })
+      }
+    }
+
     const accessToken = localStorage.getItem('user')
     if (accessToken) {
       const createWishlist = async () => {

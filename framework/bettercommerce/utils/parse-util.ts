@@ -57,6 +57,18 @@ export const matchStrings = (input1: string, input2: string, ignoreCase = false)
     return false;
 };
 
+export const tryParseJson = (json: any) => {
+    if (json) {
+        let parsed = {};
+        try {
+            parsed = JSON.parse(json);
+            return parsed;
+        } catch (e: any) {
+        }
+    }
+    return null;
+};
+
 export const priceFormat = (value: string | number | undefined, decimalPlaces: number = 2): string => {
     if (value) { // Not undefined
         let floatParsed: number = 0.00;

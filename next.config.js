@@ -23,6 +23,10 @@ module.exports = withCommerceConfig({
   },
   rewrites() {
     return [
+      {
+        source: '/robots.txt',
+        destination: '/api/robots',
+      },
       (isBC) && {
         source: '/checkout',
         destination: '/api/checkout',
@@ -53,6 +57,10 @@ module.exports = withCommerceConfig({
     BETTERCMS_BASE_URL: process.env.BETTERCMS_BASE_URL,
     BETTERCMS_API_VERSION: process.env.BETTERCMS_API_VERSION,
     BETTERCMS_API_URL: process.env.BETTERCMS_API_URL,
+    SITE_ORIGIN_URL: process.env.SITE_ORIGIN_URL,
+    SITE_NAME: process.env.SITE_NAME,
+    GA4_DISABLED: process.env.GA4_DISABLED,
+    GA4_MEASUREMENT_ID: process.env.GA4_MEASUREMENT_ID,
   },
 })
 

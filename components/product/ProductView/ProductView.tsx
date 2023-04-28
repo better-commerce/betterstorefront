@@ -4,7 +4,6 @@ import { useState, useEffect, Fragment, useCallback } from 'react'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import { StarIcon, PlayIcon } from '@heroicons/react/24/solid'
-import { NextSeo } from 'next-seo'
 import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
@@ -76,6 +75,9 @@ const ProductDetails = dynamic(
   () => import('@components/product/ProductDetails')
 )
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import { getCurrentPage } from '@framework/utils/app-util'
+
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -125,6 +127,8 @@ export default function ProductView({
     variantSize: '',
   })
   const [sizeInit, setSizeInit] = useState('');
+  let currentPage = getCurrentPage()
+
   const product = updatedProduct || data
 
   const [selectedAttrData, setSelectedAttrData] = useState({
@@ -235,6 +239,7 @@ export default function ProductView({
   const handlePreviewClose = () => {
     setPreviewImg(undefined)
   }
+
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
@@ -253,6 +258,53 @@ export default function ProductView({
           { product: selectedAttrData }
         )
         setCartItems(item)
+        if (typeof window !== "undefined") {
+          recordGA4Event(window, 'add_to_cart', {
+            ecommerce: {
+              items: [
+                {
+                  item_name: product?.name,
+                  item_brand: product?.brand,
+                  item_category2: product?.mappedCategories[1]?.categoryName,
+                  item_variant: product?.variantGroupCode,
+                  quantity: 1,
+                  item_id: product?.productCode,
+                  price: product?.price?.raw?.withTax,
+                  item_var_id: product?.stockCode,
+                  item_list_name: product?.mappedCategories[2]?.categoryName,
+                  index: 1,
+                }
+              ],
+              cart_quantity: 1,
+              total_value: product?.price?.raw?.withTax,
+              current_page: "PDP",
+              section_title: "Product Detail",
+            }
+          });
+          if (currentPage) {
+            recordGA4Event(window, 'view_cart', {
+              ecommerce: {
+                items: cartItems?.lineItems?.map((items: any, itemId: number) => (
+                  {
+                    item_name: items?.name,
+                    item_id: items?.sku,
+                    price: items?.price?.raw?.withTax,
+                    item_brand: items?.brand,
+                    item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : "",
+                    item_variant: items?.colorName,
+                    item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : "",
+                    item_list_id: "",
+                    index: itemId,
+                    quantity: items?.qty,
+                    item_var_id: items?.stockCode,
+                  }
+                )),
+                // device: deviceCheck,
+                current_page: currentPage
+              }
+            });
+          }
+        }
       },
       shortMessage: '',
     }
@@ -298,6 +350,53 @@ export default function ProductView({
               { product: selectedAttrData }
             )
             setCartItems(item)
+            if (typeof window !== "undefined") {
+              recordGA4Event(window, 'add_to_cart', {
+                ecommerce: {
+                  items: [
+                    {
+                      item_name: product?.name,
+                      item_brand: product?.brand,
+                      item_category2: product?.mappedCategories[1]?.categoryName,
+                      item_variant: product?.variantGroupCode,
+                      quantity: 1,
+                      item_id: product?.productCode,
+                      price: product?.price?.raw?.withTax,
+                      item_var_id: product?.stockCode,
+                      item_list_name: product?.mappedCategories[2]?.categoryName,
+                      index: 1,
+                    }
+                  ],
+                  cart_quantity: 1,
+                  total_value: product?.price?.raw?.withTax,
+                  current_page: "PDP",
+                  section_title: "Product Detail",
+                }
+              });
+              if (currentPage) {
+                recordGA4Event(window, 'view_cart', {
+                  ecommerce: {
+                    items: cartItems?.lineItems?.map((items: any, itemId: number) => (
+                      {
+                        item_name: items?.name,
+                        item_id: items?.sku,
+                        price: items?.price?.raw?.withTax,
+                        item_brand: items?.brand,
+                        item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : "",
+                        item_variant: items?.colorName,
+                        item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : "",
+                        item_list_id: "",
+                        index: itemId,
+                        quantity: items?.qty,
+                        item_var_id: items?.stockCode,
+                      }
+                    )),
+                    // device: deviceCheck,
+                    current_page: currentPage
+                  }
+                });
+              }
+            }
           },
           shortMessage: '',
         }
@@ -389,6 +488,55 @@ export default function ProductView({
     openWishlist()
   }
   const handleWishList = () => {
+    let productAvailability = "Yes"
+    if (product?.currentStock > 0) {
+      productAvailability = "Yes"
+    }
+    else {
+      productAvailability = "No"
+    }
+
+    if (typeof window !== "undefined") {
+      recordGA4Event(window, 'wishlist', {
+        ecommerce: {
+          header: product?.name,
+          current_page: 'PDP',
+        },
+      })
+
+      recordGA4Event(window, 'add_to_wishlist', {
+        ecommerce: {
+          items: [
+            {
+              item_name: product?.name,
+              item_brand: product?.brand,
+              item_category: product?.mappedCategories[0]?.categoryName,
+              item_category2: product?.mappedCategories[1]?.categoryName,
+              item_variant: product?.variantGroupCode,
+              quantity: 1,
+              item_id: product?.productCode,
+              price: product?.price?.raw?.withTax,
+            }
+          ],
+          item_var_id: product?.stockCode,
+          header: "PDP",
+          current_page: "PDP",
+          availability: productAvailability,
+        }
+      });
+    }
+
+    if (currentPage) {
+      if (typeof window !== "undefined") {
+        recordGA4Event(window, 'wishlist', {
+          ecommerce: {
+            header: "PDP",
+            current_page: currentPage,
+          },
+        })
+      }
+    }
+
     const accessToken = localStorage.getItem('user')
     if (accessToken) {
       const createWishlist = async () => {
@@ -718,29 +866,6 @@ export default function ProductView({
             ourDeliveryCost={product.price.raw.tax} //TBD
           />
         </div>
-        <NextSeo
-          title={product.name}
-          description={product.metaDescription}
-          additionalMetaTags={[
-            {
-              name: 'keywords',
-              content: product.metaKeywords,
-            },
-          ]}
-          openGraph={{
-            type: 'website',
-            title: product.metaTitle,
-            description: product.metaDescription,
-            images: [
-              {
-                url: product.image,
-                width: 800,
-                height: 600,
-                alt: product.name,
-              },
-            ],
-          }}
-        />
       </main>
 
       {previewImg ? (

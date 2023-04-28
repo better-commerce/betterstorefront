@@ -12,18 +12,44 @@ import {
   SIGN_UP_FOR_NEWSLETTER,
   SIGN_UP_TEXT
 } from '@components/utils/textVariables'
+import { getCurrentPage } from '@framework/utils/app-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import useDevice from '@commerce/utils/use-device'
+import { IExtraProps } from '../Layout/Layout'
 
 interface Props {
   config: []
 }
 
-const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
+const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
   const router = useRouter()
   const [hasConfig, setHasConfig] = useState(false)
+  const { isMobile, isIPadorTablet } = deviceInfo;
+
+  let deviceCheck = ""
+  if (isMobile || isIPadorTablet) {
+    deviceCheck = "Mobile"
+  } else {
+    deviceCheck = "Desktop"
+  }
+
   useEffect(() => {
     setHasConfig(Boolean(config))
   }, [config])
   const handleRedirect = (path: string) => (path ? router.push(path) : {})
+
+  function footerClick(detail: any) {
+    let currentPage = getCurrentPage()
+    if (currentPage) {
+      if (typeof window !== "undefined") {
+        recordGA4Event(window, 'footer_query_click', {
+          device: deviceCheck,
+          page_clicked_on: currentPage,
+          click_detail: detail,
+        });
+      }
+    }
+  }
 
   return (
     <footer aria-labelledby="footer-heading" className="bg-gray-100 shadow-inner sm:h-96 sm:mt-2">
@@ -32,12 +58,12 @@ const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
       </h2>
       <div className="w-full px-4 pt-20 mx-auto sm:w-4/5 sm:px-0 lg:px-0">
         <div className="grid grid-cols-1 md:grid-cols-12 md:grid-flow-col md:gap-x-8 md:gap-y-16 md:auto-rows-min">
-          <div className="col-span-1 md:col-span-2 lg:row-start-1 lg:col-start-1 opacity-70">
+          <div className="col-span-1 md:col-span-2 lg:row-start-1 lg:col-start-1 opacity-70" onClick={() => footerClick("Logo")}>
             <Logo />
           </div>
           <div className="grid grid-cols-2 col-span-6 gap-8 mt-10 sm:grid-cols-3 md:mt-0 md:row-start-1 md:col-start-3 md:col-span-8 lg:col-start-2 lg:col-span-6">
             <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
-              <div>
+              <div onClick={() => footerClick("INFORMATION")}>
                 <h3 className="font-bold text-gray-900 text-md">INFORMATION</h3>
                 <ul role="list" className="mt-6 space-y-6">
                   <li className="text-sm">
@@ -51,7 +77,7 @@ const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
                   </li>
                 </ul>
               </div>
-              <div>
+              <div onClick={() => footerClick("HELP")}>
                 <h3 className="font-bold text-gray-900 text-md">HELP</h3>
                 <ul role="list" className="mt-6 space-y-6">
                   <li className="text-sm">
@@ -71,7 +97,7 @@ const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
             </div>
           </div>
           {/* Newsletter section */}
-          <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-7 lg:col-span-6">
+          <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-7 lg:col-span-6" onClick={() => footerClick(SIGN_UP_FOR_NEWSLETTER)}>
             <h3 className="text-2xl font-bold text-black uppercase">
               {SIGN_UP_FOR_NEWSLETTER}
             </h3>
@@ -102,7 +128,7 @@ const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
           </div>
         </div>
 
-        <div className="py-10 text-center border-t border-gray-100">
+        <div className="py-10 text-center border-t border-gray-100" onClick={() => footerClick(COPYRIGHT_FOOTER_INFO)}>
           <p className="text-sm text-black">
             &copy; {COPYRIGHT_FOOTER_INFO}
           </p>

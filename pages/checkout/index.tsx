@@ -14,6 +14,7 @@ import axios from 'axios'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 
 function Checkout({ cart, config, location }: any) {
   const { user, basketId, setCartItems, cartItems, setUser, setIsGuestUser } = useUI()
@@ -73,6 +74,40 @@ function Checkout({ cart, config, location }: any) {
     eventType: CheckoutStarted,
   })
 
+  const recordShippingInfo = () => {
+    if (typeof window !== 'undefined') {
+      recordGA4Event(window, 'add_shipping_info', {
+        ecommerce: {
+          shipping_tier: cartItems?.shippingMethods[0]?.countryCode,
+          coupon: cartItems?.promotionsApplied?.length
+            ? cartItems?.promotionsApplied
+                ?.map((x: any) => x?.promoCode)
+                ?.join(',')
+            : '',
+          value: cartItems?.subTotal?.raw?.withTax,
+          item_var_id: cartItems?.id,
+          items: cartItems?.lineItems?.map((item: any) => ({
+            item_name: item?.name,
+            price: item?.price?.raw?.withTax,
+            quantity: item?.qty,
+            item_id: item?.id,
+            item_size: item?.variantProducts
+              ?.find((x: any) => x?.stockCode === item?.stockCode)
+              ?.variantAttributes?.find(
+                (x: any) => x?.fieldCode === 'clothing.size'
+              )?.fieldValue,
+            item_brand: item?.brand,
+            item_variant: item?.variantProducts
+              ?.find((x: any) => x?.stockCode === item?.stockCode)
+              ?.variantAttributes?.find(
+                (x: any) => x?.fieldCode === 'global.colour'
+              )?.fieldValue,
+          })),
+        },
+      })
+    }
+  }
+
   useEffect(() => {
     fetchAddress()
   }, [])
@@ -89,6 +124,7 @@ function Checkout({ cart, config, location }: any) {
         fetchAddress={fetchAddress}
         config={config}
         location={location}
+        recordShippingInfo={recordShippingInfo}
       />
     )
   }

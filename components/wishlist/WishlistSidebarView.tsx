@@ -18,6 +18,7 @@ import {
   IMG_PLACEHOLDER
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 
 const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
   const {
@@ -49,12 +50,27 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     if (accessToken) handleWishlistItems()
   }, [])
 
-  const deleteItemFromWishlist = (productId: string) => {
+  const deleteItemFromWishlist = (product: any) => {
+    let productAvailability = "Yes"
+    if (product?.currentStock > 0) {
+      productAvailability = "Yes"
+    } else {
+      productAvailability = "No"
+    }
+
+    if (typeof window !== "undefined") {
+      recordGA4Event(window, 'remove_item', {
+        product_name: product?.name,
+        availability: productAvailability,
+        product_id: product?.sku,
+      });
+    }
+
     if (accessToken) {
-      deleteWishlistItem(user.userId, productId).then(() =>
+      deleteWishlistItem(user.userId, product.recordId).then(() =>
         handleWishlistItems()
       )
-    } else removeFromWishlist(productId)
+    } else removeFromWishlist(product.recordId)
   }
 
   const handleAddToCart = (product: any) => {
@@ -197,9 +213,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                     <button
                                       type="button"
                                       className="font-medium text-red-300 hover:text-red-500"
-                                      onClick={() =>
-                                        deleteItemFromWishlist(product.recordId)
-                                      }
+                                      onClick={() => deleteItemFromWishlist(product)}
                                     >
                                       {GENERAL_REMOVE}
                                     </button>
