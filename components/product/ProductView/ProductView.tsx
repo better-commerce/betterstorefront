@@ -196,7 +196,7 @@ export default function ProductView({
         )
         if (domElement) {
           domElement.insertAdjacentHTML(
-            PLACEMENTS_MAP[snippet.placement].position,
+            PLACEMENTS_MAP[snippet.placement].position, 
             snippet.content
           )
         }
