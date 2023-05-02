@@ -423,22 +423,21 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                         {({ open }) => (
                           <>
                             {!item.navBlocks.length ? (
-                              <Link
-                                href={`/${item.hyperlink}`}
-                                passHref
-                                className="relative flex"
+                              <Popover.Button
+                                className={classNames(
+                                  openState == idx
+                                    ? 'border-indigo-600 text-indigo-600'
+                                    : 'border-transparent text-black hover:text-black',
+                                  'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                                )}
                               >
-                                <Popover.Button
-                                  className={classNames(
-                                    openState == idx
-                                      ? 'border-indigo-600 text-indigo-600'
-                                      : 'border-transparent text-black hover:text-black',
-                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                  )}
+                                <Link
+                                  href={`/${item.hyperlink}`}
+                                  className="relative flex h-full items-center"
                                 >
                                   {item.caption}
-                                </Popover.Button>
-                              </Link>
+                                </Link>
+                              </Popover.Button>
                             ) : (
                               <Popover.Button
                                 className={classNames(
@@ -491,22 +490,21 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                                                         key={idx}
                                                         className="flex my-2"
                                                       >
-                                                        <Link
-                                                          href={`/${navItem.itemLink}`}
-                                                          passHref
-                                                          className="hover:text-gray-800"
+                                                        <Popover.Button
+                                                          className={classNames(
+                                                            openState == idx
+                                                              ? ''
+                                                              : 'border-gray-200 text-gray-700 hover:text-gray-800',
+                                                            'relative z-10 flex items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
+                                                          )}
                                                         >
-                                                          <Popover.Button
-                                                            className={classNames(
-                                                              openState == idx
-                                                                ? ''
-                                                                : 'border-gray-200 text-gray-700 hover:text-gray-800',
-                                                              'relative z-10 flex items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
-                                                            )}
+                                                          <Link
+                                                            href={`/${navItem.itemLink}`}
+                                                            className="hover:text-gray-800 relative flex h-full items-center"
                                                           >
                                                             {navItem.caption}
-                                                          </Popover.Button>
-                                                        </Link>
+                                                          </Link>
+                                                        </Popover.Button>
                                                       </li>
                                                     )
                                                   )}
