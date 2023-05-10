@@ -694,7 +694,7 @@ useEffect(() => {
                             return(
                             <li key={product.id} className="">
                               <div className="flex py-6">
-                                <div className="flex-shrink-0 w-24 h-32 overflow-hidden border border-gray-200 rounded-md">
+                                <div className="flex-shrink-0 w-24 h-36 overflow-hidden border border-gray-200 rounded-md">
                                 <Link href={`/${product.slug}`}>
                                   <Image
                                     width={100}

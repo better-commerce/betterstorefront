@@ -124,6 +124,7 @@ export default function ProductView({
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
   const [previewImg, setPreviewImg] = useState<any>()
+  const [reviewInput, setReviewInput] = useState(false)
   const [variantInfo, setVariantInfo] = useState<any>({
     variantColour: '',
     variantSize: '',
@@ -189,7 +190,7 @@ export default function ProductView({
 
   useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
-
+    setReviewInput(true)
     recordEvent(EVENTS.ProductViewed)
     if (snippets) {
       snippets.forEach((snippet: any) => {
@@ -485,7 +486,7 @@ export default function ProductView({
     asyncHandler()
   }
 
-  const isEngravingAvailable = !!relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode === ITEM_TYPE_ADDON).length
+  const isEngravingAvailable = !!relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode === ITEM_TYPE_ADDON).length || !!product?.customAttributes.filter((item:any) => item.display == "Is Enabled" ).length
   // const isEngravingAvailable:any = true;
   //TODO no additionalProperties key found on product object
   const insertToLocalWishlist = () => {
@@ -632,8 +633,9 @@ export default function ProductView({
                                       src={generateUri(image.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
                                       alt={image.name}
                                       className="object-cover object-center w-full h-full image"
-                                      style={css}
+                                      // style={css}
                                       sizes="320 600 1000"
+                                      quality="100"
                                       width={600}
                                       height={1000}
                                       blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
@@ -670,7 +672,7 @@ export default function ProductView({
                                       }
                                       alt={image.name}
                                       className="o`bject-cover object-center w-full h-full image"
-                                      style={css}
+                                      // style={css}
                                       sizes="320 600 1000"
                                       width={600}
                                       height={1000}
@@ -801,7 +803,7 @@ export default function ProductView({
                           </p>
                         </div>
                         <div className='flex justify-center px-2 mt-3 cursor-pointer'>
-                          <PlusIcon className='w-3.5 h-4 md:my-1' />&nbsp;<p className='text-sm -ml-1 text-[#37B679] '>£5</p>
+                          {/* <PlusIcon className='w-3.5 h-4 md:my-1' />&nbsp;<p className='text-sm -ml-1 text-[#37B679] '>£5</p> */}
                         </div>
                       </div>
 
@@ -873,7 +875,7 @@ export default function ProductView({
             <div className="section-devider"></div>
           </div>
           <div className='px-6 mx-auto sm:px-0 md:w-4/5'>
-            <ReviewInput productId={product.recordId} />
+            {reviewInput && <ReviewInput productId={product.recordId} />}
           </div>
           {isEngravingAvailable && (
             <Engraving

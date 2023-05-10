@@ -43,6 +43,8 @@ export default function CategoryList(props: any) {
                                   ) || IMG_PLACEHOLDER
                                 }
                                 alt={category.name}
+                                height={20}
+                                width={20}
                                 className="object-cover object-center w-full h-full group-hover:opacity-75 image"
                                 style={css}
                               ></Image>
@@ -51,6 +53,8 @@ export default function CategoryList(props: any) {
                             <Image
                               src={IMG_PLACEHOLDER}
                               alt={category.name}
+                              height={20}
+                              width={20}
                               className="object-cover object-center w-full h-full group-hover:opacity-75 image"
                               style={css}
                             ></Image>
