@@ -813,3 +813,16 @@ body {
     min-height: 30px;
   }
 }
+
+
+.z-99 {
+  z-index: 99;
+}
+
+.z-999 {
+  z-index: 999;
+}
+
+.z-9999 {
+  z-index: 9999;
+}
