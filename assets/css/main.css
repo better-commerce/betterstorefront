@@ -505,7 +505,9 @@ body {
 .cart-related-prod .width-max--title {
   width: 200px;
 }
-
+.max-w-xl {
+  max-width: 60rem !important;
+}
 .section-devider-sm {
   width: 100%;
   float: left;
