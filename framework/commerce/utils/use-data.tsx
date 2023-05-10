@@ -52,7 +52,7 @@ const useData: UseData = (options, input, fetcherFn, swrOptions) => {
       throw error
     }
   }
-  const response = useSWR(
+  const response: any = useSWR(
     () => {
       const opts = options.fetchOptions
       return opts

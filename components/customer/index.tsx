@@ -10,7 +10,7 @@ const registerSchema = Yup.object({
   lastName: Yup.string().required(),
   password: Yup.string().min(8).max(24).required(),
   confirmPassword: Yup.string()
-  .oneOf([Yup.ref('password'), null], VALIDATION_PASSWORD_MUST_MATCH)
+  .oneOf([Yup.ref('password')], VALIDATION_PASSWORD_MUST_MATCH)
   .required(),
 })
 
