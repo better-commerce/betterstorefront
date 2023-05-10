@@ -12,7 +12,7 @@ export default function getUserCart() {
     }
     try {
       const response: any = await fetcher({
-        url: `${BASKET_ENDPOINT}/${userId}/all`,
+        url: `${BASKET_ENDPOINT}/user/${userId}/all`,
         method: 'get',
         data,
         cookies,
@@ -20,6 +20,7 @@ export default function getUserCart() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
+      //url changed according to api20 get all baskets api
       return response.result
     } catch (error: any) {
       console.log(error)

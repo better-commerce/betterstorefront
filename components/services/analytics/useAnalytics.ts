@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
 import eventDispatcher from './eventDispatcher'
 import { useUI } from '@components/ui/context'
 declare global {

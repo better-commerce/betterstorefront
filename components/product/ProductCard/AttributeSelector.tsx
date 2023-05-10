@@ -1,4 +1,3 @@
-import { attr } from 'dom7'
 import Link from 'next/link'
 
 interface Attribute {
