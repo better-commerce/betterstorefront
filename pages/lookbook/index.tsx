@@ -46,7 +46,6 @@ function LookbookPage({ data }: any) {
         <div className="relative w-full overflow-x-auto">
           <Swiper
             slidesPerView={1.5}
-            loopFillGroupWithBlank={true}
             loop={true}
             navigation={true}
           >

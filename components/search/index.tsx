@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import { NEXT_SEARCH_PRODUCTS } from '@components/utils/constants'
@@ -62,7 +62,7 @@ export default function Search({ closeWrapper = () => { }, keywords }: any) {
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     document.addEventListener('keypress', handleEnterPress)
     return () => document.removeEventListener('keypress', handleEnterPress)
   }, [])
@@ -129,6 +129,8 @@ export default function Search({ closeWrapper = () => { }, keywords }: any) {
                               IMG_PLACEHOLDER
                             }
                             alt={product.name}
+                            width={20}
+                            height={20}
                             style={css}
                             sizes="50vw"
                             className="object-cover object-center w-full h-48 sm:h-72 image"

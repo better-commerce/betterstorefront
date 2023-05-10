@@ -154,7 +154,13 @@ export default function CollectionPage(props: any) {
       },
     },
     error,
-  } = useSwr(['/api/catalog/products', state], postData)
+  } = useSwr(
+    ['/api/catalog/products', state],
+    ([url, body]: any) => postData(url, body),
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const [swrLoading, setSwrLoading] = useState(!error && !collection)
 
@@ -413,11 +419,11 @@ export default function CollectionPage(props: any) {
               {/* Filter Sidebar CTA */}
               {/* <div className="hidden sm:col-span-6 product-card-list sm:block">
                 <button
-                  className="float-right flex items-center"
+                  className="flex items-center float-right"
                   onClick={handleTogglePLPSidebar}
                 >
-                  <span className="w-auto h-4 mr-2 inline-block overflow-hidden">
-                    <AdjustmentsHorizontalIcon className="inline-block w-6 h-8 relative -top-1" />
+                  <span className="inline-block w-auto h-4 mr-2 overflow-hidden">
+                    <AdjustmentsHorizontalIcon className="relative inline-block w-6 h-8 -top-1" />
                   </span>
                   <span>Filter</span>
                 </button>

@@ -212,7 +212,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
     <>
       <div className="hover:outline hover:outline-1 group">
         <div key={product.id} className="relative">
-          <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1">
+          <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel">
             <Link
               passHref
               href={`/${currentProductData.link}`}
@@ -251,7 +251,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
               </div>
             </div>
 
-            <div className="hidden absolute sm:translate-y-0 w-full bg-white sm:flex flex-wrap group-hover:-translate-y-full transition-transform duration-500 gap-1 py-2 px-1">
+            <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-0 sm:flex group-hover:-translate-y-full">
               {!hideWishlistCTA && (
                 <SimpleButton
                   variant="slim"
@@ -278,16 +278,16 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
               href={`/${currentProductData.link}`}
               title={`${product.name} \t ${itemPrice}`}
             >
-              <div className="flex items-center justify-between group-hover:hidden my-1">
+              <div className="flex items-center justify-between my-1 group-hover:hidden product-name">
                 <div className="w-full">
-                  <h3 className="font-normal text-gray-700 text-xs sm:text-sm capitalize hover:text-gray-950">
+                  <h3 className="text-xs font-normal text-gray-700 capitalize sm:text-sm hover:text-gray-950">
                     {product?.name?.toLowerCase()}
                   </h3>
                 </div>
               </div>
 
-              <div className="hidden group-hover:block my-1">
-                <ul className="sizes-ul flex text-xs sm:text-sm text-gray-700">
+              <div className="hidden my-1 group-hover:block">
+                <ul className="flex text-xs text-gray-700 sizes-ul sm:text-sm">
                   <li className="mr-1">Sizes:</li>
                   {sizeValues.map((size: any, idx: number) => (
                     <li className="inline-block uppercase" key={idx}>
@@ -300,7 +300,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
                 </ul>
               </div>
 
-              <p className="text-gray-900 sm:mt-1 text-xs sm:text-sm">
+              <p className="text-xs text-gray-900 sm:mt-1 sm:text-sm">
                 <span className="font-medium">
                   {product?.price?.formatted?.withTax}
                 </span>
@@ -319,7 +319,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
               </p>
             </Link>
 
-            <div className="mt-2 sm:hidden flex flex-wrap border">
+            <div className="flex flex-wrap mt-2 border sm:hidden">
               <div className="w-4/12">
                 <button
                   className="w-full text-center bg-white p-1.5"
@@ -333,7 +333,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
                   />
                 </button>
               </div>
-              <div className="w-8/12 text-center sm:col-span-8 border-l">
+              <div className="w-8/12 text-center border-l sm:col-span-8">
                 <button
                   type="button"
                   onClick={() => handleQuickViewData(product)}
