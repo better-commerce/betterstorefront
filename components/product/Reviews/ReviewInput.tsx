@@ -1,7 +1,7 @@
 import withAuth from '@components/utils/withAuth'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   BTN_SUBMIT, 
   ERROR_WOOPS_SOMETHING_WENT_WRONG, 
@@ -77,11 +77,11 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
       setCommentTitle(e.target.value)
     }
   }
-
+  
   return (
     <div className="pb-16">
       <h2 className="mb-6 text-2xl font-semibold text-black">{POST_YOUR_REVIEW}</h2>
-      {asyncMessage ? (
+      { asyncMessage ? (
         <div>
           <span className="text-2xl text-gray-900">{asyncMessage}</span>
         </div>

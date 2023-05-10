@@ -90,24 +90,24 @@ export default function Engraving({
                    <ProductPersonaliser
                         canvasWidth={280}
                         canvasHeight={420}
-                        colors={[
-                          {
-                            label: 'White',
-                            value: '#FFFFFF',
-                          },
-                          {
-                            label: 'Blue',
-                            value: '#1166FF',
-                          },
-                          {
-                            label: 'Magenta',
-                            value: '#FF00FF',
-                          },
-                          {
-                            label: 'Purple',
-                            value: '#7851a9',
-                          },
-                        ]}
+                        // colors={[
+                        //   {
+                        //     label: 'White',
+                        //     value: '#FFFFFF',
+                        //   },
+                        //   {
+                        //     label: 'Blue',
+                        //     value: '#1166FF',
+                        //   },
+                        //   {
+                        //     label: 'Magenta',
+                        //     value: '#FF00FF',
+                        //   },
+                        //   {
+                        //     label: 'Purple',
+                        //     value: '#7851a9',
+                        //   },
+                        // ]}
                         characters='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                         maxTextLength={7}
                         submitText={isPersonalizeLoading ? <LoadingDots /> : GENERAL_ADD_TO_BASKET}
@@ -115,7 +115,7 @@ export default function Engraving({
                         readOnly={data?.readOnly}
                         product={product}
                         images={[]} 
-                        fonts={[]}                      
+                        // fonts={[]}                      
                     />
 
 
