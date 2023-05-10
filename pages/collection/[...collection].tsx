@@ -154,7 +154,13 @@ export default function CollectionPage(props: any) {
       },
     },
     error,
-  } = useSwr(['/api/catalog/products', state], postData)
+  } = useSwr(
+    ['/api/catalog/products', state],
+    ([url, body]: any) => postData(url, body),
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const [swrLoading, setSwrLoading] = useState(!error && !collection)
 

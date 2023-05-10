@@ -4,7 +4,7 @@ import { FC } from 'react'
 
 interface Props {
   currentPage?: string | number
-  onPageChange?: Function
+  onPageChange?: any
   pageCount?: string | number
 }
 const Pagination: FC<React.PropsWithChildren<Props>> = ({
