@@ -38,8 +38,7 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
                   <Image
                     priority
                     src={
-                      generateUri(banner?.url, 'h=800&fm=webp') ||
-                      IMG_PLACEHOLDER
+                      generateUri(banner?.url, 'h=800&fm=webp') || IMG_PLACEHOLDER
                     }
                     alt={banner?.alt}
                     style={css}

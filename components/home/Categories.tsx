@@ -79,7 +79,7 @@ function Categories({data}:any) {
       >
         <div
           role="list"
-          className="inline-flex mx-4 space-x-2 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-2"
+          className="inline-flex mx-4 space-x-2 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-2 mobile-cls-fix"
         >
           {data?.map((category: any, catId: number) => (
             <SwiperSlide key={catId}>

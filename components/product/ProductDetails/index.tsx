@@ -14,11 +14,11 @@ const Attributes = ({ attributes = [] }: any) => {
         {attributes.map((attr: any, idx: number) => {
           return (
             <tr key={idx}>
-              <th className="border text-left px-5 py-5">{attr.display}</th>
-              <td className="border text-left px-5 py-5">
+              <th className="px-5 py-5 text-left border">{attr.display}</th>
+              <td className="px-5 py-5 text-left border">
                 {colorRegex.test(attr.value) ? (
                   <div
-                    className="h-6 w-6 rounded-full mr-2 mt-2 border border-gray-100"
+                    className="w-6 h-6 mt-2 mr-2 border border-gray-100 rounded-full"
                     style={{ backgroundColor: attr.value }}
                   />
                 ) : (
@@ -62,7 +62,7 @@ export default function ProductDetails({ product, description }: any) {
       title: PRODUCT_DESCRIPTION,
       InnerComponent: (props: any) => (
         <div
-          className="text-gray-700 sm:space-y-6 space-y-2"
+          className="space-y-2 text-sm text-gray-700 sm:text-md sm:space-y-6"
           dangerouslySetInnerHTML={{ __html: description || '' }}
         />
       ),
@@ -87,24 +87,24 @@ export default function ProductDetails({ product, description }: any) {
            {({ open }) => (
              <>
                <h3>
-                 <Disclosure.Button className="group relative w-full sm:py-2 py-2 pr-2 flex justify-between items-center text-left">
+                 <Disclosure.Button className="relative flex items-center justify-between w-full py-2 pr-2 text-left group sm:py-2">
                    <span
                      className={classNames(
                        open ? 'text-black' : 'text-gray-900',
-                       'text-lg uppercase font-medium'
+                       'text-lg uppercase font-bold'
                      )}
                    >
                      {desc.title}
                    </span>
-                   <span className="ml-6 flex items-center">
+                   <span className="flex items-center ml-6">
                      {open ? (
                        <MinusSmallIcon
-                         className="block h-6 w-6 text-black group-hover:text-gray-700"
+                         className="block w-6 h-6 text-black group-hover:text-gray-700"
                          aria-hidden="true"
                        />
                      ) : (
                        <PlusSmallIcon
-                         className="block h-6 w-6 text-black group-hover:text-gray-700"
+                         className="block w-6 h-6 text-black group-hover:text-gray-700"
                          aria-hidden="true"
                        />
                      )}
@@ -112,7 +112,7 @@ export default function ProductDetails({ product, description }: any) {
                  </Disclosure.Button>
                </h3>
                
-               <Disclosure.Panel as="div" className="pb-6 prose prose-sm">
+               <Disclosure.Panel as="div" className="pb-6 prose-sm prose">
                  {desc.InnerComponent({
                    attributes: product.customAttributes || product.attributes,
                  })}
@@ -128,31 +128,31 @@ export default function ProductDetails({ product, description }: any) {
             {({ open }) => (
               <>
                 <h3>
-                  <Disclosure.Button className="group relative w-full sm:py-2 py-2 pr-2 flex justify-between items-center text-left">
+                  <Disclosure.Button className="relative flex items-center justify-between w-full py-2 pr-2 text-left group sm:py-2">
                     <span
                       className={classNames(
                         open ? 'text-black' : 'text-gray-900',
-                        'text-lg uppercase font-medium'
+                        'text-lg uppercase font-bold'
                       )}
                     >
                       {detail.title}
                     </span>
-                    <span className="ml-6 flex items-center">
+                    <span className="flex items-center ml-6">
                       {open ? (
                         <MinusSmallIcon
-                          className="block h-6 w-6 text-black group-hover:text-gray-700"
+                          className="block w-6 h-6 text-black group-hover:text-gray-700"
                           aria-hidden="true"
                         />
                       ) : (
                         <PlusSmallIcon
-                          className="block h-6 w-6 text-black group-hover:text-gray-700"
+                          className="block w-6 h-6 text-black group-hover:text-gray-700"
                           aria-hidden="true"
                         />
                       )}
                     </span>
                   </Disclosure.Button>
                 </h3>
-                <Disclosure.Panel as="div" className="pb-6 prose prose-sm">
+                <Disclosure.Panel as="div" className="pb-6 prose-sm prose">
                   {detail.InnerComponent({
                     attributes: product.customAttributes || product.attributes,
                   })}
