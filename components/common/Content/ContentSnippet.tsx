@@ -5,7 +5,6 @@ import React, { memo } from "react";
 import { useContentSnippet } from "@framework";
 
 const ContentSnippet: React.FC<React.PropsWithChildren<any>> = (props: any) => {
-    //debugger;
     const { snippets } = props;
     useContentSnippet(snippets);
     return (

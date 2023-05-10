@@ -13,7 +13,7 @@ import { useUI } from '@components/ui/context'
 import { BTN_SEARCH, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 
-export default function Search({ closeWrapper = () => {}, keywords }: any) {
+export default function Search({ closeWrapper = () => { }, keywords }: any) {
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])

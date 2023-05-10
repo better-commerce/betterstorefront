@@ -9,7 +9,7 @@ export default function getSlugsOperation() {
         url: `${SITEVIEW_ENDPOINT}/slug?slug=${slug}`,
         method: 'post',
       });
-      return { ...response.result, ...{ snippets: response.snippets } };
+      return { snippets: response?.snippets ?? [] };
     } catch (error) {
       console.log(error);
     }

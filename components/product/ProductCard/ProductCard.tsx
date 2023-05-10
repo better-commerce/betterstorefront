@@ -1,36 +1,35 @@
 import dynamic from 'next/dynamic'
-import { FC } from 'react'
+import { FC, useCallback } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-const AttributeSelector = dynamic(() => import('./AttributeSelector'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
-import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
-import { HeartIcon } from '@heroicons/react/24/outline'
+import {
+  CLOTH_COLOUR_ATTRIB_NAME,
+  CLOTH_SIZE_ATTRIB_NAME,
+  NEXT_CREATE_WISHLIST,
+} from '@components/utils/constants'
+import { StarIcon, HeartIcon } from '@heroicons/react/24/outline'
 import { round } from 'lodash'
 import {
-  ALERT_SUCCESS_WISHLIST_MESSAGE,
-  BTN_ADD_TO_WISHLIST,
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
   GENERAL_ADD_TO_BASKET,
   IMG_PLACEHOLDER,
+  ITEM_WISHLISTED,
+  QUICK_VIEW,
+  WISHLIST_TITLE,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-
+const SimpleButton = dynamic(() => import('@components/ui/Button'))
+import PLPQuickView from '@components/product/QuickView/PLPQuickView'
 
 interface Props {
   product: any
-}
-const colorKey = 'global.colour'
-
-const WISHLIST_BUTTON_COLOR_SCHEME = {
-  bgColor: 'bg-gray-500',
-  hoverBgColor: 'bg-gray-400',
-  focusRingColor: 'focus-gray-400',
+  hideWishlistCTA?: any
 }
 
 interface Attribute {
@@ -39,11 +38,13 @@ interface Attribute {
   fieldValues?: []
 }
 
-const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
-  const [isInWishList, setItemsInWishList] = useState(false)
+const ProductCard: FC<React.PropsWithChildren<Props>> = ({
+  product: productData,
+  hideWishlistCTA = false,
+}) => {
   const [currentProductData, setCurrentProductData] = useState({
-    image: product.image,
-    link: product.slug,
+    image: productData.image,
+    link: productData.slug,
   })
   const {
     basketId,
@@ -52,13 +53,51 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
     openWishlist,
     setCartItems,
     openNotifyUser,
+    wishListItems,
   } = useUI()
+  const [quickViewData, setQuickViewData] = useState(null)
+  const [sizeValues, setSizeValues] = useState([])
+  const [product, setProduct] = useState(productData || {})
+
+  const handleUpdateWishlistItem = useCallback(() => {
+    if (wishListItems.length < 1) return
+    const wishlistItemIds = wishListItems.map((o: any) => o.recordId)
+    setProduct({
+      ...productData,
+      hasWishlisted: wishlistItemIds.includes(productData.recordId),
+    })
+  }, [wishListItems, productData])
+
+  useEffect(() => {
+    handleUpdateWishlistItem()
+  }, [wishListItems, productData])
+
+  useEffect(() => {
+    if (product?.variantProductsAttributeMinimal?.length < 1) return
+    let sizeAttribData = product?.variantProductsAttributeMinimal?.find(
+      (o: any) => o.fieldCode === CLOTH_SIZE_ATTRIB_NAME
+    )
+    sizeAttribData =
+      sizeAttribData?.fieldValues?.sort(
+        (a: { displayOrder: number }, b: { displayOrder: number }) =>
+          a.displayOrder > b.displayOrder ? 1 : -1
+      ) || []
+    if (sizeAttribData) setSizeValues(sizeAttribData)
+  }, [product?.variantProductsAttributeMinimal])
+
+  const handleQuickViewData = (data: any) => {
+    setQuickViewData(data)
+  }
+
+  const handleCloseQuickView = () => {
+    setQuickViewData(null)
+  }
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
-    setItemsInWishList(true)
     openWishlist()
   }
+
   const handleWishList = async () => {
     const accessToken = localStorage.getItem('user')
     if (accessToken) {
@@ -89,7 +128,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const productWithColors =
     product.variantProductsAttributeMinimal &&
     product.variantProductsAttributeMinimal.find(
-      (item: Attribute) => item.fieldCode === colorKey
+      (item: Attribute) => item.fieldCode === CLOTH_COLOUR_ATTRIB_NAME
     )
 
   const hasColorVariation =
@@ -116,6 +155,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const secondImage = product.images[1]?.image
 
   const handleHover = (type: string) => {
+    if (hideWishlistCTA) return
     if (type === 'enter' && secondImage)
       setCurrentProductData({ ...currentProductData, image: secondImage })
     if (type === 'leave' && secondImage)
@@ -162,32 +202,37 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   }
 
   const buttonConfig = buttonTitle()
-  const saving  = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
-  const discount  = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
+  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
+  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
   const css = { maxWidth: '100%', height: 'auto' }
+
+  const itemPrice = product?.price?.formatted?.withTax
+
   return (
-    <div className="border-gray-200">
-    <div key={product.id} className="relative p-2 sm:p-3">          
-    <Link
-          passHref
-          href={`/${currentProductData.link}`}
-          key={'data-product' + currentProductData.link}
-        >
-          <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 hover:opacity-75">
-            <Image
-              priority
-              src={
-                generateUri(currentProductData.image, 'h=500&fm=webp') ||
-                IMG_PLACEHOLDER
-              }
-              alt={product.name}
+    <>
+      <div className="hover:outline hover:outline-1 group">
+        <div key={product.id} className="relative">
+          <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1">
+            <Link
+              passHref
+              href={`/${currentProductData.link}`}
               onMouseEnter={() => handleHover('enter')}
               onMouseLeave={() => handleHover('leave')}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image"
-              style={css}
-              width={400}
-              height={600}
-            ></Image>
+              title={`${product.name} \t ${itemPrice}`}
+            >
+              <Image
+                priority
+                src={
+                  generateUri(currentProductData.image, 'h=500&fm=webp') ||
+                  IMG_PLACEHOLDER
+                }
+                alt={product.name}
+                className="object-cover object-center w-full h-full sm:h-full min-h-image"
+                style={css}
+                width={400}
+                height={600}
+              />
+            </Link>
             {buttonConfig.isPreOrderEnabled && (
               <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
                 {BTN_PRE_ORDER}
@@ -198,61 +243,127 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
                 {BTN_NOTIFY_ME}
               </div>
             )}
-            {isInWishList ? (
-              <span className="text-gray-900">
-                {ALERT_SUCCESS_WISHLIST_MESSAGE}
-              </span>
-            ) : (
-              <button
-                className="absolute bottom-0 right-2 z-99 add-wishlist"
-                onClick={handleWishList}
-              >
-                <HeartIcon
-                  className="z-50 flex-shrink-0 w-8 h-8 p-1 text-gray-800 hover:text-gray-500 rounded-3xl opacity-80"
-                  aria-hidden="true"
-                />
-                <span className="ml-2 text-sm font-medium text-gray-700 hover:text-red-800"></span>
-                <span className="sr-only">f</span>
-              </button>
-            )}
-          </div>
-        </Link>
 
-      <div className="pt-0 text-left">
-        {hasColorVariation ? (
-          <AttributeSelector
-            attributes={product.variantProductsAttributeMinimal}
-            onChange={handleVariableProduct}
-            link={currentProductData.link}
-          />
-        ) : (
-          <div className="inline-block w-1 h-1 mt-2 mr-1 sm:h-1 sm:w-1 sm:mr-2" />
-        )}
-      
-        <h3 className="font-normal text-gray-700 truncate sm:text-sm">
-          <Link href={`/${currentProductData.link}`}>{product.name}</Link>
-        </h3>
-        <p className="mt-1 font-bold text-gray-900 sm:mt-1 text-md">
-          {product?.price?.formatted?.withTax}
-          {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax &&
-              <>
-                <span className='px-2 text-sm font-normal text-gray-400 line-through'>{product?.listPrice?.formatted?.withTax}</span>
-                <span className='text-sm font-semibold text-red-600'>{discount}% Off</span>
-              </>
-            }
-        </p>        
-        <div className="flex flex-col">
-          <Button
-            className="hidden mt-2"
-            title={buttonConfig.title}
-            action={buttonConfig.action}
-            type="button"
-            buttonType={buttonConfig.buttonType || 'cart'}
-          />            
+            <div className="absolute bottom-1 left-1 text-gray-900 bg-gray-100 px-[0.4rem] py-0 text-xs font-semibold sm:font-bold">
+              <div className="flex items-center gap-1">
+                <StarIcon className="inline-block w-[10px] h-[10px] sm:w-[14px] sm:h-[14px]" />
+                {product?.rating}
+              </div>
+            </div>
+
+            <div className="hidden absolute sm:translate-y-0 w-full bg-white sm:flex flex-wrap group-hover:-translate-y-full transition-transform duration-500 gap-1 py-2 px-1">
+              {!hideWishlistCTA && (
+                <SimpleButton
+                  variant="slim"
+                  className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
+                  onClick={handleWishList}
+                  disabled={product.hasWishlisted}
+                >
+                  {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
+                </SimpleButton>
+              )}
+              <SimpleButton
+                variant="slim"
+                className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none"
+                onClick={() => handleQuickViewData(product)}
+              >
+                {QUICK_VIEW}
+              </SimpleButton>
+            </div>
+          </div>
+
+          <div className="p-1 text-left">
+            <Link
+              passHref
+              href={`/${currentProductData.link}`}
+              title={`${product.name} \t ${itemPrice}`}
+            >
+              <div className="flex items-center justify-between group-hover:hidden my-1">
+                <div className="w-full">
+                  <h3 className="font-normal text-gray-700 text-xs sm:text-sm capitalize hover:text-gray-950">
+                    {product?.name?.toLowerCase()}
+                  </h3>
+                </div>
+              </div>
+
+              <div className="hidden group-hover:block my-1">
+                <ul className="sizes-ul flex text-xs sm:text-sm text-gray-700">
+                  <li className="mr-1">Sizes:</li>
+                  {sizeValues.map((size: any, idx: number) => (
+                    <li className="inline-block uppercase" key={idx}>
+                      {size?.fieldValue}
+                      {sizeValues.length !== idx + 1 && (
+                        <span className="mr-1 c-sperator">,</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <p className="text-gray-900 sm:mt-1 text-xs sm:text-sm">
+                <span className="font-medium">
+                  {product?.price?.formatted?.withTax}
+                </span>
+                {product?.listPrice?.raw?.withTax > 0 &&
+                  product?.listPrice?.raw?.withTax !=
+                    product?.price?.raw?.withTax && (
+                    <>
+                      <span className="px-1 text-xs text-gray-400 line-through">
+                        {product?.listPrice?.formatted?.withTax}
+                      </span>
+                      <span className="text-xs text-red-600">
+                        ({discount}% Off)
+                      </span>
+                    </>
+                  )}
+              </p>
+            </Link>
+
+            <div className="mt-2 sm:hidden flex flex-wrap border">
+              <div className="w-4/12">
+                <button
+                  className="w-full text-center bg-white p-1.5"
+                  onClick={handleWishList}
+                  disabled={product.hasWishlisted}
+                >
+                  <HeartIcon
+                    className={`inline-block w-4 h-4 ${
+                      product.hasWishlisted && 'fill-red-600 text-red-600'
+                    }`}
+                  />
+                </button>
+              </div>
+              <div className="w-8/12 text-center sm:col-span-8 border-l">
+                <button
+                  type="button"
+                  onClick={() => handleQuickViewData(product)}
+                  className="w-full text-primary dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
+                >
+                  {QUICK_VIEW}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <Button
+                className="hidden mt-2"
+                title={buttonConfig.title}
+                action={buttonConfig.action}
+                type="button"
+                buttonType={buttonConfig.buttonType || 'cart'}
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+      <PLPQuickView
+        isQuickview={Boolean(quickViewData)}
+        setQuickview={() => {}}
+        productData={quickViewData}
+        isQuickviewOpen={Boolean(quickViewData)}
+        setQuickviewOpen={handleCloseQuickView}
+      />
+    </>
   )
 }
 

@@ -1,3 +1,6 @@
+import { stringToBoolean } from "@framework/utils/parse-util"
+import { toNumber } from "lodash"
+
 //BETTERCOMMERCE ENDPOINTS
 export const HOMEPAGE_SLUG = `/`
 export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
@@ -9,16 +12,22 @@ export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/ca
 export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
 export const COLLECTIONS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/collection`
+export const CANCEL_REASON = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/masterdata`
 export const LOOKBOOK_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook`
 export const SITEVIEW_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/content/siteview`
 export const CATALOG_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/brand`
+export const NEXT_RETURN_ORDER_LINE = `/api/return-order-line`;
 export const SEARCH_MINIMAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced/minimal`
 export const SEARCH_ADVANCED_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced`
+export const CACHED_IMAGE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product`
+export const LOOKBOOK_SLUG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook/slug`
 export const NEXT_SEARCH_ADVANCED_ENDPOINT =
   '/api/catalog/get-category-products'
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
 export const PRODUCT_PREVIEW_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/preview`
 export const BASKET_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket`
+export const GET_BASKET_PROMOTIONS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/basket-promotions`
+export const BASKET_VALIDATE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket/validate`
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
 export const AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/authenticate`
 export const CUSTOMER_BASE_API = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/`
@@ -38,7 +47,10 @@ export const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/
 export const KEYWORDS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/keyword-redirections`
 export const LOQATE_ADDRESS = '/api/loqate'
 export const RETRIEVE_ADDRESS = '/api/retrieve-address'
-//LOCAL ENDPOINTS
+export const PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/`
+export const PRODUCT_PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/product-promotions`
+
+//LOCAL ENDPOINTS 
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
@@ -51,6 +63,8 @@ export const NEXT_GET_CART = `/api/get-cart`
 export const NEXT_ASSOCIATE_CART = '/api/customer/associate-cart'
 export const NEXT_MERGE_CART = '/api/merge-cart'
 export const NEXT_GET_USER_CART = '/api/get-user-cart'
+export const NEXT_GET_ORDER_RELATED_PRODUCTS = '/api/catalog/get-related-products'
+export const NEXT_GET_ALT_RELATED_PRODUCTS = '/api/catalog/get-alternate-related-product'
 export const NEXT_SIGN_UP = `/api/signup`
 export const NEXT_VALIDATE_EMAIL = `/api/customer/validate-email`
 export const NEXT_AUTHENTICATE = `/api/login`
@@ -66,10 +80,18 @@ export const NEXT_EDIT_ADDRESS = `/api/customer/edit-address`
 export const NEXT_CREATE_ADDRESS = `/api/customer/create-address`
 export const NEXT_DELETE_ADDRESS = `/api/customer/delete-address`
 
+export const NEXT_CANCEL_REASON = `/api/cancel-reason`
+export const NEXT_CANCEL_ORDER = `/api/order/cancel`
+export const NEXT_CANCEL_ORDER_LINE = `/api/order/cancel-order-line`;
+export const NEXT_RETURN_REASON = `/api/return-reason`
+
 export const NEXT_CREATE_REVIEW = `/api/create-review`
 export const NEXT_GET_NAVIGATION = `/api/get-navigation`
-
+export const NEXT_GET_PRODUCT_PROMOS = '/api/catalog/get-product-promos';
+export const NEXT_GET_BASKET_PROMOS = `/api/get-basket-promotions`;
+export const NEXT_BASKET_VALIDATE = `/api/basket/validate`;
 export const NEXT_APPLY_PROMOTION = `/api/apply-promo`
+export const PAGE_PREVIEW_CONTENT_ENDPOINT = `api/${process.env.BETTERCMS_API_VERSION}/page`;
 
 export const NEXT_SHIPPING_ENDPOINT = '/api/shipping-options'
 export const NEXT_UPDATE_CHECKOUT_ADDRESS = '/api/update-checkout-address'
@@ -125,6 +147,9 @@ export const BETTERCOMMERCE_DEFAULT_COUNTRY = process.env.BETTERCOMMERCE_DEFAULT
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY;
 export const BETTERCOMMERCE_LANGUAGE = process.env.BETTERCOMMERCE_LANGUAGE;
 export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY;
+export const SHOW_APPLY_COUPON_SECTION = true;
+export const SITE_ORIGIN_URL = process.env.SITE_ORIGIN_URL;
+export const SITE_NAME = process.env.SITE_NAME;
 
 export module Messages {
 
@@ -246,3 +271,47 @@ export const ALERT_TIMER = 5000
 export const DATE_FORMAT = "DD-MMM-yy";
 export const DATE_TIME_FORMAT = "DD-MMM-yy HH:mm";
 export const PRODUCTS_SLUG_PREFIX = "products/";
+export const EmptyGuid = "00000000-0000-0000-0000-000000000000";
+export const collectionSlug = "you-may-also-like";
+export const CLOTH_SIZE_ATTRIB_NAME = "clothing.size"
+export const CLOTH_COLOUR_ATTRIB_NAME = "global.colour"
+
+export enum OrderStatus {
+  PENDING = "Pending",
+  INCOMPLETE = "Incomplete",
+  APPROVED = "Approved",
+  RETURNED_FROM_WAREHOUSE = "RetrunedFromWarehouse",
+  UNFULFILLABLE = "Unfulfillable",
+  ACCEPTED_IN_WAREHOUSE = "AcceptedInWarehouse",
+  ACCEPTED = "Accepted",
+  READY_TO_DISPATCH = "ReadyToDispatch",
+  DISPATCH = "Dispatch",
+  PICKED_UP = "PICKED UP",
+  SHIPMENT_DELAYED = "SHIPMENT DELAYED",
+  IN_TRANSIT = "In Transit",
+  OUT_FOR_DELIVERY = "OUT FOR DELIVERY",
+  DELIVERED = "Delivered",
+  FAILED_DELIVERY = "FAILED DELIVERY",
+  RTO_REQUESTED = "RTO REQUESTED",
+  RTO_RECEIVED = "RTO Received",
+  RTO_RECEIVED_1 = "RTOReceived",
+  CANCELLED = "Cancelled",
+  CANCELLED_FAILED_FRAUD_SCREENING = "CancelledFailedFraudScreening",
+  CANCELLED_FAILED_FRAUD_SCREENING_1 = "OrderStatusCancelledFailedFraudScreening",
+  RETURN_REQUESTED = "Return Requested",
+  RMA_FAILED_SCREENING = "RMA FailedScreening",
+  RMA_PROCESSING = "RMA Processing",
+  CONFIRMED = "Confirmed",
+  RETURN_OUT_FOR_PICKUP = "Return Out for Pickup",
+  RETURN_PICKUP_RESCHEDULED = "Return Pickup Rescheduled",
+  RETURN_PICKEDUP = "Return Pickedup",
+  RETURN_PICKUP_CANCELLED = "Return Pickup Cancelled",
+  RMA_RECEIVED = "RMA Received",
+  REFUNDED = "Refunded",
+  CANCELLED_BY_CUSTOMER = "CancelledByCustomer",
+  CANCELLED_BY_STORE = "CancelledByStore",
+}
+
+export const PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES = process.env.PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES;
+export const PDP_REVIEW_NO_OF_IMAGES_ALLOWED = toNumber(process.env.PDP_REVIEW_NO_OF_IMAGES_ALLOWED);
+export const PDP_REVIEW_IMAGE_SIZE_IN_BYTES = toNumber(process.env.PDP_REVIEW_IMAGE_SIZE_IN_BYTES);

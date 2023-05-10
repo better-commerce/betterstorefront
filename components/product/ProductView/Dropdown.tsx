@@ -1,14 +1,91 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/24/solid'
+import cn from 'classnames'
+
 import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import { getProductFromAttributes } from '@components/utils/attributesGenerator'
+import { Dialog, RadioGroup, Switch } from '@headlessui/react'
+import { PRODUCTS_SLUG_PREFIX } from '@components/utils/constants'
+
+
+const DEFAULT_OPTIONS_COUNT = 15
+
+function renderRadioOptions(items: any, itemsCount: any, selectedValue: any, openRemainElems: boolean = false, handleToggleOpenRemainElems: any) {
+  let defaultItems = (items && items.length > 0) ? items.slice(0, itemsCount) : []
+  // console.log(defaultItems)
+  let remainingItems = (items && items.length > 0) ? items.slice(itemsCount, items.length) : []
+  // console.log(remainingItems)
+
+  return (
+    <div className='flex items-center'>
+      {defaultItems.map((item: any, idx: any) => (
+        <>
+          <RadioGroup.Option
+            key={idx}
+            value={item.fieldValue}
+            title={item.fieldLabel}
+            style={{ backgroundColor: item.fieldValue }}
+            className={cn('pdp-color-swatch-item relative z-99 h-10 w-10 flex items-center justify-center cursor-pointer outline-none hover:border-gray-900', {
+              'border border-gray-200': selectedValue !== item.fieldValue,
+              'border border-gray-900': selectedValue === item.fieldValue,
+            })}
+          >
+            <RadioGroup.Label
+              as="p"
+              className='text-ms'
+            >
+              {item.fieldValue}
+            </RadioGroup.Label>
+          </RadioGroup.Option>
+        </>
+      ))}
+
+      {/* remaining elements as hidden at first */}
+      {remainingItems.map((item: any, idx: any) => (
+        <>
+          <RadioGroup.Option
+            key={idx}
+            value={item.fieldValue}
+            title={item.fieldLabel}
+            style={{ backgroundColor: item.fieldValue }}
+            className={cn('pdp-color-swatch-item relative z-99 h-10 w-10 flex items-center justify-center cursor-pointer outline-none hover:border-gray-900', {
+              'border border-gray-200': selectedValue !== item.fieldValue,
+              'border border-gray-900': selectedValue === item.fieldValue,
+              'hidden': !openRemainElems,
+            })}
+          >
+            <RadioGroup.Label
+              as="p"
+              className='text-ms'
+            >
+              {item.fieldValue}
+            </RadioGroup.Label>
+          </RadioGroup.Option>
+        </>
+      ))}
+
+      {/* show less button */}
+      {(openRemainElems) && (
+        <button className='relative flex items-center justify-center h-10 px-1 bg-gray-300 z-99 hover:opacity-75 bg-nav' onClick={() => handleToggleOpenRemainElems()}>
+          <p className='text-gray-900 text-ms'>{'<'}</p>
+        </button>
+      )}
+
+      {/* show more button */}
+      {(remainingItems && remainingItems.length > 0 && !openRemainElems) && (
+        <div className='relative flex items-center justify-center w-10 h-10 transition duration-100 bg-gray-300 outline-none cursor-pointer z-99 hover:opacity-75 bg-nav' onClick={() => handleToggleOpenRemainElems()}>
+          <p className='text-gray-900 text-ms'>+{remainingItems.length}</p>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function Dropdown({
   items = [],
-  onChange = () => {},
+  onChange = () => { },
   label = '',
   fieldCode = '',
   currentAttribute = '',
@@ -19,6 +96,7 @@ export default function Dropdown({
   isDisabled,
   product,
   variant,
+  handleSetProductVariantInfo,
 }: any) {
   const { openNotifyUser, closeNotifyUser } = useUI()
 
@@ -26,6 +104,7 @@ export default function Dropdown({
 
   const slug = `products/${router.query.slug}`
 
+  const [sizeValue, setSizeValue] = useState<any>('')
   const [productData, setProductData] = useState(
     getStockPerAttribute(fieldCode, currentAttribute)
   )
@@ -36,6 +115,18 @@ export default function Dropdown({
     productId: productData.productId,
     stockCode: productData.stockCode,
   })
+
+  useEffect(() => {
+    handleSetProductVariantInfo({ clothSize: currentAttribute })
+  }, [])
+
+  useEffect(() => {
+    product?.customAttributes?.map((val:any) => {
+       if(val.display === 'Size'){
+          setSizeValue(val.valueText);
+       }
+    })
+   }, [currentAttribute])
 
   useEffect(() => {
     const getStockPerAttrData = getStockPerAttribute(
@@ -79,123 +170,54 @@ export default function Dropdown({
   }
 
   const handleOnChange = (value: any) => {
-    // const stockPerAttrValue = getStockPerAttribute(
+     // const stockPerAttrValue = getStockPerAttribute(
     //   fieldCode,
     //   value.currentAttribute
     // )
 
     const stockPerAttrValue = getProductFromAttributes(
       fieldCode,
-      value.currentAttribute,
+      value,
       variant,
       product.variantProducts,
       slug
     )
+   
+
+    // const stockPerAttrValue = getProductFromAttributes(
+    //   fieldCode,
+    //   value.currentAttribute,
+    //   variant,
+    //   product.variantProducts,
+    //   slug
+    // )
     setSelected({ ...value, ...stockPerAttrValue })
-    setAttrCombination(fieldCode, value.currentAttribute)
+    setAttrCombination(fieldCode, value)
     setSelectedAttrData(stockPerAttrValue)
     if (value.stock === 0 && !isPreOrderEnabled) {
       openNotifyUser(stockPerAttrValue.productId)
     }
+    return onChange(fieldCode, value)
   }
 
+  const [openRemainElems, setOpenRemainElems] = useState(false)
+
+  const handleToggleOpenRemainElems = () => setOpenRemainElems(!openRemainElems)
+  
   return (
     <>
-      <div className="border-t border-b py-1 my-2">
-        <Listbox value={selected} onChange={handleOnChange} disabled={isDisabled}>
-          <Listbox.Label
-            className={`${
-              isDisabled ? 'opacity-40' : ''
-            } inline-block text-lg pr-3 uppercase font-bold text-gray-600 text-left`}
-          >
-            {label}
-          </Listbox.Label>
-          <div className="mt-1 relative inline-block w-9/12">
-            <Listbox.Button
-              disabled
-              className={`${
-                isDisabled ? 'opacity-40' : ''
-              } relative w-full bg-white pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 sm:text-md`}
-            >
-              <span className="flex items-center">
-                <span
-                  style={{ minHeight: '20px' }}
-                  className="text-black font-medium ml-3 block truncate"
-                >
-                  {selected.currentAttribute
-                    ? generateItemOption(selected.currentAttribute, selected.stock)
-                    : ' '}
-                </span>
-              </span>
-              <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                <ChevronDownIcon
-                  className="h-6 w-6 text-black"
-                  aria-hidden="true"
-                />
-              </span>
-            </Listbox.Button>
-
-            <Transition
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                {items.map((item: any) => {
-                  const stockAmount = getStockPerAttribute(
-                    fieldCode,
-                    item.fieldValue
-                  ).stock
-                  return (
-                    <Listbox.Option
-                      key={item.fieldValue}
-                      className={({ active }) =>
-                        classNames(
-                          active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                          'cursor-default select-none relative py-2 pl-3 pr-9'
-                        )
-                      }
-                      value={{
-                        currentAttribute: item.fieldValue,
-                        stock: stockAmount,
-                      }}
-                    >
-                      {({ selected, active }) => (
-                        <>
-                          <div className="flex items-center">
-                            <span
-                              className={classNames(
-                                selected ? 'font-semibold' : 'font-normal',
-                                'ml-3 block truncate'
-                              )}
-                            >
-                              {item.fieldValue
-                                ? generateItemOption(item.fieldValue, stockAmount)
-                                : null}
-                            </span>
-                          </div>
-
-                          {selected ? (
-                            <span
-                              className={classNames(
-                                active ? 'text-white' : 'text-indigo-600',
-                                'absolute inset-y-0 right-0 flex items-center pr-4'
-                              )}
-                            >
-                              <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                            </span>
-                          ) : null}
-                        </>
-                      )}
-                    </Listbox.Option>
-                  )
-                })}
-              </Listbox.Options>
-            </Transition>
-          </div>
-        </Listbox>
-      </div>
-    </>    
+    <div className='flex mt-4'>
+    <h3 className="text-gray-700 text-ms">{label} :</h3>
+    <h3 className='pl-1 text-gray-500 text-ms'>{sizeValue}</h3>
+      {/* <h3 className='px-2' >{color}</h3>
+      <div style={{ color: `${color}` }}></div> */}
+    </div>
+    <RadioGroup value='' onChange={handleOnChange} className="mt-2 dark:text-black">
+        {/* <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label> */}
+        <div className='dark:text-black'>
+          {renderRadioOptions(items, DEFAULT_OPTIONS_COUNT, currentAttribute, openRemainElems, handleToggleOpenRemainElems)}
+        </div>
+      </RadioGroup>
+    </>
   )
 }

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { config } from './configs/contact'
+import { Formik, Form, Field } from 'formik'
 import { useUI } from '@components/ui/context'
 import { handleSubmit, URLS } from './common'
-import Button from '@components/ui/IndigoButton'
+import Button from '@components/ui/Button'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
@@ -42,6 +43,13 @@ export default function ContactPreferences() {
   const { user, setUser } = useUI()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
+  const initialValues = {
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    mobile: user.mobile,
+    phone: user.phone,
+  }
   useEffect(() => {
     const tempObj: any = {}
     let newConfig: any = radioBtnsConfig.map((radioBtn: any) => {
@@ -123,19 +131,19 @@ export default function ContactPreferences() {
 
   return (
     <main className="sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="px-4 sm:px-0">
+      <div className="max-w-4xl">
+        <div className="lg:px-4 sm:px-0">
           <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
             {title}
           </h1>
-          <p className="mt-2 text-sm flex flex-col text-gray-500">
-            <span> {CONTACT_PREFERENCES_TITLE}</span>
-            <span className="mt-5"> {CONTACT_PREFERENCES_SUBTITLE}</span>
+          <p className="mt-2 text-sm flex flex-col text-black">
+            <span className='font-medium'> {CONTACT_PREFERENCES_TITLE}</span>
+            <span className="font-medium"> {CONTACT_PREFERENCES_SUBTITLE}</span>
           </p>
         </div>
       </div>
-      <div className="max-w-4xl mx-auto flex flex-col mt-10">
-        <div className="w-1/2 flex justify-between align-center">
+      <div className="max-w-4xl lg:mx-12 flex flex-col mt-10">
+        <div className="lg:w-1/2 lg:flex justify-between lg:align-center">
           {items.map((btn: any, idx: number) => {
             return (
               <div className="flex" key={`${idx}-radio-btn`}>
@@ -151,7 +159,7 @@ export default function ContactPreferences() {
                 />
                 <label
                   htmlFor={`radio-btn-${idx}`}
-                  className="ml-3 block text-sm font-medium text-gray-700"
+                  className="ml-3 block text-sm font-medium text-black"
                 >
                   {btn.title}
                 </label>
@@ -182,7 +190,7 @@ export default function ContactPreferences() {
                         float: 'left',
                         left: '6px',
                         top: '0px',
-                        zIndex: 99999,
+                        // zIndex: 99999,
                         position: 'absolute',
                         width: '10px',
                         height: '14px',
@@ -210,14 +218,30 @@ export default function ContactPreferences() {
             )
           })}
         </div>
-        <div className="mt-10 flex sm:flex-col1">
-          <Button
-            buttonType="button"
-            action={handleDataSubmit}
-            title={GENERAL_SAVE_CHANGES}
-            className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-          />
+        <Formik
+        initialValues={initialValues}
+        onSubmit={handleDataSubmit}
+        >
+        {({
+            handleSubmit,
+            isSubmitting,
+          }: any) => {
+            return (
+              <div className="mt-10 flex sm:flex-col1 w-60">
+            <Button
+            type="submit"
+            onClick={handleSubmit}
+            className="!font-bold  !py-3"
+            loading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            {!isSubmitting && GENERAL_SAVE_CHANGES}
+          </Button>
         </div>
+            )
+          }}
+        </Formik>
+        
       </div>
     </main>
   )

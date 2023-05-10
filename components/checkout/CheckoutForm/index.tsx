@@ -56,6 +56,7 @@ export default function CheckoutForm({
   fetchAddress,
   config,
   location,
+  recordShippingInfo,
 }: any) {
   const {
     setCartItems,
@@ -234,6 +235,7 @@ export default function CheckoutForm({
   const { Order } = EVENTS_MAP.ENTITY_TYPES
 
   const handleNewAddress = (values: any, callback: any = () => { }) => {
+    recordShippingInfo()
     const newValues = {
       ...values,
       customerId: cartItems.userId,
@@ -699,7 +701,7 @@ export default function CheckoutForm({
               )}
 
               {state.isCNC || isShippingDisabled ? null : (
-                <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6 rounded-lg">
+                <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
                   <h2 className="text-lg font-bold uppercase text-black">
                     {SHIPPING_INFORMATION}
                   </h2>
@@ -735,7 +737,7 @@ export default function CheckoutForm({
               )}
 
               {/* Payment */}
-              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6 rounded-lg">
+              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
                 <h2 className="text-lg font-bold uppercase text-black">
                   {BILLING_INFORMATION}
                 </h2>
@@ -766,7 +768,7 @@ export default function CheckoutForm({
                     />
                   )}
               </div>
-              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6 rounded-lg">
+              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
                 <h2 className="text-lg font-bold uppercase text-black">
                   {GENERAL_PAYMENT}
                 </h2>

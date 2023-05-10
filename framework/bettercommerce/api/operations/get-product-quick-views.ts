@@ -5,7 +5,7 @@ export default function useGetProductQuickviews() {
   async function useGetProductQuickviewsAsync({ query }: any) {
     try {
       const response: any = await fetcher({
-        url: `${PRODUCT_API_ENDPOINT}/slug?slug=${query}`,
+        url: `${PRODUCT_API_ENDPOINT}/quickview?slug=${query}`,
         method: 'get',
       })
       return {

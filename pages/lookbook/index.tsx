@@ -28,7 +28,7 @@ function LookbookPage({ data }: any) {
   useAnalytics(PageViewed, {
     eventType: PageViewed,
     pageCategory: 'Lookbook',
-    omniImg: data[0]?.image,
+    omniImg: (data?.length) ? data[0]?.image : IMG_PLACEHOLDER,
   })
 
   const css = { maxWidth: '100%', height: 'auto' }

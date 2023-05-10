@@ -16,6 +16,7 @@ export default function RelatedProducts({
   const { basketId, setCartItems, user } = useUI()
 
   const computeRelatedItems = () => {
+    
     const relatedProductsClone = [...relatedProducts]
     const tempArr: any = {}
 
@@ -42,7 +43,6 @@ export default function RelatedProducts({
   }
 
   const computedItems = computeRelatedItems()
-
   const addToCart = (product: any) => {
     const asyncAddToCart = async () => {
       const item = await cartHandler().addToCart(
@@ -129,7 +129,11 @@ export default function RelatedProducts({
                               >
                                 {GENERAL_ADD_TO_BASKET}
                               </button>
-                              <Link href={`/${product.slug}`} passHref>, {product.name}</Link>
+                              <Link href={`/${product.slug}`} passHref legacyBehavior>
+                                <span className="sr-only">
+                                  , {product.name}
+                                </span>
+                              </Link>
                               {isEngravingAvailable && (
                                 <>
                                   <button

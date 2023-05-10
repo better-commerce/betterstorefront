@@ -1,19 +1,25 @@
 import cn from 'classnames'
 import Link from 'next/link'
+import axios from 'axios'
 import { FC } from 'react'
+import Router from 'next/router'
 import { useUI } from '@components/ui/context'
 import { useEffect, useState, Fragment } from 'react'
+import { matchStrings, priceFormat, tryParseJson } from '@framework/utils/parse-util'
 import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon, PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, EyeIcon } from '@heroicons/react/24/outline'
 import PromotionInput from '../PromotionInput'
+import RelatedProducts from '@components/product/RelatedProducts'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import Image from 'next/image'
+import { NEXT_CREATE_WISHLIST,NEXT_GET_ORDER_RELATED_PRODUCTS,NEXT_GET_ALT_RELATED_PRODUCTS,collectionSlug,PRODUCTS_SLUG_PREFIX,NEXT_GET_PRODUCT,NEXT_GET_BASKET_PROMOS,NEXT_BASKET_VALIDATE } from '@components/utils/constants'
 
 import useTranslation, {
   CLOSE_PANEL,
   GENERAL_SHOPPING_CART,
+  GENERAL_TOTAL_SAVINGS,
   WISHLIST_SIDEBAR_MESSAGE,
   GENERAL_CATALOG,
   GENERAL_REMOVE,
@@ -26,22 +32,219 @@ import useTranslation, {
   GENERAL_CONTINUE_SHOPPING,
   GENERAL_OR_TEXT,
   IMG_PLACEHOLDER,
+  BTN_MOVE_TO_WISHLIST,
+  ADDED_TO_WISH,
+  GENERAL_PERSONALISATION,
+  PERSONALISATION,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import {
+  EmptyGuid,
+} from '@components/utils/constants'
+import { getCurrentPage } from '@framework/utils/app-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import { data } from 'autoprefixer'
+import Engraving from '@components/product/Engraving'
+import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 
 const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
-  const { closeSidebar, setCartItems, cartItems, basketId } = useUI()
+  const { addToWishlist, openWishlist, displayAlert, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, user, isGuestUser, displaySidebar } = useUI()
+  const [isEngravingOpen, setIsEngravingOpen] = useState(false)
+  const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
   const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
   const { Basket } = EVENTS_MAP.ENTITY_TYPES
-
+  const [totalDiscount, setTotalDiscount] = useState(0)
+  const [lastCartItemProductId, setLastCartItemProductId] = useState('');
+  const [relatedProducts, setRelatedProducts] = useState<any>()
+  const [reValidateData, setBasketReValidate] = useState<any>([]);  
+  const [variantProducts, setVariantProducts] = useState<Array<any> | undefined>(undefined);
+  const [productSizes, setProductSizes] = useState<Array<any> | undefined>(undefined);
+  const [basketPromos, setBasketPromos] = useState<Array<any> | undefined>(undefined);
+  const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false);
+  const [paymentOffers, setPaymentOffers] = useState<any | undefined>(undefined);
+  const [isSizeDialogOpen, setIsSizeDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(undefined);
+  const [isBasketFetched, setIsBasketFetched] = useState(false);
+  const [removedProduct, setRemovedProduct] = useState<any | Array<any>>();
+  const [isOpen, setIsOpen] = useState(false)
+  const [itemClicked, setItemClicked] = useState<any | Array<any>>()
+  const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
+  const [sizeDialogState, setSizeDialogState] = useState<any>({
+    type: ''
+  })
   const content = useTranslation()
+  const [cartSidebarOpen, setCartSidebarOpen] = useState(false)
 
   useEffect(() => {
-    const handleCartitems = async () => {
-      const items = await getCart({ basketId })
-      setCartItems(items)
+    setTimeout(() => setCartSidebarOpen(displaySidebar), 250)
+  }, [displaySidebar])
+
+  let firstProductId = "";
+  if (cartItems?.lineItems?.length > 0) {
+    firstProductId = cartItems?.lineItems?.length ? cartItems?.lineItems?.filter((x: any, idx: number) => idx == 0)[0]?.productId : "";
+  }
+  let currentPage = getCurrentPage();
+  const getUserId = () => {
+    return user?.userId && user?.userId != EmptyGuid ? user?.userId : cartItems?.userId;
+  };
+ //getUserId todo
+ 
+ const getBasketPromos = async (basketId: string) => {
+  const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
+    params: { basketId: basketId }
+  });
+  setBasketPromos(basketPromos);
+  return basketPromos;
+};
+
+const getJusPayPromos = async (cartItems: any) => {
+  const data = {
+    order: {
+      amount: cartItems?.grandTotal?.raw?.withTax?.toString(),
+      currency: cartItems?.baseCurrency,
+    },
+  };
+  const { data: offersResult } = {data:''}//await getJusPayOffers(data);
+  //console.log(offersResult);
+  setPaymentOffers(offersResult);
+};
+
+const showRemove = (_product: Array<any> | any) => {
+  setRemovedProduct(_product);
+};
+
+const fetchBasketReValidate = async () => {
+  const { data: reValidate }: any = await axios.post(NEXT_BASKET_VALIDATE, {
+    basketId: basketId,
+  })
+
+  setBasketReValidate(reValidate?.result); 
+  return reValidate?.result; 
+};
+
+useEffect(() => {
+
+  const handleAsync = async () => {
+
+    const promise = await new Promise<any>(async (resolve: any, reject: any) => {
+      await getBasketPromos(basketId);
+      await fetchBasketReValidate();
+      setIsGetBasketPromoRunning(!isGetBasketPromoRunning);
+
+      if (cartItems?.lineItems?.length) {
+        const lastItemProductId = cartItems?.lineItems[cartItems?.lineItems?.length - 1]?.productId;
+        await fetchRelatedProducts(lastItemProductId);
+      }
+      resolve();
+    });
+
+    Promise.resolve(promise);
+
+  };
+
+  // [GS, 07-12-2022]: Idea is to disallow multiple get basket promos calls to instantiate in the same lifecycle event.
+  if (!isGetBasketPromoRunning) {
+    setIsGetBasketPromoRunning(true);
+    handleAsync();
+  }
+
+}, [basketId, cartItems])
+
+
+ const handleCartItems = async () => {
+  const items = await getCart({ basketId })
+  setCartItems(items);
+};
+
+ const handleCartItemsLoadAsync = async () => {
+  const promises = new Array<Promise<any>>();
+
+  promises.push(await new Promise<any>(async (resolve: any, rejec: any) => {
+    await handleCartItems();
+    resolve();
+  }));
+
+  Promise.all(promises).then(() => {
+    setIsBasketFetched(true);
+  });
+};
+
+ const handleLoadAsync = async (preferredPaymentMethod: any) => {
+    const promises = new Array<Promise<any>>();
+
+    // promises.push(await new Promise<any>(async (resolve: any, reject: any) => {
+    //   await handleFetchUPIs(preferredPaymentMethod);
+    //   resolve();
+    // }));
+
+    // promises.push(await new Promise<any>(async (resolve: any, reject: any) => {
+    //   await handleFetchCards(preferredPaymentMethod);
+    //   resolve();
+    // }));
+
+    /*promises.push(await new Promise<any>(async (resolve: any, rejec: any) => {
+      await getBasketPromos(cartItems?.id);
+      resolve();
+    }));*/
+
+    promises.push(await new Promise<any>(async (resolve: any, rejec: any) => {
+      if (cartItems?.lineItems?.length) {
+        const lastItemProductId = cartItems?.lineItems[cartItems?.lineItems?.length - 1]?.productId;
+        await fetchRelatedProducts(lastItemProductId);
+      }
+      resolve();
+    }));
+
+    promises.push(await new Promise<any>(async (resolve: any, rejec: any) => {
+      await fetchBasketReValidate();
+      resolve();
+    }));
+
+    promises.push(await new Promise<any>(async (resolve: any, rejec: any) => {
+      await getAlltrelatedProducts();
+      resolve();
+    }));
+
+    Promise.all(promises);
+  }; 
+
+  const getAlltrelatedProducts = async () => {
+    const { data: altRelatedProducts }: any = await axios.post(NEXT_GET_ALT_RELATED_PRODUCTS, {
+      slug: collectionSlug,
+    })
+    setAltRelatedProducts(altRelatedProducts)
+  };
+
+  const handleToggleEngravingModal = (product?: any) => {
+    if (product) setSelectedEngravingProduct(product)
+    setTimeout(() => {
+      setIsEngravingOpen(!isEngravingOpen)
+    }, 200)
+  }
+
+
+  useEffect(() => {
+    if (isBasketFetched) {
+      let preferredPaymentMethod:any = undefined;
+      const userId = getUserId();
+      if (isGuestUser || (userId && matchStrings(userId, EmptyGuid, true))) {
+        // preferredPaymentMethod = "";
+      } else {
+        // preferredPaymentMethod = getDefaultPaymentMethod();
+      }
+      // setPreferredPaymentMethod(preferredPaymentMethod);
+      handleLoadAsync(preferredPaymentMethod);
     }
+  }, [isBasketFetched]);
+
+
+ useEffect(() => {
+    // const handleCartitems = async () => {
+    //   const items = await getCart({ basketId })
+    //   setCartItems(items)
+    // }
+    
     eventDispatcher(BasketViewed, {
       entity: JSON.stringify({
         id: basketId,
@@ -58,11 +261,164 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
       eventType: BasketViewed,
       promoCodes: cartItems.promotionsApplied,
     })
-    handleCartitems()
+    // handleCartitems()
+    handleCartItemsLoadAsync()
   }, [])
 
+  useEffect(() => {
+    let totalPriceSaving = 0
+    let updateQtySaving = 0
+    cartItems?.lineItems?.forEach((product: any) => {
+      if (product?.listPrice?.raw?.withTax > product?.price?.raw?.withTax) {
+        const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
+        updateQtySaving = saving * product?.qty;
+        totalPriceSaving = (totalPriceSaving + updateQtySaving);
+      }
+    });
+
+    setTotalDiscount(totalPriceSaving + cartItems?.discount?.raw?.withTax);
+    if (cartItems?.lineItems?.length > 0) {
+      const lastCartItemProductId = cartItems?.lineItems[cartItems?.lineItems?.length - 1]?.productId;
+      setLastCartItemProductId(lastCartItemProductId)
+    }
+  }, [cartItems])
+
+
+  const fetchRelatedProducts = async (productId?: string) => {
+    const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, {
+      recordId: firstProductId,
+    })
+    
+    setRelatedProducts(relatedProducts)
+  };
+
+  function closeModal() {
+    setIsOpen(false)
+  }
+
+  function openModal() {
+    setIsOpen(true)
+  }
+  const itemsInBag = () => { return cartItems?.lineItems?.map((item: any) => item.qty).reduce((sum: number, current: number) => sum + current, 0); }
+  const relatedProductData = relatedProducts?.relatedProducts?.filter((x: any) => x?.itemType != 10);
+  
+  const enableHtmlScroll = () => {
+    const element: any = document.getElementsByTagName("html")[0];
+    element.classList.add("overlow-y-auto-p");
+  };
+  const insertToLocalWishlist = (product: any) => {
+    addToWishlist(product)
+    // setIsLoading({ action: 'move-wishlist', state: true })
+    handleItem(product, 'delete')
+    // setMovedProducts((prev: any) => [...prev, { product: product, msg: MOVED_TO_WISHLIST }])
+    // setIsLoading({ action: '', state: false })
+    setAlert({ type: 'success', msg: ADDED_TO_WISH })
+    openWishlist()
+  }
+  const handleWishList = async (product: any | Array<any>) => {
+    closeModal()
+    const accessToken = localStorage.getItem('user')    
+    if (accessToken) {
+      const createWishlist = async (product: any) => {
+        try {
+          await axios.post(NEXT_CREATE_WISHLIST, {
+            id: getUserId(),
+            productId: itemClicked?.length
+              ? product?.productId.toLowerCase()
+              : itemClicked?.productId.toLowerCase(),
+            flag: true,
+          })
+          insertToLocalWishlist(product)
+        } catch (error) {
+          console.log(error, 'error')
+        }
+      }
+
+      if (itemClicked && itemClicked?.length) {
+        itemClicked?.forEach((product: any) => {
+          createWishlist(product);
+        });
+      } else if (itemClicked?.productId) {
+        createWishlist(product);
+      }
+
+    } else {
+      closeSidebar()
+      setSidebarView('LOGIN_VIEW')
+      enableHtmlScroll()
+    }
+
+    let productAvailability = "Yes"
+    if (product?.currentStock > 0) {
+      productAvailability = "Yes"
+    }
+    else {
+      productAvailability = "No"
+    }
+
+    // if (typeof window !== "undefined") {
+    //   recordGA4Event(window, 'add_to_wishlist', {
+    //     ecommerce: {
+    //       items: [
+    //         {
+    //           item_name: product?.name,
+    //           item_brand: product?.brand,
+    //           item_category: product?.classification?.mainCategoryName,
+    //           item_category2: product?.classification?.category,
+    //           item_variant: getLineItemColorName(
+    //             product?.variantProducts
+    //               ?.find((x: any) => x?.stockCode === product?.stockCode)
+    //               ?.variantAttributes?.find(
+    //                 (x: any) => x?.fieldCode === 'global.colour'
+    //               )?.fieldValue
+    //           ),
+    //           quantity: 1,
+    //           item_id: product?.sku,
+    //           price: product?.price?.raw?.withTax,
+    //         }
+    //       ],
+    //       item_var_id: product?.stockCode,
+    //       header: "Cart",
+    //       current_page: "Cart",
+    //       availability: productAvailability,
+    //     }
+    //   });
+
+    //   recordGA4Event(window, 'wishlist', {
+    //     ecommerce: {
+    //       header: "Frequently Bought Together",
+    //       current_page: "Cart",
+    //     }
+    //   });
+    // }
+
+    // recordMoEngageEvent(window.moEvent, 'add_to_wishlist', {
+    //   URL: window.location.href,
+    //   Product_name: product?.name,
+    //   Product_category: product?.classification?.mainCategoryName,
+    //   Product_category_2: product?.classification?.category,
+    //   Product_color: '',
+    //   Price: product?.price?.raw?.withTax,
+    // });
+
+  }
+  
+  const isAllItemsInStock = (reValidateResult: any) => {
+    if (reValidateResult?.message) {
+      const soldOutItems: any = tryParseJson(reValidateResult?.message);
+      if (soldOutItems && soldOutItems?.length) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+
   const handleItem = (product: any, type = 'increase') => {
-    const asyncHandleItem = async () => {
+    if(isOpen){
+      closeModal()
+    }
+    const asyncHandleItem = async (product:any) => {
       const data: any = {
         basketId,
         productId: product.id,
@@ -73,9 +429,40 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
       }
       if (type === 'increase') {
         data.qty = 1
+        if (currentPage) {
+          if (typeof window !== "undefined") {
+            recordGA4Event(window, 'select_quantity', {
+              category: product?.categoryItems?.length ? product?.categoryItems[0]?.categoryName : "",
+              final_quantity: data.qty,
+              current_page: currentPage,
+              number_of_plus_clicked: 1,
+              number_of_minus_clicked: 0,
+            });
+          }
+        }
       }
       if (type === 'delete') {
         data.qty = 0
+        if (typeof window !== "undefined") {
+          recordGA4Event(window, 'remove_from_cart', {
+            ecommerce: {
+              items: [
+                {
+                  item_name: product?.name,
+                  price: product?.price?.raw?.withTax,
+                  quantity: product?.qty,
+                  item_id: product?.sku,
+                  item_size: getLineItemSizeWithoutSlug(product),
+                  item_brand: product?.brand,
+                  item_variant: product?.colorName,
+                  item_var_id: product?.stockCode
+                }
+              ],
+              loggedin: (user?.userId && user?.userId !== EmptyGuid),
+              current_page: "Cart"
+            }
+          });
+        }
       }
       try {
         const item = await addToCart(data, type, { product })
@@ -84,22 +471,118 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
         console.log(error)
       }
     }
-    asyncHandleItem()
+    if (product && product?.length) {
+      product?.forEach((product: any) => {
+        asyncHandleItem(product);
+        setBasketReValidate([])
+      });
+
+    } else if (product?.productId) {
+      asyncHandleItem(product);
+    }
   }
 
-  const handleClose = () => closeSidebar()
+  const getLineItemSizeWithoutSlug = (product: any) => {
+    const productData: any = tryParseJson(product?.attributesJson || {})
+    return productData?.Size
+  }
+
+  const beginCheckout = (cartItems: any) => {
+    if (typeof window !== "undefined") {
+      recordGA4Event(window, 'begin_checkout', {
+        ecommerce: {
+          items: [
+            cartItems?.lineItems?.map((item: any, itemId: number) => (
+              {
+                item_name: item?.name,
+                price: item?.price?.raw?.withTax,
+                quantity: item?.qty,
+                item_brand: item?.brand,
+                item_id: item?.sku,
+                item_size: getLineItemSizeWithoutSlug(item),
+                item_variant: item?.colorName,
+              }
+            ))
+          ],
+          current_page: "Checkout",
+          loggedin_status: (user?.userId && user?.userId !== EmptyGuid),
+          paymode: "",
+          address: "",
+          value: cartItems?.grandTotal?.raw?.withTax,
+          item_var_id: cartItems?.lineItems[0]?.stockCode,
+        }
+      });
+    }
+  }
+
+  const getProductItemSizes = (product: any) => {
+    const variantProductsAttribute = product?.variantProductsAttribute || product?.variantProductsAttributeMinimal || []
+    if (variantProductsAttribute?.length) {
+      //const attributes = variantProductsAttribute?.find((attr: { productId: string, variantAttributes: Array<any> }) => matchStrings(attr.productId, product?.productId, true));
+      const size = variantProductsAttribute?.find((x: any) => matchStrings(x.fieldCode, "clothing.size", true));
+      return size?.fieldValues?.map((fv: any) => {
+        return {
+          ...fv,
+          ...{ fieldValue: fv?.fieldValue?.toUpperCase(), },
+          //...{ fieldValue: fv?.fieldValue?.toUpperCase().startsWith("T") ? fv?.fieldValue?.substring(1).toUpperCase() : fv?.fieldValue },
+        }
+      });
+    }
+    return [];
+  };
+
+  const bindProductSizes = async (product: any) => {
+    const sizes = getProductItemSizes(product);
+    const productSlug = product?.slug?.replace(PRODUCTS_SLUG_PREFIX, "");
+    const { data: productDetails }: any = await axios.post(NEXT_GET_PRODUCT, { slug: productSlug?.startsWith("/") ? productSlug?.substring(1) : productSlug });
+    const correctSizes = productDetails?.product?.variantAttributes?.filter((attr: any) => attr.fieldCode === 'clothing.size')[0]?.fieldValues.sort((a: any, b: any) => a.displayOrder - b.displayOrder)
+
+    const stockCode = product?.stockCode;
+    if (stockCode) {
+      // const productCode = stockCode?.substring(0, stockCode.lastIndexOf("-"));
+      // const allStockCodes = sizes?.map((x: any) => `${productCode}-${x.fieldValue}`);
+      const allSizeValues = sizes?.map((x: any) => x.fieldValue)
+      const checkCorrectAttribute = (vpas: any) => vpas.filter((vpa: any) => vpa.fieldCode === 'clothing.size' && allSizeValues.includes(vpa.fieldValue))
+      const variantProducts = productDetails?.product?.variantProducts?.filter((vp: any) => checkCorrectAttribute(vp.attributes).length > 0);
+      // const variantProducts = productDetails?.product?.variantProducts?.filter((x: any) => allStockCodes?.includes(x?.stockCode));
+      setVariantProducts(variantProducts ?? []);
+    }
+    setProductSizes(correctSizes);
+  };
+
+  const handleQuickAddToBag = async (product: any, type?: any) => {
+    // async call
+    await bindProductSizes(product)
+    // set states
+    setIsSizeDialogOpen(true);
+    setSelectedProduct(product);
+    setSizeDialogState((v: any) => ({
+      ...v,
+      type,
+    }))
+  }
+
+  const handleClose = () => {
+    setTimeout(() => closeSidebar(), 500)
+    setCartSidebarOpen(false)
+  }
 
   const isEmpty: boolean = cartItems?.lineItems?.length === 0
 
   const css = { maxWidth: '100%', height: 'auto' }
+
+  function handleRedirectToPDP(){
+
+  }
+
   return (
-    <Transition.Root show={true} as={Fragment}>
+    <Transition.Root show={cartSidebarOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 overflow-hidden z-999"
+        className="fixed inset-0 overflow-hidden z-99"
         onClose={handleClose}
       >
-        <div className="absolute inset-0 overflow-hidden z-999">
+        <div className="absolute inset-0 overflow-hidden z-99">
           <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-500"
@@ -124,10 +607,23 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
             >
               <div className="w-screen max-w-md">
                 <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
-                  <div className="flex-1 px-4 py-6 overflow-y-auto sm:px-6">
-                    <div className="flex items-start justify-between">
+                  <div className="flex-1  py-6  ">
+                    <div className="flex items-start mb-1 px-4 sm:px-6 justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
                         {GENERAL_SHOPPING_CART}
+                        {itemsInBag() > 0 ?
+                            (
+                              <>
+                                <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black">{itemsInBag()}
+                                  {itemsInBag() > 1 ? ' items' : ' item'}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black">Empty</span>
+                              </>
+                            )
+                          }
                       </Dialog.Title>
                       <div className="flex items-center ml-3 h-7">
                         <button
@@ -140,12 +636,26 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                         </button>
                       </div>
                     </div>
-
-                    <div className="mt-8">
+                    {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
+                        <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
+                          <h3 className="font-semibold text-14 text-green-dark">
+                            {cartItems.currencySymbol}{priceFormat(totalDiscount).slice(1)}{' '}{GENERAL_TOTAL_SAVINGS}</h3>
+                        </div>
+                      )}
+                    <div className="mt-8 px-4 sm:px-6">
                       <div className="flow-root">
                         {isEmpty && (
-                          <div className="flex flex-col items-center justify-center w-full h-full text-gray-900">
-                            {WISHLIST_SIDEBAR_MESSAGE}
+                      <div className="flex flex-col items-center justify-between w-full h-full py-9">
+                        <Image
+                          height="100"
+                          width="100"
+                          src="/assets/images/cart.jpg"
+                          alt="cart"
+                          className='text-center'
+                        />
+                        <p className="mt-5 text-gray-700">
+                          {WISHLIST_SIDEBAR_MESSAGE}
+                        </p>
                             <Link href="/search">
                               <button
                                 type="button"
@@ -156,16 +666,33 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                 <span aria-hidden="true"> &rarr;</span>
                               </button>
                             </Link>
+                          {altRelatedProducts?.relatedProducts && (
+                          <div className='flex flex-col px-4 pb-10 mt-0 sm:px-8 sm:pb-16 cart-related-prod '>
+                          {/* {JSON.stringify(altRelatedProducts?.relatedProducts?.products?.results)} */}
+                          <RelatedProductWithGroup
+                            products={altRelatedProducts?.relatedProducts?.products?.results || []}
+                            productPerColumn= {1.7}
+                            />
+                        </div>
+                          )}
                           </div>
                         )}
                         <ul
                           role="list"
                           className="-my-6 divide-y divide-gray-200"
                         >
-                          {cartItems.lineItems?.map((product: any) => (
+                          {cartItems.lineItems?.map((product: any) => 
+                          
+                          {
+                            let soldOutMessage = "";
+                              if (reValidateData?.message != null) {
+                                soldOutMessage = reValidateData?.message?.includes(product.stockCode);
+                              }
+                            return(
                             <li key={product.id} className="">
                               <div className="flex py-6">
-                                <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
+                                <div className="flex-shrink-0 w-24 h-32 overflow-hidden border border-gray-200 rounded-md">
+                                <Link href={`/${product.slug}`}>
                                   <Image
                                     width={100}
                                     height={100}
@@ -175,7 +702,9 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                     }
                                     alt={product.name}
                                     className="object-cover object-center w-full h-full"
+                                    onClick={handleRedirectToPDP}
                                   ></Image>
+                                </Link>
                                   {/* <img
                                     src={product.image}
                                     alt={product.name}
@@ -194,22 +723,170 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                       <p className="ml-4">
                                         {product.price?.formatted?.withTax}
                                       </p>
-                                    </div>
+                                    </div> 
+                                    {/*TODO ADD SIZE SELECT*/} 
                                     {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                   </div>
-                                  <div className="flex items-end justify-between flex-1 text-sm">
+                                  <div className=''>
+                                  {product.children?.map(
+                                    (child: any, idx: number) => {
+                                      return (
+                                        <div className="flex" key={idx}>
+                                          <div className="flex flex-col mb-6 mt-2">
+                                            <div>
+                                              <div className="flex justify-between font-medium text-gray-900">
+                                              <div className="image-container">
+                                              <span
+                                                className="cursor-pointer align-middle"
+                                                onClick={() => {
+                                                  handleToggleEngravingModal(
+                                                    product
+                                                  )
+                                                }}
+                                                title="View Personalisation"
+                                              >
+                                                <EyeIcon className="inline-block w-4 h-4 hover:text-gray-400 lg:-mt-2 md:-mt-1 xsm:-mt-3 xsm:h-5" />
+                                              </span>
+                                                {/* <Image
+                                                  style={css}
+                                                  width={220}
+                                                  height={240}
+                                                  // src={
+                                                  //   generateUri(child.customInfo2, '') || (child.image, 'h=200&fm=webp') || IMG_PLACEHOLDER
+                                                  // }
+                                                  src={child.customInfo2 || child.image}
+                                                  alt={child.name}
+                                                  className="object-cover object-center w-full h-full image"
+                                                ></Image> */}
+                                              </div>
+                                              <p className='text-gray-500 font-thin ml-1 mr-1'> | </p>
+                                                <h3>
+                                                  {/* <Link href={`/${child.slug}`}> */}
+                                                    <span className='uppercase text-xs cursor-default'>{`${PERSONALISATION}`}</span>
+                                                  {/* </Link> */}
+                                                <span className="mt-1 ml-4 text-xs">
+                                                  {child.price?.formatted?.withTax}
+                                                </span>
+                                                </h3>
+                                              </div>
+                                              {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
+                                            </div>
+
+                                            <button
+                                              type="button"
+                                              className="-ml-32 font-medium text-xs text-indigo-600 hover:text-indigo-500"
+                                              onClick={() =>
+                                                handleItem(child, GENERAL_DELETE)
+                                              }
+                                            >
+                                              {GENERAL_REMOVE}
+                                            </button>
+                                          </div>
+
+                                        </div>
+                                      )
+                                    }
+                                  )}
+                                  </div>
+                                  <div className="flex items-end justify-between text-sm">
                                     {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                    <div className="flex justify-between w-full">
+                                    <div className="flex items-center justify-between w-full">
                                       <button
                                         type="button"
                                         className="font-medium text-red-300 hover:text-red-500"
-                                        onClick={() =>
-                                          handleItem(product, 'delete')
+                                        onClick={() =>{
+                                          openModal()
+                                          setItemClicked(product)
+                                        }
                                         }
                                       >
                                         {GENERAL_REMOVE}
                                       </button>
+
+                                        {/* Dialog box to confirm remove item */}
+                                        <Transition
+                                            appear
+                                            show={isOpen}
+                                            as={Fragment}
+                                          >
+                                            <Dialog
+                                              as="div"
+                                              open={isOpen}
+                                              className="relative z-9999"
+                                              onClose={closeModal}
+                                            >
+                                              <Transition.Child
+                                                as={Fragment}
+                                                enter="ease-out duration-300"
+                                                enterFrom="opacity-0"
+                                                enterTo="opacity-30"
+                                                leave="ease-in duration-300"
+                                                leaveFrom="opacity-30"
+                                                leaveTo="opacity-0"
+                                              >
+                                                <div className="fixed inset-0 bg-black " />
+                                              </Transition.Child>
+
+                                              <div className="fixed inset-0 overflow-y-auto">
+                                                <div className="flex min-h-full items-center justify-center p-4 text-center">
+                                                  <Transition.Child
+                                                    as={Fragment}
+                                                    enter="transition duration-100 ease-out"
+                                                    enterFrom="transform scale-95 opacity-0"
+                                                    enterTo="transform scale-100 opacity-100"
+                                                    leave="transition duration-75 ease-out"
+                                                    leaveFrom="transform scale-100 opacity-100"
+                                                    leaveTo="transform scale-95 opacity-0"
+                                                  >
+                                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden bg-white pb-6 text-left align-middle shadow-xl transition-all">
+                                                      <Dialog.Title
+                                                        as="div"
+                                                        className="flex justify-between text-lg xsm:text-md w-full border-b-2 shadow border-gray-50 font-medium px-6 leading-6 text-gray-900 py-3"
+                                                      >
+                                                        Remove this Item?
+                                                      <XMarkIcon
+                                                        className="w-5 h-5 hover:text-gray-400 text-gray-500"
+                                                        onClick={closeModal}
+                                                      ></XMarkIcon>
+                                                      </Dialog.Title>
+                                                      {/* <hr className="w-full my-2 shadow-md "></hr> */}
+                                                      <p className="text-black font-normal p-6 text-sm">
+                                                        Are you sure you don't
+                                                        want this product? You may move it to Wishlist and buy later.
+                                                      </p>
+                                                      <div className="mt-2 flex px-6 w-full justify-around items-center">
+                                                        <button
+                                                          onClick={() => {
+                                                            handleItem(
+                                                              itemClicked,
+                                                              'delete'
+                                                            )
+                                                          }}
+                                                          className="w-full h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm lg:text-md font-medium text-red-700 hover:bg-gray-100  md:w-full"
+                                                        >
+                                                          {GENERAL_REMOVE}
+                                                        </button>
+                                                        <button
+                                                          onClick={()=>{handleWishList(itemClicked)}}
+                                                          className="w-full h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-100 md:w-full"
+                                                        >
+                                                          {BTN_MOVE_TO_WISHLIST}
+                                                        </button>
+                                                      </div>
+                                                    </Dialog.Panel>
+                                                  </Transition.Child>
+                                                </div>
+                                              </div>
+                                            </Dialog>
+                                          </Transition>
+                                      { product?.variantProducts?.length>0 && (
+                                      <div className='flex flex-row px-4 items-center text-gray-900 border'>
+                                        <p className='text-gray-700 px-3 py-2'>Size: {getLineItemSizeWithoutSlug(product)} </p>
+                                        <ChevronDownIcon className='h-4 w-4'/>
+                                      </div>
+                                      )
+                                      }
                                       <div className="flex flex-row px-4 text-gray-900 border">
                                         <MinusSmallIcon
                                           onClick={() =>
@@ -227,75 +904,75 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                           }
                                         />
                                       </div>
+                                        
+
+                                        {reValidateData?.message != null && soldOutMessage != "" &&
+                                      <div className='flex flex-col'>
+                                          <>
+                                            <div className='flex text-xs font-semibold text-left text-red-500'>
+                                              <span className="relative mr-1 top-1">
+                                                <Image alt='Sold Out' src="/assets/not-shipped-edd.svg" layout="fixed" width={20} height={20} className="relative inline-block mr-1 top-2" />
+                                              </span>
+                                              <span className='mt-2'>Sold Out</span>
+                                            </div>
+                                          </>
+                                      </div>
+                                        }
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              {product.children?.map(
-                                (child: any, idx: number) => {
-                                  return (
-                                    <div className="flex" key={idx}>
-                                      <div className="flex-shrink-0 w-12 h-12 ml-10 overflow-hidden border border-gray-200 rounded-md">
-                                        <div className="image-container">
-                                          <Image
-                                            style={css}
-                                            src={
-                                              generateUri(child.image, 'h=200&fm=webp') || IMG_PLACEHOLDER
-                                            }
-                                            alt={child.name}
-                                            className="object-cover object-center w-full h-full image"
-                                          ></Image>
-                                        </div>
-                                      </div>
-                                      <div className="flex flex-col flex-1 ml-4">
-                                        <div>
-                                          <div className="flex justify-between font-medium text-gray-900">
-                                            <h3 onClick={handleClose}>
-                                              <Link href={`/${child.slug}`}>
-                                                {child.name}
-                                              </Link>
-                                            </h3>
-                                            <p className="ml-4">
-                                              {child.price?.formatted?.withTax}
-                                            </p>
-                                          </div>
-                                          {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
-                                        </div>
-                                      </div>
-                                      <div className="flex items-end justify-end flex-1 text-sm">
-                                        {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
-
-                                        <button
-                                          type="button"
-                                          className="font-medium text-indigo-600 hover:text-indigo-500"
-                                          onClick={() =>
-                                            handleItem(child, GENERAL_DELETE)
-                                          }
-                                        >
-                                          {GENERAL_REMOVE}
-                                        </button>
-                                      </div>
-                                    </div>
-                                  )
-                                }
-                              )}
                             </li>
-                          ))}
+                          )}
+                          
+                          )}
                         </ul>
                       </div>
                     </div>
                   </div>
+                    <div className="flex flex-col">
+                      <div className="section-devider-sm"></div>
+                    </div>
 
                   {!isEmpty && (
-                    <div className="px-4 py-6 border-t border-gray-200 sm:px-6">
-                      <PromotionInput />
-                      <div className="flex justify-between py-2 text-gray-900 font-small">
+                    <div className="px-0 pb-6 sm:px-0">
+                      <PromotionInput 
+                      basketPromos={basketPromos}
+                      paymentOffers={paymentOffers}
+                      items={cartItems}
+                      getBasketPromoses={getBasketPromos}
+                      // deviceInfo={deviceInfo}
+                      />
+                      {relatedProductData?.length>0 && (
+
+                      <>
+                          <div className="flex flex-col">
+                            <div className="section-devider-sm"></div>
+                          </div>
+                          <div className='flex flex-col pl-0 mt-0 sm:pl-0 cart-related-prod '>
+                          <div className='flex flex-col justify-center pb-2 text-center sm:pb-4'>
+                            <h3 className='text-black uppercase font-bold text-lg'>You May Also Like</h3>
+                          </div>
+                            <RelatedProductWithGroup
+                            products={relatedProductData || [] }
+                            productPerColumn= {1.7}
+                            />
+                          </div>
+                        <div className="flex flex-col">
+                            <div className="section-devider-sm"></div>
+                          </div>
+                        </>
+                      )
+
+                      }
+
+                      <div className="flex justify-between py-2 px-6 text-gray-900 font-small">
                         <p className="text-sm">{SUBTOTAL_INCLUDING_TAX}</p>
                         <p className="font-bold text-black">
                           {cartItems.subTotal?.formatted?.withTax}
                         </p>
                       </div>
-                      <div className="flex justify-between py-2 text-black font-small">
+                      <div className="flex justify-between py-2 px-6 text-black font-small">
                         <p>{GENERAL_SHIPPING}</p>
                         <p className="font-bold text-black">
                           {cartItems.shippingCharge?.formatted?.withTax}
@@ -303,7 +980,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                       </div>
 
                       {cartItems.promotionsApplied?.length > 0 && (
-                        <div className="flex justify-between py-2 text-black font-small">
+                        <div className="flex justify-between py-2 px-6 text-black font-small">
                           <p className="text-sm">{GENERAL_DISCOUNT}</p>
                           <p className="font-bold text-red-500">
                             {'-'}
@@ -311,17 +988,68 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                           </p>
                         </div>
                       )}
-                      <div className="flex justify-between font-medium text-black">
+                      <div className="flex justify-between font-medium px-6 text-black">
                         <p className="text-xl">{GENERAL_TOTAL}</p>
                         <p className="text-xl font-bold text-black">
                           {cartItems.grandTotal?.formatted?.withTax}
                         </p>
                       </div>
-                      <div className="mt-6">
+                      {reValidateData?.message != null && JSON.parse(reValidateData?.message).length > 0 ? (
+                            <>
+                              <div className='flex flex-col px-8 py-2 bg-red-200'>
+                                <div className='flex text-xs font-semibold text-left text-red-500'>
+                                  <span className="relative mr-1 top-1">
+                                    <Image alt='EDD' src="/assets/not-shipped-edd.svg" layout="fixed" width={20} height={20} className="relative inline-block mr-1 top-2" />
+                                  </span>
+                                  <span className='mt-2'>{JSON.parse(reValidateData?.message).length} Item in your basket is sold out!</span>
+                                </div>
+                                <div className='flex justify-start gap-8'>
+                                  <button type='button' className='pt-3 font-semibold text-black text-12' onClick={() => {
+                                    const warningItems: Array<{ Key: string, Value: number }> = JSON.parse(reValidateData?.message);
+                                    if (warningItems?.length) {
+                                      const deleteProducts = cartItems?.lineItems?.filter((x: any) => warningItems?.map((y: any) => y.Key).includes(x?.stockCode));
+                                      if (deleteProducts?.length) {
+                                        showRemove(deleteProducts);
+                                      }
+                                    }
+                                  }}>Remove</button>
+                                  {/* <button type='button' className='pt-3 font-semibold text-black text-12' onClick={() => showRemove(cartItems)}>Move to Wishlist</button> */}
+                                </div>
+                              </div>
+                            </>) : (<></>)
+                          }
+                      <div className="mt-6 px-6">
                         <Link
                           href="/cart"
+                          onClick={ async () => {
+                            // handleClose()
+                            // beginCheckout(cartItems)
+                            // Validate basket
+              const reValidateResult = await fetchBasketReValidate();
+
+              if (isAllItemsInStock(reValidateResult)) {
+
+                const messageLength: number = reValidateData?.message ? JSON.parse(reValidateData?.message)?.length ?? 0 : 0;
+
+                if (messageLength == 0) { // No error while basket validation
+                  // const deliveryAddress = getDeliveryAddress();
+                  if (getUserId() != EmptyGuid && !isGuestUser) {
+                    //if (deliveryAddress?.id) {
+                    //  Router.push(`/checkout/payment/${deliveryAddress?.id}`);
+                    //} else {
+                    Router.push("/checkout");
+                    //}
+                    handleClose()
+                    beginCheckout(cartItems);
+                  } else {
+                    Router.push(`/checkout`);
+                    handleClose()
+                    beginCheckout(cartItems);
+                  }
+                }
+              }
+                          }}
                           passHref
-                          onClick={handleClose}
                           className="flex items-center justify-center px-6 py-3 font-medium text-white uppercase bg-black border border-transparent rounded-sm shadow-sm hover:bg-gray-900"
                         >
                           {content.GENERAL_CHECKOUT}
@@ -341,6 +1069,16 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                         </p>
                       </div>
                     </div>
+                  )}
+                  {/* read-only engraving modal */}
+                  {selectedEngravingProduct && (
+                    <Engraving
+                      show={isEngravingOpen}
+                      showEngravingModal={setIsEngravingOpen}
+                      product={selectedEngravingProduct}
+                      handleToggleDialog={handleToggleEngravingModal}
+                      readOnly={true}
+                    />
                   )}
                 </div>
               </div>

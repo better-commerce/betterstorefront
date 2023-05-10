@@ -51,6 +51,14 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const infraPromise = commerce.getInfra();
   const infra = await infraPromise;
+  if (response?.statusCode === 404) {
+    return {
+      redirect: {
+        destination: '/404',
+      },
+      props: {},
+    }
+  }
   return {
     props: {
       query: context.query,

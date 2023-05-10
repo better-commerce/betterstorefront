@@ -13,13 +13,13 @@ import {
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
-import { NextSeo } from 'next-seo'
 import Image from 'next/image'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { IMG_PLACEHOLDER, SHOP_THE_LOOK } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
+
 function LookbookDetailPage({ data, slug }: any) {
   const router = useRouter()
   const { basketId, openCart, setCartItems } = useUI()
@@ -135,29 +135,6 @@ function LookbookDetailPage({ data, slug }: any) {
           </div>
         </div>
       </main>
-      <NextSeo
-        title={data?.name}
-        description={data?.description}
-        additionalMetaTags={[
-          {
-            name: 'keywords',
-            content: data?.metaKeywords,
-          },
-        ]}
-        openGraph={{
-          type: 'website',
-          title: data?.metaTitle,
-          description: data?.metaDescription,
-          images: [
-            {
-              url: data?.mainImage,
-              width: 800,
-              height: 600,
-              alt: data?.name,
-            },
-          ],
-        }}
-      />
     </div>
   )
 }

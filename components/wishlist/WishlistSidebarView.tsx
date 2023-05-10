@@ -15,12 +15,14 @@ import {
   GENERAL_ADD_TO_BASKET,
   WISHLIST_SUCCESS_MESSAGE,
   GENERAL_CONTINUE_SHOPPING,
-  IMG_PLACEHOLDER
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 
 const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
   const {
+    displaySidebar,
     closeSidebar,
     setWishlist,
     wishListItems,
@@ -31,6 +33,11 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     removeFromWishlist,
   } = useUI()
   const { getWishlist, deleteWishlistItem } = useWishlist()
+  const [openWishlistSidebar, setOpenWishlistSidebar] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setOpenWishlistSidebar(displaySidebar), 250)
+  }, [])
 
   const [isItemInCart, setItemInCart] = useState(false)
 
@@ -49,12 +56,37 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     if (accessToken) handleWishlistItems()
   }, [])
 
-  const deleteItemFromWishlist = (productId: string) => {
+  const handleDeleteWishListItems = async (productId: any) => {
+    const idCheck = (itemDetails: any) => {
+      return itemDetails.recordId !== productId
+    }
+
+    let temptWishList: any = wishListItems.filter(idCheck)
+    const items = await getWishlist(user.userId, temptWishList)
+    setWishlist(items)
+  }
+
+  const deleteItemFromWishlist = (product: any) => {
+    let productAvailability = 'Yes'
+    if (product?.currentStock > 0) {
+      productAvailability = 'Yes'
+    } else {
+      productAvailability = 'No'
+    }
+
+    if (typeof window !== 'undefined') {
+      recordGA4Event(window, 'remove_item', {
+        product_name: product?.name,
+        availability: productAvailability,
+        product_id: product?.sku,
+      })
+    }
+
     if (accessToken) {
-      deleteWishlistItem(user.userId, productId).then(() =>
-        handleWishlistItems()
+      deleteWishlistItem(user?.userId, product?.recordId).then(() =>
+        handleDeleteWishListItems(product?.recordId)
       )
-    } else removeFromWishlist(productId)
+    } else removeFromWishlist(product?.recordId)
   }
 
   const handleAddToCart = (product: any) => {
@@ -81,13 +113,17 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
       .catch((err: any) => console.log('error', err))
   }
 
-  const handleClose = () => closeSidebar()
+  const handleClose = () => {
+    setTimeout(() => closeSidebar(), 500)
+    setOpenWishlistSidebar(false)
+  }
 
   const isEmpty: boolean = wishListItems?.length === 0
 
   const css = { maxWidth: '100%', height: 'auto' }
+
   return (
-    <Transition.Root show={true} as={Fragment}>
+    <Transition.Root show={openWishlistSidebar} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 overflow-hidden z-999"
@@ -157,18 +193,21 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                           className="-my-6 divide-y divide-gray-200"
                         >
                           {wishListItems.map((product: any) => (
-                            <li key={product.id} className="flex py-6">
+                            <li key={product.recordId} className="flex py-6">
                               <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                                <Image 
+                                <Image
                                   style={css}
                                   width={80}
                                   height={80}
                                   src={
-                                    generateUri(product.image, 'h=200&fm=webp') ||
-                                    IMG_PLACEHOLDER
+                                    generateUri(
+                                      product.image,
+                                      'h=200&fm=webp'
+                                    ) || IMG_PLACEHOLDER
                                   }
                                   alt={product.name}
-                                  className="object-cover object-center w-full h-full"></Image>
+                                  className="object-cover object-center w-full h-full"
+                                ></Image>
                                 {/* <img
                                   src={product.image}
                                   alt={product.name}
@@ -198,7 +237,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                       type="button"
                                       className="font-medium text-red-300 hover:text-red-500"
                                       onClick={() =>
-                                        deleteItemFromWishlist(product.recordId)
+                                        deleteItemFromWishlist(product)
                                       }
                                     >
                                       {GENERAL_REMOVE}

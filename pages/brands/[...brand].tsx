@@ -11,7 +11,6 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { NextSeo } from 'next-seo'
 import Link from 'next/link'
 import commerce from '@lib/api/commerce'
 
@@ -292,29 +291,6 @@ function BrandDetailPage({
           handleInfiniteScroll={handleInfiniteScroll}
         />
       </main>
-      <NextSeo
-        title={brandDetails.name}
-        description={brandDetails.description}
-        additionalMetaTags={[
-          {
-            name: 'keywords',
-            content: brandDetails.metaKeywords,
-          },
-        ]}
-        openGraph={{
-          type: 'website',
-          title: brandDetails.metaTitle,
-          description: brandDetails.metaDescription,
-          images: [
-            {
-              url: brandDetails.Image,
-              width: 800,
-              height: 600,
-              alt: brandDetails.name,
-            },
-          ],
-        }}
-      />
     </div>
   )
 }

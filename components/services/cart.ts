@@ -15,6 +15,10 @@ interface CartItem {
   stockCode?: string
   userId?: string
   isAssociated?: boolean
+  CustomInfo4?: string
+  CustomInfo5?: string
+  CustomInfo4Formatted?: string
+  CustomInfo5Formatted?: string
 }
 
 interface GetCart {
