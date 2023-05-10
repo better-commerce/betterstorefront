@@ -22,7 +22,7 @@ import {
   PRODUCTS_SLUG_PREFIX,
 } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
-import * as SizeAttribute from '@components/product/ProductView/sizeAttribute.json'
+import SizeAttribute from '@components/product/ProductView/sizeAttribute.json'
 import SIZECHART from '@components/product/ProductView/SizeChart.json'
 //
 import cn from 'classnames'

@@ -4,17 +4,10 @@ module.exports = {
     purgeLayersByDefault: true,
     applyComplexClasses: true,
   },
-  purge: {
-    content: [
-      './pages/**/*.{js,ts,jsx,tsx}',
-      './components/**/*.{js,ts,jsx,tsx}',
-    ],
-    options: {
-      safelist: {
-        standard: ['outline-none'],
-      },
-    },
-  },
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
       maxWidth: {
