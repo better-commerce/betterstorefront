@@ -103,11 +103,13 @@ export const RETURN_ORDER_TEXT = 'Check the products you’ve returned'
 export const ORDER_STATUS_OUT_FOR_DELIVERY = 'Out For Delivery'
 export const ORDER_STATUS_CANCELLED = 'Cancelled'
 export const WISHLIST_TITLE = 'Wishlist'
+export const ITEM_WISHLISTED = 'Wishlisted'
 export const GENERAL_WISHLIST = 'My Wishlist'
-export const WISHLIST_SUB_TITLE = 'Oh-no! Your wishlist is empty.'
+export const WISHLIST_SUB_TITLE = 'You haven’t wished for anything yet.'
 export const WISHLIST_SIDEBAR_MESSAGE =
-  'Uh-oh, you don’t have any items in here'
+'Uh-oh, you don’t have any items in here'
 export const GENERAL_SHOPPING_CART = 'Shopping cart'
+export const GENERAL_TOTAL_SAVINGS = 'Total Savings'
 export const CLOSE_PANEL = 'Close panel'
 export const SUBTOTAL_INCLUDING_TAX = 'Subtotal (taxes included)'
 export const GENERAL_SUBTOTAL = 'Subtotal'
@@ -140,15 +142,16 @@ export const BTN_DELIVER_TO_THIS_ADDRESS = 'Deliver to this address'
 export const BTN_CONFIRM_PURCHASE = 'Confirm Purchase'
 export const GENERAL_ORDER_SUMMARY = 'Order summary'
 export const ITEMS_IN_YOUR_CART = 'Items in your cart'
+export const ITEM_TYPE_ADDON_10 = 10
 export const GENERAL_CONFIRM_ORDER = 'Confirm order'
 export const GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION =
-  "To get our latest promotions, exclusive offers, new launches and more, let us know how you'd like us to keep you updated"
+"To get our latest promotions, exclusive offers, new launches and more, let us know how you'd like us to keep you updated"
 export const BTN_CHECKOUT_SECURELY = 'Checkout securely'
 export const LOG_IN = 'Log in'
 export const GUEST_CHECKOUT = 'Guest Checkout'
 export const NEW_CUSTOMER = 'New customer?'
 export const CUSTOMER_ERROR_MESSAGE =
-  'No account has been found with this email/password'
+'No account has been found with this email/password'
 export const GENERAL_FREE = 'FREE'
 export const CARDHOLDER_NAME = 'Cardholder Name'
 export const CARD_NUMBER = 'Card Number'
@@ -183,13 +186,13 @@ export const GENERAL_FAQ = 'FAQ'
 export const GENERAL_FIND_A_STORE = 'Find a store'
 export const SIGN_UP_FOR_NEWSLETTER = 'Sign up for our newsletter'
 export const SIGN_UP_TEXT =
-  'The latest deals and savings, sent to your inbox weekly.'
+'The latest deals and savings, sent to your inbox weekly.'
 export const GENERAL_EMAIL_ADDRESS = 'Email address'
 export const BTN_SIGN_UP = 'Sign up'
 export const COPYRIGHT_FOOTER_INFO =
-  '2022 BetterCommerce, Inc. All rights reserved.'
+'2022 BetterCommerce, Inc. All rights reserved.'
 export const GENERAL_COOKIE_TEXT =
-  'This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.'
+'This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.'
 export const BTN_ACCEPT_COOKIE = 'Accept cookies'
 export const GENERAL_RECENTLY_VIEWED = 'Recently viewed'
 export const BTN_SIGN_OUT = 'Sign out'
@@ -204,16 +207,21 @@ export const GENERAL_CLOSE = 'Close'
 export const GENERAL_BACK = 'Back'
 export const VALIDATION_PASSWORD_MUST_MATCH = 'Passwords must match'
 export const PRODUCT_INFORMATION = 'Product information'
+export const PERSONALISATION = 'Personalisation'
+export const SELECT_IMAGE_ERROR = 'Please select an Image before proceeding!'
+export const PRODUCT_PERSONALIZATION_TITLE = 'Personalise with custom embroidery'
 export const PRODUCT_DESCRIPTION = 'Description'
 export const PRODUCT_OPTIONS = 'Product options'
 export const BTN_SEE_MORE_DETAILS = 'See more details'
 export const YOUR_BUNDLE_INCLUDE = 'Your bundle includes'
 export const BUNDLE_TEXT = 'Click on a product to edit your bundle'
 export const VALIDATION_PLEASE_COMPLETE_THIS_FIELD =
-  'Please compelte this field'
+'Please compelte this field'
 export const GENERAL_ENGRAVING = 'Engraving'
+export const GENERAL_PERSONALISATION = 'Personalise your Product. '
+export const GENERAL_PERSONALISATION_READONLY = 'Personalised Product'
 export const GENERAL_ENGRAVING_PERSONALIZE_BOTTLE =
-  'Personalize your bottle for only'
+  'Add Characters with a click. Type in names, initials or numbers. For just '
 export const GENERAL_SEARCH_BRAND = 'Search Brand'
 export const GENERAL_BRAND = 'Brand'
 export const GENERAL_FILTER_TITLE = 'Filters'
@@ -239,10 +247,10 @@ export const VALIDATION_ENTER_WEBSITE_LINK = 'Please enter website link'
 export const BTN_SUBMIT = 'Submit'
 export const BTN_NOTIFY_ME = 'Notify me'
 export const BTN_PRE_ORDER = 'Pre-order'
-export const CURRENCY_SYMBOL_RUPEE = "₹"
 export const GENERAL_ADD_TO_BAG = 'Add to Bag'
 export const ADDED_TO_WISH = "Added to Wishlist"
 export const BTN_ADD_TO_WISHLIST = 'Add to wishlist'
+export const BTN_MOVE_TO_WISHLIST = 'Move to Wishlist'
 export const ALERT_SUCCESS_WISHLIST_MESSAGE = 'Wishlisted'
 export const PRODUCT_SPECIFICATION = 'Product specification'
 export const GENERAL_NOT_AVAILABLE = 'Not Available'
@@ -256,11 +264,12 @@ export const BTN_SEE_EVERYTHING = 'See everything'
 export const GENERAL_SORT = 'Sort'
 export const CHOOSE_A_COLOR = 'Choose a color'
 export const ITEM_TYPE_ADDON = 'ADDON'
+export const RELATED_PROD = "You may also like"
 export const YOUTUBE_VIDEO_PLAYER = 'YouTube video player'
 export const GENERAL_REFERENCE = 'Ref'
 export const GENERAL_PRICE_LABEL_RRP = 'RRP'
 export const BTN_ADD_TO_FAVORITES = 'Add to favorites'
-export const GENERAL_REVIEWS = 'Reviews'
+export const GENERAL_REVIEWS = 'Ratings & Reviews'
 export const GENERAL_REVIEW_OUT_OF_FIVE = 'out of 5 stars'
 export const ERROR_WOOPS_SOMETHING_WENT_WRONG = 'Woops!, Something went wrong'
 export const REVIEW_TITLE = 'Review title'
@@ -323,3 +332,18 @@ export const PRODUCT_OUT_OF_STOCK='Out Of Stock'
 export const PRODUCT_AVAILABILITY='Availability'
 export const SLUG_TYPE_MANUFACTURER = 'Manufacturer'
 export const GENERAL_FOOOTER = "Footer"
+export const SIZE_CHART = "Size chart"
+
+export const CURRENCY_SYMBOL_RUPEE = "₹"  
+export const CURRENCY_SYMBOL_POUND = "£"
+export const ORDER_CANCELLED = "Order Cancelled Successfully"
+export const CANCEL_ORDER = "Cancel Order"
+export const CHAT_WITH_US = "Chat with us"
+export const GET_HELP_WITH_ORDER = "Get help with this order"
+export const HELP_ASSIST = "We will be glad to assist you. What seems to be bothering you?"
+export const REASON_CANCEL_HEADING = "Reason for cancellation"
+export const ORDER_REFUND_INFO = "Refund will be processed within 3-4 working days to your payment method"
+export const ITEM_CANCELLED = "Item Cancelled Successfully"
+export const PROCEED_TO_CANCEL = "Proceed to Cancel"
+// PLP Filters
+export const FILTER_TITLE = 'Filter & Sorting'

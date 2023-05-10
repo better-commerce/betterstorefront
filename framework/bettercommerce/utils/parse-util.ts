@@ -7,7 +7,7 @@
 
 // Package Imports
 import { DATE_TIME_FORMAT } from "@components/utils/constants";
-import { CURRENCY_SYMBOL_RUPEE } from "@components/utils/textVariables";
+import { CURRENCY_SYMBOL_POUND } from "@components/utils/textVariables";
 import { toInteger, toNumber } from "lodash";
 import { hrtime } from "process";
 
@@ -57,6 +57,18 @@ export const matchStrings = (input1: string, input2: string, ignoreCase = false)
     return false;
 };
 
+export const tryParseJson = (json: any) => {
+    if (json) {
+        let parsed = {};
+        try {
+            parsed = JSON.parse(json);
+            return parsed;
+        } catch (e: any) {
+        }
+    }
+    return null;
+};
+
 export const priceFormat = (value: string | number | undefined, decimalPlaces: number = 2): string => {
     if (value) { // Not undefined
         let floatParsed: number = 0.00;
@@ -70,11 +82,11 @@ export const priceFormat = (value: string | number | undefined, decimalPlaces: n
         }
 
         if (floatParsed % intParsed === 0) { // zeroes after decimal point.
-            return CURRENCY_SYMBOL_RUPEE + intParsed.toString();
+            return CURRENCY_SYMBOL_POUND + intParsed.toString();
         }
 
         // Round off to the specified {decimalPlaces}.
-        return CURRENCY_SYMBOL_RUPEE + floatParsed.toFixed(2);
+        return CURRENCY_SYMBOL_POUND + floatParsed.toFixed(2);
         //return Math.round(floatParsed * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
     }
     return "0";

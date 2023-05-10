@@ -11,9 +11,58 @@ export async function getStaticProps({
   locale,
   locales,
   preview,
-}: GetStaticPropsContext<{ slug: string }>) {
+}: GetStaticPropsContext<{ slug: string, recordId: string }>) {
+  let product = null, reviews = null, relatedProducts = null, pdpLookbook = null, pdpCachedImages = null;
+  let availabelPromotions = null;
+  let pdpLookbookProducts = {};
   const productPromise = commerce.getProduct({ query: params!.slug[0] })
-  const product = await productPromise
+  product = await productPromise
+
+  const availabelPromotionsPromise = commerce.getProductPromos({
+    query: product?.product?.recordId,
+  })
+  availabelPromotions = await availabelPromotionsPromise
+
+  const relatedProductsPromise = commerce.getRelatedProducts({
+    query: product?.product?.recordId,
+  })
+  relatedProducts = await relatedProductsPromise
+
+  // relatedProducts)
+
+  const reviewPromise = commerce.getProductReview({
+    query: product?.product?.recordId,
+  })
+  reviews = await reviewPromise
+
+  // GET SELECTED PRODUCT ALL REVIEWS
+  const pdpLookbookPromise = commerce.getPdpLookbook({
+    query: product?.product?.stockCode,
+  })
+
+  pdpLookbook = await pdpLookbookPromise
+
+  if (pdpLookbook?.lookbooks?.length > 0) {
+    // GET SELECTED PRODUCT ALL REVIEWS
+    const pdpLookbookProductsPromise = commerce.getPdpLookbookProduct({
+      query: pdpLookbook?.lookbooks[0]?.slug,
+    })
+    pdpLookbookProducts = await pdpLookbookProductsPromise
+  }
+
+  try {
+    if (product?.product?.productCode) {
+
+      // GET SELECTED PRODUCT ALL REVIEWS
+      const pdpCachedImagesPromise = commerce.getPdpCachedImage({
+        query: product?.product?.productCode,
+      })
+
+      pdpCachedImages = await pdpCachedImagesPromise
+    }
+  } catch (imageE) {
+  }
+
 
   const infraPromise = commerce.getInfra();
   const infra = await infraPromise;
@@ -22,7 +71,10 @@ export async function getStaticProps({
       data: product,
       slug: params!.slug[0],
       globalSnippets: infra?.snippets ?? [],
-      snippets: product?.snippets
+      snippets: product?.snippets,
+      relatedProducts: relatedProducts,
+      availabelPromotions: availabelPromotions,
+      reviews: reviews,
     },
     revalidate: 200,
   }
@@ -41,7 +93,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent, slug }: any) {
+function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, pdpLookbookProducts, pdpCachedImages,reviews }: any) {
   const router = useRouter()
   return router.isFallback ? (
     <h1>{LOADER_LOADING}</h1>
@@ -53,6 +105,11 @@ function Slug({ data, setEntities, recordEvent, slug }: any) {
         data={data.product}
         slug={slug}
         snippets={data.snippets}
+        relatedProducts={relatedProducts}
+        promotions={availabelPromotions}
+        pdpLookbookProducts={pdpLookbookProducts}
+        pdpCachedImages={pdpCachedImages}
+        reviews={reviews}
       />
     )
   )

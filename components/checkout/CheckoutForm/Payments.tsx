@@ -28,7 +28,7 @@ export default function PaymentMethods({
             onClick={() => setActivePaymentMethod(item)}
             className={`${
               activePaymentMethod.id === item.id ? 'border-black border-t-2 border-2' : 'border-t border border-gray-300'
-            }  pointer rounded-md mb-2 py-5 px-5 flex justify-start flex-row`}
+            }  pointer mb-2 py-5 px-5 flex justify-start flex-row`}
           >
             <div className="flex flex-row justify-center items-center">
               {activePaymentMethod.id === item.id ? (

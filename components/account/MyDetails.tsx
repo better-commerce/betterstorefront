@@ -7,13 +7,25 @@ import LoadingDots from '@components/ui/LoadingDots'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { MY_DETAIL_TEXT, GENERAL_SAVE_CHANGES } from '@components/utils/textVariables'
+import { Button } from '@components/ui'
+import { number } from 'yup'
 
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
-
+  const [phoneVal,setPhoneVal] = useState('');
   const { user, setUser } = useUI()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
+  const formikHandleChange=(e:any,handleFunction:any)=>{
+    if(e.target.name === 'phone' || e.target.name==='mobile'){
+      //Regex to check if the value consists of an alphabet
+      e.target.value = e.target.value ? e.target.value.replace(/([a-zA-Z])/g, '') : ''
+      handleFunction(e)
+    }
+    else{
+      handleFunction(e)
+    }
+  }
   const initialValues = {
     email: user.email,
     firstName: user.firstName,
@@ -41,18 +53,37 @@ export default function MyDetails() {
 
   return (
     <main className="sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="px-4 sm:px-0">
-          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+      <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
+          <h3 className="max-w-4xl mt-2 mx-auto text-xl font-semibold text-black flex gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-arrow-left"
+              viewBox="0 0 16 16"
+            >
+              {' '}
+              <path
+                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+              />{' '}
+            </svg> 
+            <a className="mr-2 mx-2 leading-none" href="/my-account">My Details</a>
+          </h3>
+        </div>
+      <div className="max-w-4xl lg:mx-12 xs:ml-6">
+        <div className="lg:px-0 sm:px-0">
+          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 pt-2 sm:text-3xl">
             {title}
           </h1>
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-black font-normal">
           {MY_DETAIL_TEXT}
           </p>
         </div>
       </div>
       <div>
         <Formik
+          enableReinitialize={true}
           validationSchema={schema}
           initialValues={initialValues}
           onSubmit={handleDataSubmit}
@@ -66,42 +97,47 @@ export default function MyDetails() {
             isSubmitting,
           }: any) => {
             return (
-              <div className="flex-col w-full py-5 flex items-flex-start mx-auto max-w-4xl justify-center">
-                <Form className="font-semibold w-full sm:w-1/2">
+              <div className="flex-col w-full py-5 flex items-flex-start lg:mx-12 xs:ml-6 max-w-4xl justify-center">
+                <Form className="font-normal w-full sm:w-1/2">
                   {formConfig.map((formItem: any, idx: number) => {
                     return (
                       <div key={`${formItem.label}_${idx}`}>
-                        <label className="text-gray-700 text-sm">
+                        <label className="text-black font-medium text-sm">
                           {formItem.label}
                         </label>
+
                         <Field
                           key={idx}
                           name={formItem.name}
                           placeholder={formItem.placeholder}
-                          onChange={handleChange}
+                          onChange={(e:any)=>formikHandleChange(e,handleChange)}
                           value={values[formItem.name]}
                           type={formItem.type}
-                          className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                          maxLength = {formItem.maxLength}
+                          className="mb-2 mt-2 text-black font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 "
                         />
+                        
 
                         {errors[formItem.name] && touched[formItem.name] ? (
-                          <div className="text-red-400 text-xs capitalize mb-2">
+                          <div className="text-red-400 text-xs mb-2">
                             {errors[formItem.name]}
                           </div>
                         ) : null}
                       </div>
                     )
                   })}
-                </Form>
-                <div className="mt-10 flex sm:flex-col1">
-                  <button
-                    type="submit"
-                    onClick={handleSubmit}
-                    className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-                  >
-                    {isSubmitting ? <LoadingDots /> : GENERAL_SAVE_CHANGES}
-                  </button>
+                <div className="mt-10 flex sm:flex-col1 w-60">
+                    <Button
+                      type="submit"
+                      onClick={handleSubmit}
+                      className="link-button !py-3"
+                      loading={isSubmitting}
+                      disabled={isSubmitting}
+                    >
+                      {!isSubmitting && GENERAL_SAVE_CHANGES}
+                    </Button>
                 </div>
+                </Form>
               </div>
             )
           }}

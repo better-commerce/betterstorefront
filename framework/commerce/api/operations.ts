@@ -42,6 +42,16 @@ export const OPERATIONS = [
   'createReview',
   'applyPromo',
   'getProductQuickview',
+  'getRelatedProducts',
+  'getPdpLookbook',
+  'getPdpLookbookProduct',
+  'getPdpCachedImage',
+  'getProductPromos',
+  'getPagePreviewContent',
+  'getProductReview',
+  'getCancelReason',
+  'cancelOrder',
+  'getReturnReason',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -85,6 +95,16 @@ export type Operations<P extends APIProvider> = {
   removeItemFromWishlist: {}
   subscribe: {}
   priceMatch: {}
+  getRelatedProducts:{}  
+  getPdpLookbook: {}
+  getPdpLookbookProduct: {}
+  getPdpCachedImage:{}
+  getProductPromos:{}
+  getPagePreviewContent:{}
+  getProductReview:{}
+  getCancelReason: {}
+  cancelOrder: {}
+  getReturnReason: {}
   getAllPages: {
     <T extends GetAllPagesOperation>(opts?: {
       config?: P['config']

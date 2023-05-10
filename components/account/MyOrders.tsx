@@ -21,12 +21,13 @@ import {
   GENERAL_CREATE_RETURN,
 } from '@components/utils/textVariables'
 import ReturnModal from '@components/returns/Modal'
+import { isCartAssociated } from '@framework/utils/app-util'
 
 export default function MyOrders() {
   const [data, setData] = useState([])
   const [productIdsInReturn, setProductIdsInReturn] = useState([''])
   const [returnData, setReturnData] = useState({ product: {}, order: {} })
-  const { user, basketId, setCartItems, openCart } = useUI()
+  const { user, basketId, setCartItems, openCart, cartItems } = useUI()
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -90,7 +91,7 @@ export default function MyOrders() {
           manualUnitPrice: product.price,
           stockCode: product.stockCode,
           userId: user.userId,
-          isAssociated: user.isAssociated,
+          isAssociated: isCartAssociated(cartItems),
         },
         'ADD',
         {
@@ -118,8 +119,8 @@ export default function MyOrders() {
       {/* Mobile menu */}
 
       <main className="sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="px-4 sm:px-0">
+        <div className="max-w-4xl lg:mx-12">
+          <div className="lg:px-4 sm:px-0">
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
               {ORDER_HISTORY_TITLE}
             </h1>
@@ -144,8 +145,8 @@ export default function MyOrders() {
                       {new Date(order.orderDate).toLocaleDateString()}
                     </time>
                   </h3>
-                  <div className="px-4 py-8 bg-gray-50 sm:rounded-lg sm:p-8 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-10">
-                    <dl className="flex-auto w-full space-y-6 text-sm text-gray-600 divide-y divide-gray-200 md:divide-y-0 md:space-y-0 md:grid md:grid-cols-5 md:gap-x-10 lg:flex-none lg:gap-x-10">
+                  <div className="bg-gray-50 px-4 py-8 sm:rounded-lg sm:p-8 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-10">
+                    <dl className="divide-y divide-gray-200 space-y-6 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-5 md:gap-x-10 w-full lg:flex-none lg:gap-x-10">
                       <div className="flex justify-between md:block">
                         <dt className="font-medium text-gray-900">
                           {GENERAL_ORDER_NUMBER}
@@ -177,7 +178,7 @@ export default function MyOrders() {
                         {/* <dd className="md:mt-1">{order.orderStatus}</dd> */}
                         <a
                           href={order.trackingLink}
-                          className="text-indigo-600 md:mt-1 hover:indigo-500"
+                          className="md:mt-1 text-indigo-600 hover:indigo-500"
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -186,11 +187,11 @@ export default function MyOrders() {
                       </div>
                     </dl>
                   </div>
-                  <div className="flow-root px-4 mt-6 sm:mt-10 sm:px-0">
+                  <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
                     <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
                       {order.itemsBasic.map((product: any) => (
                         <div key={product.id} className="flex py-6 sm:py-10">
-                          <div className="flex-1 min-w-0 lg:flex lg:flex-col">
+                          <div className="min-w-0 flex-1 lg:flex lg:flex-col">
                             <div className="lg:flex-1">
                               <div className="sm:flex">
                                 <div>
@@ -208,9 +209,15 @@ export default function MyOrders() {
                                   {product.price?.formatted?.withTax}
                                 </p>
                               </div>
-                              <div className="flex mt-2 text-sm font-medium sm:mt-4">
-                                <Link href={`/${product.slug || '#'}`} className="text-indigo-600 hover:text-indigo-500">{GENERAL_VIEW_PRODUCT}</Link>
-                                <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
+                              <div className="mt-2 flex text-sm font-medium sm:mt-4">
+                                <Link
+                                  href={`/${product.slug || '#'}`}
+                                  className="text-indigo-600 hover:text-indigo-500">
+
+                                  {GENERAL_VIEW_PRODUCT}
+
+                                </Link>
+                                <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                                   <button
                                     onClick={() => handleAddToCart(product)}
                                     className="text-indigo-600 hover:text-indigo-500"
@@ -221,7 +228,7 @@ export default function MyOrders() {
                                 {productIdsInReturn.includes(
                                   product.productId
                                 ) ? (
-                                  <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
+                                  <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                                     <button
                                       type="button"
                                       className="text-indigo-600 hover:text-indigo-500"
@@ -230,7 +237,7 @@ export default function MyOrders() {
                                     </button>
                                   </div>
                                 ) : (
-                                  <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
+                                  <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                                     <button
                                       onClick={() =>
                                         handleCreateReturn(product, order)
@@ -247,11 +254,11 @@ export default function MyOrders() {
                               </div>
                             </div>
                           </div>
-                          <div className="flex-shrink-0 ml-4 sm:m-0 sm:mr-6 sm:order-first">
+                          <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
                             <img
                               src={product.image}
                               alt={product.name}
-                              className="object-cover object-center w-20 h-20 col-start-2 col-end-3 rounded-lg sm:col-start-1 sm:row-start-1 sm:row-span-2 sm:w-40 sm:h-40 lg:w-52 lg:h-52"
+                              className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
                             />
                           </div>
                         </div>
@@ -265,5 +272,5 @@ export default function MyOrders() {
         </div>
       </main>
     </div>
-  )
+  );
 }

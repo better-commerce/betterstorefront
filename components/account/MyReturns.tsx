@@ -17,9 +17,10 @@ import { NEXT_GET_RETURNS } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
+import { isCartAssociated } from '@framework/utils/app-util'
 
 export default function MyReturns() {
-  const { user, basketId, setCartItems, openCart } = useUI()
+  const { user, basketId, setCartItems, openCart, cartItems } = useUI()
 
   const [returns, setReturns] = useState([])
 
@@ -39,6 +40,7 @@ export default function MyReturns() {
   }, [])
 
   const handleAddToCart = (product: any) => {
+    const returnEligibility = product?.customAttributes?.find((x: any) => x.key == "product.returnandexchangeeligibility")?.value;
     cartHandler()
       .addToCart(
         {
@@ -48,7 +50,13 @@ export default function MyReturns() {
           manualUnitPrice: product.price?.raw?.withTax,
           stockCode: product.stockCode,
           userId: user.userId,
-          isAssociated: user.isAssociated,
+          isAssociated: isCartAssociated(cartItems),
+          CustomInfo5: JSON.stringify(
+            {
+              "formatted": { "title": "Return Eligibility", "data": { "Return Eligibility": returnEligibility || null } }
+            }
+          ),
+          CustomInfo5Formatted: returnEligibility || null,
         },
         'ADD',
         {
@@ -76,12 +84,12 @@ export default function MyReturns() {
       {/* Mobile menu */}
 
       <main className="sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="px-4 sm:px-0">
+        <div className="max-w-4xl lg:mx-12">
+          <div className="lg:px-0 sm:px-0">
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
               {RETURN_ORDER_TITLE}
             </h1>
-            <p className="mt-2 text-sm text-gray-500">{RETURN_ORDER_TEXT}</p>
+            <p className="mt-2 text-sm text-black font-normal">{RETURN_ORDER_TEXT}</p>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
@@ -99,8 +107,8 @@ export default function MyReturns() {
                     </time>
                   </h3>
 
-                  <div className="px-4 py-6 bg-gray-50 sm:rounded-lg sm:p-6 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-8">
-                    <dl className="flex-auto space-y-4 text-sm text-gray-600 divide-y divide-gray-200 md:divide-y-0 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-6 lg:w-full lg:flex-none lg:gap-x-8">
+                  <div className="bg-gray-50 px-4 py-6 sm:rounded-lg sm:p-6 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-8">
+                    <dl className="divide-y divide-gray-200 space-y-4 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-6 lg:w-full lg:flex-none lg:gap-x-8">
                       <div className="flex justify-between md:block">
                         <dt className="font-medium text-gray-900">
                           {GENERAL_RETURN_NUMBER}
@@ -126,11 +134,11 @@ export default function MyReturns() {
                     </dl>
                   </div>
 
-                  <div className="flow-root px-4 mt-6 sm:mt-10 sm:px-0">
+                  <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
                     <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
                       {order.lineItems.map((product: any) => (
                         <div key={product.id} className="flex py-6 sm:py-10">
-                          <div className="flex-1 min-w-0 lg:flex lg:flex-col">
+                          <div className="min-w-0 flex-1 lg:flex lg:flex-col">
                             <div className="lg:flex-1">
                               <div className="sm:flex">
                                 <div>
@@ -142,12 +150,17 @@ export default function MyReturns() {
                                   {product.price?.formatted?.withTax}
                                 </p>
                               </div>
-                              <div className="flex mt-2 text-sm font-medium sm:mt-4">
-                                <Link href={`/${product.slug}`} passHref className="text-indigo-600 hover:text-indigo-500">
-                                {GENERAL_VIEW_PRODUCT}
+                              <div className="mt-2 flex text-sm font-medium sm:mt-4">
+                                <Link
+                                  href={`/${product.slug}`}
+                                  passHref
+                                  className="text-indigo-600 hover:text-indigo-500">
+
+                                  {GENERAL_VIEW_PRODUCT}
+
                                 </Link>
-                                <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
-                                  <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
+                                <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
+                                  <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                                     <button
                                       onClick={() => handleAddToCart(product)}
                                       className="text-indigo-600 hover:text-indigo-500"
@@ -164,11 +177,11 @@ export default function MyReturns() {
                               </p>
                             </div>
                           </div>
-                          <div className="flex-shrink-0 ml-4 sm:m-0 sm:mr-6 sm:order-first">
+                          <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
                             <img
                               src={product.image}
                               alt={product.name}
-                              className="object-cover object-center w-20 h-20 col-start-2 col-end-3 rounded-lg sm:col-start-1 sm:row-start-1 sm:row-span-2 sm:w-40 sm:h-40 lg:w-52 lg:h-52"
+                              className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
                             />
                           </div>
                         </div>
@@ -182,5 +195,5 @@ export default function MyReturns() {
         </div>
       </main>
     </div>
-  )
+  );
 }
