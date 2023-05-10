@@ -89,7 +89,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
     return user?.userId && user?.userId != EmptyGuid ? user?.userId : cartItems?.userId;
   };
  //getUserId todo
- 
+
  const getBasketPromos = async (basketId: string) => {
   const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
     params: { basketId: basketId }
@@ -614,8 +614,11 @@ useEffect(() => {
                         {itemsInBag() > 0 ?
                             (
                               <>
-                                <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black">{itemsInBag()}
-                                  {itemsInBag() > 1 ? ' items' : ' item'}
+                                <span className="pl-2 mt-3 text-xs font-bold text-gray-400 dark:text-black">
+                                {'('}
+                                {itemsInBag()}
+                                {itemsInBag() > 1 ? ' items' : ' item'}
+                                {')'}
                                 </span>
                               </>
                             ) : (
@@ -639,7 +642,7 @@ useEffect(() => {
                     {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
                         <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
                           <h3 className="font-semibold text-14 text-green-dark">
-                            {cartItems.currencySymbol}{priceFormat(totalDiscount).slice(1)}{' '}{GENERAL_TOTAL_SAVINGS}</h3>
+                            {GENERAL_TOTAL_SAVINGS}{' '}{cartItems.currencySymbol}{priceFormat(totalDiscount).slice(1)}{' !'}</h3>
                         </div>
                       )}
                     <div className="mt-8 px-4 sm:px-6">
@@ -846,16 +849,39 @@ useEffect(() => {
                                                       >
                                                         Remove this Item?
                                                       <XMarkIcon
-                                                        className="w-5 h-5 hover:text-gray-400 text-gray-500"
+                                                        className="w-5 h-5 hover:text-gray-400 cursor-pointer text-gray-500"
                                                         onClick={closeModal}
                                                       ></XMarkIcon>
                                                       </Dialog.Title>
                                                       {/* <hr className="w-full my-2 shadow-md "></hr> */}
-                                                      <p className="text-black font-normal p-6 text-sm">
-                                                        Are you sure you don't
-                                                        want this product? You may move it to Wishlist and buy later.
-                                                      </p>
+                                                      <div className="flex flex-row justify-center items-center text-black font-normal py-5 px-8 text-sm">
+                                                      { itemClicked?.image && (
+                                                      <Link href={`/${itemClicked?.slug}`} className='\h-10 w-32'>
+                                                        <Image
+                                                          width={100}
+                                                          height={100}
+                                                          // style={ maxWidth: '100%', height: 'auto' }
+                                                          src={
+                                                            generateUri(itemClicked?.image, 'h=300&fm=webp') || IMG_PLACEHOLDER
+                                                          }
+                                                          alt={itemClicked?.name}
+                                                          className="object-cover object-center rounded-md w-16 h-auto"
+                                                          onClick={handleRedirectToPDP}
+                                                        ></Image>
+                                                      </Link>
+                                                      )}
+                                                        <p className='mx-4'>
+                                                          Are you sure you don't
+                                                          want this product? You may move it to Wishlist and buy later.
+                                                        </p>
+                                                      </div>
                                                       <div className="mt-2 flex px-6 w-full justify-around items-center">
+                                                        <button
+                                                          onClick={()=>{handleWishList(itemClicked)}}
+                                                          className="w-full transition-all uppercase h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm font-medium text-gray-700 hover:text-white hover:bg-black \hover:bg-gray-100 md:w-full"
+                                                        >
+                                                          {BTN_MOVE_TO_WISHLIST}
+                                                        </button>
                                                         <button
                                                           onClick={() => {
                                                             handleItem(
@@ -863,15 +889,9 @@ useEffect(() => {
                                                               'delete'
                                                             )
                                                           }}
-                                                          className="w-full h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm lg:text-md font-medium text-red-700 hover:bg-gray-100  md:w-full"
+                                                          className="w-full transition-all uppercase h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm lg:text-md font-medium text-red-700 hover:text-white hover:bg-red-700 \hover:bg-gray-100  md:w-full"
                                                         >
                                                           {GENERAL_REMOVE}
-                                                        </button>
-                                                        <button
-                                                          onClick={()=>{handleWishList(itemClicked)}}
-                                                          className="w-full h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-100 md:w-full"
-                                                        >
-                                                          {BTN_MOVE_TO_WISHLIST}
                                                         </button>
                                                       </div>
                                                     </Dialog.Panel>
@@ -931,7 +951,7 @@ useEffect(() => {
                     </div>
                   </div>
                     <div className="flex flex-col">
-                      <div className="section-devider-sm"></div>
+                      <div className="section-divider"></div>
                     </div>
 
                   {!isEmpty && (
@@ -947,7 +967,7 @@ useEffect(() => {
 
                       <>
                           <div className="flex flex-col">
-                            <div className="section-devider-sm"></div>
+                            <div className="section-divider"></div>
                           </div>
                           <div className='flex flex-col pl-0 mt-0 sm:pl-0 cart-related-prod '>
                           <div className='flex flex-col justify-center pb-2 text-center sm:pb-4'>
@@ -959,7 +979,7 @@ useEffect(() => {
                             />
                           </div>
                         <div className="flex flex-col">
-                            <div className="section-devider-sm"></div>
+                            <div className="section-divider"></div>
                           </div>
                         </>
                       )

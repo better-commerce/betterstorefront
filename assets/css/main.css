@@ -118,7 +118,7 @@
   border-radius: 6px;
 }
 .bg-cart-sidebar-green-light {
-  background-color: #ebf6f1;
+  background-color: #EBF6CE;
 }
 
 .text-green-dark {
@@ -342,7 +342,7 @@
   width: 200px;
 }
 
-.section-devider-sm {
+.section-divider-sm {
   width: 100%;
   float: left;
   background: #f7f7f7;
@@ -552,7 +552,7 @@ body {
   padding-right: 15px;
 }
 
-.section-devider {
+.section-devider-md {
   width: 100%;
   float: left;
   background: #f7f7f7;
@@ -561,15 +561,16 @@ body {
   height: 20px;
   margin: 50px 0;
 }
-.section-devider-sm {
+.section-divider {
   width: 100%;
   float: left;
-  background: #f7f7f7;
-  box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.04);
+  background: #cecdde;
+  box-shadow: 0px -2px 4px rgba(60, 60, 165, 0.45);
   transform: matrix(1, 0, 0, -1, 0, 0);
-  height: 20px;
+  height: 1px;
   margin: 25px 0;
 }
+
 .full-m-ex-header {
   margin-left: -30px;
   margin-right: -30px;

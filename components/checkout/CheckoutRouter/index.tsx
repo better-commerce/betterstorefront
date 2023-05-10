@@ -46,7 +46,7 @@ export default function CheckoutRouter({
         setCartItems(result.data)
         setIsLoggedIn(true)
         setIsGuestUser(false);
-        // setUser(result.data)
+        setUser(result.data)
         // getWishlist(result.data.userId, wishlistItems)
         Router.push('/checkout')
       }
