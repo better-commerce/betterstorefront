@@ -33,7 +33,7 @@ export default function attributesGenerator(
 export const getAttributesFromSlug = (slug: string, variantProducts: any) => {
   return variantProducts?.reduce((acc: any, obj: any) => {
     if (obj.slug === slug) {
-      obj.attributes.forEach((varAttr: any) => {
+      obj?.attributes?.forEach((varAttr: any) => {
         acc[varAttr.fieldCode] = varAttr.fieldValue
       })
     }

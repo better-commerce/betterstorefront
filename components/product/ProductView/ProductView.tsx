@@ -581,7 +581,7 @@ export default function ProductView({
   SwiperCore.use([Navigation])
   const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
-  const addonPrice = relatedProducts.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax;
+  const addonPrice = relatedProducts?.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax;
 
   const css = { maxWidth: '100%', height: 'auto' }
 

@@ -158,6 +158,7 @@ export default function PLPQuickView({
           { product: selectedAttrData }
         )
         setCartItems(item)
+        setModelClose()
         if (typeof window !== "undefined") {
           recordGA4Event(window, 'add_to_cart', {
             ecommerce: {
@@ -640,7 +641,7 @@ export default function PLPQuickView({
                                                   />
                                                 </div>
                                               ) : (
-                                                <PlayIcon className="object-cover object-center w-full h-full" />
+                                                <></>
                                               )}
                                             </div>
                                           </div>
