@@ -1,9 +1,9 @@
 import "@assets/css/main.css"
+import '@assets/icon.css'
 import "@assets/css/chrome-bug.css"
-import 'keen-slider/keen-slider.min.css'
 import { FC, useEffect, useState, useLayoutEffect } from 'react'
 import { Head } from '@components/common'
-import { ManagedUIContext } from '@components/ui/context'
+import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import 'swiper/css/bundle'
 import Cookies from 'js-cookie'
 import { v4 as uuid_v4 } from 'uuid'
@@ -12,17 +12,24 @@ import {
   DeviceIdKey,
   NEXT_INFRA_ENDPOINT,
   NEXT_API_KEYWORDS_ENDPOINT,
+  SITE_NAME,
+  SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
 import analytics from '@components/services/analytics/analytics'
-import setSessionIdCookie, { createSession, isValidSession } from '@components/utils/setSessionId'
+import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { resetSnippetElements } from "@framework/content/use-content-snippet"
 import { ContentSnippet } from "@components/common/Content"
+import NextHead from 'next/head'
+import { GA4_DISABLED, GA4_MEASUREMENT_ID } from '@framework/utils/constants'
+import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
+import { DeviceType } from "@commerce/utils/use-device"
+import InitDeviceInfo from "@components/common/InitDeviceInfo"
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -44,7 +51,9 @@ const TEST_GEO_DATA = {
 const setDeviceIdCookie = () => {
   if (!Cookies.get(DeviceIdKey)) {
     const deviceId = uuid_v4()
-    Cookies.set(DeviceIdKey, deviceId)
+    Cookies.set(DeviceIdKey, deviceId, {
+      expires: getExpiry(getMinutesInDays(365)),
+    })
     DataLayerInstance.setItemInDataLayer(DeviceIdKey, deviceId)
   } else {
     DataLayerInstance.setItemInDataLayer(DeviceIdKey, Cookies.get(DeviceIdKey))
@@ -58,8 +67,18 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const [keywordsData, setKeywordsData] = useState([])
   const [isAppLoading, setAppIsLoading] = useState(true)
   const [language, setLanguage] = useState('')
+  const [deviceInfo, setDeviceInfo] = useState<IDeviceInfo>({
+    isMobile: undefined,
+    isDesktop: undefined,
+    isIPadorTablet: undefined,
+    deviceType: DeviceType.UNKNOWN,
+  })
 
-  const snippets = [...(pageProps?.globalSnippets ?? []), ...(pageProps?.snippets ?? [])];
+  const snippets = [
+    ...(pageProps?.globalSnippets ?? []),
+    ...(pageProps?.snippets ?? []),
+    ...(pageProps?.data?.snippets ?? []),
+  ]
 
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
@@ -118,6 +137,12 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       TagManager.initialize(tagManagerArgs)
   }
 
+  const initializeGA4 = () => {
+    if (GA4_MEASUREMENT_ID) {
+      initGA4(GA4_MEASUREMENT_ID);
+    }
+  }
+
   const fetchKeywords = async function () {
     try {
       const { data }: any = await axios.get(NEXT_API_KEYWORDS_ENDPOINT)
@@ -132,6 +157,10 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     document.body.classList?.remove('loading')
     fetchAppConfig()
     fetchKeywords()
+
+    if (!GA4_DISABLED) {
+      initializeGA4()
+    }
   }, [])
 
   useLayoutEffect(() => {
@@ -174,42 +203,61 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }, [])
 
+  const seoInfo = (pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords)
+    ? pageProps
+    : pageProps?.data?.product || undefined;
+
+  const seoImage = (pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords)
+    ? pageProps?.products?.images[0]?.url
+    : pageProps?.data?.product?.image || undefined;
+
   return (
     <>
-      <Head />
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        {seoInfo && (
+          <>
+            <title>{seoInfo?.metaTitle}</title>
+            <link rel="canonical" id="canonical" href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath} />
+            <meta name="title" content={seoInfo?.metaTitle} />
+            <meta name="description" content={seoInfo?.metaDescription} />
+            <meta name="keywords" content={seoInfo?.metaKeywords} />
+            {/* og meta tags */}
+            <meta property="og:title" content={seoInfo?.metaTitle} key="ogtitle" />
+            <meta property="og:description" content={seoInfo?.metaDescription} key="ogdesc" />
+            {/* og meta tags */}
+          </>
+        )}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
+        <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+        <meta property="og:image" content={seoImage} />
+      </NextHead>
+
+      <Head {...appConfig}></Head>
+
       <div id="google_translate_element" />
 
       <ManagedUIContext>
-        {isAppLoading && !location.Ip ? (
-          <main className="fit bg-white">
-            <div className="fixed top-0 right-0 h-screen w-screen z-50 flex justify-center items-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-            </div>
-          </main>
-        ) : (
-          <>
-            {snippets ? (
-              <ContentSnippet {...{ snippets }} />
-            ) : (
-              <></>
-            )}
-
-            <Layout
-              nav={nav}
-              footer={footer}
-              config={appConfig}
-              pageProps={pageProps}
-              keywords={keywordsData}
-            >
-              <Component
-                {...pageProps}
-                location={location}
-                ipAddress={location.Ip}
-                config={appConfig}
-              />
-            </Layout>
-          </>
-        )}
+        {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}        
+        <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
+        <Layout
+          nav={nav}
+          footer={footer}
+          config={appConfig}
+          pageProps={pageProps}
+          keywords={keywordsData}
+          deviceInfo={deviceInfo}
+        >
+          <Component
+            {...pageProps}
+            location={location}
+            ipAddress={location.Ip}
+            config={appConfig}
+            deviceInfo={deviceInfo}
+          />
+          {/* <RedirectIntercept /> */}
+        </Layout>
       </ManagedUIContext>
     </>
   )

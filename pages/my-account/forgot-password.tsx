@@ -69,7 +69,6 @@ export default function ForgotPasswordPage() {
     const isValidEmail = validate(email)
     if (isValidEmail) {
       let { data }: any = await axios.post(NEXT_FORGOT_PASSWORD, { email })
-
       if (!data.forgotRes.result.isValid) {
         setEmailStatus(EMAIL_STATUSES_MAP.INVALID_EMAIL)
       } else {

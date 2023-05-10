@@ -19,6 +19,8 @@ import {
   ADD_ADDRESS,
 } from '@components/utils/textVariables'
 import { CustomerAddressModel } from 'models/customer'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import { getCurrentPage } from '@framework/utils/app-util'
 
 export function asyncHandler() {
   function getAddress() {
@@ -95,12 +97,22 @@ export default function AddressBook() {
 
   const addNewAddress = async (values: any) => {
     let newValues = { ...values, userId: user.userId }
-      return createAddress(newValues)
-        .then(() => {
-          setNewFormMode(false)
-          success()
-        })
-        .catch(() => failCb())
+    let currentPage = getCurrentPage()
+
+    if (typeof window !== "undefined") {
+      if (currentPage) {
+        recordGA4Event(window, 'save_new_address', {
+          current_page: currentPage,
+        });
+      }
+    }
+
+    return createAddress(newValues)
+      .then(() => {
+        setNewFormMode(false)
+        success()
+      })
+      .catch(() => failCb())
   }
   return (
     <main className="sm:px-6 lg:px-8">
@@ -148,7 +160,7 @@ export default function AddressBook() {
               setNewFormMode(true)
               window.scrollTo(0, 0)
             }}
-            className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+            className="max-w-xs flex-1 bg-black border border-transparent py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
           >
             {ADD_ADDRESS}
           </button>

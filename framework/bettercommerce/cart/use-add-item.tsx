@@ -38,7 +38,7 @@ export default function useAddItem() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
-      return response.result
+      return { ...response.result, ...{ message: response.message } }
     } catch (error: any) {
       console.log(error)
       // throw new Error(error.message)

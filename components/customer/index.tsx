@@ -1,15 +1,17 @@
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
+import cn from 'classnames'
 import { registrationConfig, loginConfig } from './config'
 import LoadingDots from '@components/ui/LoadingDots'
+import Button from '@components/ui/Button'
 import { GENERAL_REGISTER, VALIDATION_PASSWORD_MUST_MATCH } from '@components/utils/textVariables'
 const registerSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
   password: Yup.string().min(8).max(24).required(),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], VALIDATION_PASSWORD_MUST_MATCH)
-    .required(),
+  .oneOf([Yup.ref('password'), null], VALIDATION_PASSWORD_MUST_MATCH)
+  .required(),
 })
 
 const loginSchema = Yup.object({
@@ -52,8 +54,14 @@ export default function CustomerForm({
   return (
     <Formik
       validationSchema={schema}
-      onSubmit={onSubmit}
+      // onSubmit={onSubmit}
       initialValues={initialValues}
+      onSubmit={(values, actions) => {
+        onSubmit(values, () => {
+          actions.setSubmitting(false)
+          // actions.resetForm()
+        })
+      }}
     >
       {({
         errors,
@@ -67,6 +75,11 @@ export default function CustomerForm({
           <div className="flex-col w-full px-5 py-5 flex items-center justify-center">
             <Form className="font-semibold w-full sm:w-1/2">
               {config.map((formItem: any, idx: number) => {
+                function handleKeyPress(e: any) {
+                  if (e.keyCode == 13) {
+                    handleSubmit()
+                  }
+                }
                 return (
                   <>
                     <label className="text-gray-700 text-sm">
@@ -78,6 +91,7 @@ export default function CustomerForm({
                       placeholder={formItem.placeholder}
                       onChange={handleChange}
                       value={values[formItem.key]}
+                      onKeyUp={(e: any) => handleKeyPress(e)}
                       type={formItem.type}
                       className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
                     />
@@ -91,14 +105,16 @@ export default function CustomerForm({
                 )
               })}
             </Form>
-            <div className="mt-10 flex sm:flex-col1">
-              <button
+            <div className='w-full sm:w-1/2 flex justify-center items-center my-5'>
+              <Button
                 type="submit"
                 onClick={handleSubmit}
-                className="max-w-xs flex-1 bg-black uppercase border border-transparent rounded-sm py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
+                className="!font-normal w-full border border-black"
+                loading={isSubmitting}
+                disabled={isSubmitting}
               >
-                {isSubmitting ? <LoadingDots /> : btnText}
-              </button>
+                {!isSubmitting && btnText}
+              </Button>
             </div>
           </div>
         )

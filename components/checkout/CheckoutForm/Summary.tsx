@@ -26,8 +26,8 @@ export default function Summary({
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className="top-0 mt-0 lg:mt-0 md:sticky">
-      <div className="mt-0 bg-white border border-gray-200 rounded-lg shadow-sm">
-        <h2 className="px-5 py-4 mb-3 text-lg font-bold text-black uppercase bg-gray-200 border-b rounded-t-md">
+      <div className="mt-0 bg-white border border-gray-200 shadow-sm">
+        <h2 className="px-5 py-4 mb-3 text-lg font-bold text-black uppercase bg-gray-200 border-b">
           {GENERAL_ORDER_SUMMARY}
         </h2>
         <h3 className="sr-only">{ITEMS_IN_YOUR_CART}</h3>
@@ -79,7 +79,7 @@ export default function Summary({
           ))}
         </ul>
         <div className="p-3 mt-2 border sm:p-3 ">
-          <PromotionInput />
+          {/* <PromotionInput /> */}
         </div>
         <dl className="px-4 py-2 space-y-2 border-t border-gray-200 sm:px-6">
           <div className="flex items-center justify-between">

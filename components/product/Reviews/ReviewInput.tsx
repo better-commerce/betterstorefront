@@ -79,11 +79,11 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
   }
 
   return (
-    <div className="pt-5 pb-16">
-      <h2 className="text-lg font-medium text-gray-900">{POST_YOUR_REVIEW}</h2>
+    <div className="pb-16">
+      <h2 className="mb-6 text-2xl font-semibold text-black">{POST_YOUR_REVIEW}</h2>
       {asyncMessage ? (
         <div>
-          <span className="text-gray-900 text-2xl">{asyncMessage}</span>
+          <span className="text-2xl text-gray-900">{asyncMessage}</span>
         </div>
       ) : (
         <>
@@ -91,20 +91,20 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             placeholder={REVIEW_TITLE}
             onChange={handleCommentTitle}
             value={commentTitle}
-            className="sm:w-1/3 w-full mb-2 mt-2 mb-5 appearance-none min-w-0 bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+            className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none sm:mb-5 sm:w-1/3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
           />
           <textarea
-            className="text-gray-900 bg-gray-50 rounded-sm border border-gray-400 leading-normal w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+            className="w-full h-20 px-3 py-2 font-medium leading-normal text-gray-900 placeholder-gray-700 border border-gray-400 rounded-sm bg-gray-50 focus:outline-none focus:bg-white"
             placeholder={REVIEW_COMMENT}
             value={commentBody}
             onChange={handleCommentChange}
             required
           />
-          <span className="text-gray-900 text-sm float-right">
+          <span className="float-right text-sm text-gray-900">
             {MESSAGE_CHARACTERS_LEFT}: {MAX_LENGTH - commentBody.length}
           </span>
-          {!!error && <span className="text-red-900 text-sm">{error}</span>}
-          <div className="flex flex-center mt-5">
+          {!!error && <span className="text-sm text-red-900">{error}</span>}
+          <div className="flex mt-5 flex-center">
             {[1, 2, 3, 4, 5].map((num) => (
               <StarIcon
                 key={`starIcon-${num}`}
@@ -124,7 +124,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
           <button
             type="button"
             onClick={handleSubmit}
-            className="max-w-xs float-right flex-1 bg-black border border-transparent rounded-sm uppercase py-2 px-4 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
+            className="flex items-center justify-center flex-1 float-right max-w-xs px-4 py-2 font-medium text-white uppercase bg-black border border-transparent rounded-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
           >
             {BTN_SUBMIT}
           </button>

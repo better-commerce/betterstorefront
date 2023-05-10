@@ -4,6 +4,7 @@ import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_API_NOTIFY_ME_ENDPOINT } from '@components/utils/constants'
 import { validate } from 'email-validator'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 
 export default function NotifyUserPopup() {
   const [email, setEmailAddress] = useState('')
@@ -32,11 +33,25 @@ export default function NotifyUserPopup() {
         }, 1500)
       }
     }
+
     if (email && isValidEmail) postEmail()
+
+    if (typeof window !== "undefined") {
+      recordGA4Event(window, 'notify_me', {
+        current_page: "PDP"
+      });
+      recordGA4Event(window, 'notify_click', {
+        current_page: "PDP"
+      });
+
+      recordGA4Event(window, 'notify_click', {
+        current_page: "PDP"
+      });
+    }
   }
 
   return (
-    <Transition.Root show={true} as={Fragment}>
+    <Transition.Root show={true} as={"div"}>
       <Dialog
         as="div"
         className="fixed inset-0 overflow-y-auto z-99"
@@ -45,7 +60,7 @@ export default function NotifyUserPopup() {
       >
         <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
-            as={Fragment}
+            as={"div"}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
             enterTo="opacity-100"

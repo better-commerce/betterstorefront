@@ -3,6 +3,7 @@ import { HeartIcon, MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/ou
 import { StarIcon, PlayIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import {PRODUCT_DESCRIPTION,PRODUCT_SPECIFICATION,GENERAL_SHIPPING,GENERAL_RETURNS} from '@components/utils/textVariables'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 
 const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i
 
@@ -67,6 +68,16 @@ export default function ProductDetails({ product, description }: any) {
       ),
     }
   ]
+
+  function openSpecification() {
+    if (typeof window !== "undefined") {
+      recordGA4Event(window, 'specification_product_detail', {
+        category_selected: product?.mappedCategories[2]?.categoryName,
+        header: product?.name,
+        current_page: window.location.href,
+      });
+    }
+  }
 
   return (
     <>

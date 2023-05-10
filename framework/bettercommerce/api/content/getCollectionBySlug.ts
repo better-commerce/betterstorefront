@@ -7,7 +7,7 @@ export default function getCollectionBySlug(slug: string) {
         url: COLLECTIONS_ENDPOINT + `/slug-minimal/?slug=${slug}`,
         method: 'get',
       })
-      return { ...response.result, ...{ snippets: response.snippets } };
+      return { ...response.result, ...{ snippets: response?.snippets ?? [] } };
     } catch (error: any) {
       console.log(error)
       // throw new Error(error.message)

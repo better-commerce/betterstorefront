@@ -35,6 +35,12 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
     }
   }
 
+  function handleKeyPress(e: any) {
+    if (e.keyCode == 13) {
+      handleSubmit()
+    }
+  }
+
   return (
     <div className="w-full flex justify-center mt-10 flex-col items-center">
       <div className="font-semibold w-full sm:w-1/2">
@@ -44,6 +50,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
           value={value}
           type="email"
           onChange={onChange}
+          onKeyUp={(e: any) => handleKeyPress(e)}
         />
       </div>
       {error ? <span className="text-red-500 capitalize">{error}</span> : null}

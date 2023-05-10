@@ -51,8 +51,12 @@ const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
  * @param expiryInMins 
  * @returns 
  */
-const getExpiry = (expiryInMins: number) => {
+export const getExpiry = (expiryInMins: number) => {
   return new Date(new Date().getTime() + expiryInMins * 60 * 1000);
 };
+
+export const getMinutesInDays = (days: number) => {
+  return days * 24 * 60;
+}
 
 export default setSessionIdCookie

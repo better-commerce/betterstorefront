@@ -27,7 +27,17 @@ import {
   createWishlist,
   removeItemFromWishlist,
   createReview,
-  applyPromo,
+  applyPromo,  
+  getRelatedProducts,
+  getPdpLookbook,
+  getPdpLookbookProduct,
+  getPdpCachedImage,
+  getProductPromos,
+  getCancelReason,
+  cancelOrder,
+  getReturnReason,
+  getPagePreviewContent,
+  getProductReview,
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -67,6 +77,16 @@ const operations = {
   removeItemFromWishlist,
   createReview,
   applyPromo,
+  getRelatedProducts,
+  getPdpLookbook,
+  getPdpLookbookProduct,
+  getPdpCachedImage,
+  getProductPromos,
+  getCancelReason,
+  cancelOrder,
+  getReturnReason,
+  getPagePreviewContent,
+  getProductReview,
 }
 
 export const provider = { config, operations }
