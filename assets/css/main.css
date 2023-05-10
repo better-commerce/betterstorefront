@@ -332,8 +332,8 @@ body {
     height: auto !important;
   }
 }
-.notify-me-pop{
-  z-index: 99999!important;
+.notify-me-pop {
+  z-index: 99999 !important;
   position: relative;
 }
 
@@ -982,7 +982,6 @@ body {
   }
 }
 
-
 .z-99 {
   z-index: 99;
 }
@@ -994,4 +993,3 @@ body {
 .z-9999 {
   z-index: 9999;
 }
-
