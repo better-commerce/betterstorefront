@@ -1,56 +1,124 @@
 import { RadioGroup } from '@headlessui/react'
-import classNames from '@components/utils/classNames'
-import Link from 'next/link'
-import { CHOOSE_A_COLOR } from '@components/utils/textVariables'
+import cn from 'classnames'
+import { GENERAL_COLOUR } from '@components/utils/textVariables'
+import { useState, useEffect } from 'react'
+
+const DEFAULT_OPTIONS_COUNT = 15
+function renderRadioOptions(
+  items: any,
+  itemsCount: any,
+  selectedValue: any,
+  openRemainElems: boolean = false,
+  handleToggleOpenRemainElems: any,
+  sizeInit: any,
+  setSizeInit: any,
+) {
+
+  let defaultItems = items && items.length > 0 ? items.slice(0, itemsCount) : []
+  let remainingItems = items && items.length > 0 ? items.slice(itemsCount, items.length) : []
+
+  return (
+    <div className="flex items-center">
+      {defaultItems.map((item: any, idx: any) => (
+        <RadioGroup.Option
+          key={idx}
+          value={item.fieldValue}
+          title={item.fieldLabel}
+          onClick={() => { setSizeInit('false') }}
+          style={{ backgroundColor: item.fieldValue }}
+          className={cn(
+            'pdp-color-swatch-item relative z-99 h-10 w-10 border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
+            {
+              'ring-1 z-999': selectedValue === item.fieldValue,
+            }
+          )}
+        />
+      ))}
+
+      {remainingItems.map((item: any, idx: any) => (
+        <RadioGroup.Option
+          key={idx}
+          value={item.fieldValue}
+          title={item.fieldLabel}
+          style={{ backgroundColor: item.fieldValue }}
+          className={cn(
+            'pdp-color-swatch-item relative z-99 h-10 w-10  border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
+            { 'ring-1 z-999': selectedValue === item.fieldValue, hidden: !openRemainElems, }
+          )}
+        />
+      ))}
+
+      {openRemainElems && (
+        <button className="relative flex items-center justify-center h-10 px-1 bg-gray-300 z-99 hover:opacity-75 bg-nav" onClick={() => handleToggleOpenRemainElems()}>
+          <p className="text-gray-900 text-ms">{'<'}</p>
+        </button>
+      )}
+
+      {remainingItems && remainingItems.length > 0 && !openRemainElems && (
+        <div className="relative flex items-center justify-center w-10 h-10 transition duration-100 bg-gray-300 outline-none cursor-pointer z-99 hover:opacity-75 bg-nav" onClick={() => handleToggleOpenRemainElems()}>
+          <p className="text-xs text-gray-900">More</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function InlineList({
   items = [],
-  onChange = () => {},
-  label = CHOOSE_A_COLOR,
+  onChange = () => { },
+  label = GENERAL_COLOUR,
   fieldCode = 'global.colour',
   currentAttribute = 'black',
-  generateLink = () => {},
+  generateLink = () => { },
+  handleSetProductVariantInfo = () => { },
+  sizeInit,
+  setSizeInit,
+  product,
 }: any) {
+  const [color, setColor] = useState(null) // to display color in the Page
+  const [colorName, setColorName] = useState<any>('')
+  const [validation, setValidation] = useState<any>(false);
   const handleChange = (value: any) => {
-    return onChange(fieldCode, value)
+    const fieldSet = items?.find((o: any) => o.fieldValue === value)
+    setColor(value)
+    return onChange(fieldCode, value, fieldSet)
   }
+
+  useEffect(() => {
+    const fieldSet = items?.find((o: any) => o.fieldValue === currentAttribute)
+    handleSetProductVariantInfo({ colour: currentAttribute, fieldSet })
+  }, [currentAttribute])
+
+  useEffect(() => {
+    product.customAttributes.map((val: any) => {
+      setValidation(true);
+      if (val.display === "Color") {
+        setColorName(val.valueText)
+      }
+    })
+  }, [currentAttribute])
+
+  const [openRemainElems, setOpenRemainElems] = useState(false)
+
+  const handleToggleOpenRemainElems = () => setOpenRemainElems(!openRemainElems)
 
   return (
     <>
-      <h3 className="font-bold text-left text-black uppercase text-md">{label}</h3>
-      <RadioGroup value={'ring-gray-700'} onChange={() => {}} className="mt-2">
-        <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
-        <div className="flex items-center space-x-3">
-          {items.map((item: any, idx: any) => {
-            const path = generateLink(fieldCode, item.fieldValue)
-            return (
-              <RadioGroup.Option
-                key={idx}
-                value={item.fieldValue}
-                style={{ backgroundColor: item.fieldValue }}
-                className={({ active, checked }) =>
-                  classNames(
-                    active && checked ? 'ring ring-offset-1' : '',
-                    !active && checked ? 'ring-2' : '',
-                    '-m-0.5 relative p-0.5 rounded-full flex items-center mt-1 justify-center cursor-pointer focus:outline-none'
-                  )
-                }
-              >
-                <RadioGroup.Label as="p" className="sr-only">
-                  {item.fieldName}
-                </RadioGroup.Label>
-                <Link href={`/${path}`} passHref>
-                  <span
-                    aria-hidden="true"
-                    onClick={() => handleChange(item.fieldvalue)}
-                    className={classNames(
-                      item.fieldvalue,
-                      'h-4 block w-4 border shadow-md drop-shadow-md border-black border-opacity-10 rounded-full'
-                    )}
-                  />
-                </Link>
-              </RadioGroup.Option>
-            )
-          })}
+      <div className="flex">
+        <h3 className="text-lg font-semibold text-black">{GENERAL_COLOUR} :</h3>
+        {validation ? <span className='pl-1 font-light text-gray-700 text-ms dark:text-gray-700'>{colorName}</span> : <span className='pl-1 text-sm font-bold text-gray-400'>--</span>}
+      </div>
+      <RadioGroup value='' onChange={handleChange} className="mt-2">
+        <div>
+          {renderRadioOptions(
+            items,
+            DEFAULT_OPTIONS_COUNT,
+            currentAttribute,
+            openRemainElems,
+            handleToggleOpenRemainElems,
+            sizeInit,
+            setSizeInit,
+          )}
         </div>
       </RadioGroup>
     </>

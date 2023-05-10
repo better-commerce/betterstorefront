@@ -151,7 +151,7 @@ const useContentSnippet = (snippets: Array<ISnippet>): void => {
  * @param elements 
  */
 const topHead = (snippet: ISnippet) => {
-    const headElem: any = document.querySelector("head");
+    const headElem: any = document.querySelector("body");
     const attrs = buildAttrs([HEAD_ELEM_SELECTORS[0]]);
     insertAdjacentHTML(snippet.content, snippet.type, headElem, attrs, "afterbegin");
 };

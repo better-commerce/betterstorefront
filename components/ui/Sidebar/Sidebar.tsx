@@ -46,7 +46,7 @@ const Sidebar: FC<React.PropsWithChildren<SidebarProps>> = ({ children, onClose 
         <div className={s.backdrop} onClick={onClose} />
         <section className="absolute inset-y-0 right-0 max-w-full flex outline-none pl-10">
           <div className="h-full w-full md:w-screen md:max-w-md">
-            <div className={s.sidebar} ref={contentRef}>
+            <div ref={contentRef}>
               {children}
             </div>
           </div>

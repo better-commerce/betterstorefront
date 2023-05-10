@@ -314,7 +314,7 @@ function Cart({ cart }: any) {
                 {GENERAL_ORDER_SUMMARY}
               </h2>
               <div className='p-3 mt-6 border sm:p-3 '>
-                <PromotionInput />
+                {/* <PromotionInput /> */}
               </div>
               <dl className="mt-6 space-y-2 sm:space-y-2">
                 <div className="flex items-center justify-between">

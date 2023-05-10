@@ -6,7 +6,7 @@ export default function attributesGenerator(
   variantProducts: []
 ) {
   return Object.entries(combination)
-    .reduce((acc, obj) => {
+    ?.reduce((acc, obj) => {
       variantProducts.forEach((el: any) => {
         const fieldValues: any = []
         el.attributes.some((item: any) => {
@@ -31,7 +31,7 @@ export default function attributesGenerator(
 }
 
 export const getAttributesFromSlug = (slug: string, variantProducts: any) => {
-  return variantProducts.reduce((acc: any, obj: any) => {
+  return variantProducts?.reduce((acc: any, obj: any) => {
     if (obj.slug === slug) {
       obj.attributes.forEach((varAttr: any) => {
         acc[varAttr.fieldCode] = varAttr.fieldValue

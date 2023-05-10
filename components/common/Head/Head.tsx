@@ -1,19 +1,30 @@
-// Base Imports
 import { FC } from 'react'
-import NextHead from 'next/head'
+import { matchStrings } from '@framework/utils/parse-util'
 
-// Other Imports
-import { DefaultSeo } from 'next-seo'
-import config from '@framework/seo.json'
+const Head: FC<any> = ({ configSettings, seoSettings = null }: any) => {
+  const getConfig = () => {
+    if (seoSettings) {
+      return seoSettings;
+    }
+    if (configSettings?.length) {
+      const seoSetting = configSettings?.find((cnf: any) => matchStrings(cnf.configType, "SeoSettings", true));
+      if (seoSetting?.configKeys?.length) {
+        const title = seoSetting?.configKeys?.find((setting: any) => matchStrings(setting?.key, "SeoSettings.DefaultTitle", true))?.value;
+        const keywords = seoSetting?.configKeys?.find((setting: any) => matchStrings(setting?.key, "SeoSettings.DefaultMetaKeywords", true))?.value;
+        const description = seoSetting?.configKeys?.find((setting: any) => matchStrings(setting?.key, "SeoSettings.DefaultMetaDescription", true))?.value;
+        return {
+          title: title,
+          keywords: keywords,
+          description: description
+        };
+      }
+    }
+    return null;
+  }
 
-const Head: FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <>
-      <DefaultSeo {...config} />
-      <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="manifest" href="/site.webmanifest" key="site-manifest" />
-      </NextHead>
+     
     </>
   )
 }

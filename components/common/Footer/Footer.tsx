@@ -1,152 +1,135 @@
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import Link from 'next/link'
 import type { Page } from '@commerce/types/page'
 import { Logo } from '@components/ui'
 import config from './config'
 import { useRouter } from 'next/router'
-import { 
-  BTN_SIGN_UP, 
-  COPYRIGHT_FOOTER_INFO, 
-  GENERAL_EMAIL_ADDRESS, 
-  GENERAL_FOOOTER, 
-  SIGN_UP_FOR_NEWSLETTER, 
-  SIGN_UP_TEXT 
+import {
+  BTN_SIGN_UP,
+  COPYRIGHT_FOOTER_INFO,
+  GENERAL_EMAIL_ADDRESS,
+  GENERAL_FOOOTER,
+  SIGN_UP_FOR_NEWSLETTER,
+  SIGN_UP_TEXT
 } from '@components/utils/textVariables'
+import { getCurrentPage } from '@framework/utils/app-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import useDevice from '@commerce/utils/use-device'
+import { IExtraProps } from '../Layout/Layout'
 
 interface Props {
   config: []
 }
 
-const Footer: FC<React.PropsWithChildren<Props>> = ({ config }) => {
+const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
   const router = useRouter()
+  const [hasConfig, setHasConfig] = useState(false)
+  const { isMobile, isIPadorTablet } = deviceInfo;
 
+  let deviceCheck = ""
+  if (isMobile || isIPadorTablet) {
+    deviceCheck = "Mobile"
+  } else {
+    deviceCheck = "Desktop"
+  }
+
+  useEffect(() => {
+    setHasConfig(Boolean(config))
+  }, [config])
   const handleRedirect = (path: string) => (path ? router.push(path) : {})
 
+  function footerClick(detail: any) {
+    let currentPage = getCurrentPage()
+    if (currentPage) {
+      if (typeof window !== "undefined") {
+        recordGA4Event(window, 'footer_query_click', {
+          device: deviceCheck,
+          page_clicked_on: currentPage,
+          click_detail: detail,
+        });
+      }
+    }
+  }
+
   return (
-    <footer aria-labelledby="footer-heading" className="bg-gray-100 sm:h-96 shadow-inner sm:mt-10">
+    <footer aria-labelledby="footer-heading" className="bg-gray-100 shadow-inner sm:h-96 sm:mt-2">
       <h2 id="footer-heading" className="sr-only">
         {GENERAL_FOOOTER}
       </h2>
-      <div className="mx-auto w-full sm:w-4/5 px-4 sm:px-0 lg:px-0">
-        <div className="py-20">
-          <div className="grid grid-cols-1 md:grid-cols-12 md:grid-flow-col md:gap-x-8 md:gap-y-16 md:auto-rows-min">
-            {/* Image section */}
-            <div className="col-span-1 md:col-span-2 lg:row-start-1 lg:col-start-1 opacity-70">
-              <Logo />
-            </div>
-
-            {/* Sitemap sections */}
-            <div className="mt-10 col-span-6 grid grid-cols-2 gap-8 sm:grid-cols-3 md:mt-0 md:row-start-1 md:col-start-3 md:col-span-8 lg:col-start-2 lg:col-span-6">
-              <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
-                {/* {config?.map((item: any, idx: number) => {
-                  return (
-                    <div key={`${idx}-footer-item`}>
-                      <h3 className="text-md font-medium text-gray-900">
-                        {item.caption}
-                      </h3>
-                      <ul role="list" className="mt-6 space-y-6">
-                        {item.navBlocks.map((navBlock: any) => (
-                          <li key={navBlock.boxTitle} className="text-sm">
-                            <h3 className="text-sm font-medium text-gray-900">
-                              {navBlock.boxTitle}
-                            </h3>
-                            <ul>
-                              {navBlock.navItems.map(
-                                (navItem: any, navItemIdx: number) => {
-                                  return (
-                                    <li
-                                      key={navItemIdx + 'navItem'}
-                                      className="text-sm"
-                                    >
-                                      <span className="text-gray-500 hover:text-gray-600 cursor-hand">
-                                        {navItem.caption}
-                                      </span>
-                                    </li>
-                                  )
-                                }
-                              )}
-                            </ul>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )
-                })} */}
-                <div>
-                  <h3 className="text-md font-bold text-gray-900">INFORMATION</h3>
-                  <ul role="list" className="mt-6 space-y-6">
-                    <li className="text-sm">
-                      <h3 className="text-sm font-medium text-gray-900">Contact Us</h3>
-                      <ul></ul>
-                    </li>
-                    <li className="text-sm">
-                      <h3 className="text-sm font-medium text-gray-900">My Account</h3>
-                      <ul></ul>
-                    </li>
-                    <li className="text-sm">
-                      <h3 className="text-sm font-medium text-gray-900">About Us</h3>
-                      <ul></ul>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-md font-bold text-gray-900">HELP</h3>
-                  <ul role="list" className="mt-6 space-y-6">
-                    <li className="text-sm">
-                      <h3 className="text-sm font-medium text-gray-900">Support</h3>
-                      <ul></ul>
-                    </li>
-                    <li className="text-sm">
-                      <h3 className="text-sm font-medium text-gray-900">Cookie Policy</h3>
-                      <ul></ul>
-                    </li>
-                    <li className="text-sm">
-                      <h3 className="text-sm font-medium text-gray-900">Privacy Policy</h3>
-                      <ul></ul>
-                    </li>
-                    <li className="text-sm">
-                      <h3 className="text-sm font-medium text-gray-900">Terms and Conditions</h3>
-                      <ul></ul>
-                    </li>
-                  </ul>
-                </div>
+      <div className="w-full px-4 pt-20 mx-auto sm:w-4/5 sm:px-0 lg:px-0">
+        <div className="grid grid-cols-1 md:grid-cols-12 md:grid-flow-col md:gap-x-8 md:gap-y-16 md:auto-rows-min">
+          <div className="col-span-1 md:col-span-2 lg:row-start-1 lg:col-start-1 opacity-70" onClick={() => footerClick("Logo")}>
+            <Logo />
+          </div>
+          <div className="grid grid-cols-2 col-span-6 gap-8 mt-10 sm:grid-cols-3 md:mt-0 md:row-start-1 md:col-start-3 md:col-span-8 lg:col-start-2 lg:col-span-6">
+            <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
+              <div onClick={() => footerClick("INFORMATION")}>
+                <h3 className="font-bold text-gray-900 text-md">INFORMATION</h3>
+                <ul role="list" className="mt-6 space-y-6">
+                  <li className="text-sm">
+                    <h3 className="text-sm font-medium text-gray-900">Contact Us</h3>
+                  </li>
+                  <li className="text-sm">
+                    <h3 className="text-sm font-medium text-gray-900">My Account</h3>
+                  </li>
+                  <li className="text-sm">
+                    <h3 className="text-sm font-medium text-gray-900">About Us</h3>
+                  </li>
+                </ul>
+              </div>
+              <div onClick={() => footerClick("HELP")}>
+                <h3 className="font-bold text-gray-900 text-md">HELP</h3>
+                <ul role="list" className="mt-6 space-y-6">
+                  <li className="text-sm">
+                    <h3 className="text-sm font-medium text-gray-900">Support</h3>
+                  </li>
+                  <li className="text-sm">
+                    <h3 className="text-sm font-medium text-gray-900">Cookie Policy</h3>
+                  </li>
+                  <li className="text-sm">
+                    <h3 className="text-sm font-medium text-gray-900">Privacy Policy</h3>
+                  </li>
+                  <li className="text-sm">
+                    <h3 className="text-sm font-medium text-gray-900">Terms and Conditions</h3>
+                  </li>
+                </ul>
               </div>
             </div>
-            {/* Newsletter section */}
-            <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-7 lg:col-span-6">
-              <h3 className="text-2xl uppercase font-bold text-black">
-                {SIGN_UP_FOR_NEWSLETTER}
-              </h3>
-              <p className="mt-1 text-md text-gray-500">
-                {SIGN_UP_TEXT}
-              </p>
-              <form className="mt-6 flex sm:max-w-md">
-                <label htmlFor="email-address" className="sr-only">
-                  {GENERAL_EMAIL_ADDRESS}
-                </label>
-                <input
-                  id="email-address"
-                  type="text"
-                  autoComplete="email"
-                  required
-                  placeholder='Enter Email ID'
-                  className="appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-4 px-4 text-gray-900 placeholder-gray-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                />
-                <div className="ml-4 flex-shrink-0">
-                  <button
-                    type="submit"
-                    className="w-full bg-black border border-transparent rounded-sm shadow-sm py-4 uppercase px-6 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-                  >
-                    {BTN_SIGN_UP}
-                  </button>
-                </div>
-              </form>
-            </div>
+          </div>
+          {/* Newsletter section */}
+          <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-7 lg:col-span-6" onClick={() => footerClick(SIGN_UP_FOR_NEWSLETTER)}>
+            <h3 className="text-2xl font-bold text-black uppercase">
+              {SIGN_UP_FOR_NEWSLETTER}
+            </h3>
+            <p className="mt-1 text-gray-900 text-md">
+              {SIGN_UP_TEXT}
+            </p>
+            <form className="flex mt-6 sm:max-w-md">
+              <label htmlFor="email-address" className="sr-only">
+                {GENERAL_EMAIL_ADDRESS}
+              </label>
+              <input
+                id="email-address"
+                type="text"
+                autoComplete="email"
+                required
+                placeholder='Enter Email ID'
+                className="w-full min-w-0 px-4 py-4 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              />
+              <div className="flex-shrink-0 ml-4">
+                <button
+                  type="submit"
+                  className="flex items-center justify-center w-full px-6 py-4 font-medium text-white uppercase bg-black border border-transparent rounded-sm shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  {BTN_SIGN_UP}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
 
-        <div className="border-t border-gray-100 py-10 text-center">
-          <p className="text-sm text-gray-500">
+        <div className="py-10 text-center border-t border-gray-100" onClick={() => footerClick(COPYRIGHT_FOOTER_INFO)}>
+          <p className="text-sm text-black">
             &copy; {COPYRIGHT_FOOTER_INFO}
           </p>
         </div>

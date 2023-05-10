@@ -8,7 +8,6 @@ import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
 import ProductGridWithFacet from '@components/product/Grid'
 import Link from 'next/link'
 import Image from 'next/image'
-import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
@@ -239,11 +238,13 @@ function CategoryPage({ category, products }: any) {
       { shallow: true }
     )
     dispatch({ type: PAGE, payload: page.selected + 1 })
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    })
+    if (typeof window !== 'undefined') {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      })
+    }
   }
 
   const handleInfiniteScroll = () => {
@@ -417,29 +418,6 @@ function CategoryPage({ category, products }: any) {
           </div>
         )}
       </main>
-      <NextSeo
-        title={category.name}
-        description={category.description}
-        additionalMetaTags={[
-          {
-            name: 'keywords',
-            content: category.metaKeywords,
-          },
-        ]}
-        openGraph={{
-          type: 'website',
-          title: category.metaTitle,
-          description: category.metaDescription,
-          images: [
-            {
-              url: category.image,
-              width: 800,
-              height: 600,
-              alt: category.name,
-            },
-          ],
-        }}
-      />
     </div>
   )
 }

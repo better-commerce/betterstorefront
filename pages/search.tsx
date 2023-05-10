@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
+import Script from 'next/script'
 //DYNAMINC COMPONENT CALLS
 const ProductGrid = dynamic(() => import('@components/product/Grid'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
@@ -15,6 +16,8 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { GENERAL_CATALOG } from '@components/utils/textVariables'
+import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -174,11 +177,13 @@ function Search({ query, setEntities, recordEvent }: any) {
       { shallow: true }
     )
     dispatch({ type: PAGE, payload: page.selected + 1 })
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    })
+    if (typeof window !== 'undefined') {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      })
+    }
   }
 
   const BrandFilter = state.filters.find(
@@ -343,6 +348,26 @@ function Search({ query, setEntities, recordEvent }: any) {
           <div></div>
         </div>
       </main>
+      <Script
+        type="application/ld+json"
+        id="schema"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+        {
+          "@context": "https://schema.org/",
+          "@type": "WebSite",
+          "name": ${SITE_NAME},
+          "url": ${SITE_ORIGIN_URL},
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": ${router.query.freeText}
+            "query-input": "required name=${router.query.freeText}" 
+          }
+        }
+        `,
+        }}
+      />
     </div>
   )
 }

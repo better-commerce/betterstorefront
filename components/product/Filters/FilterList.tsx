@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ACTION_TYPES } from 'pages/search'
 import { BTN_SEARCH } from '@components/utils/textVariables'
 
@@ -23,10 +23,14 @@ const FilterItem = ({
   isCheckboxTickDisabled = false,
   bgColor = () => false,
   onSelect,
-  closeSidebar = () => {},
+  closeSidebar = () => { },
   ...props
 }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
+
+  useEffect(() => {
+    setCheckbox(isChecked)
+  }, [isChecked])
 
   const handleCheckbox = () => {
     setCheckbox(!isCheckboxChecked)
@@ -50,43 +54,42 @@ const FilterItem = ({
 
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div key={option.value} className="flex">
-      <div className="flex items-center">
-        <input
-          name={`${optionIdx}-input[]`}
-          defaultValue={option.value}
-          type="checkbox"
-          className="h-4 w-4 border-gray-300 rounded filter-input"
-        />
+    <div key={option.value} className="flex items-center">
+      <input
+        name={`${optionIdx}-input[]`}
+        defaultValue={option.value}
+        type="checkbox"
+        className="w-4 h-4 border-gray-300 rounded filter-input"
+      />
 
-        <label
-          htmlFor={`${optionIdx}-input[]`}
-          onClick={handleCheckbox}
-          className="cursor-pointer ml-0 text-sm text-gray-500 relative filter-label"
-        >
-          {isCheckboxChecked && !isCheckboxTickDisabled && (
-            <div
-              style={{
-                content: '',
-                float: 'left',
-                left: '6px',
-                top: '0px',
-                zIndex: 99999,
-                position: 'absolute',
-                width: '10px',
-                height: '14px',
-                border: 'solid #000',
-                borderWidth: '0 2px 2px 0',
-                transform: 'rotate(45deg)',
-              }}
-            />
-          )}
-          {generateOptionName()}
-          {sectionKey === FILTER_KEYS.COLOR &&          
+      <label
+        htmlFor={`${optionIdx}-input[]`}
+        onClick={handleCheckbox}
+        className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label"
+      >
+        {isCheckboxChecked && !isCheckboxTickDisabled && (
           <div
             style={{
               content: '',
-              top:'2px',
+              float: 'left',
+              left: '6px',
+              top: '0px',
+              zIndex: 99999,
+              position: 'absolute',
+              width: '10px',
+              height: '14px',
+              border: 'solid #000',
+              borderWidth: '0 2px 2px 0',
+              transform: 'rotate(45deg)',
+            }}
+          />
+        )}
+        {generateOptionName()}
+        {sectionKey === FILTER_KEYS.COLOR &&
+          <div
+            style={{
+              content: '',
+              top: '2px',
               float: 'left',
               height: '16px',
               width: '16px',
@@ -98,11 +101,11 @@ const FilterItem = ({
             }}
           />
         }
-        {sectionKey != FILTER_KEYS.COLOR &&          
+        {sectionKey != FILTER_KEYS.COLOR &&
           <div
             style={{
               content: '',
-              top:'2px',
+              top: '2px',
               float: 'left',
               height: '16px',
               width: '16px',
@@ -114,8 +117,7 @@ const FilterItem = ({
             }}
           />
         }
-        </label>
-      </div>
+      </label>
       <span className="px-1 text-xs font-semibold text-black">({option.count})</span>
     </div>
   )
@@ -124,15 +126,13 @@ const FilterItem = ({
 const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
-      <label className="sr-only">
-        {BTN_SEARCH}
-      </label>
+      <label className="sr-only">{BTN_SEARCH}</label>
       <input
         type="text"
         onChange={(e) => handleSearch(e.target.value)}
         autoComplete={BTN_SEARCH}
         placeholder={BTN_SEARCH}
-        className="appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-1 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+        className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
       />
     </>
   )
@@ -198,7 +198,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className="max-panel space-y-2">
+      <div className="space-y-2 max-panel">
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (

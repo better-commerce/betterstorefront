@@ -8,21 +8,20 @@ import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { LoadingDots } from '@components/ui'
-import Image from 'next/image'
+import Image from "next/legacy/image";
 import {
   WISHLIST_TITLE,
   WISHLIST_SUB_TITLE,
   GENERAL_VIEW_PRODUCT,
   GENERAL_ADD_TO_BASKET,
-  GENERAL_REMOVE,
-  IMG_PLACEHOLDER,
+  GENERAL_REMOVE
 } from '@components/utils/textVariables'
-import { generateUri } from '@commerce/utils/uri-util'
+import { isCartAssociated } from '@framework/utils/app-util'
 
 export default function Wishlist() {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const { user, basketId, setCartItems, openCart, setWishlist } = useUI()
+  const { user, basketId, setCartItems, openCart, setWishlist, cartItems } = useUI()
 
   const fetchItems = async () => {
     !isLoading && setIsLoading(true)
@@ -54,13 +53,14 @@ export default function Wishlist() {
           manualUnitPrice: product.price.raw.withTax,
           stockCode: product.stockCode,
           userId: user.userId,
-          isAssociated: user.isAssociated,
+          isAssociated: isCartAssociated(cartItems),
         },
         'ADD',
         { product }
       )
       .then((response: any) => {
         setCartItems(response)
+        handleRemoveFromWishlist(product)
         openCart()
       })
       .catch((err: any) => console.log('error', err))
@@ -82,28 +82,36 @@ export default function Wishlist() {
     handleAsync()
   }
 
-  const css = { maxWidth: '80px', height: 'auto' }
   return (
     <div className="bg-white">
       {/* Mobile menu */}
 
       <main className="sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="px-4 sm:px-0">
+        <div className="max-w-4xl lg:mx-12">
+          <div className="lg:px-0 sm:px-0">
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-              {WISHLIST_TITLE}
+              {/* {WISHLIST_TITLE} */}
             </h1>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
-            {!data.length && !isLoading && <div>{WISHLIST_SUB_TITLE}</div>}
+            {!data.length && !isLoading && (
+              <>
+              <div className='flex flex-col items-start justify-center w-full px-4 py-12 sm:items-center max-acc-container sm:px-0'>
+               <img src="/assets/images/basket-no-item.svg" alt="no basket icon" className='m-92-img' />
+               <div className='my-0 font-semibold text-secondary-full-opacity text-m-16 text-24'>{WISHLIST_SUB_TITLE}</div>
+               <p className='text-xs sm:text-sm text-primary opacity-60'>Explore more and save items in your wishlist. </p>
+               <div className="flex w-full mt-5 sm:flex-col items-center"><a href="/search" className="w-40 flex items-center justify-center px-4 py-3 -mr-0.5 text-white bg-black border-2 border-black rounded-sm hover:bg-gray-800 hover:text-whitesm:px-6 hover:border-gray-900">Start Shopping</a></div>
+              </div>
+              </>
+            )}
             {isLoading ? <LoadingDots /> : null}
             <div className="space-y-16 sm:space-y-24">
-              <div className="flow-root px-4 mt-6 sm:mt-10 sm:px-0">
+              <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
                 <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
                   {data.map((product: any) => (
                     <div key={product.id} className="flex py-6 sm:py-10">
-                      <div className="flex-1 min-w-0 lg:flex lg:flex-col">
+                      <div className="min-w-0 flex-1 lg:flex lg:flex-col">
                         <div className="lg:flex-1">
                           <div className="sm:flex">
                             <div>
@@ -121,14 +129,15 @@ export default function Wishlist() {
                               {product.price.formatted.withTax}
                             </p>
                           </div>
-                          <div className="flex mt-2 text-sm font-medium sm:mt-4">
+                          <div className="mt-2 flex text-sm font-medium sm:mt-4">
                             <Link
                               href={`/${product.slug}`}
-                              className="text-indigo-600 hover:text-indigo-500"
-                            >
+                              className="text-indigo-600 hover:text-indigo-500">
+
                               {GENERAL_VIEW_PRODUCT}
+
                             </Link>
-                            <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
+                            <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                               <button
                                 onClick={() => handleAddToCart(product)}
                                 className="text-indigo-600 hover:text-indigo-500"
@@ -136,7 +145,7 @@ export default function Wishlist() {
                                 {GENERAL_ADD_TO_BASKET}
                               </button>
                             </div>
-                            <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
+                            <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                               <button
                                 onClick={() =>
                                   handleRemoveFromWishlist(product)
@@ -149,18 +158,20 @@ export default function Wishlist() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex-shrink-0 ml-4 sm:m-0 sm:mr-6 sm:order-first">
-                        <Image
-                          width={80}
-                          height={80}
-                          style={css}
-                          src={
-                            generateUri(product.image, 'h=200&fm=webp') ||
-                            IMG_PLACEHOLDER
-                          }
+                      <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
+                       <Image
+                            width={80}
+                            height={130}
+                            layout='fixed'
+                            src={product.image}
+                            alt={product.name}
+                            className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52 image"
+                          ></Image>
+                        {/* <img
+                          src={product.image}
                           alt={product.name}
-                          className="object-cover object-center w-20 h-20 col-start-2 col-end-3 rounded-lg sm:col-start-1 sm:row-start-1 sm:row-span-2 sm:w-40 sm:h-40 lg:w-52 lg:h-52 image"
-                        ></Image>
+                          className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
+                        /> */}
                       </div>
                     </div>
                   ))}
@@ -171,5 +182,5 @@ export default function Wishlist() {
         </div>
       </main>
     </div>
-  )
+  );
 }

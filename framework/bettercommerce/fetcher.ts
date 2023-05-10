@@ -33,7 +33,7 @@ const SingletonFactory = (function () {
             (response: any) => response,
             (error: any) => {
                 // Reject promise if usual error
-                if (error.response.status !== 401) {
+                if (error?.response?.status !== 401) {
                     return Promise.reject(error)
                 }
                 /*
@@ -94,6 +94,8 @@ const fetcher = async ({
         Currency: cookies.Currency || store.get('Currency') || BETTERCOMMERCE_CURRENCY || BETTERCOMMERCE_DEFAULT_CURRENCY,
         Language: cookies.Language || store.get('Language') || BETTERCOMMERCE_LANGUAGE || BETTERCOMMERCE_DEFAULT_LANGUAGE,
         Country: cookies.Country || store.get('Country') || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
+        DeviceId: cookies?.deviceId || "",
+        SessionId: cookies?.sessionId || "",
     }
     const config: any = {
         method: method,

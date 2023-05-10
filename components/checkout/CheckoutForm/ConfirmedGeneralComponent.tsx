@@ -18,7 +18,7 @@ export default function ConfirmedGeneralComponent({
         </ul>
       </div>
       <div className="flex">
-        <button onClick={onStateChange} className="btn text-pink font-xs" type="button">
+        <button onClick={onStateChange} className="btn font-xs uppercase font-bold" type="button">
           {GENERAL_EDIT}
         </button>
       </div>

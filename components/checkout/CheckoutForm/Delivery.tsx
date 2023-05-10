@@ -190,7 +190,7 @@ export default function Delivery({
   }
 
   return (
-    <div className="py-6 mt-0 border border-gray-200 bg-white shadow p-6 rounded-lg">
+    <div className="py-6 mt-0 border border-gray-200 bg-white shadow p-6">
       {isDeliveryMethodSelected ? (
         <>
           <h3 className="text-lg font-bold uppercase text-black">Delivery method</h3>
@@ -362,7 +362,7 @@ export default function Delivery({
             </ul>
           </RadioGroup>
           {selectedDeliveryMethod.id ? (
-            <div className="py-5 flex justify-center w-full">
+            <div className="py-5 flex justify-center w-40">
               <Button
                 buttonType="button"
                 action={submitShippingMethod}
