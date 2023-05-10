@@ -52,6 +52,7 @@ export const OPERATIONS = [
   'getCancelReason',
   'cancelOrder',
   'getReturnReason',
+  'resetCache',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -95,13 +96,13 @@ export type Operations<P extends APIProvider> = {
   removeItemFromWishlist: {}
   subscribe: {}
   priceMatch: {}
-  getRelatedProducts:{}  
+  getRelatedProducts: {}
   getPdpLookbook: {}
   getPdpLookbookProduct: {}
-  getPdpCachedImage:{}
-  getProductPromos:{}
-  getPagePreviewContent:{}
-  getProductReview:{}
+  getPdpCachedImage: {}
+  getProductPromos: {}
+  getPagePreviewContent: {}
+  getProductReview: {}
   getCancelReason: {}
   cancelOrder: {}
   getReturnReason: {}
@@ -226,6 +227,8 @@ export type Operations<P extends APIProvider> = {
       } & OperationOptions
     ): Promise<T['data']>
   }
+
+  resetCache: {}
 }
 
 export type APIOperations<P extends APIProvider> = {
@@ -236,8 +239,8 @@ export type AllOperations<P extends APIProvider> = {
   [K in keyof APIOperations<P>]-?: P['operations'][K] extends (
     ...args: any
   ) => any
-    ? ReturnType<P['operations'][K]>
-    : typeof noop
+  ? ReturnType<P['operations'][K]>
+  : typeof noop
 }
 
 export type OperationContext<P extends APIProvider> = {
