@@ -22,8 +22,6 @@ type ProductPersonaliserProps = {
   images: ProductPersonaliserImage[];
   canvasWidth: number;
   canvasHeight: number;
-  colors: ProductPersonaliserOption[];
-  fonts: ProductPersonaliserOption[];
   characters: string;
   maxTextLength: number;
   submitText: any;
@@ -37,12 +35,6 @@ type ProductPersonaliserProps = {
   readOnly: false;
   values?: any;
   product: any,
-};
-
-const convertTextPosition = (value: string) => {
-  const [x, y] = value.split(',');
-
-  return { x: Number(x), y: Number(y) };
 };
 
 SwiperCore.use([Navigation])
@@ -134,7 +126,6 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
         setShowError(true)
         return;
     }
-    
     onSubmit({
       message: text,
       imageUrl: product?.images?.length > 1 ? selectedImage : product.images[0]
@@ -184,15 +175,15 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
             <div className='w-96 h-full flex flex-col mx-auto'>
                 { !selectedImage ? <p className='my-1 font-thin text-center'>Select the Product you want to personalise</p> : <p className='my-1 font-thin text-center'>Great selection !</p>}
                 <Swiper
-                  slidesPerView={2}
+                  slidesPerView={1.1}
                   navigation={true}
                   loop={true}
                   breakpoints={{
                     640: {
-                      slidesPerView: 2,
+                      slidesPerView: 1.1,
                     },
                     768: {
-                      slidesPerView: 2,
+                      slidesPerView: 1.1,
                     },
                     1024: {
                       slidesPerView: 1.1,
@@ -207,7 +198,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                       )} 
                       key={valId}
                       >
-                        <img src={val.image} alt='image1' className={cn('max-h-md w-full', !!selectedImage && selectedImage === val.image  && 'border-2 border-blue')} onClick={(e)=> {
+                        <img src={val.image} alt={val.image} className={cn('max-h-md w-full', !!selectedImage && selectedImage === val.image  && 'border-2 border-blue')} onClick={(e)=> {
                             handleImageCLick(e);
                         }} ></img>
                       </SwiperSlide>
@@ -224,15 +215,15 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
         </div>
       </div>
 
-    <div className={cn('pl-2 mb-2 text-gray-500 font-light text-sm rounded-xl h-14',
-                        isFocus ? 'border-2 border-blue' : 'box-border border-2'
-                    )}>
-    <span className='pl-2 text-gray-500 font-light text-xs'>YOUR ENGRAVING</span>
-        <input className='pb-2 w-3/4 block m-auto text-gray-900 shadow-none focus:shadow-outline border-none outline-none focus:outline-none text-center text-sm' onChange={(e)=>{
-                addCharacterFromInput(e)
-            }} value={text}>
-        </input>
-    </div>
+      <div className={cn('pl-2 mb-2 text-gray-500 font-light text-sm rounded-xl h-14',
+                          isFocus ? 'border-2 border-blue' : 'box-border border-2'
+                      )}>
+      <span className='pl-2 text-gray-500 font-light text-xs'>YOUR ENGRAVING</span>
+          <input className='pb-2 w-3/4 block m-auto text-black font-mono shadow-none focus:shadow-outline border-none outline-none focus:outline-none text-center text-sm' onChange={(e)=>{
+                  addCharacterFromInput(e)
+              }} value={text}>
+          </input>
+      </div>
           <div className="w-full max-w-full ml-3 pr-6">
           <span className="text-sm text-gray-700 dark:text-gray-700 font-medium">
               {counter} / {maxTextLength} characters
@@ -293,7 +284,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                 onClick={handleSubmit}
                // className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white capitalize transition border border-transparent rounded-sm bg-green hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-green sm:w-full"
                 className={cn(
-                  'flex-1 capitalize bg-black border border-transparent rounded-sm py-3 px-8 flex items-center justify-center font-bold text-white transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-green sm:w-full',
+                  'flex-1 capitalize bg-black border border-transparent rounded-sm py-3 px-8 flex items-center justify-center font-bold text-white transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-blue sm:w-full',
                   (!selectedImage && text.length == 0 ) ? 'opacity-30' : 'hover:opacity-75'
                 )}
               >

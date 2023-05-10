@@ -225,14 +225,21 @@ export default function PromotionInput(props: IPromotionInputProps ) {
               {basketPromos?.applicablePromotions?.length > 0 ? `${basketPromos?.applicablePromotions?.length}`:`No`} {' '} {basketPromos?.applicablePromotions?.length!==1 ? `Coupons Available`:`Coupon Available`}
             </h2>
             </div>
+            {basketPromos?.length > 0 && (
             <div className='flex items-end'>
-              <h3 className='text-sm font-semibold cursor-pointer text-yellow-600  text-orange-500 mob-font-small-screen' 
+              <h3 className='flex  items-center justify-center text-sm font-semibold cursor-pointer   mob-font-small-screen' 
               onClick={() =>
                       viewCoupons(basketPromos, items)
                     }>
-                { basketPromos?.applicablePromotions?.length > 1 ? 'View Coupons' : 'View Coupon'}
+                <span>
+                <ArrowLeftIcon className='h-4 w-4 mx-1'/>
+                </span>
+                <span>
+                { basketPromos?.applicablePromotions?.length !== 1 ? 'See Coupons' : 'See Coupon'}
+                </span>
               </h3>
             </div>
+            )}
           </div>
           )
           }

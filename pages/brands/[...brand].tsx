@@ -148,7 +148,13 @@ function BrandDetailPage({
       },
     },
     error,
-  } = useSwr(['/api/catalog/products', state], postData)
+  } = useSwr(
+    ['/api/catalog/products', state],
+    ([url, body]: any) => postData(url, body),
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {

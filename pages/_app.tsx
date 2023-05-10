@@ -1,7 +1,7 @@
 import "@assets/css/main.css"
 import '@assets/icon.css'
 import "@assets/css/chrome-bug.css"
-import { FC, useEffect, useState, useLayoutEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import 'swiper/css/bundle'
@@ -163,7 +163,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     DataLayerInstance.setDataLayer()
 
     // If browser session is not yet started.

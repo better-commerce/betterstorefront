@@ -96,6 +96,8 @@ export default function RelatedProducts({
                                   <div className='image-container'>
                                     <Image
                                       style={css}
+                                      height={20}
+                                      width={20}
                                       src={
                                         generateUri(product.image, 'h=500&fm=webp') ||
                                         IMG_PLACEHOLDER
