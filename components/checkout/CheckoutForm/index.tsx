@@ -431,7 +431,7 @@ export default function CheckoutForm({
   }
 
   const loadAddressIDs = async (): Promise<Array<any>> => {
-    const response = await getAddress(user.userId)
+    const response = await getAddress(user.userId )//? user.userId : cart.userId)
     return response;
   }
 
