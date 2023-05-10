@@ -198,7 +198,7 @@ export default function ProductView({
         )
         if (domElement) {
           domElement.insertAdjacentHTML(
-            PLACEMENTS_MAP[snippet.placement].position, 
+            PLACEMENTS_MAP[snippet.placement].position,
             snippet.content
           )
         }
@@ -426,7 +426,7 @@ export default function ProductView({
     }
     const addonProducts = relatedProducts?.relatedProducts?.filter(
       (item: any) => item.itemType === ITEM_TYPE_ADDON_10
-      )
+    )
     const addonProductsWithParentProduct = addonProducts?.map((item: any) => {
       item.parentProductId = updatedProduct?.recordId
       return item
@@ -701,7 +701,7 @@ export default function ProductView({
             {/* Product info */}
             <div className="px-4 mt-2 sm:mt-10 sm:px-0 lg:mt-0 lg:col-span-5">
               <div className='flex justify-between gap-4'>
-                <h3 className="mb-0 font-mono text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
+                <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                   {selectedAttrData.brand}
                 </h3>
 
@@ -724,10 +724,10 @@ export default function ProductView({
                 </div>
               </div>
 
-              <h1 className="font-mono text-lg font-medium tracking-tight text-black sm:text-2xl">
+              <h1 className="text-lg font-medium tracking-tight text-black sm:text-2xl">
                 {selectedAttrData.name || selectedAttrData.productName}
               </h1>
-              <p className="mt-0 font-mono text-sm text-gray-400 uppercase sm:text-md sm:mt-1">
+              <p className="mt-0 text-sm text-gray-400 uppercase sm:text-md sm:mt-1">
                 <strong>{GENERAL_REFERENCE}:</strong>{' '}{selectedAttrData.stockCode}
               </p>
               <div className="mt-2">
@@ -789,21 +789,21 @@ export default function ProductView({
                   )}
 
                   {isEngravingAvailable && (
-                    <>  
-                        <div className='flex w-auto  hover:opacity-80'  onClick={() => showEngravingModal(true)}>
-                          <div className='mt-3'>
-                            {/* <img
+                    <>
+                      <div className='flex w-auto hover:opacity-80' onClick={() => showEngravingModal(true)}>
+                        <div className='mt-3'>
+                          {/* <img
                               src="/logo-cx-commerce.png"
                               className="w-12 mb-1"
                             /> */}
-                            <p className="text-sm text-pink underline cursor-pointer">
-                              {PRODUCT_PERSONALIZATION_TITLE}
-                            </p>
-                          </div>
-                          <div className='flex justify-center px-2 mt-3 cursor-pointer'>
-                          <PlusIcon className='w-3.5 h-4 md:my-1' />&nbsp;<p className='text-sm -ml-1 text-[#37B679] '>£5</p>
-                          </div>
+                          <p className="text-sm underline cursor-pointer text-pink">
+                            {PRODUCT_PERSONALIZATION_TITLE}
+                          </p>
                         </div>
+                        <div className='flex justify-center px-2 mt-3 cursor-pointer'>
+                          <PlusIcon className='w-3.5 h-4 md:my-1' />&nbsp;<p className='text-sm -ml-1 text-[#37B679] '>£5</p>
+                        </div>
+                      </div>
 
                       {/* <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                         <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
@@ -853,7 +853,7 @@ export default function ProductView({
               </div>
               <div className="px-0 mx-auto sm:container page-container">
                 <div className='flex flex-col justify-center pb-8 text-center sm:pb-10'>
-                  <h3 className='font-mono text-3xl font-bold text-black'>You May Also Like</h3>
+                  <h3 className='text-3xl font-bold text-black '>You May Also Like</h3>
                 </div>
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} />
               </div>
@@ -872,17 +872,17 @@ export default function ProductView({
           <div className="flex flex-col">
             <div className="section-devider"></div>
           </div>
-          <div className='mx-auto md:w-4/5'>
+          <div className='px-6 mx-auto sm:px-0 md:w-4/5'>
             <ReviewInput productId={product.recordId} />
           </div>
           {isEngravingAvailable && (
-            <Engraving 
-            show={isEngravingOpen} 
-            submitForm={handleEngravingSubmit} 
-            onClose={() => showEngravingModal(false)}
-            handleToggleDialog={handleTogglePersonalizationDialog}
-            product={product}
-             />
+            <Engraving
+              show={isEngravingOpen}
+              submitForm={handleEngravingSubmit}
+              onClose={() => showEngravingModal(false)}
+              handleToggleDialog={handleTogglePersonalizationDialog}
+              product={product}
+            />
           )}
 
           <PriceMatch
