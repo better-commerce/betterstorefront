@@ -158,7 +158,7 @@ const Layout: FC<Props & IExtraProps> = ({
           languages={config?.languages}
           deviceInfo={deviceInfo}
         />
-        <main className="pt-16 fit">{children}</main>
+        <main className="fit">{children}</main>
         <Footer config={data.footer} deviceInfo={deviceInfo} />
         <ModalUI />
         <SidebarUI />
