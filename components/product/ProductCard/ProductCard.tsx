@@ -210,8 +210,8 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <>
-      <div className="hover:outline hover:outline-1 group">
-        <div key={product.id} className="relative">
+      <div className="hover:outline hover:outline-1 outline-gray-200 group" key={product.id}>
+        <div className="relative">
           <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel">
             <Link
               passHref
