@@ -22,6 +22,13 @@ function Checkout({ cart, config, location }: any) {
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
   const [userAddresses, setUserAddresses] = useState([])
+  const { getAddress } = asyncHandler()
+
+  useEffect(() => {
+    const userId = cartItems?.userId || user?.userId || ''
+    fetchAddress(userId)
+  }, [user, cartItems.userId])
+
   const handleGuestMail = (values: any) => {
     const handleAsync = async () => {
       const response = await axios.post(NEXT_GUEST_CHECKOUT, {
@@ -36,20 +43,19 @@ function Checkout({ cart, config, location }: any) {
     }
     handleAsync()
   }
-  const { getAddress } = asyncHandler()
 
-  const fetchAddress = async () => {
+  const fetchAddress = async (userId: string) => {
     try {
-      const response: any = await getAddress(cartItems.userId)
+      const response: any = await getAddress(userId)
       const billingAddress = response.find((item: any) => item.isDefaultBilling)
       const shippingAddress = response.find(
         (item: any) => item.isDefaultDelivery
       )
-      setUserAddresses(response)
       if (billingAddress) setDefaultBillingAddress(billingAddress)
       if (shippingAddress) setDefaultShippingAddress(shippingAddress)
+      setUserAddresses(response)
     } catch (error) {
-      console.log(error, 'err')
+      // console.log(error, 'err')
     }
   }
 
@@ -107,10 +113,6 @@ function Checkout({ cart, config, location }: any) {
       })
     }
   }
-
-  useEffect(() => {
-    fetchAddress()
-  }, [])
 
   if (isLoggedIn) {
     return (
