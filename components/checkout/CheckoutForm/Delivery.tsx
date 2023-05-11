@@ -191,7 +191,7 @@ export default function Delivery({
 
   return (
     <div className="py-6 mt-0 border border-gray-200 bg-white shadow p-6">
-      {isDeliveryMethodSelected ? (
+      { isDeliveryMethodSelected ? (
         <>
           <h3 className="text-lg font-bold uppercase text-black">Delivery method</h3>
           <ConfirmedGeneralComponent

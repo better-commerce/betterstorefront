@@ -9,7 +9,7 @@ import { useCart as getCart } from '@framework/cart'
 import { GetServerSideProps } from 'next'
 import { useUI } from '@components/ui/context'
 import { asyncHandler } from '@components/account/Address/AddressBook'
-import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
+import { EmptyGuid, NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
 import axios from 'axios'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -18,16 +18,17 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 
 function Checkout({ cart, config, location }: any) {
   const { user, basketId, setCartItems, cartItems, setUser, setIsGuestUser } = useUI()
-  const [isLoggedIn, setIsLoggedIn] = useState(!!cartItems.userEmail)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
   const [userAddresses, setUserAddresses] = useState([])
+  
   const { getAddress } = asyncHandler()
 
   useEffect(() => {
-    const userId = cartItems?.userId || user?.userId || ''
-    fetchAddress(userId)
-  }, [user, cartItems.userId])
+    setIsLoggedIn(!!user?.userId || false)
+  },[user, cartItems])
+
 
   const handleGuestMail = (values: any) => {
     const handleAsync = async () => {
@@ -43,8 +44,9 @@ function Checkout({ cart, config, location }: any) {
     }
     handleAsync()
   }
-
-  const fetchAddress = async (userId: string) => {
+  const fetchAddress = async () => {
+    let userId = cartItems?.userId === EmptyGuid ? user?.userId : cartItems?.userId
+    if (!userId) return
     try {
       const response: any = await getAddress(userId)
       const billingAddress = response.find((item: any) => item.isDefaultBilling)
@@ -114,7 +116,11 @@ function Checkout({ cart, config, location }: any) {
     }
   }
 
-  if (isLoggedIn) {
+  useEffect(() => {
+    fetchAddress()
+  }, [])
+
+  if(isLoggedIn) {
     return (
       <CheckoutForm
         cart={cart}
@@ -130,12 +136,14 @@ function Checkout({ cart, config, location }: any) {
       />
     )
   }
-  return (
+   if(!isLoggedIn){
+    return (
     <CheckoutRouter
       setIsLoggedIn={setIsLoggedIn}
       handleGuestMail={handleGuestMail}
     />
   )
+ }
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')
