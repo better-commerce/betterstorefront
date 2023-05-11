@@ -277,7 +277,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
             <div className="relative flex flex-col w-full max-w-xs pb-12 overflow-y-auto bg-white shadow-xl z-9999">
             <Link href="/" passHref>
                 <Image
-                className="mt-5 mx-2"
+                className="mx-2 mt-5"
                 src="/logo-cx-commerce.png"
                 alt="BetterComerce"
                 width={50}
@@ -291,7 +291,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                 >
                   <span className="sr-only">Close menu</span>
                   <XMarkIcon
-                    className="w-9 h-9 mt-1 text-black"
+                    className="mt-1 text-black w-9 h-9"
                     aria-hidden="true"
                   />
                 </button>
@@ -320,17 +320,17 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                           <Disclosure key={item.caption}>
                             {({ open }) => (
                               <>
-                                <Disclosure.Button className="flex flex-col px-0 -mb-px space-x-0 w-full text-left border-t">
+                                <Disclosure.Button className="flex flex-col w-full px-0 -mb-px space-x-0 text-left border-t">
                                   <div
                                     className="flex justify-between w-full"
                                     onClick={() =>
                                       hamburgerMenuClick(item.caption)
                                     }
                                   >
-                                    <div className="flex flex-col whitespace-nowrap text-lg py-4 px-4 text-black font-bold text-sm font-bold">
+                                    <div className="flex flex-col px-4 py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap">
                                       {item.caption}
                                     </div>
-                                    <div className="pr-3 pt-5">
+                                    <div className="pt-5 pr-3">
                                       <ChevronUpIcon
                                         className={`${
                                           !open
@@ -348,7 +348,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                                 >
                                   <div className="space-y-4">
                                     {item.navBlocks.length ? (
-                                      <div className="relative bg-white px-2 border-b">
+                                      <div className="relative px-2 bg-white border-b">
                                         <div className="px-0 mx-auto max-w-7xl sm:px-0 lg:px-0">
                                           <div className="grid items-start grid-cols-1 md:grid-cols-1 lg:gap-x-8">
                                             {item.navBlocks.map(
@@ -475,7 +475,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                                 >
                                   <Link
                                     href={`/${item.hyperlink}`}
-                                    className="relative flex h-full items-center"
+                                    className="relative flex items-center h-full"
                                   >
                                     {item.caption}
                                   </Link>
@@ -545,7 +545,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                                                           >
                                                             <Link
                                                               href={`/${navItem.itemLink}`}
-                                                              className="hover:text-gray-800 relative flex h-full items-center"
+                                                              className="relative flex items-center h-full hover:text-gray-800"
                                                             >
                                                               {navItem.caption}
                                                             </Link>
