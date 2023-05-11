@@ -17,7 +17,7 @@ import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-
+import NextHead from 'next/head'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -297,67 +297,79 @@ function Search({ query, setEntities, recordEvent }: any) {
     : data.products
 
   return (
-    <div className="bg-transparent md:w-4/5 mx-auto">
-      {/* Mobile menu */}
-      <main className="pb-24">
-        <div className="text-left sm:py-5 py-4 px-4 sm:px-0 lg:px-0">
-          <h4><span className='text-sm font-normal'>Showing {data.products.total} Results for</span></h4>
-          <h1 className="sm:text-2xl text-xl font-semibold tracking-tight text-black">
-            {GENERAL_CATALOG} 
-          </h1>
-          
-        </div>
-        <div className="grid sm:grid-cols-12 grid-cols-1 gap-1 w-full mx-auto overflow-hidden px-4 sm:px-0 lg:px-0">
-          {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+    <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" id="canonical" href={router.asPath} />
+        <title>{GENERAL_CATALOG}</title>
+        <meta name="title" content={GENERAL_CATALOG} />
+        <meta name="description" content={GENERAL_CATALOG} />
+        <meta name="keywords" content="Search" />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={GENERAL_CATALOG} key="ogtitle" />
+        <meta property="og:description" content={GENERAL_CATALOG} key="ogdesc" />
+      </NextHead>
+      <div className="mx-auto bg-transparent md:w-4/5">
+        {/* Mobile menu */}
+        <main className="pb-24">
+          <div className="px-4 py-4 text-left sm:py-5 sm:px-0 lg:px-0">
+            <h4><span className='text-sm font-normal'>Showing {data.products.total} Results for</span></h4>
+            <h1 className="text-xl font-semibold tracking-tight text-black sm:text-2xl">
+              {GENERAL_CATALOG}
+            </h1>
 
-          <div className="sm:col-span-2 sm:hidden flex flex-col">
-            <ProductMobileFilters
-              handleFilters={handleFilters}
-              products={data.products}
-              routerFilters={state.filters}
-              handleSortBy={handleSortBy}
-              clearAll={clearAll}
-              routerSortOption={state.sortBy}
-            />
           </div>
+          <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
+            {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
-          {/* {FILTER PANEL SHOW ONLY IN DESKTOP VERSION} */}
-
-          <div className="sm:col-span-2 sm:block hidden">
-            <ProductFilterRight
-              handleFilters={handleFilters}
-              products={data.products}
-              routerFilters={state.filters}
-            />
-          </div>
-          <div className="sm:col-span-10">
-            {/* {HIDE FILTER TOP BAR IN MOBILE} */}
-
-            <div className="flex-1 sm:block hidden">
-              <ProductFiltersTopBar
+            <div className="flex flex-col sm:col-span-2 sm:hidden">
+              <ProductMobileFilters
+                handleFilters={handleFilters}
                 products={data.products}
-                handleSortBy={handleSortBy}
                 routerFilters={state.filters}
+                handleSortBy={handleSortBy}
                 clearAll={clearAll}
                 routerSortOption={state.sortBy}
               />
             </div>
-            <ProductGrid
-              products={productDataToPass}
-              currentPage={state.currentPage}
-              handlePageChange={handlePageChange}
-              handleInfiniteScroll={handleInfiniteScroll}
-            />
+
+            {/* {FILTER PANEL SHOW ONLY IN DESKTOP VERSION} */}
+
+            <div className="hidden sm:col-span-2 sm:block">
+              <ProductFilterRight
+                handleFilters={handleFilters}
+                products={data.products}
+                routerFilters={state.filters}
+              />
+            </div>
+            <div className="sm:col-span-10">
+              {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+
+              <div className="flex-1 hidden sm:block">
+                <ProductFiltersTopBar
+                  products={data.products}
+                  handleSortBy={handleSortBy}
+                  routerFilters={state.filters}
+                  clearAll={clearAll}
+                  routerSortOption={state.sortBy}
+                />
+              </div>
+              <ProductGrid
+                products={productDataToPass}
+                currentPage={state.currentPage}
+                handlePageChange={handlePageChange}
+                handleInfiniteScroll={handleInfiniteScroll}
+              />
+            </div>
+            <div></div>
           </div>
-          <div></div>
-        </div>
-      </main>
-      <Script
-        type="application/ld+json"
-        id="schema"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
+        </main>
+        <Script
+          type="application/ld+json"
+          id="schema"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
         {
           "@context": "https://schema.org/",
           "@type": "WebSite",
@@ -370,9 +382,10 @@ function Search({ query, setEntities, recordEvent }: any) {
           }
         }
         `,
-        }}
-      />
-    </div>
+          }}
+        />
+      </div>
+    </>
   )
 }
 

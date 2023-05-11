@@ -280,14 +280,14 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
             >
               <div className="flex items-center justify-between my-1 group-hover:hidden product-name">
                 <div className="w-full">
-                  <h3 className="text-xs font-normal text-gray-700 capitalize sm:text-sm hover:text-gray-950">
+                  <h3 className="h-10 text-xs font-medium text-black capitalize sm:text-sm hover:text-gray-950">
                     {product?.name?.toLowerCase()}
                   </h3>
                 </div>
               </div>
 
               <div className="hidden my-1 group-hover:block">
-                <ul className="flex text-xs text-gray-700 sizes-ul sm:text-sm">
+                <ul className="flex h-10 text-xs text-gray-700 sizes-ul sm:text-sm">
                   <li className="mr-1">Sizes:</li>
                   {sizeValues.map((size: any, idx: number) => (
                     <li className="inline-block uppercase" key={idx}>
@@ -300,15 +300,15 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
                 </ul>
               </div>
 
-              <p className="text-xs text-gray-900 sm:mt-1 sm:text-sm">
-                <span className="font-medium">
+              <p className="text-xs text-black sm:mt-1 sm:text-sm">
+                <span className="font-bold">
                   {product?.price?.formatted?.withTax}
                 </span>
                 {product?.listPrice?.raw?.withTax > 0 &&
                   product?.listPrice?.raw?.withTax !=
                     product?.price?.raw?.withTax && (
                     <>
-                      <span className="px-1 text-xs text-gray-400 line-through">
+                      <span className="px-1 text-xs font-semibold text-gray-400 line-through">
                         {product?.listPrice?.formatted?.withTax}
                       </span>
                       <span className="text-xs text-red-600">

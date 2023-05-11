@@ -4,7 +4,7 @@ import { Layout } from '@components/common'
 import Link from 'next/link'
 import Script from 'next/script'
 import os from 'os'
-
+import NextHead from 'next/head'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 //DYNAMINC COMPONENT CALLS
 const ProductFilterRight = dynamic(
@@ -175,9 +175,9 @@ export default function CollectionPage(props: any) {
       collectionId: props.id,
     },
   })
-    
+
   const [productDataToPass, setProductDataToPass] = useState(props.products)
-  
+
   useEffect(() => {
     if (productDataToPass) {
       setPLPFilterState({
@@ -361,63 +361,75 @@ export default function CollectionPage(props: any) {
   }
 
   return (
-    <div>
-      {props?.hostName && (
-        <input className="inst" type="hidden" value={props?.hostName} />
-      )}
-      <main className="pb-0 mx-auto md:w-4/5">
-        {props.breadCrumbs && (
-          <div className="pt-2 sm:pt-4">
-            <BreadCrumbs items={props.breadCrumbs} currentProduct={props} />
-          </div>
+    <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" id="canonical" href={props?.canonicalTags} />
+        <title>{props?.name}</title>
+        <meta name="title" content={props?.name} />
+        <meta name="description" content={props?.metaDescription} />
+        <meta name="keywords" content={props?.metaKeywords} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={props?.name} key="ogtitle" />
+        <meta property="og:description" content={props?.metaDescription} key="ogdesc" />
+      </NextHead>
+      <div>
+        {props?.hostName && (
+          <input className="inst" type="hidden" value={props?.hostName} />
         )}
-        {props.images.length > 0 && (
-          <div className="flex items-center justify-center w-full mx-auto mt-0 sm:px-0 sm:mt-4">
-            <Swiper navigation={true} loop={true} className="mySwiper">
-              {props.images.map((img: any, idx: number) => {
-                return (
-                  <SwiperSlide key={idx}>
-                    <Link href={img.link || '#'}>
-                      <Image
-                        style={css}
-                        width={1920}
-                        height={460}
-                        src={
-                          generateUri(img.url, 'h=700&fm=webp') ||
-                          IMG_PLACEHOLDER
-                        }
-                        alt={props.name}
-                        className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
-                      ></Image>
-                    </Link>
-                  </SwiperSlide>
-                )
-              })}
-            </Swiper>
-          </div>
-        )}
+        <main className="pb-0 mx-auto md:w-4/5">
+          {props.breadCrumbs && (
+            <div className="pt-2 sm:pt-4">
+              <BreadCrumbs items={props.breadCrumbs} currentProduct={props} />
+            </div>
+          )}
+          {props.images.length > 0 && (
+            <div className="flex items-center justify-center w-full mx-auto mt-0 sm:px-0 sm:mt-4">
+              <Swiper navigation={true} loop={true} className="mySwiper">
+                {props.images.map((img: any, idx: number) => {
+                  return (
+                    <SwiperSlide key={idx}>
+                      <Link href={img.link || '#'}>
+                        <Image
+                          style={css}
+                          width={1920}
+                          height={460}
+                          src={
+                            generateUri(img.url, 'h=700&fm=webp') ||
+                            IMG_PLACEHOLDER
+                          }
+                          alt={props.name}
+                          className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
+                        ></Image>
+                      </Link>
+                    </SwiperSlide>
+                  )
+                })}
+              </Swiper>
+            </div>
+          )}
 
-        <div className={cls}>
-          <div className="sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4">
-            <div className="grid w-full grid-cols-1 sm:grid-cols-12">
-              <div className="mt-1 mr-2 sm:col-span-6 product-side-filter">
-                <div className="text-base capitalize text-primary dark:text-primary text-24">
-                  <h1 className="inline-block text-base font-medium capitalize text-primary dark:text-primary text-24">
-                    {props?.name}
-                  </h1>
-                  <span className="pl-2 mt-0 text-xs text-brown-light dark:text-brown-light text-14 sm:h-6">
-                    {swrLoading ? (
-                      <LoadingDots />
-                    ) : (
-                      `${totalResults ?? 0} results`
-                    )}
-                  </span>
+          <div className={cls}>
+            <div className="sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4">
+              <div className="grid w-full grid-cols-1 sm:grid-cols-12">
+                <div className="mt-1 mr-2 sm:col-span-6 product-side-filter">
+                  <div className="text-base capitalize text-primary dark:text-primary text-24">
+                    <h1 className="inline-block text-base font-medium capitalize text-primary dark:text-primary text-24">
+                      {props?.name}
+                    </h1>
+                    <span className="pl-2 mt-0 text-xs text-brown-light dark:text-brown-light text-14 sm:h-6">
+                      {swrLoading ? (
+                        <LoadingDots />
+                      ) : (
+                        `${totalResults ?? 0} results`
+                      )}
+                    </span>
+                  </div>
+                  <h2>{props?.description}</h2>
                 </div>
-                <h2>{props?.description}</h2>
-              </div>
 
-              {/* Filter Sidebar CTA */}
-              {/* <div className="hidden sm:col-span-6 product-card-list sm:block">
+                {/* Filter Sidebar CTA */}
+                {/* <div className="hidden sm:col-span-6 product-card-list sm:block">
                 <button
                   className="flex items-center float-right"
                   onClick={handleTogglePLPSidebar}
@@ -428,97 +440,97 @@ export default function CollectionPage(props: any) {
                   <span>Filter</span>
                 </button>
               </div> */}
+              </div>
             </div>
           </div>
-        </div>
 
-        {props.products.total > 0 && (
-          <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
-            {props.allowFacets && (
-              <>
-                {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+          {props.products.total > 0 && (
+            <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
+              {props.allowFacets && (
+                <>
+                  {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
-                <div className="flex flex-col sm:col-span-2 sm:hidden">
-                  <ProductMobileFilters
-                    handleFilters={handleFilters}
-                    products={props.products}
-                    routerFilters={state.filters}
-                    handleSortBy={handleSortBy}
-                    clearAll={clearAll}
-                    routerSortOption={state.sortBy}
-                  />
-                </div>
-                <div className="hidden sm:col-span-2 sm:block">
-                  <ProductFilterRight
-                    handleFilters={handleFilters}
-                    products={props.products}
-                    routerFilters={state.filters}
-                  />
-                </div>
-                <div className="sm:col-span-10 p-[1px]">
-                  {/* {HIDE FILTER TOP BAR IN MOBILE} */}
-
-                  <div className="flex-1 hidden sm:block">
-                    <ProductFiltersTopBar
-                      products={data.products}
-                      handleSortBy={handleSortBy}
+                  <div className="flex flex-col sm:col-span-2 sm:hidden">
+                    <ProductMobileFilters
+                      handleFilters={handleFilters}
+                      products={props.products}
                       routerFilters={state.filters}
+                      handleSortBy={handleSortBy}
                       clearAll={clearAll}
                       routerSortOption={state.sortBy}
                     />
                   </div>
-                  <ProductGridWithFacet
-                    products={productDataToPass}
-                    currentPage={props.currentPage}
-                    handlePageChange={handlePageChange}
-                    handleInfiniteScroll={handleInfiniteScroll}
-                  />
-                </div>
-              </>
-            )}
-            {!props.allowFacets && (
-              <>
-                <div className="col-span-12">
-                  <ProductGrid
-                    products={productDataToPass}
-                    currentPage={props.currentPage}
-                    handlePageChange={handlePageChange}
-                    handleInfiniteScroll={handleInfiniteScroll}
-                  />
-                </div>
-              </>
-            )}
-            <div></div>
-          </div>
-        )}
-        {props.products.total == 0 && (
-          <div className="w-full py-32 mx-auto text-center">
-            <h3 className="py-3 text-3xl font-semibold text-gray-200">
-              No Item Availabe in {props.name} Collection!
-            </h3>
-            <Link href="/collection" passHref>
-              <span className="text-lg font-semibold text-indigo-500">
-                <ChevronLeftIcon className="relative top-0 inline-block w-4 h-4"></ChevronLeftIcon>{' '}
-                Back to collections
-              </span>
-            </Link>
-          </div>
-        )}
-        
-        <PLPFilterSidebar
-          handleSortBy={handleSortBy}
-          openSidebar={openPLPSidebar}
-          handleTogglePLPSidebar={handleTogglePLPSidebar}
-          plpFilterState={plpFilterState}
-        />
+                  <div className="hidden sm:col-span-2 sm:block">
+                    <ProductFilterRight
+                      handleFilters={handleFilters}
+                      products={props.products}
+                      routerFilters={state.filters}
+                    />
+                  </div>
+                  <div className="sm:col-span-10 p-[1px]">
+                    {/* {HIDE FILTER TOP BAR IN MOBILE} */}
 
-        {props?.products?.results?.length > 0 && (
-          <Script
-            type="application/ld+json"
-            id="schema"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `
+                    <div className="flex-1 hidden sm:block">
+                      <ProductFiltersTopBar
+                        products={data.products}
+                        handleSortBy={handleSortBy}
+                        routerFilters={state.filters}
+                        clearAll={clearAll}
+                        routerSortOption={state.sortBy}
+                      />
+                    </div>
+                    <ProductGridWithFacet
+                      products={productDataToPass}
+                      currentPage={props.currentPage}
+                      handlePageChange={handlePageChange}
+                      handleInfiniteScroll={handleInfiniteScroll}
+                    />
+                  </div>
+                </>
+              )}
+              {!props.allowFacets && (
+                <>
+                  <div className="col-span-12">
+                    <ProductGrid
+                      products={productDataToPass}
+                      currentPage={props.currentPage}
+                      handlePageChange={handlePageChange}
+                      handleInfiniteScroll={handleInfiniteScroll}
+                    />
+                  </div>
+                </>
+              )}
+              <div></div>
+            </div>
+          )}
+          {props.products.total == 0 && (
+            <div className="w-full py-32 mx-auto text-center">
+              <h3 className="py-3 text-3xl font-semibold text-gray-200">
+                No Item Availabe in {props.name} Collection!
+              </h3>
+              <Link href="/collection" passHref>
+                <span className="text-lg font-semibold text-indigo-500">
+                  <ChevronLeftIcon className="relative top-0 inline-block w-4 h-4"></ChevronLeftIcon>{' '}
+                  Back to collections
+                </span>
+              </Link>
+            </div>
+          )}
+
+          <PLPFilterSidebar
+            handleSortBy={handleSortBy}
+            openSidebar={openPLPSidebar}
+            handleTogglePLPSidebar={handleTogglePLPSidebar}
+            plpFilterState={plpFilterState}
+          />
+
+          {props?.products?.results?.length > 0 && (
+            <Script
+              type="application/ld+json"
+              id="schema"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
               {
                 "@context": "https://schema.org/",
                 "@type": "ItemList",
@@ -534,11 +546,12 @@ export default function CollectionPage(props: any) {
                 )}
               }
             `,
-            }}
-          />
-        )}
-      </main>
-    </div>
+              }}
+            />
+          )}
+        </main>
+      </div>
+    </>
   )
 }
 

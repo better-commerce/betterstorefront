@@ -10,6 +10,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
+import NextHead from 'next/head'
 import { postData } from '@components/utils/clientFetcher'
 import {
   ALL_CATEGORY,
@@ -296,135 +297,148 @@ function CategoryPage({ category, products }: any) {
 
   const css = { maxWidth: '100%', height: 'auto' }
   return (
-    <div className="mx-auto bg-transparent md:w-4/5">
-      {/* Mobile menu */}
-      <main className="pb-0">
-        <div className="px-3 pt-2 sm:pt-4 sm:px-0">
-          {category.breadCrumbs && (
-            <BreadCrumbs
-              items={category.breadCrumbs}
-              currentProduct={category}
-            />
-          )}
-        </div>
-        <div className="flex items-center justify-center w-full sm:px-0">
-          {category && category.images && category.images.length ? (
-            <Swiper
-              navigation={true}
-              loop={true}
-              className="mt-0 mySwiper sm:mt-4"
-            >
-              {category.images.map((image: any, idx: number) => {
-                return (
-                  <SwiperSlide key={idx}>
-                    <Link href={image.link || '#'}>
-                      <Image
-                        style={css}
-                        width={1920}
-                        height={460}
-                        src={
-                          generateUri(image.url, 'h=700&fm=webp') ||
-                          IMG_PLACEHOLDER
-                        }
-                        alt={category.name}
-                        className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
-                      ></Image>
-                    </Link>
-                  </SwiperSlide>
-                )
-              })}
-            </Swiper>
-          ) : (
-            <></>
-          )}
-        </div>
-
-        <div className="px-3 pt-3 pb-4 text-left sm:pt-1 sm:pb-6 sm:px-0">
-          <h4>
-            <span className="text-sm font-normal text-gray-500">
-              Showing {products.total} {RESULTS}
-            </span>
-          </h4>
-          <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">
-            {category.name}
-          </h1>
-          <h2 className="text-gray-500 sm:text-md">{category.description}</h2>
-        </div>
-
-        {category?.subCategories?.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-12">
-            <div className="sm:col-span-12">
-              <div className="grid grid-cols-2 py-2 mt-2 text-left border-t border-l border-r sm:grid-cols-5 bg-gray-50">
-                {category?.subCategories?.map((subcateg: any, idx: number) => {
+    <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" id="canonical" href={router.asPath} />
+        <title>{category?.name}</title>
+        <meta name="title" content={category?.name} />
+        <meta name="description" content={category?.metaDescription} />
+        <meta name="keywords" content={category?.metaKeywords} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={category?.name} key="ogtitle" />
+        <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
+      </NextHead>
+      <div className="mx-auto bg-transparent md:w-4/5">
+        {/* Mobile menu */}
+        <main className="pb-0">
+          <div className="px-3 pt-2 sm:pt-4 sm:px-0">
+            {category.breadCrumbs && (
+              <BreadCrumbs
+                items={category.breadCrumbs}
+                currentProduct={category}
+              />
+            )}
+          </div>
+          <div className="flex items-center justify-center w-full sm:px-0">
+            {category && category.images && category.images.length ? (
+              <Swiper
+                navigation={true}
+                loop={true}
+                className="mt-0 mySwiper sm:mt-4"
+              >
+                {category.images.map((image: any, idx: number) => {
                   return (
-                    <Link href={'/' + subcateg.link} key={idx}>
-                      <div className="flex flex-col text-center cursor-pointer">
-                        <h4 className="text-xs font-medium text-gray-800 underline sm:text-sm hover:text-pink">
-                          {subcateg.name}
-                        </h4>
-                      </div>
-                    </Link>
+                    <SwiperSlide key={idx}>
+                      <Link href={image.link || '#'}>
+                        <Image
+                          style={css}
+                          width={1920}
+                          height={460}
+                          src={
+                            generateUri(image.url, 'h=700&fm=webp') ||
+                            IMG_PLACEHOLDER
+                          }
+                          alt={category.name}
+                          className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
+                        ></Image>
+                      </Link>
+                    </SwiperSlide>
                   )
                 })}
+              </Swiper>
+            ) : (
+              <></>
+            )}
+          </div>
+
+          <div className="px-3 pt-3 pb-4 text-left sm:pt-1 sm:pb-6 sm:px-0">
+            <h4>
+              <span className="text-sm font-normal text-gray-500">
+                Showing {products.total} {RESULTS}
+              </span>
+            </h4>
+            <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">
+              {category.name}
+            </h1>
+            <h2 className="text-gray-500 sm:text-md">{category.description}</h2>
+          </div>
+
+          {category?.subCategories?.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-12">
+              <div className="sm:col-span-12">
+                <div className="grid grid-cols-2 py-2 mt-2 text-left border-t border-l border-r sm:grid-cols-5 bg-gray-50">
+                  {category?.subCategories?.map((subcateg: any, idx: number) => {
+                    return (
+                      <Link href={'/' + subcateg.link} key={idx}>
+                        <div className="flex flex-col text-center cursor-pointer">
+                          <h4 className="text-xs font-medium text-gray-800 underline sm:text-sm hover:text-pink">
+                            {subcateg.name}
+                          </h4>
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        {products.total > 0 && (
-          <div className="grid w-full grid-cols-1 gap-1 mx-auto overflow-hidden sm:grid-cols-12 sm:border-t sm:border-gray-200">
-            {!!products && (
-              <>
-                {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+          )}
+          {products.total > 0 && (
+            <div className="grid w-full grid-cols-1 gap-1 mx-auto overflow-hidden sm:grid-cols-12 sm:border-t sm:border-gray-200">
+              {!!products && (
+                <>
+                  {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
-                <div className="flex flex-col sm:col-span-2 sm:hidden">
-                  <ProductMobileFilters
-                    handleFilters={handleFilters}
-                    products={products}
-                    routerFilters={state.filters}
-                    handleSortBy={handleSortBy}
-                    clearAll={clearAll}
-                    routerSortOption={state.sortBy}
-                  />
-                </div>
-                <div className="hidden sm:col-span-2 sm:block">
-                  <ProductFilterRight
-                    handleFilters={handleFilters}
-                    products={productDataToPass}
-                    routerFilters={state.filters}
-                  />
-                </div>
-                <div className="px-4 overflow-hidden sm:col-span-10 sm:px-0">
-                  {/* {HIDE FILTER TOP BAR IN MOBILE} */}
-
-                  <div className="flex-1 hidden sm:block">
-                    <ProductFiltersTopBar
+                  <div className="flex flex-col sm:col-span-2 sm:hidden">
+                    <ProductMobileFilters
+                      handleFilters={handleFilters}
                       products={products}
-                      handleSortBy={handleSortBy}
                       routerFilters={state.filters}
+                      handleSortBy={handleSortBy}
                       clearAll={clearAll}
                       routerSortOption={state.sortBy}
                     />
                   </div>
-                  <ProductGridWithFacet
-                    products={productDataToPass}
-                    currentPage={products.currentPage}
-                    handlePageChange={handlePageChange}
-                    handleInfiniteScroll={handleInfiniteScroll}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        )}
-        {products.total == 0 && (
-          <div className="p-32 mx-auto text-center max-w-7xl">
-            <h4 className="text-3xl font-bold text-gray-300">
-              No Products availabe in {category.name}
-            </h4>
-          </div>
-        )}
-      </main>
-    </div>
+                  <div className="hidden sm:col-span-2 sm:block">
+                    <ProductFilterRight
+                      handleFilters={handleFilters}
+                      products={productDataToPass}
+                      routerFilters={state.filters}
+                    />
+                  </div>
+                  <div className="px-4 overflow-hidden sm:col-span-10 sm:px-0">
+                    {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+
+                    <div className="flex-1 hidden sm:block">
+                      <ProductFiltersTopBar
+                        products={products}
+                        handleSortBy={handleSortBy}
+                        routerFilters={state.filters}
+                        clearAll={clearAll}
+                        routerSortOption={state.sortBy}
+                      />
+                    </div>
+                    <ProductGridWithFacet
+                      products={productDataToPass}
+                      currentPage={products.currentPage}
+                      handlePageChange={handlePageChange}
+                      handleInfiniteScroll={handleInfiniteScroll}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+          {products.total == 0 && (
+            <div className="p-32 mx-auto text-center max-w-7xl">
+              <h4 className="text-3xl font-bold text-gray-300">
+                No Products availabe in {category.name}
+              </h4>
+            </div>
+          )}
+        </main>
+      </div>
+    </>
   )
 }
 
