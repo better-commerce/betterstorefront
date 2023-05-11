@@ -12,12 +12,8 @@ export default async function resetPassword(
   cookies?: any
 ) {
   try {
-    const res = await fetcher({
-      url: CUSTOMER_BASE_API,
-      method: 'post',
-      data: forgotPasswordData,
-    })
-    cookies
+    const endpoint = `${CUSTOMER_BASE_API}/password/reset`
+    const res = await fetcher({ url: endpoint, method: 'PUT', data: forgotPasswordData, cookies})
     return res
   } catch (error) {
     console.log(error)

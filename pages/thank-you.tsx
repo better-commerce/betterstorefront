@@ -42,12 +42,13 @@ import { generateUri } from '@commerce/utils/uri-util'
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState(defaultModel)
   const [isLoading, setIsLoading] = useState(true)
-  const { setOrderId, orderId } = useUI()
+  const { setOrderId, orderId, user } = useUI()
 
   useEffect(() => {
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER_DETAILS, {
-        id: orderId,
+        id: user?.userId,
+        orderId: orderId,
       })
       setOrderData(data.order)
       setIsLoading(false)
