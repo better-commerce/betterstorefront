@@ -72,10 +72,11 @@ export default function CheckoutForm({
       (i: any) => i.itemType === 2 || i.itemType === 20
     ).length === cartItems.lineItems.length
 
-  const defaultDeliveryMethod = cartItems.shippingMethods.find(
+  const defaultDeliveryMethod = cartItems?.shippingMethods?.find(
     (i: any) => i.id === cartItems.shippingMethodId
   )
-  const INITIAL_STATE = {
+  const isBrowser = typeof window !== 'undefined';
+  const INITIAL_STATE = { 
     isDeliveryMethodSelected: false,
     isShippingInformationCompleted: !!Object.keys(defaultShippingAddress)
       .length,
@@ -91,9 +92,9 @@ export default function CheckoutForm({
     error: '',
     orderResponse: {},
     showStripe: false,
-    isPaymentIntent: new URLSearchParams(window.location.search).get(
-      'payment_intent_client_secret'
-    ),
+    isPaymentIntent: isBrowser
+    ? new URLSearchParams(window.location.search).get('payment_intent_client_secret')
+    : null,
     isPaymentWidgetActive: false,
   }
 
@@ -227,6 +228,7 @@ export default function CheckoutForm({
   }
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+  // const [deliveryCheck, setDeliveryCheck] = useState(false)
   const { addToCart, associateCart } = cartHandler()
 
   const { createAddress } = asyncHandler()
