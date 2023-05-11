@@ -183,8 +183,8 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
 
   return (
     <>
-      <div className="bg-white">
-        <div key={product.id} className="relative py-3 sm:py-3">
+      <div className="bg-white hover:outline hover:outline-1 outline-gray-200 group" key={product.id}>
+        <div className="relative py-3 sm:py-3">
           <div className="relative overflow-hidden group aspect-w-1 aspect-h-1 hover:opacity-75">
             <Link
               passHref
