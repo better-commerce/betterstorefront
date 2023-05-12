@@ -433,7 +433,7 @@ export default function CheckoutForm({
   }
 
   const loadAddressIDs = async (): Promise<Array<any>> => {
-    const response = await getAddress(user.userId )//? user.userId : cart.userId)
+    const response = await getAddress(user.userId)
     return response;
   }
 
@@ -690,8 +690,8 @@ export default function CheckoutForm({
       >
         <div className="max-w-2xl mx-auto pt-4 md:pt-16 lg:pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
-          <form className="grid sm:grid-cols-5 grid-cols-1 sm:gap-x-6 xl:gap-x-6">
-            <div className='sm:col-span-3 pb-6'>
+          <div className="grid lg:grid-cols-5 sm:gap-x-6 xl:gap-x-6">
+            <div className='sm:col-span-3 pb-6 lg:order-1 order-2'>
               {!isShippingDisabled && (
                 <Delivery
                   appConfig={config}
@@ -797,7 +797,7 @@ export default function CheckoutForm({
             </div>
 
             {/* Order summary */}
-           <div className='sm:col-span-2'>
+           <div className='sm:col-span-3 md:col-span-3 lg:col-span-2 lg:order-2 order-1'>
               <Summary
                 confirmOrder={confirmOrder}
                 isShippingDisabled={isShippingDisabled}
@@ -805,7 +805,7 @@ export default function CheckoutForm({
                 handleItem={handleItem}
               />
            </div>
-          </form>
+          </div>
         </div>
       </div>
     </>

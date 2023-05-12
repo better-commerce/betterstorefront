@@ -32,19 +32,12 @@ export default function NotFound() {
     <>
       {!isMobile && (
         <>
-          <div className="w-full py-14">
+          <div className="w-full py-14 p-5">
             <div className="error-container">
-              <div className="error-text-section w-full text-center mt-24">
+              <div className="error-text-section w-full text-center mb-8 mt-24">
                 <h1 className="text-black sm:text-2xl font-semibold mb-2">
-                  Page Not Found
+                  404 : Page Not Found
                 </h1>
-                <div className="img-section w-full text-center mb-8 mt-4">
-                <img
-                  src="/assets/images/error.gif"
-                  alt="404 Error Image"
-                  className="inline-block"
-                ></img>
-              </div>
                 <p className="text-black">
                   Check that you typed the address correctly. Maybe go back to
                   your previous page or try using our site search to find
@@ -65,20 +58,13 @@ export default function NotFound() {
       )}
       {isMobile && (
         <>
-          <div className="w-full py-2">
+          <div className="w-full py-8 px-10 pr-10">
             <div className="error-container">
-              <div className="error-text-section w-full text-center mt-14">
-                <h1 className="text-black sm:text-2xl font-semibold mb-2">
-                  Page Not Found
+              <div className="error-text-section w-full text-left mb-8 mt-24 px-10 pr-10">
+                <h1 className="text-black text-base font-semibold mb-2">
+                  404 : Page Not Found
                 </h1>
-                <div className="img-section w-full text-center mb-8 mt-4">
-                <img
-                  src="/assets/images/error.gif"
-                  alt="404 Error Image"
-                  className="inline-block"
-                ></img>
-              </div>
-                <p className="text-black">
+                <p className="text-brown-light text-xs">
                   Check that you typed the address correctly. Maybe go back to
                   your previous page or try using our site search to find
                   something specific.
