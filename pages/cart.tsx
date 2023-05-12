@@ -14,6 +14,7 @@ const  PromotionInput  = dynamic(() => import('../components/cart/PromotionInput
 import { useEffect } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
+import { Disclosure, Transition } from '@headlessui/react'
 import { getShippingPlans } from '@framework/shipping'
 import {
   BTN_CHECKOUT_NOW,
@@ -150,7 +151,7 @@ function Cart({ cart }: any) {
           {GENERAL_SHOPPING_CART} <span className='absolute pl-2 text-sm font-semibold text-gray-400 top-2'>{'- '}{userCart.lineItems.length} Items added</span>
         </h1>
         {!isEmpty && (
-          <form className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
+          <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
             <section aria-labelledby="cart-heading" className="lg:col-span-7">
               <h2 id="cart-heading" className="sr-only">
                 {ITEMS_IN_YOUR_CART}
@@ -309,12 +310,33 @@ function Cart({ cart }: any) {
             >
               <h2
                 id="summary-heading"
-                className="text-xl font-semibold text-black uppercase"
+                className="text-xl font-semibold text-black uppercase mb-1"
               >
                 {GENERAL_ORDER_SUMMARY}
               </h2>
-              <div className='p-3 mt-6 border sm:p-3 '>
-                {/* <PromotionInput /> */}
+              <hr className='xsm:hidden'></hr>
+              <div className="mt-4 lg:-mb-3">
+                  <Disclosure>
+                    {({ open }) => (
+                      <>
+                        <Disclosure.Button className="flex justify-between rounded-lg py-2 text-left underline text-sm font-medium text-green focus-visible:ring-opacity-75 link-button">
+                          <span>Apply Promo?</span>
+                        </Disclosure.Button>
+                        <Transition
+                          enter="transition duration-100 ease-out"
+                          enterFrom="transform scale-95 opacity-0"
+                          enterTo="transform scale-100 opacity-100"
+                          leave="transition duration-75 ease-out"
+                          leaveFrom="transform scale-100 opacity-100"
+                          leaveTo="transform scale-95 opacity-0"
+                        >
+                        <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                          <PromotionInput />
+                        </Disclosure.Panel>
+                        </Transition>
+                      </>
+                    )}
+                  </Disclosure>
               </div>
               <dl className="mt-6 space-y-2 sm:space-y-2">
                 <div className="flex items-center justify-between">
@@ -365,7 +387,7 @@ function Cart({ cart }: any) {
                 </Link>
               </div>
             </section>
-          </form>
+          </div>
         )}
         {isEmpty && (
           <div className="flex flex-col items-center justify-center w-full h-full py-10 text-gray-900">
