@@ -97,7 +97,7 @@ const PLACEMENTS_MAP: any = {
 
 export default function ProductView({
   data = { images: [] },
-  snippets,
+  snippets = [],
   setEntities,
   recordEvent,
   slug,
@@ -163,23 +163,23 @@ export default function ProductView({
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
         entity: JSON.stringify({
-          id: response.data.product.recordId,
-          sku: response.data.product.sku,
-          name: response.data.product.name,
-          stockCode: response.data.product.stockCode,
-          img: response.data.product.image,
+          id: response?.data?.product?.recordId,
+          sku: response?.data?.product?.sku,
+          name: response?.data?.product?.name,
+          stockCode: response?.data?.product?.stockCode,
+          img: response?.data?.product?.image,
         }),
-        entityId: response.data.product.recordId,
-        entityName: response.data.product.name,
+        entityId: response?.data?.product?.recordId,
+        entityName: response?.data?.product?.name,
         entityType: Product,
         eventType: ProductViewed,
-        omniImg: response.data.product.image,
+        omniImg: response?.data?.product?.image,
       })
       setUpdatedProduct(response.data.product)
       setSelectedAttrData({
-        productId: response.data.product.recordId,
-        stockCode: response.data.product.stockCode,
-        ...response.data.product,
+        productId: response?.data?.product?.recordId,
+        stockCode: response?.data?.product?.stockCode,
+        ...response?.data?.product,
       })
     }
   }
@@ -216,16 +216,18 @@ export default function ProductView({
   }, [])
 
   const handleNotification = () => {
-    openNotifyUser(product.recordId)
+    openNotifyUser(product?.recordId)
   }
 
-  let content = [{ image: selectedAttrData.image }, ...product.images].filter(
+  const productImages = product?.images || [];
+  const productVideos = product?.videos || [];
+  let content = [{ image: selectedAttrData.image }, ...productImages].filter(
     (value: any, index: number, self: any) =>
       index === self.findIndex((t: any) => t.image === value.image)
   )
 
-  if (product.videos && product.videos.length > 0) {
-    content = [...product.images, ...product.videos].filter(
+  if (product?.videos && product?.videos?.length > 0) {
+    content = [...productImages, ...productVideos].filter(
       (value: any, index: number, self: any) =>
         index === self.findIndex((t: any) => t.image === value.image)
     )
@@ -254,8 +256,8 @@ export default function ProductView({
             basketId: basketId,
             productId: selectedAttrData.productId,
             qty: 1,
-            manualUnitPrice: product.price.raw.withTax,
-            stockCode: selectedAttrData.stockCode,
+            manualUnitPrice: product?.price?.raw?.withTax,
+            stockCode: selectedAttrData?.stockCode,
             userId: user.userId,
             isAssociated: user.isAssociated,
           },
@@ -313,30 +315,30 @@ export default function ProductView({
       },
       shortMessage: '',
     }
-    if (selectedAttrData.currentStock <= 0 && !product.preOrder.isEnabled) {
+    if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled) {
       if (
-        !product.flags.sellWithoutInventory ||
-        !selectedAttrData.sellWithoutInventory
+        !product?.flags?.sellWithoutInventory ||
+        !selectedAttrData?.sellWithoutInventory
       ) {
         buttonConfig.title = BTN_NOTIFY_ME
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
       }
     } else if (
-      product.preOrder.isEnabled &&
-      selectedAttrData.currentStock <= 0
+      product?.preOrder?.isEnabled &&
+      selectedAttrData?.currentStock <= 0
     ) {
       if (
-        product.preOrder.currentStock < product.preOrder.maxStock &&
-        (!product.flags.sellWithoutInventory ||
-          selectedAttrData.sellWithoutInventory)
+        product?.preOrder?.currentStock < product?.preOrder?.maxStock &&
+        (!product?.flags?.sellWithoutInventory ||
+          selectedAttrData?.sellWithoutInventory)
       ) {
         buttonConfig.title = BTN_PRE_ORDER
-        buttonConfig.shortMessage = product.preOrder.shortMessage
+        buttonConfig.shortMessage = product?.preOrder?.shortMessage
         return buttonConfig
       } else if (
-        product.flags.sellWithoutInventory ||
-        selectedAttrData.sellWithoutInventory
+        product?.flags?.sellWithoutInventory ||
+        selectedAttrData?.sellWithoutInventory
       ) {
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
@@ -344,10 +346,10 @@ export default function ProductView({
             const item = await cartHandler().addToCart(
               {
                 basketId: basketId,
-                productId: selectedAttrData.productId,
+                productId: selectedAttrData?.productId,
                 qty: 1,
-                manualUnitPrice: product.price.raw.withTax,
-                stockCode: selectedAttrData.stockCode,
+                manualUnitPrice: product?.price?.raw?.withTax,
+                stockCode: selectedAttrData?.stockCode,
                 userId: user.userId,
                 isAssociated: user.isAssociated,
               },
@@ -550,7 +552,7 @@ export default function ProductView({
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
             id: user.userId,
-            productId: product.recordId,
+            productId: product?.recordId,
             flag: true,
           })
           insertToLocalWishlist()
@@ -568,15 +570,15 @@ export default function ProductView({
 
 
   const handleProductBundleUpdate = (bundledProduct: any) => {
-    if (bundledProduct && bundledProduct.id) {
+    if (bundledProduct && bundledProduct?.id) {
       let clonedProduct = Object.assign({}, updatedProduct)
-      if (clonedProduct && clonedProduct.componentProducts) {
+      if (clonedProduct && clonedProduct?.componentProducts) {
         setUpdatedProduct(clonedProduct)
       }
     }
   }
 
-  const breadcrumbs = product.breadCrumbs?.filter(
+  const breadcrumbs = product?.breadCrumbs?.filter(
     (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
   )
   SwiperCore.use([Navigation])
@@ -736,10 +738,10 @@ export default function ProductView({
                 <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
                 {updatedProduct ? (
                   <p className="text-2xl font-bold text-black sm:text-xl">
-                    {selectedAttrData.price?.formatted?.withTax}
-                    {selectedAttrData.listPrice?.raw.tax > 0 ? (
+                    {selectedAttrData?.price?.formatted?.withTax}
+                    {selectedAttrData?.listPrice?.raw.tax > 0 ? (
                       <>
-                        <span className="px-2 font-normal text-gray-400 line-through font-xl">{product.listPrice.formatted.withTax}</span>
+                        <span className="px-2 font-normal text-gray-400 line-through font-xl">{product?.listPrice?.formatted?.withTax}</span>
                         <span className="font-semibold text-red-500 text-md">{discount}% off</span>
                       </>
                     ) : null}
@@ -763,7 +765,7 @@ export default function ProductView({
               </div>
               <h4 className="my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
                 {PRODUCT_AVAILABILITY}:{' '}
-                {product.currentStock > 0 ? (
+                {product?.currentStock > 0 ? (
                   <span>{PRODUCT_IN_STOCK}</span>
                 ) : (
                   <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
@@ -836,16 +838,16 @@ export default function ProductView({
 
               <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
                 <h2 id="details-heading" className="sr-only">{PRICEMATCH_ADDITIONAL_DETAILS}</h2>
-                <ProductDetails product={product} description={product.description || product.shortDescription} />
+                <ProductDetails product={product} description={product?.description || product?.shortDescription} />
                 <div className="mt-6 sm:mt-10">
-                  <p className="text-lg text-gray-900">{selectedAttrData.currentStock > 0 ? product.deliveryMessage : product.stockAvailabilityMessage}</p>
+                  <p className="text-lg text-gray-900">{selectedAttrData?.currentStock > 0 ? product?.deliveryMessage : product?.stockAvailabilityMessage}</p>
                 </div>
               </section>
             </div>
           </div>
 
-          {product.componentProducts && (
-            <Bundles price={product.price.formatted.withTax} products={product.componentProducts} productBundleUpdate={handleProductBundleUpdate} />
+          {product?.componentProducts && (
+            <Bundles price={product?.price?.formatted?.withTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} />
           )}
 
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
@@ -875,7 +877,7 @@ export default function ProductView({
             <div className="section-devider"></div>
           </div>
           <div className='px-6 mx-auto sm:px-0 md:w-4/5'>
-            {reviewInput && <ReviewInput productId={product.recordId} />}
+            {reviewInput && <ReviewInput productId={product?.recordId} />}
           </div>
           {isEngravingAvailable && (
             <Engraving
@@ -890,13 +892,13 @@ export default function ProductView({
           <PriceMatch
             show={isPriceMatchModalShown}
             onClose={showPriceMatchModal}
-            productName={product.name}
-            productImage={product.images[0]?.image}
-            productId={product.id}
-            stockCode={product.stockCode}
-            ourCost={product.price.raw.withTax}
-            rrp={product.listPrice.raw.withTax}
-            ourDeliveryCost={product.price.raw.tax} //TBD
+            productName={product?.name}
+            productImage={product?.images?.length ? product?.images[0]?.image : null}
+            productId={product?.id}
+            stockCode={product?.stockCode}
+            ourCost={product?.price?.raw?.withTax}
+            rrp={product?.listPrice?.raw?.withTax}
+            ourDeliveryCost={product?.price?.raw?.tax} //TBD
           />
         </div>
       </main>
