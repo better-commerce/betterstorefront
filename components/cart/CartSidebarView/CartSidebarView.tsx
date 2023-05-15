@@ -13,6 +13,7 @@ import PromotionInput from '../PromotionInput'
 import RelatedProducts from '@components/product/RelatedProducts'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { Disclosure } from '@headlessui/react'
 import Image from 'next/image'
 import { NEXT_CREATE_WISHLIST,NEXT_GET_ORDER_RELATED_PRODUCTS,NEXT_GET_ALT_RELATED_PRODUCTS,collectionSlug,PRODUCTS_SLUG_PREFIX,NEXT_GET_PRODUCT,NEXT_GET_BASKET_PROMOS,NEXT_BASKET_VALIDATE } from '@components/utils/constants'
 
@@ -89,7 +90,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
     return user?.userId && user?.userId != EmptyGuid ? user?.userId : cartItems?.userId;
   };
  //getUserId todo
-
+ 
  const getBasketPromos = async (basketId: string) => {
   const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
     params: { basketId: basketId }
@@ -614,11 +615,8 @@ useEffect(() => {
                         {itemsInBag() > 0 ?
                             (
                               <>
-                                <span className="pl-2 mt-3 text-xs font-bold text-gray-400 dark:text-black">
-                                {'('}
-                                {itemsInBag()}
-                                {itemsInBag() > 1 ? ' items' : ' item'}
-                                {')'}
+                                <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black">{itemsInBag()}
+                                  {itemsInBag() > 1 ? ' items' : ' item'}
                                 </span>
                               </>
                             ) : (
@@ -642,7 +640,7 @@ useEffect(() => {
                     {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
                         <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
                           <h3 className="font-semibold text-14 text-green-dark">
-                            {GENERAL_TOTAL_SAVINGS}{' '}{cartItems.currencySymbol}{priceFormat(totalDiscount).slice(1)}{' !'}</h3>
+                            {cartItems.currencySymbol}{priceFormat(totalDiscount).slice(1)}{' '}{GENERAL_TOTAL_SAVINGS}</h3>
                         </div>
                       )}
                     <div className="mt-8 px-4 sm:px-6">
@@ -694,7 +692,7 @@ useEffect(() => {
                             return(
                             <li key={product.id} className="">
                               <div className="flex py-6">
-                                <div className="flex-shrink-0 w-24 h-36 overflow-hidden border border-gray-200 rounded-md">
+                                <div className="flex-shrink-0 w-24 h-32 overflow-hidden border border-gray-200 rounded-md">
                                 <Link href={`/${product.slug}`}>
                                   <Image
                                     width={100}
@@ -849,39 +847,16 @@ useEffect(() => {
                                                       >
                                                         Remove this Item?
                                                       <XMarkIcon
-                                                        className="w-5 h-5 hover:text-gray-400 cursor-pointer text-gray-500"
+                                                        className="w-5 h-5 hover:text-gray-400 text-gray-500"
                                                         onClick={closeModal}
                                                       ></XMarkIcon>
                                                       </Dialog.Title>
                                                       {/* <hr className="w-full my-2 shadow-md "></hr> */}
-                                                      <div className="flex flex-row justify-center items-center text-black font-normal py-5 px-8 text-sm">
-                                                      { itemClicked?.image && (
-                                                      <Link href={`/${itemClicked?.slug}`} className='\h-10 w-32'>
-                                                        <Image
-                                                          width={100}
-                                                          height={100}
-                                                          // style={ maxWidth: '100%', height: 'auto' }
-                                                          src={
-                                                            generateUri(itemClicked?.image, 'h=300&fm=webp') || IMG_PLACEHOLDER
-                                                          }
-                                                          alt={itemClicked?.name}
-                                                          className="object-cover object-center rounded-md w-16 h-auto"
-                                                          onClick={handleRedirectToPDP}
-                                                        ></Image>
-                                                      </Link>
-                                                      )}
-                                                        <p className='mx-4'>
-                                                          Are you sure you don't
-                                                          want this product? You may move it to Wishlist and buy later.
-                                                        </p>
-                                                      </div>
+                                                      <p className="text-black font-normal p-6 text-sm">
+                                                        Are you sure you don't
+                                                        want this product? You may move it to Wishlist and buy later.
+                                                      </p>
                                                       <div className="mt-2 flex px-6 w-full justify-around items-center">
-                                                        <button
-                                                          onClick={()=>{handleWishList(itemClicked)}}
-                                                          className="w-full transition-all uppercase h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm font-medium text-gray-700 hover:text-white hover:bg-black \hover:bg-gray-100 md:w-full"
-                                                        >
-                                                          {BTN_MOVE_TO_WISHLIST}
-                                                        </button>
                                                         <button
                                                           onClick={() => {
                                                             handleItem(
@@ -889,9 +864,15 @@ useEffect(() => {
                                                               'delete'
                                                             )
                                                           }}
-                                                          className="w-full transition-all uppercase h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm lg:text-md font-medium text-red-700 hover:text-white hover:bg-red-700 \hover:bg-gray-100  md:w-full"
+                                                          className="w-full h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm lg:text-md font-medium text-red-700 hover:bg-gray-100  md:w-full"
                                                         >
                                                           {GENERAL_REMOVE}
+                                                        </button>
+                                                        <button
+                                                          onClick={()=>{handleWishList(itemClicked)}}
+                                                          className="w-full h-16 flex items-center mx-3 justify-center bg-white py-2 px-6 border border-gray-300  shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-100 md:w-full"
+                                                        >
+                                                          {BTN_MOVE_TO_WISHLIST}
                                                         </button>
                                                       </div>
                                                     </Dialog.Panel>
@@ -951,144 +932,71 @@ useEffect(() => {
                     </div>
                   </div>
                     <div className="flex flex-col">
-                      <div className="section-divider"></div>
+                      <div className="section-devider-sm"></div>
                     </div>
 
                   {!isEmpty && (
-                    <div className="px-0 pb-6 sm:px-0">
-                      <PromotionInput 
-                      basketPromos={basketPromos}
-                      paymentOffers={paymentOffers}
-                      items={cartItems}
-                      getBasketPromoses={getBasketPromos}
-                      // deviceInfo={deviceInfo}
-                      />
-                      {relatedProductData?.length>0 && (
+                   <div className="ml-5 mt-2 sticky bottom-0 bg-white pt-4 pb-1">
+                   <div className="-mt-3">
+                     <Disclosure>
+                       {({ open }) => (
+                         <>
+                           <Disclosure.Button className="flex justify-between rounded-lg py-2 text-left underline text-sm font-medium text-green focus-visible:ring-opacity-75 link-button">
+                             <span className=''>Apply Promo?</span>
+                           </Disclosure.Button>
+                           <Transition
+                             enter="transition duration-100 ease-out"
+                             enterFrom="transform scale-95 opacity-0"
+                             enterTo="transform scale-100 opacity-100"
+                             leave="transition duration-75 ease-out"
+                             leaveFrom="transform scale-100 opacity-100"
+                             leaveTo="transform scale-95 opacity-0"
+                           >
+                           <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                             <PromotionInput />
+                           </Disclosure.Panel>
+                           </Transition>
+                         </>
+                       )}
+                     </Disclosure>
+                   </div>
+                   <div className="flex justify-between text-sm text-gray-900">
+                     <p>{SUBTOTAL_INCLUDING_TAX}</p>
+                     <p>{cartItems.subTotal?.formatted?.withTax}</p>
+                   </div>
+                   <div className="flex justify-between text-sm text-gray-900">
+                     <p>{GENERAL_SHIPPING}</p>
+                     <p>{cartItems.shippingCharge?.formatted?.withTax}</p>
+                   </div>
 
-                      <>
-                          <div className="flex flex-col">
-                            <div className="section-divider"></div>
-                          </div>
-                          <div className='flex flex-col pl-0 mt-0 sm:pl-0 cart-related-prod '>
-                          <div className='flex flex-col justify-center pb-2 text-center sm:pb-4'>
-                            <h3 className='text-black uppercase font-bold text-lg'>You May Also Like</h3>
-                          </div>
-                            <RelatedProductWithGroup
-                            products={relatedProductData || [] }
-                            productPerColumn= {1.7}
-                            />
-                          </div>
-                        <div className="flex flex-col">
-                            <div className="section-divider"></div>
-                          </div>
-                        </>
-                      )
-
-                      }
-
-                      <div className="flex justify-between py-2 px-6 text-gray-900 font-small">
-                        <p className="text-sm">{SUBTOTAL_INCLUDING_TAX}</p>
-                        <p className="font-bold text-black">
-                          {cartItems.subTotal?.formatted?.withTax}
-                        </p>
-                      </div>
-                      <div className="flex justify-between py-2 px-6 text-black font-small">
-                        <p>{GENERAL_SHIPPING}</p>
-                        <p className="font-bold text-black">
-                          {cartItems.shippingCharge?.formatted?.withTax}
-                        </p>
-                      </div>
-
-                      {cartItems.promotionsApplied?.length > 0 && (
-                        <div className="flex justify-between py-2 px-6 text-black font-small">
-                          <p className="text-sm">{GENERAL_DISCOUNT}</p>
-                          <p className="font-bold text-red-500">
-                            {'-'}
-                            {cartItems.discount?.formatted?.withTax}
-                          </p>
-                        </div>
-                      )}
-                      <div className="flex justify-between font-medium px-6 text-black">
-                        <p className="text-xl">{GENERAL_TOTAL}</p>
-                        <p className="text-xl font-bold text-black">
-                          {cartItems.grandTotal?.formatted?.withTax}
-                        </p>
-                      </div>
-                      {reValidateData?.message != null && JSON.parse(reValidateData?.message).length > 0 ? (
-                            <>
-                              <div className='flex flex-col px-8 py-2 bg-red-200'>
-                                <div className='flex text-xs font-semibold text-left text-red-500'>
-                                  <span className="relative mr-1 top-1">
-                                    <Image alt='EDD' src="/assets/not-shipped-edd.svg" layout="fixed" width={20} height={20} className="relative inline-block mr-1 top-2" />
-                                  </span>
-                                  <span className='mt-2'>{JSON.parse(reValidateData?.message).length} Item in your basket is sold out!</span>
-                                </div>
-                                <div className='flex justify-start gap-8'>
-                                  <button type='button' className='pt-3 font-semibold text-black text-12' onClick={() => {
-                                    const warningItems: Array<{ Key: string, Value: number }> = JSON.parse(reValidateData?.message);
-                                    if (warningItems?.length) {
-                                      const deleteProducts = cartItems?.lineItems?.filter((x: any) => warningItems?.map((y: any) => y.Key).includes(x?.stockCode));
-                                      if (deleteProducts?.length) {
-                                        showRemove(deleteProducts);
-                                      }
-                                    }
-                                  }}>Remove</button>
-                                  {/* <button type='button' className='pt-3 font-semibold text-black text-12' onClick={() => showRemove(cartItems)}>Move to Wishlist</button> */}
-                                </div>
-                              </div>
-                            </>) : (<></>)
-                          }
-                      <div className="mt-6 px-6">
-                        <Link
-                          href="/cart"
-                          onClick={ async () => {
-                            // handleClose()
-                            // beginCheckout(cartItems)
-                            // Validate basket
-              const reValidateResult = await fetchBasketReValidate();
-
-              if (isAllItemsInStock(reValidateResult)) {
-
-                const messageLength: number = reValidateData?.message ? JSON.parse(reValidateData?.message)?.length ?? 0 : 0;
-
-                if (messageLength == 0) { // No error while basket validation
-                  // const deliveryAddress = getDeliveryAddress();
-                  if (getUserId() != EmptyGuid && !isGuestUser) {
-                    //if (deliveryAddress?.id) {
-                    //  Router.push(`/checkout/payment/${deliveryAddress?.id}`);
-                    //} else {
-                    Router.push("/checkout");
-                    //}
-                    handleClose()
-                    beginCheckout(cartItems);
-                  } else {
-                    Router.push(`/checkout`);
-                    handleClose()
-                    beginCheckout(cartItems);
-                  }
-                }
-              }
-                          }}
-                          passHref
-                          className="flex items-center justify-center px-6 py-3 font-medium text-white uppercase bg-black border border-transparent rounded-sm shadow-sm hover:bg-gray-900"
-                        >
-                          {content.GENERAL_CHECKOUT}
-                        </Link>
-                      </div>
-                      <div className="flex justify-center mt-6 text-sm text-center text-gray-500">
-                        <p>
-                          {GENERAL_OR_TEXT}{' '}
-                          <button
-                            type="button"
-                            className="font-medium text-black hover:text-indigo-500"
-                            onClick={handleClose}
-                          >
-                            {GENERAL_CONTINUE_SHOPPING}
-                            <span aria-hidden="true"> &rarr;</span>
-                          </button>
-                        </p>
-                      </div>
-                    </div>
+                   {cartItems.promotionsApplied?.length > 0 && (
+                     <div className="flex justify-between text-sm text-gray-900">
+                       <p>{GENERAL_DISCOUNT}</p>
+                       <p className="text-red-500">
+                         {'-'}
+                         {cartItems.discount?.formatted?.withTax}
+                       </p>
+                     </div>
+                   )}
+                   <div className="flex justify-between text-sm text-gray-900 font-bold">
+                     <p className="link-button">{GENERAL_TOTAL}</p>
+                     <p className=" link-button">
+                       {cartItems.grandTotal?.formatted?.withTax}
+                     </p>
+                   </div>
+                   <div className="mt-3 mb-10">
+                     <Link
+                       href="/cart"
+                       onClick={() => {
+                         handleClose()
+                         beginCheckout(cartItems)
+                       }}
+                       className="flex items-center justify-center py-3 capitalize transition bg-black text-gray-50 hover:opacity-75 link-button"
+                     >
+                       {content.GENERAL_CHECKOUT}
+                     </Link>
+                   </div>
+                 </div>
                   )}
                   {/* read-only engraving modal */}
                   {selectedEngravingProduct && (

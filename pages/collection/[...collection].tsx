@@ -135,7 +135,7 @@ export default function CollectionPage(props: any) {
   const initialState = {
     ...DEFAULT_STATE,
     filters: adaptedQuery.filters || [],
-    collectionId: props.id,
+    collectionId: props?.id,
   }
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -150,7 +150,7 @@ export default function CollectionPage(props: any) {
         total: 0,
         currentPage: 1,
         filters: [],
-        collectionId: props.id,
+        collectionId: props?.id,
       },
     },
     error,
@@ -172,11 +172,11 @@ export default function CollectionPage(props: any) {
       total: 0,
       currentPage: 1,
       filters: [],
-      collectionId: props.id,
+      collectionId: props?.id,
     },
   })
 
-  const [productDataToPass, setProductDataToPass] = useState(props.products)
+  const [productDataToPass, setProductDataToPass] = useState(props?.products)
 
   useEffect(() => {
     if (productDataToPass) {
@@ -229,9 +229,9 @@ export default function CollectionPage(props: any) {
   }, [productDataToPass])
 
   useEffect(() => {
-    const data = IS_INFINITE_SCROLL ? productListMemory.products : props.products
+    const data = IS_INFINITE_SCROLL ? productListMemory.products : props?.products
     setProductDataToPass(data)
-  }, [productListMemory.products, props.products])
+  }, [productListMemory.products, props?.products])
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
@@ -378,15 +378,15 @@ export default function CollectionPage(props: any) {
           <input className="inst" type="hidden" value={props?.hostName} />
         )}
         <main className="pb-0 mx-auto md:w-4/5">
-          {props.breadCrumbs && (
+          {props?.breadCrumbs && (
             <div className="pt-2 sm:pt-4">
-              <BreadCrumbs items={props.breadCrumbs} currentProduct={props} />
+              <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
             </div>
           )}
-          {props.images.length > 0 && (
+          {props?.images?.length > 0 && (
             <div className="flex items-center justify-center w-full mx-auto mt-0 sm:px-0 sm:mt-4">
               <Swiper navigation={true} loop={true} className="mySwiper">
-                {props.images.map((img: any, idx: number) => {
+                {props?.images?.map((img: any, idx: number) => {
                   return (
                     <SwiperSlide key={idx}>
                       <Link href={img.link || '#'}>
@@ -398,7 +398,7 @@ export default function CollectionPage(props: any) {
                             generateUri(img.url, 'h=700&fm=webp') ||
                             IMG_PLACEHOLDER
                           }
-                          alt={props.name}
+                          alt={props?.name}
                           className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
                         ></Image>
                       </Link>
@@ -444,16 +444,16 @@ export default function CollectionPage(props: any) {
             </div>
           </div>
 
-          {props.products.total > 0 && (
+          {props?.products?.total > 0 && (
             <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
-              {props.allowFacets && (
+              {props?.allowFacets && (
                 <>
                   {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
 
                   <div className="flex flex-col sm:col-span-2 sm:hidden">
                     <ProductMobileFilters
                       handleFilters={handleFilters}
-                      products={props.products}
+                      products={props?.products}
                       routerFilters={state.filters}
                       handleSortBy={handleSortBy}
                       clearAll={clearAll}
@@ -463,7 +463,7 @@ export default function CollectionPage(props: any) {
                   <div className="hidden sm:col-span-2 sm:block">
                     <ProductFilterRight
                       handleFilters={handleFilters}
-                      products={props.products}
+                      products={props?.products}
                       routerFilters={state.filters}
                     />
                   </div>
@@ -481,19 +481,19 @@ export default function CollectionPage(props: any) {
                     </div>
                     <ProductGridWithFacet
                       products={productDataToPass}
-                      currentPage={props.currentPage}
+                      currentPage={props?.currentPage}
                       handlePageChange={handlePageChange}
                       handleInfiniteScroll={handleInfiniteScroll}
                     />
                   </div>
                 </>
               )}
-              {!props.allowFacets && (
+              {!props?.allowFacets && (
                 <>
                   <div className="col-span-12">
                     <ProductGrid
                       products={productDataToPass}
-                      currentPage={props.currentPage}
+                      currentPage={props?.currentPage}
                       handlePageChange={handlePageChange}
                       handleInfiniteScroll={handleInfiniteScroll}
                     />
@@ -503,10 +503,10 @@ export default function CollectionPage(props: any) {
               <div></div>
             </div>
           )}
-          {props.products.total == 0 && (
+          {props?.products?.total == 0 && (
             <div className="w-full py-32 mx-auto text-center">
               <h3 className="py-3 text-3xl font-semibold text-gray-200">
-                No Item Availabe in {props.name} Collection!
+                No Item Availabe in {props?.name} Collection!
               </h3>
               <Link href="/collection" passHref>
                 <span className="text-lg font-semibold text-indigo-500">
