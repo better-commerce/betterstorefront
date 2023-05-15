@@ -270,7 +270,7 @@ export default function Delivery({
                         classNames(
                           checked ? 'border-transparent' : 'border-gray-300',
                           active ? 'ring-2 ring-black' : '',
-                          'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none'
+                          'relative bg-white border shadow-sm p-4 flex cursor-pointer focus:outline-none'
                         )
                       }
                     >
@@ -310,7 +310,7 @@ export default function Delivery({
                               checked
                                 ? 'border-black'
                                 : 'border-transparent',
-                              'absolute -inset-px rounded-lg pointer-events-none'
+                              'absolute -inset-px pointer-events-none'
                             )}
                             aria-hidden="true"
                           />
@@ -328,7 +328,7 @@ export default function Delivery({
                       onClick={() => handleShippingMethod(item)}
                       className={`${
                         shippingMethod.id === item.id ? 'border-black' : ''
-                      }  pointer rounded-md border-2 py-5 px-5 flex justify-between flex-row`}
+                      }  pointer border-2 py-5 px-5 flex justify-between flex-row`}
                     >
                       <div>
                         <h3 className="text-md uppercase font-bold text-gray-900">{item.displayName}</h3>
