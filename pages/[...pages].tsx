@@ -20,7 +20,7 @@ const COMPONENTS_MAP: any = {
   undefined: () => null,
 }
 
-function BrandPage({ brandDetails }: any) {
+function BrandPage({ slug, brandDetails }: any) {
   const widgetsConfig = JSON.parse(brandDetails.result.widgetsConfig).sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
@@ -28,7 +28,7 @@ function BrandPage({ brandDetails }: any) {
   return (
     <>
       {widgetsConfig.map((widget: any, idx: number) => {
-        const enhancedProps = { ...widget, brandDetails: brandDetails.result }
+        const enhancedProps = { ...widget, brandDetails: brandDetails.result, slug: slug, }
         return (
           <div key={idx}>
             {COMPONENTS_MAP[widget.manufacturerSettingType]
@@ -62,6 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       query: context.query,
+      slug: slug,
       brandDetails: response,
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets
