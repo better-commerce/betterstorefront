@@ -68,9 +68,9 @@ export default function CheckoutForm({
   } = useUI()
 
   const isShippingDisabled =
-    cartItems.lineItems.filter(
+    cartItems?.lineItems?.filter(
       (i: any) => i.itemType === 2 || i.itemType === 20
-    ).length === cartItems.lineItems.length
+    ).length === cartItems?.lineItems?.length
 
   const defaultDeliveryMethod = cartItems?.shippingMethods?.find(
     (i: any) => i.id === cartItems.shippingMethodId

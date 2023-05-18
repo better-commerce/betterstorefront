@@ -1,3 +1,4 @@
+import "@assets/css/base.css"
 import "@assets/css/main.css"
 import '@assets/icon.css'
 import "@assets/css/chrome-bug.css"
@@ -83,7 +84,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
 
-  /*const googleTranslateElementInit = () => {
+  const googleTranslateElementInit = () => {
     const windowClone: any = window
     new windowClone.google.translate.TranslateElement(
       {
@@ -103,7 +104,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     )
     document.body.appendChild(addScript)
       ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-  }, []);*/
+  }, []);
 
   useEffect(() => {
     // Listener for snippet injector reset.
