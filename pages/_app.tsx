@@ -1,3 +1,4 @@
+import "@assets/css/base.css"
 import "@assets/css/main.css"
 import '@assets/icon.css'
 import "@assets/css/chrome-bug.css"
@@ -239,7 +240,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       <div id="google_translate_element" />
 
       <ManagedUIContext>
-        {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}        
+        {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
         <Layout
           nav={nav}
