@@ -155,7 +155,7 @@ export default function CollectionPage(props: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', state],
+    ['/api/catalog/products', { ...state, ...{ slug: props?.slug } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
