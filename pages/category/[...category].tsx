@@ -42,6 +42,7 @@ export async function getStaticProps(context: any) {
     return {
       props: {
         category,
+        slug,
         products: categoryProducts,
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
@@ -52,6 +53,7 @@ export async function getStaticProps(context: any) {
     return {
       props: {
         category,
+        slug,
         products: null,
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
@@ -158,7 +160,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryPage({ category, products }: any) {
+function CategoryPage({ category, slug, products, }: any) {
   const router = useRouter()
   const adaptedQuery: any = { ...router.query }
 
@@ -191,7 +193,7 @@ function CategoryPage({ category, products }: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', state],
+    ['/api/catalog/products', { ...state, ...{ slug: slug } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -218,8 +220,8 @@ function CategoryPage({ category, products }: any) {
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
       if (
-        data.products.currentPage !== productListMemory.products.currentPage ||
-        data.products.total !== productListMemory.products.total
+        data?.products?.currentPage !== productListMemory.products.currentPage ||
+        data?.products?.total !== productListMemory.products.total
       ) {
         setProductListMemory((prevData: any) => {
           let dataClone = { ...data }
@@ -233,7 +235,7 @@ function CategoryPage({ category, products }: any) {
         })
       }
     }
-  }, [data.products.results.length])
+  }, [data?.products?.results?.length])
 
   const handlePageChange = (page: any) => {
     router.push(
