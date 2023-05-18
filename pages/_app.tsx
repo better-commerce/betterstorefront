@@ -83,6 +83,28 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
 
+  /*const googleTranslateElementInit = () => {
+    const windowClone: any = window
+    new windowClone.google.translate.TranslateElement(
+      {
+        pageLanguage: 'en',
+        layout:
+          windowClone.google.translate.TranslateElement.FloatPosition.TOP_LEFT,
+      },
+      'google_translate_element'
+    )
+  }
+
+  useEffect(() => {
+    const addScript = document.createElement('script')
+    addScript.setAttribute(
+      'src',
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+    )
+    document.body.appendChild(addScript)
+      ; (window as any).googleTranslateElementInit = googleTranslateElementInit
+  }, []);*/
+
   useEffect(() => {
     // Listener for snippet injector reset.
     router.events.on("routeChangeStart", () => {
@@ -214,8 +236,10 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
       <Head {...appConfig}></Head>
 
+      <div id="google_translate_element" />
+
       <ManagedUIContext>
-        {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}        
+        {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
         <Layout
           nav={nav}
