@@ -87,6 +87,7 @@ function BrandDetailPage({
   setEntities,
   recordEvent,
   brandDetails,
+  slug,
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -149,7 +150,7 @@ function BrandDetailPage({
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', state],
+    ['/api/catalog/products', { ...state, ...{ slug: slug } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -302,8 +303,9 @@ function BrandDetailPage({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const slug = `brands/${context.query.brand.pop()}`;
   const response = await getBrandBySlug(
-    `brands/${context.query.brand.pop()}`,
+    slug,
     context.req.cookies
   );
 
@@ -312,6 +314,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       query: context.query,
+      slug: slug,
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? []

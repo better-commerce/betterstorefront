@@ -39,7 +39,7 @@ function Cart({ cart }: any) {
 
   const mapShippingPlansToItems = (plans?: any, items?: any) => {
     const itemsClone = [...items]
-    return plans.reduce((acc: any, obj: any) => {
+    return plans?.reduce((acc: any, obj: any) => {
       acc?.forEach((cartItem?: any) => {
         const foundShippingPlan = obj.Items.find((item: any) => {
           return (
@@ -148,7 +148,7 @@ function Cart({ cart }: any) {
     <div className="w-full mx-auto bg-white sm:w-3/5">
       <main className="px-4 pt-6 pb-12 sm:pt-6 sm:pb-16 sm:px-0 lg:px-0">
         <h1 className="relative text-2xl font-semibold tracking-tight text-black uppercase sm:text-2xl">
-          {GENERAL_SHOPPING_CART} <span className='absolute pl-2 text-sm font-semibold text-gray-400 top-2'>{'- '}{userCart.lineItems.length} Items added</span>
+          {GENERAL_SHOPPING_CART} <span className='absolute pl-2 text-sm font-semibold text-gray-400 top-2'>{'- '}{userCart?.lineItems?.length} Items added</span>
         </h1>
         {!isEmpty && (
           <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
