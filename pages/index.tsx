@@ -1,35 +1,28 @@
-import dynamic from 'next/dynamic'
 // Base Imports
 import React from 'react'
 import type { GetStaticPropsContext } from 'next'
-
+import dynamic from 'next/dynamic'
+import Image from 'next/image'
+import NextHead from 'next/head'
+import Link from 'next/link'
 // Other Imports
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
 import { HOMEPAGE_SLUG, SITE_ORIGIN_URL } from '@components/utils/constants'
-const ProductSlider = dynamic(() => import('@components/product/ProductSlider'))
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
 import { isMobile } from 'react-device-detect'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import Image from 'next/image'
-import NextHead from 'next/head'
-
 import { useRouter } from 'next/router'
 import os from 'os'
-
-import 'swiper/css'
-import 'swiper/css/navigation'
-
-import SwiperCore, { Navigation } from 'swiper'
-import Link from 'next/link'
-import Heading from '@components/home/Heading'
-import Categories from '@components/home/Categories'
-import Collections from '@components/home/Collections'
 import { obfuscateHostName } from '@framework/utils/app-util'
+
+const Heading = dynamic(() => import('@components/home/Heading'))
+const Categories = dynamic(() => import('@components/home/Categories'))
+const Collections = dynamic(() => import('@components/home/Collections'))
+const ProductSlider = dynamic(() => import('@components/product/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({
@@ -92,7 +85,7 @@ function Home({
   pageContentsWeb,
   pageContentsMobileWeb,
   hostName,
-}: any) {  
+}: any) {
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb
@@ -125,121 +118,77 @@ function Home({
 
   return (
     <>
-      {(pageContents?.metatitle ||
-        pageContents?.metadescription ||
-        pageContents?.metakeywords) && (
-        <>
-          <NextHead>
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1, maximum-scale=1"
-            />
-            <link
-              rel="canonical"
-              id="canonical"
-              href={
-                pageContents?.canonical ||
-                SITE_ORIGIN_URL + router.asPath
-              }
-            />
-            {pageContents?.metatitle && (
-              <>
-                <title>{pageContents?.metatitle}</title>
-                <meta name="title" content={pageContents?.metatitle} />
-              </>
-            )}
-
-            {pageContents?.metadescription && (
-              <meta
-                name="description"
-                content={pageContents?.metadescription}
-              />
-            )}
-
-            {pageContents?.metakeywords && (
-              <meta name="keywords" content={pageContents?.metakeywords} />
-            )}
-            <meta property="og:image" content={pageContents?.image} />
-            {pageContents?.metatitle && (
-              <meta
-                property="og:title"
-                content={pageContents?.metatitle}
-                key="ogtitle"
-              />
-            )}
-            {pageContents?.metadescription && (
-              <meta
-                property="og:description"
-                content={pageContents?.metadescription}
-                key="ogdesc"
-              />
-            )}
-          </NextHead>
-        </>
+      {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
+        <NextHead>
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+          <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
+          <title>{pageContents?.metatitle || "Home"}</title>
+          <meta name="title" content={pageContents?.metatitle || "Home"} />
+          {pageContents?.metadescription && (
+            <meta name="description" content={pageContents?.metadescription} />
+          )}
+          {pageContents?.metakeywords && (
+            <meta name="keywords" content={pageContents?.metakeywords} />
+          )}
+          <meta property="og:image" content={pageContents?.image} />
+          {pageContents?.metatitle && (
+            <meta property="og:title" content={pageContents?.metatitle} key="ogtitle" />
+          )}
+          {pageContents?.metadescription && (
+            <meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />
+          )}
+        </NextHead>
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      
-      <Hero banners={pageContents?.banner} />
-      <div className="w-full pb-4 mx-auto bg-gray-50 sm:pb-8">
-        <div className="container py-3 mx-auto sm:py-6">
-          {pageContents?.heading?.map((heading: any, hId: number) => (
-            <Heading
-              title={heading?.heading_title}
-              subTitle={heading?.heading_subtitle}
-              key={hId}
-            />
-          ))}
-          <Categories data={pageContents?.categorylist} />
-        </div>
-      </div>
 
-      <div className="container mx-auto">
+      <Hero banners={pageContents?.banner} />
+
+      <div className="container py-3 mx-auto sm:py-6">
+        {pageContents?.heading?.map((heading: any, hId: number) => (
+          <Heading
+            title={heading?.heading_title}
+            subTitle={heading?.heading_subtitle}
+            key={`category-heading-${hId}`}
+          />
+        ))}
+        <Categories data={pageContents?.categorylist} />
         {pageContents?.productheading?.map((productH: any, Pid: number) => (
           <Heading
             title={productH?.productheading_title}
             subTitle={productH?.productheading_subtitle}
-            key={Pid}
+            key={`product-heading-${Pid}`}
           />
         ))}
         <ProductSlider config={pageContents} />
       </div>
-
       {pageContents?.promotions?.map((banner: any, bId: number) => (
-        <div
-          className="relative flex flex-col justify-center w-full text-center"
-          key={bId}
-        >
+        <div className="relative flex flex-col justify-center w-full text-center cursor-pointer" key={`full-banner-${bId}`}>
           <Link href={banner?.promotions_link} passHref legacyBehavior>
-            <a>
-              <Image
-                src={banner?.promotions_image}
-                className="object-cover object-center"
-                alt={banner?.promotions_title}
-                width={2000}
-                height={800}
-                style={css}
-              />
-            </a>
+            <Image
+              src={banner?.promotions_image}
+              className="object-cover object-center w-full"
+              alt={banner?.promotions_title}
+              width={2000}
+              height={800}
+              style={css}
+            />
           </Link>
           <div className="absolute text-5xl font-medium text-white top-1/2 right-24">
             {banner?.promotions_title}
           </div>
         </div>
       ))}
-
-      <div className="w-full pb-4 mx-auto bg-gray-50 sm:pb-8">
-        <div className="container px-4 py-3 mx-auto sm:px-0 sm:py-6">
-          {pageContents?.collectionheadings?.map(
-            (heading: any, cId: number) => (
-              <Heading
-                title={heading?.collectionheadings_title}
-                subTitle={heading?.collectionheadings_subtitle}
-                key={cId}
-              />
-            )
-          )}
-          <Collections data={pageContents?.collectionlist} />
-        </div>
+      <div className="container px-4 py-3 mx-auto sm:px-0 sm:py-6">
+        {pageContents?.collectionheadings?.map(
+          (heading: any, cId: number) => (
+            <Heading
+              title={heading?.collectionheadings_title}
+              subTitle={heading?.collectionheadings_subtitle}
+              key={`collection-heading-${cId}`}
+            />
+          )
+        )}
+        <Collections data={pageContents?.collectionlist} />
       </div>
     </>
   )
