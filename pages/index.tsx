@@ -120,7 +120,7 @@ function Home({
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
         <NextHead>
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
           <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
           <title>{pageContents?.metatitle || "Home"}</title>
           <meta name="title" content={pageContents?.metatitle || "Home"} />
