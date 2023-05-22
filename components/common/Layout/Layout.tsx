@@ -24,9 +24,7 @@ const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
 const SearchWrapper = dynamic(() => import('@components/search/index'))
 const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
 const Loading = () => (
-  <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
-    <LoadingDots />
-  </div>
+  <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80"><LoadingDots /></div>
 )
 
 const dynamicProps = {
@@ -136,8 +134,8 @@ const Layout: FC<Props & IExtraProps> = ({
     }
 
     return () => {
-      Router.events.off('routeChangeStart', () => {});
-      Router.events.off('routeChangeComplete', () => {});
+      Router.events.off('routeChangeStart', () => { });
+      Router.events.off('routeChangeComplete', () => { });
     }
   }, [])
 
@@ -151,21 +149,14 @@ const Layout: FC<Props & IExtraProps> = ({
     <CommerceProvider locale={locale}>
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
-        {showSearchBar && (<SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} /> )}
-        <Navbar
-          currencies={config?.currencies}
-          config={sortedData}
-          languages={config?.languages}
-          deviceInfo={deviceInfo}
-        />
+        {showSearchBar && (<SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />)}
+        <Navbar currencies={config?.currencies} config={sortedData} languages={config?.languages} deviceInfo={deviceInfo} />
         <main className="fit">{children}</main>
         <Footer config={data.footer} deviceInfo={deviceInfo} />
         <ModalUI />
         <SidebarUI />
-        <FeatureBar title={GENERAL_COOKIE_TEXT} hide={acceptedCookies} 
-          action={
-            <Button className="mx-5" onClick={() => onAcceptCookies()}>{BTN_ACCEPT_COOKIE}</Button>
-          }
+        <FeatureBar title={GENERAL_COOKIE_TEXT} hide={acceptedCookies}
+          action={<Button className="mx-5" onClick={() => onAcceptCookies()}>{BTN_ACCEPT_COOKIE}</Button>}
         />
       </div>
     </CommerceProvider>

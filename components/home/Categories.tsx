@@ -8,7 +8,7 @@ import SwiperCore, { Navigation } from 'swiper'
 import Link from 'next/link'
 import { isMobile } from 'react-device-detect'
 
-function Categories({data}:any) {
+function Categories({ data }: any) {
   var settings = {
     fade: false,
     speed: 500,
@@ -59,80 +59,43 @@ function Categories({data}:any) {
   if (!renderState) return null
 
   return (
-    <div className="flex">
-      <Swiper
-        slidesPerView={3.2}
-        spaceBetween={10}
-        navigation={true}
-        loop={true}
-        breakpoints={{
-          640: {
-            slidesPerView: 3.2,
-          },
-          768: {
-            slidesPerView: 4.5,
-          },
-          1024: {
-            slidesPerView: 5.5,
-          },
-        }}
-      >
-        <div
-          role="list"
-          className="inline-flex mx-4 space-x-2 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-2 mobile-cls-fix"
-        >
-          {data?.map((category: any, catId: number) => (
-            <SwiperSlide key={catId}>
-              <div className="sm:col-span-1">
-                <div className="relative flex flex-col style-newin_article">
-                  <div className="image-continer">
-                    <Link
-                      href={category?.categorylist_link}
-                      passHref
-                      legacyBehavior
-                    >
-                      <a>
-                        {isMobile ? (
-                          <Image
-                            src={category?.categorylist_image}
-                            alt={category?.categorylist_name}
-                            width={300}
-                            height={200}
-                            style={mobcss}
-                          />
-                        ) : (
-                          <Image
-                            src={category?.categorylist_image}
-                            alt={category?.categorylist_name}
-                            width={600}
-                            height={800}
-                            style={css}
-                          />
-                        )}
-                      </a>
-                    </Link>
-                  </div>
-                  <div className="flex flex-col w-full px-2 text-center sm:px-4 style-newin_article-title">
-                    <h3 className="pt-1 mb-2 text-sm font-semibold text-white">
-                      {category?.categorylist_name}
-                    </h3>
-                    <Link
-                      href={category?.categorylist_link}
-                      passHref
-                      legacyBehavior
-                    >
-                      <a className="w-full py-1 mb-2 text-sm font-medium text-black bg-white border border-white hover:bg-gray-100 hover:border-gray-800 hover:shadow-md">
-                        {category?.categorylist_buttontext}
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </div>
-      </Swiper>
-    </div>
+    <Swiper slidesPerView={3.2} spaceBetween={10} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 3.2, }, 768: { slidesPerView: 4.5, }, 1024: { slidesPerView: 5.5, }, }}>
+      {data?.map((category: any, catId: number) => (
+        <SwiperSlide key={catId} role="list" className="relative flex flex-col mobile-cls-fix style-newin_article">
+          <div className="image-continer">
+            <Link href={category?.categorylist_link} passHref legacyBehavior>
+              {isMobile ? (
+                <Image
+                  src={category?.categorylist_image}
+                  alt={category?.categorylist_name}
+                  width={300}
+                  height={200}
+                  style={mobcss}
+                  className='cursor-pointer'
+                />
+              ) : (
+                <Image
+                  src={category?.categorylist_image}
+                  alt={category?.categorylist_name}
+                  width={600}
+                  height={800}
+                  style={css}
+                  className='cursor-pointer'
+                />
+              )}
+            </Link>
+          </div>
+          <div className="flex flex-col w-full px-2 text-center sm:px-4 style-newin_article-title">
+            <h3 className="pt-1 text-sm font-semibold text-white b-2">{category?.categorylist_name}</h3>
+            <Link href={category?.categorylist_link} passHref legacyBehavior>
+              <a className="w-full py-1 mb-2 text-sm font-medium text-black bg-white border border-white hover:bg-gray-100 hover:border-gray-800 hover:shadow-md">
+                {category?.categorylist_buttontext}
+              </a>
+            </Link>
+          </div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
   )
 }
 
