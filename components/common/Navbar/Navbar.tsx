@@ -351,7 +351,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
         </Dialog>
       </Transition.Root>
 
-      <header className="fixed top-0 right-0 w-full bg-white shadow-md z-999">
+      <header className="fixed top-0 right-0 w-full bg-white shadow-md z-999 navbar-min-64">
         <nav aria-label="Top" className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0">
           <button type="button" className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden" onClick={() => { hamburgerMenu(); setOpen(true) }}>
             <span className="sr-only">Open menu</span>
@@ -408,7 +408,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                                   <h5 className="text-xl font-semibold text-gray-900 capitalize">{navBlock.boxTitle}</h5>
                                   <div key={`navItems-${navIdx}`} className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8">
                                     {navBlock.navItems.map((navItem: any, idx: number) => (
-                                      <Popover.Button className={classNames(openState == idx ? '' : 'border-gray-200 text-gray-700 hover:text-gray-800',
+                                      <Popover.Button key={`popover-button-${idx}`} className={classNames(openState == idx ? '' : 'border-gray-200 text-gray-700 hover:text-gray-800',
                                         'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
                                       )}>
                                         <Link href={`/${navItem.itemLink}`} className="relative flex items-center h-full hover:text-gray-800">{navItem.caption}</Link>

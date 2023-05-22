@@ -61,7 +61,7 @@ function Categories({ data }: any) {
   return (
     <Swiper slidesPerView={3.2} spaceBetween={10} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 3.2, }, 768: { slidesPerView: 4.5, }, 1024: { slidesPerView: 5.5, }, }}>
       {data?.map((category: any, catId: number) => (
-        <SwiperSlide key={catId} role="list" className="relative flex flex-col mobile-cls-fix style-newin_article">
+        <SwiperSlide key={catId} className="relative flex flex-col mobile-cls-fix style-newin_article">
           <div className="image-continer">
             <Link href={category?.categorylist_link} passHref legacyBehavior>
               {isMobile ? (
