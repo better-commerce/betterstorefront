@@ -215,7 +215,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   return (
     <>
       <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         {seoInfo && (
           <>
             <title>{seoInfo?.metaTitle}</title>
