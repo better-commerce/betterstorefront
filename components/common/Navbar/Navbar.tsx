@@ -408,7 +408,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                                   <h5 className="text-xl font-semibold text-gray-900 capitalize">{navBlock.boxTitle}</h5>
                                   <div key={`navItems-${navIdx}`} className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8">
                                     {navBlock.navItems.map((navItem: any, idx: number) => (
-                                      <Popover.Button className={classNames(openState == idx ? '' : 'border-gray-200 text-gray-700 hover:text-gray-800',
+                                      <Popover.Button key={`popover-button-${idx}`} className={classNames(openState == idx ? '' : 'border-gray-200 text-gray-700 hover:text-gray-800',
                                         'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
                                       )}>
                                         <Link href={`/${navItem.itemLink}`} className="relative flex items-center h-full hover:text-gray-800">{navItem.caption}</Link>
