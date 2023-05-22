@@ -275,14 +275,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
             leaveTo="-translate-x-full"
           >
             <div className="relative flex flex-col w-full max-w-xs pb-12 overflow-y-auto bg-white shadow-xl z-9999">
-            <Link href="/" passHref>
-                <Image
-                className="mx-2 mt-5"
-                src="/logo-cx-commerce.png"
-                alt="BetterComerce"
-                width={50}
-                height={36}
-              /></Link>
+              <Logo />
               <div className="flex px-4 pt-5 pb-2">
                 <button
                   type="button"
@@ -306,114 +299,48 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                           key={idx}
                           href={hyperlinkHandler(item.hyperlink)}
                           passHref
-                          onClick={() => {
-                            hamburgerMenuClick(item.caption)
-                            setOpen(false)
-                          }}
-                          className="flex flex-col px-4 py-4 text-sm font-bold text-black border-t whitespace-nowrap"
-                        >
+                          onClick={() => { hamburgerMenuClick(item.caption); setOpen(false) }}
+                          className="flex flex-col px-4 py-4 text-sm font-bold text-black border-t whitespace-nowrap">
                           {item.caption}
                         </Link>
                       ) : (
-                        <>
-                          {/* //Disclosure Start */}
-                          <Disclosure key={item.caption}>
-                            {({ open }) => (
-                              <>
-                                <Disclosure.Button className="flex flex-col w-full px-0 -mb-px space-x-0 text-left border-t">
-                                  <div
-                                    className="flex justify-between w-full"
-                                    onClick={() =>
-                                      hamburgerMenuClick(item.caption)
-                                    }
-                                  >
-                                    <div className="flex flex-col px-4 py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap">
-                                      {item.caption}
-                                    </div>
-                                    <div className="pt-5 pr-3">
-                                      <ChevronUpIcon
-                                        className={`${
-                                          !open
-                                            ? 'transition-transform duration-150 rotate-180 transform'
-                                            : 'transition-transform duration-150 rotate-0 transform'
-                                        } h-5 w-5 text-black`}
-                                      />
-                                    </div>
-                                  </div>
-                                </Disclosure.Button>
+                        <Disclosure key={`disclosure-start-${item.caption}`}>
+                          {({ open }) => (
+                            <>
+                              <Disclosure.Button className="flex justify-between w-full px-0 -mb-px space-x-0 text-left border-t" onClick={() => hamburgerMenuClick(item.caption)}>
+                                <div className="flex flex-col px-4 py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap">{item.caption}</div>
+                                <div className="pt-5 pr-3">
+                                  <ChevronUpIcon className={`${!open ? 'transition-transform duration-150 rotate-180 transform' : 'transition-transform duration-150 rotate-0 transform'} h-5 w-5 text-black`} />
+                                </div>
+                              </Disclosure.Button>
 
-                                <Disclosure.Panel
-                                  as={Fragment}
-                                  key={item.caption}
-                                >
-                                  <div className="space-y-4">
-                                    {item.navBlocks.length ? (
-                                      <div className="relative px-2 bg-white border-b">
-                                        <div className="px-0 mx-auto max-w-7xl sm:px-0 lg:px-0">
-                                          <div className="grid items-start grid-cols-1 md:grid-cols-1 lg:gap-x-8">
-                                            {item.navBlocks.map(
-                                              (
-                                                navBlock: any,
-                                                navIdx: number
-                                              ) => {
-                                                return (
-                                                  <div
-                                                    key={navIdx}
-                                                    className="grid grid-cols-1 gap-y-0 gap-x-0 lg:gap-x-0"
-                                                  >
-                                                    <div>
-                                                      {/* <p className="p-2 font-semibold text-black capitalize text-md">
-                                                    {navBlock.boxTitle}
-                                                  </p> */}
-                                                      <div className="px-2 py-2 pt-2 mt-1 border-t border-gray-200 sm:grid sm:grid-cols-1 sm:gap-x-6">
-                                                        <ul
-                                                          role="list"
-                                                          aria-labelledby="clothing-heading"
-                                                          className="grid grid-cols-1"
-                                                        >
-                                                          {navBlock.navItems.map(
-                                                            (navItem: any) => (
-                                                              <Link
-                                                                key={
-                                                                  navItem.caption
-                                                                }
-                                                                href={`/${navItem.itemLink}`}
-                                                                passHref
-                                                                onClick={() => {
-                                                                  setOpen(false)
-                                                                  hamburgerMenuClickLevel2(
-                                                                    item.caption,
-                                                                    navBlock.boxTitle
-                                                                  )
-                                                                }}
-                                                                className="text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
-                                                              >
-                                                                <li className="flex pb-2 my-1">
-                                                                  {
-                                                                    navItem.caption
-                                                                  }
-                                                                </li>{' '}
-                                                              </Link>
-                                                            )
-                                                          )}
-                                                          {/* <hr className="my-3" /> */}
-                                                        </ul>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                )
-                                              }
-                                            )}
-                                          </div>
+                              <Disclosure.Panel as={Fragment} key={`disclosure-panel-${item.caption}`}>
+                                <div className="space-y-4">
+                                  {item.navBlocks.length ? (
+                                    item.navBlocks.map((navBlock: any, navIdx: number) => {
+                                      return (
+                                        <div key={`navbar-parent-${navIdx}`} className="grid grid-cols-1 px-2 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0">
+                                          <ul role="list" aria-labelledby="clothing-heading" className="col-span-1">
+                                            {navBlock.navItems.map((navItem: any) => (
+                                              <Link
+                                                legacyBehavior
+                                                key={navItem.caption}
+                                                href={`/${navItem.itemLink}`}
+                                                passHref
+                                                onClick={() => { setOpen(false); hamburgerMenuClickLevel2(item.caption, navBlock.boxTitle) }}>
+                                                <li className="flex pb-2 my-1 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">{navItem.caption}</li>
+                                              </Link>
+                                            ))}
+                                          </ul>
                                         </div>
-                                      </div>
-                                    ) : null}
-                                  </div>
-                                </Disclosure.Panel>
-                              </>
-                            )}
-                          </Disclosure>
-                        </>
+                                      )
+                                    })
+                                  ) : null}
+                                </div>
+                              </Disclosure.Panel>
+                            </>
+                          )}
+                        </Disclosure>
                       )}
                     </div>
                   )
@@ -425,227 +352,121 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
       </Transition.Root>
 
       <header className="fixed top-0 right-0 w-full bg-white shadow-md z-999">
-        <nav
-          aria-label="Top"
-          className="w-full px-4 mx-auto md:w-4/5 sm:px-0 lg:px-0"
-        >
-          <div className="pb-0 sm:px-0 sm:pb-0">
-            <div className="flex items-center justify-between h-16">
-              <button
-                type="button"
-                className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden"
-                onClick={() => {
-                  hamburgerMenu()
-                  setOpen(true)
-                }}
-              >
-                <span className="sr-only">Open menu</span>
-                <Bars3Icon className="w-6 h-6 text-black" aria-hidden="true" />
-              </button>
+        <nav aria-label="Top" className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0">
+          <button type="button" className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden" onClick={() => { hamburgerMenu(); setOpen(true) }}>
+            <span className="sr-only">Open menu</span>
+            <Bars3Icon className="w-6 h-6 text-black" aria-hidden="true" />
+          </button>
 
-              <Link href="/">
-                <div className="flex w-32 cursor-pointer">
-                  <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
-                  <Logo />
-                </div>
-              </Link>
+          <Link href="/">
+            <div className="flex w-32 cursor-pointer">
+              <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
+              <Logo />
+            </div>
+          </Link>
 
-              {/* Flyout menus */}
-              {renderState && (
-                <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full sm:static sm:self-stretch sm:block sm:h-16">
-                  <div className="flex h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:h-full sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0">
-                    {config?.map((item: any, idx: number) => {
-                      return (
-                        <Popover
-                          key={idx}
-                          className="flex"
-                          onMouseEnter={() => setOpenState(idx)}
-                          onMouseLeave={() => setOpenState(-1)}
+          {renderState && (
+            <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16">
+              {config?.map((item: any, idx: number) => (
+                <Popover key={`popover-fly-menu-${idx}`} className="flex" onMouseEnter={() => setOpenState(idx)} onMouseLeave={() => setOpenState(-1)}>
+                  {({ open }) => (
+                    <>
+                      {!item.navBlocks.length ? (
+                        <Popover.Button className={classNames(
+                          openState == idx
+                            ? 'border-indigo-600 text-indigo-600'
+                            : 'border-transparent text-black hover:text-black',
+                          'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                        )}>
+                          <Link href={`/${item.hyperlink}`} className="relative flex items-center h-full">{item.caption}</Link>
+                        </Popover.Button>
+                      ) : (
+                        <Popover.Button className={classNames(
+                          openState == idx
+                            ? 'border-indigo-600 text-indigo-600'
+                            : 'border-transparent text-black hover:text-black',
+                          'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                        )}>
+                          {item.caption}
+                        </Popover.Button>
+                      )}
+                      {item.navBlocks.length ? (
+                        <Transition
+                          show={openState == idx}
+                          as={Fragment}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
                         >
-                          {({ open }) => (
-                            <>
-                              {!item.navBlocks.length ? (
-                                <Popover.Button
-                                  className={classNames(
-                                    openState == idx
-                                      ? 'border-indigo-600 text-indigo-600'
-                                      : 'border-transparent text-black hover:text-black',
-                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                  )}
-                                >
-                                  <Link
-                                    href={`/${item.hyperlink}`}
-                                    className="relative flex items-center h-full"
-                                  >
-                                    {item.caption}
-                                  </Link>
-                                </Popover.Button>
-                              ) : (
-                                <Popover.Button
-                                  className={classNames(
-                                    openState == idx
-                                      ? 'border-indigo-600 text-indigo-600'
-                                      : 'border-transparent text-black hover:text-black',
-                                    'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                                  )}
-                                >
-                                  {item.caption}
-                                </Popover.Button>
-                              )}
-                              {item.navBlocks.length ? (
-                                <Transition
-                                  show={openState == idx}
-                                  as={Fragment}
-                                  enter="transition ease-out duration-200"
-                                  enterFrom="opacity-0"
-                                  enterTo="opacity-100"
-                                  leave="transition ease-in duration-150"
-                                  leaveFrom="opacity-100"
-                                  leaveTo="opacity-0"
-                                >
-                                  <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
-                                    <div
-                                      className="absolute bg-white shadow top-1/2"
-                                      aria-hidden="true"
-                                    />
-                                    <div className="relative w-4/5 px-4 mx-auto bg-white sm:px-0 lg:px-0">
-                                      <div className="grid items-start grid-cols-1 pt-10 pb-12 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
-                                        {item.navBlocks.map(
-                                          (navBlock: any, navIdx: number) => {
-                                            return (
-                                              <div
-                                                key={navIdx}
-                                                className="grid grid-cols-1 gap-y-10 gap-x-6 lg:gap-x-8"
-                                              >
-                                                <p className="text-xl font-semibold text-gray-900 capitalize">
-                                                  {navBlock.boxTitle}
-                                                </p>
-                                                <div className="pt-6 mt-4 border-t border-gray-100 sm:grid sm:grid-cols-1 sm:gap-x-6">
-                                                  <ul
-                                                    role="list"
-                                                    aria-labelledby="clothing-heading"
-                                                    className="grid grid-cols-5"
-                                                  >
-                                                    {navBlock.navItems.map(
-                                                      (
-                                                        navItem: any,
-                                                        idx: number
-                                                      ) => (
-                                                        <li
-                                                          key={idx}
-                                                          className="flex my-2"
-                                                        >
-                                                          <Popover.Button
-                                                            className={classNames(
-                                                              openState == idx
-                                                                ? ''
-                                                                : 'border-gray-200 text-gray-700 hover:text-gray-800',
-                                                              'relative z-10 flex items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
-                                                            )}
-                                                          >
-                                                            <Link
-                                                              href={`/${navItem.itemLink}`}
-                                                              className="relative flex items-center h-full hover:text-gray-800"
-                                                            >
-                                                              {navItem.caption}
-                                                            </Link>
-                                                          </Popover.Button>
-                                                        </li>
-                                                      )
-                                                    )}
-                                                  </ul>
-                                                </div>
-                                              </div>
-                                            )
-                                          }
-                                        )}
-                                      </div>
-                                    </div>
-                                  </Popover.Panel>
-                                </Transition>
-                              ) : null}
-                            </>
-                          )}
-                        </Popover>
-                      )
-                    })}
-                  </div>
-                </Popover.Group>
-              )}
-              <div className="flex items-center justify-end flex-1">
-                <Searchbar onClick={setShowSearchBar} />
-                <Account
-                  title={title}
-                  config={accountDropdownConfig}
-                  deviceInfo={deviceInfo}
-                />
-                <div className="hidden sm:flex">
-                  <CurrencySwitcher
-                    config={currencies}
-                    title={SELECT_CURRENCY}
-                    action={configAction}
-                  />
-                  <LanguageSwitcher
-                    title={SELECT_LANGUAGE}
-                    action={configAction}
-                    config={languages}
-                  />
-                </div>
+                          <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
+                            <div className="relative grid items-start w-4/5 grid-cols-1 px-4 pt-10 pb-12 mx-auto bg-white sm:px-0 lg:px-0 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
+                              {item.navBlocks.map((navBlock: any, navIdx: number) => (
+                                <>
+                                  <h5 className="text-xl font-semibold text-gray-900 capitalize">{navBlock.boxTitle}</h5>
+                                  <div key={`navItems-${navIdx}`} className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8">
+                                    {navBlock.navItems.map((navItem: any, idx: number) => (
+                                      <Popover.Button className={classNames(openState == idx ? '' : 'border-gray-200 text-gray-700 hover:text-gray-800',
+                                        'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
+                                      )}>
+                                        <Link href={`/${navItem.itemLink}`} className="relative flex items-center h-full hover:text-gray-800">{navItem.caption}</Link>
+                                      </Popover.Button>
+                                    ))}
+                                  </div>
+                                </>
+                              ))}
+                            </div>
+                          </Popover.Panel>
+                        </Transition>
+                      ) : null}
+                    </>
+                  )}
+                </Popover>
+              ))}
+            </Popover.Group>
+          )}
+          <div className="flex items-center justify-end flex-1">
+            <Searchbar onClick={setShowSearchBar} />
+            <Account title={title} config={accountDropdownConfig} deviceInfo={deviceInfo} />
+            {!isMobile && (
+              <>
+                <CurrencySwitcher config={currencies} title={SELECT_CURRENCY} action={configAction} />
+                <LanguageSwitcher config={languages} title={SELECT_LANGUAGE} action={configAction} />
+              </>
+            )}
+            <div className="flow-root w-10 px-1 sm:w-16">
+              <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center" onClick={() => { viewWishlist(); openWishlist() }}>
+                <HeartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
+                <span className="hidden text-sm font-normal text-black sm:block">Wishlist</span>
+                {wishListItems.length > 0 && (
+                  <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full sm:block -right-0">
+                    {wishListItems.length}
+                  </span>
+                )}
+                <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+              </button>
+            </div>
 
-                <div className="flow-root w-10 px-1 sm:w-16">
-                  <button
-                    className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center"
-                    onClick={() => {
-                      viewWishlist()
-                      openWishlist()
-                    }}
-                  >
-                    <HeartIcon
-                      className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600"
-                      aria-hidden="true"
-                      aria-label="Wishlist"
-                    />
-                    <span className="hidden text-sm font-normal text-black sm:block">
-                      Wishlist
-                    </span>
-                    {wishListItems.length > 0 && (
-                      <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full sm:block -right-0">
-                        {wishListItems.length}
+            <div className="flow-root w-10 px-1 sm:w-16">
+              <button
+                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center"
+                onClick={() => { viewCart(cartItems); openCart() }}
+              >
+                <ShoppingCartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="Add to cart" />
+                <span className="hidden text-sm font-normal text-black sm:block">Cart</span>
+                {renderState && (
+                  <>
+                    {cartItems.lineItems?.length > 0 && (
+                      <span className="absolute w-4 h-4 ml-2 text-xs font-medium text-center text-white bg-gray-500 rounded-full -top-1 -right-2">
+                        {cartItems.lineItems?.length}
                       </span>
                     )}
                     <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
-                  </button>
-                </div>
-
-                <div className="flow-root w-10 px-1 sm:w-16">
-                  <button
-                    className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center"
-                    onClick={() => {
-                      viewCart(cartItems)
-                      openCart()
-                    }}
-                  >
-                    <ShoppingCartIcon
-                      className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500"
-                      aria-hidden="true"
-                      aria-label="Add to cart"
-                    />
-                    <span className="hidden text-sm font-normal text-black sm:block">
-                      Cart
-                    </span>
-                    {renderState && (
-                      <>
-                        {cartItems.lineItems?.length > 0 && (
-                          <span className="absolute w-4 h-4 ml-2 text-xs font-medium text-center text-white bg-gray-500 rounded-full -top-1 -right-2">
-                            {cartItems.lineItems?.length}
-                          </span>
-                        )}
-                        <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </nav>
