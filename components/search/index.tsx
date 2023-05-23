@@ -49,6 +49,8 @@ export default function Search({ closeWrapper = () => { }, keywords }: any) {
       }
     }
     if (inputValue.length > 2) fetchItems()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue])
 
   const handleEnterPress = (e: any) => {
@@ -65,12 +67,16 @@ export default function Search({ closeWrapper = () => { }, keywords }: any) {
   useEffect(() => {
     document.addEventListener('keypress', handleEnterPress)
     return () => document.removeEventListener('keypress', handleEnterPress)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     if (path !== Router.asPath) {
       closeWrapper()
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Router.asPath])
 
   const css = { maxWidth: '100%', height: 'auto' }

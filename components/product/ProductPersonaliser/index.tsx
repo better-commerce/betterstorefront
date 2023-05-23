@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import SwiperCore, { Navigation } from 'swiper'
 import { SELECT_IMAGE_ERROR } from '@components/utils/textVariables';
+import Image from 'next/image';
 type ProductPersonaliserOption = { label: string; value: string };
 
 type ProductPersonaliserImage = {
@@ -66,6 +67,8 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
           }
         )
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   let prodpersonaliserURL:any = '';
@@ -113,6 +116,8 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
       
       setText(chars.join(''));
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text]);
 
   const clearText = useCallback(() => {
@@ -130,6 +135,8 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
       message: text,
       imageUrl: product?.images?.length > 1 ? selectedImage : product.images[0]
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onSubmit, text, selectedImage]); 
 
   // function to handle selected Image
@@ -140,10 +147,14 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
 
   useEffect(() => {
    if(counter < 7) {setCounter(text.length)}
+
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[text])
 
   useEffect(() => {
     setShowError(false)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[selectedImage])
 
   return (
@@ -154,7 +165,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
         // style={{ minWidth: canvasWidth, minHeight: canvasHeight }}
         className="mb-2 mob-engrav-img iphoneXR:p-1 s20:p-2"
       >
-        <img src={imageUrl || ''} width={200} height={180} alt={product.name} className='mx-auto'></img>
+        <Image src={imageUrl || ''} width={200} height={180} alt={product.name} className='mx-auto' />
       </div>
           <div className="px-4 xsm:p-3 m-auto">
             <p className="mb-3 text-black xsm:text-sm xsm:flex dark:text-black"><span className='text-gray-500 text-2xl'>Message</span> : <span className='text-2xl'>{text}</span></p>
@@ -198,9 +209,9 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                       )} 
                       key={valId}
                       >
-                        <img src={val.image} alt={val.image} className={cn('max-h-md w-full', !!selectedImage && selectedImage === val.image  && 'border-2 border-blue')} onClick={(e)=> {
+                        <Image src={val.image} alt={val.image} className={cn('max-h-md w-full', !!selectedImage && selectedImage === val.image  && 'border-2 border-blue')} onClick={(e)=> {
                             handleImageCLick(e);
-                        }} ></img>
+                        }} />
                       </SwiperSlide>
                     )
                   })}
@@ -209,7 +220,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
             </div>) : 
             (
                 <>
-                    <img src={product.images[0].image} alt='image1' className='max-h-md w-full'/>
+                    <Image src={product.images[0].image} alt='image1' className='max-h-md w-full'/>
                 </>
             )}
         </div>

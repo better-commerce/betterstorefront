@@ -25,6 +25,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     if (router.query.view && view !== router.query.view) {
       setView(router.query.view)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
   const { user, deleteUser, isGuestUser } = useUI()

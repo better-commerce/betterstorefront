@@ -72,6 +72,8 @@ export default function ContactPreferences() {
     setData(tempObj)
     setDefaultData(tempObj)
     setItems(newConfig)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleRadioButton = (unsubscribe: boolean = false, id: number) => {

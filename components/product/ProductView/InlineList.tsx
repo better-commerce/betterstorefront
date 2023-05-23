@@ -87,6 +87,8 @@ export default function InlineList({
   useEffect(() => {
     const fieldSet = items?.find((o: any) => o.fieldValue === currentAttribute)
     handleSetProductVariantInfo({ colour: currentAttribute, fieldSet })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   useEffect(() => {
@@ -96,6 +98,8 @@ export default function InlineList({
         setColorName(val.valueText)
       }
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   const [openRemainElems, setOpenRemainElems] = useState(false)

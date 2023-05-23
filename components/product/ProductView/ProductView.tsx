@@ -186,6 +186,8 @@ export default function ProductView({
 
   useEffect(() => {
     fetchProduct()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug])
 
   useEffect(() => {
@@ -213,6 +215,8 @@ export default function ProductView({
           .forEach((node: any) => node.remove())
       })
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleNotification = () => {

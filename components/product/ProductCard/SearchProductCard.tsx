@@ -95,6 +95,8 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
         return { ...prevState, image: product.image, link: product.slug }
       } else return { ...prevState }
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.slug])
 
   const productWithColors =

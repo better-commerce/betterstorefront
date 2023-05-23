@@ -17,6 +17,8 @@ export default function PaymentMethods({
         if (response.data) setPaymentMethods(response.data)
       })
       .catch((err: any) => console.log(err))
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

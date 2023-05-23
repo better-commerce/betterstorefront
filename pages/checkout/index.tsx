@@ -22,12 +22,12 @@ function Checkout({ cart, config, location }: any) {
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
   const [userAddresses, setUserAddresses] = useState([])
-  
+
   const { getAddress } = asyncHandler()
 
   useEffect(() => {
     setIsLoggedIn(!!user?.userId || false)
-  },[user, cartItems])
+  }, [user, cartItems])
 
 
   const handleGuestMail = (values: any) => {
@@ -89,8 +89,8 @@ function Checkout({ cart, config, location }: any) {
           shipping_tier: cartItems?.shippingMethods[0]?.countryCode,
           coupon: cartItems?.promotionsApplied?.length
             ? cartItems?.promotionsApplied
-                ?.map((x: any) => x?.promoCode)
-                ?.join(',')
+              ?.map((x: any) => x?.promoCode)
+              ?.join(',')
             : '',
           value: cartItems?.subTotal?.raw?.withTax,
           item_var_id: cartItems?.id,
@@ -118,9 +118,11 @@ function Checkout({ cart, config, location }: any) {
 
   useEffect(() => {
     fetchAddress()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if(isLoggedIn) {
+  if (isLoggedIn) {
     return (
       <CheckoutForm
         cart={cart}
@@ -136,14 +138,14 @@ function Checkout({ cart, config, location }: any) {
       />
     )
   }
-   if(!isLoggedIn){
+  if (!isLoggedIn) {
     return (
-    <CheckoutRouter
-      setIsLoggedIn={setIsLoggedIn}
-      handleGuestMail={handleGuestMail}
-    />
-  )
- }
+      <CheckoutRouter
+        setIsLoggedIn={setIsLoggedIn}
+        handleGuestMail={handleGuestMail}
+      />
+    )
+  }
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')

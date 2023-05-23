@@ -9,6 +9,7 @@ import {
   PRODUCT_INFORMATION, 
   PRODUCT_OPTIONS 
 } from '@components/utils/textVariables'
+import Image from 'next/image'
 
 export default function BundleCard({ productData, closeModal }: any) {
   const [activeImage, setActiveImage] = useState(
@@ -66,7 +67,7 @@ export default function BundleCard({ productData, closeModal }: any) {
 
                 <div className="grid items-start w-full grid-cols-1 gap-y-8 gap-x-6 sm:grid-cols-12 lg:gap-x-8">
                   <div className="overflow-hidden bg-gray-100 rounded-lg aspect-w-2 aspect-h-3 sm:col-span-4 lg:col-span-5">
-                    <img
+                    <Image
                       src={activeImage}
                       alt={productData.images[0]?.alt || ''}
                       className="object-cover object-center"
@@ -115,10 +116,11 @@ export default function BundleCard({ productData, closeModal }: any) {
                         {productData.images.map(
                           (image: any, imageIdx: number) => {
                             return (
-                              <img
+                              <Image
                                 key={imageIdx}
                                 className="object-cover object-center w-16 h-16 p-1 border rounded-md"
                                 src={image.image}
+                                alt=""
                                 onClick={() => setActiveImage(image.image)}
                               />
                             )

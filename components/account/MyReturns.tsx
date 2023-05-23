@@ -18,6 +18,7 @@ import { useUI } from '@components/ui'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { isCartAssociated } from '@framework/utils/app-util'
+import Image from 'next/image'
 
 export default function MyReturns() {
   const { user, basketId, setCartItems, openCart, cartItems } = useUI()
@@ -37,6 +38,8 @@ export default function MyReturns() {
   }
   useEffect(() => {
     fetchReturns()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleAddToCart = (product: any) => {
@@ -178,7 +181,7 @@ export default function MyReturns() {
                             </div>
                           </div>
                           <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
-                            <img
+                            <Image
                               src={product.image}
                               alt={product.name}
                               className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"

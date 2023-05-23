@@ -184,6 +184,8 @@ export default function SizeInline({
       stockCode: getStockPerAttrData.stockCode,
     })
     handleSetProductVariantInfo({ clothSize: currentAttribute })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   useEffect(() => {
@@ -198,6 +200,8 @@ export default function SizeInline({
       productId: getStockPerAttrData.productId,
       stockCode: getStockPerAttrData.stockCode,
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId])
 
   const isPreOrderEnabled = productData.isPreOrderEnabled

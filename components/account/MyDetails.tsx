@@ -9,6 +9,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { MY_DETAIL_TEXT, GENERAL_SAVE_CHANGES } from '@components/utils/textVariables'
 import { Button } from '@components/ui'
 import { number } from 'yup'
+import Link from 'next/link'
 
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
@@ -68,7 +69,7 @@ export default function MyDetails() {
                 d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
               />{' '}
             </svg> 
-            <a className="mr-2 mx-2 leading-none" href="/my-account">My Details</a>
+            <Link className="mr-2 mx-2 leading-none" href="/my-account">My Details</Link>
           </h3>
         </div>
       <div className="max-w-4xl lg:mx-12 xs:ml-6">

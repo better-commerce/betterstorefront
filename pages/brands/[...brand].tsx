@@ -160,22 +160,24 @@ function BrandDetailPage({
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
       if (
-        data.products.currentPage !== productListMemory.products.currentPage ||
-        data.products.total !== productListMemory.products.total
+        data?.products?.currentPage !== productListMemory?.products?.currentPage ||
+        data?.products?.total !== productListMemory?.products?.total
       ) {
         setProductListMemory((prevData: any) => {
           let dataClone = { ...data }
           if (state.currentPage > 1) {
             dataClone.products.results = [
-              ...prevData.products.results,
-              ...dataClone.products.results,
+              ...prevData?.products?.results,
+              ...dataClone?.products?.results,
             ]
           }
           return dataClone
         })
       }
     }
-  }, [data.products.results.length])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.products?.results?.length])
 
   const handlePageChange = (page: any) => {
     router.push(

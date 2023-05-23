@@ -15,6 +15,7 @@ import { CURRENCY_SYMBOL_POUND } from '@components/utils/textVariables';
 import { PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES, PDP_REVIEW_IMAGE_SIZE_IN_BYTES, PDP_REVIEW_NO_OF_IMAGES_ALLOWED } from '@components/utils/constants';
 import { Button, LoadingDots } from '@components/ui';
 import classNames from 'classnames';
+import Link from 'next/link';
 
 
 const ReturnReason = ({ returnsReasons, onItemReturn, item, itemReturnLoadingState, qty }: any) => {
@@ -53,11 +54,11 @@ const ReturnReason = ({ returnsReasons, onItemReturn, item, itemReturnLoadingSta
             {/* Reason Section UI Start*/}
             <div className='w-full'>
                 <div className='mx-auto cancel-continer'>
-                    <a href="/my-account/orders" className='mobile-view'>
+                    <Link href="/my-account/orders" className='mobile-view'>
                         <h4 className="mr-2 leading-none text-xl text-gray-900 uppercase font-bold">
                         <i className="sprite-icon sprite-left-arrow mr-2"></i> Return Item
                         </h4>
-                    </a>
+                    </Link>
                     <div className='w-full py-4'>
                         <h4 className='text-base font-bold text-primary'>Why are you returning this item?</h4>
                         <p className='text-xs text-gray-700'>This Information will help us to improve our service</p>

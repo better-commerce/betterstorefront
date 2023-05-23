@@ -70,6 +70,8 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     handleUpdateWishlistItem()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wishListItems, productData])
 
   useEffect(() => {
@@ -83,6 +85,8 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
           a.displayOrder > b.displayOrder ? 1 : -1
       ) || []
     if (sizeAttribData) setSizeValues(sizeAttribData)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.variantProductsAttributeMinimal])
 
   const handleQuickViewData = (data: any) => {
@@ -123,6 +127,8 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
         return { ...prevState, image: product.image, link: product.slug }
       } else return { ...prevState }
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.slug])
 
   const productWithColors =

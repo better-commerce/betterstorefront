@@ -21,5 +21,7 @@ export default function useAnalytics(
   useEffect(() => {
     //console.count(`inside use effect ${dataLayer}`)
     if (dataLayer) eventDispatcher(event, data)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataLayer])
 }

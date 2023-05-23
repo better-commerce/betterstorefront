@@ -39,6 +39,8 @@ function LookbookDetailPage({ data, slug }: any) {
 
   useEffect(() => {
     if (slug) loadProducts()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (router?.isFallback && !data?.id) return null
@@ -129,8 +131,8 @@ function LookbookDetailPage({ data, slug }: any) {
             <ProductGrid
               products={products}
               currentPage={products?.currentpage}
-              handlePageChange={() => {}}
-              handleInfiniteScroll={() => {}}
+              handlePageChange={() => { }}
+              handleInfiniteScroll={() => { }}
             />
           </div>
         </div>
