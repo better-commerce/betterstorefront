@@ -147,6 +147,7 @@ const Layout: FC<Props & IExtraProps> = ({
   )
   return (
     <CommerceProvider locale={locale}>
+      <h1 className='sr-only'>layout</h1>
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
         {showSearchBar && (<SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />)}
