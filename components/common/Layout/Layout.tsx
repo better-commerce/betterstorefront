@@ -151,7 +151,7 @@ const Layout: FC<Props & IExtraProps> = ({
       <div className={cn(s.root)}>
         {showSearchBar && (<SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />)}
         <Navbar currencies={config?.currencies} config={sortedData} languages={config?.languages} deviceInfo={deviceInfo} />
-        <main className="fit">{children}</main>
+        <main className="pt-16 fit">{children}</main>
         <Footer config={data.footer} deviceInfo={deviceInfo} />
         <ModalUI />
         <SidebarUI />
