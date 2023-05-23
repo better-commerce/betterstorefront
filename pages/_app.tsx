@@ -102,6 +102,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }
 
+  
   useEffect(() => {
     const addScript = document.createElement('script')
     addScript.setAttribute(
