@@ -18,6 +18,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
+import { isMobile } from 'react-device-detect'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -313,10 +314,11 @@ function Search({ query, setEntities, recordEvent }: any) {
         <h4 className='px-4 text-sm font-medium sm:px-0'>Showing {data.products.total} Results for</h4>
         <h1 className="px-4 text-xl font-semibold tracking-tight text-black sm:px-0 sm:text-2xl">{GENERAL_CATALOG}</h1>
         <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
-          <div className="flex flex-col sm:col-span-2 sm:hidden">
+          {isMobile ? (
             <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
-          </div>
-          <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+          ) : (
+            <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+          )}
           <div className="sm:col-span-10">
             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
             <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} />
