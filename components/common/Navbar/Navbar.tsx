@@ -297,6 +297,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                       {!item.navBlocks.length ? (
                         <Link
                           key={idx}
+                          title={item.caption}
                           href={hyperlinkHandler(item.hyperlink)}
                           passHref
                           onClick={() => { hamburgerMenuClick(item.caption); setOpen(false) }}
@@ -325,6 +326,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                                               <Link
                                                 legacyBehavior
                                                 key={navItem.caption}
+                                                title={navItem.caption}
                                                 href={`/${navItem.itemLink}`}
                                                 passHref
                                                 onClick={() => { setOpen(false); hamburgerMenuClickLevel2(item.caption, navBlock.boxTitle) }}>
@@ -378,7 +380,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                             : 'border-transparent text-black hover:text-black',
                           'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                         )}>
-                          <Link href={`/${item.hyperlink}`} className="relative flex items-center h-full">{item.caption}</Link>
+                          <Link href={`/${item.hyperlink}`} className="relative flex items-center h-full" title={item.caption}>{item.caption}</Link>
                         </Popover.Button>
                       ) : (
                         <Popover.Button className={classNames(
@@ -411,7 +413,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                                       <Popover.Button key={`popover-button-${idx}`} className={classNames(openState == idx ? '' : 'border-gray-200 text-gray-700 hover:text-gray-800',
                                         'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
                                       )}>
-                                        <Link href={`/${navItem.itemLink}`} className="relative flex items-center h-full hover:text-gray-800">{navItem.caption}</Link>
+                                        <Link href={`/${navItem.itemLink}`} className="relative flex items-center h-full hover:text-gray-800" title={navItem.caption}>{navItem.caption}</Link>
                                       </Popover.Button>
                                     ))}
                                   </div>
@@ -430,12 +432,10 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
           <div className="flex items-center justify-end flex-1">
             <Searchbar onClick={setShowSearchBar} />
             <Account title={title} config={accountDropdownConfig} deviceInfo={deviceInfo} />
-            {!isMobile && (
-              <>
-                <CurrencySwitcher config={currencies} title={SELECT_CURRENCY} action={configAction} />
-                <LanguageSwitcher config={languages} title={SELECT_LANGUAGE} action={configAction} />
-              </>
-            )}
+            <div className="hidden sm:flex">
+              <CurrencySwitcher config={currencies} title={SELECT_CURRENCY} action={configAction} />
+              <LanguageSwitcher config={languages} title={SELECT_LANGUAGE} action={configAction} />
+            </div>
             <div className="flow-root w-10 px-1 sm:w-16">
               <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center" onClick={() => { viewWishlist(); openWishlist() }}>
                 <HeartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />

@@ -53,7 +53,7 @@ export default function Account({ config, title, deviceInfo }: any) {
                   <h3 className="p-2 font-bold text-left">Hi</h3>
                 )}
                 {config.map((item: any, idx: number) => (
-                  <Link key={idx} passHref href={item.href} className={item.className} onClick={item.onClick || false}>{item.title}</Link>
+                  <Link key={idx} title={item.title} passHref href={item.href} className={item.className} onClick={item.onClick || false}>{item.title}</Link>
                 ))}
               </>
             )}

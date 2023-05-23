@@ -210,159 +210,68 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <>
-      <div className="hover:outline hover:outline-1 outline-gray-200 group" key={product.id}>
-        <div className="relative">
-          <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel">
-            <Link
-              passHref
-              href={`/${currentProductData.link}`}
-              onMouseEnter={() => handleHover('enter')}
-              onMouseLeave={() => handleHover('leave')}
-              title={`${product.name} \t ${itemPrice}`}
-            >
-              <Image
-                priority
-                src={
-                  generateUri(currentProductData.image, 'h=500&fm=webp') ||
-                  IMG_PLACEHOLDER
-                }
-                alt={product.name}
-                className="object-cover object-center w-full h-full sm:h-full min-h-image"
-                style={css}
-                width={400}
-                height={600}
-              />
-            </Link>
-            {buttonConfig.isPreOrderEnabled && (
-              <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
-                {BTN_PRE_ORDER}
-              </div>
-            )}
-            {buttonConfig.isNotifyMeEnabled && (
-              <div className="absolute px-1 py-1 text-white bg-red-400 rounded-sm top-2">
-                {BTN_NOTIFY_ME}
-              </div>
-            )}
+      <div className="relative hover:outline hover:outline-1 outline-gray-200 group" key={product.id}>
+        <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel">
+          <Link passHref href={`/${currentProductData.link}`} onMouseEnter={() => handleHover('enter')} onMouseLeave={() => handleHover('leave')} title={`${product.name} \t ${itemPrice}`}>
+            <Image priority src={generateUri(currentProductData.image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+              alt={product.name} className="object-cover object-center w-full h-full sm:h-full min-h-image" style={css} width={400} height={600} />
+          </Link>
+          {buttonConfig.isPreOrderEnabled && (<div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">{BTN_PRE_ORDER}</div>)}
+          {buttonConfig.isNotifyMeEnabled && (<div className="absolute px-1 py-1 text-white bg-red-400 rounded-sm top-2">{BTN_NOTIFY_ME}</div>)}
 
-            <div className="absolute bottom-1 left-1 text-gray-900 bg-gray-100 px-[0.4rem] py-0 text-xs font-semibold sm:font-bold">
-              <div className="flex items-center gap-1">
-                <StarIcon className="inline-block w-[10px] h-[10px] sm:w-[14px] sm:h-[14px]" />
-                {product?.rating}
-              </div>
-            </div>
-
-            <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-0 sm:flex group-hover:-translate-y-full">
-              {!hideWishlistCTA && (
-                <SimpleButton
-                  variant="slim"
-                  className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
-                  onClick={handleWishList}
-                  disabled={product.hasWishlisted}
-                >
-                  {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
-                </SimpleButton>
-              )}
-              <SimpleButton
-                variant="slim"
-                className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none"
-                onClick={() => handleQuickViewData(product)}
-              >
-                {QUICK_VIEW}
-              </SimpleButton>
-            </div>
+          <div className="absolute bottom-1 left-1 text-gray-900 bg-gray-100 px-[0.4rem] py-0 text-xs font-semibold sm:font-bold">
+            <div className="flex items-center gap-1 star-rating">{product?.rating}</div>
           </div>
 
-          <div className="p-1 text-left">
-            <Link
-              passHref
-              href={`/${currentProductData.link}`}
-              title={`${product.name} \t ${itemPrice}`}
-            >
-              <div className="flex items-center justify-between my-1 group-hover:hidden product-name">
-                <div className="w-full">
-                  <h3 className="h-10 text-xs font-medium text-black capitalize sm:text-sm hover:text-gray-950">
-                    {product?.name?.toLowerCase()}
-                  </h3>
-                </div>
-              </div>
-
-              <div className="hidden my-1 group-hover:block">
-                <ul className="flex h-10 text-xs text-gray-700 sizes-ul sm:text-sm">
-                  <li className="mr-1">Sizes:</li>
-                  {sizeValues.map((size: any, idx: number) => (
-                    <li className="inline-block uppercase" key={idx}>
-                      {size?.fieldValue}
-                      {sizeValues.length !== idx + 1 && (
-                        <span className="mr-1 c-sperator">,</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <p className="text-xs text-black sm:mt-1 sm:text-sm">
-                <span className="font-bold">
-                  {product?.price?.formatted?.withTax}
-                </span>
-                {product?.listPrice?.raw?.withTax > 0 &&
-                  product?.listPrice?.raw?.withTax !=
-                    product?.price?.raw?.withTax && (
-                    <>
-                      <span className="px-1 text-xs font-semibold text-gray-400 line-through">
-                        {product?.listPrice?.formatted?.withTax}
-                      </span>
-                      <span className="text-xs text-red-600">
-                        ({discount}% Off)
-                      </span>
-                    </>
-                  )}
-              </p>
-            </Link>
-
-            <div className="flex flex-wrap mt-2 border sm:hidden">
-              <div className="w-4/12">
-                <button
-                  className="w-full text-center bg-white p-1.5"
-                  onClick={handleWishList}
-                  disabled={product.hasWishlisted}
-                >
-                  <HeartIcon
-                    className={`inline-block w-4 h-4 ${
-                      product.hasWishlisted && 'fill-red-600 text-red-600'
-                    }`}
-                  />
-                </button>
-              </div>
-              <div className="w-8/12 text-center border-l sm:col-span-8">
-                <button
-                  type="button"
-                  onClick={() => handleQuickViewData(product)}
-                  className="w-full text-primary dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
-                >
-                  {QUICK_VIEW}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <Button
-                className="hidden mt-2"
-                title={buttonConfig.title}
-                action={buttonConfig.action}
-                type="button"
-                buttonType={buttonConfig.buttonType || 'cart'}
-              />
-            </div>
+          <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-0 sm:flex group-hover:-translate-y-full">
+            {!hideWishlistCTA && (
+              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
+                onClick={handleWishList} disabled={product.hasWishlisted}>{product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}</SimpleButton>
+            )}
+            <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none"
+              onClick={() => handleQuickViewData(product)}>{QUICK_VIEW}</SimpleButton>
           </div>
         </div>
+
+        <Link passHref href={`/${currentProductData.link}`} title={`${product.name} \t ${itemPrice}`}>
+          <h3 className="flex items-center justify-between w-full h-10 px-2 my-1 text-xs font-medium text-black capitalize group-hover:hidden product-name sm:text-sm hover:text-gray-950">
+            {product?.name?.toLowerCase()}
+          </h3>
+
+          <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 group-hover:flex sm:px-2 sizes-ul sm:text-sm">
+            <li className="mr-1">Sizes:</li>
+            {sizeValues.map((size: any, idx: number) => (
+              <li className="inline-block uppercase" key={idx}>{size?.fieldValue} {sizeValues.length !== idx + 1 && (<span className="mr-1 c-sperator">,</span>)}</li>
+            ))}
+          </ul>
+
+          <div className="px-2 text-xs text-black sm:mt-1 sm:text-sm">
+            <span className="font-bold">{product?.price?.formatted?.withTax}</span>
+            {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax && (
+              <>
+                <span className="px-1 text-xs font-semibold text-gray-400 line-through">{product?.listPrice?.formatted?.withTax}</span>
+                <span className="text-xs text-red-600">({discount}% Off)</span>
+              </>
+            )}
+          </div>
+        </Link>
+
+        <div className="flex flex-wrap mt-2 border sm:hidden">
+          <div className="w-4/12">
+            <button className="w-full text-center bg-white p-1.5" onClick={handleWishList} disabled={product.hasWishlisted}>
+              <HeartIcon className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-600'}`} aria-hidden="true" />
+            </button>
+          </div>
+          <div className="w-8/12 text-center border-l sm:col-span-8">
+            <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">{QUICK_VIEW}</button>
+          </div>
+        </div>
+        
+        <div className="flex flex-col">
+          <Button className="hidden mt-2" title={buttonConfig.title} action={buttonConfig.action} type="button" buttonType={buttonConfig.buttonType || 'cart'} />
+        </div>
       </div>
-      <PLPQuickView
-        isQuickview={Boolean(quickViewData)}
-        setQuickview={() => {}}
-        productData={quickViewData}
-        isQuickviewOpen={Boolean(quickViewData)}
-        setQuickviewOpen={handleCloseQuickView}
-      />
+      <PLPQuickView isQuickview={Boolean(quickViewData)} setQuickview={() => { }} productData={quickViewData} isQuickviewOpen={Boolean(quickViewData)} setQuickviewOpen={handleCloseQuickView} />
     </>
   )
 }

@@ -102,16 +102,16 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   //   // }
   // }
 
-  
   // useEffect(() => {
   //   const addScript = document.createElement('script')
   //   addScript.setAttribute(
   //     'src',
   //     '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
   //   )
-  //   document.getElementById("goog-gt-tt")?.remove();
+    
   //   document.body.appendChild(addScript)
   //     ; (window as any).googleTranslateElementInit = googleTranslateElementInit
+  //     document.getElementById('goog-gt-tt')?.remove();
   // }, []);
 
   useEffect(() => {
@@ -244,8 +244,6 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       </NextHead>
 
       <Head {...appConfig}></Head>
-
-      
 
       <ManagedUIContext>
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
