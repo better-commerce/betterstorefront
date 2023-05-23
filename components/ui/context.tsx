@@ -460,7 +460,7 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
       const newCartDataClone = consolidateCartItems(payload);
 
       setItem('cartItems', { ...newCartDataClone })
-      
+
       dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
     },
     [dispatch]
@@ -484,19 +484,21 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
 
   const deleteUser = useCallback(
     (payload: any) => {
-      Router.push('/').then(() => {
-        removeItem('user')
-        dispatch({ type: 'SET_WISHLIST', payload: [] })
-        setItem('wishListItems', [])
-        setItem('cartItems', { lineItems: [] })
-        dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
-        const basketIdRef = uuid()
-        Cookies.set('basketId', basketIdRef, {
-          expires: getExpiry(getMinutesInDays(365)),
+      if (payload?.router) {
+        payload?.router?.push('/').then(() => {
+          removeItem('user')
+          dispatch({ type: 'SET_WISHLIST', payload: [] })
+          setItem('wishListItems', [])
+          setItem('cartItems', { lineItems: [] })
+          dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+          const basketIdRef = uuid()
+          Cookies.set('basketId', basketIdRef, {
+            expires: getExpiry(getMinutesInDays(365)),
+          })
+          dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
+          dispatch({ type: 'REMOVE_USER', payload: {} })
         })
-        dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
-        dispatch({ type: 'REMOVE_USER', payload: {} })
-      })
+      }
     },
     [dispatch]
   )
@@ -561,7 +563,7 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
     },
     [dispatch]
   )
-  
+
   const consolidateCartItems = (payload: any) => {
 
     let newCartDataClone: any = { ...payload };

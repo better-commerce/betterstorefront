@@ -98,7 +98,9 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
     },
     {
       href: '/',
-      onClick: () => deleteUser(),
+      onClick: () => deleteUser({
+        router: Router
+      }),
       title: BTN_SIGN_OUT,
       className: 'text-left p-2 cursor-pointer text-red-600',
     },
