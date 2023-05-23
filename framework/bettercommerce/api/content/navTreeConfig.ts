@@ -1,4 +1,4 @@
-//@TODO to be removed when we connect BE
+// To be removed when we connect BE
 const navigation = {
   categories: [
     {

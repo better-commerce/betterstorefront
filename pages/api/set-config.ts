@@ -1,6 +1,6 @@
 import store from 'store'
 
-export default async (req: any, res: any) => {
+const StoreConfigApiMiddleware = async (req: any, res: any) => {
   const { obj } = req.body
   try {
     Object.keys(obj).forEach((item: any) => {
@@ -10,4 +10,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default StoreConfigApiMiddleware;

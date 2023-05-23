@@ -576,7 +576,7 @@ export default function CheckoutForm({
 
         if (response.data?.result?.id) {
           // handlePayments(method)
-          //@TODO temporary move to BE
+          
           dispatch({
             type: 'SET_ORDER_RESPONSE',
             payload: response.data.result,
@@ -651,7 +651,6 @@ export default function CheckoutForm({
         country: state.deliveryMethod.twoLetterIsoCode,
       })
 
-      //TODO normalize data
       if (response.data) {
         return response.data.response.data.map((item: any) => {
           return {

@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 
-export default async (req: any, res: any) => {
+const PriceMatchApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.priceMatch(
       {
@@ -12,4 +12,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default PriceMatchApiMiddleware;

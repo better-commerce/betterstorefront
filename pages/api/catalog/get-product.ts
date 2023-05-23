@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 
-export default async (req: any, res: any) => {
+const GetProductApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getProduct({
       query: req.body.slug,
@@ -11,4 +11,6 @@ export default async (req: any, res: any) => {
     console.log(error)
     res.status(500).json({ error })
   }
-}
+};
+
+export default GetProductApiMiddleware;

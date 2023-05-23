@@ -8,6 +8,7 @@ import {
   ERROR_PAGE_NOT_FOUND,
   ERROR_PAGE_NOT_FOUND_MESSAGE,
 } from '@components/utils/textVariables'
+import Link from 'next/link';
 
 export async function getStaticProps({
   preview,
@@ -45,12 +46,11 @@ export default function NotFound() {
                 </p>
               </div>
               <div className="w-40 mx-auto text-center mt-5">
-                <a
+                <Link
                   href="/"
-                  className="text-white bg-black block p-4 text-center text-sm font-semibold"
-                >
+                  className="text-white bg-black block p-4 text-center text-sm font-semibold">
                   Back to Homepage
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -71,12 +71,11 @@ export default function NotFound() {
                 </p>
               </div>
               <div className="w-40 mx-auto text-center mt-5">
-                <a
+                <Link
                   href="/"
-                  className="text-white bg-black block p-4 text-center text-sm font-semibold"
-                >
+                  className="text-white bg-black block p-4 text-center text-sm font-semibold">
                   Back to Homepage
-                </a>
+                </Link>
               </div>
             </div>
           </div>

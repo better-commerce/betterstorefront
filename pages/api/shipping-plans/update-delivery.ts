@@ -1,6 +1,6 @@
 import { updateDelivery } from '@framework/shipping'
 
-export default async (req: any, res: any) => {
+const UpdateDeliveryApiMiddleware = async (req: any, res: any) => {
   const { data, id }: any = req.body
   try {
     const response = await updateDelivery()({
@@ -12,4 +12,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default UpdateDeliveryApiMiddleware;

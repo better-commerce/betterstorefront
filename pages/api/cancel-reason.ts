@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 
-export default async (req: any, res: any) => {
+const CancelReasonApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getCancelReason({
       query: req.body,
@@ -19,3 +19,5 @@ export const config = {
     }
   }
 }
+
+export default CancelReasonApiMiddleware;

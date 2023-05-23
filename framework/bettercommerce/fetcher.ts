@@ -58,7 +58,6 @@ const SingletonFactory = (function () {
                         return axiosInstance(error.response.config)
                     })
                     .catch((error) => {
-                        //@TODO redirect here to Login page
                         return Promise.reject(error)
                     })
                     .finally(createAxiosResponseInterceptor)

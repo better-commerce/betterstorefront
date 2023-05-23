@@ -1,4 +1,3 @@
-// TODO: define this type
 export type Wishlist = any
 
 export type WishlistItemBody = {

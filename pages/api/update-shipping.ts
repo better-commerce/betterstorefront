@@ -1,5 +1,6 @@
 import { updateShipping } from '@framework/checkout'
-export default async (req: any, res: any) => {
+
+const UpdateShippingApiMiddleware = async (req: any, res: any) => {
   const { basketId, countryCode, shippingId }: any = req.body
   try {
     const response = await updateShipping()({
@@ -11,4 +12,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default UpdateShippingApiMiddleware;

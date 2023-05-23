@@ -1,5 +1,6 @@
 import { useUpdateCartInfo } from '@framework/cart'
-export default async (req: any, res: any) => {
+
+const UpdateCartInfoApiMiddleware = async (req: any, res: any) => {
   const { basketId, info, lineInfo }: any = req.body
   try {
     const response = await useUpdateCartInfo()({
@@ -12,4 +13,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default UpdateCartInfoApiMiddleware;

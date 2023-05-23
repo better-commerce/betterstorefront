@@ -1,7 +1,7 @@
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug';
 import commerce from '@lib/api/commerce'
 
-export default async (req: any, res: any) => {
+const GetCollectionApiMiddleware = async (req: any, res: any) => {
   try {
     let response: any;
     const currentPage = req?.body?.currentPage || 1;
@@ -22,4 +22,6 @@ export default async (req: any, res: any) => {
     console.log(error);
     res.status(500).json({ error });
   }
-}
+};
+
+export default GetCollectionApiMiddleware;

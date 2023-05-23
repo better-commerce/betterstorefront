@@ -89,7 +89,6 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
   const getUserId = () => {
     return user?.userId && user?.userId != EmptyGuid ? user?.userId : cartItems?.userId;
   };
- //getUserId todo
  
  const getBasketPromos = async (basketId: string) => {
   const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
@@ -725,7 +724,7 @@ useEffect(() => {
                                         {product.price?.formatted?.withTax}
                                       </p>
                                     </div> 
-                                    {/*TODO ADD SIZE SELECT*/} 
+
                                     {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                   </div>
                                   <div className=''>

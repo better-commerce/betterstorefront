@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default async (req: any, res: any) => {
+const GetLocationApiMiddleware = async (req: any, res: any) => {
   const url: any = process.env.GEO_ENDPOINT
   try {
     const { data }: any = await axios.get(url, {
@@ -12,4 +12,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default GetLocationApiMiddleware;

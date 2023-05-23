@@ -1,5 +1,6 @@
 import { useShipping } from '@framework/checkout'
-export default async (req: any, res: any) => {
+
+const GetShippingMethodsApiMiddleware = async (req: any, res: any) => {
   const { basketId, countryCode, postCode, method }: any = req.body
   try {
     const response = await useShipping()({
@@ -13,4 +14,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default GetShippingMethodsApiMiddleware;

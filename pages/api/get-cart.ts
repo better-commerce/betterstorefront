@@ -1,5 +1,6 @@
 import { useCart } from '@framework/cart'
-export default async (req: any, res: any) => {
+
+const GetCartApiMiddleware = async (req: any, res: any) => {
   const { basketId }: any = req.query
   try {
     const response = await useCart()({
@@ -10,4 +11,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default GetCartApiMiddleware;

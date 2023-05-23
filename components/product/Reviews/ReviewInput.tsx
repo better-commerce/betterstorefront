@@ -17,7 +17,7 @@ import axios from 'axios'
 import { useUI } from '@components/ui/context'
 
 const MIN_LENGTH = 5
-const MAX_LENGTH = 240 //@TODO TBD with PO
+const MAX_LENGTH = 240
 
 const TITLE_MIN_LENGTH = 2
 const TITLE_MAX_LENGTH = 20

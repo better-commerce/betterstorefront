@@ -1,5 +1,6 @@
 import { guestCheckout } from '@framework/cart'
-export default async (req: any, res: any) => {
+
+const GuestCheckoutApiMiddleware = async (req: any, res: any) => {
   const { basketId, email, notifyByEmail, notifyBySms, notifyByPost }: any =
     req.body
   try {
@@ -15,4 +16,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default GuestCheckoutApiMiddleware;

@@ -1,5 +1,6 @@
 import searchProducts from '@framework/api/operations/search-product'
-export default async (req: any, res: any) => {
+
+const SearchProductsApiMiddleware = async (req: any, res: any) => {
   const { value }: any = req.body
   try {
     const response = await searchProducts()({
@@ -9,4 +10,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default SearchProductsApiMiddleware;

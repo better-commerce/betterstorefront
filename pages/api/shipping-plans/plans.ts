@@ -4,7 +4,7 @@ interface BodyProps {
   model: any
 }
 
-export default async (req: any, res: any) => {
+const GetShippingPlansApiMiddleware = async (req: any, res: any) => {
   const { model }: any = req.body
   try {
     const response = await getShippingPlans()({
@@ -15,4 +15,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default GetShippingPlansApiMiddleware;
