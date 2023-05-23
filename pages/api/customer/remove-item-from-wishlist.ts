@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 
-export default async (req: any, res: any) => {
+const RemoveItemFromWishlistApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.removeItemFromWishlist({
       query: req.body,
@@ -11,4 +11,6 @@ export default async (req: any, res: any) => {
     console.log(error, 'error')
     res.status(500).json({ error })
   }
-}
+};
+
+export default RemoveItemFromWishlistApiMiddleware;

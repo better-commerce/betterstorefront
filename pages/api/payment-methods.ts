@@ -1,5 +1,6 @@
 import { getPaymentMethods } from '@framework/payment'
-export default async (req: any, res: any) => {
+
+const GetPaymentMethodsapiMiddleware =  async (req: any, res: any) => {
   const { countryCode, currencyCode }: any = req.body
   try {
     const response = await getPaymentMethods()({
@@ -12,3 +13,5 @@ export default async (req: any, res: any) => {
     res.status(500).json({ error })
   }
 }
+
+export default GetPaymentMethodsapiMiddleware;

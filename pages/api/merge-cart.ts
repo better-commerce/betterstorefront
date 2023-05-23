@@ -1,5 +1,6 @@
 import { mergeCart } from '@framework/cart'
-export default async (req: any, res: any) => {
+
+const MergeCartApiMiddleware = async (req: any, res: any) => {
   const { userBasketId, currentBasketId }: any = req.body.data
   try {
     const response = await mergeCart()({
@@ -11,4 +12,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default MergeCartApiMiddleware;

@@ -1,5 +1,6 @@
 import { putPaymentResponse } from '@framework/payment'
-export default async (req: any, res: any) => {
+
+const PaymentResponseApiMiddleware = async (req: any, res: any) => {
   const { orderId, model }: any = req.body
   try {
     const response = await putPaymentResponse()({
@@ -11,4 +12,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default PaymentResponseApiMiddleware;

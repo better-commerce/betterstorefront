@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 
-export default async (req: any, res: any) => {
+const GetPDPLookbookApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getPdpLookbook({
       query: req.body.stockCode,
@@ -11,3 +11,5 @@ export default async (req: any, res: any) => {
     res.status(500).json({ error })
   }
 }
+
+export default GetPDPLookbookApiMiddleware;

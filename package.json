@@ -2,15 +2,15 @@
   "name": "betterstorefront-bettercommerce",
   "version": "1.0.0",
   "scripts": {
-    "dev": "node generate-locales.js && cross-env NODE_OPTIONS='--inspect' next dev",
-    "dev-windows": "node generate-locales.js && cross-env NODE_OPTIONS='--inspect=5009' next dev",
-    "build": "node generate-locales.js && next build",
-    "start": "next start",
+    "dev": "npm run tsc && node generate-locales.js && cross-env NODE_OPTIONS='--inspect' next dev",
+    "build": "npm run tsc && node generate-locales.js && next build",
+    "start": "npm run tsc && next start",
     "analyze": "BUNDLE_ANALYZE=both yarn build",
     "lint": "next lint",
     "prettier-fix": "prettier --write .",
     "find:unused": "npx next-unused",
-    "generate:definitions": "node framework/bigcommerce/scripts/generate-definitions.js"
+    "generate:definitions": "node framework/bigcommerce/scripts/generate-definitions.js",
+    "tsc": "tsc"
   },
   "sideEffects": false,
   "license": "MIT",
@@ -86,7 +86,7 @@
     "lint-staged": "^13.2.2",
     "postcss-nesting": "^11.2.2",
     "prettier": "^2.8.8",
-    "typescript": "5.0.4"
+    "typescript": "4.5.2"
   },
   "husky": {
     "hooks": {

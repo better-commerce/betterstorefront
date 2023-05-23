@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 
-export default async (req: any, res: any) => {
+const CreateReviewApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.createReview(req.body, req.cookies)
     res.status(200).json(response)
@@ -8,4 +8,6 @@ export default async (req: any, res: any) => {
     console.log(error)
     res.status(500).json({ error })
   }
-}
+};
+
+export default CreateReviewApiMiddleware;

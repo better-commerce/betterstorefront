@@ -5,7 +5,7 @@ import axios from "axios";
 import { XML_FEED } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
 
-export default async (req: any, res: any) => {
+const RobotsApiMiddleware = async (req: any, res: any) => {
     try {
         const url = `${XML_FEED}?slug=robots.txt`
         const { result: feedResult }: any = await fetcher({
@@ -29,3 +29,5 @@ export default async (req: any, res: any) => {
         res.status(error?.response?.status || 500).send();
     }
 };
+
+export default RobotsApiMiddleware;

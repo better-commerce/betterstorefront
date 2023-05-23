@@ -1,4 +1,3 @@
-// TODO: define this type
 export type Page = {
   // ID of the Web page.
   id: string

@@ -1,5 +1,6 @@
 import { confirmOrder } from '@framework/checkout'
-export default async (req: any, res: any) => {
+
+const ConfirmOrderApiMiddleware = async (req: any, res: any) => {
   const { basketId, model }: any = req.body
   try {
     const response = await confirmOrder()({
@@ -11,4 +12,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default ConfirmOrderApiMiddleware;

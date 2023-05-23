@@ -1,4 +1,3 @@
-//@TODO TBD on links
 import { 
   GENERAL_ACCESSORIES, 
   GENERAL_BAGS, 

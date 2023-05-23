@@ -5,7 +5,7 @@ interface BodyProps {
   postCode: string
 }
 
-export default async (req: any, res: any) => {
+const ClickAndCollectApiMiddleware = async (req: any, res: any) => {
   const { items, postCode }: any = req.body
   try {
     const response = await clickAndCollect()({
@@ -17,4 +17,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default ClickAndCollectApiMiddleware;

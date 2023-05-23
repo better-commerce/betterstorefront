@@ -1,5 +1,6 @@
 import { loqateUser } from '@framework/checkout'
-export default async (req: any, res: any) => {
+
+const LoqateUserApiMiddleWare = async (req: any, res: any) => {
   const { postCode, country }: any = req.body
   try {
     const response = await loqateUser()({
@@ -11,4 +12,6 @@ export default async (req: any, res: any) => {
     console.log(error)
     res.status(500).json({ error })
   }
-}
+};
+
+export default LoqateUserApiMiddleWare;

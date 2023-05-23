@@ -490,7 +490,7 @@ export default function ProductView({
 
   const isEngravingAvailable = !!relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode === ITEM_TYPE_ADDON).length || !!product?.customAttributes.filter((item:any) => item.display == "Is Enabled" ).length
   // const isEngravingAvailable:any = true;
-  //TODO no additionalProperties key found on product object
+  
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)

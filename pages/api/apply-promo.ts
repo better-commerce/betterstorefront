@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 
-export default async (req: any, res: any) => {
+const ApplyPromoApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.applyPromo({
       basketId: req.body.basketId,
@@ -13,3 +13,5 @@ export default async (req: any, res: any) => {
     res.status(500).json({ error })
   }
 }
+
+export default ApplyPromoApiMiddleware;

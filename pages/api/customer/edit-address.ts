@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 
-export default async (req: any, res: any) => {
+const EditAddressApiMiddleware = async (req: any, res: any) => {
   try {
     console.group(req.body, 'req body')
     const response = await commerce.editAddress({
@@ -12,4 +12,6 @@ export default async (req: any, res: any) => {
     console.log(error, 'error')
     res.status(500).json({ error })
   }
-}
+};
+
+export default EditAddressApiMiddleware;

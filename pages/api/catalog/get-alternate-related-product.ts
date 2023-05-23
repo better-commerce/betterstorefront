@@ -1,5 +1,6 @@
 import { getAltRelatedProducts } from '@framework/checkout'
-export default async (req: any, res: any) => {
+
+const GetAltRelatedProductsApiMiddleware = async (req: any, res: any) => {
   const { slug }: any = req.body
   try {
     const response: any = await getAltRelatedProducts()(slug)
@@ -8,3 +9,5 @@ export default async (req: any, res: any) => {
     res.status(500).json({ error })
   }
 }
+
+export default GetAltRelatedProductsApiMiddleware;

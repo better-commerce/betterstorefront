@@ -1,5 +1,6 @@
 import useInfra from '@framework/api/endpoints/infra'
-export default async (req: any, res: any) => {
+
+const InfraApiMiddleware = async (req: any, res: any) => {
   const { setHeader = false } = req.body
   try {
     const response = await useInfra(req)(setHeader)
@@ -8,3 +9,5 @@ export default async (req: any, res: any) => {
     res.status(500).json({ error })
   }
 }
+
+export default InfraApiMiddleware;

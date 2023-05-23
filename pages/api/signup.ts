@@ -1,5 +1,6 @@
 import { useSignup } from '@framework/auth'
-export default async (req: any, res: any) => {
+
+const SignupApiMiddleware = async (req: any, res: any) => {
   const { email, password, confirmPassword, firstName, lastName }: any =
     req.body.data
   try {
@@ -15,4 +16,6 @@ export default async (req: any, res: any) => {
   } catch (error: any) {
     throw new Error(error)
   }
-}
+};
+
+export default SignupApiMiddleware;

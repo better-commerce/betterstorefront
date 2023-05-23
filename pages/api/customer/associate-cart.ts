@@ -1,5 +1,6 @@
 import { associateCart } from '@framework/cart'
-export default async (req: any, res: any) => {
+
+const AssociateCartApiMiddleware = async (req: any, res: any) => {
   const { basketId, userId }: any = req.body.data
   try {
     const response = await associateCart()({
@@ -11,4 +12,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default AssociateCartApiMiddleware;

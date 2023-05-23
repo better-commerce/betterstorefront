@@ -1,5 +1,6 @@
 import { loginCheckout } from '@framework/cart'
-export default async (req: any, res: any) => {
+
+const LoginCheckoutApiMiddleware = async (req: any, res: any) => {
   const { basketId, email, password }: any = req.body
   try {
     const response = await loginCheckout()({
@@ -12,4 +13,6 @@ export default async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ error })
   }
-}
+};
+
+export default LoginCheckoutApiMiddleware;

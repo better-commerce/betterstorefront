@@ -1,5 +1,6 @@
 import { retrieveAddress } from '@framework/checkout'
-export default async (req: any, res: any) => {
+
+const RetrieveAddressApiMiddleware = async (req: any, res: any) => {
   const { id }: any = req.body
   try {
     const response = await retrieveAddress()(id, req.cookies)
@@ -8,4 +9,6 @@ export default async (req: any, res: any) => {
     console.log(error)
     res.status(500).json({ error })
   }
-}
+};
+
+export default RetrieveAddressApiMiddleware;

@@ -297,7 +297,7 @@ export default function ProductQuickView({
   }
 
   const buttonConfig = buttonTitle()
-  //TODO no additionalProperties key found on product object
+  
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
