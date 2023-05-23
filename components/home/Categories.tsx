@@ -63,7 +63,7 @@ function Categories({ data }: any) {
       {data?.map((category: any, catId: number) => (
         <SwiperSlide key={catId} className="relative flex flex-col mobile-cls-fix style-newin_article">
           <div className="image-continer">
-            <Link href={category?.categorylist_link} passHref legacyBehavior>
+            <Link href={category?.categorylist_link} title={category?.categorylist_name} passHref legacyBehavior>
               {isMobile ? (
                 <Image
                   src={category?.categorylist_image}
@@ -87,7 +87,7 @@ function Categories({ data }: any) {
           </div>
           <div className="flex flex-col w-full px-2 text-center sm:px-4 style-newin_article-title">
             <h3 className="pt-1 text-sm font-semibold text-white b-2">{category?.categorylist_name}</h3>
-            <Link href={category?.categorylist_link} passHref legacyBehavior>
+            <Link title={category?.categorylist_buttontext} href={category?.categorylist_link} passHref legacyBehavior>
               <a className="w-full py-1 mb-2 text-sm font-medium text-black bg-white border border-white hover:bg-gray-100 hover:border-gray-800 hover:shadow-md">
                 {category?.categorylist_buttontext}
               </a>

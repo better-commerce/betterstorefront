@@ -54,19 +54,9 @@ const FilterItem = ({
 
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div key={option.value} className="flex items-center">
-      <input
-        name={`${optionIdx}-input[]`}
-        defaultValue={option.value}
-        type="checkbox"
-        className="w-4 h-4 border-gray-300 rounded filter-input"
-      />
-
-      <label
-        htmlFor={`${optionIdx}-input[]`}
-        onClick={handleCheckbox}
-        className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label"
-      >
+    <div key={option.value} className="flex items-center pt-2">
+      <input name={`${optionIdx}-input[]`} defaultValue={option.value} type="checkbox" className="w-4 h-4 border-gray-300 rounded filter-input" />
+      <label htmlFor={`${optionIdx}-input[]`} onClick={handleCheckbox} className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label">
         {isCheckboxChecked && !isCheckboxTickDisabled && (
           <div
             style={{
@@ -127,11 +117,7 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
       <label className="sr-only">{BTN_SEARCH}</label>
-      <input
-        type="text"
-        onChange={(e) => handleSearch(e.target.value)}
-        autoComplete={BTN_SEARCH}
-        placeholder={BTN_SEARCH}
+      <input type="text" onChange={(e) => handleSearch(e.target.value)} autoComplete={BTN_SEARCH} placeholder={BTN_SEARCH}
         className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
       />
     </>
@@ -198,7 +184,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className="space-y-2 max-panel">
+      <div className='max-panel'>
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (
