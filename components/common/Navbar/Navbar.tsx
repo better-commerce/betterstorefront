@@ -358,7 +358,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
             <Bars3Icon className="w-6 h-6 text-black" aria-hidden="true" />
           </button>
 
-          <Link href="/">
+          <Link href="/" title='BetterCommerce'>
             <div className="flex w-32 cursor-pointer">
               <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
               <Logo />
