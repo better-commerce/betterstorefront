@@ -1043,3 +1043,16 @@ body {
     min-height: 64px !important;
   }
 }
+
+.star-rating {
+  position: relative;
+  width: 24px;
+  padding-left: 16px;
+}
+.star-rating:after {
+  content: url(/assets/images/star.svg);
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  left: 0;
+}
