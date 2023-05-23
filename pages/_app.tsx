@@ -94,6 +94,12 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       },
       'google_translate_element'
     )
+
+    const selector = "iframe[name='votingFrame']";
+    const elem = document.querySelector(selector);
+    if (elem) {
+      elem.setAttribute("title", "Google Voting Frame");
+    }
   }
 
   useEffect(() => {
