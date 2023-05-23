@@ -43,10 +43,14 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     } else {
       fetchOrders(pageNumber);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allOrdersFetched]);
 
   useEffect(() => {
     setAllOrdersFetched(false);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber]);
 
   useEffect(() => {
@@ -66,6 +70,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
         setAllOrders([]);
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allOrderIds]);
 
   useEffect(() => {
@@ -74,6 +80,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     } else {
       fetchOrders(pageNumber);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchOrders = async (pageNumber: number) => {
@@ -106,6 +114,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     if (router.query.view && view !== router.query.view) {
       setView(router.query.view)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
   let loggedInEventData: any = {
@@ -152,7 +162,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                 d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
               />{' '}
             </svg> 
-            <a className="mr-2 mx-2 leading-none" href="/my-account">My Orders</a>
+            <Link className="mr-2 mx-2 leading-none" href="/my-account">My Orders</Link>
           </h3>
         </div>
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">

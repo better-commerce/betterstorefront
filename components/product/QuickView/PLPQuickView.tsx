@@ -525,6 +525,8 @@ export default function PLPQuickView({
   useEffect(() => {
     fetchProduct()
     fetchIsQuickView()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData?.slug])
 
   const setModelClose = () => {

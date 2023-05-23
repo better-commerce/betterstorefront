@@ -527,6 +527,8 @@ export default function ProductQuickView({
   useEffect(() => {
     fetchProduct()
     fetchIsQuickView()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData?.slug])
 
   if (!product) {

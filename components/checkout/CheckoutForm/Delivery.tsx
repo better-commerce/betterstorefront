@@ -136,6 +136,8 @@ export default function Delivery({
       }
     }
     if (Object.keys(appConfig).length) getDefaultCountry()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appConfig])
 
   useEffect(() => {
@@ -143,6 +145,8 @@ export default function Delivery({
     setSelectedDeliveryMethod({ id: 0, children: [], type: 0 })
 
     fetchDeliveryMethods()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCountry])
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

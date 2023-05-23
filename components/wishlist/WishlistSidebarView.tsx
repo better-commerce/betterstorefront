@@ -37,6 +37,8 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
 
   useEffect(() => {
     setTimeout(() => setOpenWishlistSidebar(displaySidebar), 250)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [isItemInCart, setItemInCart] = useState(false)
@@ -54,6 +56,8 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
 
   useEffect(() => {
     if (objUser) handleWishlistItems()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [objUser])
 
   const handleDeleteWishListItems = async (productId: any) => {

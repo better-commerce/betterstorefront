@@ -25,6 +25,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     if (router.query.view && view !== router.query.view) {
       setView(router.query.view)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
   const { user, deleteUser } = useUI()
@@ -58,8 +60,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
 
   return (
     <section className="relative pb-10 text-gray-900 sm:text-sm">
-    <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
-    <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header mx-5">
+      <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
+        <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header mx-5">
           <h3 className="max-w-4xl mt-2 mx-auto text-xl font-semibold text-black flex gap-1 mx-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -73,93 +75,92 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
               <path
                 d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
               />{' '}
-            </svg> 
-            <a className="mr-2 mx-2 leading-none" href="/my-account">My Saved Address</a>
+            </svg>
+            <Link className="mr-2 mx-2 leading-none" href="/my-account">My Saved Address</Link>
           </h3>
         </div>
-      <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-        <div className="col-span-3 md:pl-12 border-r border-gray-200 sm:pl-6 tab-list-sm sm:pt-10 mob-hidden">
-           
-                <div className="sticky left-0 z-10 flex flex-col top-36">
-                  {config.map((item: any, idx: number) => (
-                    <>
-                      <div
-                        key={`my-acc-${idx}`}
-                        // href="#"
-                        className={`hover:bg-white hover:text-indigo-600 border border-transparent text-md leading-3 font-medium text-gray-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"}`}
-                      >
-                        <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
-                          <i
-                            className={
-                              item.text.toLowerCase() + ' ' + 'sprite-icon'
-                            }
-                          ></i>
-                        </span>
+        <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
+          <div className="col-span-3 md:pl-12 border-r border-gray-200 sm:pl-6 tab-list-sm sm:pt-10 mob-hidden">
 
-                        {item.text == 'My Saved Address' ? (
-                          <>
-                          <div
-                             key={`my-acc-${idx}`}
-                             // href="#"
-                             className={`ring-white relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${item.text == "My Saved Address" ? "bg-white border-r-0  sm:border-b-0 sm:border-r-2 sm:border-black font-bold opacity-full" : "text-primary font-medium opacity-60"}`}
-                          >
-                             <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4" >
-                                <i className={item.text.toLowerCase() + ' ' + 'sprite-icon'}></i></span>
-                             <Link
-                               shallow={true}
-                               href={item.href}
-                               passHref
-                               onClick={() => {
-                                  handleClick;
-                                  setShow(false);
-                               }}
-                               className="inline-block w-full h-full py-4 text-sm  text-primary">
+            <div className="sticky left-0 z-10 flex flex-col top-36">
+              {config.map((item: any, idx: number) => (
+                <>
+                  <div
+                    key={`my-acc-${idx}`}
+                    // href="#"
+                    className={`hover:bg-white hover:text-indigo-600 border border-transparent text-md leading-3 font-medium text-gray-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"}`}
+                  >
+                    <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
+                      <i
+                        className={
+                          item.text.toLowerCase() + ' ' + 'sprite-icon'
+                        }
+                      ></i>
+                    </span>
 
-                               <span className='inline-block sm:hidden text-black dark:text-black'>{item.mtext}</span>
-                               <span className={`hidden sm:inline-block text-black dark:text-black ${item.text == 'My Saved Address' && 'font-display'}`}>{item.text}</span>
+                    {item.text == 'My Saved Address' ? (
+                      <>
+                        <div
+                          key={`my-acc-${idx}`}
+                          // href="#"
+                          className={`ring-white relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${item.text == "My Saved Address" ? "bg-white border-r-0  sm:border-b-0 sm:border-r-2 sm:border-black font-bold opacity-full" : "text-primary font-medium opacity-60"}`}
+                        >
+                          <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4" >
+                            <i className={item.text.toLowerCase() + ' ' + 'sprite-icon'}></i></span>
+                          <Link
+                            shallow={true}
+                            href={item.href}
+                            passHref
+                            onClick={() => {
+                              handleClick;
+                              setShow(false);
+                            }}
+                            className="inline-block w-full h-full py-4 text-sm  text-primary">
 
-                             </Link>
-                          </div>
-                       </>
-                        ) : (
-                          <>
-                            <Link
-                              shallow={true}
-                              href={item.href}
-                              passHref
-                              onClick={() => {
-                                handleClick
-                              }}
-                              className="inline-block w-full h-full py-4 text-sm  text-primary pl-2 transition hover:bg-gray-100">
+                            <span className='inline-block sm:hidden text-black dark:text-black'>{item.mtext}</span>
+                            <span className={`hidden sm:inline-block text-black dark:text-black ${item.text == 'My Saved Address' && 'font-display'}`}>{item.text}</span>
 
-                              <span className="inline-block sm:hidden text-black capitalize dark:text-black">
-                                {item.mtext}
-                              </span>
-                              <span className="hidden sm:inline-block text-black dark:text-black">
-                                {item.text}
-                              </span>
+                          </Link>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          shallow={true}
+                          href={item.href}
+                          passHref
+                          onClick={() => {
+                            handleClick
+                          }}
+                          className="inline-block w-full h-full py-4 text-sm  text-primary pl-2 transition hover:bg-gray-100">
 
-                            </Link>
-                          </>
-                        )}
-                      </div>
-                    </>
-                  ))}
-                </div>
-              </div>
+                          <span className="inline-block sm:hidden text-black capitalize dark:text-black">
+                            {item.mtext}
+                          </span>
+                          <span className="hidden sm:inline-block text-black dark:text-black">
+                            {item.text}
+                          </span>
 
-              <div
-                className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${
-                  isShow ? `` : ''
-                }`}
-              >
-                <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-                  <AddressBook />
-                </div>
-              </div>
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </>
+              ))}
             </div>
-    
-     </div>
+          </div>
+
+          <div
+            className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${isShow ? `` : ''
+              }`}
+          >
+            <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
+              <AddressBook />
+            </div>
+          </div>
+        </div>
+
+      </div>
     </section>
   );
 }

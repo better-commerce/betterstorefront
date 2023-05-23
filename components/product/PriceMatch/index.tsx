@@ -4,6 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import Form from './form'
 import axios from 'axios'
 import { NEXT_API_PRICE_MATCH_ENDPOINT } from '@components/utils/constants'
+import Image from 'next/image'
 
 export default function PriceMatch({
   show,
@@ -103,8 +104,9 @@ export default function PriceMatch({
                       possible prices. But sometimes, somewhere, someone is
                       selling the item you want for less. Let us help!
                     </p>
-                    <img
+                    <Image
                       src={productImage}
+                      alt=""
                       className="h-96 w-96 object-cover object-top"
                     />
                     <p className="text-black font-bold text-center py-5">

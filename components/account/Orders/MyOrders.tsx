@@ -17,6 +17,7 @@ import { GENERAL_RECENT_ORDERS, } from '@components/utils/textVariables'
 import { NEXT_GET_ORDER_DETAILS, } from '@components/utils/constants'
 import useDevice from '@commerce/utils/use-device'
 import Spinner from '@components/ui/Spinner'
+import Link from 'next/link'
 
 
 export default function MyOrders({ allOrders, handleInfiniteScroll, }: any) {
@@ -170,7 +171,7 @@ export default function MyOrders({ allOrders, handleInfiniteScroll, }: any) {
                           <>
                             <div className='flex flex-col items-start justify-center w-full px-4 py-12 sm:items-center max-acc-container sm:px-0'>
                               <div className='my-2 text-2xl font-semibold text-black'>No Order Available</div>
-                              <div className="flex w-60 mt-5 sm:flex-col"><a href="/" className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 text-white bg-black border-2 border-black rounded-sm hover:bg-gray-800 hover:text-whitesm:px-6 hover:border-gray-900 link-button">Start Shopping</a></div>
+                              <div className="flex w-60 mt-5 sm:flex-col"><Link href="/" className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 text-white bg-black border-2 border-black rounded-sm hover:bg-gray-800 hover:text-whitesm:px-6 hover:border-gray-900 link-button">Start Shopping</Link></div>
                             </div>
                           </>
                         )

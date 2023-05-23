@@ -5,6 +5,8 @@ export default function ValidatePage() {
   useEffect(() => {
     const token = router.query.token
     router.push(`/my-account/forgot-password?token=${token}`)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return null
 }

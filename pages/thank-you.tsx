@@ -60,6 +60,8 @@ export default function OrderConfirmation() {
     return function cleanup() {
       setOrderId('')
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isLoading) {

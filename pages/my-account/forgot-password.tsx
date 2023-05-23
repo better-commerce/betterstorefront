@@ -56,6 +56,8 @@ export default function ForgotPasswordPage() {
       setIsLoading(true)
       validateToken(token)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

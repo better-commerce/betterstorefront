@@ -123,6 +123,8 @@ const Layout: FC<Props & IExtraProps> = ({
     }
     fetchLayout()
     setAppConfig(config)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -137,6 +139,8 @@ const Layout: FC<Props & IExtraProps> = ({
       Router.events.off('routeChangeStart', () => { });
       Router.events.off('routeChangeComplete', () => { });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()

@@ -215,6 +215,8 @@ function CategoryPage({ category, slug, products, }: any) {
   useEffect(() => {
     if (category.id !== state.categoryId)
       dispatch({ type: SET_CATEGORY_ID, payload: category.id })
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category.id])
 
   useEffect(() => {
@@ -235,6 +237,8 @@ function CategoryPage({ category, slug, products, }: any) {
         })
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length])
 
   const handlePageChange = (page: any) => {

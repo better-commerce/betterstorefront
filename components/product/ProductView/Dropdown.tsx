@@ -118,6 +118,8 @@ export default function Dropdown({
 
   useEffect(() => {
     handleSetProductVariantInfo({ clothSize: currentAttribute })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -126,6 +128,8 @@ export default function Dropdown({
           setSizeValue(val.valueText);
        }
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [currentAttribute])
 
   useEffect(() => {
@@ -140,6 +144,8 @@ export default function Dropdown({
       productId: getStockPerAttrData.productId,
       stockCode: getStockPerAttrData.stockCode,
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   useEffect(() => {
@@ -154,6 +160,8 @@ export default function Dropdown({
       productId: getStockPerAttrData.productId,
       stockCode: getStockPerAttrData.stockCode,
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId])
 
   const isPreOrderEnabled = productData.isPreOrderEnabled

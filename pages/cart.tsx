@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
 import { PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
-const  PromotionInput  = dynamic(() => import('../components/cart/PromotionInput'));
+const PromotionInput = dynamic(() => import('../components/cart/PromotionInput'));
 import { useEffect } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
@@ -109,6 +109,8 @@ function Cart({ cart }: any) {
     else {
       setCartItems(cart)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleItem = (product: any, type = 'increase') => {
@@ -168,10 +170,10 @@ function Cart({ cart }: any) {
                         style={css}
                         width={140}
                         height={180}
-                        src={generateUri(product.image, "h=200&fm=webp") || IMG_PLACEHOLDER} 
+                        src={generateUri(product.image, "h=200&fm=webp") || IMG_PLACEHOLDER}
                         alt={product.name}
                         className="object-cover object-center w-16 h-20 rounded-sm sm:w-48 sm:h-48 image"
-                      />                     
+                      />
                     </div>
                     <div className="flex flex-col justify-between flex-1 ml-4 sm:ml-6">
                       <div className="relative flex justify-between h-full pr-6 sm:pr-0">
@@ -223,7 +225,7 @@ function Cart({ cart }: any) {
                                     key={'child' + idx}
                                   >
                                     <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                                      <img
+                                      <Image
                                         src={child.image}
                                         alt={child.name}
                                         className="object-cover object-center w-full h-full"
@@ -278,7 +280,7 @@ function Cart({ cart }: any) {
                             {product.shippingPlan?.shippingSpeed}
                           </p>
                         </div>
-                        
+
                         <div className="absolute top-0 right-0">
                           <button
                             type="button"
@@ -316,27 +318,27 @@ function Cart({ cart }: any) {
               </h2>
               <hr className='xsm:hidden'></hr>
               <div className="mt-4 lg:-mb-3">
-                  <Disclosure>
-                    {({ open }) => (
-                      <>
-                        <Disclosure.Button className="flex justify-between rounded-lg py-2 text-left underline text-sm font-medium text-green focus-visible:ring-opacity-75 link-button">
-                          <span>Apply Promo?</span>
-                        </Disclosure.Button>
-                        <Transition
-                          enter="transition duration-100 ease-out"
-                          enterFrom="transform scale-95 opacity-0"
-                          enterTo="transform scale-100 opacity-100"
-                          leave="transition duration-75 ease-out"
-                          leaveFrom="transform scale-100 opacity-100"
-                          leaveTo="transform scale-95 opacity-0"
-                        >
+                <Disclosure>
+                  {({ open }) => (
+                    <>
+                      <Disclosure.Button className="flex justify-between rounded-lg py-2 text-left underline text-sm font-medium text-green focus-visible:ring-opacity-75 link-button">
+                        <span>Apply Promo?</span>
+                      </Disclosure.Button>
+                      <Transition
+                        enter="transition duration-100 ease-out"
+                        enterFrom="transform scale-95 opacity-0"
+                        enterTo="transform scale-100 opacity-100"
+                        leave="transition duration-75 ease-out"
+                        leaveFrom="transform scale-100 opacity-100"
+                        leaveTo="transform scale-95 opacity-0"
+                      >
                         <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
                           <PromotionInput />
                         </Disclosure.Panel>
-                        </Transition>
-                      </>
-                    )}
-                  </Disclosure>
+                      </Transition>
+                    </>
+                  )}
+                </Disclosure>
               </div>
               <dl className="mt-6 space-y-2 sm:space-y-2">
                 <div className="flex items-center justify-between">
@@ -366,7 +368,7 @@ function Cart({ cart }: any) {
                       </dd>
                     </>
                   )}
-                </div>                
+                </div>
 
                 <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
                   <dt className="text-lg font-bold text-black">{GENERAL_TOTAL}</dt>

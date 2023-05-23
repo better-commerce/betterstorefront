@@ -129,11 +129,15 @@ const LayoutError: FC<Props & IExtraProps> = ({
     }
     fetchLayout()
     setAppConfig(config)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
@@ -145,10 +149,6 @@ const LayoutError: FC<Props & IExtraProps> = ({
 
   return (
     <CommerceProvider locale={locale}>
-      <Script
-        src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
-        strategy="beforeInteractive"
-      />
 
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>

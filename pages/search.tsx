@@ -149,6 +149,8 @@ function Search({ query, setEntities, recordEvent }: any) {
     if (router.query.freeText !== undefined && router.query.freeText !== state.freeText) {
       dispatch({ type: FREE_TEXT, payload: query.freeText })
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.freeText])
 
   useEffect(() => {
@@ -169,6 +171,8 @@ function Search({ query, setEntities, recordEvent }: any) {
         })
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.products.results.length])
 
   const handlePageChange = (page: any) => {
@@ -242,6 +246,8 @@ function Search({ query, setEntities, recordEvent }: any) {
         filters: JSON.stringify(state.filters),
       },
     })
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.filters])
 
   const handleFilters = (filter: null, type: string) => {

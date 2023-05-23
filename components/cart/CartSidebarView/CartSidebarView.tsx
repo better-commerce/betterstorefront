@@ -149,6 +149,7 @@ useEffect(() => {
     handleAsync();
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [basketId, cartItems])
 
 
@@ -236,6 +237,8 @@ useEffect(() => {
       // setPreferredPaymentMethod(preferredPaymentMethod);
       handleLoadAsync(preferredPaymentMethod);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBasketFetched]);
 
 
@@ -263,6 +266,8 @@ useEffect(() => {
     })
     // handleCartitems()
     handleCartItemsLoadAsync()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

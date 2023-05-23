@@ -57,6 +57,8 @@ export default function PaymentWidget({
     if (paymentMethod && paymentMethod.systemName) {
       PAYMENT_METHOD_MAP[paymentMethod.systemName]()
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentMethod])
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES

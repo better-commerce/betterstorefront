@@ -10,6 +10,7 @@ import {
 } from '@components/utils/textVariables'
 import { Guid } from '@commerce/types'
 import { ColorFilledSquare } from '@components/ui/ColorFilledSquare'
+import Image from 'next/image'
 
 
 export default function Bundles({ price = '', products = [], productBundleUpdate = () => { } }: any) {
@@ -74,9 +75,10 @@ export default function Bundles({ price = '', products = [], productBundleUpdate
               <div key={productIdx} className='grid grid-cols-12 gap-x-2 border p-3 rounded-md align-center content-center border-gray-200 hover:border-indigo-200'>
                 {/*JSON.stringify(product)*/}
                 <div onClick={() => handleProduct(product)} className='col-span-4 image-container cursor-pointer'>
-                  <img
+                  <Image
                     className="mx-auto object-center object-cover image rounded-md"
                     src={product.image || product.images[0]?.image}
+                    alt=""
                   />
                 </div>
                 <div className='col-span-8'>

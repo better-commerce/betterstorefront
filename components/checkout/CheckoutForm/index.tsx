@@ -475,6 +475,8 @@ export default function CheckoutForm({
       setShippingInformation(defaultShippingAddress)
       setBillingInformation(defaultBillingAddress, false)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultShippingAddress])
 
   const handlePayments = (method: any) => {

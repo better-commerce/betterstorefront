@@ -152,6 +152,8 @@ function CheckoutForm({
             break
         }
       })
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stripe])
 
   const handleSubmit = async () => {
@@ -227,6 +229,8 @@ export default function StripeWrapper(props: any) {
       setClientSecret(client.data.clientSecret)
     }
     !props.isPaymentIntent && fetchClientSecret()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const options: any = {

@@ -438,6 +438,6 @@
 
 // Search.Layout = Layout
 
-export default function () {
+export default function Search() {
   return null
 }

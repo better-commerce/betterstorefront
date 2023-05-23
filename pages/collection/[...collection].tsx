@@ -191,6 +191,8 @@ export default function CollectionPage(props: any) {
         pages: productDataToPass?.pages || 0,
       })
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productDataToPass])
 
   useEffect(() => {
@@ -200,6 +202,8 @@ export default function CollectionPage(props: any) {
       loading: loadingState
     })
     setSwrLoading(loadingState)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, collection])
 
   useEffect(() => {
@@ -226,12 +230,16 @@ export default function CollectionPage(props: any) {
         })
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productDataToPass])
 
   useEffect(() => {
     const data = IS_INFINITE_SCROLL ? productListMemory.products : props?.products
     setProductDataToPass(data)
-  }, [productListMemory.products, props?.products])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productListMemory?.products, props?.products])
 
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
@@ -251,7 +259,9 @@ export default function CollectionPage(props: any) {
         })
       }
     }
-  }, [data.products.results.length])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.products?.results?.length])
 
   const handlePageChange = (page: any) => {
     router.push(
@@ -323,6 +333,8 @@ export default function CollectionPage(props: any) {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [visible, setVisible] = useState(true)
