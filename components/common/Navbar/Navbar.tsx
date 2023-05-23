@@ -355,6 +355,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
 
       <header className="fixed top-0 right-0 w-full bg-white shadow-md z-999 navbar-min-64">
         <nav aria-label="Top" className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0">
+          <h1 className='sr-only'>nav</h1>
           <button type="button" className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden" onClick={() => { hamburgerMenu(); setOpen(true) }}>
             <span className="sr-only">Open menu</span>
             <Bars3Icon className="w-6 h-6 text-black" aria-hidden="true" />
