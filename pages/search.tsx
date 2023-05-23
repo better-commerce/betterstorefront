@@ -299,7 +299,7 @@ function Search({ query, setEntities, recordEvent }: any) {
   return (
     <>
       <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" id="canonical" href={router.asPath} />
         <title>{GENERAL_CATALOG}</title>
         <meta name="title" content={GENERAL_CATALOG} />
@@ -309,67 +309,26 @@ function Search({ query, setEntities, recordEvent }: any) {
         <meta property="og:title" content={GENERAL_CATALOG} key="ogtitle" />
         <meta property="og:description" content={GENERAL_CATALOG} key="ogdesc" />
       </NextHead>
-      <div className="mx-auto bg-transparent md:w-4/5">
-        {/* Mobile menu */}
-        <main className="pb-24">
-          <div className="px-4 py-4 text-left sm:py-5 sm:px-0 lg:px-0">
-            <h4><span className='text-sm font-normal'>Showing {data.products.total} Results for</span></h4>
-            <h1 className="text-xl font-semibold tracking-tight text-black sm:text-2xl">
-              {GENERAL_CATALOG}
-            </h1>
-
+      <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
+        <h4 className='px-4 text-sm font-medium sm:px-0'>Showing {data.products.total} Results for</h4>
+        <h1 className="px-4 text-xl font-semibold tracking-tight text-black sm:px-0 sm:text-2xl">{GENERAL_CATALOG}</h1>
+        <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
+          <div className="flex flex-col sm:col-span-2 sm:hidden">
+            <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
           </div>
-          <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
-            {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
-
-            <div className="flex flex-col sm:col-span-2 sm:hidden">
-              <ProductMobileFilters
-                handleFilters={handleFilters}
-                products={data.products}
-                routerFilters={state.filters}
-                handleSortBy={handleSortBy}
-                clearAll={clearAll}
-                routerSortOption={state.sortBy}
-              />
-            </div>
-
-            {/* {FILTER PANEL SHOW ONLY IN DESKTOP VERSION} */}
-
-            <div className="hidden sm:col-span-2 sm:block">
-              <ProductFilterRight
-                handleFilters={handleFilters}
-                products={data.products}
-                routerFilters={state.filters}
-              />
-            </div>
-            <div className="sm:col-span-10">
-              {/* {HIDE FILTER TOP BAR IN MOBILE} */}
-
-              <div className="flex-1 hidden sm:block">
-                <ProductFiltersTopBar
-                  products={data.products}
-                  handleSortBy={handleSortBy}
-                  routerFilters={state.filters}
-                  clearAll={clearAll}
-                  routerSortOption={state.sortBy}
-                />
-              </div>
-              <ProductGrid
-                products={productDataToPass}
-                currentPage={state.currentPage}
-                handlePageChange={handlePageChange}
-                handleInfiniteScroll={handleInfiniteScroll}
-              />
-            </div>
-            <div></div>
+          <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+          <div className="sm:col-span-10">
+            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
+            <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} />
           </div>
-        </main>
-        <Script
-          type="application/ld+json"
-          id="schema"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
+        </div>
+      </div>
+      <Script
+        type="application/ld+json"
+        id="schema"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
         {
           "@context": "https://schema.org/",
           "@type": "WebSite",
@@ -382,9 +341,8 @@ function Search({ query, setEntities, recordEvent }: any) {
           }
         }
         `,
-          }}
-        />
-      </div>
+        }}
+      />
     </>
   )
 }
