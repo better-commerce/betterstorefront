@@ -84,33 +84,35 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
 
-  const googleTranslateElementInit = () => {
-    const windowClone: any = window
-    new windowClone.google.translate.TranslateElement(
-      {
-        pageLanguage: 'en',
-        layout:
-          windowClone.google.translate.TranslateElement.FloatPosition.TOP_LEFT,
-      },
-      'google_translate_element'
-    )
+  // const googleTranslateElementInit = () => {
+  //   const windowClone: any = window
+  //   new windowClone.google.translate.TranslateElement(
+  //     {
+  //       pageLanguage: 'en',
+  //       layout:
+  //         windowClone.google.translate.TranslateElement.FloatPosition.TOP_LEFT,
+  //     },
+  //     'google_translate_element'
+  //   )
 
-    const selector = "iframe[name='votingFrame']";
-    const elem = document.querySelector(selector);
-    if (elem) {
-      elem.setAttribute("title", "Google Voting Frame");
-    }
-  }
+  //   // const selector = "iframe[name='votingFrame']";
+  //   // const elem = document.querySelector(selector);
+  //   // if (elem) {
+  //   //   elem.setAttribute("title", "Google Voting Frame");
+  //   // }
+  // }
 
-  useEffect(() => {
-    const addScript = document.createElement('script')
-    addScript.setAttribute(
-      'src',
-      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
-    )
-    document.body.appendChild(addScript)
-      ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-  }, []);
+  // useEffect(() => {
+  //   const addScript = document.createElement('script')
+  //   addScript.setAttribute(
+  //     'src',
+  //     '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+  //   )
+    
+  //   document.body.appendChild(addScript)
+  //     ; (window as any).googleTranslateElementInit = googleTranslateElementInit
+  //     document.getElementById('goog-gt-tt')?.remove();
+  // }, []);
 
   useEffect(() => {
     // Listener for snippet injector reset.
@@ -242,8 +244,6 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       </NextHead>
 
       <Head {...appConfig}></Head>
-
-      <div id="google_translate_element" />
 
       <ManagedUIContext>
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
