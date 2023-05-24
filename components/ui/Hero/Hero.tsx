@@ -29,7 +29,7 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <>
-      <h1 className="sr-only">Hero</h1>
+      <h2 className="sr-only">Hero</h2>
       <h2 className="sr-only">Hero 2</h2>
       <Swiper navigation={true} loop={true} className="relative bg-gray-900 mySwiper">
         {banners && banners?.map((banner: BannerProps, idx: number) => {
