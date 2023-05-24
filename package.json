@@ -11,7 +11,6 @@
     "find:unused": "npx next-unused",
     "generate:definitions": "node framework/bigcommerce/scripts/generate-definitions.js",
     "tsc": "tsc",
-    "prepare": "husky install",
     "lint-staged-configure": "npx mrm lint-staged"
   },
   "sideEffects": false,
@@ -45,6 +44,7 @@
     "lodash.random": "^3.2.0",
     "memory-cache": "^0.2.0",
     "moment": "^2.29.4",
+    "mrm": "^4.1.14",
     "next": "13.4.1",
     "next-themes": "^0.2.1",
     "node-fetch": "^2.6.11",
