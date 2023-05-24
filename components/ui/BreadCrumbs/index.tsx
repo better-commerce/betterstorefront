@@ -41,7 +41,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
         <li key={breadcrumbIdx}>
           <div className="flex items-center text-xs sm:text-sm">
             <Link href={`/${breadcrumb.slug}`} passHref>
-              <span className={`font-normal hover:text-gray-900 ${breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-gray-400'}`}>
+              <span className={`font-normal hover:text-gray-900 ${breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-black'}`}>
                 {breadcrumb.title}
               </span>
             </Link>

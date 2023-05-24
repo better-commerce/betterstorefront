@@ -261,7 +261,7 @@ export const GENERAL_DETAILS = 'Details'
 export const GENERAL_DETAILS_TEXT =
   'This is a limited edition production run. Printing starts when the drop ends. Reminder: Bad Boys For Life. Shipping may take 10+ days due to COVID-19.'
 export const BTN_SEE_EVERYTHING = 'See everything'
-export const GENERAL_SORT = 'Sort'
+export const GENERAL_SORT = 'Sort by'
 export const CHOOSE_A_COLOR = 'Choose a color'
 export const ITEM_TYPE_ADDON = 'ADDON'
 export const RELATED_PROD = "You may also like"
