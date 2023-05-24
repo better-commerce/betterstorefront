@@ -5,11 +5,6 @@ import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import Script from 'next/script'
-//DYNAMINC COMPONENT CALLS
-const ProductGrid = dynamic(() => import('@components/product/Grid'))
-const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
-const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
-const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -19,6 +14,7 @@ import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { isMobile } from 'react-device-detect'
+declare const window: any;
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -43,30 +39,14 @@ interface stateInterface {
   freeText: string
 }
 
-const IS_INFINITE_SCROLL =
-  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 const PAGE_TYPE = PAGE_TYPES['Search']
-
-const {
-  SORT_BY,
-  PAGE,
-  SORT_ORDER,
-  CLEAR,
-  HANDLE_FILTERS_UI,
-  ADD_FILTERS,
-  REMOVE_FILTERS,
-  FREE_TEXT,
-} = ACTION_TYPES
-
-const DEFAULT_STATE = {
-  sortBy: '',
-  sortOrder: 'asc',
-  currentPage: 1,
-  filters: [],
-  freeText: '',
-}
-
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT, } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '', }
+const ProductGrid = dynamic(() => import('@components/product/Grid'))
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
@@ -296,12 +276,17 @@ function Search({ query, setEntities, recordEvent }: any) {
   const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory.products
     : data.products
+    
+  let absPath = "";
+  if (typeof window !== 'undefined') {
+    absPath = window?.location?.href;
+  }
 
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" id="canonical" href={router.asPath} />
+        <link rel="canonical" id="canonical" href={absPath} />
         <title>{GENERAL_CATALOG}</title>
         <meta name="title" content={GENERAL_CATALOG} />
         <meta name="description" content={GENERAL_CATALOG} />
@@ -311,7 +296,7 @@ function Search({ query, setEntities, recordEvent }: any) {
         <meta property="og:description" content={GENERAL_CATALOG} key="ogdesc" />
       </NextHead>
       <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
-        <h4 className='px-4 text-sm font-medium sm:px-0'>Showing {data.products.total} Results for</h4>
+        <span className='px-4 text-sm font-medium sm:px-0'>Showing {data.products.total} Results for</span>
         <h1 className="px-4 text-xl font-semibold tracking-tight text-black sm:px-0 sm:text-2xl">{GENERAL_CATALOG}</h1>
         <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
           {isMobile ? (
