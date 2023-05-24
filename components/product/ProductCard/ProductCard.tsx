@@ -27,23 +27,9 @@ interface Attribute {
   fieldValues?: []
 }
 
-const ProductCard: FC<React.PropsWithChildren<Props>> = ({
-  product: productData,
-  hideWishlistCTA = false,
-}) => {
-  const [currentProductData, setCurrentProductData] = useState({
-    image: productData.image,
-    link: productData.slug,
-  })
-  const {
-    basketId,
-    user,
-    addToWishlist,
-    openWishlist,
-    setCartItems,
-    openNotifyUser,
-    wishListItems,
-  } = useUI()
+const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product: productData, hideWishlistCTA = false, }) => {
+  const [currentProductData, setCurrentProductData] = useState({ image: productData.image, link: productData.slug, })
+  const { basketId, user, addToWishlist, openWishlist, setCartItems, openNotifyUser, wishListItems, } = useUI()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
   const [product, setProduct] = useState(productData || {})
@@ -51,36 +37,20 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
   const handleUpdateWishlistItem = useCallback(() => {
     if (wishListItems.length < 1) return
     const wishlistItemIds = wishListItems.map((o: any) => o.recordId)
-    setProduct({
-      ...productData,
-      hasWishlisted: wishlistItemIds.includes(productData.recordId),
-    })
+    setProduct({ ...productData, hasWishlisted: wishlistItemIds.includes(productData.recordId), })
   }, [wishListItems, productData])
 
-  useEffect(() => {
-    handleUpdateWishlistItem()
-  }, [wishListItems, productData])
-
+  useEffect(() => { handleUpdateWishlistItem() }, [wishListItems, productData])
   useEffect(() => {
     if (product?.variantProductsAttributeMinimal?.length < 1) return
-    let sizeAttribData = product?.variantProductsAttributeMinimal?.find(
-      (o: any) => o.fieldCode === CLOTH_SIZE_ATTRIB_NAME
-    )
-    sizeAttribData =
-      sizeAttribData?.fieldValues?.sort(
-        (a: { displayOrder: number }, b: { displayOrder: number }) =>
-          a.displayOrder > b.displayOrder ? 1 : -1
-      ) || []
+    let sizeAttribData = product?.variantProductsAttributeMinimal?.find((o: any) => o.fieldCode === CLOTH_SIZE_ATTRIB_NAME)
+    sizeAttribData = sizeAttribData?.fieldValues?.sort((a: { displayOrder: number }, b: { displayOrder: number }) => a.displayOrder > b.displayOrder ? 1 : -1) || []
     if (sizeAttribData) setSizeValues(sizeAttribData)
   }, [product?.variantProductsAttributeMinimal])
 
-  const handleQuickViewData = (data: any) => {
-    setQuickViewData(data)
-  }
+  const handleQuickViewData = (data: any) => { setQuickViewData(data) }
 
-  const handleCloseQuickView = () => {
-    setQuickViewData(null)
-  }
+  const handleCloseQuickView = () => { setQuickViewData(null) }
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
@@ -151,9 +121,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
       setCurrentProductData({ ...currentProductData, image: product.image })
   }
 
-  const handleNotification = () => {
-    openNotifyUser(product.id)
-  }
+  const handleNotification = () => { openNotifyUser(product.id) }
 
   const buttonTitle = () => {
     let buttonConfig: any = {
@@ -252,7 +220,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
         {isMobile &&
           <div className="flex flex-wrap mt-2 border">
             <div className="w-4/12">
-              <button className="w-full text-center bg-white p-1.5" onClick={handleWishList} disabled={product.hasWishlisted}>
+              <button className="w-full text-center bg-white p-1.5" onClick={handleWishList} title='Wishlist' disabled={product.hasWishlisted} aria-hidden="true">
                 <HeartIcon className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-800'}`} aria-hidden="true" />
               </button>
             </div>
