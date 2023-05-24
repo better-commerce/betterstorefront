@@ -1,31 +1,20 @@
 import dynamic from 'next/dynamic'
-import { FC, useCallback } from 'react'
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
-import cartHandler from '@components/services/cart'
+import { FC, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
-import {
-  CLOTH_COLOUR_ATTRIB_NAME,
-  CLOTH_SIZE_ATTRIB_NAME,
-  NEXT_CREATE_WISHLIST,
-} from '@components/utils/constants'
-import { StarIcon, HeartIcon } from '@heroicons/react/24/outline'
+import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { HeartIcon } from '@heroicons/react/24/outline'
 import { round } from 'lodash'
-import {
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  GENERAL_ADD_TO_BASKET,
-  IMG_PLACEHOLDER,
-  ITEM_WISHLISTED,
-  QUICK_VIEW,
-  WISHLIST_TITLE,
-} from '@components/utils/textVariables'
+import { BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, ITEM_WISHLISTED, QUICK_VIEW, WISHLIST_TITLE } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import cartHandler from '@components/services/cart'
+import { isMobile } from 'react-device-detect'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
-import PLPQuickView from '@components/product/QuickView/PLPQuickView'
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
 
 interface Props {
   product: any
@@ -217,24 +206,28 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
               alt={product.name} className="object-cover object-center w-full h-full sm:h-full min-h-image" style={css} width={400} height={600} />
           </Link>
           {buttonConfig.isPreOrderEnabled && (<div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">{BTN_PRE_ORDER}</div>)}
-          {buttonConfig.isNotifyMeEnabled && (<div className="absolute px-1 py-1 text-white bg-red-400 rounded-sm top-2">{BTN_NOTIFY_ME}</div>)}
+          {buttonConfig.isNotifyMeEnabled && (<div className="absolute px-2 py-1 text-xs font-semibold text-white bg-red-800 rounded-sm top-2">{BTN_NOTIFY_ME}</div>)}
 
           <div className="absolute bottom-1 left-1 text-gray-900 bg-gray-100 px-[0.4rem] py-0 text-xs font-semibold sm:font-bold">
             <div className="flex items-center gap-1 star-rating">{product?.rating}</div>
           </div>
 
-          <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-0 sm:flex group-hover:-translate-y-full">
-            {!hideWishlistCTA && (
-              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
-                onClick={handleWishList} disabled={product.hasWishlisted}>{product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}</SimpleButton>
-            )}
-            <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none"
-              onClick={() => handleQuickViewData(product)}>{QUICK_VIEW}</SimpleButton>
-          </div>
+          {isMobile ? null : (
+            <>
+              <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-0 sm:flex group-hover:-translate-y-full">
+                {!hideWishlistCTA && (
+                  <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
+                    onClick={handleWishList} disabled={product.hasWishlisted}>{product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}</SimpleButton>
+                )}
+                <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none"
+                  onClick={() => handleQuickViewData(product)}>{QUICK_VIEW}</SimpleButton>
+              </div>
+            </>
+          )}
         </div>
 
         <Link passHref href={`/${currentProductData.link}`} title={`${product.name} \t ${itemPrice}`}>
-          <h3 className="flex items-center justify-between w-full h-10 px-2 my-1 text-xs font-medium text-black capitalize group-hover:hidden product-name sm:text-sm hover:text-gray-950">
+          <h3 className="flex items-center justify-between w-full h-10 px-2 my-1 text-xs font-semibold text-black capitalize group-hover:hidden product-name sm:text-sm hover:text-gray-950">
             {product?.name?.toLowerCase()}
           </h3>
 
@@ -249,24 +242,26 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
             <span className="font-bold">{product?.price?.formatted?.withTax}</span>
             {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax && (
               <>
-                <span className="px-1 text-xs font-semibold text-gray-400 line-through">{product?.listPrice?.formatted?.withTax}</span>
-                <span className="text-xs text-red-600">({discount}% Off)</span>
+                <span className="px-1 text-xs font-medium text-black line-through">{product?.listPrice?.formatted?.withTax}</span>
+                <span className="text-xs font-semibold text-red-600">({discount}% Off)</span>
               </>
             )}
           </div>
         </Link>
 
-        <div className="flex flex-wrap mt-2 border sm:hidden">
-          <div className="w-4/12">
-            <button className="w-full text-center bg-white p-1.5" onClick={handleWishList} disabled={product.hasWishlisted}>
-              <HeartIcon className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-600'}`} aria-hidden="true" />
-            </button>
+        {isMobile &&
+          <div className="flex flex-wrap mt-2 border">
+            <div className="w-4/12">
+              <button className="w-full text-center bg-white p-1.5" onClick={handleWishList} disabled={product.hasWishlisted}>
+                <HeartIcon className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-800'}`} aria-hidden="true" />
+              </button>
+            </div>
+            <div className="w-8/12 text-center border-l sm:col-span-8">
+              <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">{QUICK_VIEW}</button>
+            </div>
           </div>
-          <div className="w-8/12 text-center border-l sm:col-span-8">
-            <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">{QUICK_VIEW}</button>
-          </div>
-        </div>
-        
+        }
+
         <div className="flex flex-col">
           <Button className="hidden mt-2" title={buttonConfig.title} action={buttonConfig.action} type="button" buttonType={buttonConfig.buttonType || 'cart'} />
         </div>
