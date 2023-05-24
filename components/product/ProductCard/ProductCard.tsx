@@ -26,6 +26,7 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 import PLPQuickView from '@components/product/QuickView/PLPQuickView'
+import { hideElement, showElement } from '@framework/utils/ui-util'
 
 interface Props {
   product: any
@@ -160,12 +161,23 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
 
   const secondImage = product.images[1]?.image
 
-  const handleHover = (type: string) => {
+  const handleHover = (ev: any, type: string) => {
     if (hideWishlistCTA) return
-    if (type === 'enter' && secondImage)
-      setCurrentProductData({ ...currentProductData, image: secondImage })
-    if (type === 'leave' && secondImage)
-      setCurrentProductData({ ...currentProductData, image: product.image })
+
+    const parentElem = ev?.target?.parentElement
+    if (parentElem) {
+      if (type === 'enter' && secondImage) {
+        hideElement(ev?.target?.parentElement?.childNodes[0])
+        showElement(ev?.target?.parentElement?.childNodes[1])
+        //setCurrentProductData({ ...currentProductData, image: secondImage })
+      }
+
+      if (type === 'leave' && secondImage) {
+        hideElement(ev?.target?.parentElement?.childNodes[1])
+        showElement(ev?.target?.parentElement?.childNodes[0])
+        //setCurrentProductData({ ...currentProductData, image: product.image })
+      }
+    }
   }
 
   const handleNotification = () => {
@@ -216,20 +228,23 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <>
-      <div className="hover:outline hover:outline-1 outline-gray-200 group" key={product.id}>
+      <div
+        className="hover:outline hover:outline-1 outline-gray-200 group"
+        key={product.id}
+      >
         <div className="relative">
           <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel">
             <Link
               passHref
               href={`/${currentProductData.link}`}
-              onMouseEnter={() => handleHover('enter')}
-              onMouseLeave={() => handleHover('leave')}
+              onMouseEnter={(ev: any) => handleHover(ev, 'enter')}
+              onMouseLeave={(ev: any) => handleHover(ev, 'leave')}
               title={`${product.name} \t ${itemPrice}`}
             >
               <Image
                 priority
                 src={
-                  generateUri(currentProductData.image, 'h=500&fm=webp') ||
+                  generateUri(currentProductData?.image, 'h=500&fm=webp') ||
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
@@ -238,6 +253,22 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({
                 width={400}
                 height={600}
               />
+
+              {product?.images?.length > 1 && (
+                <Image
+                  id={`${product?.productId ?? product?.recordId}-2`}
+                  priority
+                  src={
+                    generateUri(product?.images[1]?.image, 'h=500&fm=webp') ||
+                    IMG_PLACEHOLDER
+                  }
+                  alt={product.name}
+                  className="object-cover object-center w-full h-full sm:h-full min-h-image hidden"
+                  style={css}
+                  width={400}
+                  height={600}
+                />
+              )}
             </Link>
             {buttonConfig.isPreOrderEnabled && (
               <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
