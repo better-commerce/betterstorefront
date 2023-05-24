@@ -2,9 +2,10 @@ import dynamic from 'next/dynamic'
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
+import NextHead from 'next/head'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
-const ProductGrid = dynamic(() => import('@components/product/Grid'))
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 const ProductSort = dynamic(() => import('@components/product/ProductSort'))
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -13,6 +14,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import Link from 'next/link'
 import commerce from '@lib/api/commerce'
+import { RESULTS } from '@components/utils/textVariables'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -265,40 +267,35 @@ function BrandDetailPage({
       </div>
     )
   }
-
+  let absPath = "";
+  if (typeof window !== 'undefined') {
+    absPath = window?.location?.href;
+  }
   return (
-    <div className="bg-white">
-      {/* Mobile menu */}
-      <main className="pb-24">
-        <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            {state.filters[0]?.Value}
-          </h1>
-          <h1 className="mt-2 text-lg font-medium tracking-tight text-gray-500 sm:text-xl">
-            {data.products.total} results
-          </h1>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: brandDetails.description,
-            }}
-            className="px-5 py-4 mt-2 text-gray-900 sm:py-10 sm:mt-5"
-          />
+    <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <link rel="canonical" id="canonical" href={absPath} />
+        <title>{brandDetails?.name || "Brands"}</title>
+        <meta name="title" content={brandDetails?.name || "Brands"} />
+        <meta name="description" content={brandDetails?.metaDescription} />
+        <meta name="keywords" content={brandDetails?.metaKeywords} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={brandDetails?.name} key="ogtitle" />
+        <meta property="og:description" content={brandDetails?.metaDescription} key="ogdesc" />
+      </NextHead>
+      <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
+        <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
+          <span className='text-sm font-semibold text-black'>Showing {data?.products?.total} {RESULTS}</span>
+          <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">{brandDetails?.name}</h1>
+          <div dangerouslySetInnerHTML={{ __html: brandDetails?.description, }} className="mt-2 text-black sm:mt-5" />
         </div>
-        <div className="flex justify-end w-full max-w-3xl px-4 py-2 mx-auto text-center sm:py-5 sm:px-6 lg:max-w-7xl lg:px-8">
-          <ProductSort
-            routerSortOption={state.sortBy}
-            products={data.products}
-            action={handleSortBy}
-          />
+        <div className="flex justify-end w-full">
+          <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} />
         </div>
-        <ProductGrid
-          products={productDataToPass}
-          currentPage={state.currentPage}
-          handlePageChange={handlePageChange}
-          handleInfiniteScroll={handleInfiniteScroll}
-        />
-      </main>
-    </div>
+        <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} />
+      </div>
+    </>
   )
 }
 

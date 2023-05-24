@@ -26,7 +26,7 @@ export default function CategoryGrid({
       {IS_INFINITE_SCROLL && (
         <InfiniteScroll fetchData={handleInfiniteScroll} className="w-full mx-auto overflow-hidden sm:pl-4" total={products.total} currentNumber={products.results.length}
           component={
-            <div className={`p-[1px] border-gray-100 gap-x-2 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-6 ${products.results.length < 6
+            <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-6 ${products.results.length < 6
               ? `lg:grid-cols-6` : 'lg:grid-cols-6'}`}>
               {!products.results.length && rangeMap(12, (i) => (
                 <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72">
@@ -46,7 +46,7 @@ export default function CategoryGrid({
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className={`p-[1px] border-gray-100 gap-x-2 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 ${products.results.length < 6
+          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 ${products.results.length < 6
             ? `lg:grid-cols-5` : 'lg:grid-cols-5'}`}>
             {!products.results.length && rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72">

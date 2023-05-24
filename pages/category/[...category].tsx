@@ -302,9 +302,9 @@ function CategoryPage({ category, slug, products, }: any) {
           <div className="grid grid-cols-2 gap-2 mt-2 text-left sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
             {category?.subCategories?.map((subcateg: any, idx: number) => (
               <Link href={'/' + subcateg.link} key={idx}>
-                <h4 className="flex flex-col py-2 text-xs font-semibold text-center text-black border border-gray-200 rounded cursor-pointer bg-gray-50 sm:text-sm hover:text-pink hover:bg-gray-100">
+                <h3 className="flex flex-col py-2 text-xs font-semibold text-center text-black border border-gray-200 rounded cursor-pointer bg-gray-50 sm:text-sm hover:text-pink hover:bg-gray-100">
                   {subcateg.name}
-                </h4>
+                </h3>
               </Link>
             ))}
           </div>
