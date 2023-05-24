@@ -3,8 +3,6 @@ import dynamic from 'next/dynamic'
 const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 const Pagination = dynamic(() => import('@components/product/Pagination'))
-import { TITLE_PRODUCTS } from '@components/utils/textVariables'
-
 interface Props {
   products: any
   currentPage: number | string
@@ -12,15 +10,8 @@ interface Props {
   handleInfiniteScroll: any
 }
 
-export default function Grid({
-  products,
-  currentPage,
-  handlePageChange = () => { },
-  handleInfiniteScroll,
-}: Props) {
-  const IS_INFINITE_SCROLL =
-    process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-
+export default function Grid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll, }: Props) {
+  const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === "true"
   return (
     <>
       {IS_INFINITE_SCROLL && (
@@ -46,7 +37,8 @@ export default function Grid({
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className="grid grid-cols-2 border-gray-200 sm:mx-0 md:grid-cols-4 lg:grid-cols-4">
+          <div className={`p-[1px] border-gray-100 gap-x-2 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 ${products.results.length < 6
+            ? `lg:grid-cols-5` : 'lg:grid-cols-5'}`}>
             {!products.results.length && rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72">
                 <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
