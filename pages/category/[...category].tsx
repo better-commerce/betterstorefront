@@ -1,35 +1,29 @@
+import Link from 'next/link'
+import Image from 'next/image'
+import NextHead from 'next/head'
+import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 import { useReducer, useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import ProductFilterRight from '@components/product/Filters/filtersRight'
-import ProductMobileFilters from '@components/product/Filters'
-import ProductFiltersTopBar from '@components/product/Filters/FilterTopBar'
-import ProductGridWithFacet from '@components/product/Grid'
-import Link from 'next/link'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
 import useSwr from 'swr'
-import NextHead from 'next/head'
 import { postData } from '@components/utils/clientFetcher'
-import {
-  ALL_CATEGORY,
-  BAD_URL_TEXT,
-  IMG_PLACEHOLDER,
-  RESULTS,
-} from '@components/utils/textVariables'
+import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER, RESULTS, } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import BreadCrumbs from '@components/ui/BreadCrumbs'
-// Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
-
-import SwiperCore, { Navigation } from 'swiper'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-//import { BiUnlink } from "react-icons/bi";
-
+import { isMobile } from 'react-device-detect'
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
+const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const PAGE_TYPE = PAGE_TYPES.Category
+declare const window: any;
 
 export async function getStaticProps(context: any) {
   const slugName = Object.keys(context.params)[0]
@@ -41,22 +35,14 @@ export async function getStaticProps(context: any) {
     const categoryProducts = await getCategoryProducts(category.id)
     return {
       props: {
-        category,
-        slug,
-        products: categoryProducts,
-        globalSnippets: infra?.snippets ?? [],
-        snippets: category?.snippets ?? [],
+        category, slug, products: categoryProducts, globalSnippets: infra?.snippets ?? [], snippets: category?.snippets ?? [],
       },
       revalidate: 60,
     }
   } else
     return {
       props: {
-        category,
-        slug,
-        products: null,
-        globalSnippets: infra?.snippets ?? [],
-        snippets: category?.snippets ?? [],
+        category, slug, products: null, globalSnippets: infra?.snippets ?? [], snippets: category?.snippets ?? [],
       },
       revalidate: 60,
     }
@@ -66,9 +52,7 @@ const generateCategories = (categories: any) => {
   const categoryMap: any = []
   const generateCategory = (category: any) => {
     if (category.link) {
-      category.link.includes('category/')
-        ? categoryMap.push(`/${category.link}`)
-        : categoryMap.push(`/category/${category.link}`)
+      category.link.includes('category/') ? categoryMap.push(`/${category.link}`) : categoryMap.push(`/category/${category.link}`)
     }
     if (category.subCategories) {
       category.subCategories.forEach((i: any) => generateCategory(i))
@@ -110,27 +94,9 @@ interface stateInterface {
   categoryId: any
 }
 
-const IS_INFINITE_SCROLL =
-  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-
-const {
-  SORT_BY,
-  PAGE,
-  SORT_ORDER,
-  CLEAR,
-  HANDLE_FILTERS_UI,
-  ADD_FILTERS,
-  REMOVE_FILTERS,
-  SET_CATEGORY_ID,
-} = ACTION_TYPES
-
-const DEFAULT_STATE = {
-  sortBy: '',
-  sortOrder: 'asc',
-  currentPage: 1,
-  filters: [],
-  categoryId: '',
-}
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, SET_CATEGORY_ID } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], categoryId: '' }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
@@ -163,22 +129,10 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function CategoryPage({ category, slug, products, }: any) {
   const router = useRouter()
   const adaptedQuery: any = { ...router.query }
-
-  adaptedQuery.currentPage
-    ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
-    : false
-  adaptedQuery.filters
-    ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
-    : false
-
-  const initialState = {
-    ...DEFAULT_STATE,
-    filters: adaptedQuery.filters || [],
-    categoryId: category.id,
-  }
-
+  adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
+  adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
+  const initialState = { ...DEFAULT_STATE, filters: adaptedQuery.filters || [], categoryId: category.id, }
   const [state, dispatch] = useReducer(reducer, initialState)
-
   const {
     data = {
       products: {
@@ -220,15 +174,15 @@ function CategoryPage({ category, slug, products, }: any) {
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
       if (
-        data?.products?.currentPage !== productListMemory.products.currentPage ||
-        data?.products?.total !== productListMemory.products.total
+        data?.products?.currentPage !== productListMemory?.products?.currentPage ||
+        data?.products?.total !== productListMemory?.products?.total
       ) {
         setProductListMemory((prevData: any) => {
           let dataClone = { ...data }
-          if (state.currentPage > 1) {
+          if (state?.currentPage > 1) {
             dataClone.products.results = [
-              ...prevData.products.results,
-              ...dataClone.products.results,
+              ...prevData?.products?.results,
+              ...dataClone?.products?.results,
             ]
           }
           return dataClone
@@ -298,147 +252,119 @@ function CategoryPage({ category, slug, products, }: any) {
       : products
 
   const css = { maxWidth: '100%', height: 'auto' }
+  let absPath = "";
+  if (typeof window !== 'undefined') {
+    absPath = window?.location?.href;
+  }
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" id="canonical" href={router.asPath} />
-        <title>{category?.name}</title>
-        <meta name="title" content={category?.name} />
+        <link rel="canonical" id="canonical" href={absPath} />
+        <title>{category?.name || "Category"}</title>
+        <meta name="title" content={category?.name || "Category"} />
         <meta name="description" content={category?.metaDescription} />
         <meta name="keywords" content={category?.metaKeywords} />
         <meta property="og:image" content="" />
         <meta property="og:title" content={category?.name} key="ogtitle" />
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
-      <div className="mx-auto bg-transparent md:w-4/5">
-        {/* Mobile menu */}
-        <main className="pb-0">
-          <div className="px-3 pt-2 sm:pt-4 sm:px-0">
-            {category.breadCrumbs && (
-              <BreadCrumbs
-                items={category.breadCrumbs}
-                currentProduct={category}
-              />
-            )}
-          </div>
-          <div className="flex items-center justify-center w-full sm:px-0">
-            {category && category.images && category.images.length ? (
-              <Swiper
-                navigation={true}
-                loop={true}
-                className="mt-0 mySwiper sm:mt-4"
-              >
-                {category.images.map((image: any, idx: number) => {
-                  return (
-                    <SwiperSlide key={idx}>
-                      <Link href={image.link || '#'}>
-                        <Image
-                          style={css}
-                          width={1920}
-                          height={460}
-                          src={
-                            generateUri(image.url, 'h=700&fm=webp') ||
-                            IMG_PLACEHOLDER
-                          }
-                          alt={category.name}
-                          className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
-                        ></Image>
-                      </Link>
-                    </SwiperSlide>
-                  )
-                })}
-              </Swiper>
-            ) : (
-              <></>
-            )}
-          </div>
+      <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
+        {category.breadCrumbs && (
+          <BreadCrumbs items={category.breadCrumbs} currentProduct={category} />
+        )}
+        {category && category.images && category.images.length ? (
+          <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mt-0 mySwiper sm:mt-4 sm:px-0">
+            {category.images.map((image: any, idx: number) => (
+              <SwiperSlide key={idx}>
+                <Link href={image.link || '#'}>
+                  <Image
+                    style={css}
+                    width={1920}
+                    height={460}
+                    src={generateUri(image.url, 'h=700&fm=webp') || IMG_PLACEHOLDER}
+                    alt={category.name}
+                    className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
+                  />
+                </Link>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : null}
 
-          <div className="px-3 pt-3 pb-4 text-left sm:pt-1 sm:pb-6 sm:px-0">
-            <h4>
-              <span className="text-sm font-normal text-gray-500">
-                Showing {products.total} {RESULTS}
-              </span>
-            </h4>
-            <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">
-              {category.name}
-            </h1>
-            <h2 className="text-gray-500 sm:text-md">{category.description}</h2>
+        <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
+          <span className='text-sm font-semibold text-black'>Showing {products.total} {RESULTS}</span>
+          <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">{category.name}</h1>
+          <h2 className="text-gray-500 sm:text-md">{category.description}</h2>
+        </div>
+
+        {category?.subCategories?.length > 0 && (
+          <div className="grid grid-cols-2 gap-2 mt-2 text-left sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+            {category?.subCategories?.map((subcateg: any, idx: number) => (
+              <Link href={'/' + subcateg.link} key={idx}>
+                <h4 className="flex flex-col py-2 text-xs font-semibold text-center text-black border border-gray-200 rounded cursor-pointer bg-gray-50 sm:text-sm hover:text-pink hover:bg-gray-100">
+                  {subcateg.name}
+                </h4>
+              </Link>
+            ))}
           </div>
-
-          {category?.subCategories?.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-12">
-              <div className="sm:col-span-12">
-                <div className="grid grid-cols-2 py-2 mt-2 text-left border-t border-l border-r sm:grid-cols-5 bg-gray-50">
-                  {category?.subCategories?.map((subcateg: any, idx: number) => {
-                    return (
-                      <Link href={'/' + subcateg.link} key={idx}>
-                        <div className="flex flex-col text-center cursor-pointer">
-                          <h4 className="text-xs font-medium text-gray-800 underline sm:text-sm hover:text-pink">
-                            {subcateg.name}
-                          </h4>
-                        </div>
-                      </Link>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
-          {products.total > 0 && (
-            <div className="grid w-full grid-cols-1 gap-1 mx-auto overflow-hidden sm:grid-cols-12 sm:border-t sm:border-gray-200">
-              {!!products && (
-                <>
-                  {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
-
-                  <div className="flex flex-col sm:col-span-2 sm:hidden">
-                    <ProductMobileFilters
-                      handleFilters={handleFilters}
+        )}
+        {products.total > 0 ? (
+          <div className="grid w-full grid-cols-1 sm:grid-cols-12">
+            {!!products && (products?.filters?.length > 0 ? (
+              <>
+                {isMobile ? (
+                  <ProductMobileFilters
+                    handleFilters={handleFilters}
+                    products={products}
+                    routerFilters={state.filters}
+                    handleSortBy={handleSortBy}
+                    clearAll={clearAll}
+                    routerSortOption={state.sortBy}
+                  />
+                ) : (
+                  <ProductFilterRight
+                    handleFilters={handleFilters}
+                    products={productDataToPass}
+                    routerFilters={state.filters}
+                  />
+                )}
+                <div className="sm:col-span-10 p-[1px]">
+                  {isMobile ? null : (
+                    <ProductFiltersTopBar
                       products={products}
-                      routerFilters={state.filters}
                       handleSortBy={handleSortBy}
+                      routerFilters={state.filters}
                       clearAll={clearAll}
                       routerSortOption={state.sortBy}
                     />
-                  </div>
-                  <div className="hidden sm:col-span-2 sm:block">
-                    <ProductFilterRight
-                      handleFilters={handleFilters}
-                      products={productDataToPass}
-                      routerFilters={state.filters}
-                    />
-                  </div>
-                  <div className="px-4 overflow-hidden sm:col-span-10 sm:px-0">
-                    {/* {HIDE FILTER TOP BAR IN MOBILE} */}
-
-                    <div className="flex-1 hidden sm:block">
-                      <ProductFiltersTopBar
-                        products={products}
-                        handleSortBy={handleSortBy}
-                        routerFilters={state.filters}
-                        clearAll={clearAll}
-                        routerSortOption={state.sortBy}
-                      />
-                    </div>
-                    <ProductGridWithFacet
-                      products={productDataToPass}
-                      currentPage={products.currentPage}
-                      handlePageChange={handlePageChange}
-                      handleInfiniteScroll={handleInfiniteScroll}
-                    />
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-          {products.total == 0 && (
-            <div className="p-32 mx-auto text-center max-w-7xl">
-              <h4 className="text-3xl font-bold text-gray-300">
-                No Products availabe in {category.name}
-              </h4>
-            </div>
-          )}
-        </main>
+                  )}
+                  <ProductGridWithFacet
+                    products={productDataToPass}
+                    currentPage={products.currentPage}
+                    handlePageChange={handlePageChange}
+                    handleInfiniteScroll={handleInfiniteScroll}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="sm:col-span-12 p-[1px] sm:mt-4 mt-2">
+                <ProductGrid
+                  products={productDataToPass}
+                  currentPage={products.currentPage}
+                  handlePageChange={handlePageChange}
+                  handleInfiniteScroll={handleInfiniteScroll}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="p-32 mx-auto text-center max-w-7xl">
+            <h4 className="text-3xl font-bold text-gray-300">
+              No Products availabe in {category.name}
+            </h4>
+          </div>
+        )}
       </div>
     </>
   )
