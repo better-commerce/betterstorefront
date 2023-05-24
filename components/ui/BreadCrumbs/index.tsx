@@ -38,25 +38,23 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
   return (
     <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4">
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
-        <li key={breadcrumbIdx}>
-          <div className="flex items-center text-xs sm:text-sm">
-            <Link href={`/${breadcrumb.slug}`} passHref>
-              <span className={`font-normal hover:text-gray-900 ${breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-black'}`}>
-                {breadcrumb.title}
-              </span>
-            </Link>
-            {breadcrumbIdx !== flattenedItems.length - 1 ? (
-              <svg
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                aria-hidden="true"
-                className="flex-shrink-0 w-4 h-4 ml-0 text-gray-300 sm:ml-0"
-              >
-                <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
-              </svg>
-            ) : null}
-          </div>
+        <li key={breadcrumbIdx} className="flex items-center text-xs sm:text-sm">
+          <Link href={`/${breadcrumb.slug}`} passHref>
+            <span className={`font-normal hover:text-gray-900 ${breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-black'}`}>
+              {breadcrumb.title}
+            </span>
+          </Link>
+          {breadcrumbIdx !== flattenedItems.length - 1 ? (
+            <svg
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              aria-hidden="true"
+              className="flex-shrink-0 w-4 h-4 ml-0 text-gray-300 sm:ml-0"
+            >
+              <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+            </svg>
+          ) : null}
         </li>
       ))}
     </ol>
