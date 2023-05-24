@@ -114,7 +114,7 @@ export default function Filters({
         <h2 id="filter-heading-filter" className="sr-only">{GENERAL_FILTER_TITLE}</h2>
         <div className="relative col-start-1 row-start-1 py-3">
           <div className="flex px-4 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
-            <button onClick={() => setOpen(true)} className="flex items-center font-medium text-gray-700 group">
+            <button onClick={() => setOpen(true)} aria-hidden="true" title='Product Filter' className="flex items-center font-medium text-gray-700 group">
               <FunnelIcon className="flex-none w-5 h-5 mr-2 text-gray-900 group-hover:text-gray-500" aria-hidden="true" />
               {appliedFilters?.length > 0 && (routerFilters.length)}
             </button>
