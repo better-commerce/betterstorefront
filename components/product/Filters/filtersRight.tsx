@@ -16,7 +16,7 @@ export default function FiltersRightOpen({
     <div className="relative flex-col hidden w-full h-full max-w-xs pr-4 ml-auto overflow-y-auto bg-white sm:col-span-2 sm:flex">
       {products.filters?.map((section: any) => (
         <>
-          <h3 key={section?.name} className="flex items-center justify-between w-full px-2 py-2 my-1 -mx-2 font-bold text-black uppercase bg-white text-md">{section?.name}</h3>
+          <div key={section?.name} className="flex items-center justify-between w-full px-2 py-2 my-1 -mx-2 font-bold text-black uppercase bg-white text-md">{section?.name}</div>
           <FilterList handleFilters={handleFilters} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} />
         </>
       ))}
