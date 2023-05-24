@@ -184,7 +184,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className='max-panel'>
+      <div className='pb-5 mt-2 border-b border-gray-200 max-panel'>
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (
