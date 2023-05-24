@@ -31,6 +31,7 @@ const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
 const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const PLPFilterSidebar = dynamic(() => import('@components/product/Filters/PLPFilterSidebarView'))
+declare const window: any;
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -319,11 +320,15 @@ export default function CollectionPage(props: any) {
   const totalResults = appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length
   const [openPLPSidebar, setOpenPLPSidebar] = useState(false)
   const handleTogglePLPSidebar = () => { setOpenPLPSidebar(!openPLPSidebar) }
+  let absPath = "";
+  if (typeof window !== 'undefined') {
+    absPath = window?.location?.href;
+  }
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" id="canonical" href={props?.canonicalTags} />
+        <link rel="canonical" id="canonical" href={absPath} />
         <title>{props?.name}</title>
         <meta name="title" content={props?.name} />
         <meta name="description" content={props?.metaDescription} />
@@ -346,7 +351,7 @@ export default function CollectionPage(props: any) {
                     style={css}
                     width={1920}
                     height={460}
-                    src={generateUri(img.url, 'h=700&fm=webp') || IMG_PLACEHOLDER}
+                    src={generateUri(img.url, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                     alt={props?.name}
                     className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
                   />
@@ -358,7 +363,7 @@ export default function CollectionPage(props: any) {
 
         <div className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4 ${cls}`}>
           <h1 className="inline-block text-base font-medium capitalize text-primary dark:text-primary text-24">{props?.name}</h1>
-          <span className="pl-2 mt-0 text-xs text-brown-light dark:text-brown-light text-14 sm:h-6">
+          <span className="pl-2 mt-0 text-xs font-semibold text-black dark:text-white text-14 sm:h-6">
             {swrLoading ? (<LoadingDots />) : (`${totalResults ?? 0} results`)}
           </span>
           <h2>{props?.description}</h2>

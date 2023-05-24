@@ -220,7 +220,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product: productData,
         {isMobile &&
           <div className="flex flex-wrap mt-2 border">
             <div className="w-4/12">
-              <button className="w-full text-center bg-white p-1.5" onClick={handleWishList} title='Wishlist' disabled={product.hasWishlisted} aria-hidden="true">
+              <button className="w-full text-center bg-white p-1.5" onClick={handleWishList} title='Wishlist' disabled={product.hasWishlisted}>
                 <HeartIcon className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-800'}`} aria-hidden="true" />
               </button>
             </div>
