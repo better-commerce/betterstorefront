@@ -246,11 +246,7 @@ function CategoryPage({ category, slug, products, }: any) {
     )
   }
 
-  const productDataToPass =
-    IS_INFINITE_SCROLL && productListMemory.products?.results?.length
-      ? productListMemory.products
-      : products
-
+  const productDataToPass = IS_INFINITE_SCROLL && productListMemory.products?.results?.length ? productListMemory.products : products
   const css = { maxWidth: '100%', height: 'auto' }
   let absPath = "";
   if (typeof window !== 'undefined') {

@@ -16,13 +16,7 @@ import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon, PlusSmallIcon, MinusSmallIcon } from '@heroicons/react/24/outline'
-import {
-  NEXT_CREATE_WISHLIST,
-  NEXT_BULK_ADD_TO_CART,
-  NEXT_UPDATE_CART_INFO,
-  NEXT_GET_PRODUCT,
-  NEXT_GET_PRODUCT_PREVIEW,
-} from '@components/utils/constants'
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
@@ -51,34 +45,27 @@ import {
   SLUG_TYPE_MANUFACTURER,
   YOUTUBE_VIDEO_PLAYER,
 } from '@components/utils/textVariables'
-import {
-  ELEM_ATTR,
-  PDP_ELEM_SELECTORS,
-} from '@framework/content/use-content-snippet'
+import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { matchStrings } from '@framework/utils/parse-util'
-import RelatedProductWithGroup from '../RelatedProducts/RelatedProductWithGroup'
-import AvailableOffers from './AvailableOffers'
-import ReviewInput from '../Reviews/ReviewInput'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import { getCurrentPage } from '@framework/utils/app-util'
+import { isMobile } from 'react-device-detect'
 
-//DYNAMIC COMPONENT LOAD IN PRODUCT DETAIL
-const AttributesHandler = dynamic(() => import('./AttributesHandler'))
+const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-const RelatedProducts = dynamic(
-  () => import('@components/product/RelatedProducts')
-)
+const RelatedProducts = dynamic(() => import('@components/product/RelatedProducts'))
 const Bundles = dynamic(() => import('@components/product/Bundles'))
 const Reviews = dynamic(() => import('@components/product/Reviews'))
 const PriceMatch = dynamic(() => import('@components/product/PriceMatch'))
 const Engraving = dynamic(() => import('@components/product/Engraving'))
-const ProductDetails = dynamic(
-  () => import('@components/product/ProductDetails')
-)
+const ProductDetails = dynamic(() => import('@components/product/ProductDetails'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-import { recordGA4Event } from '@components/services/analytics/ga4'
-import { getCurrentPage } from '@framework/utils/app-util'
+const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup'))
+const AvailableOffers = dynamic(() => import('@components/product/ProductView/AvailableOffers'))
+const ReviewInput = dynamic(() => import('@components/product/Reviews/ReviewInput'))
 
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -108,28 +95,16 @@ export default function ProductView({
   pdpCachedImages,
   reviews
 }: any) {
-  const {
-    openNotifyUser,
-    addToWishlist,
-    openWishlist,
-    basketId,
-    cartItems,
-    setCartItems,
-    user,
-    openCart,
-  } = useUI()
-
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, openCart } = useUI()
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
   const [previewImg, setPreviewImg] = useState<any>()
   const [reviewInput, setReviewInput] = useState(false)
-  const [variantInfo, setVariantInfo] = useState<any>({
-    variantColour: '',
-    variantSize: '',
-  })
+  const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
   const [sizeInit, setSizeInit] = useState('');
+  const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
   let currentPage = getCurrentPage()
 
   const product = updatedProduct || data
@@ -159,7 +134,6 @@ export default function ProductView({
   const fetchProduct = async () => {
     const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW
     const response: any = await axios.post(url, { slug: slug })
-    //console.log(JSON.stringify(response?.data))
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
         entity: JSON.stringify({
@@ -232,8 +206,6 @@ export default function ProductView({
         index === self.findIndex((t: any) => t.image === value.image)
     )
   }
-
-  const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
 
   const handleTogglePersonalizationDialog = () => {
     if (!isPersonalizeLoading) showEngravingModal(v => !v)
@@ -488,7 +460,7 @@ export default function ProductView({
     asyncHandler()
   }
 
-  const isEngravingAvailable = !!relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode === ITEM_TYPE_ADDON).length || !!product?.customAttributes.filter((item:any) => item.display == "Is Enabled" ).length
+  const isEngravingAvailable = !!relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode === ITEM_TYPE_ADDON).length || !!product?.customAttributes.filter((item: any) => item.display == "Is Enabled").length
   // const isEngravingAvailable:any = true;
   //TODO no additionalProperties key found on product object
   const insertToLocalWishlist = () => {
@@ -593,315 +565,243 @@ export default function ProductView({
   }
 
   return (
-    <div className="mx-auto bg-white page-container md:w-full">
-      <div className="px-4 pt-2 mx-auto sm:pt-6 sm:px-0 md:w-4/5">
+    <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
+      <div className='px-4 mx-auto mb-4 md:w-4/5 sm:px-2 sm:mb-6'>
         {breadcrumbs && (
           <BreadCrumbs items={breadcrumbs} currentProduct={product} />
         )}
       </div>
-      <main className="sm:pt-8">
-        <div className="lg:max-w-none">
-          <div className="mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start lg:max-w-none md:w-4/5">
-            <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp">
-              <div className="grid grid-cols-1 sm:grid-cols-12 sm:gap-x-8">
-                <div className="col-span-12 px-4 sm:px-0">
-                  <div className="block w-full pt-6 mx-auto sm:hidden sm:pt-0">
-                    <Swiper
-                      slidesPerView={1}
-                      spaceBetween={4}
-                      navigation={true}
-                      loop={true}
-                      breakpoints={{
-                        640: {
-                          slidesPerView: 1,
-                        },
-                        768: {
-                          slidesPerView: 4,
-                        },
-                        1024: {
-                          slidesPerView: 4,
-                        },
-                      }}
-                    >
-                      <div role="list" className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0">
-                        {content?.map((image: any, idx) => (
-                          <SwiperSlide className="px-0" key={`${idx}-slider`}>
-                            <div key={idx} className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto">
-                              <div className="relative group">
-                                {image.image ? (
-                                  <div className="image-container">
-                                    <Image
-                                      priority
-                                      src={generateUri(image.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
-                                      alt={image.name}
-                                      className="object-cover object-center w-full h-full image"
-                                      // style={css}
-                                      sizes="320 600 1000"
-                                      quality="100"
-                                      width={600}
-                                      height={1000}
-                                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
-                                    />
-                                  </div>
-                                ) : (
-                                  <PlayIcon className="object-cover object-center w-full h-full" />
-                                )}
-                              </div>
-                            </div>
-                          </SwiperSlide>
-                        ))}
-                      </div>
-                    </Swiper>
-                  </div>
-                  {/*DESKTOP PRODUCT IMAGE SLIDER*/}
-                  <div className="hidden w-full max-w-2xl mx-auto sm:block lg:max-w-none">
-                    <Tab.List className={content?.length > 1 ? "grid grid-cols-1 gap-2 sm:grid-cols-2" : "grid grid-cols-1 gap-2 sm:grid-cols-1"}>
-                      {content?.map((image: any, idx) => (
-                        <Tab key={`${idx}-tab`}>
-                          {() => (
-                            <>
-                              <span className="sr-only">{image.name}</span>
-                              <span className="relative">
-                                {image.image ? (
-                                  <div className="image-container">
-                                    <Image
-                                      priority
-                                      src={
-                                        generateUri(
-                                          image.image,
-                                          'h=700&fm=webp'
-                                        ) || IMG_PLACEHOLDER
-                                      }
-                                      alt={image.name}
-                                      className="o`bject-cover object-center w-full h-full image"
-                                      // style={css}
-                                      sizes="320 600 1000"
-                                      width={600}
-                                      height={1000}
-                                      onClick={(ev: any) =>
-                                        handleImgLoadT(image.image)
-                                      }
-                                      blurDataURL={
-                                        `${image.image}?h=600&w=400&fm=webp` ||
-                                        IMG_PLACEHOLDER
-                                      }
-                                    />
-                                    {/* </ControlledZoom> */}
-                                  </div>
-                                ) : (
-                                  <PlayIcon className="object-cover object-center w-full h-full" />
-                                )}
-                              </span>
-                            </>
-                          )}
-                        </Tab>
-                      ))}
-                    </Tab.List>
-                  </div>
-                </div>
-              </div>
-            </Tab.Group>
-
-            {/* Product info */}
-            <div className="px-4 mt-2 sm:mt-10 sm:px-0 lg:mt-0 lg:col-span-5">
-              <div className='flex justify-between gap-4'>
-                <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
-                  {selectedAttrData.brand}
-                </h3>
-
-                <div>
-                  <h3 className="sr-only">{GENERAL_REVIEWS}</h3>
-                  <div className="flex items-center xs:flex-col">
-                    <div className="flex items-center xs:text-center align-center">
-                      {[0, 1, 2, 3, 4].map((rating) => (
-                        <StarIcon
-                          key={rating}
-                          className={classNames(reviews?.review?.ratingAverage > rating ? 'text-yellow-400 h-3 w-3' : 'text-gray-300 h-4 w-4', 'flex-shrink-0')}
-                          aria-hidden="true"
-                        />
-                      ))}
+      <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none md:w-4/5">
+        <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp">
+          {isMobile ? (
+            <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={true}
+              breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 4, }, 1024: { slidesPerView: 4, } }}>
+              {content?.map((image: any, idx) => (
+                <SwiperSlide className="relative inline-flex flex-col w-full px-0 text-center cursor-pointer group lg:w-auto" key={`${idx}-slider`}>
+                  {image.image ? (
+                    <div className="image-container">
+                      <Image
+                        priority
+                        src={generateUri(image.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
+                        alt={image.name}
+                        className="object-cover object-center w-full h-full image"
+                        sizes="320 600 1000"
+                        quality="100"
+                        width={600}
+                        height={1000}
+                        blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
+                      />
                     </div>
-                    {reviews?.review?.productReviews?.length > 0 ?
-                      <p className='pl-1 text-xs font-bold'>({reviews?.review?.ratingAverage})</p> : <p className='pl-1 text-xs font-bold'>(0)</p>
-                    }
-                  </div>
-                </div>
-              </div>
-
-              <h1 className="text-lg font-medium tracking-tight text-black sm:text-2xl">
-                {selectedAttrData.name || selectedAttrData.productName}
-              </h1>
-              <p className="mt-0 text-sm text-gray-400 uppercase sm:text-md sm:mt-1">
-                <strong>{GENERAL_REFERENCE}:</strong>{' '}{selectedAttrData.stockCode}
-              </p>
-              <div className="mt-2">
-                <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
-                {updatedProduct ? (
-                  <p className="text-2xl font-bold text-black sm:text-xl">
-                    {selectedAttrData?.price?.formatted?.withTax}
-                    {selectedAttrData?.listPrice?.raw.tax > 0 ? (
-                      <>
-                        <span className="px-2 font-normal text-gray-400 line-through font-xl">{product?.listPrice?.formatted?.withTax}</span>
-                        <span className="font-semibold text-red-500 text-md">{discount}% off</span>
-                      </>
-                    ) : null}
-                  </p>
-                ) : (
-                  <></>
-                )}
-              </div>
-
-
-              <div className="w-full sm:w-full">
-                <AttributesHandler
-                  product={product}
-                  variant={selectedAttrData}
-                  setSelectedAttrData={setSelectedAttrData}
-                  variantInfo={variantInfo}
-                  handleSetProductVariantInfo={handleSetProductVariantInfo}
-                  sizeInit={sizeInit}
-                  setSizeInit={setSizeInit}
-                />
-              </div>
-              <h4 className="my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
-                {PRODUCT_AVAILABILITY}:{' '}
-                {product?.currentStock > 0 ? (
-                  <span>{PRODUCT_IN_STOCK}</span>
-                ) : (
-                  <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
-                )}
-              </h4>
-              {promotions?.promotions?.availablePromotions?.length > 0 &&
-                <div className="flex-1 order-4 w-full sm:order-3">
-                  <AvailableOffers currency={product?.price} offers={promotions?.promotions} />
-                </div>
-              }
-              {updatedProduct ? (
-                <>
-                  {!isEngravingAvailable && (
-                    <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                      <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
-                        className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                      >
-                        {isInWishList ? (<HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />) :
-                          (<HeartIcon className="flex-shrink-0 w-6 h-6" />)
-                        }
-                        <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
-                      </button>
-                    </div>
-                  )}
-
-                  {isEngravingAvailable && (
+                  ) : (<PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />)}
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <Tab.List className={content?.length > 1 ? "grid grid-cols-1 gap-2 sm:grid-cols-2" : "grid grid-cols-1 gap-2 sm:grid-cols-1"}>
+              {content?.map((image: any, idx) => (
+                <Tab key={`${idx}-tab`}>
+                  {() => (
                     <>
-                      <div className='flex w-auto hover:opacity-80' onClick={() => showEngravingModal(true)}>
-                        <div className='mt-3'>
-                          {/* <img
-                              src="/logo-cx-commerce.png"
-                              className="w-12 mb-1"
-                            /> */}
-                          <p className="text-sm underline cursor-pointer text-pink">
-                            {PRODUCT_PERSONALIZATION_TITLE}
-                          </p>
-                        </div>
-                        <div className='flex justify-center px-2 mt-3 cursor-pointer'>
-                          {/* <PlusIcon className='w-3.5 h-4 md:my-1' />&nbsp;<p className='text-sm -ml-1 text-[#37B679] '>£5</p> */}
-                        </div>
-                      </div>
-
-                      {/* <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                        <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                      </div> */}
-                      <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                        <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                        {/* <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                          onClick={() => showEngravingModal(true)}
-                        >
-                          <span className="font-bold">{GENERAL_ENGRAVING}</span>
-                        </button> */}
-                        <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
-                          className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink">
-                          {isInWishList ? (
-                            <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                          ) : (
-                            <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                          )}
-                          <span className="sr-only">
-                            {BTN_ADD_TO_FAVORITES}
-                          </span>
-                        </button>
-                      </div>
+                      <span className="sr-only">{image.name}</span>
+                      <span className="relative">
+                        {image.image ? (
+                          <div className="image-container">
+                            <Image
+                              priority
+                              src={
+                                generateUri(
+                                  image.image,
+                                  'h=700&fm=webp'
+                                ) || IMG_PLACEHOLDER
+                              }
+                              alt={image.name}
+                              className="o`bject-cover object-center w-full h-full image"
+                              // style={css}
+                              sizes="320 600 1000"
+                              width={600}
+                              height={1000}
+                              onClick={(ev: any) =>
+                                handleImgLoadT(image.image)
+                              }
+                              blurDataURL={
+                                `${image.image}?h=600&w=400&fm=webp` ||
+                                IMG_PLACEHOLDER
+                              }
+                            />
+                            {/* </ControlledZoom> */}
+                          </div>
+                        ) : (
+                          <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
+                        )}
+                      </span>
                     </>
                   )}
-                </>
-              ) : null}
+                </Tab>
+              ))}
+            </Tab.List>
+          )}
+        </Tab.Group>
 
-              <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
-                <h2 id="details-heading" className="sr-only">{PRICEMATCH_ADDITIONAL_DETAILS}</h2>
-                <ProductDetails product={product} description={product?.description || product?.shortDescription} />
-                <div className="mt-6 sm:mt-10">
-                  <p className="text-lg text-gray-900">{selectedAttrData?.currentStock > 0 ? product?.deliveryMessage : product?.stockAvailabilityMessage}</p>
-                </div>
-              </section>
+        {/* Product info */}
+        <div className="px-4 mt-2 sm:mt-10 sm:px-8 lg:mt-0 lg:col-span-5">
+          <div className='flex justify-between gap-4'>
+            <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">{selectedAttrData.brand}</h3>
+            <div className="flex items-center xs:flex-col">
+              <div className="flex items-center xs:text-center align-center">
+                {[0, 1, 2, 3, 4].map((rating) => (
+                  <StarIcon key={rating} aria-hidden="true" className={classNames(reviews?.review?.ratingAverage > rating ? 'text-yellow-400 h-3 w-3' : 'text-gray-300 h-4 w-4', 'flex-shrink-0')} />
+                ))}
+              </div>
+              {reviews?.review?.productReviews?.length > 0 ?
+                <p className='pl-1 text-xs font-bold'>({reviews?.review?.ratingAverage})</p> : <p className='pl-1 text-xs font-bold'>(0)</p>
+              }
             </div>
           </div>
 
-          {product?.componentProducts && (
-            <Bundles price={product?.price?.formatted?.withTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} />
-          )}
-
-          {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
+          <h1 className="text-lg font-medium tracking-tight text-black sm:text-2xl">{selectedAttrData.name || selectedAttrData.productName}</h1>
+          <p className="mt-0 text-sm text-black uppercase sm:text-xs sm:mt-1"><strong>{GENERAL_REFERENCE}:</strong>{' '}{selectedAttrData.stockCode}</p>
+          <div className="my-4">
+            <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
+            {updatedProduct ? (
+              <p className="text-2xl font-bold text-black sm:text-xl">
+                {selectedAttrData?.price?.formatted?.withTax}
+                {selectedAttrData?.listPrice?.raw.tax > 0 ? (
+                  <>
+                    <span className="px-2 text-sm font-medium text-gray-900 line-through">{product?.listPrice?.formatted?.withTax}</span>
+                    <span className="text-sm font-medium text-red-500">{discount}% off</span>
+                  </>
+                ) : null}
+              </p>
+            ) : (
+              <></>
+            )}
+          </div>
+          <AttributesHandler
+            product={product}
+            variant={selectedAttrData}
+            setSelectedAttrData={setSelectedAttrData}
+            variantInfo={variantInfo}
+            handleSetProductVariantInfo={handleSetProductVariantInfo}
+            sizeInit={sizeInit}
+            setSizeInit={setSizeInit}
+          />
+          <h4 className="h-5 my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
+            {PRODUCT_AVAILABILITY}:{' '}
+            {product?.currentStock > 0 ? (
+              <span>{PRODUCT_IN_STOCK}</span>
+            ) : (
+              <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
+            )}
+          </h4>
+          {promotions?.promotions?.availablePromotions?.length > 0 &&
+            <AvailableOffers currency={product?.price} offers={promotions?.promotions} />
+          }
+          {updatedProduct ? (
             <>
-              <div className="flex flex-col">
-                <div className="section-devider"></div>
-              </div>
-              <div className="px-0 mx-auto sm:container page-container">
-                <div className='flex flex-col justify-center pb-8 text-center sm:pb-10'>
-                  <h3 className='text-3xl font-bold text-black '>You May Also Like</h3>
+              {!isEngravingAvailable && (
+                <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                  <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
+                    className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                  >
+                    {isInWishList ? (<HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />) :
+                      (<HeartIcon className="flex-shrink-0 w-6 h-6" />)
+                    }
+                    <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
+                  </button>
                 </div>
-                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} />
-              </div>
+              )}
+
+              {isEngravingAvailable && (
+                <>
+                  <div className='flex w-auto hover:opacity-80' onClick={() => showEngravingModal(true)}>
+                    <div className='mt-3 text-sm underline cursor-pointer text-pink'>
+                      {PRODUCT_PERSONALIZATION_TITLE}
+                    </div>
+                  </div>
+                  <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                    <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                    <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
+                      className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink">
+                      {isInWishList ? (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                      ) : (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                      )}
+                      <span className="sr-only">
+                        {BTN_ADD_TO_FAVORITES}
+                      </span>
+                    </button>
+                  </div>
+                </>
+              )}
             </>
           ) : null}
 
-          <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
-          {reviews?.review?.productReviews?.length > 0 &&
-            <>
-              <div className="flex flex-col">
-                <div className="section-devider"></div>
-              </div>
-              <Reviews className="mx-auto md:w-4/5" data={reviews?.review} />
-            </>
-          }
+          <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
+            <h2 id="details-heading" className="sr-only">{PRICEMATCH_ADDITIONAL_DETAILS}</h2>
+            <ProductDetails product={product} description={product?.description || product?.shortDescription} />
+            <div className="mt-6 sm:mt-10">
+              <p className="text-lg text-gray-900">{selectedAttrData?.currentStock > 0 ? product?.deliveryMessage : product?.stockAvailabilityMessage}</p>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      {product?.componentProducts && (
+        <Bundles price={product?.price?.formatted?.withTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} />
+      )}
+
+      {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
+        <>
           <div className="flex flex-col">
             <div className="section-devider"></div>
           </div>
-          <div className='px-6 mx-auto sm:px-0 md:w-4/5'>
-            {reviewInput && <ReviewInput productId={product?.recordId} />}
+          <div className="px-0 mx-auto sm:container page-container">
+            <div className='flex flex-col justify-center pb-8 text-center sm:pb-10'>
+              <h3 className='text-3xl font-bold text-black '>You May Also Like</h3>
+            </div>
+            <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} />
           </div>
-          {isEngravingAvailable && (
-            <Engraving
-              show={isEngravingOpen}
-              submitForm={handleEngravingSubmit}
-              onClose={() => showEngravingModal(false)}
-              handleToggleDialog={handleTogglePersonalizationDialog}
-              product={product}
-            />
-          )}
+        </>
+      ) : null}
 
-          <PriceMatch
-            show={isPriceMatchModalShown}
-            onClose={showPriceMatchModal}
-            productName={product?.name}
-            productImage={product?.images?.length ? product?.images[0]?.image : null}
-            productId={product?.id}
-            stockCode={product?.stockCode}
-            ourCost={product?.price?.raw?.withTax}
-            rrp={product?.listPrice?.raw?.withTax}
-            ourDeliveryCost={product?.price?.raw?.tax} //TBD
-          />
-        </div>
-      </main>
+      <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
+      {reviews?.review?.productReviews?.length > 0 &&
+        <>
+          <div className="flex flex-col">
+            <div className="section-devider"></div>
+          </div>
+          <Reviews className="mx-auto md:w-4/5" data={reviews?.review} />
+        </>
+      }
+      <div className="flex flex-col">
+        <div className="section-devider"></div>
+      </div>
+      <div className='px-6 mx-auto sm:px-0 md:w-4/5'>
+        {reviewInput && <ReviewInput productId={product?.recordId} />}
+      </div>
+      {isEngravingAvailable && (
+        <Engraving
+          show={isEngravingOpen}
+          submitForm={handleEngravingSubmit}
+          onClose={() => showEngravingModal(false)}
+          handleToggleDialog={handleTogglePersonalizationDialog}
+          product={product}
+        />
+      )}
+
+      <PriceMatch
+        show={isPriceMatchModalShown}
+        onClose={showPriceMatchModal}
+        productName={product?.name}
+        productImage={product?.images?.length ? product?.images[0]?.image : null}
+        productId={product?.id}
+        stockCode={product?.stockCode}
+        ourCost={product?.price?.raw?.withTax}
+        rrp={product?.listPrice?.raw?.withTax}
+        ourDeliveryCost={product?.price?.raw?.tax} //TBD
+      />
 
       {previewImg ? (
         <Transition.Root show={previewImg != undefined} as={Fragment}>

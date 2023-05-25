@@ -106,13 +106,13 @@ export default function AttributesHandler({
     }
     return slug
   }
-  
+
   const handleChange = (fieldCode: string, value: string, fieldSet: any) => {
     const updatedFieldData: any = {
       ...fieldData,
       [fieldCode]: value,
     }
-    
+
     if (typeof window !== "undefined") {
       recordGA4Event(window, 'view_item', {
         ecommerce: {
@@ -148,7 +148,7 @@ export default function AttributesHandler({
       const clothSize = updatedFieldData[KEY_SIZE]
       handleFetchProductQuickView({
         slug: fieldSet?.slug || null,
-        colour, 
+        colour,
         clothSize,
         fieldSet,
       })
@@ -213,8 +213,8 @@ export default function AttributesHandler({
       Object.keys(originalAttributes).findIndex(
         (i: string) => i === option.fieldCode
       ) -
-        Object.keys(attrCombination).length ===
-        0 || Object.keys(attrCombination).includes(option.fieldCode)
+      Object.keys(attrCombination).length ===
+      0 || Object.keys(attrCombination).includes(option.fieldCode)
 
     const isLastItem = Object.keys(attrCombination).pop() === option.fieldCode
     if (isInOrder) {
@@ -287,8 +287,8 @@ export default function AttributesHandler({
   const matchAttributes =
     variantAttributes && variantAttributes.length
       ? variantAttributes.filter((x: any) =>
-          KEY_ATTRIBUTES.includes(x.fieldCode)
-        )
+        KEY_ATTRIBUTES.includes(x.fieldCode)
+      )
       : false
   const sortAttributes =
     matchAttributes && matchAttributes.length === KEY_ATTRIBUTES.length
@@ -299,61 +299,51 @@ export default function AttributesHandler({
   //JSON?.parse(JSON?.stringify(tempVariantAttrs))
   const newVariantAttrs = sortAttributes
     ? cloneDeep(tempVariantAttrs)?.map((x: any, index: number) => {
-        if (x.fieldCode === KEY_SIZE || x.fieldCode === KEY_COLOR) {
-          if (x.fieldCode === KEY_COLOR) {
-            x.displayOrder = tempVariantAttrs?.find(
-              (x: any) => x.fieldCode === KEY_COLOR
-            )?.displayOrder
-          } else if (x.fieldCode === KEY_SIZE) {
-            x.displayOrder = tempVariantAttrs?.find(
-              (x: any) => x.fieldCode === KEY_SIZE
-            )?.displayOrder
-          }
-          return x
+      if (x.fieldCode === KEY_SIZE || x.fieldCode === KEY_COLOR) {
+        if (x.fieldCode === KEY_COLOR) {
+          x.displayOrder = tempVariantAttrs?.find(
+            (x: any) => x.fieldCode === KEY_COLOR
+          )?.displayOrder
+        } else if (x.fieldCode === KEY_SIZE) {
+          x.displayOrder = tempVariantAttrs?.find(
+            (x: any) => x.fieldCode === KEY_SIZE
+          )?.displayOrder
         }
         return x
-      })
+      }
+      return x
+    })
     : tempVariantAttrs
 
   return (
     <>
-      {newVariantAttrs
-        ?.sort((first: any, second: any) => {
-          return first.displayOrder - second.displayOrder
-        })
-        ?.map((option: any, idx: number) => {
-          const optionsToPass = generateOptions(option)
-          const originalAttribute = isCustomAttr
-            ? stateAttributes[option.fieldCode]
-            : originalAttributes[option.fieldCode]
-          const Component =
-            ATTR_COMPONENTS[option.inputType] ||
-            // TEMP_MAP[option.fieldCode] ||
-            mapComponents[option.fieldCode] ||
-            DefaultComponent
-          return (
-            <div key={idx}>
-              <Component
-                currentAttribute={originalAttribute}
-                getStockPerAttribute={getStockPerAttribute}
-                items={optionsToPass}
-                label={option.fieldName}
-                isDisabled={!optionsToPass.length}
-                onChange={handleChange}
-                setSelectedAttrData={handleSelectedAttrData}
-                fieldCode={option.fieldCode}
-                productId={product.id}
-                setAttrCombination={handleAttrCombinations}
-                generateLink={generateLink}
-                product={product}
-                variant={variant}
-                handleSetProductVariantInfo={handleSetProductVariantInfo}
-                sizeInit = {sizeInit}
-                setSizeInit = {setSizeInit}
-              />
-            </div>
-          )
-        })}
+      {newVariantAttrs?.sort((first: any, second: any) => { return first.displayOrder - second.displayOrder })?.map((option: any, idx: number) => {
+        const optionsToPass = generateOptions(option)
+        const originalAttribute = isCustomAttr ? stateAttributes[option.fieldCode] : originalAttributes[option.fieldCode]
+        const Component = ATTR_COMPONENTS[option.inputType] || mapComponents[option.fieldCode] || DefaultComponent
+        return (
+          <div key={idx}>
+            <Component
+              currentAttribute={originalAttribute}
+              getStockPerAttribute={getStockPerAttribute}
+              items={optionsToPass}
+              label={option.fieldName}
+              isDisabled={!optionsToPass.length}
+              onChange={handleChange}
+              setSelectedAttrData={handleSelectedAttrData}
+              fieldCode={option.fieldCode}
+              productId={product.id}
+              setAttrCombination={handleAttrCombinations}
+              generateLink={generateLink}
+              product={product}
+              variant={variant}
+              handleSetProductVariantInfo={handleSetProductVariantInfo}
+              sizeInit={sizeInit}
+              setSizeInit={setSizeInit}
+            />
+          </div>
+        )
+      })}
     </>
   )
 }
