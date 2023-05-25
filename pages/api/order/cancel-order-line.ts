@@ -1,4 +1,5 @@
 import useCancelOrderLine from '@framework/checkout/cancel-order-line';
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 async function CancelOrderLineApiMiddleware(req: any, res: any) {
     try {
@@ -8,7 +9,7 @@ async function CancelOrderLineApiMiddleware(req: any, res: any) {
         });
         res.status(200).json(response)
     } catch (error) {
-        res.status(500).json({ error })
+        apiMiddlewareErrorHandler(req, res, error)
     }
 };
 

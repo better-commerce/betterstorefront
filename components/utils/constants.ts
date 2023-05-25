@@ -112,6 +112,7 @@ export const NEXT_VALIDATE_TOKEN = '/api/customer/validate-token'
 export const NEXT_GET_RETURN_DATA = '/api/return/get-return-data'
 export const NEXT_CREATE_RETURN_DATA = '/api/return/create'
 export const NEXT_GET_RETURNS = '/api/return/get-user-returns'
+export const NEXT_POST_LOGGER = '/api/app-logger'
 //CONSTANTS
 
 export const NEXT_GET_PRODUCT_QUICK_VIEW = "/api/catalog/get-product-quick-view"

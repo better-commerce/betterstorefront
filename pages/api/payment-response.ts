@@ -1,4 +1,5 @@
 import { putPaymentResponse } from '@framework/payment'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const PaymentResponseApiMiddleware = async (req: any, res: any) => {
   const { orderId, model }: any = req.body
@@ -10,7 +11,7 @@ const PaymentResponseApiMiddleware = async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 };
 

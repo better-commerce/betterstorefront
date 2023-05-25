@@ -1,4 +1,5 @@
 import useInfra from '@framework/api/endpoints/infra'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const InfraApiMiddleware = async (req: any, res: any) => {
   const { setHeader = false } = req.body
@@ -6,7 +7,7 @@ const InfraApiMiddleware = async (req: any, res: any) => {
     const response = await useInfra(req)(setHeader)
     res.status(200).json(response)
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 }
 

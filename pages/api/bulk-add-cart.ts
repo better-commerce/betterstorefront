@@ -1,4 +1,6 @@
 import { useBulkAdd } from '@framework/cart'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
+
 const BulkAddCartApiMiddleware = async (req: any, res: any) => {
   const { basketId, products }: any = req.body
   try {
@@ -9,8 +11,7 @@ const BulkAddCartApiMiddleware = async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error) {
-    console.log('error before backend api call')
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 }
 

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const GetLocationApiMiddleware = async (req: any, res: any) => {
   const url: any = process.env.GEO_ENDPOINT
@@ -10,7 +11,7 @@ const GetLocationApiMiddleware = async (req: any, res: any) => {
     })
     res.status(200).json(data)
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 };
 

@@ -1,4 +1,5 @@
 import { clickAndCollect } from '@framework/shipping'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 interface BodyProps {
   items: []
@@ -15,7 +16,7 @@ const ClickAndCollectApiMiddleware = async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 };
 

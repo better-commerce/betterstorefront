@@ -1,4 +1,5 @@
 import { updateAddress } from '@framework/checkout'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const UpdateAddressApiMiddleware = async (req: any, res: any) => {
   const { basketId, model }: any = req.body
@@ -9,7 +10,7 @@ const UpdateAddressApiMiddleware = async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 };
 

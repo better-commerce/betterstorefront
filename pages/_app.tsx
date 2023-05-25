@@ -31,6 +31,7 @@ import { GA4_DISABLED, GA4_MEASUREMENT_ID } from '@framework/utils/constants'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { DeviceType } from "@commerce/utils/use-device"
 import InitDeviceInfo from "@components/common/InitDeviceInfo"
+import ErrorBoundary from "@components/error"
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -240,25 +241,27 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       <div id="google_translate_element" />
 
       <ManagedUIContext>
-        {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
-        <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
-        <Layout
-          nav={nav}
-          footer={footer}
-          config={appConfig}
-          pageProps={pageProps}
-          keywords={keywordsData}
-          deviceInfo={deviceInfo}
-        >
-          <Component
-            {...pageProps}
-            location={location}
-            ipAddress={location.Ip}
+        <ErrorBoundary>
+          {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
+          <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
+          <Layout
+            nav={nav}
+            footer={footer}
             config={appConfig}
+            pageProps={pageProps}
+            keywords={keywordsData}
             deviceInfo={deviceInfo}
-          />
-          {/* <RedirectIntercept /> */}
-        </Layout>
+          >
+            <Component
+              {...pageProps}
+              location={location}
+              ipAddress={location.Ip}
+              config={appConfig}
+              deviceInfo={deviceInfo}
+              />
+            {/* <RedirectIntercept /> */}
+          </Layout>
+        </ErrorBoundary>
       </ManagedUIContext>
     </>
   )

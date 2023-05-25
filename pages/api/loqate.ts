@@ -1,4 +1,5 @@
 import { loqateUser } from '@framework/checkout'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const LoqateUserApiMiddleWare = async (req: any, res: any) => {
   const { postCode, country }: any = req.body
@@ -9,8 +10,7 @@ const LoqateUserApiMiddleWare = async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 };
 

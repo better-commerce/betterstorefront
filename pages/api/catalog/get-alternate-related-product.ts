@@ -1,4 +1,5 @@
 import { getAltRelatedProducts } from '@framework/checkout'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const GetAltRelatedProductsApiMiddleware = async (req: any, res: any) => {
   const { slug }: any = req.body
@@ -6,7 +7,7 @@ const GetAltRelatedProductsApiMiddleware = async (req: any, res: any) => {
     const response: any = await getAltRelatedProducts()(slug)
     res.status(200).json({ relatedProducts: response.result })
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 }
 

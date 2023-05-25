@@ -2,7 +2,11 @@ import * as fs from 'fs';
 import path from 'path';
 import { v4 as uuid } from "uuid";
 import Cookies, { CookieAttributes } from 'js-cookie'
+import * as winston from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
+
 import { FetcherError } from '@commerce/utils/errors'
+import { HTTP_MESSAGES } from './constants';
 
 export const setCookie = (
   name: string,
@@ -71,4 +75,75 @@ export const writeFetcherLog = (request: any, response: any) => {
       console.log(`---API Log: ${filePath}---`);
     }
   });
+}
+
+export const appLogger = (logMessageFormat?: any) => {
+  const { format, createLogger } = winston
+  const { timestamp, combine, errors, printf } = format
+
+  // winston file logger transport
+  const logTransport: DailyRotateFile = new DailyRotateFile({
+    datePattern: 'YYYYMMDD',
+    dirname: process.env.LOG_OUTPUT_DIR,
+    filename: 'app-%DATE%',
+    extension: '.log',
+  })
+
+  const logFormat = printf((info: any) => {
+    if (logMessageFormat) return logMessageFormat(info)
+    return `${info.timestamp} [${info?.level}] "${info?.message}"`
+  })
+
+  // create logger
+  const logger: winston.Logger = createLogger({
+    format: combine(
+      timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSSZZ' }),
+      errors({ stack: true }),
+      logFormat,
+    ),
+    transports: [],
+  })
+
+  logger.add(logTransport)
+
+  return logger
+}
+
+export const apiMiddlewareErrorHandler = (req: any, res: any, error: any) => {
+  // logs will be captured when enabled
+  if (process.env.LOG_ENABLED === "true") {
+    let logMessageFormat: any;
+
+    if (error.name === 'AxiosError') {
+      // request log format
+      logMessageFormat = (info: any) => {
+        return `${info.timestamp} [${info?.response?.status}] ${info?.request?.method}:${info?.request?.path} ${JSON.stringify(info?.request?._headers)} "${info?.response?.data||info?.message}"`
+      }
+    } else {
+      // other log format
+      logMessageFormat = (info: any) => {
+        return `${info.timestamp} [${info?.level}] "${info?.message}"`
+      }
+    }
+
+    // app logger
+    appLogger(logMessageFormat).error(error)
+  }
+
+  // default error object
+  const errorInfo: any = {
+    statusCode: 500,
+    message: HTTP_MESSAGES['SERVER_ERROR'],
+    description: '',
+  }
+
+  // update error info on response
+  if (error?.response) {
+    errorInfo.statusCode = error?.response?.status || 500
+    errorInfo.message = error?.response?.statusText || HTTP_MESSAGES['SERVER_ERROR']
+    errorInfo.description = error?.response?.data || ''
+  }
+
+  // send response
+  res.status(errorInfo?.statusCode).json(errorInfo)
 }
