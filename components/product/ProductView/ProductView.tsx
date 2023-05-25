@@ -572,7 +572,7 @@ export default function ProductView({
         )}
       </div>
       <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none md:w-4/5">
-        <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp">
+        <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp" title='product images'>
           {isMobile ? (
             <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={true}
               breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 4, }, 1024: { slidesPerView: 4, } }}>
@@ -599,36 +599,24 @@ export default function ProductView({
           ) : (
             <Tab.List className={content?.length > 1 ? "grid grid-cols-1 gap-2 sm:grid-cols-2" : "grid grid-cols-1 gap-2 sm:grid-cols-1"}>
               {content?.map((image: any, idx) => (
-                <Tab key={`${idx}-tab`}>
+                <Tab key={`${idx}-tab`} title={selectedAttrData.name}>
                   {() => (
                     <>
-                      <span className="sr-only">{image.name}</span>
+                      <span className="sr-only">{selectedAttrData.name}</span>
                       <span className="relative">
                         {image.image ? (
                           <div className="image-container">
                             <Image
                               priority
-                              src={
-                                generateUri(
-                                  image.image,
-                                  'h=700&fm=webp'
-                                ) || IMG_PLACEHOLDER
-                              }
-                              alt={image.name}
+                              src={generateUri(image.image, 'h=700&fm=webp') || IMG_PLACEHOLDER}
+                              alt={selectedAttrData.name}
                               className="o`bject-cover object-center w-full h-full image"
-                              // style={css}
                               sizes="320 600 1000"
                               width={600}
                               height={1000}
-                              onClick={(ev: any) =>
-                                handleImgLoadT(image.image)
-                              }
-                              blurDataURL={
-                                `${image.image}?h=600&w=400&fm=webp` ||
-                                IMG_PLACEHOLDER
-                              }
+                              onClick={(ev: any) => handleImgLoadT(image.image)}
+                              blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
                             />
-                            {/* </ControlledZoom> */}
                           </div>
                         ) : (
                           <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
