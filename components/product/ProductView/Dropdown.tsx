@@ -32,12 +32,7 @@ function renderRadioOptions(items: any, itemsCount: any, selectedValue: any, ope
               'border border-gray-900': selectedValue === item.fieldValue,
             })}
           >
-            <RadioGroup.Label
-              as="p"
-              className='text-ms'
-            >
-              {item.fieldValue}
-            </RadioGroup.Label>
+            <RadioGroup.Label as="p" className='text-ms'>{item.fieldValue}</RadioGroup.Label>
           </RadioGroup.Option>
         </>
       ))}
@@ -56,12 +51,7 @@ function renderRadioOptions(items: any, itemsCount: any, selectedValue: any, ope
               'hidden': !openRemainElems,
             })}
           >
-            <RadioGroup.Label
-              as="p"
-              className='text-ms'
-            >
-              {item.fieldValue}
-            </RadioGroup.Label>
+            <RadioGroup.Label as="p" className='text-ms'>{item.fieldValue}</RadioGroup.Label>
           </RadioGroup.Option>
         </>
       ))}
@@ -121,12 +111,12 @@ export default function Dropdown({
   }, [])
 
   useEffect(() => {
-    product?.customAttributes?.map((val:any) => {
-       if(val.display === 'Size'){
-          setSizeValue(val.valueText);
-       }
+    product?.customAttributes?.map((val: any) => {
+      if (val.display === 'Size') {
+        setSizeValue(val.valueText);
+      }
     })
-   }, [currentAttribute])
+  }, [currentAttribute])
 
   useEffect(() => {
     const getStockPerAttrData = getStockPerAttribute(
@@ -170,7 +160,7 @@ export default function Dropdown({
   }
 
   const handleOnChange = (value: any) => {
-     // const stockPerAttrValue = getStockPerAttribute(
+    // const stockPerAttrValue = getStockPerAttribute(
     //   fieldCode,
     //   value.currentAttribute
     // )
@@ -182,7 +172,7 @@ export default function Dropdown({
       product.variantProducts,
       slug
     )
-   
+
 
     // const stockPerAttrValue = getProductFromAttributes(
     //   fieldCode,
@@ -203,16 +193,16 @@ export default function Dropdown({
   const [openRemainElems, setOpenRemainElems] = useState(false)
 
   const handleToggleOpenRemainElems = () => setOpenRemainElems(!openRemainElems)
-  
+
   return (
     <>
-    <div className='flex mt-4'>
-    <h3 className="text-gray-700 text-ms">{label} :</h3>
-    <h3 className='pl-1 text-gray-500 text-ms'>{sizeValue}</h3>
-      {/* <h3 className='px-2' >{color}</h3>
+      <div className='flex mt-4'>
+        <h3 className="text-gray-700 text-ms">{label} :</h3>
+        <h3 className='pl-1 text-gray-500 text-ms'>{sizeValue}</h3>
+        {/* <h3 className='px-2' >{color}</h3>
       <div style={{ color: `${color}` }}></div> */}
-    </div>
-    <RadioGroup value='' onChange={handleOnChange} className="mt-2 dark:text-black">
+      </div>
+      <RadioGroup value='' onChange={handleOnChange} className="mt-2 dark:text-black">
         {/* <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label> */}
         <div className='dark:text-black'>
           {renderRadioOptions(items, DEFAULT_OPTIONS_COUNT, currentAttribute, openRemainElems, handleToggleOpenRemainElems)}
