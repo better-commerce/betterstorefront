@@ -583,7 +583,7 @@ export default function ProductView({
                       <Image
                         priority
                         src={generateUri(image.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
-                        alt={image.name}
+                        alt={selectedAttrData.name}
                         className="object-cover object-center w-full h-full image"
                         sizes="320 600 1000"
                         quality="100"
