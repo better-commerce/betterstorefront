@@ -572,31 +572,31 @@ export default function ProductView({
         )}
       </div>
       <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none md:w-4/5">
-        <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp" title='product images'>
-          {isMobile ? (
-            <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={true}
-              breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 4, }, 1024: { slidesPerView: 4, } }}>
-              {content?.map((image: any, idx) => (
-                <SwiperSlide className="relative inline-flex flex-col w-full px-0 text-center cursor-pointer group lg:w-auto" key={`${idx}-slider`}>
-                  {image.image ? (
-                    <div className="image-container">
-                      <Image
-                        priority
-                        src={generateUri(image.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
-                        alt={image.name}
-                        className="object-cover object-center w-full h-full image"
-                        sizes="320 600 1000"
-                        quality="100"
-                        width={600}
-                        height={1000}
-                        blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
-                      />
-                    </div>
-                  ) : (<PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />)}
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          ) : (
+        {isMobile ? (
+          <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={true}
+            breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 4, }, 1024: { slidesPerView: 4, } }}>
+            {content?.map((image: any, idx) => (
+              <SwiperSlide className="relative inline-flex flex-col w-full px-0 text-center cursor-pointer group lg:w-auto" key={`${idx}-slider`}>
+                {image.image ? (
+                  <div className="image-container">
+                    <Image
+                      priority
+                      src={generateUri(image.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
+                      alt={image.name}
+                      className="object-cover object-center w-full h-full image"
+                      sizes="320 600 1000"
+                      quality="100"
+                      width={600}
+                      height={1000}
+                      blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
+                    />
+                  </div>
+                ) : (<PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />)}
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <Tab.Group as="div" className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp" title='product images'>
             <Tab.List className={content?.length > 1 ? "grid grid-cols-1 gap-2 sm:grid-cols-2" : "grid grid-cols-1 gap-2 sm:grid-cols-1"}>
               {content?.map((image: any, idx) => (
                 <Tab key={`${idx}-tab`} title={selectedAttrData.name}>
@@ -627,8 +627,9 @@ export default function ProductView({
                 </Tab>
               ))}
             </Tab.List>
-          )}
-        </Tab.Group>
+          </Tab.Group>
+        )}
+
 
         {/* Product info */}
         <div className="px-4 mt-2 sm:mt-10 sm:px-8 lg:mt-0 lg:col-span-5">
