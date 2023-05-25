@@ -1,4 +1,5 @@
 import { useLogin } from '@framework/auth'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const LoginApiMiddleware = async (req: any, res: any) => {
   const { email, password }: any = req.body.data
@@ -10,7 +11,7 @@ const LoginApiMiddleware = async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error: any) {
-    throw new Error(error)
+    apiMiddlewareErrorHandler(req, res, error)
   }
 };
 

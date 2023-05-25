@@ -4,6 +4,7 @@ import axios from "axios";
 // Other Imports
 import { XML_FEED } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const RobotsApiMiddleware = async (req: any, res: any) => {
     try {
@@ -26,7 +27,7 @@ const RobotsApiMiddleware = async (req: any, res: any) => {
             "Allow: /";
         res.send(content);*/
     } catch (error: any) {
-        res.status(error?.response?.status || 500).send();
+        apiMiddlewareErrorHandler(req, res, error)
     }
 };
 

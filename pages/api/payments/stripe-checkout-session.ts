@@ -1,4 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 export default async function handler(req: any, res: any) {
   const chargeUser = async (
@@ -26,6 +27,6 @@ export default async function handler(req: any, res: any) {
       clientSecret: paymentIntent.client_secret,
     })
   } catch (error) {
-    res.send(error)
+    apiMiddlewareErrorHandler(req, res, error)
   }
 }

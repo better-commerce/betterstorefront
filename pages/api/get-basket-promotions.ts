@@ -1,4 +1,5 @@
 import useGetBasketPromotions from '@framework/cart/use-get-basket-promotions';
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const GetBasketPromotionsApiMiddleware = async (req: any, res: any) => {
     const { basketId }: any = req.query;
@@ -9,7 +10,7 @@ const GetBasketPromotionsApiMiddleware = async (req: any, res: any) => {
         });
         res.status(200).json(response);
     } catch (error) {
-        res.status(500).json({ error });
+        apiMiddlewareErrorHandler(req, res, error)
     }
 };
 

@@ -61,6 +61,8 @@ module.exports = withCommerceConfig({
     SITE_NAME: process.env.SITE_NAME,
     GA4_DISABLED: process.env.GA4_DISABLED,
     GA4_MEASUREMENT_ID: process.env.GA4_MEASUREMENT_ID,
+    LOG_ENABLED: process.env.LOG_ENABLED,
+    LOG_OUTPUT_DIR: process.env.LOG_OUTPUT_DIR,
   },
 })
 

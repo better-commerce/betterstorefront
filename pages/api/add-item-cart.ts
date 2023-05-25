@@ -1,4 +1,6 @@
 import { useAddItem } from '@framework/cart'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
+
 const AddItemCartApiMiddleware = async (req: any, res: any) => {
   const {
     basketId,
@@ -20,7 +22,7 @@ const AddItemCartApiMiddleware = async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 }
 

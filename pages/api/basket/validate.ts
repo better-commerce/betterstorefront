@@ -1,4 +1,5 @@
 import useBasketValidate from '@framework/cart/use-basket-validate';
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const BasketValidateApiMiddleware = async function (req: any, res: any) {
     const {
@@ -11,7 +12,7 @@ const BasketValidateApiMiddleware = async function (req: any, res: any) {
         });
         res.status(200).json(response)
     } catch (error) {
-        res.status(500).json({ error })
+        apiMiddlewareErrorHandler(req, res, error)
     }
 };
 

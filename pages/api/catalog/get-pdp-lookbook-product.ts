@@ -1,4 +1,5 @@
 import commerce from '@lib/api/commerce'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const GetPdpLookbookProductApiMiddleware = async (req: any, res: any) => {
   try {
@@ -7,8 +8,7 @@ const GetPdpLookbookProductApiMiddleware = async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error) {
-    console.log(error, 'error')
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 }
 
