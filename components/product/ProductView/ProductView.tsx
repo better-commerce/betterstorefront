@@ -691,8 +691,7 @@ export default function ProductView({
                 <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                   <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                   <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
-                    className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                  >
+                    className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink">
                     {isInWishList ? (<HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />) :
                       (<HeartIcon className="flex-shrink-0 w-6 h-6" />)
                     }
@@ -743,13 +742,9 @@ export default function ProductView({
 
       {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
         <>
-          <div className="flex flex-col">
-            <div className="section-devider"></div>
-          </div>
+          <div className="flex flex-col section-devider"></div>
           <div className="px-0 mx-auto sm:container page-container">
-            <div className='flex flex-col justify-center pb-8 text-center sm:pb-10'>
-              <h3 className='text-3xl font-bold text-black '>You May Also Like</h3>
-            </div>
+            <h3 className='flex flex-col justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10'>You May Also Like</h3>
             <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} />
           </div>
         </>
@@ -758,15 +753,11 @@ export default function ProductView({
       <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
       {reviews?.review?.productReviews?.length > 0 &&
         <>
-          <div className="flex flex-col">
-            <div className="section-devider"></div>
-          </div>
+          <div className="flex flex-col section-devider" aria-hidden="true"></div>
           <Reviews className="mx-auto md:w-4/5" data={reviews?.review} />
         </>
       }
-      <div className="flex flex-col">
-        <div className="section-devider"></div>
-      </div>
+      <div className="flex flex-col section-devider" aria-hidden="true"></div>
       <div className='px-6 mx-auto sm:px-0 md:w-4/5'>
         {reviewInput && <ReviewInput productId={product?.recordId} />}
       </div>
@@ -840,9 +831,7 @@ export default function ProductView({
             </div>
           </Dialog>
         </Transition.Root>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </div>
   )
 }
