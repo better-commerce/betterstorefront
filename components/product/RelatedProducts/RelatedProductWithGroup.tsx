@@ -16,7 +16,7 @@ import { getCurrentPage } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import ProductCard from '../ProductCard/ProductCard'
 
-export default function RelatedProductWithGroup({ products,productPerColumn }: any) {
+export default function RelatedProductWithGroup({ products, productPerColumn }: any) {
     var settings = {
         fade: false,
         speed: 500,
@@ -113,35 +113,35 @@ export default function RelatedProductWithGroup({ products,productPerColumn }: a
 
         if (currentPage) {
             if (typeof window !== "undefined") {
-              recordGA4Event(window, 'popup_view', {
-                product_name: product?.name,
-                category: product?.classification?.mainCategoryName,
-                page: window.location.href,
-                position: pid + 1,
-                color: product?.variantGroupCode,
-                price: product?.price?.raw?.withTax,
-                current_page: currentPage,
-              })
-            }
-          }
-      
-          if (currentPage) {
-            if (typeof window !== "undefined") {
-              recordGA4Event(window, 'quick_view_click', {
-                ecommerce: {
-                  items: {
+                recordGA4Event(window, 'popup_view', {
                     product_name: product?.name,
-                    position: pid + 1,
-                    product_price: product?.price?.raw?.withTax,
-                    color: product?.variantGroupCode,
                     category: product?.classification?.mainCategoryName,
+                    page: window.location.href,
+                    position: pid + 1,
+                    color: product?.variantGroupCode,
+                    price: product?.price?.raw?.withTax,
                     current_page: currentPage,
-                    header: 'You May Also Like',
-                  },
-                },
-              })
+                })
             }
-          }
+        }
+
+        if (currentPage) {
+            if (typeof window !== "undefined") {
+                recordGA4Event(window, 'quick_view_click', {
+                    ecommerce: {
+                        items: {
+                            product_name: product?.name,
+                            position: pid + 1,
+                            product_price: product?.price?.raw?.withTax,
+                            color: product?.variantGroupCode,
+                            category: product?.classification?.mainCategoryName,
+                            current_page: currentPage,
+                            header: 'You May Also Like',
+                        },
+                    },
+                })
+            }
+        }
     }
     const css = { maxWidth: '100%', height: 'auto' }
     return (
@@ -175,7 +175,7 @@ export default function RelatedProductWithGroup({ products,productPerColumn }: a
                             return (
                                 <>
                                     <SwiperSlide key={pId} className='p-[1px]'>
-                                        {/* <div className="relative w-full overflow-hidden group aspect-w-1 aspect-h-1 hover:opacity-75">
+                                        <div className="relative w-full overflow-hidden group aspect-w-1 aspect-h-1 hover:opacity-75">
                                             <div className='image-container'>
                                                 <Link href={`/${product.slug}`} passHref>
                                                     <Image
@@ -212,7 +212,7 @@ export default function RelatedProductWithGroup({ products,productPerColumn }: a
                                                     </>
                                                 }
                                             </p>
-                                        </div> */}
+                                        </div>
                                         <ProductCard product={product} hideWishlistCTA={true} />
                                     </SwiperSlide>
                                 </>
