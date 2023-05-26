@@ -16,7 +16,7 @@ export default function RelatedProducts({
   const { basketId, setCartItems, user } = useUI()
 
   const computeRelatedItems = () => {
-    
+
     const relatedProductsClone = [...relatedProducts]
     const tempArr: any = {}
 
@@ -75,87 +75,71 @@ export default function RelatedProducts({
             return (
               <div key={`relatedItemIdx-${relatedItemIdx}`}>
                 {computedItems[relatedItem].relatedProducts && (
-                  <h2
-                    id="related-heading"
-                    className="mt-6 text-xl font-bold text-gray-900"
-                  >
-                    {computedItems[relatedItem].name}
-                  </h2>
+                  <h2 id="related-heading" className="mt-6 text-xl font-bold text-gray-900">{computedItems[relatedItem].name}</h2>
                 )}
                 <div className="grid grid-cols-1 mt-8 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-                  {computedItems[relatedItem].relatedProducts &&
-                    computedItems[relatedItem].relatedProducts.map(
-                      (product: any) => {
-                        const isEngravingAvailable =
-                          product.stockCode === ITEM_TYPE_ADDON
-                        return (
-                          <div key={product.id}>
-                            <div className="relative">
-                              <div className="relative w-full overflow-hidden rounded-lg h-72">
-                                <Link href={`/${product.slug}`} passHref>
-                                  <div className='image-container'>
-                                    <Image
-                                      style={css}
-                                      height={20}
-                                      width={20}
-                                      src={
-                                        generateUri(product.image, 'h=500&fm=webp') ||
-                                        IMG_PLACEHOLDER
-                                      }
-                                      alt={product.name}
-                                      className="object-cover object-center w-full h-full image">                                      
-                                    </Image>  
-                                  </div>
-                                </Link>
+                  {computedItems[relatedItem].relatedProducts && computedItems[relatedItem].relatedProducts.map(
+                    (product: any) => {
+                      const isEngravingAvailable = product.stockCode === ITEM_TYPE_ADDON
+                      return (
+                        <div key={product.id}>
+                          <div className="relative w-full overflow-hidden rounded-lg h-72">
+                            <Link href={`/${product.slug}`} passHref>
+                              <div className="image-container">
+                                <Image
+                                  style={css}
+                                  height={20}
+                                  width={20}
+                                  src={generateUri(product.image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                                  alt={product.name}
+                                  className="object-cover object-center w-full h-full image" />
                               </div>
-                              <div className="relative mt-4">
-                                <h3 className="text-sm font-medium text-gray-900 min-h-50px">
-                                  <Link href={`/${product.slug}`} passHref>{product.name}</Link>
-                                </h3>
-                              </div>
-                              <div className="absolute inset-x-0 top-0 flex items-end justify-end p-4 overflow-hidden rounded-lg h-72">
-                                <div
-                                  aria-hidden="true"
-                                  className="absolute inset-x-0 bottom-0 opacity-50 h-36 bg-gradient-to-t from-black"
-                                />
-                                <p className="relative text-lg font-semibold text-white">
-                                  {product.price.formatted.withTax}
-                                </p>
-                              </div>
+                            </Link>
+                            <div className="relative mt-4">
+                              <h3 className="text-sm font-medium text-gray-900 min-h-50px">
+                                <Link href={`/${product.slug}`} passHref>{product.name}</Link>
+                              </h3>
                             </div>
-                            <div className="mt-6">
-                              <button
-                                onClick={() => addToCart(product)}
-                                type="button"
-                                className="relative flex items-center justify-center w-full px-8 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-transparent rounded-md hover:bg-gray-200"
-                              >
-                                {GENERAL_ADD_TO_BASKET}
-                              </button>
-                              <Link href={`/${product.slug}`} passHref legacyBehavior>
-                                <span className="sr-only">
-                                  , {product.name}
-                                </span>
-                              </Link>
-                              {isEngravingAvailable && (
-                                <>
-                                  <button
-                                    className="relative flex items-center justify-center w-full py-2 mt-2 text-sm font-medium text-white bg-gray-400 border border-transparent rounded-md hover:bg-gray-500"
-                                    onClick={() => showEngravingModal(true)}
-                                  >
-                                    <span className="font-bold">{GENERAL_ENGRAVING}</span>
-                                  </button>
-                                  <Engraving
-                                    show={isEngravingOpen}
-                                    submitForm={() => addToCart(product)}
-                                    onClose={() => showEngravingModal(false)}
-                                  />
-                                </>
-                              )}
+                            <div className="absolute inset-x-0 top-0 flex items-end justify-end p-4 overflow-hidden rounded-lg h-72">
+                              <div aria-hidden="true" className="absolute inset-x-0 bottom-0 opacity-50 h-36 bg-gradient-to-t from-black" />
+                              <p className="relative text-lg font-semibold text-white">
+                                {product.price.formatted.withTax}
+                              </p>
                             </div>
                           </div>
-                        )
-                      }
-                    )}
+                          <div className="mt-6">
+                            <button
+                              onClick={() => addToCart(product)}
+                              type="button"
+                              className="relative flex items-center justify-center w-full px-8 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-transparent rounded-md hover:bg-gray-200"
+                            >
+                              {GENERAL_ADD_TO_BASKET}
+                            </button>
+                            <Link href={`/${product.slug}`} passHref legacyBehavior>
+                              <span className="sr-only">
+                                , {product.name}
+                              </span>
+                            </Link>
+                            {isEngravingAvailable && (
+                              <>
+                                <button
+                                  className="relative flex items-center justify-center w-full py-2 mt-2 text-sm font-medium text-white bg-gray-400 border border-transparent rounded-md hover:bg-gray-500"
+                                  onClick={() => showEngravingModal(true)}
+                                >
+                                  <span className="font-bold">{GENERAL_ENGRAVING}</span>
+                                </button>
+                                <Engraving
+                                  show={isEngravingOpen}
+                                  submitForm={() => addToCart(product)}
+                                  onClose={() => showEngravingModal(false)}
+                                />
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    }
+                  )}
                 </div>
               </div>
             )
