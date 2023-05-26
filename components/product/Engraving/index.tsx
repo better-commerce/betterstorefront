@@ -47,31 +47,22 @@ export default function Engraving({
       <div className="fixed inset-0 overflow-auto xsm:overflow-hidden">
         <div className="flex items-center justify-center min-h-full p-4 xsm:p-0 ">
           <Dialog.Panel>
-            <div className="relative flex flex-col items-center max-w-md px-4 pb-8 overflow-hidden bg-white shadow-2xl pt-14 sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-xl">
+            <div className="relative flex flex-col items-center max-w-full px-4 pb-8 overflow-hidden bg-white shadow-2xl pt-14 sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-xl">
               <Dialog.Title className='block py-2 transition cursor-pointer select-none'>
                 <XMarkIcon onClick={() => handleToggleDialog()} title='Close Panel' className="absolute right-0 w-6 h-6 mr-6 text-gray-400 hover:text-gray-600" aria-hidden="true" />
               </Dialog.Title>
-              <section className="flex flex-col w-full p-0">
-                {readOnly ? (
-                  <p className="flex flex-col mx-auto mt-6 text-4xl font-bold text-center text-black">{GENERAL_PERSONALISATION_READONLY}</p>
-                ) : (
-                  <div className="flex flex-col py-0 mx-auto">
-                    <p className="mx-auto text-4xl font-bold text-center text-black">{GENERAL_PERSONALISATION}</p>
-                    <span className="w-3/4 py-2 m-auto text-center text-gray-500 text-md">{GENERAL_ENGRAVING_PERSONALIZE_BOTTLE} {engravingPrice}{' '}</span>
-                  </div>
-                )}
-                <ProductPersonaliser
-                  canvasWidth={280}
-                  canvasHeight={420}
-                  characters='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-                  maxTextLength={7}
-                  submitText={isPersonalizeLoading ? <LoadingDots /> : GENERAL_ADD_TO_BASKET}
-                  onSubmit={onSubmit}
-                  readOnly={data?.readOnly}
-                  product={product}
-                  images={[]}
-                />
-              </section>
+              <ProductPersonaliser              
+                canvasWidth={280}
+                canvasHeight={420}
+                characters='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                maxTextLength={7}
+                submitText={isPersonalizeLoading ? <LoadingDots /> : GENERAL_ADD_TO_BASKET}
+                onSubmit={onSubmit}
+                readOnly={data?.readOnly}
+                product={product}
+                images={[]}
+                engravingPrice={engravingPrice}
+              />
             </div>
           </Dialog.Panel>
         </div>
