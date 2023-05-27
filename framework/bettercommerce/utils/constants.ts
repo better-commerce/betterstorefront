@@ -15,6 +15,7 @@ export const TEST_PAYMENT_AMOUNT = process.env.TEST_PAYMENT_AMOUNT ? toNumber(pr
 export const BETTERCMS_API_VERSION = process.env.BETTERCMS_API_VERSION
 export const BETTERCMS_API_URL = process.env.BETTERCMS_API_URL
 export const HOME_PAGE_DEFAULT_SLUG = "home";
+export const CIPHER_ENCRYPTION_KEY = process.env.CIPHER_ENCRYPTION_KEY;
 
 // google analytics
 export const GA4_DISABLED = stringToBoolean(process.env.GA4_DISABLED);

@@ -20,6 +20,7 @@ import setSessionIdCookie from '@components/utils/setSessionId'
 import cartHandler from '@components/services/cart'
 import Router from 'next/router'
 import { getItem } from '@components/utils/localStorage'
+import { LocalStorage } from '@components/utils/payment-constants'
 const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
 const { Order } = EVENTS_MAP.ENTITY_TYPES
 
@@ -40,8 +41,8 @@ function CheckoutForm({
   const { associateCart } = cartHandler()
 
   const handleUserAfterPayment = async (paymentIntent: any) => {
-    const orderResponseFromLocalStorage: any = getItem('orderResponse')
-    const orderModelFromLocalStorage: any = getItem('orderModelPayment')
+    const orderResponseFromLocalStorage: any = getItem(LocalStorage.Key.ORDER_RESPONSE)
+    const orderModelFromLocalStorage: any = getItem(LocalStorage.Key.ORDER_PAYMENT)
 
     const res: any = await axios.post(NEXT_POST_PAYMENT_RESPONSE, {
       model: orderModelFromLocalStorage,

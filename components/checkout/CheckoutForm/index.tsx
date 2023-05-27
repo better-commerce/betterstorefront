@@ -36,6 +36,7 @@ import {
 } from '@components/utils/textVariables'
 import PaymentWidget from '@components/checkout/PaymentWidget'
 import { AddressType } from '@framework/utils/enums'
+import { LocalStorage } from '@components/utils/payment-constants'
 
 const Spinner = () => {
   return (
@@ -65,7 +66,9 @@ export default function CheckoutForm({
     setOrderId,
     orderId,
     setBasketId,
-  } = useUI()
+  } = useUI();
+
+  const uiContext = useUI();
 
   const isShippingDisabled =
     cartItems?.lineItems?.filter(
@@ -76,7 +79,7 @@ export default function CheckoutForm({
     (i: any) => i.id === cartItems.shippingMethodId
   )
   const isBrowser = typeof window !== 'undefined';
-  const INITIAL_STATE = { 
+  const INITIAL_STATE = {
     isDeliveryMethodSelected: false,
     isShippingInformationCompleted: !!Object.keys(defaultShippingAddress)
       .length,
@@ -93,8 +96,8 @@ export default function CheckoutForm({
     orderResponse: {},
     showStripe: false,
     isPaymentIntent: isBrowser
-    ? new URLSearchParams(window.location.search).get('payment_intent_client_secret')
-    : null,
+      ? new URLSearchParams(window.location.search).get('payment_intent_client_secret')
+      : null,
     isPaymentWidgetActive: false,
   }
 
@@ -273,6 +276,7 @@ export default function CheckoutForm({
     const response = await axios.post(NEXT_PAYMENT_METHODS, {
       currencyCode: cartItems.baseCurrency,
       countryCode: state.deliveryMethod.twoLetterIsoCode || 'GB',
+      basketId: basketId,
     })
     return response
   }
@@ -346,7 +350,7 @@ export default function CheckoutForm({
 
   const setBillingInformation = (payload: any, update = true, type = AddressType.BILLING) => {
     const handleAsync = async () => {
-      
+
       const billingInfoClone = { ...payload }
       //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
       const shippingClone = { ...state.shippingInformation }
@@ -496,6 +500,45 @@ export default function CheckoutForm({
     }, {})
   }
 
+  const getPaymentOrderInfo = async (paymentMethod: any) => {
+    dispatch({ type: 'SET_PAYMENT_METHOD', payload: paymentMethod });
+
+    const billingInfoClone = { ...state.billingInformation }
+    //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
+    const shippingClone = { ...state.shippingInformation }
+    //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
+
+    const paymentOrderInfo = {
+      basketId,
+      customerId: cartItems.userId,
+      basket: cartItems,
+      billingAddress: {
+        ...billingInfoClone,
+        country: state.deliveryMethod.name,
+        countryCode: state.deliveryMethod.twoLetterIsoCode,
+      },
+      shippingAddress: {
+        ...shippingClone,
+        country: state.deliveryMethod.name,
+        countryCode: state.deliveryMethod.twoLetterIsoCode,
+      },
+      selectedShipping: state.shippingMethod,
+      selectedPayment: paymentMethod,
+      storeId: state.storeId,
+
+      Payment: {
+        OrderAmount: cartItems?.grandTotal?.raw?.withTax,
+      }
+    };
+
+    const billingAddrId = await lookupAddressId(paymentOrderInfo.billingAddress);
+    paymentOrderInfo.billingAddress.id = billingAddrId;
+    const shippingAddrId = await lookupAddressId(paymentOrderInfo.shippingAddress);
+    paymentOrderInfo.shippingAddress.id = shippingAddrId;
+
+    return paymentOrderInfo;
+  };
+
   const confirmOrder = (method: any) => {
     dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
 
@@ -582,7 +625,7 @@ export default function CheckoutForm({
             payload: response.data.result,
           })
           localStorage.setItem(
-            'orderResponse',
+            LocalStorage.Key.ORDER_RESPONSE,
             JSON.stringify(response.data.result)
           )
 
@@ -626,7 +669,7 @@ export default function CheckoutForm({
             upFrontTerm: '76245369',
             isPrePaid: false,
           }
-          localStorage.setItem('orderModelPayment', JSON.stringify(orderModel))
+          localStorage.setItem(LocalStorage.Key.ORDER_PAYMENT, JSON.stringify(orderModel))
 
           dispatch({ type: 'TRIGGER_PAYMENT_WIDGET', payload: true })
         } else {
@@ -776,9 +819,11 @@ export default function CheckoutForm({
                 </h2>
                 {state.isPaymentInformationCompleted && (
                   <Payments
-                    handlePaymentMethod={handlePaymentMethod}
                     paymentData={paymentData}
+                    paymentOrderInfo={getPaymentOrderInfo}
                     selectedPaymentMethod={state.selectedPaymentMethod}
+                    uiContext={uiContext}
+                    dispatchState={dispatch}
                   />
                 )}
                 {(state.isPaymentWidgetActive || !!state.isPaymentIntent) && (
@@ -797,14 +842,14 @@ export default function CheckoutForm({
             </div>
 
             {/* Order summary */}
-           <div className='sm:col-span-3 md:col-span-3 lg:col-span-2 lg:order-2 order-1'>
+            <div className='sm:col-span-3 md:col-span-3 lg:col-span-2 lg:order-2 order-1'>
               <Summary
                 confirmOrder={confirmOrder}
                 isShippingDisabled={isShippingDisabled}
                 cart={cartItems}
                 handleItem={handleItem}
               />
-           </div>
+            </div>
           </div>
         </div>
       </div>

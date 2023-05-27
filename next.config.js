@@ -11,9 +11,9 @@ const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
 const isBetterCommerce = provider === 'bettercommerce'
 
-module.exports = withCommerceConfig({  
+module.exports = withCommerceConfig({
   images: {
-    domains: ['liveocxcdn.azureedge.net','liveocxstorage.blob.core.windows.net', 'cdnbs.bettercommerce.io','dev-da-cdn-erf7a6h0byf7e6f0.z01.azurefd.net' , 'cdn.shopify.com', 'liveocx.imgix.net', 'devocxblob.blob.core.windows.net','img.ffx.co.uk'],
+    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'cdnbs.bettercommerce.io', 'dev-da-cdn-erf7a6h0byf7e6f0.z01.azurefd.net', 'cdn.shopify.com', 'liveocx.imgix.net', 'devocxblob.blob.core.windows.net', 'img.ffx.co.uk'],
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
   commerce,
@@ -61,6 +61,10 @@ module.exports = withCommerceConfig({
     SITE_NAME: process.env.SITE_NAME,
     GA4_DISABLED: process.env.GA4_DISABLED,
     GA4_MEASUREMENT_ID: process.env.GA4_MEASUREMENT_ID,
+    CIPHER_ENCRYPTION_KEY: process.env.CIPHER_ENCRYPTION_KEY,
+    PAYPAL_PAY_METHOD_SYSTEM_NAME: process.env.PAYPAL_PAY_METHOD_SYSTEM_NAME,
+    SECURE_PAYMENT_METHODS_SETTINGS_FIELDS: process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS,
+    PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS: process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
   },
 })
 
