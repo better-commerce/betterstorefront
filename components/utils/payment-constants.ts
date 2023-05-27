@@ -2,9 +2,17 @@
 import { stringToBoolean } from "@framework/utils/parse-util";
 import { JusPayEndpoint } from "@framework/api/endpoints/payments/juspay/constants";
 import { IS_TEST_PAYMENT_ENABLED_ON_LIVE, TEST_PAYMENT_AMOUNT } from "@framework/utils/constants";
+import { PayPalEndpoint } from "@framework/api/endpoints/payments/paypal/constants";
+import { SECURE_PAYMENT_METHODS_SETTINGS_FIELDS } from "./constants";
 
 export const LOG_REQUEST_OPTIONS = true;
 export const TEST_PAYMENT_AMOUNT_FORMATTED = `₹${TEST_PAYMENT_AMOUNT}`;
+
+export enum PaymentGateway {
+  JUSPAY = "juspay",
+  PAYPAL = "paypal",
+};
+
 export module JusPay {
   export module RequestParams {
 
@@ -139,6 +147,28 @@ export module JusPay {
   };
 };
 
+export module PayPal {
+  export const PARSE_ORDER_ID_REGEX = /Order[ ](.*?)(?:[a-zA-Z0-9\-]*)for[ ]basket (.*)(?:[a-zA-Z0-9\-]*)/g;
+
+  export module RequestParams {
+
+    export const CREATE_PAYMENT: any = {
+      t: PayPalEndpoint.CREATE_PAYMENT,
+      s: SECURE_PAYMENT_METHODS_SETTINGS_FIELDS ? 1 : 0,
+    };
+
+    export const GET_PAYMENT_DETAILS: any = {
+      t: PayPalEndpoint.GET_PAYMENT_DETAILS,
+      s: SECURE_PAYMENT_METHODS_SETTINGS_FIELDS ? 1 : 0,
+    };
+
+    export const EXECUTE_PAYMENT: any = {
+      t: PayPalEndpoint.EXECUTE_PAYMENT,
+      s: SECURE_PAYMENT_METHODS_SETTINGS_FIELDS ? 1 : 0,
+    };
+  }
+};
+
 export module LocalStorage {
   export module Key {
     export const ORDER_RESPONSE = "orderResponse";
@@ -175,6 +205,7 @@ export enum PaymentMethodType {
   UPI = "UPI",
   COD = "CODGoKwik",
   DIFFERENT_PAY_MODE = "UseDifferentMethod",
+  PAYER_ACCOUNT = "PAYER_ACCOUNT",
 }
 
 export enum PaymentMethodMode {

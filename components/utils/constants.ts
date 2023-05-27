@@ -49,6 +49,7 @@ export const LOQATE_ADDRESS = '/api/loqate'
 export const RETRIEVE_ADDRESS = '/api/retrieve-address'
 export const PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/`
 export const PRODUCT_PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/product-promotions`
+export const INFRA_LOG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/log`
 
 //LOCAL ENDPOINTS 
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
@@ -80,6 +81,7 @@ export const NEXT_EDIT_ADDRESS = `/api/customer/edit-address`
 export const NEXT_CREATE_ADDRESS = `/api/customer/create-address`
 export const NEXT_DELETE_ADDRESS = `/api/customer/delete-address`
 
+export const NEXT_GET_ORDER = `/api/order/order-details`;
 export const NEXT_CANCEL_REASON = `/api/cancel-reason`
 export const NEXT_CANCEL_ORDER = `/api/order/cancel`
 export const NEXT_CANCEL_ORDER_LINE = `/api/order/cancel-order-line`;
@@ -106,12 +108,14 @@ export const NEXT_CONFIRM_ORDER = '/api/confirm-order'
 export const NEXT_INFRA_ENDPOINT = '/api/infra'
 export const NEXT_SET_CONFIG = '/api/set-config'
 export const NEXT_POST_PAYMENT_RESPONSE = '/api/payment-response'
+export const NEXT_POST_PAYMENT_RESPONSE_V2 = '/api/payment-response-v2'
 export const NEXT_FORGOT_PASSWORD = '/api/customer/forgot-password'
 export const NEXT_RESET_PASSWORD = '/api/customer/reset-password'
 export const NEXT_VALIDATE_TOKEN = '/api/customer/validate-token'
 export const NEXT_GET_RETURN_DATA = '/api/return/get-return-data'
 export const NEXT_CREATE_RETURN_DATA = '/api/return/create'
 export const NEXT_GET_RETURNS = '/api/return/get-user-returns'
+export const PAYPAL_API = `/api/payments/paypal`;
 //CONSTANTS
 
 export const NEXT_GET_PRODUCT_QUICK_VIEW = "/api/catalog/get-product-quick-view"
@@ -150,6 +154,9 @@ export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY;
 export const SHOW_APPLY_COUPON_SECTION = true;
 export const SITE_ORIGIN_URL = process.env.SITE_ORIGIN_URL;
 export const SITE_NAME = process.env.SITE_NAME;
+export const PAYPAL_PAY_METHOD_SYSTEM_NAME = process.env.PAYPAL_PAY_METHOD_SYSTEM_NAME;
+export const SECURE_PAYMENT_METHODS_SETTINGS_FIELDS = stringToBoolean(process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS);
+export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS = process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS;
 
 export module Messages {
 
