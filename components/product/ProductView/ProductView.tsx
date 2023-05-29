@@ -745,7 +745,7 @@ export default function ProductView({
           <div className="flex flex-col section-devider"></div>
           <div className="flex flex-col px-0 mx-auto sm:container page-container">
             <h3 className='justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10'>You May Also Like</h3>
-            <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} />
+            <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={6} />
           </div>
         </>
       ) : null}
