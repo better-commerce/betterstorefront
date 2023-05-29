@@ -662,19 +662,12 @@ export default function ProductView({
                   </>
                 ) : null}
               </p>
-            ) : (
-              <></>
-            )}
+            ) : null}
           </div>
-          <AttributesHandler
-            product={product}
-            variant={selectedAttrData}
-            setSelectedAttrData={setSelectedAttrData}
-            variantInfo={variantInfo}
-            handleSetProductVariantInfo={handleSetProductVariantInfo}
-            sizeInit={sizeInit}
-            setSizeInit={setSizeInit}
-          />
+          
+          <AttributesHandler product={product} variant={selectedAttrData} setSelectedAttrData={setSelectedAttrData} variantInfo={variantInfo}
+            handleSetProductVariantInfo={handleSetProductVariantInfo} sizeInit={sizeInit} setSizeInit={setSizeInit} />
+            
           <h4 className="h-5 my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
             {PRODUCT_AVAILABILITY}:{' '}
             {product?.currentStock > 0 ? (
