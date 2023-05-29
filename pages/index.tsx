@@ -145,47 +145,28 @@ function Home({
 
       <div className="container py-3 mx-auto sm:py-6">
         {pageContents?.heading?.map((heading: any, hId: number) => (
-          <Heading
-            title={heading?.heading_title}
-            subTitle={heading?.heading_subtitle}
-            key={`category-heading-${hId}`}
-          />
+          <Heading title={heading?.heading_title} subTitle={heading?.heading_subtitle} key={`category-heading-${hId}`} />
         ))}
         <Categories data={pageContents?.categorylist} />
         {pageContents?.productheading?.map((productH: any, Pid: number) => (
-          <Heading
-            title={productH?.productheading_title}
-            subTitle={productH?.productheading_subtitle}
-            key={`product-heading-${Pid}`}
-          />
+          <Heading title={productH?.productheading_title} subTitle={productH?.productheading_subtitle} key={`product-heading-${Pid}`} />
         ))}
         <ProductSlider config={pageContents} />
       </div>
+      
       {pageContents?.promotions?.map((banner: any, bId: number) => (
         <div className="relative flex flex-col justify-center w-full text-center cursor-pointer" key={`full-banner-${bId}`}>
           <Link href={banner?.promotions_link} passHref legacyBehavior>
-            <Image
-              src={banner?.promotions_image}
-              className="object-cover object-center w-full"
-              alt={banner?.promotions_title}
-              width={2000}
-              height={800}
-              style={css}
-            />
+            <Image src={banner?.promotions_image} className="object-cover object-center w-full" alt={banner?.promotions_title} width={2000} height={800} style={css} />
           </Link>
-          <div className="absolute text-5xl font-medium text-white top-1/2 right-24">
-            {banner?.promotions_title}
-          </div>
+          <div className="absolute text-5xl font-medium text-white top-1/2 right-24">{banner?.promotions_title}</div>
         </div>
       ))}
+      
       <div className="container px-4 py-3 mx-auto sm:px-0 sm:py-6">
         {pageContents?.collectionheadings?.map(
           (heading: any, cId: number) => (
-            <Heading
-              title={heading?.collectionheadings_title}
-              subTitle={heading?.collectionheadings_subtitle}
-              key={`collection-heading-${cId}`}
-            />
+            <Heading title={heading?.collectionheadings_title} subTitle={heading?.collectionheadings_subtitle} key={`collection-heading-${cId}`} />
           )
         )}
         <Collections data={pageContents?.collectionlist} />
