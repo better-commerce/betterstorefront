@@ -194,7 +194,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
               <Image
                 priority
                 src={
-                  generateUri(currentProductData.image, 'h=500&fm=webp') ||
+                  generateUri(currentProductData.image, 'h=350&fm=webp') ||
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}

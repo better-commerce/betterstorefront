@@ -170,7 +170,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product: productData,
       <div className="relative hover:outline hover:outline-1 outline-gray-200 group" key={product.id}>
         <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel">
           <Link passHref href={`/${currentProductData.link}`} onMouseEnter={() => handleHover('enter')} onMouseLeave={() => handleHover('leave')} title={`${product.name} \t ${itemPrice}`}>
-            <Image priority src={generateUri(currentProductData.image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+            <Image priority src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER}
               alt={product.name} className="object-cover object-center w-full h-full sm:h-full min-h-image" style={css} width={400} height={600} />
           </Link>
           {buttonConfig.isPreOrderEnabled && (<div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">{BTN_PRE_ORDER}</div>)}
