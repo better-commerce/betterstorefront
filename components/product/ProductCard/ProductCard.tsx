@@ -206,7 +206,7 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product: productData,
             ))}
           </ul>
 
-          <div className="px-2 text-xs text-black sm:mt-1 sm:text-sm">
+          <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm">
             <span className="font-bold">{product?.price?.formatted?.withTax}</span>
             {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax && (
               <>
