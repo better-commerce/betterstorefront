@@ -759,7 +759,7 @@ export default function ProductView({
         </>
       }
       <div className="flex flex-col section-devider" aria-hidden="true"></div>
-      <div className='px-6 mx-auto sm:px-0 md:w-4/5'>
+      <div className='px-6 pb-5 mx-auto mb-5 sm:px-0 sm:container sm:pb-10 sm:mb-10'>
         {reviewInput && <ReviewInput productId={product?.recordId} />}
       </div>
       {isEngravingAvailable && (
