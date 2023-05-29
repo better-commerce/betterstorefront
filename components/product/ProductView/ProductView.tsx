@@ -743,8 +743,8 @@ export default function ProductView({
       {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
         <>
           <div className="flex flex-col section-devider"></div>
-          <div className="px-0 mx-auto sm:container page-container">
-            <h3 className='flex flex-col justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10'>You May Also Like</h3>
+          <div className="flex flex-col px-0 mx-auto sm:container page-container">
+            <h3 className='justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10'>You May Also Like</h3>
             <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} />
           </div>
         </>
