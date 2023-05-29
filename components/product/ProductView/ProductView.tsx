@@ -581,11 +581,11 @@ export default function ProductView({
                   <div className="image-container">
                     <Image
                       priority
-                      src={generateUri(image.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
+                      src={generateUri(image.image, 'h=600&fm=webp') || IMG_PLACEHOLDER}
                       alt={image.name}
                       className="object-cover object-center w-full h-full image"
                       sizes="320 600 1000"
-                      quality="100"
+                      quality="70"
                       width={600}
                       height={1000}
                       blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
@@ -608,13 +608,14 @@ export default function ProductView({
                           <div className="image-container">
                             <Image
                               priority
-                              src={generateUri(image.image, 'h=700&fm=webp') || IMG_PLACEHOLDER}
+                              src={generateUri(image.image, 'h=650&fm=webp') || IMG_PLACEHOLDER}
                               alt={selectedAttrData.name}
                               className="o`bject-cover object-center w-full h-full image"
                               sizes="320 600 1000"
                               width={600}
                               height={1000}
                               onClick={(ev: any) => handleImgLoadT(image.image)}
+                              quality="60"
                               blurDataURL={`${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER}
                             />
                           </div>
@@ -687,41 +688,27 @@ export default function ProductView({
           }
           {updatedProduct ? (
             <>
-              {!isEngravingAvailable && (
-                <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                  <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
-                    className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink">
-                    {isInWishList ? (<HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />) :
-                      (<HeartIcon className="flex-shrink-0 w-6 h-6" />)
-                    }
-                    <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
-                  </button>
-                </div>
-              )}
-
-              {isEngravingAvailable && (
+              {isEngravingAvailable ? (
                 <>
-                  <div className='flex w-auto hover:opacity-80' onClick={() => showEngravingModal(true)}>
-                    <div className='mt-3 text-sm underline cursor-pointer text-pink'>
-                      {PRODUCT_PERSONALIZATION_TITLE}
-                    </div>
-                  </div>
+                  <div className='flex w-auto mt-3 text-sm underline cursor-pointer hover:opacity-80 text-pink' onClick={() => showEngravingModal(true)}>{PRODUCT_PERSONALIZATION_TITLE}</div>
                   <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                     <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                     <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
                       className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink">
-                      {isInWishList ? (
-                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                      ) : (
-                        <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                      )}
-                      <span className="sr-only">
-                        {BTN_ADD_TO_FAVORITES}
-                      </span>
+                      {isInWishList ? (<HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />) : (<HeartIcon className="flex-shrink-0 w-6 h-6" />)}
+                      <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
                     </button>
                   </div>
                 </>
+              ) : (
+                <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                  <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }}
+                    className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink">
+                    {isInWishList ? (<HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />) : (<HeartIcon className="flex-shrink-0 w-6 h-6" />)}
+                    <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
+                  </button>
+                </div>
               )}
             </>
           ) : null}
@@ -729,9 +716,7 @@ export default function ProductView({
           <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
             <h2 id="details-heading" className="sr-only">{PRICEMATCH_ADDITIONAL_DETAILS}</h2>
             <ProductDetails product={product} description={product?.description || product?.shortDescription} />
-            <div className="mt-6 sm:mt-10">
-              <p className="text-lg text-gray-900">{selectedAttrData?.currentStock > 0 ? product?.deliveryMessage : product?.stockAvailabilityMessage}</p>
-            </div>
+            <p className="mt-6 text-lg text-gray-900 sm:mt-10">{selectedAttrData?.currentStock > 0 ? product?.deliveryMessage : product?.stockAvailabilityMessage}</p>
           </section>
         </div>
       </div>
@@ -758,30 +743,16 @@ export default function ProductView({
         </>
       }
       <div className="flex flex-col section-devider" aria-hidden="true"></div>
-      <div className='px-6 mx-auto sm:px-0 md:w-4/5'>
+      <div className='px-6 pb-5 mx-auto mb-5 sm:px-0 sm:container sm:pb-10 sm:mb-10'>
         {reviewInput && <ReviewInput productId={product?.recordId} />}
       </div>
       {isEngravingAvailable && (
-        <Engraving
-          show={isEngravingOpen}
-          submitForm={handleEngravingSubmit}
-          onClose={() => showEngravingModal(false)}
-          handleToggleDialog={handleTogglePersonalizationDialog}
-          product={product}
-        />
+        <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
       )}
 
-      <PriceMatch
-        show={isPriceMatchModalShown}
-        onClose={showPriceMatchModal}
-        productName={product?.name}
-        productImage={product?.images?.length ? product?.images[0]?.image : null}
-        productId={product?.id}
-        stockCode={product?.stockCode}
-        ourCost={product?.price?.raw?.withTax}
-        rrp={product?.listPrice?.raw?.withTax}
-        ourDeliveryCost={product?.price?.raw?.tax} //TBD
-      />
+      <PriceMatch show={isPriceMatchModalShown} onClose={showPriceMatchModal} productName={product?.name} productImage={product?.images?.length ? product?.images[0]?.image : null}
+        productId={product?.id} stockCode={product?.stockCode} ourCost={product?.price?.raw?.withTax} rrp={product?.listPrice?.raw?.withTax}
+        ourDeliveryCost={product?.price?.raw?.tax} />
 
       {previewImg ? (
         <Transition.Root show={previewImg != undefined} as={Fragment}>
