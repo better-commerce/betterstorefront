@@ -1,17 +1,8 @@
 import { ChangeEvent, useState } from 'react'
 import BundleCard from './BundleCard'
-
-import {
-  BUNDLE_TEXT,
-  GENERAL_ADD_TO_BASKET,
-  //GENERAL_COLOUR,
-  //GENERAL_SIZE,
-  YOUR_BUNDLE_INCLUDE
-} from '@components/utils/textVariables'
-import { Guid } from '@commerce/types'
+import { BUNDLE_TEXT, YOUR_BUNDLE_INCLUDE } from '@components/utils/textVariables'
 import { ColorFilledSquare } from '@components/ui/ColorFilledSquare'
 import Image from 'next/image'
-
 
 export default function Bundles({ price = '', products = [], productBundleUpdate = () => { } }: any) {
   const [productData, setProductData] = useState(null)
@@ -60,49 +51,43 @@ export default function Bundles({ price = '', products = [], productBundleUpdate
       <p className="text-sm text-center text-gray-400">{BUNDLE_TEXT}</p>
       <div className="flex items-center justify-between mt-3">
         {products.map((product: any, productIdx: number) => (
-          <div key={`bundle-product-${productIdx}`} className='grid content-center grid-cols-12 p-3 border border-gray-200 rounded-md gap-x-2 align-center hover:border-indigo-200'>
-            <div onClick={() => handleProduct(product)} className='col-span-4 cursor-pointer image-container'>
+          <div key={`bundle-product-${productIdx}`} className="grid content-center grid-cols-12 p-3 border border-gray-200 rounded-md gap-x-2 align-center hover:border-indigo-200">
+            <div onClick={() => handleProduct(product)} className="col-span-4 cursor-pointer image-container">
               <Image src={product.image || product.images[0]?.image} width={400} height={500} style={css} alt={product.name} className="object-cover object-center mx-auto rounded-md image" />
             </div>
-            <div className='col-span-8'>
-              <div className='flex flex-col'>
-                <h3 className='text-xs font-semibold text-gray-400'>{product.brand}</h3>
-                <h3 onClick={() => handleProduct(product)} className='mt-1 text-sm font-semibold text-gray-700 cursor-pointer hover:text-indigo-600'>{product.name}</h3>
-                <h4 className='mt-1 text-sm'>
-                  <span className='inline-block text-xs font-bold uppercase tex-black'>SKU:</span>
-                  <span className='inline-block pl-1 text-gray-600'>{product.stockCode}</span>
+            <div className="col-span-8">
+              <div className="flex flex-col">
+                <h3 className="text-xs font-semibold text-gray-400">{product.brand}</h3>
+                <h3 onClick={() => handleProduct(product)} className="mt-1 text-sm font-semibold text-gray-700 cursor-pointer hover:text-indigo-600">{product.name}</h3>
+                <h4 className="mt-1 text-sm">
+                  <span className="inline-block text-xs font-bold uppercase tex-black">SKU:</span>
+                  <span className="inline-block pl-1 text-gray-600">{product.stockCode}</span>
                 </h4>
-                <h4 className='mt-2 text-sm text-black'>
-                  <span className='inline-block font-semibold'>{product.price.formatted.withoutTax}</span>
-                  {
-                    (product.listPrice.raw.withoutTax > 0) && (
-                      <span className='inline-block pl-3 text-xs font-semibold text-red-400 line-through'>{product.listPrice.formatted.withoutTax}</span>
-                    )}
+                <h4 className="mt-2 text-sm text-black">
+                  <span className="inline-block font-semibold">{product.price.formatted.withoutTax}</span>
+                  {product.listPrice.raw.withoutTax > 0 ? (
+                    <span className="inline-block pl-3 text-xs font-semibold text-red-400 line-through">{product.listPrice.formatted.withoutTax}</span>
+                  ) : null}
                 </h4>
-                <h4 className='mt-1 text-sm'>
-                  <span className='inline-block text-xs font-bold uppercase tex-black'>Colour:</span>
-                  <span className='inline-block pl-1 text-gray-600'>
+                <h4 className="mt-1 text-sm">
+                  <span className="inline-block text-xs font-bold uppercase tex-black">Colour:</span>
+                  <span className="inline-block pl-1 text-gray-600">
                     <ColorFilledSquare width={10} height={10} bgColor={getProductColorHexCode(product)} />
                   </span>
                 </h4>
               </div>
-              <div className='flex flex-col mt-1'>
-                {product.variantAttributes.map((attribute: any, aid: number) => {
-                  if (attribute.fieldName == "Size") {
-                    return (
-                      <div className='flex flex-col mt-1' key={aid}>
-                        <label className='text-sm font-semibold text-black'>{attribute.fieldName}:</label>
-                        <select className='p-2 text-sm font-semibold text-black uppercase border border-gray-400 rounded-sm' onChange={(ev) => handleSizeChanged(ev, product)}>
-                          {/*<option value="">Please Select</option>*/}
-                          {attribute.fieldValues.map((size: any, vdx: number) => {
-                            return (<option className='uppercase' key={vdx} value={size.fieldValue} selected={getSizeSelection(size.fieldValue, product)}>{size.fieldValue}</option>)
-                          })}
-                        </select>
-                      </div>
-                    )
-                  }
-                })}
-              </div>
+              {product.variantAttributes.map((attribute: any, aid: number) => {
+                attribute.fieldName == "Size" ? (
+                  <div className="flex flex-col mt-1" key={aid}>
+                    <label className="text-sm font-semibold text-black">{attribute.fieldName}:</label>
+                    <select className="p-2 text-sm font-semibold text-black uppercase border border-gray-400 rounded-sm" onChange={(ev) => handleSizeChanged(ev, product)}>
+                      {attribute.fieldValues.map((size: any, vdx: number) => (
+                        <option className="uppercase" key={vdx} value={size.fieldValue} selected={getSizeSelection(size.fieldValue, product)}>{size.fieldValue}</option>
+                      ))}
+                    </select>
+                  </div>
+                ) : null
+              })}
             </div>
           </div>
         ))}
