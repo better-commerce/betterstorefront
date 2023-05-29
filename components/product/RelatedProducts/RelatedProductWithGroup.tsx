@@ -99,13 +99,7 @@ export default function RelatedProductWithGroup({ products, productPerColumn }: 
                     <SwiperSlide key={pId}><ProductCard product={product} hideWishlistCTA={true} /></SwiperSlide>
                 ))}
             </Swiper>
-            <QuickViewModal
-                isQuikview={isQuickview}
-                setQuickview={setQuickview}
-                productData={isQuickview}
-                isQuickviewOpen={isQuickviewOpen}
-                setQuickviewOpen={setQuickviewOpen}
-            />
+            <QuickViewModal isQuikview={isQuickview} setQuickview={setQuickview} productData={isQuickview} isQuickviewOpen={isQuickviewOpen} setQuickviewOpen={setQuickviewOpen} />
         </>
     )
 }
