@@ -232,7 +232,6 @@ export class PayPalPaymentButton extends BasePaymentButton {
      */
     public render() {
         const that = this;
-        console.log(this?.state?.paymentMethod);
         const clientId = super.getPaymentMethodSetting(this?.state?.paymentMethod, "accountcode");
 
         return (

@@ -1,3 +1,6 @@
+// Package Imports
+import { Frames, CardNumber, ExpiryDate, Cvv } from 'frames-react';
+
 // Component Imports
 import BasePaymentButton, { IDispatchState } from "./BasePaymentButton";
 import { IPaymentButtonProps } from "./BasePaymentButton";
@@ -13,6 +16,9 @@ export class CheckoutPaymentButton extends BasePaymentButton {
      */
     constructor(props: IPaymentButtonProps & IDispatchState) {
         super(props);
+        this.state = {
+            paymentMethod: super.getPaymentMethod(props?.paymentMethod),
+        };
     }
 
     /**
@@ -30,10 +36,52 @@ export class CheckoutPaymentButton extends BasePaymentButton {
      * @returns {React.JSX.Element}
      */
     public render() {
-        return this.baseRender({
-            ...this?.props, ...{
-                onPay: this.onPay,
-            }
-        });
+        const publicKey = super.getPaymentMethodSetting(this?.state?.paymentMethod, "accountcode");
+
+        return (
+            <div className="checkout-frame-container">
+                <Frames
+                    config={{
+                        debug: true,
+                        publicKey: publicKey,
+                        schemeChoice: true,
+                        localization: {
+                            cardNumberPlaceholder: 'Card number',
+                            expiryMonthPlaceholder: 'MM',
+                            expiryYearPlaceholder: 'YY',
+                            cvvPlaceholder: 'CVV',
+                        },
+                    }}
+                    ready={() => { }}
+                    frameActivated={(e) => { }}
+                    frameFocus={(e) => { }}
+                    frameBlur={(e) => { }}
+                    frameValidationChanged={(e) => { }}
+                    paymentMethodChanged={(e) => { }}
+                    cardValidationChanged={(e) => { }}
+                    cardSubmitted={() => { }}
+                    cardTokenized={(e) => { }}
+                    cardTokenizationFailed={(e) => { }}
+                    cardBinChanged={(e) => { }}
+                >
+                    <div>
+                        <CardNumber />
+                    </div>
+                    <div className="date-and-code">
+                        <ExpiryDate />
+                        <Cvv />
+                    </div>
+
+                    {
+                        this.baseRender({
+                            ...this?.props, ...{
+                                onPay: this.onPay,
+                            }
+                        })
+                    }
+                </Frames>
+            </div>
+
+        )
     }
 }
