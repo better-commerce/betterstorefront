@@ -2,6 +2,7 @@ import "@assets/css/base.css"
 import "@assets/css/main.css"
 import '@assets/icon.css'
 import "@assets/css/chrome-bug.css"
+import "@assets/css/checkout-frame.css"
 import { FC, useEffect, useState } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
