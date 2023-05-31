@@ -479,7 +479,17 @@ export default function CheckoutForm({
       setShippingInformation(defaultShippingAddress)
       setBillingInformation(defaultBillingAddress, false)
     }
-  }, [defaultShippingAddress])
+  }, [defaultShippingAddress]);
+
+  const [basketOrderInfo, setbasketOrderInfo] = useState<any>();
+  useEffect(() => {
+    if (state?.isPaymentInformationCompleted) {
+      getPaymentOrderInfo(state.selectedPaymentMethod)
+        .then((basketOrderInfo: any) => {
+          setbasketOrderInfo(basketOrderInfo);
+        });
+    }
+  }, [state?.isPaymentInformationCompleted])
 
   const handlePayments = (method: any) => {
     // const isTestUrl = state.selectedPaymentMethod.settings.find((method:any) => method.key === 'UseSandbox').value === 'True';
@@ -821,6 +831,7 @@ export default function CheckoutForm({
                   <Payments
                     paymentData={paymentData}
                     paymentOrderInfo={getPaymentOrderInfo}
+                    basketOrderInfo={basketOrderInfo}
                     selectedPaymentMethod={state.selectedPaymentMethod}
                     uiContext={uiContext}
                     dispatchState={dispatch}

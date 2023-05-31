@@ -7,11 +7,14 @@ import DefaultButton from "@components/ui/IndigoButton";
 // Other Imports
 import { createStorefrontOrder } from "@framework/utils/payment-util";
 import { LocalStorage } from "@components/utils/payment-constants";
+import { parsePaymentMethods } from "@framework/utils/app-util";
+import { matchStrings } from "@framework/utils/parse-util";
 
 export interface IPaymentButtonProps {
     readonly paymentMethod: any | null;
     readonly btnTitle: string;
     readonly paymentOrderInfo: Function;
+    readonly basketOrderInfo?: any;
     readonly onPay?: Function;
 }
 
@@ -43,6 +46,19 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
         return await getPaymentOrderInfo(paymentMethod);
     }
 
+    protected getPaymentMethod(paymentMethod: any) {
+        return paymentMethod
+            ? parsePaymentMethods([paymentMethod], false)[0]
+            : null;
+    }
+
+    protected getPaymentMethodSetting(paymentMethod: any, settingKey: string) {
+        if (paymentMethod?.settings?.length) {
+            return paymentMethod?.settings?.find((x: any) => matchStrings(x?.key, settingKey, true))?.value || "";
+        }
+        return null;
+    }
+
     /**
      * Executes create order on CommerceHub for generic payment methods on storefront.
      * @param paymentMethod {Object} PaymentMethod info of the executing payment type.
@@ -55,13 +71,11 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
         try {
             const orderResult = await createStorefrontOrder(data);
             if (orderResult?.result?.id) {
-                // handlePayments(method)
-                //@TODO temporary move to BE
                 dispatchState({
                     type: "SET_ORDER_RESPONSE",
                     payload: orderResult?.result,
-                })
-                localStorage.setItem(LocalStorage.Key.ORDER_RESPONSE, JSON.stringify(orderResult?.result))
+                });
+                localStorage.setItem(LocalStorage.Key.ORDER_RESPONSE, JSON.stringify({ ...orderResult?.result, ...{ basketId: data?.basketId } }))
 
                 const orderModel = {
                     id: orderResult?.result?.payment?.id,
@@ -75,7 +89,7 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
                     paymentMethod: paymentMethod?.systemName,
                     ...paymentMethodOrderRespData,
                 }
-                localStorage.setItem(LocalStorage.Key.ORDER_PAYMENT, JSON.stringify(orderModel))
+                localStorage.setItem(LocalStorage.Key.ORDER_PAYMENT, JSON.stringify(orderModel));
 
                 return {
                     status: true,

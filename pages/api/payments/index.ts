@@ -1,4 +1,7 @@
-import usePaypal from "framework/bettercommerce/api/endpoints/payments/paypal";
+import { ENABLE_SECURED_PAYMENT_PAYLOAD } from "@components/utils/constants";
+import { decipherPayload } from "@framework/utils/app-util";
+import { tryParseJson } from "@framework/utils/parse-util";
+import usePayments from "framework/bettercommerce/api/endpoints/payments";
 
 export default async (req: any, res: any) => {
     try {
@@ -17,7 +20,15 @@ export default async (req: any, res: any) => {
                 referer = referer.substring(0, referer.length - 1);
             }
         }
-        const response = await usePaypal({ data: req.body, params: req.query, cookies: req.cookies, origin: referer })
+        let data = req?.body;
+        if (data) {
+            if (ENABLE_SECURED_PAYMENT_PAYLOAD) {
+                data = decipherPayload(Object.keys(data)[0]);
+            } else {
+                data = tryParseJson(data);
+            }
+        }
+        const response = await usePayments({ data: data, params: req?.query, headers: req?.headers, cookies: req?.cookies, origin: referer })
         res.status(200).json(response)
     } catch (error) {
         res.status(500).json({ error })
