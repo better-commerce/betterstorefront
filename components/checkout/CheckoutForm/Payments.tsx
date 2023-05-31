@@ -9,12 +9,14 @@ import { IDispatchState } from './PaymentButton/BasePaymentButton'
 interface IPaymentMethodsProps {
   readonly paymentData: Function;
   readonly paymentOrderInfo: Function;
+  readonly basketOrderInfo?: any;
   readonly selectedPaymentMethod: any;
 }
 
 export default function PaymentMethods({
   paymentData,
   paymentOrderInfo,
+  basketOrderInfo,
   selectedPaymentMethod,
   uiContext,
   dispatchState,
@@ -28,8 +30,6 @@ export default function PaymentMethods({
       })
       .catch((err: any) => console.log(err))
   }, [])
-
-  console.log(methods)
 
   return (
     <ul className={`text-gray-900 mt-4`}>
@@ -73,6 +73,7 @@ export default function PaymentMethods({
             btnTitle={GENERAL_CONFIRM}
             paymentMethod={activePaymentMethod}
             paymentOrderInfo={paymentOrderInfo}
+            basketOrderInfo={basketOrderInfo}
             uiContext={uiContext}
             dispatchState={dispatchState}
           />

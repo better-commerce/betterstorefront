@@ -115,7 +115,7 @@ export const NEXT_VALIDATE_TOKEN = '/api/customer/validate-token'
 export const NEXT_GET_RETURN_DATA = '/api/return/get-return-data'
 export const NEXT_CREATE_RETURN_DATA = '/api/return/create'
 export const NEXT_GET_RETURNS = '/api/return/get-user-returns'
-export const PAYPAL_API = `/api/payments/paypal`;
+export const PAYMENTS_API = `/api/payments`;
 //CONSTANTS
 
 export const NEXT_GET_PRODUCT_QUICK_VIEW = "/api/catalog/get-product-quick-view"
@@ -154,7 +154,7 @@ export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY;
 export const SHOW_APPLY_COUPON_SECTION = true;
 export const SITE_ORIGIN_URL = process.env.SITE_ORIGIN_URL;
 export const SITE_NAME = process.env.SITE_NAME;
-export const PAYPAL_PAY_METHOD_SYSTEM_NAME = process.env.PAYPAL_PAY_METHOD_SYSTEM_NAME;
+export const ENABLE_SECURED_PAYMENT_PAYLOAD = stringToBoolean(process.env.ENABLE_SECURED_PAYMENT_PAYLOAD);
 export const SECURE_PAYMENT_METHODS_SETTINGS_FIELDS = stringToBoolean(process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS);
 export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS = process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS;
 
@@ -279,6 +279,7 @@ export const DATE_FORMAT = "DD-MMM-yy";
 export const DATE_TIME_FORMAT = "DD-MMM-yy HH:mm";
 export const PRODUCTS_SLUG_PREFIX = "products/";
 export const EmptyGuid = "00000000-0000-0000-0000-000000000000";
+export const EmptyString = "";
 export const collectionSlug = "you-may-also-like";
 export const CLOTH_SIZE_ATTRIB_NAME = "clothing.size"
 export const CLOTH_COLOUR_ATTRIB_NAME = "global.colour"

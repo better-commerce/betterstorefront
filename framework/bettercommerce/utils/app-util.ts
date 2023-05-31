@@ -2,9 +2,9 @@
 import { v4 as uuid } from "uuid";
 
 // Other Imports
-import { decrypt } from "./cipher";
+import { decrypt, encrypt } from "./cipher";
 import fetcher from "@framework/fetcher";
-import { EmptyGuid, INFRA_LOG_ENDPOINT } from "@components/utils/constants";
+import { EmptyGuid, INFRA_LOG_ENDPOINT, PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS } from "@components/utils/constants";
 import { stringToBoolean, tryParseJson } from "./parse-util";
 import { ILogRequestParams } from "@framework/api/operations/log-request";
 import { LocalStorage } from "@components/utils/payment-constants";
@@ -154,7 +154,7 @@ export const logActivityRequest = async ({ headers = {}, data = {}, cookies = {}
   return null;
 };
 
-export const decipherResult = (result: string) => {
+export const decipherPayload = (result: string) => {
   if (result) {
     const deciphered = decrypt(result);
     if (deciphered) {
@@ -163,4 +163,33 @@ export const decipherResult = (result: string) => {
     }
   }
   return null;
+};
+
+export const parsePaymentMethods = (paymentMethods: any, isEncrypt = true) => {
+  const UI_HIDDEN_SETTINGS_FIELDS = PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS?.length
+    ? PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS.split(",")
+    : [];
+  return paymentMethods?.map((x: any) => ({
+    ...x,
+    ...{
+      notificationUrl: isEncrypt ? encrypt(x?.notificationUrl || "") : decrypt(x?.notificationUrl || ""),
+    },
+    ...{
+      settings: x?.settings?.map((setting: any) => {
+        if (UI_HIDDEN_SETTINGS_FIELDS.includes(setting?.key)) {
+          return {
+            ...setting,
+            ...{
+              value: setting?.value
+                ? isEncrypt
+                  ? encrypt(setting?.value)
+                  : decrypt(setting?.value)
+                : null
+            },
+          }
+        }
+        return setting;
+      })
+    }
+  }));
 };
