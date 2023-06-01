@@ -243,7 +243,6 @@ export class PayPalPaymentButton extends BasePaymentButton {
                     fundingSource={"paypal"}
                     createOrder={(data: CreateOrderData, actions: CreateOrderActions) => {
                         const orderData: any = that.getPayPalOrderData();
-                        //console.log(orderData);
                         return actions.order.create(orderData);
                     }}
                     onApprove={(data: OnApproveData, actions: OnApproveActions) => {
@@ -255,7 +254,6 @@ export class PayPalPaymentButton extends BasePaymentButton {
                                     : "";
                                 const redirectUrl = `${that?.state?.paymentMethod?.notificationUrl}?orderId=${orderDetails?.id}&payerId=${orderDetails?.payer?.payer_id}&token=${tokenId}`;
                                 Router.push(redirectUrl);
-                                //console.log(orderDetails);
                             }
                             resolve();
                         });

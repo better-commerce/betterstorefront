@@ -519,6 +519,7 @@ export default function CheckoutForm({
     //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
     const paymentOrderInfo = {
+      user,
       basketId,
       customerId: cartItems.userId,
       basket: cartItems,
@@ -545,7 +546,7 @@ export default function CheckoutForm({
     paymentOrderInfo.billingAddress.id = billingAddrId;
     const shippingAddrId = await lookupAddressId(paymentOrderInfo.shippingAddress);
     paymentOrderInfo.shippingAddress.id = shippingAddrId;
-
+    console.log(paymentOrderInfo);
     return paymentOrderInfo;
   };
 

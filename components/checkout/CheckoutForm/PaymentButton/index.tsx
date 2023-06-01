@@ -1,5 +1,5 @@
 // Base Imports
-import React from "react";
+import React, { useEffect } from "react";
 
 // Component Imports
 import { CODPaymentButton } from "./CODPaymentButton";
@@ -32,6 +32,10 @@ const PaymentButton = (props: IPaymentButtonProps & IDispatchState) => {
     } else {
         Component = CODPaymentButton;
     }
+
+    useEffect(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+    }, []);
 
     return (
         <Component {...props} />

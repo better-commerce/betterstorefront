@@ -111,7 +111,7 @@ const GatewayPage = (props: IGatewayPageProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  //console.log(context?.query);
+
   const params: any = context?.query;
   const gateway = params?.gateway?.length ? params?.gateway[0] : "";
   const isCancelled = params?.gateway?.length > 1
