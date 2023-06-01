@@ -123,11 +123,6 @@ function Checkout({ cart, config, location }: any) {
 
   if (isLoggedIn) {
     return (
-      <>
-        <Script src="https://cdn.checkout.com/js/framesv2.min.js"
-          strategy="afterInteractive"
-        />
-
         <CheckoutForm
           cart={cart}
           addresses={userAddresses}
@@ -140,7 +135,6 @@ function Checkout({ cart, config, location }: any) {
           location={location}
           recordShippingInfo={recordShippingInfo}
         />
-      </>
     )
   }
   if (!isLoggedIn) {

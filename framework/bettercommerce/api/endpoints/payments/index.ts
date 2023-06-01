@@ -9,6 +9,7 @@ import { parsePaymentMethodConfig } from "@framework/utils/app-util";
 import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY } from "@components/utils/constants";
 import { getGatewayName } from "@framework/utils/payment-util";
 import useUpdatePaymentResponse from "./update-payment-response";
+import useRequestPayment from "./request-payment";
 
 export default async function useBCPayments({ data = {}, params = {}, headers, cookies, origin }: any) {
     const { t: type, s: isSecured, gid: gatewayId } = params;
@@ -25,11 +26,14 @@ export default async function useBCPayments({ data = {}, params = {}, headers, c
             switch (type) {
 
                 // ------------------ Payments ------------------
+                case BCPaymentEndpoint.REQUEST_PAYMENT:
+                    response = await useRequestPayment({ data, config: paymentConfig, cookies, });
+                    break;
+
                 case BCPaymentEndpoint.GET_ORDER_DETAILS:
                     break;
 
                 case BCPaymentEndpoint.PAYMENT_RESPONSE:
-
                     response = await useUpdatePaymentResponse({ data, config: paymentConfig, cookies, });
                     break;
             }

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import Button from '@components/ui/IndigoButton'
 import { GENERAL_CONFIRM } from '@components/utils/textVariables'
 import getStripe from '@components/utils/get-stripe'
 import PaymentButton from './PaymentButton'
@@ -72,7 +71,6 @@ export default function PaymentMethods({
           <PaymentButton
             btnTitle={GENERAL_CONFIRM}
             paymentMethod={activePaymentMethod}
-            paymentOrderInfo={paymentOrderInfo}
             basketOrderInfo={basketOrderInfo}
             uiContext={uiContext}
             dispatchState={dispatchState}

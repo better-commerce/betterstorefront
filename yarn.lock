@@ -130,12 +130,13 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@better-commerce/bc-payments-sdk@^0.0.1":
-  version "0.0.1"
-  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.1/6a24b2df0f565ca74764472164cb1faf840d325f"
-  integrity sha512-qmIyLKBPzeniyNtu3x7naDmYvBgWoOY+KPPopeWdterfuJK4nR/p4mPipjExaSVZGAV8/D8uaOq4bXp/b8Yx3w==
+"@better-commerce/bc-payments-sdk@0.0.2":
+  version "0.0.2"
+  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.2/37d6e466e6af6b858ce605d1656e4d9b07ee3e93"
+  integrity sha512-9dvHvXwPv1s8mYd9ZWl39R21AJpVEKyh3Xh55ubVnE6cndm5rrf7ygpyGSLOYuJjVt5lC8en9q8lprRD/SGmpg==
   dependencies:
     axios "^1.4.0"
+    bc-checkout-sdk "0.0.2"
     bc-paypal-sdk "0.0.2"
 
 "@cspotcode/source-map-support@^0.8.0":
@@ -894,6 +895,13 @@ balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+
+bc-checkout-sdk@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npmjs.org/bc-checkout-sdk/-/bc-checkout-sdk-0.0.2.tgz"
+  integrity sha512-Z2ofeapaN/hiUAKdyLRO3zJkAnlbhqVJdtX7AHJypgz5o2LY1dK34QZZ087bKyEjlOqcR34h4CwONFm0lfl6Mw==
+  dependencies:
+    axios "^1.4.0"
 
 bc-paypal-sdk@0.0.2:
   version "0.0.2"
@@ -1742,7 +1750,7 @@ fraction.js@^4.2.0:
   resolved "https://registry.npmjs.org/fraction.js/-/fraction.js-4.2.0.tgz"
   integrity sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==
 
-frames-react@^1.1.0:
+frames-react@1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/frames-react/-/frames-react-1.1.0.tgz"
   integrity sha512-4mpZsex1GL20OxCVwS7DaWXsRlJz17chy0OegFWuxrY9yhlupA8PNf7/ev/u/YBpxa3iY3f6feW6tdenGJPsLg==

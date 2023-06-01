@@ -99,6 +99,18 @@ export const getGatewayName = (id: number) => {
     return -1;
 };
 
+export const requestPayment = async (gatewayName: string, data: any) => {
+    const gid = getGatewayId(gatewayName);
+    const { data: orderDetailResult } = await axios.post(PAYMENTS_API, // Endpoint url
+        ENABLE_SECURED_PAYMENT_PAYLOAD ? encrypt(JSON.stringify(data)) : JSON.stringify(data), // Data
+        {
+            params: { ...Payments.RequestParams.REQUEST_PAYMENT, gid, },
+        }); // Params
+    return ENABLE_SECURED_PAYMENT_PAYLOAD
+        ? decipherPayload(orderDetailResult)
+        : tryParseJson(orderDetailResult);
+};
+
 export const getPaymentOrderDetails = async (gatewayName: string, data: any) => {
     const gid = getGatewayId(gatewayName);
     const { data: orderDetailResult } = await axios.post(PAYMENTS_API, // Endpoint url

@@ -13,9 +13,9 @@ import { matchStrings } from "@framework/utils/parse-util";
 export interface IPaymentButtonProps {
     readonly paymentMethod: any | null;
     readonly btnTitle: string;
-    readonly paymentOrderInfo: Function;
-    readonly basketOrderInfo?: any;
+    readonly basketOrderInfo: any;
     readonly onPay?: Function;
+    readonly disabled?: boolean;
 }
 
 export interface IDispatchState {
@@ -118,16 +118,17 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
      * @param param0 {IPaymentButtonProps & IDispatchState}
      * @returns {React.JSX.Element}
      */
-    public baseRender({ btnTitle, paymentMethod, paymentOrderInfo, uiContext, dispatchState, onPay }: IPaymentButtonProps & IDispatchState) {
+    public baseRender({ btnTitle, paymentMethod, basketOrderInfo, uiContext, dispatchState, onPay, disabled = false }: IPaymentButtonProps & IDispatchState) {
         return (
             <DefaultButton
                 buttonType="button"
                 action={async () => {
                     if (onPay) {
-                        onPay(paymentMethod, paymentOrderInfo, uiContext, dispatchState);
+                        onPay(paymentMethod, basketOrderInfo, uiContext, dispatchState);
                     }
                 }}
                 title={btnTitle}
+                disabled={disabled}
             />
         );
     }
