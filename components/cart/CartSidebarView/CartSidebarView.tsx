@@ -73,9 +73,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
   const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
-  const [sizeDialogState, setSizeDialogState] = useState<any>({
-    type: ''
-  })
+  const [sizeDialogState, setSizeDialogState] = useState<any>({type: ''})
   const content = useTranslation()
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
