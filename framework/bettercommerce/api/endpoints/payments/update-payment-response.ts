@@ -28,8 +28,8 @@ export default async function useUpdatePaymentResponse({ data, config, cookies, 
             objectId,
         }, `${logId} Request`);
 
-        BCEnvironment.init(config);
-        BCEnvironment.withCredentials(CLIENT_ID || "", SHARED_SECRET || "");
+        BCEnvironment.init(CLIENT_ID || "", SHARED_SECRET || "", config);
+        console.log("UpdatePaymentResponse params", params);
         const paymentResponseResult = await new CommerceOperation().processPayment(params);
 
         logData = {};
