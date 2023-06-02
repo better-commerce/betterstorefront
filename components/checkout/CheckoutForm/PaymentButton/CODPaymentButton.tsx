@@ -26,86 +26,9 @@ export class CODPaymentButton extends BasePaymentButton {
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
-        let additionalServiceCharge = paymentMethod?.settings?.find((x: any) => matchStrings(x?.key, "AdditionalServiceCharge", true))?.value || "0";
-        if (basketOrderInfo) {
-            basketOrderInfo = {
-                ...basketOrderInfo,
-                ...{
-                    Payment: {
-                        ...basketOrderInfo?.Payment,
-                        ...{
-                            Id: null,
-                            CardNo: null,
-                            OrderNo: 0,
-                            PaidAmount: 0.0,
-                            BalanceAmount: 0.0,
-                            IsValid: false,
-                            Status: 0,
-                            AuthCode: null,
-                            IssuerUrl: null,
-                            PaRequest: null,
-                            PspSessionCookie: null,
-                            PspResponseCode: null,
-                            PspResponseMessage: null,
-                            PaymentGatewayId: paymentMethod?.id,
-                            PaymentGateway: paymentMethod?.systemName,
-                            Token: null,
-                            PayerId: null,
-                            CvcResult: null,
-                            AvsResult: null,
-                            Secure3DResult: null,
-                            CardHolderName: null,
-                            IssuerCountry: null,
-                            Info1: null,
-                            FraudScore: null,
-                            PaymentMethod: paymentMethod?.systemName,
-                            IsVerify: false,
-                            IsValidAddress: false,
-                            LastUpdatedBy: null,
-                            OperatorId: null,
-                            RefStoreId: null,
-                            TillNumber: null,
-                            ExternalRefNo: null,
-                            ExpiryYear: null,
-                            ExpiryMonth: null,
-                            IsMoto: false,
-                            additionalServiceCharge: additionalServiceCharge,
-                        },
-                    },
-                }
-            }
+        const paymentMethodOrderRespData = super.getCODConvertOrderPayload(paymentMethod, basketOrderInfo);
+        if (paymentMethodOrderRespData) {
 
-            const paymentMethodOrderRespData = {
-                cardNo: null,
-                status: PaymentOrderStatus.PAID,
-                authCode: null,
-                issuerUrl: null,
-                paRequest: null,
-                pspSessionCookie: null,
-                pspResponseCode: null,
-                pspResponseMessage: null,
-                token: null,
-                payerId: null,
-                cvcResult: null,
-                avsResult: null,
-                secure3DResult: null,
-                cardHolderName: null,
-                issuerCountry: null,
-                info1: '',
-                fraudScore: null,
-                cardType: null,
-                operatorId: null,
-                refStoreId: null,
-                tillNumber: null,
-                externalRefNo: null,
-                expiryYear: null,
-                expiryMonth: null,
-                isMoto: true,
-                upFrontPayment: false,
-                upFrontAmount: '0.00',
-                upFrontTerm: '76245369',
-                isPrePaid: false,
-            };
             const orderResult = await super.confirmOrder(paymentMethod, basketOrderInfo, paymentMethodOrderRespData, dispatchState);
             if (orderResult?.state) {
                 uiContext?.hideOverlayLoaderState();
