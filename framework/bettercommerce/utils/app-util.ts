@@ -1,5 +1,6 @@
 import { EmptyGuid } from "@components/utils/constants";
-
+import Cookies from "js-cookie";
+import setSessionIdCookie from "@components/utils/setSessionId";
 export const isCartAssociated = (cartItems: any) => {
     if (cartItems?.userId && cartItems?.userId !== EmptyGuid) {
         return true;
@@ -36,4 +37,14 @@ export const sanitizeBase64 = (base64: string) => {
       return base64?.replace("data:image/png;base64,", "")?.replace("data:image/jpeg;base64,", "");
   }
   return "";
+};
+
+export const resetBasket = async (setBasketId: any, generateBasketId: any) => {
+  Cookies.remove('sessionId');
+  setSessionIdCookie();
+  Cookies.remove('basketId');
+  const generatedBasketId = generateBasketId();
+  if (setBasketId) {
+      setBasketId(generatedBasketId);
+  }
 };

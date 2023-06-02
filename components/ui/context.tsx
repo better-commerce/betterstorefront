@@ -7,6 +7,9 @@ import Cookies from 'js-cookie'
 import { Guid } from '@commerce/types'
 import { DeviceType } from "@commerce/utils/use-device"
 import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId';
+import { resetBasket } from '@framework/utils/app-util';
+import { LocalStorage } from '@components/utils/payment-constants';
+import { LOGOUT } from '@components/utils/textVariables';
 
 export const basketId = () => {
   if (Cookies.get('basketId')) {
@@ -457,11 +460,49 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
   )
   const setCartItems = useCallback(
     (payload: any) => {
-      const newCartDataClone = consolidateCartItems(payload);
+      const newCartDataClone: any = { ...payload }
+      newCartDataClone?.lineItems?.forEach((element: any, idx: number) => {
+        newCartDataClone?.lineItems?.forEach((i: any) => {
+          if (element.parentProductId === i.productId) {
+            i.children = i.children ? [...i.children, element] : [element]
+            newCartDataClone.lineItems.splice(idx, 1)
+          }
+        })
+      })
 
-      setItem('cartItems', { ...newCartDataClone })
-      
+      const cart = { ...payload };
+      setItem('cartItems', cart);
+
+      if (cart?.lineItems?.length == 0) {
+        resetBasket(setBasketId, basketId,);
+        /*const user = {
+          ...state?.user,
+          ...{
+            isAssociated: false
+          }
+        };
+        setUser(user);*/
+      }
       dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
+    },
+    [dispatch]
+  )
+
+  const resetCartItems = useCallback(
+    (payload?: any) => {
+      setItem('cartItems', { lineItems: [] })
+      dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+    },
+    [dispatch]
+  )
+
+  const resetCartStorage = useCallback(
+    (payload?: any) => {
+      removeItem(LocalStorage.Key.ORDER_RESPONSE);
+      removeItem(LocalStorage.Key.ORDER_PAYMENT);
+      removeItem(LocalStorage.Key.CONVERTED_ORDER);
+      //setItem('cartItems', { lineItems: [] })
+      //dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
     },
     [dispatch]
   )
@@ -486,6 +527,11 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
     (payload: any) => {
       Router.push('/').then(() => {
         removeItem('user')
+        removeItem(LocalStorage.Key.CONVERTED_ORDER);
+        removeItem(LocalStorage.Key.ORDER_RESPONSE);
+        removeItem(LocalStorage.Key.ORDER_PAYMENT);
+        removeItem(LocalStorage.Key.PREFERRED_PAYMENT);
+        removeItem(LocalStorage.Key.DELIVERY_ADDRESS);
         dispatch({ type: 'SET_WISHLIST', payload: [] })
         setItem('wishListItems', [])
         setItem('cartItems', { lineItems: [] })
@@ -495,8 +541,9 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
           expires: getExpiry(getMinutesInDays(365)),
         })
         dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
-        dispatch({ type: 'REMOVE_USER', payload: {} })
+        dispatch({ type: 'REMOVE_USER', payload: {} })      
       })
+
     },
     [dispatch]
   )
@@ -664,7 +711,8 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
       setOrderId,
       setUserIp,
       setOverlayLoaderState,
-      hideOverlayLoaderState,
+      hideOverlayLoaderState,      
+      resetCartItems,
     }),
     [state]
   )
