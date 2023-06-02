@@ -1,111 +1,37 @@
 // Base Imports
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 // Package Imports
-import Cookies from "js-cookie";
-import Router from "next/router";
 import { GetServerSideProps } from "next";
 
 // Component Imports
 import Spinner from "@components/ui/Spinner";
+import PaymentGatewayNotification from "@components/checkout/PaymentGatewayNotification";
 
 // Other Imports
-import cartHandler from "@components/services/cart";
 import { EVENTS_MAP } from "@components/services/analytics/constants";
-import setSessionIdCookie from '@components/utils/setSessionId';
-import { useUI, basketId as generateBasketId } from '@components/ui/context';
-import { PaymentOrderStatus } from "@components/utils/payment-constants";
-import { getOrderId, getOrderInfo } from "@framework/utils/app-util";
-import { processPaymentResponse } from "@framework/utils/payment-util";
 
-interface IGatewayPageProps {
+export interface IGatewayPageProps {
   readonly gateway: string;
   readonly params?: { token?: string, orderId?: string, payerId?: string };
   readonly isCancelled: boolean;
-}
-
-const IS_RESPONSE_REDIRECT_ENABLED = true
+  readonly isCOD?: boolean;
+};
 
 const GatewayPage = (props: IGatewayPageProps) => {
 
-  const orderInfo = getOrderInfo();
+  const { gateway, params, isCancelled } = props;
   const { Order } = EVENTS_MAP.ENTITY_TYPES;
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES;
-  const { gateway, isCancelled, params } = props;
-  const { associateCart } = cartHandler();
-  const { user, setCartItems, basketId, cartItems, setOrderId, orderId: uiOrderId, setBasketId, } = useUI();
-
-  const [redirectUrl, setRedirectUrl] = useState<string>();
-
-  /**
-   * Update order status.
-   */
-  const asyncHandler = async (gateway: string, params: any, isCancelled: boolean) => {
-
-    let paymentDetailsResult: any;
-    let bankOfferDetails:
-      | {
-        voucherCode: string
-        offerCode: string
-        value: string
-        status: string
-        discountedTotal: number
-      }
-      | undefined;
-    const extras = {
-      ...params,
-      gateway: gateway,
-      isCancelled: isCancelled,
-    };
-
-    const paymentResponseRequest: any /*IPaymentProcessingData*/ = {
-      isCOD: false,
-      orderId: orderInfo?.orderResponse?.id,
-      txnOrderId: getOrderId(orderInfo?.order),
-      bankOfferDetails: bankOfferDetails,
-      extras,
-    };
-
-    const paymentResponseResult: any = await processPaymentResponse(gateway, paymentResponseRequest);
-    if (paymentResponseResult === PaymentOrderStatus.PAID || paymentResponseResult === PaymentOrderStatus.AUTHORIZED) {
-
-      Cookies.remove('sessionId');
-      setSessionIdCookie();
-      Cookies.remove('basketId');
-      const generatedBasketId = generateBasketId();
-      setBasketId(generatedBasketId)
-      const userId = cartItems.userId
-      const newCart = await associateCart(userId, generatedBasketId);
-      setCartItems(newCart.data);
-      setOrderId(paymentResponseRequest?.orderId);
-
-      if (IS_RESPONSE_REDIRECT_ENABLED) {
-        setRedirectUrl('/thank-you');
-      }
-    } else if (paymentResponseResult === PaymentOrderStatus.PENDING || paymentResponseResult === PaymentOrderStatus.DECLINED) {
-
-      setOrderId(paymentResponseRequest?.orderId);
-      if (IS_RESPONSE_REDIRECT_ENABLED) {
-        setRedirectUrl(`/payment-failed`); // TODO: Show order failed screen.
-      }
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      asyncHandler(gateway, params, isCancelled);
-    }, 500);
-  }, []);
-
-  useEffect(() => {
-    if (redirectUrl) {
-      Router.replace(redirectUrl)
-    }
-  }, [redirectUrl]);
 
   return (
     <>
       <Spinner />
+      <PaymentGatewayNotification
+        gateway={gateway}
+        params={params}
+        isCancelled={isCancelled}
+      />
     </>
   );
 };
@@ -134,9 +60,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       })))) : "",*/
 
       params: {
-        token: params?.token, // Paypal
-        orderId: !isCancelled ? params?.orderId : "", // Paypal
-        payerId: payerId, // Paypal
+        token: params?.token, // For Paypal
+        orderId: !isCancelled ? params?.orderId : "", // For Paypal & Checkout
+        payerId: payerId, // For Paypal & Checkout
       },
     }, // will be passed to the page component as props
   }

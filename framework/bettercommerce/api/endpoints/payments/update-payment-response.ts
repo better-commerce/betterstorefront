@@ -12,12 +12,9 @@ export default async function useUpdatePaymentResponse({ data, config, cookies, 
     let logData: any = {};
     let objectId = uuid();
     try {
-
-        BCEnvironment.init(config);
-        BCEnvironment.withCredentials(CLIENT_ID || "", SHARED_SECRET || "");
         const params = { ...data, ...{ extras: { ...data.extras, ...{ cookies } } } };
 
-        logData["request"] = BCEnvironment;
+        logData["request"] = data;
         if (LOG_REQUEST_OPTIONS) {
             console.log(config);
             logData["requestOptions"] = config;
@@ -31,6 +28,8 @@ export default async function useUpdatePaymentResponse({ data, config, cookies, 
             objectId,
         }, `${logId} Request`);
 
+        BCEnvironment.init(config);
+        BCEnvironment.withCredentials(CLIENT_ID || "", SHARED_SECRET || "");
         const paymentResponseResult = await new CommerceOperation().processPayment(params);
 
         logData = {};

@@ -62,6 +62,8 @@ export const getGatewayId = (gatewayName: string) => {
         return PaymentGatewayId.JUSPAY;
     } else if (matchStrings(gatewayName, PaymentGateway.STRIPE, true)) {
         return PaymentGatewayId.STRIPE;
+    } else if (matchStrings(gatewayName, PaymentGateway.COD, true)) {
+        return PaymentGatewayId.COD;
     }
     return -1;
 };
@@ -81,6 +83,8 @@ export const getGatewayName = (id: number) => {
         return PaymentGateway.JUSPAY;
     } else if (id === PaymentGatewayId.STRIPE) {
         return PaymentGateway.STRIPE;
+    } else if (id === PaymentGatewayId.COD) {
+        return PaymentGateway.COD;
     }
     return -1;
 };
