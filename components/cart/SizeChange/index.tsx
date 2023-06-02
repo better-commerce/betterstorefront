@@ -19,23 +19,22 @@ import { matchStrings } from '@framework/utils/parse-util'
 const SIZE_ATTRIBUTE = 'clothing.size'
 
 function SizeChangeModal({ open, handleToggleOpen, product }: any) {
-  const {
-    setCartItems,
-    cartItems,
-    basketId,
-    setAlert,
-  } = useUI()
+  const { setCartItems, cartItems, basketId } = useUI()
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState('')
   const [productSizeData, setProductSizeData] = useState<any>(null)
-  const [productStockCodesWithSize, setProductStockCodesWithSize] = useState<any>(null)
+  const [productStockCodesWithSize, setProductStockCodesWithSize] =
+    useState<any>(null)
   const [isSizeUpdateLoading, setIsSizeUpdateLoading] = useState(false)
 
   useEffect(() => {
     // update current size of the product
     if (!productStockCodesWithSize) return
     const stockCodeValues: any = Object.values(productStockCodesWithSize)
-    setValue(stockCodeValues?.find((o: any) => product?.stockCode === o?.stockCode)?.sizeValue || '')
+    setValue(
+      stockCodeValues?.find((o: any) => product?.stockCode === o?.stockCode)
+        ?.sizeValue || ''
+    )
   }, [productStockCodesWithSize])
 
   useEffect(() => {
@@ -85,6 +84,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
           [sizeObj.fieldValue]: {
             sizeValue: sizeObj.fieldValue,
             stockCode: variantItemObj.stockCode,
+            productId: variantItemObj.productId,
           },
         }))
       }
@@ -106,7 +106,11 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
     }
   }
 
-  const handleUpdateProductItemSize = async (selectedProduct: any, newStockCode: string) => {
+  const handleUpdateProductItemSize = async (
+    selectedProduct: any,
+    newStockCode: string,
+    newItemId: string
+  ) => {
     // start loader
     setIsSizeUpdateLoading(true)
 
@@ -116,51 +120,80 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
       )
 
       if (oldLineItem) {
-        const oldProduct = {
-          stockCode: selectedProduct?.stockCode,
-          parentProductId: null,
+        const itemToBeDeleted = {
+          productId: selectedProduct?.productId, // old product id for old size item
+          stockCode: selectedProduct?.stockCode, // old stock code
+          parentProductId: EmptyGuid,
           qty: 0,
-          basketId: '',
         }
 
-        const newProduct = {
-          stockCode: newStockCode,
-          parentProductId: null,
+        const itemToBeSaved = {
+          productId: newItemId, // new product id for new size item
+          parentProductId: EmptyGuid,
+          stockCode: newStockCode, // new stock code
           qty: oldLineItem?.qty,
-          basketId: '',
           customInfo1: oldLineItem?.customInfo1,
           customInfo2: oldLineItem?.customInfo2,
           customInfo3: oldLineItem?.customInfo3,
           customInfo4: oldLineItem?.customInfo4,
           customInfo5: oldLineItem?.customInfo5,
+          customInfo1Formatted: oldLineItem?.customInfo1Formatted,
+          customInfo2Formatted: oldLineItem?.customInfo2Formatted,
+          customInfo3Formatted: oldLineItem?.customInfo3Formatted,
+          customInfo4Formatted: oldLineItem?.customInfo4Formatted,
+          customInfo5Formatted: oldLineItem?.customInfo5Formatted,
         }
 
-        const updatedProducts = [...[newProduct], ...[oldProduct]]
+        let products = [...[itemToBeDeleted], ...[itemToBeSaved]]
+
+        if (oldLineItem?.children?.length > 0) {
+          const childItemObj = oldLineItem?.children[0]
+          const personalizedItemToBeSaved = {
+            productId: childItemObj?.productId, // new personalize item product id
+            parentProductId: newItemId, // new product id
+            stockCode: childItemObj?.stockCode,
+            qty: childItemObj?.qty,
+            customInfo1: childItemObj?.customInfo1,
+            customInfo2: childItemObj?.customInfo2,
+            customInfo3: childItemObj?.customInfo3,
+            customInfo4: childItemObj?.customInfo4,
+            customInfo5: childItemObj?.customInfo5,
+            customInfo1Formatted: childItemObj?.customInfo1Formatted,
+            customInfo2Formatted: childItemObj?.customInfo2Formatted,
+            customInfo3Formatted: childItemObj?.customInfo3Formatted,
+            customInfo4Formatted: childItemObj?.customInfo4Formatted,
+            customInfo5Formatted: childItemObj?.customInfo5Formatted,
+          }
+
+          products = [...products, ...[personalizedItemToBeSaved]]
+        }
 
         const { data: newCart }: any = await axios.post(NEXT_BULK_ADD_TO_CART, {
           basketId,
-          products: updatedProducts,
+          products,
         })
 
         if (newCart?.id && newCart?.id != EmptyGuid) {
           setCartItems(newCart)
-          setAlert({
-            type: 'success',
-            msg: 'Product size updated successfully',
-          })
+          // setAlert({
+          //   type: 'success',
+          //   msg: 'Product size updated successfully',
+          // })
         }
 
         setProductSizeData(null)
         handleToggleOpen()
         setIsSizeUpdateLoading(false)
+      } else {
+        throw new Error('Something went wrong.')
       }
     } catch (error) {
-      setAlert({
-        type: 'error',
-        msg: 'Something went wrong.',
-      })
+      // setAlert({
+      //   type: 'error',
+      //   msg: 'Something went wrong.',
+      // })
     }
-  };
+  }
 
   const handleSubmit = async () => {
     const schema = yup.string().required()
@@ -168,11 +201,15 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
 
     if (!validatedVal) return false
 
-    const selectedProductItemStockCode =
-      productStockCodesWithSize && productStockCodesWithSize[validatedVal]?.stockCode
+    const newItemId =
+      productStockCodesWithSize &&
+      productStockCodesWithSize[validatedVal]?.productId
+    const newItemStockCode =
+      productStockCodesWithSize &&
+      productStockCodesWithSize[validatedVal]?.stockCode
 
     // bulk update basket handler
-    handleUpdateProductItemSize(product, selectedProductItemStockCode)
+    handleUpdateProductItemSize(product, newItemStockCode, newItemId)
     return validatedVal
   }
 
