@@ -27,8 +27,7 @@ export default async function useRequestPayment({ data, config, cookies, extras 
             objectId,
         }, `${logId} Request`);
 
-        BCEnvironment.init(config);
-        BCEnvironment.withCredentials(CLIENT_ID || "", SHARED_SECRET || "");
+        BCEnvironment.init(CLIENT_ID || "", SHARED_SECRET || "", config);
         const paymentResponseResult = await new PaymentOperation().requestPayment(data);
 
         logData = {};
