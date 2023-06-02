@@ -39,14 +39,16 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
      * Executes create order on CommerceHub for generic payment methods on storefront.
      * @param paymentMethod {Object} PaymentMethod info of the executing payment type.
      * @param data {Object} Basket, Address, Order info.
-     * @param paymentMethodOrderRespData {Object} OrderModel data specific to payment type, appended to the OrderModelResponse object.
      * @param dispatchState {Function} Method for dispatching state changes.
      * @returns { status: boolean, state: any, result?: any }
      */
-    public async confirmOrder(paymentMethod: any, data: any, paymentMethodOrderRespData: any, dispatchState: Function): Promise<{ status: boolean, state: any, result?: any }> {
+    public async confirmOrder(paymentMethod: any, data: any, dispatchState: Function, isCOD: boolean = false): Promise<{ status: boolean, state: any, result?: any }> {
         try {
             const orderResult = await createStorefrontOrder(data);
             if (orderResult?.result?.id) {
+                const paymentMethodOrderRespData = !isCOD
+                    ? this.getNonCODConvertOrderPayload(paymentMethod, data)
+                    : this.getCODConvertOrderPayload(paymentMethod, data);
                 dispatchState({
                     type: "SET_ORDER_RESPONSE",
                     payload: orderResult?.result,
@@ -80,7 +82,6 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
                 };
             }
         } catch (error) {
-            window.alert(error);
             console.log(error);
             return {
                 status: false,

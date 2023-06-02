@@ -7,11 +7,11 @@ interface Props {
   currencyCode: string
   readonly basketId: string;
   cookies?: any
-  secureFieldValuessExplicitlyDisabled?: boolean;
+  secureFieldValuesExplicitlyDisabled?: boolean;
 }
 
 export default function getPaymentMethods() {
-  return async function handler({ countryCode, currencyCode, basketId, cookies, secureFieldValuessExplicitlyDisabled = false }: Props) {
+  return async function handler({ countryCode, currencyCode, basketId, cookies, secureFieldValuesExplicitlyDisabled = false }: Props) {
     try {
       const response: any = await fetcher({
         url: `${PAYMENTS_ENDPOINT}?country=${countryCode}&currency=${currencyCode}&basketId=${basketId}`,
@@ -22,7 +22,7 @@ export default function getPaymentMethods() {
         cookies,
       });
 
-      if (!secureFieldValuessExplicitlyDisabled && SECURE_PAYMENT_METHODS_SETTINGS_FIELDS && PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS) {
+      if (!secureFieldValuesExplicitlyDisabled && SECURE_PAYMENT_METHODS_SETTINGS_FIELDS && PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS) {
         if (response?.result?.length) {
           return parsePaymentMethods(response?.result);
         }

@@ -130,10 +130,10 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@better-commerce/bc-payments-sdk@0.0.2":
-  version "0.0.2"
-  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.2/37d6e466e6af6b858ce605d1656e4d9b07ee3e93"
-  integrity sha512-9dvHvXwPv1s8mYd9ZWl39R21AJpVEKyh3Xh55ubVnE6cndm5rrf7ygpyGSLOYuJjVt5lC8en9q8lprRD/SGmpg==
+"@better-commerce/bc-payments-sdk@0.0.3":
+  version "0.0.3"
+  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.3/a0c4592d67c5d87a330d8624b44ee30152bc486c"
+  integrity sha512-OZL5BpLGrGR0NppaUX2JBcQDuWiYhpDz4D4ys6Z4/GLCEgjENw9Rbgvq2becoAVuh6vizmomsh1et+tuvzY5Rw==
   dependencies:
     axios "^1.4.0"
     bc-checkout-sdk "0.0.2"

@@ -65,7 +65,7 @@ const getPaymentConfig = async ({ paymentGateway, cookies, origin, isSecured }: 
         countryCode: cookies?.Country || store?.get('Country') || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
         currencyCode: cookies?.Currency || store?.get('Currency') || BETTERCOMMERCE_CURRENCY || BETTERCOMMERCE_DEFAULT_CURRENCY,
         basketId: cookies?.basketId,
-        secureFieldValuessExplicitlyDisabled: true,
+        secureFieldValuesExplicitlyDisabled: true,
     });
     const paymentConfig = response?.length ? response?.find(x => x?.systemName?.toLowerCase() === paymentGateway?.toLowerCase()) : undefined;
     /*const paymentConfig = response?.length ? response?.find(x => matchStrings(x.systemName, PAYPAL_PAY_METHOD_SYSTEM_NAME || "", true)) : undefined;

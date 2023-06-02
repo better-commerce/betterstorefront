@@ -44,16 +44,10 @@ export class PayPalPaymentButton extends BasePaymentButton {
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating order..." });
-        const paymentMethodOrderRespData = super.getNonCODConvertOrderPayload(paymentMethod, basketOrderInfo);
-        if (paymentMethodOrderRespData) {
 
-            const { result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, paymentMethodOrderRespData, dispatchState);
-            if (orderResult?.success && orderResult?.result?.id) {
-                uiContext?.hideOverlayLoaderState();
-            } else {
-                uiContext?.hideOverlayLoaderState();
-                dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
-            }
+        const { result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
+        if (orderResult?.success && orderResult?.result?.id) {
+            uiContext?.hideOverlayLoaderState();
         } else {
             uiContext?.hideOverlayLoaderState();
             dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });

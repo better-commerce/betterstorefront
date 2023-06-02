@@ -39,16 +39,10 @@ export class CheckoutPaymentButton extends BasePaymentButton {
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating order..." });
-        const paymentMethodOrderRespData = super.getNonCODConvertOrderPayload(paymentMethod, basketOrderInfo);
 
-        if (paymentMethodOrderRespData) {
-            const { result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, paymentMethodOrderRespData, dispatchState);
-            if (orderResult?.success && orderResult?.result?.id) {
-                uiContext?.hideOverlayLoaderState();
-            } else {
-                uiContext?.hideOverlayLoaderState();
-                dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
-            }
+        const { result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
+        if (orderResult?.success && orderResult?.result?.id) {
+            uiContext?.hideOverlayLoaderState();
         } else {
             uiContext?.hideOverlayLoaderState();
             dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
@@ -135,7 +129,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                                     number: basketOrderInfo?.shippingAddress?.phoneNo || EmptyString,
                                 },
                             },
-                            processing_channel_id: EmptyString,
+                            processing_channel_id: paymentMethod?.settings?.find((x: any) => x.key === "MotoUserName")?.value || EmptyString,
                             metadata: {
                                 udf1: orderId,
                                 udf2: orderResult?.basketId,
@@ -220,7 +214,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                                     that.state.formLoaded ? that.baseRender({
                                         ...that?.props, ...{
                                             disabled: that.state.disabledFormSubmit,
-                                            onPay: (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => that.onCapturePayment(paymentMethod, basketOrderInfo, uiContext, dispatchState),
+                                            onPay: (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => that.onCapturePayment(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState),
                                         }
                                     }) : null
                                 }

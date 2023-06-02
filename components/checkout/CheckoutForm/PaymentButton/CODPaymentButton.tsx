@@ -1,11 +1,10 @@
 // Component Imports
-import BasePaymentButton, { IDispatchState } from "./BasePaymentButton";
 import { IPaymentButtonProps } from "./BasePaymentButton";
+import BasePaymentButton, { IDispatchState } from "./BasePaymentButton";
+import PaymentGatewayNotification from "@components/checkout/PaymentGatewayNotification";
 
 // Other Imports
-import { matchStrings } from "@framework/utils/parse-util";
-import { PaymentOrderStatus } from "@components/utils/payment-constants";
-import { Messages } from "@components/utils/constants";
+import { EmptyString, Messages } from "@components/utils/constants";
 
 export class CODPaymentButton extends BasePaymentButton {
 
@@ -15,6 +14,9 @@ export class CODPaymentButton extends BasePaymentButton {
      */
     constructor(props: IPaymentButtonProps & IDispatchState) {
         super(props);
+        this.state = {
+            isPaymentInitiated: false,
+        }
     }
 
     /**
@@ -26,17 +28,13 @@ export class CODPaymentButton extends BasePaymentButton {
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
-        const paymentMethodOrderRespData = super.getCODConvertOrderPayload(paymentMethod, basketOrderInfo);
-        if (paymentMethodOrderRespData) {
-
-            const orderResult = await super.confirmOrder(paymentMethod, basketOrderInfo, paymentMethodOrderRespData, dispatchState);
-            if (orderResult?.state) {
-                uiContext?.hideOverlayLoaderState();
-                dispatchState(orderResult?.state);
-            } else {
-                uiContext?.hideOverlayLoaderState();
-                dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
-            }
+        const orderResult = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState, true);
+        if (orderResult?.state) {
+            uiContext?.hideOverlayLoaderState();
+            dispatchState(orderResult?.state);
+            this.setState({
+                isPaymentInitiated: true,
+            });
         } else {
             uiContext?.hideOverlayLoaderState();
             dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
@@ -48,10 +46,32 @@ export class CODPaymentButton extends BasePaymentButton {
      * @returns {React.JSX.Element}
      */
     public render() {
-        return this.baseRender({
-            ...this?.props, ...{
-                onPay: this.onPay,
-            }
-        });
+        const that = this;
+        return (
+            <>
+                {
+                    this.baseRender({
+                        ...this?.props, ...{
+                            onPay: (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => that.onPay(paymentMethod, basketOrderInfo, uiContext, dispatchState),
+                        }
+                    })
+                }
+
+                {
+                    this.state.isPaymentInitiated && (
+                        <PaymentGatewayNotification
+                            isCOD={true}
+                            gateway={this.props?.paymentMethod?.systemName}
+                            params={{
+                                token: EmptyString,
+                                orderId: EmptyString,
+                                payerId: EmptyString,
+                            }}
+                            isCancelled={false}
+                        />
+                    )
+                }
+            </>
+        );
     }
 }
