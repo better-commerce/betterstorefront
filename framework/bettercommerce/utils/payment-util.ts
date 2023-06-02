@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Other Imports
 import { decipherPayload } from "./app-util";
-import { PayPal, PaymentGateway, PaymentGatewayId } from "@components/utils/payment-constants";
+import { PaymentGateway, PaymentGatewayId } from "@components/utils/payment-constants";
 import { ENABLE_SECURED_PAYMENT_PAYLOAD, NEXT_CANCEL_ORDER, NEXT_CONFIRM_ORDER, NEXT_POST_PAYMENT_RESPONSE, PAYMENTS_API } from "@components/utils/constants";
 import { Payments } from "@components/utils/payment-constants";
 import { matchStrings, tryParseJson } from "./parse-util";
@@ -25,20 +25,6 @@ export const getReferer = (origin: string) => {
         }
     }
     return referer;
-};
-
-export const parsePayPalOrder = (desc: string): { orderId: string, basketId: string } | null => {
-    if (desc) {
-        const regEx = new RegExp(PayPal.PARSE_ORDER_ID_REGEX);
-        const matches = regEx.exec(desc);
-        if (matches?.length && matches?.length > 2) {
-            return {
-                orderId: matches[1] ? matches[1].trim() : "",
-                basketId: matches[2] ? matches[2].trim() : "",
-            };
-        }
-    }
-    return null;
 };
 
 export const createStorefrontOrder = async (data: any) => {

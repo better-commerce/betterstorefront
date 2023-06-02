@@ -4,7 +4,7 @@ import React from "react";
 // Package Imports
 import Router from "next/router";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions, OnClickActions, OnInitActions } from "@paypal/paypal-js/types/components/buttons";
+import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions } from "@paypal/paypal-js/types/components/buttons";
 
 // Component Imports
 import BasePaymentButton, { IDispatchState } from "./BasePaymentButton";
@@ -12,7 +12,6 @@ import { IPaymentButtonProps } from "./BasePaymentButton";
 
 // Other Imports
 import { BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyGuid, EmptyString, Messages } from "@components/utils/constants";
-import { PaymentOrderStatus } from "@components/utils/payment-constants";
 import { PayPalOrderIntent } from "@framework/api/endpoints/payments/constants";
 import { getOrderInfo } from "@framework/utils/app-util";
 
@@ -45,94 +44,12 @@ export class PayPalPaymentButton extends BasePaymentButton {
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating order..." });
-        //let orderData = await super.paymentOrderInfo(paymentMethod, paymentOrderInfo);
-        if (basketOrderInfo) {
-            basketOrderInfo = {
-                ...basketOrderInfo,
-                ...{
-                    Payment: {
-                        ...basketOrderInfo?.Payment,
-                        ...{
-                            Id: null,
-                            CardNo: null,
-                            OrderNo: 0,
-                            PaidAmount: 0.0,
-                            BalanceAmount: 0.0,
-                            IsValid: false,
-                            Status: PaymentOrderStatus.PENDING,
-                            AuthCode: null,
-                            IssuerUrl: null,
-                            PaRequest: null,
-                            PspSessionCookie: null,
-                            PspResponseCode: null,
-                            PspResponseMessage: null,
-                            PaymentGatewayId: paymentMethod?.id,
-                            PaymentGateway: paymentMethod?.systemName,
-                            Token: null,
-                            PayerId: null,
-                            CvcResult: null,
-                            AvsResult: null,
-                            Secure3DResult: null,
-                            CardHolderName: null,
-                            IssuerCountry: null,
-                            Info1: null,
-                            FraudScore: null,
-                            PaymentMethod: paymentMethod?.systemName,
-                            IsVerify: false,
-                            IsValidAddress: false,
-                            LastUpdatedBy: null,
-                            OperatorId: null,
-                            RefStoreId: null,
-                            TillNumber: null,
-                            ExternalRefNo: null,
-                            ExpiryYear: null,
-                            ExpiryMonth: null,
-                            IsMoto: false,
-                        },
-                    },
-                }
-            };
+        const paymentMethodOrderRespData = super.getNonCODConvertOrderPayload(paymentMethod, basketOrderInfo);
+        if (paymentMethodOrderRespData) {
 
-            const paymentMethodOrderRespData = {
-                cardNo: null,
-                status: PaymentOrderStatus.PAID,
-                authCode: null,
-                issuerUrl: null,
-                paRequest: null,
-                pspSessionCookie: null,
-                pspResponseCode: null,
-                pspResponseMessage: null,
-                token: null,
-                payerId: null,
-                cvcResult: null,
-                avsResult: null,
-                secure3DResult: null,
-                cardHolderName: null,
-                issuerCountry: null,
-                info1: '',
-                fraudScore: null,
-                cardType: null,
-                operatorId: null,
-                refStoreId: null,
-                tillNumber: null,
-                externalRefNo: null,
-                expiryYear: null,
-                expiryMonth: null,
-                isMoto: false,
-                upFrontPayment: false,
-                upFrontAmount: `${basketOrderInfo?.Payment?.OrderAmount}`,
-                isPrePaid: false,
-            };
             const { result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, paymentMethodOrderRespData, dispatchState);
             if (orderResult?.success && orderResult?.result?.id) {
                 uiContext?.hideOverlayLoaderState();
-                /*const orderId = orderResult?.result?.result?.id;
-                const createPaymentResult: any = await createPaypalPayment(orderId);
-                const redirectUrl = createPaymentResult?.links?.approval_url?.href;
-                if (redirectUrl) {
-                    uiContext?.hideOverlayLoaderState();
-                    Router.push(redirectUrl);
-                }*/
             } else {
                 uiContext?.hideOverlayLoaderState();
                 dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
@@ -143,7 +60,43 @@ export class PayPalPaymentButton extends BasePaymentButton {
         }
     }
 
-    private getPayPalOrderData() {
+    /**
+     * Creates a PayPal order while payment modal is opened over the window.
+     * @param data 
+     * @param actions 
+     * @returns 
+     */
+    private onCreateOrder(data: CreateOrderData, actions: CreateOrderActions) {
+        const orderData: any = this.getPayPalOrderInputPayload();
+        return actions.order.create(orderData);
+    }
+
+    /**
+     * onApprove callback handler executes after the payment is authorized from the payment modal.
+     * @param data 
+     * @param actions 
+     * @returns 
+     */
+    private onApprove(data: OnApproveData, actions: OnApproveActions) {
+        const promise = new Promise<void>(async (resolve: any, reject: any) => {
+            const orderDetails: any = await actions?.order?.capture();
+            if (orderDetails?.id) {
+                const tokenId = orderDetails?.purchase_units[0]?.payments?.captures?.length
+                    ? orderDetails?.purchase_units[0]?.payments?.captures[0]?.id
+                    : "";
+                const redirectUrl = `${this?.state?.paymentMethod?.notificationUrl}?orderId=${orderDetails?.id}&payerId=${orderDetails?.payer?.payer_id}&token=${tokenId}`;
+                Router.push(redirectUrl);
+            }
+            resolve();
+        });
+        return promise;
+    }
+
+    /**
+     * Returns the payload for PayPal CreateOrder.
+     * @returns 
+     */
+    private getPayPalOrderInputPayload() {
         const orderInfo = getOrderInfo();
         const orderResult: any = orderInfo?.orderResponse;
         if (orderResult) {
@@ -221,6 +174,9 @@ export class PayPalPaymentButton extends BasePaymentButton {
         }
     }
 
+    /**
+     * Called immediately after a component is mounted.
+     */
     public componentDidMount(): void {
         const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any = this.props;
         this.onPay(paymentMethod, basketOrderInfo, uiContext, dispatchState);
@@ -241,24 +197,8 @@ export class PayPalPaymentButton extends BasePaymentButton {
                 <PayPalButtons
                     style={BUTTONS_DEFAULT_LAYOUT}
                     fundingSource={"paypal"}
-                    createOrder={(data: CreateOrderData, actions: CreateOrderActions) => {
-                        const orderData: any = that.getPayPalOrderData();
-                        return actions.order.create(orderData);
-                    }}
-                    onApprove={(data: OnApproveData, actions: OnApproveActions) => {
-                        const promise = new Promise<void>(async (resolve: any, reject: any) => {
-                            const orderDetails: any = await actions?.order?.capture();
-                            if (orderDetails?.id) {
-                                const tokenId = orderDetails?.purchase_units[0]?.payments?.captures?.length
-                                    ? orderDetails?.purchase_units[0]?.payments?.captures[0]?.id
-                                    : "";
-                                const redirectUrl = `${that?.state?.paymentMethod?.notificationUrl}?orderId=${orderDetails?.id}&payerId=${orderDetails?.payer?.payer_id}&token=${tokenId}`;
-                                Router.push(redirectUrl);
-                            }
-                            resolve();
-                        });
-                        return promise;
-                    }}
+                    createOrder={(data: CreateOrderData, actions: CreateOrderActions) => that.onCreateOrder(data, actions)}
+                    onApprove={(data: OnApproveData, actions: OnApproveActions) => that.onApprove(data, actions)}
                 />
             </PayPalScriptProvider>
         );

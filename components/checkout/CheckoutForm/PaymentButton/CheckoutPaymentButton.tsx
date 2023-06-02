@@ -10,7 +10,7 @@ import { IPaymentButtonProps } from "./BasePaymentButton";
 
 // Other Imports
 import { requestPayment } from '@framework/utils/payment-util';
-import { PaymentOrderStatus } from '@components/utils/payment-constants';
+import { PaymentOrderStatus, Payments } from '@components/utils/payment-constants';
 import { getOrderId, getOrderInfo } from "@framework/utils/app-util";
 import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE, EmptyString, Messages } from '@components/utils/constants';
 
@@ -39,84 +39,9 @@ export class CheckoutPaymentButton extends BasePaymentButton {
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating order..." });
-        //let orderData = await super.paymentOrderInfo(paymentMethod, paymentOrderInfo);
-        if (basketOrderInfo) {
-            basketOrderInfo = {
-                ...basketOrderInfo,
-                ...{
-                    Payment: {
-                        ...basketOrderInfo?.Payment,
-                        ...{
-                            Id: null,
-                            CardNo: null,
-                            OrderNo: 0,
-                            PaidAmount: 0.0,
-                            BalanceAmount: 0.0,
-                            IsValid: false,
-                            Status: PaymentOrderStatus.PENDING,
-                            AuthCode: null,
-                            IssuerUrl: null,
-                            PaRequest: null,
-                            PspSessionCookie: null,
-                            PspResponseCode: null,
-                            PspResponseMessage: null,
-                            PaymentGatewayId: paymentMethod?.id,
-                            PaymentGateway: paymentMethod?.systemName,
-                            Token: null,
-                            PayerId: null,
-                            CvcResult: null,
-                            AvsResult: null,
-                            Secure3DResult: null,
-                            CardHolderName: null,
-                            IssuerCountry: null,
-                            Info1: null,
-                            FraudScore: null,
-                            PaymentMethod: paymentMethod?.systemName,
-                            IsVerify: false,
-                            IsValidAddress: false,
-                            LastUpdatedBy: null,
-                            OperatorId: null,
-                            RefStoreId: null,
-                            TillNumber: null,
-                            ExternalRefNo: null,
-                            ExpiryYear: null,
-                            ExpiryMonth: null,
-                            IsMoto: false,
-                        },
-                    },
-                }
-            };
+        const paymentMethodOrderRespData = super.getNonCODConvertOrderPayload(paymentMethod, basketOrderInfo);
 
-            const paymentMethodOrderRespData = {
-                cardNo: null,
-                status: PaymentOrderStatus.PAID,
-                authCode: null,
-                issuerUrl: null,
-                paRequest: null,
-                pspSessionCookie: null,
-                pspResponseCode: null,
-                pspResponseMessage: null,
-                token: null,
-                payerId: null,
-                cvcResult: null,
-                avsResult: null,
-                secure3DResult: null,
-                cardHolderName: null,
-                issuerCountry: null,
-                info1: '',
-                fraudScore: null,
-                cardType: null,
-                operatorId: null,
-                refStoreId: null,
-                tillNumber: null,
-                externalRefNo: null,
-                expiryYear: null,
-                expiryMonth: null,
-                isMoto: false,
-                upFrontPayment: false,
-                upFrontAmount: `${basketOrderInfo?.Payment?.OrderAmount}`,
-                isPrePaid: false,
-            };
+        if (paymentMethodOrderRespData) {
             const { result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, paymentMethodOrderRespData, dispatchState);
             if (orderResult?.success && orderResult?.result?.id) {
                 uiContext?.hideOverlayLoaderState();
@@ -244,6 +169,9 @@ export class CheckoutPaymentButton extends BasePaymentButton {
         }
     }
 
+    /**
+     * Called immediately after a component is mounted.
+     */
     public componentDidMount(): void {
         const { uiContext }: any = this.props;
         uiContext?.setOverlayLoaderState({ visible: true, message: "Loading..." });
@@ -263,7 +191,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
 
         return (
             <>
-                <Script src="https://cdn.checkout.com/js/framesv2.min.js"
+                <Script src={Payments.CHECKOUT_FRAMES_SCRIPT_SRC_V2}
                     strategy="lazyOnload"
                     onReady={() => that.onScriptReady()}
                 />
