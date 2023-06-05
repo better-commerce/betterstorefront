@@ -85,7 +85,6 @@ export class StripePaymentButton extends BasePaymentButton {
 
         uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
         const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`;
-        console.log(returnUrl)
 
         // Get a reference to a mounted CardElement. Elements knows how
         // to find your CardElement because there can only ever be one of
