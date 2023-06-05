@@ -111,7 +111,7 @@ function Cart({ cart }: any) {
 
     setCartItems({
       ...cart,
-      lineItems: mapShippingPlansToItems(shippingPlans, cart.lineItems),
+      lineItems: mapShippingPlansToItems(shippingPlans || [], cart.lineItems),
     })
   }
 
@@ -119,7 +119,7 @@ function Cart({ cart }: any) {
     async function loadShippingPlans() {
       await fetchShippingPlans();
     }
-
+    
     if (cart?.shippingMethods.length > 0) {
       loadShippingPlans()
     }
