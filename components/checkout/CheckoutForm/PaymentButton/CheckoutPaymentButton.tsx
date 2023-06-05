@@ -40,12 +40,16 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating order..." });
 
-        const { result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
+        const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
         if (orderResult?.success && orderResult?.result?.id) {
             uiContext?.hideOverlayLoaderState();
         } else {
             uiContext?.hideOverlayLoaderState();
-            dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            if (state) {
+                dispatchState(state);
+            } else {
+                dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            }
         }
     }
 
@@ -167,7 +171,8 @@ export class CheckoutPaymentButton extends BasePaymentButton {
      * Called immediately after a component is mounted.
      */
     public componentDidMount(): void {
-        const { uiContext }: any = this.props;
+        const { uiContext, dispatchState }: any = this.props;
+        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
         uiContext?.setOverlayLoaderState({ visible: true, message: "Loading..." });
     }
 

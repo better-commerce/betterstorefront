@@ -12,6 +12,7 @@ import { createStorefrontOrder } from "@framework/utils/payment-util";
 import { LocalStorage, PaymentOrderStatus } from "@components/utils/payment-constants";
 import { parsePaymentMethods } from "@framework/utils/app-util";
 import { matchStrings } from "@framework/utils/parse-util";
+import { Messages } from "@components/utils/constants";
 
 export interface IPaymentButtonProps {
     readonly paymentMethod: any | null;
@@ -50,7 +51,22 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
     public async confirmOrder(paymentMethod: any, data: any, dispatchState: Function, isCOD: boolean = false): Promise<{ status: boolean, state: any, result?: any }> {
         try {
             const orderResult = await createStorefrontOrder(data);
-            if (orderResult?.result?.id) {
+            if (orderResult?.message) {
+                if (orderResult?.message === "YourBag.Links.EmptyBag") {
+
+                    return {
+                        status: false,
+                        state: { type: 'SET_ERROR', payload: Messages.Errors[orderResult?.message] },
+                        result: null,
+                    };
+                }
+
+                return {
+                    status: false,
+                    state: { type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] },
+                    result: null,
+                };
+            } else if (orderResult?.result?.id) {
                 const paymentMethodOrderRespData = !isCOD
                     ? this.getNonCODConvertOrderPayload(paymentMethod, data)
                     : this.getCODConvertOrderPayload(paymentMethod, data);

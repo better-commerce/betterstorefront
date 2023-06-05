@@ -45,12 +45,16 @@ export class PayPalPaymentButton extends BasePaymentButton {
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating order..." });
 
-        const { result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
+        const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
         if (orderResult?.success && orderResult?.result?.id) {
             uiContext?.hideOverlayLoaderState();
         } else {
             uiContext?.hideOverlayLoaderState();
-            dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            if (state) {
+                dispatchState(state);
+            } else {
+                dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            }
         }
     }
 
@@ -173,6 +177,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
      */
     public componentDidMount(): void {
         const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any = this.props;
+        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
         this.onPay(paymentMethod, basketOrderInfo, uiContext, dispatchState);
     }
 

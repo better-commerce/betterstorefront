@@ -34,7 +34,6 @@ import {
   GENERAL_SAVE_CHANGES,
   SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
-import PaymentWidget from '@components/checkout/PaymentWidget'
 import { AddressType } from '@framework/utils/enums'
 import { LocalStorage } from '@components/utils/payment-constants'
 
@@ -670,11 +669,11 @@ export default function CheckoutForm({
                   />
                 )}
                 {(state.isPaymentWidgetActive || !!state.isPaymentIntent) && (
-                  <PaymentWidget
+                  {/*<PaymentWidget
                     paymentMethod={state.selectedPaymentMethod}
                     checkoutCallback={checkoutCallback}
                     orderModelResponse={state.orderResponse}
-                  />
+                  />*/}
                 )}
                 {state.error && (
                   <h4 className="py-5 text-lg font-semibold text-red-500">

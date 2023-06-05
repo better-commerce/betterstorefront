@@ -3,6 +3,7 @@ import BasePaymentButton, { IDispatchState } from "./BasePaymentButton";
 import { IPaymentButtonProps } from "./BasePaymentButton";
 
 // Other Imports
+import { EmptyString } from "@components/utils/constants";
 
 
 export class MasterCardPaymentButton extends BasePaymentButton {
@@ -23,6 +24,14 @@ export class MasterCardPaymentButton extends BasePaymentButton {
      * @param dispatchState {Function} Method for dispatching state changes.
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
+    }
+
+    /**
+     * Called immediately after a component is mounted.
+     */
+    public componentDidMount(): void {
+        const { dispatchState }: any = this.props;
+        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
     }
 
     /**
