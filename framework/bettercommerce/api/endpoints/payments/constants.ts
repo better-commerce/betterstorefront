@@ -1,4 +1,5 @@
 export enum BCPaymentEndpoint {
+    INIT_PAYMENT = "ip",
     REQUEST_PAYMENT = "rp",
     GET_ORDER_DETAILS = "god",
     PAYMENT_RESPONSE = "pr",

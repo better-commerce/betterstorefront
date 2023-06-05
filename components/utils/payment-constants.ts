@@ -34,6 +34,11 @@ export module Payments {
 
   export module RequestParams {
 
+    export const INIT_PAYMENT: any = {
+      t: BCPaymentEndpoint.INIT_PAYMENT,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
+    };
+
     export const REQUEST_PAYMENT: any = {
       t: BCPaymentEndpoint.REQUEST_PAYMENT,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,

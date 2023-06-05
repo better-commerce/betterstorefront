@@ -7,10 +7,10 @@ import { PayPalPaymentButton } from "./PayPalPaymentButton";
 import { IDispatchState, IPaymentButtonProps } from "./BasePaymentButton";
 import { MasterCardPaymentButton } from "./MasterCardPaymentButton";
 import { CheckoutPaymentButton } from "./CheckoutPaymentButton";
+import { StripePaymentButton } from "./StripePaymentButton"
 
 // Other Imports
 import { matchStrings } from "@framework/utils/parse-util";
-import { StripePaymentButton } from "./StripePaymentButton";
 
 /**
  * Factory helper/renderer component for <PaymentButton>

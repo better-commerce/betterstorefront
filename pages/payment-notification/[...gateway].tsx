@@ -9,7 +9,7 @@ import Spinner from "@components/ui/Spinner";
 import PaymentGatewayNotification from "@components/checkout/PaymentGatewayNotification";
 
 // Other Imports
-import { EVENTS_MAP } from "@components/services/analytics/constants";
+
 
 export interface IGatewayPageProps {
   readonly gateway: string;
@@ -21,8 +21,6 @@ export interface IGatewayPageProps {
 const GatewayPage = (props: IGatewayPageProps) => {
 
   const { gateway, params, isCancelled } = props;
-  const { Order } = EVENTS_MAP.ENTITY_TYPES;
-  const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES;
 
   return (
     <>

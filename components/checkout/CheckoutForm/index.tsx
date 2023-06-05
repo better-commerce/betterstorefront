@@ -491,25 +491,6 @@ export default function CheckoutForm({
     }
   }, [state?.isPaymentInformationCompleted])
 
-  const handlePayments = (method: any) => {
-    // const isTestUrl = state.selectedPaymentMethod.settings.find((method:any) => method.key === 'UseSandbox').value === 'True';
-    const paymentObject = method.settings.reduce((acc: any, obj: any) => {
-      if (obj.key === 'UseSandbox') {
-        acc['isTestUrl'] = obj.value === 'True'
-        return acc
-      }
-      if (obj.key === 'TestUrl') {
-        acc['testUrl'] = obj.value
-        return acc
-      }
-      if (obj.key === 'ProductionUrl') {
-        acc['prodUrl'] = obj.value
-        return acc
-      }
-      return acc
-    }, {})
-  }
-
   const getPaymentOrderInfo = async (paymentMethod: any) => {
     dispatch({ type: 'SET_PAYMENT_METHOD', payload: paymentMethod });
 
@@ -546,157 +527,8 @@ export default function CheckoutForm({
     paymentOrderInfo.billingAddress.id = billingAddrId;
     const shippingAddrId = await lookupAddressId(paymentOrderInfo.shippingAddress);
     paymentOrderInfo.shippingAddress.id = shippingAddrId;
-    console.log(paymentOrderInfo);
     return paymentOrderInfo;
   };
-
-  const confirmOrder = (method: any) => {
-    dispatch({ type: 'SET_PAYMENT_METHOD', payload: method })
-
-    const billingInfoClone = { ...state.billingInformation }
-    //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
-    const shippingClone = { ...state.shippingInformation }
-    //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
-
-    const data = {
-      basketId,
-      customerId: cartItems.userId,
-      basket: cartItems,
-      billingAddress: {
-        ...billingInfoClone,
-        country: state.deliveryMethod.name,
-        countryCode: state.deliveryMethod.twoLetterIsoCode,
-      },
-      shippingAddress: {
-        ...shippingClone,
-        country: state.deliveryMethod.name,
-        countryCode: state.deliveryMethod.twoLetterIsoCode,
-      },
-      selectedShipping: state.shippingMethod,
-      selectedPayment: method,
-      storeId: state.storeId,
-      Payment: {
-        Id: null,
-        CardNo: null,
-        OrderNo: 0,
-        OrderAmount: cartItems.grandTotal.raw.withTax,
-        PaidAmount: 0.0,
-        BalanceAmount: 0.0,
-        IsValid: false,
-        Status: 0,
-        AuthCode: null,
-        IssuerUrl: null,
-        PaRequest: null,
-        PspSessionCookie: null,
-        PspResponseCode: null,
-        PspResponseMessage: null,
-        PaymentGatewayId: method.id,
-        PaymentGateway: method.systemName,
-        Token: null,
-        PayerId: null,
-        CvcResult: null,
-        AvsResult: null,
-        Secure3DResult: null,
-        CardHolderName: null,
-        IssuerCountry: null,
-        Info1: null,
-        FraudScore: null,
-        PaymentMethod: method.systemName,
-        IsVerify: false,
-        IsValidAddress: false,
-        LastUpdatedBy: null,
-        OperatorId: null,
-        RefStoreId: null,
-        TillNumber: null,
-        ExternalRefNo: null,
-        ExpiryYear: null,
-        ExpiryMonth: null,
-        IsMoto: false,
-      },
-    }
-
-    const handleAsync = async () => {
-      try {
-        const billingAddrId = await lookupAddressId(data.billingAddress);
-        data.billingAddress.id = billingAddrId;
-        const shippingAddrId = await lookupAddressId(data.shippingAddress);
-        data.shippingAddress.id = shippingAddrId;
-        const response: any = await axios.post(NEXT_CONFIRM_ORDER, {
-          basketId,
-          model: data,
-        })
-
-        if (state.error) dispatch({ type: 'SET_ERROR', payload: '' })
-
-        if (response.data?.result?.id) {
-          // handlePayments(method)
-          //@TODO temporary move to BE
-          dispatch({
-            type: 'SET_ORDER_RESPONSE',
-            payload: response.data.result,
-          })
-          localStorage.setItem(
-            LocalStorage.Key.ORDER_RESPONSE,
-            JSON.stringify(response.data.result)
-          )
-
-          const orderModel = {
-            id: response.data.result.payment.id,
-            cardNo: null,
-            orderNo: response.data.result.orderNo,
-            orderAmount: response.data.result.grandTotal.raw.withTax,
-            paidAmount: response.data.result.grandTotal.raw.withTax,
-            balanceAmount: '0.00',
-            isValid: true,
-            status: 2,
-            authCode: null,
-            issuerUrl: null,
-            paRequest: null,
-            pspSessionCookie: null,
-            pspResponseCode: null,
-            pspResponseMessage: null,
-            paymentGatewayId: method.id,
-            paymentGateway: method.systemName,
-            token: null,
-            payerId: null,
-            cvcResult: null,
-            avsResult: null,
-            secure3DResult: null,
-            cardHolderName: null,
-            issuerCountry: null,
-            info1: '',
-            fraudScore: null,
-            paymentMethod: method.systemName,
-            cardType: null,
-            operatorId: null,
-            refStoreId: null,
-            tillNumber: null,
-            externalRefNo: null,
-            expiryYear: null,
-            expiryMonth: null,
-            isMoto: true,
-            upFrontPayment: false,
-            upFrontAmount: '0.00',
-            upFrontTerm: '76245369',
-            isPrePaid: false,
-          }
-          localStorage.setItem(LocalStorage.Key.ORDER_PAYMENT, JSON.stringify(orderModel))
-
-          dispatch({ type: 'TRIGGER_PAYMENT_WIDGET', payload: true })
-        } else {
-          dispatch({ type: 'SET_ERROR', payload: response.data.message })
-        }
-      } catch (error) {
-        window.alert(error)
-        console.log(error)
-      }
-    }
-    handleAsync()
-  }
-
-  const handlePaymentMethod = (method: any) => {
-    confirmOrder(method)
-  }
 
   const loqateAddress = (postCode: string = 'E1') => {
     const handleAsync = async () => {
@@ -831,7 +663,6 @@ export default function CheckoutForm({
                 {state.isPaymentInformationCompleted && (
                   <Payments
                     paymentData={paymentData}
-                    paymentOrderInfo={getPaymentOrderInfo}
                     basketOrderInfo={basketOrderInfo}
                     selectedPaymentMethod={state.selectedPaymentMethod}
                     uiContext={uiContext}
@@ -856,7 +687,6 @@ export default function CheckoutForm({
             {/* Order summary */}
             <div className='sm:col-span-3 md:col-span-3 lg:col-span-2 lg:order-2 order-1'>
               <Summary
-                confirmOrder={confirmOrder}
                 isShippingDisabled={isShippingDisabled}
                 cart={cartItems}
                 handleItem={handleItem}

@@ -3,13 +3,14 @@ import store from "store";
 
 // Other Imports
 import { BCPaymentEndpoint } from "./constants";
-import { decrypt, encrypt } from "@framework/utils/cipher";
+import { encrypt } from "@framework/utils/cipher";
 import { getPaymentMethods } from "@framework/payment";
 import { parsePaymentMethodConfig } from "@framework/utils/app-util";
 import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY } from "@components/utils/constants";
 import { getGatewayName } from "@framework/utils/payment-util";
 import useUpdatePaymentResponse from "./update-payment-response";
 import useRequestPayment from "./request-payment";
+import useInitPayment from "./init-payment";
 
 export default async function useBCPayments({ data = {}, params = {}, headers, cookies, origin }: any) {
     const { t: type, s: isSecured, gid: gatewayId } = params;
@@ -26,6 +27,10 @@ export default async function useBCPayments({ data = {}, params = {}, headers, c
             switch (type) {
 
                 // ------------------ Payments ------------------
+                case BCPaymentEndpoint.INIT_PAYMENT:
+                    response = await useInitPayment({ data, config: paymentConfig, cookies, });
+                    break;
+
                 case BCPaymentEndpoint.REQUEST_PAYMENT:
                     response = await useRequestPayment({ data, config: paymentConfig, cookies, });
                     break;

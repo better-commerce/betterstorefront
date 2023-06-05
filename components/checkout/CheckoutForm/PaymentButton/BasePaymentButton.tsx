@@ -1,6 +1,9 @@
 // Base Imports
 import React from "react";
 
+// Package Imports
+import { Stripe, StripeElements } from "@stripe/stripe-js";
+
 // Component Imports
 import DefaultButton from "@components/ui/IndigoButton";
 
@@ -16,6 +19,8 @@ export interface IPaymentButtonProps {
     readonly basketOrderInfo: any;
     readonly onPay?: Function;
     readonly disabled?: boolean;
+    readonly stripe?: Stripe | null;
+    readonly stripeElements?: StripeElements | null;
 }
 
 export interface IDispatchState {
@@ -279,17 +284,6 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
             return paymentMethodOrderRespData;
         }
         return null;
-    }
-
-    /**
-     * Returns generic input data object for generating CommerceHub order, 
-     * containing information of Basket, Address, Shipping, PaymentMethod relevant for all payment types.
-     * @param paymentMethod {Object} PaymentMethod info of the executing payment type.
-     * @param getPaymentOrderInfo {Function} Generic function that dispatches the generic input data object for generating the CommerceHub order.
-     * @returns 
-     */
-    protected async paymentOrderInfo(paymentMethod: any, getPaymentOrderInfo: Function): Promise<any> {
-        return await getPaymentOrderInfo(paymentMethod);
     }
 
     protected getPaymentMethod(paymentMethod: any) {
