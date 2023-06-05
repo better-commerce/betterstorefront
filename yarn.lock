@@ -130,14 +130,15 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@better-commerce/bc-payments-sdk@0.0.1":
-  version "0.0.1"
-  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.1/878b438d446674b22e909a74cb05f7c220c7f723"
-  integrity sha512-F5WiayQ93vf9LheKtC7pAk+SG1vLX6koEY7kRt/S6Zw6evkgtagiSUreCynAKxZ3LcgJrRzTcKXEVY/j/nIHOQ==
+"@better-commerce/bc-payments-sdk@0.0.2":
+  version "0.0.2"
+  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.2/5aa719f07278e4774c89fc8812a367fbdb0083a5"
+  integrity sha512-Q2BFF0vzxE5vY0Nd7zwxNq4WvexVZvu8tebIWxx8At4+Ou5gLPNLlY9SFhCA5BIVMD3DW1k/NHuryJHDxBmJ4g==
   dependencies:
     axios "^1.4.0"
     bc-checkout-sdk "0.0.2"
     bc-paypal-sdk "0.0.2"
+    bc-stripe-sdk "0.0.2"
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
@@ -909,6 +910,14 @@ bc-paypal-sdk@0.0.2:
   integrity sha512-CDH3ROT+7feRvhiEQhZZQEJ36evjKwu+bqXjmobij8KcmYpk8xYhKQeKT6MHe13tyY0lIvxM54S8+zltXaj4jA==
   dependencies:
     axios "^1.4.0"
+
+bc-stripe-sdk@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npmjs.org/bc-stripe-sdk/-/bc-stripe-sdk-0.0.2.tgz"
+  integrity sha512-YLDbYczLf4p9v9aifXNHWGNmbyMw+SDs/pe4is/FbNUA698gmX3+aDnE6mIa0xOz3NSDSNzbIWR+1h5+gk0XeA==
+  dependencies:
+    axios "^1.4.0"
+    stripe "^12.4.0"
 
 binary-extensions@^2.0.0:
   version "2.2.0"

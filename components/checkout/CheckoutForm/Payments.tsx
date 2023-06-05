@@ -1,20 +1,22 @@
+// Base Imports
 import { useEffect, useState } from 'react'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import { GENERAL_CONFIRM } from '@components/utils/textVariables'
-import getStripe from '@components/utils/get-stripe'
+
+// Component Imports
 import PaymentButton from './PaymentButton'
+
+// Other Imports
+import { GENERAL_CONFIRM } from '@components/utils/textVariables'
 import { IDispatchState } from './PaymentButton/BasePaymentButton'
 
 interface IPaymentMethodsProps {
   readonly paymentData: Function;
-  readonly paymentOrderInfo: Function;
   readonly basketOrderInfo?: any;
   readonly selectedPaymentMethod: any;
 }
 
 export default function PaymentMethods({
   paymentData,
-  paymentOrderInfo,
   basketOrderInfo,
   selectedPaymentMethod,
   uiContext,
