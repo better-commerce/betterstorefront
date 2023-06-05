@@ -40,9 +40,9 @@ export class StripePaymentButton extends BasePaymentButton {
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating order..." });
 
-        const { result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
+        const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
         if (orderResult?.success && orderResult?.result?.id) {
-            const { id: orderId, basketId, orderNo, grandTotal, currencyCode } = orderResult?.result;
+            const { id: orderId, orderNo, grandTotal, currencyCode } = orderResult?.result;
             const stripePromise = getStripe();
             const appearance = {
                 theme: "stripe",
@@ -51,7 +51,7 @@ export class StripePaymentButton extends BasePaymentButton {
                 amount: grandTotal.raw.withTax,
                 currency: currencyCode,
                 receipt_email: uiContext?.user?.email,
-                description: `Order ${orderId} for basket ${basketId}`,
+                description: `Order ${orderId} for basket ${basketOrderInfo?.basketId}`,
             };
             uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating payment..." });
             const clientResult: any = await initPayment(this.state?.paymentMethod?.systemName, data);
@@ -66,7 +66,11 @@ export class StripePaymentButton extends BasePaymentButton {
             uiContext?.hideOverlayLoaderState();
         } else {
             uiContext?.hideOverlayLoaderState();
-            dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            if (state) {
+                dispatchState(state);
+            } else {
+                dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            }
         }
     }
 
@@ -80,6 +84,8 @@ export class StripePaymentButton extends BasePaymentButton {
         }
 
         uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
+        const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`;
+        console.log(returnUrl)
 
         // Get a reference to a mounted CardElement. Elements knows how
         // to find your CardElement because there can only ever be one of
@@ -89,7 +95,7 @@ export class StripePaymentButton extends BasePaymentButton {
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`,
+                return_url: returnUrl,
             },
         });
 
@@ -104,6 +110,7 @@ export class StripePaymentButton extends BasePaymentButton {
      */
     public componentDidMount(): void {
         const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any = this.props;
+        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
         this.onPay(paymentMethod, basketOrderInfo, uiContext, dispatchState);
     }
 

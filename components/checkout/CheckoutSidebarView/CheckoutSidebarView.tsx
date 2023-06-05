@@ -8,7 +8,6 @@ import useCart from '@framework/cart/use-cart'
 import usePrice from '@framework/product/use-price'
 import useCheckout from '@framework/checkout/use-checkout'
 import ShippingWidget from '../ShippingWidget'
-import PaymentWidget from '../PaymentWidget'
 import s from './CheckoutSidebarView.module.css'
 import {
   BTN_CONFIRM_PURCHASE,
@@ -43,10 +42,10 @@ const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
           <Text variant="sectionHeading">{GENERAL_CHECKOUT}</Text>
         </Link>
 
-        <PaymentWidget
+        {/*<PaymentWidget
           isValid={checkoutData?.hasPayment}
           onClick={() => setSidebarView('PAYMENT_VIEW')}
-        />
+        />*/}
         <ShippingWidget
           isValid={checkoutData?.hasShipping}
           onClick={() => setSidebarView('SHIPPING_VIEW')}

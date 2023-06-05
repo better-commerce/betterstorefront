@@ -42,6 +42,14 @@ export class CODPaymentButton extends BasePaymentButton {
     }
 
     /**
+     * Called immediately after a component is mounted.
+     */
+    public componentDidMount(): void {
+        const { dispatchState }: any = this.props;
+        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
+    }
+
+    /**
      * Renders the component.
      * @returns {React.JSX.Element}
      */
