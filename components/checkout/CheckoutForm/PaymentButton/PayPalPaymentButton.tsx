@@ -65,7 +65,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
      * @returns 
      */
     private onCreateOrder(data: CreateOrderData, actions: CreateOrderActions) {
-        const orderData: any = this.getPayPalOrderInputPayload();
+        const orderData: any = this.getOrderInputPayload();
         return actions.order.create(orderData);
     }
 
@@ -94,7 +94,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
      * Returns the payload for PayPal CreateOrder.
      * @returns 
      */
-    private getPayPalOrderInputPayload() {
+    private getOrderInputPayload() {
         const orderInfo = getOrderInfo();
         const orderResult: any = orderInfo?.orderResponse;
         if (orderResult) {

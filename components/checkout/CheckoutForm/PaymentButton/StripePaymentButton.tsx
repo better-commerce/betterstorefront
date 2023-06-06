@@ -1,5 +1,4 @@
 // Package Imports
-import Router from "next/router";
 import { Stripe, StripeElements } from "@stripe/stripe-js";
 import { Elements, ElementsConsumer, PaymentElement, } from '@stripe/react-stripe-js'
 
@@ -9,7 +8,6 @@ import { IPaymentButtonProps } from "./BasePaymentButton";
 
 // Other Imports
 import { EmptyString, Messages } from '@components/utils/constants';
-import { getOrderInfo } from '@framework/utils/app-util';
 import getStripe from "@components/utils/get-stripe";
 import { initPayment } from "@framework/utils/payment-util";
 import { GENERAL_PAY } from "@components/utils/textVariables";
@@ -39,7 +37,6 @@ export class StripePaymentButton extends BasePaymentButton {
      * @param dispatchState {Function} Method for dispatching state changes.
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
-        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
         uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating order..." });
 
         const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
@@ -104,6 +101,14 @@ export class StripePaymentButton extends BasePaymentButton {
             uiContext?.hideOverlayLoaderState();
             dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
         }
+    }
+
+    /**
+     * Called immediately after a component is mounted.
+     */
+    public componentDidMount(): void {
+        const { dispatchState }: any = this.props;
+        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
     }
 
     /**
