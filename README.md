@@ -75,10 +75,6 @@ LIVE demo at: [demostore.bettercommerce.io](https://demostore.bettercommerce.io/
 - Integrations - Integrate seamlessly with the most common plugins needed - google analytics, post code locator, marketing platforms, etc. 
 - And lot many more features...
 
-## Integrations
-
-Next.js Commerce integrates out-of-the-box with BigCommerce, Shopify, Swell, Saleor and Vendure. We plan to support all major ecommerce backends.
-
 ## Request flow
 - The client side is making requests to NextJS server.
 - NextJS server then fetches from the bettercommerce API and returns the data
