@@ -7,7 +7,8 @@ import { PayPalPaymentButton } from "./PayPalPaymentButton";
 import { IDispatchState, IPaymentButtonProps } from "./BasePaymentButton";
 import { MasterCardPaymentButton } from "./MasterCardPaymentButton";
 import { CheckoutPaymentButton } from "./CheckoutPaymentButton";
-import { StripePaymentButton } from "./StripePaymentButton"
+import { StripePaymentButton } from "./StripePaymentButton";
+import { KlarnaPaymentButton } from "./KlarnaPaymentButton";
 
 // Other Imports
 import { matchStrings } from "@framework/utils/parse-util";
@@ -29,6 +30,8 @@ const PaymentButton = (props: IPaymentButtonProps & IDispatchState) => {
         Component = MasterCardPaymentButton;
     } else if (matchStrings(paymentMethod?.systemName, "stripe", true)) {
         Component = StripePaymentButton;
+    } else if (matchStrings(paymentMethod?.systemName, "klarna", true)) {
+        Component = KlarnaPaymentButton;
     } else {
         Component = CODPaymentButton;
     }
