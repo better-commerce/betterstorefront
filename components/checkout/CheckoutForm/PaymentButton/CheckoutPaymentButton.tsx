@@ -10,7 +10,7 @@ import { IPaymentButtonProps } from "./BasePaymentButton";
 
 // Other Imports
 import { requestPayment } from '@framework/utils/payment-util';
-import { PaymentOrderStatus, Payments } from '@components/utils/payment-constants';
+import { PaymentStatus, Payments } from '@components/utils/payment-constants';
 import { getOrderId, getOrderInfo } from "@framework/utils/app-util";
 import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE, EmptyString, Messages } from '@components/utils/constants';
 import { GENERAL_PAY } from '@components/utils/textVariables';
@@ -170,6 +170,14 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     }
 
     /**
+     * Called immediately after a component is mounted.
+     */
+    public componentDidMount(): void {
+        const { dispatchState }: any = this.props;
+        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
+    }
+
+    /**
      * Renders the component.
      * @returns {React.JSX.Element}
      */
@@ -188,13 +196,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                     !this.state.confirmed && (
                         this.baseRender({
                             ...this?.props, ...{
-                                onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => {
-                                    dispatchState({ type: 'SET_ERROR', payload: EmptyString });
-                                    uiContext?.setOverlayLoaderState({ visible: true, message: "Loading..." });
-                                    that.setState({
-                                        confirmed: true,
-                                    })
-                                },
+                                onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => that.setState({ confirmed: true, }),
                             }
                         })
                     )

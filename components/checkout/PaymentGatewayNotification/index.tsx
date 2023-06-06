@@ -13,7 +13,7 @@ import cartHandler from "@components/services/cart";
 import { getOrderId, getOrderInfo } from "@framework/utils/app-util";
 import setSessionIdCookie from '@components/utils/setSessionId';
 import { processPaymentResponse } from "@framework/utils/payment-util";
-import { PaymentOrderStatus } from "@components/utils/payment-constants";
+import { PaymentStatus } from "@components/utils/payment-constants";
 import { IGatewayPageProps } from "pages/payment-notification/[...gateway]";
 import { useUI, basketId as generateBasketId } from '@components/ui/context';
 import { EVENTS_MAP } from "@components/services/analytics/constants";
@@ -60,7 +60,7 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
         };
 
         const paymentResponseResult: any = await processPaymentResponse(gateway, paymentResponseRequest);
-        if (paymentResponseResult === PaymentOrderStatus.PAID || paymentResponseResult === PaymentOrderStatus.AUTHORIZED) {
+        if (paymentResponseResult === PaymentStatus.PAID || paymentResponseResult === PaymentStatus.AUTHORIZED) {
 
             const { orderNo, grandTotal } = orderInfo?.orderResponse;
             eventDispatcher(CheckoutConfirmation, {
@@ -135,7 +135,7 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
             if (IS_RESPONSE_REDIRECT_ENABLED) {
                 setRedirectUrl('/thank-you');
             }
-        } else if (paymentResponseResult === PaymentOrderStatus.PENDING || paymentResponseResult === PaymentOrderStatus.DECLINED) {
+        } else if (paymentResponseResult === PaymentStatus.PENDING || paymentResponseResult === PaymentStatus.DECLINED) {
 
             setOrderId(paymentResponseRequest?.orderId);
             if (IS_RESPONSE_REDIRECT_ENABLED) {

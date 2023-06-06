@@ -9,7 +9,7 @@ import DefaultButton from "@components/ui/IndigoButton";
 
 // Other Imports
 import { createStorefrontOrder } from "@framework/utils/payment-util";
-import { LocalStorage, PaymentOrderStatus } from "@components/utils/payment-constants";
+import { LocalStorage, PaymentStatus } from "@components/utils/payment-constants";
 import { parsePaymentMethods } from "@framework/utils/app-util";
 import { matchStrings } from "@framework/utils/parse-util";
 import { Messages } from "@components/utils/constants";
@@ -183,7 +183,7 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
 
             const paymentMethodOrderRespData = {
                 cardNo: null,
-                status: PaymentOrderStatus.PAID,
+                status: PaymentStatus.PAID,
                 authCode: null,
                 issuerUrl: null,
                 paRequest: null,
@@ -232,7 +232,7 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
                             PaidAmount: 0.0,
                             BalanceAmount: 0.0,
                             IsValid: false,
-                            Status: PaymentOrderStatus.PENDING,
+                            Status: PaymentStatus.PENDING,
                             AuthCode: null,
                             IssuerUrl: null,
                             PaRequest: null,
@@ -268,7 +268,7 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
 
             const paymentMethodOrderRespData = {
                 cardNo: null,
-                status: PaymentOrderStatus.PAID,
+                status: PaymentStatus.PAID,
                 authCode: null,
                 issuerUrl: null,
                 paRequest: null,

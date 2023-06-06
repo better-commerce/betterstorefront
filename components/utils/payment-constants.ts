@@ -31,6 +31,7 @@ export enum PaymentGatewayId {
 export module Payments {
   export const PARSE_ORDER_ID_REGEX = /Order[ ](.*?)(?:[a-zA-Z0-9\-]*)for[ ]basket (.*)(?:[a-zA-Z0-9\-]*)/g;
   export const CHECKOUT_FRAMES_SCRIPT_SRC_V2 = "https://cdn.checkout.com/js/framesv2.min.js";
+  export const KLARNA_FRAMES_SCRIPT_SRC_V1 = "https://x.klarnacdn.net/kp/lib/v1/api.js";
 
   export module RequestParams {
 
@@ -90,7 +91,7 @@ export module LocalStorage {
   };
 };
 
-export enum PaymentOrderStatus {
+export enum PaymentStatus {
   PENDING = 0,
   AUTHORIZED = 1,
   PAID = 2,
