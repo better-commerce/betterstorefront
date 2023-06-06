@@ -12,6 +12,7 @@ import { EmptyString, Messages } from '@components/utils/constants';
 import { getOrderInfo } from '@framework/utils/app-util';
 import getStripe from "@components/utils/get-stripe";
 import { initPayment } from "@framework/utils/payment-util";
+import { GENERAL_PAY } from "@components/utils/textVariables";
 
 export class StripePaymentButton extends BasePaymentButton {
 
@@ -136,7 +137,7 @@ export class StripePaymentButton extends BasePaymentButton {
                                                 ...this?.props, ...{
                                                     onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => await that.onCapturePayment(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState, stripe, elements),
                                                     disabled: (!stripe || !elements),
-                                                    btnTitle: "Pay"
+                                                    btnTitle: GENERAL_PAY
                                                 }
                                             })
                                         }

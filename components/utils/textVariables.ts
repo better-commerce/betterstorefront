@@ -134,6 +134,8 @@ export const ADDRESS_OF_YOUR_CHOICE = 'to an address of your choice'
 export const IN_STORE_OR_COLLECT_PLUS = 'in store or using Collect+'
 export const GENERAL_SELECT_COUNTRY = 'Select country'
 export const GENERAL_CONFIRM = 'Confirm'
+export const GENERAL_PAY = 'Pay'
+export const GENERAL_PAY_WITH_KLARNA = 'Pay Later with Klarna'
 export const BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS =
   'My billing and delivery address are the same'
 export const SHIPPING_INFORMATION = 'Shipping information'
