@@ -22,6 +22,8 @@ export default function useAddress() {
       isDefaultBilling: query.isDefaultBilling,
       isDefaultDelivery: query.isDefaultDelivery,
       isDefaultSubscription: query.isDefaultSubscription,
+      id: query.id,
+      label: query.label
     }
     try {
       const response: any = await fetcher({
