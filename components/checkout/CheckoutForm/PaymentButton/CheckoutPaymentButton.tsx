@@ -23,6 +23,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     constructor(props: IPaymentButtonProps & IDispatchState) {
         super(props);
         this.state = {
+            confirmed: false,
             paymentMethod: super.getPaymentMethod(props?.paymentMethod),
             disabledFormSubmit: false,
             scriptLoaded: false,
@@ -168,15 +169,6 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     }
 
     /**
-     * Called immediately after a component is mounted.
-     */
-    public componentDidMount(): void {
-        const { uiContext, dispatchState }: any = this.props;
-        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
-        uiContext?.setOverlayLoaderState({ visible: true, message: "Loading..." });
-    }
-
-    /**
      * Renders the component.
      * @returns {React.JSX.Element}
      */
@@ -190,10 +182,31 @@ export class CheckoutPaymentButton extends BasePaymentButton {
 
         return (
             <>
-                <Script src={Payments.CHECKOUT_FRAMES_SCRIPT_SRC_V2}
-                    strategy="lazyOnload"
-                    onReady={() => that.onScriptReady()}
-                />
+
+                {
+                    !this.state.confirmed && (
+                        this.baseRender({
+                            ...this?.props, ...{
+                                onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => {
+                                    dispatchState({ type: 'SET_ERROR', payload: EmptyString });
+                                    uiContext?.setOverlayLoaderState({ visible: true, message: "Loading..." });
+                                    that.setState({
+                                        confirmed: true,
+                                    })
+                                },
+                            }
+                        })
+                    )
+                }
+
+                {
+                    this.state.confirmed && !this.state.formLoaded && (
+                        <Script src={Payments.CHECKOUT_FRAMES_SCRIPT_SRC_V2}
+                            strategy="lazyOnload"
+                            onReady={() => that.onScriptReady()}
+                        />
+                    )
+                }
 
                 {
                     that.state?.scriptLoaded && (
@@ -220,6 +233,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                                         ...that?.props, ...{
                                             disabled: that.state.disabledFormSubmit,
                                             onPay: (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => that.onCapturePayment(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState),
+                                            btnTitle: "Pay"
                                         }
                                     }) : null
                                 }

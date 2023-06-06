@@ -39,10 +39,18 @@ export class KlarnaPaymentButton extends BasePaymentButton {
      * @returns {React.JSX.Element}
      */
     public render() {
-        return this.baseRender({
-            ...this?.props, ...{
-                onPay: this.onPay,
-            }
-        });
+        return (
+            <>
+                <div>
+                    <p className="text-muted pb-10">Click Pay Later With Klarna to check if you are eligible</p>
+                    {this.baseRender({
+                        ...this?.props, ...{
+                            onPay: this.onPay,
+                            btnTitle: "PAY LATER WITH KLARNA",
+                        }
+                    })}
+                </div>
+            </>
+        );
     }
 }
