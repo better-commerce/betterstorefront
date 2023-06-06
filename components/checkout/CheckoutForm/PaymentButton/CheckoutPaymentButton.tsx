@@ -13,6 +13,7 @@ import { requestPayment } from '@framework/utils/payment-util';
 import { PaymentOrderStatus, Payments } from '@components/utils/payment-constants';
 import { getOrderId, getOrderInfo } from "@framework/utils/app-util";
 import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE, EmptyString, Messages } from '@components/utils/constants';
+import { GENERAL_PAY } from '@components/utils/textVariables';
 
 export class CheckoutPaymentButton extends BasePaymentButton {
 
@@ -233,7 +234,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                                         ...that?.props, ...{
                                             disabled: that.state.disabledFormSubmit,
                                             onPay: (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => that.onCapturePayment(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState),
-                                            btnTitle: "Pay"
+                                            btnTitle: GENERAL_PAY
                                         }
                                     }) : null
                                 }

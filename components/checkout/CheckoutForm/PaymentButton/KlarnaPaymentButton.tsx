@@ -4,7 +4,7 @@ import { IPaymentButtonProps } from "./BasePaymentButton";
 
 // Other Imports
 import { EmptyString } from "@components/utils/constants";
-
+import { GENERAL_PAY_WITH_KLARNA } from "@components/utils/textVariables";
 
 export class KlarnaPaymentButton extends BasePaymentButton {
 
@@ -46,7 +46,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                     {this.baseRender({
                         ...this?.props, ...{
                             onPay: this.onPay,
-                            btnTitle: "PAY LATER WITH KLARNA",
+                            btnTitle: GENERAL_PAY_WITH_KLARNA,
                         }
                     })}
                 </div>
