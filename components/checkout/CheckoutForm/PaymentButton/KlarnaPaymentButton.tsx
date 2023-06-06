@@ -25,6 +25,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         super(props);
         this.state = {
             confirmed: false,
+            formLoaded: false,
             clientSession: null,
             paymentMethod: super.getPaymentMethod(props?.paymentMethod),
         };
@@ -66,6 +67,13 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         }
     }
 
+    /**
+     * Initiates payment capture.
+     * @param paymentMethod {Object} PaymentMethod info of the executing payment type.
+     * @param basketOrderInfo {Object} Input data object for generating the CommerceHub order.
+     * @param uiContext {Object} Object for accessing global state context.
+     * @param dispatchState {Function} Method for dispatching state changes.
+     */
     private async onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
         const orderInput = this.getOrderInputPayload();
@@ -104,18 +112,20 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         Klarna.Payments.authorize({
             payment_method_category: PaymentGateway.KLARNA,
         }, authorizeInput, (authorizeResult: any) => {
-
             if (authorizeResult?.approved && authorizeResult?.show_form) {
             } else {
                 uiContext?.hideOverlayLoaderState();
-                dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+                //dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
             }
         });
     }
 
+    /**
+     * Script ready event handler for klarna script load.
+     */
     private onScriptReady(): void {
         let that = this;
-        const { basketOrderInfo, uiContext, dispatchState }: any = this.props;
+        const { uiContext, dispatchState }: any = this.props;
         const clientToken = this.state?.clientSession?.client_token;
         if (clientToken) {
             Klarna.Payments.init({
@@ -127,6 +137,9 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                     container: '#klarna-payments-container',
                     payment_method_category: PaymentGateway.KLARNA,
                 }, (result: any) => {
+                    that.setState({
+                        formLoaded: true,
+                    })
                     uiContext?.hideOverlayLoaderState();
                     //console.debug(res);
                 });
@@ -206,12 +219,14 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                         <>
                             <div>
                                 <div id="klarna-payments-container"></div>
-                                {this.baseRender({
-                                    ...this?.props, ...{
-                                        onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => await that.onCapturePayment(paymentMethod, basketOrderInfo, uiContext, dispatchState),
-                                        btnTitle: GENERAL_PAY,
-                                    }
-                                })}
+                                {this.state.formLoaded && (
+                                    this.baseRender({
+                                        ...this?.props, ...{
+                                            onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => await that.onCapturePayment(paymentMethod, basketOrderInfo, uiContext, dispatchState),
+                                            btnTitle: GENERAL_PAY,
+                                        }
+                                    })
+                                )}
                             </div>
 
                             <Script src={Payments.KLARNA_FRAMES_SCRIPT_SRC_V1}

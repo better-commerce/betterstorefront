@@ -33,7 +33,7 @@ export class StripePaymentButton extends BasePaymentButton {
      * Executes order generation for COD payment method on CommerceHub.
      * @param paymentMethod {Object} PaymentMethod info of the executing payment type.
      * @param basketOrderInfo {Object} Input data object for generating the CommerceHub order.
-     * @param uiContext {Object} Method for dispatching global ui state changes.
+     * @param uiContext {Object} Object for accessing global state context.
      * @param dispatchState {Function} Method for dispatching state changes.
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
@@ -73,6 +73,16 @@ export class StripePaymentButton extends BasePaymentButton {
         }
     }
 
+    /**
+     * Initiates payment capture.
+     * @param paymentMethod {Object} PaymentMethod info of the executing payment type.
+     * @param basketOrderInfo {Object} Input data object for generating the CommerceHub order.
+     * @param uiContext {Object} Object for accessing global state context.
+     * @param dispatchState {Function} Method for dispatching state changes.
+     * @param stripe {Object}
+     * @param elements {Object}
+     * @returns 
+     */
     private async onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function, stripe: Stripe, elements: StripeElements) {
 
         // Block native form submission.
