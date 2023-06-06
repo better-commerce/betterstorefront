@@ -38,6 +38,7 @@ export class StripePaymentButton extends BasePaymentButton {
      * @param dispatchState {Function} Method for dispatching state changes.
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
+        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
         uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating order..." });
 
         const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState);
@@ -105,15 +106,6 @@ export class StripePaymentButton extends BasePaymentButton {
     }
 
     /**
-     * Called immediately after a component is mounted.
-     */
-    public componentDidMount(): void {
-        const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any = this.props;
-        dispatchState({ type: 'SET_ERROR', payload: EmptyString });
-        this.onPay(paymentMethod, basketOrderInfo, uiContext, dispatchState);
-    }
-
-    /**
      * Renders the component.
      * @returns {React.JSX.Element}
      */
@@ -122,6 +114,15 @@ export class StripePaymentButton extends BasePaymentButton {
 
         return (
             <>
+                {
+                    !this.state.clientSecret && (
+                        this.baseRender({
+                            ...this?.props, ...{
+                                onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => await that.onPay(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState),
+                            }
+                        })
+                    )
+                }
                 {
                     this.state.stripeOptions && (
                         <Elements stripe={this.state.stripePromise} options={this.state.stripeOptions}>
@@ -134,7 +135,8 @@ export class StripePaymentButton extends BasePaymentButton {
                                             this.baseRender({
                                                 ...this?.props, ...{
                                                     onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => await that.onCapturePayment(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState, stripe, elements),
-                                                    disabled: (!stripe || !elements)
+                                                    disabled: (!stripe || !elements),
+                                                    btnTitle: "Pay"
                                                 }
                                             })
                                         }
