@@ -7,8 +7,8 @@ import { LOG_REQUEST_OPTIONS } from "@components/utils/payment-constants";
 import { BCEnvironment, PaymentOperation } from "@better-commerce/bc-payments-sdk";
 import { CLIENT_ID, SHARED_SECRET } from "@framework/utils/constants";
 
-const logId = "Payments | InitPayment";
-export default async function useInitPayment({ data, config, cookies, extras }: any) {
+const logId = "Payments | OneTimePaymentOrder";
+export default async function useOneTimePaymentOrder({ data, config, cookies, extras }: any) {
     let logData: any = {};
     let objectId = uuid();
     try {
@@ -28,10 +28,10 @@ export default async function useInitPayment({ data, config, cookies, extras }: 
         }, `${logId} Request`);
 
         BCEnvironment.init(CLIENT_ID || "", SHARED_SECRET || "", config);
-        const initPaymentResult = await new PaymentOperation().initPaymentIntent(data);
+        const oneTimePaymentResult = await new PaymentOperation().createOneTimePaymentOrder(data);
 
         logData = {};
-        logData["response"] = initPaymentResult;
+        logData["response"] = oneTimePaymentResult;
         await logPaymentRequest({
             //headers: {},
             paymentGatewayId: config?.id || 0,
@@ -41,7 +41,7 @@ export default async function useInitPayment({ data, config, cookies, extras }: 
             objectId,
         }, `${logId} Response`);
 
-        return initPaymentResult;
+        return oneTimePaymentResult;
     } catch (error: any) {
 
         logData = {};

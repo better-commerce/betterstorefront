@@ -113,6 +113,18 @@ export const requestPayment = async (gatewayName: string, data: any) => {
         : tryParseJson(orderDetailResult);
 };
 
+export const createOneTimePaymentOrder = async (gatewayName: string, data: any) => {
+    const gid = getGatewayId(gatewayName);
+    const { data: orderDetailResult } = await axios.post(PAYMENTS_API, // Endpoint url
+        ENABLE_SECURED_PAYMENT_PAYLOAD ? encrypt(JSON.stringify(data)) : JSON.stringify(data), // Data
+        {
+            params: { ...Payments.RequestParams.CREATE_ONE_TIME_PAY_ORDER, gid, },
+        }); // Params
+    return ENABLE_SECURED_PAYMENT_PAYLOAD
+        ? decipherPayload(orderDetailResult)
+        : tryParseJson(orderDetailResult);
+};
+
 export const getPaymentOrderDetails = async (gatewayName: string, data: any) => {
     const gid = getGatewayId(gatewayName);
     const { data: orderDetailResult } = await axios.post(PAYMENTS_API, // Endpoint url

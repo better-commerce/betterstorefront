@@ -45,6 +45,11 @@ export module Payments {
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
     };
 
+    export const CREATE_ONE_TIME_PAY_ORDER: any = {
+      t: BCPaymentEndpoint.CREATE_ONE_TIME_PAY_ORDER,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
+    };
+
     export const GET_ORDER_DETAILS: any = {
       t: BCPaymentEndpoint.GET_ORDER_DETAILS,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,

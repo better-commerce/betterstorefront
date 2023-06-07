@@ -69,6 +69,15 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         payerId: EmptyString,
       };
       break;
+
+    case PaymentGateway.KLARNA:
+
+      propParams = {
+        token: EmptyString, // For Klarna
+        orderId: !isCancelled ? params?.orderId : EmptyString, // For Klarna
+        payerId: EmptyString,
+      };
+      break;
   }
 
   return {
