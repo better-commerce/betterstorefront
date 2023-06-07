@@ -11,6 +11,7 @@ import { getGatewayName } from "@framework/utils/payment-util";
 import useUpdatePaymentResponse from "./update-payment-response";
 import useRequestPayment from "./request-payment";
 import useInitPayment from "./init-payment";
+import useOneTimePaymentOrder from "./create-one-time-payment-order";
 
 export default async function useBCPayments({ data = {}, params = {}, headers, cookies, origin }: any) {
     const { t: type, s: isSecured, gid: gatewayId } = params;
@@ -33,6 +34,10 @@ export default async function useBCPayments({ data = {}, params = {}, headers, c
 
                 case BCPaymentEndpoint.REQUEST_PAYMENT:
                     response = await useRequestPayment({ data, config: paymentConfig, cookies, });
+                    break;
+
+                case BCPaymentEndpoint.CREATE_ONE_TIME_PAY_ORDER:
+                    response = await useOneTimePaymentOrder({ data, config: paymentConfig, cookies, });
                     break;
 
                 case BCPaymentEndpoint.GET_ORDER_DETAILS:

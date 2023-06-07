@@ -28,10 +28,10 @@ export default async function useRequestPayment({ data, config, cookies, extras 
         }, `${logId} Request`);
 
         BCEnvironment.init(CLIENT_ID || "", SHARED_SECRET || "", config);
-        const paymentResponseResult = await new PaymentOperation().requestPayment(data);
+        const requestPaymentResult = await new PaymentOperation().requestPayment(data);
 
         logData = {};
-        logData["response"] = paymentResponseResult;
+        logData["response"] = requestPaymentResult;
         await logPaymentRequest({
             //headers: {},
             paymentGatewayId: config?.id || 0,
@@ -41,7 +41,7 @@ export default async function useRequestPayment({ data, config, cookies, extras 
             objectId,
         }, `${logId} Response`);
 
-        return paymentResponseResult;
+        return requestPaymentResult;
     } catch (error: any) {
 
         logData = {};

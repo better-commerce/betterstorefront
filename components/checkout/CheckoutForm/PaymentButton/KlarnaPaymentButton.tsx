@@ -1,6 +1,8 @@
 // Package Imports
+import Router from "next/router";
 import Script from "next/script";
 import Cookies from "js-cookie";
+import { KlarnaOrderLine } from "@better-commerce/bc-payments-sdk";
 
 // Component Imports
 import { PaymentGateway, Payments } from "@components/utils/payment-constants";
@@ -8,10 +10,10 @@ import BasePaymentButton, { IDispatchState } from "./BasePaymentButton";
 import { IPaymentButtonProps } from "./BasePaymentButton";
 
 // Other Imports
-import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, EmptyString, Messages } from "@components/utils/constants";
+import { getOrderId, getOrderInfo, sanitizeAmount } from "@framework/utils/app-util";
 import { GENERAL_PAY, GENERAL_PAY_WITH_KLARNA } from "@components/utils/textVariables";
-import { initPayment } from "@framework/utils/payment-util";
-import { getOrderId, getOrderInfo } from "@framework/utils/app-util";
+import { createOneTimePaymentOrder, initPayment } from "@framework/utils/payment-util";
+import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, EmptyString, Messages } from "@components/utils/constants";
 
 declare const Klarna: any;
 
@@ -47,7 +49,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
 
             uiContext?.setOverlayLoaderState({ visible: true, message: "Initiating payment..." });
             const orderInput = this.getOrderInputPayload();
-            const clientResult: any = await initPayment(this.state?.paymentMethod?.systemName, orderInput)
+            const clientResult: any = await initPayment(this.state?.paymentMethod?.systemName, orderInput);
             if (clientResult?.session_id) {
                 this.setState({
                     confirmed: true,
@@ -75,10 +77,29 @@ export class KlarnaPaymentButton extends BasePaymentButton {
      * @param dispatchState {Function} Method for dispatching state changes.
      */
     private async onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
+
         uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
-        const orderInput = this.getOrderInputPayload();
+        const gatewayName = this.state.paymentMethod?.systemName;
+        const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`;
+
+        const orderInput: any = this.getOrderInputPayload();
         const authorizeInput = {
             ...orderInput,
+            order_amount: sanitizeAmount(orderInput?.order_amount),
+            order_tax_amount: sanitizeAmount(orderInput?.order_tax_amount),
+            order_lines: orderInput?.order_lines?.map((x: KlarnaOrderLine) => ({
+                type: x?.type,
+                reference: x?.reference,
+                name: x?.name,
+                quantity: x?.quantity,
+                unit_price: sanitizeAmount(x?.unit_price),
+                tax_rate: sanitizeAmount(x?.tax_rate),
+                total_amount: sanitizeAmount(x?.total_amount),
+                total_discount_amount: sanitizeAmount(x?.total_discount_amount),
+                total_tax_amount: sanitizeAmount(x?.total_tax_amount),
+                image_url: x?.image_url,
+                product_url: x?.product_url,
+            })),
             billing_address: {
                 given_name: basketOrderInfo?.billingAddress?.firstName,
                 family_name: basketOrderInfo?.billingAddress?.lastName,
@@ -90,7 +111,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                 city: basketOrderInfo?.billingAddress?.city,
                 region: basketOrderInfo?.billingAddress?.state,
                 phone: basketOrderInfo?.billingAddress?.phoneNo,
-                country: basketOrderInfo?.billingAddress?.country || Cookies.get("Country") || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
+                country: basketOrderInfo?.billingAddress?.countryCode || Cookies.get("Country") || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
             },
             shipping_address: {
                 given_name: basketOrderInfo?.shippingAddress?.firstName,
@@ -103,16 +124,73 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                 city: basketOrderInfo?.shippingAddress?.city,
                 region: basketOrderInfo?.shippingAddress?.state,
                 phone: basketOrderInfo?.shippingAddress?.phoneNo,
-                country: basketOrderInfo?.shippingAddress?.country || Cookies.get("Country") || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
+                country: basketOrderInfo?.shippingAddress?.countryCode || Cookies.get("Country") || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
             },
-            customer: {
+            /*customer: {
                 //date_of_birth: ,
-            },
+            },*/
         };
+
+        uiContext?.setOverlayLoaderState({ visible: true, message: "Authorizing payment..." });
         Klarna.Payments.authorize({
             payment_method_category: PaymentGateway.KLARNA,
         }, authorizeInput, (authorizeResult: any) => {
-            if (authorizeResult?.approved && authorizeResult?.show_form) {
+            if (authorizeResult?.error?.invalid_fields?.length) {
+                uiContext?.hideOverlayLoaderState();
+            } else if (authorizeResult?.authorization_token) {
+
+                const { intent, ...rest } = orderInput;
+                const createOrderInput = {
+                    ...rest,
+                    billing_address: {
+                        given_name: basketOrderInfo?.billingAddress?.firstName,
+                        family_name: basketOrderInfo?.billingAddress?.lastName,
+                        email: basketOrderInfo?.user?.email || EmptyString,
+                        title: basketOrderInfo?.billingAddress?.title,
+                        street_address: basketOrderInfo?.billingAddress?.address1,
+                        street_address2: basketOrderInfo?.billingAddress?.address2,
+                        postal_code: basketOrderInfo?.billingAddress?.postCode,
+                        city: basketOrderInfo?.billingAddress?.city,
+                        region: basketOrderInfo?.billingAddress?.state,
+                        phone: basketOrderInfo?.billingAddress?.phoneNo,
+                        country: basketOrderInfo?.billingAddress?.countryCode || Cookies.get("Country") || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
+                    },
+                    shipping_address: {
+                        given_name: basketOrderInfo?.shippingAddress?.firstName,
+                        family_name: basketOrderInfo?.shippingAddress?.lastName,
+                        email: basketOrderInfo?.user?.email || EmptyString,
+                        title: basketOrderInfo?.shippingAddress?.title,
+                        street_address: basketOrderInfo?.shippingAddress?.address1,
+                        street_address2: basketOrderInfo?.shippingAddress?.address2,
+                        postal_code: basketOrderInfo?.shippingAddress?.postCode,
+                        city: basketOrderInfo?.shippingAddress?.city,
+                        region: basketOrderInfo?.shippingAddress?.state,
+                        phone: basketOrderInfo?.shippingAddress?.phoneNo,
+                        country: basketOrderInfo?.shippingAddress?.countryCode || Cookies.get("Country") || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
+                    },
+                    authorizationToken: authorizeResult?.authorization_token,
+                    /*merchant_urls: {
+                        confirmation: "",
+                        notification: "",
+                    },
+                    merchant_reference1: ,*/
+                };
+
+                createOneTimePaymentOrder(gatewayName, createOrderInput)
+                    .then((paymentOrderResult: any) => {
+                        if (paymentOrderResult?.order_id) {
+                            uiContext?.hideOverlayLoaderState();
+                            Router.push(`${returnUrl}?orderId=${paymentOrderResult?.order_id}&fraudStatus=${paymentOrderResult?.fraud_status}`);
+                        } else {
+                            uiContext?.hideOverlayLoaderState();
+                            dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+                        }
+                    }).catch((error: any) => {
+                        uiContext?.hideOverlayLoaderState();
+                        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+                    });
+
+            } else if (authorizeResult?.approved && authorizeResult?.show_form) {
             } else {
                 uiContext?.hideOverlayLoaderState();
                 //dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
@@ -141,7 +219,6 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                         formLoaded: true,
                     })
                     uiContext?.hideOverlayLoaderState();
-                    //console.debug(res);
                 });
             }, 300);
         } else {
@@ -164,8 +241,8 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                 purchase_country: Cookies.get("Country") || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
                 purchase_currency: orderResult?.currencyCode,
                 locale: Cookies.get("Language") || BETTERCOMMERCE_LANGUAGE || BETTERCOMMERCE_DEFAULT_LANGUAGE,
-                order_amount: parseFloat(orderResult?.grandTotal?.raw?.withoutTax?.toFixed(2)),
-                order_tax_amount: parseFloat(orderResult?.grandTotal?.raw?.tax?.toFixed(2)),
+                order_amount: parseFloat(orderResult?.grandTotal?.raw?.withTax?.toFixed(2)), // parseFloat(orderResult?.grandTotal?.raw?.withoutTax?.toFixed(2)),
+                order_tax_amount: 0, //parseFloat(orderResult?.grandTotal?.raw?.tax?.toFixed(2)),
                 order_lines: [{
                     type: "physical",
                     reference: `Order ${orderId} for basket ${orderResult?.basketId} OrderPaymentId ${getOrderId(orderInfo?.order)}`,
@@ -173,11 +250,11 @@ export class KlarnaPaymentButton extends BasePaymentButton {
 
                     // Quantity field contains sum of item quantities.
                     quantity: orderResult?.items?.map((x: any) => x?.qty)?.reduce((sum: number, current: number) => sum + current, 0),
-                    unit_price: parseFloat(orderResult?.grandTotal?.raw?.withoutTax?.toFixed(2)),
-                    tax_rate: parseFloat((((orderResult?.grandTotal?.raw?.withTax - orderResult?.grandTotal?.raw?.withoutTax) / orderResult?.grandTotal?.raw?.withTax) * 100.0).toFixed(2)),
+                    unit_price: parseFloat(orderResult?.grandTotal?.raw?.withTax?.toFixed(2)), //parseFloat(orderResult?.grandTotal?.raw?.withoutTax?.toFixed(2)),
+                    tax_rate: 0, //parseFloat((((orderResult?.grandTotal?.raw?.withTax - orderResult?.grandTotal?.raw?.withoutTax) / orderResult?.grandTotal?.raw?.withTax) * 100.0).toFixed(2)),
                     total_amount: parseFloat(orderResult?.grandTotal?.raw?.withTax?.toFixed(2)),
                     total_discount_amount: 0,
-                    total_tax_amount: parseFloat(orderResult?.grandTotal?.raw?.tax?.toFixed(2)),
+                    total_tax_amount: 0, //parseFloat(orderResult?.grandTotal?.raw?.tax?.toFixed(2)),
                     image_url: orderResult?.items?.length ? `${window.location.origin}/product/${orderResult?.items[0]?.slug}` : EmptyString,
                     product_url: orderResult?.items?.length ? `${window.location.origin}/product/${orderResult?.items[0]?.slug}` : EmptyString,
                 }],
@@ -198,8 +275,6 @@ export class KlarnaPaymentButton extends BasePaymentButton {
      * @returns {React.JSX.Element}
      */
     public render() {
-        const { basketOrderInfo } = this.props;
-        console.log(basketOrderInfo);
         let that = this;
         return (
             <>

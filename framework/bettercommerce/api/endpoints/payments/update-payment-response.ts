@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 // Other Imports
 import { logPaymentRequest } from "@framework/utils/app-util";
 import { LOG_REQUEST_OPTIONS } from "@components/utils/payment-constants";
-import { BCEnvironment, CommerceOperation } from "@better-commerce/bc-payments-sdk";
+import { BCEnvironment, BetterCommerceOperation } from "@better-commerce/bc-payments-sdk";
 import { CLIENT_ID, SHARED_SECRET } from "@framework/utils/constants";
 
 const logId = "Payments | UpdatePaymentResponse";
@@ -30,7 +30,7 @@ export default async function useUpdatePaymentResponse({ data, config, cookies, 
 
         BCEnvironment.init(CLIENT_ID || "", SHARED_SECRET || "", config);
         console.log("UpdatePaymentResponse params", params);
-        const paymentResponseResult = await new CommerceOperation().processPayment(params);
+        const paymentResponseResult = await new BetterCommerceOperation().processPayment(params);
 
         logData = {};
         logData["response"] = paymentResponseResult;
