@@ -29,7 +29,6 @@ export default async function useUpdatePaymentResponse({ data, config, cookies, 
         }, `${logId} Request`);
 
         BCEnvironment.init(CLIENT_ID || "", SHARED_SECRET || "", config);
-        console.log("UpdatePaymentResponse params", params);
         const paymentResponseResult = await new BetterCommerceOperation().processPayment(params);
 
         logData = {};
