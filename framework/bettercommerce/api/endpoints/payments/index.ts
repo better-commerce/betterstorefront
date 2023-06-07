@@ -48,9 +48,9 @@ export default async function useBCPayments({ data = {}, params = {}, headers, c
                     break;
             }
 
-            if (response) {
-                return isSecured ? encrypt(JSON.stringify(response)) : JSON.stringify(response);
-            }
+            //if (response) {
+            return isSecured ? encrypt(JSON.stringify(response)) : JSON.stringify(response);
+            //}
         }
     } catch (error: any) {
         console.log(error);
