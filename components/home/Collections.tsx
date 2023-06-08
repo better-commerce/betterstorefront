@@ -13,10 +13,10 @@ export default function Collections({ data }: any) {
             </Link>
           </div>
           <div className='flex flex-col w-full px-0 py-2 text-left'>
-            <h3 className='mt-3 mb-2 text-xl font-bold text-black'>{collection?.collectionlist_title}</h3>
-            <div dangerouslySetInnerHTML={{ __html: collection.collectionlist_shortdescription, }} className="mb-3 text-sm font-normal text-gray-600 h-14" />
+            <h4 className='mt-3 mb-2 font-bold text-black'>{collection?.collectionlist_title}</h4>
+            <div dangerouslySetInnerHTML={{ __html: collection.collectionlist_shortdescription, }} className="mb-3 font-normal text-gray-600 h-14" />
             <Link href={collection?.collectionlist_link} title="Shop Now" passHref legacyBehavior>
-              <a className='px-4 py-2 text-lg font-medium text-center text-black bg-transparent border border-black hover:bg-gray-100 hover:shadow-md hover:border-gray-400'>
+              <a className='px-4 py-2 text-lg font-medium text-center border btn-default'>
                 Shop Now
               </a>
             </Link>

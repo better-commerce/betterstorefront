@@ -61,7 +61,7 @@ export default function PaymentMethods({
               ) : null}
             </div>
             <div>
-              <h3 className="font-bold uppercase text-md">{item.displayName}</h3>
+              <h4 className="font-bold uppercase">{item.displayName}</h4>
               <p className="text-sm py-2 text-gray-400">{item.description}</p>
             </div>
           </li>

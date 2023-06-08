@@ -1,0 +1,383 @@
+@tailwind base;
+@import './base.css';
+
+@tailwind components;
+
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Black.woff2') format('woff2'),
+    url('../font/Urbanist-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraLight.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Italic.woff2') format('woff2'),
+    url('../font/Urbanist-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraBoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-BlackItalic.woff2') format('woff2'),
+    url('../font/Urbanist-BlackItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Light.woff2') format('woff2'),
+    url('../font/Urbanist-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-BoldItalic.woff2') format('woff2'),
+    url('../font/Urbanist-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraBold.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraBold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraLightItalic.woff') format('woff');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Bold.woff2') format('woff2'),
+    url('../font/Urbanist-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-SemiBold.woff2') format('woff2'),
+    url('../font/Urbanist-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
+    url('../font/Urbanist-SemiBoldItalic.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Regular.woff2') format('woff2'),
+    url('../font/Urbanist-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ThinItalic.woff2') format('woff2'),
+    url('../font/Urbanist-ThinItalic.woff') format('woff');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-MediumItalic.woff2') format('woff2'),
+    url('../font/Urbanist-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-LightItalic.woff2') format('woff2'),
+    url('../font/Urbanist-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Medium.woff2') format('woff2'),
+    url('../font/Urbanist-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Thin.woff2') format('woff2'),
+    url('../font/Urbanist-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-16);
+}
+
+h1 {
+  font-size: var(--font-48);
+}
+
+h2 {
+  font-size: var(--font-44);
+}
+
+h3 {
+  font-size: var(--font-36);
+}
+
+h4 {
+  font-size: var(--font-20);
+}
+
+h5 {
+  font-size: var(--font-16);
+}
+
+h6 {
+  font-size: var(--font-16);
+}
+
+p {
+  font-size: var(--font-14);
+}
+
+.primary-text-color {
+  color: #000;
+}
+
+.bg-header-color {
+  background: var(--bg-header-color);
+}
+
+.text-header-clr {
+  color: var(--text-header-clr);
+}
+
+.text-hover-clr {
+  color: var(--text-hover-clr);
+}
+
+.border-hover-clr {
+  border-color: var(--border-hover-clr);
+}
+
+.bg-footer-color {
+  background: var(--bg-footer-color);
+}
+
+.text-footer-clr {
+  color: var(--text-footer-clr);
+}
+
+/* button  css start */
+.btn-primary {
+  background: var(--btn-bg-primary);
+  color: var(--btn-text-color-primary);
+  font-size: var(--font-18);
+}
+
+.btn-primary:hover {
+  background: var(--btn-bg-hover-primary);
+  color: var(--btn-hover-text-color-primary);
+}
+
+.btn-default {
+  background: var(--btn-bg-default);
+  color: var(--btn-text-color-default);
+  border: 2px solid var(--btn-text-color-default);
+  border-color: var(--btn-border-clr-default);
+  font-size: var(--font-18);
+}
+
+.btn-default:hover {
+  background: var(--btn-bg-hover-default);
+  color: var(--btn-hover-text-color-default);
+  border-color: var(--btn-hover-border-clr-default);
+}
+
+.btn-primary-red {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-bg-red);
+  border-radius: 4px;
+  color: var(--btn-text-color-red);
+  border: 2px solid var(--btn-border-red);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-primary-red:hover {
+  background: var(--btn-bg-hover-red);
+  color: var(--btn-hover-text-color-red);
+  border: 2px solid var(--btn-border-hover-red);
+}
+
+.btn-primary-blue {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-bg-blue);
+  border-radius: 4px;
+  color: var(--btn-text-color-blue);
+  border: 2px solid var(--btn-border-blue);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-primary-blue:hover {
+  background: var(--btn-bg-hover-blue);
+  color: var(--btn-hover-text-color-blue);
+  border: 2px solid var(--btn-border-hover-blue);
+}
+
+.btn-primary-teal {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-bg-teal);
+  border-radius: 4px;
+  color: var(--btn-text-color-teal);
+  border: 2px solid var(--btn-border-teal);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-primary-teal:hover {
+  background: var(--btn-bg-hover-teal);
+  color: var(--btn-hover-text-color-teal);
+  border: 2px solid var(--btn-border-hover-teal);
+}
+
+.btn-primary-white {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-bg-white);
+  border-radius: 4px;
+  color: var(--btn-text-color-white);
+  border: 2px solid var(--btn-border-white);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-primary-white:hover {
+  background: var(--btn-bg-hover-white);
+  color: var(--btn-hover-text-color-white);
+  border: 2px solid var(--btn-border-hover-white);
+}
+
+.btn-default-red {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-d-bg-red);
+  border-radius: 4px;
+  color: var(--btn-d-text-color-red);
+  border: 2px solid var(--btn-d-border-red);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-default-red:hover {
+  background: var(--btn-d-bg-hover-red);
+  color: var(--btn-d-hover-text-color-red);
+  border: 2px solid var(--btn-d-border-hover-red);
+}
+
+.btn-default-blue {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-d-bg-blue);
+  border-radius: 4px;
+  color: var(--btn-d-text-color-blue);
+  border: 2px solid var(--btn-d-border-blue);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-default-blue:hover {
+  background: var(--btn-d-bg-hover-blue);
+  color: var(--btn-d-hover-text-color-blue);
+  border: 2px solid var(--btn-d-border-hover-blue);
+}
+
+.btn-default-teal {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-d-bg-teal);
+  border-radius: 4px;
+  color: var(--btn-d-text-color-teal);
+  border: 2px solid var(--btn-d-border-teal);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-default-teal:hover {
+  background: var(--btn-d-bg-hover-teal);
+  color: var(--btn-d-hover-text-color-teal);
+  border: 2px solid var(--btn-d-border-hover-teal);
+}
+
+/* button  css End */
