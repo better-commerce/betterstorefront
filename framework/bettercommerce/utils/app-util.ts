@@ -1,9 +1,11 @@
 // Package Imports
+import Cookies from "js-cookie";
 import { v4 as uuid } from "uuid";
 
 // Other Imports
 import { decrypt, encrypt } from "./cipher";
 import fetcher from "@framework/fetcher";
+import setSessionIdCookie from "@components/utils/setSessionId";
 import { EmptyGuid, INFRA_LOG_ENDPOINT, PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS } from "@components/utils/constants";
 import { stringToBoolean, tryParseJson } from "./parse-util";
 import { ILogRequestParams } from "@framework/api/operations/log-request";
@@ -46,6 +48,16 @@ export const sanitizeBase64 = (base64: string) => {
     return base64?.replace("data:image/png;base64,", "")?.replace("data:image/jpeg;base64,", "");
   }
   return "";
+};
+
+export const resetBasket = async (setBasketId: any, generateBasketId: any) => {
+  Cookies.remove('sessionId');
+  setSessionIdCookie();
+  Cookies.remove('basketId');
+  const generatedBasketId = generateBasketId();
+  if (setBasketId) {
+    setBasketId(generatedBasketId);
+  }
 };
 
 export const parsePaymentMethodConfig = (configSettings: any, isSecured: boolean) => {

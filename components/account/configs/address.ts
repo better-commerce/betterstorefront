@@ -101,6 +101,25 @@ export const formConfig = [
     label: GENERAL_IS_DEFAULT_BILLING_ADDRESS,
     className: 'flex-inline',
   },
+  {
+    as: 'select',
+    name: 'label',
+    options: [
+      {
+        title: "Home",
+        value: "Home",
+      },
+      {
+        title: "Work",
+        value: "Work",
+      },
+      {
+        title: "Other",
+        value: "Other",
+      },
+    ],
+    label: "Save As",
+  },
 ]
 
 export const schema = Yup.object({
@@ -116,4 +135,5 @@ export const schema = Yup.object({
   isDefaultDelivery: Yup.boolean(),
   isDefaultBilling: Yup.boolean(),
   isDefaultSubscription: Yup.boolean(),
+  label:Yup.string().nullable()
 })

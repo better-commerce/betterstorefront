@@ -351,3 +351,5 @@ export const ITEM_CANCELLED = "Item Cancelled Successfully"
 export const PROCEED_TO_CANCEL = "Proceed to Cancel"
 // PLP Filters
 export const FILTER_TITLE = 'Filter & Sorting'
+export const CHANGE_SIZE = "Change Size"
+export const LOGOUT = "Logout Successful"
