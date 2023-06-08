@@ -24,7 +24,7 @@ export default function CurrencySwitcher({ config, title, action }: any) {
             {({ active }) => {
               return (
                 <>
-                  <h3 className="p-2 font-bold text-left">{title}</h3>
+                  <h5 className="p-2 font-bold text-left">{title}</h5>
                   {config.map((item: any, idx: number) => {
                     return (
                       <div key={'language' + idx} className={'text-left p-2 cursor-pointer hover:bg-gray-200'} onClick={() => { Cookies.set('googtrans', `/en/${item.languageCode}`); action({ Language: item.languageCode }) }}>

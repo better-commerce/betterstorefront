@@ -138,9 +138,9 @@ export default function AvailableOffers({ currency, offers }: any) {
                                             >
                                                 <div className="relative h-full group">
                                                     <div className="h-full p-2 bg-transparent border cursor-pointer promo-bg sm:p-3">
-                                                        <h3 className="text-sm font-bold text-left text-black uppercase break-word-text">
+                                                        <h6 className="font-bold text-left text-black uppercase break-word-text">
                                                             {saving.name}
-                                                        </h3>
+                                                        </h6>
                                                         {saving?.promoType == 1 && (
                                                             <span>
                                                                 {saving.additionalInfo2 == 'False' ||

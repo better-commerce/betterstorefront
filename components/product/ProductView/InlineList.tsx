@@ -119,8 +119,8 @@ export default function InlineList({
 
   return (
     <>
-      <div className="flex">
-      <h3 className="text-gray-700 text-ms">{GENERAL_COLOUR} :</h3>
+      <div className="flex items-center">
+      <h4 className="text-gray-700">{GENERAL_COLOUR} :</h4>
       {validation ? <span className='pl-1 font-light text-gray-700 text-ms dark:text-gray-700'>{colorName}</span> : <span className='pl-1 text-sm font-bold text-gray-400'>--</span> }
         {/* <h3 className='px-2' >{color}</h3>
       <div style={{ color: `${color}` }}></div> */}
