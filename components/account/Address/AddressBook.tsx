@@ -160,7 +160,7 @@ export default function AddressBook() {
               setNewFormMode(true)
               window.scrollTo(0, 0)
             }}
-            className="max-w-xs flex-1 bg-black border border-transparent py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
+            className="max-w-xs flex-1  border border-transparent py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
           >
             {ADD_ADDRESS}
           </button>
