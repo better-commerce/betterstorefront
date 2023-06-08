@@ -231,7 +231,7 @@ export default function ContactPreferences() {
             <Button
             type="submit"
             onClick={handleSubmit}
-            className="!font-bold  !py-3"
+            className="!font-bold  !py-3 btn-c btn-primary"
             loading={isSubmitting}
             disabled={isSubmitting}
           >
