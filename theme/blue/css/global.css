@@ -173,11 +173,11 @@ body {
 }
 
 h1 {
-  font-size: var(--font-48);
+  font-size: var(--font-36);
 }
 
 h2 {
-  font-size: var(--font-44);
+  font-size: var(--font-32);
 }
 
 h3 {
@@ -193,7 +193,7 @@ h5 {
 }
 
 h6 {
-  font-size: var(--font-16);
+  font-size: var(--font-14);
 }
 
 p {

@@ -178,7 +178,7 @@ function Cart({ cart }: any) {
         <meta property="og:description" content="Basket" key="ogdesc" />
       </NextHead>
       <div className="container w-full px-4 mx-auto mt-6 bg-white sm:px-6 sm:mt-10">
-        <h1 className="relative text-2xl font-semibold tracking-tight text-black uppercase sm:text-2xl">
+        <h1 className="relative font-semibold tracking-tight text-black uppercase">
           {GENERAL_SHOPPING_CART} <span className='absolute pl-2 text-sm font-normal text-gray-400 top-2'>{userCart?.lineItems?.length} Items added</span>
         </h1>
         {!isEmpty && (
@@ -254,7 +254,7 @@ function Cart({ cart }: any) {
               ))}
             </section>
             <section aria-labelledby="summary-heading" className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-20 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5">
-              <h2 id="summary-heading" className="mb-1 text-xl font-semibold text-black uppercase">{GENERAL_ORDER_SUMMARY}</h2>
+              <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase">{GENERAL_ORDER_SUMMARY}</h4>
               <div className="mt-4 lg:-mb-3">
                 <Disclosure defaultOpen={true}>
                   {({ open }) => (
@@ -319,7 +319,7 @@ function Cart({ cart }: any) {
                 <Link href="/checkout">
                   <button
                     type="submit"
-                    className="w-full px-4 py-3 font-medium text-center text-white uppercase bg-black border border-transparent rounded-sm shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black"
+                    className="w-full px-4 py-3 font-medium text-center text-white uppercase btn-primary"
                   >
                     {BTN_PLACE_ORDER}
                   </button>

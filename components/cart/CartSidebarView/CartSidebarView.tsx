@@ -729,11 +729,11 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                     <div className="flex flex-col flex-1 ml-4">
                                       <div>
                                         <div className="flex justify-between font-semibold text-gray-900 font-sm">
-                                          <h3 onClick={handleClose}>
+                                          <h5 onClick={handleClose}>
                                             <Link href={`/${product.slug}`}>
                                               {product.name}
                                             </Link>
-                                          </h3>
+                                          </h5>
                                           <p className="ml-4">
                                             {product.price?.formatted?.withTax}
                                           </p>

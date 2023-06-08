@@ -648,7 +648,7 @@ export default function ProductView({
             </div>
           </div>
 
-          <h1 className="text-lg font-medium tracking-tight text-black sm:text-2xl">{selectedAttrData.name || selectedAttrData.productName}</h1>
+          <h1 className="font-medium tracking-tight text-black">{selectedAttrData.name || selectedAttrData.productName}</h1>
           <p className="mt-0 text-sm text-black uppercase sm:text-xs sm:mt-1"><strong>{GENERAL_REFERENCE}:</strong>{' '}{selectedAttrData.stockCode}</p>
           <div className="my-4">
             <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>

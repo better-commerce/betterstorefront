@@ -23,7 +23,7 @@ export default function CurrencySwitcher({ config = [], title, action }: any) {
           <Menu.Item>
             {({ active }) => (
               <>
-                <h3 className="p-2 font-bold text-left">{title}</h3>
+                <h5 className="p-2 font-bold text-left">{title}</h5>
                 {config.map((item: any, idx: number) => (
                   <div key={'currency' + idx} className={'text-left p-2 cursor-pointer hover:bg-gray-200'} onClick={() => action({ Currency: item.currencyCode })}>
                     {item.currencyCode} - {item.currencySymbol}
