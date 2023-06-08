@@ -1,16 +1,29 @@
+// Base Imports
 import { useEffect, useState } from 'react'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import Button from '@components/ui/IndigoButton'
+
+// Component Imports
+import PaymentButton from './PaymentButton'
+
+// Other Imports
 import { GENERAL_CONFIRM } from '@components/utils/textVariables'
-import getStripe from '@components/utils/get-stripe'
+import { IDispatchState } from './PaymentButton/BasePaymentButton'
+
+interface IPaymentMethodsProps {
+  readonly paymentData: Function;
+  readonly basketOrderInfo?: any;
+  readonly selectedPaymentMethod: any;
+}
 
 export default function PaymentMethods({
   paymentData,
-  handlePaymentMethod,
+  basketOrderInfo,
   selectedPaymentMethod,
-}: any) {
+  uiContext,
+  dispatchState,
+}: IPaymentMethodsProps & IDispatchState) {
   const [methods, setPaymentMethods] = useState([])
-  const [activePaymentMethod, setActivePaymentMethod] = useState({ id: null })
+  const [activePaymentMethod, setActivePaymentMethod] = useState<any>({ id: null })
   useEffect(() => {
     paymentData()
       .then((response: any) => {
@@ -26,9 +39,8 @@ export default function PaymentMethods({
           <li
             key={idx}
             onClick={() => setActivePaymentMethod(item)}
-            className={`${
-              activePaymentMethod.id === item.id ? 'border-black border-t-2 border-2' : 'border-t border border-gray-300'
-            }  pointer mb-2 py-5 px-5 flex justify-start flex-row`}
+            className={`${activePaymentMethod.id === item.id ? 'border-black border-t-2 border-2' : 'border-t border border-gray-300'
+              }  pointer mb-2 py-5 px-5 flex justify-start flex-row`}
           >
             <div className="flex flex-row justify-center items-center">
               {activePaymentMethod.id === item.id ? (
@@ -56,12 +68,14 @@ export default function PaymentMethods({
         )
       })}
       {activePaymentMethod.id &&
-      selectedPaymentMethod?.id !== activePaymentMethod.id ? (
+        selectedPaymentMethod?.id !== activePaymentMethod.id ? (
         <div className="py-5 flex justify-center w-full">
-          <Button
-            buttonType="button"
-            action={async () => handlePaymentMethod(activePaymentMethod)}
-            title={GENERAL_CONFIRM}
+          <PaymentButton
+            btnTitle={GENERAL_CONFIRM}
+            paymentMethod={activePaymentMethod}
+            basketOrderInfo={basketOrderInfo}
+            uiContext={uiContext}
+            dispatchState={dispatchState}
           />
         </div>
       ) : null}

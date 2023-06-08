@@ -49,6 +49,7 @@ export const LOQATE_ADDRESS = '/api/loqate'
 export const RETRIEVE_ADDRESS = '/api/retrieve-address'
 export const PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/`
 export const PRODUCT_PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/product-promotions`
+export const INFRA_LOG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/log`
 
 //LOCAL ENDPOINTS 
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
@@ -80,6 +81,7 @@ export const NEXT_EDIT_ADDRESS = `/api/customer/edit-address`
 export const NEXT_CREATE_ADDRESS = `/api/customer/create-address`
 export const NEXT_DELETE_ADDRESS = `/api/customer/delete-address`
 
+export const NEXT_GET_ORDER = `/api/order/order-details`;
 export const NEXT_CANCEL_REASON = `/api/cancel-reason`
 export const NEXT_CANCEL_ORDER = `/api/order/cancel`
 export const NEXT_CANCEL_ORDER_LINE = `/api/order/cancel-order-line`;
@@ -106,12 +108,14 @@ export const NEXT_CONFIRM_ORDER = '/api/confirm-order'
 export const NEXT_INFRA_ENDPOINT = '/api/infra'
 export const NEXT_SET_CONFIG = '/api/set-config'
 export const NEXT_POST_PAYMENT_RESPONSE = '/api/payment-response'
+export const NEXT_POST_PAYMENT_RESPONSE_V2 = '/api/payment-response-v2'
 export const NEXT_FORGOT_PASSWORD = '/api/customer/forgot-password'
 export const NEXT_RESET_PASSWORD = '/api/customer/reset-password'
 export const NEXT_VALIDATE_TOKEN = '/api/customer/validate-token'
 export const NEXT_GET_RETURN_DATA = '/api/return/get-return-data'
 export const NEXT_CREATE_RETURN_DATA = '/api/return/create'
 export const NEXT_GET_RETURNS = '/api/return/get-user-returns'
+export const PAYMENTS_API = `/api/payments`;
 //CONSTANTS
 
 export const NEXT_GET_PRODUCT_QUICK_VIEW = "/api/catalog/get-product-quick-view"
@@ -128,8 +132,6 @@ export const SHIPPING_ACTION_TYPES_MAP = {
   ACTIVE_SHIPPING_METHODS: 'ACTIVE_SHIPPING_METHODS',
 }
 
-export const STRIPE_CHECKOUT_SESSION = '/api/payments/stripe-checkout-session'
-
 export const NEXT_GEO_ENDPOINT =
   process.env.NEXT_PUBLIC_GEO_ENDPOINT ||
   'https://omnilytics.bettercommerce.io/api/v1/IpInfo?ipAddress='
@@ -142,14 +144,19 @@ export const NEXT_PUBLIC_API_CACHING_LOG_ENABLED = process.env.NEXT_PUBLIC_API_C
 export const BETTERCOMMERCE_DEFAULT_CURRENCY = process.env.BETTERCOMMERCE_DEFAULT_CURRENCY;
 export const BETTERCOMMERCE_DEFAULT_LANGUAGE = process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE;
 export const BETTERCOMMERCE_DEFAULT_COUNTRY = process.env.BETTERCOMMERCE_DEFAULT_COUNTRY;
+export const BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE = process.env.BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE;
 
 // Override currency, language & country settings ONLY FOR specific storefronts WHEREVER REQUIRED.
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY;
 export const BETTERCOMMERCE_LANGUAGE = process.env.BETTERCOMMERCE_LANGUAGE;
 export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY;
 export const SHOW_APPLY_COUPON_SECTION = true;
+export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 export const SITE_ORIGIN_URL = process.env.SITE_ORIGIN_URL;
 export const SITE_NAME = process.env.SITE_NAME;
+export const ENABLE_SECURED_PAYMENT_PAYLOAD = stringToBoolean(process.env.ENABLE_SECURED_PAYMENT_PAYLOAD);
+export const SECURE_PAYMENT_METHODS_SETTINGS_FIELDS = stringToBoolean(process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS);
+export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS = process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS;
 
 export module Messages {
 
@@ -262,6 +269,7 @@ export module Messages {
     "CART_EMPTY": "Your cart is empty",
     "CART_ITEM_QTY_LIMIT_EXCEEDED": "Max allowed quantity is 5.",
     "BASKET_VALIDATION_FAILED": "Basket validation failed",
+    "YourBag.Links.EmptyBag": "Payment for your basket is already completed.",
   };
 }
 
@@ -272,6 +280,7 @@ export const DATE_FORMAT = "DD-MMM-yy";
 export const DATE_TIME_FORMAT = "DD-MMM-yy HH:mm";
 export const PRODUCTS_SLUG_PREFIX = "products/";
 export const EmptyGuid = "00000000-0000-0000-0000-000000000000";
+export const EmptyString = "";
 export const collectionSlug = "you-may-also-like";
 export const CLOTH_SIZE_ATTRIB_NAME = "clothing.size"
 export const CLOTH_COLOUR_ATTRIB_NAME = "global.colour"

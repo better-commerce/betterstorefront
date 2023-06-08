@@ -2,6 +2,7 @@ import "@assets/css/base.css"
 import "@assets/css/main.css"
 import '@assets/icon.css'
 import "@assets/css/chrome-bug.css"
+import "@assets/css/checkout-frame.css"
 import { FC, useEffect, useState } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
@@ -24,6 +25,7 @@ import analytics from '@components/services/analytics/analytics'
 import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import OverlayLoader from "@components/common/OverlayLoader";
 import { resetSnippetElements } from "@framework/content/use-content-snippet"
 import { ContentSnippet } from "@components/common/Content"
 import NextHead from 'next/head'
@@ -256,6 +258,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
           keywords={keywordsData}
           deviceInfo={deviceInfo}
         >
+          <OverlayLoader />
           <Component
             {...pageProps}
             location={location}
