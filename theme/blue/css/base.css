@@ -68,7 +68,7 @@
   --brand-red: #FF3600;
   --web-red: #DF340C;
   --barnd-blue: #212530;
-  --web-blue: #212530;
+  --web-blue: #252E47;
   --brand-white: #fff;
   --web-white: #F8F8F8;
   --tan-clr: #F3EDE3;
@@ -162,9 +162,57 @@
   --btn-d-border-hover-teal: #345662;
   /* button default blue variable */
 
+  /* label primary red variable */
+  --label-bg-red: #DF340C;
+  --label-text-clr-red: #fff;
+  --label-border-red: #DF340C;
+  /* label primary red variable */
+
+  /* label primary blue variable */
+  --label-bg-blue: #212530;
+  --label-text-clr-blue: #fff;
+  --label-border-blue: #212530;
+  /* label primary blue variable */
+
+  /* label primary white variable */
+  --label-bg-white: #fff;
+  --label-text-clr-white: #212530;
+  --label-border-white: #212530;
+  /* label primary white variable */
+
+  /* label primary tan variable */
+  --label-bg-tan: #F3EDE3;
+  --label-text-clr-tan: #212530;
+  --label-border-tan: #F3EDE3;
+  /* label primary tan variable */
+
+  /* label primary yellow variable */
+  --label-bg-yellow: #FCD673;
+  --label-text-clr-yellow: #212530;
+  --label-border-yellow: #FCD673;
+  /* label primary tan variable */
+
+  /* label default red variable */
+  --label-d-bg-red: #fff;
+  --label-d-text-clr-red: #DF340C;
+  --label-d-border-red: #DF340C;
+  /* label default red variable */
+
+  /* label default blue variable */
+  --label-d-bg-blue: #fff;
+  --label-d-text-clr-blue: #212530;
+  --label-d-border-blue: #212530;
+  /* label default blue variable */
+
+  /* label default white variable */
+  --label-d-bg-white: #212530;
+  --label-d-text-clr-white: #fff;
+  --label-d-border-white: #fff;
+  /* label default white variable */
+
   /* Header variable */
   --bg-header-color: #fff;
-  --text-header-clr: #000;
+  --text-header-clr: #2e2929;
   --text-hover-clr: #000;
   --border-hover-clr: #000;
   /* footer variable */
