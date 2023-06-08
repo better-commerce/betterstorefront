@@ -297,6 +297,8 @@ export const GENERAL_SUMMARY = 'Summary'
 export const VALIDATION_YOU_ARE_ALREADY_LOGGED_IN = "You're already logged in"
 export const VALIDATION_NO_ACCOUNT_FOUND =
   'No account has been found with this email/password'
+export const VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP =
+  'No account has been found with this mobile'
 export const VALIDATION_ENTER_A_VALID_EMAIL = 'Please enter a valid email'
 export const VALIDATION_EMAIL_ALREADY_IN_USE = 'This email is already in use'
 export const BTN_REGISTER_FOR_FREE = 'Register for free'
