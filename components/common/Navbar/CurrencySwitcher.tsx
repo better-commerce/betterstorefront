@@ -8,7 +8,7 @@ export default function CurrencySwitcher({ config = [], title, action }: any) {
     <Menu as="div" className="relative flow-root w-10 px-1 text-left sm:w-16">
       <Menu.Button className="grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center" aria-label="Currency">
         <CurrencyDollarIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="Currency" />
-        <span className='hidden text-sm font-normal text-black sm:block'>Currency</span>
+        <span className='hidden text-sm font-normal text-black sm:block text-header-clr'>Currency</span>
       </Menu.Button>
       <Transition
         as={Fragment}
