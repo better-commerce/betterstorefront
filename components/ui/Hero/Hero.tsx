@@ -40,13 +40,13 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
                   <Image
                     priority
                     src={
-                      generateUri(banner?.url, 'h=800&fm=webp') || IMG_PLACEHOLDER
+                      generateUri(banner?.url, 'h=600&fm=webp') || IMG_PLACEHOLDER
                     }
                     alt={banner?.alt}
                     style={css}
-                    width={2000}
-                    height={1000}
-                    quality="100"
+                    width={1903}
+                    height={761}
+                    quality="60"
                     className='sm:max-h-screen image banner-Image'></Image>
                   <div className='sr-only'>Banner Image</div>
                 </div>

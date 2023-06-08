@@ -324,3 +324,5 @@ export enum OrderStatus {
 export const PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES = process.env.PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES;
 export const PDP_REVIEW_NO_OF_IMAGES_ALLOWED = toNumber(process.env.PDP_REVIEW_NO_OF_IMAGES_ALLOWED);
 export const PDP_REVIEW_IMAGE_SIZE_IN_BYTES = toNumber(process.env.PDP_REVIEW_IMAGE_SIZE_IN_BYTES);
+
+export const SHORT_ALERT_TIMER = 2500
