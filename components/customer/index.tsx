@@ -109,7 +109,7 @@ export default function CustomerForm({
               <Button
                 type="submit"
                 onClick={handleSubmit}
-                className="!font-normal w-full border border-black"
+                className="!font-normal w-full border border-black btn-c btn-primary"
                 loading={isSubmitting}
                 disabled={isSubmitting}
               >

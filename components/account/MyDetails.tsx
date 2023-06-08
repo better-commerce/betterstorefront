@@ -130,7 +130,7 @@ export default function MyDetails() {
                     <Button
                       type="submit"
                       onClick={handleSubmit}
-                      className="link-button !py-3"
+                      className="link-button !py-3 btn-c btn-primary"
                       loading={isSubmitting}
                       disabled={isSubmitting}
                     >

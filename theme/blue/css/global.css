@@ -235,6 +235,17 @@ p {
   font-size: var(--font-18);
 }
 
+.btn-c.btn-primary {
+  background: var(--btn-bg-primary);
+  color: var(--btn-text-color-primary);
+  font-size: var(--font-18);
+}
+
+.btn-c.btn-primary:hover {
+  background: var(--btn-bg-hover-primary);
+  color: var(--btn-hover-text-color-primary);
+}
+
 .btn-primary:hover {
   background: var(--btn-bg-hover-primary);
   color: var(--btn-hover-text-color-primary);
