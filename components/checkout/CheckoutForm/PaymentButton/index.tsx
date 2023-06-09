@@ -9,9 +9,11 @@ import { MasterCardPaymentButton } from "./MasterCardPaymentButton";
 import { CheckoutPaymentButton } from "./CheckoutPaymentButton";
 import { StripePaymentButton } from "./StripePaymentButton";
 import { KlarnaPaymentButton } from "./KlarnaPaymentButton";
+import { ClearPayPaymentButton } from "./ClearPayPaymentButton";
 
 // Other Imports
 import { matchStrings } from "@framework/utils/parse-util";
+import { PaymentGateway } from "@components/utils/payment-constants";
 
 /**
  * Factory helper/renderer component for <PaymentButton>
@@ -22,16 +24,18 @@ const PaymentButton = (props: IPaymentButtonProps & IDispatchState) => {
     const { paymentMethod } = props;
 
     let Component: any;
-    if (matchStrings(paymentMethod?.systemName, "paypal", true)) {
+    if (matchStrings(paymentMethod?.systemName, PaymentGateway.PAYPAL, true)) {
         Component = PayPalPaymentButton;
-    } else if (matchStrings(paymentMethod?.systemName, "checkout", true)) {
+    } else if (matchStrings(paymentMethod?.systemName, PaymentGateway.CHECKOUT, true)) {
         Component = CheckoutPaymentButton;
-    } else if (matchStrings(paymentMethod?.systemName, "mastercard", true)) {
+    } else if (matchStrings(paymentMethod?.systemName, PaymentGateway.MASTER_CARD, true)) {
         Component = MasterCardPaymentButton;
-    } else if (matchStrings(paymentMethod?.systemName, "stripe", true)) {
+    } else if (matchStrings(paymentMethod?.systemName, PaymentGateway.STRIPE, true)) {
         Component = StripePaymentButton;
-    } else if (matchStrings(paymentMethod?.systemName, "klarna", true)) {
+    } else if (matchStrings(paymentMethod?.systemName, PaymentGateway.KLARNA, true)) {
         Component = KlarnaPaymentButton;
+    } else if (matchStrings(paymentMethod?.systemName, PaymentGateway.CLEAR_PAY, true)) {
+        Component = ClearPayPaymentButton;
     } else {
         Component = CODPaymentButton;
     }

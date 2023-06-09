@@ -25,7 +25,6 @@ export class StripePaymentButton extends BasePaymentButton {
             clientSecret: null,
             stripePromise: null,
             stripeOptions: null,
-            message: EmptyString,
         }
     }
 

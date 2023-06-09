@@ -130,13 +130,14 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@better-commerce/bc-payments-sdk@0.0.3":
-  version "0.0.3"
-  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.3/67e4ff9922a07dae3ae3db1f2ae0afcde753f34d"
-  integrity sha512-3jH2lsz4tzjFoKOfSq50UhrUGJUgy5vy6iAi096QY6bsGqyBFIaSU807Btct6Xh8LcgTKM+gn8hSLfXjZoQn9w==
+"@better-commerce/bc-payments-sdk@0.0.4":
+  version "0.0.4"
+  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.4/9b296238ea0b5e764edb1ae188342175eb05e682"
+  integrity sha512-DwF+2YX4a4dqywN1K645Cc4a4Sn9Cao+kxJ4z/HCoN9tGhYPsWvpGa0SwTteEyvv4U14lKeKP66x4pqybWvpqA==
   dependencies:
     axios "1.4.0"
     bc-checkout-sdk "0.0.2"
+    bc-clearpay-sdk "0.0.3"
     bc-klarna-sdk "0.0.4"
     bc-paypal-sdk "0.0.2"
     bc-stripe-sdk "0.0.3"
@@ -904,6 +905,13 @@ bc-checkout-sdk@0.0.2:
   integrity sha512-Z2ofeapaN/hiUAKdyLRO3zJkAnlbhqVJdtX7AHJypgz5o2LY1dK34QZZ087bKyEjlOqcR34h4CwONFm0lfl6Mw==
   dependencies:
     axios "^1.4.0"
+
+bc-clearpay-sdk@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/bc-clearpay-sdk/-/bc-clearpay-sdk-0.0.3.tgz"
+  integrity sha512-weo564ZHjqSWBumnS8IIH58O/Wqr6SZLJbxIYPrD6O9otiaCrKprq7LLojZqP5q0fJDdHQrv1wghm4TfTaWhfg==
+  dependencies:
+    axios "1.4.0"
 
 bc-klarna-sdk@0.0.4:
   version "0.0.4"
