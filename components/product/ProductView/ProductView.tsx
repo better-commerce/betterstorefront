@@ -55,6 +55,7 @@ import { getCurrentPage } from '@framework/utils/app-util'
 import { isMobile } from 'react-device-detect'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
+import ProductDescription from './ProductDescription'
 
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -760,6 +761,15 @@ export default function ProductView({
       <PriceMatch show={isPriceMatchModalShown} onClose={showPriceMatchModal} productName={product?.name} productImage={product?.images?.length ? product?.images[0]?.image : null}
         productId={product?.id} stockCode={product?.stockCode} ourCost={product?.price?.raw?.withTax} rrp={product?.listPrice?.raw?.withTax}
         ourDeliveryCost={product?.price?.raw?.tax} />
+
+      <div className="flex flex-col w-full">
+        <div className="flex flex-col">
+          <div className="section-devider"></div>
+        </div>
+        <div className='px-4 mx-auto sm:container page-container sm:px-6'>
+          <ProductDescription seoInfo={attrGroup} />
+        </div>
+      </div>
 
       {previewImg ? (
         <Transition.Root show={previewImg != undefined} as={Fragment}>
