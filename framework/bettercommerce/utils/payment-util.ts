@@ -27,15 +27,6 @@ export const getReferer = (origin: string) => {
     return referer;
 };
 
-export const createStorefrontOrder = async (data: any) => {
-    const { basketId } = data;
-    const { data: orderResponse }: any = await axios.post(NEXT_CONFIRM_ORDER, {
-        basketId,
-        model: data,
-    });
-    return orderResponse;
-};
-
 export const cancelStorefrontOrder = async (orderId: string) => {
     const { data: orderResponse }: any = await axios.post(NEXT_CANCEL_ORDER, {
         id: orderId,
@@ -87,6 +78,25 @@ export const getGatewayName = (id: number) => {
         return PaymentGateway.COD;
     }
     return -1;
+};
+
+export const convertOrder = async (data: any) => {
+    const { data: orderDetailResult } = await axios.post(PAYMENTS_API, // Endpoint url
+        ENABLE_SECURED_PAYMENT_PAYLOAD ? encrypt(JSON.stringify(data)) : JSON.stringify(data), // Data
+        {
+            params: { ...Payments.RequestParams.CONVERT_ORDER, },
+        }); // Params
+    return ENABLE_SECURED_PAYMENT_PAYLOAD
+        ? decipherPayload(orderDetailResult)
+        : tryParseJson(orderDetailResult);
+
+
+    /*const { basketId } = data;
+    const { data: orderResponse }: any = await axios.post(NEXT_CONFIRM_ORDER, {
+        basketId,
+        model: data,
+    });
+    return orderResponse;*/
 };
 
 export const initPayment = async (gatewayName: string, data: any) => {

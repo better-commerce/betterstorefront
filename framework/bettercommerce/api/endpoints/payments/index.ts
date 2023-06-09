@@ -5,53 +5,66 @@ import store from "store";
 import { BCPaymentEndpoint } from "./constants";
 import { encrypt } from "@framework/utils/cipher";
 import { getPaymentMethods } from "@framework/payment";
-import { parsePaymentMethodConfig } from "@framework/utils/app-util";
 import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY } from "@components/utils/constants";
 import { getGatewayName } from "@framework/utils/payment-util";
 import useUpdatePaymentResponse from "./update-payment-response";
 import useRequestPayment from "./request-payment";
 import useInitPayment from "./init-payment";
 import useOneTimePaymentOrder from "./create-one-time-payment-order";
+import useConvertOrder from "./convert-order";
 
 export default async function useBCPayments({ data = {}, params = {}, headers, cookies, origin }: any) {
     const { t: type, s: isSecured, gid: gatewayId } = params;
     let response = undefined;
+    let paymentConfig: any;
     try {
-        const paymentConfig = await getPaymentConfig({
-            paymentGateway: getGatewayName(gatewayId ? parseInt(gatewayId) : -1),
-            cookies,
-            origin,
-            isSecured,
-        });
 
-        if (paymentConfig) {
-            switch (type) {
-
-                // ------------------ Payments ------------------
-                case BCPaymentEndpoint.INIT_PAYMENT:
-                    response = await useInitPayment({ data, config: paymentConfig, cookies, });
-                    break;
-
-                case BCPaymentEndpoint.REQUEST_PAYMENT:
-                    response = await useRequestPayment({ data, config: paymentConfig, cookies, });
-                    break;
-
-                case BCPaymentEndpoint.CREATE_ONE_TIME_PAY_ORDER:
-                    response = await useOneTimePaymentOrder({ data, config: paymentConfig, cookies, });
-                    break;
-
-                case BCPaymentEndpoint.GET_ORDER_DETAILS:
-                    break;
-
-                case BCPaymentEndpoint.PAYMENT_RESPONSE:
-                    response = await useUpdatePaymentResponse({ data, config: paymentConfig, cookies, });
-                    break;
-            }
-
-            //if (response) {
-            return isSecured ? encrypt(JSON.stringify(response)) : JSON.stringify(response);
-            //}
+        if (gatewayId) {
+            paymentConfig = await getPaymentConfig({
+                paymentGateway: getGatewayName(gatewayId ? parseInt(gatewayId) : -1),
+                cookies,
+                origin,
+                isSecured,
+            });
         }
+
+        switch (type) {
+
+            // ------------------ Checkout ------------------
+            case BCPaymentEndpoint.CONVERT_ORDER:
+                response = await useConvertOrder({ data, config: paymentConfig, cookies, });
+                break;
+
+            case BCPaymentEndpoint.PAYMENT_RESPONSE:
+                if (paymentConfig) {
+                    response = await useUpdatePaymentResponse({ data, config: paymentConfig, cookies, });
+                }
+                break;
+
+            // ------------------ Payments ------------------
+            case BCPaymentEndpoint.INIT_PAYMENT:
+                if (paymentConfig) {
+                    response = await useInitPayment({ data, config: paymentConfig, cookies, });
+                }
+                break;
+
+            case BCPaymentEndpoint.REQUEST_PAYMENT:
+                if (paymentConfig) {
+                    response = await useRequestPayment({ data, config: paymentConfig, cookies, });
+                }
+                break;
+
+            case BCPaymentEndpoint.CREATE_ONE_TIME_PAY_ORDER:
+                if (paymentConfig) {
+                    response = await useOneTimePaymentOrder({ data, config: paymentConfig, cookies, });
+                }
+                break;
+        }
+
+        //if (response) {
+        return isSecured ? encrypt(JSON.stringify(response)) : JSON.stringify(response);
+        //}
+
     } catch (error: any) {
         console.log(error);
         return { hasError: true, error: error?.message }

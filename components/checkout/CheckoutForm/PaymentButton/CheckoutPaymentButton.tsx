@@ -196,7 +196,10 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                     !this.state.confirmed && (
                         this.baseRender({
                             ...this?.props, ...{
-                                onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => that.setState({ confirmed: true, }),
+                                onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => {
+                                    uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
+                                    that.setState({ confirmed: true, })
+                                },
                             }
                         })
                     )
