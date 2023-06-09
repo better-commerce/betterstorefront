@@ -28,16 +28,24 @@ export class CODPaymentButton extends BasePaymentButton {
      */
     private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
         uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
-        const orderResult = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState, true);
-        if (orderResult?.state) {
+        const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, dispatchState, true);
+        if (orderResult?.success && orderResult?.result?.id) {
             uiContext?.hideOverlayLoaderState();
-            dispatchState(orderResult?.state);
+
+            if (state) {
+                dispatchState(state);
+            }
+
             this.setState({
                 isPaymentInitiated: true,
             });
         } else {
             uiContext?.hideOverlayLoaderState();
-            dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            if (state) {
+                dispatchState(state);
+            } else {
+                dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            }
         }
     }
 
