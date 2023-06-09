@@ -93,7 +93,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, pdpLookbookProducts, pdpCachedImages,reviews }: any) {
+function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo }: any) {
   const router = useRouter()
   return router.isFallback ? (
     <h1>{LOADER_LOADING}</h1>
@@ -110,6 +110,7 @@ function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabel
         pdpLookbookProducts={pdpLookbookProducts}
         pdpCachedImages={pdpCachedImages}
         reviews={reviews}
+        deviceInfo={deviceInfo}
       />
     )
   )

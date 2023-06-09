@@ -32,7 +32,7 @@ export default function Account({ config, title, deviceInfo }: any) {
     <Menu as="div" className="relative flow-root w-10 px-1 text-left sm:w-16">
       <Menu.Button className="grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center" aria-label="My Account" onClick={() => setLoginAttempt()}>
         <UserIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="My Account" />
-        <span className="hidden text-sm font-normal text-black sm:block">Profile</span>
+        <span className="hidden text-sm font-normal text-black sm:block text-header-clr">Profile</span>
       </Menu.Button>
       <Transition
         as={Fragment}
@@ -48,9 +48,9 @@ export default function Account({ config, title, deviceInfo }: any) {
             {({ active }) => (
               <>
                 {title ? (
-                  <h3 className="p-2 font-bold text-left">{title}</h3>
+                  <h5 className="p-2 font-bold text-left">{title}</h5>
                 ) : (
-                  <h3 className="p-2 font-bold text-left">Hi</h3>
+                  <h5 className="p-2 font-bold text-left">Hi</h5>
                 )}
                 {config.map((item: any, idx: number) => (
                   <Link key={idx} title={item.title} passHref href={item.href} className={item.className} onClick={item.onClick || false}>{item.title}</Link>

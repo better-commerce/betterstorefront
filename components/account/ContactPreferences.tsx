@@ -133,7 +133,7 @@ export default function ContactPreferences() {
     <main className="sm:px-6 lg:px-8">
       <div className="max-w-4xl">
         <div className="lg:px-4 sm:px-0">
-          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+          <h1 className="font-extrabold tracking-tight text-gray-900">
             {title}
           </h1>
           <p className="mt-2 text-sm flex flex-col text-black">
@@ -231,7 +231,7 @@ export default function ContactPreferences() {
             <Button
             type="submit"
             onClick={handleSubmit}
-            className="!font-bold  !py-3"
+            className="!font-bold  !py-3 btn-c btn-primary"
             loading={isSubmitting}
             disabled={isSubmitting}
           >

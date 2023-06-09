@@ -26,6 +26,7 @@
       "@commerce": ["framework/commerce"],
       "@commerce/*": ["framework/commerce/*"],
       "@framework": ["framework/bettercommerce"],
+      "@theme/*": ["theme/*"],
       "@framework/*": ["framework/bettercommerce/*"]
     }
   },
