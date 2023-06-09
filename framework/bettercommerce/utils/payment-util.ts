@@ -4,7 +4,7 @@ import axios from "axios";
 // Other Imports
 import { decipherPayload } from "./app-util";
 import { PaymentGateway, PaymentGatewayId } from "@components/utils/payment-constants";
-import { ENABLE_SECURED_PAYMENT_PAYLOAD, NEXT_CANCEL_ORDER, NEXT_CONFIRM_ORDER, NEXT_POST_PAYMENT_RESPONSE, PAYMENTS_API } from "@components/utils/constants";
+import { ENABLE_SECURED_PAYMENT_PAYLOAD, NEXT_CANCEL_ORDER, PAYMENTS_API } from "@components/utils/constants";
 import { Payments } from "@components/utils/payment-constants";
 import { matchStrings, tryParseJson } from "./parse-util";
 import { encrypt } from "./cipher";
@@ -32,10 +32,6 @@ export const cancelStorefrontOrder = async (orderId: string) => {
         id: orderId,
     });
     return orderResponse;
-};
-
-export const confirmPayment = async (data: any) => {
-    return await axios.post(NEXT_POST_PAYMENT_RESPONSE, data);
 };
 
 export const getGatewayId = (gatewayName: string) => {
@@ -89,14 +85,6 @@ export const convertOrder = async (data: any) => {
     return ENABLE_SECURED_PAYMENT_PAYLOAD
         ? decipherPayload(orderDetailResult)
         : tryParseJson(orderDetailResult);
-
-
-    /*const { basketId } = data;
-    const { data: orderResponse }: any = await axios.post(NEXT_CONFIRM_ORDER, {
-        basketId,
-        model: data,
-    });
-    return orderResponse;*/
 };
 
 export const initPayment = async (gatewayName: string, data: any) => {
@@ -129,18 +117,6 @@ export const createOneTimePaymentOrder = async (gatewayName: string, data: any) 
         ENABLE_SECURED_PAYMENT_PAYLOAD ? encrypt(JSON.stringify(data)) : JSON.stringify(data), // Data
         {
             params: { ...Payments.RequestParams.CREATE_ONE_TIME_PAY_ORDER, gid, },
-        }); // Params
-    return ENABLE_SECURED_PAYMENT_PAYLOAD
-        ? decipherPayload(orderDetailResult)
-        : tryParseJson(orderDetailResult);
-};
-
-export const getPaymentOrderDetails = async (gatewayName: string, data: any) => {
-    const gid = getGatewayId(gatewayName);
-    const { data: orderDetailResult } = await axios.post(PAYMENTS_API, // Endpoint url
-        ENABLE_SECURED_PAYMENT_PAYLOAD ? encrypt(JSON.stringify(data)) : JSON.stringify(data), // Data
-        {
-            params: { ...Payments.RequestParams.GET_ORDER_DETAILS, gid, },
         }); // Params
     return ENABLE_SECURED_PAYMENT_PAYLOAD
         ? decipherPayload(orderDetailResult)

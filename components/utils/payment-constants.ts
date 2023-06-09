@@ -56,11 +56,6 @@ export module Payments {
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
     };
 
-    export const GET_ORDER_DETAILS: any = {
-      t: BCPaymentEndpoint.GET_ORDER_DETAILS,
-      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
-    };
-
     export const PROCESS_PAYMENT_RESPONSE: any = {
       t: BCPaymentEndpoint.PAYMENT_RESPONSE,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
