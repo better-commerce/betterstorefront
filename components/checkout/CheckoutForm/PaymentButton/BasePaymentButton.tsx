@@ -63,7 +63,7 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
 
                 return {
                     status: false,
-                    state: { type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] },
+                    state: { type: 'SET_ERROR', payload: orderResult?.message },
                     result: null,
                 };
             } else if (orderResult?.result?.id) {

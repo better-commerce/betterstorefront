@@ -6,7 +6,7 @@ import { v4 as uuid } from "uuid";
 import { decrypt, encrypt } from "./cipher";
 import fetcher from "@framework/fetcher";
 import setSessionIdCookie from "@components/utils/setSessionId";
-import { EmptyGuid, INFRA_LOG_ENDPOINT, PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS } from "@components/utils/constants";
+import { EmptyGuid, EmptyString, INFRA_LOG_ENDPOINT, PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS } from "@components/utils/constants";
 import { stringToBoolean, tryParseJson } from "./parse-util";
 import { ILogRequestParams } from "@framework/api/operations/log-request";
 import { LocalStorage } from "@components/utils/payment-constants";
@@ -45,9 +45,9 @@ export const obfuscateHostName = (hostname: string) => {
 
 export const sanitizeBase64 = (base64: string) => {
   if (base64) {
-    return base64?.replace("data:image/png;base64,", "")?.replace("data:image/jpeg;base64,", "");
+    return base64?.replace("data:image/png;base64,", EmptyString)?.replace("data:image/jpeg;base64,", EmptyString);
   }
-  return "";
+  return EmptyString;
 };
 
 export const resetBasket = async (setBasketId: any, generateBasketId: any) => {
@@ -63,21 +63,21 @@ export const resetBasket = async (setBasketId: any, generateBasketId: any) => {
 export const parsePaymentMethodConfig = (configSettings: any, isSecured: boolean) => {
 
   if (configSettings?.length) {
-    const sandboxUrl = configSettings?.find((x: any) => x?.key === "TestUrl")?.value || "";
+    const sandboxUrl = configSettings?.find((x: any) => x?.key === "TestUrl")?.value || EmptyString;
 
-    let accountCode = configSettings?.find((x: any) => x?.key === "AccountCode")?.value || "";
+    let accountCode = configSettings?.find((x: any) => x?.key === "AccountCode")?.value || EmptyString;
     if (isSecured && accountCode) {
       accountCode = decrypt(accountCode);
     }
 
-    let signature = configSettings?.find((x: any) => x?.key === "Signature")?.value || "";
+    let signature = configSettings?.find((x: any) => x?.key === "Signature")?.value || EmptyString;
     if (isSecured && signature) {
       signature = decrypt(signature);
     }
 
-    const liveUrl = configSettings?.find((x: any) => x?.key === "ProductionUrl")?.value || "";
+    const liveUrl = configSettings?.find((x: any) => x?.key === "ProductionUrl")?.value || EmptyString;
     const useSandbox = configSettings?.find((x: any) => x?.key === "UseSandbox")?.value;
-    const cancelUrl = configSettings?.find((x: any) => x?.key === "CancelUrl")?.value || "";
+    const cancelUrl = configSettings?.find((x: any) => x?.key === "CancelUrl")?.value || EmptyString;
     const config = {
       useSandbox: configSettings?.find((x: any) => x?.key === "UseSandbox")?.value,
       accountCode: accountCode,
@@ -103,7 +103,7 @@ export const getOrderInfo = () => {
 
 export const logPaymentRequest = async ({ headers = {}, data = {}, cookies = {}, pageUrl, objectId = "", paymentGatewayId = 0, userId = "", userName = "" }: any, message: string) => {
   const logData: ILogRequestParams = {
-    ipAddress: "",
+    ipAddress: EmptyString,
     logLevelId: 20,
     objectId: objectId ?? uuid(),
     pageUrl: pageUrl,
@@ -136,7 +136,7 @@ export const logPaymentRequest = async ({ headers = {}, data = {}, cookies = {},
 
 export const logActivityRequest = async ({ headers = {}, data = {}, cookies = {}, pageUrl, objectId = "", userId = "", userName = "" }: any, message: string) => {
   const logData: ILogRequestParams = {
-    ipAddress: "",
+    ipAddress: EmptyString,
     logLevelId: 20,
     objectId: objectId ?? uuid(),
     pageUrl: pageUrl,
@@ -184,7 +184,7 @@ export const parsePaymentMethods = (paymentMethods: any, isEncrypt = true) => {
   return paymentMethods?.map((x: any) => ({
     ...x,
     ...{
-      notificationUrl: isEncrypt ? encrypt(x?.notificationUrl || "") : decrypt(x?.notificationUrl || ""),
+      notificationUrl: isEncrypt ? encrypt(x?.notificationUrl || EmptyString) : decrypt(x?.notificationUrl || EmptyString),
     },
     ...{
       settings: x?.settings?.map((setting: any) => {
