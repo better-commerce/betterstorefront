@@ -47,12 +47,14 @@ import {
 } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
-import { round } from 'lodash'
+import { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { matchStrings } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage } from '@framework/utils/app-util'
 import { isMobile } from 'react-device-detect'
+import DeliveryInfo from './DeliveryInfo'
+import ProductSpecifications from '../ProductDetails/specifications'
 
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -93,8 +95,10 @@ export default function ProductView({
   promotions,
   pdpLookbookProducts,
   pdpCachedImages,
-  reviews
+  reviews,
+  deviceInfo
 }: any) {
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, openCart } = useUI()
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
@@ -559,6 +563,7 @@ export default function ProductView({
   const addonPrice = relatedProducts?.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax;
 
   const css = { maxWidth: '100%', height: 'auto' }
+  const attrGroup = groupBy(product?.customAttributes, 'key')
 
   if (!product) {
     return null
@@ -664,10 +669,10 @@ export default function ProductView({
               </p>
             ) : null}
           </div>
-          
+
           <AttributesHandler product={product} variant={selectedAttrData} setSelectedAttrData={setSelectedAttrData} variantInfo={variantInfo}
             handleSetProductVariantInfo={handleSetProductVariantInfo} sizeInit={sizeInit} setSizeInit={setSizeInit} />
-            
+
           <h4 className="h-5 my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
             {PRODUCT_AVAILABILITY}:{' '}
             {product?.currentStock > 0 ? (
@@ -705,13 +710,22 @@ export default function ProductView({
               )}
             </>
           ) : null}
-
+          <div className="flex-1 order-6 w-full sm:order-5">
+            <DeliveryInfo
+              product={product}
+              grpData={attrGroup}
+            />
+          </div>
           <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
             <h2 id="details-heading" className="sr-only">{PRICEMATCH_ADDITIONAL_DETAILS}</h2>
             <ProductDetails product={product} description={product?.description || product?.shortDescription} />
             <p className="mt-6 text-lg text-gray-900 sm:mt-10">{selectedAttrData?.currentStock > 0 ? product?.deliveryMessage : product?.stockAvailabilityMessage}</p>
           </section>
         </div>
+      </div>
+      <div className="flex flex-col section-devider"></div>
+      <div className="flex flex-col px-0 mx-auto sm:container page-container">
+        <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
       </div>
 
       {product?.componentProducts && (
