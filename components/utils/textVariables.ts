@@ -257,7 +257,12 @@ export const ALERT_SUCCESS_WISHLIST_MESSAGE = 'Wishlisted'
 export const PRODUCT_SPECIFICATION = 'Product specification'
 export const GENERAL_NOT_AVAILABLE = 'Not Available'
 export const GENERAL_CARE_TITLE = 'Care'
+export const PERFECT_FOR = 'Perfect for'
+export const FABRIC_CARE = 'Fabric care'
+export const WASH_CARE = 'Wash care'
+export const COLLAR = 'Collar'
 export const GENERAL_CARE_TEXT =
+
   'This is a limited edition production run. Printing starts when the drop ends.'
 export const GENERAL_DETAILS = 'Details'
 export const GENERAL_DETAILS_TEXT =
