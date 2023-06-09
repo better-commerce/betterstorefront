@@ -15,7 +15,7 @@ const { isOnlyMobile } = deviceInfo;
   return (
     <>
       <div className='grid sm:grid-cols-12'>
-        <div className='sm:col-span-6'>
+        <div className='sm:col-span-8'>
           <div className='flex-1 pb-0 pr-4 sm:pb-4'>
             <h2 className="mb-2 text-2xl font-bold text-dark-brown">{PRODUCT_SPECIFICATION}</h2>
             {attrGroup["whyweloveit"]?.length > 0 &&
@@ -183,7 +183,7 @@ const { isOnlyMobile } = deviceInfo;
             }
           </div>
         </div>
-        <div className='sm:col-span-6'>
+        <div className='sm:col-span-4'>
           {imageTagGroup?.specification?.length &&
             <div className="my-6 sm:col-span-1 specifications sm:my-0">
               <Swiper
