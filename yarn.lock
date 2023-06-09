@@ -132,8 +132,8 @@
 
 "@better-commerce/bc-payments-sdk@0.0.4":
   version "0.0.4"
-  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.4/9b296238ea0b5e764edb1ae188342175eb05e682"
-  integrity sha512-DwF+2YX4a4dqywN1K645Cc4a4Sn9Cao+kxJ4z/HCoN9tGhYPsWvpGa0SwTteEyvv4U14lKeKP66x4pqybWvpqA==
+  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.4/362ec732d9e9fb4c9f65eff750f00be4074e19f7"
+  integrity sha512-SmW7ok+mTA+hFkICtxWkSaYHJc3J6+Ofqxd3PvYI0byWle0d1Yv/wDSePH7Xj2yHC2nYFzkoENjWaB1DPsGRDg==
   dependencies:
     axios "1.4.0"
     bc-checkout-sdk "0.0.2"
