@@ -89,7 +89,7 @@ export default function Wishlist() {
       <main className="sm:px-6 lg:px-8">
         <div className="max-w-4xl lg:mx-12">
           <div className="lg:px-0 sm:px-0">
-            <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+            <h1 className="font-extrabold tracking-tight text-gray-900">
               {/* {WISHLIST_TITLE} */}
             </h1>
           </div>

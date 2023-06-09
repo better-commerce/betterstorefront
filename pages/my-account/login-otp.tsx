@@ -1,22 +1,23 @@
-import { Layout } from '@components/common'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import Form from '@components/customer'
-import { NEXT_AUTHENTICATE } from '@components/utils/constants'
 import axios from 'axios'
 import { useState } from 'react'
-import { useUI } from '@components/ui/context'
 import Router from 'next/router'
+
+import { useUI } from '@components/ui/context'
+import { Layout } from '@components/common'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { NEXT_AUTHENTICATE } from '@components/utils/constants'
 import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
   GENERAL_LOGIN,
-  VALIDATION_NO_ACCOUNT_FOUND,
+  VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP,
   VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
 } from '@components/utils/textVariables'
-import Link from 'next/link'
-function LoginPage({ recordEvent, setEntities }: any) {
+import LoginOTPForm from '@components/customer/login-otp-form'
+
+function LoginOTPPage() {
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -41,7 +42,7 @@ function LoginPage({ recordEvent, setEntities }: any) {
   if (!isGuestUser && user.userId) {
     Router.push('/')
   }
-  
+
   if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
@@ -50,17 +51,40 @@ function LoginPage({ recordEvent, setEntities }: any) {
     )
   }
 
-  const handleUserLogin = (values: any) => {
+  const handleUserLogin = (
+    values: {
+      username: string
+      password: string
+      isOTPBasedAuthentication: boolean
+    },
+    cb?: any
+  ) => {
     const asyncLoginUser = async () => {
-      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
-      if (!result.data) {
-        setNoAccount(true)
-      } else if (result.data) {
+      try {
+        const result: any = await axios.post(NEXT_AUTHENTICATE, {
+          data: values,
+        })
+
+        if (cb) cb()
+
+        // no account was found provided details
+        if (!result.data) {
+          setNoAccount(true)
+          setTimeout(() => {
+            setNoAccount(false)
+          }, 5000)
+          return
+        }
+
         setNoAccount(false)
         const userObj = { ...result.data }
+
+        // fetch wishlist items
         const wishlist = await getWishlist(result.data.userId, wishListItems)
         setWishlist(wishlist)
         getWishlist(result.data.userId, wishListItems)
+
+        // fetch cart items
         const cart: any = await getCartByUser({
           userId: result.data.userId,
           cart: cartItems,
@@ -73,9 +97,16 @@ function LoginPage({ recordEvent, setEntities }: any) {
         } else {
           userObj.isAssociated = false
         }
+
+        // update user
         setUser(userObj)
         setIsGuestUser(false)
+
+        // redirect to home
         Router.push('/')
+      } catch (error) {
+        // console.log(error)
+        if (cb) cb()
       }
     }
     asyncLoginUser()
@@ -84,36 +115,24 @@ function LoginPage({ recordEvent, setEntities }: any) {
     <section aria-labelledby="trending-heading" className="bg-white">
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h2 className="font-extrabold text-center tracking-tight text-gray-900">
-            {GENERAL_LOGIN}
+          <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
+            {GENERAL_LOGIN} via OTP
           </h2>
         </div>
-        <Form btnText="Login" type="login" onSubmit={handleUserLogin} apiError={noAccount ? VALIDATION_NO_ACCOUNT_FOUND : ""} />
+        <LoginOTPForm handleUserLogin={handleUserLogin} />
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && (
             <span className="text-red-700 text-lg">
-              {VALIDATION_NO_ACCOUNT_FOUND}
+              {VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP}
             </span>
           )}
-        </div>
-        <div className="w-full flex flex-col justify-center items-center">
-          <Link href="/my-account/login-otp" passHref>
-            <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
-              Login via OTP
-            </span>
-          </Link>
-          <Link href="/my-account/forgot-password" passHref>
-            <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
-              Forgot password?
-            </span>
-          </Link>
         </div>
       </div>
     </section>
   )
 }
 
-LoginPage.Layout = Layout
+LoginOTPPage.Layout = Layout
 
 const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(LoginPage, PAGE_TYPE)
+export default withDataLayer(LoginOTPPage, PAGE_TYPE)

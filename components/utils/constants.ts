@@ -50,6 +50,8 @@ export const RETRIEVE_ADDRESS = '/api/retrieve-address'
 export const PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/`
 export const PRODUCT_PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/product-promotions`
 export const INFRA_LOG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/log`
+export const NOTIFICATION_OTP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/notification/otp`
+export const VALIDATE_CHANGE_USERNAME_OTP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/notification`
 
 //LOCAL ENDPOINTS 
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
@@ -116,6 +118,9 @@ export const NEXT_GET_RETURN_DATA = '/api/return/get-return-data'
 export const NEXT_CREATE_RETURN_DATA = '/api/return/create'
 export const NEXT_GET_RETURNS = '/api/return/get-user-returns'
 export const PAYMENTS_API = `/api/payments`;
+export const NEXT_OTP_REQUEST = '/api/notification/otp'
+export const NEXT_VALIDATE_CHANGE_USERNAME_OTP = '/api/notification/validate-change-username-otp';
+
 //CONSTANTS
 
 export const NEXT_GET_PRODUCT_QUICK_VIEW = "/api/catalog/get-product-quick-view"
@@ -326,3 +331,4 @@ export const PDP_REVIEW_NO_OF_IMAGES_ALLOWED = toNumber(process.env.PDP_REVIEW_N
 export const PDP_REVIEW_IMAGE_SIZE_IN_BYTES = toNumber(process.env.PDP_REVIEW_IMAGE_SIZE_IN_BYTES);
 
 export const SHORT_ALERT_TIMER = 2500
+export const OTP_TIMER = 45

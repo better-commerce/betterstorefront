@@ -93,7 +93,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             ))}
             <p className="ml-3 text-sm text-gray-700">{rating}<span className="sr-only"> {GENERAL_REVIEW_OUT_OF_FIVE}</span></p>
           </div>
-          <button type="button" onClick={handleSubmit} className="flex items-center justify-center flex-1 float-right max-w-xs px-4 py-2 font-medium text-white uppercase bg-black border border-transparent rounded-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full">
+          <button type="button" onClick={handleSubmit} className="flex items-center justify-center flex-1 float-right max-w-xs px-4 py-2 btn-primary uppercase sm:w-full">
             {BTN_SUBMIT}
           </button>
         </>

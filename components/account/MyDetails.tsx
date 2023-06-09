@@ -73,7 +73,7 @@ export default function MyDetails() {
         </div>
       <div className="max-w-4xl lg:mx-12 xs:ml-6">
         <div className="lg:px-0 sm:px-0">
-          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 pt-2 sm:text-3xl">
+          <h1 className="font-extrabold tracking-tight text-gray-900 pt-2">
             {title}
           </h1>
           <p className="mt-2 text-sm text-black font-normal">
