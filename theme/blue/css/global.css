@@ -228,6 +228,10 @@ p {
   color: var(--text-footer-clr);
 }
 
+.btn-primary-white.btn-padding-none {
+  padding: 0px !important;
+}
+
 /* button  css start */
 .btn-primary {
   background: var(--btn-bg-primary);

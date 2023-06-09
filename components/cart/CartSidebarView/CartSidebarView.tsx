@@ -654,8 +654,8 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                       </div>
                       {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
                         <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
-                          <h3 className="font-semibold text-14 text-green-dark">
-                            {cartItems.currencySymbol}{priceFormat(totalDiscount).slice(1)}{' '}{GENERAL_TOTAL_SAVINGS}</h3>
+                          <h4 className="font-semibold text-green-dark">
+                            {cartItems.currencySymbol}{priceFormat(totalDiscount).slice(1)}{' '}{GENERAL_TOTAL_SAVINGS}</h4>
                         </div>
                       )}
                       <div className="px-4 mt-8 sm:px-6">
@@ -1021,7 +1021,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                               handleClose()
                               beginCheckout(cartItems)
                             }}
-                            className="flex items-center justify-center py-3 capitalize transition bg-black text-gray-50 hover:opacity-75 link-button"
+                            className="flex items-center justify-center py-3 capitalize transition btn-primary hover:opacity-75"
                           >
                             {content.GENERAL_CHECKOUT}
                           </Link>
