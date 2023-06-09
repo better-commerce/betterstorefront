@@ -30,9 +30,9 @@ function renderRadioOptions(
           onClick={()=>{setSizeInit('false')}}
           style={{ backgroundColor: item.fieldValue }}
           className={cn(
-            'pdp-color-swatch-item relative z-99 h-10 w-10 border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
+            'pdp-color-swatch-item relative z-1 h-10 w-10 border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
             {
-              'ring-1 z-999': selectedValue === item.fieldValue,
+              'ring-1 z-1': selectedValue === item.fieldValue,
             }
           )}
         />
@@ -46,9 +46,9 @@ function renderRadioOptions(
           title={item.fieldLabel}
           style={{ backgroundColor: item.fieldValue }}
           className={cn(
-            'pdp-color-swatch-item relative z-99 h-10 w-10  border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
+            'pdp-color-swatch-item relative z-1 h-10 w-10  border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
             {
-              'ring-1 z-999': selectedValue === item.fieldValue,
+              'ring-1 z-1': selectedValue === item.fieldValue,
               hidden: !openRemainElems,
             }
           )}
@@ -58,7 +58,7 @@ function renderRadioOptions(
       {/* show less button */}
       {openRemainElems && (
         <button
-          className="relative flex items-center justify-center h-10 px-1 bg-gray-300 z-99 hover:opacity-75 bg-nav"
+          className="relative flex items-center justify-center h-10 px-1 bg-gray-300 z-1 hover:opacity-75 bg-nav"
           onClick={() => handleToggleOpenRemainElems()}
         >
           <p className="text-gray-900 text-ms">{'<'}</p>

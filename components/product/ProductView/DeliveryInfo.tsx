@@ -88,10 +88,9 @@ export default function DeliveryInfo({ product, grpData }: any) {
             {grpData["product.exchangeeligibilitydays"]?.length && returnEligeble == "True" &&
               <div className='flex flex-col items-center content-center cursor-pointer align-center' onClick={handleClick(grpData)} >
                 {grpData["product.exchangeeligibilitydays"]?.map((replaceAttr: any, rpdx: number) => (
-                  <div key={`product-${rpdx}-delivery`} className="flex flex-col justify-center w-full gap-2 text-left">
-                    <img src={`/assets/images/easy-return.png`} width="60" alt={replaceAttr?.value} />
-                    <div className='text-sm font-semibold text-black'>
-                      {replaceAttr?.value == "500 Day" ? "500 Day Replacement Guarantee" : "15 Day Easy Return"}</div>
+                  <div key={`product-${rpdx}-delivery`} className="flex items-center justify-start w-full gap-2 text-left">
+                    <img src={`/assets/images/easy-return.png`} width="30" alt={replaceAttr?.value} />
+                    <div className='text-sm font-semibold text-black'>{replaceAttr?.value} Days Easy Return</div>
                   </div>
                 ))}
               </div>
@@ -99,9 +98,9 @@ export default function DeliveryInfo({ product, grpData }: any) {
             {grpData["product.returneligibilitydays"]?.length && refundEligeble == "True" &&
               <div className='flex items-center content-center cursor-pointer align-center' onClick={() => handleReturn()}>
                 {grpData["product.returneligibilitydays"]?.map((returnAttr: any, rdx: number) => (
-                  <div key={`product-${rdx}-edd-return`} className="flex flex-col justify-center w-full gap-2 text-left">
-                    <img src={`/assets/images/exchange.png`} width="60" alt={returnAttr?.value} />
-                    <div className='text-sm font-semibold text-black'>30 Days Easy Exchange</div>
+                  <div key={`product-${rdx}-edd-return`} className="flex items-center justify-start w-full gap-2 text-left">
+                    <img src={`/assets/images/exchange.png`} width="25" alt={returnAttr?.value} />
+                    <div className='text-sm font-semibold text-black'>{returnAttr?.value} Days Easy Exchange</div>
                   </div>
                 ))}
               </div>
