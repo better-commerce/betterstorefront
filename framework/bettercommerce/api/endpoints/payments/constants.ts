@@ -1,8 +1,8 @@
 export enum BCPaymentEndpoint {
+    CONVERT_ORDER = "CO",
     INIT_PAYMENT = "ip",
     REQUEST_PAYMENT = "rp",
     CREATE_ONE_TIME_PAY_ORDER = "cotpo",
-    GET_ORDER_DETAILS = "god",
     PAYMENT_RESPONSE = "pr",
 };
 
