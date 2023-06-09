@@ -37,7 +37,7 @@
   --accent-8: #111111;
   --accent-9: #000;
 
-  --font-primary: 'Urbanist', sans-serif;
+  --font-primary: 'Oswald', sans-serif;
 
   /* font size variable */
   --font-10: 10px;
@@ -84,10 +84,10 @@
   /* secondary color variable */
 
   /* button primary variable */
-  --btn-bg-primary: #000;
+  --btn-bg-primary: #E8AA42;
   --btn-text-color-primary: #fff;
   --btn-hover-text-color-primary: #fff;
-  --btn-bg-hover-primary: #0f172a;
+  --btn-bg-hover-primary: #E57C23;
   /* button primary variable */
 
   /* button primary red variable */
@@ -100,16 +100,16 @@
   /* button primary variable */
 
   /* button primary blue variable */
-  --btn-bg-blue: #212530;
+  --btn-bg-blue: #11009E;
   --btn-text-color-blue: #fff;
   --btn-hover-text-color-blue: #fff;
-  --btn-border-blue: #212530;
+  --btn-border-blue: #11009E;
   --btn-bg-hover-blue: #252E47;
   --btn-border-hover-blue: #252E47;
   /* button primary blue variable */
 
   /* button primary white variable */
-  --btn-bg-white: #F8F8F8;
+  --btn-bg-white: #F8F1F1;
   --btn-text-color-white: #212530;
   --btn-hover-text-color-white: #212530;
   --btn-border-white: #212530;
@@ -118,18 +118,18 @@
   /* button primary white variable */
 
   /* button primary teal variable */
-  --btn-bg-teal: #345662;
+  --btn-bg-teal: #116A7B;
   --btn-text-color-teal: #fff;
   --btn-hover-text-color-teal: #fff;
-  --btn-border-teal: #345662;
+  --btn-border-teal: #116A7B;
   --btn-bg-hover-teal: #3F6978;
   --btn-border-hover-teal: #3F6978;
   /* button primary teal variable */
 
   /* button default variable */
   --btn-bg-default: transparent;
-  --btn-text-color-default: #000;
-  --btn-border-clr-default: #000;
+  --btn-text-color-default: #E8AA42;
+  --btn-border-clr-default: #E8AA42;
   --btn-bg-hover-default: transparent;
   --btn-hover-text-color-default: #000;
   --btn-hover-border-clr-default: #cbd5e1;
@@ -211,14 +211,14 @@
   /* label default white variable */
 
   /* Header variable */
-  --bg-header-color: #fff;
+  --bg-header-color: #ECE5C7;
   --text-header-clr: #2e2929;
   --text-hover-clr: #000;
-  --border-hover-clr: #000;
+  --border-hover-clr: #DF340C;
   /* footer variable */
 
   /* footer variable */
-  --bg-footer-color: #f3f4f6;
+  --bg-footer-color: #ECE5C7;
   --text-footer-clr: #000;
   /* footer variable */
 }
@@ -283,163 +283,55 @@
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Black.woff2') format('woff2'),
-    url('../font/Urbanist-Black.woff') format('woff');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ExtraLight.woff2') format('woff2'),
-    url('../font/Urbanist-ExtraLight.woff') format('woff');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Italic.woff2') format('woff2'),
-    url('../font/Urbanist-Italic.woff') format('woff');
-  font-weight: normal;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
-    url('../font/Urbanist-ExtraBoldItalic.woff') format('woff');
-  font-weight: bold;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-BlackItalic.woff2') format('woff2'),
-    url('../font/Urbanist-BlackItalic.woff') format('woff');
-  font-weight: 900;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Light.woff2') format('woff2'),
-    url('../font/Urbanist-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-BoldItalic.woff2') format('woff2'),
-    url('../font/Urbanist-BoldItalic.woff') format('woff');
-  font-weight: bold;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ExtraBold.woff2') format('woff2'),
-    url('../font/Urbanist-ExtraBold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
-    url('../font/Urbanist-ExtraLightItalic.woff') format('woff');
-  font-weight: 200;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Bold.woff2') format('woff2'),
-    url('../font/Urbanist-Bold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-SemiBold.woff2') format('woff2'),
-    url('../font/Urbanist-SemiBold.woff') format('woff');
+  font-family: 'Oswald';
+  src: url('../font/Oswald-SemiBold.woff2') format('woff2'),
+    url('../font/Oswald-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
-    url('../font/Urbanist-SemiBoldItalic.woff') format('woff');
-  font-weight: 600;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Regular.woff2') format('woff2'),
-    url('../font/Urbanist-Regular.woff') format('woff');
-  font-weight: normal;
+  font-family: 'Oswald';
+  src: url('../font/Oswald-ExtraLight.woff2') format('woff2'),
+    url('../font/Oswald-ExtraLight.woff') format('woff');
+  font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ThinItalic.woff2') format('woff2'),
-    url('../font/Urbanist-ThinItalic.woff') format('woff');
-  font-weight: 100;
-  font-style: italic;
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Bold.woff2') format('woff2'),
+    url('../font/Oswald-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-MediumItalic.woff2') format('woff2'),
-    url('../font/Urbanist-MediumItalic.woff') format('woff');
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-LightItalic.woff2') format('woff2'),
-    url('../font/Urbanist-LightItalic.woff') format('woff');
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Light.woff2') format('woff2'),
+    url('../font/Oswald-Light.woff') format('woff');
   font-weight: 300;
-  font-style: italic;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Medium.woff2') format('woff2'),
-    url('../font/Urbanist-Medium.woff') format('woff');
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Medium.woff2') format('woff2'),
+    url('../font/Oswald-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Thin.woff2') format('woff2'),
-    url('../font/Urbanist-Thin.woff') format('woff');
-  font-weight: 100;
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Regular.woff2') format('woff2'),
+    url('../font/Oswald-Regular.woff') format('woff');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }

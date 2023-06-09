@@ -167,7 +167,7 @@ const LayoutError: FC<Props & IExtraProps> = ({
           title={GENERAL_COOKIE_TEXT}
           hide={acceptedCookies}
           action={
-            <Button className="mx-5" onClick={() => onAcceptCookies()}>
+            <Button className="mx-5 btn-c btn-primary" onClick={() => onAcceptCookies()}>
               {BTN_ACCEPT_COOKIE}
             </Button>
           }

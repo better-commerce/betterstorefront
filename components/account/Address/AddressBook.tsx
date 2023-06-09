@@ -118,7 +118,7 @@ export default function AddressBook() {
     <main className="sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="px-4 sm:px-0">
-          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+          <h1 className="font-extrabold tracking-tight text-gray-900">
             {title}
           </h1>
           <p className="mt-2 text-sm text-gray-500">{DETAILS_SUBTITLE}</p>
