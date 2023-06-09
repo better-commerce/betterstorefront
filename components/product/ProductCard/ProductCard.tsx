@@ -195,9 +195,9 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product: productData,
         </div>
 
         <Link passHref href={`/${currentProductData.link}`} title={`${product.name} \t ${itemPrice}`}>
-          <h3 className="flex items-center justify-between w-full h-10 px-2 my-1 text-xs font-semibold text-black capitalize group-hover:hidden product-name sm:text-sm hover:text-gray-950">
+          <h6 className="flex items-center justify-between w-full h-10 px-2 my-1 font-semibold text-black capitalize group-hover:hidden product-name hover:text-gray-950">
             {product?.name?.toLowerCase()}
-          </h3>
+          </h6>
 
           <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 group-hover:flex sm:px-2 sizes-ul sm:text-sm">
             <li className="mr-1">Sizes:</li>

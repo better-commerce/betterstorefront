@@ -589,9 +589,9 @@ export default function CheckoutForm({
 
               {state.isCNC || isShippingDisabled ? null : (
                 <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
-                  <h2 className="text-lg font-bold uppercase text-black">
+                  <h4 className="font-bold uppercase text-black">
                     {SHIPPING_INFORMATION}
-                  </h2>
+                  </h4>
                   {state?.isDeliveryMethodSelected ? (
                     <>
                       <Form
@@ -625,9 +625,9 @@ export default function CheckoutForm({
 
               {/* Payment */}
               <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
-                <h2 className="text-lg font-bold uppercase text-black">
+                <h4 className="font-bold uppercase text-black">
                   {BILLING_INFORMATION}
-                </h2>
+                </h4>
                 {(state?.isShippingInformationCompleted ||
                   state.isCNC ||
                   isShippingDisabled) && (
@@ -656,9 +656,9 @@ export default function CheckoutForm({
                   )}
               </div>
               <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
-                <h2 className="text-lg font-bold uppercase text-black">
+                <h4 className="font-bold uppercase text-black">
                   {GENERAL_PAYMENT}
-                </h2>
+                </h4>
                 {state.isPaymentInformationCompleted && (
                   <Payments
                     paymentData={paymentData}

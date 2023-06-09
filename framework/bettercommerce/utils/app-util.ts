@@ -228,3 +228,20 @@ export const sanitizeAmount = (value: number) => {
   }
   return amount;
 };
+
+export const getMinMax = (list: Array<any>, dependantProp: string) => {
+    let lowest = Number.POSITIVE_INFINITY;
+    let highest = Number.NEGATIVE_INFINITY;
+    var tmp;
+    for (var i = list.length - 1; i >= 0; i--) {
+        tmp = list[i][dependantProp];
+        if (tmp < lowest) lowest = tmp;
+        if (tmp > highest) highest = tmp;
+    }
+
+    return {
+        min: lowest,
+        max: highest,
+    }
+};
+

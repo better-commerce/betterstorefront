@@ -46,13 +46,13 @@ const accountDropDownConfigUnauthorized: any = [
     href: '/my-account/login',
     title: GENERAL_LOGIN,
     className:
-      'mt-5 max-w-xs flex-1 bg-gray-300 border font-semibold border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full',
+      'mt-5 max-w-xs flex-1 bg-gray-300 border font-semibold border-transparent rounded-md py-3 px-8 flex items-center justify-center btn-primary-teal sm:w-full',
   },
   {
     href: '/my-account/register',
     title: GENERAL_REGISTER,
     className:
-      'mt-5 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md op-75 py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full',
+      'mt-5 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md op-75 py-3 px-8 flex items-center justify-center font-medium btn-primary-blue sm:w-full',
   },
 ]
 
@@ -353,7 +353,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
         </Dialog>
       </Transition.Root>
 
-      <header className="fixed top-0 right-0 w-full bg-white shadow-md z-999 navbar-min-64">
+      <header className="fixed top-0 right-0 w-full bg-white bg-header-color shadow-md z-999 navbar-min-64">
         <nav aria-label="Top" className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0">
           <h2 className='sr-only'>nav</h2>
           <button type="button" className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden" onClick={() => { hamburgerMenu(); setOpen(true) }}>
@@ -377,17 +377,17 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                       {!item.navBlocks.length ? (
                         <Popover.Button className={classNames(
                           openState == idx
-                            ? 'border-indigo-600 text-indigo-600'
-                            : 'border-transparent text-black hover:text-black',
+                            ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
+                            : 'border-transparent text-black hover:text-black text-header-clr',
                           'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                         )}>
-                          <Link href={`/${item.hyperlink}`} className="relative flex items-center h-full" title={item.caption}>{item.caption}</Link>
+                          <Link href={`/${item.hyperlink}`} className="relative flex items-center h-full text-header-clr" title={item.caption}>{item.caption}</Link>
                         </Popover.Button>
                       ) : (
                         <Popover.Button className={classNames(
                           openState == idx
-                            ? 'border-indigo-600 text-indigo-600'
-                            : 'border-transparent text-black hover:text-black',
+                            ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
+                            : 'border-transparent text-black hover:text-black text-header-clr',
                           'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                         )}>
                           {item.caption}
@@ -440,7 +440,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
             <div className="flow-root w-10 px-1 sm:w-16">
               <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center" onClick={() => { viewWishlist(); openWishlist() }}>
                 <HeartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
-                <span className="hidden text-sm font-normal text-black sm:block">Wishlist</span>
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">Wishlist</span>
                 {wishListItems.length > 0 && (
                   <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full sm:block -right-0">
                     {wishListItems.length}
@@ -456,7 +456,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                 onClick={() => { viewCart(cartItems); openCart() }}
               >
                 <ShoppingCartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="Add to cart" />
-                <span className="hidden text-sm font-normal text-black sm:block">Cart</span>
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">Cart</span>
                 {renderState && (
                   <>
                     {cartItems.lineItems?.length > 0 && (
