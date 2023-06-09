@@ -197,7 +197,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                         this.baseRender({
                             ...this?.props, ...{
                                 onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => {
-                                    uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
+                                    uiContext?.setOverlayLoaderState({ visible: true, message: "loading..." });
                                     that.setState({ confirmed: true, })
                                 },
                             }

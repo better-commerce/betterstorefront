@@ -1,9 +1,10 @@
 import { useReducer, useEffect } from 'react'
-import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
-import { NEXT_POST_PAYMENT_RESPONSE } from '@components/utils/constants'
+import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
+import { processPaymentResponse } from '@framework/utils/payment-util'
+import { PaymentGateway, PaymentStatus } from '@components/utils/payment-constants'
 
 /* ---------------- HOW TO ADD A NEW PAYMENT METHOD
 
@@ -26,6 +27,7 @@ export default function PaymentWidget({
     paymentMethod,
     checkoutCallback,
 }: any) {
+    const orderInfo = getOrderInfo();
     const initialState = {
         triggerStripe: false,
         isPaymentIntent: new URLSearchParams(window.location.search).get(
@@ -54,53 +56,10 @@ export default function PaymentWidget({
     const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
     const { Order } = EVENTS_MAP.ENTITY_TYPES
 
-    const CODHandler = async () => {
-        const orderModel = {
-            id: orderModelResponse.payment.id,
-            cardNo: null,
-            orderNo: orderModelResponse.orderNo,
-            orderAmount: orderModelResponse.grandTotal.raw.withTax,
-            paidAmount: orderModelResponse.grandTotal.raw.withTax,
-            balanceAmount: '0.00',
-            isValid: true,
-            status: 2,
-            authCode: null,
-            issuerUrl: null,
-            paRequest: null,
-            pspSessionCookie: null,
-            pspResponseCode: null,
-            pspResponseMessage: null,
-            paymentGatewayId: paymentMethod.id,
-            paymentGateway: paymentMethod.systemName,
-            token: null,
-            payerId: null,
-            cvcResult: null,
-            avsResult: null,
-            secure3DResult: null,
-            cardHolderName: null,
-            issuerCountry: null,
-            info1: '',
-            fraudScore: null,
-            paymentMethod: paymentMethod.systemName,
-            cardType: null,
-            operatorId: null,
-            refStoreId: null,
-            tillNumber: null,
-            externalRefNo: null,
-            expiryYear: null,
-            expiryMonth: null,
-            isMoto: true,
-            upFrontPayment: false,
-            upFrontAmount: '0.00',
-            upFrontTerm: '76245369',
-            isPrePaid: false,
-        }
-        const res: any = await axios.post(NEXT_POST_PAYMENT_RESPONSE, {
-            model: orderModel,
-            orderId: orderModelResponse.id,
-        })
-
-        if (res.data.success) {
+    const CODHandler = async (paymentResponseRequest: any) => {
+        const res: any = await processPaymentResponse(PaymentGateway.COD, paymentResponseRequest);
+        if (res === PaymentStatus.AUTHORIZED) {
+            // TODO: Get order details
             const {
                 basketId,
                 customerId,
@@ -120,7 +79,7 @@ export default function PaymentWidget({
                 subTotal,
                 taxPercent,
                 orderDate,
-            } = res.data.result
+            } = res.result
             eventDispatcher(CheckoutConfirmation, {
                 basketItemCount: items.length,
                 basketTotal: grandTotal?.raw?.withTax,
@@ -185,7 +144,15 @@ export default function PaymentWidget({
     }
 
     if (state.triggerCOD) {
-        CODHandler()
+        const paymentResponseRequest: any = {
+            isCOD: true,
+            orderId: orderInfo?.orderResponse?.id,
+            txnOrderId: getOrderId(orderInfo?.order),
+            bankOfferDetails: null,
+            extras: {},
+        };
+        console.log(paymentResponseRequest);
+        CODHandler(paymentResponseRequest)
         return null
     }
     return null
