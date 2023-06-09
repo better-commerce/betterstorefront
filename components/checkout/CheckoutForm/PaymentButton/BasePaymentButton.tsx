@@ -8,7 +8,7 @@ import { Stripe, StripeElements } from "@stripe/stripe-js";
 import DefaultButton from "@components/ui/IndigoButton";
 
 // Other Imports
-import { createStorefrontOrder } from "@framework/utils/payment-util";
+import { convertOrder } from "@framework/utils/payment-util";
 import { LocalStorage, PaymentStatus } from "@components/utils/payment-constants";
 import { parsePaymentMethods } from "@framework/utils/app-util";
 import { matchStrings } from "@framework/utils/parse-util";
@@ -50,7 +50,7 @@ export default abstract class BasePaymentButton extends React.Component<IPayment
      */
     public async confirmOrder(paymentMethod: any, data: any, dispatchState: Function, isCOD: boolean = false): Promise<{ status: boolean, state: any, result?: any }> {
         try {
-            const orderResult = await createStorefrontOrder(data);
+            const orderResult: any = await convertOrder(data);
             if (orderResult?.message) {
                 if (orderResult?.message === "YourBag.Links.EmptyBag") {
 

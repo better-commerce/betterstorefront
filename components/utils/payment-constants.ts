@@ -36,6 +36,11 @@ export module Payments {
 
   export module RequestParams {
 
+    export const CONVERT_ORDER: any = {
+      t: BCPaymentEndpoint.CONVERT_ORDER,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
+    };
+
     export const INIT_PAYMENT: any = {
       t: BCPaymentEndpoint.INIT_PAYMENT,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
