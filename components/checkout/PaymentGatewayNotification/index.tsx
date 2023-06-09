@@ -35,7 +35,10 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
      */
     const asyncHandler = async (gateway: string, params: any, isCancelled: boolean) => {
 
-        let paymentDetailsResult: any;
+        /**
+         * For future use,
+         * For implementation of bank offers.
+         */
         let bankOfferDetails:
             | {
                 voucherCode: string
@@ -98,7 +101,7 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
                     id: orderInfo?.orderResponse?.id,
                     lineitems: orderInfo?.orderResponse?.items,
                     orderNo: orderNo,
-                    //paidAmount: paymentIntent.amount,
+                    paidAmount: grandTotal?.raw?.withTax,
                     payments: orderInfo?.orderResponse?.payments?.map((i: any) => {
                         return {
                           methodName: i.paymentMethod,

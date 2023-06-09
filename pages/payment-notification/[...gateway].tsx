@@ -78,6 +78,15 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         payerId: EmptyString,
       };
       break;
+
+      case PaymentGateway.CLEAR_PAY:
+
+      propParams = {
+        token: params?.token,
+        orderId: !isCancelled ? params?.orderId : EmptyString,
+        payerId: EmptyString,
+      };
+      break;
   }
 
   return {
