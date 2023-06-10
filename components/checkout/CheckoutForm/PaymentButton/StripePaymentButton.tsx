@@ -1,6 +1,6 @@
 // Package Imports
 import { Stripe, StripeElements } from "@stripe/stripe-js";
-import { Elements, ElementsConsumer, PaymentElement, } from '@stripe/react-stripe-js'
+import { Elements, ElementsConsumer, PaymentElement } from '@stripe/react-stripe-js'
 
 // Component Imports
 import BasePaymentButton, { IDispatchState } from "./BasePaymentButton";
@@ -91,24 +91,28 @@ export class StripePaymentButton extends BasePaymentButton {
             return;
         }
 
-        uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
-        const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`;
+        const submitResult = await elements.submit();
+        if (!submitResult?.error) {
+            uiContext?.setOverlayLoaderState({ visible: true, message: "Please wait..." });
+            const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`;
 
-        // Get a reference to a mounted CardElement. Elements knows how
-        // to find your CardElement because there can only ever be one of
-        // each type of element.
-        // Use your card Element with other Stripe.js APIs
-        const { error }: any = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                // Make sure to change this to your payment completion page
-                return_url: returnUrl,
-            },
-        });
+            // Get a reference to a mounted CardElement. Elements knows how
+            // to find your CardElement because there can only ever be one of
+            // each type of element.
+            // Use your card Element with other Stripe.js APIs
+            const { error }: any = await stripe.confirmPayment({
+                elements,
+                clientSecret: this.state.clientSecret,
+                confirmParams: {
+                    // Make sure to change this to your payment completion page
+                    return_url: returnUrl,
+                },
+            });
 
-        if (error) {
-            uiContext?.hideOverlayLoaderState();
-            dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            if (error) {
+                uiContext?.hideOverlayLoaderState();
+                dispatchState({ type: 'SET_ERROR', payload: Messages.Errors["GENERIC_ERROR"] });
+            }
         }
     }
 
