@@ -57,7 +57,7 @@ export function asyncHandler() {
   }
 }
 
-export default function AddressBook() {
+export default function AddressBook({ deviceInfo }: any) {
   const [data, setData] = useState([])
   const [isNewFormMode, setNewFormMode] = useState(false)
   const [title, setTitle] = useState(ADDRESS_BOOK_TITLE)

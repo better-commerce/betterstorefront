@@ -14,7 +14,6 @@ import {
 } from '@components/utils/textVariables'
 import { getCurrentPage } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import useDevice from '@commerce/utils/use-device'
 import { IExtraProps } from '../Layout/Layout'
 
 interface Props {
