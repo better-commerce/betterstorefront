@@ -15,12 +15,11 @@ import InfiniteScroll from '@components/ui/InfiniteScroll'
 // Other Imports
 import { GENERAL_RECENT_ORDERS, } from '@components/utils/textVariables'
 import { NEXT_GET_ORDER_DETAILS, } from '@components/utils/constants'
-import useDevice from '@commerce/utils/use-device'
 import Spinner from '@components/ui/Spinner'
 
 
-export default function MyOrders({ allOrders, handleInfiniteScroll, }: any) {
-  const { isMobile, isIPadorTablet } = useDevice();
+export default function MyOrders({ allOrders, handleInfiniteScroll, deviceInfo, }: any) {
+  const { isMobile, isIPadorTablet } = deviceInfo;
   const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(false);
   const { user, displayAlert, alertRibbon } = useUI();
   const [orderDetails, setOrderDetails] = useState<any>(undefined);
@@ -47,12 +46,12 @@ export default function MyOrders({ allOrders, handleInfiniteScroll, }: any) {
     allOrders?.forEach((orderObj: any) => {
       // remove personalization from order items
       if (!!orderObj?.orderDetails?.order?.items?.length) {
-        orderObj.orderDetails.order.items = 
+        orderObj.orderDetails.order.items =
           orderObj.orderDetails.order.items.filter((o: any) => o.name !== "Personalization")
       }
       // remove personalization from order delivery plans items
       if (!!orderObj?.orderDetails?.order?.deliveryPlans?.length) {
-        orderObj.orderDetails.order.deliveryPlans = 
+        orderObj.orderDetails.order.deliveryPlans =
           orderObj.orderDetails.order.deliveryPlans.map((o: any) => {
             o.items = o.items.filter((o: any) => o.productName !== "Personalization")
             return o

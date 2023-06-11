@@ -35,11 +35,10 @@ import OrderSummary from './OrderSummary';
 import HelpModal from './HelpModal';
 import OrderReviewModal from './OrderReviewModal';
 import OrderDeliveryPlanItems from './OrderDeliveryPlanItems';
-import useDevice from '@commerce/utils/use-device';
 import { recordGA4Event } from '@components/services/analytics/ga4';
 
-export default function OrderDetail({ details, showDetailedOrder, show }: any) {
-  const { isMobile, isIPadorTablet } = useDevice();
+export default function OrderDetail({ details, showDetailedOrder, show, deviceInfo }: any) {
+  const { isMobile, isIPadorTablet } = deviceInfo;
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isHelpOrderOpen, setIsHelpOrderOpen] = useState(false);
   const [isHelpStatus, setIsHelpStatus] = useState<any>();

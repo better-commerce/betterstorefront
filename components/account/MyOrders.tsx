@@ -23,7 +23,7 @@ import {
 import ReturnModal from '@components/returns/Modal'
 import { isCartAssociated } from '@framework/utils/app-util'
 
-export default function MyOrders() {
+export default function MyOrders({ deviceInfo }: any) {
   const [data, setData] = useState([])
   const [productIdsInReturn, setProductIdsInReturn] = useState([''])
   const [returnData, setReturnData] = useState({ product: {}, order: {} })

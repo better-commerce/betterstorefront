@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
+import { isDesktop, isMobile } from "react-device-detect";
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { v4 as uuid } from "uuid";
 import { useRouter } from 'next/router'
@@ -10,6 +11,8 @@ import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId';
 import { resetBasket } from '@framework/utils/app-util';
 import { LocalStorage } from '@components/utils/payment-constants';
 import { LOGOUT } from '@components/utils/textVariables';
+
+declare const window: any
 
 export const basketId = () => {
   if (Cookies.get('basketId')) {
@@ -24,6 +27,7 @@ export const basketId = () => {
 
 export interface IDeviceInfo {
   readonly isMobile: boolean | undefined;
+  readonly isOnlyMobile: boolean | undefined;
   readonly isDesktop: boolean | undefined;
   readonly isIPadorTablet: boolean | undefined;
   readonly deviceType: DeviceType;
@@ -64,6 +68,7 @@ export interface State {
   orderId: string
   userIp: string
   overlayLoaderState: IOverlayLoaderState;
+  deviceInfo: IDeviceInfo;
 }
 
 const initialState = {
@@ -87,6 +92,13 @@ const initialState = {
   overlayLoaderState: {
     visible: false,
     message: "",
+  },
+  deviceInfo: {
+    isMobile: false,
+    isOnlyMobile: false,
+    isDesktop: false,
+    isIPadorTablet: false,
+    deviceType: DeviceType.UNKNOWN,
   },
 }
 
@@ -161,6 +173,7 @@ type Action =
   | { type: 'SET_ORDER_ID'; payload: any }
   | { type: 'SET_USER_IP'; payload: string }
   | { type: 'SET_OVERLAY_STATE'; payload: IOverlayLoaderState }
+  | { type: 'SETUP_DEVICE_INFO'; payload: IDeviceInfo }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -182,6 +195,13 @@ UIContext.displayName = 'UIContext'
 
 function uiReducer(state: State, action: Action) {
   switch (action.type) {
+    case 'SETUP_DEVICE_INFO': {
+      return {
+        ...state,
+        deviceInfo: state?.deviceInfo,
+      }
+    }
+
     case 'OPEN_SIDEBAR': {
       return {
         ...state,
@@ -350,6 +370,53 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
   const Router = useRouter()
 
   const [state, dispatch] = React.useReducer(uiReducer, initialState)
+
+  const setupDeviceInfo = useCallback(
+    () => {
+
+      const UA = navigator.userAgent;
+      const isIPadorTablet = /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA);
+
+      /**
+       * Determine the mobile operating system.
+       * This function returns one of 'IOS', 'ANDROID', 'WINDOWS_PHONE', or 'UNKNOWN'.
+       *
+       * @returns {String}
+       */
+      const getDeviceType = () => {
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        // Windows Phone must come first because its UA also contains "Android"
+        if (/windows phone/i.test(userAgent)) {
+          return DeviceType.WINDOWS_PHONE;
+        }
+
+        if (/android/i.test(userAgent)) {
+          return DeviceType.ANDROID;
+        }
+
+        // iOS detection from: http://stackoverflow.com/a/9039885/177710
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          return DeviceType.IOS;
+        }
+
+        return DeviceType.UNKNOWN;
+      }
+      const deviceTypeInfo = getDeviceType()
+      const isOnlyMobile = (isMobile && !isIPadorTablet) || deviceTypeInfo === 2;
+
+      const payload: IDeviceInfo = {
+        isMobile,
+        isOnlyMobile,
+        isDesktop: (isMobile || isIPadorTablet) ? false : isDesktop,
+        isIPadorTablet,
+        deviceType: deviceTypeInfo,
+      };
+      setItem('deviceInfo', payload);
+      dispatch({ type: 'SETUP_DEVICE_INFO', payload });
+    },
+    [dispatch]
+  )
 
   const addToWishlist = useCallback(
     (payload: any) => {
@@ -541,7 +608,7 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
           expires: getExpiry(getMinutesInDays(365)),
         })
         dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
-        dispatch({ type: 'REMOVE_USER', payload: {} })      
+        dispatch({ type: 'REMOVE_USER', payload: {} })
       })
 
     },
@@ -608,7 +675,7 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
     },
     [dispatch]
   )
-  
+
   const consolidateCartItems = (payload: any) => {
 
     let newCartDataClone: any = { ...payload };
@@ -711,8 +778,9 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
       setOrderId,
       setUserIp,
       setOverlayLoaderState,
-      hideOverlayLoaderState,      
+      hideOverlayLoaderState,
       resetCartItems,
+      setupDeviceInfo,
     }),
     [state]
   )
