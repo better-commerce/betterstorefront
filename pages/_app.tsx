@@ -77,6 +77,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     isDesktop: undefined,
     isIPadorTablet: undefined,
     deviceType: DeviceType.UNKNOWN,
+    isOnlyMobile: undefined,
   })
 
   const snippets = [
@@ -112,10 +113,10 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       'src',
       '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
     )
-    
+
     document.body.appendChild(addScript)
       ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-      document.getElementById('goog-gt-tt')?.remove();
+    document.getElementById('goog-gt-tt')?.remove();
   }, []);
 
   useEffect(() => {

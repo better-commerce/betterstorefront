@@ -14,7 +14,6 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
-import { isMobile } from 'react-device-detect'
 import { useRouter } from 'next/router'
 import os from 'os'
 import { obfuscateHostName } from '@framework/utils/app-util'
@@ -41,21 +40,25 @@ export async function getStaticProps({
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
 
-  const PageContentsPromiseWeb = commerce.getPagePreviewContent({
-    id: '', //pageId,
-    slug: HOME_PAGE_DEFAULT_SLUG,
-    workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-    channel: 'Web',
-  })
-  const pageContentsWeb = await PageContentsPromiseWeb
+  let pageContentsWeb, pageContentsMobileWeb;
+  try {
+    const PageContentsPromiseWeb = commerce.getPagePreviewContent({
+      id: '', //pageId,
+      slug: HOME_PAGE_DEFAULT_SLUG,
+      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+      channel: 'Web',
+    })
+    pageContentsWeb = await PageContentsPromiseWeb
 
-  const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
-    id: '', //pageId,
-    slug: HOME_PAGE_DEFAULT_SLUG,
-    workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-    channel: 'MobileWeb',
-  })
-  const pageContentsMobileWeb = await PageContentsPromiseMobileWeb
+    const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
+      id: '', //pageId,
+      slug: HOME_PAGE_DEFAULT_SLUG,
+      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+      channel: 'MobileWeb',
+    })
+    pageContentsMobileWeb = await PageContentsPromiseMobileWeb
+  } catch (error: any) {
+  }
 
   const hostName = os.hostname()
 
@@ -85,9 +88,11 @@ function Home({
   pageContentsWeb,
   pageContentsMobileWeb,
   hostName,
+  deviceInfo,
 }: any) {
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
   const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
@@ -147,13 +152,13 @@ function Home({
         {pageContents?.heading?.map((heading: any, hId: number) => (
           <Heading title={heading?.heading_title} subTitle={heading?.heading_subtitle} key={`category-heading-${hId}`} />
         ))}
-        <Categories data={pageContents?.categorylist} />
+        <Categories data={pageContents?.categorylist} deviceInfo={deviceInfo} />
         {pageContents?.productheading?.map((productH: any, Pid: number) => (
           <Heading title={productH?.productheading_title} subTitle={productH?.productheading_subtitle} key={`product-heading-${Pid}`} />
         ))}
         <ProductSlider config={pageContents} />
       </div>
-      
+
       {pageContents?.promotions?.map((banner: any, bId: number) => (
         <div className="relative flex flex-col justify-center w-full text-center cursor-pointer" key={`full-banner-${bId}`}>
           <Link href={banner?.promotions_link} passHref legacyBehavior>
@@ -162,7 +167,7 @@ function Home({
           <div className="absolute text-5xl font-medium text-white top-1/2 right-24">{banner?.promotions_title}</div>
         </div>
       ))}
-      
+
       <div className="container px-4 py-3 mx-auto sm:px-0 sm:py-6">
         {pageContents?.collectionheadings?.map(
           (heading: any, cId: number) => (

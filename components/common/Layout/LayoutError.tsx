@@ -25,6 +25,7 @@ import {
   GENERAL_COOKIE_TEXT,
 } from '@components/utils/textVariables'
 import { IDeviceInfo } from '@components/ui/context'
+import { IExtraProps } from './Layout'
 
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
@@ -73,32 +74,29 @@ const ModalUI: FC = () => {
   return null
 }
 
-const SidebarView: FC<{ sidebarView: string; closeSidebar(): any }> = ({
+const SidebarView: FC<{ sidebarView: string; closeSidebar(): any } & IExtraProps> = ({
   sidebarView,
   closeSidebar,
+  deviceInfo,
 }) => {
   return (
-    <Sidebar onClose={closeSidebar}>
-      {sidebarView === 'CART_VIEW' && <CartSidebarView />}
+    <Sidebar onClose={closeSidebar} deviceInfo={deviceInfo}>
+      {sidebarView === 'CART_VIEW' && <CartSidebarView deviceInfo={deviceInfo} />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
     </Sidebar>
   )
 }
 
-const SidebarUI: FC = () => {
+const SidebarUI: FC = ({ deviceInfo }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
-    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} />
+    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} deviceInfo={deviceInfo} />
   ) : null
 }
 
 interface LayoutProps {
   nav: []
   footer: []
-}
-
-export interface IExtraProps {
-  readonly deviceInfo: IDeviceInfo;
 }
 
 const LayoutError: FC<Props & IExtraProps> = ({

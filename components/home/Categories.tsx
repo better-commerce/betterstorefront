@@ -6,9 +6,9 @@ import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
 import Link from 'next/link'
-import { isMobile } from 'react-device-detect'
 
-function Categories({ data }: any) {
+function Categories({ data, deviceInfo }: any) {
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
   var settings = {
     fade: false,
     speed: 500,

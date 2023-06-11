@@ -49,9 +49,11 @@ import { data } from 'autoprefixer'
 import Engraving from '@components/product/Engraving'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
+import { IExtraProps } from '@components/common/Layout/Layout'
 
-const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
+const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo }: any) => {
   const { addToWishlist, openWishlist, displayAlert, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, user, isGuestUser, displaySidebar } = useUI()
+  const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo;
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
@@ -73,7 +75,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
   const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
-  const [sizeDialogState, setSizeDialogState] = useState<any>({type: ''})
+  const [sizeDialogState, setSizeDialogState] = useState<any>({ type: '' })
   const content = useTranslation()
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
@@ -688,6 +690,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                   <RelatedProductWithGroup
                                     products={altRelatedProducts?.relatedProducts?.products?.results || []}
                                     productPerColumn={1.7}
+                                    deviceInfo={deviceInfo}
                                   />
                                 </div>
                               )}

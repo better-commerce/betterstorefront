@@ -10,7 +10,7 @@ import "swiper/css/navigation"
 const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
 const QuickViewModal = dynamic(() => import('@components/product/QuickView/ProductQuickView'))
 
-export default function RelatedProductWithGroup({ products, productPerColumn }: any) {
+export default function RelatedProductWithGroup({ products, productPerColumn, deviceInfo }: any) {
     const [isQuickview, setQuickview] = useState(undefined)
     const [isQuickviewOpen, setQuickviewOpen] = useState(false)
     let currentPage = getCurrentPage();
@@ -96,7 +96,7 @@ export default function RelatedProductWithGroup({ products, productPerColumn }: 
         <>
             <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: productPerColumn, }, 1024: { slidesPerView: productPerColumn, } }}>
                 {products?.map((product: any, pId: number) => (
-                    <SwiperSlide key={pId}><ProductCard product={product} hideWishlistCTA={true} /></SwiperSlide>
+                    <SwiperSlide key={pId}><ProductCard product={product} hideWishlistCTA={true} deviceInfo={deviceInfo} /></SwiperSlide>
                 ))}
             </Swiper>
             <QuickViewModal isQuikview={isQuickview} setQuickview={setQuickview} productData={isQuickview} isQuickviewOpen={isQuickviewOpen} setQuickviewOpen={setQuickviewOpen} />

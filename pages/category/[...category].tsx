@@ -15,7 +15,6 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { isMobile } from 'react-device-detect'
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
@@ -126,7 +125,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryPage({ category, slug, products, }: any) {
+function CategoryPage({ category, slug, products, deviceInfo, }: any) {
+  const { isMobile } = deviceInfo;
   const router = useRouter()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
@@ -340,6 +340,7 @@ function CategoryPage({ category, slug, products, }: any) {
                     currentPage={products.currentPage}
                     handlePageChange={handlePageChange}
                     handleInfiniteScroll={handleInfiniteScroll}
+                    deviceInfo={deviceInfo}
                   />
                 </div>
               </>
@@ -350,6 +351,7 @@ function CategoryPage({ category, slug, products, }: any) {
                   currentPage={products.currentPage}
                   handlePageChange={handlePageChange}
                   handleInfiniteScroll={handleInfiniteScroll}
+                  deviceInfo={deviceInfo}
                 />
               </div>
             ))}

@@ -90,6 +90,7 @@ function BrandDetailPage({
   recordEvent,
   brandDetails,
   slug,
+  deviceInfo,
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -293,7 +294,7 @@ function BrandDetailPage({
         <div className="flex justify-end w-full">
           <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} />
         </div>
-        <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} />
+        <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} />
       </div>
     </>
   )
