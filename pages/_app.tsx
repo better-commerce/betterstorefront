@@ -35,6 +35,8 @@ import { GA4_DISABLED, GA4_MEASUREMENT_ID } from '@framework/utils/constants'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { DeviceType } from "@commerce/utils/use-device"
 import InitDeviceInfo from "@components/common/InitDeviceInfo"
+import CustomCacheBuster from "@components/common/CustomCacheBuster";
+import { version as buildVersion } from '../package.json';
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -252,6 +254,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       <div id="google_translate_element" />
       <ManagedUIContext>
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
+        <CustomCacheBuster buildVersion={buildVersion} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
         <Layout
           nav={nav}
