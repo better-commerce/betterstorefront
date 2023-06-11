@@ -52,7 +52,6 @@ import ImageZoom from 'react-image-zooom'
 import { matchStrings } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage } from '@framework/utils/app-util'
-import { isMobile } from 'react-device-detect'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
@@ -738,7 +737,7 @@ export default function ProductView({
           <div className="flex flex-col section-devider"></div>
           <div className="flex flex-col px-0 mx-auto sm:container page-container">
             <h3 className='justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10'>You May Also Like</h3>
-            <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={6} />
+            <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={6} deviceInfo={deviceInfo} />
           </div>
         </>
       ) : null}

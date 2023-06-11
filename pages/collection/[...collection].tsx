@@ -23,7 +23,6 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { obfuscateHostName } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState } from '@components/ui/context'
-import { isMobile } from 'react-device-detect'
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
@@ -467,12 +466,12 @@ export default function CollectionPage(props: any) {
                   {isMobile ? null : (
                     <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
                   )}
-                  <ProductGridWithFacet products={productDataToPass} currentPage={props?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} />
+                  <ProductGridWithFacet products={productDataToPass} currentPage={props?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} />
                 </div>
               </>
             ) : (
               <div className="col-span-12">
-                <ProductGrid products={productDataToPass} currentPage={props?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} />
+                <ProductGrid products={productDataToPass} currentPage={props?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} />
               </div>
             )}
           </div>

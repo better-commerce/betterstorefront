@@ -1,3 +1,4 @@
+import { IExtraProps } from '@components/common/Layout/Layout'
 import rangeMap from '@lib/range-map'
 import dynamic from 'next/dynamic'
 const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
@@ -10,7 +11,7 @@ interface Props {
   handleInfiniteScroll: any
 }
 
-export default function Grid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll, }: Props) {
+export default function Grid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll, deviceInfo, }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === "true"
   return (
     <>
@@ -29,7 +30,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
                 </div>
               ))}
               {products?.results?.map((product: any, productIdx: number) => (
-                <ProductCard key={productIdx} product={product} />
+                <ProductCard key={productIdx} product={product} deviceInfo={deviceInfo} />
               ))}
             </div>
           }
@@ -49,7 +50,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
               </div>
             ))}
             {products.results.map((product: any, productIdx: number) => (
-              <ProductCard key={productIdx} product={product} />
+              <ProductCard key={productIdx} product={product} deviceInfo={deviceInfo} />
             ))}
           </div>
           {products.pages > 1 && (
