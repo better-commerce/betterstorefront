@@ -296,6 +296,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
               keywords={keywordsData}
               deviceInfo={deviceInfo}
             >
+              <OverlayLoader />
               <Component
                 {...pageProps}
                 location={location}

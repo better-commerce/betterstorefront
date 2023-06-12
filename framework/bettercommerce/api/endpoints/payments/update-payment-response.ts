@@ -11,8 +11,9 @@ import {
 import { CLIENT_ID, SHARED_SECRET } from '@framework/utils/constants'
 
 const logId = 'Payments | UpdatePaymentResponse'
-const UpdatePaymentResponseApiMiddleware =
-  async function useUpdatePaymentResponse({
+
+const UpdatePaymentResponseApiMiddleware = function () {
+  return async function useUpdatePaymentResponse({
     data,
     config,
     cookies,
@@ -81,5 +82,6 @@ const UpdatePaymentResponseApiMiddleware =
       return { hasError: true, error: error?.response?.data }
     }
   }
+}
 
 export default UpdatePaymentResponseApiMiddleware

@@ -141,8 +141,10 @@ export default abstract class BasePaymentButton
     uiContext,
     dispatchState,
     onPay,
-    disabled = false,
-  }: IPaymentButtonProps & IDispatchState) {
+    disabled,
+    stripe = null,
+    stripeElements = null,
+  }: any) {
     return (
       <DefaultButton
         buttonType="button"
