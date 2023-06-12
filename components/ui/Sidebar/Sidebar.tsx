@@ -6,13 +6,15 @@ import {
   enableBodyScroll,
   clearAllBodyScrollLocks,
 } from 'body-scroll-lock'
+import { IExtraProps } from '@components/common/Layout/Layout'
 
 interface SidebarProps {
   children: any
   onClose: () => void
 }
 
-const Sidebar: FC<React.PropsWithChildren<SidebarProps>> = ({ children, onClose }) => {
+const Sidebar: FC<React.PropsWithChildren<SidebarProps & IExtraProps>> = ({ children, onClose, deviceInfo }) => {
+  const { isMobile, isIPadorTablet } = deviceInfo;
   const sidebarRef = useRef() as React.MutableRefObject<HTMLDivElement>
   const contentRef = useRef() as React.MutableRefObject<HTMLDivElement>
 

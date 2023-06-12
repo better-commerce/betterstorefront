@@ -1,0 +1,477 @@
+:root {
+  --primary: #ffffff;
+  --primary-2: #f1f3f5;
+  --secondary: #000000;
+  --secondary-2: #111;
+  --selection: var(--cyan);
+
+  --text-base: #000000;
+  --text-primary: #000000;
+  --text-secondary: white;
+
+  --hover: rgba(0, 0, 0, 0.075);
+  --hover-1: rgba(0, 0, 0, 0.15);
+  --hover-2: rgba(0, 0, 0, 0.25);
+  --cyan: #22b8cf;
+  --green: #37b679;
+  --red: #da3c3c;
+  --purple: #f81ce5;
+  --blue: #0070f3;
+
+  --pink: #ff0080;
+  --pink-light: #ff379c;
+
+  --magenta: #eb367f;
+
+  --violet: #7928ca;
+  --violet-dark: #4c2889;
+
+  --accent-0: #fff;
+  --accent-1: #fafafa;
+  --accent-2: #eaeaea;
+  --accent-3: #999999;
+  --accent-4: #888888;
+  --accent-5: #666666;
+  --accent-6: #444444;
+  --accent-7: #333333;
+  --accent-8: #111111;
+  --accent-9: #000;
+
+  --font-primary: 'Urbanist', sans-serif;
+
+  /* font size variable */
+  --font-10: 10px;
+  --font-12: 12px;
+  --font-14: 14px;
+  --font-16: 16px;
+  --font-18: 18px;
+  --font-20: 20px;
+  --font-22: 22px;
+  --font-24: 24px;
+  --font-26: 26px;
+  --font-28: 28px;
+  --font-30: 30px;
+  --font-32: 32px;
+  --font-34: 34px;
+  --font-36: 36px;
+  --font-40: 40px;
+  --font-44: 44px;
+  --font-48: 48px;
+  --font-64: 64px;
+  --font-68: 68px;
+  --font-72: 72px;
+  --font-74: 74px;
+  --font-76: 76px;
+  /* font size variable */
+
+  /* primary color variable */
+  --brand-red: #FF3600;
+  --web-red: #DF340C;
+  --barnd-blue: #212530;
+  --web-blue: #252E47;
+  --brand-white: #fff;
+  --web-white: #F8F8F8;
+  --tan-clr: #F3EDE3;
+  --teal-clr: #345662;
+  /* primary color variable */
+
+  /* secondary color variable */
+  --cool-grey: #DDDBDB;
+  --yellow-clr: #FCD673;
+  --black-clr: #2A2A2B;
+  --light-green: #B1CBC0;
+  --deep-green: #5F7970;
+  /* secondary color variable */
+
+  /* button primary variable */
+  --btn-bg-primary: #000;
+  --btn-text-color-primary: #fff;
+  --btn-hover-text-color-primary: #fff;
+  --btn-bg-hover-primary: #0f172a;
+  /* button primary variable */
+
+  /* button primary red variable */
+  --btn-bg-red: #DF340C;
+  --btn-text-color-red: #fff;
+  --btn-hover-text-color-red: #fff;
+  --btn-border-red: #DF340C;
+  --btn-bg-hover-red: #FF3600;
+  --btn-border-hover-red: #FF3600;
+  /* button primary variable */
+
+  /* button primary blue variable */
+  --btn-bg-blue: #212530;
+  --btn-text-color-blue: #fff;
+  --btn-hover-text-color-blue: #fff;
+  --btn-border-blue: #212530;
+  --btn-bg-hover-blue: #252E47;
+  --btn-border-hover-blue: #252E47;
+  /* button primary blue variable */
+
+  /* button primary white variable */
+  --btn-bg-white: #F8F8F8;
+  --btn-text-color-white: #212530;
+  --btn-hover-text-color-white: #212530;
+  --btn-border-white: #212530;
+  --btn-bg-hover-white: #FFFFFF;
+  --btn-border-hover-white: #212530;
+  /* button primary white variable */
+
+  /* button primary teal variable */
+  --btn-bg-teal: #345662;
+  --btn-text-color-teal: #fff;
+  --btn-hover-text-color-teal: #fff;
+  --btn-border-teal: #345662;
+  --btn-bg-hover-teal: #3F6978;
+  --btn-border-hover-teal: #3F6978;
+  /* button primary teal variable */
+
+  /* button default variable */
+  --btn-bg-default: transparent;
+  --btn-text-color-default: #000;
+  --btn-border-clr-default: #000;
+  --btn-bg-hover-default: transparent;
+  --btn-hover-text-color-default: #000;
+  --btn-hover-border-clr-default: #cbd5e1;
+  /* button default variable */
+
+  /* button default red variable */
+  --btn-d-bg-red: #fff;
+  --btn-d-text-color-red: #DF340C;
+  --btn-d-hover-text-color-red: #FF3600;
+  --btn-d-border-red: #DF340C;
+  --btn-d-bg-hover-red: rgba(255, 54, 0, 0.1);
+  --btn-d-border-hover-red: #FF3600;
+  /* button default red variable */
+
+  /* button default blue variable */
+  --btn-d-bg-blue: #fff;
+  --btn-d-text-color-blue: #212530;
+  --btn-d-hover-text-color-blue: #212530;
+  --btn-d-border-blue: #212530;
+  --btn-d-bg-hover-blue: rgba(33, 37, 48, 0.1);
+  --btn-d-border-hover-blue: #212530;
+  /* button default blue variable */
+
+  /* button default blue variable */
+  --btn-d-bg-teal: #fff;
+  --btn-d-text-color-teal: #345662;
+  --btn-d-hover-text-color-teal: #345662;
+  --btn-d-border-teal: #345662;
+  --btn-d-bg-hover-teal: rgba(52, 86, 98, 0.1);
+  --btn-d-border-hover-teal: #345662;
+  /* button default blue variable */
+
+  /* label primary red variable */
+  --label-bg-red: #DF340C;
+  --label-text-clr-red: #fff;
+  --label-border-red: #DF340C;
+  /* label primary red variable */
+
+  /* label primary blue variable */
+  --label-bg-blue: #212530;
+  --label-text-clr-blue: #fff;
+  --label-border-blue: #212530;
+  /* label primary blue variable */
+
+  /* label primary white variable */
+  --label-bg-white: #fff;
+  --label-text-clr-white: #212530;
+  --label-border-white: #212530;
+  /* label primary white variable */
+
+  /* label primary tan variable */
+  --label-bg-tan: #F3EDE3;
+  --label-text-clr-tan: #212530;
+  --label-border-tan: #F3EDE3;
+  /* label primary tan variable */
+
+  /* label primary yellow variable */
+  --label-bg-yellow: #FCD673;
+  --label-text-clr-yellow: #212530;
+  --label-border-yellow: #FCD673;
+  /* label primary tan variable */
+
+  /* label default red variable */
+  --label-d-bg-red: #fff;
+  --label-d-text-clr-red: #DF340C;
+  --label-d-border-red: #DF340C;
+  /* label default red variable */
+
+  /* label default blue variable */
+  --label-d-bg-blue: #fff;
+  --label-d-text-clr-blue: #212530;
+  --label-d-border-blue: #212530;
+  /* label default blue variable */
+
+  /* label default white variable */
+  --label-d-bg-white: #212530;
+  --label-d-text-clr-white: #fff;
+  --label-d-border-white: #fff;
+  /* label default white variable */
+
+  /* Header variable */
+  --bg-header-color: #fff;
+  --text-header-clr: #2e2929;
+  --text-hover-clr: #000;
+  --border-hover-clr: #000;
+  /* footer variable */
+
+  /* footer variable */
+  --bg-footer-color: #f3f4f6;
+  --text-footer-clr: #000;
+  /* footer variable */
+}
+
+[data-theme='dark'] {
+  --primary: #000000;
+  --primary-2: #111;
+  --secondary: #ffffff;
+  --secondary-2: #f1f3f5;
+  --hover: rgba(255, 255, 255, 0.075);
+  --hover-1: rgba(255, 255, 255, 0.15);
+  --hover-2: rgba(255, 255, 255, 0.25);
+  --selection: var(--purple);
+
+  --text-base: white;
+  --text-primary: white;
+  --text-secondary: black;
+
+  --accent-9: #fff;
+  --accent-8: #fafafa;
+  --accent-7: #eaeaea;
+  --accent-6: #999999;
+  --accent-5: #888888;
+  --accent-4: #666666;
+  --accent-3: #444444;
+  --accent-2: #333333;
+  --accent-1: #111111;
+  --accent-0: #000;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+@media screen and (max-width: 767px) {
+  :root {
+    --font-10: 10px;
+    --font-12: 12px;
+    --font-14: 14px;
+    --font-16: 16px;
+    --font-18: 18px;
+    --font-20: 18px;
+    --font-22: 22px;
+    --font-24: 18px;
+    --font-26: 22px;
+    --font-28: 24px;
+    --font-30: 24px;
+    --font-32: 24px;
+    --font-34: 30px;
+    --font-36: 28px;
+    --font-40: 30px;
+    --font-44: 30px;
+    --font-48: 30px;
+    --font-64: 30px;
+    --font-68: 30px;
+    --font-72: 32px;
+    --font-74: 36px;
+    --font-76: 40px;
+  }
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Black.woff2') format('woff2'),
+    url('../font/Urbanist-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraLight.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Italic.woff2') format('woff2'),
+    url('../font/Urbanist-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraBoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-BlackItalic.woff2') format('woff2'),
+    url('../font/Urbanist-BlackItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Light.woff2') format('woff2'),
+    url('../font/Urbanist-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-BoldItalic.woff2') format('woff2'),
+    url('../font/Urbanist-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraBold.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraBold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraLightItalic.woff') format('woff');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Bold.woff2') format('woff2'),
+    url('../font/Urbanist-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-SemiBold.woff2') format('woff2'),
+    url('../font/Urbanist-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
+    url('../font/Urbanist-SemiBoldItalic.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Regular.woff2') format('woff2'),
+    url('../font/Urbanist-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ThinItalic.woff2') format('woff2'),
+    url('../font/Urbanist-ThinItalic.woff') format('woff');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-MediumItalic.woff2') format('woff2'),
+    url('../font/Urbanist-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-LightItalic.woff2') format('woff2'),
+    url('../font/Urbanist-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Medium.woff2') format('woff2'),
+    url('../font/Urbanist-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Thin.woff2') format('woff2'),
+    url('../font/Urbanist-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+  touch-action: manipulation;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  font-family: var(--font-primary);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--primary);
+  color: var(--text-primary);
+  overscroll-behavior-x: none;
+}
+
+body {
+  position: relative;
+  min-height: 100%;
+  margin: 0;
+  top: 0 !important;
+  font-family: 'Urbanist' !important;
+}
+
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}

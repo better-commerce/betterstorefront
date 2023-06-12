@@ -23,7 +23,7 @@ import {
 import ReturnModal from '@components/returns/Modal'
 import { isCartAssociated } from '@framework/utils/app-util'
 
-export default function MyOrders() {
+export default function MyOrders({ deviceInfo }: any) {
   const [data, setData] = useState([])
   const [productIdsInReturn, setProductIdsInReturn] = useState([''])
   const [returnData, setReturnData] = useState({ product: {}, order: {} })
@@ -121,7 +121,7 @@ export default function MyOrders() {
       <main className="sm:px-6 lg:px-8">
         <div className="max-w-4xl lg:mx-12">
           <div className="lg:px-4 sm:px-0">
-            <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+            <h1 className="font-extrabold tracking-tight text-gray-900">
               {ORDER_HISTORY_TITLE}
             </h1>
             <p className="mt-2 text-sm text-gray-500">{MY_ORDERS_TEXT}</p>

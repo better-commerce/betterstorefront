@@ -306,7 +306,7 @@ export default function SizeInline({
       <>
          <div className="flex items-center justify-between my-3" id="productSize">
             <div>
-               <h3 className="text-gray-700 text-ms">
+               <h4 className="text-gray-700">
                   {label} :
                   {selected.attributes ? <span className='pl-1 font-light text-gray-700 text-ms dark:text-gray-700'>{selected.attributes[1].fieldValue}</span> : <span className='pl-1 text-sm font-bold text-gray-400'></span>}
                   <span className="pl-1 text-xs font-bold text-black sm:text-sm">
@@ -330,7 +330,7 @@ export default function SizeInline({
                            </>
                         ))}
                   </span>
-               </h3>
+               </h4>
             </div>
             <div>
                <p

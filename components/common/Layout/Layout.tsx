@@ -65,13 +65,14 @@ const ModalUI: FC<React.PropsWithChildren<unknown>> = () => {
   return null
 }
 
-const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSidebar(): any }>> = ({
+const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSidebar(): any } & IExtraProps>> = ({
   sidebarView,
   closeSidebar,
+  deviceInfo,
 }) => {
   return (
-    <Sidebar onClose={closeSidebar}>
-      {sidebarView === 'CART_VIEW' && <CartSidebarView />}
+    <Sidebar onClose={closeSidebar} deviceInfo={deviceInfo}>
+      {sidebarView === 'CART_VIEW' && <CartSidebarView deviceInfo={deviceInfo} />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
       {sidebarView === 'PAYMENT_VIEW' && <PaymentMethodView />}
@@ -80,10 +81,10 @@ const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSideba
   )
 }
 
-const SidebarUI: FC<React.PropsWithChildren<unknown>> = () => {
+const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({ deviceInfo }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
-    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} />
+    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} deviceInfo={deviceInfo} />
   ) : null
 }
 
@@ -94,7 +95,7 @@ interface LayoutProps {
 
 export interface IExtraProps {
   readonly deviceInfo: IDeviceInfo;
-}
+};
 
 const Layout: FC<Props & IExtraProps> = ({
   children,
@@ -155,9 +156,9 @@ const Layout: FC<Props & IExtraProps> = ({
         <main className="pt-16 fit">{children}</main>
         <Footer config={data.footer} deviceInfo={deviceInfo} />
         <ModalUI />
-        <SidebarUI />
+        <SidebarUI deviceInfo={deviceInfo} />
         <FeatureBar title={GENERAL_COOKIE_TEXT} hide={acceptedCookies}
-          action={<Button className="mx-5" onClick={() => onAcceptCookies()}>{BTN_ACCEPT_COOKIE}</Button>}
+          action={<Button className="mx-5 btn-c btn-primary" onClick={() => onAcceptCookies()}>{BTN_ACCEPT_COOKIE}</Button>}
         />
       </div>
     </CommerceProvider>

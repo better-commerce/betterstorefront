@@ -1,7 +1,10 @@
 import "@assets/css/base.css"
+import "@theme/blue/css/base.css"
 import "@assets/css/main.css"
 import '@assets/icon.css'
 import "@assets/css/chrome-bug.css"
+import "@theme/blue/css/global.css"
+import "@assets/css/checkout-frame.css"
 import { FC, useEffect, useState } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
@@ -24,6 +27,7 @@ import analytics from '@components/services/analytics/analytics'
 import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import OverlayLoader from "@components/common/OverlayLoader";
 import { resetSnippetElements } from "@framework/content/use-content-snippet"
 import { ContentSnippet } from "@components/common/Content"
 import NextHead from 'next/head'
@@ -31,6 +35,8 @@ import { GA4_DISABLED, GA4_MEASUREMENT_ID } from '@framework/utils/constants'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { DeviceType } from "@commerce/utils/use-device"
 import InitDeviceInfo from "@components/common/InitDeviceInfo"
+import CustomCacheBuster from "@components/common/CustomCacheBuster";
+import { version as buildVersion } from '../package.json';
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -73,6 +79,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     isDesktop: undefined,
     isIPadorTablet: undefined,
     deviceType: DeviceType.UNKNOWN,
+    isOnlyMobile: undefined,
   })
 
   const snippets = [
@@ -108,10 +115,10 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       'src',
       '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
     )
-    
+
     document.body.appendChild(addScript)
       ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-      document.getElementById('goog-gt-tt')?.remove();
+    document.getElementById('goog-gt-tt')?.remove();
   }, []);
 
   useEffect(() => {
@@ -247,6 +254,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       <div id="google_translate_element" />
       <ManagedUIContext>
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
+        <CustomCacheBuster buildVersion={buildVersion} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
         <Layout
           nav={nav}
@@ -256,6 +264,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
           keywords={keywordsData}
           deviceInfo={deviceInfo}
         >
+          <OverlayLoader />
           <Component
             {...pageProps}
             location={location}

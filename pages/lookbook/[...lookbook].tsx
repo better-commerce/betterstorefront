@@ -17,7 +17,7 @@ import { IMG_PLACEHOLDER, SHOP_THE_LOOK } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 
-function LookbookDetailPage({ data, slug }: any) {
+function LookbookDetailPage({ data, slug, deviceInfo, }: any) {
   const router = useRouter()
   const { basketId, openCart, setCartItems } = useUI()
   const [products, setProducts] = useState(data.products)
@@ -81,7 +81,7 @@ function LookbookDetailPage({ data, slug }: any) {
         </div>
       </div>
       <div className="mx-auto mt-5 sm:w-4/5">
-        <ProductGrid products={products} currentPage={products?.currentpage} handlePageChange={() => { }} handleInfiniteScroll={() => { }} />
+        <ProductGrid products={products} currentPage={products?.currentpage} handlePageChange={() => { }} handleInfiniteScroll={() => { }} deviceInfo={deviceInfo} />
       </div>
     </div>
   )

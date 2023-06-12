@@ -13,7 +13,7 @@ import OrderStatusMapping from './OrderStatusMapping';
 
 // Other Imports
 import { matchStrings, priceFormat, stringToNumber } from '@framework/utils/parse-util';
-import { PaymentOrderStatus } from '@components/utils/payment-constants';
+import { PaymentStatus } from '@components/utils/payment-constants';
 import ReviewInput from '@components/product/Reviews/ReviewInput';
 import { ArrowLeft } from '@components/icons';
 // import { CLOSE_PANEL, CURRENCY_SYMBOL_RUPEE } from '@components/utils/textVariables';
@@ -35,11 +35,10 @@ import OrderSummary from './OrderSummary';
 import HelpModal from './HelpModal';
 import OrderReviewModal from './OrderReviewModal';
 import OrderDeliveryPlanItems from './OrderDeliveryPlanItems';
-import useDevice from '@commerce/utils/use-device';
 import { recordGA4Event } from '@components/services/analytics/ga4';
 
-export default function OrderDetail({ details, showDetailedOrder, show }: any) {
-  const { isMobile, isIPadorTablet } = useDevice();
+export default function OrderDetail({ details, showDetailedOrder, show, deviceInfo }: any) {
+  const { isMobile, isIPadorTablet } = deviceInfo;
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isHelpOrderOpen, setIsHelpOrderOpen] = useState(false);
   const [isHelpStatus, setIsHelpStatus] = useState<any>();
@@ -71,7 +70,7 @@ export default function OrderDetail({ details, showDetailedOrder, show }: any) {
   const isConfirmedOrder = () => {
     if (details?.order?.payments?.length) {
       const payment = details?.order?.payments?.find((x: any) => x?.isValid);
-      if (payment?.status === PaymentOrderStatus.PAID) {
+      if (payment?.status === PaymentStatus.PAID) {
         return true;
       }
     }

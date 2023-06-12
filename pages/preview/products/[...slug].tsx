@@ -41,7 +41,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent, slug }: any) {
+function Slug({ data, setEntities, recordEvent, slug, deviceInfo }: any) {
   const router = useRouter()
   return router.isFallback ? (
     <h1>{LOADER_LOADING}</h1>
@@ -54,6 +54,7 @@ function Slug({ data, setEntities, recordEvent, slug }: any) {
         slug={slug}
         snippets={data.snippets}
         isPreview={true}
+        deviceInfo={deviceInfo}
       />
     )
   )

@@ -76,6 +76,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 export default function ProductCollection({
   query = {},
   brandDetails,
+  deviceInfo,
   ...props
 }: any) {
   const adaptedQuery = { ...query }
@@ -202,6 +203,7 @@ export default function ProductCollection({
           products={productDataToPass}
           currentPage={state.currentPage}
           handleInfiniteScroll={handleInfiniteScroll}
+          deviceInfo={deviceInfo}
         />
       </main>
     </div>

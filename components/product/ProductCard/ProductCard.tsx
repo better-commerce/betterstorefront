@@ -11,7 +11,7 @@ import { round } from 'lodash'
 import { BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, ITEM_WISHLISTED, QUICK_VIEW, WISHLIST_TITLE } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
-import { isMobile } from 'react-device-detect'
+import { IExtraProps } from '@components/common/Layout/Layout'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
@@ -27,7 +27,8 @@ interface Attribute {
   fieldValues?: []
 }
 
-const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product: productData, hideWishlistCTA = false, }) => {
+const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product: productData, hideWishlistCTA = false, deviceInfo }) => {
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
   const [currentProductData, setCurrentProductData] = useState({ image: productData.image, link: productData.slug, })
   const { basketId, user, addToWishlist, openWishlist, setCartItems, openNotifyUser, wishListItems, } = useUI()
   const [quickViewData, setQuickViewData] = useState(null)
@@ -195,9 +196,9 @@ const ProductCard: FC<React.PropsWithChildren<Props>> = ({ product: productData,
         </div>
 
         <Link passHref href={`/${currentProductData.link}`} title={`${product.name} \t ${itemPrice}`}>
-          <h3 className="flex items-center justify-between w-full h-10 px-2 my-1 text-xs font-semibold text-black capitalize group-hover:hidden product-name sm:text-sm hover:text-gray-950">
+          <h6 className="flex items-center justify-between w-full h-10 px-2 my-1 font-semibold text-black capitalize group-hover:hidden product-name hover:text-gray-950">
             {product?.name?.toLowerCase()}
-          </h3>
+          </h6>
 
           <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 group-hover:flex sm:px-2 sizes-ul sm:text-sm">
             <li className="mr-1">Sizes:</li>
