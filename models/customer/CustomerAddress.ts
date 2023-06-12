@@ -3,25 +3,27 @@ import { Guid, GUIDType } from "@commerce/types";
 export default class CustomerAddressModel {
     address1: string;
     address2: string;
-    address3: string;
+    address3?: string;
     city: string;
-    companyName: string;
+    companyName?: string;
     country: string;
     countryCode: string;
-    customerId: string | GUIDType; // Guid
+    customerId?: string | GUIDType; // Guid
     firstName: string;
-    id: number;
+    id?: number;
     isDefault: boolean;
     isDefaultBilling: boolean;
     isDefaultDelivery: boolean;
-    isDefaultForSubscription: boolean;
+    isDefaultForSubscription?: boolean;
     lastName: string;
-    mobileNo: string;
+    mobileNo?: string;
     phoneNo: string;
     postCode: string;
     state: string;
     title: string;
     userId: string | GUIDType; // Guid
+    isConsentSelected: boolean;
+    label: string;
 
     constructor() {
         this.address1 = "";
@@ -45,5 +47,7 @@ export default class CustomerAddressModel {
         this.state = "";
         this.title = "";
         this.userId = Guid.empty;
+        this.isConsentSelected = false;
+        this.label = "";
     }
 }

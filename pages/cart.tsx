@@ -10,8 +10,14 @@ import { basketId as basketIdGenerator } from '@components/ui/context'
 import Link from 'next/link'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
-import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
-const PromotionInput = dynamic(() => import('../components/cart/PromotionInput'));
+import {
+  PlusSmallIcon,
+  MinusSmallIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/24/outline'
+const PromotionInput = dynamic(
+  () => import('../components/cart/PromotionInput')
+)
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
@@ -37,10 +43,11 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
 
 function Cart({ cart }: any) {
-  const { setCartItems, cartItems, basketId } = useUI()
+  const { setCartItems, cartItems, basketId, basketPromos, getBasketPromos } = useUI()
   const { addToCart } = cartHandler()
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
-  const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] = useState(null)
+  const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
+    useState(null)
 
   const handleToggleOpenSizeChangeModal = async (product?: any) => {
     // toggle open/close modal
@@ -106,7 +113,7 @@ function Cart({ cart }: any) {
       DeliveryCenter: null,
     }
     //const response = await axios.post(NEXT_SHIPPING_PLANS, { model })
-    const shippingPlans = await getShippingPlans()({ model: model });
+    const shippingPlans = await getShippingPlans()({ model: model })
     //console.log(JSON.stringify(shippingPlans));
 
     setCartItems({
@@ -117,13 +124,12 @@ function Cart({ cart }: any) {
 
   useEffect(() => {
     async function loadShippingPlans() {
-      await fetchShippingPlans();
+      await fetchShippingPlans()
     }
     
     if (cart?.shippingMethods.length > 0) {
       loadShippingPlans()
-    }
-    else {
+    } else {
       setCartItems(cart)
     }
   }, [])
@@ -167,8 +173,15 @@ function Cart({ cart }: any) {
   return (
     <>
       <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" id="canonical" href="https://demostore.bettercommerce.io/cart" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
+        <link
+          rel="canonical"
+          id="canonical"
+          href="https://demostore.bettercommerce.io/cart"
+        />
         <title>Basket</title>
         <meta name="title" content="Basket" />
         <meta name="description" content="Basket" />
@@ -178,85 +191,164 @@ function Cart({ cart }: any) {
         <meta property="og:description" content="Basket" key="ogdesc" />
       </NextHead>
       <div className="container w-full px-4 mx-auto mt-6 bg-white sm:px-6 sm:mt-10">
-        <h1 className="relative text-2xl font-semibold tracking-tight text-black uppercase sm:text-2xl">
-          {GENERAL_SHOPPING_CART} <span className='absolute pl-2 text-sm font-normal text-gray-400 top-2'>{userCart?.lineItems?.length} Items added</span>
+        <h1 className="relative font-semibold tracking-tight text-black uppercase">
+          {GENERAL_SHOPPING_CART}{' '}
+          <span className="absolute pl-2 text-sm font-normal text-gray-400 top-2">
+            {userCart?.lineItems?.length} Items added
+          </span>
         </h1>
         {!isEmpty && (
           <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
             <section aria-labelledby="cart-heading" className="lg:col-span-7">
               {userCart.lineItems?.map((product: any, productIdx: number) => (
-                <div key={productIdx} className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3">
+                <div
+                  key={productIdx}
+                  className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3"
+                >
                   <div className="flex-shrink-0">
-                    <Image style={css} width={140} height={180} src={generateUri(product.image, "h=200&fm=webp") || IMG_PLACEHOLDER} alt={product.name} className="object-cover object-center w-16 rounded-lg sm:w-28 image" />
+                    <Image
+                      style={css}
+                      width={140}
+                      height={180}
+                      src={
+                        generateUri(product.image, 'h=200&fm=webp') ||
+                        IMG_PLACEHOLDER
+                      }
+                      alt={product.name}
+                      className="object-cover object-center w-16 rounded-lg sm:w-28 image"
+                    />
                   </div>
                   <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
-                    <h3 className="py-0 text-sm font-semibold text-black sm:py-0 sm:text-sm">{product.brand}</h3>
+                    <h3 className="py-0 text-sm font-semibold text-black sm:py-0 sm:text-sm">
+                      {product.brand}
+                    </h3>
                     <h3 className="my-2 text-sm sm:text-sm sm:my-1">
                       <Link href={`/${product.slug}`}>
-                        <span className="font-normal text-gray-700 hover:text-gray-800">{product.name}</span>
+                        <span className="font-normal text-gray-700 hover:text-gray-800">
+                          {product.name}
+                        </span>
                       </Link>
                     </h3>
                     <div className="mt-0 font-bold text-black text-md sm:font-medium">
                       {product.price?.formatted?.withTax}
-                      {product.listPrice?.raw.withTax > 0 && product.listPrice?.raw.withTax != product.price?.raw?.withTax ? (
-                        <span className="px-2 text-sm text-red-400 line-through">{GENERAL_PRICE_LABEL_RRP}{' '}{product.listPrice.formatted.withTax}</span>
+                      {product.listPrice?.raw.withTax > 0 &&
+                      product.listPrice?.raw.withTax !=
+                        product.price?.raw?.withTax ? (
+                        <span className="px-2 text-sm text-red-400 line-through">
+                          {GENERAL_PRICE_LABEL_RRP}{' '}
+                          {product.listPrice.formatted.withTax}
+                        </span>
                       ) : null}
                     </div>
                     <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
                       {product?.variantProducts?.length > 0 ? (
                         <div></div>
                       ) : (
-                        <div role="button" onClick={handleToggleOpenSizeChangeModal.bind(null, product)}>
+                        <div
+                          role="button"
+                          onClick={handleToggleOpenSizeChangeModal.bind(
+                            null,
+                            product
+                          )}
+                        >
                           <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
-                            <div className="mr-1 text-sm text-gray-700">Size: <span className='font-semibold text-black'>{getLineItemSizeWithoutSlug(product)}</span></div>
+                            <div className="mr-1 text-sm text-gray-700">
+                              Size:{' '}
+                              <span className="font-semibold text-black">
+                                {getLineItemSizeWithoutSlug(product)}
+                              </span>
+                            </div>
                             <ChevronDownIcon className="w-4 h-4 text-black" />
                           </div>
                         </div>
                       )}
                       <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                        <MinusSmallIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
-                        <span className="px-4 py-1 text-md sm:py-1">{product.qty}</span>
-                        <PlusSmallIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
+                        <MinusSmallIcon
+                          onClick={() => handleItem(product, 'decrease')}
+                          className="w-4 cursor-pointer"
+                        />
+                        <span className="px-4 py-1 text-md sm:py-1">
+                          {product.qty}
+                        </span>
+                        <PlusSmallIcon
+                          className="w-4 cursor-pointer"
+                          onClick={() => handleItem(product, 'increase')}
+                        />
                       </div>
                     </div>
 
                     {product.children?.map((child: any, idx: number) => (
                       <div className="flex mt-10" key={'child' + idx}>
                         <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                          <img src={child.image} alt={child.name} className="object-cover object-center w-full h-full" />
+                          <img
+                            src={child.image}
+                            alt={child.name}
+                            className="object-cover object-center w-full h-full"
+                          />
                         </div>
                         <div className="flex justify-between ml-5 font-medium text-gray-900">
                           <Link href={`/${child.slug}`}>{child.name}</Link>
-                          <p className="ml-4">{child.price?.formatted?.withTax > 0 ? child.price?.formatted?.withTax : ""}</p>
+                          <p className="ml-4">
+                            {child.price?.formatted?.withTax > 0
+                              ? child.price?.formatted?.withTax
+                              : ''}
+                          </p>
                         </div>
                         {!child.parentProductId ? (
                           <div className="flex items-center justify-end flex-1 text-sm">
-                            <button type="button" onClick={() => handleItem(child, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500">
+                            <button
+                              type="button"
+                              onClick={() => handleItem(child, 'delete')}
+                              className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
+                            >
                               <span className="sr-only">{GENERAL_REMOVE}</span>
-                              <XMarkIconSolid className="w-5 h-5" aria-hidden="true" />
+                              <XMarkIconSolid
+                                className="w-5 h-5"
+                                aria-hidden="true"
+                              />
                             </button>
                           </div>
                         ) : (
-                          <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">{child.qty}</div>
+                          <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">
+                            {child.qty}
+                          </div>
                         )}
                       </div>
-                    )
-                    )}
+                    ))}
                     <div className="absolute top-0 right-0">
-                      <button type="button" onClick={() => handleItem(product, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500">
+                      <button
+                        type="button"
+                        onClick={() => handleItem(product, 'delete')}
+                        className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
+                      >
                         <span className="sr-only">{GENERAL_REMOVE}</span>
-                        <XMarkIconSolid className="w-4 h-4 mt-2 text-black sm:h-5 sm:w-5" aria-hidden="true" />
+                        <XMarkIconSolid
+                          className="w-4 h-4 mt-2 text-black sm:h-5 sm:w-5"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
-                    <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">{product.shippingPlan?.shippingSpeed}</div>
+                    <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
+                      {product.shippingPlan?.shippingSpeed}
+                    </div>
                   </div>
                 </div>
               ))}
             </section>
-            <section aria-labelledby="summary-heading" className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-20 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5">
-              <h2 id="summary-heading" className="mb-1 text-xl font-semibold text-black uppercase">{GENERAL_ORDER_SUMMARY}</h2>
+            <section
+              aria-labelledby="summary-heading"
+              className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-20 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5"
+            >
+              <h4
+                id="summary-heading"
+                className="mb-1 font-semibold text-black uppercase"
+              >
+                {GENERAL_ORDER_SUMMARY}
+              </h4>
               <div className="mt-4 lg:-mb-3">
-                <Disclosure defaultOpen={true}>
+                <Disclosure
+                  defaultOpen={cartItems.promotionsApplied?.length > 0}
+                >
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
@@ -268,9 +360,14 @@ function Cart({ cart }: any) {
                         enterTo="transform scale-100 opacity-100"
                         leave="transition duration-75 ease-out"
                         leaveFrom="transform scale-100 opacity-100"
-                        leaveTo="transform scale-95 opacity-0">
+                        leaveTo="transform scale-95 opacity-0"
+                      >
                         <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-500">
-                          <PromotionInput />
+                          <PromotionInput
+                            basketPromos={basketPromos}
+                            items={cartItems}
+                            getBasketPromoses={getBasketPromos}
+                          />
                         </Disclosure.Panel>
                       </Transition>
                     </>
@@ -301,14 +398,19 @@ function Cart({ cart }: any) {
                         <span>{GENERAL_DISCOUNT}</span>
                       </dt>
                       <dd className="font-semibold text-red-500 text-md">
-                        <p>{'-'}{cartItems.discount?.formatted?.withTax}</p>
+                        <p>
+                          {'-'}
+                          {cartItems.discount?.formatted?.withTax}
+                        </p>
                       </dd>
                     </>
                   )}
                 </div>
 
                 <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
-                  <dt className="text-lg font-bold text-black">{GENERAL_TOTAL}</dt>
+                  <dt className="text-lg font-bold text-black">
+                    {GENERAL_TOTAL}
+                  </dt>
                   <dd className="text-xl font-bold text-black">
                     {cartItems.grandTotal?.formatted?.withTax}
                   </dd>
@@ -319,7 +421,7 @@ function Cart({ cart }: any) {
                 <Link href="/checkout">
                   <button
                     type="submit"
-                    className="w-full px-4 py-3 font-medium text-center text-white uppercase bg-black border border-transparent rounded-sm shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black"
+                    className="w-full px-4 py-3 font-medium text-center text-white uppercase btn-primary"
                   >
                     {BTN_PLACE_ORDER}
                   </button>

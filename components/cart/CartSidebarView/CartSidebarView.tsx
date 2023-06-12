@@ -49,9 +49,11 @@ import { data } from 'autoprefixer'
 import Engraving from '@components/product/Engraving'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
+import { IExtraProps } from '@components/common/Layout/Layout'
 
-const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
+const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo }: any) => {
   const { addToWishlist, openWishlist, displayAlert, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, user, isGuestUser, displaySidebar } = useUI()
+  const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo;
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
@@ -73,7 +75,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
   const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
-  const [sizeDialogState, setSizeDialogState] = useState<any>({type: ''})
+  const [sizeDialogState, setSizeDialogState] = useState<any>({ type: '' })
   const content = useTranslation()
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
@@ -654,8 +656,8 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                       </div>
                       {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
                         <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
-                          <h3 className="font-semibold text-14 text-green-dark">
-                            {cartItems.currencySymbol}{priceFormat(totalDiscount).slice(1)}{' '}{GENERAL_TOTAL_SAVINGS}</h3>
+                          <h4 className="font-semibold text-green-dark">
+                            {cartItems.currencySymbol}{priceFormat(totalDiscount).slice(1)}{' '}{GENERAL_TOTAL_SAVINGS}</h4>
                         </div>
                       )}
                       <div className="px-4 mt-8 sm:px-6">
@@ -688,6 +690,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                   <RelatedProductWithGroup
                                     products={altRelatedProducts?.relatedProducts?.products?.results || []}
                                     productPerColumn={1.7}
+                                    deviceInfo={deviceInfo}
                                   />
                                 </div>
                               )}
@@ -729,11 +732,11 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                     <div className="flex flex-col flex-1 ml-4">
                                       <div>
                                         <div className="flex justify-between font-semibold text-gray-900 font-sm">
-                                          <h3 onClick={handleClose}>
+                                          <h5 onClick={handleClose}>
                                             <Link href={`/${product.slug}`}>
                                               {product.name}
                                             </Link>
-                                          </h3>
+                                          </h5>
                                           <p className="ml-4">
                                             {product.price?.formatted?.withTax}
                                           </p>
@@ -968,7 +971,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                     {!isEmpty && (
                       <div className="sticky bottom-0 pt-4 pb-1 mt-2 ml-5 bg-white">
                         <div className="-mt-3">
-                          <Disclosure>
+                          <Disclosure defaultOpen>
                             {({ open }) => (
                               <>
                                 <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
@@ -983,7 +986,11 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                                   leaveTo="transform scale-95 opacity-0"
                                 >
                                   <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                    <PromotionInput />
+                                    <PromotionInput 
+                                      basketPromos={basketPromos}
+                                      items={cartItems}
+                                      getBasketPromoses={getBasketPromos}
+                                    />
                                   </Disclosure.Panel>
                                 </Transition>
                               </>
@@ -1021,7 +1028,7 @@ const CartSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
                               handleClose()
                               beginCheckout(cartItems)
                             }}
-                            className="flex items-center justify-center py-3 capitalize transition bg-black text-gray-50 hover:opacity-75 link-button"
+                            className="flex items-center justify-center py-3 capitalize transition btn-primary hover:opacity-75"
                           >
                             {content.GENERAL_CHECKOUT}
                           </Link>

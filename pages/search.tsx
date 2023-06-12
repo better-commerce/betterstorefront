@@ -13,7 +13,6 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
-import { isMobile } from 'react-device-detect'
 declare const window: any;
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -75,7 +74,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function Search({ query, setEntities, recordEvent }: any) {
+function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
+  const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo;
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -297,7 +297,7 @@ function Search({ query, setEntities, recordEvent }: any) {
       </NextHead>
       <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
         <span className='px-4 text-sm font-medium sm:px-0'>Showing {data.products.total} Results for</span>
-        <h1 className="px-4 text-xl font-semibold tracking-tight text-black sm:px-0 sm:text-2xl">{GENERAL_CATALOG}</h1>
+        <h1 className="px-4 font-semibold tracking-tight text-black sm:px-0">{GENERAL_CATALOG}</h1>
         <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
           {isMobile ? (
             <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
@@ -306,7 +306,7 @@ function Search({ query, setEntities, recordEvent }: any) {
           )}
           <div className="sm:col-span-10">
             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
-            <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} />
+            <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} />
           </div>
         </div>
       </div>

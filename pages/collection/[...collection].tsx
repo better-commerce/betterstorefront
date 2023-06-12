@@ -23,7 +23,6 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { obfuscateHostName } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState } from '@components/ui/context'
-import { isMobile } from 'react-device-detect'
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
@@ -85,7 +84,10 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 export default function CollectionPage(props: any) {
+  const { deviceInfo } = props
+  const { isOnlyMobile, isMobile, isIPadorTablet } = deviceInfo;
   const router = useRouter()
+  const [paddingTop, setPaddingTop] = useState('0')
   const adaptedQuery: any = { ...router.query }
   const [plpFilterState, setPLPFilterState] = useState<IPLPFilterState>({
     filters: [],
@@ -342,23 +344,105 @@ export default function CollectionPage(props: any) {
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
-        {props?.images?.length > 0 && (
-          <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
-            {props?.images?.map((img: any, idx: number) => (
-              <SwiperSlide key={idx}>
-                <Link href={img.link || '#'}>
-                  <Image
-                    style={css}
-                    width={1920}
-                    height={460}
-                    src={generateUri(img.url, 'h=500&fm=webp') || IMG_PLACEHOLDER}
-                    alt={props?.name}
-                    className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
-                  />
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+
+        {props?.customInfo3 == 'vertical' && (
+          <>
+            <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-0 sm:px-0 sm:mt-4">
+              {props?.images?.length > 1 ? (
+                <>
+                  <div className="w-full v-image-space">
+                    {props?.images?.map((img: any, idx: number) => {
+                      const imgUrl = (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
+                      return (
+                        <div key={idx}>
+                          <div className="relative w-full h-auto px-0 collection-multi-vimage">
+                            <Link legacyBehavior href={img?.link || '#'} passHref>
+                              <span
+                                style={{ paddingTop }}
+                                className="block"
+                              >
+                                <Image
+                                  src={
+                                    generateUri(
+                                      imgUrl,
+                                      'fm=webp&h=530&q=50'
+                                    ) || IMG_PLACEHOLDER
+                                  }
+                                  alt="Collection Banner"
+                                  layout="fill"
+                                  objectFit="contain"
+                                  className=""
+                                  onLoad={({ target }) => {
+                                    const { naturalWidth, naturalHeight } =
+                                      target as HTMLImageElement
+                                    setPaddingTop(
+                                      `calc(100% / (${naturalWidth} / ${naturalHeight})`
+                                    )
+                                  }}
+                                ></Image>
+                              </span>
+                            </Link>
+                            <div className="absolute z-10 text-left bottom-3 left-4">
+                              <h3 className="font-medium text-white text-14">
+                                {img?.title}
+                              </h3>
+                              <p className="mb-2 font-normal text-left text-white text-10">
+                                {img?.description}
+                              </p>
+                              {img?.title ? (
+                                <>
+                                  <Link legacyBehavior href={img?.link} passHref>
+                                    <span className="font-medium text-left text-white underline text-12">
+                                      Shop now
+                                    </span>
+                                  </Link>
+                                </>
+                              ) : null}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {props?.images?.map((img: any, idx: number) => {
+                    const imgUrl = (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
+                    return (
+                      <div className="w-full h-auto px-0" key={idx}>
+                        <Link legacyBehavior href={img?.link || '#'}>
+                          <a>
+                            <img src={imgUrl} alt="banner" />
+                          </a>
+                        </Link>
+                      </div>
+                    )
+                  })}
+                </>
+              )}
+            </div>
+          </>
+        )}
+        {props?.customInfo3 == 'Horizontal' || (props?.customInfo3 == 'horizontal') && (
+          props?.images?.length > 0 && (
+            <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
+              {props?.images?.map((img: any, idx: number) => (
+                <SwiperSlide key={idx}>
+                  <Link href={img.link || '#'}>
+                    <Image
+                      style={css}
+                      width={1920}
+                      height={460}
+                      src={generateUri(img.url, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                      alt={props?.name}
+                      className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
+                    />
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )
         )}
 
         <div className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4 ${cls}`}>
@@ -382,12 +466,12 @@ export default function CollectionPage(props: any) {
                   {isMobile ? null : (
                     <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
                   )}
-                  <ProductGridWithFacet products={productDataToPass} currentPage={props?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} />
+                  <ProductGridWithFacet products={productDataToPass} currentPage={props?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} />
                 </div>
               </>
             ) : (
               <div className="col-span-12">
-                <ProductGrid products={productDataToPass} currentPage={props?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} />
+                <ProductGrid products={productDataToPass} currentPage={props?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} />
               </div>
             )}
           </div>

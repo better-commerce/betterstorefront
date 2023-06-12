@@ -89,7 +89,7 @@ export default function Wishlist() {
       <main className="sm:px-6 lg:px-8">
         <div className="max-w-4xl lg:mx-12">
           <div className="lg:px-0 sm:px-0">
-            <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+            <h1 className="font-extrabold tracking-tight text-gray-900">
               {/* {WISHLIST_TITLE} */}
             </h1>
           </div>
@@ -101,7 +101,7 @@ export default function Wishlist() {
                <img src="/assets/images/basket-no-item.svg" alt="no basket icon" className='m-92-img' />
                <div className='my-0 font-semibold text-secondary-full-opacity text-m-16 text-24'>{WISHLIST_SUB_TITLE}</div>
                <p className='text-xs sm:text-sm text-primary opacity-60'>Explore more and save items in your wishlist. </p>
-               <div className="flex w-full mt-5 sm:flex-col items-center"><a href="/search" className="w-40 flex items-center justify-center px-4 py-3 -mr-0.5 text-white bg-black border-2 border-black rounded-sm hover:bg-gray-800 hover:text-whitesm:px-6 hover:border-gray-900">Start Shopping</a></div>
+               <div className="flex w-full mt-5 sm:flex-col items-center"><a href="/search" className="w-50 flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 btn-primary">Start Shopping</a></div>
               </div>
               </>
             )}

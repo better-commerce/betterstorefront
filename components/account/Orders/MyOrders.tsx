@@ -15,12 +15,11 @@ import InfiniteScroll from '@components/ui/InfiniteScroll'
 // Other Imports
 import { GENERAL_RECENT_ORDERS, } from '@components/utils/textVariables'
 import { NEXT_GET_ORDER_DETAILS, } from '@components/utils/constants'
-import useDevice from '@commerce/utils/use-device'
 import Spinner from '@components/ui/Spinner'
 
 
-export default function MyOrders({ allOrders, handleInfiniteScroll, }: any) {
-  const { isMobile, isIPadorTablet } = useDevice();
+export default function MyOrders({ allOrders, handleInfiniteScroll, deviceInfo, }: any) {
+  const { isMobile, isIPadorTablet } = deviceInfo;
   const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(false);
   const { user, displayAlert, alertRibbon } = useUI();
   const [orderDetails, setOrderDetails] = useState<any>(undefined);
@@ -47,12 +46,12 @@ export default function MyOrders({ allOrders, handleInfiniteScroll, }: any) {
     allOrders?.forEach((orderObj: any) => {
       // remove personalization from order items
       if (!!orderObj?.orderDetails?.order?.items?.length) {
-        orderObj.orderDetails.order.items = 
+        orderObj.orderDetails.order.items =
           orderObj.orderDetails.order.items.filter((o: any) => o.name !== "Personalization")
       }
       // remove personalization from order delivery plans items
       if (!!orderObj?.orderDetails?.order?.deliveryPlans?.length) {
-        orderObj.orderDetails.order.deliveryPlans = 
+        orderObj.orderDetails.order.deliveryPlans =
           orderObj.orderDetails.order.deliveryPlans.map((o: any) => {
             o.items = o.items.filter((o: any) => o.productName !== "Personalization")
             return o
@@ -170,7 +169,7 @@ export default function MyOrders({ allOrders, handleInfiniteScroll, }: any) {
                           <>
                             <div className='flex flex-col items-start justify-center w-full px-4 py-12 sm:items-center max-acc-container sm:px-0'>
                               <div className='my-2 text-2xl font-semibold text-black'>No Order Available</div>
-                              <div className="flex w-60 mt-5 sm:flex-col"><a href="/" className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 text-white bg-black border-2 border-black rounded-sm hover:bg-gray-800 hover:text-whitesm:px-6 hover:border-gray-900 link-button">Start Shopping</a></div>
+                              <div className="flex w-60 mt-5 sm:flex-col"><a href="/" className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">Start Shopping</a></div>
                             </div>
                           </>
                         )

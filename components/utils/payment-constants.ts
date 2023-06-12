@@ -1,127 +1,75 @@
 
-import { stringToBoolean } from "@framework/utils/parse-util";
-import { JusPayEndpoint } from "@framework/api/endpoints/payments/juspay/constants";
-import { IS_TEST_PAYMENT_ENABLED_ON_LIVE, TEST_PAYMENT_AMOUNT } from "@framework/utils/constants";
+import { TEST_PAYMENT_AMOUNT } from "@framework/utils/constants";
+import { BCPaymentEndpoint } from "@framework/api/endpoints/payments/constants";
+import { ENABLE_SECURED_PAYMENT_PAYLOAD } from "./constants";
 
-export const LOG_REQUEST_OPTIONS = true;
+export const LOG_REQUEST_OPTIONS = false;
 export const TEST_PAYMENT_AMOUNT_FORMATTED = `₹${TEST_PAYMENT_AMOUNT}`;
-export module JusPay {
+
+export enum PaymentGateway {
+  COD = "cod",
+  JUSPAY = "juspay",
+  PAYPAL = "paypal",
+  CHECKOUT = "checkout",
+  MASTER_CARD = "mastercard",
+  CLEAR_PAY = "clearpay",
+  KLARNA = "klarna",
+  STRIPE = "stripe",
+};
+
+export enum PaymentGatewayId {
+  COD = 0,
+  JUSPAY = 1,
+  PAYPAL = 2,
+  CHECKOUT = 3,
+  MASTER_CARD = 4,
+  CLEAR_PAY = 5,
+  KLARNA = 6,
+  STRIPE = 7,
+};
+
+export module Payments {
+  export const PARSE_ORDER_ID_REGEX = /Order[ ](.*?)(?:[a-zA-Z0-9\-]*)for[ ]basket (.*)(?:[a-zA-Z0-9\-]*)/g;
+  export const CHECKOUT_FRAMES_SCRIPT_SRC_V2 = "https://cdn.checkout.com/js/framesv2.min.js";
+  export const KLARNA_FRAMES_SCRIPT_SRC_V1 = "https://x.klarnacdn.net/kp/lib/v1/api.js";
+  export const CLEARPAY_SCRIPT_SRC = "afterpay.js";
+
   export module RequestParams {
 
-    export const GET_PAYMENT_METHODS: any = {
-      type: JusPayEndpoint.GET_PAYMENT_METHODS,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-      options: {
-        add_outage: false,
-      },
+    export const CONVERT_ORDER: any = {
+      t: BCPaymentEndpoint.CONVERT_ORDER,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
     };
 
-    export const GET_OFFERS: any = {
-      type: JusPayEndpoint.GET_OFFERS,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
+    export const INIT_PAYMENT: any = {
+      t: BCPaymentEndpoint.INIT_PAYMENT,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
     };
 
-    export const GET_CARD_BIN: any = {
-      type: JusPayEndpoint.GET_CARD_INFO,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
+    export const REQUEST_PAYMENT: any = {
+      t: BCPaymentEndpoint.REQUEST_PAYMENT,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
     };
 
-    export const GET_CUSTOMER: any = {
-      type: JusPayEndpoint.GET_CUSTOMER,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
+    export const CREATE_ONE_TIME_PAY_ORDER: any = {
+      t: BCPaymentEndpoint.CREATE_ONE_TIME_PAY_ORDER,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
     };
 
-    export const CREATE_CUSTOMER: any = {
-      type: JusPayEndpoint.CREATE_CUSTOMER,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const TOKENIZE_CARD: any = {
-      type: JusPayEndpoint.TOKENIZE_CARD,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const SAVE_CARD: any = {
-      type: JusPayEndpoint.SAVE_CARD,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const DELETE_CARD: any = {
-      type: JusPayEndpoint.DELETE_CARD,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const LIST_CARDS: any = {
-      type: JusPayEndpoint.LIST_CARDS,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const CREDIT_DEBIT_CARD_PAYMENT: any = {
-      type: JusPayEndpoint.CREDIT_DEBIT_CARD_PAYMENT,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const NETBANKING_PAYMENT: any = {
-      type: JusPayEndpoint.NETBANKING_PAYMENT,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const WALLET_PAYMENT: any = {
-      type: JusPayEndpoint.WALLET_PAYMENT,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const UPI_INTENT_PAYMENT: any = {
-      type: JusPayEndpoint.UPI_INTENT_PAYMENT,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const GET_ORDER: any = {
-      type: JusPayEndpoint.GET_ORDER,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const CREATE_ORDER: any = {
-      type: JusPayEndpoint.CREATE_ORDER,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const UPDATE_ORDER: any = {
-      type: JusPayEndpoint.UPDATE_ORDER,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const VERIFY_VPA: any = {
-      type: JusPayEndpoint.VERIFY_VPA,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
-    };
-
-    export const PAY_VIA_UPI: any = {
-      type: JusPayEndpoint.PAY_VIA_UPI,
-      testMode: stringToBoolean(IS_TEST_PAYMENT_ENABLED_ON_LIVE),
+    export const PROCESS_PAYMENT_RESPONSE: any = {
+      t: BCPaymentEndpoint.PAYMENT_RESPONSE,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
     };
   };
+};
+
+export module JusPay {
 
   export enum TransactionStatus {
     TXN_CHARGED = "TXN_CHARGED",
     TXN_FAILED = "TXN_FAILED",
     ORDER_REFUNDED = "ORDER_REFUNDED",
   }
-
-  export enum PaymentStatus {
-    AUTHORIZATION_FAILED = "AUTHORIZATION_FAILED",
-    AUTHENTICATION_FAILED = "AUTHENTICATION_FAILED", // UPI
-    PENDING = "PENDING_VBV", // Card
-    VBV_SUCCESSFUL = "VBV_SUCCESSFUL",
-    CHARGED = "CHARGED",
-    JUSPAY_DECLINED = "JUSPAY_DECLINED",
-    AUTO_REFUNDED = "AUTO_REFUNDED",
-    CAPTURE_FAILED = "CAPTURE_FAILED",
-    NOT_FOUND = "NOT_FOUND",
-    AUTHORIZING = "AUTHORIZING",
-    STARTED = "STARTED",
-    CAPTURE_INITIATED = "CAPTURE_INITIATED",
-  };
 
   export enum UPI {
     PAYMENT_METHOD_TYPE = "UPI",
@@ -149,7 +97,7 @@ export module LocalStorage {
   };
 };
 
-export enum PaymentOrderStatus {
+export enum PaymentStatus {
   PENDING = 0,
   AUTHORIZED = 1,
   PAID = 2,
@@ -175,6 +123,7 @@ export enum PaymentMethodType {
   UPI = "UPI",
   COD = "CODGoKwik",
   DIFFERENT_PAY_MODE = "UseDifferentMethod",
+  PAYER_ACCOUNT = "PAYER_ACCOUNT",
 }
 
 export enum PaymentMethodMode {

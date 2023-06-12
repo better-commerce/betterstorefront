@@ -18,6 +18,7 @@ export default function AddressItem({
   successCallback = () => {},
   userId,
   deleteAddress,
+  onEditAddress = (id: number) => {},
 }: any) {
   const [isEditMode, setEditMode] = useState(false)
   const {
@@ -37,25 +38,27 @@ export default function AddressItem({
     isDefaultSubscription,
     countryCode,
     user,
-    label
+    label,
   } = item
 
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
+  let [isOpen, setIsOpen] = useState(false)
 
   const handleAddressSubmit = async (values: any) => {
     let currentPage = getCurrentPage()
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       if (currentPage) {
         recordGA4Event(window, 'address_changes', {
           delivery_address_name: values?.address1,
           current_page: currentPage,
-        });
+        })
       }
     }
     return updateAddress({ ...item, ...values, ...{ userId } })
       .then(
         () =>
-          successCallback() && isEditMode &&
+          successCallback() &&
+          isEditMode &&
           eventDispatcher(CustomerUpdated, {
             entity: JSON.stringify({
               id: user.userId,
@@ -95,6 +98,13 @@ export default function AddressItem({
       .catch(() => errCallback)
   }
 
+  function deletecloseModal() {
+    setIsOpen(false)
+  }
+
+  function deleteopenModal() {
+    setIsOpen(true)
+  }
   return (
     <div>
       {isEditMode ? (
@@ -115,7 +125,7 @@ export default function AddressItem({
             isDefaultBilling: isDefaultBilling || false,
             isDefaultDelivery: isDefaultDelivery || false,
             isDefaultSubscription: isDefaultSubscription || false,
-            label: label || 'Home'
+            label: label || 'Home',
           }}
           closeEditMode={() => setEditMode(false)}
           onSubmit={handleAddressSubmit}
@@ -128,22 +138,25 @@ export default function AddressItem({
                 {item.firstName + ' ' + item.lastName}
               </span>
               {item.label && (
-                  <span className="p-1 bg-black text-white text-sm rounded-sm ">
+                <span className="flex items-start">
+                  <span className="p-1 bg-black text-white font-bold">
                     {label}
                   </span>
-                )}
+                </span>
+              )}
               <span>{item.address1}</span>
               <span>{item.address2}</span>
-
-              <span>{item.city}</span>
-              <span>{item.postCode}</span>
-              <span>{item.country}</span>
+              <span>
+                {item.city} - {item.postCode}
+              </span>
               <span>{item.phoneNo}</span>
             </div>
             <div>
               <div className="justify-end mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
                 <button
-                  onClick={() => setEditMode(true)}
+                  onClick={() => {
+                    onEditAddress(item?.id)
+                  }}
                   className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                 >
                   {GENERAL_EDIT}
@@ -156,7 +169,7 @@ export default function AddressItem({
                 </button>
               </div>
               <div className="flex items-center justify-between mt-5">
-                {item.isDefaultDelivery && (
+                {/* {item.isDefaultDelivery && (
                   <div className="px-2 py-2 mr-2 border">
                     {GENERAL_DEFAULT_DELIVERY_ADDRESS}
                   </div>
@@ -164,6 +177,13 @@ export default function AddressItem({
                 {item.isDefaultBilling && (
                   <div className="px-2 py-2 border">
                     {GENERAL_DEFAULT_BILLING_ADDRESS}
+                  </div>
+                )} */}
+                {item.isDefault && (
+                  <div className="p-1 border bg-black">
+                    <span className="text-white font-semibold">
+                      Default address
+                    </span>
                   </div>
                 )}
               </div>

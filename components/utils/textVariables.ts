@@ -134,6 +134,8 @@ export const ADDRESS_OF_YOUR_CHOICE = 'to an address of your choice'
 export const IN_STORE_OR_COLLECT_PLUS = 'in store or using Collect+'
 export const GENERAL_SELECT_COUNTRY = 'Select country'
 export const GENERAL_CONFIRM = 'Confirm'
+export const GENERAL_PAY = 'Pay'
+export const GENERAL_PAY_WITH_KLARNA = 'Pay Later with Klarna'
 export const BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS =
   'My billing and delivery address are the same'
 export const SHIPPING_INFORMATION = 'Shipping information'
@@ -255,7 +257,12 @@ export const ALERT_SUCCESS_WISHLIST_MESSAGE = 'Wishlisted'
 export const PRODUCT_SPECIFICATION = 'Product specification'
 export const GENERAL_NOT_AVAILABLE = 'Not Available'
 export const GENERAL_CARE_TITLE = 'Care'
+export const PERFECT_FOR = 'Perfect for'
+export const FABRIC_CARE = 'Fabric care'
+export const WASH_CARE = 'Wash care'
+export const COLLAR = 'Collar'
 export const GENERAL_CARE_TEXT =
+
   'This is a limited edition production run. Printing starts when the drop ends.'
 export const GENERAL_DETAILS = 'Details'
 export const GENERAL_DETAILS_TEXT =
@@ -281,6 +288,8 @@ export const GENERAL_THANK_YOU = 'Thank you!'
 export const GENERAL_ON_THE_WAY = "It's on the way!"
 export const GENERAL_YOUR_ORDER = ' Your order'
 export const GENERAL_ORDER_WILL_BE_WITH_YOU_SOON = 'will be with you soon.'
+export const GENERAL_ORDER_FAILED = 'Order Failed!'
+export const GENERAL_ORDER_NOT_PROCESSED = 'failed.'
 export const GENERAL_ITEMS = 'Items'
 export const GENERAL_QUANTITY = 'Quantity'
 export const GENERAL_PRICE = 'Price'
@@ -293,6 +302,8 @@ export const GENERAL_SUMMARY = 'Summary'
 export const VALIDATION_YOU_ARE_ALREADY_LOGGED_IN = "You're already logged in"
 export const VALIDATION_NO_ACCOUNT_FOUND =
   'No account has been found with this email/password'
+export const VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP =
+  'No account has been found with this mobile'
 export const VALIDATION_ENTER_A_VALID_EMAIL = 'Please enter a valid email'
 export const VALIDATION_EMAIL_ALREADY_IN_USE = 'This email is already in use'
 export const BTN_REGISTER_FOR_FREE = 'Register for free'

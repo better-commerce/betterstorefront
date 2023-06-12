@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic'
+import Script from 'next/script'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 const CheckoutRouter = dynamic(() => import('@components/checkout/CheckoutRouter'))
 const CheckoutForm = dynamic(() => import('@components/checkout/CheckoutForm'))
@@ -22,12 +23,12 @@ function Checkout({ cart, config, location }: any) {
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
   const [userAddresses, setUserAddresses] = useState([])
-  
+
   const { getAddress } = asyncHandler()
 
   useEffect(() => {
     setIsLoggedIn(!!user?.userId || false)
-  },[user, cartItems])
+  }, [user, cartItems])
 
 
   const handleGuestMail = (values: any) => {
@@ -89,8 +90,8 @@ function Checkout({ cart, config, location }: any) {
           shipping_tier: cartItems?.shippingMethods[0]?.countryCode,
           coupon: cartItems?.promotionsApplied?.length
             ? cartItems?.promotionsApplied
-                ?.map((x: any) => x?.promoCode)
-                ?.join(',')
+              ?.map((x: any) => x?.promoCode)
+              ?.join(',')
             : '',
           value: cartItems?.subTotal?.raw?.withTax,
           item_var_id: cartItems?.id,
@@ -120,30 +121,30 @@ function Checkout({ cart, config, location }: any) {
     fetchAddress()
   }, [])
 
-  if(isLoggedIn) {
+  if (isLoggedIn) {
     return (
-      <CheckoutForm
-        cart={cart}
-        addresses={userAddresses}
-        defaultBillingAddress={defaultBillingAddress}
-        defaultShippingAddress={defaultShippingAddress}
-        user={user}
-        getAddress={getAddress}
-        fetchAddress={fetchAddress}
-        config={config}
-        location={location}
-        recordShippingInfo={recordShippingInfo}
+        <CheckoutForm
+          cart={cart}
+          addresses={userAddresses}
+          defaultBillingAddress={defaultBillingAddress}
+          defaultShippingAddress={defaultShippingAddress}
+          user={user}
+          getAddress={getAddress}
+          fetchAddress={fetchAddress}
+          config={config}
+          location={location}
+          recordShippingInfo={recordShippingInfo}
+        />
+    )
+  }
+  if (!isLoggedIn) {
+    return (
+      <CheckoutRouter
+        setIsLoggedIn={setIsLoggedIn}
+        handleGuestMail={handleGuestMail}
       />
     )
   }
-   if(!isLoggedIn){
-    return (
-    <CheckoutRouter
-      setIsLoggedIn={setIsLoggedIn}
-      handleGuestMail={handleGuestMail}
-    />
-  )
- }
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')

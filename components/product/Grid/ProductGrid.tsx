@@ -4,6 +4,7 @@ const ProductCard = dynamic(() => import('@components/product/ProductCard/Produc
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 const Pagination = dynamic(() => import('@components/product/Pagination'))
 import { TITLE_PRODUCTS } from '@components/utils/textVariables'
+import { IExtraProps } from '@components/common/Layout/Layout'
 
 interface Props {
   products: any
@@ -17,7 +18,8 @@ export default function CategoryGrid({
   currentPage,
   handlePageChange = () => { },
   handleInfiniteScroll,
-}: Props) {
+  deviceInfo,
+}: Props & IExtraProps) {
   const IS_INFINITE_SCROLL =
     process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 
@@ -38,7 +40,7 @@ export default function CategoryGrid({
                 </div>
               ))}
               {products?.results?.map((product: any, productIdx: number) => (
-                <ProductCard key={productIdx} product={product} />
+                <ProductCard key={productIdx} product={product} deviceInfo={deviceInfo} />
               ))}
             </div>
           }
@@ -58,7 +60,7 @@ export default function CategoryGrid({
               </div>
             ))}
             {products.results.map((product: any, productIdx: number) => (
-              <ProductCard key={productIdx} product={product} />
+              <ProductCard key={productIdx} product={product} deviceInfo={deviceInfo} />
             ))}
           </div>
           {products.pages > 1 && (

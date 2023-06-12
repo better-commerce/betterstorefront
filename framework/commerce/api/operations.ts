@@ -53,6 +53,7 @@ export const OPERATIONS = [
   'cancelOrder',
   'getReturnReason',
   'resetCache',
+  'logRequest',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -229,6 +230,7 @@ export type Operations<P extends APIProvider> = {
   }
 
   resetCache: {}
+  logRequest: {}
 }
 
 export type APIOperations<P extends APIProvider> = {

@@ -20,7 +20,7 @@ const COMPONENTS_MAP: any = {
   undefined: () => null,
 }
 
-function BrandPage({ slug, brandDetails }: any) {
+function BrandPage({ slug, brandDetails, deviceInfo, }: any) {
   const widgetsConfig = JSON.parse(brandDetails.result.widgetsConfig).sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
@@ -28,7 +28,7 @@ function BrandPage({ slug, brandDetails }: any) {
   return (
     <>
       {widgetsConfig.map((widget: any, idx: number) => {
-        const enhancedProps = { ...widget, brandDetails: brandDetails.result, slug: slug, }
+        const enhancedProps = { ...widget, brandDetails: brandDetails.result, slug: slug, deviceInfo, }
         return (
           <div key={idx}>
             {COMPONENTS_MAP[widget.manufacturerSettingType]

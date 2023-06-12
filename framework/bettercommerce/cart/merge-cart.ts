@@ -14,8 +14,8 @@ export default function useMergeCart() {
   }: Props) {
     try {
       const response: any = await fetcher({
-        url: `${BASKET_ENDPOINT}/${userBasketId}/merge/${currentBasketId}`,
-        method: 'post',
+        url: `${BASKET_ENDPOINT}/${userBasketId}/merge?sourceBasketId=${currentBasketId}`,
+        method: 'put',
         cookies,
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
