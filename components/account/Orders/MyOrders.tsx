@@ -94,6 +94,7 @@ export default function MyOrders({ allOrders, handleInfiniteScroll, deviceInfo, 
             show={isShowDetailedOrder}
             showDetailedOrder={setIsShowDetailedOrder}
             details={orderDetails}
+            deviceInfo={deviceInfo}
           />
         </div>
       ) : (
@@ -169,7 +170,7 @@ export default function MyOrders({ allOrders, handleInfiniteScroll, deviceInfo, 
                           <>
                             <div className='flex flex-col items-start justify-center w-full px-4 py-12 sm:items-center max-acc-container sm:px-0'>
                               <div className='my-2 text-2xl font-semibold text-black'>No Order Available</div>
-                              <div className="flex w-60 mt-5 sm:flex-col"><a href="/" className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">Start Shopping</a></div>
+                              <div className="flex mt-5 w-60 sm:flex-col"><a href="/" className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">Start Shopping</a></div>
                             </div>
                           </>
                         )
