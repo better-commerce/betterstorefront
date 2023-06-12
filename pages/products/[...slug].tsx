@@ -97,7 +97,6 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
     fallback: 'blocking',
   }
 }
-
 function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo }: any) {
   const router = useRouter()
   return router.isFallback ? (
