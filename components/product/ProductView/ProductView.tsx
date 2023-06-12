@@ -731,7 +731,6 @@ export default function ProductView({
       {product?.componentProducts && (
         <Bundles price={product?.price?.formatted?.withTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} />
       )}
-
       {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, "ALSOLIKE", true))?.length > 0 ? (
         <>
           <div className="flex flex-col section-devider"></div>
