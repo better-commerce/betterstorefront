@@ -138,97 +138,49 @@ const PaymentFailedPage = ({
                         className="mt-2 text-sm text-gray-500"
                       />
                     </div>
+                    <div className="flex items-end flex-1 mt-6">
+                      <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
+                        <div className="flex">
+                          <dt className="font-medium text-gray-900">
+                            {GENERAL_QUANTITY}
+                          </dt>
+                          <dd className="ml-2 text-gray-700">{product?.qty}</dd>
+                        </div>
+                        <div className="flex pl-4 sm:pl-6">
+                          <dt className="font-medium text-gray-900">
+                            {GENERAL_PRICE}
+                          </dt>
+                          <dd className="ml-2 text-gray-700">
+                            {product?.price.formatted.withTax}
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              ))}
 
-                    {order?.orderNo ? (
-                      <section
-                        aria-labelledby="order-heading"
-                        className="mt-10 border-t border-gray-200"
-                      >
-                        <h2 id="order-heading" className="sr-only">
-                          {GENERAL_YOUR_ORDER}
-                        </h2>
+              <div className="sm:ml-40 sm:pl-6">
+                <h3 className="sr-only">{YOUR_INFORMATION}</h3>
 
-                        <h3 className="sr-only">{GENERAL_ITEMS}</h3>
-                        {order?.items?.map((product: any) => (
-                          <div
-                            key={product?.id}
-                            className="flex py-10 space-x-6 border-b border-gray-200"
-                          >
-                            <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                              <Image
-                                style={css}
-                                src={
-                                  generateUri(
-                                    product?.image,
-                                    'h=200&fm=webp'
-                                  ) || IMG_PLACEHOLDER
-                                }
-                                width={200}
-                                height={200}
-                                alt={product?.name}
-                                className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
-                              ></Image>
-                            </div>
-                            <div className="flex flex-col flex-auto">
-                              <div>
-                                <h4 className="font-medium text-gray-900">
-                                  <Link href={`/${product?.slug}`}>
-                                    {product?.name}
-                                  </Link>
-                                </h4>
-
-                                <div
-                                  dangerouslySetInnerHTML={{
-                                    __html: product?.shortDescription,
-                                  }}
-                                  className="mt-2 text-sm text-gray-500"
-                                />
-                              </div>
-                              <div className="flex items-end flex-1 mt-6">
-                                <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
-                                  <div className="flex">
-                                    <dt className="font-medium text-gray-900">
-                                      {GENERAL_QUANTITY}
-                                    </dt>
-                                    <dd className="ml-2 text-gray-700">
-                                      {product?.qty}
-                                    </dd>
-                                  </div>
-                                  <div className="flex pl-4 sm:pl-6">
-                                    <dt className="font-medium text-gray-900">
-                                      {GENERAL_PRICE}
-                                    </dt>
-                                    <dd className="ml-2 text-gray-700">
-                                      {product?.price.formatted.withTax}
-                                    </dd>
-                                  </div>
-                                </dl>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-
-                        <div className="sm:ml-40 sm:pl-6">
-                          <h3 className="sr-only">{YOUR_INFORMATION}</h3>
-
-                          <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>
-                          <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
-                            <div>
-                              <dt className="font-medium text-gray-900">
-                                {/* {GENERAL_SHIPPING_ADDRESS} */}
-                                {GENERAL_DELIVERY_ADDRESS}
-                              </dt>
-                              <dd className="mt-2 text-gray-700">
-                                <address className="not-italic">
-                                  <span className="block">{`${order?.shippingAddress?.firstName} ${order?.shippingAddress?.lastName}`}</span>
-                                  <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
-                                  <span className="block">{`${order?.shippingAddress?.address1}`}</span>
-                                  <span className="block">{`${order?.shippingAddress?.address2}`}</span>
-                                  <span className="block">{`${order?.shippingAddress?.city} ${order?.shippingAddress?.countryCode} ${order?.shippingAddress?.postCode}`}</span>
-                                </address>
-                              </dd>
-                            </div>
-                            {/* <div>
+                <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>
+                <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
+                  <div>
+                    <dt className="font-medium text-gray-900">
+                      {/* {GENERAL_SHIPPING_ADDRESS} */}
+                      {GENERAL_DELIVERY_ADDRESS}
+                    </dt>
+                    <dd className="mt-2 text-gray-700">
+                      <address className="not-italic">
+                        <span className="block">{`${order?.shippingAddress?.firstName} ${order?.shippingAddress?.lastName}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.address1}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.address2}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.city} ${order?.shippingAddress?.countryCode} ${order?.shippingAddress?.postCode}`}</span>
+                      </address>
+                    </dd>
+                  </div>
+                  {/* <div>
                                         <dt className="font-medium text-gray-900">
                                             {GENERAL_BILLING_ADDRESS}
                                         </dt>
@@ -242,54 +194,6 @@ const PaymentFailedPage = ({
                                             </address>
                                         </dd>
                                     </div> */}
-                          </dl>
-                        </div>
-                      </section>
-                    ) : null}
-                    <div className="max-w-xl">
-                      <Link href={`/`} passHref>
-                        <span className="font-medium text-indigo-600 hover:text-indigo-500">
-                          {BTN_BACK_TO_HOME}
-                        </span>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              <div className="sm:ml-40 sm:pl-6">
-                <h3 className="sr-only">{YOUR_INFORMATION}</h3>
-
-                <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>
-                <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
-                  <div>
-                    <dt className="font-medium text-gray-900">
-                      {GENERAL_SHIPPING_ADDRESS}
-                    </dt>
-                    <dd className="mt-2 text-gray-700">
-                      <address className="not-italic">
-                        <span className="block">{`${order?.shippingAddress?.firstName} ${order?.shippingAddress?.lastName}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.address1}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.address2}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.city} ${order?.shippingAddress?.countryCode} ${order?.shippingAddress?.postCode}`}</span>
-                      </address>
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="font-medium text-gray-900">
-                      {GENERAL_BILLING_ADDRESS}
-                    </dt>
-                    <dd className="mt-2 text-gray-700">
-                      <address className="not-italic">
-                        <span className="block">{`${order?.billingAddress?.firstName} ${order?.billingAddress?.lastName}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address1}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address2}`}</span>
-                        <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
-                      </address>
-                    </dd>
-                  </div>
                 </dl>
               </div>
             </section>

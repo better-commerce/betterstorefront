@@ -284,29 +284,27 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       <Head {...appConfig}></Head>
       <div id="google_translate_element" />
       <ManagedUIContext>
+        {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
+        <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
         <ErrorBoundary>
-          {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
-          <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
-          <ErrorBoundary>
-            <Layout
-              nav={nav}
-              footer={footer}
+          <Layout
+            nav={nav}
+            footer={footer}
+            config={appConfig}
+            pageProps={pageProps}
+            keywords={keywordsData}
+            deviceInfo={deviceInfo}
+          >
+            <OverlayLoader />
+            <Component
+              {...pageProps}
+              location={location}
+              ipAddress={location.Ip}
               config={appConfig}
-              pageProps={pageProps}
-              keywords={keywordsData}
               deviceInfo={deviceInfo}
-            >
-              <OverlayLoader />
-              <Component
-                {...pageProps}
-                location={location}
-                ipAddress={location.Ip}
-                config={appConfig}
-                deviceInfo={deviceInfo}
-              />
-              {/* <RedirectIntercept /> */}
-            </Layout>
-          </ErrorBoundary>
+            />
+            {/* <RedirectIntercept /> */}
+          </Layout>
         </ErrorBoundary>
       </ManagedUIContext>
     </>
