@@ -14,7 +14,7 @@ import {
 
 export default function AddressForm({
   initialValues = {},
-  onSubmit = () => { },
+  onSubmit = () => {},
   closeEditMode,
   btnTitle = 'Save',
   toggleAction,
@@ -24,7 +24,7 @@ export default function AddressForm({
   config,
   addresses,
   setAddress,
-  sameAddressAction = () => { },
+  sameAddressAction = () => {},
   isSameAddressCheckboxEnabled,
   isSameAddress = true,
   isGuest = false,
@@ -126,7 +126,7 @@ export default function AddressForm({
       initialValues={initState}
       onSubmit={(values: any) => {
         // Pass on dirty flag to the parent ref.
-        onSubmit({ ...values, ...{ isDirty: formikRef.current.dirty } });
+        onSubmit({ ...values, ...{ isDirty: formikRef.current.dirty } })
       }}
       innerRef={formikRef}
     >
@@ -236,8 +236,8 @@ export default function AddressForm({
                           </span>
                         )}
                         {formItem.addressFinder &&
-                          values[formItem.name] === postCodeValue &&
-                          addressList.length > 0 ? (
+                        values[formItem.name] === postCodeValue &&
+                        addressList.length > 0 ? (
                           <div className="absolute bg-white z-10 w-64 max-h-80 overflow-scroll">
                             <div className="bg-gray-900">
                               <h2
@@ -300,7 +300,7 @@ export default function AddressForm({
                 <button
                   type="button"
                   onClick={() => handleNewFormButton(values, errors)}
-                  className="max-w-xs m-2 flex-1 bg-black border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
+                  className="max-w-xs m-2 flex-1 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
                 >
                   {isFormOpen ? BTN_SAVE : ADD_ADDRESS}
                 </button>
@@ -341,7 +341,7 @@ export default function AddressForm({
               <button
                 type="submit"
                 onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
-                className="max-w-xs flex-1 bg-black border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
+                className="max-w-xs flex-1 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
               >
                 {btnTitle}
               </button>

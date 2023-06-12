@@ -37,24 +37,26 @@ export default function AddressItem({
     isDefaultSubscription,
     countryCode,
     user,
+    label,
   } = item
 
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const handleAddressSubmit = async (values: any) => {
     let currentPage = getCurrentPage()
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       if (currentPage) {
         recordGA4Event(window, 'address_changes', {
           delivery_address_name: values?.address1,
           current_page: currentPage,
-        });
+        })
       }
     }
     return updateAddress({ ...item, ...values, ...{ userId } })
       .then(
         () =>
-          successCallback() && isEditMode &&
+          successCallback() &&
+          isEditMode &&
           eventDispatcher(CustomerUpdated, {
             entity: JSON.stringify({
               id: user.userId,
@@ -114,6 +116,7 @@ export default function AddressItem({
             isDefaultBilling: isDefaultBilling || false,
             isDefaultDelivery: isDefaultDelivery || false,
             isDefaultSubscription: isDefaultSubscription || false,
+            label: label || 'Home',
           }}
           closeEditMode={() => setEditMode(false)}
           onSubmit={handleAddressSubmit}
@@ -125,6 +128,11 @@ export default function AddressItem({
               <span className="text-xl font-bold">
                 {item.firstName + ' ' + item.lastName}
               </span>
+              {item.label && (
+                <span className="p-1 bg-black text-white text-sm rounded-sm ">
+                  {label}
+                </span>
+              )}
               <span>{item.address1}</span>
               <span>{item.address2}</span>
 

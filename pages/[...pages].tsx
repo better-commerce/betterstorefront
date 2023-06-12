@@ -20,7 +20,7 @@ const COMPONENTS_MAP: any = {
   undefined: () => null,
 }
 
-function BrandPage({ slug, brandDetails }: any) {
+function BrandPage({ slug, brandDetails, deviceInfo }: any) {
   const widgetsConfig = JSON.parse(brandDetails.result.widgetsConfig).sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
@@ -28,7 +28,12 @@ function BrandPage({ slug, brandDetails }: any) {
   return (
     <>
       {widgetsConfig.map((widget: any, idx: number) => {
-        const enhancedProps = { ...widget, brandDetails: brandDetails.result, slug: slug, }
+        const enhancedProps = {
+          ...widget,
+          brandDetails: brandDetails.result,
+          slug: slug,
+          deviceInfo,
+        }
         return (
           <div key={idx}>
             {COMPONENTS_MAP[widget.manufacturerSettingType]
@@ -49,8 +54,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const slug: any = context?.query?.pages[0] || ''
   const response = await getBrandBySlug(slug, context.req.cookies)
 
-  const infraPromise = commerce.getInfra();
-  const infra = await infraPromise;
+  const infraPromise = commerce.getInfra()
+  const infra = await infraPromise
   if (response?.statusCode === 404) {
     return {
       redirect: {
@@ -65,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       slug: slug,
       brandDetails: response,
       globalSnippets: infra?.snippets ?? [],
-      snippets: response?.snippets
+      snippets: response?.snippets,
     }, // will be passed to the page component as props
   }
 }

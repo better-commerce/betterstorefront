@@ -185,7 +185,10 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
 
   return (
     <>
-      <div className="bg-white hover:outline hover:outline-1 outline-gray-200 group" key={product.id}>
+      <div
+        className="bg-white hover:outline hover:outline-1 outline-gray-200 group"
+        key={product.id}
+      >
         <div className="relative py-3 sm:py-3">
           <div className="relative overflow-hidden group aspect-w-1 aspect-h-1 hover:opacity-75">
             <Link
@@ -196,7 +199,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
               <Image
                 priority
                 src={
-                  generateUri(currentProductData.image, 'h=500&fm=webp') ||
+                  generateUri(currentProductData.image, 'h=350&fm=webp') ||
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
@@ -255,14 +258,19 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
             ) : (
               <div className="inline-block w-1 h-1 mt-2 mr-1 sm:h-6 sm:w-6 sm:mr-2" />
             )}
-            <div className='grid grid-cols-3'>
-              <div className='col-span-2'>
+            <div className="grid grid-cols-3">
+              <div className="col-span-2">
                 <h3 className="font-normal text-gray-700 truncate sm:text-sm">
-                  <Link href={`/${currentProductData.link}`}>{product.name}</Link>
+                  <Link href={`/${currentProductData.link}`}>
+                    {product.name}
+                  </Link>
                 </h3>
               </div>
-              <div className='justify-end col-span-1 pr-2 mt-1 text-right'>
-                <h4 className='text-sm font-bold text-gray-600'><StarIcon className='relative inline-block w-4 h-4 text-gray-600 -top-0.5' /> {product?.rating}</h4>
+              <div className="justify-end col-span-1 pr-2 mt-1 text-right">
+                <h4 className="text-sm font-bold text-gray-600">
+                  <StarIcon className="relative inline-block w-4 h-4 text-gray-600 -top-0.5" />{' '}
+                  {product?.rating}
+                </h4>
               </div>
             </div>
 
@@ -272,7 +280,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
                   {product?.price?.formatted?.withTax}
                   {product?.listPrice?.raw?.withTax > 0 &&
                     product?.listPrice?.raw?.withTax !=
-                    product?.price?.raw?.withTax && (
+                      product?.price?.raw?.withTax && (
                       <>
                         <span className="px-2 text-sm font-normal text-gray-400 line-through">
                           {product?.listPrice?.formatted?.withTax}

@@ -107,7 +107,7 @@ export const ITEM_WISHLISTED = 'Wishlisted'
 export const GENERAL_WISHLIST = 'My Wishlist'
 export const WISHLIST_SUB_TITLE = 'You haven’t wished for anything yet.'
 export const WISHLIST_SIDEBAR_MESSAGE =
-'Uh-oh, you don’t have any items in here'
+  'Uh-oh, you don’t have any items in here'
 export const GENERAL_SHOPPING_CART = 'Shopping cart'
 export const GENERAL_TOTAL_SAVINGS = 'Total Savings'
 export const CLOSE_PANEL = 'Close panel'
@@ -134,6 +134,8 @@ export const ADDRESS_OF_YOUR_CHOICE = 'to an address of your choice'
 export const IN_STORE_OR_COLLECT_PLUS = 'in store or using Collect+'
 export const GENERAL_SELECT_COUNTRY = 'Select country'
 export const GENERAL_CONFIRM = 'Confirm'
+export const GENERAL_PAY = 'Pay'
+export const GENERAL_PAY_WITH_KLARNA = 'Pay Later with Klarna'
 export const BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS =
   'My billing and delivery address are the same'
 export const SHIPPING_INFORMATION = 'Shipping information'
@@ -145,13 +147,13 @@ export const ITEMS_IN_YOUR_CART = 'Items in your cart'
 export const ITEM_TYPE_ADDON_10 = 10
 export const GENERAL_CONFIRM_ORDER = 'Confirm order'
 export const GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION =
-"To get our latest promotions, exclusive offers, new launches and more, let us know how you'd like us to keep you updated"
+  "To get our latest promotions, exclusive offers, new launches and more, let us know how you'd like us to keep you updated"
 export const BTN_CHECKOUT_SECURELY = 'Checkout securely'
 export const LOG_IN = 'Log in'
 export const GUEST_CHECKOUT = 'Guest Checkout'
 export const NEW_CUSTOMER = 'New customer?'
 export const CUSTOMER_ERROR_MESSAGE =
-'No account has been found with this email/password'
+  'No account has been found with this email/password'
 export const GENERAL_FREE = 'FREE'
 export const CARDHOLDER_NAME = 'Cardholder Name'
 export const CARD_NUMBER = 'Card Number'
@@ -186,19 +188,19 @@ export const GENERAL_FAQ = 'FAQ'
 export const GENERAL_FIND_A_STORE = 'Find a store'
 export const SIGN_UP_FOR_NEWSLETTER = 'Sign up for our newsletter'
 export const SIGN_UP_TEXT =
-'The latest deals and savings, sent to your inbox weekly.'
+  'The latest deals and savings, sent to your inbox weekly.'
 export const GENERAL_EMAIL_ADDRESS = 'Email address'
 export const BTN_SIGN_UP = 'Sign up'
 export const COPYRIGHT_FOOTER_INFO =
-'2022 BetterCommerce, Inc. All rights reserved.'
+  '2022 BetterCommerce, Inc. All rights reserved.'
 export const GENERAL_COOKIE_TEXT =
-'This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.'
+  'This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.'
 export const BTN_ACCEPT_COOKIE = 'Accept cookies'
 export const GENERAL_RECENTLY_VIEWED = 'Recently viewed'
 export const BTN_SIGN_OUT = 'Sign out'
 export const GENERAL_LOGIN = 'Login'
 export const GENERAL_REGISTER = 'Register'
-export const GENERAL_WORKFLOW_TITLE = 'Workflow'
+export const GENERAL_WORKFLOW_TITLE = 'BetterCommerce'
 export const SELECT_CURRENCY = 'Select currency'
 export const SELECT_LANGUAGE = 'Select language'
 export const GENERAL_ITEM_IN_CART = 'items in cart, view bag'
@@ -209,14 +211,15 @@ export const VALIDATION_PASSWORD_MUST_MATCH = 'Passwords must match'
 export const PRODUCT_INFORMATION = 'Product information'
 export const PERSONALISATION = 'Personalisation'
 export const SELECT_IMAGE_ERROR = 'Please select an Image before proceeding!'
-export const PRODUCT_PERSONALIZATION_TITLE = 'Personalise with custom embroidery'
+export const PRODUCT_PERSONALIZATION_TITLE =
+  'Personalise with custom embroidery'
 export const PRODUCT_DESCRIPTION = 'Description'
 export const PRODUCT_OPTIONS = 'Product options'
 export const BTN_SEE_MORE_DETAILS = 'See more details'
 export const YOUR_BUNDLE_INCLUDE = 'Your bundle includes'
 export const BUNDLE_TEXT = 'Click on a product to edit your bundle'
 export const VALIDATION_PLEASE_COMPLETE_THIS_FIELD =
-'Please compelte this field'
+  'Please compelte this field'
 export const GENERAL_ENGRAVING = 'Engraving'
 export const GENERAL_PERSONALISATION = 'Personalise your Product. '
 export const GENERAL_PERSONALISATION_READONLY = 'Personalised Product'
@@ -248,23 +251,27 @@ export const BTN_SUBMIT = 'Submit'
 export const BTN_NOTIFY_ME = 'Notify me'
 export const BTN_PRE_ORDER = 'Pre-order'
 export const GENERAL_ADD_TO_BAG = 'Add to Bag'
-export const ADDED_TO_WISH = "Added to Wishlist"
+export const ADDED_TO_WISH = 'Added to Wishlist'
 export const BTN_ADD_TO_WISHLIST = 'Add to wishlist'
 export const BTN_MOVE_TO_WISHLIST = 'Move to Wishlist'
 export const ALERT_SUCCESS_WISHLIST_MESSAGE = 'Wishlisted'
 export const PRODUCT_SPECIFICATION = 'Product specification'
 export const GENERAL_NOT_AVAILABLE = 'Not Available'
 export const GENERAL_CARE_TITLE = 'Care'
+export const PERFECT_FOR = 'Perfect for'
+export const FABRIC_CARE = 'Fabric care'
+export const WASH_CARE = 'Wash care'
+export const COLLAR = 'Collar'
 export const GENERAL_CARE_TEXT =
   'This is a limited edition production run. Printing starts when the drop ends.'
 export const GENERAL_DETAILS = 'Details'
 export const GENERAL_DETAILS_TEXT =
   'This is a limited edition production run. Printing starts when the drop ends. Reminder: Bad Boys For Life. Shipping may take 10+ days due to COVID-19.'
 export const BTN_SEE_EVERYTHING = 'See everything'
-export const GENERAL_SORT = 'Sort'
+export const GENERAL_SORT = 'Sort by'
 export const CHOOSE_A_COLOR = 'Choose a color'
 export const ITEM_TYPE_ADDON = 'ADDON'
-export const RELATED_PROD = "You may also like"
+export const RELATED_PROD = 'You may also like'
 export const YOUTUBE_VIDEO_PLAYER = 'YouTube video player'
 export const GENERAL_REFERENCE = 'Ref'
 export const GENERAL_PRICE_LABEL_RRP = 'RRP'
@@ -281,6 +288,8 @@ export const GENERAL_THANK_YOU = 'Thank you!'
 export const GENERAL_ON_THE_WAY = "It's on the way!"
 export const GENERAL_YOUR_ORDER = ' Your order'
 export const GENERAL_ORDER_WILL_BE_WITH_YOU_SOON = 'will be with you soon.'
+export const GENERAL_ORDER_FAILED = 'Order Failed!'
+export const GENERAL_ORDER_NOT_PROCESSED = 'failed.'
 export const GENERAL_ITEMS = 'Items'
 export const GENERAL_QUANTITY = 'Quantity'
 export const GENERAL_PRICE = 'Price'
@@ -293,6 +302,8 @@ export const GENERAL_SUMMARY = 'Summary'
 export const VALIDATION_YOU_ARE_ALREADY_LOGGED_IN = "You're already logged in"
 export const VALIDATION_NO_ACCOUNT_FOUND =
   'No account has been found with this email/password'
+export const VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP =
+  'No account has been found with this mobile'
 export const VALIDATION_ENTER_A_VALID_EMAIL = 'Please enter a valid email'
 export const VALIDATION_EMAIL_ALREADY_IN_USE = 'This email is already in use'
 export const BTN_REGISTER_FOR_FREE = 'Register for free'
@@ -328,22 +339,26 @@ export const PRODUCTS_AVAILABLE = 'Products available'
 export const GENERAL_COLOUR = 'Colour'
 export const GENERAL_SIZE = 'Size'
 export const PRODUCT_IN_STOCK = 'In Stock'
-export const PRODUCT_OUT_OF_STOCK='Out Of Stock'
-export const PRODUCT_AVAILABILITY='Availability'
+export const PRODUCT_OUT_OF_STOCK = 'Out Of Stock'
+export const PRODUCT_AVAILABILITY = 'Availability'
 export const SLUG_TYPE_MANUFACTURER = 'Manufacturer'
-export const GENERAL_FOOOTER = "Footer"
-export const SIZE_CHART = "Size chart"
+export const GENERAL_FOOOTER = 'Footer'
+export const SIZE_CHART = 'Size chart'
 
-export const CURRENCY_SYMBOL_RUPEE = "₹"  
-export const CURRENCY_SYMBOL_POUND = "£"
-export const ORDER_CANCELLED = "Order Cancelled Successfully"
-export const CANCEL_ORDER = "Cancel Order"
-export const CHAT_WITH_US = "Chat with us"
-export const GET_HELP_WITH_ORDER = "Get help with this order"
-export const HELP_ASSIST = "We will be glad to assist you. What seems to be bothering you?"
-export const REASON_CANCEL_HEADING = "Reason for cancellation"
-export const ORDER_REFUND_INFO = "Refund will be processed within 3-4 working days to your payment method"
-export const ITEM_CANCELLED = "Item Cancelled Successfully"
-export const PROCEED_TO_CANCEL = "Proceed to Cancel"
+export const CURRENCY_SYMBOL_RUPEE = '₹'
+export const CURRENCY_SYMBOL_POUND = '£'
+export const ORDER_CANCELLED = 'Order Cancelled Successfully'
+export const CANCEL_ORDER = 'Cancel Order'
+export const CHAT_WITH_US = 'Chat with us'
+export const GET_HELP_WITH_ORDER = 'Get help with this order'
+export const HELP_ASSIST =
+  'We will be glad to assist you. What seems to be bothering you?'
+export const REASON_CANCEL_HEADING = 'Reason for cancellation'
+export const ORDER_REFUND_INFO =
+  'Refund will be processed within 3-4 working days to your payment method'
+export const ITEM_CANCELLED = 'Item Cancelled Successfully'
+export const PROCEED_TO_CANCEL = 'Proceed to Cancel'
 // PLP Filters
 export const FILTER_TITLE = 'Filter & Sorting'
+export const CHANGE_SIZE = 'Change Size'
+export const LOGOUT = 'Logout Successful'

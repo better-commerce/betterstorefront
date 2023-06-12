@@ -5,7 +5,9 @@ import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
-const ProductGrid = dynamic(() => import('@components/product/Grid'))
+const ProductGrid = dynamic(
+  () => import('@components/product/Grid/ProductGrid')
+)
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
@@ -20,7 +22,7 @@ import { IMG_PLACEHOLDER, SHOP_THE_LOOK } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 
-function LookbookDetailPage({ data, slug }: any) {
+function LookbookDetailPage({ data, slug, deviceInfo }: any) {
   const router = useRouter()
   const { basketId, openCart, setCartItems } = useUI()
   const [products, setProducts] = useState(data.products)
@@ -55,29 +57,17 @@ function LookbookDetailPage({ data, slug }: any) {
         DisplayOrder: obj.displayOrder || 0,
         StockCode: obj.stockCode,
         ItemType: obj.itemType || 0,
-
         ProductName: obj.name,
-
         ManualUnitPrice: obj.manualUnitPrice || 0.0,
-
         PostCode: obj.postCode || null,
-
         IsSubscription: obj.subscriptionEnabled || false,
-
         IsMembership: obj.hasMembership || false,
-
         SubscriptionPlanId: obj.subscriptionPlanId || null,
-
         SubscriptionTermId: obj.subscriptionTermId || null,
-
         UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
-
         GiftWrapId: obj.giftWrapConfig || null,
-
         IsGiftWrapApplied: obj.isGiftWrapApplied || false,
-
         ItemGroupId: obj.itemGroupId || 0,
-
         PriceMatchReqId:
           obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
       })
@@ -95,48 +85,44 @@ function LookbookDetailPage({ data, slug }: any) {
 
   const css = { maxWidth: '100%', height: 'auto' }
   return (
-    <div className="w-full mx-auto bg-white">
-      {/* Mobile menu */}
-      <main className="pb-24">
-        <div className="flex flex-col items-center px-4 py-0 text-left sm:px-0 lg:px-0">
-          <div className="w-full overflow-hidden bg-gray-200 rounded-sm">
-            <div className="image-container lookbook-image">
-              <Image
-                style={css}
-                width={1000}
-                height={400}
-                src={
-                  generateUri(data.mainImage, 'h=800&fm=webp') || IMG_PLACEHOLDER
-                }
-                alt={data.name}
-                className="object-cover object-center w-full h-screen min-h-screen image"
-              />
-              <div className="lookbook-data">
-                <h1 className="py-1 text-4xl font-semibold tracking-tight text-white">
-                  {data.name}
-                </h1>
-                <h2 className="pt-4 font-normal tracking-tight text-white text-md sm:w-1/3">
-                  {data.description}
-                </h2>
-                <button
-                  onClick={handleBulk}
-                  className="px-10 py-3 mt-5 text-lg font-semibold text-white uppercase bg-black hover:bg-gray-900"
-                >
-                  {SHOP_THE_LOOK}
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="mx-auto mt-5 sm:w-4/5">
-            <ProductGrid
-              products={products}
-              currentPage={products?.currentpage}
-              handlePageChange={() => { }}
-              handleInfiniteScroll={() => { }}
-            />
+    <div className="flex flex-col items-center w-full px-4 py-0 pb-24 mx-auto text-left bg-white sm:px-0 lg:px-0">
+      <div className="w-full overflow-hidden bg-gray-200 rounded-sm">
+        <div className="image-container lookbook-image">
+          <Image
+            style={css}
+            width={1000}
+            height={400}
+            src={
+              generateUri(data.mainImage, 'h=700&fm=webp') || IMG_PLACEHOLDER
+            }
+            alt={data.name}
+            className="object-cover object-center w-full h-screen min-h-screen image"
+          />
+          <div className="lookbook-data">
+            <h1 className="py-1 text-4xl font-semibold tracking-tight text-white">
+              {data.name}
+            </h1>
+            <h2 className="pt-4 font-normal tracking-tight text-white text-md sm:w-1/3">
+              {data.description}
+            </h2>
+            <button
+              onClick={handleBulk}
+              className="px-10 py-3 mt-5 text-lg font-semibold text-white uppercase bg-black hover:bg-gray-900"
+            >
+              {SHOP_THE_LOOK}
+            </button>
           </div>
         </div>
-      </main>
+      </div>
+      <div className="mx-auto mt-5 sm:w-4/5">
+        <ProductGrid
+          products={products}
+          currentPage={products?.currentpage}
+          handlePageChange={() => {}}
+          handleInfiniteScroll={() => {}}
+          deviceInfo={deviceInfo}
+        />
+      </div>
     </div>
   )
 }
@@ -149,7 +135,6 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const slug: any = params!.lookbook
   const response = await getSingleLookbook(slug[0])
-
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
   return {
@@ -162,11 +147,7 @@ export async function getStaticProps({
     revalidate: 200,
   }
 }
-
-LookbookDetailPage.Layout = Layout
-
 const PAGE_TYPE = PAGE_TYPES['Page']
-
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const data = await getLookbooks()
   let paths = data?.map((lookbook: any) => {
@@ -175,10 +156,8 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
     } else return `/${lookbook?.slug}`
   })
 
-  return {
-    paths: paths,
-    fallback: 'blocking',
-  }
+  return { paths: paths, fallback: 'blocking' }
 }
 
+LookbookDetailPage.Layout = Layout
 export default withDataLayer(LookbookDetailPage, PAGE_TYPE)

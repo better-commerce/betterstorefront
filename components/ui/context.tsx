@@ -1,12 +1,18 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
+import { isDesktop, isMobile } from 'react-device-detect'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import { Guid } from '@commerce/types'
-import { DeviceType } from "@commerce/utils/use-device"
-import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId';
+import { DeviceType } from '@commerce/utils/use-device'
+import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
+import { resetBasket } from '@framework/utils/app-util'
+import { LocalStorage } from '@components/utils/payment-constants'
+import { LOGOUT } from '@components/utils/textVariables'
+
+declare const window: any
 
 export const basketId = () => {
   if (Cookies.get('basketId')) {
@@ -20,27 +26,28 @@ export const basketId = () => {
 }
 
 export interface IDeviceInfo {
-  readonly isMobile: boolean | undefined;
-  readonly isDesktop: boolean | undefined;
-  readonly isIPadorTablet: boolean | undefined;
-  readonly deviceType: DeviceType;
+  readonly isMobile: boolean | undefined
+  readonly isOnlyMobile: boolean | undefined
+  readonly isDesktop: boolean | undefined
+  readonly isIPadorTablet: boolean | undefined
+  readonly deviceType: DeviceType
 }
 
 export interface IOverlayLoaderState {
-  readonly visible: boolean;
-  readonly message?: string;
-};
+  readonly visible: boolean
+  readonly message?: string
+}
 
 export interface IPLPFilterState {
-  filters: Array<any>;
-  sortBy: string;
-  sortList: Array<any>;
-  results: number;
-  total: number;
-  currentPage: number;
-  pages: number;
-  loading: boolean;
-};
+  filters: Array<any>
+  sortBy: string
+  sortList: Array<any>
+  results: number
+  total: number
+  currentPage: number
+  pages: number
+  loading: boolean
+}
 
 export interface State {
   displaySidebar: boolean
@@ -55,12 +62,13 @@ export interface State {
   cartItems: any
   basketId: string
   user: any
-  isGuestUser: boolean,
+  isGuestUser: boolean
   showSearchBar: boolean
   appConfig: any
   orderId: string
   userIp: string
-  overlayLoaderState: IOverlayLoaderState;
+  overlayLoaderState: IOverlayLoaderState
+  deviceInfo: IDeviceInfo
 }
 
 const initialState = {
@@ -83,73 +91,80 @@ const initialState = {
   userIp: '',
   overlayLoaderState: {
     visible: false,
-    message: "",
+    message: '',
+  },
+  deviceInfo: {
+    isMobile: false,
+    isOnlyMobile: false,
+    isDesktop: false,
+    isIPadorTablet: false,
+    deviceType: DeviceType.UNKNOWN,
   },
 }
 
 type Action =
   | {
-    type: 'OPEN_SIDEBAR'
-  }
+      type: 'OPEN_SIDEBAR'
+    }
   | {
-    type: 'CLOSE_SIDEBAR'
-  }
+      type: 'CLOSE_SIDEBAR'
+    }
   | {
-    type: 'OPEN_DROPDOWN'
-  }
+      type: 'OPEN_DROPDOWN'
+    }
   | {
-    type: 'CLOSE_DROPDOWN'
-  }
+      type: 'CLOSE_DROPDOWN'
+    }
   | {
-    type: 'OPEN_MODAL'
-  }
+      type: 'OPEN_MODAL'
+    }
   | {
-    type: 'OPEN_NOTIFY_USER_POPUP'
-    payload: string
-  }
+      type: 'OPEN_NOTIFY_USER_POPUP'
+      payload: string
+    }
   | {
-    type: 'CLOSE_NOTIFY_USER_POPUP'
-  }
+      type: 'CLOSE_NOTIFY_USER_POPUP'
+    }
   | {
-    type: 'CLOSE_MODAL'
-  }
+      type: 'CLOSE_MODAL'
+    }
   | {
-    type: 'SET_MODAL_VIEW'
-    view: MODAL_VIEWS
-  }
+      type: 'SET_MODAL_VIEW'
+      view: MODAL_VIEWS
+    }
   | {
-    type: 'SET_SIDEBAR_VIEW'
-    view: SIDEBAR_VIEWS
-  }
+      type: 'SET_SIDEBAR_VIEW'
+      view: SIDEBAR_VIEWS
+    }
   | {
-    type: 'SET_USER_AVATAR'
-    value: string
-  }
+      type: 'SET_USER_AVATAR'
+      value: string
+    }
   | {
-    type: 'ADD_TO_WISHLIST'
-    payload: any
-  }
+      type: 'ADD_TO_WISHLIST'
+      payload: any
+    }
   | {
-    type: 'REMOVE_FROM_WISHLIST'
-    payload: any
-  }
+      type: 'REMOVE_FROM_WISHLIST'
+      payload: any
+    }
   | {
-    type: 'ADD_TO_CART'
-    payload: any
-  }
+      type: 'ADD_TO_CART'
+      payload: any
+    }
   | {
-    type: 'REMOVE_FROM_CART'
-    payload: any
-  }
+      type: 'REMOVE_FROM_CART'
+      payload: any
+    }
   | { type: 'SET_CART_ITEMS'; payload: any }
   | {
-    type: 'SET_USER'
-    payload: any
-  }
+      type: 'SET_USER'
+      payload: any
+    }
   | {
-    type: 'SET_IS_GUEST_USER'
-    payload: boolean
-  }
+      type: 'SET_IS_GUEST_USER'
+      payload: boolean
+    }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -158,6 +173,7 @@ type Action =
   | { type: 'SET_ORDER_ID'; payload: any }
   | { type: 'SET_USER_IP'; payload: string }
   | { type: 'SET_OVERLAY_STATE'; payload: IOverlayLoaderState }
+  | { type: 'SETUP_DEVICE_INFO'; payload: IDeviceInfo }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -179,6 +195,13 @@ UIContext.displayName = 'UIContext'
 
 function uiReducer(state: State, action: Action) {
   switch (action.type) {
+    case 'SETUP_DEVICE_INFO': {
+      return {
+        ...state,
+        deviceInfo: state?.deviceInfo,
+      }
+    }
+
     case 'OPEN_SIDEBAR': {
       return {
         ...state,
@@ -254,9 +277,9 @@ function uiReducer(state: State, action: Action) {
       }
     }
     case 'REMOVE_FROM_WISHLIST': {
-      const items = state.wishListItems.filter((item: any) => (
-        item.recordId !== action.payload
-      ))
+      const items = state.wishListItems.filter(
+        (item: any) => item.recordId !== action.payload
+      )
       setItem('wishListItems', items)
       return {
         ...state,
@@ -347,6 +370,49 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
   const Router = useRouter()
 
   const [state, dispatch] = React.useReducer(uiReducer, initialState)
+
+  const setupDeviceInfo = useCallback(() => {
+    const UA = navigator.userAgent
+    const isIPadorTablet = /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA)
+
+    /**
+     * Determine the mobile operating system.
+     * This function returns one of 'IOS', 'ANDROID', 'WINDOWS_PHONE', or 'UNKNOWN'.
+     *
+     * @returns {String}
+     */
+    const getDeviceType = () => {
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera
+
+      // Windows Phone must come first because its UA also contains "Android"
+      if (/windows phone/i.test(userAgent)) {
+        return DeviceType.WINDOWS_PHONE
+      }
+
+      if (/android/i.test(userAgent)) {
+        return DeviceType.ANDROID
+      }
+
+      // iOS detection from: http://stackoverflow.com/a/9039885/177710
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return DeviceType.IOS
+      }
+
+      return DeviceType.UNKNOWN
+    }
+    const deviceTypeInfo = getDeviceType()
+    const isOnlyMobile = (isMobile && !isIPadorTablet) || deviceTypeInfo === 2
+
+    const payload: IDeviceInfo = {
+      isMobile,
+      isOnlyMobile,
+      isDesktop: isMobile || isIPadorTablet ? false : isDesktop,
+      isIPadorTablet,
+      deviceType: deviceTypeInfo,
+    }
+    setItem('deviceInfo', payload)
+    dispatch({ type: 'SETUP_DEVICE_INFO', payload })
+  }, [dispatch])
 
   const addToWishlist = useCallback(
     (payload: any) => {
@@ -457,11 +523,49 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
   )
   const setCartItems = useCallback(
     (payload: any) => {
-      const newCartDataClone = consolidateCartItems(payload);
+      const newCartDataClone: any = { ...payload }
+      newCartDataClone?.lineItems?.forEach((element: any, idx: number) => {
+        newCartDataClone?.lineItems?.forEach((i: any) => {
+          if (element.parentProductId === i.productId) {
+            i.children = i.children ? [...i.children, element] : [element]
+            newCartDataClone.lineItems.splice(idx, 1)
+          }
+        })
+      })
 
-      setItem('cartItems', { ...newCartDataClone })
+      const cart = { ...payload }
+      setItem('cartItems', cart)
 
+      if (cart?.lineItems?.length == 0) {
+        resetBasket(setBasketId, basketId)
+        /*const user = {
+          ...state?.user,
+          ...{
+            isAssociated: false
+          }
+        };
+        setUser(user);*/
+      }
       dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
+    },
+    [dispatch]
+  )
+
+  const resetCartItems = useCallback(
+    (payload?: any) => {
+      setItem('cartItems', { lineItems: [] })
+      dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+    },
+    [dispatch]
+  )
+
+  const resetCartStorage = useCallback(
+    (payload?: any) => {
+      removeItem(LocalStorage.Key.ORDER_RESPONSE)
+      removeItem(LocalStorage.Key.ORDER_PAYMENT)
+      removeItem(LocalStorage.Key.CONVERTED_ORDER)
+      //setItem('cartItems', { lineItems: [] })
+      //dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
     },
     [dispatch]
   )
@@ -551,13 +655,15 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
   )
 
   const hideOverlayLoaderState = useCallback(
-    (payload: IOverlayLoaderState = {
-      visible: false,
-      message: "",
-    }) => {
+    (
+      payload: IOverlayLoaderState = {
+        visible: false,
+        message: '',
+      }
+    ) => {
       const data: IOverlayLoaderState = {
         visible: false,
-        message: "",
+        message: '',
       }
       dispatch({ type: 'SET_OVERLAY_STATE', payload })
     },
@@ -565,60 +671,81 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
   )
 
   const consolidateCartItems = (payload: any) => {
+    let newCartDataClone: any = { ...payload }
 
-    let newCartDataClone: any = { ...payload };
-
-    let lineItems = new Array<any>();
-    let parentItemsTemp = new Array<any>();
+    let lineItems = new Array<any>()
+    let parentItemsTemp = new Array<any>()
 
     // If line items exist
     if (newCartDataClone?.lineItems?.length) {
-
       // Find all child items.
-      const allParentProducts = newCartDataClone?.lineItems?.filter((x: any) => !x.parentProductId || (x.parentProductId && (x.parentProductId.trim() === "" || x.parentProductId.trim() === Guid.empty)));
+      const allParentProducts = newCartDataClone?.lineItems?.filter(
+        (x: any) =>
+          !x.parentProductId ||
+          (x.parentProductId &&
+            (x.parentProductId.trim() === '' ||
+              x.parentProductId.trim() === Guid.empty))
+      )
 
       // If parent items found
       if (allParentProducts && allParentProducts.length) {
-
         // Iterate parent items
         allParentProducts.forEach((parentItem: any) => {
-
           // Find child items for current item.
-          const childItems = newCartDataClone?.lineItems?.filter((x: any) => x.parentProductId && x.parentProductId.trim() !== "" && x.parentProductId.trim() !== Guid.empty && x.parentProductId.toLowerCase().trim() == parentItem.productId.toLowerCase());
+          const childItems = newCartDataClone?.lineItems?.filter(
+            (x: any) =>
+              x.parentProductId &&
+              x.parentProductId.trim() !== '' &&
+              x.parentProductId.trim() !== Guid.empty &&
+              x.parentProductId.toLowerCase().trim() ==
+                parentItem.productId.toLowerCase()
+          )
 
           // If child items exists
           if (childItems && childItems.length) {
-
             // Find current item in temp parent items
-            const findParentInTemp = parentItemsTemp.find((x: any) => x.productId.toLowerCase() == parentItem.productId.toLowerCase());
+            const findParentInTemp = parentItemsTemp.find(
+              (x: any) =>
+                x.productId.toLowerCase() == parentItem.productId.toLowerCase()
+            )
 
             // If found
             if (findParentInTemp && findParentInTemp.children) {
-
               // Concat child items to existing parent item
-              findParentInTemp.children = findParentInTemp.children.concat(childItems);
+              findParentInTemp.children =
+                findParentInTemp.children.concat(childItems)
             } else {
-
               // Add new parent with child items
-              parentItemsTemp.push({ ...parentItem, ... { children: childItems } });
+              parentItemsTemp.push({
+                ...parentItem,
+                ...{ children: childItems },
+              })
             }
           }
-
-        });
+        })
       }
 
-      const parentItemsTempIds = (parentItemsTemp.length) ? parentItemsTemp.map((x: any) => x.productId.toLowerCase()) : [];
-      const findUntouchedParentItems = newCartDataClone?.lineItems?.filter((x: any) => (!x.parentProductId || (x.parentProductId && (x.parentProductId.trim() === "" || x.parentProductId.trim() === Guid.empty)) && !parentItemsTempIds.includes(x.productId.toLowerCase())));
+      const parentItemsTempIds = parentItemsTemp.length
+        ? parentItemsTemp.map((x: any) => x.productId.toLowerCase())
+        : []
+      const findUntouchedParentItems = newCartDataClone?.lineItems?.filter(
+        (x: any) =>
+          !x.parentProductId ||
+          (x.parentProductId &&
+            (x.parentProductId.trim() === '' ||
+              x.parentProductId.trim() === Guid.empty) &&
+            !parentItemsTempIds.includes(x.productId.toLowerCase()))
+      )
 
       if (findUntouchedParentItems && findUntouchedParentItems.length) {
-        lineItems = lineItems.concat(findUntouchedParentItems);
+        lineItems = lineItems.concat(findUntouchedParentItems)
       }
 
       if (parentItemsTemp && parentItemsTemp.length) {
-        lineItems = lineItems.concat(parentItemsTemp);
+        lineItems = lineItems.concat(parentItemsTemp)
       }
 
-      newCartDataClone.lineItems = lineItems;
+      newCartDataClone.lineItems = lineItems
     }
 
     /*newCartDataClone?.lineItems?.forEach((element: any, idx: number) => {
@@ -630,8 +757,8 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
       })
     })*/
 
-    return newCartDataClone;
-  };
+    return newCartDataClone
+  }
 
   const value = useMemo(
     () => ({
@@ -667,6 +794,8 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
       setUserIp,
       setOverlayLoaderState,
       hideOverlayLoaderState,
+      resetCartItems,
+      setupDeviceInfo,
     }),
     [state]
   )
@@ -682,7 +811,9 @@ export const useUI = () => {
   return context
 }
 
-export const ManagedUIContext: FC<React.PropsWithChildren<unknown>> = ({ children }) => (
+export const ManagedUIContext: FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => (
   <UIProvider>
     <ThemeProvider>{children}</ThemeProvider>
   </UIProvider>

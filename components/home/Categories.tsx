@@ -6,9 +6,9 @@ import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
 import Link from 'next/link'
-import { isMobile } from 'react-device-detect'
 
-function Categories({ data }: any) {
+function Categories({ data, deviceInfo }: any) {
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   var settings = {
     fade: false,
     speed: 500,
@@ -46,8 +46,8 @@ function Categories({ data }: any) {
     ],
   }
 
-  const css = { maxWidth: "100%", minHeight: "350px" }
-  const mobcss = { maxWidth: "100%", minHeight: "150px" }
+  const css = { maxWidth: '100%', minHeight: '350px' }
+  const mobcss = { maxWidth: '100%', minHeight: '150px' }
 
   const [renderState, setRenderState] = useState(false)
 
@@ -59,11 +59,29 @@ function Categories({ data }: any) {
   if (!renderState) return null
 
   return (
-    <Swiper slidesPerView={3.2} spaceBetween={10} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 3.2, }, 768: { slidesPerView: 4.5, }, 1024: { slidesPerView: 5.5, }, }}>
+    <Swiper
+      slidesPerView={3.2}
+      spaceBetween={10}
+      navigation={true}
+      loop={true}
+      breakpoints={{
+        640: { slidesPerView: 3.2 },
+        768: { slidesPerView: 4.5 },
+        1024: { slidesPerView: 5.5 },
+      }}
+    >
       {data?.map((category: any, catId: number) => (
-        <SwiperSlide key={catId} className="relative flex flex-col mobile-cls-fix style-newin_article">
+        <SwiperSlide
+          key={catId}
+          className="relative flex flex-col mobile-cls-fix style-newin_article"
+        >
           <div className="image-continer">
-            <Link href={category?.categorylist_link} passHref legacyBehavior>
+            <Link
+              href={category?.categorylist_link}
+              title={category?.categorylist_name}
+              passHref
+              legacyBehavior
+            >
               {isMobile ? (
                 <Image
                   src={category?.categorylist_image}
@@ -71,7 +89,7 @@ function Categories({ data }: any) {
                   width={300}
                   height={200}
                   style={mobcss}
-                  className='cursor-pointer'
+                  className="cursor-pointer"
                 />
               ) : (
                 <Image
@@ -80,15 +98,22 @@ function Categories({ data }: any) {
                   width={600}
                   height={800}
                   style={css}
-                  className='cursor-pointer'
+                  className="cursor-pointer"
                 />
               )}
             </Link>
           </div>
           <div className="flex flex-col w-full px-2 text-center sm:px-4 style-newin_article-title">
-            <h3 className="pt-1 text-sm font-semibold text-white b-2">{category?.categorylist_name}</h3>
-            <Link href={category?.categorylist_link} passHref legacyBehavior>
-              <a className="w-full py-1 mb-2 text-sm font-medium text-black bg-white border border-white hover:bg-gray-100 hover:border-gray-800 hover:shadow-md">
+            <h3 className="pt-1 text-sm font-semibold text-white b-2">
+              {category?.categorylist_name}
+            </h3>
+            <Link
+              title={category?.categorylist_buttontext}
+              href={category?.categorylist_link}
+              passHref
+              legacyBehavior
+            >
+              <a className="w-full mb-2 font-medium btn-primary-white btn-padding-none">
                 {category?.categorylist_buttontext}
               </a>
             </Link>

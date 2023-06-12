@@ -211,6 +211,17 @@ body {
   z-index: 9999;
 }
 
+/* Overlay Loader */
+.overlay-panel {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+}
+
 .add-wishlist {
   bottom: -25px !important;
   padding: 6px;
@@ -994,6 +1005,17 @@ body {
   z-index: 9999;
 }
 
+/* Overlay Loader */
+.overlay-panel {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+}
+
 @media only screen and (min-width: 321px) and (max-width: 767px) {
   .mobile-view-on {
     display: block;
@@ -1042,4 +1064,17 @@ body {
   .navbar-min-44 {
     min-height: 64px !important;
   }
+}
+
+.star-rating {
+  position: relative;
+  width: 24px;
+  padding-left: 16px;
+}
+.star-rating:after {
+  content: url(/assets/images/star.svg);
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  left: 0;
 }

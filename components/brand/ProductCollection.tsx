@@ -76,6 +76,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 export default function ProductCollection({
   query = {},
   brandDetails,
+  deviceInfo,
   ...props
 }: any) {
   const adaptedQuery = { ...query }
@@ -136,7 +137,8 @@ export default function ProductCollection({
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
       if (
-        data?.products?.currentPage !== productListMemory?.products?.currentPage ||
+        data?.products?.currentPage !==
+          productListMemory?.products?.currentPage ||
         data?.products?.total !== productListMemory?.products?.total
       ) {
         setProductListMemory((prevData: any) => {
@@ -204,6 +206,7 @@ export default function ProductCollection({
           products={productDataToPass}
           currentPage={state.currentPage}
           handleInfiniteScroll={handleInfiniteScroll}
+          deviceInfo={deviceInfo}
         />
       </main>
     </div>

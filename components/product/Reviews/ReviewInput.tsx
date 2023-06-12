@@ -2,14 +2,15 @@ import withAuth from '@components/utils/withAuth'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import { useState, useEffect } from 'react'
-import { 
-  BTN_SUBMIT, 
-  ERROR_WOOPS_SOMETHING_WENT_WRONG, 
-  GENERAL_REVIEW_OUT_OF_FIVE, 
-  MESSAGE_CHARACTERS_LEFT, 
-  MIN_BODY_LENGTH_ERROR, 
-  POST_YOUR_REVIEW, 
-  REVIEW_COMMENT, REVIEW_TITLE 
+import {
+  BTN_SUBMIT,
+  ERROR_WOOPS_SOMETHING_WENT_WRONG,
+  GENERAL_REVIEW_OUT_OF_FIVE,
+  MESSAGE_CHARACTERS_LEFT,
+  MIN_BODY_LENGTH_ERROR,
+  POST_YOUR_REVIEW,
+  REVIEW_COMMENT,
+  REVIEW_TITLE,
 } from '@components/utils/textVariables'
 
 import { NEXT_CREATE_REVIEW } from '@components/utils/constants'
@@ -77,14 +78,12 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
       setCommentTitle(e.target.value)
     }
   }
-  
+
   return (
-    <div className="pb-16">
-      <h2 className="mb-6 text-2xl font-semibold text-black">{POST_YOUR_REVIEW}</h2>
-      { asyncMessage ? (
-        <div>
-          <span className="text-2xl text-gray-900">{asyncMessage}</span>
-        </div>
+    <>
+      <h4 className="mb-6 font-semibold text-black">{POST_YOUR_REVIEW}</h4>
+      {asyncMessage ? (
+        <span className="text-2xl text-gray-900">{asyncMessage}</span>
       ) : (
         <>
           <input
@@ -124,13 +123,13 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
           <button
             type="button"
             onClick={handleSubmit}
-            className="flex items-center justify-center flex-1 float-right max-w-xs px-4 py-2 font-medium text-white uppercase bg-black border border-transparent rounded-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
+            className="flex items-center justify-center flex-1 float-right max-w-xs px-4 py-2 btn-primary uppercase sm:w-full"
           >
             {BTN_SUBMIT}
           </button>
         </>
       )}
-    </div>
+    </>
   )
 }
 
