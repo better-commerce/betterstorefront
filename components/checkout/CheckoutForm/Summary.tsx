@@ -4,7 +4,7 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import { EyeIcon } from '@heroicons/react/24/outline'
 import PromotionInput from '@components/cart/PromotionInput'
 import Engraving from '@components/product/Engraving'
-import classNames from 'classnames';
+import classNames from 'classnames'
 import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import {
@@ -27,6 +27,9 @@ export default function Summary({
   cart,
   handleItem,
   confirmOrder,
+  basketPromos,
+  cartItems,
+  getBasketPromos,
   isShippingDisabled,
 }: any) {
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
@@ -56,7 +59,7 @@ export default function Summary({
 
     return details
   }
-  
+
   const getLineItemSizeWithoutSlug = (product: any) => {
     const productData: any = tryParseJson(product?.attributesJson || {})
     return productData?.Size
@@ -73,7 +76,7 @@ export default function Summary({
                   className={classNames(
                     'text-lg font-bold text-gray-900 uppercase w-full text-left mobile-view-on border border-gray-200 bg-white shadow p-5',
                     {
-                      'mb-3': !open
+                      'mb-3': !open,
                     }
                   )}
                 >
@@ -203,7 +206,19 @@ export default function Summary({
                                           <div className="text-ms text-gray-700">
                                             <span
                                               title="Message"
-                                              className={classNames({'font-rubikBubblesMerged':customFont==='rubikBubblesMerged','font-YeonSungRegularMerged':customFont==='YeonSungRegularMerged','font-KSTM1Merged':customFont==='KSTM1Merged','font-Cantarell-RegularMergedSymbols':customFont==='Cantarell-RegularMergedSymbols'})}
+                                              className={classNames({
+                                                'font-rubikBubblesMerged':
+                                                  customFont ===
+                                                  'rubikBubblesMerged',
+                                                'font-YeonSungRegularMerged':
+                                                  customFont ===
+                                                  'YeonSungRegularMerged',
+                                                'font-KSTM1Merged':
+                                                  customFont === 'KSTM1Merged',
+                                                'font-Cantarell-RegularMergedSymbols':
+                                                  customFont ===
+                                                  'Cantarell-RegularMergedSymbols',
+                                              })}
                                             >
                                               {customMsg}
                                             </span>
@@ -247,7 +262,9 @@ export default function Summary({
                     </ul>
                     <hr></hr>
                     <div className=" mx-4 pt-2">
-                      <Disclosure>
+                      <Disclosure
+                        defaultOpen={cart.promotionsApplied?.length > 0}
+                      >
                         {({ open }) => (
                           <>
                             <Disclosure.Button className="flex justify-between rounded-lg py-2 text-left underline text-sm font-medium text-green focus-visible:ring-opacity-75 link-button">
@@ -261,9 +278,13 @@ export default function Summary({
                               leaveFrom="transform scale-100 opacity-100"
                               leaveTo="transform scale-95 opacity-0"
                             >
-                            <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                              <PromotionInput />
-                            </Disclosure.Panel>
+                              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                <PromotionInput
+                                  basketPromos={basketPromos}
+                                  items={cartItems}
+                                  getBasketPromoses={getBasketPromos}
+                                />
+                              </Disclosure.Panel>
                             </Transition>
                           </>
                         )}
@@ -409,8 +430,11 @@ export default function Summary({
                             <div>{}</div>
                             {product?.children?.map(
                               (child: any, childId: number) => {
-                                const customInfo1: any = tryParseJson(child.customInfo1)
-                                const customInfo1FormattedData = customInfo1?.formatted?.data || null
+                                const customInfo1: any = tryParseJson(
+                                  child.customInfo1
+                                )
+                                const customInfo1FormattedData =
+                                  customInfo1?.formatted?.data || null
                                 const personalizationFont = `font-${customInfo1FormattedData?.Font}`
 
                                 return (
@@ -466,31 +490,35 @@ export default function Summary({
                   )
                 })}
               </ul>
-              <hr className=''></hr>
-          <div className=" mx-6 mt-2">
-          <Disclosure>
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="flex justify-between rounded-lg py-2 text-left underline text-sm font-medium text-green focus-visible:ring-			opacity-75 link-button">
-                  <span>Apply Promo?</span>
-                </Disclosure.Button>
-                <Transition
-                  enter="transition duration-100 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-75 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                >
-                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                  <PromotionInput />
-                </Disclosure.Panel>
-                </Transition>
-              </>
-            )}
-          </Disclosure>
-          </div>
-          <dl className="px-4 py-2 space-y-2 border-gray-200 sm:px-6">
+              <hr className=""></hr>
+              <div className=" mx-6 mt-2">
+                <Disclosure defaultOpen={cart.promotionsApplied?.length > 0}>
+                  {({ open }) => (
+                    <>
+                      <Disclosure.Button className="flex justify-between rounded-lg py-2 text-left underline text-sm font-medium text-green focus-visible:ring-			opacity-75 link-button">
+                        <span>Apply Promo?</span>
+                      </Disclosure.Button>
+                      <Transition
+                        enter="transition duration-100 ease-out"
+                        enterFrom="transform scale-95 opacity-0"
+                        enterTo="transform scale-100 opacity-100"
+                        leave="transition duration-75 ease-out"
+                        leaveFrom="transform scale-100 opacity-100"
+                        leaveTo="transform scale-95 opacity-0"
+                      >
+                        <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                          <PromotionInput
+                            basketPromos={basketPromos}
+                            items={cartItems}
+                            getBasketPromoses={getBasketPromos}
+                          />
+                        </Disclosure.Panel>
+                      </Transition>
+                    </>
+                  )}
+                </Disclosure>
+              </div>
+              <dl className="px-4 py-2 space-y-2 border-gray-200 sm:px-6">
                 <div className="flex items-center justify-between">
                   <dt>{SUBTOTAL_INCLUDING_TAX}</dt>
                   <dd>{cart.subTotal?.formatted?.withTax}</dd>

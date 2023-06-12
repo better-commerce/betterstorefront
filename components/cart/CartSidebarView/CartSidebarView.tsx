@@ -971,7 +971,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo 
                     {!isEmpty && (
                       <div className="sticky bottom-0 pt-4 pb-1 mt-2 ml-5 bg-white">
                         <div className="-mt-3">
-                          <Disclosure>
+                          <Disclosure defaultOpen>
                             {({ open }) => (
                               <>
                                 <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
@@ -986,7 +986,11 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo 
                                   leaveTo="transform scale-95 opacity-0"
                                 >
                                   <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                    <PromotionInput />
+                                    <PromotionInput 
+                                      basketPromos={basketPromos}
+                                      items={cartItems}
+                                      getBasketPromoses={getBasketPromos}
+                                    />
                                   </Disclosure.Panel>
                                 </Transition>
                               </>
