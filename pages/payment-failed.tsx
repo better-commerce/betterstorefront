@@ -17,7 +17,7 @@ import { removeItem } from "@components/utils/localStorage";
 import { NEXT_GET_ORDER, } from "@components/utils/constants";
 import { LocalStorage } from "@components/utils/payment-constants";
 import { obfuscateHostName, } from "@framework/utils/app-util";
-import { BTN_BACK_TO_HOME, GENERAL_ADDRESSES, GENERAL_BILLING_ADDRESS, GENERAL_ITEMS, GENERAL_ORDER_FAILED, GENERAL_ORDER_NOT_PROCESSED, GENERAL_PRICE, GENERAL_QUANTITY, GENERAL_SHIPPING_ADDRESS, GENERAL_YOUR_ORDER, IMG_PLACEHOLDER, LOADING_YOUR_ORDERS, YOUR_INFORMATION } from "@components/utils/textVariables";
+import { BTN_BACK_TO_HOME, GENERAL_ADDRESSES, GENERAL_BILLING_ADDRESS, GENERAL_DELIVERY_ADDRESS, GENERAL_ITEMS, GENERAL_ORDER_FAILED, GENERAL_ORDER_NOT_PROCESSED, GENERAL_PRICE, GENERAL_QUANTITY, GENERAL_SHIPPING_ADDRESS, GENERAL_YOUR_ORDER, IMG_PLACEHOLDER, LOADING_YOUR_ORDERS, YOUR_INFORMATION } from "@components/utils/textVariables";
 import { generateUri } from "@commerce/utils/uri-util";
 import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from "@framework/content/use-content-snippet";
 
@@ -145,7 +145,8 @@ const PaymentFailedPage = ({ /*orderId: guidOrderId,*/ config, hostName, }: any)
                                 <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                                     <div>
                                         <dt className="font-medium text-gray-900">
-                                            {GENERAL_SHIPPING_ADDRESS}
+                                            {/* {GENERAL_SHIPPING_ADDRESS} */}
+                                            {GENERAL_DELIVERY_ADDRESS}
                                         </dt>
                                         <dd className="mt-2 text-gray-700">
                                             <address className="not-italic">
@@ -157,7 +158,7 @@ const PaymentFailedPage = ({ /*orderId: guidOrderId,*/ config, hostName, }: any)
                                             </address>
                                         </dd>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <dt className="font-medium text-gray-900">
                                             {GENERAL_BILLING_ADDRESS}
                                         </dt>
@@ -170,7 +171,7 @@ const PaymentFailedPage = ({ /*orderId: guidOrderId,*/ config, hostName, }: any)
                                                 <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
                                             </address>
                                         </dd>
-                                    </div>
+                                    </div> */}
                                 </dl>
                             </div>
                         </section>
