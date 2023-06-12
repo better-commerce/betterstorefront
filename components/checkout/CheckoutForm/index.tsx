@@ -243,7 +243,7 @@ export default function CheckoutForm({
   const { addToCart, associateCart } = cartHandler()
   const { state: submitState, dispatch: submitDispatch } = useDataSubmit()
 
-  const { createAddress , updateAddress } = asyncHandler()
+  const { createAddress  } = asyncHandler()
 
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
@@ -358,28 +358,29 @@ export default function CheckoutForm({
           // Duplicate address exists
         }
       })
-    } else {
-      updateAddress({
-        ...newValues,
-        ...{ id: data?.id, customerId: cartItems?.userId },
-      })
-        .then((saveAddressResult: any) => {
-          // const updatedUser = { ...user, ...{ notifyByWhatsapp: data?.whtsappUpdated } };
-          // setUser(updatedUser);
-          // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
-          // });
-          fetchAddress()
+    } 
+    // else {
+    //   updateAddress({
+    //     ...newValues,
+    //     ...{ id: data?.id, customerId: cartItems?.userId },
+    //   })
+    //     .then((saveAddressResult: any) => {
+    //       // const updatedUser = { ...user, ...{ notifyByWhatsapp: data?.whtsappUpdated } };
+    //       // setUser(updatedUser);
+    //       // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
+    //       // });
+    //       fetchAddress()
 
-          if (callback) {
-            callback()
-          }
-          closeNewAddressModal()
-          // setAlert({type:'success',msg:ADDRESS_UPDATE})
-        })
-        .catch((error: any) => {
-          console.log(error)
-        })
-    }
+    //       if (callback) {
+    //         callback()
+    //       }
+    //       closeNewAddressModal()
+    //       // setAlert({type:'success',msg:ADDRESS_UPDATE})
+    //     })
+    //     .catch((error: any) => {
+    //       console.log(error)
+    //     })
+    // }
   }
   const handleEditAddress = async (id: number) => {
     const { data }: any = await axios.post(NEXT_ADDRESS, {
@@ -462,27 +463,29 @@ export default function CheckoutForm({
     asyncHandleItem()
   }
 
-  const setShippingInformation = (payload: any) =>
-    dispatch({ type: 'SET_SHIPPING_INFORMATION', payload })
+  const setShippingInformation = (payload: any) =>{
+     setBillingInformation(payload)
+     dispatch({ type: 'SET_SHIPPING_INFORMATION', payload })
+  }
 
-  // const updateAddress = (type: string, payload: any) => {
-  //   switch (type) {
-  //     case 'SHIPPING':
-  //       dispatch({
-  //         type: 'SET_SHIPPING_INFORMATION',
-  //         payload: { ...state.shippingInformation, ...payload },
-  //       })
-  //       return true
-  //     case 'BILLING':
-  //       dispatch({
-  //         type: 'SET_BILLING_INFORMATION',
-  //         payload: { ...state.billingInformation, ...payload },
-  //       })
-  //       return true
-  //     default:
-  //       return false
-  //   }
-  // }
+  const updateAddress = (type: string, payload: any) => {
+    switch (type) {
+      case 'SHIPPING':
+        dispatch({
+          type: 'SET_SHIPPING_INFORMATION',
+          payload: { ...state.shippingInformation, ...payload },
+        })
+        return true
+      case 'BILLING':
+        dispatch({
+          type: 'SET_BILLING_INFORMATION',
+          payload: { ...state.billingInformation, ...payload },
+        })
+        return true
+      default:
+        return false
+    }
+  }
 
   const setBillingInformation = (payload: any, update = true, type = AddressType.BILLING) => {
     const handleAsync = async () => {
