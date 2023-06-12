@@ -17,7 +17,7 @@ export async function getStaticProps({
   let pdpLookbookProducts = {};
 
   try {
-    const productPromise = commerce.getProduct({ query: params!.slug[0] })
+    const productPromise = commerce.getProduct({ query: params!?.slug[0] })
     product = await productPromise
 
     const availabelPromotionsPromise = commerce.getProductPromos({
@@ -87,10 +87,10 @@ export async function getStaticProps({
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const { products } = await commerce.getAllProductPaths()
-  let paths = products.map((product: any) => {
-    if (!product.slug.includes('products/')) {
-      return `/products/${product.slug}`
-    } else return `/${product.slug}`
+  let paths = products?.map((product: any) => {
+    if (!product?.slug?.includes('products/')) {
+      return `/products/${product?.slug}`
+    } else return `/${product?.slug}`
   })
   return {
     paths: paths,
