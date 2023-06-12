@@ -25,10 +25,10 @@ import {
 
 const PAGE_SIZE = 10
 
-function MyAccount({ defaultView, isLoggedIn }: any) {
+function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { user, deleteUser, isGuestUser } = useUI()
   const router = useRouter()
-
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
@@ -276,6 +276,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
               <MyOrders
                 allOrders={allOrders}
                 handleInfiniteScroll={handleInfiniteScroll}
+                deviceInfo={deviceInfo}
               />
             </div>
           </div>

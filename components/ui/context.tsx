@@ -174,7 +174,7 @@ type Action =
   | { type: 'SET_USER_IP'; payload: string }
   | { type: 'SET_OVERLAY_STATE'; payload: IOverlayLoaderState }
   | { type: 'SETUP_DEVICE_INFO'; payload: IDeviceInfo }
-
+  | { type: 'SET_SELECTED_ADDRESS_ID'; payload: number }
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
   | 'LOGIN_VIEW'
@@ -363,6 +363,13 @@ function uiReducer(state: State, action: Action) {
         overlayLoaderState: action.payload,
       }
     }
+
+    case 'SET_SELECTED_ADDRESS_ID': {
+      return {
+        ...state,
+        selectedAddressId: action.payload,
+      }
+    }
   }
 }
 
@@ -426,6 +433,12 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
   const setUserIp = useCallback(
     (payload: string) => {
       dispatch({ type: 'SET_USER_IP', payload })
+    },
+    [dispatch]
+  )
+  const setAddressId = useCallback(
+    (payload: number) => {
+      dispatch({ type: 'SET_SELECTED_ADDRESS_ID', payload })
     },
     [dispatch]
   )
@@ -548,6 +561,7 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
       }
       dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]
   )
 
@@ -567,6 +581,8 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
       //setItem('cartItems', { lineItems: [] })
       //dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
     },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]
   )
 
@@ -796,7 +812,10 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
       hideOverlayLoaderState,
       resetCartItems,
       setupDeviceInfo,
+      setAddressId,
     }),
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [state]
   )
 

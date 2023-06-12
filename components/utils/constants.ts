@@ -355,4 +355,9 @@ export const PDP_REVIEW_IMAGE_SIZE_IN_BYTES = toNumber(
 )
 
 export const SHORT_ALERT_TIMER = 2500
+export enum AddressPageAction {
+  SAVE = 0,
+  SELECT_ADDRESS = 1,
+}
+export const NEXT_PINCODE_LOOKUP = '/api/checkout/pincode-lookup'
 export const OTP_TIMER = 45

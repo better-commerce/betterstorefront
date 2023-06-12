@@ -27,6 +27,9 @@ export default function Summary({
   cart,
   handleItem,
   confirmOrder,
+  basketPromos,
+  cartItems,
+  getBasketPromos,
   isShippingDisabled,
 }: any) {
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
@@ -259,7 +262,9 @@ export default function Summary({
                     </ul>
                     <hr></hr>
                     <div className=" mx-4 pt-2">
-                      <Disclosure>
+                      <Disclosure
+                        defaultOpen={cart.promotionsApplied?.length > 0}
+                      >
                         {({ open }) => (
                           <>
                             <Disclosure.Button className="flex justify-between rounded-lg py-2 text-left underline text-sm font-medium text-green focus-visible:ring-opacity-75 link-button">
@@ -274,7 +279,11 @@ export default function Summary({
                               leaveTo="transform scale-95 opacity-0"
                             >
                               <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                <PromotionInput />
+                                <PromotionInput
+                                  basketPromos={basketPromos}
+                                  items={cartItems}
+                                  getBasketPromoses={getBasketPromos}
+                                />
                               </Disclosure.Panel>
                             </Transition>
                           </>
@@ -483,7 +492,7 @@ export default function Summary({
               </ul>
               <hr className=""></hr>
               <div className=" mx-6 mt-2">
-                <Disclosure>
+                <Disclosure defaultOpen={cart.promotionsApplied?.length > 0}>
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex justify-between rounded-lg py-2 text-left underline text-sm font-medium text-green focus-visible:ring-			opacity-75 link-button">
@@ -498,7 +507,11 @@ export default function Summary({
                         leaveTo="transform scale-95 opacity-0"
                       >
                         <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                          <PromotionInput />
+                          <PromotionInput
+                            basketPromos={basketPromos}
+                            items={cartItems}
+                            getBasketPromoses={getBasketPromos}
+                          />
                         </Disclosure.Panel>
                       </Transition>
                     </>

@@ -2,7 +2,10 @@
 import React, { useReducer } from 'react'
 
 // Other Imports
-import { actionInterface } from 'pages/checkout'
+export interface actionInterface {
+  type?: string
+  payload?: any
+}
 
 export interface ISubmitStateInterface {
   readonly isSubmitting: boolean

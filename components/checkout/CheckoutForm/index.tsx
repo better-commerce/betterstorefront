@@ -11,6 +11,9 @@ import {
   NEXT_PAYMENT_METHODS,
   LOQATE_ADDRESS,
   RETRIEVE_ADDRESS,
+  BETTERCOMMERCE_DEFAULT_COUNTRY,
+  NEXT_ADDRESS,
+  AddressPageAction,
 } from '@components/utils/constants'
 import {
   shippingFormConfig,
@@ -28,12 +31,22 @@ import {
   BILLING_INFORMATION,
   BTN_DELIVER_TO_THIS_ADDRESS,
   GENERAL_CHECKOUT,
+  GENERAL_DELIVERY_ADDRESS,
   GENERAL_PAYMENT,
   GENERAL_SAVE_CHANGES,
   SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
 import PaymentWidget from '@components/checkout/PaymentWidget'
 import { AddressType } from '@framework/utils/enums'
+import { LocalStorage } from '@components/utils/payment-constants'
+import {
+  parseFullName,
+  resetSubmitData,
+  submitData,
+} from '@framework/utils/app-util'
+import { matchStrings } from '@framework/utils/parse-util'
+import useDataSubmit from '@commerce/utils/use-data-submit'
+import NewAddressModal from './NewAddressModal'
 
 const Spinner = () => {
   return (
@@ -63,6 +76,8 @@ export default function CheckoutForm({
     setOrderId,
     orderId,
     setBasketId,
+    setAddressId,
+    isGuestUser,
   } = useUI()
 
   const uiContext = useUI()
@@ -232,38 +247,164 @@ export default function CheckoutForm({
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
   // const [deliveryCheck, setDeliveryCheck] = useState(false)
   const { addToCart, associateCart } = cartHandler()
+  const { state: submitState, dispatch: submitDispatch } = useDataSubmit()
 
   const { createAddress } = asyncHandler()
 
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
 
-  const handleNewAddress = (values: any, callback: any = () => {}) => {
-    recordShippingInfo()
+  const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
+  const [selectedAddress, setSelectedAddress] = useState()
+  const handleOpenNewAddressModal = () => {
+    setAddressId(0)
+    setSelectedAddress(undefined)
+    openNewAddressModal()
+  }
+
+  const openNewAddressModal = () => {
+    setIsNewAddressModalOpen(true)
+  }
+  const closeNewAddressModal = () => {
+    setIsNewAddressModalOpen(false)
+    resetSubmitData(submitDispatch)
+  }
+  const isRegisterAsGuestUser = () => {
+    return (getUserId() && isGuestUser) || !getUserId()
+  }
+  const getUserId = () => {
+    if (user?.userId) {
+      return user?.userId
+    }
+    return cartItems?.userId
+  }
+
+  // const handleNewAddress = (values: any, callback: any = () => { }) => {
+  //   recordShippingInfo()
+  //   const newValues = {
+  //     ...values,
+  //     customerId: cartItems.userId,
+  //     userId: cartItems.userId,
+  //     country: state.deliveryMethod.name,
+  //     countryCode: state.deliveryMethod.twoLetterIsoCode,
+  //   }
+  //   console.log("called from Form:",newValues)
+
+  //   lookupAddressId(newValues).then((addressId: number) => {
+  //     if (addressId == 0) {
+  //       createAddress(newValues)
+  //         .then((response: any) => {
+  //           callback()
+  //           fetchAddress()
+  //           setShippingInformation({ ...newValues, id: response.id })
+  //         })
+  //         .catch((error: any) => console.log(error));
+  //     } else {
+  //       callback()
+  //       fetchAddress()
+  //     }
+  //   }).catch((error: any) => console.log(error));
+  // }
+  const handleNewAddress = (data: any, callback?: Function) => {
+    const name = parseFullName(data?.name)
+    const values = {
+      address1: data?.address1,
+      address2: data?.address2,
+      city: data?.city,
+      state: data?.state,
+      firstName: name?.firstName,
+      lastName: name?.lastName ?? '',
+      phoneNo: data?.mobileNumber,
+      postCode: data?.pinCode,
+      label: matchStrings(data?.categoryName, 'Other', true)
+        ? data?.otherAddressType
+        : data?.categoryName,
+      title: '',
+      isDefault: data?.useAsDefault,
+      isDefaultBilling: data?.useAsDefault ? true : false,
+      isDefaultDelivery: data?.useAsDefault ? true : false,
+      isConsentSelected: data?.whtsappUpdated,
+    }
     const newValues = {
       ...values,
-      customerId: cartItems.userId,
-      userId: cartItems.userId,
-      country: state.deliveryMethod.name,
-      countryCode: state.deliveryMethod.twoLetterIsoCode,
+      userId: user?.userId,
+      country:
+        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode:
+        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
     }
-
-    lookupAddressId(newValues)
-      .then((addressId: number) => {
+    if (data?.id == 0) {
+      lookupAddressId(newValues).then((addressId: number) => {
         if (addressId == 0) {
           createAddress(newValues)
-            .then((response: any) => {
-              callback()
+            .then((createAddressResult: any) => {
+              // const updatedUser = { ...user, ...{ notifyByWhatsapp: data?.whtsappUpdated } };
+              // setUser(updatedUser);
+              // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
+              // });
               fetchAddress()
-              setShippingInformation({ ...newValues, id: response.id })
+              const values = {
+                ...newValues,
+                ...{ id: createAddressResult?.id, state: newValues?.state },
+              }
+
+              if (callback) {
+                callback()
+              }
+
+              closeNewAddressModal()
+              // setAlert({type:'success',msg:NEW_ADDRESS})
             })
-            .catch((error: any) => console.log(error))
+            .catch((error: any) => {
+              // setAlert({type:'error',msg:NETWORK_ERR})
+              console.log(error)
+            })
         } else {
-          callback()
-          fetchAddress()
+          // Duplicate address exists
         }
       })
-      .catch((error: any) => console.log(error))
+    }
+    // else {
+    //   updateAddress({
+    //     ...newValues,
+    //     ...{ id: data?.id, customerId: cartItems?.userId },
+    //   })
+    //     .then((saveAddressResult: any) => {
+    //       // const updatedUser = { ...user, ...{ notifyByWhatsapp: data?.whtsappUpdated } };
+    //       // setUser(updatedUser);
+    //       // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
+    //       // });
+    //       fetchAddress()
+
+    //       if (callback) {
+    //         callback()
+    //       }
+    //       closeNewAddressModal()
+    //       // setAlert({type:'success',msg:ADDRESS_UPDATE})
+    //     })
+    //     .catch((error: any) => {
+    //       console.log(error)
+    //     })
+    // }
+  }
+  const handleEditAddress = async (id: number) => {
+    const { data }: any = await axios.post(NEXT_ADDRESS, {
+      id: user?.userId,
+      addressId: id,
+    })
+    let res = data.find((el: any) => el?.id === id)
+    setSelectedAddress(res)
+    // if (isMobile) {
+    handleNewAddress(data, () => {
+      closeNewAddressModal()
+    })
+    openNewAddressModal()
+    // } else {
+    //   handleNewAddress(data, () => {
+    //   closeNewAddressModal()
+    //   })
+    //   openNewAddressModal()
+    // }
   }
 
   const toggleDelivery = (payload?: any) =>
@@ -327,8 +468,10 @@ export default function CheckoutForm({
     asyncHandleItem()
   }
 
-  const setShippingInformation = (payload: any) =>
+  const setShippingInformation = (payload: any) => {
+    setBillingInformation(payload)
     dispatch({ type: 'SET_SHIPPING_INFORMATION', payload })
+  }
 
   const updateAddress = (type: string, payload: any) => {
     switch (type) {
@@ -617,7 +760,7 @@ export default function CheckoutForm({
               {state.isCNC || isShippingDisabled ? null : (
                 <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
                   <h4 className="font-bold uppercase text-black">
-                    {SHIPPING_INFORMATION}
+                    {GENERAL_DELIVERY_ADDRESS}
                   </h4>
                   {state?.isDeliveryMethodSelected ? (
                     <>
@@ -636,7 +779,6 @@ export default function CheckoutForm({
                         btnTitle={BTN_DELIVER_TO_THIS_ADDRESS}
                         addresses={addresses}
                         retrieveAddress={retrieveAddress}
-                        handleNewAddress={handleNewAddress}
                         setAddress={setShippingInformation}
                         isGuest={cartItems.isGuestCheckout}
                         isSameAddress={state?.isSameAddress}
@@ -644,44 +786,61 @@ export default function CheckoutForm({
                         sameAddressAction={() => {
                           dispatch({ type: 'SET_SAME_ADDRESS' })
                         }}
+                        onEditAddress={handleEditAddress}
+                        handleOpenNewAddressModal={handleOpenNewAddressModal}
                       />
                     </>
                   ) : null}
                 </div>
               )}
 
+              <NewAddressModal
+                selectedAddress={selectedAddress}
+                submitState={submitState}
+                isOpen={isNewAddressModalOpen}
+                onSubmit={(data: any) => {
+                  submitData(submitDispatch, AddressPageAction.SAVE)
+                  handleNewAddress(data, () => {
+                    closeNewAddressModal()
+                  })
+                }}
+                onCloseModal={closeNewAddressModal}
+                isRegisterAsGuestUser={isRegisterAsGuestUser()}
+                btnTitle="Save Address"
+              />
+
               {/* Payment */}
-              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
+              {/* <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
                 <h4 className="font-bold uppercase text-black">
                   {BILLING_INFORMATION}
                 </h4>
                 {(state?.isShippingInformationCompleted ||
                   state.isCNC ||
                   isShippingDisabled) && (
-                  <Form
-                    toggleAction={() =>
-                      togglePayment(!state.isPaymentInformationCompleted)
-                    }
-                    onSubmit={handleBillingSubmit}
-                    appConfig={config}
-                    values={state?.billingInformation}
-                    schema={billingSchema}
-                    updateAddress={updateAddress}
-                    infoType="BILLING"
-                    loqateAddress={loqateAddress}
-                    config={billingFormConfig}
-                    handleNewAddress={handleNewAddress}
-                    initialValues={defaultBillingAddress}
-                    retrieveAddress={retrieveAddress}
-                    isInfoCompleted={state?.isPaymentInformationCompleted}
-                    btnTitle={GENERAL_SAVE_CHANGES}
-                    addresses={addresses}
-                    isGuest={cartItems.isGuestCheckout}
-                    setAddress={setBillingInformation}
-                    isSameAddressCheckboxEnabled={false}
-                  />
-                )}
-              </div>
+                    <Form
+                      toggleAction={() =>
+                        togglePayment(!state.isPaymentInformationCompleted)
+                      }
+                      onSubmit={handleBillingSubmit}
+                      appConfig={config}
+                      values={state?.billingInformation}
+                      schema={billingSchema}
+                      updateAddress={updateAddress}
+                      infoType="BILLING"
+                      loqateAddress={loqateAddress}
+                      config={billingFormConfig}
+                      handleNewAddress={handleNewAddress}
+                      initialValues={defaultBillingAddress}
+                      retrieveAddress={retrieveAddress}
+                      isInfoCompleted={state?.isPaymentInformationCompleted}
+                      btnTitle={GENERAL_SAVE_CHANGES}
+                      addresses={addresses}
+                      isGuest={cartItems.isGuestCheckout}
+                      setAddress={setBillingInformation}
+                      isSameAddressCheckboxEnabled={false}
+                    />
+                  )}
+              </div> */}
               <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
                 <h4 className="font-bold uppercase text-black">
                   {GENERAL_PAYMENT}

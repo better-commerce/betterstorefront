@@ -105,6 +105,7 @@ export default function MyOrders({
             show={isShowDetailedOrder}
             showDetailedOrder={setIsShowDetailedOrder}
             details={orderDetails}
+            deviceInfo={deviceInfo}
           />
         </div>
       ) : (
