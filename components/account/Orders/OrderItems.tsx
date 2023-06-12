@@ -60,9 +60,9 @@ const OrderItems = ({ items, details, ifCancelled, openHelpModal, setReview }: a
                                                 <label className={`px-4 py-3 text-sm font-bold leading-none ${itemStatusCss}`}>{itemStatus}</label>
                                           }
                                        </div>
-                                       <h3 className="max-w-sm pr-6 mt-2 text-sm font-semibold truncate text-primary text-ellipsis">
+                                       <h5 className="max-w-sm pr-6 mt-2  font-semibold truncate text-primary text-ellipsis">
                                           <a href={`/${productItem?.slug}`}>{productItem?.name}</a>
-                                       </h3>
+                                       </h5>
                                        <p className="mt-2 text-sm font-semibold text-secondary-full-opacity">
                                           {priceFormat(productItem?.price?.raw?.withTax)}
                                           {productItem?.listPrice?.raw?.tax > 0 ? (
