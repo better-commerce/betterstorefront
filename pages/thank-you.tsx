@@ -11,6 +11,7 @@ import {
   GENERAL_ADDRESSES,
   GENERAL_BILLING_ADDRESS,
   GENERAL_DELIVERED_BY,
+  GENERAL_DELIVERY_ADDRESS,
   GENERAL_ITEMS,
   GENERAL_ON_THE_WAY,
   GENERAL_ORDER_WILL_BE_WITH_YOU_SOON,
@@ -166,7 +167,8 @@ export default function OrderConfirmation() {
                 <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                   <div>
                     <dt className="font-medium text-gray-900">
-                      {GENERAL_SHIPPING_ADDRESS}
+                      {/* {GENERAL_SHIPPING_ADDRESS} */}
+                      {GENERAL_DELIVERY_ADDRESS}
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <address className="not-italic">
@@ -178,7 +180,7 @@ export default function OrderConfirmation() {
                       </address>
                     </dd>
                   </div>
-                  <div>
+                  {/* <div>
                     <dt className="font-medium text-gray-900">
                       {GENERAL_BILLING_ADDRESS}
                     </dt>
@@ -191,7 +193,7 @@ export default function OrderConfirmation() {
                         <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
                       </address>
                     </dd>
-                  </div>
+                  </div> */}
                 </dl>
 
                 <h4 className="sr-only">{GENERAL_PAYMENT}</h4>

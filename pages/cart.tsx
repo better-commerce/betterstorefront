@@ -43,7 +43,8 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
 
 function Cart({ cart }: any) {
-  const { setCartItems, cartItems, basketId } = useUI()
+  const { setCartItems, cartItems, basketId, basketPromos, getBasketPromos } =
+    useUI()
   const { addToCart } = cartHandler()
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
@@ -348,7 +349,9 @@ function Cart({ cart }: any) {
                 {GENERAL_ORDER_SUMMARY}
               </h4>
               <div className="mt-4 lg:-mb-3">
-                <Disclosure defaultOpen={true}>
+                <Disclosure
+                  defaultOpen={cartItems.promotionsApplied?.length > 0}
+                >
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
@@ -363,7 +366,11 @@ function Cart({ cart }: any) {
                         leaveTo="transform scale-95 opacity-0"
                       >
                         <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-500">
-                          <PromotionInput />
+                          <PromotionInput
+                            basketPromos={basketPromos}
+                            items={cartItems}
+                            getBasketPromoses={getBasketPromos}
+                          />
                         </Disclosure.Panel>
                       </Transition>
                     </>

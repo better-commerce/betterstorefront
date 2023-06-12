@@ -11,11 +11,14 @@ import {
   EmptyString,
   INFRA_LOG_ENDPOINT,
   PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
+  NEXT_PINCODE_LOOKUP,
 } from '@components/utils/constants'
-import { stringToBoolean, tryParseJson } from './parse-util'
+import { stringToBoolean, tryParseJson, matchStrings } from './parse-util'
 import { ILogRequestParams } from '@framework/api/operations/log-request'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
+import { DataSubmit } from '@commerce/utils/use-data-submit'
+import axios from 'axios'
 
 export const isCartAssociated = (cartItems: any) => {
   if (cartItems?.userId && cartItems?.userId !== EmptyGuid) {
@@ -276,6 +279,74 @@ export const sanitizeAmount = (value: number) => {
     }
   }
   return amount
+}
+
+export const findByFieldName = (fields: Array<any>, fieldName: string) => {
+  if (fields?.length) {
+    return fields?.find((x) => matchStrings(x?.name, fieldName, true))
+  }
+  return null
+}
+export const pincodeLookup = async (pincode: string) => {
+  return null
+  const { data: pinCodeLookupResult }: any = await axios.post(
+    NEXT_PINCODE_LOOKUP,
+    { postCode: pincode }
+  )
+  return pinCodeLookupResult?.result
+}
+export const submittingClassName = (
+  state: any,
+  type: number,
+  id?: string | undefined
+) => {
+  return state &&
+    state?.isSubmitting &&
+    state?.submitSource === type &&
+    (!state?.id || (state && state?.id && state?.id === (id ?? '')))
+    ? 'opacity-50 cursor-not-allowed'
+    : ''
+}
+
+export const submitData = (dispatch: any, type: number, id?: string) => {
+  if (dispatch) {
+    if (!id) {
+      dispatch({ type: DataSubmit.SET_SUBMITTING, payload: type })
+    } else {
+      dispatch({
+        type: DataSubmit.SET_SUBMITTING_OPTIONAL_ID,
+        payload: { type: type, id: id ?? '' },
+      })
+    }
+  }
+}
+
+export const parseFullName = (
+  fullName: string
+): { firstName: string | ' '; lastName: string | ' ' } => {
+  if (fullName) {
+    if (fullName.trim().indexOf(' ') == -1) {
+      return {
+        firstName: fullName,
+        lastName: ' ',
+      }
+    } else {
+      const index = fullName.indexOf(' ')
+      const firstName = fullName.trim().substring(0, index).trim()
+      const lastName = fullName
+        .trim()
+        .substring(index + 1)
+        .trim()
+      return { firstName: firstName, lastName: lastName ?? '' }
+    }
+  }
+  return { firstName: ' ', lastName: ' ' }
+}
+
+export const resetSubmitData = (dispatch: any) => {
+  if (dispatch) {
+    dispatch({ type: DataSubmit.RESET_SUBMITTING })
+  }
 }
 
 export const getMinMax = (list: Array<any>, dependantProp: string) => {
