@@ -10,9 +10,9 @@ import { GENERAL_CONFIRM } from '@components/utils/textVariables'
 import { IDispatchState } from './PaymentButton/BasePaymentButton'
 
 interface IPaymentMethodsProps {
-  readonly paymentData: Function;
-  readonly basketOrderInfo?: any;
-  readonly selectedPaymentMethod: any;
+  readonly paymentData: Function
+  readonly basketOrderInfo?: any
+  readonly selectedPaymentMethod: any
 }
 
 export default function PaymentMethods({
@@ -23,13 +23,17 @@ export default function PaymentMethods({
   dispatchState,
 }: IPaymentMethodsProps & IDispatchState) {
   const [methods, setPaymentMethods] = useState([])
-  const [activePaymentMethod, setActivePaymentMethod] = useState<any>({ id: null })
+  const [activePaymentMethod, setActivePaymentMethod] = useState<any>({
+    id: null,
+  })
   useEffect(() => {
     paymentData()
       .then((response: any) => {
         if (response.data) setPaymentMethods(response.data)
       })
       .catch((err: any) => console.log(err))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -39,8 +43,11 @@ export default function PaymentMethods({
           <li
             key={idx}
             onClick={() => setActivePaymentMethod(item)}
-            className={`${activePaymentMethod.id === item.id ? 'border-black border-t-2 border-2' : 'border-t border border-gray-300'
-              }  pointer mb-2 py-5 px-5 flex justify-start flex-row`}
+            className={`${
+              activePaymentMethod.id === item.id
+                ? 'border-black border-t-2 border-2'
+                : 'border-t border border-gray-300'
+            }  pointer mb-2 py-5 px-5 flex justify-start flex-row`}
           >
             <div className="flex flex-row justify-center items-center">
               {activePaymentMethod.id === item.id ? (
@@ -68,7 +75,7 @@ export default function PaymentMethods({
         )
       })}
       {activePaymentMethod.id &&
-        selectedPaymentMethod?.id !== activePaymentMethod.id ? (
+      selectedPaymentMethod?.id !== activePaymentMethod.id ? (
         <div className="py-5 flex justify-center w-full">
           <PaymentButton
             btnTitle={GENERAL_CONFIRM}

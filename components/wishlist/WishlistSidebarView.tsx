@@ -37,6 +37,8 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
 
   useEffect(() => {
     setTimeout(() => setOpenWishlistSidebar(displaySidebar), 250)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [isItemInCart, setItemInCart] = useState(false)
@@ -46,15 +48,17 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     const items = await getWishlist(user.userId, wishlistItems)
     setWishlist(items)
   }
-  let accessToken: boolean | any = false
+  let objUser: boolean | any = false
 
   if (typeof window !== 'undefined') {
-    accessToken = localStorage.getItem('user')
+    objUser = localStorage.getItem('user')
   }
 
   useEffect(() => {
-    if (accessToken) handleWishlistItems()
-  }, [])
+    if (objUser) handleWishlistItems()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [objUser])
 
   const handleDeleteWishListItems = async (productId: any) => {
     const idCheck = (itemDetails: any) => {
@@ -82,7 +86,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
       })
     }
 
-    if (accessToken) {
+    if (objUser) {
       deleteWishlistItem(user?.userId, product?.recordId).then(() =>
         handleDeleteWishListItems(product?.recordId)
       )

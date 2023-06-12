@@ -1,13 +1,15 @@
 import commerce from '@lib/api/commerce'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-export default async (req: any, res: any) => {
+const GetProductPromosApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getProductPromos({
       query: req.body.recordId,
     })
     res.status(200).json(response)
   } catch (error) {
-    console.log(error, 'error')
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default GetProductPromosApiMiddleware;

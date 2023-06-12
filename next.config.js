@@ -13,7 +13,16 @@ const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({
   images: {
-    domains: ['liveocxcdn.azureedge.net','liveocxstorage.blob.core.windows.net', 'cdnbs.bettercommerce.io','dev-da-cdn-erf7a6h0byf7e6f0.z01.azurefd.net' , 'cdn.shopify.com', 'liveocx.imgix.net', 'devocxblob.blob.core.windows.net','img.ffx.co.uk','livekstmcdn.azureedge.net'],
+    domains: [
+      'liveocxcdn.azureedge.net',
+      'liveocxstorage.blob.core.windows.net',
+      'cdnbs.bettercommerce.io',
+      'dev-da-cdn-erf7a6h0byf7e6f0.z01.azurefd.net',
+      'cdn.shopify.com',
+      'liveocx.imgix.net',
+      'devocxblob.blob.core.windows.net',
+      'img.ffx.co.uk',
+    ],
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
   commerce,
@@ -27,7 +36,7 @@ module.exports = withCommerceConfig({
         source: '/robots.txt',
         destination: '/api/robots',
       },
-      (isBC) && {
+      isBC && {
         source: '/checkout',
         destination: '/api/checkout',
       },
@@ -39,7 +48,6 @@ module.exports = withCommerceConfig({
       },
       // For Vendure, rewrite the local api url to the remote (external) api url. This is required
       // to make the session cookies work.
-
     ].filter(Boolean)
   },
   env: {
@@ -48,10 +56,13 @@ module.exports = withCommerceConfig({
     BETTERCOMMERCE_CLIENT_ID: process.env.BETTERCOMMERCE_CLIENT_ID,
     BETTERCOMMERCE_SHARED_SECRET: process.env.BETTERCOMMERCE_SHARED_SECRET,
     OMS_BASE_URL: process.env.OMS_BASE_URL,
-    BETTERCOMMERCE_DEFAULT_CURRENCY: process.env.BETTERCOMMERCE_DEFAULT_CURRENCY,
-    BETTERCOMMERCE_DEFAULT_LANGUAGE: process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE,
+    BETTERCOMMERCE_DEFAULT_CURRENCY:
+      process.env.BETTERCOMMERCE_DEFAULT_CURRENCY,
+    BETTERCOMMERCE_DEFAULT_LANGUAGE:
+      process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE,
     BETTERCOMMERCE_DEFAULT_COUNTRY: process.env.BETTERCOMMERCE_DEFAULT_COUNTRY,
-    BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE: process.env.BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
+    BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE:
+      process.env.BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
     BETTERCOMMERCE_CURRENCY: process.env.BETTERCOMMERCE_CURRENCY,
     BETTERCOMMERCE_LANGUAGE: process.env.BETTERCOMMERCE_LANGUAGE,
     BETTERCOMMERCE_COUNTRY: process.env.BETTERCOMMERCE_COUNTRY,
@@ -65,8 +76,12 @@ module.exports = withCommerceConfig({
     GA4_MEASUREMENT_ID: process.env.GA4_MEASUREMENT_ID,
     CIPHER_ENCRYPTION_KEY: process.env.CIPHER_ENCRYPTION_KEY,
     ENABLE_SECURED_PAYMENT_PAYLOAD: process.env.ENABLE_SECURED_PAYMENT_PAYLOAD,
-    SECURE_PAYMENT_METHODS_SETTINGS_FIELDS: process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS,
-    PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS: process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
+    SECURE_PAYMENT_METHODS_SETTINGS_FIELDS:
+      process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS,
+    PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS:
+      process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
+    LOG_ENABLED: process.env.LOG_ENABLED,
+    LOG_OUTPUT_DIR: process.env.LOG_OUTPUT_DIR,
   },
 })
 

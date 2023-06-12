@@ -15,7 +15,12 @@ import axios from 'axios'
 import { NEXT_SET_CONFIG } from '@components/utils/constants'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
-import { Bars3Icon, XMarkIcon, ShoppingCartIcon, HeartIcon } from '@heroicons/react/24/outline'
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ShoppingCartIcon,
+  HeartIcon,
+} from '@heroicons/react/24/outline'
 const Account = dynamic(() => import('./AccountDropdown'))
 const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
@@ -56,7 +61,12 @@ const accountDropDownConfigUnauthorized: any = [
   },
 ]
 
-const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, deviceInfo }) => {
+const Navbar: FC<Props & IExtraProps> = ({
+  config,
+  currencies,
+  languages,
+  deviceInfo,
+}) => {
   const router = useRouter()
 
   const {
@@ -71,7 +81,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
   } = useUI()
 
   let currentPage = getCurrentPage()
-  const { isMobile, isIPadorTablet } = deviceInfo;
+  const { isMobile, isIPadorTablet } = deviceInfo
 
   let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
@@ -98,14 +108,21 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
     },
     {
       href: '/',
-      onClick: () => deleteUser(),
+      onClick: () =>
+        deleteUser({
+          router: Router,
+        }),
       title: BTN_SIGN_OUT,
       className: 'text-left p-2 cursor-pointer text-red-600',
     },
   ]
 
   let accountDropdownConfig = accountDropDownConfigUnauthorized
-  let title = !isGuestUser ? (user.userId ? `Hi, ${user.firstName}` : 'My account') : ""
+  let title = !isGuestUser
+    ? user.userId
+      ? `Hi, ${user.firstName}`
+      : 'My account'
+    : ''
 
   if (!isGuestUser && user.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
@@ -140,20 +157,20 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
 
   const viewWishlist = () => {
     if (currentPage) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         recordGA4Event(window, 'wishlist', {
           ecommerce: {
-            header: "Menu Bar",
+            header: 'Menu Bar',
             current_page: currentPage,
-          }
-        });
+          },
+        })
       }
     }
   }
 
   function viewCart(cartItems: any) {
     if (currentPage) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         recordGA4Event(window, 'view_cart', {
           ecommerce: {
             items: cartItems?.lineItems?.map((items: any, itemId: number) => ({
@@ -168,7 +185,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
               item_list_name: items?.categoryItems?.length
                 ? items?.categoryItems[0]?.categoryName
                 : '',
-              item_list_id: "",
+              item_list_id: '',
               index: itemId,
               quantity: items?.qty,
               item_var_id: items?.stockCode,
@@ -183,7 +200,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
 
   const hamburgerMenu = () => {
     if (currentPage) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         recordGA4Event(window, 'hamburger_menu', {
           current_page: currentPage,
           device: deviceCheck,
@@ -201,7 +218,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
 
   const hamburgerMenuClick = (item: any) => {
     if (currentPage) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         recordGA4Event(window, 'hamgurger_menu_click', {
           header: item,
           sub_header: '',
@@ -215,7 +232,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
 
   const hamburgerMenuClickLevel2 = (item: any, subHeader: any) => {
     if (currentPage) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         recordGA4Event(window, 'hamgurger_menu_click', {
           header: item,
           sub_header: subHeader,
@@ -233,7 +250,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
     subHeader2: any
   ) => {
     if (currentPage) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         recordGA4Event(window, 'hamgurger_menu_click', {
           header: item,
           sub_header: subHeader,
@@ -300,44 +317,82 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                           title={item.caption}
                           href={hyperlinkHandler(item.hyperlink)}
                           passHref
-                          onClick={() => { hamburgerMenuClick(item.caption); setOpen(false) }}
-                          className="flex flex-col px-4 py-4 text-sm font-bold text-black border-t whitespace-nowrap">
+                          onClick={() => {
+                            hamburgerMenuClick(item.caption)
+                            setOpen(false)
+                          }}
+                          className="flex flex-col px-4 py-4 text-sm font-bold text-black border-t whitespace-nowrap"
+                        >
                           {item.caption}
                         </Link>
                       ) : (
                         <Disclosure key={`disclosure-start-${item.caption}`}>
                           {({ open }) => (
                             <>
-                              <Disclosure.Button className="flex justify-between w-full px-0 -mb-px space-x-0 text-left border-t" onClick={() => hamburgerMenuClick(item.caption)}>
-                                <div className="flex flex-col px-4 py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap">{item.caption}</div>
+                              <Disclosure.Button
+                                className="flex justify-between w-full px-0 -mb-px space-x-0 text-left border-t"
+                                onClick={() => hamburgerMenuClick(item.caption)}
+                              >
+                                <div className="flex flex-col px-4 py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap">
+                                  {item.caption}
+                                </div>
                                 <div className="pt-5 pr-3">
-                                  <ChevronUpIcon className={`${!open ? 'transition-transform duration-150 rotate-180 transform' : 'transition-transform duration-150 rotate-0 transform'} h-5 w-5 text-black`} />
+                                  <ChevronUpIcon
+                                    className={`${
+                                      !open
+                                        ? 'transition-transform duration-150 rotate-180 transform'
+                                        : 'transition-transform duration-150 rotate-0 transform'
+                                    } h-5 w-5 text-black`}
+                                  />
                                 </div>
                               </Disclosure.Button>
 
-                              <Disclosure.Panel as={Fragment} key={`disclosure-panel-${item.caption}`}>
+                              <Disclosure.Panel
+                                as={Fragment}
+                                key={`disclosure-panel-${item.caption}`}
+                              >
                                 <div className="space-y-4">
-                                  {item.navBlocks.length ? (
-                                    item.navBlocks.map((navBlock: any, navIdx: number) => {
-                                      return (
-                                        <div key={`navbar-parent-${navIdx}`} className="grid grid-cols-1 px-2 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0">
-                                          <ul role="list" aria-labelledby="clothing-heading" className="col-span-1">
-                                            {navBlock.navItems.map((navItem: any) => (
-                                              <Link
-                                                legacyBehavior
-                                                key={navItem.caption}
-                                                title={navItem.caption}
-                                                href={`/${navItem.itemLink}`}
-                                                passHref
-                                                onClick={() => { setOpen(false); hamburgerMenuClickLevel2(item.caption, navBlock.boxTitle) }}>
-                                                <li className="flex pb-2 my-1 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">{navItem.caption}</li>
-                                              </Link>
-                                            ))}
-                                          </ul>
-                                        </div>
+                                  {item.navBlocks.length
+                                    ? item.navBlocks.map(
+                                        (navBlock: any, navIdx: number) => {
+                                          return (
+                                            <div
+                                              key={`navbar-parent-${navIdx}`}
+                                              className="grid grid-cols-1 px-2 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0"
+                                            >
+                                              <ul
+                                                role="list"
+                                                aria-labelledby="clothing-heading"
+                                                className="col-span-1"
+                                              >
+                                                {navBlock.navItems.map(
+                                                  (navItem: any) => (
+                                                    <Link
+                                                      legacyBehavior
+                                                      key={navItem.caption}
+                                                      title={navItem.caption}
+                                                      href={`/${navItem.itemLink}`}
+                                                      passHref
+                                                      onClick={() => {
+                                                        setOpen(false)
+                                                        hamburgerMenuClickLevel2(
+                                                          item.caption,
+                                                          navBlock.boxTitle
+                                                        )
+                                                      }}
+                                                    >
+                                                      <li className="flex pb-2 my-1 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
+                                                        {navItem.caption}
+                                                      </li>
+                                                    </Link>
+                                                  )
+                                                )}
+                                              </ul>
+                                            </div>
+                                          )
+                                        }
                                       )
-                                    })
-                                  ) : null}
+                                    : null}
                                 </div>
                               </Disclosure.Panel>
                             </>
@@ -354,14 +409,24 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
       </Transition.Root>
 
       <header className="fixed top-0 right-0 w-full bg-white bg-header-color shadow-md z-999 navbar-min-64">
-        <nav aria-label="Top" className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0">
-          <h2 className='sr-only'>nav</h2>
-          <button type="button" className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden" onClick={() => { hamburgerMenu(); setOpen(true) }}>
+        <nav
+          aria-label="Top"
+          className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
+        >
+          <h2 className="sr-only">nav</h2>
+          <button
+            type="button"
+            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden"
+            onClick={() => {
+              hamburgerMenu()
+              setOpen(true)
+            }}
+          >
             <span className="sr-only">Open menu</span>
             <Bars3Icon className="w-6 h-6 text-black" aria-hidden="true" />
           </button>
 
-          <Link href="/" title='BetterCommerce'>
+          <Link href="/" title="BetterCommerce">
             <div className="flex w-32 cursor-pointer">
               <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
               <Logo />
@@ -371,25 +436,40 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
           {renderState && (
             <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16">
               {config?.map((item: any, idx: number) => (
-                <Popover key={`popover-fly-menu-${idx}`} className="flex" onMouseEnter={() => setOpenState(idx)} onMouseLeave={() => setOpenState(-1)}>
+                <Popover
+                  key={`popover-fly-menu-${idx}`}
+                  className="flex"
+                  onMouseEnter={() => setOpenState(idx)}
+                  onMouseLeave={() => setOpenState(-1)}
+                >
                   {({ open }) => (
                     <>
                       {!item.navBlocks.length ? (
-                        <Popover.Button className={classNames(
-                          openState == idx
-                            ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
-                            : 'border-transparent text-black hover:text-black text-header-clr',
-                          'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                        )}>
-                          <Link href={`/${item.hyperlink}`} className="relative flex items-center h-full text-header-clr" title={item.caption}>{item.caption}</Link>
+                        <Popover.Button
+                          className={classNames(
+                            openState == idx
+                              ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
+                              : 'border-transparent text-black hover:text-black text-header-clr',
+                            'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                          )}
+                        >
+                          <Link
+                            href={`/${item.hyperlink}`}
+                            className="relative flex items-center h-full text-header-clr"
+                            title={item.caption}
+                          >
+                            {item.caption}
+                          </Link>
                         </Popover.Button>
                       ) : (
-                        <Popover.Button className={classNames(
-                          openState == idx
-                            ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
-                            : 'border-transparent text-black hover:text-black text-header-clr',
-                          'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                        )}>
+                        <Popover.Button
+                          className={classNames(
+                            openState == idx
+                              ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
+                              : 'border-transparent text-black hover:text-black text-header-clr',
+                            'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                          )}
+                        >
                           {item.caption}
                         </Popover.Button>
                       )}
@@ -406,20 +486,41 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
                         >
                           <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
                             <div className="relative grid items-start w-4/5 grid-cols-1 px-4 pt-10 pb-12 mx-auto bg-white sm:px-0 lg:px-0 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
-                              {item.navBlocks.map((navBlock: any, navIdx: number) => (
-                                <>
-                                  <h5 className="text-xl font-semibold text-gray-900 capitalize">{navBlock.boxTitle}</h5>
-                                  <div key={`navItems-${navIdx}`} className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8">
-                                    {navBlock.navItems.map((navItem: any, idx: number) => (
-                                      <Popover.Button key={`popover-button-${idx}`} className={classNames(openState == idx ? '' : 'border-gray-200 text-gray-700 hover:text-gray-800',
-                                        'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
-                                      )}>
-                                        <Link href={`/${navItem.itemLink}`} className="relative flex items-center h-full hover:text-gray-800" title={navItem.caption}>{navItem.caption}</Link>
-                                      </Popover.Button>
-                                    ))}
-                                  </div>
-                                </>
-                              ))}
+                              {item.navBlocks.map(
+                                (navBlock: any, navIdx: number) => (
+                                  <>
+                                    <h5 className="text-xl font-semibold text-gray-900 capitalize">
+                                      {navBlock.boxTitle}
+                                    </h5>
+                                    <div
+                                      key={`navItems-${navIdx}`}
+                                      className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8"
+                                    >
+                                      {navBlock.navItems.map(
+                                        (navItem: any, idx: number) => (
+                                          <Popover.Button
+                                            key={`popover-button-${idx}`}
+                                            className={classNames(
+                                              openState == idx
+                                                ? ''
+                                                : 'border-gray-200 text-gray-700 hover:text-gray-800',
+                                              'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
+                                            )}
+                                          >
+                                            <Link
+                                              href={`/${navItem.itemLink}`}
+                                              className="relative flex items-center h-full hover:text-gray-800"
+                                              title={navItem.caption}
+                                            >
+                                              {navItem.caption}
+                                            </Link>
+                                          </Popover.Button>
+                                        )
+                                      )}
+                                    </div>
+                                  </>
+                                )
+                              )}
                             </div>
                           </Popover.Panel>
                         </Transition>
@@ -432,15 +533,39 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
           )}
           <div className="flex items-center justify-end flex-1">
             <Searchbar onClick={setShowSearchBar} />
-            <Account title={title} config={accountDropdownConfig} deviceInfo={deviceInfo} />
+            <Account
+              title={title}
+              config={accountDropdownConfig}
+              deviceInfo={deviceInfo}
+            />
             <div className="hidden sm:flex">
-              <CurrencySwitcher config={currencies} title={SELECT_CURRENCY} action={configAction} />
-              <LanguageSwitcher config={languages} title={SELECT_LANGUAGE} action={configAction} />
+              <CurrencySwitcher
+                config={currencies}
+                title={SELECT_CURRENCY}
+                action={configAction}
+              />
+              <LanguageSwitcher
+                config={languages}
+                title={SELECT_LANGUAGE}
+                action={configAction}
+              />
             </div>
             <div className="flow-root w-10 px-1 sm:w-16">
-              <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center" onClick={() => { viewWishlist(); openWishlist() }}>
-                <HeartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
-                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">Wishlist</span>
+              <button
+                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center"
+                onClick={() => {
+                  viewWishlist()
+                  openWishlist()
+                }}
+              >
+                <HeartIcon
+                  className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600"
+                  aria-hidden="true"
+                  aria-label="Wishlist"
+                />
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">
+                  Wishlist
+                </span>
                 {wishListItems.length > 0 && (
                   <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full sm:block -right-0">
                     {wishListItems.length}
@@ -453,10 +578,19 @@ const Navbar: FC<Props & IExtraProps> = ({ config, currencies, languages, device
             <div className="flow-root w-10 px-1 sm:w-16">
               <button
                 className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center"
-                onClick={() => { viewCart(cartItems); openCart() }}
+                onClick={() => {
+                  viewCart(cartItems)
+                  openCart()
+                }}
               >
-                <ShoppingCartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="Add to cart" />
-                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">Cart</span>
+                <ShoppingCartIcon
+                  className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500"
+                  aria-hidden="true"
+                  aria-label="Add to cart"
+                />
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">
+                  Cart
+                </span>
                 {renderState && (
                   <>
                     {cartItems.lineItems?.length > 0 && (

@@ -4,6 +4,7 @@ import NextDocument, {
   Main,
   NextScript,
 } from 'next/document'
+import Script from 'next/script'
 
 export default class MyDocument extends NextDocument /*Document*/ {
   static async getInitialProps(ctx: any) {
@@ -18,6 +19,10 @@ export default class MyDocument extends NextDocument /*Document*/ {
         <body className="custom_class">
           <Main />
           <NextScript />
+          <Script
+            src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
+            strategy="beforeInteractive"
+          />
         </body>
       </Html>
     )

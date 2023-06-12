@@ -1,196 +1,221 @@
 // Base Imports
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react'
 
 // Package Imports
-import moment from 'moment';
-import Router from 'next/router';
-import Image from 'next/image';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Dialog, Transition, Disclosure } from '@headlessui/react';
+import moment from 'moment'
+import Router from 'next/router'
+import Image from 'next/image'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import { Dialog, Transition, Disclosure } from '@headlessui/react'
 
 // Component Imports
-import OrderStatusMapping from './OrderStatusMapping';
+import OrderStatusMapping from './OrderStatusMapping'
 
 // Other Imports
-import { matchStrings, priceFormat, stringToNumber } from '@framework/utils/parse-util';
-import { PaymentStatus } from '@components/utils/payment-constants';
-import ReviewInput from '@components/product/Reviews/ReviewInput';
-import { ArrowLeft } from '@components/icons';
+import {
+  matchStrings,
+  priceFormat,
+  stringToNumber,
+} from '@framework/utils/parse-util'
+import { PaymentStatus } from '@components/utils/payment-constants'
+import ReviewInput from '@components/product/Reviews/ReviewInput'
+import { ArrowLeft } from '@components/icons'
 // import { CLOSE_PANEL, CURRENCY_SYMBOL_RUPEE } from '@components/utils/textVariables';
-import { StarIcon } from '@heroicons/react/24/solid';
-import { DATE_FORMAT } from '@components/utils/constants';
+import { StarIcon } from '@heroicons/react/24/solid'
+import { DATE_FORMAT } from '@components/utils/constants'
 // import getCustomerOrderDetail from '@framework/checkout/customer-order-details'
-import { round } from 'lodash';
-import Link from 'next/link';
-import { useUI } from "@components/ui";
-
+import { round } from 'lodash'
+import Link from 'next/link'
+import { useUI } from '@components/ui'
 
 // import { recordGA4Event } from '@components/services/analytics/ga4';
-import OrderLog from './OrderLog';
+import OrderLog from './OrderLog'
 // import CartFreeGift from '@components/cart/CartSidebarView/FreeGift';
-import OrderDetailHeader from './OrderDetailHeader';
-import TrackingDetail from './TrackingDetail';
-import OrderItems from './OrderItems';
-import OrderSummary from './OrderSummary';
-import HelpModal from './HelpModal';
-import OrderReviewModal from './OrderReviewModal';
-import OrderDeliveryPlanItems from './OrderDeliveryPlanItems';
-import { recordGA4Event } from '@components/services/analytics/ga4';
+import OrderDetailHeader from './OrderDetailHeader'
+import TrackingDetail from './TrackingDetail'
+import OrderItems from './OrderItems'
+import OrderSummary from './OrderSummary'
+import HelpModal from './HelpModal'
+import OrderReviewModal from './OrderReviewModal'
+import OrderDeliveryPlanItems from './OrderDeliveryPlanItems'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 
-export default function OrderDetail({ details, showDetailedOrder, show, deviceInfo }: any) {
-  const { isMobile, isIPadorTablet } = deviceInfo;
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const [isHelpOrderOpen, setIsHelpOrderOpen] = useState(false);
-  const [isHelpStatus, setIsHelpStatus] = useState<any>();
-  const [data, setData] = useState<any>(undefined);
-  const [isSubmitReview, setSubmitReview] = useState<any>(false);
+export default function OrderDetail({
+  details,
+  showDetailedOrder,
+  show,
+  deviceInfo,
+}: any) {
+  const { isMobile, isIPadorTablet } = deviceInfo
+  const [isHelpOpen, setIsHelpOpen] = useState(false)
+  const [isHelpOrderOpen, setIsHelpOrderOpen] = useState(false)
+  const [isHelpStatus, setIsHelpStatus] = useState<any>()
+  const [data, setData] = useState<any>(undefined)
+  const [isSubmitReview, setSubmitReview] = useState<any>(false)
   const [isReviewdata, setReviewData] = useState<any>()
   const [returnRequestedItems, setReturnRequestedItems] = useState({})
 
   useEffect(() => {
     // need to map the "isRMACreated" field to control return item status/cta
     if (details?.order?.items?.length > 0) {
-      const mapOrderLineItemObj = details?.order?.items?.reduce((acc: any, cur: any) => {
-        const obj = {
-          [cur.id]: {
-            id: cur.id,
-            statusCode: cur.statusCode,
-            isRMACreated: cur.isRMACreated,
+      const mapOrderLineItemObj = details?.order?.items?.reduce(
+        (acc: any, cur: any) => {
+          const obj = {
+            [cur.id]: {
+              id: cur.id,
+              statusCode: cur.statusCode,
+              isRMACreated: cur.isRMACreated,
+            },
           }
-        }
-        return {
-          ...acc,
-          ...obj
-        }
-      }, {})
+          return {
+            ...acc,
+            ...obj,
+          }
+        },
+        {}
+      )
       setReturnRequestedItems(mapOrderLineItemObj)
     }
   }, [details])
 
   const isConfirmedOrder = () => {
     if (details?.order?.payments?.length) {
-      const payment = details?.order?.payments?.find((x: any) => x?.isValid);
+      const payment = details?.order?.payments?.find((x: any) => x?.isValid)
       if (payment?.status === PaymentStatus.PAID) {
-        return true;
+        return true
       }
     }
-    return false;
+    return false
   }
   function setReview(item: any) {
     setSubmitReview(true)
-    setReviewData(item);
+    setReviewData(item)
   }
-  let deviceCheck = ""
+  let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
-    deviceCheck = "Mobile"
+    deviceCheck = 'Mobile'
   } else {
-    deviceCheck = "Desktop"
+    deviceCheck = 'Desktop'
   }
-  const ifCancelled = details?.order?.orderLog?.map((x: any) => x?.updateType).includes('UpdateOrderLine')
-    || details?.order?.orderLog?.map((x: any) => x?.updateType).includes('RefundGenerated')
-    || details?.order?.orderLog?.map((x: any) => x?.updateValue).some((y: any) => ['102', '103', '104', '105', '110', '202', '40'].includes(y))
+  const ifCancelled =
+    details?.order?.orderLog
+      ?.map((x: any) => x?.updateType)
+      .includes('UpdateOrderLine') ||
+    details?.order?.orderLog
+      ?.map((x: any) => x?.updateType)
+      .includes('RefundGenerated') ||
+    details?.order?.orderLog
+      ?.map((x: any) => x?.updateValue)
+      .some((y: any) =>
+        ['102', '103', '104', '105', '110', '202', '40'].includes(y)
+      )
 
   const openHelpModal = (item: any, order: any) => {
     setData({
       orderId: order?.id,
       itemId: item?.productId,
-    });
-    setIsHelpOpen(true);
-    setIsHelpStatus(item);
-    if (typeof window !== "undefined") {
+    })
+    setIsHelpOpen(true)
+    setIsHelpStatus(item)
+    if (typeof window !== 'undefined') {
       recordGA4Event(window, 'help_icon', {
-        helpmode: "cancel/return/exchange/chat",
-        device: deviceCheck
-      });
+        helpmode: 'cancel/return/exchange/chat',
+        device: deviceCheck,
+      })
     }
-  };
+  }
 
   const chooseHelpMode = (mode: any) => {
-    if (typeof window !== "undefined")
+    if (typeof window !== 'undefined')
       recordGA4Event(window, 'help_sidebar_menu', {
         helpmode: mode,
-        device: deviceCheck
-      });
+        device: deviceCheck,
+      })
   }
 
   const closeHelpModal = () => {
-    setData(undefined);
-    setIsHelpOpen(false);
-  };
+    setData(undefined)
+    setIsHelpOpen(false)
+  }
 
   const openOrderHelpModal = (order: any) => {
     setData({
-      orderId: order?.id
-    });
-    setIsHelpOrderOpen(true);
-    if (typeof window !== "undefined")
+      orderId: order?.id,
+    })
+    setIsHelpOrderOpen(true)
+    if (typeof window !== 'undefined')
       recordGA4Event(window, 'need_help_with_your_order', {
-        helpmode: "Order",
-        device: deviceCheck
-      });
-  };
+        helpmode: 'Order',
+        device: deviceCheck,
+      })
+  }
 
   const closeOrderHelpModal = () => {
-    setIsHelpOrderOpen(false);
-  };
+    setIsHelpOrderOpen(false)
+  }
 
   const onCancelItem = async (mode: any) => {
-    Router.push(`/my-account/cancel-order-item/${data?.orderId}/${data?.itemId}`);
-    if (typeof window !== "undefined") {
-      recordGA4Event(window, 'proceed_to_cancel_item', {});
+    Router.push(
+      `/my-account/cancel-order-item/${data?.orderId}/${data?.itemId}`
+    )
+    if (typeof window !== 'undefined') {
+      recordGA4Event(window, 'proceed_to_cancel_item', {})
       recordGA4Event(window, 'help_sidebar_menu', {
         helpmode: mode,
-        device: deviceCheck
-      });
+        device: deviceCheck,
+      })
     }
-  };
+  }
   const onCancelOrder = async (mode: any) => {
-    Router.push(`/my-account/cancel-order/${data?.orderId}`);
-    if (typeof window !== "undefined") {
-      recordGA4Event(window, 'proceed_to_cancel_order', {});
+    Router.push(`/my-account/cancel-order/${data?.orderId}`)
+    if (typeof window !== 'undefined') {
+      recordGA4Event(window, 'proceed_to_cancel_order', {})
       recordGA4Event(window, 'help_sidebar_menu', {
         helpmode: mode,
-        device: deviceCheck
-      });
+        device: deviceCheck,
+      })
     }
-  };
+  }
   const onReturnItem = async (mode: any) => {
-    Router.push(`/my-account/return-order/${data?.orderId}/${data?.itemId}`);
-    if (typeof window !== "undefined") {
-      recordGA4Event(window, 'proceed_to_return', {});
+    Router.push(`/my-account/return-order/${data?.orderId}/${data?.itemId}`)
+    if (typeof window !== 'undefined') {
+      recordGA4Event(window, 'proceed_to_return', {})
       recordGA4Event(window, 'help_sidebar_menu', {
         helpmode: mode,
-        device: deviceCheck
-      });
+        device: deviceCheck,
+      })
     }
-  };
+  }
   const onExchangeItem = async (mode: any) => {
-    Router.push(`/my-account/exchange-order/${data?.orderId}/${data?.itemId}`);
-    if (typeof window !== "undefined") {
-      recordGA4Event(window, 'proceed_to_exchange', {});
+    Router.push(`/my-account/exchange-order/${data?.orderId}/${data?.itemId}`)
+    if (typeof window !== 'undefined') {
+      recordGA4Event(window, 'proceed_to_exchange', {})
       recordGA4Event(window, 'track_package', {
         transaction_id: details?.payments?.id,
-        device: deviceCheck
-      });
+        device: deviceCheck,
+      })
       recordGA4Event(window, 'help_sidebar_menu', {
         helpmode: mode,
-        device: deviceCheck
-      });
+        device: deviceCheck,
+      })
     }
-  };
+  }
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo(0, 0)
+  }, [])
 
   // @ts-ignore
   // console.log('ENTIRE_ORDER_LOG_SORTED', details?.order?.orderLog.sort((a:any,b:any) => new Date(a?.created) - new Date(b?.created)))
   // console.log('ENTIRE_ORDER_', details?.order)
   const trackPackage = (details: any) => {
-    if (typeof window !== "undefined")
-      recordGA4Event(window, 'proceed_to_exchange', {});
+    if (typeof window !== 'undefined')
+      recordGA4Event(window, 'proceed_to_exchange', {})
   }
 
-  const subTotalAmount = (details?.order?.subTotal?.raw?.withTax - details?.order?.discount?.raw?.withTax).toFixed(2);
+  const subTotalAmount = (
+    details?.order?.subTotal?.raw?.withTax -
+    details?.order?.discount?.raw?.withTax
+  ).toFixed(2)
 
   return (
     <>

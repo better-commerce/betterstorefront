@@ -125,7 +125,7 @@ export function getEndpoint<
 ): NextApiHandler {
   const cfg = commerce.getConfig(context.config)
 
-  return function apiHandler(req, res) {
+  return function apiHandler(req: any, res: any) {
     return context.handler({
       req,
       res,

@@ -13,58 +13,69 @@ import { useUI } from '@components/ui/context'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
 
 // Other Imports
-import { GENERAL_RECENT_ORDERS, } from '@components/utils/textVariables'
-import { NEXT_GET_ORDER_DETAILS, } from '@components/utils/constants'
+import { GENERAL_RECENT_ORDERS } from '@components/utils/textVariables'
+import { NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
+import Link from 'next/link'
 
-
-export default function MyOrders({ allOrders, handleInfiniteScroll, deviceInfo, }: any) {
-  const { isMobile, isIPadorTablet } = deviceInfo;
-  const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(false);
-  const { user, displayAlert, alertRibbon } = useUI();
-  const [orderDetails, setOrderDetails] = useState<any>(undefined);
+export default function MyOrders({
+  allOrders,
+  handleInfiniteScroll,
+  deviceInfo,
+}: any) {
+  const { isMobile, isIPadorTablet } = deviceInfo
+  const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(false)
+  const { user, displayAlert, alertRibbon } = useUI()
+  const [orderDetails, setOrderDetails] = useState<any>(undefined)
   // console.log(allOrders)
 
   const handleFetchOrderDetails = async (id: any) => {
-    const { data: orderDetails }: any = await axios.post(NEXT_GET_ORDER_DETAILS, {
-      id: user?.userId,
-      orderId: id
-    });
-    return orderDetails;
-  };
+    const { data: orderDetails }: any = await axios.post(
+      NEXT_GET_ORDER_DETAILS,
+      {
+        id: user?.userId,
+        orderId: id,
+      }
+    )
+    return orderDetails
+  }
 
   const fetchOrderDetails = async (id: any) => {
     const { orderDetails } = allOrders.find((order: any) => order.id === id)
-    setOrderDetails(orderDetails);
-  };
+    setOrderDetails(orderDetails)
+  }
 
   const onOrderDetail = async (id: any) => {
-    await fetchOrderDetails(id);
-  };
+    await fetchOrderDetails(id)
+  }
 
   useEffect(() => {
     allOrders?.forEach((orderObj: any) => {
       // remove personalization from order items
       if (!!orderObj?.orderDetails?.order?.items?.length) {
         orderObj.orderDetails.order.items =
-          orderObj.orderDetails.order.items.filter((o: any) => o.name !== "Personalization")
+          orderObj.orderDetails.order.items.filter(
+            (o: any) => o.name !== 'Personalization'
+          )
       }
       // remove personalization from order delivery plans items
       if (!!orderObj?.orderDetails?.order?.deliveryPlans?.length) {
         orderObj.orderDetails.order.deliveryPlans =
           orderObj.orderDetails.order.deliveryPlans.map((o: any) => {
-            o.items = o.items.filter((o: any) => o.productName !== "Personalization")
+            o.items = o.items.filter(
+              (o: any) => o.productName !== 'Personalization'
+            )
             return o
           })
       }
     })
-  }, [allOrders]);
+  }, [allOrders])
 
-  let deviceCheck = ""
+  let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
-    deviceCheck = "Mobile"
+    deviceCheck = 'Mobile'
   } else {
-    deviceCheck = "Desktop"
+    deviceCheck = 'Desktop'
   }
   const trackPackage = (order: any) => {
     // recordGA4Event('track_package', {
@@ -89,7 +100,7 @@ export default function MyOrders({ allOrders, handleInfiniteScroll, deviceInfo, 
   return (
     <>
       {isShowDetailedOrder ? (
-        <div id="OrderDetail" className='w-full'>
+        <div id="OrderDetail" className="w-full">
           <OrderDetail
             show={isShowDetailedOrder}
             showDetailedOrder={setIsShowDetailedOrder}
@@ -111,96 +122,149 @@ export default function MyOrders({ allOrders, handleInfiniteScroll, deviceInfo, 
           <div className="bg-white">
             <main className="sm:px-6 lg:px-8">
               <div className="max-w-4xl">
-                {
-                  !allOrders ? (
-                    <Spinner />
-                  ) : (
-                    <>
-                      {
-                        allOrders?.length > 0 ? (
-                          <>
-                            <section aria-labelledby="recent-heading" className="mt-2">
-                              <h2 id="recent-heading" className="sr-only">
-                                {GENERAL_RECENT_ORDERS}
-                              </h2>
-                              <div className="w-full mx-auto overflow-hidden sm:px-0 lg:px-0 paged-orders">
-                                <InfiniteScroll
-                                  fetchData={handleInfiniteScroll}
-                                  total={allOrders?.length ? allOrders[0]?.totalRecord : 0}
-                                  currentNumber={allOrders?.length}
-                                  component={
-                                    allOrders?.map((order: any) => {
-                                      const groups: any = groupBy(order?.itemsBasic, 'category');
-                                      return (
-                                        <>
-                                          {order?.orderDetails?.order?.deliveryPlans?.length > 0 ?
-                                            (
-                                              <>
-                                                {order?.orderDetails?.order?.deliveryPlans.map((item: any, idx: number) => (
-                                                  <>
-                                                    <a onClick={async () => { await onOrderDetail(order.id); setIsShowDetailedOrder(true); }}
-                                                      className='inline-block w-full mb-6 border cursor-pointer' key={idx}>
-                                                      <DeliveryOrderLines groups={groups} trackPackage={trackPackage} order={order} item={item} idx={idx} />
-                                                    </a>
-                                                  </>
-                                                ))}
-                                              </>
-                                            ) : (
-                                              <>
-                                                <a onClick={async () => { await onOrderDetail(order.id); setIsShowDetailedOrder(true); }}
-                                                  className='inline-block w-full mb-6 border cursor-pointer' key={order.orderNo}>
-                                                  <OrderLines groups={groups} trackPackage={trackPackage} order={order} item={order} idx="" />
-                                                </a>
-                                              </>
-                                            )}
-                                        </>
-                                      )
-                                    })
-                                  }
-                                />
-                                {allOrders[0]?.totalRecord > 10 && allOrders[0]?.totalRecord > allOrders?.length &&
-                                  <div className='flex justify-center flex-1 mx-auto'>
-                                    <button className='px-6 py-2 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white' onClick={handleInfiniteScroll}>Load More</button>
-                                  </div>
-                                }
-                              </div>
-                            </section>
-                          </>
-                        ) : (
-                          <>
-                            <div className='flex flex-col items-start justify-center w-full px-4 py-12 sm:items-center max-acc-container sm:px-0'>
-                              <div className='my-2 text-2xl font-semibold text-black'>No Order Available</div>
-                              <div className="flex mt-5 w-60 sm:flex-col"><a href="/" className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">Start Shopping</a></div>
-                            </div>
-                          </>
-                        )
-                      }
-                    </>
-                  )
-                }
-
-                {
-                  (isMobile || isIPadorTablet) && (
-                    <div className="sticky bottom-0 z-50 p-0 sm:px-0">
-                      {
-                        displayAlert
-                          ? <div className="mb-3 mt-3 m-[-20px] w-auto">
-                            <div className={`${alertBgColor(alertRibbon?.type)} justify-center w-full px-10 py-4 text-center align-center`}>
-                              <h4 className={`text-16 font-medium ${alertRibbon?.type == 'cancel' ? 'text-[#c10000]' : 'text-[#fff]'}`}>{alertRibbon?.msg}</h4>
-                            </div>
+                {!allOrders ? (
+                  <Spinner />
+                ) : (
+                  <>
+                    {allOrders?.length > 0 ? (
+                      <>
+                        <section
+                          aria-labelledby="recent-heading"
+                          className="mt-2"
+                        >
+                          <h2 id="recent-heading" className="sr-only">
+                            {GENERAL_RECENT_ORDERS}
+                          </h2>
+                          <div className="w-full mx-auto overflow-hidden sm:px-0 lg:px-0 paged-orders">
+                            <InfiniteScroll
+                              fetchData={handleInfiniteScroll}
+                              total={
+                                allOrders?.length
+                                  ? allOrders[0]?.totalRecord
+                                  : 0
+                              }
+                              currentNumber={allOrders?.length}
+                              component={allOrders?.map((order: any) => {
+                                const groups: any = groupBy(
+                                  order?.itemsBasic,
+                                  'category'
+                                )
+                                return (
+                                  <>
+                                    {order?.orderDetails?.order?.deliveryPlans
+                                      ?.length > 0 ? (
+                                      <>
+                                        {order?.orderDetails?.order?.deliveryPlans.map(
+                                          (item: any, idx: number) => (
+                                            <>
+                                              <a
+                                                onClick={async () => {
+                                                  await onOrderDetail(order.id)
+                                                  setIsShowDetailedOrder(true)
+                                                }}
+                                                className="inline-block w-full mb-6 border cursor-pointer"
+                                                key={idx}
+                                              >
+                                                <DeliveryOrderLines
+                                                  groups={groups}
+                                                  trackPackage={trackPackage}
+                                                  order={order}
+                                                  item={item}
+                                                  idx={idx}
+                                                />
+                                              </a>
+                                            </>
+                                          )
+                                        )}
+                                      </>
+                                    ) : (
+                                      <>
+                                        <a
+                                          onClick={async () => {
+                                            await onOrderDetail(order.id)
+                                            setIsShowDetailedOrder(true)
+                                          }}
+                                          className="inline-block w-full mb-6 border cursor-pointer"
+                                          key={order.orderNo}
+                                        >
+                                          <OrderLines
+                                            groups={groups}
+                                            trackPackage={trackPackage}
+                                            order={order}
+                                            item={order}
+                                            idx=""
+                                          />
+                                        </a>
+                                      </>
+                                    )}
+                                  </>
+                                )
+                              })}
+                            />
+                            {allOrders[0]?.totalRecord > 10 &&
+                              allOrders[0]?.totalRecord > allOrders?.length && (
+                                <div className="flex justify-center flex-1 mx-auto">
+                                  <button
+                                    className="px-6 py-2 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white"
+                                    onClick={handleInfiniteScroll}
+                                  >
+                                    Load More
+                                  </button>
+                                </div>
+                              )}
                           </div>
-                          : null
-                      }
-                    </div>
-                  )
-                }
+                        </section>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex flex-col items-start justify-center w-full px-4 py-12 sm:items-center max-acc-container sm:px-0">
+                          <div className="my-2 text-2xl font-semibold text-black">
+                            No Order Available
+                          </div>
+                          <div className="flex w-60 mt-5 sm:flex-col">
+                            <Link
+                              legacyBehavior
+                              passHref
+                              href="/"
+                              className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary"
+                            >
+                              Start Shopping
+                            </Link>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </>
+                )}
 
+                {(isMobile || isIPadorTablet) && (
+                  <div className="sticky bottom-0 z-50 p-0 sm:px-0">
+                    {displayAlert ? (
+                      <div className="mb-3 mt-3 m-[-20px] w-auto">
+                        <div
+                          className={`${alertBgColor(
+                            alertRibbon?.type
+                          )} justify-center w-full px-10 py-4 text-center align-center`}
+                        >
+                          <h4
+                            className={`text-16 font-medium ${
+                              alertRibbon?.type == 'cancel'
+                                ? 'text-[#c10000]'
+                                : 'text-[#fff]'
+                            }`}
+                          >
+                            {alertRibbon?.msg}
+                          </h4>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
               </div>
             </main>
           </div>
         </>
-      )
-      }
+      )}
     </>
-  );
-};
+  )
+}

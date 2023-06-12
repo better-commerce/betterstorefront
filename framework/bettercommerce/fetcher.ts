@@ -58,7 +58,6 @@ const SingletonFactory = (function () {
                         return axiosInstance(error.response.config)
                     })
                     .catch((error) => {
-                        //@TODO redirect here to Login page
                         return Promise.reject(error)
                     })
                     .finally(createAxiosResponseInterceptor)
@@ -118,8 +117,7 @@ const fetcher = async ({
         }
         return response.data
     } catch (error: any) {
-        console.log(error, 'error inside fetcher')
-        throw new Error(error.response.data.message)
+        throw error
     }
 }
 export default fetcher

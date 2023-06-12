@@ -3,7 +3,7 @@ import { setGeneralParams } from '../../fetcher'
 import { cachedGetData } from '../utils/cached-fetch';
 
 export default function useInfra(req: any) {
-  //TODO change based on location
+  
   return async function handler(setHeader = false) {
     const headers = {
       DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,

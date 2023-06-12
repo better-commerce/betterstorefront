@@ -14,7 +14,7 @@ export enum SnippetContentType {
 enum SnippetPlacementType {
     HEAD_AFTER_OPEN = "TopHead",
     HEAD_BEFORE_CLOSE = "Head",
-    ERROR_HEAD = "ErrorHead", // TODO: Introduce error page in better storefront first.
+    ERROR_HEAD = "ErrorHead", 
     BODY_AFTER_OPEN = "BodyStartHtmlTagAfter",
     BODY_BEFORE_CLOSE = "BodyEndHtmlTagBefore",
     PAGE_CONTAINER_AFTER = "PageContainerAfter",

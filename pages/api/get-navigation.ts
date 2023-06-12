@@ -1,10 +1,13 @@
 import getNavTree from '@framework/api/content/getNavTree'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-export default async (req: any, res: any) => {
+const GetNavTreeApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await getNavTree(req.cookies)
     res.status(200).json({ nav: response.header, footer: response.footer })
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
-}
+};
+
+export default GetNavTreeApiMiddleware;
