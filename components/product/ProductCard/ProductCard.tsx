@@ -245,6 +245,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             title={`${product.name} \t ${itemPrice}`}
           >
             <Image
+              id={`${product?.productId ?? product?.recordId}-1`}
               priority
               src={
                 generateUri(currentProductData.image, 'h=350&fm=webp') ||
@@ -256,6 +257,21 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               width={400}
               height={600}
             />
+            {product?.images?.length > 1 && (
+              <Image
+                id={`${product?.productId ?? product?.recordId}-2`}
+                priority
+                src={
+                  generateUri(product?.images[1]?.image, 'h=500&fm=webp') ||
+                  IMG_PLACEHOLDER
+                }
+                alt={product.name}
+                className="object-cover object-center w-full h-full sm:h-full min-h-image hidden"
+                style={css}
+                width={400}
+                height={600}
+              />
+            )}
           </Link>
           {buttonConfig.isPreOrderEnabled && (
             <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
