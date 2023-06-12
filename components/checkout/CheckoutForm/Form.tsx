@@ -33,6 +33,7 @@ export default function AddressForm({
   updateAddress,
   infoType,
   retrieveAddress,
+  handleOpenNewAddressModal,
 }: any) {
   const defaultItemsToHide = ['address1', 'address2', 'city', 'postCode']
   const [isFormOpen, setNewFormOpen] = useState(!addresses.length)
@@ -178,6 +179,14 @@ export default function AddressForm({
                       <span className="pr-1">{item.postCode}, </span>
                       <span className="pr-1">{item.country}, </span>
                       <span className="pr-1">{item.phoneNo}</span>
+                      {/* <button
+                      onClick={() => {
+                      onEditAddress(item?.id)
+                      }}
+                      className="flex items-end justify-end w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                      >
+                      {GENERAL_EDIT}
+                      </button> */}
                     </div>
                   </div>
                 )
@@ -299,7 +308,8 @@ export default function AddressForm({
               <div className="flex">
                 <button
                   type="button"
-                  onClick={() => handleNewFormButton(values, errors)}
+                  // onClick={() => handleNewFormButton(values, errors)}
+                  onClick={(ev: any) => handleOpenNewAddressModal()}
                   className="max-w-xs m-2 flex-1 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
                 >
                   {isFormOpen ? BTN_SAVE : ADD_ADDRESS}
@@ -315,7 +325,7 @@ export default function AddressForm({
                 )}
               </div>
             )}
-            {isSameAddressCheckboxEnabled && (
+            {/* {isSameAddressCheckboxEnabled && (
               <div className="flex items-center mt-10">
                 <input
                   name={`sameAddress`}
@@ -335,7 +345,7 @@ export default function AddressForm({
                   {BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS}
                 </label>
               </div>
-            )}
+            )} */}
 
             <div className="mt-10 flex sm:flex-col1 w-full justify-center">
               <button

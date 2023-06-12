@@ -14,7 +14,7 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
-"@better-commerce/bc-payments-sdk@0.0.4":
+"@better-commerce/bc-payments-sdk@^0.0.4":
   version "0.0.4"
   resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.4/3a0b030aa3f7c1747f31deaf68d21ccc3b93d1ab#3a0b030aa3f7c1747f31deaf68d21ccc3b93d1ab"
   integrity sha512-1fNfFGOgVQBjeRnzABrbBZy9L73EUoWxSjLpNHTgiQwMW+w06ZtnThENxnjy88p8CWYlG1Q2Rc4GMvv8E7TcGg==
