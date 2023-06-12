@@ -1,7 +1,6 @@
 import { Dialog, RadioGroup, Switch } from '@headlessui/react'
 import { Fragment, useState, useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-// import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
 import { useRouter } from 'next/router'
@@ -22,8 +21,8 @@ import {
   PRODUCTS_SLUG_PREFIX,
 } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
-import SizeAttribute from '@components/product/ProductView/sizeAttribute.json'
-import SIZECHART from '@components/product/ProductView/SizeChart.json'
+import * as SizeAttribute from '@components/product/ProductView/sizeAttribute.json'
+import * as SizeChart from '@components/product/ProductView/SizeChart.json'
 //
 import cn from 'classnames'
 
@@ -318,14 +317,14 @@ export default function SizeInline({
     <>
       <div className="flex items-center justify-between my-3" id="productSize">
         <div>
-          <h3 className="text-gray-700 text-ms">
+          <h4 className="text-gray-700">
             {label} :
             {selected.attributes ? (
-              <span className="text-gray-700 text-ms font-light dark:text-gray-700 pl-1">
+              <span className="pl-1 font-light text-gray-700 text-ms dark:text-gray-700">
                 {selected.attributes[1].fieldValue}
               </span>
             ) : (
-              <span className="text-gray-400 font-bold text-sm pl-1"> -- </span>
+              <span className="pl-1 text-sm font-bold text-gray-400"></span>
             )}
             <span className="pl-1 text-xs font-bold text-black sm:text-sm">
               {product?.mappedCategories?.length > 0 &&
@@ -336,35 +335,29 @@ export default function SizeInline({
                       product?.mappedCategories[0].categoryName,
                       true
                     ) && (
-                      <>
-                        <div className="inline-block" key={aid}>
-                          {attr?.values?.map((fields: any, idx: number) => (
-                            <>
-                              <div key={idx}>
-                                {matchStrings(
-                                  fields.FieldText,
-                                  currentAttribute,
-                                  true
-                                ) && (
-                                  <>
-                                    <p>
-                                      {fields.FieldText}
-                                      {' ('}
-                                      {fields.FieldValue}
-                                      {')'}
-                                    </p>
-                                  </>
-                                )}
-                              </div>
-                            </>
-                          ))}
-                        </div>
-                      </>
+                      <div className="inline-block" key={aid}>
+                        {attr?.values?.map((fields: any, idx: number) => (
+                          <div key={idx}>
+                            {matchStrings(
+                              fields.FieldText,
+                              currentAttribute,
+                              true
+                            ) && (
+                              <p>
+                                {fields.FieldText}
+                                {' ('}
+                                {fields.FieldValue}
+                                {')'}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     )}
                   </>
                 ))}
             </span>
-          </h3>
+          </h4>
         </div>
         <div>
           <p
@@ -415,7 +408,7 @@ export default function SizeInline({
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                 >
-                  <Dialog.Panel className="w-screen max-w-lg pointer-events-auto side-panel-lg">
+                  <Dialog.Panel className="w-screen max-w-xl pointer-events-auto side-panel-lg">
                     <div className="relative z-50 flex flex-col h-full bg-white shadow-xl">
                       <div className="px-0 py-3 sm:px-0">
                         <div className="flex pb-2 border-b border-gray-200">
@@ -471,27 +464,108 @@ export default function SizeInline({
                             </thead>
                             <tbody>
                               <tr className="text-black dark:text-black">
-                                <td className='border border-slate-300 text-center'></td>
-                                <td className='border border-slate-300 text-center'>UK</td>
-                                <td className='border border-slate-300 text-center'>US</td>
-                                <td className='border border-slate-300 text-center'>EU</td>
-                                <td className='border border-slate-300 text-center'>IT</td>
-                                <td className='border border-slate-300 text-center'>Chest (in cm)</td>
-                                <td className='border border-slate-300 text-center'>Waist (in cm)</td>
-                                <td className='border border-slate-300 text-center'>Hip (in cm)</td>
+                                <td className="pl-2 text-white bg-black border-1"></td>
+                                <td>UK</td>
+                                <td>US</td>
+                                <td>EU</td>
+                                <td>IT</td>
+                                <td>
+                                  <p>Chest</p>
+                                  <p>(in cm)</p>
+                                </td>
+                                <td>
+                                  <p>Waist</p>
+                                  <p>(in cm)</p>
+                                </td>
+                                <td>
+                                  <p>Hip</p>
+                                  <p>(in cm)</p>
+                                </td>
                               </tr>
-                              {SIZECHART.women.map((data, index) => (
-                                  <tr className="dark:text-black" key={index}>
-                                  <td className="border border-slate-300 text-center text-white bg-black">{data.size}</td>
-                                  <td className="border border-slate-300 text-center">{data.uk}</td>
-                                  <td className="border border-slate-300 text-center">{data.us}</td>
-                                  <td className="border border-slate-300 text-center">{data.eu}</td>
-                                  <td className="border border-slate-300 text-center">{data.it}</td>
-                                  <td className="border border-slate-300 text-center">{data.chest}</td>
-                                  <td className="border border-slate-300 text-center">{data.waist}</td>
-                                  <td className="border border-slate-300 text-center">{data.hip}</td>
-                                </tr>
-                              ))}
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  XXS
+                                </td>
+                                <td>4-6</td>
+                                <td>0-2</td>
+                                <td>32-34</td>
+                                <td>36-38</td>
+                                <td>76-80 </td>
+                                <td>59-63 </td>
+                                <td>84-88 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  XS
+                                </td>
+                                <td>6-8</td>
+                                <td>2-4</td>
+                                <td>34-36</td>
+                                <td>38-40</td>
+                                <td>81-85 </td>
+                                <td>64-68 </td>
+                                <td>89-93 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  S
+                                </td>
+                                <td>8-10</td>
+                                <td>4-6</td>
+                                <td>36-38</td>
+                                <td>40-42</td>
+                                <td>86-90 </td>
+                                <td>69-73 </td>
+                                <td>94-98 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  M
+                                </td>
+                                <td>10-12</td>
+                                <td>6-8</td>
+                                <td>38-40</td>
+                                <td>42-44</td>
+                                <td>91-95 </td>
+                                <td>74-78 </td>
+                                <td>99-103 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  L
+                                </td>
+                                <td>12-14</td>
+                                <td>8-10</td>
+                                <td>40-42</td>
+                                <td>44-46</td>
+                                <td>96-100 </td>
+                                <td>79-83 </td>
+                                <td>104-108 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  XL
+                                </td>
+                                <td>14-16</td>
+                                <td>10-12</td>
+                                <td>42-44</td>
+                                <td>46-48</td>
+                                <td>101-105 </td>
+                                <td>84-88 </td>
+                                <td>109-113 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  XXL
+                                </td>
+                                <td>16-18</td>
+                                <td>12-14</td>
+                                <td>44-46</td>
+                                <td>48-50</td>
+                                <td>106-110 </td>
+                                <td>89-93 </td>
+                                <td>114-118 </td>
+                              </tr>
                             </tbody>
                           </table>
                           <table className="w-full text-xs table-fixed">
@@ -501,7 +575,7 @@ export default function SizeInline({
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th className="pt-8 pb-5 text-gray-700 dark:text-gray-700 ">
+                                <th className="pt-8 pb-5 text-gray-700 dark:text-gray-700">
                                   Men
                                 </th>
                                 <th></th>
@@ -511,31 +585,113 @@ export default function SizeInline({
                             </thead>
                             <tbody>
                               <tr className="text-black dark:text-black">
-                                <td className='border border-slate-300 text-center'></td>
-                                <td className='border border-slate-300 text-center'>UK</td>
-                                <td className='border border-slate-300 text-center'>US</td>
-                                <td className='border border-slate-300 text-center'>EU</td>
-                                <td className='border border-slate-300 text-center'>IT</td>
-                                <td className='border border-slate-300 text-center'>Chest (in cm)</td>
-                                <td className='border border-slate-300 text-center'>Waist (in cm)</td>
-                                <td className='border border-slate-300 text-center'>Hip (in cm)</td>
+                                <td className="pl-2 text-white bg-black border-1"></td>
+                                <td>UK</td>
+                                <td>US</td>
+                                <td>EU</td>
+                                <td>IT</td>
+                                <td>
+                                  <p>Chest</p>
+                                  <p>(in cm)</p>
+                                </td>
+                                <td>
+                                  <p>Waist</p>
+                                  <p>(in cm)</p>
+                                </td>
+                                <td>
+                                  <p>Hip</p>
+                                  <p>(in cm)</p>
+                                </td>
                               </tr>
-                              {SIZECHART.men.map((data, indexmen) => (
-                                  <tr className="dark:text-black" key={indexmen}>
-                                  <td className="border border-slate-300 text-center text-white bg-black">{data.size}</td>
-                                  <td className="border border-slate-300 text-center">{data.uk}</td>
-                                  <td className="border border-slate-300 text-center">{data.us}</td>
-                                  <td className="border border-slate-300 text-center">{data.eu}</td>
-                                  <td className="border border-slate-300 text-center">{data.it}</td>
-                                  <td className="border border-slate-300 text-center">{data.chest}</td>
-                                  <td className="border border-slate-300 text-center">{data.waist}</td>
-                                  <td className="border border-slate-300 text-center">{data.hip}</td>
-                                </tr>
-                              ))}
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  XXS
+                                </td>
+                                <td>4-6</td>
+                                <td>0-2</td>
+                                <td>32-34</td>
+                                <td>36-38</td>
+                                <td>76-80 </td>
+                                <td>59-63 </td>
+                                <td>84-88 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  XS
+                                </td>
+                                <td>6-8</td>
+                                <td>2-4</td>
+                                <td>34-36</td>
+                                <td>38-40</td>
+                                <td>81-85 </td>
+                                <td>64-68 </td>
+                                <td>89-93 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  S
+                                </td>
+                                <td>8-10</td>
+                                <td>4-6</td>
+                                <td>36-38</td>
+                                <td>40-42</td>
+                                <td>86-90 </td>
+                                <td>69-73 </td>
+                                <td>94-98 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  M
+                                </td>
+                                <td>10-12</td>
+                                <td>6-8</td>
+                                <td>38-40</td>
+                                <td>42-44</td>
+                                <td>91-95 </td>
+                                <td>74-78 </td>
+                                <td>99-103 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  L
+                                </td>
+                                <td>12-14</td>
+                                <td>8-10</td>
+                                <td>40-42</td>
+                                <td>44-46</td>
+                                <td>96-100 </td>
+                                <td>79-83 </td>
+                                <td>104-108 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  XL
+                                </td>
+                                <td>14-16</td>
+                                <td>10-12</td>
+                                <td>42-44</td>
+                                <td>46-48</td>
+                                <td>101-105 </td>
+                                <td>84-88 </td>
+                                <td>109-113 </td>
+                              </tr>
+                              <tr className="text-black dark:text-black">
+                                <td className="pl-2 text-white bg-black border-1">
+                                  XXL
+                                </td>
+                                <td>16-18</td>
+                                <td>12-14</td>
+                                <td>44-46</td>
+                                <td>48-50</td>
+                                <td>106-110 </td>
+                                <td>89-93 </td>
+                                <td>114-118 </td>
+                              </tr>
                             </tbody>
                           </table>
                         </div>
                       </div>
+
                       {/*              {outerWearCategory?.categoryName == 'Outerwear' &&
                                        <>
                                           {SizeChart?.Outerwear.map((chart: any, chid: number) => (

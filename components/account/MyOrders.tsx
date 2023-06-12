@@ -24,7 +24,7 @@ import ReturnModal from '@components/returns/Modal'
 import { isCartAssociated } from '@framework/utils/app-util'
 import Image from 'next/image'
 
-export default function MyOrders() {
+export default function MyOrders({ deviceInfo }: any) {
   const [data, setData] = useState([])
   const [productIdsInReturn, setProductIdsInReturn] = useState([''])
   const [returnData, setReturnData] = useState({ product: {}, order: {} })
@@ -124,7 +124,7 @@ export default function MyOrders() {
       <main className="sm:px-6 lg:px-8">
         <div className="max-w-4xl lg:mx-12">
           <div className="lg:px-4 sm:px-0">
-            <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+            <h1 className="font-extrabold tracking-tight text-gray-900">
               {ORDER_HISTORY_TITLE}
             </h1>
             <p className="mt-2 text-sm text-gray-500">{MY_ORDERS_TEXT}</p>
@@ -215,10 +215,9 @@ export default function MyOrders() {
                               <div className="mt-2 flex text-sm font-medium sm:mt-4">
                                 <Link
                                   href={`/${product.slug || '#'}`}
-                                  className="text-indigo-600 hover:text-indigo-500">
-
+                                  className="text-indigo-600 hover:text-indigo-500"
+                                >
                                   {GENERAL_VIEW_PRODUCT}
-
                                 </Link>
                                 <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                                   <button
@@ -275,5 +274,5 @@ export default function MyOrders() {
         </div>
       </main>
     </div>
-  );
+  )
 }

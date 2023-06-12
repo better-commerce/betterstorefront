@@ -222,11 +222,11 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                               <div className="flex flex-col flex-1 ml-4">
                                 <div>
                                   <div className="flex justify-between font-medium text-gray-900">
-                                    <h3 onClick={handleClose}>
+                                    <h5 onClick={handleClose}>
                                       <Link href={`/${product.slug}`}>
                                         {product.name}
                                       </Link>
-                                    </h3>
+                                    </h5>
                                     <p className="ml-4">
                                       {product.price?.formatted?.withTax}
                                     </p>
@@ -278,7 +278,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                       <p>
                         <button
                           type="button"
-                          className="flex items-center justify-center px-6 py-3 font-medium text-white uppercase bg-black border border-transparent rounded-sm shadow-sm hover:bg-pink"
+                          className="flex items-center justify-center px-6 py-3 font-medium uppercase btn-primary"
                           onClick={handleClose}
                         >
                           {GENERAL_CONTINUE_SHOPPING}

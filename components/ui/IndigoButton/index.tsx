@@ -10,6 +10,7 @@ interface Props {
   buttonType?: string
   type?: string
   colorScheme?: any
+  disabled?: boolean
 }
 
 const DEFAULT_COLOR_SCHEME = {
@@ -22,8 +23,9 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
   className = '',
   title = 'Add to bag',
   buttonType = 'cart',
-  action = () => { },
+  action = () => {},
   colorScheme = DEFAULT_COLOR_SCHEME,
+  disabled = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -47,8 +49,9 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
   return (
     <button
       onClick={handleAction}
-      type="button" 
-      className={`xs:max-w-xs flex-1 ${bgColor} border border-transparent rounded-sm uppercase sm:py-3 py-1 sm:px-8 px-1 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className}`}
+      type="button"
+      className={`xs:max-w-xs flex-1 ${bgColor} border border-transparent rounded-sm uppercase sm:py-3 py-1 sm:px-8 px-1 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className} btn-c btn-primary`}
+      disabled={disabled}
     >
       {isLoading ? <LoadingDots /> : title}
     </button>

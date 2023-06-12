@@ -23,7 +23,7 @@ const FilterItem = ({
   isCheckboxTickDisabled = false,
   bgColor = () => false,
   onSelect,
-  closeSidebar = () => { },
+  closeSidebar = () => {},
   ...props
 }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
@@ -54,14 +54,13 @@ const FilterItem = ({
 
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div key={option.value} className="flex items-center">
+    <div key={option.value} className="flex items-center pt-2">
       <input
         name={`${optionIdx}-input[]`}
         defaultValue={option.value}
         type="checkbox"
         className="w-4 h-4 border-gray-300 rounded filter-input"
       />
-
       <label
         htmlFor={`${optionIdx}-input[]`}
         onClick={handleCheckbox}
@@ -85,7 +84,7 @@ const FilterItem = ({
           />
         )}
         {generateOptionName()}
-        {sectionKey === FILTER_KEYS.COLOR &&
+        {sectionKey === FILTER_KEYS.COLOR && (
           <div
             style={{
               content: '',
@@ -100,8 +99,8 @@ const FilterItem = ({
               marginRight: '6px',
             }}
           />
-        }
-        {sectionKey != FILTER_KEYS.COLOR &&
+        )}
+        {sectionKey != FILTER_KEYS.COLOR && (
           <div
             style={{
               content: '',
@@ -116,9 +115,11 @@ const FilterItem = ({
               marginRight: '6px',
             }}
           />
-        }
+        )}
       </label>
-      <span className="px-1 text-xs font-semibold text-black">({option.count})</span>
+      <span className="px-1 text-xs font-semibold text-black">
+        ({option.count})
+      </span>
     </div>
   )
 }
@@ -198,7 +199,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className="space-y-2 max-panel">
+      <div className="pb-5 mt-2 border-b border-gray-200 max-panel">
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (

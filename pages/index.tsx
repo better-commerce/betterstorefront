@@ -14,7 +14,6 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
-import { isMobile } from 'react-device-detect'
 import { useRouter } from 'next/router'
 import os from 'os'
 import { obfuscateHostName } from '@framework/utils/app-util'
@@ -41,21 +40,24 @@ export async function getStaticProps({
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
 
-  const PageContentsPromiseWeb = commerce.getPagePreviewContent({
-    id: '', //pageId,
-    slug: HOME_PAGE_DEFAULT_SLUG,
-    workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-    channel: 'Web',
-  })
-  const pageContentsWeb = await PageContentsPromiseWeb
+  let pageContentsWeb, pageContentsMobileWeb
+  try {
+    const PageContentsPromiseWeb = commerce.getPagePreviewContent({
+      id: '', //pageId,
+      slug: HOME_PAGE_DEFAULT_SLUG,
+      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+      channel: 'Web',
+    })
+    pageContentsWeb = await PageContentsPromiseWeb
 
-  const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
-    id: '', //pageId,
-    slug: HOME_PAGE_DEFAULT_SLUG,
-    workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-    channel: 'MobileWeb',
-  })
-  const pageContentsMobileWeb = await PageContentsPromiseMobileWeb
+    const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
+      id: '', //pageId,
+      slug: HOME_PAGE_DEFAULT_SLUG,
+      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+      channel: 'MobileWeb',
+    })
+    pageContentsMobileWeb = await PageContentsPromiseMobileWeb
+  } catch (error: any) {}
 
   const hostName = os.hostname()
 
@@ -85,9 +87,11 @@ function Home({
   pageContentsWeb,
   pageContentsMobileWeb,
   hostName,
+  deviceInfo,
 }: any) {
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
@@ -110,7 +114,7 @@ function Home({
 
   if (!pageContents) {
     return (
-      <div className='flex w-full text-center flex-con'>
+      <div className="flex w-full text-center flex-con">
         <Loader />
       </div>
     )
@@ -118,12 +122,21 @@ function Home({
 
   return (
     <>
-      {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
+      {(pageContents?.metatitle ||
+        pageContents?.metadescription ||
+        pageContents?.metakeywords) && (
         <NextHead>
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-          <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
-          <title>{pageContents?.metatitle || "Home"}</title>
-          <meta name="title" content={pageContents?.metatitle || "Home"} />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=5"
+          />
+          <link
+            rel="canonical"
+            id="canonical"
+            href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
+          />
+          <title>{pageContents?.metatitle || 'Home'}</title>
+          <meta name="title" content={pageContents?.metatitle || 'Home'} />
           {pageContents?.metadescription && (
             <meta name="description" content={pageContents?.metadescription} />
           )}
@@ -132,10 +145,18 @@ function Home({
           )}
           <meta property="og:image" content={pageContents?.image} />
           {pageContents?.metatitle && (
-            <meta property="og:title" content={pageContents?.metatitle} key="ogtitle" />
+            <meta
+              property="og:title"
+              content={pageContents?.metatitle}
+              key="ogtitle"
+            />
           )}
           {pageContents?.metadescription && (
-            <meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />
+            <meta
+              property="og:description"
+              content={pageContents?.metadescription}
+              key="ogdesc"
+            />
           )}
         </NextHead>
       )}
@@ -151,7 +172,7 @@ function Home({
             key={`category-heading-${hId}`}
           />
         ))}
-        <Categories data={pageContents?.categorylist} />
+        <Categories data={pageContents?.categorylist} deviceInfo={deviceInfo} />
         {pageContents?.productheading?.map((productH: any, Pid: number) => (
           <Heading
             title={productH?.productheading_title}
@@ -161,8 +182,12 @@ function Home({
         ))}
         <ProductSlider config={pageContents} />
       </div>
+
       {pageContents?.promotions?.map((banner: any, bId: number) => (
-        <div className="relative flex flex-col justify-center w-full text-center cursor-pointer" key={`full-banner-${bId}`}>
+        <div
+          className="relative flex flex-col justify-center w-full text-center cursor-pointer"
+          key={`full-banner-${bId}`}
+        >
           <Link href={banner?.promotions_link} passHref legacyBehavior>
             <Image
               src={banner?.promotions_image}
@@ -178,16 +203,15 @@ function Home({
           </div>
         </div>
       ))}
+
       <div className="container px-4 py-3 mx-auto sm:px-0 sm:py-6">
-        {pageContents?.collectionheadings?.map(
-          (heading: any, cId: number) => (
-            <Heading
-              title={heading?.collectionheadings_title}
-              subTitle={heading?.collectionheadings_subtitle}
-              key={`collection-heading-${cId}`}
-            />
-          )
-        )}
+        {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
+          <Heading
+            title={heading?.collectionheadings_title}
+            subTitle={heading?.collectionheadings_subtitle}
+            key={`collection-heading-${cId}`}
+          />
+        ))}
         <Collections data={pageContents?.collectionlist} />
       </div>
     </>

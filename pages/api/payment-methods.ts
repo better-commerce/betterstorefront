@@ -1,12 +1,13 @@
 import { getPaymentMethods } from '@framework/payment'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-const GetPaymentMethodsapiMiddleware =  async (req: any, res: any) => {
-  const { countryCode, currencyCode }: any = req.body
+const GetPaymentMethodsapiMiddleware = async (req: any, res: any) => {
+  const { countryCode, currencyCode, basketId }: any = req.body
   try {
     const response = await getPaymentMethods()({
       countryCode,
       currencyCode,
+      basketId,
       cookies: req.cookies,
     })
     res.status(200).json(response)
@@ -15,4 +16,4 @@ const GetPaymentMethodsapiMiddleware =  async (req: any, res: any) => {
   }
 }
 
-export default GetPaymentMethodsapiMiddleware;
+export default GetPaymentMethodsapiMiddleware

@@ -7,7 +7,7 @@ interface Props {
   cookies?: any
 }
 
-export default function updateShippingMethod() {
+export default function useConfirmOrder() {
   return async function handler({ basketId, model, cookies }: Props) {
     const url = CHECKOUT_ENDPOINT + `/${basketId}/convert`
     try {

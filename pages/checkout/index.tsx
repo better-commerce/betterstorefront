@@ -1,6 +1,9 @@
 import dynamic from 'next/dynamic'
+import Script from 'next/script'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-const CheckoutRouter = dynamic(() => import('@components/checkout/CheckoutRouter'))
+const CheckoutRouter = dynamic(
+  () => import('@components/checkout/CheckoutRouter')
+)
 const CheckoutForm = dynamic(() => import('@components/checkout/CheckoutForm'))
 import { useState, useEffect } from 'react'
 import cookie from 'cookie'
@@ -16,8 +19,14 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 
+export interface actionInterface {
+  type?: string
+  payload?: any
+}
+
 function Checkout({ cart, config, location }: any) {
-  const { user, basketId, setCartItems, cartItems, setUser, setIsGuestUser } = useUI()
+  const { user, basketId, setCartItems, cartItems, setUser, setIsGuestUser } =
+    useUI()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
@@ -28,7 +37,6 @@ function Checkout({ cart, config, location }: any) {
   useEffect(() => {
     setIsLoggedIn(!!user?.userId || false)
   }, [user, cartItems])
-
 
   const handleGuestMail = (values: any) => {
     const handleAsync = async () => {
@@ -45,7 +53,8 @@ function Checkout({ cart, config, location }: any) {
     handleAsync()
   }
   const fetchAddress = async () => {
-    let userId = cartItems?.userId === EmptyGuid ? user?.userId : cartItems?.userId
+    let userId =
+      cartItems?.userId === EmptyGuid ? user?.userId : cartItems?.userId
     if (!userId) return
     try {
       const response: any = await getAddress(userId)
@@ -89,8 +98,8 @@ function Checkout({ cart, config, location }: any) {
           shipping_tier: cartItems?.shippingMethods[0]?.countryCode,
           coupon: cartItems?.promotionsApplied?.length
             ? cartItems?.promotionsApplied
-              ?.map((x: any) => x?.promoCode)
-              ?.join(',')
+                ?.map((x: any) => x?.promoCode)
+                ?.join(',')
             : '',
           value: cartItems?.subTotal?.raw?.withTax,
           item_var_id: cartItems?.id,

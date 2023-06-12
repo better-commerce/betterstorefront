@@ -27,7 +27,7 @@ import {
   createWishlist,
   removeItemFromWishlist,
   createReview,
-  applyPromo,  
+  applyPromo,
   getRelatedProducts,
   getPdpLookbook,
   getPdpLookbookProduct,
@@ -39,6 +39,7 @@ import {
   getPagePreviewContent,
   getProductReview,
   resetCache,
+  logRequest,
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -89,6 +90,7 @@ const operations = {
   getPagePreviewContent,
   getProductReview,
   resetCache,
+  logRequest,
 }
 
 export const provider = { config, operations }

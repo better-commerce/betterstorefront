@@ -1,12 +1,28 @@
 import dynamic from 'next/dynamic'
-import getCollections from '@framework/api/content/getCollections'
-import { Layout } from '@components/common'
 import Link from 'next/link'
 import Script from 'next/script'
-import os from 'os'
 import NextHead from 'next/head'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import getCollections from '@framework/api/content/getCollections'
+import { Layout } from '@components/common'
+import os from 'os'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
-//DYNAMINC COMPONENT CALLS
+import { useReducer, useEffect, useState } from 'react'
+import useSwr from 'swr'
+import { postData } from '@components/utils/clientFetcher'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { ChevronLeftIcon } from '@heroicons/react/24/outline'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import commerce from '@lib/api/commerce'
+import { generateUri } from '@commerce/utils/uri-util'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import { obfuscateHostName } from '@framework/utils/app-util'
+import { LoadingDots } from '@components/ui'
+import { IPLPFilterState } from '@components/ui/context'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -21,28 +37,10 @@ const ProductGrid = dynamic(
   () => import('@components/product/Grid/ProductGrid')
 )
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-import { useReducer, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import useSwr from 'swr'
-import Image from 'next/image'
-import { postData } from '@components/utils/clientFetcher'
-import { IMG_PLACEHOLDER, RESULTS } from '@components/utils/textVariables'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { ChevronLeftIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline'
-// Import Swiper styles
-import 'swiper/css'
-import 'swiper/css/navigation'
-
-import SwiperCore, { Navigation } from 'swiper'
-import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
-import { obfuscateHostName } from '@framework/utils/app-util'
-import { LoadingDots } from '@components/ui'
-import PLPFilterSidebar from '@components/product/Filters/PLPFilterSidebarView'
-import { IPLPFilterState } from '@components/ui/context'
-
+const PLPFilterSidebar = dynamic(
+  () => import('@components/product/Filters/PLPFilterSidebarView')
+)
+declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -67,7 +65,6 @@ interface stateInterface {
 
 const IS_INFINITE_SCROLL =
   process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-
 const {
   SORT_BY,
   PAGE,
@@ -77,7 +74,6 @@ const {
   ADD_FILTERS,
   REMOVE_FILTERS,
 } = ACTION_TYPES
-
 const DEFAULT_STATE = {
   sortBy: '',
   sortOrder: 'asc',
@@ -112,7 +108,10 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 export default function CollectionPage(props: any) {
+  const { deviceInfo } = props
+  const { isOnlyMobile, isMobile, isIPadorTablet } = deviceInfo
   const router = useRouter()
+  const [paddingTop, setPaddingTop] = useState('0')
   const adaptedQuery: any = { ...router.query }
   const [plpFilterState, setPLPFilterState] = useState<IPLPFilterState>({
     filters: [],
@@ -199,7 +198,7 @@ export default function CollectionPage(props: any) {
     const loadingState = !error && !collection
     setPLPFilterState({
       ...plpFilterState,
-      loading: loadingState
+      loading: loadingState,
     })
     setSwrLoading(loadingState)
 
@@ -235,7 +234,9 @@ export default function CollectionPage(props: any) {
   }, [productDataToPass])
 
   useEffect(() => {
-    const data = IS_INFINITE_SCROLL ? productListMemory.products : props?.products
+    const data = IS_INFINITE_SCROLL
+      ? productListMemory.products
+      : props?.products
     setProductDataToPass(data)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -360,189 +361,249 @@ export default function CollectionPage(props: any) {
   const cls = visible
     ? 'sticky w-full mx-auto bg-white top-108 sm:container'
     : 'relative'
-
   const totalResults =
     appliedFilters?.length > 0
       ? data?.products?.total
       : props?.products?.total || data?.products?.results?.length
-
   const [openPLPSidebar, setOpenPLPSidebar] = useState(false)
-
   const handleTogglePLPSidebar = () => {
     setOpenPLPSidebar(!openPLPSidebar)
   }
-
+  let absPath = ''
+  if (typeof window !== 'undefined') {
+    absPath = window?.location?.href
+  }
   return (
     <>
       <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="canonical" id="canonical" href={props?.canonicalTags} />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
+        <link rel="canonical" id="canonical" href={absPath} />
         <title>{props?.name}</title>
         <meta name="title" content={props?.name} />
         <meta name="description" content={props?.metaDescription} />
         <meta name="keywords" content={props?.metaKeywords} />
         <meta property="og:image" content="" />
         <meta property="og:title" content={props?.name} key="ogtitle" />
-        <meta property="og:description" content={props?.metaDescription} key="ogdesc" />
+        <meta
+          property="og:description"
+          content={props?.metaDescription}
+          key="ogdesc"
+        />
       </NextHead>
-      <div>
-        {props?.hostName && (
-          <input className="inst" type="hidden" value={props?.hostName} />
+      {props?.hostName && (
+        <input className="inst" type="hidden" value={props?.hostName} />
+      )}
+      <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
+        {props?.breadCrumbs && (
+          <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
-        <main className="pb-0 mx-auto md:w-4/5">
-          {props?.breadCrumbs && (
-            <div className="pt-2 sm:pt-4">
-              <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
-            </div>
-          )}
-          {props?.images?.length > 0 && (
-            <div className="flex items-center justify-center w-full mx-auto mt-0 sm:px-0 sm:mt-4">
-              <Swiper navigation={true} loop={true} className="mySwiper">
-                {props?.images?.map((img: any, idx: number) => {
-                  return (
-                    <SwiperSlide key={idx}>
-                      <Link href={img.link || '#'}>
-                        <Image
-                          style={css}
-                          width={1920}
-                          height={460}
-                          src={
-                            generateUri(img.url, 'h=700&fm=webp') ||
-                            IMG_PLACEHOLDER
-                          }
-                          alt={props?.name}
-                          className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
-                        ></Image>
-                      </Link>
-                    </SwiperSlide>
-                  )
-                })}
-              </Swiper>
-            </div>
-          )}
 
-          <div className={cls}>
-            <div className="sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4">
-              <div className="grid w-full grid-cols-1 sm:grid-cols-12">
-                <div className="mt-1 mr-2 sm:col-span-6 product-side-filter">
-                  <div className="text-base capitalize text-primary dark:text-primary text-24">
-                    <h1 className="inline-block text-base font-medium capitalize text-primary dark:text-primary text-24">
-                      {props?.name}
-                    </h1>
-                    <span className="pl-2 mt-0 text-xs text-brown-light dark:text-brown-light text-14 sm:h-6">
-                      {swrLoading ? (
-                        <LoadingDots />
-                      ) : (
-                        `${totalResults ?? 0} results`
-                      )}
-                    </span>
-                  </div>
-                  <h2>{props?.description}</h2>
-                </div>
-
-                {/* Filter Sidebar CTA */}
-                {/* <div className="hidden sm:col-span-6 product-card-list sm:block">
-                <button
-                  className="flex items-center float-right"
-                  onClick={handleTogglePLPSidebar}
-                >
-                  <span className="inline-block w-auto h-4 mr-2 overflow-hidden">
-                    <AdjustmentsHorizontalIcon className="relative inline-block w-6 h-8 -top-1" />
-                  </span>
-                  <span>Filter</span>
-                </button>
-              </div> */}
-              </div>
-            </div>
-          </div>
-
-          {props?.products?.total > 0 && (
-            <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
-              {props?.allowFacets && (
+        {props?.customInfo3 == 'vertical' && (
+          <>
+            <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-0 sm:px-0 sm:mt-4">
+              {props?.images?.length > 1 ? (
                 <>
-                  {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
+                  <div className="w-full v-image-space">
+                    {props?.images?.map((img: any, idx: number) => {
+                      const imgUrl =
+                        (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
+                      return (
+                        <div key={idx}>
+                          <div className="relative w-full h-auto px-0 collection-multi-vimage">
+                            <Link
+                              legacyBehavior
+                              href={img?.link || '#'}
+                              passHref
+                            >
+                              <span style={{ paddingTop }} className="block">
+                                <Image
+                                  src={
+                                    generateUri(imgUrl, 'fm=webp&h=530&q=50') ||
+                                    IMG_PLACEHOLDER
+                                  }
+                                  alt="Collection Banner"
+                                  layout="fill"
+                                  objectFit="contain"
+                                  className=""
+                                  onLoad={({ target }) => {
+                                    const { naturalWidth, naturalHeight } =
+                                      target as HTMLImageElement
+                                    setPaddingTop(
+                                      `calc(100% / (${naturalWidth} / ${naturalHeight})`
+                                    )
+                                  }}
+                                ></Image>
+                              </span>
+                            </Link>
+                            <div className="absolute z-10 text-left bottom-3 left-4">
+                              <h3 className="font-medium text-white text-14">
+                                {img?.title}
+                              </h3>
+                              <p className="mb-2 font-normal text-left text-white text-10">
+                                {img?.description}
+                              </p>
+                              {img?.title ? (
+                                <>
+                                  <Link
+                                    legacyBehavior
+                                    href={img?.link}
+                                    passHref
+                                  >
+                                    <span className="font-medium text-left text-white underline text-12">
+                                      Shop now
+                                    </span>
+                                  </Link>
+                                </>
+                              ) : null}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {props?.images?.map((img: any, idx: number) => {
+                    const imgUrl =
+                      (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
+                    return (
+                      <div className="w-full h-auto px-0" key={idx}>
+                        <Link legacyBehavior href={img?.link || '#'}>
+                          <a>
+                            <Image src={imgUrl} alt="banner" />
+                          </a>
+                        </Link>
+                      </div>
+                    )
+                  })}
+                </>
+              )}
+            </div>
+          </>
+        )}
+        {props?.customInfo3 == 'Horizontal' ||
+          (props?.customInfo3 == 'horizontal' && props?.images?.length > 0 && (
+            <Swiper
+              navigation={true}
+              loop={true}
+              className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0"
+            >
+              {props?.images?.map((img: any, idx: number) => (
+                <SwiperSlide key={idx}>
+                  <Link href={img.link || '#'}>
+                    <Image
+                      style={css}
+                      width={1920}
+                      height={460}
+                      src={
+                        generateUri(img.url, 'h=500&fm=webp') || IMG_PLACEHOLDER
+                      }
+                      alt={props?.name}
+                      className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
+                    />
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ))}
 
-                  <div className="flex flex-col sm:col-span-2 sm:hidden">
-                    <ProductMobileFilters
-                      handleFilters={handleFilters}
-                      products={props?.products}
-                      routerFilters={state.filters}
+        <div
+          className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4 ${cls}`}
+        >
+          <h1 className="inline-block text-base font-medium capitalize text-primary dark:text-primary text-24">
+            {props?.name}
+          </h1>
+          <span className="pl-2 mt-0 text-xs font-semibold text-black dark:text-white text-14 sm:h-6">
+            {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} results`}
+          </span>
+          <h2>{props?.description}</h2>
+        </div>
+
+        {props?.products?.total > 0 && (
+          <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
+            {props?.allowFacets ? (
+              <>
+                {isMobile ? (
+                  <ProductMobileFilters
+                    handleFilters={handleFilters}
+                    products={data.products}
+                    routerFilters={state.filters}
+                    handleSortBy={handleSortBy}
+                    clearAll={clearAll}
+                    routerSortOption={state.sortBy}
+                  />
+                ) : (
+                  <ProductFilterRight
+                    handleFilters={handleFilters}
+                    products={data.products}
+                    routerFilters={state.filters}
+                  />
+                )}
+                <div className="sm:col-span-10 p-[1px]">
+                  {isMobile ? null : (
+                    <ProductFiltersTopBar
+                      products={data.products}
                       handleSortBy={handleSortBy}
+                      routerFilters={state.filters}
                       clearAll={clearAll}
                       routerSortOption={state.sortBy}
                     />
-                  </div>
-                  <div className="hidden sm:col-span-2 sm:block">
-                    <ProductFilterRight
-                      handleFilters={handleFilters}
-                      products={props?.products}
-                      routerFilters={state.filters}
-                    />
-                  </div>
-                  <div className="sm:col-span-10 p-[1px]">
-                    {/* {HIDE FILTER TOP BAR IN MOBILE} */}
+                  )}
+                  <ProductGridWithFacet
+                    products={productDataToPass}
+                    currentPage={props?.currentPage}
+                    handlePageChange={handlePageChange}
+                    handleInfiniteScroll={handleInfiniteScroll}
+                    deviceInfo={deviceInfo}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="col-span-12">
+                <ProductGrid
+                  products={productDataToPass}
+                  currentPage={props?.currentPage}
+                  handlePageChange={handlePageChange}
+                  handleInfiniteScroll={handleInfiniteScroll}
+                  deviceInfo={deviceInfo}
+                />
+              </div>
+            )}
+          </div>
+        )}
+        {props?.products?.total == 0 && (
+          <div className="w-full py-32 mx-auto text-center">
+            <h3 className="py-3 text-3xl font-semibold text-gray-200">
+              {' '}
+              No Item Availabe in {props?.name} Collection!
+            </h3>
+            <Link href="/collection" passHref>
+              <span className="text-lg font-semibold text-indigo-500">
+                <ChevronLeftIcon className="relative top-0 inline-block w-4 h-4"></ChevronLeftIcon>{' '}
+                Back to collections
+              </span>
+            </Link>
+          </div>
+        )}
 
-                    <div className="flex-1 hidden sm:block">
-                      <ProductFiltersTopBar
-                        products={data.products}
-                        handleSortBy={handleSortBy}
-                        routerFilters={state.filters}
-                        clearAll={clearAll}
-                        routerSortOption={state.sortBy}
-                      />
-                    </div>
-                    <ProductGridWithFacet
-                      products={productDataToPass}
-                      currentPage={props?.currentPage}
-                      handlePageChange={handlePageChange}
-                      handleInfiniteScroll={handleInfiniteScroll}
-                    />
-                  </div>
-                </>
-              )}
-              {!props?.allowFacets && (
-                <>
-                  <div className="col-span-12">
-                    <ProductGrid
-                      products={productDataToPass}
-                      currentPage={props?.currentPage}
-                      handlePageChange={handlePageChange}
-                      handleInfiniteScroll={handleInfiniteScroll}
-                    />
-                  </div>
-                </>
-              )}
-              <div></div>
-            </div>
-          )}
-          {props?.products?.total == 0 && (
-            <div className="w-full py-32 mx-auto text-center">
-              <h3 className="py-3 text-3xl font-semibold text-gray-200">
-                No Item Availabe in {props?.name} Collection!
-              </h3>
-              <Link href="/collection" passHref>
-                <span className="text-lg font-semibold text-indigo-500">
-                  <ChevronLeftIcon className="relative top-0 inline-block w-4 h-4"></ChevronLeftIcon>{' '}
-                  Back to collections
-                </span>
-              </Link>
-            </div>
-          )}
+        <PLPFilterSidebar
+          handleSortBy={handleSortBy}
+          openSidebar={openPLPSidebar}
+          handleTogglePLPSidebar={handleTogglePLPSidebar}
+          plpFilterState={plpFilterState}
+        />
 
-          <PLPFilterSidebar
-            handleSortBy={handleSortBy}
-            openSidebar={openPLPSidebar}
-            handleTogglePLPSidebar={handleTogglePLPSidebar}
-            plpFilterState={plpFilterState}
-          />
-
-          {props?.products?.results?.length > 0 && (
-            <Script
-              type="application/ld+json"
-              id="schema"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
+        {props?.products?.results?.length > 0 && (
+          <Script
+            type="application/ld+json"
+            id="schema"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
               {
                 "@context": "https://schema.org/",
                 "@type": "ItemList",
@@ -558,10 +619,9 @@ export default function CollectionPage(props: any) {
                 )}
               }
             `,
-              }}
-            />
-          )}
-        </main>
+            }}
+          />
+        )}
       </div>
     </>
   )

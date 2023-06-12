@@ -2,13 +2,12 @@ import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
 import LayoutError from '../components/common/Layout/LayoutError'
 import { Text } from '@components/ui'
-import Image from "next/legacy/image";
-import { isMobile } from 'react-device-detect'
+import Image from 'next/legacy/image'
 import {
   ERROR_PAGE_NOT_FOUND,
   ERROR_PAGE_NOT_FOUND_MESSAGE,
 } from '@components/utils/textVariables'
-import Link from 'next/link';
+import Link from 'next/link'
 
 export async function getStaticProps({
   preview,
@@ -28,7 +27,8 @@ export async function getStaticProps({
   }
 }
 
-export default function NotFound() {
+export default function NotFound({ deviceInfo }: any) {
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   return (
     <>
       {!isMobile && (
@@ -48,7 +48,8 @@ export default function NotFound() {
               <div className="w-40 mx-auto text-center mt-5">
                 <Link
                   href="/"
-                  className="text-white bg-black block p-4 text-center text-sm font-semibold">
+                  className="text-white bg-black block p-4 text-center text-sm font-semibold"
+                >
                   Back to Homepage
                 </Link>
               </div>
@@ -73,7 +74,8 @@ export default function NotFound() {
               <div className="w-40 mx-auto text-center mt-5">
                 <Link
                   href="/"
-                  className="text-white bg-black block p-4 text-center text-sm font-semibold">
+                  className="text-white bg-black block p-4 text-center text-sm font-semibold"
+                >
                   Back to Homepage
                 </Link>
               </div>

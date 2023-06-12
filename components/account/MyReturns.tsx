@@ -43,7 +43,9 @@ export default function MyReturns() {
   }, [])
 
   const handleAddToCart = (product: any) => {
-    const returnEligibility = product?.customAttributes?.find((x: any) => x.key == "product.returnandexchangeeligibility")?.value;
+    const returnEligibility = product?.customAttributes?.find(
+      (x: any) => x.key == 'product.returnandexchangeeligibility'
+    )?.value
     cartHandler()
       .addToCart(
         {
@@ -54,11 +56,12 @@ export default function MyReturns() {
           stockCode: product.stockCode,
           userId: user.userId,
           isAssociated: isCartAssociated(cartItems),
-          CustomInfo5: JSON.stringify(
-            {
-              "formatted": { "title": "Return Eligibility", "data": { "Return Eligibility": returnEligibility || null } }
-            }
-          ),
+          CustomInfo5: JSON.stringify({
+            formatted: {
+              title: 'Return Eligibility',
+              data: { 'Return Eligibility': returnEligibility || null },
+            },
+          }),
           CustomInfo5Formatted: returnEligibility || null,
         },
         'ADD',
@@ -89,10 +92,12 @@ export default function MyReturns() {
       <main className="sm:px-6 lg:px-8">
         <div className="max-w-4xl lg:mx-12">
           <div className="lg:px-0 sm:px-0">
-            <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+            <h1 className="font-extrabold tracking-tight text-gray-900">
               {RETURN_ORDER_TITLE}
             </h1>
-            <p className="mt-2 text-sm text-black font-normal">{RETURN_ORDER_TEXT}</p>
+            <p className="mt-2 text-sm text-black font-normal">
+              {RETURN_ORDER_TEXT}
+            </p>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
@@ -157,10 +162,9 @@ export default function MyReturns() {
                                 <Link
                                   href={`/${product.slug}`}
                                   passHref
-                                  className="text-indigo-600 hover:text-indigo-500">
-
+                                  className="text-indigo-600 hover:text-indigo-500"
+                                >
                                   {GENERAL_VIEW_PRODUCT}
-
                                 </Link>
                                 <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                                   <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
@@ -198,5 +202,5 @@ export default function MyReturns() {
         </div>
       </main>
     </div>
-  );
+  )
 }

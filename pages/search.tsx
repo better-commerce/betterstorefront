@@ -5,11 +5,6 @@ import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import Script from 'next/script'
-//DYNAMINC COMPONENT CALLS
-const ProductGrid = dynamic(() => import('@components/product/Grid'))
-const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
-const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
-const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -18,6 +13,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
+declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -44,9 +40,7 @@ interface stateInterface {
 
 const IS_INFINITE_SCROLL =
   process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-
 const PAGE_TYPE = PAGE_TYPES['Search']
-
 const {
   SORT_BY,
   PAGE,
@@ -57,7 +51,6 @@ const {
   REMOVE_FILTERS,
   FREE_TEXT,
 } = ACTION_TYPES
-
 const DEFAULT_STATE = {
   sortBy: '',
   sortOrder: 'asc',
@@ -65,7 +58,16 @@ const DEFAULT_STATE = {
   filters: [],
   freeText: '',
 }
-
+const ProductGrid = dynamic(() => import('@components/product/Grid'))
+const ProductMobileFilters = dynamic(
+  () => import('@components/product/Filters')
+)
+const ProductFilterRight = dynamic(
+  () => import('@components/product/Filters/filtersRight')
+)
+const ProductFiltersTopBar = dynamic(
+  () => import('@components/product/Filters/FilterTopBar')
+)
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
@@ -94,7 +96,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function Search({ query, setEntities, recordEvent }: any) {
+function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
+  const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -146,7 +149,10 @@ function Search({ query, setEntities, recordEvent }: any) {
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
-    if (router.query.freeText !== undefined && router.query.freeText !== state.freeText) {
+    if (
+      router.query.freeText !== undefined &&
+      router.query.freeText !== state.freeText
+    ) {
       dispatch({ type: FREE_TEXT, payload: query.freeText })
     }
 
@@ -246,7 +252,7 @@ function Search({ query, setEntities, recordEvent }: any) {
         filters: JSON.stringify(state.filters),
       },
     })
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.filters])
 
@@ -302,80 +308,79 @@ function Search({ query, setEntities, recordEvent }: any) {
     ? productListMemory.products
     : data.products
 
+  let absPath = ''
+  if (typeof window !== 'undefined') {
+    absPath = window?.location?.href
+  }
+
   return (
     <>
       <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="canonical" id="canonical" href={router.asPath} />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
+        <link rel="canonical" id="canonical" href={absPath} />
         <title>{GENERAL_CATALOG}</title>
         <meta name="title" content={GENERAL_CATALOG} />
         <meta name="description" content={GENERAL_CATALOG} />
         <meta name="keywords" content="Search" />
         <meta property="og:image" content="" />
         <meta property="og:title" content={GENERAL_CATALOG} key="ogtitle" />
-        <meta property="og:description" content={GENERAL_CATALOG} key="ogdesc" />
+        <meta
+          property="og:description"
+          content={GENERAL_CATALOG}
+          key="ogdesc"
+        />
       </NextHead>
-      <div className="mx-auto bg-transparent md:w-4/5">
-        {/* Mobile menu */}
-        <main className="pb-24">
-          <div className="px-4 py-4 text-left sm:py-5 sm:px-0 lg:px-0">
-            <h4><span className='text-sm font-normal'>Showing {data.products.total} Results for</span></h4>
-            <h1 className="text-xl font-semibold tracking-tight text-black sm:text-2xl">
-              {GENERAL_CATALOG}
-            </h1>
-
+      <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
+        <span className="px-4 text-sm font-medium sm:px-0">
+          Showing {data.products.total} Results for
+        </span>
+        <h1 className="px-4 font-semibold tracking-tight text-black sm:px-0">
+          {GENERAL_CATALOG}
+        </h1>
+        <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
+          {isMobile ? (
+            <ProductMobileFilters
+              handleFilters={handleFilters}
+              products={data.products}
+              routerFilters={state.filters}
+              handleSortBy={handleSortBy}
+              clearAll={clearAll}
+              routerSortOption={state.sortBy}
+            />
+          ) : (
+            <ProductFilterRight
+              handleFilters={handleFilters}
+              products={data.products}
+              routerFilters={state.filters}
+            />
+          )}
+          <div className="sm:col-span-10">
+            <ProductFiltersTopBar
+              products={data.products}
+              handleSortBy={handleSortBy}
+              routerFilters={state.filters}
+              clearAll={clearAll}
+              routerSortOption={state.sortBy}
+            />
+            <ProductGrid
+              products={productDataToPass}
+              currentPage={state.currentPage}
+              handlePageChange={handlePageChange}
+              handleInfiniteScroll={handleInfiniteScroll}
+              deviceInfo={deviceInfo}
+            />
           </div>
-          <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
-            {/* {MOBILE FILTER PANEL SHOW ONLY IN MOBILE} */}
-
-            <div className="flex flex-col sm:col-span-2 sm:hidden">
-              <ProductMobileFilters
-                handleFilters={handleFilters}
-                products={data.products}
-                routerFilters={state.filters}
-                handleSortBy={handleSortBy}
-                clearAll={clearAll}
-                routerSortOption={state.sortBy}
-              />
-            </div>
-
-            {/* {FILTER PANEL SHOW ONLY IN DESKTOP VERSION} */}
-
-            <div className="hidden sm:col-span-2 sm:block">
-              <ProductFilterRight
-                handleFilters={handleFilters}
-                products={data.products}
-                routerFilters={state.filters}
-              />
-            </div>
-            <div className="sm:col-span-10">
-              {/* {HIDE FILTER TOP BAR IN MOBILE} */}
-
-              <div className="flex-1 hidden sm:block">
-                <ProductFiltersTopBar
-                  products={data.products}
-                  handleSortBy={handleSortBy}
-                  routerFilters={state.filters}
-                  clearAll={clearAll}
-                  routerSortOption={state.sortBy}
-                />
-              </div>
-              <ProductGrid
-                products={productDataToPass}
-                currentPage={state.currentPage}
-                handlePageChange={handlePageChange}
-                handleInfiniteScroll={handleInfiniteScroll}
-              />
-            </div>
-            <div></div>
-          </div>
-        </main>
-        <Script
-          type="application/ld+json"
-          id="schema"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
+        </div>
+      </div>
+      <Script
+        type="application/ld+json"
+        id="schema"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
         {
           "@context": "https://schema.org/",
           "@type": "WebSite",
@@ -388,9 +393,8 @@ function Search({ query, setEntities, recordEvent }: any) {
           }
         }
         `,
-          }}
-        />
-      </div>
+        }}
+      />
     </>
   )
 }

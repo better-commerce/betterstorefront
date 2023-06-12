@@ -71,8 +71,8 @@ export default function AttributesHandler({
 
   useEffect(() => {
     setFieldData({
-      'global.colour': variantInfo?.variantColour,
-      'clothing.size': variantInfo?.variantSize,
+      'global.colour': variantInfo.variantColour,
+      'clothing.size': variantInfo.variantSize,
     })
   }, [variantInfo])
 
@@ -106,14 +106,14 @@ export default function AttributesHandler({
     }
     return slug
   }
-  
+
   const handleChange = (fieldCode: string, value: string, fieldSet: any) => {
     const updatedFieldData: any = {
       ...fieldData,
       [fieldCode]: value,
     }
-    
-    if (typeof window !== "undefined") {
+
+    if (typeof window !== 'undefined') {
       recordGA4Event(window, 'view_item', {
         ecommerce: {
           items: {
@@ -127,7 +127,7 @@ export default function AttributesHandler({
             item_var_id: product?.stockCode,
             price: product?.price?.raw?.withTax,
           },
-          section_title: "PLP",
+          section_title: 'PLP',
           value: product?.price?.raw?.withTax,
         },
       })
@@ -139,7 +139,7 @@ export default function AttributesHandler({
         item_var_id: product?.stockCode,
         item_id: product?.productCode,
         // position: idx + 1
-      });
+      })
     }
 
     // for quickview
@@ -148,7 +148,7 @@ export default function AttributesHandler({
       const clothSize = updatedFieldData[KEY_SIZE]
       handleFetchProductQuickView({
         slug: fieldSet?.slug || null,
-        colour, 
+        colour,
         clothSize,
         fieldSet,
       })
@@ -336,7 +336,7 @@ export default function AttributesHandler({
               <Component
                 currentAttribute={originalAttribute}
                 getStockPerAttribute={getStockPerAttribute}
-                items={optionsToPass}
+                items={option.fieldValues}
                 label={option.fieldName}
                 isDisabled={!optionsToPass.length}
                 onChange={handleChange}
@@ -348,8 +348,8 @@ export default function AttributesHandler({
                 product={product}
                 variant={variant}
                 handleSetProductVariantInfo={handleSetProductVariantInfo}
-                sizeInit = {sizeInit}
-                setSizeInit = {setSizeInit}
+                sizeInit={sizeInit}
+                setSizeInit={setSizeInit}
               />
             </div>
           )

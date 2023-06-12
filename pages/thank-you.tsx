@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import axios from 'axios'
-import { NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
-const defaultModel: any = {}
+import { NEXT_GET_ORDER } from '@components/utils/constants'
 import { LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
 import {
@@ -38,23 +37,23 @@ import {
 } from '@framework/content/use-content-snippet'
 import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
+import { LocalStorage } from '@components/utils/payment-constants'
 
 export default function OrderConfirmation() {
-  const [order, setOrderData] = useState(defaultModel)
+  const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
   const { setOrderId, orderId, user } = useUI()
 
   useEffect(() => {
     const fetchOrder = async () => {
-      const { data }: any = await axios.post(NEXT_GET_ORDER_DETAILS, {
-        id: user?.userId,
-        orderId: orderId,
+      const { data }: any = await axios.post(NEXT_GET_ORDER, {
+        id: orderId,
       })
       setOrderData(data.order)
       setIsLoading(false)
     }
-    removeItem('orderResponse')
-    removeItem('orderModelPayment')
+    removeItem(LocalStorage.Key.ORDER_RESPONSE)
+    removeItem(LocalStorage.Key.ORDER_PAYMENT)
     if (orderId) fetchOrder()
     if (!orderId) setIsLoading(false)
     return function cleanup() {
@@ -83,21 +82,21 @@ export default function OrderConfirmation() {
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
             <h1 className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
-              {order.orderNo ? GENERAL_THANK_YOU : null}
+              {order?.orderNo ? GENERAL_THANK_YOU : null}
             </h1>
             <p className="mt-2 text-4xl font-bold tracking-tight text-black uppercase sm:text-3xl">
-              {order.orderNo ? GENERAL_ON_THE_WAY : NO_ORDER_PROVIDED}
+              {order?.orderNo ? GENERAL_ON_THE_WAY : NO_ORDER_PROVIDED}
             </p>
-            {order.orderNo ? (
+            {order?.orderNo ? (
               <p className="mt-2 text-black">
                 {GENERAL_YOUR_ORDER}{' '}
-                <span className="font-bold text-black">{order.orderNo}</span>{' '}
+                <span className="font-bold text-black">{order?.orderNo}</span>{' '}
                 {GENERAL_ORDER_WILL_BE_WITH_YOU_SOON}
               </p>
             ) : null}
           </div>
 
-          {order.orderNo ? (
+          {order?.orderNo ? (
             <section
               aria-labelledby="order-heading"
               className="mt-10 border-t border-gray-200"
@@ -107,7 +106,7 @@ export default function OrderConfirmation() {
               </h2>
 
               <h3 className="sr-only">{GENERAL_ITEMS}</h3>
-              {order.items.map((product: any) => (
+              {order?.items?.map((product: any) => (
                 <div
                   key={product.id}
                   className="flex py-10 space-x-6 border-b border-gray-200"
@@ -171,11 +170,11 @@ export default function OrderConfirmation() {
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <address className="not-italic">
-                        <span className="block">{`${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`}</span>
-                        <span className="block">{`${order.shippingAddress.phoneNo}`}</span>
-                        <span className="block">{`${order.shippingAddress.address1}`}</span>
-                        <span className="block">{`${order.shippingAddress.address2}`}</span>
-                        <span className="block">{`${order.shippingAddress.city} ${order.shippingAddress.countryCode} ${order.shippingAddress.postCode}`}</span>
+                        <span className="block">{`${order?.shippingAddress.firstName} ${order?.shippingAddress.lastName}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.address1}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.address2}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.city} ${order?.shippingAddress?.countryCode} ${order?.shippingAddress?.postCode}`}</span>
                       </address>
                     </dd>
                   </div>
@@ -185,11 +184,11 @@ export default function OrderConfirmation() {
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <address className="not-italic">
-                        <span className="block">{`${order.billingAddress.firstName} ${order.billingAddress.lastName}`}</span>
-                        <span className="block">{`${order.shippingAddress.phoneNo}`}</span>
-                        <span className="block">{`${order.billingAddress.address1}`}</span>
-                        <span className="block">{`${order.billingAddress.address2}`}</span>
-                        <span className="block">{`${order.billingAddress.city} ${order.billingAddress.countryCode} ${order.billingAddress.postCode}`}</span>
+                        <span className="block">{`${order?.billingAddress?.firstName} ${order?.billingAddress?.lastName}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
+                        <span className="block">{`${order?.billingAddress?.address1}`}</span>
+                        <span className="block">{`${order?.billingAddress?.address2}`}</span>
+                        <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
                       </address>
                     </dd>
                   </div>
@@ -197,14 +196,14 @@ export default function OrderConfirmation() {
 
                 <h4 className="sr-only">{GENERAL_PAYMENT}</h4>
                 <dl className="grid grid-cols-2 py-10 text-sm border-t border-gray-200 gap-x-6">
-                  {order.payments && (
+                  {order?.payments && (
                     <div>
                       <dt className="font-medium text-gray-900">
                         {GENERAL_PAYMENT_METHOD}
                       </dt>
                       <dd className="mt-2 text-gray-700">
-                        <p>{order.payments[0]?.paymentMethod}</p>
-                        {/* <p>{order.payments[0]?.paymentGateway}</p> */}
+                        <p>{order?.payments[0]?.paymentMethod}</p>
+                        {/* <p>{order?.payments[0]?.paymentGateway}</p> */}
                       </dd>
                     </div>
                   )}
@@ -213,11 +212,11 @@ export default function OrderConfirmation() {
                       {GENERAL_SHIPPING_METHOD}
                     </dt>
                     <dd className="mt-2 text-gray-700">
-                      <p>{order.shipping.displayName}</p>
+                      <p>{order?.shipping?.displayName}</p>
                       <p>
                         {GENERAL_DELIVERED_BY}:{' '}
                         {new Date(
-                          order.shipping.expectedDeliveryDate
+                          order?.shipping?.expectedDeliveryDate
                         ).toLocaleDateString()}
                       </p>
                     </dd>
@@ -232,7 +231,7 @@ export default function OrderConfirmation() {
                       {SUBTOTAL_INCLUDING_TAX}
                     </dt>
                     <dd className="text-gray-700">
-                      {order.subTotal?.formatted?.withTax}
+                      {order?.subTotal?.formatted?.withTax}
                     </dd>
                   </div>
                   <div className="flex justify-between">
@@ -240,7 +239,7 @@ export default function OrderConfirmation() {
                       {GENERAL_SHIPPING}
                     </dt>
                     <dd className="text-gray-700">
-                      {order.shippingCharge.formatted.withTax}
+                      {order?.shippingCharge.formatted.withTax}
                     </dd>
                   </div>
                   <div className="flex justify-between">
@@ -248,7 +247,7 @@ export default function OrderConfirmation() {
                       {GENERAL_TOTAL}
                     </dt>
                     <dd className="text-gray-900">
-                      {order.grandTotal?.formatted?.withTax}
+                      {order?.grandTotal?.formatted?.withTax}
                     </dd>
                   </div>
                 </dl>

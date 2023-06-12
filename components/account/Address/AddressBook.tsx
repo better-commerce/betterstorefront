@@ -57,7 +57,7 @@ export function asyncHandler() {
   }
 }
 
-export default function AddressBook() {
+export default function AddressBook({ deviceInfo }: any) {
   const [data, setData] = useState([])
   const [isNewFormMode, setNewFormMode] = useState(false)
   const [title, setTitle] = useState(ADDRESS_BOOK_TITLE)
@@ -101,11 +101,11 @@ export default function AddressBook() {
     let newValues = { ...values, userId: user.userId }
     let currentPage = getCurrentPage()
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       if (currentPage) {
         recordGA4Event(window, 'save_new_address', {
           current_page: currentPage,
-        });
+        })
       }
     }
 
@@ -120,7 +120,7 @@ export default function AddressBook() {
     <main className="sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="px-4 sm:px-0">
-          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+          <h1 className="font-extrabold tracking-tight text-gray-900">
             {title}
           </h1>
           <p className="mt-2 text-sm text-gray-500">{DETAILS_SUBTITLE}</p>
@@ -162,7 +162,7 @@ export default function AddressBook() {
               setNewFormMode(true)
               window.scrollTo(0, 0)
             }}
-            className="max-w-xs flex-1 bg-black border border-transparent py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
+            className="max-w-xs flex-1  border border-transparent py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
           >
             {ADD_ADDRESS}
           </button>

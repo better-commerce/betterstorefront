@@ -15,14 +15,14 @@ export async function getStaticProps({
   const productPromise = commerce.getProductPreview({ query: params!.slug[0] })
   const product = await productPromise
 
-  const infraPromise = commerce.getInfra();
-  const infra = await infraPromise;
+  const infraPromise = commerce.getInfra()
+  const infra = await infraPromise
   return {
     props: {
       data: product,
       slug: params!.slug[0],
       globalSnippets: infra?.snippets ?? [],
-      snippets: product?.snippets ?? []
+      snippets: product?.snippets ?? [],
     },
     revalidate: 200,
   }
@@ -41,7 +41,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent, slug }: any) {
+function Slug({ data, setEntities, recordEvent, slug, deviceInfo }: any) {
   const router = useRouter()
   return router.isFallback ? (
     <h1>{LOADER_LOADING}</h1>
@@ -54,6 +54,7 @@ function Slug({ data, setEntities, recordEvent, slug }: any) {
         slug={slug}
         snippets={data.snippets}
         isPreview={true}
+        deviceInfo={deviceInfo}
       />
     )
   )

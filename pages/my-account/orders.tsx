@@ -18,9 +18,12 @@ import MyDetails from '@components/account/MyDetails'
 import MyOrders from '@components/account/Orders/MyOrders'
 import { matchStrings } from '@framework/utils/parse-util'
 import axios from 'axios'
-import { NEXT_GET_ORDERS, NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
+import {
+  NEXT_GET_ORDERS,
+  NEXT_GET_ORDER_DETAILS,
+} from '@components/utils/constants'
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 10
 
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const { user, deleteUser, isGuestUser } = useUI()
@@ -30,59 +33,62 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   const [view, setView] = useState(defaultView)
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
-  const [allOrders, setAllOrders] = useState<Array<any> | undefined>(undefined);
-  const [pagedOrders, setPagedOrders] = useState<Array<any>>();
-  const [allOrderIds, setAllOrderIds] = useState<Array<string> | undefined>(undefined);
-  const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false);
-  const [active, setActive] = useState(false);
-  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [allOrders, setAllOrders] = useState<Array<any> | undefined>(undefined)
+  const [pagedOrders, setPagedOrders] = useState<Array<any>>()
+  const [allOrderIds, setAllOrderIds] = useState<Array<string> | undefined>(
+    undefined
+  )
+  const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
+  const [active, setActive] = useState(false)
+  const [pageNumber, setPageNumber] = useState<number>(1)
 
   useEffect(() => {
     if (allOrdersFetched) {
-      setAllOrderIds(pagedOrders?.map((x: any) => x?.id));
+      setAllOrderIds(pagedOrders?.map((x: any) => x?.id))
     } else {
-      fetchOrders(pageNumber);
+      fetchOrders(pageNumber)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allOrdersFetched]);
+  }, [allOrdersFetched])
 
   useEffect(() => {
-    setAllOrdersFetched(false);
+    setAllOrdersFetched(false)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber]);
+  }, [pageNumber])
 
   useEffect(() => {
     if (allOrderIds?.length) {
       allOrderIds?.forEach((id: string, index: number) => {
-        handleFetchOrderDetails(id)
-          .then((orderDetails: any) => {
-            const newOrders = pagedOrders?.map(
-              (obj: any) => (matchStrings(obj?.id, id, true) ? Object.assign(obj, { orderDetails: orderDetails }) : obj)
-            );
-            setPagedOrders(newOrders);
-            setAllOrders((allOrders ?? [])?.concat(newOrders));
-          });
-      });
+        handleFetchOrderDetails(id).then((orderDetails: any) => {
+          const newOrders = pagedOrders?.map((obj: any) =>
+            matchStrings(obj?.id, id, true)
+              ? Object.assign(obj, { orderDetails: orderDetails })
+              : obj
+          )
+          setPagedOrders(newOrders)
+          setAllOrders((allOrders ?? [])?.concat(newOrders))
+        })
+      })
     } else {
       if (allOrderIds !== undefined) {
-        setAllOrders([]);
+        setAllOrders([])
       }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allOrderIds]);
+  }, [allOrderIds])
 
   useEffect(() => {
     if (isGuestUser) {
-      router.push("/");
+      router.push('/')
     } else {
-      fetchOrders(pageNumber);
+      fetchOrders(pageNumber)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const fetchOrders = async (pageNumber: number) => {
     const { data: ordersResult }: any = await axios.post(NEXT_GET_ORDERS, {
@@ -90,25 +96,28 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
       hasMembership: user?.hasMembership,
       pageNumber: pageNumber,
       pageSize: PAGE_SIZE,
-    });
+    })
 
     // console.log('setPagedOrders ::', ordersResult);
-    setPagedOrders(ordersResult);
-    setAllOrdersFetched(true);
-  };
+    setPagedOrders(ordersResult)
+    setAllOrdersFetched(true)
+  }
 
   const handleFetchOrderDetails = async (id: any) => {
-    const { data: orderDetails }: any = await axios.post(NEXT_GET_ORDER_DETAILS, {
-      id: user?.userId,
-      orderId: id
-    });
-    return orderDetails;
-  };
+    const { data: orderDetails }: any = await axios.post(
+      NEXT_GET_ORDER_DETAILS,
+      {
+        id: user?.userId,
+        orderId: id,
+      }
+    )
+    return orderDetails
+  }
 
   const handleInfiniteScroll = () => {
     //alert(pageNumber)
-    setPageNumber(pageNumber + 1);
-  };
+    setPageNumber(pageNumber + 1)
+  }
 
   useEffect(() => {
     if (router.query.view && view !== router.query.view) {
@@ -148,7 +157,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     <section className="relative pb-10 text-gray-900">
       <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
         <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-          <h3 className="max-w- mt-2 mx-auto text-xl font-semibold text-black flex gap-1 mx-5">
+          <h3 className="flex gap-1 mx-5 mt-2 text-xl font-semibold text-black max-w-">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -158,15 +167,20 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
               viewBox="0 0 16 16"
             >
               {' '}
-              <path
-                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
-              />{' '}
-            </svg> 
-            <Link className="mr-2 mx-2 leading-none" href="/my-account">My Orders</Link>
+              <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
+            </svg>
+            <Link
+              legacyBehavior
+              passHref
+              className="mx-2 mr-2 leading-none"
+              href="/my-account"
+            >
+              My Orders
+            </Link>
           </h3>
         </div>
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-          <div className="col-span-3 md:pl-12 border-r border-gray-200 sm:pl-6 tab-list-sm sm:pt-10 mob-hidden">
+          <div className="col-span-3 border-r border-gray-200 md:pl-12 sm:pl-6 tab-list-sm sm:pt-10 mob-hidden">
             <div className="sticky left-0 z-10 flex flex-col top-36">
               {config.map((item: any, idx: number) => (
                 <>
@@ -187,11 +201,10 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                       <>
                         <div
                           key={`my-acc-${idx}`}
-                          // href="#"
-                          className={`ring-white relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${
+                          className={`relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${
                             item.text == 'My Orders'
-                              ? 'bg-white border-r-0  sm:border-b-0 sm:border-r-2 sm:border-black opacity-full'
-                              : 'text-primary font-medium opacity-60'
+                              ? 'bg-gray-200 text-black font-semibold border-l-4 sm:border-b-0 sm:border-l-4 sm:border-black opacity-full'
+                              : 'font-medium'
                           }`}
                         >
                           <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
@@ -209,15 +222,18 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                               handleClick
                               setShow(false)
                             }}
-                            className="inline-block w-full h-full py-4 text-sm text-primary">
-
-                            <span className="inline-block sm:hidden text-black dark:text-black">
+                            className="inline-block w-full h-full py-4 text-sm text-primary"
+                          >
+                            <span className="inline-block text-black sm:hidden dark:text-black">
                               {item.mtext}
                             </span>
-                            <span className={`hidden sm:inline-block text-black dark:text-black ${item.text == 'My Orders' && 'font-display'}`}>
+                            <span
+                              className={`hidden sm:inline-block text-black dark:text-black ${
+                                item.text == 'My Orders' && 'font-display'
+                              }`}
+                            >
                               {item.text}
                             </span>
-
                           </Link>
                         </div>
                       </>
@@ -230,15 +246,18 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                           onClick={() => {
                             handleClick
                           }}
-                          className="inline-block w-full h-full py-4 text-sm text-primary pl-2 transition hover:bg-gray-100">
-
-                          <span className="inline-block sm:hidden text-black dark:text-black">
+                          className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
+                        >
+                          <span className="inline-block text-black sm:hidden dark:text-black">
                             {item.mtext}
                           </span>
-                          <span className={`hidden sm:inline-block text-black dark:text-black ${item.text == 'My Orders' && 'font-display'}`}>
+                          <span
+                            className={`hidden sm:inline-block text-black dark:text-black ${
+                              item.text == 'My Orders' && 'font-display'
+                            }`}
+                          >
                             {item.text}
                           </span>
-
                         </Link>
                       </>
                     )}
@@ -254,7 +273,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
             }`}
           >
             <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-              <MyOrders 
+              <MyOrders
                 allOrders={allOrders}
                 handleInfiniteScroll={handleInfiniteScroll}
               />
@@ -263,7 +282,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 MyAccount.Layout = Layout

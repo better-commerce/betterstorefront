@@ -15,14 +15,15 @@ export default function useAddress() {
       Address2: query.address2,
       City: query.city,
       PostCode: query.postCode,
-      Country: query.country,
-      CountryCode: query.countryCode || countryCode,
+      Country: query.country || `United Kingdom`,
+      CountryCode: query.countryCode || countryCode || `GB`,
       CustomerId: query.userId,
       PhoneNo: query.phoneNo,
       isDefault: query.isDefault || false,
       isDefaultBilling: query.isDefaultBilling || false,
       isDefaultDelivery: query.isDefaultDelivery || false,
       isDefaultSubscription: query.isDefaultSubscription || false,
+      label: query.label || `Home`,
     }
     try {
       const response: any = await fetcher({

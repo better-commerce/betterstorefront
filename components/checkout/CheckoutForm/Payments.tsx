@@ -1,16 +1,31 @@
+// Base Imports
 import { useEffect, useState } from 'react'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import Button from '@components/ui/IndigoButton'
+
+// Component Imports
+import PaymentButton from './PaymentButton'
+
+// Other Imports
 import { GENERAL_CONFIRM } from '@components/utils/textVariables'
-import getStripe from '@components/utils/get-stripe'
+import { IDispatchState } from './PaymentButton/BasePaymentButton'
+
+interface IPaymentMethodsProps {
+  readonly paymentData: Function
+  readonly basketOrderInfo?: any
+  readonly selectedPaymentMethod: any
+}
 
 export default function PaymentMethods({
   paymentData,
-  handlePaymentMethod,
+  basketOrderInfo,
   selectedPaymentMethod,
-}: any) {
+  uiContext,
+  dispatchState,
+}: IPaymentMethodsProps & IDispatchState) {
   const [methods, setPaymentMethods] = useState([])
-  const [activePaymentMethod, setActivePaymentMethod] = useState({ id: null })
+  const [activePaymentMethod, setActivePaymentMethod] = useState<any>({
+    id: null,
+  })
   useEffect(() => {
     paymentData()
       .then((response: any) => {
@@ -18,7 +33,7 @@ export default function PaymentMethods({
       })
       .catch((err: any) => console.log(err))
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -29,7 +44,9 @@ export default function PaymentMethods({
             key={idx}
             onClick={() => setActivePaymentMethod(item)}
             className={`${
-              activePaymentMethod.id === item.id ? 'border-black border-t-2 border-2' : 'border-t border border-gray-300'
+              activePaymentMethod.id === item.id
+                ? 'border-black border-t-2 border-2'
+                : 'border-t border border-gray-300'
             }  pointer mb-2 py-5 px-5 flex justify-start flex-row`}
           >
             <div className="flex flex-row justify-center items-center">
@@ -51,7 +68,7 @@ export default function PaymentMethods({
               ) : null}
             </div>
             <div>
-              <h3 className="font-bold uppercase text-md">{item.displayName}</h3>
+              <h4 className="font-bold uppercase">{item.displayName}</h4>
               <p className="text-sm py-2 text-gray-400">{item.description}</p>
             </div>
           </li>
@@ -60,10 +77,12 @@ export default function PaymentMethods({
       {activePaymentMethod.id &&
       selectedPaymentMethod?.id !== activePaymentMethod.id ? (
         <div className="py-5 flex justify-center w-full">
-          <Button
-            buttonType="button"
-            action={async () => handlePaymentMethod(activePaymentMethod)}
-            title={GENERAL_CONFIRM}
+          <PaymentButton
+            btnTitle={GENERAL_CONFIRM}
+            paymentMethod={activePaymentMethod}
+            basketOrderInfo={basketOrderInfo}
+            uiContext={uiContext}
+            dispatchState={dispatchState}
           />
         </div>
       ) : null}

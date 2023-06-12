@@ -8,7 +8,7 @@ import Button from '@components/ui/Button'
 import {
   APPLY_PROMOTION,
   APPLY_PROMOTION_SUCCESS_MESSAGE,
-  GENERAL_APPLY_TEXT
+  GENERAL_APPLY_TEXT,
 } from '@components/utils/textVariables'
 
 export default function PromotionInput() {
@@ -20,12 +20,12 @@ export default function PromotionInput() {
     setValue(e.target.value)
   }
   useEffect(() => {
-if(error) {
-    setTimeout(() => {
-      setError(false)
-    }, 2000);
-  }
-   }, [error])
+    if (error) {
+      setTimeout(() => {
+        setError(false)
+      }, 2000)
+    }
+  }, [error])
   const handleSubmit = async (
     method: string = 'apply',
     promoCode: string = value
@@ -48,7 +48,7 @@ if(error) {
   }
   return (
     <div className="flex items-center">
-      <form 
+      <form
         onSubmit={(e) => {
           e.preventDefault()
           handleSubmit('apply')
@@ -63,7 +63,10 @@ if(error) {
                   return (
                     <div className="flex items-center py-2" key={promo.name}>
                       <span className="text-gray-900">
-                        <span className='text-gray-900 p-1 rounded-full border bg-gray-50 text-sm px-4 font-bold'>{promo.name}</span> {' '}{APPLY_PROMOTION_SUCCESS_MESSAGE}
+                        <span className="text-gray-900 p-1 rounded-full border bg-gray-50 text-sm px-4 font-bold">
+                          {promo.name}
+                        </span>{' '}
+                        {APPLY_PROMOTION_SUCCESS_MESSAGE}
                       </span>
                       <TrashIcon
                         className="ml-5 cursor-pointer text-red-500 hover:text-red-700 max-w-xs h-5"
@@ -85,8 +88,8 @@ if(error) {
               required
             />
             <button
-              type='submit'
-              className='py-1 px-3 xsm:h-10 flex items-center justify-center bg-black lg:h-10 md:h-10 hover:opacity-75 text-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-green w-full'
+              type="submit"
+              className="py-1 px-3 xsm:h-10 flex items-center justify-center lg:h-10 md:h-10 hover:opacity-75 btn-primary w-full"
             >
               {GENERAL_APPLY_TEXT}
             </button>

@@ -1,4 +1,12 @@
-import { NEXT_ADD_TO_CART, NEXT_BULK_ADD_TO_CART, NEXT_GET_CART, NEXT_GET_USER_CART, NEXT_ASSOCIATE_CART, NEXT_MERGE_CART, } from '@components/utils/constants'
+import {
+  NEXT_ADD_TO_CART,
+  NEXT_BULK_ADD_TO_CART,
+  NEXT_GET_CART,
+  NEXT_GET_USER_CART,
+  NEXT_ASSOCIATE_CART,
+  NEXT_MERGE_CART,
+  EmptyGuid,
+} from '@components/utils/constants'
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -44,7 +52,7 @@ export default function cartHandler() {
       type = 'ADD',
       data: any = {}
     ) => {
-      let url = NEXT_ADD_TO_CART; // Set default url
+      let url = NEXT_ADD_TO_CART // Set default url
       let postData: any = {
         basketId,
         productId,
@@ -52,21 +60,28 @@ export default function cartHandler() {
         manualUnitPrice,
         displayOrder,
         stockCode,
-      }; // Set default post data
+      } // Set default post data
 
-      const isBundledProduct = (data.product?.componentProducts && data.product?.componentProducts.length > 0);
+      const isBundledProduct =
+        data.product?.componentProducts &&
+        data.product?.componentProducts.length > 0
 
       // If the selected product is a bundle.
       if (isBundledProduct) {
-        url = NEXT_BULK_ADD_TO_CART; // Modify url
-        const mainProduct = [{
-          productId: data.product.productId, // ?? data.product.recordId,
-          stockCode: data.product.stockCode,
-          productName: data.product.name,
-          qty: 1,
-        }];
-        const findComplementaryStatus = data.product.componentProducts.filter((x: any) => x.bundleType === BundleType.COMPLEMENTARY);
-        const isComplementary = (findComplementaryStatus && findComplementaryStatus.length);
+        url = NEXT_BULK_ADD_TO_CART // Modify url
+        const mainProduct = [
+          {
+            productId: data.product.productId, // ?? data.product.recordId,
+            stockCode: data.product.stockCode,
+            productName: data.product.name,
+            qty: 1,
+          },
+        ]
+        const findComplementaryStatus = data.product.componentProducts.filter(
+          (x: any) => x.bundleType === BundleType.COMPLEMENTARY
+        )
+        const isComplementary =
+          findComplementaryStatus && findComplementaryStatus.length
         const bundledProducts = data.product.componentProducts.map((x: any) => {
           return {
             productId: x.productId, // ?? x.recordId,
@@ -75,13 +90,15 @@ export default function cartHandler() {
             parentProductId: isComplementary ? Guid.empty : productId,
             qty: 1,
           }
-        });
-        const products = isComplementary ? bundledProducts : [...mainProduct, ...bundledProducts]
+        })
+        const products = isComplementary
+          ? bundledProducts
+          : [...mainProduct, ...bundledProducts]
 
         postData = {
           basketId,
           products,
-        }; // Modify post data
+        } // Modify post data
       }
 
       const response: any = await axios.post(url, {
@@ -142,20 +159,45 @@ export default function cartHandler() {
       return response
     },
     getCartByUser: async ({ userId, basketId }: any) => {
+      if (userId && userId !== EmptyGuid) {
+        try {
+          const { data: userCart }: any = await axios.get(NEXT_GET_USER_CART, {
+            params: {
+              userId: userId,
+            },
+          })
+
+          if (userCart?.length) {
+            return userCart?.sort((cart1: any, cart2: any) => {
+              return (
+                new Date(cart2?.lastUpdated).getTime() -
+                new Date(cart1?.lastUpdated).getTime()
+              )
+            })[0]
+          }
+        } catch (error) {
+          console.log(error, 'err')
+        }
+      }
+      return null
+    },
+    getCartByUserOld: async ({ userId, basketId }: any) => {
       const userCart: any = await axios.get(
         `${NEXT_GET_USER_CART}?userId=${userId}`
       )
+      const recentCart = userCart?.data?.at(-1) || null
       try {
+        if (!recentCart) throw new Error('no cart was found..')
         if (userId) {
           const response = await axios.post(NEXT_MERGE_CART, {
             data: {
-              userBasketId: userCart.data[0].id,
+              userBasketId: recentCart.id,
               currentBasketId: basketId,
             },
           })
           return response.data
         } else {
-          return userCart.data[0]
+          return recentCart
         }
       } catch (error) {
         console.log(error, 'err')

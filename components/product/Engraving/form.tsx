@@ -1,4 +1,7 @@
-import { GENERAL_ADD_TO_BASKET, VALIDATION_PLEASE_COMPLETE_THIS_FIELD } from '@components/utils/textVariables'
+import {
+  GENERAL_ADD_TO_BASKET,
+  VALIDATION_PLEASE_COMPLETE_THIS_FIELD,
+} from '@components/utils/textVariables'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { config } from './config'
@@ -47,7 +50,7 @@ export default function EngravingForm({ submitForm }: any) {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="w-full max-w-xs flex-1 uppercase bg-black border border-transparent rounded-sm py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
+                className="w-full max-w-xs flex-1 uppercase bg-black border border-transparent rounded-sm py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
               >
                 {GENERAL_ADD_TO_BASKET}
               </button>

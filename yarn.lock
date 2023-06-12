@@ -130,6 +130,18 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
+"@better-commerce/bc-payments-sdk@0.0.4":
+  version "0.0.4"
+  resolved "https://npm.pkg.github.com/download/@better-commerce/bc-payments-sdk/0.0.4/3a0b030aa3f7c1747f31deaf68d21ccc3b93d1ab"
+  integrity sha512-1fNfFGOgVQBjeRnzABrbBZy9L73EUoWxSjLpNHTgiQwMW+w06ZtnThENxnjy88p8CWYlG1Q2Rc4GMvv8E7TcGg==
+  dependencies:
+    axios "1.4.0"
+    bc-checkout-sdk "0.0.2"
+    bc-clearpay-sdk "0.0.3"
+    bc-klarna-sdk "0.0.4"
+    bc-paypal-sdk "0.0.2"
+    bc-stripe-sdk "0.0.3"
+
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz"
@@ -318,6 +330,28 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@paypal/paypal-js@^5.1.6":
+  version "5.1.6"
+  resolved "https://registry.npmjs.org/@paypal/paypal-js/-/paypal-js-5.1.6.tgz"
+  integrity sha512-1upF06pv0AUtTftRVSra44p8ibqGa3ruKLArvdhpZla25zcrND7R+nDUIMrJ0iteVYZowhujZStFs6NoruExfg==
+  dependencies:
+    promise-polyfill "^8.3.0"
+
+"@paypal/react-paypal-js@7.8.3":
+  version "7.8.3"
+  resolved "https://registry.npmjs.org/@paypal/react-paypal-js/-/react-paypal-js-7.8.3.tgz"
+  integrity sha512-7sD5JFA0IH9kysyGFv5DTmtPn54vLWZ0DLhdjUvsjqZnoEs11mJJJlTsTA7MkIO3jBAJOWlfoA4wLYzmy68C4g==
+  dependencies:
+    "@paypal/paypal-js" "^5.1.6"
+    "@paypal/sdk-constants" "^1.0.122"
+
+"@paypal/sdk-constants@^1.0.122":
+  version "1.0.130"
+  resolved "https://registry.npmjs.org/@paypal/sdk-constants/-/sdk-constants-1.0.130.tgz"
+  integrity sha512-hrh1SyZy+qiBA+h/EYWjTZ7QiBcRgDiEfhHCxP47fiBO8wE9w+DiEfHm747vFQomvHg6AyDxhyGXjnuaGAW31A==
+  dependencies:
+    hi-base32 "^0.5.0"
 
 "@pkgr/utils@^2.3.1":
   version "2.3.1"
@@ -910,7 +944,7 @@ axe-core@^4.6.2:
   resolved "https://registry.npmjs.org/axe-core/-/axe-core-4.6.3.tgz"
   integrity sha512-/BQzOX780JhsxDnPpH4ZiyrJAzcd8AfzFPkv+89veFSr1rcMjuq2JDCwypKaPeB6ljHp9KjXhPpjgCvQlWYuqg==
 
-axios@^1.4.0:
+axios@^1.4.0, axios@1.4.0:
   version "1.4.0"
   resolved "https://registry.npmjs.org/axios/-/axios-1.4.0.tgz"
   integrity sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==
@@ -955,6 +989,42 @@ balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+
+bc-checkout-sdk@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npmjs.org/bc-checkout-sdk/-/bc-checkout-sdk-0.0.2.tgz"
+  integrity sha512-Z2ofeapaN/hiUAKdyLRO3zJkAnlbhqVJdtX7AHJypgz5o2LY1dK34QZZ087bKyEjlOqcR34h4CwONFm0lfl6Mw==
+  dependencies:
+    axios "^1.4.0"
+
+bc-clearpay-sdk@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/bc-clearpay-sdk/-/bc-clearpay-sdk-0.0.3.tgz"
+  integrity sha512-weo564ZHjqSWBumnS8IIH58O/Wqr6SZLJbxIYPrD6O9otiaCrKprq7LLojZqP5q0fJDdHQrv1wghm4TfTaWhfg==
+  dependencies:
+    axios "1.4.0"
+
+bc-klarna-sdk@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/bc-klarna-sdk/-/bc-klarna-sdk-0.0.4.tgz"
+  integrity sha512-+4ImWtcWwoJF3m+Ap0pNdN22ilzlpBZPxE576wYfy0tOzHXo7MpoxsWuPaDLrChcumUp6Qu6ycyApvy5r8DA5w==
+  dependencies:
+    axios "1.4.0"
+
+bc-paypal-sdk@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npmjs.org/bc-paypal-sdk/-/bc-paypal-sdk-0.0.2.tgz"
+  integrity sha512-CDH3ROT+7feRvhiEQhZZQEJ36evjKwu+bqXjmobij8KcmYpk8xYhKQeKT6MHe13tyY0lIvxM54S8+zltXaj4jA==
+  dependencies:
+    axios "^1.4.0"
+
+bc-stripe-sdk@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/bc-stripe-sdk/-/bc-stripe-sdk-0.0.3.tgz"
+  integrity sha512-YVd4gq/WesZWSaPpR3Qpd4MnrZdH9dixytxSOmuooEFpMeyB/n9RizMtSQfb4psnoGaE96PF52x6jBuvjJTjDg==
+  dependencies:
+    axios "1.4.0"
+    stripe "12.4.0"
 
 binary-extensions@^2.0.0:
   version "2.2.0"
@@ -1166,7 +1236,7 @@ ci-info@^2.0.0:
   resolved "https://registry.npmjs.org/ci-info/-/ci-info-2.0.0.tgz"
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
-classnames@^2.3.2:
+classnames@^2.3.1, classnames@^2.3.2:
   version "2.3.2"
   resolved "https://registry.npmjs.org/classnames/-/classnames-2.3.2.tgz"
   integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
@@ -2227,6 +2297,13 @@ fraction.js@^4.2.0:
   resolved "https://registry.npmjs.org/fraction.js/-/fraction.js-4.2.0.tgz"
   integrity sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==
 
+frames-react@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/frames-react/-/frames-react-1.1.0.tgz"
+  integrity sha512-4mpZsex1GL20OxCVwS7DaWXsRlJz17chy0OegFWuxrY9yhlupA8PNf7/ev/u/YBpxa3iY3f6feW6tdenGJPsLg==
+  dependencies:
+    classnames "^2.3.1"
+
 fs-exists-sync@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/fs-exists-sync/-/fs-exists-sync-0.1.0.tgz"
@@ -2568,6 +2645,11 @@ has@^1.0.3:
   integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
   dependencies:
     function-bind "^1.1.1"
+
+hi-base32@^0.5.0:
+  version "0.5.1"
+  resolved "https://registry.npmjs.org/hi-base32/-/hi-base32-0.5.1.tgz"
+  integrity sha512-EmBBpvdYh/4XxsnUybsPag6VikPYnN30td+vQk+GI3qpahVEG9+gTkG0aXVxTjBqQ5T6ijbWIu77O+C5WFWsnA==
 
 hoist-non-react-statics@^3.0.0, hoist-non-react-statics@^3.3.0:
   version "3.3.2"
@@ -4026,6 +4108,11 @@ prettier@2.8.8:
   resolved "https://registry.npmjs.org/prettier/-/prettier-2.8.8.tgz"
   integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
 
+promise-polyfill@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.npmjs.org/promise-polyfill/-/promise-polyfill-8.3.0.tgz"
+  integrity sha512-H5oELycFml5yto/atYqmjyigJoAo3+OXwolYiH7OfQuYlAqhxNvTfiNMbV9hsC6Yp83yE5r2KTVmtrG6R9i6Pg==
+
 prop-ini@^0.0.2:
   version "0.0.2"
   resolved "https://registry.npmjs.org/prop-ini/-/prop-ini-0.0.2.tgz"
@@ -4106,7 +4193,7 @@ react-device-detect@^2.2.3:
   dependencies:
     ua-parser-js "^1.0.33"
 
-react-dom@*, "react-dom@^16 || ^17 || ^18", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", "react-dom@^17 || ^18", react-dom@^18.2.0, "react-dom@>= 0.14.0", "react-dom@>= 16.8.0", "react-dom@>= 16.8.0 || 18.0.0", react-dom@>=16.13:
+react-dom@*, "react-dom@^16 || ^17 || ^18", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", "react-dom@^17 || ^18", react-dom@^18.2.0, "react-dom@>= 0.14.0", "react-dom@>= 16.8.0", "react-dom@>= 16.8.0 || 18.0.0", react-dom@>=16.13, react-dom@>=16.3.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -4187,7 +4274,7 @@ react-use-measure@^2.1.1:
   dependencies:
     debounce "^1.2.1"
 
-react@*, "react@^16 || ^17 || ^18", "react@^16.11.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^17 || ^18", react@^18.2.0, "react@>= 0.14.0", "react@>= 16", "react@>= 16.8.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>= 16.8.0 || 18.0.0", react@>=16.0.0, react@>=16.13, react@>=16.13.1, react@>=16.8.0:
+react@*, "react@^16 || ^17 || ^18", "react@^16.11.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^17 || ^18", react@^18.2.0, "react@>= 0.14.0", "react@>= 16", "react@>= 16.8.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>= 16.8.0 || 18.0.0", react@>=16.0.0, react@>=16.13, react@>=16.13.1, react@>=16.3.0, react@>=16.8, react@>=16.8.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
@@ -4762,6 +4849,14 @@ stripe@^12.4.0:
   version "12.5.0"
   resolved "https://registry.npmjs.org/stripe/-/stripe-12.5.0.tgz"
   integrity sha512-eDBh4bv+Uo+GdhjnQ246lM5KaOReoBzxFltgW0HJqco/QEAgSYxZPOpFbd5+gJnZlRqHSB5B+Zqw273SlbdPag==
+  dependencies:
+    "@types/node" ">=8.1.0"
+    qs "^6.11.0"
+
+stripe@12.4.0:
+  version "12.4.0"
+  resolved "https://registry.npmjs.org/stripe/-/stripe-12.4.0.tgz"
+  integrity sha512-QjZRzKi3wf8TsuJf/fd6/ejfPgwNptDIzFogRWaRzP3oMJnSD73I2YxR0Eje5zfrU8FmddYWZYawoUejqN+o1w==
   dependencies:
     "@types/node" ">=8.1.0"
     qs "^6.11.0"
