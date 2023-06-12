@@ -15,16 +15,27 @@ import { getData } from '../../utils/clientFetcher'
 import { setItem, getItem } from '../../utils/localStorage'
 import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import Router from 'next/router'
-import { BTN_ACCEPT_COOKIE, GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
+import {
+  BTN_ACCEPT_COOKIE,
+  GENERAL_COOKIE_TEXT,
+} from '@components/utils/textVariables'
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
-const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
-const PaymentMethodView = dynamic(() => import('@components/checkout/PaymentMethodView'))
-const CheckoutSidebarView = dynamic(() => import('@components/checkout/CheckoutSidebarView'))
+const CartSidebarView = dynamic(
+  () => import('@components/cart/CartSidebarView')
+)
+const PaymentMethodView = dynamic(
+  () => import('@components/checkout/PaymentMethodView')
+)
+const CheckoutSidebarView = dynamic(
+  () => import('@components/checkout/CheckoutSidebarView')
+)
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
 const SearchWrapper = dynamic(() => import('@components/search/index'))
 const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
 const Loading = () => (
-  <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80"><LoadingDots /></div>
+  <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
+    <LoadingDots />
+  </div>
 )
 
 const dynamicProps = {
@@ -48,10 +59,9 @@ interface Props {
   keywords: []
 }
 
-const ModalView: FC<React.PropsWithChildren<{ modalView: string; closeModal(): any }>> = ({
-  modalView,
-  closeModal,
-}) => {
+const ModalView: FC<
+  React.PropsWithChildren<{ modalView: string; closeModal(): any }>
+> = ({ modalView, closeModal }) => {
   return (
     <Modal onClose={closeModal}>{modalView === 'NOTIFY_USER' && null}</Modal>
   )
@@ -65,14 +75,16 @@ const ModalUI: FC<React.PropsWithChildren<unknown>> = () => {
   return null
 }
 
-const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSidebar(): any } & IExtraProps>> = ({
-  sidebarView,
-  closeSidebar,
-  deviceInfo,
-}) => {
+const SidebarView: FC<
+  React.PropsWithChildren<
+    { sidebarView: string; closeSidebar(): any } & IExtraProps
+  >
+> = ({ sidebarView, closeSidebar, deviceInfo }) => {
   return (
     <Sidebar onClose={closeSidebar} deviceInfo={deviceInfo}>
-      {sidebarView === 'CART_VIEW' && <CartSidebarView deviceInfo={deviceInfo} />}
+      {sidebarView === 'CART_VIEW' && (
+        <CartSidebarView deviceInfo={deviceInfo} />
+      )}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
       {sidebarView === 'PAYMENT_VIEW' && <PaymentMethodView />}
@@ -81,10 +93,16 @@ const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSideba
   )
 }
 
-const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({ deviceInfo }: any) => {
+const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
+  deviceInfo,
+}: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
-    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} deviceInfo={deviceInfo} />
+    <SidebarView
+      sidebarView={sidebarView}
+      closeSidebar={closeSidebar}
+      deviceInfo={deviceInfo}
+    />
   ) : null
 }
 
@@ -94,8 +112,8 @@ interface LayoutProps {
 }
 
 export interface IExtraProps {
-  readonly deviceInfo: IDeviceInfo;
-};
+  readonly deviceInfo: IDeviceInfo
+}
 
 const Layout: FC<Props & IExtraProps> = ({
   children,
@@ -124,6 +142,8 @@ const Layout: FC<Props & IExtraProps> = ({
     }
     fetchLayout()
     setAppConfig(config)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -131,13 +151,15 @@ const Layout: FC<Props & IExtraProps> = ({
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
 
     if (!document.title) {
-      document.title = document.location.host;
+      document.title = document.location.host
     }
 
     return () => {
-      Router.events.off('routeChangeStart', () => { });
-      Router.events.off('routeChangeComplete', () => { });
+      Router.events.off('routeChangeStart', () => {})
+      Router.events.off('routeChangeComplete', () => {})
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
@@ -148,17 +170,36 @@ const Layout: FC<Props & IExtraProps> = ({
   )
   return (
     <CommerceProvider locale={locale}>
-      <h1 className='sr-only'>layout</h1>
+      <h1 className="sr-only">layout</h1>
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
-        {showSearchBar && (<SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />)}
-        <Navbar currencies={config?.currencies} config={sortedData} languages={config?.languages} deviceInfo={deviceInfo} />
+        {showSearchBar && (
+          <SearchWrapper
+            keywords={keywords}
+            closeWrapper={() => setShowSearchBar(false)}
+          />
+        )}
+        <Navbar
+          currencies={config?.currencies}
+          config={sortedData}
+          languages={config?.languages}
+          deviceInfo={deviceInfo}
+        />
         <main className="pt-16 fit">{children}</main>
         <Footer config={data.footer} deviceInfo={deviceInfo} />
         <ModalUI />
         <SidebarUI deviceInfo={deviceInfo} />
-        <FeatureBar title={GENERAL_COOKIE_TEXT} hide={acceptedCookies}
-          action={<Button className="mx-5 btn-c btn-primary" onClick={() => onAcceptCookies()}>{BTN_ACCEPT_COOKIE}</Button>}
+        <FeatureBar
+          title={GENERAL_COOKIE_TEXT}
+          hide={acceptedCookies}
+          action={
+            <Button
+              className="mx-5 btn-c btn-primary"
+              onClick={() => onAcceptCookies()}
+            >
+              {BTN_ACCEPT_COOKIE}
+            </Button>
+          }
         />
       </div>
     </CommerceProvider>

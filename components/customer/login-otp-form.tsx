@@ -89,6 +89,8 @@ function LoginOTPForm({ handleUserLogin }: any) {
         clearTimeout(otpTimer)
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timer])
 
   const resetTimer = function () {
@@ -103,8 +105,8 @@ function LoginOTPForm({ handleUserLogin }: any) {
     formik.handleChange({
       target: {
         name: 'otp',
-        value: ''
-      }
+        value: '',
+      },
     })
     await sendOtpApi({ mobileNo: mobile })
   }
@@ -166,11 +168,7 @@ function LoginOTPForm({ handleUserLogin }: any) {
             disabled={formik.isSubmitting}
             loading={formik.isSubmitting}
           >
-            {!shouldDisplayOTPField ? (
-              'Request OTP'
-            ) : (
-              'Verify OTP'
-            )}
+            {!shouldDisplayOTPField ? 'Request OTP' : 'Verify OTP'}
           </Button>
         </div>
       </form>

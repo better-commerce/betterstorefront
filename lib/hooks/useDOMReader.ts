@@ -56,7 +56,7 @@ export const useDOMReader = (content: string) => {
             setError(e);
         }
 
-    }, []);
+    }, [content]);
 
     return { loading, domReferences, error };
 }

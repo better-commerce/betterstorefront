@@ -9,7 +9,8 @@ import {
   MESSAGE_CHARACTERS_LEFT,
   MIN_BODY_LENGTH_ERROR,
   POST_YOUR_REVIEW,
-  REVIEW_COMMENT, REVIEW_TITLE
+  REVIEW_COMMENT,
+  REVIEW_TITLE,
 } from '@components/utils/textVariables'
 
 import { NEXT_CREATE_REVIEW } from '@components/utils/constants'
@@ -17,7 +18,7 @@ import axios from 'axios'
 import { useUI } from '@components/ui/context'
 
 const MIN_LENGTH = 5
-const MAX_LENGTH = 240 //@TODO TBD with PO
+const MAX_LENGTH = 240
 
 const TITLE_MIN_LENGTH = 2
 const TITLE_MAX_LENGTH = 20
@@ -81,19 +82,49 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
   return (
     <>
       <h4 className="mb-6 font-semibold text-black">{POST_YOUR_REVIEW}</h4>
-      {asyncMessage ? (<span className="text-2xl text-gray-900">{asyncMessage}</span>) : (
+      {asyncMessage ? (
+        <span className="text-2xl text-gray-900">{asyncMessage}</span>
+      ) : (
         <>
-          <input placeholder={REVIEW_TITLE} onChange={handleCommentTitle} value={commentTitle} className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none sm:mb-5 sm:w-1/3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 " />
-          <textarea className="w-full h-20 px-3 py-2 font-medium leading-normal text-gray-900 placeholder-gray-700 border border-gray-400 rounded-sm bg-gray-50 focus:outline-none focus:bg-white" placeholder={REVIEW_COMMENT} value={commentBody} onChange={handleCommentChange} required />
-          <span className="float-right text-sm text-gray-900">{MESSAGE_CHARACTERS_LEFT}: {MAX_LENGTH - commentBody.length}</span>
+          <input
+            placeholder={REVIEW_TITLE}
+            onChange={handleCommentTitle}
+            value={commentTitle}
+            className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none sm:mb-5 sm:w-1/3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+          />
+          <textarea
+            className="w-full h-20 px-3 py-2 font-medium leading-normal text-gray-900 placeholder-gray-700 border border-gray-400 rounded-sm bg-gray-50 focus:outline-none focus:bg-white"
+            placeholder={REVIEW_COMMENT}
+            value={commentBody}
+            onChange={handleCommentChange}
+            required
+          />
+          <span className="float-right text-sm text-gray-900">
+            {MESSAGE_CHARACTERS_LEFT}: {MAX_LENGTH - commentBody.length}
+          </span>
           {!!error && <span className="text-sm text-red-900">{error}</span>}
           <div className="flex mt-5 flex-center">
             {[1, 2, 3, 4, 5].map((num) => (
-              <StarIcon key={`starIcon-${num}`} className={classNames(rating >= num ? 'text-yellow-400' : 'text-gray-200', 'h-5 w-5 flex-shrink-0')} onClick={() => handleRatingChange(num)} aria-hidden="true" />
+              <StarIcon
+                key={`starIcon-${num}`}
+                className={classNames(
+                  rating >= num ? 'text-yellow-400' : 'text-gray-200',
+                  'h-5 w-5 flex-shrink-0'
+                )}
+                onClick={() => handleRatingChange(num)}
+                aria-hidden="true"
+              />
             ))}
-            <p className="ml-3 text-sm text-gray-700">{rating}<span className="sr-only"> {GENERAL_REVIEW_OUT_OF_FIVE}</span></p>
+            <p className="ml-3 text-sm text-gray-700">
+              {rating}
+              <span className="sr-only"> {GENERAL_REVIEW_OUT_OF_FIVE}</span>
+            </p>
           </div>
-          <button type="button" onClick={handleSubmit} className="flex items-center justify-center flex-1 float-right max-w-xs px-4 py-2 btn-primary uppercase sm:w-full">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="flex items-center justify-center flex-1 float-right max-w-xs px-4 py-2 btn-primary uppercase sm:w-full"
+          >
             {BTN_SUBMIT}
           </button>
         </>

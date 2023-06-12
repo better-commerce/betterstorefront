@@ -35,6 +35,8 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
       stockCodeValues?.find((o: any) => product?.stockCode === o?.stockCode)
         ?.sizeValue || ''
     )
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productStockCodesWithSize])
 
   useEffect(() => {
@@ -51,6 +53,8 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
       setProductSizeData(null)
       setValue('')
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   const fetchProductBySlug = async (product: any) => {

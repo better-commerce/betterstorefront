@@ -23,7 +23,7 @@ const FilterItem = ({
   isCheckboxTickDisabled = false,
   bgColor = () => false,
   onSelect,
-  closeSidebar = () => { },
+  closeSidebar = () => {},
   ...props
 }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
@@ -55,8 +55,17 @@ const FilterItem = ({
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
     <div key={option.value} className="flex items-center pt-2">
-      <input name={`${optionIdx}-input[]`} defaultValue={option.value} type="checkbox" className="w-4 h-4 border-gray-300 rounded filter-input" />
-      <label htmlFor={`${optionIdx}-input[]`} onClick={handleCheckbox} className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label">
+      <input
+        name={`${optionIdx}-input[]`}
+        defaultValue={option.value}
+        type="checkbox"
+        className="w-4 h-4 border-gray-300 rounded filter-input"
+      />
+      <label
+        htmlFor={`${optionIdx}-input[]`}
+        onClick={handleCheckbox}
+        className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label"
+      >
         {isCheckboxChecked && !isCheckboxTickDisabled && (
           <div
             style={{
@@ -75,7 +84,7 @@ const FilterItem = ({
           />
         )}
         {generateOptionName()}
-        {sectionKey === FILTER_KEYS.COLOR &&
+        {sectionKey === FILTER_KEYS.COLOR && (
           <div
             style={{
               content: '',
@@ -90,8 +99,8 @@ const FilterItem = ({
               marginRight: '6px',
             }}
           />
-        }
-        {sectionKey != FILTER_KEYS.COLOR &&
+        )}
+        {sectionKey != FILTER_KEYS.COLOR && (
           <div
             style={{
               content: '',
@@ -106,9 +115,11 @@ const FilterItem = ({
               marginRight: '6px',
             }}
           />
-        }
+        )}
       </label>
-      <span className="px-1 text-xs font-semibold text-black">({option.count})</span>
+      <span className="px-1 text-xs font-semibold text-black">
+        ({option.count})
+      </span>
     </div>
   )
 }
@@ -117,7 +128,11 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
       <label className="sr-only">{BTN_SEARCH}</label>
-      <input type="text" onChange={(e) => handleSearch(e.target.value)} autoComplete={BTN_SEARCH} placeholder={BTN_SEARCH}
+      <input
+        type="text"
+        onChange={(e) => handleSearch(e.target.value)}
+        autoComplete={BTN_SEARCH}
+        placeholder={BTN_SEARCH}
         className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
       />
     </>
@@ -184,7 +199,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className='pb-5 mt-2 border-b border-gray-200 max-panel'>
+      <div className="pb-5 mt-2 border-b border-gray-200 max-panel">
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (

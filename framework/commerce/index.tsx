@@ -92,7 +92,7 @@ export function CoreCommerceProvider<P extends Provider>({
   children,
 }: CommerceProps<P>) {
   const providerRef = useRef(provider)
-  // TODO: Remove the fetcherRef
+  
   const fetcherRef = useRef(provider.fetcher)
   // If the parent re-renders this provider will re-render every
   // consumer unless we memoize the config

@@ -28,6 +28,7 @@ import {
   GENERAL_APPLY_TEXT,
 } from '@components/utils/textVariables'
 import useDevice from '@commerce/utils/use-device'
+import Image from 'next/image'
 
 declare const window: any
 
@@ -81,6 +82,8 @@ const PromotionInput = (props: IPromotionInputProps) => {
         handleCloseCoupon(false)
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asPath])
 
   useEffect(() => {
@@ -513,7 +516,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                       key={crdx}
                     >
                       <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
-                        <img
+                        <Image
                           className="w-auto"
                           src="/assets/icons/more-offer-icon.svg"
                           alt=""
@@ -541,7 +544,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                       key={crdx}
                     >
                       <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
-                        <img
+                        <Image
                           className="w-auto"
                           src="/assets/icons/more-offer-icon.svg"
                           alt=""

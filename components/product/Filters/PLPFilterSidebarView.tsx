@@ -59,6 +59,8 @@ const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({
 
   useEffect(() => {
     if (accessToken) handleWishlistItems()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const deleteItemFromWishlist = (product: any) => {

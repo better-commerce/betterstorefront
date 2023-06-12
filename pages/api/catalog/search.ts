@@ -1,5 +1,7 @@
 import searchProducts from '@framework/api/operations/search-product'
-export default async (req: any, res: any) => {
+import { apiMiddlewareErrorHandler } from '@framework/utils'
+
+const SearchProductsApiMiddleware = async (req: any, res: any) => {
   const { value }: any = req.body
   try {
     const response = await searchProducts()({
@@ -7,6 +9,8 @@ export default async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
-}
+};
+
+export default SearchProductsApiMiddleware;

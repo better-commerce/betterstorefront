@@ -18,6 +18,8 @@ export default function ReturnModal({
 
   useEffect(() => {
     if (!isOpen && returnData.order.id) handleClose()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   const getReturnData = async () => {
@@ -38,6 +40,8 @@ export default function ReturnModal({
     if (returnData.order.id) {
       getReturnData()
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [returnData])
 
   const onClose = () => {

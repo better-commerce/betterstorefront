@@ -120,32 +120,36 @@ export const shippingFormConfig = [
 ]
 
 export const shippingSchema = Yup.object({
-   firstName: Yup.string().required(),
+  firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phoneNo: Yup.string().max(10)
-  .required(Messages.Validations.AddNewAddress["MOBILE_NUMBER_REQUIRED"])
-  .matches(
-      Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
-      message: Messages.Validations.AddNewAddress["MOBILE_NUMBER_INPUT"],
-  }),
+  phoneNo: Yup.string()
+    .max(10)
+    .required(Messages.Validations.AddNewAddress['MOBILE_NUMBER_REQUIRED'])
+    .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
+      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
+    }),
   country: Yup.string().required(),
-  postCode: Yup.string().required(Messages.Validations.AddNewAddress["PIN_CODE_REQUIRED"]).min(3)
-  .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
-     message: Messages.Validations.AddNewAddress["PIN_CODE_NUM"],
-  }),
-  address1: Yup.string().min(3)
-  .required(Messages.Validations.AddNewAddress["ADDRESS_1_REQUIRED"])
-  .matches(
-      Messages.Validations.RegularExpressions.ADDRESS_LINE, {
-      message: Messages.Validations.AddNewAddress["ADDRESS_1_INPUT"],
-  }),
+  postCode: Yup.string()
+    .required(Messages.Validations.AddNewAddress['PIN_CODE_REQUIRED'])
+    .min(3)
+    .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
+      message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
+    }),
+  address1: Yup.string()
+    .min(3)
+    .required(Messages.Validations.AddNewAddress['ADDRESS_1_REQUIRED'])
+    .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
+      message: Messages.Validations.AddNewAddress['ADDRESS_1_INPUT'],
+    }),
   title: Yup.string().nullable(),
-  city: Yup.string().required(Messages.Validations.AddNewAddress["CITY_REQUIRED"]).min(3),
+  city: Yup.string()
+    .required(Messages.Validations.AddNewAddress['CITY_REQUIRED'])
+    .min(3),
   isDefault: Yup.boolean(),
   isDefaultDelivery: Yup.boolean(),
   isDefaultBilling: Yup.boolean(),
   isDefaultSubscription: Yup.boolean(),
-  label:Yup.string().nullable()
+  label: Yup.string().nullable(),
 })
 
 export const billingFormConfig = [
@@ -232,30 +236,34 @@ export const billingFormConfig = [
 ]
 
 export const billingSchema = Yup.object({
-   firstName: Yup.string().required(),
+  firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phoneNo: Yup.string().max(10)
-  .required(Messages.Validations.AddNewAddress["MOBILE_NUMBER_REQUIRED"])
-  .matches(
-      Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
-      message: Messages.Validations.AddNewAddress["MOBILE_NUMBER_INPUT"],
-  }),
+  phoneNo: Yup.string()
+    .max(10)
+    .required(Messages.Validations.AddNewAddress['MOBILE_NUMBER_REQUIRED'])
+    .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
+      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
+    }),
   country: Yup.string().required(),
-  postCode: Yup.string().required(Messages.Validations.AddNewAddress["PIN_CODE_REQUIRED"]).min(3)
-  .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
-     message: Messages.Validations.AddNewAddress["PIN_CODE_NUM"],
-  }),
-  address1: Yup.string().min(3)
-  .required(Messages.Validations.AddNewAddress["ADDRESS_1_REQUIRED"])
-  .matches(
-      Messages.Validations.RegularExpressions.ADDRESS_LINE, {
-      message: Messages.Validations.AddNewAddress["ADDRESS_1_INPUT"],
-  }),
+  postCode: Yup.string()
+    .required(Messages.Validations.AddNewAddress['PIN_CODE_REQUIRED'])
+    .min(3)
+    .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
+      message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
+    }),
+  address1: Yup.string()
+    .min(3)
+    .required(Messages.Validations.AddNewAddress['ADDRESS_1_REQUIRED'])
+    .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
+      message: Messages.Validations.AddNewAddress['ADDRESS_1_INPUT'],
+    }),
   title: Yup.string().nullable(),
-  city: Yup.string().required(Messages.Validations.AddNewAddress["CITY_REQUIRED"]).min(3),
+  city: Yup.string()
+    .required(Messages.Validations.AddNewAddress['CITY_REQUIRED'])
+    .min(3),
   isDefault: Yup.boolean(),
   isDefaultDelivery: Yup.boolean(),
   isDefaultBilling: Yup.boolean(),
   isDefaultSubscription: Yup.boolean(),
-  label:Yup.string().nullable()
+  label: Yup.string().nullable(),
 })

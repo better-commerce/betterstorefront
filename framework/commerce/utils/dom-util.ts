@@ -106,7 +106,7 @@ export const insertAdjacentHTML = (content: string, contentType: string, node: H
         if (contentType === SnippetContentType.JAVASCRIPT) {
             arrNodes = container.querySelectorAll("*");
         } else {
-            // TODO: This is currently a workaround. Need to handle all first level children inside parent.
+            // Need to handle all first level children inside parent.
             arrNodes = [container.children[0]];
         }
         if (arrNodes && arrNodes.length) {

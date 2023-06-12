@@ -41,6 +41,7 @@ const ExchangeSelection = ({ btnTitle, item, reason, selectedImages, onGetProduc
             handleAsync(item?.slug);
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [item]);
 
     const openModal = () => {

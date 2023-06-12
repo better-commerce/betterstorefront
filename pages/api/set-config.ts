@@ -1,6 +1,7 @@
 import store from 'store'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-export default async (req: any, res: any) => {
+const StoreConfigApiMiddleware = async (req: any, res: any) => {
   const { obj } = req.body
   try {
     Object.keys(obj).forEach((item: any) => {
@@ -8,6 +9,8 @@ export default async (req: any, res: any) => {
     })
     res.status(200).json({ success: true })
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
-}
+};
+
+export default StoreConfigApiMiddleware;

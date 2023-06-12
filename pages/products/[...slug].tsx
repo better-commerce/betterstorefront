@@ -11,10 +11,14 @@ export async function getStaticProps({
   locale,
   locales,
   preview,
-}: GetStaticPropsContext<{ slug: string, recordId: string }>) {
-  let product = null, reviews = null, relatedProducts = null, pdpLookbook = null, pdpCachedImages = null;
-  let availabelPromotions = null;
-  let pdpLookbookProducts = {};
+}: GetStaticPropsContext<{ slug: string; recordId: string }>) {
+  let product = null,
+    reviews = null,
+    relatedProducts = null,
+    pdpLookbook = null,
+    pdpCachedImages = null
+  let availabelPromotions = null
+  let pdpLookbookProducts = {}
 
   try {
     const productPromise = commerce.getProduct({ query: params!?.slug[0] })
@@ -54,7 +58,6 @@ export async function getStaticProps({
 
     try {
       if (product?.product?.productCode) {
-
         // GET SELECTED PRODUCT ALL REVIEWS
         const pdpCachedImagesPromise = commerce.getPdpCachedImage({
           query: product?.product?.productCode,
@@ -62,15 +65,11 @@ export async function getStaticProps({
 
         pdpCachedImages = await pdpCachedImagesPromise
       }
-    } catch (imageE) {
-    }
+    } catch (imageE) {}
+  } catch (error: any) {}
 
-  } catch (error: any) {
-  }
-
-
-  const infraPromise = commerce.getInfra();
-  const infra = await infraPromise;
+  const infraPromise = commerce.getInfra()
+  const infra = await infraPromise
   return {
     props: {
       data: product,
@@ -98,7 +97,18 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo }: any) {
+function Slug({
+  data,
+  setEntities,
+  recordEvent,
+  slug,
+  relatedProducts,
+  availabelPromotions,
+  pdpLookbookProducts,
+  pdpCachedImages,
+  reviews,
+  deviceInfo,
+}: any) {
   const router = useRouter()
   return router.isFallback ? (
     <h1>{LOADER_LOADING}</h1>

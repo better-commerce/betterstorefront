@@ -1,5 +1,7 @@
 import { useLogin } from '@framework/auth'
-export default async (req: any, res: any) => {
+import { apiMiddlewareErrorHandler } from '@framework/utils'
+
+const LoginApiMiddleware = async (req: any, res: any) => {
   const { email, password }: any = req.body.data
   try {
     const response = await useLogin()({
@@ -9,6 +11,8 @@ export default async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error: any) {
-    throw new Error(error)
+    apiMiddlewareErrorHandler(req, res, error)
   }
-}
+};
+
+export default LoginApiMiddleware;

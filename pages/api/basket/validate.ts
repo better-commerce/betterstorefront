@@ -1,6 +1,7 @@
 import useBasketValidate from '@framework/cart/use-basket-validate';
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-export default async function (req: any, res: any) {
+const BasketValidateApiMiddleware = async function (req: any, res: any) {
     const {
         basketId,
     }: any = req?.body
@@ -11,6 +12,8 @@ export default async function (req: any, res: any) {
         });
         res.status(200).json(response)
     } catch (error) {
-        res.status(500).json({ error })
+        apiMiddlewareErrorHandler(req, res, error)
     }
 };
+
+export default BasketValidateApiMiddleware;
