@@ -644,7 +644,7 @@ export async function getStaticProps({ params, ...context }: any) {
       query: context,
       slug: params!.collection[0],
       globalSnippets: infra?.snippets ?? [],
-      snippets: data?.snippets,
+      snippets: data?.snippets ?? [],
       hostName: obfuscateHostName(hostName),
     },
     revalidate: 60,
