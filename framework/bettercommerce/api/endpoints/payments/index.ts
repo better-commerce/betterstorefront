@@ -28,63 +28,75 @@ const PaymentsApiMiddleware = async function useBCPayments({
   const { t: type, s: isSecured, gid: gatewayId } = params
   let response = undefined
   let paymentConfig: any
-  let hook: any
-
-  if (gatewayId) {
-    paymentConfig = await getPaymentConfig({
-      paymentGateway: getGatewayName(gatewayId ? parseInt(gatewayId) : -1),
-      cookies,
-      origin,
-      isSecured,
-    })
-  }
-
-  switch (type) {
-    // ------------------ Checkout ------------------
-    case BCPaymentEndpoint.CONVERT_ORDER:
-      hook = useConvertOrder
-      break
-
-    case BCPaymentEndpoint.PAYMENT_RESPONSE:
-      if (paymentConfig) {
-        hook = useUpdatePaymentResponse
-      }
-      break
-
-    // ------------------ Payments ------------------
-    case BCPaymentEndpoint.INIT_PAYMENT:
-      if (paymentConfig) {
-        hook = useInitPayment
-      }
-      break
-
-    case BCPaymentEndpoint.REQUEST_PAYMENT:
-      if (paymentConfig) {
-        hook = useRequestPayment
-      }
-      break
-
-    case BCPaymentEndpoint.CREATE_ONE_TIME_PAY_ORDER:
-      if (paymentConfig) {
-        hook = useOneTimePaymentOrder
-      }
-      break
-  }
+  const convertOrder = useConvertOrder()
+  const updatePaymentResponse = useUpdatePaymentResponse()
+  const initPayment = useInitPayment()
+  const requestPayment = useRequestPayment()
+  const oneTimePaymentOrder = useOneTimePaymentOrder()
 
   try {
-    if (paymentConfig) {
-      response = await hook({ data, config: paymentConfig, cookies })
+    if (gatewayId) {
+      paymentConfig = await getPaymentConfig({
+        paymentGateway: getGatewayName(gatewayId ? parseInt(gatewayId) : -1),
+        cookies,
+        origin,
+        isSecured,
+      })
     }
 
-    //if (response) {
-    return isSecured
-      ? encrypt(JSON.stringify(response))
-      : JSON.stringify(response)
-    //}
+    switch (type) {
+      // ------------------ Checkout ------------------
+      case BCPaymentEndpoint.CONVERT_ORDER:
+        response = await convertOrder({ data, config: paymentConfig, cookies })
+        break
+
+      case BCPaymentEndpoint.PAYMENT_RESPONSE:
+        if (paymentConfig) {
+          response = await updatePaymentResponse({
+            data,
+            config: paymentConfig,
+            cookies,
+          })
+        }
+        break
+
+      // ------------------ Payments ------------------
+      case BCPaymentEndpoint.INIT_PAYMENT:
+        if (paymentConfig) {
+          response = await initPayment({ data, config: paymentConfig, cookies })
+        }
+        break
+
+      case BCPaymentEndpoint.REQUEST_PAYMENT:
+        if (paymentConfig) {
+          response = await requestPayment({
+            data,
+            config: paymentConfig,
+            cookies,
+          })
+        }
+        break
+
+      case BCPaymentEndpoint.CREATE_ONE_TIME_PAY_ORDER:
+        if (paymentConfig) {
+          response = await oneTimePaymentOrder({
+            data,
+            config: paymentConfig,
+            cookies,
+          })
+        }
+        break
+    }
   } catch (error: any) {
     console.log(error)
     return { hasError: true, error: error?.message }
   }
+
+  //if (response) {
+  return isSecured
+    ? encrypt(JSON.stringify(response))
+    : JSON.stringify(response)
+  //}
 }
 
 const getPaymentConfig = async ({
