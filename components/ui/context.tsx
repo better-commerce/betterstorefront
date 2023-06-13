@@ -373,10 +373,15 @@ function uiReducer(state: State, action: Action) {
   }
 }
 
-export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
+export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
+  props: any
+) => {
   const Router = useRouter()
 
-  const [state, dispatch] = React.useReducer(uiReducer, initialState)
+  const [state, dispatch] = React.useReducer<React.Reducer<any, any>>(
+    uiReducer,
+    initialState
+  )
 
   const setupDeviceInfo = useCallback(() => {
     const UA = navigator.userAgent
@@ -423,7 +428,7 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
 
   const addToWishlist = useCallback(
     (payload: any) => {
-      const storedItems = getItem('wishListItems') || []
+      const storedItems: any = getItem('wishListItems') || []
       setItem('wishListItems', [...storedItems, payload])
       dispatch({ type: 'ADD_TO_WISHLIST', payload })
     },
@@ -518,7 +523,7 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (props) => {
 
   const addToCart = useCallback(
     (payload: any) => {
-      const storedItems = getItem('cartItems') || { lineItems: [] }
+      const storedItems: any = getItem('cartItems') || { lineItems: [] }
       setItem('cartItems', { lineItems: [...storedItems.lineItems, payload] })
       dispatch({ type: 'ADD_TO_CART', payload })
     },
