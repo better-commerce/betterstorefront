@@ -1,7 +1,7 @@
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
-import { NEXT_AUTHENTICATE } from '@components/utils/constants'
+import { NEXT_AUTHENTICATE,OTP_LOGIN_ENABLED } from '@components/utils/constants'
 import axios from 'axios'
 import { useState } from 'react'
 import { useUI } from '@components/ui/context'
@@ -33,7 +33,7 @@ function LoginPage({ recordEvent, setEntities }: any) {
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
-
+  const otpEnabled = OTP_LOGIN_ENABLED
   useAnalytics(PageViewed, {
     eventType: PageViewed,
   })
@@ -102,11 +102,15 @@ function LoginPage({ recordEvent, setEntities }: any) {
           )}
         </div>
         <div className="w-full flex flex-col justify-center items-center">
-          <Link href="/my-account/login-otp" passHref>
-            <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
-              Login via OTP
-            </span>
-          </Link>
+          {otpEnabled && 
+          (
+            <Link href="/my-account/login-otp" passHref>
+              <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
+                {otpEnabled}
+                Login via OTP
+              </span>
+            </Link>
+          )}
           <Link href="/my-account/forgot-password" passHref>
             <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
               Forgot password?
