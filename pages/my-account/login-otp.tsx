@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Router from 'next/router'
 
 import { useUI } from '@components/ui/context'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { NEXT_AUTHENTICATE } from '@components/utils/constants'
+import { NEXT_AUTHENTICATE, OTP_LOGIN_ENABLED } from '@components/utils/constants'
 import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -34,7 +34,7 @@ function LoginOTPPage() {
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
-
+  const otpEnabled = OTP_LOGIN_ENABLED
   useAnalytics(PageViewed, {
     eventType: PageViewed,
   })
@@ -42,6 +42,13 @@ function LoginOTPPage() {
   if (!isGuestUser && user.userId) {
     Router.push('/')
   }
+
+  
+  useEffect(()=>{
+    if(!otpEnabled){
+      Router.push('404')
+    }
+  },[])
 
   if (!isGuestUser && user.userId) {
     return (
@@ -110,6 +117,9 @@ function LoginOTPPage() {
       }
     }
     asyncLoginUser()
+  }
+  if(!otpEnabled){
+    return null
   }
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
