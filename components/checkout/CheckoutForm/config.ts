@@ -131,10 +131,10 @@ export const shippingSchema = Yup.object({
   country: Yup.string().required(),
   postCode: Yup.string()
     .required(Messages.Validations.AddNewAddress['PIN_CODE_REQUIRED'])
-    .min(3)
-    .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
-      message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
-    }),
+    .min(3),
+  // .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
+  //   message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
+  // }),
   address1: Yup.string()
     .min(3)
     .required(Messages.Validations.AddNewAddress['ADDRESS_1_REQUIRED'])
