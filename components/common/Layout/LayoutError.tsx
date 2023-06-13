@@ -111,7 +111,10 @@ const LayoutError: FC<Props & IExtraProps> = ({
   isLocationLoaded,
   deviceInfo,
 }) => {
-  const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
+  const navTreeFromLocalStorage: any = getItem('navTree') || {
+    nav: [],
+    footer: [],
+  }
   const [isLoading, setIsLoading] = useState(false)
   const { showSearchBar, setShowSearchBar } = useUI()
   const [data, setData] = useState(navTreeFromLocalStorage)
