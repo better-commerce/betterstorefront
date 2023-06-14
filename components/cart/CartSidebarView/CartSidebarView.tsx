@@ -791,7 +791,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                             role="list"
                             className="-my-6 divide-y divide-gray-200"
                           >
-                            {cartItems.lineItems?.sort((a:any,b:any)=>{return a?.displayOrder - b?.displayOrder})?.map((product: any) => {
+                            {cartItems.lineItems?.sort((lineItem1:any,lineItem2:any)=>{return lineItem1?.displayOrder - lineItem2?.displayOrder})?.map((product: any) => {
                               let soldOutMessage = ''
                               if (reValidateData?.message != null) {
                                 soldOutMessage =

@@ -22,7 +22,6 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState('')
-  // console.log("Selected size Value::",value,"\n Product size ::",product);
   
   const [productSizeData, setProductSizeData] = useState<any>(null)
   const [productStockCodesWithSize, setProductStockCodesWithSize] =
@@ -33,7 +32,6 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
   useEffect(()=>{
     let slugBreakArr:any = product?.slug?.split("-")
     let sizeFromSlug:any = slugBreakArr?.length ? slugBreakArr[slugBreakArr?.length - 1] : ""
-    // console.log("sizeFromSlug",sizeFromSlug);
     setDefaultSize(sizeFromSlug)
     
   },[open])
@@ -141,8 +139,6 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
           parentProductId: EmptyGuid,
           qty: 0,
         }
-        // console.log("selectedProduct?.stockCode",selectedProduct?.stockCode);
-        // console.log("newStockCode",newStockCode);
 
         const itemToBeSaved = {
           productId: newItemId, // new product id for new size item
