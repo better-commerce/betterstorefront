@@ -519,9 +519,9 @@ export default function CheckoutForm({
             shippingAddress: {
               ...payload,
               id: addressId,
-              country: state.deliveryMethod.name,
-              countryCode: state.deliveryMethod.twoLetterIsoCode,
-              customerId: user.userId,
+              country: state?.deliveryMethod?.name,
+              countryCode: state?.deliveryMethod?.twoLetterIsoCode,
+              customerId: user?.userId,
               isDefault: false,
               isDefaultBilling: false,
               isDefaultDelivery: false,
@@ -786,7 +786,7 @@ export default function CheckoutForm({
                         sameAddressAction={() => {
                           dispatch({ type: 'SET_SAME_ADDRESS' })
                         }}
-                        onEditAddress={handleEditAddress}
+                        // onEditAddress={handleEditAddress}
                         handleOpenNewAddressModal={handleOpenNewAddressModal}
                       />
                     </>
