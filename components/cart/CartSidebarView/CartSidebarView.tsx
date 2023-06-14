@@ -791,7 +791,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                             role="list"
                             className="-my-6 divide-y divide-gray-200"
                           >
-                            {cartItems.lineItems?.sort((a:any,b:any)=>{return a?.displayOrder - b?.displayOrder})?.map((product: any) => {
+                            {cartItems.lineItems?.map((product: any) => {
                               let soldOutMessage = ''
                               if (reValidateData?.message != null) {
                                 soldOutMessage =
@@ -1168,13 +1168,13 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
               </Transition.Child>
             </div>
           </div>
+        </Dialog>
+      </Transition.Root>
       <SizeChangeModal
         open={openSizeChangeModal}
         handleToggleOpen={handleToggleOpenSizeChangeModal}
         product={selectedProductOnSizeChange}
       />
-        </Dialog>
-      </Transition.Root>
     </>
   )
 }
