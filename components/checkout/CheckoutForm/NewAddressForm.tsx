@@ -57,7 +57,7 @@ const NewAddressForm = (props: INewAddressFormProps) => {
       const pincode = target?.value
       if (pincode) {
         const pincodeLookupResult = await pincodeLookup(pincode)
-        console.log(pincodeLookupResult)
+        // console.log(pincodeLookupResult)
 
         if (pincodeLookupResult?.length) {
           const lookup = pincodeLookupResult?.find((x: any) =>
@@ -109,27 +109,27 @@ const NewAddressForm = (props: INewAddressFormProps) => {
                     key={idx}
                     context={context}
                     item={item}
-                    extraConfig={{
-                      customHandler: async (ev: any) => {
-                        const target = ev?.target
-                        setTimeout(async () => {
-                          setFieldValue(NEW_ADDRESS_FORM_FIELDS[1]?.name, '')
-                          setFieldValue(NEW_ADDRESS_FORM_FIELDS[2]?.name, '')
+                    // extraConfig={{
+                    //   customHandler: async (ev: any) => {
+                    //     const target = ev?.target
+                    //     setTimeout(async () => {
+                    //       setFieldValue(NEW_ADDRESS_FORM_FIELDS[1]?.name, '')
+                    //       setFieldValue(NEW_ADDRESS_FORM_FIELDS[2]?.name, '')
 
-                          const lookup = await onLookup(target)
-                          if (lookup) {
-                            setFieldValue(
-                              NEW_ADDRESS_FORM_FIELDS[1]?.name,
-                              lookup?.city
-                            )
-                            setFieldValue(
-                              NEW_ADDRESS_FORM_FIELDS[2]?.name,
-                              lookup?.state
-                            )
-                          }
-                        }, 200)
-                      },
-                    }}
+                    //       const lookup = await onLookup(target)
+                    //       if (lookup) {
+                    //         setFieldValue(
+                    //           NEW_ADDRESS_FORM_FIELDS[1]?.name,
+                    //           lookup?.city
+                    //         )
+                    //         setFieldValue(
+                    //           NEW_ADDRESS_FORM_FIELDS[2]?.name,
+                    //           lookup?.state
+                    //         )
+                    //       }
+                    //     }, 200)
+                    //   },
+                    // }}
                   />
                 ))}
                 <div className="grid w-full grid-cols-2 overflow-hidden gap-x-4">
@@ -172,7 +172,7 @@ const NewAddressForm = (props: INewAddressFormProps) => {
                       findByFieldName(formFields, 'name'),
                       {
                         ...findByFieldName(formFields, 'mobileNumber'),
-                        ...{ disabled: isRegisterAsGuestUser },
+                        // ...{ disabled: isRegisterAsGuestUser },
                       },
                     ])
                   : []
