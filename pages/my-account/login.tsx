@@ -106,14 +106,6 @@ function LoginPage({ recordEvent, setEntities }: any) {
           )}
         </div>
         <div className="w-full flex flex-col justify-center items-center">
-          {/* {otpEnabled && 
-          (
-            <Link href="/my-account/login-otp" passHref>
-              <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
-                Login via OTP
-              </span>
-            </Link>
-          )} */}
           <Link href="/my-account/forgot-password" passHref>
             <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
               Forgot password?
