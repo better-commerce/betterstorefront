@@ -1,12 +1,16 @@
-import * as fs from 'fs';
-import path from 'path';
-import { v4 as uuid } from "uuid";
+import * as fs from 'fs'
+import path from 'path'
+import { v4 as uuid } from 'uuid'
 import Cookies, { CookieAttributes } from 'js-cookie'
-import * as winston from 'winston';
-import DailyRotateFile from 'winston-daily-rotate-file';
+import * as winston from 'winston'
+import DailyRotateFile from 'winston-daily-rotate-file'
 
 import { FetcherError } from '@commerce/utils/errors'
-import { HTTP_MESSAGES } from './constants';
+import {
+  ERROR_LOG_ENABLED,
+  ERROR_LOG_OUTPUT_DIR,
+  HTTP_MESSAGES,
+} from './constants'
 
 export const setCookie = (
   name: string,
@@ -58,23 +62,25 @@ export const clearTokens = () => Cookies.remove('betterCommerce.token')
 
 export const writeFetcherLog = (request: any, response: any) => {
   const objectStrigified = (obj: any) => {
-    return JSON.stringify(obj, null, "\t");
+    return JSON.stringify(obj, null, '\t')
   }
-  const MID = "\\.next\\server\\";
-  const workingDir = __dirname;
-  const rootDir = workingDir.substring(0, workingDir.indexOf(MID) + MID.length);
-  const dirPath = path.resolve(`${rootDir}/api-logs`);
+  const MID = '\\.next\\server\\'
+  const workingDir = __dirname
+  const rootDir = workingDir.substring(0, workingDir.indexOf(MID) + MID.length)
+  const dirPath = path.resolve(`${rootDir}/api-logs`)
   if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath);
+    fs.mkdirSync(dirPath)
   }
 
-  const filePath = path.resolve(`${dirPath}/${uuid()}-response.log`);
-  const contents = `Request:\n${objectStrigified(request)}\n\nResponse:\n${objectStrigified(response)}`;
+  const filePath = path.resolve(`${dirPath}/${uuid()}-response.log`)
+  const contents = `Request:\n${objectStrigified(
+    request
+  )}\n\nResponse:\n${objectStrigified(response)}`
   fs.writeFile(filePath, contents, function (err) {
     if (!err) {
-      console.log(`---API Log: ${filePath}---`);
+      console.log(`---API Log: ${filePath}---`)
     }
-  });
+  })
 }
 
 export const appLogger = (logMessageFormat?: any) => {
@@ -84,7 +90,7 @@ export const appLogger = (logMessageFormat?: any) => {
   // winston file logger transport
   const logTransport: DailyRotateFile = new DailyRotateFile({
     datePattern: 'YYYYMMDD',
-    dirname: process.env.LOG_OUTPUT_DIR,
+    dirname: ERROR_LOG_OUTPUT_DIR,
     filename: 'app-%DATE%',
     extension: '.log',
   })
@@ -99,7 +105,7 @@ export const appLogger = (logMessageFormat?: any) => {
     format: combine(
       timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSSZZ' }),
       errors({ stack: true }),
-      logFormat,
+      logFormat
     ),
     transports: [],
   })
@@ -111,13 +117,17 @@ export const appLogger = (logMessageFormat?: any) => {
 
 export const apiMiddlewareErrorHandler = (req: any, res: any, error: any) => {
   // logs will be captured when enabled
-  if (process.env.LOG_ENABLED === "true") {
-    let logMessageFormat: any;
+  if (ERROR_LOG_ENABLED) {
+    let logMessageFormat: any
 
     if (error.name === 'AxiosError') {
       // request log format
       logMessageFormat = (info: any) => {
-        return `${info.timestamp} [${info?.response?.status}] ${info?.request?.method}:${info?.request?.path} ${JSON.stringify(info?.request?._headers)} "${info?.response?.data||info?.message}"`
+        return `${info.timestamp} [${info?.response?.status}] ${
+          info?.request?.method
+        }:${info?.request?.path} ${JSON.stringify(info?.request?._headers)} "${
+          info?.response?.data || info?.message
+        }"`
       }
     } else {
       // other log format
@@ -140,7 +150,8 @@ export const apiMiddlewareErrorHandler = (req: any, res: any, error: any) => {
   // update error info on response
   if (error?.response) {
     errorInfo.statusCode = error?.response?.status || 500
-    errorInfo.message = error?.response?.statusText || HTTP_MESSAGES['SERVER_ERROR']
+    errorInfo.message =
+      error?.response?.statusText || HTTP_MESSAGES['SERVER_ERROR']
     errorInfo.description = error?.response?.data || ''
   }
 

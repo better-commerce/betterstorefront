@@ -285,6 +285,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       <div id="google_translate_element" />
       <ManagedUIContext>
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
+        <CustomCacheBuster buildVersion={buildVersion} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
         <ErrorBoundary>
           <Layout
