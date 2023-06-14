@@ -19,7 +19,7 @@ import { matchStrings } from '@framework/utils/parse-util'
 export const NEW_ADDRESS_FORM_ID = 'newAddressForm'
 export const NEW_ADDRESS_FORM_FIELDS = [
   {
-    type: 'tel',
+    type: 'text',
     name: 'pinCode',
     placeholder: 'Pincode',
     label: 'Pincode',
@@ -28,13 +28,13 @@ export const NEW_ADDRESS_FORM_FIELDS = [
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: true,
     disabled: false,
-    max: 6,
-    handleChange: (e: any, item: any, context: any) => {
-      const regex = /^[0-9\s]*$/
-      if (regex.test(e?.target.value.toString())) {
-        context.setFieldValue(NEW_ADDRESS_FORM_FIELDS[0]?.name, e.target.value)
-      }
-    },
+    max: 8,
+    // handleChange: (e: any, item: any, context: any) => {
+    //   const regex = /^[0-9\s]*$/
+    //   if (regex.test(e?.target.value.toString())) {
+    //     context.setFieldValue(NEW_ADDRESS_FORM_FIELDS[0]?.name, e.target.value)
+    //   }
+    // },
   },
   {
     type: 'text',
@@ -149,7 +149,7 @@ export const NEW_ADDRESS_FORM_FIELDS = [
       'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     max: 20,
-    required: false,
+    required: true,
     disabled: false,
     dependant: true,
   },
@@ -169,20 +169,22 @@ export const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
   id: Yup.number().notRequired(),
   pinCode: Yup.string()
     .required(Messages.Validations.AddNewAddress['PIN_CODE_REQUIRED'])
-    .min(3)
-    .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
-      message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
-    }),
-  city: Yup.string(),
-  state: Yup.string(),
+    .min(3),
+  // .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
+  //   message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
+  // }),
+  city: Yup.string()
+    .required(Messages.Validations.AddNewAddress['CITY_REQUIRED'])
+    .min(3),
+  state: Yup.string().min(3),
   address1: Yup.string()
-    .min(3)
+    .min(15)
     .required(Messages.Validations.AddNewAddress['ADDRESS_1_REQUIRED'])
     .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
       message: Messages.Validations.AddNewAddress['ADDRESS_1_INPUT'],
     }),
   address2: Yup.string()
-    .min(3)
+    .max(15)
     .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
       message: Messages.Validations.AddNewAddress['ADDRESS_2_INPUT'],
     }),
@@ -193,7 +195,14 @@ export const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
     .matches(Messages.Validations.RegularExpressions.FULL_NAME, {
       message: Messages.Validations.AddNewAddress['NAME_INPUT'],
     }),
-  mobileNumber: Yup.string().required(),
+  mobileNumber: Yup.string()
+    .required()
+    .max(15)
+    .min(7)
+    .required(Messages.Validations.AddNewAddress['MOBILE_NUMBER_REQUIRED'])
+    .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
+      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
+    }),
   label: Yup.string().nullable(),
   otherAddressType: Yup.string(),
   whtsappUpdated: Yup.boolean(),

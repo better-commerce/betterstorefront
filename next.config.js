@@ -83,6 +83,8 @@ module.exports = withCommerceConfig({
     LOG_ENABLED: process.env.LOG_ENABLED,
     LOG_OUTPUT_DIR: process.env.LOG_OUTPUT_DIR,
     OTP_LOGIN_ENABLED: process.env.OTP_LOGIN_ENABLED,
+    ERROR_LOG_ENABLED: process.env.ERROR_LOG_ENABLED,
+    ERROR_LOG_OUTPUT_DIR: process.env.ERROR_LOG_OUTPUT_DIR,
   },
 })
 
