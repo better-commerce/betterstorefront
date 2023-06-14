@@ -24,8 +24,8 @@ export const CIPHER_ENCRYPTION_KEY = process.env.CIPHER_ENCRYPTION_KEY
 export const GA4_DISABLED = stringToBoolean(process.env.GA4_DISABLED)
 export const GA4_MEASUREMENT_ID = process.env.GA4_MEASUREMENT_ID
 
-export const LOG_ENABLED = process.env.LOG_ENABLED
-export const LOG_OUTPUT_DIR = process.env.LOG_OUTPUT_DIR
+export const ERROR_LOG_ENABLED = stringToBoolean(process.env.ERROR_LOG_ENABLED)
+export const ERROR_LOG_OUTPUT_DIR = process.env.ERROR_LOG_OUTPUT_DIR
 
 export const HTTP_MESSAGES = {
   SERVER_ERROR: 'Internal server error',
