@@ -14,7 +14,7 @@ import { Button } from '@components/ui'
 import { number } from 'yup'
 import Link from 'next/link'
 import { findByFieldName } from '@framework/utils/app-util'
-import FormField from '@components/utils/ui/FormField'
+import FormField from '@components/utils/FormField'
 
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
@@ -100,14 +100,15 @@ export default function MyDetails() {
           initialValues={initialValues}
           onSubmit={handleDataSubmit}
         >
-          {({
-            errors,
-            touched,
-            handleSubmit,
-            values,
-            handleChange,
-            isSubmitting,
-          }: any) => {
+          {(context) => {
+            const {
+              errors,
+              touched,
+              handleSubmit,
+              values,
+              handleChange,
+              isSubmitting,
+            }: any = context
             return (
               <div className="flex-col w-full py-5 flex items-flex-start lg:mx-12 xs:ml-6 max-w-4xl justify-center">
                 <Form className="font-normal w-full sm:w-1/2">
@@ -148,7 +149,7 @@ export default function MyDetails() {
                     : []
                   )?.map((item: any, idx: number) => (
                     <div key={item?.name} className="w-full py-4 address-type">
-                      {<FormField context={values} item={item} />}
+                      {<FormField context={context} item={item} />}
                     </div>
                   ))}
                   <div className="mt-10 flex sm:flex-col1 w-60">
