@@ -6,182 +6,74 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Black.woff2') format('woff2'),
-    url('../font/Urbanist-Black.woff') format('woff');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ExtraLight.woff2') format('woff2'),
-    url('../font/Urbanist-ExtraLight.woff') format('woff');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Italic.woff2') format('woff2'),
-    url('../font/Urbanist-Italic.woff') format('woff');
-  font-weight: normal;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
-    url('../font/Urbanist-ExtraBoldItalic.woff') format('woff');
-  font-weight: bold;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-BlackItalic.woff2') format('woff2'),
-    url('../font/Urbanist-BlackItalic.woff') format('woff');
-  font-weight: 900;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Light.woff2') format('woff2'),
-    url('../font/Urbanist-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-BoldItalic.woff2') format('woff2'),
-    url('../font/Urbanist-BoldItalic.woff') format('woff');
-  font-weight: bold;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ExtraBold.woff2') format('woff2'),
-    url('../font/Urbanist-ExtraBold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
-    url('../font/Urbanist-ExtraLightItalic.woff') format('woff');
-  font-weight: 200;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Bold.woff2') format('woff2'),
-    url('../font/Urbanist-Bold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-SemiBold.woff2') format('woff2'),
-    url('../font/Urbanist-SemiBold.woff') format('woff');
+  font-family: 'Oswald';
+  src: url('../font/Oswald-SemiBold.woff2') format('woff2'),
+    url('../font/Oswald-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
-    url('../font/Urbanist-SemiBoldItalic.woff') format('woff');
-  font-weight: 600;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Regular.woff2') format('woff2'),
-    url('../font/Urbanist-Regular.woff') format('woff');
-  font-weight: normal;
+  font-family: 'Oswald';
+  src: url('../font/Oswald-ExtraLight.woff2') format('woff2'),
+    url('../font/Oswald-ExtraLight.woff') format('woff');
+  font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-ThinItalic.woff2') format('woff2'),
-    url('../font/Urbanist-ThinItalic.woff') format('woff');
-  font-weight: 100;
-  font-style: italic;
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Bold.woff2') format('woff2'),
+    url('../font/Oswald-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-MediumItalic.woff2') format('woff2'),
-    url('../font/Urbanist-MediumItalic.woff') format('woff');
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-LightItalic.woff2') format('woff2'),
-    url('../font/Urbanist-LightItalic.woff') format('woff');
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Light.woff2') format('woff2'),
+    url('../font/Oswald-Light.woff') format('woff');
   font-weight: 300;
-  font-style: italic;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Medium.woff2') format('woff2'),
-    url('../font/Urbanist-Medium.woff') format('woff');
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Medium.woff2') format('woff2'),
+    url('../font/Oswald-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Urbanist';
-  src: url('../font/Urbanist-Thin.woff2') format('woff2'),
-    url('../font/Urbanist-Thin.woff') format('woff');
-  font-weight: 100;
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Regular.woff2') format('woff2'),
+    url('../font/Oswald-Regular.woff') format('woff');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 body {
   font-family: var(--font-primary) !important;
-  font-size: var(--font-16);
+  font-size: var(--font-14);
 }
 
 h1 {
-  font-size: var(--font-36);
-}
-
-h2 {
   font-size: var(--font-32);
 }
 
+h2 {
+  font-size: var(--font-28);
+}
+
 h3 {
-  font-size: var(--font-36);
+  font-size: var(--font-26);
 }
 
 h4 {
@@ -197,7 +89,59 @@ h6 {
 }
 
 p {
-  font-size: var(--font-14);
+  font-size: var(--font-12);
+}
+
+.font-14 {
+  font-size: 14px !important;
+}
+
+.font-16 {
+  font-size: 16px !important;
+}
+
+.font-18 {
+  font-size: 18px !important;
+}
+
+.font-20 {
+  font-size: 20px !important;
+}
+
+.font-22 {
+  font-size: 22px !important;
+}
+
+.font-24 {
+  font-size: 24px !important;
+}
+
+.font-28 {
+  font-size: 28px !important;
+}
+
+.font-32 {
+  font-size: 32px !important;
+}
+
+.font-36 {
+  font-size: 36px !important;
+}
+
+.font-42 {
+  font-size: 42px !important;
+}
+
+.font-46 {
+  font-size: 46px !important;
+}
+
+.font-52 {
+  font-size: 52px !important;
+}
+
+.font-56 {
+  font-size: 56px !important;
 }
 
 .primary-text-color {
@@ -255,6 +199,17 @@ p {
   color: var(--btn-hover-text-color-primary);
 }
 
+.btn-secondary {
+  background: var(--btn-bg-secondary);
+  color: var(--btn-text-color-secondary);
+  font-size: var(--font-18);
+}
+
+.btn-secondary:hover {
+  background: var(--btn-bg-hover-secondary);
+  color: var(--btn-hover-text-color-secondary);
+}
+
 .btn-default {
   background: var(--btn-bg-default);
   color: var(--btn-text-color-default);
@@ -267,6 +222,24 @@ p {
   background: var(--btn-bg-hover-default);
   color: var(--btn-hover-text-color-default);
   border-color: var(--btn-hover-border-clr-default);
+}
+
+.btn-c.btn-primary-red {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px !important;
+  background: var(--btn-bg-red) !important;
+  border-radius: 4px;
+  color: var(--btn-text-color-red);
+  border: 2px solid var(--btn-border-red);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-c.btn-primary-red:hover {
+  background: var(--btn-bg-hover-red) !important;
+  color: var(--btn-hover-text-color-red);
+  border: 2px solid var(--btn-border-hover-red);
 }
 
 .btn-primary-red {

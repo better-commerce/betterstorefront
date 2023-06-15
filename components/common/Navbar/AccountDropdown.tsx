@@ -31,7 +31,7 @@ export default function Account({ config, title, deviceInfo }: any) {
   return (
     <Menu as="div" className="relative flow-root w-10 px-1 text-left sm:w-16">
       <Menu.Button
-        className="grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center"
+        className="grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
         aria-label="My Account"
         onClick={() => setLoginAttempt()}
       >
@@ -58,7 +58,7 @@ export default function Account({ config, title, deviceInfo }: any) {
             {({ active }) => (
               <>
                 {title ? (
-                  <h3 className="p-2 font-bold text-left">{title}</h3>
+                  <h4 className="p-2 font-bold text-left">{title}</h4>
                 ) : null}
                 {config.map((item: any, idx: number) => (
                   <Link
