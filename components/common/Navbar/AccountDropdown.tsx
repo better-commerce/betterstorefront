@@ -58,7 +58,7 @@ export default function Account({ config, title, deviceInfo }: any) {
             {({ active }) => (
               <>
                 {title ? (
-                  <h3 className="p-2 font-bold text-left">{title}</h3>
+                  <h4 className="p-2 font-bold text-left">{title}</h4>
                 ) : null}
                 {config.map((item: any, idx: number) => (
                   <Link
