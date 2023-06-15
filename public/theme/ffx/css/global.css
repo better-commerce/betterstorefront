@@ -202,7 +202,12 @@ p {
 .btn-primary-white.btn-padding-none {
   padding: 0px !important;
 }
-
+.cart-icon-dark-white svg{
+  color: var(--header-icon-clr);
+}
+.cart-icon-dark-white .icon-grp:hover svg{
+  color: var(--header-icon-hover-clr);
+}
 /* button  css start */
 .btn-primary {
   background: var(--btn-bg-primary);
