@@ -1,0 +1,591 @@
+@tailwind base;
+@import './base.css';
+
+@tailwind components;
+
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Black.woff2') format('woff2'),
+    url('../font/Urbanist-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraLight.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Italic.woff2') format('woff2'),
+    url('../font/Urbanist-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraBoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-BlackItalic.woff2') format('woff2'),
+    url('../font/Urbanist-BlackItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Light.woff2') format('woff2'),
+    url('../font/Urbanist-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-BoldItalic.woff2') format('woff2'),
+    url('../font/Urbanist-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraBold.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraBold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
+    url('../font/Urbanist-ExtraLightItalic.woff') format('woff');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Bold.woff2') format('woff2'),
+    url('../font/Urbanist-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-SemiBold.woff2') format('woff2'),
+    url('../font/Urbanist-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
+    url('../font/Urbanist-SemiBoldItalic.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Regular.woff2') format('woff2'),
+    url('../font/Urbanist-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-ThinItalic.woff2') format('woff2'),
+    url('../font/Urbanist-ThinItalic.woff') format('woff');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-MediumItalic.woff2') format('woff2'),
+    url('../font/Urbanist-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-LightItalic.woff2') format('woff2'),
+    url('../font/Urbanist-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Medium.woff2') format('woff2'),
+    url('../font/Urbanist-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../font/Urbanist-Thin.woff2') format('woff2'),
+    url('../font/Urbanist-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: var(--font-primary) !important;
+  font-size: var(--font-16);
+}
+
+h1 {
+  font-size: var(--font-36);
+}
+
+h2 {
+  font-size: var(--font-32);
+}
+
+h3 {
+  font-size: var(--font-36);
+}
+
+h4 {
+  font-size: var(--font-20);
+}
+
+h5 {
+  font-size: var(--font-16);
+}
+
+h6 {
+  font-size: var(--font-14);
+}
+
+p {
+  font-size: var(--font-14);
+}
+
+.font-14 {
+  font-size: 14px !important;
+}
+
+.font-16 {
+  font-size: 16px !important;
+}
+
+.font-18 {
+  font-size: 18px !important;
+}
+
+.font-20 {
+  font-size: 20px !important;
+}
+
+.font-22 {
+  font-size: 22px !important;
+}
+
+.font-24 {
+  font-size: 24px !important;
+}
+
+.font-28 {
+  font-size: 28px !important;
+}
+
+.font-32 {
+  font-size: 32px !important;
+}
+
+.font-36 {
+  font-size: 36px !important;
+}
+
+.font-42 {
+  font-size: 42px !important;
+}
+
+.font-46 {
+  font-size: 46px !important;
+}
+
+.font-52 {
+  font-size: 52px !important;
+}
+
+.font-56 {
+  font-size: 56px !important;
+}
+
+.primary-text-color {
+  color: #000;
+}
+
+.bg-header-color {
+  background: var(--bg-header-color);
+}
+
+.text-header-clr {
+  color: var(--text-header-clr);
+}
+
+.text-hover-clr {
+  color: var(--text-hover-clr);
+}
+
+.border-hover-clr {
+  border-color: var(--border-hover-clr);
+}
+
+.bg-footer-color {
+  background: var(--bg-footer-color);
+}
+
+.text-footer-clr {
+  color: var(--text-footer-clr);
+}
+
+.btn-primary-white.btn-padding-none {
+  padding: 0px !important;
+}
+
+/* button  css start */
+.btn-primary {
+  background: var(--btn-bg-primary);
+  color: var(--btn-text-color-primary);
+  font-size: var(--font-18);
+}
+
+.btn-c.btn-primary {
+  background: var(--btn-bg-primary);
+  color: var(--btn-text-color-primary);
+  font-size: var(--font-18);
+}
+
+.btn-c.btn-primary:hover {
+  background: var(--btn-bg-hover-primary);
+  color: var(--btn-hover-text-color-primary);
+}
+
+.btn-primary:hover {
+  background: var(--btn-bg-hover-primary);
+  color: var(--btn-hover-text-color-primary);
+}
+
+.btn-default {
+  background: var(--btn-bg-default);
+  color: var(--btn-text-color-default);
+  border: 2px solid var(--btn-text-color-default);
+  border-color: var(--btn-border-clr-default);
+  font-size: var(--font-18);
+}
+
+.btn-default:hover {
+  background: var(--btn-bg-hover-default);
+  color: var(--btn-hover-text-color-default);
+  border-color: var(--btn-hover-border-clr-default);
+}
+
+.btn-c.btn-primary-red {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px !important;
+  background: var(--btn-bg-red) !important;
+  border-radius: 4px;
+  color: var(--btn-text-color-red);
+  border: 2px solid var(--btn-border-red);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-c.btn-primary-red:hover {
+  background: var(--btn-bg-hover-red) !important;
+  color: var(--btn-hover-text-color-red);
+  border: 2px solid var(--btn-border-hover-red);
+}
+
+.btn-primary-red {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-bg-red);
+  border-radius: 4px;
+  color: var(--btn-text-color-red);
+  border: 2px solid var(--btn-border-red);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-primary-red:hover {
+  background: var(--btn-bg-hover-red);
+  color: var(--btn-hover-text-color-red);
+  border: 2px solid var(--btn-border-hover-red);
+}
+
+.btn-primary-blue {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-bg-blue);
+  border-radius: 4px;
+  color: var(--btn-text-color-blue);
+  border: 2px solid var(--btn-border-blue);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-primary-blue:hover {
+  background: var(--btn-bg-hover-blue);
+  color: var(--btn-hover-text-color-blue);
+  border: 2px solid var(--btn-border-hover-blue);
+}
+
+.btn-primary-teal {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-bg-teal);
+  border-radius: 4px;
+  color: var(--btn-text-color-teal);
+  border: 2px solid var(--btn-border-teal);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-primary-teal:hover {
+  background: var(--btn-bg-hover-teal);
+  color: var(--btn-hover-text-color-teal);
+  border: 2px solid var(--btn-border-hover-teal);
+}
+
+.btn-primary-white {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-bg-white);
+  border-radius: 4px;
+  color: var(--btn-text-color-white);
+  border: 2px solid var(--btn-border-white);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-primary-white:hover {
+  background: var(--btn-bg-hover-white);
+  color: var(--btn-hover-text-color-white);
+  border: 2px solid var(--btn-border-hover-white);
+}
+
+.btn-default-red {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-d-bg-red);
+  border-radius: 4px;
+  color: var(--btn-d-text-color-red);
+  border: 2px solid var(--btn-d-border-red);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-default-red:hover {
+  background: var(--btn-d-bg-hover-red);
+  color: var(--btn-d-hover-text-color-red);
+  border: 2px solid var(--btn-d-border-hover-red);
+}
+
+.btn-default-blue {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-d-bg-blue);
+  border-radius: 4px;
+  color: var(--btn-d-text-color-blue);
+  border: 2px solid var(--btn-d-border-blue);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-default-blue:hover {
+  background: var(--btn-d-bg-hover-blue);
+  color: var(--btn-d-hover-text-color-blue);
+  border: 2px solid var(--btn-d-border-hover-blue);
+}
+
+.btn-default-teal {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background: var(--btn-d-bg-teal);
+  border-radius: 4px;
+  color: var(--btn-d-text-color-teal);
+  border: 2px solid var(--btn-d-border-teal);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-default-teal:hover {
+  background: var(--btn-d-bg-hover-teal);
+  color: var(--btn-d-hover-text-color-teal);
+  border: 2px solid var(--btn-d-border-hover-teal);
+}
+
+/* button  css End */
+
+
+/* label badge css start */
+.label-primary-red {
+  padding: 4px 6px;
+  background: var(--label-bg-red);
+  color: var(--label-text-clr-red);
+  border: 1px solid var(--label-border-red);
+  border-radius: 4px;
+  text-align: center;
+  display: inline-block;
+}
+
+.label-primary-blue {
+  padding: 4px 6px;
+  background: var(--label-bg-blue);
+  color: var(--label-text-clr-blue);
+  border: 1px solid var(--label-border-blue);
+  border-radius: 4px;
+  text-align: center;
+  display: inline-block;
+}
+
+.label-primary-white {
+  padding: 4px 6px;
+  background: var(--label-bg-white);
+  color: var(--label-text-clr-white);
+  border: 1px solid var(--label-border-white);
+  border-radius: 4px;
+  text-align: center;
+  display: inline-block;
+}
+
+.label-primary-tan {
+  padding: 4px 6px;
+  background: var(--label-bg-tan);
+  color: var(--label-text-clr-tan);
+  border: 1px solid var(--label-border-tan);
+  border-radius: 4px;
+  text-align: center;
+  display: inline-block;
+}
+
+.label-primary-yellow {
+  padding: 4px 6px;
+  background: var(--label-bg-yellow);
+  color: var(--label-text-clr-yellow);
+  border: 1px solid var(--label-border-yellow);
+  border-radius: 4px;
+  text-align: center;
+  display: inline-block;
+}
+
+.label-default-red {
+  padding: 4px 6px;
+  background: var(--label-d-bg-red);
+  color: var(--label-d-text-clr-red);
+  border: 1px solid var(--label-d-border-red);
+  border-radius: 4px;
+  text-align: center;
+  display: inline-block;
+}
+
+.label-default-blue {
+  padding: 4px 6px;
+  background: var(--label-d-bg-blue);
+  color: var(--label-d-text-clr-blue);
+  border: 1px solid var(--label-d-border-blue);
+  border-radius: 4px;
+  text-align: center;
+  display: inline-block;
+}
+
+.label-default-white {
+  padding: 4px 6px;
+  background: var(--label-d-bg-white);
+  color: var(--label-d-text-clr-white);
+  border: 1px solid var(--label-d-border-white);
+  border-radius: 4px;
+  text-align: center;
+  display: inline-block;
+}
+
+/* label badge css End */
+
+/* flag primary css start */
+.flag-primary-red {
+  padding: 12px 16px;
+  display: inline-block;
+  width: 180px;
+  background: var(--web-red);
+  color: var(--brand-white);
+  clip-path: polygon(100% 0, 75% 52%, 100% 100%, 0% 100%, 0 48%, 0% 0%);
+}
+
+.flag-primary-blue {
+  padding: 12px 16px;
+  display: inline-block;
+  width: 180px;
+  background: var(--barnd-blue);
+  color: var(--brand-white);
+  clip-path: polygon(100% 0, 75% 52%, 100% 100%, 0% 100%, 0 48%, 0% 0%);
+}
+
+.flag-primary-tan {
+  padding: 12px 16px;
+  display: inline-block;
+  width: 180px;
+  background: var(--tan-clr);
+  color: var(--barnd-blue);
+  clip-path: polygon(100% 0, 75% 52%, 100% 100%, 0% 100%, 0 48%, 0% 0%);
+}
+
+.flag-primary-teal {
+  padding: 12px 16px;
+  display: inline-block;
+  width: 180px;
+  background: var(--teal-clr);
+  color: var(--brand-white);
+  clip-path: polygon(100% 0, 75% 52%, 100% 100%, 0% 100%, 0 48%, 0% 0%);
+}
+
+/* flag primary css start */
