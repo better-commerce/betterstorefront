@@ -90,6 +90,13 @@
   --btn-bg-hover-primary: #0f172a;
   /* button primary variable */
 
+  /* button secondary variable */
+  --btn-bg-secondary: #000;
+  --btn-text-color-secondary: #fff;
+  --btn-hover-text-color-secondary: #fff;
+  --btn-bg-hover-secondary: #000;
+  /* button secondary variable */
+
   /* button primary red variable */
   --btn-bg-red: #DF340C;
   --btn-text-color-red: #fff;
