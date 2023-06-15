@@ -43,7 +43,8 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
 
 function Cart({ cart }: any) {
-  const { setCartItems, cartItems, basketId, basketPromos, getBasketPromos } = useUI()
+  const { setCartItems, cartItems, basketId, basketPromos, getBasketPromos } =
+    useUI()
   const { addToCart } = cartHandler()
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
@@ -126,12 +127,14 @@ function Cart({ cart }: any) {
     async function loadShippingPlans() {
       await fetchShippingPlans()
     }
-    
+
     if (cart?.shippingMethods.length > 0) {
       loadShippingPlans()
     } else {
       setCartItems(cart)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleItem = (product: any, type = 'increase') => {
@@ -280,7 +283,7 @@ function Cart({ cart }: any) {
                     {product.children?.map((child: any, idx: number) => (
                       <div className="flex mt-10" key={'child' + idx}>
                         <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                          <img
+                          <Image
                             src={child.image}
                             alt={child.name}
                             className="object-cover object-center w-full h-full"

@@ -1,5 +1,8 @@
 import fetcher from '../../fetcher'
-import { BETTERCOMMERCE_DEFAULT_COUNTRY, CREATE_ADDRESS_ENDPOINT } from '@components/utils/constants'
+import {
+  BETTERCOMMERCE_DEFAULT_COUNTRY,
+  CREATE_ADDRESS_ENDPOINT,
+} from '@components/utils/constants'
 import countryList from '@components/utils/countryList'
 
 export default function useAddress() {
@@ -16,7 +19,8 @@ export default function useAddress() {
       City: query?.city,
       PostCode: query?.postCode,
       Country: query?.country || BETTERCOMMERCE_DEFAULT_COUNTRY,
-      CountryCode: query?.countryCode || countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      CountryCode:
+        query?.countryCode || countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
       CustomerId: query?.userId,
       PhoneNo: query?.phoneNo,
       isDefault: query?.isDefault || false,
@@ -25,7 +29,7 @@ export default function useAddress() {
       isDefaultSubscription: query?.isDefaultSubscription || false,
       label: query?.label || '',
       State: query?.state,
-      isConsentSelected: query?.isConsentSelected ,
+      isConsentSelected: query?.isConsentSelected,
     }
     try {
       const response: any = await fetcher({

@@ -12,14 +12,13 @@ function renderRadioOptions(
   selectedValue: any,
   openRemainElems: boolean = false,
   handleToggleOpenRemainElems: any,
-  sizeInit:any,
-  setSizeInit:any,
+  sizeInit: any,
+  setSizeInit: any
 ) {
-  
   let defaultItems = items && items.length > 0 ? items.slice(0, itemsCount) : []
   let remainingItems =
     items && items.length > 0 ? items.slice(itemsCount, items.length) : []
-  
+
   return (
     <div className="flex items-center">
       {defaultItems.map((item: any, idx: any) => (
@@ -27,7 +26,9 @@ function renderRadioOptions(
           key={idx}
           value={item.fieldValue}
           title={item.fieldLabel}
-          onClick={()=>{setSizeInit('false')}}
+          onClick={() => {
+            setSizeInit('false')
+          }}
           style={{ backgroundColor: item.fieldValue }}
           className={cn(
             'pdp-color-swatch-item relative z-1 h-10 w-10 border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
@@ -92,7 +93,7 @@ export default function InlineList({
 }: any) {
   const [color, setColor] = useState(null) // to display color in the Page
   const [colorName, setColorName] = useState<any>('')
-  const [validation, setValidation] = useState<any>(false);
+  const [validation, setValidation] = useState<any>(false)
   const handleChange = (value: any) => {
     const fieldSet = items?.find((o: any) => o.fieldValue === value)
     setColor(value)
@@ -102,15 +103,19 @@ export default function InlineList({
   useEffect(() => {
     const fieldSet = items?.find((o: any) => o.fieldValue === currentAttribute)
     handleSetProductVariantInfo({ colour: currentAttribute, fieldSet })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   useEffect(() => {
-    product.customAttributes.map((val:any) => {
-      setValidation(true);
-      if(val.key === "global.colour"){ 
+    product.customAttributes.map((val: any) => {
+      setValidation(true)
+      if (val.key === 'global.colour') {
         setColorName(val.valueText)
       }
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   const [openRemainElems, setOpenRemainElems] = useState(false)
@@ -120,8 +125,14 @@ export default function InlineList({
   return (
     <>
       <div className="flex items-center">
-      <h4 className="text-gray-700">{GENERAL_COLOUR} :</h4>
-      {validation ? <span className='pl-1 font-light text-gray-700 text-ms dark:text-gray-700'>{colorName}</span> : <span className='pl-1 text-sm font-bold text-gray-400'>--</span> }
+        <h4 className="text-gray-700">{GENERAL_COLOUR} :</h4>
+        {validation ? (
+          <span className="pl-1 font-light text-gray-700 text-ms dark:text-gray-700">
+            {colorName}
+          </span>
+        ) : (
+          <span className="pl-1 text-sm font-bold text-gray-400">--</span>
+        )}
         {/* <h3 className='px-2' >{color}</h3>
       <div style={{ color: `${color}` }}></div> */}
       </div>
@@ -135,7 +146,7 @@ export default function InlineList({
             openRemainElems,
             handleToggleOpenRemainElems,
             sizeInit,
-            setSizeInit,
+            setSizeInit
           )}
         </div>
       </RadioGroup>

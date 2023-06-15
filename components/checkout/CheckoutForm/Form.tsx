@@ -14,7 +14,7 @@ import {
 
 export default function AddressForm({
   initialValues = {},
-  onSubmit = () => { },
+  onSubmit = () => {},
   closeEditMode,
   btnTitle = 'Save',
   toggleAction,
@@ -24,7 +24,7 @@ export default function AddressForm({
   config,
   addresses,
   setAddress,
-  sameAddressAction = () => { },
+  sameAddressAction = () => {},
   isSameAddressCheckboxEnabled,
   isSameAddress = true,
   isGuest = false,
@@ -127,7 +127,7 @@ export default function AddressForm({
       initialValues={initState}
       onSubmit={(values: any) => {
         // Pass on dirty flag to the parent ref.
-        onSubmit({ ...values, ...{ isDirty: formikRef.current.dirty } });
+        onSubmit({ ...values, ...{ isDirty: formikRef.current.dirty } })
       }}
       innerRef={formikRef}
     >
@@ -192,7 +192,7 @@ export default function AddressForm({
                 )
               })}
             </div>
-            {isFormOpen && (
+            {/* {isFormOpen && (
               <Form className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                 {config.map((formItem: any, idx: number) => {
                   let classNames = ''
@@ -245,8 +245,8 @@ export default function AddressForm({
                           </span>
                         )}
                         {formItem.addressFinder &&
-                          values[formItem.name] === postCodeValue &&
-                          addressList.length > 0 ? (
+                        values[formItem.name] === postCodeValue &&
+                        addressList.length > 0 ? (
                           <div className="absolute bg-white z-10 w-64 max-h-80 overflow-scroll">
                             <div className="bg-gray-900">
                               <h2
@@ -303,18 +303,18 @@ export default function AddressForm({
                   )
                 })}
               </Form>
-            )}
-            {!isGuest && (
+            )} */}
+            {
               <div className="flex">
                 <button
                   type="button"
                   // onClick={() => handleNewFormButton(values, errors)}
                   onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="max-w-xs m-2 flex-1 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
+                  className="max-w-xs m-2 flex-1 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium btn-default sm:w-full"
                 >
-                  {isFormOpen ? BTN_SAVE : ADD_ADDRESS}
+                  {ADD_ADDRESS}
                 </button>
-                {isFormOpen && (
+                {/* {isFormOpen && (
                   <button
                     type="button"
                     onClick={() => setNewFormOpen(false)}
@@ -322,9 +322,9 @@ export default function AddressForm({
                   >
                     {GENERAL_CANCEL}
                   </button>
-                )}
+                )} */}
               </div>
-            )}
+            }
             {/* {isSameAddressCheckboxEnabled && (
               <div className="flex items-center mt-10">
                 <input
@@ -355,7 +355,7 @@ export default function AddressForm({
               >
                 {btnTitle}
               </button>
-              {!!closeEditMode && (
+              {/* {!!closeEditMode && (
                 <button
                   type="button"
                   onClick={closeEditMode}
@@ -363,7 +363,7 @@ export default function AddressForm({
                 >
                   {GENERAL_CANCEL}
                 </button>
-              )}
+              )} */}
             </div>
           </>
         )

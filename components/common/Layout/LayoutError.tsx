@@ -74,14 +74,14 @@ const ModalUI: FC = () => {
   return null
 }
 
-const SidebarView: FC<{ sidebarView: string; closeSidebar(): any } & IExtraProps> = ({
-  sidebarView,
-  closeSidebar,
-  deviceInfo,
-}) => {
+const SidebarView: FC<
+  { sidebarView: string; closeSidebar(): any } & IExtraProps
+> = ({ sidebarView, closeSidebar, deviceInfo }) => {
   return (
     <Sidebar onClose={closeSidebar} deviceInfo={deviceInfo}>
-      {sidebarView === 'CART_VIEW' && <CartSidebarView deviceInfo={deviceInfo} />}
+      {sidebarView === 'CART_VIEW' && (
+        <CartSidebarView deviceInfo={deviceInfo} />
+      )}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
     </Sidebar>
   )
@@ -90,7 +90,11 @@ const SidebarView: FC<{ sidebarView: string; closeSidebar(): any } & IExtraProps
 const SidebarUI: FC = ({ deviceInfo }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
-    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} deviceInfo={deviceInfo} />
+    <SidebarView
+      sidebarView={sidebarView}
+      closeSidebar={closeSidebar}
+      deviceInfo={deviceInfo}
+    />
   ) : null
 }
 
@@ -107,7 +111,10 @@ const LayoutError: FC<Props & IExtraProps> = ({
   isLocationLoaded,
   deviceInfo,
 }) => {
-  const navTreeFromLocalStorage = getItem('navTree') || { nav: [], footer: [] }
+  const navTreeFromLocalStorage: any = getItem('navTree') || {
+    nav: [],
+    footer: [],
+  }
   const [isLoading, setIsLoading] = useState(false)
   const { showSearchBar, setShowSearchBar } = useUI()
   const [data, setData] = useState(navTreeFromLocalStorage)
@@ -127,11 +134,15 @@ const LayoutError: FC<Props & IExtraProps> = ({
     }
     fetchLayout()
     setAppConfig(config)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
@@ -143,11 +154,6 @@ const LayoutError: FC<Props & IExtraProps> = ({
 
   return (
     <CommerceProvider locale={locale}>
-      <Script
-        src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
-        strategy="beforeInteractive"
-      />
-
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
         <Navbar
@@ -165,7 +171,10 @@ const LayoutError: FC<Props & IExtraProps> = ({
           title={GENERAL_COOKIE_TEXT}
           hide={acceptedCookies}
           action={
-            <Button className="mx-5 btn-c btn-primary" onClick={() => onAcceptCookies()}>
+            <Button
+              className="mx-5 btn-c btn-primary"
+              onClick={() => onAcceptCookies()}
+            >
               {BTN_ACCEPT_COOKIE}
             </Button>
           }

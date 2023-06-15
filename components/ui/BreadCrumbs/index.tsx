@@ -36,11 +36,21 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
   //const [flattenedItems, setFlattenedItems] = useState(createBreadcrumbs(items))
   const flattenedItems = createBreadcrumbs(items)
   return (
-    <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4">
+    <ol
+      role="list"
+      className="flex items-center space-x-0 sm:space-x-0 sm:mb-4"
+    >
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
-        <li key={breadcrumbIdx} className="flex items-center text-xs sm:text-sm">
+        <li
+          key={breadcrumbIdx}
+          className="flex items-center text-xs sm:text-sm"
+        >
           <Link href={`/${breadcrumb.slug}`} passHref>
-            <span className={`font-normal hover:text-gray-900 ${breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-black'}`}>
+            <span
+              className={`font-normal hover:text-gray-900 ${
+                breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-black'
+              }`}
+            >
               {breadcrumb.title}
             </span>
           </Link>

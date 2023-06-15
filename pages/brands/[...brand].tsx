@@ -5,7 +5,9 @@ import useSwr from 'swr'
 import NextHead from 'next/head'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
-const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
+const ProductGrid = dynamic(
+  () => import('@components/product/Grid/ProductGrid')
+)
 const ProductSort = dynamic(() => import('@components/product/ProductSort'))
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -163,22 +165,25 @@ function BrandDetailPage({
   useEffect(() => {
     if (IS_INFINITE_SCROLL) {
       if (
-        data.products.currentPage !== productListMemory.products.currentPage ||
-        data.products.total !== productListMemory.products.total
+        data?.products?.currentPage !==
+          productListMemory?.products?.currentPage ||
+        data?.products?.total !== productListMemory?.products?.total
       ) {
         setProductListMemory((prevData: any) => {
           let dataClone = { ...data }
           if (state.currentPage > 1) {
             dataClone.products.results = [
-              ...prevData.products.results,
-              ...dataClone.products.results,
+              ...prevData?.products?.results,
+              ...dataClone?.products?.results,
             ]
           }
           return dataClone
         })
       }
     }
-  }, [data.products.results.length])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.products?.results?.length])
 
   const handlePageChange = (page: any) => {
     router.push(
@@ -268,56 +273,77 @@ function BrandDetailPage({
       </div>
     )
   }
-  let absPath = "";
+  let absPath = ''
   if (typeof window !== 'undefined') {
-    absPath = window?.location?.href;
+    absPath = window?.location?.href
   }
   return (
     <>
       <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
         <link rel="canonical" id="canonical" href={absPath} />
-        <title>{brandDetails?.name || "Brands"}</title>
-        <meta name="title" content={brandDetails?.name || "Brands"} />
+        <title>{brandDetails?.name || 'Brands'}</title>
+        <meta name="title" content={brandDetails?.name || 'Brands'} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
         <meta property="og:image" content="" />
         <meta property="og:title" content={brandDetails?.name} key="ogtitle" />
-        <meta property="og:description" content={brandDetails?.metaDescription} key="ogdesc" />
+        <meta
+          property="og:description"
+          content={brandDetails?.metaDescription}
+          key="ogdesc"
+        />
       </NextHead>
       <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
         <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
-          <span className='text-sm font-semibold text-black'>Showing {data?.products?.total} {RESULTS}</span>
-          <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">{brandDetails?.name}</h1>
-          <div dangerouslySetInnerHTML={{ __html: brandDetails?.description, }} className="mt-2 text-black sm:mt-5" />
+          <span className="text-sm font-semibold text-black">
+            Showing {data?.products?.total} {RESULTS}
+          </span>
+          <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">
+            {brandDetails?.name}
+          </h1>
+          <div
+            dangerouslySetInnerHTML={{ __html: brandDetails?.description }}
+            className="mt-2 text-black sm:mt-5"
+          />
         </div>
         <div className="flex justify-end w-full">
-          <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} />
+          <ProductSort
+            routerSortOption={state.sortBy}
+            products={data.products}
+            action={handleSortBy}
+          />
         </div>
-        <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} />
+        <ProductGrid
+          products={productDataToPass}
+          currentPage={state.currentPage}
+          handlePageChange={handlePageChange}
+          handleInfiniteScroll={handleInfiniteScroll}
+          deviceInfo={deviceInfo}
+        />
       </div>
     </>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const slug = `brands/${context.query.brand.pop()}`;
-  const response = await getBrandBySlug(
-    slug,
-    context.req.cookies
-  );
+  const slug = `brands/${context.query.brand.pop()}`
+  const response = await getBrandBySlug(slug, context.req.cookies)
 
-  const infraPromise = commerce.getInfra();
-  const infra = await infraPromise;
+  const infraPromise = commerce.getInfra()
+  const infra = await infraPromise
   return {
     props: {
       query: context.query,
       slug: slug,
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
-      snippets: response?.snippets ?? []
+      snippets: response?.snippets ?? [],
     }, // will be passed to the page component as props
-  };
+  }
 }
 
 const PAGE_TYPE = PAGE_TYPES['Brand']

@@ -6,7 +6,12 @@ import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
 import { data } from 'autoprefixer'
-import { BTN_CLEAR_ALL, GENERAL_CLOSE, GENERAL_FILTER_TITLE, PRODUCT_FILTER } from '@components/utils/textVariables'
+import {
+  BTN_CLEAR_ALL,
+  GENERAL_CLOSE,
+  GENERAL_FILTER_TITLE,
+  PRODUCT_FILTER,
+} from '@components/utils/textVariables'
 
 interface Props {
   products: any
@@ -74,22 +79,39 @@ export default function Filters({
           >
             <div className="relative flex flex-col w-full h-full max-w-xs py-2 pb-2 ml-auto overflow-y-auto bg-white shadow-xl sm:py-4 sm:pb-6 z-9999">
               <div className="flex items-center justify-between px-4">
-                <h2 className="text-lg font-medium text-gray-900">{GENERAL_FILTER_TITLE}</h2>
-                <button type="button" onClick={() => setOpen(false)}
-                  className="flex items-center justify-center w-10 h-6 p-2 -mr-2 text-gray-400 bg-white rounded-md sm:h-10 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <h2 className="text-lg font-medium text-gray-900">
+                  {GENERAL_FILTER_TITLE}
+                </h2>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-center w-10 h-6 p-2 -mr-2 text-gray-400 bg-white rounded-md sm:h-10 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
                   <span className="sr-only">{GENERAL_CLOSE}</span>
                   <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                 </button>
               </div>
 
               {products.filters?.map((section: any) => (
-                <Disclosure as="div" key={section.name} className="px-4 py-3 border-t border-gray-200">
+                <Disclosure
+                  as="div"
+                  key={section.name}
+                  className="px-4 py-3 border-t border-gray-200"
+                >
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex items-center justify-between w-full px-2 py-3 -mx-2 -my-3 text-sm text-gray-400 bg-white">
-                        <span className="font-medium text-gray-900">{section.name}</span>
+                        <span className="font-medium text-gray-900">
+                          {section.name}
+                        </span>
                         <span className="flex items-center ml-6">
-                          <ChevronDownIcon className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform')} aria-hidden="true" />
+                          <ChevronDownIcon
+                            className={classNames(
+                              open ? '-rotate-180' : 'rotate-0',
+                              'h-5 w-5 transform'
+                            )}
+                            aria-hidden="true"
+                          />
                         </span>
                       </Disclosure.Button>
                       <Disclosure.Panel className="pt-6 space-y-3 max-panel">
@@ -110,29 +132,59 @@ export default function Filters({
         </Dialog>
       </Transition.Root>
 
-      <section aria-labelledby="filter-heading-filter" className="flex items-center justify-between px-0 py-0 text-center border-t border-gray-200 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 id="filter-heading-filter" className="sr-only">{GENERAL_FILTER_TITLE}</h2>
+      <section
+        aria-labelledby="filter-heading-filter"
+        className="flex items-center justify-between px-0 py-0 text-center border-t border-gray-200 sm:px-6 lg:max-w-7xl lg:px-8"
+      >
+        <h2 id="filter-heading-filter" className="sr-only">
+          {GENERAL_FILTER_TITLE}
+        </h2>
         <div className="relative col-start-1 row-start-1 py-3">
           <div className="flex px-4 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
-            <button onClick={() => setOpen(true)} title='Product Filter' className="flex items-center font-medium text-gray-700 group">
-              <FunnelIcon className="flex-none w-5 h-5 mr-2 text-gray-900 group-hover:text-gray-500" title='Filter' aria-hidden="true" />
-              {appliedFilters?.length > 0 && (routerFilters.length)}
+            <button
+              onClick={() => setOpen(true)}
+              title="Product Filter"
+              className="flex items-center font-medium text-gray-700 group"
+            >
+              <FunnelIcon
+                className="flex-none w-5 h-5 mr-2 text-gray-900 group-hover:text-gray-500"
+                title="Filter"
+                aria-hidden="true"
+              />
+              {appliedFilters?.length > 0 && routerFilters.length}
             </button>
             <div className="pl-6">
-              <button onClick={clearAll} type="button" className="text-gray-500">{BTN_CLEAR_ALL}</button>
+              <button
+                onClick={clearAll}
+                type="button"
+                className="text-gray-500"
+              >
+                {BTN_CLEAR_ALL}
+              </button>
             </div>
           </div>
         </div>
-        <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} />
+        <ProductSort
+          routerSortOption={routerSortOption}
+          products={products}
+          action={handleSortBy}
+        />
         {appliedFilters?.length > 0 && (
-          <div className='grid flex-col grid-cols-1 px-4 py-2 border-t border-gray-100'>
-            <h4 className='flex w-full mb-2 text-sm font-bold'>Applied Filters</h4>
-            <div className='grid grid-cols-2'>
+          <div className="grid flex-col grid-cols-1 px-4 py-2 border-t border-gray-100">
+            <h4 className="flex w-full mb-2 text-sm font-bold">
+              Applied Filters
+            </h4>
+            <div className="grid grid-cols-2">
               {appliedFilters.map((appliedFilter: any, idx: number) => (
-                <div key={`applied-filter-${idx}`} className="flex-1 text-xs text-left text-gray-600 justify-left items-left">
+                <div
+                  key={`applied-filter-${idx}`}
+                  className="flex-1 text-xs text-left text-gray-600 justify-left items-left"
+                >
                   {appliedFilter.name ? (
                     <>
-                      <span className='font-medium'>{appliedFilter.name}: </span>
+                      <span className="font-medium">
+                        {appliedFilter.name}:{' '}
+                      </span>
                       <span className="ml-1">{appliedFilter.Value}</span>
                     </>
                   ) : null}

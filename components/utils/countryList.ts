@@ -1,4 +1,4 @@
-export default [
+const countryList = [
   { code: null, title: 'Country', value: 'Country' },
   { code: 'AF', title: 'Afghanistan', value: 'Afghanistan' },
   { code: 'AX', title: 'Åland Islands', value: 'Åland Islands' },
@@ -359,4 +359,6 @@ export default [
   { code: 'YE', title: 'Yemen', value: 'Yemen' },
   { code: 'ZM', title: 'Zambia', value: 'Zambia' },
   { code: 'ZW', title: 'Zimbabwe', value: 'Zimbabwe' },
-]
+];
+
+export default countryList;

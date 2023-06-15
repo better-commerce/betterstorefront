@@ -1,21 +1,20 @@
+import { TEST_PAYMENT_AMOUNT } from '@framework/utils/constants'
+import { BCPaymentEndpoint } from '@framework/api/endpoints/payments/constants'
+import { ENABLE_SECURED_PAYMENT_PAYLOAD } from './constants'
 
-import { TEST_PAYMENT_AMOUNT } from "@framework/utils/constants";
-import { BCPaymentEndpoint } from "@framework/api/endpoints/payments/constants";
-import { ENABLE_SECURED_PAYMENT_PAYLOAD } from "./constants";
-
-export const LOG_REQUEST_OPTIONS = false;
-export const TEST_PAYMENT_AMOUNT_FORMATTED = `₹${TEST_PAYMENT_AMOUNT}`;
+export const LOG_REQUEST_OPTIONS = false
+export const TEST_PAYMENT_AMOUNT_FORMATTED = `₹${TEST_PAYMENT_AMOUNT}`
 
 export enum PaymentGateway {
-  COD = "cod",
-  JUSPAY = "juspay",
-  PAYPAL = "paypal",
-  CHECKOUT = "checkout",
-  MASTER_CARD = "mastercard",
-  CLEAR_PAY = "clearpay",
-  KLARNA = "klarna",
-  STRIPE = "stripe",
-};
+  COD = 'cod',
+  JUSPAY = 'juspay',
+  PAYPAL = 'paypal',
+  CHECKOUT = 'checkout',
+  MASTER_CARD = 'mastercard',
+  CLEAR_PAY = 'clearpay',
+  KLARNA = 'klarna',
+  STRIPE = 'stripe',
+}
 
 export enum PaymentGatewayId {
   COD = 0,
@@ -26,76 +25,77 @@ export enum PaymentGatewayId {
   CLEAR_PAY = 5,
   KLARNA = 6,
   STRIPE = 7,
-};
+}
 
 export module Payments {
-  export const PARSE_ORDER_ID_REGEX = /Order[ ](.*?)(?:[a-zA-Z0-9\-]*)for[ ]basket (.*)(?:[a-zA-Z0-9\-]*)/g;
-  export const CHECKOUT_FRAMES_SCRIPT_SRC_V2 = "https://cdn.checkout.com/js/framesv2.min.js";
-  export const KLARNA_FRAMES_SCRIPT_SRC_V1 = "https://x.klarnacdn.net/kp/lib/v1/api.js";
-  export const CLEARPAY_SCRIPT_SRC = "afterpay.js";
+  export const PARSE_ORDER_ID_REGEX =
+    /Order[ ](.*?)(?:[a-zA-Z0-9\-]*)for[ ]basket (.*)(?:[a-zA-Z0-9\-]*)/g
+  export const CHECKOUT_FRAMES_SCRIPT_SRC_V2 =
+    'https://cdn.checkout.com/js/framesv2.min.js'
+  export const KLARNA_FRAMES_SCRIPT_SRC_V1 =
+    'https://x.klarnacdn.net/kp/lib/v1/api.js'
+  export const CLEARPAY_SCRIPT_SRC = 'afterpay.js'
 
   export module RequestParams {
-
     export const CONVERT_ORDER: any = {
       t: BCPaymentEndpoint.CONVERT_ORDER,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
-    };
+    }
 
     export const INIT_PAYMENT: any = {
       t: BCPaymentEndpoint.INIT_PAYMENT,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
-    };
+    }
 
     export const REQUEST_PAYMENT: any = {
       t: BCPaymentEndpoint.REQUEST_PAYMENT,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
-    };
+    }
 
     export const CREATE_ONE_TIME_PAY_ORDER: any = {
       t: BCPaymentEndpoint.CREATE_ONE_TIME_PAY_ORDER,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
-    };
+    }
 
     export const PROCESS_PAYMENT_RESPONSE: any = {
       t: BCPaymentEndpoint.PAYMENT_RESPONSE,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
-    };
-  };
-};
+    }
+  }
+}
 
 export module JusPay {
-
   export enum TransactionStatus {
-    TXN_CHARGED = "TXN_CHARGED",
-    TXN_FAILED = "TXN_FAILED",
-    ORDER_REFUNDED = "ORDER_REFUNDED",
+    TXN_CHARGED = 'TXN_CHARGED',
+    TXN_FAILED = 'TXN_FAILED',
+    ORDER_REFUNDED = 'ORDER_REFUNDED',
   }
 
   export enum UPI {
-    PAYMENT_METHOD_TYPE = "UPI",
-    PAYMENT_METHOD = "UPI",
-    TRANSACTION_TYPE = "UPI_COLLECT",
-  };
+    PAYMENT_METHOD_TYPE = 'UPI',
+    PAYMENT_METHOD = 'UPI',
+    TRANSACTION_TYPE = 'UPI_COLLECT',
+  }
 
   export module Offers {
-    export const ELIGIBLE_OFFER_STATUS = "ELIGIBLE";
+    export const ELIGIBLE_OFFER_STATUS = 'ELIGIBLE'
 
     export enum CalculationRuleType {
-      PERCENTAGE = "PERCENTAGE",
-      ABSOLUTE = "ABSOLUTE",
+      PERCENTAGE = 'PERCENTAGE',
+      ABSOLUTE = 'ABSOLUTE',
     }
-  };
-};
+  }
+}
 
 export module LocalStorage {
   export module Key {
-    export const ORDER_RESPONSE = "orderResponse";
-    export const ORDER_PAYMENT = "orderModelPayment";
-    export const CONVERTED_ORDER = "convertedOrder";
-    export const PREFERRED_PAYMENT = "prefPay";
-    export const DELIVERY_ADDRESS = "delAddr";
-  };
-};
+    export const ORDER_RESPONSE = 'orderResponse'
+    export const ORDER_PAYMENT = 'orderModelPayment'
+    export const CONVERTED_ORDER = 'convertedOrder'
+    export const PREFERRED_PAYMENT = 'prefPay'
+    export const DELIVERY_ADDRESS = 'delAddr'
+  }
+}
 
 export enum PaymentStatus {
   PENDING = 0,
@@ -114,16 +114,16 @@ export enum PaymentStatus {
   REQUEST_TO_CANCEL_PRE_AUTH = 13,
   PROBLEM_IN_CANCEL_PRE_AUTH = 14,
   PO_RECEIVED = 15,
-};
+}
 
 export enum PaymentMethodType {
-  CARD = "CARD",
-  NETBANKING = "NB",
-  WALLET = "WALLET",
-  UPI = "UPI",
-  COD = "CODGoKwik",
-  DIFFERENT_PAY_MODE = "UseDifferentMethod",
-  PAYER_ACCOUNT = "PAYER_ACCOUNT",
+  CARD = 'CARD',
+  NETBANKING = 'NB',
+  WALLET = 'WALLET',
+  UPI = 'UPI',
+  COD = 'CODGoKwik',
+  DIFFERENT_PAY_MODE = 'UseDifferentMethod',
+  PAYER_ACCOUNT = 'PAYER_ACCOUNT',
 }
 
 export enum PaymentMethodMode {
@@ -134,4 +134,11 @@ export enum PaymentMethodMode {
   COD = 5,
 }
 
-export const CARD_TYPES = ["RUPAY", "VISA", "MASTER", "MAESTRO", "DINERS", "AMEX"];
+export const CARD_TYPES = [
+  'RUPAY',
+  'VISA',
+  'MASTER',
+  'MAESTRO',
+  'DINERS',
+  'AMEX',
+]

@@ -18,63 +18,77 @@ import MyDetails from '@components/account/MyDetails'
 import MyOrders from '@components/account/Orders/MyOrders'
 import { matchStrings } from '@framework/utils/parse-util'
 import axios from 'axios'
-import { NEXT_GET_ORDERS, NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
+import {
+  NEXT_GET_ORDERS,
+  NEXT_GET_ORDER_DETAILS,
+} from '@components/utils/constants'
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 10
 
 function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { user, deleteUser, isGuestUser } = useUI()
   const router = useRouter()
-const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
-  const [allOrders, setAllOrders] = useState<Array<any> | undefined>(undefined);
-  const [pagedOrders, setPagedOrders] = useState<Array<any>>();
-  const [allOrderIds, setAllOrderIds] = useState<Array<string> | undefined>(undefined);
-  const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false);
-  const [active, setActive] = useState(false);
-  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [allOrders, setAllOrders] = useState<Array<any> | undefined>(undefined)
+  const [pagedOrders, setPagedOrders] = useState<Array<any>>()
+  const [allOrderIds, setAllOrderIds] = useState<Array<string> | undefined>(
+    undefined
+  )
+  const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
+  const [active, setActive] = useState(false)
+  const [pageNumber, setPageNumber] = useState<number>(1)
 
   useEffect(() => {
     if (allOrdersFetched) {
-      setAllOrderIds(pagedOrders?.map((x: any) => x?.id));
+      setAllOrderIds(pagedOrders?.map((x: any) => x?.id))
     } else {
-      fetchOrders(pageNumber);
+      fetchOrders(pageNumber)
     }
-  }, [allOrdersFetched]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allOrdersFetched])
 
   useEffect(() => {
-    setAllOrdersFetched(false);
-  }, [pageNumber]);
+    setAllOrdersFetched(false)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber])
 
   useEffect(() => {
     if (allOrderIds?.length) {
       allOrderIds?.forEach((id: string, index: number) => {
-        handleFetchOrderDetails(id)
-          .then((orderDetails: any) => {
-            const newOrders = pagedOrders?.map(
-              (obj: any) => (matchStrings(obj?.id, id, true) ? Object.assign(obj, { orderDetails: orderDetails }) : obj)
-            );
-            setPagedOrders(newOrders);
-            setAllOrders((allOrders ?? [])?.concat(newOrders));
-          });
-      });
+        handleFetchOrderDetails(id).then((orderDetails: any) => {
+          const newOrders = pagedOrders?.map((obj: any) =>
+            matchStrings(obj?.id, id, true)
+              ? Object.assign(obj, { orderDetails: orderDetails })
+              : obj
+          )
+          setPagedOrders(newOrders)
+          setAllOrders((allOrders ?? [])?.concat(newOrders))
+        })
+      })
     } else {
       if (allOrderIds !== undefined) {
-        setAllOrders([]);
+        setAllOrders([])
       }
     }
-  }, [allOrderIds]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allOrderIds])
 
   useEffect(() => {
     if (isGuestUser) {
-      router.push("/");
+      router.push('/')
     } else {
-      fetchOrders(pageNumber);
+      fetchOrders(pageNumber)
     }
-  }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const fetchOrders = async (pageNumber: number) => {
     const { data: ordersResult }: any = await axios.post(NEXT_GET_ORDERS, {
@@ -82,30 +96,35 @@ const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
       hasMembership: user?.hasMembership,
       pageNumber: pageNumber,
       pageSize: PAGE_SIZE,
-    });
+    })
 
     // console.log('setPagedOrders ::', ordersResult);
-    setPagedOrders(ordersResult);
-    setAllOrdersFetched(true);
-  };
+    setPagedOrders(ordersResult)
+    setAllOrdersFetched(true)
+  }
 
   const handleFetchOrderDetails = async (id: any) => {
-    const { data: orderDetails }: any = await axios.post(NEXT_GET_ORDER_DETAILS, {
-      id: user?.userId,
-      orderId: id
-    });
-    return orderDetails;
-  };
+    const { data: orderDetails }: any = await axios.post(
+      NEXT_GET_ORDER_DETAILS,
+      {
+        id: user?.userId,
+        orderId: id,
+      }
+    )
+    return orderDetails
+  }
 
   const handleInfiniteScroll = () => {
     //alert(pageNumber)
-    setPageNumber(pageNumber + 1);
-  };
+    setPageNumber(pageNumber + 1)
+  }
 
   useEffect(() => {
     if (router.query.view && view !== router.query.view) {
       setView(router.query.view)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
   let loggedInEventData: any = {
@@ -148,11 +167,16 @@ const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
               viewBox="0 0 16 16"
             >
               {' '}
-              <path
-                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
-              />{' '}
+              <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
             </svg>
-            <a className="mx-2 mr-2 leading-none" href="/my-account">My Orders</a>
+            <Link
+              legacyBehavior
+              passHref
+              className="mx-2 mr-2 leading-none"
+              href="/my-account"
+            >
+              My Orders
+            </Link>
           </h3>
         </div>
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
@@ -177,10 +201,12 @@ const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
                       <>
                         <div
                           key={`my-acc-${idx}`}
-                          className={`relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${item.text == 'My Orders'
-                            ? 'bg-gray-200 text-black font-semibold border-l-4 sm:border-b-0 sm:border-l-4 sm:border-black opacity-full'
-                            : 'font-medium'
-                            }`}>
+                          className={`relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${
+                            item.text == 'My Orders'
+                              ? 'bg-gray-200 text-black font-semibold border-l-4 sm:border-b-0 sm:border-l-4 sm:border-black opacity-full'
+                              : 'font-medium'
+                          }`}
+                        >
                           <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
                             <i
                               className={
@@ -196,15 +222,18 @@ const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
                               handleClick
                               setShow(false)
                             }}
-                            className="inline-block w-full h-full py-4 text-sm text-primary">
-
+                            className="inline-block w-full h-full py-4 text-sm text-primary"
+                          >
                             <span className="inline-block text-black sm:hidden dark:text-black">
                               {item.mtext}
                             </span>
-                            <span className={`hidden sm:inline-block text-black dark:text-black ${item.text == 'My Orders' && 'font-display'}`}>
+                            <span
+                              className={`hidden sm:inline-block text-black dark:text-black ${
+                                item.text == 'My Orders' && 'font-display'
+                              }`}
+                            >
                               {item.text}
                             </span>
-
                           </Link>
                         </div>
                       </>
@@ -217,15 +246,18 @@ const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
                           onClick={() => {
                             handleClick
                           }}
-                          className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100">
-
+                          className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
+                        >
                           <span className="inline-block text-black sm:hidden dark:text-black">
                             {item.mtext}
                           </span>
-                          <span className={`hidden sm:inline-block text-black dark:text-black ${item.text == 'My Orders' && 'font-display'}`}>
+                          <span
+                            className={`hidden sm:inline-block text-black dark:text-black ${
+                              item.text == 'My Orders' && 'font-display'
+                            }`}
+                          >
                             {item.text}
                           </span>
-
                         </Link>
                       </>
                     )}
@@ -236,8 +268,9 @@ const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
           </div>
 
           <div
-            className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${isShow ? `` : ''
-              }`}
+            className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
+              isShow ? `` : ''
+            }`}
           >
             <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
               <MyOrders
@@ -250,7 +283,7 @@ const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 MyAccount.Layout = Layout

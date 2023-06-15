@@ -23,7 +23,7 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
   className = '',
   title = 'Add to bag',
   buttonType = 'cart',
-  action = () => { },
+  action = () => {},
   colorScheme = DEFAULT_COLOR_SCHEME,
   disabled = false,
 }) => {

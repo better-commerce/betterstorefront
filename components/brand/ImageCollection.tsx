@@ -3,6 +3,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
+import Image from 'next/image'
 
 SwiperCore.use([Navigation])
 
@@ -25,7 +26,7 @@ export default function ImageCollection(props: any) {
         {images.map((image: any, idx: number) => {
           return (
             <SwiperSlide key={idx}>
-              <img
+              <Image
                 src={image}
                 alt=""
                 className="cursor-pointer w-full h-full object-center object-cover"

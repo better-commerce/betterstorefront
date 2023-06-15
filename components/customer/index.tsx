@@ -4,14 +4,17 @@ import cn from 'classnames'
 import { registrationConfig, loginConfig } from './config'
 import LoadingDots from '@components/ui/LoadingDots'
 import Button from '@components/ui/Button'
-import { GENERAL_REGISTER, VALIDATION_PASSWORD_MUST_MATCH } from '@components/utils/textVariables'
+import {
+  GENERAL_REGISTER,
+  VALIDATION_PASSWORD_MUST_MATCH,
+} from '@components/utils/textVariables'
 const registerSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
   password: Yup.string().min(8).max(24).required(),
   confirmPassword: Yup.string()
-  .oneOf([Yup.ref('password')], VALIDATION_PASSWORD_MUST_MATCH)
-  .required(),
+    .oneOf([Yup.ref('password')], VALIDATION_PASSWORD_MUST_MATCH)
+    .required(),
 })
 
 const loginSchema = Yup.object({
@@ -105,7 +108,7 @@ export default function CustomerForm({
                 )
               })}
             </Form>
-            <div className='w-full sm:w-1/2 flex justify-center items-center my-5'>
+            <div className="w-full sm:w-1/2 flex justify-center items-center my-5">
               <Button
                 type="submit"
                 onClick={handleSubmit}

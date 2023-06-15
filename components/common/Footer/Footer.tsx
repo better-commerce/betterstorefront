@@ -10,7 +10,7 @@ import {
   GENERAL_EMAIL_ADDRESS,
   GENERAL_FOOOTER,
   SIGN_UP_FOR_NEWSLETTER,
-  SIGN_UP_TEXT
+  SIGN_UP_TEXT,
 } from '@components/utils/textVariables'
 import { getCurrentPage } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
@@ -23,13 +23,13 @@ interface Props {
 const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
   const router = useRouter()
   const [hasConfig, setHasConfig] = useState(false)
-  const { isMobile, isIPadorTablet } = deviceInfo;
+  const { isMobile, isIPadorTablet } = deviceInfo
 
-  let deviceCheck = ""
+  let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
-    deviceCheck = "Mobile"
+    deviceCheck = 'Mobile'
   } else {
-    deviceCheck = "Desktop"
+    deviceCheck = 'Desktop'
   }
 
   useEffect(() => {
@@ -40,58 +40,98 @@ const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
   function footerClick(detail: any) {
     let currentPage = getCurrentPage()
     if (currentPage) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         recordGA4Event(window, 'footer_query_click', {
           device: deviceCheck,
           page_clicked_on: currentPage,
           click_detail: detail,
-        });
+        })
       }
     }
   }
   return (
-    <footer aria-labelledby="footer-heading" className="pt-10 bg-gray-100 shadow-inner sm:h-96 sm:pt-16 sm:mt-2 bg-footer-color">
+    <footer
+      aria-labelledby="footer-heading"
+      className="pt-10 bg-gray-100 shadow-inner sm:h-96 sm:pt-16 sm:mt-2 bg-footer-color"
+    >
       <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
-        <div className='sm:col-span-1'>
+        <div className="sm:col-span-1">
           <Logo />
         </div>
-        <div className='sm:col-span-3' onClick={() => footerClick("INFORMATION")}>
-          <h5 className="font-bold text-gray-900 text-footer-clr ">INFORMATION</h5>
+        <div
+          className="sm:col-span-3"
+          onClick={() => footerClick('INFORMATION')}
+        >
+          <h5 className="font-bold text-gray-900 text-footer-clr ">
+            INFORMATION
+          </h5>
           <ul role="list" className="mt-3 space-y-3">
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">Contact Us</li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">My Account</li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">About Us</li>
+            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+              Contact Us
+            </li>
+            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+              My Account
+            </li>
+            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+              About Us
+            </li>
           </ul>
         </div>
-        <div className='sm:col-span-3' onClick={() => footerClick("HELP")}>
+        <div className="sm:col-span-3" onClick={() => footerClick('HELP')}>
           <h5 className="font-bold text-gray-900 text-footer-clr ">HELP</h5>
           <ul role="list" className="mt-3 space-y-3">
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">Support</li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">Cookie Policy</li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">Privacy Policy</li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">Terms and Conditions</li>
+            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+              Support
+            </li>
+            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+              Cookie Policy
+            </li>
+            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+              Privacy Policy
+            </li>
+            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+              Terms and Conditions
+            </li>
           </ul>
         </div>
-        <div className='sm:col-span-5'>
-          <h4 className="font-bold text-black uppercase text-footer-clr ">{SIGN_UP_FOR_NEWSLETTER}</h4>
-          <p className="mt-1 text-gray-900 text-md text-footer-clr ">{SIGN_UP_TEXT}</p>
+        <div className="sm:col-span-5">
+          <h4 className="font-bold text-black uppercase text-footer-clr ">
+            {SIGN_UP_FOR_NEWSLETTER}
+          </h4>
+          <p className="mt-1 text-gray-900 text-md text-footer-clr ">
+            {SIGN_UP_TEXT}
+          </p>
           <form className="flex mt-6 sm:max-w-md">
-            <label htmlFor="email-address" className="sr-only">{GENERAL_EMAIL_ADDRESS}</label>
-            <input id="email-address" type="text" autoComplete="email" required placeholder='Enter Email ID'
+            <label htmlFor="email-address" className="sr-only">
+              {GENERAL_EMAIL_ADDRESS}
+            </label>
+            <input
+              id="email-address"
+              type="text"
+              autoComplete="email"
+              required
+              placeholder="Enter Email ID"
               className="w-full min-w-0 px-4 py-4 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
             />
             <div className="flex-shrink-0 ml-4">
-              <button type="submit" className="flex items-center justify-center w-full px-6 py-4 font-medium uppercase btn-primary">
+              <button
+                type="submit"
+                className="flex items-center justify-center w-full px-6 py-4 font-medium uppercase btn-primary"
+              >
                 {BTN_SIGN_UP}
               </button>
             </div>
           </form>
         </div>
-        <div className='justify-center text-center border-t border-white sm:col-span-12 sm:pt-6 sm:mt-10'>
-          <p className="font-semibold text-black text-footer-clr ">&copy; {COPYRIGHT_FOOTER_INFO}</p>
+        <div className="justify-center text-center border-t border-white sm:col-span-12 sm:pt-6 sm:mt-10">
+          <p className="font-semibold text-black text-footer-clr ">
+            &copy; {COPYRIGHT_FOOTER_INFO}
+          </p>
         </div>
       </div>
-      <h2 id="footer-heading" className="sr-only">{GENERAL_FOOOTER}</h2>
+      <h2 id="footer-heading" className="sr-only">
+        {GENERAL_FOOOTER}
+      </h2>
     </footer>
   )
 }

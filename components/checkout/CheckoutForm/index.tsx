@@ -39,7 +39,11 @@ import {
 import PaymentWidget from '@components/checkout/PaymentWidget'
 import { AddressType } from '@framework/utils/enums'
 import { LocalStorage } from '@components/utils/payment-constants'
-import { parseFullName, resetSubmitData, submitData } from '@framework/utils/app-util'
+import {
+  parseFullName,
+  resetSubmitData,
+  submitData,
+} from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 import NewAddressModal from './NewAddressModal'
@@ -73,10 +77,10 @@ export default function CheckoutForm({
     orderId,
     setBasketId,
     setAddressId,
-    isGuestUser
-  } = useUI();
+    isGuestUser,
+  } = useUI()
 
-  const uiContext = useUI();
+  const uiContext = useUI()
 
   const isShippingDisabled =
     cartItems?.lineItems?.filter(
@@ -86,7 +90,7 @@ export default function CheckoutForm({
   const defaultDeliveryMethod = cartItems?.shippingMethods?.find(
     (i: any) => i.id === cartItems.shippingMethodId
   )
-  const isBrowser = typeof window !== 'undefined';
+  const isBrowser = typeof window !== 'undefined'
   const INITIAL_STATE = {
     isDeliveryMethodSelected: false,
     isShippingInformationCompleted: !!Object.keys(defaultShippingAddress)
@@ -104,7 +108,9 @@ export default function CheckoutForm({
     orderResponse: {},
     showStripe: false,
     isPaymentIntent: isBrowser
-      ? new URLSearchParams(window.location.search).get('payment_intent_client_secret')
+      ? new URLSearchParams(window.location.search).get(
+          'payment_intent_client_secret'
+        )
       : null,
     isPaymentWidgetActive: false,
   }
@@ -243,7 +249,7 @@ export default function CheckoutForm({
   const { addToCart, associateCart } = cartHandler()
   const { state: submitState, dispatch: submitDispatch } = useDataSubmit()
 
-  const { createAddress  } = asyncHandler()
+  const { createAddress } = asyncHandler()
 
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
@@ -272,7 +278,6 @@ export default function CheckoutForm({
     }
     return cartItems?.userId
   }
-
 
   // const handleNewAddress = (values: any, callback: any = () => { }) => {
   //   recordShippingInfo()
@@ -358,7 +363,7 @@ export default function CheckoutForm({
           // Duplicate address exists
         }
       })
-    } 
+    }
     // else {
     //   updateAddress({
     //     ...newValues,
@@ -390,10 +395,10 @@ export default function CheckoutForm({
     let res = data.find((el: any) => el?.id === id)
     setSelectedAddress(res)
     // if (isMobile) {
-      handleNewAddress(data, () => {
+    handleNewAddress(data, () => {
       closeNewAddressModal()
-      })
-      openNewAddressModal()
+    })
+    openNewAddressModal()
     // } else {
     //   handleNewAddress(data, () => {
     //   closeNewAddressModal()
@@ -463,9 +468,9 @@ export default function CheckoutForm({
     asyncHandleItem()
   }
 
-  const setShippingInformation = (payload: any) =>{
-     setBillingInformation(payload)
-     dispatch({ type: 'SET_SHIPPING_INFORMATION', payload })
+  const setShippingInformation = (payload: any) => {
+    setBillingInformation(payload)
+    dispatch({ type: 'SET_SHIPPING_INFORMATION', payload })
   }
 
   const updateAddress = (type: string, payload: any) => {
@@ -487,21 +492,24 @@ export default function CheckoutForm({
     }
   }
 
-  const setBillingInformation = (payload: any, update = true, type = AddressType.BILLING) => {
+  const setBillingInformation = (
+    payload: any,
+    update = true,
+    type = AddressType.BILLING
+  ) => {
     const handleAsync = async () => {
-
       const billingInfoClone = { ...payload }
       //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
       const shippingClone = { ...state.shippingInformation }
       //delete shippingClone.id // Commenting this to ensure that duplicate address does not get saved in the system
 
-      let data;
-      let updateAddress = false;
-      const addresses = await loadAddressIDs();
+      let data
+      let updateAddress = false
+      const addresses = await loadAddressIDs()
 
       if (state.isSameAddress) {
-        const addressId = await lookupAddressId(payload, addresses);
-        updateAddress = (addressId == 0);
+        const addressId = await lookupAddressId(payload, addresses)
+        updateAddress = addressId == 0
 
         if (updateAddress) {
           data = {
@@ -511,20 +519,20 @@ export default function CheckoutForm({
             shippingAddress: {
               ...payload,
               id: addressId,
-              country: state.deliveryMethod.name,
-              countryCode: state.deliveryMethod.twoLetterIsoCode,
-              customerId: user.userId,
+              country: state?.deliveryMethod?.name,
+              countryCode: state?.deliveryMethod?.twoLetterIsoCode,
+              customerId: user?.userId,
               isDefault: false,
               isDefaultBilling: false,
               isDefaultDelivery: false,
             },
-          };
+          }
         }
       } else {
         // This case is only valid for billing address.
 
-        const addressId = await lookupAddressId(payload, addresses);
-        updateAddress = (addressId == 0);
+        const addressId = await lookupAddressId(payload, addresses)
+        updateAddress = addressId == 0
 
         if (updateAddress) {
           data = {
@@ -541,7 +549,7 @@ export default function CheckoutForm({
             shippingAddress: {
               isDefaultBilling: false,
             },
-          };
+          }
         }
       }
 
@@ -551,7 +559,7 @@ export default function CheckoutForm({
             basketId,
             model: data,
           })
-        } catch (error) { }
+        } catch (error) {}
       }
     }
     dispatch({ type: 'SET_BILLING_INFORMATION', payload })
@@ -560,7 +568,7 @@ export default function CheckoutForm({
 
   const handleShippingSubmit = (values: any) => {
     if (values.isDirty) {
-      delete values.isDirty;
+      delete values.isDirty
     }
     toggleShipping()
     if (state.isSameAddress) {
@@ -577,61 +585,81 @@ export default function CheckoutForm({
 
   const loadAddressIDs = async (): Promise<Array<any>> => {
     const response = await getAddress(user.userId)
-    return response;
+    return response
   }
 
   const lookupAddressId = async (addressInfo: any, addresses?: Array<any>) => {
-
     if (!addresses) {
-      addresses = await loadAddressIDs();
+      addresses = await loadAddressIDs()
     }
 
     const strVal = (val: string): string => {
       if (val) {
-        return val.trim().toLowerCase();
+        return val.trim().toLowerCase()
       }
-      return "";
-    };
-
-    let addressId = 0;
-    if (addresses && addresses.length) {
-      const lookupAddress = addresses.filter((address: any) => {
-        const titleMatch = (strVal(address.title) == strVal(addressInfo.title));
-        const firstNameMatch = (strVal(address.firstName) == strVal(addressInfo.firstName));
-        const lastNameMatch = (strVal(address.lastName) == strVal(addressInfo.lastName));
-        const address1Match = (strVal(address.address1) == strVal(addressInfo.address1));
-        const address2Match = (strVal(address.address2) == strVal(addressInfo.address2));
-        const cityMatch = (strVal(address.city) == strVal(addressInfo.city));
-        const postCodeMatch = (strVal(address.postCode) == strVal(addressInfo.postCode));
-        const phoneNoMatch = (strVal(address.phoneNo) == strVal(addressInfo.phoneNo));
-
-        return (titleMatch && firstNameMatch && lastNameMatch && address1Match && address2Match && cityMatch && postCodeMatch && phoneNoMatch);
-      });
-      addressId = (lookupAddress && lookupAddress.length) ? lookupAddress[0].id : 0;
+      return ''
     }
 
-    return addressId;
-  };
+    let addressId = 0
+    if (addresses && addresses.length) {
+      const lookupAddress = addresses.filter((address: any) => {
+        const titleMatch = strVal(address.title) == strVal(addressInfo.title)
+        const firstNameMatch =
+          strVal(address.firstName) == strVal(addressInfo.firstName)
+        const lastNameMatch =
+          strVal(address.lastName) == strVal(addressInfo.lastName)
+        const address1Match =
+          strVal(address.address1) == strVal(addressInfo.address1)
+        const address2Match =
+          strVal(address.address2) == strVal(addressInfo.address2)
+        const cityMatch = strVal(address.city) == strVal(addressInfo.city)
+        const postCodeMatch =
+          strVal(address.postCode) == strVal(addressInfo.postCode)
+        const phoneNoMatch =
+          strVal(address.phoneNo) == strVal(addressInfo.phoneNo)
+
+        return (
+          titleMatch &&
+          firstNameMatch &&
+          lastNameMatch &&
+          address1Match &&
+          address2Match &&
+          cityMatch &&
+          postCodeMatch &&
+          phoneNoMatch
+        )
+      })
+      addressId =
+        lookupAddress && lookupAddress.length ? lookupAddress[0].id : 0
+    }
+
+    return addressId
+  }
 
   useEffect(() => {
     if (!Object.keys(state.shippingInformation).length) {
       setShippingInformation(defaultShippingAddress)
       setBillingInformation(defaultBillingAddress, false)
     }
-  }, [defaultShippingAddress]);
 
-  const [basketOrderInfo, setbasketOrderInfo] = useState<any>();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultShippingAddress])
+
+  const [basketOrderInfo, setbasketOrderInfo] = useState<any>()
   useEffect(() => {
     if (state?.isPaymentInformationCompleted) {
-      getPaymentOrderInfo(state.selectedPaymentMethod)
-        .then((basketOrderInfo: any) => {
-          setbasketOrderInfo(basketOrderInfo);
-        });
+      getPaymentOrderInfo(state.selectedPaymentMethod).then(
+        (basketOrderInfo: any) => {
+          setbasketOrderInfo(basketOrderInfo)
+        }
+      )
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.isPaymentInformationCompleted])
 
   const getPaymentOrderInfo = async (paymentMethod: any) => {
-    dispatch({ type: 'SET_PAYMENT_METHOD', payload: paymentMethod });
+    dispatch({ type: 'SET_PAYMENT_METHOD', payload: paymentMethod })
 
     const billingInfoClone = { ...state.billingInformation }
     //delete billingInfoClone.id // Commenting this to ensure that duplicate address does not get saved in the system
@@ -659,15 +687,17 @@ export default function CheckoutForm({
 
       Payment: {
         OrderAmount: cartItems?.grandTotal?.raw?.withTax,
-      }
-    };
+      },
+    }
 
-    const billingAddrId = await lookupAddressId(paymentOrderInfo.billingAddress);
-    paymentOrderInfo.billingAddress.id = billingAddrId;
-    const shippingAddrId = await lookupAddressId(paymentOrderInfo.shippingAddress);
-    paymentOrderInfo.shippingAddress.id = shippingAddrId;
-    return paymentOrderInfo;
-  };
+    const billingAddrId = await lookupAddressId(paymentOrderInfo.billingAddress)
+    paymentOrderInfo.billingAddress.id = billingAddrId
+    const shippingAddrId = await lookupAddressId(
+      paymentOrderInfo.shippingAddress
+    )
+    paymentOrderInfo.shippingAddress.id = shippingAddrId
+    return paymentOrderInfo
+  }
 
   const loqateAddress = (postCode: string = 'E1') => {
     const handleAsync = async () => {
@@ -676,7 +706,6 @@ export default function CheckoutForm({
         country: state.deliveryMethod.twoLetterIsoCode,
       })
 
-      //TODO normalize data
       if (response.data) {
         return response.data.response.data.map((item: any) => {
           return {
@@ -708,15 +737,16 @@ export default function CheckoutForm({
     <>
       {state.isPaymentIntent && <Spinner />}
       <div
-        className={`bg-gray-50 relative ${state.isPaymentIntent
-          ? 'pointer-events-none hidden overflow-hidden'
-          : ''
-          }`}
+        className={`bg-gray-50 relative ${
+          state.isPaymentIntent
+            ? 'pointer-events-none hidden overflow-hidden'
+            : ''
+        }`}
       >
         <div className="max-w-2xl mx-auto pt-4 md:pt-16 lg:pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
           <div className="grid lg:grid-cols-5 sm:gap-x-6 xl:gap-x-6">
-            <div className='sm:col-span-3 pb-6 lg:order-1 order-2'>
+            <div className="sm:col-span-3 pb-6 lg:order-1 order-2">
               {!isShippingDisabled && (
                 <Delivery
                   appConfig={config}
@@ -730,7 +760,7 @@ export default function CheckoutForm({
               {state.isCNC || isShippingDisabled ? null : (
                 <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
                   <h4 className="font-bold uppercase text-black">
-                    {GENERAL_DELIVERY_ADDRESS} 
+                    {GENERAL_DELIVERY_ADDRESS}
                   </h4>
                   {state?.isDeliveryMethodSelected ? (
                     <>
@@ -756,7 +786,7 @@ export default function CheckoutForm({
                         sameAddressAction={() => {
                           dispatch({ type: 'SET_SAME_ADDRESS' })
                         }}
-                        onEditAddress={handleEditAddress}
+                        // onEditAddress={handleEditAddress}
                         handleOpenNewAddressModal={handleOpenNewAddressModal}
                       />
                     </>
@@ -764,20 +794,20 @@ export default function CheckoutForm({
                 </div>
               )}
 
-          <NewAddressModal
-          selectedAddress={selectedAddress}
-          submitState={submitState}
-          isOpen={isNewAddressModalOpen}
-          onSubmit={(data: any) => {
-            submitData(submitDispatch, AddressPageAction.SAVE)
-            handleNewAddress(data, () => {
-              closeNewAddressModal()
-            })
-          }}
-          onCloseModal={closeNewAddressModal}
-          isRegisterAsGuestUser={isRegisterAsGuestUser()}
-          btnTitle="Save Address"
-          />
+              <NewAddressModal
+                selectedAddress={selectedAddress}
+                submitState={submitState}
+                isOpen={isNewAddressModalOpen}
+                onSubmit={(data: any) => {
+                  submitData(submitDispatch, AddressPageAction.SAVE)
+                  handleNewAddress(data, () => {
+                    closeNewAddressModal()
+                  })
+                }}
+                onCloseModal={closeNewAddressModal}
+                isRegisterAsGuestUser={isRegisterAsGuestUser()}
+                btnTitle="Save Address"
+              />
 
               {/* Payment */}
               {/* <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
@@ -840,7 +870,7 @@ export default function CheckoutForm({
             </div>
 
             {/* Order summary */}
-            <div className='sm:col-span-3 md:col-span-3 lg:col-span-2 lg:order-2 order-1'>
+            <div className="sm:col-span-3 md:col-span-3 lg:col-span-2 lg:order-2 order-1">
               <Summary
                 isShippingDisabled={isShippingDisabled}
                 cart={cartItems}

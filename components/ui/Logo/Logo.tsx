@@ -1,6 +1,7 @@
 import React from 'react'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage } from '@framework/utils/app-util'
+import Image from 'next/image'
 
 const Logo = ({ className = '', ...props }) => {
   let currentPage = getCurrentPage()
@@ -16,7 +17,7 @@ const Logo = ({ className = '', ...props }) => {
   }
 
   return (
-    <img
+    <Image
       onClick={logoClick}
       src="/logo-cx-commerce.png"
       alt="BetterComerce"

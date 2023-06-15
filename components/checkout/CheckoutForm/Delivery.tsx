@@ -136,6 +136,8 @@ export default function Delivery({
       }
     }
     if (Object.keys(appConfig).length) getDefaultCountry()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appConfig])
 
   useEffect(() => {
@@ -143,6 +145,8 @@ export default function Delivery({
     setSelectedDeliveryMethod({ id: 0, children: [], type: 0 })
 
     fetchDeliveryMethods()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCountry])
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -191,7 +195,7 @@ export default function Delivery({
 
   return (
     <div className="py-6 mt-0 border border-gray-200 bg-white shadow p-6">
-      { isDeliveryMethodSelected ? (
+      {isDeliveryMethodSelected ? (
         <>
           <h4 className="font-bold uppercase text-black">Delivery method</h4>
           <ConfirmedGeneralComponent
@@ -307,9 +311,7 @@ export default function Delivery({
                           <div
                             className={classNames(
                               active ? 'border' : 'border-2',
-                              checked
-                                ? 'border-black'
-                                : 'border-transparent',
+                              checked ? 'border-black' : 'border-transparent',
                               'absolute -inset-px pointer-events-none'
                             )}
                             aria-hidden="true"
@@ -331,11 +333,15 @@ export default function Delivery({
                       }  pointer border-2 py-5 px-5 flex justify-between flex-row`}
                     >
                       <div>
-                        <h4 className="uppercase font-bold text-gray-900">{item.displayName}</h4>
+                        <h4 className="uppercase font-bold text-gray-900">
+                          {item.displayName}
+                        </h4>
                         <p className="text-sm py-2">{item.description}</p>
                       </div>
                       <div className="flex flex-row justify-center items-center">
-                        <h3 className='text-lg uppercase font-bold text-gray-900'>{item.price.formatted.withTax}</h3>
+                        <h3 className="text-lg uppercase font-bold text-gray-900">
+                          {item.price.formatted.withTax}
+                        </h3>
                         {shippingMethod.id === item.id ? (
                           <div className="ml-5">
                             <CheckCircleIcon
