@@ -494,7 +494,7 @@ export default function CheckoutForm({
 
   const setBillingInformation = (
     payload: any,
-    update = true,
+    update = false,
     type = AddressType.BILLING
   ) => {
     const handleAsync = async () => {

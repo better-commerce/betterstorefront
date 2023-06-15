@@ -13,6 +13,8 @@ import {
 import { Button } from '@components/ui'
 import { number } from 'yup'
 import Link from 'next/link'
+import { findByFieldName } from '@framework/utils/app-util'
+import FormField from '@components/utils/ui/FormField'
 
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
@@ -32,11 +34,16 @@ export default function MyDetails() {
     }
   }
   const initialValues = {
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    mobile: user.mobile,
-    phone: user.phone,
+    email: user?.email,
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    mobile: user?.mobile,
+    phone: user?.phone,
+    gender: user?.gender
+      ? user?.gender
+      : findByFieldName(formConfig, 'gender')?.options?.length
+      ? ''
+      : '',
   }
 
   const handleDataSubmit = async (values: any) => {
@@ -106,32 +113,44 @@ export default function MyDetails() {
                 <Form className="font-normal w-full sm:w-1/2">
                   {formConfig.map((formItem: any, idx: number) => {
                     return (
-                      <div key={`${formItem.label}_${idx}`}>
-                        <label className="text-black font-medium text-sm">
-                          {formItem.label}
-                        </label>
+                      formItem.type !== 'singleSelectButtonGroup' && (
+                        <div key={`${formItem.label}_${idx}`}>
+                          <label className="text-black font-medium text-sm">
+                            {formItem.label}
+                          </label>
 
-                        <Field
-                          key={idx}
-                          name={formItem.name}
-                          placeholder={formItem.placeholder}
-                          onChange={(e: any) =>
-                            formikHandleChange(e, handleChange)
-                          }
-                          value={values[formItem.name]}
-                          type={formItem.type}
-                          maxLength={formItem.maxLength}
-                          className="mb-2 mt-2 text-black font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 "
-                        />
+                          <Field
+                            key={idx}
+                            name={formItem.name}
+                            placeholder={formItem.placeholder}
+                            onChange={(e: any) =>
+                              formikHandleChange(e, handleChange)
+                            }
+                            value={values[formItem.name]}
+                            type={formItem.type}
+                            maxLength={formItem.maxLength}
+                            className="mb-2 mt-2 text-black font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 "
+                          />
 
-                        {errors[formItem.name] && touched[formItem.name] ? (
-                          <div className="text-red-400 text-xs mb-2">
-                            {errors[formItem.name]}
-                          </div>
-                        ) : null}
-                      </div>
+                          {errors[formItem.name] && touched[formItem.name] ? (
+                            <div className="text-red-400 text-xs mb-2">
+                              {errors[formItem.name]}
+                            </div>
+                          ) : null}
+                        </div>
+                      )
                     )
                   })}
+                  {(formConfig?.length
+                    ? Array.from<any>([]).concat([
+                        findByFieldName(formConfig, 'gender'),
+                      ])
+                    : []
+                  )?.map((item: any, idx: number) => (
+                    <div key={item?.name} className="w-full py-4 address-type">
+                      {<FormField context={values} item={item} />}
+                    </div>
+                  ))}
                   <div className="mt-10 flex sm:flex-col1 w-60">
                     <Button
                       type="submit"
