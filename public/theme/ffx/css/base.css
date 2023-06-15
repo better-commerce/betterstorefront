@@ -90,6 +90,13 @@
   --btn-bg-hover-primary: #252E47;
   /* button primary variable */
 
+  /* button secondary variable */
+  --btn-bg-secondary: #DF340C;
+  --btn-text-color-secondary: #fff;
+  --btn-hover-text-color-secondary: #fff;
+  --btn-bg-hover-secondary: #FF3600;
+  /* button secondary variable */
+
   /* button primary red variable */
   --btn-bg-red: #DF340C;
   --btn-text-color-red: #fff;
@@ -283,6 +290,7 @@
     --font-76: 40px;
   }
 }
+
 @font-face {
   font-family: 'Inter';
   src: url('../font/Inter-Bold.woff2') format('woff2'),

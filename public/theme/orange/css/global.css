@@ -199,6 +199,17 @@ p {
   color: var(--btn-hover-text-color-primary);
 }
 
+.btn-secondary {
+  background: var(--btn-bg-secondary);
+  color: var(--btn-text-color-secondary);
+  font-size: var(--font-18);
+}
+
+.btn-secondary:hover {
+  background: var(--btn-bg-hover-secondary);
+  color: var(--btn-hover-text-color-secondary);
+}
+
 .btn-default {
   background: var(--btn-bg-default);
   color: var(--btn-text-color-default);

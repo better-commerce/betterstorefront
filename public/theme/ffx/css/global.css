@@ -202,12 +202,15 @@ p {
 .btn-primary-white.btn-padding-none {
   padding: 0px !important;
 }
-.cart-icon-dark-white svg{
+
+.cart-icon-dark-white svg {
   color: var(--header-icon-clr);
 }
-.cart-icon-dark-white .icon-grp:hover svg{
+
+.cart-icon-dark-white .icon-grp:hover svg {
   color: var(--header-icon-hover-clr);
 }
+
 /* button  css start */
 .btn-primary {
   background: var(--btn-bg-primary);
@@ -229,6 +232,17 @@ p {
 .btn-primary:hover {
   background: var(--btn-bg-hover-primary);
   color: var(--btn-hover-text-color-primary);
+}
+
+.btn-secondary {
+  background: var(--btn-bg-secondary);
+  color: var(--btn-text-color-secondary);
+  font-size: var(--font-18);
+}
+
+.btn-secondary:hover {
+  background: var(--btn-bg-hover-secondary);
+  color: var(--btn-hover-text-color-secondary);
 }
 
 .btn-default {
