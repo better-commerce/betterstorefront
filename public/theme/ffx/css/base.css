@@ -211,15 +211,17 @@
   /* label default white variable */
 
   /* Header variable */
-  --bg-header-color: #fff;
-  --text-header-clr: #2e2929;
-  --text-hover-clr: #000;
-  --border-hover-clr: #000;
+  --bg-header-color: #212530;
+  --text-header-clr: #FFFFFF;
+  --text-hover-clr: #FFFFFF;
+  --border-hover-clr: #FF3600;
+  --header-icon-clr: #fff;
+  --header-icon-hover-clr: #FF3600;
   /* footer variable */
 
   /* footer variable */
-  --bg-footer-color: #f3f4f6;
-  --text-footer-clr: #000;
+  --bg-footer-color: #212530;
+  --text-footer-clr: #fff;
   /* footer variable */
 }
 
@@ -281,7 +283,6 @@
     --font-76: 40px;
   }
 }
-
 @font-face {
   font-family: 'Inter';
   src: url('../font/Inter-Bold.woff2') format('woff2'),
