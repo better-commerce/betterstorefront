@@ -27,7 +27,7 @@ export default function useAddress() {
       state: query?.state,
       title: query?.title,
       userId: query?.userId,
-      isConsentSelected: query?.isConsentSelected
+      isConsentSelected: query?.isConsentSelected,
     }
     try {
       const response: any = await fetcher({

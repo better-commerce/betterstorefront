@@ -72,6 +72,8 @@ export default function ContactPreferences() {
     setData(tempObj)
     setDefaultData(tempObj)
     setItems(newConfig)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleRadioButton = (unsubscribe: boolean = false, id: number) => {
@@ -137,7 +139,7 @@ export default function ContactPreferences() {
             {title}
           </h1>
           <p className="mt-2 text-sm flex flex-col text-black">
-            <span className='font-medium'> {CONTACT_PREFERENCES_TITLE}</span>
+            <span className="font-medium"> {CONTACT_PREFERENCES_TITLE}</span>
             <span className="font-medium"> {CONTACT_PREFERENCES_SUBTITLE}</span>
           </p>
         </div>
@@ -218,30 +220,23 @@ export default function ContactPreferences() {
             )
           })}
         </div>
-        <Formik
-        initialValues={initialValues}
-        onSubmit={handleDataSubmit}
-        >
-        {({
-            handleSubmit,
-            isSubmitting,
-          }: any) => {
+        <Formik initialValues={initialValues} onSubmit={handleDataSubmit}>
+          {({ handleSubmit, isSubmitting }: any) => {
             return (
               <div className="mt-10 flex sm:flex-col1 w-60">
-            <Button
-            type="submit"
-            onClick={handleSubmit}
-            className="!font-bold  !py-3 btn-c btn-primary"
-            loading={isSubmitting}
-            disabled={isSubmitting}
-          >
-            {!isSubmitting && GENERAL_SAVE_CHANGES}
-          </Button>
-        </div>
+                <Button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="!font-bold  !py-3 btn-c btn-primary"
+                  loading={isSubmitting}
+                  disabled={isSubmitting}
+                >
+                  {!isSubmitting && GENERAL_SAVE_CHANGES}
+                </Button>
+              </div>
             )
           }}
         </Formik>
-        
       </div>
     </main>
   )

@@ -1,4 +1,7 @@
-import { GENERAL_ADD_TO_BASKET, VALIDATION_PLEASE_COMPLETE_THIS_FIELD } from '@components/utils/textVariables'
+import {
+  GENERAL_ADD_TO_BASKET,
+  VALIDATION_PLEASE_COMPLETE_THIS_FIELD,
+} from '@components/utils/textVariables'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { config } from './config'

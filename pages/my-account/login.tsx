@@ -1,7 +1,7 @@
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
-import { NEXT_AUTHENTICATE } from '@components/utils/constants'
+import { NEXT_AUTHENTICATE,OTP_LOGIN_ENABLED } from '@components/utils/constants'
 import axios from 'axios'
 import { useState } from 'react'
 import { useUI } from '@components/ui/context'
@@ -16,6 +16,7 @@ import {
   VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
 } from '@components/utils/textVariables'
 import Link from 'next/link'
+import LoginOtp from '../../components/account/login-otp'
 function LoginPage({ recordEvent, setEntities }: any) {
   const [noAccount, setNoAccount] = useState(false)
   const {
@@ -33,7 +34,7 @@ function LoginPage({ recordEvent, setEntities }: any) {
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
-
+  const otpEnabled = OTP_LOGIN_ENABLED
   useAnalytics(PageViewed, {
     eventType: PageViewed,
   })
@@ -41,7 +42,7 @@ function LoginPage({ recordEvent, setEntities }: any) {
   if (!isGuestUser && user.userId) {
     Router.push('/')
   }
-  
+
   if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
@@ -80,6 +81,9 @@ function LoginPage({ recordEvent, setEntities }: any) {
     }
     asyncLoginUser()
   }
+  if(otpEnabled){
+    return <LoginOtp/>
+  }
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
@@ -88,7 +92,12 @@ function LoginPage({ recordEvent, setEntities }: any) {
             {GENERAL_LOGIN}
           </h2>
         </div>
-        <Form btnText="Login" type="login" onSubmit={handleUserLogin} apiError={noAccount ? VALIDATION_NO_ACCOUNT_FOUND : ""} />
+        <Form
+          btnText="Login"
+          type="login"
+          onSubmit={handleUserLogin}
+          apiError={noAccount ? VALIDATION_NO_ACCOUNT_FOUND : ''}
+        />
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && (
             <span className="text-red-700 text-lg">
@@ -97,11 +106,6 @@ function LoginPage({ recordEvent, setEntities }: any) {
           )}
         </div>
         <div className="w-full flex flex-col justify-center items-center">
-          <Link href="/my-account/login-otp" passHref>
-            <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
-              Login via OTP
-            </span>
-          </Link>
           <Link href="/my-account/forgot-password" passHref>
             <span className="block text-indigo-400 hover:text-indigo-500 hover:underline cursor-pointer">
               Forgot password?

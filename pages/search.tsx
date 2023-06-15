@@ -13,7 +13,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
-declare const window: any;
+declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -38,14 +38,36 @@ interface stateInterface {
   freeText: string
 }
 
-const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+const IS_INFINITE_SCROLL =
+  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 const PAGE_TYPE = PAGE_TYPES['Search']
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT, } = ACTION_TYPES
-const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '', }
+const {
+  SORT_BY,
+  PAGE,
+  SORT_ORDER,
+  CLEAR,
+  HANDLE_FILTERS_UI,
+  ADD_FILTERS,
+  REMOVE_FILTERS,
+  FREE_TEXT,
+} = ACTION_TYPES
+const DEFAULT_STATE = {
+  sortBy: '',
+  sortOrder: 'asc',
+  currentPage: 1,
+  filters: [],
+  freeText: '',
+}
 const ProductGrid = dynamic(() => import('@components/product/Grid'))
-const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
-const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
-const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
+const ProductMobileFilters = dynamic(
+  () => import('@components/product/Filters')
+)
+const ProductFilterRight = dynamic(
+  () => import('@components/product/Filters/filtersRight')
+)
+const ProductFiltersTopBar = dynamic(
+  () => import('@components/product/Filters/FilterTopBar')
+)
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
@@ -75,7 +97,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
-  const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo;
+  const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -127,9 +149,14 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
-    if (router.query.freeText !== undefined && router.query.freeText !== state.freeText) {
+    if (
+      router.query.freeText !== undefined &&
+      router.query.freeText !== state.freeText
+    ) {
       dispatch({ type: FREE_TEXT, payload: query.freeText })
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.freeText])
 
   useEffect(() => {
@@ -150,6 +177,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
         })
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.products.results.length])
 
   const handlePageChange = (page: any) => {
@@ -223,6 +252,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
         filters: JSON.stringify(state.filters),
       },
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.filters])
 
   const handleFilters = (filter: null, type: string) => {
@@ -276,16 +307,19 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
   const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory.products
     : data.products
-    
-  let absPath = "";
+
+  let absPath = ''
   if (typeof window !== 'undefined') {
-    absPath = window?.location?.href;
+    absPath = window?.location?.href
   }
 
   return (
     <>
       <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
         <link rel="canonical" id="canonical" href={absPath} />
         <title>{GENERAL_CATALOG}</title>
         <meta name="title" content={GENERAL_CATALOG} />
@@ -293,20 +327,51 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
         <meta name="keywords" content="Search" />
         <meta property="og:image" content="" />
         <meta property="og:title" content={GENERAL_CATALOG} key="ogtitle" />
-        <meta property="og:description" content={GENERAL_CATALOG} key="ogdesc" />
+        <meta
+          property="og:description"
+          content={GENERAL_CATALOG}
+          key="ogdesc"
+        />
       </NextHead>
       <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
-        <span className='px-4 text-sm font-medium sm:px-0'>Showing {data.products.total} Results for</span>
-        <h1 className="px-4 font-semibold tracking-tight text-black sm:px-0">{GENERAL_CATALOG}</h1>
+        <span className="px-4 text-sm font-medium sm:px-0">
+          Showing {data.products.total} Results for
+        </span>
+        <h1 className="px-4 font-semibold tracking-tight text-black sm:px-0">
+          {GENERAL_CATALOG}
+        </h1>
         <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
           {isMobile ? (
-            <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
+            <ProductMobileFilters
+              handleFilters={handleFilters}
+              products={data.products}
+              routerFilters={state.filters}
+              handleSortBy={handleSortBy}
+              clearAll={clearAll}
+              routerSortOption={state.sortBy}
+            />
           ) : (
-            <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+            <ProductFilterRight
+              handleFilters={handleFilters}
+              products={data.products}
+              routerFilters={state.filters}
+            />
           )}
           <div className="sm:col-span-10">
-            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
-            <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} />
+            <ProductFiltersTopBar
+              products={data.products}
+              handleSortBy={handleSortBy}
+              routerFilters={state.filters}
+              clearAll={clearAll}
+              routerSortOption={state.sortBy}
+            />
+            <ProductGrid
+              products={productDataToPass}
+              currentPage={state.currentPage}
+              handlePageChange={handlePageChange}
+              handleInfiniteScroll={handleInfiniteScroll}
+              deviceInfo={deviceInfo}
+            />
           </div>
         </div>
       </div>

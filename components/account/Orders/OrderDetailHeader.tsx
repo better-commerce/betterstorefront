@@ -39,7 +39,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
 
                      <div className='w-full'>
                         
-                        <h3 className='font-bold text-16 text-secondary-full-opacity '>Order Details</h3>
+                        <h5 className='font-bold text-16 text-secondary-full-opacity '>Order Details</h5>
                         {
                             details?.order?.parentCustomNo?.length != 0 ?
                             <><p className='text-sm text-black-light mob-font-14'>Replacement Order</p>
@@ -63,11 +63,11 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                      </div>
                   </div>
                   <div className='hidden sm:block'>
-                     <h3 className='font-10 text-black-light'>Order PLACED ON</h3>
+                     <h5 className='font-10 text-black-light'>Order PLACED ON</h5>
                      <p className='text-sm dark:text-black text-primary'>{moment(new Date(details?.order.orderDate)).format(DATE_FORMAT)}</p>
                   </div>
                   <div className='hidden sm:block'>
-                     <h3 className='text-black font-10 text-black-light'>ORDER TOTAL</h3>
+                     <h5 className='text-black font-10 text-black-light'>ORDER TOTAL</h5>
                      <p className='text-sm dark:text-black text-primary'>
                         {priceFormat(details?.order.grandTotal?.raw?.withTax)}
                      </p>

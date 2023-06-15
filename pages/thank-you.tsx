@@ -49,9 +49,9 @@ export default function OrderConfirmation() {
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER, {
         id: orderId,
-      });
-      setOrderData(data.order);
-      setIsLoading(false);
+      })
+      setOrderData(data.order)
+      setIsLoading(false)
     }
     removeItem(LocalStorage.Key.ORDER_RESPONSE)
     removeItem(LocalStorage.Key.ORDER_PAYMENT)
@@ -60,6 +60,8 @@ export default function OrderConfirmation() {
     return function cleanup() {
       setOrderId('')
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isLoading) {

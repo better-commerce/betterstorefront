@@ -22,10 +22,19 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState('')
+  
   const [productSizeData, setProductSizeData] = useState<any>(null)
   const [productStockCodesWithSize, setProductStockCodesWithSize] =
     useState<any>(null)
   const [isSizeUpdateLoading, setIsSizeUpdateLoading] = useState(false)
+  const [defaultSize,setDefaultSize] = useState<any>(null)
+
+  useEffect(()=>{
+    let slugBreakArr:any = product?.slug?.split("-")
+    let sizeFromSlug:any = slugBreakArr?.length ? slugBreakArr[slugBreakArr?.length - 1] : ""
+    setDefaultSize(sizeFromSlug)
+    
+  },[open])
 
   useEffect(() => {
     // update current size of the product
@@ -35,6 +44,8 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
       stockCodeValues?.find((o: any) => product?.stockCode === o?.stockCode)
         ?.sizeValue || ''
     )
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productStockCodesWithSize])
 
   useEffect(() => {
@@ -51,6 +62,8 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
       setProductSizeData(null)
       setValue('')
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   const fetchProductBySlug = async (product: any) => {
@@ -132,6 +145,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
           parentProductId: EmptyGuid,
           stockCode: newStockCode, // new stock code
           qty: oldLineItem?.qty,
+          displayOrder: oldLineItem?.displayOrder,
           customInfo1: oldLineItem?.customInfo1,
           customInfo2: oldLineItem?.customInfo2,
           customInfo3: oldLineItem?.customInfo3,
@@ -153,6 +167,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
             parentProductId: newItemId, // new product id
             stockCode: childItemObj?.stockCode,
             qty: childItemObj?.qty,
+            displayOrder: childItemObj?.displayOrder,
             customInfo1: childItemObj?.customInfo1,
             customInfo2: childItemObj?.customInfo2,
             customInfo3: childItemObj?.customInfo3,
@@ -306,7 +321,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
                   className={`!py-3 text-sm font-bold text-center text-white bg-red-700 border cursor-pointer ${
                     false ? 'opacity-50 !cursor-not-allowed' : ''
                   }`}
-                  disabled={!Boolean(value) || isSizeUpdateLoading}
+                  disabled={!Boolean(value) || isSizeUpdateLoading || value===defaultSize}
                   onClick={handleSubmit}
                 >
                   {isSizeUpdateLoading

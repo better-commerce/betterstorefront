@@ -164,6 +164,8 @@ export const Canvas: FC<CanvasProps> = ({
       specialFontFamily,
       isSymbol,
     );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image, width, text, textColor, fontFamily, fontSize]);
 
   if (!image) {

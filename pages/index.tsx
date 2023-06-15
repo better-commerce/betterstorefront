@@ -40,7 +40,7 @@ export async function getStaticProps({
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
 
-  let pageContentsWeb, pageContentsMobileWeb;
+  let pageContentsWeb, pageContentsMobileWeb
   try {
     const PageContentsPromiseWeb = commerce.getPagePreviewContent({
       id: '', //pageId,
@@ -57,8 +57,7 @@ export async function getStaticProps({
       channel: 'MobileWeb',
     })
     pageContentsMobileWeb = await PageContentsPromiseMobileWeb
-  } catch (error: any) {
-  }
+  } catch (error: any) {}
 
   const hostName = os.hostname()
 
@@ -92,7 +91,7 @@ function Home({
 }: any) {
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo;
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
@@ -115,7 +114,7 @@ function Home({
 
   if (!pageContents) {
     return (
-      <div className='flex w-full text-center flex-con'>
+      <div className="flex w-full text-center flex-con">
         <Loader />
       </div>
     )
@@ -123,12 +122,21 @@ function Home({
 
   return (
     <>
-      {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
+      {(pageContents?.metatitle ||
+        pageContents?.metadescription ||
+        pageContents?.metakeywords) && (
         <NextHead>
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-          <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
-          <title>{pageContents?.metatitle || "Home"}</title>
-          <meta name="title" content={pageContents?.metatitle || "Home"} />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=5"
+          />
+          <link
+            rel="canonical"
+            id="canonical"
+            href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
+          />
+          <title>{pageContents?.metatitle || 'Home'}</title>
+          <meta name="title" content={pageContents?.metatitle || 'Home'} />
           {pageContents?.metadescription && (
             <meta name="description" content={pageContents?.metadescription} />
           )}
@@ -137,10 +145,18 @@ function Home({
           )}
           <meta property="og:image" content={pageContents?.image} />
           {pageContents?.metatitle && (
-            <meta property="og:title" content={pageContents?.metatitle} key="ogtitle" />
+            <meta
+              property="og:title"
+              content={pageContents?.metatitle}
+              key="ogtitle"
+            />
           )}
           {pageContents?.metadescription && (
-            <meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />
+            <meta
+              property="og:description"
+              content={pageContents?.metadescription}
+              key="ogdesc"
+            />
           )}
         </NextHead>
       )}
@@ -150,30 +166,52 @@ function Home({
 
       <div className="container py-3 mx-auto sm:py-6">
         {pageContents?.heading?.map((heading: any, hId: number) => (
-          <Heading title={heading?.heading_title} subTitle={heading?.heading_subtitle} key={`category-heading-${hId}`} />
+          <Heading
+            title={heading?.heading_title}
+            subTitle={heading?.heading_subtitle}
+            key={`category-heading-${hId}`}
+          />
         ))}
         <Categories data={pageContents?.categorylist} deviceInfo={deviceInfo} />
         {pageContents?.productheading?.map((productH: any, Pid: number) => (
-          <Heading title={productH?.productheading_title} subTitle={productH?.productheading_subtitle} key={`product-heading-${Pid}`} />
+          <Heading
+            title={productH?.productheading_title}
+            subTitle={productH?.productheading_subtitle}
+            key={`product-heading-${Pid}`}
+          />
         ))}
         <ProductSlider config={pageContents} />
       </div>
 
       {pageContents?.promotions?.map((banner: any, bId: number) => (
-        <div className="relative flex flex-col justify-center w-full text-center cursor-pointer" key={`full-banner-${bId}`}>
+        <div
+          className="relative flex flex-col justify-center w-full text-center cursor-pointer"
+          key={`full-banner-${bId}`}
+        >
           <Link href={banner?.promotions_link} passHref legacyBehavior>
-            <Image src={banner?.promotions_image} className="object-cover object-center w-full" alt={banner?.promotions_title} width={2000} height={800} style={css} />
+            <Image
+              src={banner?.promotions_image}
+              className="object-cover object-center w-full"
+              alt={banner?.promotions_title}
+              width={2000}
+              height={800}
+              style={css}
+            />
           </Link>
-          <div className="absolute text-5xl font-medium text-white top-1/2 right-24">{banner?.promotions_title}</div>
+          <div className="absolute text-5xl font-medium text-white top-1/2 right-24">
+            {banner?.promotions_title}
+          </div>
         </div>
       ))}
 
       <div className="container px-4 py-3 mx-auto sm:px-0 sm:py-6">
-        {pageContents?.collectionheadings?.map(
-          (heading: any, cId: number) => (
-            <Heading title={heading?.collectionheadings_title} subTitle={heading?.collectionheadings_subtitle} key={`collection-heading-${cId}`} />
-          )
-        )}
+        {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
+          <Heading
+            title={heading?.collectionheadings_title}
+            subTitle={heading?.collectionheadings_subtitle}
+            key={`collection-heading-${cId}`}
+          />
+        ))}
         <Collections data={pageContents?.collectionlist} />
       </div>
     </>

@@ -1,6 +1,7 @@
 import commerce from '@lib/api/commerce'
+import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-export default async (req: any, res: any) => {
+const NotifyMeApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.notifyMe({
       email: req.query.email,
@@ -9,6 +10,8 @@ export default async (req: any, res: any) => {
     })
     res.status(200).json(response)
   } catch (error) {
-    res.status(500).json({ error })
+    apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default NotifyMeApiMiddleware;

@@ -16,7 +16,13 @@ import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { BTN_REGISTER_FOR_FREE, GENERAL_EMAIL, VALIDATION_EMAIL_ALREADY_IN_USE, VALIDATION_ENTER_A_VALID_EMAIL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
+import {
+  BTN_REGISTER_FOR_FREE,
+  GENERAL_EMAIL,
+  VALIDATION_EMAIL_ALREADY_IN_USE,
+  VALIDATION_ENTER_A_VALID_EMAIL,
+  VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
+} from '@components/utils/textVariables'
 
 const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   const [error, setError] = useState(apiError)
@@ -55,7 +61,12 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
       </div>
       {error ? <span className="text-red-500 capitalize">{error}</span> : null}
       <div className="w-full sm:w-1/2 flex justify-center items-center my-5">
-        <Button className='btn-c btn-primary' buttonType="default" action={handleSubmit} title={'Submit'} />
+        <Button
+          className="btn-c btn-primary"
+          buttonType="default"
+          action={handleSubmit}
+          title={'Submit'}
+        />
       </div>
     </div>
   )

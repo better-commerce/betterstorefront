@@ -219,6 +219,8 @@ export default function AddressBook({ deviceInfo }: any) {
 
   useEffect(() => {
     fetchAddress()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const success = () => {
@@ -260,8 +262,8 @@ export default function AddressBook({ deviceInfo }: any) {
     let res = data.find((el: any) => el?.id === id)
     setSelectedAddress(res)
     // if (isMobile) {
-      setAddressId(id)
-      openNewAddressModal()
+    setAddressId(id)
+    openNewAddressModal()
     // } else {
     //   setAddressId(id)
     //   openNewAddressModal()

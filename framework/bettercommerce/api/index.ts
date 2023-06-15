@@ -27,7 +27,7 @@ import {
   createWishlist,
   removeItemFromWishlist,
   createReview,
-  applyPromo,  
+  applyPromo,
   getRelatedProducts,
   getPdpLookbook,
   getPdpLookbookProduct,

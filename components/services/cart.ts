@@ -1,4 +1,12 @@
-import { NEXT_ADD_TO_CART, NEXT_BULK_ADD_TO_CART, NEXT_GET_CART, NEXT_GET_USER_CART, NEXT_ASSOCIATE_CART, NEXT_MERGE_CART, EmptyGuid, } from '@components/utils/constants'
+import {
+  NEXT_ADD_TO_CART,
+  NEXT_BULK_ADD_TO_CART,
+  NEXT_GET_CART,
+  NEXT_GET_USER_CART,
+  NEXT_ASSOCIATE_CART,
+  NEXT_MERGE_CART,
+  EmptyGuid,
+} from '@components/utils/constants'
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'

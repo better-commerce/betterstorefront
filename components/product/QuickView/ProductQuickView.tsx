@@ -297,7 +297,7 @@ export default function ProductQuickView({
   }
 
   const buttonConfig = buttonTitle()
-  //TODO no additionalProperties key found on product object
+  
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
@@ -527,6 +527,8 @@ export default function ProductQuickView({
   useEffect(() => {
     fetchProduct()
     fetchIsQuickView()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData?.slug])
 
   if (!product) {

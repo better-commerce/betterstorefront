@@ -143,9 +143,9 @@ const OrderDeliveryPlanItems = ({ items, details, trackPackage, ifCancelled, ope
                                                                         )
                                                                   )}
                                                                </div>
-                                                               <h3 className="max-w-sm pr-6 mt-0 dark:text-black font-normal truncate text-14 text-primary text-ellipsis">
+                                                               <h5 className="max-w-sm pr-6 mt-0 dark:text-black font-normal truncate text-primary text-ellipsis">
                                                                   <a href={`/${productItem?.slug}`}>{productItem?.name}</a>
-                                                               </h3>
+                                                               </h5>
                                                                <p className="mt-2 text-sm font-normal text-secondary-full-opacity">
                                                                   {priceFormat(productItem?.price?.raw?.withTax)}
                                                                   {productItem?.listPrice?.raw?.tax > 0 ? (

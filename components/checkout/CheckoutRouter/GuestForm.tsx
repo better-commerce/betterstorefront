@@ -1,12 +1,12 @@
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import Checkbox from '@components/account/Address/Checkbox'
-import { 
+import {
   BTN_CHECKOUT_SECURELY,
-  GENERAL_EMAIL, 
-  GENERAL_POST, 
+  GENERAL_EMAIL,
+  GENERAL_POST,
   GENERAL_SMS,
-  GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION 
+  GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION,
 } from '@components/utils/textVariables'
 
 const COMPONENTS_MAP: any = {
@@ -85,7 +85,7 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
                       className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
                     />
                     <h3 className="text-center py-2 text-gray-600 text-sm">
-                     {GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION}
+                      {GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION}
                     </h3>
 
                     {errors[formItem.key] && touched[formItem.key] ? (

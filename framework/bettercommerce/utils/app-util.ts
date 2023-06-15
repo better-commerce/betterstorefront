@@ -53,10 +53,12 @@ export const obfuscateHostName = (hostname: string) => {
 
 export const sanitizeBase64 = (base64: string) => {
   if (base64) {
-    return base64?.replace("data:image/png;base64,", EmptyString)?.replace("data:image/jpeg;base64,", EmptyString);
+    return base64
+      ?.replace('data:image/png;base64,', EmptyString)
+      ?.replace('data:image/jpeg;base64,', EmptyString)
   }
-  return EmptyString;
-};
+  return EmptyString
+}
 
 export const resetBasket = async (setBasketId: any, generateBasketId: any) => {
   Cookies.remove('sessionId')
@@ -73,21 +75,33 @@ export const parsePaymentMethodConfig = (
   isSecured: boolean
 ) => {
   if (configSettings?.length) {
-    const sandboxUrl = configSettings?.find((x: any) => x?.key === "TestUrl")?.value || EmptyString;
+    const sandboxUrl =
+      configSettings?.find((x: any) => x?.key === 'TestUrl')?.value ||
+      EmptyString
 
-    let accountCode = configSettings?.find((x: any) => x?.key === "AccountCode")?.value || EmptyString;
+    let accountCode =
+      configSettings?.find((x: any) => x?.key === 'AccountCode')?.value ||
+      EmptyString
     if (isSecured && accountCode) {
       accountCode = decrypt(accountCode)
     }
 
-    let signature = configSettings?.find((x: any) => x?.key === "Signature")?.value || EmptyString;
+    let signature =
+      configSettings?.find((x: any) => x?.key === 'Signature')?.value ||
+      EmptyString
     if (isSecured && signature) {
       signature = decrypt(signature)
     }
 
-    const liveUrl = configSettings?.find((x: any) => x?.key === "ProductionUrl")?.value || EmptyString;
-    const useSandbox = configSettings?.find((x: any) => x?.key === "UseSandbox")?.value;
-    const cancelUrl = configSettings?.find((x: any) => x?.key === "CancelUrl")?.value || EmptyString;
+    const liveUrl =
+      configSettings?.find((x: any) => x?.key === 'ProductionUrl')?.value ||
+      EmptyString
+    const useSandbox = configSettings?.find(
+      (x: any) => x?.key === 'UseSandbox'
+    )?.value
+    const cancelUrl =
+      configSettings?.find((x: any) => x?.key === 'CancelUrl')?.value ||
+      EmptyString
     const config = {
       useSandbox: configSettings?.find((x: any) => x?.key === 'UseSandbox')
         ?.value,
@@ -219,7 +233,9 @@ export const parsePaymentMethods = (paymentMethods: any, isEncrypt = true) => {
   return paymentMethods?.map((x: any) => ({
     ...x,
     ...{
-      notificationUrl: isEncrypt ? encrypt(x?.notificationUrl || EmptyString) : decrypt(x?.notificationUrl || EmptyString),
+      notificationUrl: isEncrypt
+        ? encrypt(x?.notificationUrl || EmptyString)
+        : decrypt(x?.notificationUrl || EmptyString),
     },
     ...{
       settings: x?.settings?.map((setting: any) => {
@@ -334,17 +350,17 @@ export const resetSubmitData = (dispatch: any) => {
 }
 
 export const getMinMax = (list: Array<any>, dependantProp: string) => {
-  let lowest = Number.POSITIVE_INFINITY;
-  let highest = Number.NEGATIVE_INFINITY;
-  var tmp;
+  let lowest = Number.POSITIVE_INFINITY
+  let highest = Number.NEGATIVE_INFINITY
+  var tmp
   for (var i = list.length - 1; i >= 0; i--) {
-      tmp = list[i][dependantProp];
-      if (tmp < lowest) lowest = tmp;
-      if (tmp > highest) highest = tmp;
+    tmp = list[i][dependantProp]
+    if (tmp < lowest) lowest = tmp
+    if (tmp > highest) highest = tmp
   }
 
   return {
-      min: lowest,
-      max: highest,
+    min: lowest,
+    max: highest,
   }
-};
+}

@@ -20,7 +20,6 @@ export const useScriptLoader = (type: ScriptLoaderType, content: string, attrs?:
             } else if (type === ScriptLoaderType.TEXT) {
                 script.text = content;
             }
-            
 
             for (const [k, v] of Object.entries(attrs || {})) {
                 script.setAttribute(k, v);
@@ -71,6 +70,8 @@ export const useScriptLoader = (type: ScriptLoaderType, content: string, attrs?:
         } else {
             setIsLoading(false);
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return [loading, scriptReference, error];

@@ -119,6 +119,8 @@ export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
     }
     window.scrollTo(0, 0)
     handleAsync()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -133,19 +135,19 @@ export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
             style={{ display: showCancellationReasons ? 'none' : 'block' }}
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
-              <a href="/my-account/orders">
+              <Link href="/my-account/orders">
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
                   <i className="sprite-icon sprite-left-arrow mr-2"></i> {CANCEL_ORDER}
                 </h3>
-              </a>
+              </Link>
             </div>
 
             <div className="mx-auto cancel-continer">
-              <a href="/my-account/orders" className='mobile-view'>
+              <Link href="/my-account/orders" className='mobile-view'>
                 <h4 className="mr-2 leading-none text-xl text-gray-900 uppercase font-bold">
                   <i className="sprite-icon sprite-left-arrow mr-2"></i> {CANCEL_ORDER}
                 </h4>
-              </a>
+              </Link>
               <div className="w-full">
                 <div className="px-0 mt-4">
                   <div className="flow-root">

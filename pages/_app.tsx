@@ -1,10 +1,10 @@
-import "@assets/css/base.css"
-import "@theme/blue/css/base.css"
-import "@assets/css/main.css"
+import '@assets/css/base.css'
+import '@theme/blue/css/base.css'
+import '@assets/css/main.css'
 import '@assets/icon.css'
-import "@assets/css/chrome-bug.css"
-import "@theme/blue/css/global.css"
-import "@assets/css/checkout-frame.css"
+import '@assets/css/chrome-bug.css'
+import '@theme/blue/css/global.css'
+import '@assets/css/checkout-frame.css'
 import { FC, useEffect, useState } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
@@ -24,25 +24,33 @@ import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
 import analytics from '@components/services/analytics/analytics'
-import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
+import setSessionIdCookie, {
+  createSession,
+  isValidSession,
+  getExpiry,
+  getMinutesInDays,
+} from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import OverlayLoader from "@components/common/OverlayLoader";
-import { resetSnippetElements } from "@framework/content/use-content-snippet"
-import { ContentSnippet } from "@components/common/Content"
+import OverlayLoader from '@components/common/OverlayLoader'
+import { resetSnippetElements } from '@framework/content/use-content-snippet'
+import { ContentSnippet } from '@components/common/Content'
 import NextHead from 'next/head'
 import { GA4_DISABLED, GA4_MEASUREMENT_ID } from '@framework/utils/constants'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
-import { DeviceType } from "@commerce/utils/use-device"
-import InitDeviceInfo from "@components/common/InitDeviceInfo"
-import CustomCacheBuster from "@components/common/CustomCacheBuster";
-import { version as buildVersion } from '../package.json';
+import { DeviceType } from '@commerce/utils/use-device'
+import InitDeviceInfo from '@components/common/InitDeviceInfo'
+import ErrorBoundary from '@components/error'
+import CustomCacheBuster from '@components/common/CustomCacheBuster'
+import { version as buildVersion } from '../package.json'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
 }
 
-const Noop: FC<React.PropsWithChildren<unknown>> = ({ children }) => <>{children}</>
+const Noop: FC<React.PropsWithChildren<unknown>> = ({ children }) => (
+  <>{children}</>
+)
 
 const TEST_GEO_DATA = {
   Ip: '81.196.3.147',
@@ -102,10 +110,10 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       'google_translate_element'
     )
 
-    const selector = "iframe[name='votingFrame']";
-    const elem = document.querySelector(selector);
+    const selector = "iframe[name='votingFrame']"
+    const elem = document.querySelector(selector)
     if (elem) {
-      elem.setAttribute("title", "Google Voting Frame");
+      elem.setAttribute('title', 'Google Voting Frame')
     }
   }
 
@@ -117,22 +125,21 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     )
 
     document.body.appendChild(addScript)
-      ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-    document.getElementById('goog-gt-tt')?.remove();
-  }, []);
+    ;(window as any).googleTranslateElementInit = googleTranslateElementInit
+    document.getElementById('goog-gt-tt')?.remove()
+  }, [])
 
   useEffect(() => {
     // Listener for snippet injector reset.
-    router.events.on("routeChangeStart", () => {
-      resetSnippetElements();
-    });
+    router.events.on('routeChangeStart', () => {
+      resetSnippetElements()
+    })
 
     // Dispose listener.
     return () => {
-      router.events.off("routeChangeComplete", () => {
-      });
-    };
-  }, [router.events]);
+      router.events.off('routeChangeComplete', () => {})
+    }
+  }, [router.events])
 
   const fetchAppConfig = async () => {
     try {
@@ -155,7 +162,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
   const initializeGA4 = () => {
     if (GA4_MEASUREMENT_ID) {
-      initGA4(GA4_MEASUREMENT_ID);
+      initGA4(GA4_MEASUREMENT_ID)
     }
   }
 
@@ -184,9 +191,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
     // If browser session is not yet started.
     if (!isValidSession()) {
-
       // Initiate a new browser session.
-      createSession();
+      createSession()
 
       if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
         geoData()
@@ -219,34 +225,59 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }, [])
 
-  const seoInfo = (pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords)
-    ? pageProps
-    : pageProps?.data?.product || undefined;
+  const seoInfo =
+    pageProps?.metaTitle ||
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
+      ? pageProps
+      : pageProps?.data?.product || undefined
 
-  const seoImage = (pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords)
-    ? pageProps?.products?.images[0]?.url
-    : pageProps?.data?.product?.image || undefined;
+  const seoImage =
+    pageProps?.metaTitle ||
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
+      ? pageProps?.products?.images[0]?.url
+      : pageProps?.data?.product?.image || undefined
 
   return (
     <>
       <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
         {seoInfo && (
           <>
             <title>{seoInfo?.metaTitle}</title>
-            <link rel="canonical" id="canonical" href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath} />
+            <link
+              rel="canonical"
+              id="canonical"
+              href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath}
+            />
             <meta name="title" content={seoInfo?.metaTitle} />
             <meta name="description" content={seoInfo?.metaDescription} />
             <meta name="keywords" content={seoInfo?.metaKeywords} />
             {/* og meta tags */}
-            <meta property="og:title" content={seoInfo?.metaTitle} key="ogtitle" />
-            <meta property="og:description" content={seoInfo?.metaDescription} key="ogdesc" />
+            <meta
+              property="og:title"
+              content={seoInfo?.metaTitle}
+              key="ogtitle"
+            />
+            <meta
+              property="og:description"
+              content={seoInfo?.metaDescription}
+              key="ogdesc"
+            />
             {/* og meta tags */}
           </>
         )}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+        <meta
+          property="og:url"
+          content={SITE_ORIGIN_URL + router.asPath}
+          key="ogurl"
+        />
         <meta property="og:image" content={seoImage} />
       </NextHead>
 
@@ -256,24 +287,26 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
         <CustomCacheBuster buildVersion={buildVersion} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
-        <Layout
-          nav={nav}
-          footer={footer}
-          config={appConfig}
-          pageProps={pageProps}
-          keywords={keywordsData}
-          deviceInfo={deviceInfo}
-        >
-          <OverlayLoader />
-          <Component
-            {...pageProps}
-            location={location}
-            ipAddress={location.Ip}
+        <ErrorBoundary>
+          <Layout
+            nav={nav}
+            footer={footer}
             config={appConfig}
+            pageProps={pageProps}
+            keywords={keywordsData}
             deviceInfo={deviceInfo}
-          />
-          {/* <RedirectIntercept /> */}
-        </Layout>
+          >
+            <OverlayLoader />
+            <Component
+              {...pageProps}
+              location={location}
+              ipAddress={location.Ip}
+              config={appConfig}
+              deviceInfo={deviceInfo}
+            />
+            {/* <RedirectIntercept /> */}
+          </Layout>
+        </ErrorBoundary>
       </ManagedUIContext>
     </>
   )
