@@ -1,4 +1,5 @@
 import React from 'react'
+import { CURRENT_THEME } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage } from '@framework/utils/app-util'
 import Image from 'next/image'
@@ -19,9 +20,9 @@ const Logo = ({ className = '', ...props }) => {
   return (
     <Image
       onClick={logoClick}
-      src="/logo-cx-commerce.png"
+      src={`/theme/${CURRENT_THEME}/image/logo.png`}
       alt="BetterComerce"
-      width={50}
+      width={60}
       height={36}
     />
   )
