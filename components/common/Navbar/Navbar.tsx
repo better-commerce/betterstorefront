@@ -531,7 +531,7 @@ const Navbar: FC<Props & IExtraProps> = ({
               ))}
             </Popover.Group>
           )}
-          <div className="flex items-center justify-end flex-1">
+          <div className="flex items-center justify-end flex-1 cart-icon-dark-white">
             <Searchbar onClick={setShowSearchBar} />
             <Account
               title={title}
@@ -552,7 +552,7 @@ const Navbar: FC<Props & IExtraProps> = ({
             </div>
             <div className="flow-root w-10 px-1 sm:w-16">
               <button
-                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center"
+                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
                 onClick={() => {
                   viewWishlist()
                   openWishlist()
@@ -577,7 +577,7 @@ const Navbar: FC<Props & IExtraProps> = ({
 
             <div className="flow-root w-10 px-1 sm:w-16">
               <button
-                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group align-center"
+                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
                 onClick={() => {
                   viewCart(cartItems)
                   openCart()

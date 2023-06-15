@@ -92,6 +92,58 @@ p {
   font-size: var(--font-12);
 }
 
+.font-14 {
+  font-size: 14px !important;
+}
+
+.font-16 {
+  font-size: 16px !important;
+}
+
+.font-18 {
+  font-size: 18px !important;
+}
+
+.font-20 {
+  font-size: 20px !important;
+}
+
+.font-22 {
+  font-size: 22px !important;
+}
+
+.font-24 {
+  font-size: 24px !important;
+}
+
+.font-28 {
+  font-size: 28px !important;
+}
+
+.font-32 {
+  font-size: 32px !important;
+}
+
+.font-36 {
+  font-size: 36px !important;
+}
+
+.font-42 {
+  font-size: 42px !important;
+}
+
+.font-46 {
+  font-size: 46px !important;
+}
+
+.font-52 {
+  font-size: 52px !important;
+}
+
+.font-56 {
+  font-size: 56px !important;
+}
+
 .primary-text-color {
   color: #000;
 }
@@ -159,6 +211,24 @@ p {
   background: var(--btn-bg-hover-default);
   color: var(--btn-hover-text-color-default);
   border-color: var(--btn-hover-border-clr-default);
+}
+
+.btn-c.btn-primary-red {
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px !important;
+  background: var(--btn-bg-red) !important;
+  border-radius: 4px;
+  color: var(--btn-text-color-red);
+  border: 2px solid var(--btn-border-red);
+  font-size: var(--font-18);
+  box-sizing: border-box;
+}
+
+.btn-c.btn-primary-red:hover {
+  background: var(--btn-bg-hover-red) !important;
+  color: var(--btn-hover-text-color-red);
+  border: 2px solid var(--btn-border-hover-red);
 }
 
 .btn-primary-red {
