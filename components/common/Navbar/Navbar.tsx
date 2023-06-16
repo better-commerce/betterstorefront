@@ -563,7 +563,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                   aria-hidden="true"
                   aria-label="Wishlist"
                 />
-                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
                   Wishlist
                 </span>
                 {wishListItems.length > 0 && (
@@ -588,7 +588,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                   aria-hidden="true"
                   aria-label="Add to cart"
                 />
-                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
                   Cart
                 </span>
                 {renderState && (

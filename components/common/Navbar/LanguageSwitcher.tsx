@@ -15,7 +15,7 @@ export default function CurrencySwitcher({ config, title, action }: any) {
           aria-hidden="true"
           aria-label="Flags"
         />
-        <span className="hidden text-sm font-normal text-black sm:block text-header-clr">
+        <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
           Lang
         </span>
       </Menu.Button>
