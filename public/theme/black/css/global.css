@@ -245,6 +245,23 @@ p {
   color: var(--btn-hover-text-color-secondary);
 }
 
+.btn-c.btn-secondary {
+  display: inline-block;
+  text-align: center;
+  background: var(--btn-bg-secondary) !important;
+  color: var(--btn-text-color-secondary);
+  font-size: var(--font-18);
+  padding: 12px 24px !important;
+
+  border-radius: 4px;
+  border: 0 !important;
+}
+
+.btn-c.btn-secondary:hover {
+  background: var(--btn-bg-hover-secondary) !important;
+  color: var(--btn-hover-text-color-secondary);
+}
+
 .btn-default {
   background: var(--btn-bg-default);
   color: var(--btn-text-color-default);
@@ -527,3 +544,16 @@ p {
 }
 
 /* flag primary css start */
+
+/* product list image width and height control css  */
+.height-img-auto {
+  min-height: 0 !important;
+  height: auto !important;
+  object-fit: contain !important;
+  object-position: inherit;
+  width: auto !important;
+}
+.min-prod-name-height{
+  min-height: 65px;
+}
+/* product list image width and height control css  */
