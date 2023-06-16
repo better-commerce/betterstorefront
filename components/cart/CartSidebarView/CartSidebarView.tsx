@@ -18,6 +18,7 @@ import {
   MinusSmallIcon,
   ChevronDownIcon,
   EyeIcon,
+  CheckCircleIcon,
 } from '@heroicons/react/24/outline'
 import PromotionInput from '../PromotionInput'
 import RelatedProducts from '@components/product/RelatedProducts'
@@ -57,6 +58,8 @@ import useTranslation, {
   ADDED_TO_WISH,
   GENERAL_PERSONALISATION,
   PERSONALISATION,
+  BTN_ADD_TO_WISHLIST,
+  WISHLIST_SUCCESS_MESSAGE,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { EmptyGuid } from '@components/utils/constants'
@@ -118,6 +121,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   })
   const content = useTranslation()
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false)
+  const [isWishlistClicked, setIsWishlistClicked] = useState(false);
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
     useState(null)
@@ -394,14 +398,21 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
     element.classList.add('overlow-y-auto-p')
   }
   const insertToLocalWishlist = (product: any) => {
+    setIsWishlistClicked(true);
     addToWishlist(product)
     // setIsLoading({ action: 'move-wishlist', state: true })
     handleItem(product, 'delete')
     // setMovedProducts((prev: any) => [...prev, { product: product, msg: MOVED_TO_WISHLIST }])
     // setIsLoading({ action: '', state: false })
-    setAlert({ type: 'success', msg: ADDED_TO_WISH })
-    openWishlist()
+    // setAlert({ type: 'success', msg: ADDED_TO_WISH })
+    // openWishlist()
+    openWishlistAfter()
   }
+
+  const openWishlistAfter = () => {
+    setTimeout(() => openWishlist(), 1000)
+  }
+
   const handleWishList = async (product: any | Array<any>) => {
     closeModal()
     const accessToken = localStorage.getItem('user')
@@ -672,6 +683,10 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   const css = { maxWidth: '100%', height: 'auto' }
 
   function handleRedirectToPDP() {}
+
+  function handleAddToWishlist(){
+
+  }
 
   return (
     <>
@@ -964,7 +979,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                       <p className="p-6 text-sm font-normal text-black">
                                                         Are you sure you don't
                                                         want this product? You
-                                                        may move it to Wishlist
+                                                        may still move it to Wishlist
                                                         and buy later.
                                                       </p>
                                                       <div className="flex items-center justify-around w-full px-6 mt-2">
@@ -987,7 +1002,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                           }}
                                                           className="flex items-center justify-center w-full h-16 px-6 py-2 mx-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 shadow-sm hover:bg-gray-100 md:w-full"
                                                         >
-                                                          {BTN_MOVE_TO_WISHLIST}
+                                                          {BTN_ADD_TO_WISHLIST}
                                                         </button>
                                                       </div>
                                                     </Dialog.Panel>
@@ -1061,7 +1076,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                             )}
                                         </div>
                                       </div>
-                                      <div className="flex flex-col justify-start mt-2 text-left">
+                                      <div className="flex flex-row justify-between mt-2 /text-left">
                                         <button
                                           type="button"
                                           className="font-medium text-left text-red-300 hover:text-red-500"
@@ -1072,12 +1087,29 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                         >
                                           {GENERAL_REMOVE}
                                         </button>
+
+                                        <button 
+                                          className='font-medium text-left text-gray-700 hover:text-indigo-700'
+                                          onClick={() => {
+                                            insertToLocalWishlist(product);
+                                          }}
+                                        >
+                                          {BTN_ADD_TO_WISHLIST}
+                                        </button>
                                       </div>
                                     </div>
                                   </div>
                                 </li>
                               )
                             })}
+                            {isWishlistClicked && (
+                              <div className="items-center justify-center w-full h-full py-5 text-xl text-gray-500">
+                                <CheckCircleIcon className="flex items-center justify-center w-full h-12 text-center text-indigo-600" />
+                                <p className="mt-5 text-center">
+                                  {ADDED_TO_WISH}
+                                </p>
+                              </div>
+                            )} 
                           </ul>
                         </div>
                       </div>

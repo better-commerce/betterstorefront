@@ -156,6 +156,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
 
   // function to handle selected Image
   function handleImageCLick(e: any) {
+    console.log('image clicked', e.target.src)
     setIsImageCLick(true)
     setSelectedImage(e.target.src)
   }
@@ -242,7 +243,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                               selectedImage === val.image &&
                               'border-2 border-blue'
                           )}
-                          onClick={(e) => {
+                          onClick={(e:any) => {
                             handleImageCLick(e)
                           }}
                         />
