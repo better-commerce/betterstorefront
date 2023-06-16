@@ -162,7 +162,6 @@ function Home({
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <Hero banners={pageContents?.banner} />
-
       <div className="container py-3 mx-auto sm:py-6">
         {pageContents?.heading?.map((heading: any, hId: number) => (
           <Heading
