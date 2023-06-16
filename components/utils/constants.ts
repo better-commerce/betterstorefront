@@ -126,7 +126,7 @@ export const NEXT_VALIDATE_CHANGE_USERNAME_OTP =
 
 export const NEXT_GET_PRODUCT_QUICK_VIEW = '/api/catalog/get-product-quick-view'
 
-export const NEXT_GET_PRODUCT_REVIEW = '/api/catalog/get-product-review'
+export const NEXT_GET_PRODUCT_REVIEW = '/api/catalog/get-product-reviews'
 export const DefaultSessionCookieKey: string = `defaultSession`
 export const SessionIdCookieKey: string = `sessionId`
 export const DeviceIdKey: string = `deviceId`
@@ -175,9 +175,7 @@ export const SECURE_PAYMENT_METHODS_SETTINGS_FIELDS = stringToBoolean(
 export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS =
   process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS
 
- export const OTP_LOGIN_ENABLED = stringToBoolean(
-  process.env.OTP_LOGIN_ENABLED 
-)
+export const OTP_LOGIN_ENABLED = stringToBoolean(process.env.OTP_LOGIN_ENABLED)
 
 export module Messages {
   export module Validations {

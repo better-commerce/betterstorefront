@@ -1,7 +1,10 @@
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
-import { NEXT_AUTHENTICATE,OTP_LOGIN_ENABLED } from '@components/utils/constants'
+import {
+  NEXT_AUTHENTICATE,
+  OTP_LOGIN_ENABLED,
+} from '@components/utils/constants'
 import axios from 'axios'
 import { useState } from 'react'
 import { useUI } from '@components/ui/context'
@@ -81,8 +84,8 @@ function LoginPage({ recordEvent, setEntities }: any) {
     }
     asyncLoginUser()
   }
-  if(otpEnabled){
-    return <LoginOtp/>
+  if (otpEnabled) {
+    return <LoginOtp />
   }
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
