@@ -6,7 +6,7 @@ export default function updateDetails() {
     try {
       const response: any = await fetcher({
         url: `${CUSTOMER_BASE_API}${userId}/update`,
-        method: 'post',
+        method: 'put',
         data: query,
         cookies,
       })
