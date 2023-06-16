@@ -129,7 +129,7 @@ function Checkout({ cart, config, location }: any) {
     fetchAddress()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isLoggedIn])
 
   if (isLoggedIn) {
     return (
