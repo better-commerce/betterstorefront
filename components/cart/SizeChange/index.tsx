@@ -22,19 +22,20 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
   const { setCartItems, cartItems, basketId } = useUI()
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState('')
-  
+
   const [productSizeData, setProductSizeData] = useState<any>(null)
   const [productStockCodesWithSize, setProductStockCodesWithSize] =
     useState<any>(null)
   const [isSizeUpdateLoading, setIsSizeUpdateLoading] = useState(false)
-  const [defaultSize,setDefaultSize] = useState<any>(null)
+  const [defaultSize, setDefaultSize] = useState<any>(null)
 
-  useEffect(()=>{
-    let slugBreakArr:any = product?.slug?.split("-")
-    let sizeFromSlug:any = slugBreakArr?.length ? slugBreakArr[slugBreakArr?.length - 1] : ""
-    setDefaultSize(sizeFromSlug)
-    
-  },[open])
+  useEffect(() => {
+    let stockCodeBreakArr: any = product?.stockCode?.split('-')
+    let sizeFromStockCode = stockCodeBreakArr?.length
+      ? stockCodeBreakArr[stockCodeBreakArr?.length - 1]
+      : ''
+    setDefaultSize(sizeFromStockCode.toLowerCase())
+  }, [open])
 
   useEffect(() => {
     // update current size of the product
@@ -321,7 +322,11 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
                   className={`!py-3 text-sm font-bold text-center text-white bg-red-700 border cursor-pointer ${
                     false ? 'opacity-50 !cursor-not-allowed' : ''
                   }`}
-                  disabled={!Boolean(value) || isSizeUpdateLoading || value===defaultSize}
+                  disabled={
+                    !Boolean(value) ||
+                    isSizeUpdateLoading ||
+                    value === defaultSize
+                  }
                   onClick={handleSubmit}
                 >
                   {isSizeUpdateLoading
