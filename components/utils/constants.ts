@@ -176,6 +176,7 @@ export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS =
   process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS
 
 export const OTP_LOGIN_ENABLED = stringToBoolean(process.env.OTP_LOGIN_ENABLED)
+export const CURRENT_THEME = process.env.CURRENT_THEME
 
 export module Messages {
   export module Validations {
