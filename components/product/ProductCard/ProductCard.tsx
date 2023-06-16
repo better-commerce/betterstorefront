@@ -305,7 +305,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 )}
                 <SimpleButton
                   variant="slim"
-                  className="!p-1 flex-1 !bg-transparent btn-c btn-primary-red font-14"
+                  className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14"
                   onClick={() => handleQuickViewData(product)}
                 >
                   {QUICK_VIEW}
