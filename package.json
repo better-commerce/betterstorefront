@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "npm run tsc && node generate-locales.js && cross-env NODE_OPTIONS='--inspect' next dev",
-    "build": "npm run tsc && node generate-locales.js && next build",
-    "start": "npm run tsc && next start",
+    "build": "node generate-locales.js && next build",
+    "start": "next start",
     "analyze": "BUNDLE_ANALYZE=both yarn build",
     "lint": "next lint",
     "prettier-fix": "prettier --write .",
