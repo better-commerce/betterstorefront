@@ -96,7 +96,6 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
     fallback: 'blocking',
   }
 }
-
 function Slug({
   data,
   setEntities,

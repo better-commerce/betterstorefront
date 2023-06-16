@@ -906,7 +906,6 @@ export default function ProductView({
           productBundleUpdate={handleProductBundleUpdate}
         />
       )}
-
       {relatedProducts?.relatedProducts?.filter((x: any) =>
         matchStrings(x?.relatedType, 'ALSOLIKE', true)
       )?.length > 0 ? (

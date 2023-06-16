@@ -37,7 +37,8 @@ framework/bettercommerce/seo.json
 framework/bettercommerce/locales.json
 # vercel
 .vercel
-yarn.lock
+# yarn.lock
+# package-lock.json
 
 
 #tailwind screenshots and templates
@@ -45,4 +46,4 @@ tw.ecommerce
 tsconfig.tsbuildinfo
 
 # npm build output
-# .npmrc
+#.npmrc
