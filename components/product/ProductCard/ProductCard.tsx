@@ -320,7 +320,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           href={`/${currentProductData.link}`}
           title={`${product.name} \t ${itemPrice}`}
         >
-          <h6 className="flex items-center justify-between w-full h-10 px-2 my-1 font-semibold text-black capitalize group-hover:hidden product-name hover:text-gray-950">
+          <h6 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-black capitalize group-hover:hidden product-name hover:text-gray-950">
             {product?.name?.toLowerCase()}
           </h6>
 
