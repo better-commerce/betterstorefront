@@ -19,6 +19,8 @@ import { LocalStorage } from '@components/utils/payment-constants'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { DataSubmit } from '@commerce/utils/use-data-submit'
 import axios from 'axios'
+import { isMobileOnly } from "react-device-detect";
+import Router from "next/router";
 
 export const isCartAssociated = (cartItems: any) => {
   if (cartItems?.userId && cartItems?.userId !== EmptyGuid) {
@@ -50,6 +52,16 @@ export const obfuscateHostName = (hostname: string) => {
   }
   return ''
 }
+
+export const validateAddToCart = (productId: string, cartItems: any) => {
+  if (cartItems?.lineItems && cartItems?.lineItems?.length) {
+      const findLineItem = cartItems?.lineItems?.find((x: any) => matchStrings(x?.productId, productId, true));
+      if (findLineItem) {
+          return (findLineItem?.qty != 5);
+      }
+  }
+  return true;
+};
 
 export const sanitizeBase64 = (base64: string) => {
   if (base64) {
@@ -363,4 +375,17 @@ export const getMinMax = (list: Array<any>, dependantProp: string) => {
     min: lowest,
     max: highest,
   }
+}
+
+export const openNewCartPage = (openCart: Function) => {
+  if (isMobileOnly) { 
+      Router?.push("/cart");
+  } else {
+      const checkIfCartUrl = window?.location?.href?.includes('/cart') || window?.location?.href?.includes('#cartopen') 
+      if(!checkIfCartUrl){
+          Router?.push({pathname: `${window?.location?.href}#cartopen`,},`${window?.location?.href}#cartopen`,{ shallow: true, scroll: false })
+          openCart();
+      }
+  }
+  // Router.push('/cart');
 }

@@ -8,7 +8,7 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
-import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { NEXT_CREATE_WISHLIST, Messages } from '@components/utils/constants'
 import {
   ArrowsPointingOutIcon,
   CursorArrowRaysIcon,
@@ -29,6 +29,7 @@ import {
   QUICK_VIEW,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { validateAddToCart } from '@framework/utils/app-util'
 import QuickViewModal from '@components/product/QuickView/ProductQuickView'
 interface Props {
   product: any
@@ -61,6 +62,8 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
     user,
     addToWishlist,
     openWishlist,
+    cartItems,
+    setAlert,
     setCartItems,
     openNotifyUser,
   } = useUI()
@@ -142,6 +145,19 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
+      validateAction: async () => {
+        const isValid = validateAddToCart(
+          product?.recordId ?? product?.productId,
+          cartItems
+        )
+        if (!isValid) {
+          setAlert({
+            type: 'error',
+            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+          })
+        }
+        return isValid
+      },
       action: async () => {
         const item = await cartHandler().addToCart(
           {

@@ -2,6 +2,7 @@ import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { isDesktop, isMobile } from 'react-device-detect'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
+import { ALERT_TIMER } from '@components/utils/constants';
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
@@ -373,9 +374,11 @@ function uiReducer(state: State, action: Action) {
   }
 }
 
-export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
-  props: any
-) => {
+type UIProviderProps = {
+  children: any
+}
+
+export const UIProvider: React.FC<any> = (props) => {
   const Router = useRouter()
 
   const [state, dispatch] = React.useReducer<React.Reducer<any, any>>(
@@ -383,48 +386,48 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
     initialState
   )
 
-  const setupDeviceInfo = useCallback(() => {
-    const UA = navigator.userAgent
-    const isIPadorTablet = /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA)
+  // const setupDeviceInfo = useCallback(() => {
+  //   const UA = navigator.userAgent
+  //   const isIPadorTablet = /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA)
 
-    /**
-     * Determine the mobile operating system.
-     * This function returns one of 'IOS', 'ANDROID', 'WINDOWS_PHONE', or 'UNKNOWN'.
-     *
-     * @returns {String}
-     */
-    const getDeviceType = () => {
-      var userAgent = navigator.userAgent || navigator.vendor || window.opera
+  //   /**
+  //    * Determine the mobile operating system.
+  //    * This function returns one of 'IOS', 'ANDROID', 'WINDOWS_PHONE', or 'UNKNOWN'.
+  //    *
+  //    * @returns {String}
+  //    */
+  //   const getDeviceType = () => {
+  //     var userAgent = navigator.userAgent || navigator.vendor || window.opera
 
-      // Windows Phone must come first because its UA also contains "Android"
-      if (/windows phone/i.test(userAgent)) {
-        return DeviceType.WINDOWS_PHONE
-      }
+  //     // Windows Phone must come first because its UA also contains "Android"
+  //     if (/windows phone/i.test(userAgent)) {
+  //       return DeviceType.WINDOWS_PHONE
+  //     }
 
-      if (/android/i.test(userAgent)) {
-        return DeviceType.ANDROID
-      }
+  //     if (/android/i.test(userAgent)) {
+  //       return DeviceType.ANDROID
+  //     }
 
-      // iOS detection from: http://stackoverflow.com/a/9039885/177710
-      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        return DeviceType.IOS
-      }
+  //     // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  //     if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+  //       return DeviceType.IOS
+  //     }
 
-      return DeviceType.UNKNOWN
-    }
-    const deviceTypeInfo = getDeviceType()
-    const isOnlyMobile = (isMobile && !isIPadorTablet) || deviceTypeInfo === 2
+  //     return DeviceType.UNKNOWN
+  //   }
+  //   const deviceTypeInfo = getDeviceType()
+  //   const isOnlyMobile = (isMobile && !isIPadorTablet) || deviceTypeInfo === 2
 
-    const payload: IDeviceInfo = {
-      isMobile,
-      isOnlyMobile,
-      isDesktop: isMobile || isIPadorTablet ? false : isDesktop,
-      isIPadorTablet,
-      deviceType: deviceTypeInfo,
-    }
-    setItem('deviceInfo', payload)
-    dispatch({ type: 'SETUP_DEVICE_INFO', payload })
-  }, [dispatch])
+  //   const payload: IDeviceInfo = {
+  //     isMobile,
+  //     isOnlyMobile,
+  //     isDesktop: isMobile || isIPadorTablet ? false : isDesktop,
+  //     isIPadorTablet,
+  //     deviceType: deviceTypeInfo,
+  //   }
+  //   setItem('deviceInfo', payload)
+  //   dispatch({ type: 'SETUP_DEVICE_INFO', payload })
+  // }, [dispatch])
 
   const addToWishlist = useCallback(
     (payload: any) => {
@@ -490,6 +493,25 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
     [dispatch]
   )
 
+  const showAlert = useCallback(
+    () => {
+      dispatch({ type: 'SHOW_ALERT' })
+      // const closeAlert = dispatch({type:'HIDE_ALERT'})
+      setTimeout(hideAlert, ALERT_TIMER)
+    },
+    [dispatch]
+  )
+  const hideAlert = useCallback(
+    () => dispatch({ type: 'HIDE_ALERT' }),
+    [dispatch]
+  )
+  const setAlert = useCallback(
+    (payload: any) => {
+      showAlert()
+      dispatch({ type: 'USE_ALERT', payload })
+    },
+    [dispatch]
+  )
   const openModal = useCallback(
     () => dispatch({ type: 'OPEN_MODAL' }),
     [dispatch]
@@ -622,6 +644,7 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
           })
           dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
           dispatch({ type: 'REMOVE_USER', payload: {} })
+           setAlert({ type: 'success', msg: LOGOUT })
         })
       }
     },
@@ -818,6 +841,9 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
       resetCartItems,
       setupDeviceInfo,
       setAddressId,
+      showAlert,
+      hideAlert,
+      setAlert,
     }),
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -835,9 +861,7 @@ export const useUI = () => {
   return context
 }
 
-export const ManagedUIContext: FC<React.PropsWithChildren<unknown>> = ({
-  children,
-}) => (
+export const ManagedUIContext: React.FC<any> = ({ children }: any) => (
   <UIProvider>
     <ThemeProvider>{children}</ThemeProvider>
   </UIProvider>

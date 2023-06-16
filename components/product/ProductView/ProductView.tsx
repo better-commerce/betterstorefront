@@ -21,6 +21,7 @@ import {
   MinusSmallIcon,
 } from '@heroicons/react/24/outline'
 import {
+  Messages,
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
   NEXT_UPDATE_CART_INFO,
@@ -64,7 +65,7 @@ import { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { matchStrings } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { getCurrentPage } from '@framework/utils/app-util'
+import { getCurrentPage, validateAddToCart } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
@@ -93,7 +94,6 @@ const AvailableOffers = dynamic(
 const ReviewInput = dynamic(
   () => import('@components/product/Reviews/ReviewInput')
 )
-
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -130,6 +130,7 @@ export default function ProductView({
     openWishlist,
     basketId,
     cartItems,
+    setAlert,
     setCartItems,
     user,
     openCart,
@@ -267,6 +268,18 @@ export default function ProductView({
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
+      validateAction: async () => {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
+        if (selectedAttrData?.currentStock === cartLineItem?.qty) {
+          setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_MAX_ADDED"] })
+          return false
+        }
+        const isValid = validateAddToCart(selectedAttrData?.productId ?? selectedAttrData?.recordId, cartItems);
+        if (!isValid) {
+          setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_LIMIT_EXCEEDED"] })
+        }
+        return isValid;
+      },
       action: async () => {
         const item = await cartHandler().addToCart(
           {
@@ -363,6 +376,18 @@ export default function ProductView({
       ) {
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
+          validateAction: async () => {
+            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
+            if (selectedAttrData?.currentStock === cartLineItem?.qty) {
+              setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_MAX_ADDED"] })
+              return false
+            }
+            const isValid = validateAddToCart(selectedAttrData?.productId ?? selectedAttrData?.recordId, cartItems);
+            if (!isValid) {
+              setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_LIMIT_EXCEEDED"] })
+            }
+            return isValid;
+          },
           action: async () => {
             const item = await cartHandler().addToCart(
               {
@@ -824,6 +849,7 @@ export default function ProductView({
                       className="hidden sm:block "
                       title={buttonConfig.title}
                       action={buttonConfig.action}
+                      validateAction={buttonConfig.validateAction}
                       buttonType={buttonConfig.type || 'cart'}
                     />
                     <button
