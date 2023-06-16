@@ -7,7 +7,7 @@ import Image from "next/legacy/image";
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
-
+import { openNewCartPage } from '@framework/utils/app-util'
 
 interface Props {
   className?: string
@@ -16,6 +16,7 @@ interface Props {
   buttonType?: string
   type?: string
   colorScheme?: any
+  validateAction?: any
 }
 
 const DEFAULT_COLOR_SCHEME = {
@@ -30,6 +31,7 @@ const DefaultButton: FC<Props> = ({
   buttonType = 'cart',
   action = () => { },
   colorScheme = DEFAULT_COLOR_SCHEME,
+  validateAction = null,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -38,10 +40,24 @@ const DefaultButton: FC<Props> = ({
   const handleAction = () => {
     setIsLoading(true)
     if (buttonType === 'cart') {
+
+      if (validateAction) {
+      validateAction().then((status: boolean) => {
+        if (status) {
+          action().then(() => {
+            setIsLoading(false)
+            // openCart()
+            openNewCartPage(openCart);
+          });
+        }
+      })
+    } else {
       action().then(() => {
         setIsLoading(false)
-        openCart()
+        // openCart()
+        openNewCartPage(openCart);
       })
+    }
     } else
       action().then(() => {
         setIsLoading(false)

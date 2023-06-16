@@ -501,6 +501,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
     if (isOpen) {
       closeModal()
     }
+    const MAX_PRODUCT_LIMIT = 5; // Maximum product limit
     const asyncHandleItem = async (product: any) => {
       const data: any = {
         basketId,
@@ -511,6 +512,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
         qty: -1,
       }
       if (type === 'increase') {
+        if (product.qty < MAX_PRODUCT_LIMIT) {
         data.qty = 1
         if (currentPage) {
           if (typeof window !== 'undefined') {
@@ -525,7 +527,12 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
             })
           }
         }
+      } else {
+        console.log('Maximum product limit reached');
+        alert('Maximum product limit reached')
+        return;
       }
+    }
       if (type === 'delete') {
         data.qty = 0
         if (typeof window !== 'undefined') {

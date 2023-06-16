@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { useUI } from '@components/ui/context'
 import { useState } from 'react'
 import { LoadingDots } from '@components/ui'
-
+import { openNewCartPage } from '@framework/utils/app-util'
 interface Props {
   className?: string
   title?: string
@@ -11,6 +11,7 @@ interface Props {
   type?: string
   colorScheme?: any
   disabled?: boolean
+  validateAction?: any
 }
 
 const DEFAULT_COLOR_SCHEME = {
@@ -26,6 +27,7 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
   action = () => {},
   colorScheme = DEFAULT_COLOR_SCHEME,
   disabled = false,
+  validateAction = null,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -34,10 +36,24 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
   const handleAction = () => {
     setIsLoading(true)
     if (buttonType === 'cart') {
+
+      if (validateAction) {
+        validateAction().then((status: boolean) => {
+          if (status) {
+            action().then(() => {
+              setIsLoading(false)
+              // openCart()
+              openNewCartPage(openCart);
+            });
+          }
+        })
+      } else {
       action()?.then(() => {
         setIsLoading(false)
-        openCart()
+        // openCart()
+        openNewCartPage(openCart);
       })
+    }
     } else
       action()?.then(() => {
         setIsLoading(false)
