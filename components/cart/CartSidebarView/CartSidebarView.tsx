@@ -1089,7 +1089,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                         </button>
 
                                         <button 
-                                          className='font-medium text-left text-gray-700 hover:text-indigo-700'
+                                          className='font-medium text-left text-gray-700 hover:text-indigo-500'
                                           onClick={() => {
                                             insertToLocalWishlist(product);
                                           }}
@@ -1119,7 +1119,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                     </div>
 
                     {!isEmpty && (
-                      <div className="sticky bottom-0 pt-4 pb-1 mt-2 ml-5 bg-white">
+                      <div className="sticky bottom-0 pt-4 pb-1 mt-2 ml-5 mr-5  bg-white">
                         <div className="-mt-3">
                           <Disclosure defaultOpen>
                             {({ open }) => (
@@ -1135,7 +1135,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                   leaveFrom="transform scale-100 opacity-100"
                                   leaveTo="transform scale-95 opacity-0"
                                 >
-                                  <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                  <Disclosure.Panel className="/px-4 pt-4 pb-2 text-sm text-gray-500">
                                     <PromotionInput
                                       basketPromos={basketPromos}
                                       items={cartItems}
