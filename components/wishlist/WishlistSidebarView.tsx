@@ -110,6 +110,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
       .then((response: any) => {
         setCartItems(response)
         setItemInCart(true)
+        deleteItemFromWishlist(product)
         setTimeout(() => {
           setItemInCart(false)
         }, 3000)
@@ -247,7 +248,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                       {GENERAL_REMOVE}
                                     </button>
                                   </div>
-                                  <div className="flex justify-between w-full">
+                                  <div className="flex justify-end w-full">
                                     <button
                                       type="button"
                                       className="font-medium text-black hover:text-indigo-500"

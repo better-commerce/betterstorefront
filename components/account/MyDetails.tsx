@@ -21,11 +21,13 @@ export default function MyDetails() {
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const formikHandleChange = (e: any, handleFunction: any) => {
+    console.log(e.target, 'e.target in MyDetails')
     if (e.target.name === 'phone' || e.target.name === 'mobile') {
       //Regex to check if the value consists of an alphabet
       e.target.value = e.target.value
-        ? e.target.value.replace(/([a-zA-Z])/g, '')
-        : ''
+      // ? e.target.value.replace(/([a-zA-Z])/g, '')
+      ? e.target.value.replace( /^[a-zA-Z@\!#\$\^%&*()+=\-[]\\\';,\.\/\{\}\|\":<>\? ]+$/, '')
+      : ''
       handleFunction(e)
     } else {
       handleFunction(e)
