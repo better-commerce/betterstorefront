@@ -400,7 +400,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                   dispatchState: Function
                 ) =>
                   await that.onPay(
-                    paymentMethod,
+                    that.state.paymentMethod,
                     basketOrderInfo,
                     uiContext,
                     dispatchState

@@ -90,7 +90,7 @@ export class CODPaymentButton extends BasePaymentButton {
               dispatchState: Function
             ) =>
               that.onPay(
-                paymentMethod,
+                that.state.paymentMethod,
                 basketOrderInfo,
                 uiContext,
                 dispatchState
