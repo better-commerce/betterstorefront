@@ -363,3 +363,5 @@ export const PROCEED_TO_CANCEL = 'Proceed to Cancel'
 export const FILTER_TITLE = 'Filter & Sorting'
 export const CHANGE_SIZE = 'Change Size'
 export const LOGOUT = 'Logout Successful'
+export const PRODUCT_DELIVERY_MESSAGE =
+  'For orders above {currencySymbol}{freeShippingOverXValue}, Usually delivered in 2-5 days.'

@@ -122,6 +122,7 @@ export default function ProductView({
   pdpCachedImages,
   reviews,
   deviceInfo,
+  config,
 }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const {
@@ -872,7 +873,11 @@ export default function ProductView({
             </>
           ) : null}
           <div className="flex-1 order-6 w-full sm:order-5">
-            <DeliveryInfo product={product} grpData={attrGroup} />
+            <DeliveryInfo
+              product={product}
+              grpData={attrGroup}
+              config={config}
+            />
           </div>
           <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
             <h2 id="details-heading" className="sr-only">
