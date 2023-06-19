@@ -14,6 +14,7 @@ import ProductReturn from '../ProductSidebar/ProductReturn'
 import { min } from 'lodash'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Image from 'next/image'
+import DeliveryMessage from './DeliveryMessage'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
 export const DELIVERY_FORM_FIELDS = [
@@ -91,12 +92,7 @@ export default function DeliveryInfo({ product, grpData }: any) {
         className="mt-0 border-gray-200 sm:border-t sm:mt-2"
       >
         <div className="flex flex-col px-4 pt-0 pb-0 mt-0 sm:pb-6 sm:pt-2 sm:mt-2 sm:px-0">
-          <div className="mb-2 font-bold text-primary text-20">
-            Free Delivery
-          </div>
-          <p className="font-normal text-14 text-brown-light">
-            For orders above ₹600, Usually delivered in 2-5 days
-          </p>
+          <DeliveryMessage product={product} />
           <div className="grid grid-cols-2 mt-6 gap-x-4">
             {grpData['product.exchangeeligibilitydays']?.length &&
               returnEligeble == 'True' && (
