@@ -67,7 +67,6 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
       })
     }
   }
-  console.log(config)
   const shippingSettings = config?.configSettings?.find(
     (x: any) => x.configType === 'ShippingSettings'
   )
