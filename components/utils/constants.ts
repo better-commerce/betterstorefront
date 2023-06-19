@@ -297,7 +297,8 @@ export module Messages {
     GENERIC_ERROR:
       'Your request could not be processed. Please try again after sometime.',
     CART_EMPTY: 'Your cart is empty',
-    CART_ITEM_QTY_LIMIT_EXCEEDED: 'Max allowed quantity is 5.',
+    CART_ITEM_QTY_LIMIT_EXCEEDED:
+      'Max allowed quantity is {maxBasketItemsCount}.',
     BASKET_VALIDATION_FAILED: 'Basket validation failed',
     'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
   }

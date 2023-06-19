@@ -5,6 +5,7 @@ import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { LOADER_LOADING } from '@components/utils/textVariables'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 
 export async function getStaticProps({
   params,
@@ -41,7 +42,14 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   }
 }
 
-function Slug({ data, setEntities, recordEvent, slug, deviceInfo }: any) {
+function Slug({
+  data,
+  setEntities,
+  recordEvent,
+  slug,
+  deviceInfo,
+  config,
+}: any) {
   const router = useRouter()
   return router.isFallback ? (
     <h1>{LOADER_LOADING}</h1>
@@ -55,6 +63,7 @@ function Slug({ data, setEntities, recordEvent, slug, deviceInfo }: any) {
         snippets={data.snippets}
         isPreview={true}
         deviceInfo={deviceInfo}
+        maxBasketItemsCount={maxBasketItemsCount(config)}
       />
     )
   )

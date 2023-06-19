@@ -8,6 +8,7 @@ import { useEffect, useState, Fragment } from 'react'
 import {
   matchStrings,
   priceFormat,
+  stringFormat,
   tryParseJson,
 } from '@framework/utils/parse-util'
 import useCart from '@components/services/cart'
@@ -28,6 +29,7 @@ import { Disclosure } from '@headlessui/react'
 
 import Image from 'next/image'
 import {
+  Messages,
   NEXT_CREATE_WISHLIST,
   NEXT_GET_ORDER_RELATED_PRODUCTS,
   NEXT_GET_ALT_RELATED_PRODUCTS,
@@ -73,6 +75,7 @@ import { IExtraProps } from '@components/common/Layout/Layout'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   deviceInfo,
+  maxBasketItemsCount,
 }: any) => {
   const {
     addToWishlist,
@@ -522,19 +525,29 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
         qty: -1,
       }
       if (type === 'increase') {
-        data.qty = 1
-        if (currentPage) {
-          if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'select_quantity', {
-              category: product?.categoryItems?.length
-                ? product?.categoryItems[0]?.categoryName
-                : '',
-              final_quantity: data.qty,
-              current_page: currentPage,
-              number_of_plus_clicked: 1,
-              number_of_minus_clicked: 0,
-            })
+        if (product.qty < maxBasketItemsCount) {
+          data.qty = 1
+          if (currentPage) {
+            if (typeof window !== 'undefined') {
+              recordGA4Event(window, 'select_quantity', {
+                category: product?.categoryItems?.length
+                  ? product?.categoryItems[0]?.categoryName
+                  : '',
+                final_quantity: data.qty,
+                current_page: currentPage,
+                number_of_plus_clicked: 1,
+                number_of_minus_clicked: 0,
+              })
+            }
           }
+        } else {
+          setAlert({
+            type: 'error',
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
+          })
+          return
         }
       }
       if (type === 'delete') {
@@ -793,6 +806,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                     }
                                     productPerColumn={1.7}
                                     deviceInfo={deviceInfo}
+                                    maxBasketItemsCount={maxBasketItemsCount}
                                   />
                                 </div>
                               )}

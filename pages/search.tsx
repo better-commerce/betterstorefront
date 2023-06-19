@@ -13,6 +13,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -96,7 +97,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
+function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage
@@ -371,6 +372,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
               handlePageChange={handlePageChange}
               handleInfiniteScroll={handleInfiniteScroll}
               deviceInfo={deviceInfo}
+              maxBasketItemsCount={maxBasketItemsCount(config)}
             />
           </div>
         </div>

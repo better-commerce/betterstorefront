@@ -1078,3 +1078,38 @@ body {
   position: absolute;
   left: 0;
 }
+
+.promo-copied {
+  top: -30px;
+  right: -20px;
+  position: absolute;
+  float: right;
+  margin-right: 0;
+  width: 90px;
+  z-index: 99;
+}
+
+.promo-copied:after {
+  content: '>';
+  font-size: 35px;
+  color: #000;
+  position: absolute;
+  bottom: -4px;
+  right: 26%;
+  z-index: -1;
+  transform: rotate(90deg);
+}
+
+/* alert ribbon theme */
+.bg-ribbon-green {
+  background-color: #00890e !important;
+}
+
+.bg-ribbon-red {
+  background-color: #c10000 !important;
+}
+
+.bg-ribbon-cancel {
+  background-color: #fdebeb !important;
+}
+

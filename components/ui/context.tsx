@@ -2,6 +2,7 @@ import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { isDesktop, isMobile } from 'react-device-detect'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
+import { ALERT_TIMER } from '@components/utils/constants';
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
@@ -79,6 +80,8 @@ const initialState = {
   sidebarView: 'CART_VIEW',
   userAvatar: '',
   productId: '',
+  displayAlert: false,
+  alertRibbon: {},
   notifyUser: false,
   wishListItems: getItem('wishListItems') || [],
   cartItems: getItem('cartItems') || { lineItems: [] },
@@ -117,6 +120,16 @@ type Action =
     }
   | {
       type: 'OPEN_MODAL'
+    }
+  |  {
+      type: 'SHOW_ALERT'
+    }
+  | {
+      type: 'HIDE_ALERT'
+    }
+  | {
+      type: 'USE_ALERT'
+      payload: any
     }
   | {
       type: 'OPEN_NOTIFY_USER_POPUP'
@@ -231,6 +244,24 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         displayDropdown: false,
+      }
+    }
+    case 'SHOW_ALERT': {
+      return {
+        ...state,
+        displayAlert: true,
+      }
+    }
+    case 'HIDE_ALERT': {
+      return {
+        ...state,
+        displayAlert: false,
+      }
+    }
+    case 'USE_ALERT': {
+      return {
+        ...state,
+        alertRibbon: action.payload,
       }
     }
     case 'OPEN_MODAL': {
@@ -373,9 +404,11 @@ function uiReducer(state: State, action: Action) {
   }
 }
 
-export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
-  props: any
-) => {
+type UIProviderProps = {
+  children: any
+}
+
+export const UIProvider: React.FC<any> = (props) => {
   const Router = useRouter()
 
   const [state, dispatch] = React.useReducer<React.Reducer<any, any>>(
@@ -490,6 +523,25 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
     [dispatch]
   )
 
+  const showAlert = useCallback(
+    () => {
+      dispatch({ type: 'SHOW_ALERT' })
+      // const closeAlert = dispatch({type:'HIDE_ALERT'})
+      setTimeout(hideAlert, ALERT_TIMER)
+    },
+    [dispatch]
+  )
+  const hideAlert = useCallback(
+    () => dispatch({ type: 'HIDE_ALERT' }),
+    [dispatch]
+  )
+  const setAlert = useCallback(
+    (payload: any) => {
+      showAlert()
+      dispatch({ type: 'USE_ALERT', payload })
+    },
+    [dispatch]
+  )
   const openModal = useCallback(
     () => dispatch({ type: 'OPEN_MODAL' }),
     [dispatch]
@@ -622,6 +674,7 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
           })
           dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
           dispatch({ type: 'REMOVE_USER', payload: {} })
+           setAlert({ type: 'success', msg: LOGOUT })
         })
       }
     },
@@ -818,6 +871,9 @@ export const UIProvider: FC<React.PropsWithChildren<unknown>> = (
       resetCartItems,
       setupDeviceInfo,
       setAddressId,
+      showAlert,
+      hideAlert,
+      setAlert,
     }),
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -835,9 +891,7 @@ export const useUI = () => {
   return context
 }
 
-export const ManagedUIContext: FC<React.PropsWithChildren<unknown>> = ({
-  children,
-}) => (
+export const ManagedUIContext: React.FC<any> = ({ children }: any) => (
   <UIProvider>
     <ThemeProvider>{children}</ThemeProvider>
   </UIProvider>

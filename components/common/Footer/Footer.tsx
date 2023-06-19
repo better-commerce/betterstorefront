@@ -20,7 +20,11 @@ interface Props {
   config: []
 }
 
-const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
+const Footer: FC<Props & IExtraProps> = ({
+  config,
+  deviceInfo,
+  maxBasketItemsCount,
+}) => {
   const router = useRouter()
   const [hasConfig, setHasConfig] = useState(false)
   const { isMobile, isIPadorTablet } = deviceInfo
