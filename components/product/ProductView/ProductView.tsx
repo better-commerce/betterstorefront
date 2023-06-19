@@ -875,6 +875,7 @@ export default function ProductView({
                   <Button
                     title={buttonConfig.title}
                     action={buttonConfig.action}
+                    validateAction={buttonConfig.validateAction}
                     buttonType={buttonConfig.type || 'cart'}
                   />
                   <button
