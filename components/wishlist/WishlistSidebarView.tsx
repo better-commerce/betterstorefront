@@ -64,7 +64,6 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     const idCheck = (itemDetails: any) => {
       return itemDetails.recordId !== productId
     }
-
     let temptWishList: any = wishListItems.filter(idCheck)
     const items = await getWishlist(user.userId, temptWishList)
     setWishlist(items)
@@ -110,6 +109,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
       .then((response: any) => {
         setCartItems(response)
         setItemInCart(true)
+        deleteItemFromWishlist(product)
         setTimeout(() => {
           setItemInCart(false)
         }, 3000)
@@ -196,8 +196,8 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                           role="list"
                           className="-my-6 divide-y divide-gray-200"
                         >
-                          {wishListItems.map((product: any) => (
-                            <li key={product.recordId} className="flex py-6">
+                          {wishListItems.map((product: any, idx: number) => (
+                            <li key={idx} className="flex py-6">
                               <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
                                 <Image
                                   style={css}
@@ -247,7 +247,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                       {GENERAL_REMOVE}
                                     </button>
                                   </div>
-                                  <div className="flex justify-between w-full">
+                                  <div className="flex justify-end w-full">
                                     <button
                                       type="button"
                                       className="font-medium text-black hover:text-indigo-500"

@@ -242,7 +242,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                               selectedImage === val.image &&
                               'border-2 border-blue'
                           )}
-                          onClick={(e) => {
+                          onClick={(e: any) => {
                             handleImageCLick(e)
                           }}
                         />
