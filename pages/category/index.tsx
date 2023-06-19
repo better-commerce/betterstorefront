@@ -13,9 +13,9 @@ export default function CategoryList(props: any) {
   return (
     <main className="w-full px-4 mx-auto sm:px-0 md:w-4/5 lg:px-0">
       <section aria-labelledby="products-heading" className="mt-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
+        <h1 className="font-bold tracking-tight text-gray-900 uppercase">
           {SHOP_BY_CATEGORY}
-        </h2>
+        </h1>
         {props?.data.length > 0 && (
           <div className="flow-root mt-1 sm:mt-0">
             <div className="my-0">
@@ -64,9 +64,9 @@ export default function CategoryList(props: any) {
                           aria-hidden="true"
                           className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 opacity-40"
                         />
-                        <span className="relative mt-auto text-sm font-bold text-center text-white uppercase sm:text-lg">
+                        <h2 className="relative mt-auto text-sm font-bold text-center text-white uppercase font-18">
                           {category.name}
-                        </span>
+                        </h2>
                       </span>
                     </Link>
                   ))}

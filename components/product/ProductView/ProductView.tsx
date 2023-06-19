@@ -122,6 +122,7 @@ export default function ProductView({
   pdpCachedImages,
   reviews,
   deviceInfo,
+  config,
 }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const {
@@ -785,7 +786,7 @@ export default function ProductView({
             </div>
           </div>
 
-          <h1 className="font-medium tracking-tight text-black">
+          <h1 className="font-medium tracking-tight text-black font-36">
             {selectedAttrData.name || selectedAttrData.productName}
           </h1>
           <p className="mt-0 text-sm text-black uppercase sm:text-xs sm:mt-1">
@@ -794,7 +795,7 @@ export default function ProductView({
           <div className="my-4">
             <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
             {updatedProduct ? (
-              <p className="text-2xl font-bold text-black sm:text-xl">
+              <p className="text-2xl font-bold text-black sm:text-xl font-24">
                 {selectedAttrData?.price?.formatted?.withTax}
                 {selectedAttrData?.listPrice?.raw.tax > 0 ? (
                   <>
@@ -899,7 +900,11 @@ export default function ProductView({
             </>
           ) : null}
           <div className="flex-1 order-6 w-full sm:order-5">
-            <DeliveryInfo product={product} grpData={attrGroup} />
+            <DeliveryInfo
+              product={product}
+              grpData={attrGroup}
+              config={config}
+            />
           </div>
           <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
             <h2 id="details-heading" className="sr-only">

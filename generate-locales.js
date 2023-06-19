@@ -3,47 +3,50 @@ require('dotenv').config()
 
 const path = require('path')
 const fs = require('fs')
-const { v4 } = require("uuid");
+const { v4 } = require('uuid')
 
 const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
 const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
 const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL
 const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config`
-const NEXT_PUBLIC_API_CACHING_LOG_ENABLED = process.env.NEXT_PUBLIC_API_CACHING_LOG_ENABLED
+const NEXT_PUBLIC_API_CACHING_LOG_ENABLED =
+  process.env.NEXT_PUBLIC_API_CACHING_LOG_ENABLED
 
 /**
  * Logs fetch request/response.
- * @param {*} request 
- * @param {*} response 
+ * @param {*} request
+ * @param {*} response
  */
 const writeFetcherLog = (request, response) => {
   const objectStrigified = (obj) => {
-    return JSON.stringify(obj, null, "\t");
+    return JSON.stringify(obj, null, '\t')
   }
- 
-  const workingDir = __dirname;
-  const dirPath = path.resolve(`${workingDir}/.next/server/api-logs`);
+
+  const workingDir = __dirname
+  const dirPath = path.resolve(`${workingDir}/.next/server/api-logs`)
 
   if (!fs.existsSync(`${workingDir}/.next`)) {
-    fs.mkdirSync(`${workingDir}/.next`);
+    fs.mkdirSync(`${workingDir}/.next`)
   }
 
   if (!fs.existsSync(`${workingDir}/.next/server`)) {
-    fs.mkdirSync(`${workingDir}/.next/server`);
+    fs.mkdirSync(`${workingDir}/.next/server`)
   }
 
   if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath);
+    fs.mkdirSync(dirPath)
   }
 
-  const filePath = path.resolve(`${dirPath}/${v4()}-response.log`);
-  const contents = `Request:\n${objectStrigified(request)}\n\nResponse:\n${objectStrigified(response)}`;
+  const filePath = path.resolve(`${dirPath}/${v4()}-response.log`)
+  const contents = `Request:\n${objectStrigified(
+    request
+  )}\n\nResponse:\n${objectStrigified(response)}`
   fs.writeFile(filePath, contents, function (err) {
     if (!err) {
-      console.log(`---API Log: ${filePath}---`);
+      console.log(`---API Log: ${filePath}---`)
     }
-  });
+  })
 }
 
 const getToken = async () => {
@@ -62,6 +65,8 @@ const getToken = async () => {
 }
 
 const getMicrosites = () => {
+  const defaultLocale = `${process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE}-${process.env.BETTERCOMMERCE_DEFAULT_COUNTRY}`
+
   const microSitesHandler = async () => {
     const token = await getToken()
     const url = new URL('/api/v2/content/microsite/all', BASE_URL).href
@@ -75,13 +80,16 @@ const getMicrosites = () => {
     }
     const { data } = await axios(req)
 
-    if (NEXT_PUBLIC_API_CACHING_LOG_ENABLED) { // If global setting for logging is TURNED ON
-      writeFetcherLog(req, data);
+    if (NEXT_PUBLIC_API_CACHING_LOG_ENABLED) {
+      // If global setting for logging is TURNED ON
+      writeFetcherLog(req, data)
     }
 
     let locales = {
-      locales: [...new Set(data.result.map((i) => i.defaultLangCulture))],
-      defaultLocale: 'en-US',
+      locales: data?.result?.length
+        ? [...new Set(data?.result?.map((i) => i.defaultLangCulture))]
+        : [defaultLocale],
+      defaultLocale: defaultLocale,
     }
     // fs.writeFileSync(__dirname.join('/'))
     fs.writeFileSync(
