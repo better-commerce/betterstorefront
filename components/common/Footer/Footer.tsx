@@ -62,34 +62,34 @@ const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
           className="sm:col-span-3"
           onClick={() => footerClick('INFORMATION')}
         >
-          <h5 className="font-bold text-gray-900 text-footer-clr ">
+          <h4 className="font-bold text-gray-900 text-footer-clr ">
             INFORMATION
-          </h5>
+          </h4>
           <ul role="list" className="mt-3 space-y-3">
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+            <li className="text-sm font-medium text-gray-900 text-footer-clr f-footer-weight">
               Contact Us
             </li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+            <li className="text-sm font-medium text-gray-900 text-footer-clr f-footer-weight ">
               My Account
             </li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+            <li className="text-sm font-medium text-gray-900 text-footer-clr  f-footer-weight">
               About Us
             </li>
           </ul>
         </div>
         <div className="sm:col-span-3" onClick={() => footerClick('HELP')}>
-          <h5 className="font-bold text-gray-900 text-footer-clr ">HELP</h5>
+          <h4 className="font-bold text-gray-900 text-footer-clr ">HELP</h4>
           <ul role="list" className="mt-3 space-y-3">
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+            <li className="text-sm font-medium text-gray-900 text-footer-clr  f-footer-weight">
               Support
             </li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+            <li className="text-sm font-medium text-gray-900 text-footer-clr f-footer-weight">
               Cookie Policy
             </li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+            <li className="text-sm font-medium text-gray-900 text-footer-clr f-footer-weight">
               Privacy Policy
             </li>
-            <li className="text-sm font-medium text-gray-900 text-footer-clr ">
+            <li className="text-sm font-medium text-gray-900 text-footer-clr f-footer-weight">
               Terms and Conditions
             </li>
           </ul>

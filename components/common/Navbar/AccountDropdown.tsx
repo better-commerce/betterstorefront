@@ -40,7 +40,7 @@ export default function Account({ config, title, deviceInfo }: any) {
           aria-hidden="true"
           aria-label="My Account"
         />
-        <span className="hidden text-sm font-normal text-black sm:block text-header-clr">
+        <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
           Profile
         </span>
       </Menu.Button>
