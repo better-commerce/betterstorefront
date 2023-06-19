@@ -413,7 +413,6 @@ const Navbar: FC<Props & IExtraProps> = ({
           aria-label="Top"
           className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
         >
-          <h2 className="sr-only">nav</h2>
           <button
             type="button"
             className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden"
