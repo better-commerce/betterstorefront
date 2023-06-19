@@ -233,10 +233,10 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div
-        className="relative hover:outline hover:outline-1 outline-gray-200 group"
+        className="relative hover:outline hover:outline-1 outline-gray-200 group prod-group"
         key={product.id}
       >
-        <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel">
+        <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">
           <Link
             passHref
             href={`/${currentProductData.link}`}
@@ -320,11 +320,11 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           href={`/${currentProductData.link}`}
           title={`${product.name} \t ${itemPrice}`}
         >
-          <h6 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-black capitalize group-hover:hidden product-name hover:text-gray-950 min-prod-name-height">
+          <h4 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-black capitalize group-hover:hidden product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
             {product?.name?.toLowerCase()}
-          </h6>
+          </h4>
 
-          <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 group-hover:flex sm:px-2 sizes-ul sm:text-sm">
+          <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 group-hover:flex sm:px-2 sizes-ul sm:text-sm prod-ul-size">
             <li className="mr-1">Sizes:</li>
             {sizeValues.map((size: any, idx: number) => (
               <li className="inline-block uppercase" key={idx}>
@@ -336,7 +336,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             ))}
           </ul>
 
-          <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm">
+          <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm p-font-size">
             <span className="font-bold">
               {product?.price?.formatted?.withTax}
             </span>

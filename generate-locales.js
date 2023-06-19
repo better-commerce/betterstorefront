@@ -65,8 +65,7 @@ const getToken = async () => {
 }
 
 const getMicrosites = () => {
-  const defaultLocales = ['en-US']
-  const defaultLocale = 'en-US'
+  const defaultLocale = `${process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE}-${process.env.BETTERCOMMERCE_DEFAULT_COUNTRY}`
 
   const microSitesHandler = async () => {
     const token = await getToken()
@@ -89,7 +88,7 @@ const getMicrosites = () => {
     let locales = {
       locales: data?.result?.length
         ? [...new Set(data?.result?.map((i) => i.defaultLangCulture))]
-        : defaultLocales,
+        : [defaultLocale],
       defaultLocale: defaultLocale,
     }
     // fs.writeFileSync(__dirname.join('/'))
