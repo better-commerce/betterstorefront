@@ -110,9 +110,9 @@ export default function ProductDetails({ product, description }: any) {
             {({ open }) => (
               <>
                 <Disclosure.Button className="relative flex items-center justify-between w-full py-2 pr-2 text-left group sm:py-2">
-                  <span className="text-lg font-bold text-black uppercase">
+                  <h2 className="font-18 font-bold text-black uppercase">
                     {desc.title}
-                  </span>
+                  </h2>
                   <span className="flex items-center ml-6">
                     {open ? (
                       <MinusSmallIcon
@@ -143,9 +143,9 @@ export default function ProductDetails({ product, description }: any) {
             {({ open }) => (
               <>
                 <Disclosure.Button className="relative flex items-center justify-between w-full py-2 pr-2 text-left group sm:py-2">
-                  <span className="text-lg font-bold text-black uppercase">
+                  <h2 className="font-18 font-bold text-black uppercase">
                     {detail.title}
-                  </span>
+                  </h2>
                   <span className="flex items-center ml-6">
                     {open ? (
                       <MinusSmallIcon
