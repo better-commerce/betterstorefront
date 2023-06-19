@@ -178,6 +178,7 @@ h1 {
 
 h2 {
   font-size: var(--font-32);
+  line-height: 34px;
 }
 
 h3 {
