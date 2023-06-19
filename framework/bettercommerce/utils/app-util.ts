@@ -19,8 +19,6 @@ import { LocalStorage } from '@components/utils/payment-constants'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { DataSubmit } from '@commerce/utils/use-data-submit'
 import axios from 'axios'
-import { isMobileOnly } from "react-device-detect";
-import Router from "next/router";
 
 export const isCartAssociated = (cartItems: any) => {
   if (cartItems?.userId && cartItems?.userId !== EmptyGuid) {
