@@ -64,7 +64,6 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     const idCheck = (itemDetails: any) => {
       return itemDetails.recordId !== productId
     }
-    console.log(productId, 'idCheck after remove is called')
     let temptWishList: any = wishListItems.filter(idCheck)
     const items = await getWishlist(user.userId, temptWishList)
     setWishlist(items)
