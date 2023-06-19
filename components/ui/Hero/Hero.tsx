@@ -28,8 +28,7 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <>
-      <h2 className="sr-only">Hero</h2>
-      <h2 className="sr-only">Hero 2</h2>
+      <h1 className="sr-only">Home Page</h1>
       <Swiper
         navigation={true}
         loop={true}
