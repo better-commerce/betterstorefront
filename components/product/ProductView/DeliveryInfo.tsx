@@ -2,20 +2,22 @@
 import { useState } from 'react'
 
 // Package Imports
-import moment from 'moment'
-import axios from 'axios'
-import * as Yup from 'yup'
+import Image from 'next/image'
+import Cookies from 'js-cookie'
 
 // Component Imports
+import DeliveryMessage from './DeliveryMessage'
 import ProductWarranty from '../ProductSidebar/ProductWarranty'
 import ProductReturn from '../ProductSidebar/ProductReturn'
 
 // Other Imports
-import { min } from 'lodash'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import Image from 'next/image'
-import DeliveryMessage from './DeliveryMessage'
 import { stringToBoolean } from '@framework/utils/parse-util'
+import {
+  BETTERCOMMERCE_CURRENCY,
+  BETTERCOMMERCE_DEFAULT_CURRENCY,
+  EmptyString,
+} from '@components/utils/constants'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
 export const DELIVERY_FORM_FIELDS = [
@@ -65,6 +67,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
       })
     }
   }
+  console.log(config)
   const shippingSettings = config?.configSettings?.find(
     (x: any) => x.configType === 'ShippingSettings'
   )
@@ -76,6 +79,18 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
   const freeShippingOverXValue = shippingSettings?.configKeys?.find(
     (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
   )?.value
+
+  const getCurrencySymbol = () => {
+    const currency =
+      Cookies.get('Currency') ||
+      store.get('Currency') ||
+      BETTERCOMMERCE_CURRENCY ||
+      BETTERCOMMERCE_DEFAULT_CURRENCY
+    return (
+      config?.currencies?.find((x: any) => x?.currencyCode === currency)
+        ?.currencySymbol || EmptyString
+    )
+  }
 
   let returnEligeble = ''
   let refundEligeble = ''
@@ -106,6 +121,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
         {isFreeShippingOverXEnabled && (
           <DeliveryMessage
             product={product}
+            currencySymbol={getCurrencySymbol()}
             freeShippingOverXValue={freeShippingOverXValue}
           />
         )}
