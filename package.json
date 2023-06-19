@@ -11,8 +11,7 @@
     "find:unused": "npx next-unused",
     "generate:definitions": "node framework/bigcommerce/scripts/generate-definitions.js",
     "tsc": "tsc",
-    "lint-staged-configure": "npx mrm lint-staged",
-    "prepare": "npx husky install"
+    "lint-staged-configure": "npx mrm lint-staged"
   },
   "sideEffects": false,
   "license": "MIT",
