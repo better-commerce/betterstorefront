@@ -7,6 +7,7 @@ import {
   GENERAL_MOBILE_NUMBER,
   GENERAL_PHONE,
 } from '@components/utils/textVariables'
+import { Messages } from '@components/utils/constants'
 export const formConfig = [
   {
     type: 'text',
@@ -70,6 +71,15 @@ export const schema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
   email: Yup.string().email().required(),
-  mobile: Yup.string().max(10).min(10),
-  phone: Yup.string().max(10),
+  mobile: Yup.string()
+    .max(10)
+    .min(10)
+    .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
+      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
+    }),
+  phone: Yup.string()
+    .max(10)
+    .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
+      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
+    }),
 })
