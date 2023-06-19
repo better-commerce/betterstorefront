@@ -676,7 +676,8 @@ export default function CheckoutForm({
     const paymentOrderInfo = {
       user,
       basketId,
-      customerId: cartItems.userId,
+      customerId:
+        cartItems.userId != EmptyGuid ? cartItems.userId : user?.userId,
       basket: cartItems,
       billingAddress: {
         ...billingInfoClone,

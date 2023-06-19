@@ -15,7 +15,7 @@ import {
 } from '@components/utils/payment-constants'
 import { parsePaymentMethods } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
-import { Messages } from '@components/utils/constants'
+import { EmptyString, Messages } from '@components/utils/constants'
 
 export interface IPaymentButtonProps {
   readonly paymentMethod: any | null
@@ -53,14 +53,14 @@ export default abstract class BasePaymentButton
   public async confirmOrder(
     paymentMethod: any,
     data: any,
+    uiContext: any,
     dispatchState: Function,
     isCOD: boolean = false
   ): Promise<{ status: boolean; state: any; result?: any }> {
     try {
       const convertOrderInput: any = !isCOD
-        ? this.getNonCODConvertOrderPayload(paymentMethod, data)
-        : this.getCODConvertOrderPayload(paymentMethod, data)
-      console.log('convertOrderInput', convertOrderInput)
+        ? this.getNonCODConvertOrderPayload(paymentMethod, data, uiContext)
+        : this.getCODConvertOrderPayload(paymentMethod, data, uiContext)
       const orderResult: any = await convertOrder(convertOrderInput)
       if (orderResult?.message || orderResult?.errors?.length) {
         let errorResult
@@ -173,7 +173,8 @@ export default abstract class BasePaymentButton
 
   protected getCODConvertOrderPayload(
     paymentMethod: any,
-    basketOrderInfo: any
+    basketOrderInfo: any,
+    uiContext: any
   ) {
     let additionalServiceCharge =
       paymentMethod?.settings?.find((x: any) =>
@@ -182,6 +183,16 @@ export default abstract class BasePaymentButton
     if (basketOrderInfo) {
       basketOrderInfo = {
         ...basketOrderInfo,
+        ...{ selectedPayment: paymentMethod },
+        ...{
+          basket: {
+            ...basketOrderInfo?.basket,
+            ...{
+              userId: uiContext?.user?.userId || EmptyString,
+              userEmail: uiContext?.user?.email || EmptyString,
+            },
+          },
+        },
         ...{
           Payment: {
             ...basketOrderInfo?.Payment,
@@ -235,7 +246,8 @@ export default abstract class BasePaymentButton
 
   protected getNonCODConvertOrderPayload(
     paymentMethod: any,
-    basketOrderInfo: any
+    basketOrderInfo: any,
+    uiContext: any
   ) {
     let additionalServiceCharge =
       paymentMethod?.settings?.find((x: any) =>
@@ -245,6 +257,15 @@ export default abstract class BasePaymentButton
       basketOrderInfo = {
         ...basketOrderInfo,
         ...{ selectedPayment: paymentMethod },
+        ...{
+          basket: {
+            ...basketOrderInfo?.basket,
+            ...{
+              userId: uiContext?.user?.userId || EmptyString,
+              userEmail: uiContext?.user?.email || EmptyString,
+            },
+          },
+        },
         ...{
           Payment: {
             ...basketOrderInfo?.Payment,
