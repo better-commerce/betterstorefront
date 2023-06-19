@@ -22,18 +22,21 @@ export default function MyDetails() {
   const { user, setUser } = useUI()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
+  const ContactNumberLenCheck: any = 10
+
   const formikHandleChange = (e: any, handleFunction: any) => {
-    console.log(e.target, 'e.target in MyDetails')
     if (e.target.name === 'phone' || e.target.name === 'mobile') {
       //Regex to check if the value consists of an alphabet
       e.target.value = e.target.value
-        ? // ? e.target.value.replace(/([a-zA-Z])/g, '')
-          e.target.value.replace(
-            /^[a-zA-Z@\!#\$\^%&*()+=\-[]\\\';,\.\/\{\}\|\":<>\? ]+$/,
+        ? e.target.value.replace(
+            /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g,
             ''
           )
-        : ''
-      handleFunction(e)
+        : //  e.target.value.replace( /^([^0-9]*)$/ ,'')
+          ''
+      if (e.target.value.length <= ContactNumberLenCheck) {
+        handleFunction(e)
+      }
     } else {
       handleFunction(e)
     }

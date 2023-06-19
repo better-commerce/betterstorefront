@@ -70,6 +70,6 @@ export const schema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
   email: Yup.string().email().required(),
-  mobile: Yup.string().max(10),
+  mobile: Yup.string().max(10).min(10),
   phone: Yup.string().max(10),
 })
