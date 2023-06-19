@@ -18,14 +18,8 @@ import {
   ITEM_TYPE_ADDON,
 } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
-import {
-  HeartIcon,
-  PlayIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
-import {
-  StarIcon,
-} from '@heroicons/react/24/solid'
+import { HeartIcon, PlayIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { StarIcon } from '@heroicons/react/24/solid'
 import axios from 'axios'
 import { Fragment, useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -117,7 +111,7 @@ export default function PLPQuickView({
     stockCode: quickViewData?.stockCode,
     ...quickViewData,
   })
-  const [sizeInit, setSizeInit] = useState('');
+  const [sizeInit, setSizeInit] = useState('')
   let currentPage = getCurrentPage()
   const product = updatedProduct || productData
 
@@ -139,7 +133,7 @@ export default function PLPQuickView({
   const handleNotification = () => {
     openNotifyUser(product.recordId)
   }
-  
+
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
@@ -159,7 +153,7 @@ export default function PLPQuickView({
         )
         setCartItems(item)
         setModelClose()
-        if (typeof window !== "undefined") {
+        if (typeof window !== 'undefined') {
           recordGA4Event(window, 'add_to_cart', {
             ecommerce: {
               items: [
@@ -178,35 +172,38 @@ export default function PLPQuickView({
               ],
               cart_quantity: 1,
               total_value: product?.price?.raw?.withTax,
-              current_page: "PLP ",
+              current_page: 'PLP ',
               section_title: 'Quick View',
             },
           })
-    
+
           if (currentPage) {
             recordGA4Event(window, 'view_cart', {
               ecommerce: {
-                items: cartItems?.lineItems?.map((items: any, itemId: number) => (
-                  {
+                items: cartItems?.lineItems?.map(
+                  (items: any, itemId: number) => ({
                     item_name: items?.name,
                     item_id: items?.sku,
                     price: items?.price?.raw?.withTax,
                     item_brand: items?.brand,
-                    item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : "",
+                    item_category2: items?.categoryItems?.length
+                      ? items?.categoryItems[1]?.categoryName
+                      : '',
                     item_variant: items?.colorName,
-                    item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : "",
-                    item_list_id: "",
+                    item_list_name: items?.categoryItems?.length
+                      ? items?.categoryItems[0]?.categoryName
+                      : '',
+                    item_list_id: '',
                     index: itemId,
                     quantity: items?.qty,
                     item_var_id: items?.stockCode,
-                  }
-                )),
+                  })
+                ),
                 // device: deviceCheck,
-                current_page: currentPage
+                current_page: currentPage,
               },
             })
           }
-    
         }
       },
       shortMessage: '',
@@ -253,54 +250,59 @@ export default function PLPQuickView({
               { product: selectedAttrData }
             )
             setCartItems(item)
-            if (typeof window !== "undefined") {
+            if (typeof window !== 'undefined') {
               recordGA4Event(window, 'add_to_cart', {
                 ecommerce: {
                   items: [
                     {
                       item_name: product?.name,
                       item_brand: product?.brand,
-                      item_category2: product?.mappedCategories[1]?.categoryName,
+                      item_category2:
+                        product?.mappedCategories[1]?.categoryName,
                       item_variant: product?.variantGroupCode,
                       quantity: 1,
                       item_id: product?.productCode,
                       price: product?.price?.raw?.withTax,
                       item_var_id: product?.stockCode,
-                      item_list_name: product?.mappedCategories[2]?.categoryName,
+                      item_list_name:
+                        product?.mappedCategories[2]?.categoryName,
                       // index: position,
                     },
                   ],
                   cart_quantity: 1,
                   total_value: product?.price?.raw?.withTax,
-                  current_page: "PLP ",
+                  current_page: 'PLP ',
                   section_title: 'Quick View',
                 },
               })
-        
+
               if (currentPage) {
                 recordGA4Event(window, 'view_cart', {
                   ecommerce: {
-                    items: cartItems?.lineItems?.map((items: any, itemId: number) => (
-                      {
+                    items: cartItems?.lineItems?.map(
+                      (items: any, itemId: number) => ({
                         item_name: items?.name,
                         item_id: items?.sku,
                         price: items?.price?.raw?.withTax,
                         item_brand: items?.brand,
-                        item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : "",
+                        item_category2: items?.categoryItems?.length
+                          ? items?.categoryItems[1]?.categoryName
+                          : '',
                         item_variant: items?.colorName,
-                        item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : "",
-                        item_list_id: "",
+                        item_list_name: items?.categoryItems?.length
+                          ? items?.categoryItems[0]?.categoryName
+                          : '',
+                        item_list_id: '',
                         index: itemId,
                         quantity: items?.qty,
                         item_var_id: items?.stockCode,
-                      }
-                    )),
+                      })
+                    ),
                     // device: deviceCheck,
-                    current_page: currentPage
+                    current_page: currentPage,
                   },
                 })
               }
-        
             }
           },
           shortMessage: '',
@@ -316,7 +318,7 @@ export default function PLPQuickView({
   }
 
   const buttonConfig = buttonTitle()
-  
+
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
@@ -330,10 +332,10 @@ export default function PLPQuickView({
       productAvailability = 'No'
     }
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       recordGA4Event(window, 'wishlist', {
         ecommerce: {
-          header: "PLP",
+          header: 'PLP',
           current_page: 'Quick view ',
         },
       })
@@ -353,7 +355,7 @@ export default function PLPQuickView({
             },
           ],
           item_var_id: product?.stockCode,
-          header: "Quick View",
+          header: 'Quick View',
           current_page: 'Quick View',
           availability: productAvailability,
         },
@@ -361,10 +363,10 @@ export default function PLPQuickView({
     }
 
     if (currentPage) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         recordGA4Event(window, 'wishlist', {
           ecommerce: {
-            header: "Quick View",
+            header: 'Quick View',
             current_page: currentPage,
           },
         })
@@ -659,7 +661,7 @@ export default function PLPQuickView({
                               <h4 className="text-xs font-normal text-gray-400">
                                 {productData?.classification?.category}
                               </h4>
-                              <h1 className="grid grid-cols-12 mb-2 text-xl font-bold tracking-tight text-primary sm:text-2xl sm:grid-cols-6">
+                              <h3 className="grid grid-cols-12 mb-2 text-xl font-bold tracking-tight text-primary sm:text-2xl sm:grid-cols-6">
                                 <div className="col-span-8 sm:col-span-4">
                                   <Link
                                     href={`/${productData?.slug}`}
@@ -687,7 +689,7 @@ export default function PLPQuickView({
                                     </>
                                   )}
                                 </div>
-                              </h1>
+                              </h3>
                             </div>
                             <div className="flex flex-col px-4 mt-1 sm:px-6">
                               <p className="mb-2 text-lg font-semibold text-primary sm:text-md">
@@ -716,7 +718,9 @@ export default function PLPQuickView({
                                     variant={selectedAttrData}
                                     setSelectedAttrData={setSelectedAttrData}
                                     variantInfo={variantInfo}
-                                    handleSetProductVariantInfo={handleSetProductVariantInfo}
+                                    handleSetProductVariantInfo={
+                                      handleSetProductVariantInfo
+                                    }
                                     sizeInit={sizeInit}
                                     setSizeInit={setSizeInit}
                                   />
@@ -747,7 +751,7 @@ export default function PLPQuickView({
                                       </button>
                                     </div>
                                   )}
-                                  
+
                                   {isEngravingAvailable && (
                                     <>
                                       <div className="flex mt-6 sm:mt-8 sm:flex-col1">
