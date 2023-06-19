@@ -7,19 +7,17 @@ import React from 'react'
 
 // Other Imports
 
-function DeliveryMessage(product: any) {
+function DeliveryMessage({ product, freeShippingOverXValue }: any) {
   return (
-    <>
-      {product?.flags?.isFreeDelivery && (
-        <div className="mb-2 font-bold text-primary text-20">Free Delivery</div>
-      )}
-      {product?.deliveryMessage && (
+    <div className="flex flex-col px-4 pt-0 pb-0 mt-0 sm:pb-6 sm:pt-2 sm:mt-2 sm:px-0">
+      <div className="mb-2 font-bold text-primary text-20">Free Delivery</div>
+      {freeShippingOverXValue && (
         <p className="font-normal text-14 text-brown-light">
-          {product?.deliveryMessage}{' '}
-          {/* For orders above ₹600, Usually delivered in 2-5 days */}
+          For orders above ₹{freeShippingOverXValue}, Usually delivered in 2-5
+          days
         </p>
       )}
-    </>
+    </div>
   )
 }
 
