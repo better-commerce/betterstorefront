@@ -540,7 +540,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
           }
         }
       } else {
-        console.log('Maximum product limit reached');
         setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_LIMIT_EXCEEDED"] })
         return;
       }
