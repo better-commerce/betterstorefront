@@ -15,6 +15,7 @@ import { number } from 'yup'
 import Link from 'next/link'
 import { findByFieldName } from '@framework/utils/app-util'
 import FormField from '@components/utils/FormField'
+import { Messages } from '@components/utils/constants'
 
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
@@ -29,11 +30,10 @@ export default function MyDetails() {
       //Regex to check if the value consists of an alphabet or a character
       e.target.value = e.target.value
         ? e.target.value.replace(
-            /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g,
+            Messages.Validations.RegularExpressions.CHARACTERS_AND_ALPHABETS,
             ''
           )
-        : //  e.target.value.replace( /^([^0-9]*)$/ ,'')
-          ''
+        : ''
       if (e.target.value.length <= ContactNumberLenCheck) {
         handleFunction(e)
       }

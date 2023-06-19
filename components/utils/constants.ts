@@ -194,7 +194,10 @@ export module Messages {
       export const URL =
         /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/
       export const FIND_EMPTY_CHARACTERS = /\s/g
+      export const PHONE_NUM = /^([^0-9]*)$/
       export const REPLACE_DEFAULT_UPI_WEB_PREFIX_URL = /upi:\/\//g
+      export const CHARACTERS_AND_ALPHABETS =
+        /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g
     }
 
     export const Login: any = {
