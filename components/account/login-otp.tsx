@@ -129,9 +129,9 @@ function LoginOTPPage() {
     <section aria-labelledby="trending-heading" className="bg-white">
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h2 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
+          <h1 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
             {GENERAL_LOGIN} via OTP
-          </h2>
+          </h1>
         </div>
         <LoginOTPForm handleUserLogin={handleUserLogin} />
         <div className="w-full flex flex-col justify-center items-center">

@@ -120,9 +120,9 @@ export default function ForgotPasswordPage() {
     <section>
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h2 className="my-4 text-4xl font-extrabold text-center tracking-tight text-gray-900">
+          <h1 className="my-4 font-extrabold text-center tracking-tight text-gray-900">
             {isValid ? 'Change password' : 'Forgot password'}
-          </h2>
+          </h1>
           {isValid ? (
             <form
               onSubmit={handlePasswordChangeSubmit}
@@ -149,7 +149,7 @@ export default function ForgotPasswordPage() {
               })}
               <button
                 type="submit"
-                className="my-4 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                className="my-4 max-w-xs flex-1 btn-primary sm:w-full"
               >
                 {isLoading ? <LoadingDots /> : BTN_SUBMIT}
               </button>
@@ -172,7 +172,7 @@ export default function ForgotPasswordPage() {
                 <button
                   onClick={handleSubmit}
                   type="button"
-                  className="my-4 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                  className="my-4 max-w-xs flex-1 btn-primary py-3 px-4 sm:w-full"
                 >
                   {isLoading ? <LoadingDots /> : BTN_SUBMIT}
                 </button>
