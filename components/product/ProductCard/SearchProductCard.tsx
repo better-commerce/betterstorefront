@@ -31,6 +31,8 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import { validateAddToCart } from '@framework/utils/app-util'
 import QuickViewModal from '@components/product/QuickView/ProductQuickView'
+import { IExtraProps } from '@components/common/Layout/Layout'
+import { stringFormat } from '@framework/utils/parse-util'
 interface Props {
   product: any
 }
@@ -49,7 +51,10 @@ interface Attribute {
   fieldValues?: []
 }
 
-const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
+const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
+  product,
+  maxBasketItemsCount,
+}) => {
   const [isInWishList, setItemsInWishList] = useState(false)
   const [isQuickview, setQuickview] = useState(undefined)
   const [isQuickviewOpen, setQuickviewOpen] = useState(false)
@@ -148,12 +153,15 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
       validateAction: async () => {
         const isValid = validateAddToCart(
           product?.recordId ?? product?.productId,
-          cartItems
+          cartItems,
+          maxBasketItemsCount
         )
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
           })
         }
         return isValid

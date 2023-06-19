@@ -20,7 +20,10 @@ import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { obfuscateHostName } from '@framework/utils/app-util'
+import {
+  maxBasketItemsCount,
+  obfuscateHostName,
+} from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState } from '@components/ui/context'
 const ProductFilterRight = dynamic(
@@ -108,7 +111,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 export default function CollectionPage(props: any) {
-  const { deviceInfo } = props
+  const { deviceInfo, config } = props
   const { isOnlyMobile, isMobile, isIPadorTablet } = deviceInfo
   const router = useRouter()
   const [paddingTop, setPaddingTop] = useState('0')
@@ -559,6 +562,7 @@ export default function CollectionPage(props: any) {
                     handlePageChange={handlePageChange}
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
+                    maxBasketItemsCount={maxBasketItemsCount(config)}
                   />
                 </div>
               </>
@@ -570,6 +574,7 @@ export default function CollectionPage(props: any) {
                   handlePageChange={handlePageChange}
                   handleInfiniteScroll={handleInfiniteScroll}
                   deviceInfo={deviceInfo}
+                  maxBasketItemsCount={maxBasketItemsCount(config)}
                 />
               </div>
             )}

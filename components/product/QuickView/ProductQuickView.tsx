@@ -20,14 +20,8 @@ import {
   ITEM_TYPE_ADDON,
 } from '@components/utils/textVariables'
 import { Dialog, RadioGroup, Transition } from '@headlessui/react'
-import {
-  HeartIcon,
-  PlayIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
-import {
-  StarIcon,
-} from '@heroicons/react/24/solid'
+import { HeartIcon, PlayIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { StarIcon } from '@heroicons/react/24/solid'
 import axios from 'axios'
 import { Fragment, useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -38,7 +32,7 @@ import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
 import Link from 'next/link'
 import { round } from 'lodash'
-import { priceFormat } from '@framework/utils/parse-util'
+import { priceFormat, stringFormat } from '@framework/utils/parse-util'
 import AttributesHandler from '../ProductView/AttributesHandler'
 import dynamic from 'next/dynamic'
 import { useUI } from '@components/ui'
@@ -94,6 +88,7 @@ export default function ProductQuickView({
   productData,
   isQuickviewOpen,
   setQuickviewOpen,
+  maxBasketItemsCount,
 }: any) {
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
   const [close, setClose] = useState(isQuickviewOpen)
@@ -122,24 +117,32 @@ export default function ProductQuickView({
     openCart,
   } = useUI()
   let currentPage = getCurrentPage()
-  
+
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
-        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId.toUpperCase())
+        const cartLineItem: any = cartItems?.lineItems?.find(
+          (o: any) => o.productId === selectedAttrData?.productId.toUpperCase()
+        )
         if (selectedAttrData?.currentStock === cartLineItem?.qty) {
-          setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_MAX_ADDED"] })
+          setAlert({
+            type: 'error',
+            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+          })
           return false
         }
         const isValid = validateAddToCart(
           selectedAttrData?.productId ?? selectedAttrData?.recordId,
-          cartItems
+          cartItems,
+          maxBasketItemsCount
         )
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
           })
         }
         return isValid
@@ -157,9 +160,9 @@ export default function ProductQuickView({
           },
           'ADD',
           { product: selectedAttrData }
-        )       
+        )
         setCartItems(item)
-        if (typeof window !== "undefined") {
+        if (typeof window !== 'undefined') {
           recordGA4Event(window, 'add_to_cart', {
             ecommerce: {
               items: [
@@ -178,35 +181,38 @@ export default function ProductQuickView({
               ],
               cart_quantity: 1,
               total_value: product?.price?.raw?.withTax,
-              current_page: "PLP ",
+              current_page: 'PLP ',
               section_title: 'Quick View',
             },
           })
-    
+
           if (currentPage) {
             recordGA4Event(window, 'view_cart', {
               ecommerce: {
-                items: cartItems?.lineItems?.map((items: any, itemId: number) => (
-                  {
+                items: cartItems?.lineItems?.map(
+                  (items: any, itemId: number) => ({
                     item_name: items?.name,
                     item_id: items?.sku,
                     price: items?.price?.raw?.withTax,
                     item_brand: items?.brand,
-                    item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : "",
+                    item_category2: items?.categoryItems?.length
+                      ? items?.categoryItems[1]?.categoryName
+                      : '',
                     item_variant: items?.colorName,
-                    item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : "",
-                    item_list_id: "",
+                    item_list_name: items?.categoryItems?.length
+                      ? items?.categoryItems[0]?.categoryName
+                      : '',
+                    item_list_id: '',
                     index: itemId,
                     quantity: items?.qty,
                     item_var_id: items?.stockCode,
-                  }
-                )),
+                  })
+                ),
                 // device: deviceCheck,
-                current_page: currentPage
+                current_page: currentPage,
               },
             })
           }
-    
         }
       },
       shortMessage: '',
@@ -239,19 +245,29 @@ export default function ProductQuickView({
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
           validateAction: async () => {
-            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId.toUpperCase())
+            const cartLineItem: any = cartItems?.lineItems?.find(
+              (o: any) =>
+                o.productId === selectedAttrData?.productId.toUpperCase()
+            )
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
-              setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_MAX_ADDED"] })
+              setAlert({
+                type: 'error',
+                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+              })
               return false
             }
             const isValid = validateAddToCart(
               selectedAttrData?.productId ?? selectedAttrData?.recordId,
-              cartItems
+              cartItems,
+              maxBasketItemsCount
             )
             if (!isValid) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+                msg: stringFormat(
+                  Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+                  { maxBasketItemsCount }
+                ),
               })
             }
             return isValid
@@ -271,54 +287,59 @@ export default function ProductQuickView({
               { product: selectedAttrData }
             )
             setCartItems(item)
-            if (typeof window !== "undefined") {
+            if (typeof window !== 'undefined') {
               recordGA4Event(window, 'add_to_cart', {
                 ecommerce: {
                   items: [
                     {
                       item_name: product?.name,
                       item_brand: product?.brand,
-                      item_category2: product?.mappedCategories[1]?.categoryName,
+                      item_category2:
+                        product?.mappedCategories[1]?.categoryName,
                       item_variant: product?.variantGroupCode,
                       quantity: 1,
                       item_id: product?.productCode,
                       price: product?.price?.raw?.withTax,
                       item_var_id: product?.stockCode,
-                      item_list_name: product?.mappedCategories[2]?.categoryName,
+                      item_list_name:
+                        product?.mappedCategories[2]?.categoryName,
                       // index: position,
                     },
                   ],
                   cart_quantity: 1,
                   total_value: product?.price?.raw?.withTax,
-                  current_page: "PLP ",
+                  current_page: 'PLP ',
                   section_title: 'Quick View',
                 },
               })
-        
+
               if (currentPage) {
                 recordGA4Event(window, 'view_cart', {
                   ecommerce: {
-                    items: cartItems?.lineItems?.map((items: any, itemId: number) => (
-                      {
+                    items: cartItems?.lineItems?.map(
+                      (items: any, itemId: number) => ({
                         item_name: items?.name,
                         item_id: items?.sku,
                         price: items?.price?.raw?.withTax,
                         item_brand: items?.brand,
-                        item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : "",
+                        item_category2: items?.categoryItems?.length
+                          ? items?.categoryItems[1]?.categoryName
+                          : '',
                         item_variant: items?.colorName,
-                        item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : "",
-                        item_list_id: "",
+                        item_list_name: items?.categoryItems?.length
+                          ? items?.categoryItems[0]?.categoryName
+                          : '',
+                        item_list_id: '',
                         index: itemId,
                         quantity: items?.qty,
                         item_var_id: items?.stockCode,
-                      }
-                    )),
+                      })
+                    ),
                     // device: deviceCheck,
-                    current_page: currentPage
+                    current_page: currentPage,
                   },
                 })
               }
-        
             }
           },
           shortMessage: '',
@@ -334,7 +355,7 @@ export default function ProductQuickView({
   }
 
   const buttonConfig = buttonTitle()
-  
+
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     setItemsInWishList(true)
@@ -348,10 +369,10 @@ export default function ProductQuickView({
       productAvailability = 'No'
     }
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       recordGA4Event(window, 'wishlist', {
         ecommerce: {
-          header: "PLP",
+          header: 'PLP',
           current_page: 'Quick view ',
         },
       })
@@ -371,7 +392,7 @@ export default function ProductQuickView({
             },
           ],
           item_var_id: product?.stockCode,
-          header: "Quick View",
+          header: 'Quick View',
           current_page: 'Quick View',
           availability: productAvailability,
         },
@@ -379,10 +400,10 @@ export default function ProductQuickView({
     }
 
     if (currentPage) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         recordGA4Event(window, 'wishlist', {
           ecommerce: {
-            header: "Quick View",
+            header: 'Quick View',
             current_page: currentPage,
           },
         })
@@ -523,8 +544,9 @@ export default function ProductQuickView({
       // }
     }
   }
-  const fetchIsQuickView = () => {    
-    if (isQuickviewOpen) { //if(isQuickview)
+  const fetchIsQuickView = () => {
+    if (isQuickviewOpen) {
+      //if(isQuickview)
       const loadView = async (slug: string) => {
         const { data: productQuickViewData }: any = await axios.post(
           NEXT_GET_PRODUCT_QUICK_VIEW,
@@ -718,7 +740,8 @@ export default function ProductQuickView({
                                     <>
                                       <StarIcon className="relative inline-block w-4 h-4 text-yellow-600 -top-1" />
                                       <span className="relative inline-block pl-1 text-xs -top-1 text-primary">
-                                        {productData?.rating} ({reviewData?.totalRecord})
+                                        {productData?.rating} (
+                                        {reviewData?.totalRecord})
                                       </span>
                                     </>
                                   ) : (
@@ -759,7 +782,9 @@ export default function ProductQuickView({
                                       <Button
                                         title={buttonConfig.title}
                                         action={buttonConfig.action}
-                                        validateAction={buttonConfig.validateAction}
+                                        validateAction={
+                                          buttonConfig.validateAction
+                                        }
                                         buttonType={buttonConfig.type || 'cart'}
                                       />
                                       <button

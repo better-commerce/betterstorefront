@@ -63,7 +63,7 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
-import { matchStrings } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
@@ -123,6 +123,7 @@ export default function ProductView({
   reviews,
   deviceInfo,
   config,
+  maxBasketItemsCount,
 }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const {
@@ -270,16 +271,30 @@ export default function ProductView({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
-        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
+        const cartLineItem: any = cartItems?.lineItems?.find(
+          (o: any) => o.productId === selectedAttrData?.productId?.toUpperCase()
+        )
         if (selectedAttrData?.currentStock === cartLineItem?.qty) {
-          setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_MAX_ADDED"] })
+          setAlert({
+            type: 'error',
+            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+          })
           return false
         }
-        const isValid = validateAddToCart(selectedAttrData?.productId ?? selectedAttrData?.recordId, cartItems);
+        const isValid = validateAddToCart(
+          selectedAttrData?.productId ?? selectedAttrData?.recordId,
+          cartItems,
+          maxBasketItemsCount
+        )
         if (!isValid) {
-          setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_LIMIT_EXCEEDED"] })
+          setAlert({
+            type: 'error',
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
+          })
         }
-        return isValid;
+        return isValid
       },
       action: async () => {
         const item = await cartHandler().addToCart(
@@ -378,16 +393,32 @@ export default function ProductView({
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
           validateAction: async () => {
-            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
+            const cartLineItem: any = cartItems?.lineItems?.find(
+              (o: any) =>
+                o.productId === selectedAttrData?.productId?.toUpperCase()
+            )
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
-              setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_MAX_ADDED"] })
+              setAlert({
+                type: 'error',
+                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+              })
               return false
             }
-            const isValid = validateAddToCart(selectedAttrData?.productId ?? selectedAttrData?.recordId, cartItems);
+            const isValid = validateAddToCart(
+              selectedAttrData?.productId ?? selectedAttrData?.recordId,
+              cartItems,
+              maxBasketItemsCount
+            )
             if (!isValid) {
-              setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_LIMIT_EXCEEDED"] })
+              setAlert({
+                type: 'error',
+                msg: stringFormat(
+                  Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+                  { maxBasketItemsCount }
+                ),
+              })
             }
-            return isValid;
+            return isValid
           },
           action: async () => {
             const item = await cartHandler().addToCart(
@@ -951,6 +982,7 @@ export default function ProductView({
               products={relatedProducts?.relatedProducts}
               productPerColumn={6}
               deviceInfo={deviceInfo}
+              maxBasketItemsCount={maxBasketItemsCount}
             />
           </div>
         </>

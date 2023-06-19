@@ -46,6 +46,7 @@ import { cachedGetData } from '@framework/api/utils/cached-fetch'
 import { AppContext, AppInitialProps } from 'next/app'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -291,6 +292,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
             pageProps={pageProps}
             keywords={keywordsData}
             deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount(appConfig)}
           >
             <OverlayLoader />
             <Component
