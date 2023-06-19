@@ -85,7 +85,7 @@ export default function ProductDetails({ product, description }: any) {
       title: PRODUCT_DESCRIPTION,
       InnerComponent: (props: any) => (
         <div
-          className="space-y-2 text-sm text-gray-700 sm:text-md sm:space-y-6"
+          className="space-y-2 text-sm text-gray-700 sm:text-md sm:space-y-6 font-h2-desc"
           dangerouslySetInnerHTML={{ __html: description || '' }}
         />
       ),

@@ -92,8 +92,7 @@ const getKeywords = async function () {
 }
 
 const getMicrosites = () => {
-  const defaultLocales = ['en-US']
-  const defaultLocale = 'en-US'
+  const defaultLocale = `${process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE}-${process.env.BETTERCOMMERCE_DEFAULT_COUNTRY}`
 
   const microSitesHandler = async () => {
     const token = await getToken()
@@ -109,7 +108,7 @@ const getMicrosites = () => {
     return {
       locales: data?.result?.length
         ? data?.result?.map((i) => i.defaultLangCulture)
-        : defaultLocales,
+        : [defaultLocale],
       defaultLocale: defaultLocale,
     }
   }
