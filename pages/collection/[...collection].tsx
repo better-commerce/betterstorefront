@@ -20,7 +20,10 @@ import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { obfuscateHostName } from '@framework/utils/app-util'
+import {
+  maxBasketItemsCount,
+  obfuscateHostName,
+} from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState } from '@components/ui/context'
 const ProductFilterRight = dynamic(
@@ -108,7 +111,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 export default function CollectionPage(props: any) {
-  const { deviceInfo } = props
+  const { deviceInfo, config } = props
   const { isOnlyMobile, isMobile, isIPadorTablet } = deviceInfo
   const router = useRouter()
   const [paddingTop, setPaddingTop] = useState('0')
@@ -514,7 +517,7 @@ export default function CollectionPage(props: any) {
         <div
           className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4 ${cls}`}
         >
-          <h1 className="inline-block text-base font-medium capitalize text-primary dark:text-primary text-24">
+          <h1 className="inline-block capitalize text-primary dark:text-primary">
             {props?.name}
           </h1>
           <span className="pl-2 mt-0 text-xs font-semibold text-black dark:text-white text-14 sm:h-6">
@@ -559,6 +562,7 @@ export default function CollectionPage(props: any) {
                     handlePageChange={handlePageChange}
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
+                    maxBasketItemsCount={maxBasketItemsCount(config)}
                   />
                 </div>
               </>
@@ -570,6 +574,7 @@ export default function CollectionPage(props: any) {
                   handlePageChange={handlePageChange}
                   handleInfiniteScroll={handleInfiniteScroll}
                   deviceInfo={deviceInfo}
+                  maxBasketItemsCount={maxBasketItemsCount(config)}
                 />
               </div>
             )}

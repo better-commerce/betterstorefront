@@ -53,14 +53,14 @@ export default function ProductDetails({ product, description }: any) {
       InnerComponent: (props: any) => (
         <p className="text-gray-900">
           {props.shippingMessage || (
-            <p>
+            <span>
               We currently ship in the UK and worldwide.
               <br />
               <br />
               We accept payment via PayPal, Clearpay, and major card payment
               providers (including Visa, Mastercard, Maestro, and Switch) and
               more.
-            </p>
+            </span>
           )}
         </p>
       ),
@@ -70,10 +70,10 @@ export default function ProductDetails({ product, description }: any) {
       InnerComponent: (props: any) => (
         <p className="text-gray-900">
           {props.returnsMessage || (
-            <p>
+            <span>
               Items may be returned for a full refund within 14 days from the
               date an order was received.
-            </p>
+            </span>
           )}
         </p>
       ),
@@ -110,9 +110,9 @@ export default function ProductDetails({ product, description }: any) {
             {({ open }) => (
               <>
                 <Disclosure.Button className="relative flex items-center justify-between w-full py-2 pr-2 text-left group sm:py-2">
-                  <span className="text-lg font-bold text-black uppercase">
+                  <h2 className="font-18 font-bold text-black uppercase">
                     {desc.title}
-                  </span>
+                  </h2>
                   <span className="flex items-center ml-6">
                     {open ? (
                       <MinusSmallIcon
@@ -143,9 +143,9 @@ export default function ProductDetails({ product, description }: any) {
             {({ open }) => (
               <>
                 <Disclosure.Button className="relative flex items-center justify-between w-full py-2 pr-2 text-left group sm:py-2">
-                  <span className="text-lg font-bold text-black uppercase">
+                  <h2 className="font-18 font-bold text-black uppercase">
                     {detail.title}
-                  </span>
+                  </h2>
                   <span className="flex items-center ml-6">
                     {open ? (
                       <MinusSmallIcon

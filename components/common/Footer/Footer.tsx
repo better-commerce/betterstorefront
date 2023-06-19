@@ -20,7 +20,11 @@ interface Props {
   config: []
 }
 
-const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
+const Footer: FC<Props & IExtraProps> = ({
+  config,
+  deviceInfo,
+  maxBasketItemsCount,
+}) => {
   const router = useRouter()
   const [hasConfig, setHasConfig] = useState(false)
   const { isMobile, isIPadorTablet } = deviceInfo
@@ -54,6 +58,9 @@ const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
       aria-labelledby="footer-heading"
       className="pt-10 bg-gray-100 shadow-inner sm:h-96 sm:pt-16 sm:mt-2 bg-footer-color"
     >
+      <h3 id="footer-heading" className="sr-only">
+        {GENERAL_FOOOTER}
+      </h3>
       <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
         <div className="sm:col-span-1">
           <Logo />
@@ -129,9 +136,6 @@ const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
           </p>
         </div>
       </div>
-      <h2 id="footer-heading" className="sr-only">
-        {GENERAL_FOOOTER}
-      </h2>
     </footer>
   )
 }

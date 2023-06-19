@@ -2,18 +2,22 @@
 import { useState } from 'react'
 
 // Package Imports
-import moment from 'moment'
-import axios from 'axios'
-import * as Yup from 'yup'
+import Image from 'next/image'
+import Cookies from 'js-cookie'
 
 // Component Imports
+import DeliveryMessage from './DeliveryMessage'
 import ProductWarranty from '../ProductSidebar/ProductWarranty'
 import ProductReturn from '../ProductSidebar/ProductReturn'
 
 // Other Imports
-import { min } from 'lodash'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import Image from 'next/image'
+import { stringToBoolean } from '@framework/utils/parse-util'
+import {
+  BETTERCOMMERCE_CURRENCY,
+  BETTERCOMMERCE_DEFAULT_CURRENCY,
+  EmptyString,
+} from '@components/utils/constants'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
 export const DELIVERY_FORM_FIELDS = [
@@ -38,7 +42,7 @@ export const DELIVERY_FORM_FIELDS = [
     },
   },
 ]
-export default function DeliveryInfo({ product, grpData }: any) {
+export default function DeliveryInfo({ product, grpData, config }: any) {
   const [isWarranty, setWarranty] = useState(false)
   const [isReturn, setReturn] = useState(false)
   const [edd, setEDD] = useState<string | undefined>(undefined)
@@ -62,6 +66,29 @@ export default function DeliveryInfo({ product, grpData }: any) {
         category: 'Easy Returns & Exchange',
       })
     }
+  }
+  const shippingSettings = config?.configSettings?.find(
+    (x: any) => x.configType === 'ShippingSettings'
+  )
+  const isFreeShippingOverXEnabled = stringToBoolean(
+    shippingSettings?.configKeys?.find(
+      (x: any) => x.key === 'ShippingSettings.FreeShippingOverXEnabled'
+    )?.value || EmptyString
+  )
+  const freeShippingOverXValue =
+    shippingSettings?.configKeys?.find(
+      (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
+    )?.value || '0'
+
+  const getCurrencySymbol = () => {
+    const currency =
+      Cookies.get('Currency') ||
+      BETTERCOMMERCE_CURRENCY ||
+      BETTERCOMMERCE_DEFAULT_CURRENCY
+    return (
+      config?.currencies?.find((x: any) => x?.currencyCode === currency)
+        ?.currencySymbol || EmptyString
+    )
   }
 
   let returnEligeble = ''
@@ -90,66 +117,71 @@ export default function DeliveryInfo({ product, grpData }: any) {
         aria-labelledby="details-heading"
         className="mt-0 border-gray-200 sm:border-t sm:mt-2"
       >
-        <div className="flex flex-col px-4 pt-0 pb-0 mt-0 sm:pb-6 sm:pt-2 sm:mt-2 sm:px-0">
-          <div className="mb-2 font-bold text-primary text-20">
-            Free Delivery
-          </div>
-          <p className="font-normal text-14 text-brown-light">
-            For orders above ₹600, Usually delivered in 2-5 days
-          </p>
-          <div className="grid grid-cols-2 mt-6 gap-x-4">
-            {grpData['product.exchangeeligibilitydays']?.length &&
-              returnEligeble == 'True' && (
-                <div
-                  className="flex flex-col items-center content-center cursor-pointer align-center"
-                  onClick={handleClick(grpData)}
-                >
-                  {grpData['product.exchangeeligibilitydays']?.map(
-                    (replaceAttr: any, rpdx: number) => (
-                      <div
-                        key={`product-${rpdx}-delivery`}
-                        className="flex items-center justify-start w-full gap-2 text-left"
-                      >
-                        <Image
-                          src={`/assets/images/easy-return.png`}
-                          width="30"
-                          alt={replaceAttr?.value}
-                        />
-                        <div className="text-sm font-semibold text-black">
-                          {replaceAttr?.value} Days Easy Return
+        {isFreeShippingOverXEnabled && (
+          <DeliveryMessage
+            product={product}
+            currencySymbol={getCurrencySymbol()}
+            freeShippingOverXValue={freeShippingOverXValue}
+          />
+        )}
+
+        {(grpData['product.exchangeeligibilitydays']?.length ||
+          grpData['product.returneligibilitydays']?.length) && (
+          <div className="flex flex-col px-4 pt-0 pb-0 mt-0 sm:pb-6 sm:pt-2 sm:mt-2 sm:px-0">
+            <div className="grid grid-cols-2 mt-6 gap-x-4">
+              {grpData['product.exchangeeligibilitydays']?.length &&
+                returnEligeble == 'True' && (
+                  <div
+                    className="flex flex-col items-center content-center cursor-pointer align-center"
+                    onClick={handleClick(grpData)}
+                  >
+                    {grpData['product.exchangeeligibilitydays']?.map(
+                      (replaceAttr: any, rpdx: number) => (
+                        <div
+                          key={`product-${rpdx}-delivery`}
+                          className="flex items-center justify-start w-full gap-2 text-left"
+                        >
+                          <Image
+                            src={`/assets/images/easy-return.png`}
+                            width="30"
+                            alt={replaceAttr?.value}
+                          />
+                          <div className="text-sm font-semibold text-black">
+                            {replaceAttr?.value} Days Easy Return
+                          </div>
                         </div>
-                      </div>
-                    )
-                  )}
-                </div>
-              )}
-            {grpData['product.returneligibilitydays']?.length &&
-              refundEligeble == 'True' && (
-                <div
-                  className="flex items-center content-center cursor-pointer align-center"
-                  onClick={() => handleReturn()}
-                >
-                  {grpData['product.returneligibilitydays']?.map(
-                    (returnAttr: any, rdx: number) => (
-                      <div
-                        key={`product-${rdx}-edd-return`}
-                        className="flex items-center justify-start w-full gap-2 text-left"
-                      >
-                        <Image
-                          src={`/assets/images/exchange.png`}
-                          width="25"
-                          alt={returnAttr?.value}
-                        />
-                        <div className="text-sm font-semibold text-black">
-                          {returnAttr?.value} Days Easy Exchange
+                      )
+                    )}
+                  </div>
+                )}
+              {grpData['product.returneligibilitydays']?.length &&
+                refundEligeble == 'True' && (
+                  <div
+                    className="flex items-center content-center cursor-pointer align-center"
+                    onClick={() => handleReturn()}
+                  >
+                    {grpData['product.returneligibilitydays']?.map(
+                      (returnAttr: any, rdx: number) => (
+                        <div
+                          key={`product-${rdx}-edd-return`}
+                          className="flex items-center justify-start w-full gap-2 text-left"
+                        >
+                          <Image
+                            src={`/assets/images/exchange.png`}
+                            width="25"
+                            alt={returnAttr?.value}
+                          />
+                          <div className="text-sm font-semibold text-black">
+                            {returnAttr?.value} Days Easy Exchange
+                          </div>
                         </div>
-                      </div>
-                    )
-                  )}
-                </div>
-              )}
+                      )
+                    )}
+                  </div>
+                )}
+            </div>
           </div>
-        </div>
+        )}
       </section>
       <ProductWarranty
         isWarranty={isWarranty}

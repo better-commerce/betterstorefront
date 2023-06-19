@@ -18,6 +18,7 @@ export default function RelatedProductWithGroup({
   products,
   productPerColumn,
   deviceInfo,
+  maxBasketItemsCount,
 }: any) {
   const [isQuickview, setQuickview] = useState(undefined)
   const [isQuickviewOpen, setQuickviewOpen] = useState(false)
@@ -125,6 +126,7 @@ export default function RelatedProductWithGroup({
               product={product}
               hideWishlistCTA={true}
               deviceInfo={deviceInfo}
+              maxBasketItemsCount={maxBasketItemsCount}
             />
           </SwiperSlide>
         ))}
@@ -135,6 +137,7 @@ export default function RelatedProductWithGroup({
         productData={isQuickview}
         isQuickviewOpen={isQuickviewOpen}
         setQuickviewOpen={setQuickviewOpen}
+        maxBasketItemsCount={maxBasketItemsCount}
       />
     </>
   )

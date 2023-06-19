@@ -21,6 +21,7 @@ export default function CategoryGrid({
   handlePageChange = () => {},
   handleInfiniteScroll,
   deviceInfo,
+  maxBasketItemsCount,
 }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL =
     process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -59,6 +60,7 @@ export default function CategoryGrid({
                   key={productIdx}
                   product={product}
                   deviceInfo={deviceInfo}
+                  maxBasketItemsCount={maxBasketItemsCount}
                 />
               ))}
             </div>
@@ -90,6 +92,7 @@ export default function CategoryGrid({
                 key={productIdx}
                 product={product}
                 deviceInfo={deviceInfo}
+                maxBasketItemsCount={maxBasketItemsCount}
               />
             ))}
           </div>

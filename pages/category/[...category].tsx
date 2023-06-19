@@ -20,6 +20,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -164,7 +165,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryPage({ category, slug, products, deviceInfo }: any) {
+function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
   const adaptedQuery: any = { ...router.query }
@@ -414,6 +415,7 @@ function CategoryPage({ category, slug, products, deviceInfo }: any) {
                       handlePageChange={handlePageChange}
                       handleInfiniteScroll={handleInfiniteScroll}
                       deviceInfo={deviceInfo}
+                      maxBasketItemsCount={maxBasketItemsCount(config)}
                     />
                   </div>
                 </>
@@ -425,6 +427,7 @@ function CategoryPage({ category, slug, products, deviceInfo }: any) {
                     handlePageChange={handlePageChange}
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
+                    maxBasketItemsCount={maxBasketItemsCount(config)}
                   />
                 </div>
               ))}

@@ -67,6 +67,7 @@
     "react-use-measure": "^2.1.1",
     "shebang-regex": "^4.0.0",
     "store": "^2.0.12",
+    "string-format": "^2.0.0",
     "stripe": "^12.4.0",
     "swiper": "^9.3.1",
     "swr": "^2.1.5",
@@ -85,6 +86,7 @@
     "@types/memory-cache": "^0.2.2",
     "@types/node": "^20.1.2",
     "@types/react": "^18.2.6",
+    "@types/string-format": "^2.0.0",
     "@types/uuid": "^9.0.1",
     "deepmerge": "^4.3.1",
     "eslint": "^8.40.0",
@@ -95,11 +97,6 @@
     "postcss-nesting": "^11.2.2",
     "prettier": "2.8.8",
     "typescript": "4.5.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
