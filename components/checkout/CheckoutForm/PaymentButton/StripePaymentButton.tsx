@@ -52,6 +52,7 @@ export class StripePaymentButton extends BasePaymentButton {
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
       basketOrderInfo,
+      uiContext,
       dispatchState
     )
     if (orderResult?.success && orderResult?.result?.id) {
