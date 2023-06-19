@@ -55,7 +55,7 @@ const getSeoConfig = async function (token) {
       JSON.stringify(seoConfig),
       (err) => console.log(err)
     )
-  } catch (error) { }
+  } catch (error) {}
 }
 
 const handler = async () => {
@@ -74,9 +74,9 @@ const getKeywords = async function () {
     },
   })
   return response.data.result.map((item) => {
-    let pathName = "";
+    let pathName = ''
     try {
-      pathName = new URL(item.oldUrl).pathname;
+      pathName = new URL(item.oldUrl).pathname
     } catch (e) {
       // Do nothing
     }
@@ -92,6 +92,8 @@ const getKeywords = async function () {
 }
 
 const getMicrosites = () => {
+  const defaultLocale = `${process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE}-${process.env.BETTERCOMMERCE_DEFAULT_COUNTRY}`
+
   const microSitesHandler = async () => {
     const token = await getToken()
     const url = new URL('/api/v2/content/microsite/all', BASE_URL).href
@@ -104,8 +106,10 @@ const getMicrosites = () => {
       },
     })
     return {
-      locales: data.result.map((i) => i.defaultLangCulture),
-      defaultLocale: 'en-US',
+      locales: data?.result?.length
+        ? data?.result?.map((i) => i.defaultLangCulture)
+        : [defaultLocale],
+      defaultLocale: defaultLocale,
     }
   }
   return microSitesHandler()

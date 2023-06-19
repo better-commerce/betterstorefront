@@ -494,7 +494,7 @@ export default function CheckoutForm({
 
   const setBillingInformation = (
     payload: any,
-    update = true,
+    update = false,
     type = AddressType.BILLING
   ) => {
     const handleAsync = async () => {
@@ -744,7 +744,7 @@ export default function CheckoutForm({
         }`}
       >
         <div className="max-w-2xl mx-auto pt-4 md:pt-16 lg:pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
+          <h1 className="sr-only">{GENERAL_CHECKOUT}</h1>
           <div className="grid lg:grid-cols-5 sm:gap-x-6 xl:gap-x-6">
             <div className="sm:col-span-3 pb-6 lg:order-1 order-2">
               {!isShippingDisabled && (

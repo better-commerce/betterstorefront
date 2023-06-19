@@ -82,6 +82,7 @@ const Navbar: FC<Props & IExtraProps> = ({
 
   let currentPage = getCurrentPage()
   const { isMobile, isIPadorTablet } = deviceInfo
+  const [delayEffect, setDelayEffect] = useState(false)
 
   let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
@@ -262,6 +263,10 @@ const Navbar: FC<Props & IExtraProps> = ({
     }
   }
 
+  useEffect(() => {
+    setDelayEffect(true)
+  }, [])
+
   return (
     <>
       <Transition.Root show={open} as={Fragment}>
@@ -413,7 +418,6 @@ const Navbar: FC<Props & IExtraProps> = ({
           aria-label="Top"
           className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
         >
-          <h2 className="sr-only">nav</h2>
           <button
             type="button"
             className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden"
@@ -563,10 +567,10 @@ const Navbar: FC<Props & IExtraProps> = ({
                   aria-hidden="true"
                   aria-label="Wishlist"
                 />
-                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
                   Wishlist
                 </span>
-                {wishListItems.length > 0 && (
+                {wishListItems.length > 0 && delayEffect && (
                   <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full sm:block -right-0">
                     {wishListItems.length}
                   </span>
@@ -588,7 +592,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                   aria-hidden="true"
                   aria-label="Add to cart"
                 />
-                <span className="hidden text-sm font-normal text-black sm:block text-header-clr">
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
                   Cart
                 </span>
                 {renderState && (
