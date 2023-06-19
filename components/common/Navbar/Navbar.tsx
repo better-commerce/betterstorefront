@@ -82,6 +82,7 @@ const Navbar: FC<Props & IExtraProps> = ({
 
   let currentPage = getCurrentPage()
   const { isMobile, isIPadorTablet } = deviceInfo
+  const [delayEffect, setDelayEffect] = useState(false)
 
   let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
@@ -261,6 +262,10 @@ const Navbar: FC<Props & IExtraProps> = ({
       }
     }
   }
+
+  useEffect(() => {
+    setDelayEffect(true)
+  }, [])
 
   return (
     <>
@@ -565,7 +570,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                 <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
                   Wishlist
                 </span>
-                {wishListItems.length > 0 && (
+                {wishListItems.length > 0 && delayEffect && (
                   <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full sm:block -right-0">
                     {wishListItems.length}
                   </span>
