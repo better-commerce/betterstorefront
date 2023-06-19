@@ -83,7 +83,6 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
   const getCurrencySymbol = () => {
     const currency =
       Cookies.get('Currency') ||
-      store.get('Currency') ||
       BETTERCOMMERCE_CURRENCY ||
       BETTERCOMMERCE_DEFAULT_CURRENCY
     return (
