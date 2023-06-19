@@ -26,7 +26,7 @@ export default function MyDetails() {
 
   const formikHandleChange = (e: any, handleFunction: any) => {
     if (e.target.name === 'phone' || e.target.name === 'mobile') {
-      //Regex to check if the value consists of an alphabet
+      //Regex to check if the value consists of an alphabet or a character
       e.target.value = e.target.value
         ? e.target.value.replace(
             /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g,

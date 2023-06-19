@@ -64,7 +64,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     const idCheck = (itemDetails: any) => {
       return itemDetails.recordId !== productId
     }
-
+    console.log(productId, 'idCheck after remove is called')
     let temptWishList: any = wishListItems.filter(idCheck)
     const items = await getWishlist(user.userId, temptWishList)
     setWishlist(items)
@@ -197,8 +197,8 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                           role="list"
                           className="-my-6 divide-y divide-gray-200"
                         >
-                          {wishListItems.map((product: any) => (
-                            <li key={product.recordId} className="flex py-6">
+                          {wishListItems.map((product: any, idx: number) => (
+                            <li key={idx} className="flex py-6">
                               <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
                                 <Image
                                   style={css}
