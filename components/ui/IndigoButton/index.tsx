@@ -2,7 +2,6 @@ import { FC } from 'react'
 import { useUI } from '@components/ui/context'
 import { useState } from 'react'
 import { LoadingDots } from '@components/ui'
-import { openNewCartPage } from '@framework/utils/app-util'
 interface Props {
   className?: string
   title?: string
@@ -39,19 +38,19 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
 
       if (validateAction) {
         validateAction().then((status: boolean) => {
+          setIsLoading(false)
           if (status) {
+            setIsLoading(true); // Set isLoading to true before performing action
             action().then(() => {
               setIsLoading(false)
-              // openCart()
-              openNewCartPage(openCart);
+              openCart()
             });
           }
         })
       } else {
       action()?.then(() => {
         setIsLoading(false)
-        // openCart()
-        openNewCartPage(openCart);
+        openCart()
       })
     }
     } else

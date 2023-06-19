@@ -7,7 +7,6 @@ import Image from "next/legacy/image";
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
-import { openNewCartPage } from '@framework/utils/app-util'
 
 interface Props {
   className?: string
@@ -46,16 +45,14 @@ const DefaultButton: FC<Props> = ({
         if (status) {
           action().then(() => {
             setIsLoading(false)
-            // openCart()
-            openNewCartPage(openCart);
+            openCart()
           });
         }
       })
     } else {
       action().then(() => {
         setIsLoading(false)
-        // openCart()
-        openNewCartPage(openCart);
+        openCart()
       })
     }
     } else

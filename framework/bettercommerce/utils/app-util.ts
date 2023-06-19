@@ -376,16 +376,3 @@ export const getMinMax = (list: Array<any>, dependantProp: string) => {
     max: highest,
   }
 }
-
-export const openNewCartPage = (openCart: Function) => {
-  if (isMobileOnly) { 
-      Router?.push("/cart");
-  } else {
-      const checkIfCartUrl = window?.location?.href?.includes('/cart') || window?.location?.href?.includes('#cartopen') 
-      if(!checkIfCartUrl){
-          Router?.push({pathname: `${window?.location?.href}#cartopen`,},`${window?.location?.href}#cartopen`,{ shallow: true, scroll: false })
-          openCart();
-      }
-  }
-  // Router.push('/cart');
-}
