@@ -11,7 +11,8 @@
     "find:unused": "npx next-unused",
     "generate:definitions": "node framework/bigcommerce/scripts/generate-definitions.js",
     "tsc": "tsc",
-    "lint-staged-configure": "npx mrm lint-staged"
+    "lint-staged-configure": "npx mrm lint-staged",
+    "prepare": "npx husky install"
   },
   "sideEffects": false,
   "license": "MIT",
@@ -95,11 +96,6 @@
     "postcss-nesting": "^11.2.2",
     "prettier": "2.8.8",
     "typescript": "4.5.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
