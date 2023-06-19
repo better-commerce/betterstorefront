@@ -11,6 +11,7 @@ import { WishlistSidebarView } from '@components/wishlist'
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
+import AlertRibbon from '@components/ui/AlertRibbon'
 import { getData } from '../../utils/clientFetcher'
 import { setItem, getItem } from '../../utils/localStorage'
 import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
@@ -130,8 +131,7 @@ const Layout: FC<Props & IExtraProps> = ({
   const [isLoading, setIsLoading] = useState(false)
   const { showSearchBar, setShowSearchBar } = useUI()
   const [data, setData] = useState(navTreeFromLocalStorage)
-
-  const { appConfig, setAppConfig } = useUI()
+  const { appConfig, setAppConfig, displayAlert } = useUI()
 
   useEffect(() => {
     const fetchLayout = async () => {
@@ -188,7 +188,9 @@ const Layout: FC<Props & IExtraProps> = ({
           languages={config?.languages}
           deviceInfo={deviceInfo}
         />
-        <main className="pt-16 fit">{children}</main>
+        <main className="pt-16 fit">
+        {displayAlert && <AlertRibbon />}
+          {children}</main>
         <Footer config={data.footer} deviceInfo={deviceInfo} />
         <ModalUI />
         <SidebarUI deviceInfo={deviceInfo} />

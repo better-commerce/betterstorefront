@@ -27,6 +27,7 @@ import { Disclosure } from '@headlessui/react'
 
 import Image from 'next/image'
 import {
+  Messages,
   NEXT_CREATE_WISHLIST,
   NEXT_GET_ORDER_RELATED_PRODUCTS,
   NEXT_GET_ALT_RELATED_PRODUCTS,
@@ -529,7 +530,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
         }
       } else {
         console.log('Maximum product limit reached');
-        alert('Maximum product limit reached')
+        setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_LIMIT_EXCEEDED"] })
         return;
       }
     }

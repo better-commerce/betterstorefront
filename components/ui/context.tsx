@@ -80,6 +80,8 @@ const initialState = {
   sidebarView: 'CART_VIEW',
   userAvatar: '',
   productId: '',
+  displayAlert: false,
+  alertRibbon: {},
   notifyUser: false,
   wishListItems: getItem('wishListItems') || [],
   cartItems: getItem('cartItems') || { lineItems: [] },
@@ -118,6 +120,16 @@ type Action =
     }
   | {
       type: 'OPEN_MODAL'
+    }
+  |  {
+      type: 'SHOW_ALERT'
+    }
+  | {
+      type: 'HIDE_ALERT'
+    }
+  | {
+      type: 'USE_ALERT'
+      payload: any
     }
   | {
       type: 'OPEN_NOTIFY_USER_POPUP'
@@ -232,6 +244,24 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         displayDropdown: false,
+      }
+    }
+    case 'SHOW_ALERT': {
+      return {
+        ...state,
+        displayAlert: true,
+      }
+    }
+    case 'HIDE_ALERT': {
+      return {
+        ...state,
+        displayAlert: false,
+      }
+    }
+    case 'USE_ALERT': {
+      return {
+        ...state,
+        alertRibbon: action.payload,
       }
     }
     case 'OPEN_MODAL': {
@@ -386,48 +416,48 @@ export const UIProvider: React.FC<any> = (props) => {
     initialState
   )
 
-  // const setupDeviceInfo = useCallback(() => {
-  //   const UA = navigator.userAgent
-  //   const isIPadorTablet = /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA)
+  const setupDeviceInfo = useCallback(() => {
+    const UA = navigator.userAgent
+    const isIPadorTablet = /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA)
 
-  //   /**
-  //    * Determine the mobile operating system.
-  //    * This function returns one of 'IOS', 'ANDROID', 'WINDOWS_PHONE', or 'UNKNOWN'.
-  //    *
-  //    * @returns {String}
-  //    */
-  //   const getDeviceType = () => {
-  //     var userAgent = navigator.userAgent || navigator.vendor || window.opera
+    /**
+     * Determine the mobile operating system.
+     * This function returns one of 'IOS', 'ANDROID', 'WINDOWS_PHONE', or 'UNKNOWN'.
+     *
+     * @returns {String}
+     */
+    const getDeviceType = () => {
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera
 
-  //     // Windows Phone must come first because its UA also contains "Android"
-  //     if (/windows phone/i.test(userAgent)) {
-  //       return DeviceType.WINDOWS_PHONE
-  //     }
+      // Windows Phone must come first because its UA also contains "Android"
+      if (/windows phone/i.test(userAgent)) {
+        return DeviceType.WINDOWS_PHONE
+      }
 
-  //     if (/android/i.test(userAgent)) {
-  //       return DeviceType.ANDROID
-  //     }
+      if (/android/i.test(userAgent)) {
+        return DeviceType.ANDROID
+      }
 
-  //     // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  //     if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-  //       return DeviceType.IOS
-  //     }
+      // iOS detection from: http://stackoverflow.com/a/9039885/177710
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return DeviceType.IOS
+      }
 
-  //     return DeviceType.UNKNOWN
-  //   }
-  //   const deviceTypeInfo = getDeviceType()
-  //   const isOnlyMobile = (isMobile && !isIPadorTablet) || deviceTypeInfo === 2
+      return DeviceType.UNKNOWN
+    }
+    const deviceTypeInfo = getDeviceType()
+    const isOnlyMobile = (isMobile && !isIPadorTablet) || deviceTypeInfo === 2
 
-  //   const payload: IDeviceInfo = {
-  //     isMobile,
-  //     isOnlyMobile,
-  //     isDesktop: isMobile || isIPadorTablet ? false : isDesktop,
-  //     isIPadorTablet,
-  //     deviceType: deviceTypeInfo,
-  //   }
-  //   setItem('deviceInfo', payload)
-  //   dispatch({ type: 'SETUP_DEVICE_INFO', payload })
-  // }, [dispatch])
+    const payload: IDeviceInfo = {
+      isMobile,
+      isOnlyMobile,
+      isDesktop: isMobile || isIPadorTablet ? false : isDesktop,
+      isIPadorTablet,
+      deviceType: deviceTypeInfo,
+    }
+    setItem('deviceInfo', payload)
+    dispatch({ type: 'SETUP_DEVICE_INFO', payload })
+  }, [dispatch])
 
   const addToWishlist = useCallback(
     (payload: any) => {
