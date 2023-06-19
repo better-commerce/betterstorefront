@@ -443,10 +443,10 @@ export default function AddressBook({ deviceInfo }: any) {
           Addresses
         </h3>
       </div>
-      <main className="px-0 sm:px-6 lg:px-8">
+      <main className="px-0 sm:px-6 lg:px-8 mt-4">
         <div className="max-w-4xl px-4 mx-auto">
           <div className="px-0 sm:px-0">
-            <h1 className="mb-3 text-base font-bold tracking-tight sm:text-xl text-primary sm:mb-5 dark:text-black">
+            <h1 className="mb-3 font-bold tracking-tight  text-primary sm:mb-5 dark:text-black">
               <span className="hidden sm:inline-block">{title}</span>
               <span className="inline-block sm:hidden">Saved Addresses</span>
             </h1>
