@@ -16,12 +16,12 @@ export default function FiltersRightOpen({
     <div className="relative flex-col hidden w-full h-full max-w-xs pr-4 ml-auto overflow-y-auto bg-white sm:col-span-2 sm:flex">
       {products.filters?.map((section: any, sectionId: number) => (
         <>
-          <div
+          <h2
             key={`applied-filter-${sectionId}`}
-            className="flex items-center justify-between w-full px-2 py-2 my-1 -mx-2 font-bold text-black uppercase bg-white text-md"
+            className="flex items-center justify-between w-full px-2 py-2 my-1 -mx-2 font-bold text-black uppercase bg-white font-16"
           >
             {section?.name}
-          </div>
+          </h2>
           <FilterList
             handleFilters={handleFilters}
             sectionKey={section?.key}

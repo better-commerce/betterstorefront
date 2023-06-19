@@ -514,7 +514,7 @@ export default function CollectionPage(props: any) {
         <div
           className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4 ${cls}`}
         >
-          <h1 className="inline-block text-base font-medium capitalize text-primary dark:text-primary text-24">
+          <h1 className="inline-block capitalize text-primary dark:text-primary">
             {props?.name}
           </h1>
           <span className="pl-2 mt-0 text-xs font-semibold text-black dark:text-white text-14 sm:h-6">
