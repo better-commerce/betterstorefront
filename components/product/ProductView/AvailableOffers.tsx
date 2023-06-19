@@ -79,14 +79,14 @@ export default function AvailableOffers({ currency, offers }: any) {
       <div className="flex flex-col pt-4 pb-4 mt-2 border-b border-gray-200 gap-y-4 mob-gap-y-4 mob-border-none-pdp">
         <div className="grid w-full grid-cols-12 px-4 sm:grid-cols-6 sm:px-0 mob-promo-grid">
           <div className="col-span-7 sm:col-span-3 mob-left-7">
-            <h4 className="font-semibold sm:text-sm text-16 dark:text-black">
+            <h2 className="font-semibold font-16 text-16 dark:text-black">
               <span className="font-medium opacity_056 text-primary">
                 BEST PRICE:{' '}
               </span>
               <span className="inline-block pl-1 text-sm text-black">
                 {priceFormat(bestprice)}
               </span>
-            </h4>
+            </h2>
             <p className="text-xs font-medium text-gray-900">
               {offers?.bestAvailablePromotion?.additionalInfo6} (Apply on
               checkout)
@@ -122,9 +122,9 @@ export default function AvailableOffers({ currency, offers }: any) {
       </div>
       {/* more offer */}
       <div className="flex flex-col px-4 py-2 pr-0 mt-2 sm:pr-4 gap-x-4 sm:px-0 offeres m-hide-navigation">
-        <div className="mb-2 font-semibold text-black uppercase opacity_056 text-primary text-14 sm:text-sm dark:text-black">
+        <h2 className="mb-2 font-semibold text-black uppercase opacity_056 text-primary font-18  dark:text-black">
           More Offers
-        </div>
+        </h2>
         <Swiper
           slidesPerView={2.3}
           spaceBetween={4}
@@ -161,10 +161,10 @@ export default function AvailableOffers({ currency, offers }: any) {
                         onClick={() => setOfferData(saving)}
                       >
                         <div className="relative h-full group">
-                          <div className="h-full p-2 bg-transparent border cursor-pointer promo-bg sm:p-3">
-                            <h6 className="font-bold text-left text-black uppercase break-word-text">
+                          <div className="h-full p-2 bg-transparent border cursor-pointer promo-bg sm:p-3 box-border">
+                            <h3 className="font-bold text-left text-black font-14 uppercase break-word-text">
                               {saving.name}
-                            </h6>
+                            </h3>
                             {saving?.promoType == 1 && (
                               <span>
                                 {saving.additionalInfo2 == 'False' ||

@@ -107,6 +107,7 @@ function Slug({
   pdpCachedImages,
   reviews,
   deviceInfo,
+  config,
 }: any) {
   const router = useRouter()
   return router.isFallback ? (
@@ -125,6 +126,7 @@ function Slug({
         pdpCachedImages={pdpCachedImages}
         reviews={reviews}
         deviceInfo={deviceInfo}
+        config={config}
       />
     )
   )

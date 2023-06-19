@@ -17,6 +17,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import Link from 'next/link'
 import commerce from '@lib/api/commerce'
 import { RESULTS } from '@components/utils/textVariables'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -93,6 +94,7 @@ function BrandDetailPage({
   brandDetails,
   slug,
   deviceInfo,
+  config,
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -323,6 +325,7 @@ function BrandDetailPage({
           handlePageChange={handlePageChange}
           handleInfiniteScroll={handleInfiniteScroll}
           deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount(config)}
         />
       </div>
     </>

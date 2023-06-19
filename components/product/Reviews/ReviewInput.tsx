@@ -81,7 +81,9 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
 
   return (
     <>
-      <h4 className="mb-6 font-semibold text-black">{POST_YOUR_REVIEW}</h4>
+      <h2 className="font-18 mb-6 font-semibold text-black">
+        {POST_YOUR_REVIEW}
+      </h2>
       {asyncMessage ? (
         <span className="text-2xl text-gray-900">{asyncMessage}</span>
       ) : (

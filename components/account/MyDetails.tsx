@@ -15,6 +15,7 @@ import { number } from 'yup'
 import Link from 'next/link'
 import { findByFieldName } from '@framework/utils/app-util'
 import FormField from '@components/utils/FormField'
+import { Messages } from '@components/utils/constants'
 
 export default function MyDetails() {
   const [title, setTitle] = useState('My Details')
@@ -22,13 +23,20 @@ export default function MyDetails() {
   const { user, setUser } = useUI()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
+  const ContactNumberLenCheck: any = 10
+
   const formikHandleChange = (e: any, handleFunction: any) => {
     if (e.target.name === 'phone' || e.target.name === 'mobile') {
-      //Regex to check if the value consists of an alphabet
+      //Regex to check if the value consists of an alphabet or a character
       e.target.value = e.target.value
-        ? e.target.value.replace(/([a-zA-Z])/g, '')
+        ? e.target.value.replace(
+            Messages.Validations.RegularExpressions.CHARACTERS_AND_ALPHABETS,
+            ''
+          )
         : ''
-      handleFunction(e)
+      if (e.target.value.length <= ContactNumberLenCheck) {
+        handleFunction(e)
+      }
     } else {
       handleFunction(e)
     }
@@ -130,7 +138,7 @@ export default function MyDetails() {
                             value={values[formItem.name]}
                             type={formItem.type}
                             maxLength={formItem.maxLength}
-                            className="mb-2 mt-2 text-black font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 "
+                            className="mb-2 mt-2 font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 "
                           />
 
                           {errors[formItem.name] && touched[formItem.name] ? (
