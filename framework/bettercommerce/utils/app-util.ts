@@ -51,15 +51,38 @@ export const obfuscateHostName = (hostname: string) => {
   return ''
 }
 
-export const validateAddToCart = (productId: string, cartItems: any) => {
-  if (cartItems?.lineItems && cartItems?.lineItems?.length) {
-      const findLineItem = cartItems?.lineItems?.find((x: any) => matchStrings(x?.productId, productId, true));
-      if (findLineItem) {
-          return (findLineItem?.qty != 5);
-      }
+export const maxBasketItemsCount = (config: any) => {
+  const basketSettings = config?.configSettings?.find(
+    (x: any) => x.configType === 'BasketSettings'
+  )
+
+  if (basketSettings?.configKeys?.length) {
+    const maxBasketItems =
+      basketSettings?.configKeys?.find(
+        (x: any) => x.key === 'BasketSettings.MaximumBasketItems'
+      )?.value || '0'
+
+    return parseInt(maxBasketItems)
   }
-  return true;
-};
+
+  return 0
+}
+
+export const validateAddToCart = (
+  productId: string,
+  cartItems: any,
+  maxBasketItemsCount: number
+) => {
+  if (cartItems?.lineItems && cartItems?.lineItems?.length) {
+    const findLineItem = cartItems?.lineItems?.find((x: any) =>
+      matchStrings(x?.productId, productId, true)
+    )
+    if (findLineItem) {
+      return findLineItem?.qty != maxBasketItemsCount
+    }
+  }
+  return true
+}
 
 export const sanitizeBase64 = (base64: string) => {
   if (base64) {

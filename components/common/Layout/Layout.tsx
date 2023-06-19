@@ -80,11 +80,18 @@ const SidebarView: FC<
   React.PropsWithChildren<
     { sidebarView: string; closeSidebar(): any } & IExtraProps
   >
-> = ({ sidebarView, closeSidebar, deviceInfo }) => {
+> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount }) => {
   return (
-    <Sidebar onClose={closeSidebar} deviceInfo={deviceInfo}>
+    <Sidebar
+      onClose={closeSidebar}
+      deviceInfo={deviceInfo}
+      maxBasketItemsCount={maxBasketItemsCount}
+    >
       {sidebarView === 'CART_VIEW' && (
-        <CartSidebarView deviceInfo={deviceInfo} />
+        <CartSidebarView
+          deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount}
+        />
       )}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
@@ -96,6 +103,7 @@ const SidebarView: FC<
 
 const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
   deviceInfo,
+  maxBasketItemsCount,
 }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
@@ -103,6 +111,7 @@ const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
       sidebarView={sidebarView}
       closeSidebar={closeSidebar}
       deviceInfo={deviceInfo}
+      maxBasketItemsCount={maxBasketItemsCount}
     />
   ) : null
 }
@@ -114,6 +123,7 @@ interface LayoutProps {
 
 export interface IExtraProps {
   readonly deviceInfo: IDeviceInfo
+  readonly maxBasketItemsCount: number
 }
 
 const Layout: FC<Props & IExtraProps> = ({
@@ -123,6 +133,7 @@ const Layout: FC<Props & IExtraProps> = ({
   keywords,
   isLocationLoaded,
   deviceInfo,
+  maxBasketItemsCount = 0,
 }) => {
   const navTreeFromLocalStorage: any = getItem('navTree') || {
     nav: [],
@@ -186,13 +197,22 @@ const Layout: FC<Props & IExtraProps> = ({
           config={sortedData}
           languages={config?.languages}
           deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount}
         />
         <main className="pt-16 fit">
-        {displayAlert && <AlertRibbon />}
-          {children}</main>
-        <Footer config={data.footer} deviceInfo={deviceInfo} />
+          {displayAlert && <AlertRibbon />}
+          {children}
+        </main>
+        <Footer
+          config={data.footer}
+          deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount}
+        />
         <ModalUI />
-        <SidebarUI deviceInfo={deviceInfo} />
+        <SidebarUI
+          deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount}
+        />
         <FeatureBar
           title={GENERAL_COOKIE_TEXT}
           hide={acceptedCookies}

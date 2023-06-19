@@ -77,6 +77,7 @@ export default function ProductCollection({
   query = {},
   brandDetails,
   deviceInfo,
+  maxBasketItemsCount,
   ...props
 }: any) {
   const adaptedQuery = { ...query }
@@ -207,6 +208,7 @@ export default function ProductCollection({
           currentPage={state.currentPage}
           handleInfiniteScroll={handleInfiniteScroll}
           deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount}
         />
       </main>
     </div>

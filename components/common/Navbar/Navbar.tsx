@@ -66,6 +66,7 @@ const Navbar: FC<Props & IExtraProps> = ({
   currencies,
   languages,
   deviceInfo,
+  maxBasketItemsCount,
 }) => {
   const router = useRouter()
 

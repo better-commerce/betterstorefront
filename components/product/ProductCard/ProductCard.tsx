@@ -25,10 +25,9 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
-import {
-  validateAddToCart,
-} from '@framework/utils/app-util'
+import { validateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
+import { stringFormat } from '@framework/utils/parse-util'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -50,6 +49,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   product: productData,
   hideWishlistCTA = false,
   deviceInfo,
+  maxBasketItemsCount,
 }) => {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
@@ -65,7 +65,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     openNotifyUser,
     cartItems,
     wishListItems,
-    setAlert
+    setAlert,
   } = useUI()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
@@ -200,12 +200,15 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       validateAction: async () => {
         const isValid = validateAddToCart(
           product?.recordId ?? product?.productId,
-          cartItems
+          cartItems,
+          maxBasketItemsCount
         )
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
           })
         }
         return isValid

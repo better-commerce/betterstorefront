@@ -8,6 +8,7 @@ import { useEffect, useState, Fragment } from 'react'
 import {
   matchStrings,
   priceFormat,
+  stringFormat,
   tryParseJson,
 } from '@framework/utils/parse-util'
 import useCart from '@components/services/cart'
@@ -74,6 +75,7 @@ import { IExtraProps } from '@components/common/Layout/Layout'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   deviceInfo,
+  maxBasketItemsCount,
 }: any) => {
   const {
     addToWishlist,
@@ -513,7 +515,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
     if (isOpen) {
       closeModal()
     }
-    const MAX_PRODUCT_LIMIT = 5; // Maximum product limit
     const asyncHandleItem = async (product: any) => {
       const data: any = {
         basketId,
@@ -524,26 +525,31 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
         qty: -1,
       }
       if (type === 'increase') {
-        if (product.qty < MAX_PRODUCT_LIMIT) {
-        data.qty = 1
-        if (currentPage) {
-          if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'select_quantity', {
-              category: product?.categoryItems?.length
-                ? product?.categoryItems[0]?.categoryName
-                : '',
-              final_quantity: data.qty,
-              current_page: currentPage,
-              number_of_plus_clicked: 1,
-              number_of_minus_clicked: 0,
-            })
+        if (product.qty < maxBasketItemsCount) {
+          data.qty = 1
+          if (currentPage) {
+            if (typeof window !== 'undefined') {
+              recordGA4Event(window, 'select_quantity', {
+                category: product?.categoryItems?.length
+                  ? product?.categoryItems[0]?.categoryName
+                  : '',
+                final_quantity: data.qty,
+                current_page: currentPage,
+                number_of_plus_clicked: 1,
+                number_of_minus_clicked: 0,
+              })
+            }
           }
+        } else {
+          setAlert({
+            type: 'error',
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
+          })
+          return
         }
-      } else {
-        setAlert({ type: 'error', msg: Messages.Errors["CART_ITEM_QTY_LIMIT_EXCEEDED"] })
-        return;
       }
-    }
       if (type === 'delete') {
         data.qty = 0
         if (typeof window !== 'undefined') {
@@ -800,6 +806,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                     }
                                     productPerColumn={1.7}
                                     deviceInfo={deviceInfo}
+                                    maxBasketItemsCount={maxBasketItemsCount}
                                   />
                                 </div>
                               )}
