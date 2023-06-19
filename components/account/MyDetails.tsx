@@ -138,7 +138,7 @@ export default function MyDetails() {
                             value={values[formItem.name]}
                             type={formItem.type}
                             maxLength={formItem.maxLength}
-                            className="mb-2 mt-2 text-black font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 "
+                            className="mb-2 mt-2 font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 "
                           />
 
                           {errors[formItem.name] && touched[formItem.name] ? (
