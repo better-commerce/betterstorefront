@@ -69,9 +69,9 @@ const PaymentFailedPage = ({
   if (isLoading) {
     return (
       <main className="px-4 pt-16 pb-24 bg-white sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
-        <h1 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
+        <h2 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
           {LOADING_YOUR_ORDERS}
-        </h1>
+        </h2>
         <div className="flex items-center justify-center w-full mt-10 text-gray-900">
           <LoadingDots />
         </div>
