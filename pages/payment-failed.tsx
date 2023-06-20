@@ -85,15 +85,15 @@ const PaymentFailedPage = ({
       <main className="px-4 pt-6 pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
-            <h2 className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
+            <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
               {order?.orderNo ? GENERAL_ORDER_FAILED : null}
-            </h2>
+            </p>
             {order?.orderNo ? (
-              <p className="mt-2 text-black">
+              <h1 className="mt-2 text-black">
                 {GENERAL_YOUR_ORDER}{' '}
                 <span className="font-bold text-black">{order?.orderNo}</span>{' '}
                 {GENERAL_ORDER_NOT_PROCESSED}
-              </p>
+              </h1>
             ) : null}
           </div>
 

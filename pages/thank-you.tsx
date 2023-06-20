@@ -67,9 +67,9 @@ export default function OrderConfirmation() {
   if (isLoading) {
     return (
       <main className="px-4 pt-16 pb-24 bg-white sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
-        <h1 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
+        <h2 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
           {LOADING_YOUR_ORDERS}
-        </h1>
+        </h2>
         <div className="flex items-center justify-center w-full mt-10 text-gray-900">
           <LoadingDots />
         </div>
@@ -82,12 +82,12 @@ export default function OrderConfirmation() {
       <main className="px-4 pt-6 pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
-            <h2 className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
+            <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
               {order?.orderNo ? GENERAL_THANK_YOU : null}
-            </h2>
-            <p className="mt-2 text-4xl font-bold tracking-tight text-black uppercase sm:text-3xl">
-              {order?.orderNo ? GENERAL_ON_THE_WAY : NO_ORDER_PROVIDED}
             </p>
+            <h1 className="mt-2 font-bold tracking-tight text-black uppercase">
+              {order?.orderNo ? GENERAL_ON_THE_WAY : NO_ORDER_PROVIDED}
+            </h1>
             {order?.orderNo ? (
               <p className="mt-2 text-black">
                 {GENERAL_YOUR_ORDER}{' '}
@@ -108,59 +108,63 @@ export default function OrderConfirmation() {
 
               <h3 className="sr-only">{GENERAL_ITEMS}</h3>
               {order?.items?.map((product: any) => (
-                <div
-                  key={product.id}
-                  className="flex py-10 space-x-6 border-b border-gray-200"
-                >
-                  <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                    <Image
-                      style={css}
-                      src={
-                        generateUri(product.image, 'h=200&fm=webp') ||
-                        IMG_PLACEHOLDER
-                      }
-                      width={200}
-                      height={200}
-                      alt={product.name}
-                      className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
-                    ></Image>
+                <>
+                  <div
+                    key={product.id}
+                    className="flex py-10 space-x-6 border-b border-gray-200"
+                  >
+                    <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
+                      <Image
+                        style={css}
+                        src={
+                          generateUri(product.image, 'h=200&fm=webp') ||
+                          IMG_PLACEHOLDER
+                        }
+                        width={200}
+                        height={200}
+                        alt={product.name}
+                        className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
+                      ></Image>
+                    </div>
+                    <div className="flex flex-col flex-auto">
+                      <div>
+                        <h4 className="font-medium text-gray-900">
+                          <Link href={`/${product.slug}`}>{product.name}</Link>
+                        </h4>
+                      </div>
+                      <div className="flex items-end mt-2">
+                        <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
+                          <div className="flex">
+                            <dt className="font-medium text-gray-900">
+                              {GENERAL_QUANTITY}
+                            </dt>
+                            <dd className="ml-2 text-gray-700">
+                              {product.qty}
+                            </dd>
+                          </div>
+                          <div className="flex pl-4 sm:pl-6">
+                            <dt className="font-medium text-gray-900">
+                              {GENERAL_PRICE}
+                            </dt>
+                            <dd className="ml-2 text-gray-700">
+                              {product.price.formatted.withTax}
+                            </dd>
+                          </div>
+                        </dl>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex flex-col flex-auto">
-                    <div>
-                      <h4 className="font-medium text-gray-900">
-                        <Link href={`/${product.slug}`}>{product.name}</Link>
-                      </h4>
 
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: product.shortDescription,
-                        }}
-                        className="mt-2 text-sm text-gray-500 topspace"
-                      />
-                    </div>
-                    <div className="flex items-end flex-1 mt-6">
-                      <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
-                        <div className="flex">
-                          <dt className="font-medium text-gray-900">
-                            {GENERAL_QUANTITY}
-                          </dt>
-                          <dd className="ml-2 text-gray-700">{product.qty}</dd>
-                        </div>
-                        <div className="flex pl-4 sm:pl-6">
-                          <dt className="font-medium text-gray-900">
-                            {GENERAL_PRICE}
-                          </dt>
-                          <dd className="ml-2 text-gray-700">
-                            {product.price.formatted.withTax}
-                          </dd>
-                        </div>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: product.shortDescription,
+                    }}
+                    className="text-sm text-gray-500 topspace lg:pl-5 sm:pl-2 mb-10 mt-10"
+                  />
+                </>
               ))}
 
-              <div className="lg:pl-5 sm:pl-2">
+              <div className="lg:pl-5 sm:pl-2 border-t border-gray-200 ">
                 <h3 className="sr-only">{YOUR_INFORMATION}</h3>
 
                 <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>
@@ -256,9 +260,9 @@ export default function OrderConfirmation() {
               </div>
             </section>
           ) : null}
-          <div className="max-w-xl">
+          <div className="max-w-xl mt-5 text-center">
             <Link href={`/`} passHref>
-              <span className="font-medium text-indigo-600 hover:text-indigo-500">
+              <span className="font-medium btn-primary p-3">
                 {BTN_BACK_TO_HOME}
               </span>
             </Link>

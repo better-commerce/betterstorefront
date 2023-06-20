@@ -1119,3 +1119,6 @@ body {
 .topspace p{
   line-height: 25px;
 }
+.topspace h2{
+  font-size: 18px;
+}
