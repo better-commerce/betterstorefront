@@ -336,12 +336,14 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         />
       </NextHead>
       <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
-        <span className="px-4 text-sm font-medium sm:px-0">
-          Showing {data.products.total} Results for
-        </span>
-        <h1 className="px-4 font-semibold tracking-tight text-black sm:px-0">
+      <div className=''>
+        <h1 className="pl-4 font-semibold tracking-tight text-black sm:px-0 inline-block">
           {GENERAL_CATALOG}
         </h1>
+        <span className="text-sm font-medium sm:px-0 inline-block ml-2">
+          Showing {data.products.total} Results for
+        </span>
+      </div>
         <div className="grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
           {isMobile ? (
             <ProductMobileFilters
