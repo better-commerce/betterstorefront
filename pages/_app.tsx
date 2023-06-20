@@ -12,13 +12,15 @@ import { v4 as uuid_v4 } from 'uuid'
 import {
   SessionIdCookieKey,
   DeviceIdKey,
-  NEXT_INFRA_ENDPOINT,
   NEXT_API_KEYWORDS_ENDPOINT,
   SITE_NAME,
   SITE_ORIGIN_URL,
+  INFRA_ENDPOINT,
+  BETTERCOMMERCE_DEFAULT_CURRENCY,
+  BETTERCOMMERCE_DEFAULT_COUNTRY,
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
 } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
-import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
 import analytics from '@components/services/analytics/analytics'
@@ -41,6 +43,11 @@ import InitDeviceInfo from '@components/common/InitDeviceInfo'
 import ErrorBoundary from '@components/error'
 import CustomCacheBuster from '@components/common/CustomCacheBuster'
 import { version as buildVersion } from '../package.json'
+import { cachedGetData } from '@framework/api/utils/cached-fetch'
+import { AppContext, AppInitialProps } from 'next/app'
+import { decrypt, encrypt } from '@framework/utils/cipher'
+import { tryParseJson } from '@framework/utils/parse-util'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -74,7 +81,6 @@ const setDeviceIdCookie = () => {
 }
 
 function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
-  const [appConfig, setAppConfig] = useState({})
   const [location, setUserLocation] = useState({ Ip: '' })
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
   const [keywordsData, setKeywordsData] = useState([])
@@ -139,18 +145,9 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }, [router.events])
 
-  const fetchAppConfig = async () => {
-    try {
-      const response: any = await postData(NEXT_INFRA_ENDPOINT, {
-        setHeader: true,
-      })
-      setAppConfig(response.result)
-      Cookies.set('Currency', response.defaultCurrency)
-      Cookies.set('Language', response.defaultLanguage)
-      Cookies.set('Country', response.defaultCountry)
-    } catch (error) {
-      console.log(error, 'error')
-    }
+  let appConfig: any = null
+  if (pageProps?.appConfig) {
+    appConfig = tryParseJson(decrypt(pageProps?.appConfig))
   }
 
   const initializeGTM = () => {
@@ -176,7 +173,10 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   useEffect(() => {
     initializeGTM()
     document.body.classList?.remove('loading')
-    fetchAppConfig()
+    if (appConfig) {
+      Cookies.set('Currency', appConfig?.defaultCurrency)
+      Cookies.set('Language', appConfig?.defaultLanguage)
+    }
     fetchKeywords()
 
     if (!GA4_DISABLED) {
@@ -293,6 +293,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
             pageProps={pageProps}
             keywords={keywordsData}
             deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount(appConfig)}
           >
             <OverlayLoader />
             <Component
@@ -308,6 +309,78 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       </ManagedUIContext>
     </>
   )
+}
+
+MyApp.getInitialProps = async (
+  context: AppContext
+): Promise<AppInitialProps> => {
+  const { ctx, Component } = context
+  const req: any = ctx?.req
+  let appConfigResult
+  let defaultCurrency = BETTERCOMMERCE_DEFAULT_CURRENCY
+  let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
+  let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
+
+  try {
+    const headers = {
+      DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+    }
+    appConfigResult = await cachedGetData(INFRA_ENDPOINT, req?.cookies, headers)
+    const languageCookie =
+      req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
+
+    const currencyCookie =
+      req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
+
+    const countryCookie =
+      req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
+
+    defaultCurrency =
+      currencyCookie ||
+      appConfigResult?.result?.configSettings
+        .find((setting: any) => setting.configType === 'RegionalSettings')
+        .configKeys.find(
+          (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
+        ).value ||
+      BETTERCOMMERCE_DEFAULT_CURRENCY
+
+    defaultCountry =
+      countryCookie ||
+      appConfigResult?.result?.configSettings
+        .find((setting: any) => setting.configType === 'RegionalSettings')
+        .configKeys.find(
+          (item: any) => item.key === 'RegionalSettings.DefaultCountry'
+        ).value ||
+      BETTERCOMMERCE_DEFAULT_COUNTRY
+
+    defaultLanguage =
+      languageCookie ||
+      appConfigResult?.result?.configSettings
+        .find((setting: any) => setting.configType === 'RegionalSettings')
+        .configKeys.find(
+          (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
+        ).value ||
+      BETTERCOMMERCE_DEFAULT_LANGUAGE
+  } catch (error: any) {}
+
+  let appConfig = null
+  if (appConfigResult) {
+    const appConfigObj = {
+      ...(appConfigResult?.result || {}),
+      ...{
+        defaultCurrency,
+        defaultLanguage,
+        defaultCountry,
+      },
+    }
+    appConfig = encrypt(JSON.stringify(appConfigObj))
+  }
+
+  return {
+    pageProps: {
+      appConfig: appConfig,
+    },
+  }
 }
 
 export default MyApp

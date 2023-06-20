@@ -36,6 +36,12 @@ export const EMPTY_ADDRESS = 'Oh-no! Your address book is empty is empty.'
 export const ADD_ADDRESS = 'Add new address'
 export const GENERAL_EDIT = 'Edit'
 export const GENERAL_DELETE = 'Delete'
+//PDP
+export const INSUFFICIENT_STOCK = 'Insufficient stock for add to cart'
+export const PROD_ADDED = 'Added to Bag'
+export const PROD_ADDED_SUCCESSFULLY = 'Product Added Successfully'
+export const REV_SUB = 'Review Submitted'
+
 export const GENERAL_DEFAULT_DELIVERY_ADDRESS = 'Default delivery address'
 export const GENERAL_DEFAULT_BILLING_ADDRESS = 'Default billing address'
 export const GENERAL_TITLE = 'Title'
@@ -363,3 +369,5 @@ export const PROCEED_TO_CANCEL = 'Proceed to Cancel'
 export const FILTER_TITLE = 'Filter & Sorting'
 export const CHANGE_SIZE = 'Change Size'
 export const LOGOUT = 'Logout Successful'
+export const PRODUCT_DELIVERY_MESSAGE =
+  'For orders above {currencySymbol}{freeShippingOverXValue}, Usually delivered in 2-5 days.'

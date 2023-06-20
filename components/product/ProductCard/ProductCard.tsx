@@ -9,6 +9,7 @@ import {
   CLOTH_COLOUR_ATTRIB_NAME,
   CLOTH_SIZE_ATTRIB_NAME,
   NEXT_CREATE_WISHLIST,
+  Messages,
 } from '@components/utils/constants'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import { round } from 'lodash'
@@ -24,7 +25,9 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
+import { validateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
+import { stringFormat } from '@framework/utils/parse-util'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -46,6 +49,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   product: productData,
   hideWishlistCTA = false,
   deviceInfo,
+  maxBasketItemsCount,
 }) => {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
@@ -59,7 +63,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     openWishlist,
     setCartItems,
     openNotifyUser,
+    cartItems,
     wishListItems,
+    setAlert,
   } = useUI()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
@@ -191,6 +197,22 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
+      validateAction: async () => {
+        const isValid = validateAddToCart(
+          product?.recordId ?? product?.productId,
+          cartItems,
+          maxBasketItemsCount
+        )
+        if (!isValid) {
+          setAlert({
+            type: 'error',
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
+          })
+        }
+        return isValid
+      },
       action: async () => {
         const item = await cartHandler()?.addToCart(
           {
@@ -233,10 +255,10 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div
-        className="relative hover:outline hover:outline-1 outline-gray-200 group"
+        className="relative hover:outline hover:outline-1 outline-gray-200 group prod-group"
         key={product.id}
       >
-        <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel">
+        <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">
           <Link
             passHref
             href={`/${currentProductData.link}`}
@@ -320,11 +342,11 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           href={`/${currentProductData.link}`}
           title={`${product.name} \t ${itemPrice}`}
         >
-          <h6 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-black capitalize group-hover:hidden product-name hover:text-gray-950 min-prod-name-height">
+          <h4 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-black capitalize group-hover:hidden product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
             {product?.name?.toLowerCase()}
-          </h6>
+          </h4>
 
-          <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 group-hover:flex sm:px-2 sizes-ul sm:text-sm">
+          <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 group-hover:flex sm:px-2 sizes-ul sm:text-sm prod-ul-size">
             <li className="mr-1">Sizes:</li>
             {sizeValues.map((size: any, idx: number) => (
               <li className="inline-block uppercase" key={idx}>
@@ -336,7 +358,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             ))}
           </ul>
 
-          <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm">
+          <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm p-font-size">
             <span className="font-bold">
               {product?.price?.formatted?.withTax}
             </span>

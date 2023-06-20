@@ -15,7 +15,8 @@ const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 const dataNormalizr = (data: any = []) => {
   return data.reduce((acc: any, item: any) => {
     let ref = acc.findIndex(
-      (i: any) => i.title.toLowerCase() === item.manufacturerName.charAt(0).toLowerCase()
+      (i: any) =>
+        i.title.toLowerCase() === item.manufacturerName.charAt(0).toLowerCase()
     )
     if (ref >= 0) {
       acc[ref].results = [...acc[ref].results, item]
@@ -64,12 +65,12 @@ function BrandsPage({ brands }: any) {
       {/* Mobile menu */}
       <main className="pb-24 mx-auto overflow-hidden max-w-7xl sm:px-6 lg:px-8">
         <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          <h1 className="font-extrabold tracking-tight text-gray-900">
             Brands
           </h1>
-          <h1 className="mt-2 font-medium tracking-tight text-gray-500 sm:text-xl text-md">
+          <h2 className="mt-2 font-medium tracking-tight text-gray-500 sm:text-xl">
             {totalResults} results
-          </h1>
+          </h2>
           <div className="flex flex-wrap items-center justify-center w-full py-5">
             {ALPHABET.split('').map((letter: any, key: number) => {
               const brandExists = !!normalizedBrands.find(

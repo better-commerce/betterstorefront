@@ -45,7 +45,7 @@ export async function getStaticProps({
     const PageContentsPromiseWeb = commerce.getPagePreviewContent({
       id: '', //pageId,
       slug: HOME_PAGE_DEFAULT_SLUG,
-      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+      workingVersion: process.env.NODE_ENV === 'production' ? false : false, // TRUE for preview, FALSE for prod.
       channel: 'Web',
     })
     pageContentsWeb = await PageContentsPromiseWeb
@@ -53,7 +53,7 @@ export async function getStaticProps({
     const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
       id: '', //pageId,
       slug: HOME_PAGE_DEFAULT_SLUG,
-      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+      workingVersion: process.env.NODE_ENV === 'production' ? false : false, // TRUE for preview, FALSE for prod.
       channel: 'MobileWeb',
     })
     pageContentsMobileWeb = await PageContentsPromiseMobileWeb
@@ -161,9 +161,7 @@ function Home({
         </NextHead>
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-
       <Hero banners={pageContents?.banner} />
-
       <div className="container py-3 mx-auto sm:py-6">
         {pageContents?.heading?.map((heading: any, hId: number) => (
           <Heading

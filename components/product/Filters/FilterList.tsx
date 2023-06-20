@@ -83,7 +83,7 @@ const FilterItem = ({
             }}
           />
         )}
-        {generateOptionName()}
+        <span className="long-f-name">{generateOptionName()}</span>
         {sectionKey === FILTER_KEYS.COLOR && (
           <div
             style={{

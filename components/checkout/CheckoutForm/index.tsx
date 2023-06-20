@@ -14,6 +14,7 @@ import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   NEXT_ADDRESS,
   AddressPageAction,
+  EmptyGuid,
 } from '@components/utils/constants'
 import {
   shippingFormConfig,
@@ -424,6 +425,12 @@ export default function CheckoutForm({
   }
 
   const setShippingMethod = (payload: any, isCNC = false, storeId = '') => {
+    // Update basket order info for payment processing
+    setbasketOrderInfo({
+      ...basketOrderInfo,
+      selectedShipping: payload,
+    })
+
     dispatch({ type: 'SET_SHIPPING_METHOD', payload })
     if (isCNC) {
       dispatch({ type: 'IS_CNC', payload: storeId })
@@ -669,7 +676,8 @@ export default function CheckoutForm({
     const paymentOrderInfo = {
       user,
       basketId,
-      customerId: cartItems.userId,
+      customerId:
+        cartItems.userId != EmptyGuid ? cartItems.userId : user?.userId,
       basket: cartItems,
       billingAddress: {
         ...billingInfoClone,
@@ -686,7 +694,7 @@ export default function CheckoutForm({
       storeId: state.storeId,
 
       Payment: {
-        OrderAmount: cartItems?.grandTotal?.raw?.withTax,
+        orderAmount: cartItems?.grandTotal?.raw?.withTax,
       },
     }
 
@@ -744,7 +752,7 @@ export default function CheckoutForm({
         }`}
       >
         <div className="max-w-2xl mx-auto pt-4 md:pt-16 lg:pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h2 className="sr-only">{GENERAL_CHECKOUT}</h2>
+          <h1 className="sr-only">{GENERAL_CHECKOUT}</h1>
           <div className="grid lg:grid-cols-5 sm:gap-x-6 xl:gap-x-6">
             <div className="sm:col-span-3 pb-6 lg:order-1 order-2">
               {!isShippingDisabled && (
