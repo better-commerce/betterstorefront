@@ -28,7 +28,7 @@ export const NEW_ADDRESS_FORM_FIELDS = [
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: true,
     disabled: false,
-    max: 8,
+    max: 10,
     // handleChange: (e: any, item: any, context: any) => {
     //   const regex = /^[0-9\s]*$/
     //   if (regex.test(e?.target.value.toString())) {
@@ -79,7 +79,6 @@ export const NEW_ADDRESS_FORM_FIELDS = [
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: false,
     disabled: false,
-    max:15
   },
   {
     type: 'checkbox',
@@ -185,8 +184,7 @@ export const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
     .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
       message: Messages.Validations.AddNewAddress['ADDRESS_1_INPUT'],
     }),
-  address2: Yup.string()
-    .max(15)
+  address2: Yup.string().nullable()
     .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
       message: Messages.Validations.AddNewAddress['ADDRESS_2_INPUT'],
     }),
@@ -198,15 +196,13 @@ export const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
       message: Messages.Validations.AddNewAddress['NAME_INPUT'],
     }),
   mobileNumber: Yup.string()
-    .required()
-    .max(15)
-    .min(7)
+    .max(10)
     .required(Messages.Validations.AddNewAddress['MOBILE_NUMBER_REQUIRED'])
     .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
       message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
     }),
   label: Yup.string().nullable(),
-  otherAddressType: Yup.string(),
+  otherAddressType: Yup.string().nullable(),
   whtsappUpdated: Yup.boolean(),
   // .when(["categoryName"], {
   //     is: (label: string) => {
