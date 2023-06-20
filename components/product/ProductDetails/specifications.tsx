@@ -28,10 +28,10 @@ export default function ProductSpecifications({
   const { isOnlyMobile } = deviceInfo
   return (
     <>
-      <div className="grid sm:grid-cols-12">
+      <div className="grid sm:grid-cols-12 px-6 sm:px-0">
         <div className="sm:col-span-8">
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
-            <h2 className="mb-2 text-2xl font-bold text-dark-brown">
+            <h2 className="mb-2 font-bold font-18 text-dark-brown">
               {PRODUCT_SPECIFICATION}
             </h2>
             {attrGroup['whyweloveit']?.length > 0 && (
