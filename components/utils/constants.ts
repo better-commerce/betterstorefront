@@ -126,7 +126,7 @@ export const NEXT_VALIDATE_CHANGE_USERNAME_OTP =
 
 export const NEXT_GET_PRODUCT_QUICK_VIEW = '/api/catalog/get-product-quick-view'
 
-export const NEXT_GET_PRODUCT_REVIEW = '/api/catalog/get-product-review'
+export const NEXT_GET_PRODUCT_REVIEW = '/api/catalog/get-product-reviews'
 export const DefaultSessionCookieKey: string = `defaultSession`
 export const SessionIdCookieKey: string = `sessionId`
 export const DeviceIdKey: string = `deviceId`
