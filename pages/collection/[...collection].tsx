@@ -237,10 +237,9 @@ export default function CollectionPage(props: any) {
   }, [productDataToPass])
 
   useEffect(() => {
-    /*const data = IS_INFINITE_SCROLL
-      ? productListMemory.products
-      : props?.products*/
-    const data = productListMemory.products
+    const data = IS_INFINITE_SCROLL
+      ? productListMemory?.products
+      : props?.products
     setProductDataToPass(data)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

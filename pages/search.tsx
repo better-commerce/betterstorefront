@@ -305,10 +305,9 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     recordEvent(EVENTS.FreeText)
   })
 
-  const productDataToPass = productListMemory?.products
-  /*const productDataToPass = IS_INFINITE_SCROLL
-    ? productListMemory.products
-    : data.products*/
+  const productDataToPass = IS_INFINITE_SCROLL
+    ? productListMemory?.products
+    : data?.products
 
   let absPath = ''
   if (typeof window !== 'undefined') {
