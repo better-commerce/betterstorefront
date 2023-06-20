@@ -76,24 +76,32 @@ const ModalUI: FC = () => {
 
 const SidebarView: FC<
   { sidebarView: string; closeSidebar(): any } & IExtraProps
-> = ({ sidebarView, closeSidebar, deviceInfo }) => {
+> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount }) => {
   return (
-    <Sidebar onClose={closeSidebar} deviceInfo={deviceInfo}>
+    <Sidebar
+      onClose={closeSidebar}
+      deviceInfo={deviceInfo}
+      maxBasketItemsCount={maxBasketItemsCount}
+    >
       {sidebarView === 'CART_VIEW' && (
-        <CartSidebarView deviceInfo={deviceInfo} />
+        <CartSidebarView
+          deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount}
+        />
       )}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
     </Sidebar>
   )
 }
 
-const SidebarUI: FC = ({ deviceInfo }: any) => {
+const SidebarUI: FC = ({ deviceInfo, maxBasketItemsCount }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
     <SidebarView
       sidebarView={sidebarView}
       closeSidebar={closeSidebar}
       deviceInfo={deviceInfo}
+      maxBasketItemsCount={maxBasketItemsCount}
     />
   ) : null
 }
@@ -110,6 +118,7 @@ const LayoutError: FC<Props & IExtraProps> = ({
   keywords,
   isLocationLoaded,
   deviceInfo,
+  maxBasketItemsCount,
 }) => {
   const navTreeFromLocalStorage: any = getItem('navTree') || {
     nav: [],
@@ -162,9 +171,14 @@ const LayoutError: FC<Props & IExtraProps> = ({
           languages={config?.languages}
           key="navbar"
           deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount}
         />
         <main className="">{children}</main>
-        <Footer config={data.footer} deviceInfo={deviceInfo} />
+        <Footer
+          config={data.footer}
+          deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount}
+        />
         <ModalUI />
         <SidebarUI />
         <FeatureBar

@@ -8,7 +8,6 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-
 interface Props {
   className?: string
   title?: string
@@ -16,6 +15,7 @@ interface Props {
   buttonType?: string
   type?: string
   colorScheme?: any
+  validateAction?: any
 }
 
 const DEFAULT_COLOR_SCHEME = {
@@ -30,6 +30,7 @@ const DefaultButton: FC<Props> = ({
   buttonType = 'cart',
   action = () => { },
   colorScheme = DEFAULT_COLOR_SCHEME,
+  validateAction = null,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -38,10 +39,22 @@ const DefaultButton: FC<Props> = ({
   const handleAction = () => {
     setIsLoading(true)
     if (buttonType === 'cart') {
+
+      if (validateAction) {
+      validateAction().then((status: boolean) => {
+        if (status) {
+          action().then(() => {
+            setIsLoading(false)
+            openCart()
+          });
+        }
+      })
+    } else {
       action().then(() => {
         setIsLoading(false)
         openCart()
       })
+    }
     } else
       action().then(() => {
         setIsLoading(false)
