@@ -69,6 +69,7 @@ import { getCurrentPage, validateAddToCart } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
+import CacheProductImages from './CacheProductImages'
 
 const AttributesHandler = dynamic(
   () => import('@components/product/ProductView/AttributesHandler')
@@ -119,8 +120,8 @@ export default function ProductView({
   relatedProducts,
   promotions,
   pdpLookbookProducts,
-  pdpCachedImages,
   reviews,
+  pdpCachedImages: cachedImages,
   deviceInfo,
   config,
   maxBasketItemsCount,
@@ -147,6 +148,7 @@ export default function ProductView({
     variantColour: '',
     variantSize: '',
   })
+  const [isLoading, setIsLoading] = useState(true)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
   let currentPage = getCurrentPage()
@@ -685,200 +687,231 @@ export default function ProductView({
   }
 
   return (
-    <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
-      <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-2 sm:mb-6">
-        {breadcrumbs && (
-          <BreadCrumbs items={breadcrumbs} currentProduct={product} />
-        )}
-      </div>
-      <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none md:w-4/5">
-        {isMobile ? (
-          <Swiper
-            slidesPerView={1}
-            spaceBetween={4}
-            navigation={true}
-            loop={true}
-            breakpoints={{
-              640: { slidesPerView: 1 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 4 },
-            }}
-          >
-            {content?.map((image: any, idx) => (
-              <SwiperSlide
-                className="relative inline-flex flex-col w-full px-0 text-center cursor-pointer group lg:w-auto"
-                key={`${idx}-slider`}
-              >
-                {image.image ? (
-                  <div className="image-container">
-                    <Image
-                      priority
-                      src={
-                        generateUri(image.image, 'h=600&fm=webp') ||
-                        IMG_PLACEHOLDER
-                      }
-                      alt={image.name}
-                      className="object-cover object-center w-full h-full image"
-                      sizes="320 600 1000"
-                      quality="70"
-                      width={600}
-                      height={1000}
-                      blurDataURL={
-                        `${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER
-                      }
-                    />
-                  </div>
-                ) : (
-                  <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
-                )}
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <Tab.Group
-            as="div"
-            className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp"
-            title="product images"
-          >
-            <Tab.List
-              className={
-                content?.length > 1
-                  ? 'grid grid-cols-1 gap-2 sm:grid-cols-2'
-                  : 'grid grid-cols-1 gap-2 sm:grid-cols-1'
-              }
+    <>
+      <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
+      <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
+        <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-2 sm:mb-6">
+          {breadcrumbs && (
+            <BreadCrumbs items={breadcrumbs} currentProduct={product} />
+          )}
+        </div>
+        <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none md:w-4/5">
+          {isMobile ? (
+            <Swiper
+              slidesPerView={1}
+              spaceBetween={4}
+              navigation={true}
+              loop={true}
+              breakpoints={{
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 4 },
+                1024: { slidesPerView: 4 },
+              }}
             >
               {content?.map((image: any, idx) => (
-                <Tab key={`${idx}-tab`} title={selectedAttrData.name}>
-                  {() => (
+                <SwiperSlide
+                  className="relative inline-flex flex-col w-full px-0 text-center cursor-pointer group lg:w-auto"
+                  key={`${idx}-slider`}
+                >
+                  {image.image ? (
+                    <div className="image-container">
+                      <Image
+                        priority
+                        src={
+                          generateUri(image.image, 'h=600&fm=webp') ||
+                          IMG_PLACEHOLDER
+                        }
+                        alt={image.name}
+                        className="object-cover object-center w-full h-full image"
+                        sizes="320 600 1000"
+                        quality="70"
+                        width={600}
+                        height={1000}
+                        blurDataURL={
+                          `${image.image}?h=600&w=400&fm=webp` ||
+                          IMG_PLACEHOLDER
+                        }
+                      />
+                    </div>
+                  ) : (
+                    <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
+                  )}
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <Tab.Group
+              as="div"
+              className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp"
+              title="product images"
+            >
+              <Tab.List
+                className={
+                  content?.length > 1
+                    ? 'grid grid-cols-1 gap-2 sm:grid-cols-2'
+                    : 'grid grid-cols-1 gap-2 sm:grid-cols-1'
+                }
+              >
+                {content?.map((image: any, idx) => (
+                  <Tab key={`${idx}-tab`} title={selectedAttrData.name}>
+                    {() => (
+                      <>
+                        <span className="sr-only">{selectedAttrData.name}</span>
+                        <span className="relative">
+                          {image.image ? (
+                            <div className="image-container">
+                              <Image
+                                priority
+                                src={
+                                  generateUri(image.image, 'h=650&fm=webp') ||
+                                  IMG_PLACEHOLDER
+                                }
+                                alt={selectedAttrData.name}
+                                className="o`bject-cover object-center w-full h-full image"
+                                sizes="320 600 1000"
+                                width={600}
+                                height={1000}
+                                onClick={(ev: any) =>
+                                  handleImgLoadT(image.image)
+                                }
+                                quality="60"
+                                blurDataURL={
+                                  `${image.image}?h=600&w=400&fm=webp` ||
+                                  IMG_PLACEHOLDER
+                                }
+                              />
+                            </div>
+                          ) : (
+                            <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
+                          )}
+                        </span>
+                      </>
+                    )}
+                  </Tab>
+                ))}
+              </Tab.List>
+            </Tab.Group>
+          )}
+
+          {/* Product info */}
+          <div className="px-4 mt-2 sm:mt-10 sm:px-8 lg:mt-0 lg:col-span-5">
+            <div className="flex justify-between gap-4">
+              <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
+                {selectedAttrData.brand}
+              </h3>
+              <div className="flex items-center xs:flex-col">
+                <div className="flex items-center xs:text-center align-center">
+                  {[0, 1, 2, 3, 4].map((rating) => (
+                    <StarIcon
+                      key={rating}
+                      aria-hidden="true"
+                      className={classNames(
+                        reviews?.review?.ratingAverage > rating
+                          ? 'text-yellow-400 h-3 w-3'
+                          : 'text-gray-300 h-4 w-4',
+                        'flex-shrink-0'
+                      )}
+                    />
+                  ))}
+                </div>
+                {reviews?.review?.productReviews?.length > 0 ? (
+                  <p className="pl-1 text-xs font-bold">
+                    ({reviews?.review?.ratingAverage})
+                  </p>
+                ) : (
+                  <p className="pl-1 text-xs font-bold">(0)</p>
+                )}
+              </div>
+            </div>
+
+            <h1 className="font-medium tracking-tight text-black font-36">
+              {selectedAttrData.name || selectedAttrData.productName}
+            </h1>
+            <p className="mt-0 text-sm text-black uppercase sm:text-xs sm:mt-1">
+              <strong>{GENERAL_REFERENCE}:</strong> {selectedAttrData.stockCode}
+            </p>
+            <div className="my-4">
+              <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
+              {updatedProduct ? (
+                <p className="text-2xl font-bold text-black sm:text-xl font-24">
+                  {selectedAttrData?.price?.formatted?.withTax}
+                  {selectedAttrData?.listPrice?.raw.tax > 0 ? (
                     <>
-                      <span className="sr-only">{selectedAttrData.name}</span>
-                      <span className="relative">
-                        {image.image ? (
-                          <div className="image-container">
-                            <Image
-                              priority
-                              src={
-                                generateUri(image.image, 'h=650&fm=webp') ||
-                                IMG_PLACEHOLDER
-                              }
-                              alt={selectedAttrData.name}
-                              className="o`bject-cover object-center w-full h-full image"
-                              sizes="320 600 1000"
-                              width={600}
-                              height={1000}
-                              onClick={(ev: any) => handleImgLoadT(image.image)}
-                              quality="60"
-                              blurDataURL={
-                                `${image.image}?h=600&w=400&fm=webp` ||
-                                IMG_PLACEHOLDER
-                              }
-                            />
-                          </div>
-                        ) : (
-                          <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
-                        )}
+                      <span className="px-2 text-sm font-medium text-gray-900 line-through">
+                        {product?.listPrice?.formatted?.withTax}
+                      </span>
+                      <span className="text-sm font-medium text-red-500">
+                        {discount}% off
                       </span>
                     </>
-                  )}
-                </Tab>
-              ))}
-            </Tab.List>
-          </Tab.Group>
-        )}
-
-        {/* Product info */}
-        <div className="px-4 mt-2 sm:mt-10 sm:px-8 lg:mt-0 lg:col-span-5">
-          <div className="flex justify-between gap-4">
-            <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
-              {selectedAttrData.brand}
-            </h3>
-            <div className="flex items-center xs:flex-col">
-              <div className="flex items-center xs:text-center align-center">
-                {[0, 1, 2, 3, 4].map((rating) => (
-                  <StarIcon
-                    key={rating}
-                    aria-hidden="true"
-                    className={classNames(
-                      reviews?.review?.ratingAverage > rating
-                        ? 'text-yellow-400 h-3 w-3'
-                        : 'text-gray-300 h-4 w-4',
-                      'flex-shrink-0'
-                    )}
-                  />
-                ))}
-              </div>
-              {reviews?.review?.productReviews?.length > 0 ? (
-                <p className="pl-1 text-xs font-bold">
-                  ({reviews?.review?.ratingAverage})
+                  ) : null}
                 </p>
-              ) : (
-                <p className="pl-1 text-xs font-bold">(0)</p>
-              )}
+              ) : null}
             </div>
-          </div>
 
-          <h1 className="font-medium tracking-tight text-black font-36">
-            {selectedAttrData.name || selectedAttrData.productName}
-          </h1>
-          <p className="mt-0 text-sm text-black uppercase sm:text-xs sm:mt-1">
-            <strong>{GENERAL_REFERENCE}:</strong> {selectedAttrData.stockCode}
-          </p>
-          <div className="my-4">
-            <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
-            {updatedProduct ? (
-              <p className="text-2xl font-bold text-black sm:text-xl font-24">
-                {selectedAttrData?.price?.formatted?.withTax}
-                {selectedAttrData?.listPrice?.raw.tax > 0 ? (
-                  <>
-                    <span className="px-2 text-sm font-medium text-gray-900 line-through">
-                      {product?.listPrice?.formatted?.withTax}
-                    </span>
-                    <span className="text-sm font-medium text-red-500">
-                      {discount}% off
-                    </span>
-                  </>
-                ) : null}
-              </p>
-            ) : null}
-          </div>
-
-          <AttributesHandler
-            product={product}
-            variant={selectedAttrData}
-            setSelectedAttrData={setSelectedAttrData}
-            variantInfo={variantInfo}
-            handleSetProductVariantInfo={handleSetProductVariantInfo}
-            sizeInit={sizeInit}
-            setSizeInit={setSizeInit}
-          />
-
-          <h4 className="h-5 my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
-            {PRODUCT_AVAILABILITY}:{' '}
-            {product?.currentStock > 0 ? (
-              <span>{PRODUCT_IN_STOCK}</span>
-            ) : (
-              <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
-            )}
-          </h4>
-          {promotions?.promotions?.availablePromotions?.length > 0 && (
-            <AvailableOffers
-              currency={product?.price}
-              offers={promotions?.promotions}
+            <AttributesHandler
+              product={product}
+              variant={selectedAttrData}
+              setSelectedAttrData={setSelectedAttrData}
+              variantInfo={variantInfo}
+              handleSetProductVariantInfo={handleSetProductVariantInfo}
+              sizeInit={sizeInit}
+              setSizeInit={setSizeInit}
             />
-          )}
-          {updatedProduct ? (
-            <>
-              {isEngravingAvailable ? (
-                <>
-                  <div
-                    className="flex w-auto mt-3 text-sm underline cursor-pointer hover:opacity-80 text-pink"
-                    onClick={() => showEngravingModal(true)}
-                  >
-                    {PRODUCT_PERSONALIZATION_TITLE}
-                  </div>
+
+            <h4 className="h-5 my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
+              {PRODUCT_AVAILABILITY}:{' '}
+              {product?.currentStock > 0 ? (
+                <span>{PRODUCT_IN_STOCK}</span>
+              ) : (
+                <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
+              )}
+            </h4>
+            {promotions?.promotions?.availablePromotions?.length > 0 && (
+              <AvailableOffers
+                currency={product?.price}
+                offers={promotions?.promotions}
+              />
+            )}
+            {updatedProduct ? (
+              <>
+                {isEngravingAvailable ? (
+                  <>
+                    <div
+                      className="flex w-auto mt-3 text-sm underline cursor-pointer hover:opacity-80 text-pink"
+                      onClick={() => showEngravingModal(true)}
+                    >
+                      {PRODUCT_PERSONALIZATION_TITLE}
+                    </div>
+                    <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                      <Button
+                        className="hidden sm:block "
+                        title={buttonConfig.title}
+                        action={buttonConfig.action}
+                        validateAction={buttonConfig.validateAction}
+                        buttonType={buttonConfig.type || 'cart'}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!isInWishList) {
+                            handleWishList()
+                          }
+                        }}
+                        className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                      >
+                        {isInWishList ? (
+                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                        ) : (
+                          <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                        )}
+                        <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
                   <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                     <Button
-                      className="hidden sm:block "
                       title={buttonConfig.title}
                       action={buttonConfig.action}
                       validateAction={buttonConfig.validateAction}
@@ -901,210 +934,185 @@ export default function ProductView({
                       <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
                     </button>
                   </div>
-                </>
-              ) : (
-                <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                  <Button
-                    title={buttonConfig.title}
-                    action={buttonConfig.action}
-                    validateAction={buttonConfig.validateAction}
-                    buttonType={buttonConfig.type || 'cart'}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!isInWishList) {
-                        handleWishList()
-                      }
-                    }}
-                    className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                  >
-                    {isInWishList ? (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                    ) : (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                    )}
-                    <span className="sr-only">{BTN_ADD_TO_FAVORITES}</span>
-                  </button>
-                </div>
-              )}
-            </>
-          ) : null}
-          <div className="flex-1 order-6 w-full sm:order-5">
-            <DeliveryInfo
-              product={product}
-              grpData={attrGroup}
-              config={config}
-            />
-          </div>
-          <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
-            <h2 id="details-heading" className="sr-only">
-              {PRICEMATCH_ADDITIONAL_DETAILS}
-            </h2>
-            <ProductDetails
-              product={product}
-              description={product?.description || product?.shortDescription}
-            />
-            <p className="mt-6 text-lg text-gray-900 sm:mt-10">
-              {selectedAttrData?.currentStock > 0
-                ? product?.deliveryMessage
-                : product?.stockAvailabilityMessage}
-            </p>
-          </section>
-        </div>
-      </div>
-      <div className="flex flex-col section-devider"></div>
-      <div className="flex flex-col px-0 mx-auto sm:container page-container">
-        <ProductSpecifications
-          attrGroup={attrGroup}
-          product={product}
-          deviceInfo={deviceInfo}
-        />
-      </div>
-
-      {product?.componentProducts && (
-        <Bundles
-          price={product?.price?.formatted?.withTax}
-          products={product?.componentProducts}
-          productBundleUpdate={handleProductBundleUpdate}
-        />
-      )}
-      {relatedProducts?.relatedProducts?.filter((x: any) =>
-        matchStrings(x?.relatedType, 'ALSOLIKE', true)
-      )?.length > 0 ? (
-        <>
-          <div className="flex flex-col section-devider"></div>
-          <div className="flex flex-col px-0 mx-auto sm:container page-container">
-            <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
-              You May Also Like
-            </h3>
-            <RelatedProductWithGroup
-              products={relatedProducts?.relatedProducts}
-              productPerColumn={6}
-              deviceInfo={deviceInfo}
-              maxBasketItemsCount={maxBasketItemsCount}
-            />
-          </div>
-        </>
-      ) : null}
-
-      <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
-      {reviews?.review?.productReviews?.length > 0 && (
-        <>
-          <div
-            className="flex flex-col section-devider"
-            aria-hidden="true"
-          ></div>
-          <Reviews className="mx-auto md:w-4/5" data={reviews?.review} />
-        </>
-      )}
-      <div className="flex flex-col section-devider" aria-hidden="true"></div>
-      <div className="px-6 pb-5 mx-auto mb-5 sm:px-0 sm:container sm:pb-10 sm:mb-10">
-        {reviewInput && <ReviewInput productId={product?.recordId} />}
-      </div>
-      {isEngravingAvailable && (
-        <Engraving
-          show={isEngravingOpen}
-          submitForm={handleEngravingSubmit}
-          onClose={() => showEngravingModal(false)}
-          handleToggleDialog={handleTogglePersonalizationDialog}
-          product={product}
-        />
-      )}
-
-      <PriceMatch
-        show={isPriceMatchModalShown}
-        onClose={showPriceMatchModal}
-        productName={product?.name}
-        productImage={
-          product?.images?.length ? product?.images[0]?.image : null
-        }
-        productId={product?.id}
-        stockCode={product?.stockCode}
-        ourCost={product?.price?.raw?.withTax}
-        rrp={product?.listPrice?.raw?.withTax}
-        ourDeliveryCost={product?.price?.raw?.tax}
-      />
-
-      <div className="flex flex-col w-full">
-        <div className="flex flex-col">
-          <div className="section-devider"></div>
-        </div>
-        <div className="px-4 mx-auto sm:container page-container sm:px-6">
-          <ProductDescription seoInfo={attrGroup} />
-        </div>
-      </div>
-
-      {previewImg ? (
-        <Transition.Root show={previewImg != undefined} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative mt-4 z-999 top-4"
-            onClose={handlePreviewClose}
-          >
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div
-                className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
-                onClick={handlePreviewClose}
+                )}
+              </>
+            ) : null}
+            <div className="flex-1 order-6 w-full sm:order-5">
+              <DeliveryInfo
+                product={product}
+                grpData={attrGroup}
+                config={config}
               />
-            </Transition.Child>
+            </div>
+            <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
+              <h2 id="details-heading" className="sr-only">
+                {PRICEMATCH_ADDITIONAL_DETAILS}
+              </h2>
+              <ProductDetails
+                product={product}
+                description={product?.description || product?.shortDescription}
+              />
+              <p className="mt-6 text-lg text-gray-900 sm:mt-10">
+                {selectedAttrData?.currentStock > 0
+                  ? product?.deliveryMessage
+                  : product?.stockAvailabilityMessage}
+              </p>
+            </section>
+          </div>
+        </div>
+        <div className="flex flex-col section-devider"></div>
+        <div className="flex flex-col px-0 mx-auto sm:container page-container">
+          <ProductSpecifications
+            attrGroup={attrGroup}
+            product={product}
+            deviceInfo={deviceInfo}
+          />
+        </div>
 
-            <div className="fixed top-0 left-0 w-full overflow-y-auto z-9999">
-              <div className="flex items-end justify-center h-screen min-h-screen p-4 mx-auto text-center sm:items-center sm:p-0">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  enterTo="opacity-100 translate-y-0 sm:scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-                  <div className="relative px-4 pt-5 pb-4 mx-auto overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-2/6 sm:p-2">
-                    <div>
-                      <div className="flex items-center">
-                        <button
-                          type="button"
-                          className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
-                          onClick={handlePreviewClose}
-                        >
-                          <span className="sr-only">{CLOSE_PANEL}</span>
-                          <XMarkIcon
-                            className="w-6 h-6 text-black"
-                            aria-hidden="true"
-                          />
-                        </button>
-                      </div>
-                      <div className="text-center">
-                        {previewImg && (
-                          <div key={previewImg.name + 'tab-panel'}>
-                            <ImageZoom
-                              src={previewImg || IMG_PLACEHOLDER}
-                              alt={previewImg.name}
-                              blurDataURL={
-                                `${previewImg}?h=600&w=400&fm=webp` ||
-                                IMG_PLACEHOLDER
-                              }
+        {product?.componentProducts && (
+          <Bundles
+            price={product?.price?.formatted?.withTax}
+            products={product?.componentProducts}
+            productBundleUpdate={handleProductBundleUpdate}
+          />
+        )}
+        {relatedProducts?.relatedProducts?.filter((x: any) =>
+          matchStrings(x?.relatedType, 'ALSOLIKE', true)
+        )?.length > 0 ? (
+          <>
+            <div className="flex flex-col section-devider"></div>
+            <div className="flex flex-col px-0 mx-auto sm:container page-container">
+              <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
+                You May Also Like
+              </h3>
+              <RelatedProductWithGroup
+                products={relatedProducts?.relatedProducts}
+                productPerColumn={6}
+                deviceInfo={deviceInfo}
+                maxBasketItemsCount={maxBasketItemsCount}
+              />
+            </div>
+          </>
+        ) : null}
+
+        <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
+        {reviews?.review?.productReviews?.length > 0 && (
+          <>
+            <div
+              className="flex flex-col section-devider"
+              aria-hidden="true"
+            ></div>
+            <Reviews className="mx-auto md:w-4/5" data={reviews?.review} />
+          </>
+        )}
+        <div className="flex flex-col section-devider" aria-hidden="true"></div>
+        <div className="px-6 pb-5 mx-auto mb-5 sm:px-0 sm:container sm:pb-10 sm:mb-10">
+          {reviewInput && <ReviewInput productId={product?.recordId} />}
+        </div>
+        {isEngravingAvailable && (
+          <Engraving
+            show={isEngravingOpen}
+            submitForm={handleEngravingSubmit}
+            onClose={() => showEngravingModal(false)}
+            handleToggleDialog={handleTogglePersonalizationDialog}
+            product={product}
+          />
+        )}
+
+        <PriceMatch
+          show={isPriceMatchModalShown}
+          onClose={showPriceMatchModal}
+          productName={product?.name}
+          productImage={
+            product?.images?.length ? product?.images[0]?.image : null
+          }
+          productId={product?.id}
+          stockCode={product?.stockCode}
+          ourCost={product?.price?.raw?.withTax}
+          rrp={product?.listPrice?.raw?.withTax}
+          ourDeliveryCost={product?.price?.raw?.tax}
+        />
+
+        <div className="flex flex-col w-full">
+          <div className="flex flex-col">
+            <div className="section-devider"></div>
+          </div>
+          <div className="px-4 mx-auto sm:container page-container sm:px-6">
+            <ProductDescription seoInfo={attrGroup} />
+          </div>
+        </div>
+
+        {previewImg ? (
+          <Transition.Root show={previewImg != undefined} as={Fragment}>
+            <Dialog
+              as="div"
+              className="relative mt-4 z-999 top-4"
+              onClose={handlePreviewClose}
+            >
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div
+                  className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+                  onClick={handlePreviewClose}
+                />
+              </Transition.Child>
+
+              <div className="fixed top-0 left-0 w-full overflow-y-auto z-9999">
+                <div className="flex items-end justify-center h-screen min-h-screen p-4 mx-auto text-center sm:items-center sm:p-0">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  >
+                    <div className="relative px-4 pt-5 pb-4 mx-auto overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-2/6 sm:p-2">
+                      <div>
+                        <div className="flex items-center">
+                          <button
+                            type="button"
+                            className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
+                            onClick={handlePreviewClose}
+                          >
+                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <XMarkIcon
+                              className="w-6 h-6 text-black"
+                              aria-hidden="true"
                             />
-                          </div>
-                        )}
+                          </button>
+                        </div>
+                        <div className="text-center">
+                          {previewImg && (
+                            <div key={previewImg.name + 'tab-panel'}>
+                              <ImageZoom
+                                src={previewImg || IMG_PLACEHOLDER}
+                                alt={previewImg.name}
+                                blurDataURL={
+                                  `${previewImg}?h=600&w=400&fm=webp` ||
+                                  IMG_PLACEHOLDER
+                                }
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Transition.Child>
+                  </Transition.Child>
+                </div>
               </div>
-            </div>
-          </Dialog>
-        </Transition.Root>
-      ) : null}
-    </div>
+            </Dialog>
+          </Transition.Root>
+        ) : null}
+      </div>
+    </>
   )
 }
