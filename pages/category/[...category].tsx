@@ -195,7 +195,10 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: slug } }],
+    [
+      '/api/catalog/products',
+      { ...state, ...{ slug: slug, isCategory: true } },
+    ],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -213,12 +216,11 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
       categoryId: category.id,
     },
   })
+  const [productDataToPass, setProductDataToPass] = useState(products)
 
   useEffect(() => {
     if (category.id !== state.categoryId)
       dispatch({ type: SET_CATEGORY_ID, payload: category.id })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category.id])
 
   useEffect(() => {
@@ -230,7 +232,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
-        if (state?.currentPage > 1) {
+        if (state?.currentPage > 1 && IS_INFINITE_SCROLL) {
           dataClone.products.results = [
             ...prevData?.products?.results,
             ...dataClone?.products?.results,
@@ -241,8 +243,14 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     }
     //}
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length])
+
+  useEffect(() => {
+    const data = IS_INFINITE_SCROLL
+      ? productListMemory?.products
+      : productListMemory?.products //props?.products
+    setProductDataToPass(data)
+  }, [productListMemory?.products, products])
 
   const handlePageChange = (page: any) => {
     router.push(
@@ -299,7 +307,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     )
   }
 
-  const productDataToPass = productListMemory.products
   /*const productDataToPass =
     IS_INFINITE_SCROLL && productListMemory.products?.results?.length
       ? productListMemory.products
@@ -414,7 +421,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     )}
                     <ProductGridWithFacet
                       products={productDataToPass}
-                      currentPage={products.currentPage}
+                      currentPage={state?.currentPage}
                       handlePageChange={handlePageChange}
                       handleInfiniteScroll={handleInfiniteScroll}
                       deviceInfo={deviceInfo}
@@ -426,7 +433,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                 <div className="sm:col-span-12 p-[1px] sm:mt-4 mt-2">
                   <ProductGrid
                     products={productDataToPass}
-                    currentPage={products.currentPage}
+                    currentPage={state?.currentPage}
                     handlePageChange={handlePageChange}
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
