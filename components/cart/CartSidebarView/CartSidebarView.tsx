@@ -8,6 +8,7 @@ import { useEffect, useState, Fragment } from 'react'
 import {
   matchStrings,
   priceFormat,
+  stringFormat,
   tryParseJson,
 } from '@framework/utils/parse-util'
 import useCart from '@components/services/cart'
@@ -18,6 +19,7 @@ import {
   MinusSmallIcon,
   ChevronDownIcon,
   EyeIcon,
+  CheckCircleIcon,
 } from '@heroicons/react/24/outline'
 import PromotionInput from '../PromotionInput'
 import RelatedProducts from '@components/product/RelatedProducts'
@@ -27,6 +29,7 @@ import { Disclosure } from '@headlessui/react'
 
 import Image from 'next/image'
 import {
+  Messages,
   NEXT_CREATE_WISHLIST,
   NEXT_GET_ORDER_RELATED_PRODUCTS,
   NEXT_GET_ALT_RELATED_PRODUCTS,
@@ -57,6 +60,8 @@ import useTranslation, {
   ADDED_TO_WISH,
   GENERAL_PERSONALISATION,
   PERSONALISATION,
+  BTN_ADD_TO_WISHLIST,
+  WISHLIST_SUCCESS_MESSAGE,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { EmptyGuid } from '@components/utils/constants'
@@ -70,6 +75,7 @@ import { IExtraProps } from '@components/common/Layout/Layout'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   deviceInfo,
+  maxBasketItemsCount,
 }: any) => {
   const {
     addToWishlist,
@@ -118,6 +124,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   })
   const content = useTranslation()
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false)
+  const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
     useState(null)
@@ -394,14 +401,21 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
     element.classList.add('overlow-y-auto-p')
   }
   const insertToLocalWishlist = (product: any) => {
+    setIsWishlistClicked(true)
     addToWishlist(product)
     // setIsLoading({ action: 'move-wishlist', state: true })
     handleItem(product, 'delete')
     // setMovedProducts((prev: any) => [...prev, { product: product, msg: MOVED_TO_WISHLIST }])
     // setIsLoading({ action: '', state: false })
-    setAlert({ type: 'success', msg: ADDED_TO_WISH })
-    openWishlist()
+    // setAlert({ type: 'success', msg: ADDED_TO_WISH })
+    // openWishlist()
+    openWishlistAfter()
   }
+
+  const openWishlistAfter = () => {
+    setTimeout(() => openWishlist(), 1000)
+  }
+
   const handleWishList = async (product: any | Array<any>) => {
     closeModal()
     const accessToken = localStorage.getItem('user')
@@ -511,19 +525,29 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
         qty: -1,
       }
       if (type === 'increase') {
-        data.qty = 1
-        if (currentPage) {
-          if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'select_quantity', {
-              category: product?.categoryItems?.length
-                ? product?.categoryItems[0]?.categoryName
-                : '',
-              final_quantity: data.qty,
-              current_page: currentPage,
-              number_of_plus_clicked: 1,
-              number_of_minus_clicked: 0,
-            })
+        if (product.qty < maxBasketItemsCount) {
+          data.qty = 1
+          if (currentPage) {
+            if (typeof window !== 'undefined') {
+              recordGA4Event(window, 'select_quantity', {
+                category: product?.categoryItems?.length
+                  ? product?.categoryItems[0]?.categoryName
+                  : '',
+                final_quantity: data.qty,
+                current_page: currentPage,
+                number_of_plus_clicked: 1,
+                number_of_minus_clicked: 0,
+              })
+            }
           }
+        } else {
+          setAlert({
+            type: 'error',
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
+          })
+          return
         }
       }
       if (type === 'delete') {
@@ -782,6 +806,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                     }
                                     productPerColumn={1.7}
                                     deviceInfo={deviceInfo}
+                                    maxBasketItemsCount={maxBasketItemsCount}
                                   />
                                 </div>
                               )}
@@ -994,7 +1019,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                               )}
                                           </div>
                                         </div>
-                                        <div className="flex flex-col justify-start mt-2 text-left">
+                                        <div className="flex flex-row justify-between mt-2 \text-left">
                                           <button
                                             type="button"
                                             className="font-medium text-left text-red-300 hover:text-red-500"
@@ -1005,12 +1030,29 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                           >
                                             {GENERAL_REMOVE}
                                           </button>
+
+                                          <button
+                                            className="font-medium text-left text-gray-700 hover:text-indigo-500"
+                                            onClick={() => {
+                                              insertToLocalWishlist(product)
+                                            }}
+                                          >
+                                            {BTN_ADD_TO_WISHLIST}
+                                          </button>
                                         </div>
                                       </div>
                                     </div>
                                   </li>
                                 )
                               })}
+                            {isWishlistClicked && (
+                              <div className="items-center justify-center w-full h-full py-5 text-xl text-gray-500">
+                                <CheckCircleIcon className="flex items-center justify-center w-full h-12 text-center text-indigo-600" />
+                                <p className="mt-5 text-center">
+                                  {ADDED_TO_WISH}
+                                </p>
+                              </div>
+                            )}
                           </ul>
                         </div>
                       </div>
@@ -1091,7 +1133,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                     </Transition>
 
                     {!isEmpty && (
-                      <div className="sticky bottom-0 pt-4 pb-1 mt-2 ml-5 bg-white">
+                      <div className="sticky bottom-0 pt-4 pb-1 mt-2 ml-5 mr-5  bg-white">
                         <div className="-mt-3">
                           <Disclosure defaultOpen>
                             {({ open }) => (
@@ -1107,7 +1149,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                   leaveFrom="transform scale-100 opacity-100"
                                   leaveTo="transform scale-95 opacity-0"
                                 >
-                                  <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                  <Disclosure.Panel className="/px-4 pt-4 pb-2 text-sm text-gray-500">
                                     <PromotionInput
                                       basketPromos={basketPromos}
                                       items={cartItems}

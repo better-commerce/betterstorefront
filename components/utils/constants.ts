@@ -195,6 +195,8 @@ export module Messages {
         /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/
       export const FIND_EMPTY_CHARACTERS = /\s/g
       export const REPLACE_DEFAULT_UPI_WEB_PREFIX_URL = /upi:\/\//g
+      export const CHARACTERS_AND_ALPHABETS =
+        /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g
     }
 
     export const Login: any = {
@@ -295,7 +297,8 @@ export module Messages {
     GENERIC_ERROR:
       'Your request could not be processed. Please try again after sometime.',
     CART_EMPTY: 'Your cart is empty',
-    CART_ITEM_QTY_LIMIT_EXCEEDED: 'Max allowed quantity is 5.',
+    CART_ITEM_QTY_LIMIT_EXCEEDED:
+      'Max allowed quantity is {maxBasketItemsCount}.',
     BASKET_VALIDATION_FAILED: 'Basket validation failed',
     'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
   }

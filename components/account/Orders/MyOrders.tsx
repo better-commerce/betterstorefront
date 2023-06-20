@@ -218,9 +218,9 @@ export default function MyOrders({
                     ) : (
                       <>
                         <div className="flex flex-col items-start justify-center w-full px-4 py-12 sm:items-center max-acc-container sm:px-0">
-                          <div className="my-2 text-2xl font-semibold text-black">
+                          <h1 className="my-2 text-2xl font-semibold text-black">
                             No Order Available
-                          </div>
+                          </h1>
                           <div className="flex w-60 mt-5 sm:flex-col">
                             <Link legacyBehavior passHref href="/">
                               <a className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">

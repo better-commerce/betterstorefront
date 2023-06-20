@@ -17,6 +17,7 @@ const Sidebar: FC<React.PropsWithChildren<SidebarProps & IExtraProps>> = ({
   children,
   onClose,
   deviceInfo,
+  maxBasketItemsCount = 0,
 }) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const sidebarRef = useRef() as React.MutableRefObject<HTMLDivElement>
