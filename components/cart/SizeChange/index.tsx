@@ -30,9 +30,9 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
   const [defaultSize, setDefaultSize] = useState<any>(null)
 
   useEffect(() => {
-    let stockCodeBreakArr: any = product?.stockCode?.split('-')
-    let sizeFromStockCode = stockCodeBreakArr?.length
-      ? stockCodeBreakArr[stockCodeBreakArr?.length - 1]
+    let arrStockCode: any = product?.stockCode?.split('-')
+    let sizeFromStockCode = arrStockCode?.length
+      ? arrStockCode[arrStockCode?.length - 1]
       : ''
     setDefaultSize(sizeFromStockCode.toLowerCase())
   }, [open])
