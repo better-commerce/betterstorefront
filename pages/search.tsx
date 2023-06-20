@@ -168,7 +168,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
-        if (state.currentPage > 1) {
+        if (state.currentPage > 1 && IS_INFINITE_SCROLL) {
           dataClone.products.results = [
             ...prevData.products.results,
             ...dataClone.products.results,
