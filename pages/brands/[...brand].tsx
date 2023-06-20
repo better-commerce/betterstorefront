@@ -165,24 +165,24 @@ function BrandDetailPage({
   )
 
   useEffect(() => {
-    if (IS_INFINITE_SCROLL) {
-      if (
-        data?.products?.currentPage !==
-          productListMemory?.products?.currentPage ||
-        data?.products?.total !== productListMemory?.products?.total
-      ) {
-        setProductListMemory((prevData: any) => {
-          let dataClone = { ...data }
-          if (state.currentPage > 1) {
-            dataClone.products.results = [
-              ...prevData?.products?.results,
-              ...dataClone?.products?.results,
-            ]
-          }
-          return dataClone
-        })
-      }
+    //if (IS_INFINITE_SCROLL) {
+    if (
+      data?.products?.currentPage !==
+        productListMemory?.products?.currentPage ||
+      data?.products?.total !== productListMemory?.products?.total
+    ) {
+      setProductListMemory((prevData: any) => {
+        let dataClone = { ...data }
+        if (state.currentPage > 1) {
+          dataClone.products.results = [
+            ...prevData?.products?.results,
+            ...dataClone?.products?.results,
+          ]
+        }
+        return dataClone
+      })
     }
+    //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length])
@@ -258,9 +258,10 @@ function BrandDetailPage({
     recordEvent(EVENTS.FreeText)
   })
 
-  const productDataToPass = IS_INFINITE_SCROLL
+  const productDataToPass = productListMemory.products
+  /*const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory.products
-    : data.products
+    : data.products*/
 
   // IMPLEMENT HANDLING FOR NULL OBJECT
   if (brandDetails === null) {
