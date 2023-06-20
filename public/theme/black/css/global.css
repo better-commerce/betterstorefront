@@ -634,3 +634,16 @@ p {
   line-height: 24px;
   color: #212530;
 }
+
+/* footer css */
+.mob-menu-icon{
+  color: var(--menu-icon-color) !important;
+}
+
+
+/* main css start */
+.mob-img-height{
+  min-height: 0 !important;
+  height: auto !important;
+}
+/* main css end */

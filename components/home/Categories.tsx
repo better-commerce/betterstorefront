@@ -60,7 +60,7 @@ function Categories({ data, deviceInfo }: any) {
 
   return (
     <Swiper
-      slidesPerView={3.2}
+      slidesPerView={1.5}
       spaceBetween={10}
       navigation={true}
       loop={true}
