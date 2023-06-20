@@ -12,63 +12,55 @@ export default function CategoryList(props: any) {
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <main className="w-full px-4 mx-auto sm:px-0 md:w-4/5 lg:px-0">
-      <section aria-labelledby="products-heading" className="mt-8">
-        <h1 className="font-bold tracking-tight text-gray-900 uppercase">
+      <section aria-labelledby="products-heading ">
+        <h1 className="tracking-tight  mt-4 dark:text-gray-700">
           {SHOP_BY_CATEGORY}
         </h1>
         {props?.data.length > 0 && (
-          <div className="flow-root mt-1 sm:mt-0">
+          <div className="flow-root mt-1 sm:mt-0 ">
             <div className="my-0">
-              <div className="box-content relative">
-                <div className="grid grid-cols-2 py-1 sm:py-6 sm:gap-y-8 gap-y-6 sm:grid-cols-5 gap-x-6 lg:grid-cols-6 xl:gap-x-8">
+              <div className="box-content relative px-0 mt-2">
+                <div className="grid gap-x-3 gap-y-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-4 my-2 mb-6 sm:my-4">
                   {props?.data?.map((category: any, key: number) => (
-                    <Link key={key} href={`/${category.link}`}>
-                      <span
-                        key={category.id}
-                        className="relative flex flex-col w-full p-6 overflow-hidden sm:w-56 sm:h-80 h-60 hover:opacity-75 xl:w-auto"
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-gray-100 opacity-90"
-                        />
-
-                        <span aria-hidden="true" className="absolute inset-0">
+                    <div key={key} className="bg-gray-100 border border-gray-300 hover:border-gray-400 ">
+                      <div className="relative group">
+                        <Link key={key} href={`/${category.link}`}>
                           {category?.image ? (
-                            <div className="image-container">
+                            <div className=" relative overflow-hidden bg-gray-100 aspect-w-1 aspect-h-1 group-hover:bg-gray-200 ">
                               <Image
                                 src={
-                                  generateUri(
-                                    category?.image,
-                                    'h=400&fm=webp'
-                                  ) || IMG_PLACEHOLDER
+                                  `${category?.image}?fm=webp&h=800&w=400` ||
+                                  IMG_PLACEHOLDER
                                 }
                                 alt={category.name}
-                                height={20}
-                                width={20}
-                                className="object-cover object-center w-full h-full group-hover:opacity-75 image"
-                                style={css}
+                                className="object-cover object-center w-full h-full sm:h-full"
+                                layout="responsive"
+                                width={600}
+                                height={900}
                               ></Image>
                             </div>
                           ) : (
-                            <Image
-                              src={IMG_PLACEHOLDER}
-                              alt={category.name}
-                              height={20}
-                              width={20}
-                              className="object-cover object-center w-full h-full group-hover:opacity-75 image"
-                              style={css}
-                            ></Image>
+                            <div className=" relative overflow-hidden bg-gray-100 aspect-w-1 aspect-h-1 group-hover:bg-gray-200 ">
+                              <Image
+                                src={IMG_PLACEHOLDER}
+                                alt={category.name}
+                                className="object-cover object-center w-full h-full sm:h-full"
+                                layout="responsive"
+                                width={600}
+                                height={900}
+                              ></Image>
+                            </div>
                           )}
-                        </span>
-                        <span
-                          aria-hidden="true"
-                          className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 opacity-40"
-                        />
-                        <h2 className="relative mt-auto text-sm font-bold text-center text-white uppercase font-18">
-                          {category.name}
-                        </h2>
-                      </span>
-                    </Link>
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-x-0 bottom-4 h-1/3 opacity-40"
+                          />
+                          <h2 className="relative w-full flex justify-center items-center lg:mt-auto  text-sm text-center text-gray-700 capitalize sm:text-lg py-3 bg-white tracking-wide bg-opacity-70 bg-nav dark:text-gray-700">
+                            {category.name}
+                          </h2>
+                        </Link>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -78,9 +70,9 @@ export default function CategoryList(props: any) {
         {props?.data.length == 0 && (
           <>
             <div className="flex flex-col py-32 text-center">
-              <h2 className="w-full mx-auto text-4xl font-bold text-gray-200">
+              <h1 className="w-full mx-auto text-4xl font-bold text-gray-200">
                 No Category Available
-              </h2>
+              </h1>
             </div>
           </>
         )}
