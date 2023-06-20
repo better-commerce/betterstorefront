@@ -168,11 +168,11 @@ export default function CollectionPage(props: any) {
 
   const [productListMemory, setProductListMemory] = useState({
     products: {
-      results: [],
+      results: [], // current page result set
       sortList: [],
-      pages: 0,
-      total: 0,
-      currentPage: 1,
+      pages: 0, // total number of pages
+      total: 0, // total numer of records
+      currentPage: 1, // current page
       filters: [],
       collectionId: props?.id,
     },

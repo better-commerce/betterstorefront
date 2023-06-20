@@ -94,7 +94,7 @@ export default function Grid({
             ))}
           </div>
 
-          {products?.currentPage < products?.pages && (
+          {/*{products?.currentPage < products?.pages && (
             <div className="flex justify-center flex-1 mx-auto">
               <button
                 className="px-6 py-2 my-6 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white"
@@ -103,14 +103,14 @@ export default function Grid({
                 Load More
               </button>
             </div>
-          )}
-          {/*{products.pages > 1 && (
+          )}*/}
+          {products.pages > 1 && (
             <Pagination
               currentPage={currentPage}
               onPageChange={handlePageChange}
               pageCount={products.pages}
             />
-          )}*/}
+          )}
         </>
       )}
     </>
