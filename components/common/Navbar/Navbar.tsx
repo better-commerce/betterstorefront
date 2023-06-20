@@ -298,8 +298,8 @@ const Navbar: FC<Props & IExtraProps> = ({
             leaveTo="-translate-x-full"
           >
             <div className="relative flex flex-col w-full max-w-xs pb-12 overflow-y-auto bg-white shadow-xl z-9999">
-              <div className="flex item-center px-4 pt-5 pb-2">
-                <Logo />
+              <div className="flex item-center px-4 pt-16 pb-2">
+                {/* <Logo /> */}
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
