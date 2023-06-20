@@ -22,7 +22,7 @@ export default function ProductSort({
     (item: any) => item.key === routerSortOption
   )[0]
   return (
-    <Menu as="div" className="relative flex mb-4">
+    <Menu as="div" className="relative flex mb-0 sm:mb-4 pr-4 sm:pr-0">
       <Menu.Button className="inline-flex justify-center font-semibold text-black text-md group hover:text-gray-900">
         {GENERAL_SORT}{' '}
         <ChevronDownIcon

@@ -38,6 +38,7 @@ export class CODPaymentButton extends BasePaymentButton {
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
       basketOrderInfo,
+      uiContext,
       dispatchState,
       true
     )
@@ -90,7 +91,7 @@ export class CODPaymentButton extends BasePaymentButton {
               dispatchState: Function
             ) =>
               that.onPay(
-                paymentMethod,
+                that.state.paymentMethod,
                 basketOrderInfo,
                 uiContext,
                 dispatchState

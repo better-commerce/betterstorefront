@@ -408,7 +408,7 @@ export default function SizeInline({
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                 >
-                  <Dialog.Panel className="w-screen max-w-xl pointer-events-auto side-panel-lg">
+                  <Dialog.Panel className="w-screen max-w-lg pointer-events-auto side-panel-lg">
                     <div className="relative z-50 flex flex-col h-full bg-white shadow-xl">
                       <div className="px-0 py-3 sm:px-0">
                         <div className="flex pb-2 border-b border-gray-200">

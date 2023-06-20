@@ -21,6 +21,7 @@ export default function CategoryGrid({
   handlePageChange = () => {},
   handleInfiniteScroll,
   deviceInfo,
+  maxBasketItemsCount,
 }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL =
     process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -32,16 +33,16 @@ export default function CategoryGrid({
           fetchData={handleInfiniteScroll}
           className="w-full mx-auto overflow-hidden sm:pl-4"
           total={products.total}
-          currentNumber={products.results.length}
+          currentNumber={products?.results?.length}
           component={
             <div
               className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-6 ${
-                products.results.length < 6
+                products?.results?.length < 6
                   ? `lg:grid-cols-6`
                   : 'lg:grid-cols-6'
               }`}
             >
-              {!products.results.length &&
+              {!products?.results?.length &&
                 rangeMap(12, (i) => (
                   <div
                     key={i}
@@ -59,6 +60,7 @@ export default function CategoryGrid({
                   key={productIdx}
                   product={product}
                   deviceInfo={deviceInfo}
+                  maxBasketItemsCount={maxBasketItemsCount}
                 />
               ))}
             </div>
@@ -69,10 +71,12 @@ export default function CategoryGrid({
         <>
           <div
             className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 ${
-              products.results.length < 6 ? `lg:grid-cols-5` : 'lg:grid-cols-5'
+              products?.results?.length < 6
+                ? `lg:grid-cols-5`
+                : 'lg:grid-cols-5'
             }`}
           >
-            {!products.results.length &&
+            {!products?.results?.length &&
               rangeMap(12, (i) => (
                 <div
                   key={i}
@@ -85,14 +89,26 @@ export default function CategoryGrid({
                   </div>
                 </div>
               ))}
-            {products.results.map((product: any, productIdx: number) => (
+            {products?.results?.map((product: any, productIdx: number) => (
               <ProductCard
                 key={productIdx}
                 product={product}
                 deviceInfo={deviceInfo}
+                maxBasketItemsCount={maxBasketItemsCount}
               />
             ))}
           </div>
+
+          {/*{products?.currentPage < products?.pages && (
+            <div className="flex justify-center flex-1 mx-auto">
+              <button
+                className="px-6 py-2 my-6 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white"
+                onClick={() => handleInfiniteScroll()}
+              >
+                Load More
+              </button>
+            </div>
+          )}*/}
           {products.pages > 1 && (
             <Pagination
               currentPage={currentPage}

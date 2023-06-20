@@ -21,6 +21,7 @@ import {
   MinusSmallIcon,
 } from '@heroicons/react/24/outline'
 import {
+  Messages,
   NEXT_CREATE_WISHLIST,
   NEXT_BULK_ADD_TO_CART,
   NEXT_UPDATE_CART_INFO,
@@ -62,9 +63,9 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
-import { matchStrings } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { getCurrentPage } from '@framework/utils/app-util'
+import { getCurrentPage, validateAddToCart } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
@@ -93,7 +94,6 @@ const AvailableOffers = dynamic(
 const ReviewInput = dynamic(
   () => import('@components/product/Reviews/ReviewInput')
 )
-
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -123,6 +123,7 @@ export default function ProductView({
   reviews,
   deviceInfo,
   config,
+  maxBasketItemsCount,
 }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const {
@@ -131,6 +132,7 @@ export default function ProductView({
     openWishlist,
     basketId,
     cartItems,
+    setAlert,
     setCartItems,
     user,
     openCart,
@@ -268,6 +270,32 @@ export default function ProductView({
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
+      validateAction: async () => {
+        const cartLineItem: any = cartItems?.lineItems?.find(
+          (o: any) => o.productId === selectedAttrData?.productId?.toUpperCase()
+        )
+        if (selectedAttrData?.currentStock === cartLineItem?.qty) {
+          setAlert({
+            type: 'error',
+            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+          })
+          return false
+        }
+        const isValid = validateAddToCart(
+          selectedAttrData?.productId ?? selectedAttrData?.recordId,
+          cartItems,
+          maxBasketItemsCount
+        )
+        if (!isValid) {
+          setAlert({
+            type: 'error',
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
+          })
+        }
+        return isValid
+      },
       action: async () => {
         const item = await cartHandler().addToCart(
           {
@@ -364,6 +392,34 @@ export default function ProductView({
       ) {
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
+          validateAction: async () => {
+            const cartLineItem: any = cartItems?.lineItems?.find(
+              (o: any) =>
+                o.productId === selectedAttrData?.productId?.toUpperCase()
+            )
+            if (selectedAttrData?.currentStock === cartLineItem?.qty) {
+              setAlert({
+                type: 'error',
+                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+              })
+              return false
+            }
+            const isValid = validateAddToCart(
+              selectedAttrData?.productId ?? selectedAttrData?.recordId,
+              cartItems,
+              maxBasketItemsCount
+            )
+            if (!isValid) {
+              setAlert({
+                type: 'error',
+                msg: stringFormat(
+                  Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+                  { maxBasketItemsCount }
+                ),
+              })
+            }
+            return isValid
+          },
           action: async () => {
             const item = await cartHandler().addToCart(
               {
@@ -732,7 +788,7 @@ export default function ProductView({
 
         {/* Product info */}
         <div className="px-4 mt-2 sm:mt-10 sm:px-8 lg:mt-0 lg:col-span-5">
-          <div className="flex justify-between gap-4">
+          <div className="flex justify-between gap-4 mb-3 sm:mb-0">
             <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
               {selectedAttrData.brand}
             </h3>
@@ -761,7 +817,7 @@ export default function ProductView({
             </div>
           </div>
 
-          <h1 className="font-medium tracking-tight text-black font-36">
+          <h1 className="font-medium tracking-tight text-black font-36 mb-3 sm:mb-0">
             {selectedAttrData.name || selectedAttrData.productName}
           </h1>
           <p className="mt-0 text-sm text-black uppercase sm:text-xs sm:mt-1">
@@ -825,6 +881,7 @@ export default function ProductView({
                       className="hidden sm:block "
                       title={buttonConfig.title}
                       action={buttonConfig.action}
+                      validateAction={buttonConfig.validateAction}
                       buttonType={buttonConfig.type || 'cart'}
                     />
                     <button
@@ -850,6 +907,7 @@ export default function ProductView({
                   <Button
                     title={buttonConfig.title}
                     action={buttonConfig.action}
+                    validateAction={buttonConfig.validateAction}
                     buttonType={buttonConfig.type || 'cart'}
                   />
                   <button
@@ -896,7 +954,7 @@ export default function ProductView({
         </div>
       </div>
       <div className="flex flex-col section-devider"></div>
-      <div className="flex flex-col px-0 mx-auto sm:container page-container">
+      <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
         <ProductSpecifications
           attrGroup={attrGroup}
           product={product}
@@ -916,7 +974,7 @@ export default function ProductView({
       )?.length > 0 ? (
         <>
           <div className="flex flex-col section-devider"></div>
-          <div className="flex flex-col px-0 mx-auto sm:container page-container">
+          <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
             <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
               You May Also Like
             </h3>
@@ -924,6 +982,7 @@ export default function ProductView({
               products={relatedProducts?.relatedProducts}
               productPerColumn={6}
               deviceInfo={deviceInfo}
+              maxBasketItemsCount={maxBasketItemsCount}
             />
           </div>
         </>

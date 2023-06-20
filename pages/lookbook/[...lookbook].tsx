@@ -21,8 +21,9 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { IMG_PLACEHOLDER, SHOP_THE_LOOK } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 
-function LookbookDetailPage({ data, slug, deviceInfo }: any) {
+function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
   const router = useRouter()
   const { basketId, openCart, setCartItems } = useUI()
   const [products, setProducts] = useState(data.products)
@@ -121,6 +122,7 @@ function LookbookDetailPage({ data, slug, deviceInfo }: any) {
           handlePageChange={() => {}}
           handleInfiniteScroll={() => {}}
           deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount(config)}
         />
       </div>
     </div>

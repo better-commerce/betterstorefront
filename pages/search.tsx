@@ -13,6 +13,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -96,7 +97,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
+function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage
@@ -160,23 +161,23 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
   }, [router.query.freeText])
 
   useEffect(() => {
-    if (IS_INFINITE_SCROLL) {
-      if (
-        data.products.currentPage !== productListMemory.products.currentPage ||
-        data.products.total !== productListMemory.products.total
-      ) {
-        setProductListMemory((prevData: any) => {
-          let dataClone = { ...data }
-          if (state.currentPage > 1) {
-            dataClone.products.results = [
-              ...prevData.products.results,
-              ...dataClone.products.results,
-            ]
-          }
-          return dataClone
-        })
-      }
+    //if (IS_INFINITE_SCROLL) {
+    if (
+      data.products.currentPage !== productListMemory.products.currentPage ||
+      data.products.total !== productListMemory.products.total
+    ) {
+      setProductListMemory((prevData: any) => {
+        let dataClone = { ...data }
+        if (state.currentPage > 1 && IS_INFINITE_SCROLL) {
+          dataClone.products.results = [
+            ...prevData.products.results,
+            ...dataClone.products.results,
+          ]
+        }
+        return dataClone
+      })
     }
+    //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.products.results.length])
@@ -305,8 +306,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
   })
 
   const productDataToPass = IS_INFINITE_SCROLL
-    ? productListMemory.products
-    : data.products
+    ? productListMemory?.products
+    : data?.products
 
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -334,13 +335,15 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
         />
       </NextHead>
       <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
-        <span className="px-4 text-sm font-medium sm:px-0">
-          Showing {data.products.total} Results for
-        </span>
-        <h1 className="px-4 font-semibold tracking-tight text-black sm:px-0">
+      <div className=''>
+        <h1 className="pl-4 font-semibold tracking-tight text-black sm:px-0 inline-block">
           {GENERAL_CATALOG}
         </h1>
-        <div className="grid w-full grid-cols-1 gap-1 px-4 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
+        <span className="text-sm font-medium sm:px-0 inline-block ml-2">
+          Showing {data.products.total} Results for
+        </span>
+      </div>
+        <div className="grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
           {isMobile ? (
             <ProductMobileFilters
               handleFilters={handleFilters}
@@ -371,6 +374,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo }: any) {
               handlePageChange={handlePageChange}
               handleInfiniteScroll={handleInfiniteScroll}
               deviceInfo={deviceInfo}
+              maxBasketItemsCount={maxBasketItemsCount(config)}
             />
           </div>
         </div>

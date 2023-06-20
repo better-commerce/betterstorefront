@@ -20,7 +20,11 @@ interface Props {
   config: []
 }
 
-const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
+const Footer: FC<Props & IExtraProps> = ({
+  config,
+  deviceInfo,
+  maxBasketItemsCount,
+}) => {
   const router = useRouter()
   const [hasConfig, setHasConfig] = useState(false)
   const { isMobile, isIPadorTablet } = deviceInfo
@@ -52,7 +56,7 @@ const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
   return (
     <footer
       aria-labelledby="footer-heading"
-      className="pt-10 bg-gray-100 shadow-inner sm:h-96 sm:pt-16 sm:mt-2 bg-footer-color"
+      className="py-8 pt-10 bg-gray-100 shadow-inner px-4 sm:px-0 sm:h-96 sm:pt-16 sm:mt-2 bg-footer-color"
     >
       <h3 id="footer-heading" className="sr-only">
         {GENERAL_FOOOTER}
@@ -65,7 +69,7 @@ const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
           className="sm:col-span-3"
           onClick={() => footerClick('INFORMATION')}
         >
-          <h4 className="font-bold text-gray-900 text-footer-clr ">
+          <h4 className="font-bold text-gray-900 my-4 sm:my-0 text-footer-clr">
             INFORMATION
           </h4>
           <ul role="list" className="mt-3 space-y-3">
@@ -81,7 +85,7 @@ const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
           </ul>
         </div>
         <div className="sm:col-span-3" onClick={() => footerClick('HELP')}>
-          <h4 className="font-bold text-gray-900 text-footer-clr ">HELP</h4>
+          <h4 className="font-bold text-gray-900 my-4 sm:my-0 text-footer-clr ">HELP</h4>
           <ul role="list" className="mt-3 space-y-3">
             <li className="text-sm font-medium text-gray-900 text-footer-clr  f-footer-weight">
               Support
@@ -98,7 +102,7 @@ const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
           </ul>
         </div>
         <div className="sm:col-span-5">
-          <h4 className="font-bold text-black uppercase text-footer-clr ">
+          <h4 className="font-bold text-black uppercase my-4 sm:my-0 text-footer-clr ">
             {SIGN_UP_FOR_NEWSLETTER}
           </h4>
           <p className="mt-1 text-gray-900 text-md text-footer-clr ">
@@ -126,8 +130,8 @@ const Footer: FC<Props & IExtraProps> = ({ config, deviceInfo }) => {
             </div>
           </form>
         </div>
-        <div className="justify-center text-center border-t border-white sm:col-span-12 sm:pt-6 sm:mt-10">
-          <p className="font-semibold text-black text-footer-clr ">
+        <div className="justify-center text-center border-t border-white sm:col-span-12 sm:pt-6 mt-10 sm:mt-10">
+          <p className="font-semibold text-black my-4 sm:my-0 text-footer-clr ">
             &copy; {COPYRIGHT_FOOTER_INFO}
           </p>
         </div>

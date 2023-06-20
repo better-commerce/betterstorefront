@@ -8,7 +8,7 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
-import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { NEXT_CREATE_WISHLIST, Messages } from '@components/utils/constants'
 import {
   ArrowsPointingOutIcon,
   CursorArrowRaysIcon,
@@ -29,7 +29,10 @@ import {
   QUICK_VIEW,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { validateAddToCart } from '@framework/utils/app-util'
 import QuickViewModal from '@components/product/QuickView/ProductQuickView'
+import { IExtraProps } from '@components/common/Layout/Layout'
+import { stringFormat } from '@framework/utils/parse-util'
 interface Props {
   product: any
 }
@@ -48,7 +51,10 @@ interface Attribute {
   fieldValues?: []
 }
 
-const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
+const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
+  product,
+  maxBasketItemsCount,
+}) => {
   const [isInWishList, setItemsInWishList] = useState(false)
   const [isQuickview, setQuickview] = useState(undefined)
   const [isQuickviewOpen, setQuickviewOpen] = useState(false)
@@ -61,6 +67,8 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
     user,
     addToWishlist,
     openWishlist,
+    cartItems,
+    setAlert,
     setCartItems,
     openNotifyUser,
   } = useUI()
@@ -142,6 +150,22 @@ const SearchProductCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
+      validateAction: async () => {
+        const isValid = validateAddToCart(
+          product?.recordId ?? product?.productId,
+          cartItems,
+          maxBasketItemsCount
+        )
+        if (!isValid) {
+          setAlert({
+            type: 'error',
+            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+              maxBasketItemsCount,
+            }),
+          })
+        }
+        return isValid
+      },
       action: async () => {
         const item = await cartHandler().addToCart(
           {

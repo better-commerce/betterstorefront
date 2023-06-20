@@ -10,6 +10,7 @@ import {
 } from '@components/brand'
 import React from 'react'
 import commerce from '@lib/api/commerce'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 
 const COMPONENTS_MAP: any = {
   PlainText: (props: any) => <PlainText {...props} />,
@@ -20,7 +21,7 @@ const COMPONENTS_MAP: any = {
   undefined: () => null,
 }
 
-function BrandPage({ slug, brandDetails, deviceInfo }: any) {
+function BrandPage({ slug, brandDetails, deviceInfo, config }: any) {
   const widgetsConfig = JSON.parse(brandDetails.result.widgetsConfig).sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
@@ -33,6 +34,7 @@ function BrandPage({ slug, brandDetails, deviceInfo }: any) {
           brandDetails: brandDetails.result,
           slug: slug,
           deviceInfo,
+          maxBasketItemsCount: maxBasketItemsCount(config),
         }
         return (
           <div key={idx}>
