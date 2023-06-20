@@ -168,11 +168,11 @@ export default function CollectionPage(props: any) {
 
   const [productListMemory, setProductListMemory] = useState({
     products: {
-      results: [],
+      results: [], // current page result set
       sortList: [],
-      pages: 0,
-      total: 0,
-      currentPage: 1,
+      pages: 0, // total number of pages
+      total: 0, // total numer of records
+      currentPage: 1, // current page
       filters: [],
       collectionId: props?.id,
     },
@@ -237,24 +237,22 @@ export default function CollectionPage(props: any) {
   }, [productDataToPass])
 
   useEffect(() => {
-    /*const data = IS_INFINITE_SCROLL
-      ? productListMemory.products
-      : props?.products*/
-    const data = productListMemory.products
+    const data = IS_INFINITE_SCROLL
+      ? productListMemory?.products
+      : productListMemory?.products //props?.products
     setProductDataToPass(data)
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productListMemory?.products, props?.products])
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
     if (
-      data.products.currentPage !== productListMemory.products.currentPage ||
-      data.products.total !== productListMemory.products.total
+      data.products?.currentPage !== productListMemory.products.currentPage ||
+      data.products?.total !== productListMemory.products.total
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
-        if (state.currentPage > 1) {
+        if (state.currentPage > 1 && IS_INFINITE_SCROLL) {
           dataClone.products.results = [
             ...prevData.products.results,
             ...dataClone.products.results,
@@ -559,7 +557,7 @@ export default function CollectionPage(props: any) {
                   )}
                   <ProductGridWithFacet
                     products={productDataToPass}
-                    currentPage={props?.currentPage}
+                    currentPage={state?.currentPage}
                     handlePageChange={handlePageChange}
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
@@ -571,7 +569,7 @@ export default function CollectionPage(props: any) {
               <div className="col-span-12">
                 <ProductGrid
                   products={productDataToPass}
-                  currentPage={props?.currentPage}
+                  currentPage={state?.currentPage}
                   handlePageChange={handlePageChange}
                   handleInfiniteScroll={handleInfiniteScroll}
                   deviceInfo={deviceInfo}
