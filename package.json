@@ -1,6 +1,6 @@
 {
   "name": "betterstorefront-bettercommerce",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "dev": "node generate-locales.js && cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "node generate-locales.js && next build",
