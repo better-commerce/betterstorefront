@@ -120,8 +120,8 @@ export default function ProductView({
   relatedProducts,
   promotions,
   pdpLookbookProducts,
-  reviews,
   pdpCachedImages: cachedImages,
+  reviews,
   deviceInfo,
   config,
   maxBasketItemsCount,
@@ -728,8 +728,7 @@ export default function ProductView({
                         width={600}
                         height={1000}
                         blurDataURL={
-                          `${image.image}?h=600&w=400&fm=webp` ||
-                          IMG_PLACEHOLDER
+                          `${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER
                         }
                       />
                     </div>
@@ -771,9 +770,7 @@ export default function ProductView({
                                 sizes="320 600 1000"
                                 width={600}
                                 height={1000}
-                                onClick={(ev: any) =>
-                                  handleImgLoadT(image.image)
-                                }
+                                onClick={(ev: any) => handleImgLoadT(image.image)}
                                 quality="60"
                                 blurDataURL={
                                   `${image.image}?h=600&w=400&fm=webp` ||
@@ -795,7 +792,7 @@ export default function ProductView({
 
           {/* Product info */}
           <div className="px-4 mt-2 sm:mt-10 sm:px-8 lg:mt-0 lg:col-span-5">
-            <div className="flex justify-between gap-4">
+            <div className="flex justify-between gap-4 mb-3 sm:mb-0">
               <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}
               </h3>
@@ -824,7 +821,7 @@ export default function ProductView({
               </div>
             </div>
 
-            <h1 className="font-medium tracking-tight text-black font-36">
+            <h1 className="font-medium tracking-tight text-black font-36 mb-3 sm:mb-0">
               {selectedAttrData.name || selectedAttrData.productName}
             </h1>
             <p className="mt-0 text-sm text-black uppercase sm:text-xs sm:mt-1">
@@ -961,7 +958,7 @@ export default function ProductView({
           </div>
         </div>
         <div className="flex flex-col section-devider"></div>
-        <div className="flex flex-col px-0 mx-auto sm:container page-container">
+        <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
           <ProductSpecifications
             attrGroup={attrGroup}
             product={product}
@@ -981,7 +978,7 @@ export default function ProductView({
         )?.length > 0 ? (
           <>
             <div className="flex flex-col section-devider"></div>
-            <div className="flex flex-col px-0 mx-auto sm:container page-container">
+            <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
               <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
                 You May Also Like
               </h3>
