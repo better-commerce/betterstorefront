@@ -1229,3 +1229,12 @@ body {
 }
 
 /* end */
+.topspace h2, h4, p, ul, li, br {
+  margin-top: 10px; /* Adjust the value as needed */
+}
+.topspace p{
+  line-height: 25px;
+}
+.topspace h2{
+  font-size: 18px;
+  }
