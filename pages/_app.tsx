@@ -12,14 +12,15 @@ import { v4 as uuid_v4 } from 'uuid'
 import {
   SessionIdCookieKey,
   DeviceIdKey,
-  NEXT_INFRA_ENDPOINT,
   NEXT_API_KEYWORDS_ENDPOINT,
   SITE_NAME,
   SITE_ORIGIN_URL,
   INFRA_ENDPOINT,
+  BETTERCOMMERCE_DEFAULT_CURRENCY,
+  BETTERCOMMERCE_DEFAULT_COUNTRY,
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
 } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
-import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
 import analytics from '@components/services/analytics/analytics'
@@ -315,55 +316,57 @@ MyApp.getInitialProps = async (
 ): Promise<AppInitialProps> => {
   const { ctx, Component } = context
   const req: any = ctx?.req
+  let appConfigResult
+  let defaultCurrency = BETTERCOMMERCE_DEFAULT_CURRENCY
+  let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
+  let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
 
-  const headers = {
-    DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-  }
-  const appConfigResult: any = await cachedGetData(
-    INFRA_ENDPOINT,
-    req?.cookies,
-    headers
-  )
-  const languageCookie =
-    req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
+  try {
+    const headers = {
+      DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+    }
+    appConfigResult = await cachedGetData(INFRA_ENDPOINT, req?.cookies, headers)
+    const languageCookie =
+      req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
 
-  const currencyCookie =
-    req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
+    const currencyCookie =
+      req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
 
-  const countryCookie =
-    req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
+    const countryCookie =
+      req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
 
-  const defaultCurrency =
-    currencyCookie ||
-    appConfigResult?.result?.configSettings
-      .find((setting: any) => setting.configType === 'RegionalSettings')
-      .configKeys.find(
-        (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
-      ).value ||
-    'INR'
+    defaultCurrency =
+      currencyCookie ||
+      appConfigResult?.result?.configSettings
+        .find((setting: any) => setting.configType === 'RegionalSettings')
+        .configKeys.find(
+          (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
+        ).value ||
+      BETTERCOMMERCE_DEFAULT_CURRENCY
 
-  const defaultCountry =
-    countryCookie ||
-    appConfigResult?.result?.configSettings
-      .find((setting: any) => setting.configType === 'RegionalSettings')
-      .configKeys.find(
-        (item: any) => item.key === 'RegionalSettings.DefaultCountry'
-      ).value ||
-    'US'
+    defaultCountry =
+      countryCookie ||
+      appConfigResult?.result?.configSettings
+        .find((setting: any) => setting.configType === 'RegionalSettings')
+        .configKeys.find(
+          (item: any) => item.key === 'RegionalSettings.DefaultCountry'
+        ).value ||
+      BETTERCOMMERCE_DEFAULT_COUNTRY
 
-  const defaultLanguage =
-    languageCookie ||
-    appConfigResult?.result?.configSettings
-      .find((setting: any) => setting.configType === 'RegionalSettings')
-      .configKeys.find(
-        (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
-      ).value ||
-    'en-IN'
+    defaultLanguage =
+      languageCookie ||
+      appConfigResult?.result?.configSettings
+        .find((setting: any) => setting.configType === 'RegionalSettings')
+        .configKeys.find(
+          (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
+        ).value ||
+      BETTERCOMMERCE_DEFAULT_LANGUAGE
+  } catch (error: any) {}
 
   let appConfig = null
   if (appConfigResult) {
     const appConfigObj = {
-      ...appConfigResult?.result,
+      ...(appConfigResult?.result || {}),
       ...{
         defaultCurrency,
         defaultLanguage,
