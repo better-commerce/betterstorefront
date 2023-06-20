@@ -168,7 +168,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
-        if (state.currentPage > 1) {
+        if (state.currentPage > 1 && IS_INFINITE_SCROLL) {
           dataClone.products.results = [
             ...prevData.products.results,
             ...dataClone.products.results,
@@ -305,10 +305,9 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     recordEvent(EVENTS.FreeText)
   })
 
-  const productDataToPass = productListMemory?.products
-  /*const productDataToPass = IS_INFINITE_SCROLL
-    ? productListMemory.products
-    : data.products*/
+  const productDataToPass = IS_INFINITE_SCROLL
+    ? productListMemory?.products
+    : data?.products
 
   let absPath = ''
   if (typeof window !== 'undefined') {
