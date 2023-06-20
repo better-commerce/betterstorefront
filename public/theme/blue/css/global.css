@@ -617,8 +617,13 @@ p {
 }
 
 /* flag primary css start */
+@media screen and (max-width: 767px) {
+  .font-36 {
+    font-size: 24px !important;
+  }
+}
 
 /* footer css */
-.mob-menu-icon{
+.mob-menu-icon {
   color: var(--menu-icon-color) !important;
 }
