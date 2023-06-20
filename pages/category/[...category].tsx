@@ -222,24 +222,24 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   }, [category.id])
 
   useEffect(() => {
-    if (IS_INFINITE_SCROLL) {
-      if (
-        data?.products?.currentPage !==
-          productListMemory?.products?.currentPage ||
-        data?.products?.total !== productListMemory?.products?.total
-      ) {
-        setProductListMemory((prevData: any) => {
-          let dataClone = { ...data }
-          if (state?.currentPage > 1) {
-            dataClone.products.results = [
-              ...prevData?.products?.results,
-              ...dataClone?.products?.results,
-            ]
-          }
-          return dataClone
-        })
-      }
+    //if (IS_INFINITE_SCROLL) {
+    if (
+      data?.products?.currentPage !==
+        productListMemory?.products?.currentPage ||
+      data?.products?.total !== productListMemory?.products?.total
+    ) {
+      setProductListMemory((prevData: any) => {
+        let dataClone = { ...data }
+        if (state?.currentPage > 1) {
+          dataClone.products.results = [
+            ...prevData?.products?.results,
+            ...dataClone?.products?.results,
+          ]
+        }
+        return dataClone
+      })
     }
+    //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length])
@@ -299,10 +299,11 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     )
   }
 
-  const productDataToPass =
+  const productDataToPass = productListMemory.products
+  /*const productDataToPass =
     IS_INFINITE_SCROLL && productListMemory.products?.results?.length
       ? productListMemory.products
-      : products
+      : products*/
   const css = { maxWidth: '100%', height: 'auto' }
   let absPath = ''
   if (typeof window !== 'undefined') {

@@ -71,7 +71,7 @@ export default function Grid({
               products.results.length < 6 ? `lg:grid-cols-5` : 'lg:grid-cols-5'
             }`}
           >
-            {!products.results.length &&
+            {!products?.results?.length &&
               rangeMap(12, (i) => (
                 <div
                   key={i}
@@ -93,13 +93,24 @@ export default function Grid({
               />
             ))}
           </div>
-          {products.pages > 1 && (
+
+          {products?.currentPage < products?.pages && (
+            <div className="flex justify-center flex-1 mx-auto">
+              <button
+                className="px-6 py-2 my-6 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white"
+                onClick={() => handleInfiniteScroll()}
+              >
+                Load More
+              </button>
+            </div>
+          )}
+          {/*{products.pages > 1 && (
             <Pagination
               currentPage={currentPage}
               onPageChange={handlePageChange}
               pageCount={products.pages}
             />
-          )}
+          )}*/}
         </>
       )}
     </>
