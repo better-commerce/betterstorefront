@@ -33,7 +33,7 @@ export default function Grid({
           currentNumber={products.results.length}
           component={
             <div
-              className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-4 ${
+              className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-4 px-3 sm:px-0 ${
                 products.results.length < 6
                   ? `lg:grid-cols-4`
                   : 'lg:grid-cols-4'
@@ -94,7 +94,7 @@ export default function Grid({
             ))}
           </div>
 
-          {products?.currentPage < products?.pages && (
+          {/*{products?.currentPage < products?.pages && (
             <div className="flex justify-center flex-1 mx-auto">
               <button
                 className="px-6 py-2 my-6 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white"
@@ -103,14 +103,14 @@ export default function Grid({
                 Load More
               </button>
             </div>
-          )}
-          {/*{products.pages > 1 && (
+          )}*/}
+          {products.pages > 1 && (
             <Pagination
               currentPage={currentPage}
               onPageChange={handlePageChange}
               pageCount={products.pages}
             />
-          )}*/}
+          )}
         </>
       )}
     </>
