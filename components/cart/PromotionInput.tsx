@@ -576,7 +576,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                   placeholder={APPLY_PROMOTION}
                   onChange={handleChange}
                   value={value}
-                  className="text-md text-gray-900 appearance-none min-w-0 lg:h-10 md:h-10 border xsm:h-10 border-gray-300 py-1 px-3 placeholder-gray-500 placeholder:text-sm focus:outline-none focus:border-gray-700 bg-white w-full"
+                  className="text-md text-gray-900 appearance-none min-w-0 lg:h-10 md:h-10 border xsm:h-10 border-gray-300 px-3 placeholder-gray-500 placeholder:text-sm focus:outline-none focus:border-gray-700 bg-white w-full py-2"
                   required
                 />
 
@@ -586,7 +586,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                   }
                   type="submit"
                   title={GENERAL_APPLY_TEXT}
-                  className={`py-1 px-3 xsm:h-10 flex items-center justify-center lg:h-10 md:h-10 btn-secondary w-full`}
+                  className={`px-3 xsm:h-10 flex items-center justify-center lg:h-10 md:h-10 btn-secondary w-full py-2`}
                 >
                   {GENERAL_APPLY_TEXT}
                 </button>
