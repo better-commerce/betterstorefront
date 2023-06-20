@@ -890,7 +890,7 @@ body {
 
 .full-m-header {
   margin-left: -15px;
-  margin-right: -15px;
+  /* margin-right: -15px; */
   padding-left: 15px;
   padding-right: 15px;
 }

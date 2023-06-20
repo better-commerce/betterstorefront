@@ -89,7 +89,7 @@ export default function Wishlist() {
     <div className="bg-white">
       {/* Mobile menu */}
 
-      <main className="sm:px-6 lg:px-8">
+      <main className="px-8 lg:px-8">
         <div className="max-w-4xl lg:mx-12">
           <div className="lg:px-0 sm:px-0">
             <h1 className="font-extrabold tracking-tight text-gray-900">
@@ -97,22 +97,22 @@ export default function Wishlist() {
             </h1>
           </div>
 
-          <section aria-labelledby="recent-heading" className="mt-16">
+          <section aria-labelledby="recent-heading" className="mt-1">
             {!data.length && !isLoading && (
               <>
-                <div className="flex flex-col items-start justify-center w-full px-4 py-12 sm:items-center max-acc-container sm:px-0">
-                  <Image
+                <div className="flex flex-col w-full py-2 max-acc-container sm:px-0">
+                  {/* <Image
                     src="/assets/images/basket-no-item.svg"
                     alt="no basket icon"
                     className="m-92-img"
-                  />
+                  /> */}
                   <div className="my-0 font-semibold text-secondary-full-opacity text-m-16 text-24">
                     {WISHLIST_SUB_TITLE}
                   </div>
                   <p className="text-xs sm:text-sm text-primary opacity-60">
                     Explore more and save items in your wishlist.{' '}
                   </p>
-                  <div className="flex w-full mt-5 sm:flex-col items-center">
+                  <div className="flex w-full mt-5 sm:flex-col">
                     <Link
                       legacyBehavior
                       passHref

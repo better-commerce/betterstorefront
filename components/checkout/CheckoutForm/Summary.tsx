@@ -91,7 +91,7 @@ export default function Summary({
                           alt="logo"
                         ></Image> */}
                         <ShoppingCartIcon className="w-4 h-4" />
-                        <span className="ml-3 link-button">
+                        <span className="ml-3 link-button !text-base">
                           {GENERAL_ORDER_SUMMARY}
                         </span>
                       </h2>
