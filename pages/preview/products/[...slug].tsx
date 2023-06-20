@@ -13,17 +13,33 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ slug: string }>) {
+  let pdpCachedImages = null
   const productPromise = commerce.getProductPreview({ query: params!.slug[0] })
   const product = await productPromise
 
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
+
+  try {
+    if (product?.product?.productCode) {
+      // GET SELECTED PRODUCT ALL REVIEWS
+      const pdpCachedImagesPromise = commerce.getPdpCachedImage({
+        query: product?.product?.productCode,
+      })
+
+      pdpCachedImages = await pdpCachedImagesPromise
+    }
+  } catch (error: any) {}
+
   return {
     props: {
       data: product,
       slug: params!.slug[0],
       globalSnippets: infra?.snippets ?? [],
       snippets: product?.snippets ?? [],
+      pdpCachedImages: pdpCachedImages?.images
+        ? JSON.parse(pdpCachedImages?.images)
+        : [],
     },
     revalidate: 200,
   }
@@ -47,6 +63,7 @@ function Slug({
   setEntities,
   recordEvent,
   slug,
+  pdpCachedImages,
   deviceInfo,
   config,
 }: any) {
@@ -62,6 +79,7 @@ function Slug({
         slug={slug}
         snippets={data.snippets}
         isPreview={true}
+        pdpCachedImages={pdpCachedImages}
         deviceInfo={deviceInfo}
         maxBasketItemsCount={maxBasketItemsCount(config)}
       />
