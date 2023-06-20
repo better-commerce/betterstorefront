@@ -194,7 +194,10 @@ function CategoryPage({ category, slug, products, deviceInfo }: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: slug } }],
+    [
+      '/api/catalog/products',
+      { ...state, ...{ slug: slug, isCategory: true } },
+    ],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
