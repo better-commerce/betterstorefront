@@ -1113,3 +1113,128 @@ body {
   background-color: #fdebeb !important;
 }
 
+.floating-label {
+  position: relative;
+}
+
+.floating-label label {
+  position: absolute;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  top: 50%;
+  left: 0;
+  z-index: 9;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #251000;
+  opacity: 0.56;
+  font-size: 14px;
+}
+
+.floating-label input {
+  min-height: 56px;
+  background: #dadfe78c;
+  border-radius: 2px;
+}
+
+.floating-label input:focus,
+.floating-label input:not(:placeholder-shown) {
+  padding-top: 1.4rem;
+}
+
+.floating-label input:focus ~ label,
+.floating-label input:not(:placeholder-shown) ~ label {
+  top: 24px;
+  left: 5px;
+  font-size: 10px;
+  transition: all 0.2s ease-in-out;
+  color: #251000;
+}
+
+.floating-label input::placeholder {
+  color: transparent;
+}
+
+.checkbox-c label {
+  margin-top: -7px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.main-custom-check-label
+{
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    border-radius: 2px;
+    color: #000;
+    padding: 11px 15px;
+}
+
+.main-custom-check {
+  display: none;
+}
+
+.main-custom-check:checked + .main-custom-check-label {
+  background: transparent;
+  border: 1.5px solid #000;
+}
+
+.main-custom-check + .main-custom-check-label {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 2px;
+  color: #000;
+  padding: 11px 15px;
+}
+
+/* custom checkbox */
+.custom-checkbox {
+  position: absolute;
+  opacity: 0;
+}
+
+.custom-checkbox + label {
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+}
+
+.custom-checkbox + label:before {
+  content: '';
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 1px solid #000;
+}
+
+.custom-checkbox:checked + label:before {
+  background: black;
+  border: 1px solid #fff;
+}
+
+.custom-checkbox:checked + label:after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 9px;
+  background: white;
+  width: 2px;
+  height: 2px;
+  box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white,
+    4px -6px 0 white, 4px -8px 0 white;
+  transform: rotate(45deg);
+}
+
+/* end */
+.topspace h2, h4, p, ul, li, br {
+  margin-top: 10px; /* Adjust the value as needed */
+}
+.topspace p{
+  line-height: 25px;
+}
+.topspace h2{
+  font-size: 18px;
+  }

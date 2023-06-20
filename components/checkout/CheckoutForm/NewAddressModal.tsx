@@ -79,6 +79,7 @@ export const NEW_ADDRESS_FORM_FIELDS = [
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: false,
     disabled: false,
+    max:15
   },
   {
     type: 'checkbox',
@@ -176,7 +177,8 @@ export const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
   city: Yup.string()
     .required(Messages.Validations.AddNewAddress['CITY_REQUIRED'])
     .min(3),
-  state: Yup.string().min(3),
+  state: Yup.string().min(3)
+  .required(Messages.Validations.AddNewAddress['STATE_REQUIRED']),
   address1: Yup.string()
     .min(15)
     .required(Messages.Validations.AddNewAddress['ADDRESS_1_REQUIRED'])
