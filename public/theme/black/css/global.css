@@ -605,6 +605,10 @@ p {
     font-weight: 600;
     margin-bottom: 10px;
   }
+  .font-36 {
+    font-size: 24px !important;
+    line-height: 26px !important;
+  }
 }
 
 .mobile-card-panel.white-card {
@@ -659,5 +663,7 @@ p {
   min-height: 0 !important;
   height: auto !important;
 }
-
+.mob-prod-height{
+  min-height: 350px !important;
+}
 /* main css end */
