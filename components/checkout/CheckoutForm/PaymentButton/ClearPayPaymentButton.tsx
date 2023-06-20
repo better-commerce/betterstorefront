@@ -59,6 +59,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
       basketOrderInfo,
+      uiContext,
       dispatchState
     )
     if (orderResult?.success && orderResult?.result?.id) {
@@ -325,7 +326,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
               dispatchState: Function
             ) =>
               that.onPay(
-                paymentMethod,
+                that.state.paymentMethod,
                 basketOrderInfo,
                 uiContext,
                 dispatchState

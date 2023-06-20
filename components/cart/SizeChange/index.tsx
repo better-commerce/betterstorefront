@@ -30,13 +30,11 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
   const [defaultSize, setDefaultSize] = useState<any>(null)
 
   useEffect(() => {
-    let slugBreakArr: any = product?.slug?.split('-')
-    let sizeFromSlug: any = slugBreakArr?.length
-      ? slugBreakArr[slugBreakArr?.length - 1]
+    let stockCodeBreakArr: any = product?.stockCode?.split('-')
+    let sizeFromStockCode = stockCodeBreakArr?.length
+      ? stockCodeBreakArr[stockCodeBreakArr?.length - 1]
       : ''
-    setDefaultSize(sizeFromSlug)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setDefaultSize(sizeFromStockCode.toLowerCase())
   }, [open])
 
   useEffect(() => {
