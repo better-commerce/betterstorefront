@@ -954,7 +954,7 @@ export default function ProductView({
         </div>
       </div>
       <div className="flex flex-col section-devider"></div>
-      <div className="flex flex-col px-0 mx-auto sm:container page-container">
+      <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
         <ProductSpecifications
           attrGroup={attrGroup}
           product={product}
@@ -974,7 +974,7 @@ export default function ProductView({
       )?.length > 0 ? (
         <>
           <div className="flex flex-col section-devider"></div>
-          <div className="flex flex-col px-0 mx-auto sm:container page-container">
+          <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
             <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
               You May Also Like
             </h3>
