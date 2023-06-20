@@ -225,7 +225,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-        productListMemory?.products?.currentPage ||
+      productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -359,13 +359,15 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         ) : null}
 
         <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
-          <span className="text-sm font-semibold text-black">
-            Showing {products.total} {RESULTS}
-          </span>
-          <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">
-            {category.name}
-          </h1>
-          <h2 className="text-gray-500 sm:text-md">{category.description}</h2>
+          <div className=''>
+            <h1 className="text-black inline-block">
+              {category.name}
+            </h1>
+            <span className="text-sm font-semibold text-black inline-block ml-2">
+              Showing {products.total} {RESULTS}
+            </span>
+          </div>
+          <p className="text-gray-500 sm:text-md">{category.description}</p>
         </div>
 
         {category?.subCategories?.length > 0 && (
