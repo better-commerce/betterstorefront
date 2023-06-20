@@ -56,6 +56,7 @@ const FloatingLabelFormField = (props: IFloatingLabelFormFieldProps) => {
   return (
     <>
       {DEFAULT_TYPES.includes(item?.type) && (
+        <div className='w-full'>
         <div
           className={
             item?.floatingDivClassName
@@ -145,8 +146,8 @@ const FloatingLabelFormField = (props: IFloatingLabelFormFieldProps) => {
           </label>
 
           {lastChildInFloatingContainer && <>{lastChildInFloatingContainer}</>}
-
-          {(item?.required ||
+        </div>
+        {(item?.required ||
             (item?.dependant && context.errors[item?.name])) &&
             getErrorLabel(context, item)}
         </div>
