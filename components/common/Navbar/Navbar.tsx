@@ -66,6 +66,7 @@ const Navbar: FC<Props & IExtraProps> = ({
   currencies,
   languages,
   deviceInfo,
+  maxBasketItemsCount,
 }) => {
   const router = useRouter()
 
@@ -297,8 +298,8 @@ const Navbar: FC<Props & IExtraProps> = ({
             leaveTo="-translate-x-full"
           >
             <div className="relative flex flex-col w-full max-w-xs pb-12 overflow-y-auto bg-white shadow-xl z-9999">
-              <Logo />
-              <div className="flex px-4 pt-5 pb-2">
+              <div className="flex item-center px-4 pt-16 pb-2">
+                {/* <Logo /> */}
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
@@ -343,11 +344,10 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 </div>
                                 <div className="pt-5 pr-3">
                                   <ChevronUpIcon
-                                    className={`${
-                                      !open
+                                    className={`${!open
                                         ? 'transition-transform duration-150 rotate-180 transform'
                                         : 'transition-transform duration-150 rotate-0 transform'
-                                    } h-5 w-5 text-black`}
+                                      } h-5 w-5 text-black`}
                                   />
                                 </div>
                               </Disclosure.Button>
@@ -359,44 +359,44 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 <div className="space-y-4">
                                   {item.navBlocks.length
                                     ? item.navBlocks.map(
-                                        (navBlock: any, navIdx: number) => {
-                                          return (
-                                            <div
-                                              key={`navbar-parent-${navIdx}`}
-                                              className="grid grid-cols-1 px-2 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0"
+                                      (navBlock: any, navIdx: number) => {
+                                        return (
+                                          <div
+                                            key={`navbar-parent-${navIdx}`}
+                                            className="grid grid-cols-1 px-5 sm:px-0 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0"
+                                          >
+                                            <ul
+                                              role="list"
+                                              aria-labelledby="clothing-heading"
+                                              className="col-span-1"
                                             >
-                                              <ul
-                                                role="list"
-                                                aria-labelledby="clothing-heading"
-                                                className="col-span-1"
-                                              >
-                                                {navBlock.navItems.map(
-                                                  (navItem: any) => (
-                                                    <Link
-                                                      legacyBehavior
-                                                      key={navItem.caption}
-                                                      title={navItem.caption}
-                                                      href={`/${navItem.itemLink}`}
-                                                      passHref
-                                                      onClick={() => {
-                                                        setOpen(false)
-                                                        hamburgerMenuClickLevel2(
-                                                          item.caption,
-                                                          navBlock.boxTitle
-                                                        )
-                                                      }}
-                                                    >
-                                                      <li className="flex pb-2 my-1 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
-                                                        {navItem.caption}
-                                                      </li>
-                                                    </Link>
-                                                  )
-                                                )}
-                                              </ul>
-                                            </div>
-                                          )
-                                        }
-                                      )
+                                              {navBlock.navItems.map(
+                                                (navItem: any , idx: any) => (
+                                                  <Link
+                                                    legacyBehavior
+                                                    key={`${navItem.caption}-${idx}`}
+                                                    title={navItem.caption}
+                                                    href={`/${navItem.itemLink}`}
+                                                    passHref
+                                                    onClick={() => {
+                                                      setOpen(false)
+                                                      hamburgerMenuClickLevel2(
+                                                        item.caption,
+                                                        navBlock.boxTitle
+                                                      )
+                                                    }}
+                                                  >
+                                                    <li className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
+                                                      {navItem.caption}
+                                                    </li>
+                                                  </Link>
+                                                )
+                                              )}
+                                            </ul>
+                                          </div>
+                                        )
+                                      }
+                                    )
                                     : null}
                                 </div>
                               </Disclosure.Panel>
@@ -420,14 +420,14 @@ const Navbar: FC<Props & IExtraProps> = ({
         >
           <button
             type="button"
-            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden"
+            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 rounded-md sm:hidden bg-transparent"
             onClick={() => {
               hamburgerMenu()
               setOpen(true)
             }}
           >
             <span className="sr-only">Open menu</span>
-            <Bars3Icon className="w-6 h-6 text-black" aria-hidden="true" />
+            <Bars3Icon className="w-6 h-6 mob-menu-icon" aria-hidden="true" />
           </button>
 
           <Link href="/" title="BetterCommerce">

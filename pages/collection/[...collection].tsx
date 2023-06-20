@@ -20,7 +20,10 @@ import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { obfuscateHostName } from '@framework/utils/app-util'
+import {
+  maxBasketItemsCount,
+  obfuscateHostName,
+} from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState } from '@components/ui/context'
 const ProductFilterRight = dynamic(
@@ -108,7 +111,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 export default function CollectionPage(props: any) {
-  const { deviceInfo } = props
+  const { deviceInfo, config } = props
   const { isOnlyMobile, isMobile, isIPadorTablet } = deviceInfo
   const router = useRouter()
   const [paddingTop, setPaddingTop] = useState('0')
@@ -165,11 +168,11 @@ export default function CollectionPage(props: any) {
 
   const [productListMemory, setProductListMemory] = useState({
     products: {
-      results: [],
+      results: [], // current page result set
       sortList: [],
-      pages: 0,
-      total: 0,
-      currentPage: 1,
+      pages: 0, // total number of pages
+      total: 0, // total numer of records
+      currentPage: 1, // current page
       filters: [],
       collectionId: props?.id,
     },
@@ -235,31 +238,30 @@ export default function CollectionPage(props: any) {
 
   useEffect(() => {
     const data = IS_INFINITE_SCROLL
-      ? productListMemory.products
-      : props?.products
+      ? productListMemory?.products
+      : productListMemory?.products //props?.products
     setProductDataToPass(data)
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productListMemory?.products, props?.products])
 
   useEffect(() => {
-    if (IS_INFINITE_SCROLL) {
-      if (
-        data.products.currentPage !== productListMemory.products.currentPage ||
-        data.products.total !== productListMemory.products.total
-      ) {
-        setProductListMemory((prevData: any) => {
-          let dataClone = { ...data }
-          if (state.currentPage > 1) {
-            dataClone.products.results = [
-              ...prevData.products.results,
-              ...dataClone.products.results,
-            ]
-          }
-          return dataClone
-        })
-      }
+    //if (IS_INFINITE_SCROLL) {
+    if (
+      data.products?.currentPage !== productListMemory.products.currentPage ||
+      data.products?.total !== productListMemory.products.total
+    ) {
+      setProductListMemory((prevData: any) => {
+        let dataClone = { ...data }
+        if (state.currentPage > 1 && IS_INFINITE_SCROLL) {
+          dataClone.products.results = [
+            ...prevData.products.results,
+            ...dataClone.products.results,
+          ]
+        }
+        return dataClone
+      })
     }
+    //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length])
@@ -512,7 +514,7 @@ export default function CollectionPage(props: any) {
           ))}
 
         <div
-          className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4 ${cls}`}
+          className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container px-4 sm:px-0 sm:py-4 ${cls}`}
         >
           <h1 className="inline-block capitalize text-primary dark:text-primary">
             {props?.name}
@@ -523,7 +525,7 @@ export default function CollectionPage(props: any) {
           <h2>{props?.description}</h2>
         </div>
 
-        {props?.products?.total > 0 && (
+        {productDataToPass?.results?.length > 0 && (
           <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
             {props?.allowFacets ? (
               <>
@@ -555,10 +557,11 @@ export default function CollectionPage(props: any) {
                   )}
                   <ProductGridWithFacet
                     products={productDataToPass}
-                    currentPage={props?.currentPage}
+                    currentPage={state?.currentPage}
                     handlePageChange={handlePageChange}
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
+                    maxBasketItemsCount={maxBasketItemsCount(config)}
                   />
                 </div>
               </>
@@ -566,10 +569,11 @@ export default function CollectionPage(props: any) {
               <div className="col-span-12">
                 <ProductGrid
                   products={productDataToPass}
-                  currentPage={props?.currentPage}
+                  currentPage={state?.currentPage}
                   handlePageChange={handlePageChange}
                   handleInfiniteScroll={handleInfiniteScroll}
                   deviceInfo={deviceInfo}
+                  maxBasketItemsCount={maxBasketItemsCount(config)}
                 />
               </div>
             )}

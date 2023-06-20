@@ -126,7 +126,7 @@ export const NEXT_VALIDATE_CHANGE_USERNAME_OTP =
 
 export const NEXT_GET_PRODUCT_QUICK_VIEW = '/api/catalog/get-product-quick-view'
 
-export const NEXT_GET_PRODUCT_REVIEW = '/api/catalog/get-product-review'
+export const NEXT_GET_PRODUCT_REVIEW = '/api/catalog/get-product-reviews'
 export const DefaultSessionCookieKey: string = `defaultSession`
 export const SessionIdCookieKey: string = `sessionId`
 export const DeviceIdKey: string = `deviceId`
@@ -297,7 +297,8 @@ export module Messages {
     GENERIC_ERROR:
       'Your request could not be processed. Please try again after sometime.',
     CART_EMPTY: 'Your cart is empty',
-    CART_ITEM_QTY_LIMIT_EXCEEDED: 'Max allowed quantity is 5.',
+    CART_ITEM_QTY_LIMIT_EXCEEDED:
+      'Max allowed quantity is {maxBasketItemsCount}.',
     BASKET_VALIDATION_FAILED: 'Basket validation failed',
     'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
   }

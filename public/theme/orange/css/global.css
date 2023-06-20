@@ -508,3 +508,7 @@ p {
 }
 
 /* flag primary css start */
+/* footer css */
+.mob-menu-icon {
+  color: var(--menu-icon-color) !important;
+}

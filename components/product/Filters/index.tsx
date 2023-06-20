@@ -78,7 +78,7 @@ export default function Filters({
             leaveTo="translate-x-full"
           >
             <div className="relative flex flex-col w-full h-full max-w-xs py-2 pb-2 ml-auto overflow-y-auto bg-white shadow-xl sm:py-4 sm:pb-6 z-9999">
-              <div className="flex items-center justify-between px-4">
+              <div className="flex items-center justify-between px-4 py-4">
                 <h2 className="text-lg font-medium text-gray-900">
                   {GENERAL_FILTER_TITLE}
                 </h2>
@@ -169,8 +169,9 @@ export default function Filters({
           products={products}
           action={handleSortBy}
         />
-        {appliedFilters?.length > 0 && (
-          <div className="grid flex-col grid-cols-1 px-4 py-2 border-t border-gray-100">
+      </section>
+      {appliedFilters?.length > 0 && (
+          <div className="grid flex-col grid-cols-1 px-4 py-2 border-t border-gray-100 my-2">
             <h4 className="flex w-full mb-2 text-sm font-bold">
               Applied Filters
             </h4>
@@ -193,7 +194,6 @@ export default function Filters({
             </div>
           </div>
         )}
-      </section>
     </>
   )
 }
