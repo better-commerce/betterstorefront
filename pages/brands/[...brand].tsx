@@ -168,7 +168,7 @@ function BrandDetailPage({
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-        productListMemory?.products?.currentPage ||
+      productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -302,12 +302,14 @@ function BrandDetailPage({
       </NextHead>
       <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
         <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
-          <span className="text-sm font-semibold text-black">
-            Showing {data?.products?.total} {RESULTS}
-          </span>
-          <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">
-            {brandDetails?.name}
-          </h1>
+          <div className=''>
+            <h1 className="text-black inline-block">
+              {brandDetails?.name}
+            </h1>
+            <span className="text-sm font-semibold text-black inline-block ml-2">
+              Showing {data?.products?.total} {RESULTS}
+            </span>
+          </div>
           <div
             dangerouslySetInnerHTML={{ __html: brandDetails?.description }}
             className="mt-2 text-black sm:mt-5"
