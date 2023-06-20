@@ -92,7 +92,7 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
                   style={css}
                   width={500}
                   height={600}
-                  className="object-cover object-center w-full h-full group-hover:opacity-75"
+                  className="object-cover object-center w-full h-full group-hover:opacity-75 mob-prod-height"
                 />
               </div>
               <div className="px-2 pb-3 mt-3 text-left sm:px-4">
