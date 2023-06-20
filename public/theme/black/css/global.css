@@ -566,12 +566,15 @@ p {
   width: auto !important;
   min-height: 350px !important;
 }
-.prod-group:hover .prod-name-block{
+
+.prod-group:hover .prod-name-block {
   display: block !important;
 }
-.prod-ul-size{
+
+.prod-ul-size {
   display: none !important;
 }
+
 .min-prod-name-height {
   min-height: 108px;
 }
@@ -596,6 +599,14 @@ p {
   margin-bottom: 10px;
 }
 
+@media screen and (max-width: 767px) {
+  .p-font-size {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+}
+
 .mobile-card-panel.white-card {
   background: #fff !important;
 }
@@ -605,11 +616,13 @@ p {
     width: 94px;
   }
 }
+
 @media screen and (min-width: 1301px) and (max-width: 1550px) {
   .long-f-name {
     width: 122px;
   }
 }
+
 /* product list image width and height control css  */
 
 
@@ -636,14 +649,15 @@ p {
 }
 
 /* footer css */
-.mob-menu-icon{
+.mob-menu-icon {
   color: var(--menu-icon-color) !important;
 }
 
 
 /* main css start */
-.mob-img-height{
+.mob-img-height {
   min-height: 0 !important;
   height: auto !important;
 }
+
 /* main css end */
