@@ -84,11 +84,34 @@ export const getGatewayName = (id: number) => {
 }
 
 export const convertOrder = async (data: any) => {
+  const {
+    basketId,
+    customerId,
+    basket,
+    billingAddress,
+    shippingAddress,
+    selectedShipping,
+    selectedPayment,
+    storeId,
+    Payment,
+  } = data
+  const payload = {
+    basketId,
+    customerId,
+    basket,
+    billingAddress,
+    shippingAddress,
+    selectedShipping,
+    selectedPayment,
+    storeId,
+    Payment,
+  }
+  console.log('payload', payload)
   const { data: orderDetailResult } = await axios.post(
     PAYMENTS_API, // Endpoint url
     ENABLE_SECURED_PAYMENT_PAYLOAD
-      ? encrypt(JSON.stringify(data))
-      : JSON.stringify(data), // Data
+      ? encrypt(JSON.stringify(payload))
+      : JSON.stringify(payload), // Data
     {
       params: { ...Payments.RequestParams.CONVERT_ORDER },
     }
