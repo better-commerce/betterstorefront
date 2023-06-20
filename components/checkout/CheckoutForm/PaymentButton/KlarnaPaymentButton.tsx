@@ -70,6 +70,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
       basketOrderInfo,
+      uiContext,
       dispatchState
     )
     if (orderResult?.success && orderResult?.result?.id) {
@@ -400,7 +401,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                   dispatchState: Function
                 ) =>
                   await that.onPay(
-                    paymentMethod,
+                    that.state.paymentMethod,
                     basketOrderInfo,
                     uiContext,
                     dispatchState

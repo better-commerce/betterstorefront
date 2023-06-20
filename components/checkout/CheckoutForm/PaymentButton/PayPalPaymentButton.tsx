@@ -40,6 +40,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
   constructor(props: IPaymentButtonProps & IDispatchState) {
     super(props)
     this.state = {
+      confirmed: false,
       paymentMethod: super.getPaymentMethod(props?.paymentMethod),
     }
   }
@@ -65,10 +66,14 @@ export class PayPalPaymentButton extends BasePaymentButton {
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
       basketOrderInfo,
+      uiContext,
       dispatchState
     )
     if (orderResult?.success && orderResult?.result?.id) {
       uiContext?.hideOverlayLoaderState()
+      this.setState({
+        confirmed: true,
+      })
     } else {
       uiContext?.hideOverlayLoaderState()
       if (state) {
@@ -208,7 +213,12 @@ export class PayPalPaymentButton extends BasePaymentButton {
     const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any =
       this.props
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
-    this.onPay(paymentMethod, basketOrderInfo, uiContext, dispatchState)
+    this.onPay(
+      this.state.paymentMethod,
+      basketOrderInfo,
+      uiContext,
+      dispatchState
+    )
   }
 
   /**
@@ -223,23 +233,25 @@ export class PayPalPaymentButton extends BasePaymentButton {
     )
 
     return (
-      <PayPalScriptProvider
-        options={{
-          'client-id': clientId,
-          currency: BETTERCOMMERCE_DEFAULT_CURRENCY,
-        }}
-      >
-        <PayPalButtons
-          style={BUTTONS_DEFAULT_LAYOUT}
-          fundingSource={'paypal'}
-          createOrder={(data: CreateOrderData, actions: CreateOrderActions) =>
-            that.onCreateOrder(data, actions)
-          }
-          onApprove={(data: OnApproveData, actions: OnApproveActions) =>
-            that.onApprove(data, actions)
-          }
-        />
-      </PayPalScriptProvider>
+      this.state.confirmed && (
+        <PayPalScriptProvider
+          options={{
+            'client-id': clientId,
+            currency: BETTERCOMMERCE_DEFAULT_CURRENCY,
+          }}
+        >
+          <PayPalButtons
+            style={BUTTONS_DEFAULT_LAYOUT}
+            fundingSource={'paypal'}
+            createOrder={(data: CreateOrderData, actions: CreateOrderActions) =>
+              that.onCreateOrder(data, actions)
+            }
+            onApprove={(data: OnApproveData, actions: OnApproveActions) =>
+              that.onApprove(data, actions)
+            }
+          />
+        </PayPalScriptProvider>
+      )
     )
   }
 }
