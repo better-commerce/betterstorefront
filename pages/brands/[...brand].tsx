@@ -17,6 +17,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import Link from 'next/link'
 import commerce from '@lib/api/commerce'
 import { RESULTS } from '@components/utils/textVariables'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -93,6 +94,7 @@ function BrandDetailPage({
   brandDetails,
   slug,
   deviceInfo,
+  config,
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -163,24 +165,24 @@ function BrandDetailPage({
   )
 
   useEffect(() => {
-    if (IS_INFINITE_SCROLL) {
-      if (
-        data?.products?.currentPage !==
-          productListMemory?.products?.currentPage ||
-        data?.products?.total !== productListMemory?.products?.total
-      ) {
-        setProductListMemory((prevData: any) => {
-          let dataClone = { ...data }
-          if (state.currentPage > 1) {
-            dataClone.products.results = [
-              ...prevData?.products?.results,
-              ...dataClone?.products?.results,
-            ]
-          }
-          return dataClone
-        })
-      }
+    //if (IS_INFINITE_SCROLL) {
+    if (
+      data?.products?.currentPage !==
+        productListMemory?.products?.currentPage ||
+      data?.products?.total !== productListMemory?.products?.total
+    ) {
+      setProductListMemory((prevData: any) => {
+        let dataClone = { ...data }
+        if (state.currentPage > 1) {
+          dataClone.products.results = [
+            ...prevData?.products?.results,
+            ...dataClone?.products?.results,
+          ]
+        }
+        return dataClone
+      })
     }
+    //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length])
@@ -256,9 +258,10 @@ function BrandDetailPage({
     recordEvent(EVENTS.FreeText)
   })
 
-  const productDataToPass = IS_INFINITE_SCROLL
+  const productDataToPass = productListMemory.products
+  /*const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory.products
-    : data.products
+    : data.products*/
 
   // IMPLEMENT HANDLING FOR NULL OBJECT
   if (brandDetails === null) {
@@ -323,6 +326,7 @@ function BrandDetailPage({
           handlePageChange={handlePageChange}
           handleInfiniteScroll={handleInfiniteScroll}
           deviceInfo={deviceInfo}
+          maxBasketItemsCount={maxBasketItemsCount(config)}
         />
       </div>
     </>

@@ -73,11 +73,12 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
   const isFreeShippingOverXEnabled = stringToBoolean(
     shippingSettings?.configKeys?.find(
       (x: any) => x.key === 'ShippingSettings.FreeShippingOverXEnabled'
-    )?.value
+    )?.value || EmptyString
   )
-  const freeShippingOverXValue = shippingSettings?.configKeys?.find(
-    (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
-  )?.value
+  const freeShippingOverXValue =
+    shippingSettings?.configKeys?.find(
+      (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
+    )?.value || '0'
 
   const getCurrencySymbol = () => {
     const currency =
