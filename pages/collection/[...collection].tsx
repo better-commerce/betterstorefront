@@ -237,32 +237,33 @@ export default function CollectionPage(props: any) {
   }, [productDataToPass])
 
   useEffect(() => {
-    const data = IS_INFINITE_SCROLL
+    /*const data = IS_INFINITE_SCROLL
       ? productListMemory.products
-      : props?.products
+      : props?.products*/
+    const data = productListMemory.products
     setProductDataToPass(data)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productListMemory?.products, props?.products])
 
   useEffect(() => {
-    if (IS_INFINITE_SCROLL) {
-      if (
-        data.products.currentPage !== productListMemory.products.currentPage ||
-        data.products.total !== productListMemory.products.total
-      ) {
-        setProductListMemory((prevData: any) => {
-          let dataClone = { ...data }
-          if (state.currentPage > 1) {
-            dataClone.products.results = [
-              ...prevData.products.results,
-              ...dataClone.products.results,
-            ]
-          }
-          return dataClone
-        })
-      }
+    //if (IS_INFINITE_SCROLL) {
+    if (
+      data.products.currentPage !== productListMemory.products.currentPage ||
+      data.products.total !== productListMemory.products.total
+    ) {
+      setProductListMemory((prevData: any) => {
+        let dataClone = { ...data }
+        if (state.currentPage > 1) {
+          dataClone.products.results = [
+            ...prevData.products.results,
+            ...dataClone.products.results,
+          ]
+        }
+        return dataClone
+      })
     }
+    //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length])
@@ -526,7 +527,7 @@ export default function CollectionPage(props: any) {
           <h2>{props?.description}</h2>
         </div>
 
-        {props?.products?.total > 0 && (
+        {productDataToPass?.results?.length > 0 && (
           <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
             {props?.allowFacets ? (
               <>
