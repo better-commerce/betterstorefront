@@ -1334,3 +1334,55 @@ body {
   display: inline;
 }
 /* order status timeline ends */
+
+
+.paymentBox.paymentbox-sec .control {
+  padding: 0 !important;
+}
+
+.paymentBox .control__indicator {
+  width: 100% !important;
+  height: auto !important;
+  background: transparent !important;
+  border: 0;
+  line-height: 45px;
+  margin: 0;
+  border-bottom: dashed 1px #d9d9d9;
+  top: 0 !important;
+}
+
+.paymentBox .control__indicator.border-bottom-only {
+  border: none;
+  border-bottom: dashed 1px #d9d9d9;
+  border-top: 0px !important;
+}
+
+.control input.pay-inpt {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.paymentBox .control input.pay-inpt:checked ~ .control__indicator .check-icon {
+  background: #000;
+}
+
+.paymentBox .control input.pay-inpt:checked~.control__indicator .pay-btn-section {
+  display: grid;
+}
+
+.paymentBox .control__indicator.border-b {
+  border: none;
+  border-bottom: dashed 1px #e5e7eb !important;
+}
+
+.methodName {
+  color: #000;
+  font-size: 15px;
+  line-height: 30px;
+  font-weight: 400;
+}
+.logowidth{
+min-width: 45% !important;
+width: 45% !important;
+}
