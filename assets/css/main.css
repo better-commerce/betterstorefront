@@ -959,6 +959,15 @@ body {
     width: 100%;
     padding-left: 1rem;
   }
+  .section-devider {
+    width: 100%;
+    float: left;
+    background: #f4f4fd;
+    box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.04);
+    transform: matrix(1, 0, 0, -1, 0, 0);
+    height: 15px;
+    margin: 10px 0;
+  }
   
 }
 /* cancel ui css */
@@ -1244,3 +1253,84 @@ body {
 .topspace h2{
   font-size: 18px;
   }
+
+  /* order status timeline css */
+.order-track-step {
+  display: flex;
+  height: 50px;
+}
+.order-track-step:last-child {
+  overflow: hidden;
+  height: 4rem;
+}
+.order-track-step:last-child .order-track-status span:last-of-type {
+  display: none;
+}
+.order-track-step.completed:last-child .order-track-status-line,
+.order-track-step.cancelled:last-child .order-track-status-line {
+  display: none !important;
+}
+.order-track-step.completed:last-child .check-s-icon,
+.order-track-step.cancelled:last-child .check-s-icon {
+  display: inline-block !important;
+}
+.order-track-status {
+  margin-right: 1.5rem;
+  position: relative;
+}
+.order-track-status-dot {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f3f4f5;
+  border: 1px solid #eb5b25;
+  align-items: center;
+  justify-content: center;
+}
+.order-track-status-line {
+  display: block;
+  margin: 0 auto;
+  width: 1px;
+  height: 50px;
+  background: #fff;
+  border-left: 1px dotted #000;
+}
+.order-track-text-stat {
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 0.6;
+}
+.order-track-text {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.order-track {
+  transition: all 0.3s height 0.3s;
+  transform-origin: top center;
+}
+.order-track-step.completed .order-track-status-dot {
+  background: #00890e;
+  border: 1px solid #00890e;
+}
+.check-s-icon {
+  display: inline;
+}
+.order-track-step.completed .order-track-text-stat {
+  opacity: 1;
+}
+.order-track-step.completed .check-s-icon {
+  display: inline;
+}
+.order-track-step.cancelled .order-track-status-dot {
+  background: #c10000;
+  border: 1px solid #c10000;
+}
+.order-track-step.cancelled .order-track-text-stat {
+  opacity: 1;
+}
+.order-track-step.cancelled .check-s-icon {
+  display: inline;
+}
+/* order status timeline ends */
