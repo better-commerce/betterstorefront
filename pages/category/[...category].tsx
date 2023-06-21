@@ -243,7 +243,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     }
     //}
 
-  }, [data?.products?.results?.length])
+  }, [data?.products?.results?.length,data])
 
   useEffect(() => {
     const data = IS_INFINITE_SCROLL
