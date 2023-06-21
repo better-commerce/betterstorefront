@@ -182,15 +182,17 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length,data])
 
-  const handlePageChange = (page: any) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, currentPage: page.selected + 1 },
-      },
-      undefined,
-      { shallow: true }
-    )
+  const handlePageChange = (page: any,redirect:any=true) => {
+    if(redirect)
+    { 
+       router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, currentPage: page.selected + 1 },
+        },
+        undefined,
+        { shallow: true }
+      )}
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
       window.scroll({
