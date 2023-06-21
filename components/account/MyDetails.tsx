@@ -74,28 +74,29 @@ export default function MyDetails() {
   return (
     <main className="sm:px-6 lg:px-8">
       <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-        <h3 className="max-w-4xl mt-2 mx-auto text-xl font-semibold text-black flex gap-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-arrow-left"
-            viewBox="0 0 16 16"
-          >
-            {' '}
-            <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
-          </svg>
-          <Link className="mr-2 mx-2 leading-none" href="/my-account">
-            My Details
+      <h3 className="max-w-4xl mt-0 mx-auto text-xl font-semibold text-black flex gap-1">
+          <Link className="mr-2 mx-1 align-middle leading-none" href="/my-account">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-arrow-left xsm:mt-1"
+              viewBox="0 0 16 16"
+            >
+              {' '}
+              <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
+            </svg>
           </Link>
+          <span className="leading-none">My Details</span>
         </h3>
       </div>
+      <div className='mx-2'>
       <div className="max-w-4xl lg:mx-12 xs:ml-6">
         <div className="lg:px-0 sm:px-0">
-          <h1 className="font-extrabold tracking-tight text-gray-900 pt-2">
+          {/* <h1 className="font-extrabold tracking-tight text-gray-900 pt-2">
             {title}
-          </h1>
+          </h1> */}
           <p className="mt-2 text-sm text-black font-normal">
             {MY_DETAIL_TEXT}
           </p>
@@ -138,7 +139,7 @@ export default function MyDetails() {
                             value={values[formItem.name]}
                             type={formItem.type}
                             maxLength={formItem.maxLength}
-                            className="mb-2 mt-2 font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 "
+                            className="mb-2 mt-2 font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 !px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
                           />
 
                           {errors[formItem.name] && touched[formItem.name] ? (
@@ -176,6 +177,7 @@ export default function MyDetails() {
             )
           }}
         </Formik>
+      </div>
       </div>
     </main>
   )

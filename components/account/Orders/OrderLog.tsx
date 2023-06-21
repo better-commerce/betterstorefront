@@ -17,7 +17,7 @@ const OrderLog = ({ orderLog, orderJourney, deliveryPlanId }: any) => {
       return (
          <div className={`w-full order-track-step ${cssClass}`}>
             <div className="order-track-status">
-               <span className="order-track-status-dot">
+               <span className="order-track-status-dot !mt-2">
                   <span className='leading-none check-s-icon'>
                      {cssClass === 'cancelled' ? <XMarkIcon className="inline-block w-4 h-4 text-white" /> : <CheckIcon className="inline-block w-4 h-4 text-white" />}
                   </span>

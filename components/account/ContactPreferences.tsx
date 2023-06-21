@@ -132,12 +132,12 @@ export default function ContactPreferences() {
   }
 
   return (
-    <main className="sm:px-6 lg:px-8">
+    <main className="lg:px-8">
       <div className="max-w-4xl">
         <div className="lg:px-4 sm:px-0">
-          <h1 className="font-extrabold tracking-tight text-gray-900">
+          {/* <h1 className="font-extrabold tracking-tight text-gray-900">
             {title}
-          </h1>
+          </h1> */}
           <p className="mt-2 text-sm flex flex-col text-black">
             <span className="font-medium"> {CONTACT_PREFERENCES_TITLE}</span>
             <span className="font-medium"> {CONTACT_PREFERENCES_SUBTITLE}</span>

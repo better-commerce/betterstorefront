@@ -91,7 +91,7 @@ export default function Summary({
                           alt="logo"
                         ></Image> */}
                         <ShoppingCartIcon className="w-4 h-4" />
-                        <span className="ml-3 link-button">
+                        <span className="ml-3 link-button !text-base">
                           {GENERAL_ORDER_SUMMARY}
                         </span>
                       </h2>
@@ -150,7 +150,7 @@ export default function Summary({
                                       href={`/${product.slug}`}
                                       className="inline-block font-bold text-gray-900 hover:text-gray-800 hover:underline uppercase"
                                     >
-                                      {product?.name}
+                                      <p>{product?.name}</p>
                                     </Link>
                                     <p className="inline-block text-sm text-gray-900 font-medium">
                                       {product.price?.formatted?.withTax}
@@ -362,7 +362,7 @@ export default function Summary({
           </Disclosure>
           {/* /////////hide data */}
           <div className="mt-0 bg-white border border-gray-200 shadow-sm deskdataonmobile hideipad">
-            <h4 className="px-5 py-4 mb-3 font-bold text-gray-900 uppercase bg-gray-200 border-b bg-nav">
+            <h4 className="px-5 py-4 mb-3 font-bold text-gray-900 uppercase bg-gray-200 border-b bg-nav !mt-0">
               {GENERAL_ORDER_SUMMARY}
             </h4>
 
@@ -410,7 +410,7 @@ export default function Summary({
                                 href={`/${product.slug}`}
                                 className="inline-block text-gray-700 hover:text-gray-800 hover:underline font-bold uppercase"
                               >
-                                {product?.name}
+                                <p>{product?.name}</p>
                               </Link>
                               <p className="inline-block text-sm text-gray-700 font-bold uppercase">
                                 {product.price?.formatted?.withTax}
