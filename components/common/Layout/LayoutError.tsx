@@ -48,7 +48,8 @@ interface Props {
   children: any
   pageProps: {
     pages?: Page[]
-    categories: Category[]
+    categories: Category[],
+    navTree: [],
   }
   nav: []
   footer: []
@@ -133,13 +134,15 @@ const LayoutError: FC<Props & IExtraProps> = ({
   //check if nav data is avaialbel in LocalStorage, then dont fetch from Server/API
   useEffect(() => {
     const fetchLayout = async () => {
-      try {
+      setData(pageProps?.navTree)
+      setItem('navTree', pageProps?.navTree)
+      /*try {
         const response: any = await getData(NEXT_GET_NAVIGATION)
         setData(response)
         setItem('navTree', response)
       } catch (error) {
         console.log(error, 'error')
-      }
+      }*/
     }
     fetchLayout()
     setAppConfig(config)
