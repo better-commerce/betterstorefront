@@ -151,11 +151,16 @@ const Navbar: FC<Props & IExtraProps> = ({
 
   const buttonRef = useRef<HTMLButtonElement>(null) // useRef<HTMLButtonElement>(null)
   const [openState, setOpenState] = useState(-1)
-  const [renderState, setRenderState] = useState(false)
+  const isProduction = process.env.NODE_ENV === "production"
+  const [renderState, setRenderState] = useState(isProduction)
 
   // update 'renderState' to check whether the component is rendered or not
   // used for removing hydration errors
-  useEffect(() => setRenderState(true), [])
+  useEffect(() => {
+    if (!isProduction) {
+      setRenderState(true)
+    }
+  }, [])
 
   const viewWishlist = () => {
     if (currentPage) {
@@ -345,8 +350,8 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 <div className="pt-5 pr-3">
                                   <ChevronUpIcon
                                     className={`${!open
-                                        ? 'transition-transform duration-150 rotate-180 transform'
-                                        : 'transition-transform duration-150 rotate-0 transform'
+                                      ? 'transition-transform duration-150 rotate-180 transform'
+                                      : 'transition-transform duration-150 rotate-0 transform'
                                       } h-5 w-5 text-black`}
                                   />
                                 </div>
@@ -371,7 +376,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                               className="col-span-1"
                                             >
                                               {navBlock.navItems.map(
-                                                (navItem: any , idx: any) => (
+                                                (navItem: any, idx: any) => (
                                                   <Link
                                                     legacyBehavior
                                                     key={`${navItem.caption}-${idx}`}
