@@ -150,7 +150,7 @@ export default function Summary({
                                       href={`/${product.slug}`}
                                       className="inline-block font-bold text-gray-900 hover:text-gray-800 hover:underline uppercase"
                                     >
-                                      {product?.name}
+                                      <p>{product?.name}</p>
                                     </Link>
                                     <p className="inline-block text-sm text-gray-900 font-medium">
                                       {product.price?.formatted?.withTax}
@@ -410,7 +410,7 @@ export default function Summary({
                                 href={`/${product.slug}`}
                                 className="inline-block text-gray-700 hover:text-gray-800 hover:underline font-bold uppercase"
                               >
-                                {product?.name}
+                                <p>{product?.name}</p>
                               </Link>
                               <p className="inline-block text-sm text-gray-700 font-bold uppercase">
                                 {product.price?.formatted?.withTax}
