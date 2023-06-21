@@ -98,7 +98,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
       pageSize: PAGE_SIZE,
     })
 
-    // console.log('setPagedOrders ::', ordersResult);
+    // console.log('setPagedOrders ::', ordersResult);<a
     setPagedOrders(ordersResult)
     setAllOrdersFetched(true)
   }
@@ -164,7 +164,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
       {!isShowDetailedOrder && (
         <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
         <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
-            <a className="mx-2 leading-none mt-1 align-middle" href="/my-account"><svg
+            <Link className="mx-2 leading-none mt-1 align-middle" href="/my-account"><svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -176,7 +176,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
                 <path
                   d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
                 />{' '}
-              </svg></a> 
+              </svg></Link> 
               <span className='leading-none'>My Orders</span>
             </h3>
         </div>
