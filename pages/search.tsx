@@ -180,19 +180,19 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.products?.results?.length,data])
+  }, [data?.products?.results?.length, data])
 
-  const handlePageChange = (page: any,redirect:any=true) => {
-    if(redirect)
-    { 
-       router.push(
+  const handlePageChange = (page: any, redirect = true) => {
+    if (redirect) {
+      router.push(
         {
           pathname: router.pathname,
           query: { ...router.query, currentPage: page.selected + 1 },
         },
         undefined,
         { shallow: true }
-      )}
+      )
+    }
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
       window.scroll({
@@ -337,14 +337,14 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         />
       </NextHead>
       <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
-      <div className=''>
-        <h1 className="pl-4 font-semibold tracking-tight text-black sm:px-0 inline-block">
-          {GENERAL_CATALOG}
-        </h1>
-        <span className="text-sm font-medium sm:px-0 inline-block ml-2">
-          Showing {data.products.total} Results for
-        </span>
-      </div>
+        <div className=''>
+          <h1 className="pl-4 font-semibold tracking-tight text-black sm:px-0 inline-block">
+            {GENERAL_CATALOG}
+          </h1>
+          <span className="text-sm font-medium sm:px-0 inline-block ml-2">
+            Showing {data.products.total} Results for
+          </span>
+        </div>
         <div className="grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
           {isMobile ? (
             <ProductMobileFilters
