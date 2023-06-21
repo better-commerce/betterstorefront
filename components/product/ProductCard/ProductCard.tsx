@@ -82,9 +82,13 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   useEffect(() => {
     handleUpdateWishlistItem()
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wishListItems, productData])
+
+  useEffect(()=>{
+    setProduct(productData)
+  },[productData])
+
   useEffect(() => {
     if (product?.variantProductsAttributeMinimal?.length < 1) return
     let sizeAttribData = product?.variantProductsAttributeMinimal?.find(

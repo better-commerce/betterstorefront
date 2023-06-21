@@ -243,7 +243,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     }
     //}
 
-  }, [data?.products?.results?.length])
+  }, [data?.products?.results?.length,data])
 
   useEffect(() => {
     const data = IS_INFINITE_SCROLL
@@ -252,15 +252,17 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     setProductDataToPass(data)
   }, [productListMemory?.products, products])
 
-  const handlePageChange = (page: any) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, currentPage: page.selected + 1 },
-      },
-      undefined,
-      { shallow: true }
-    )
+  const handlePageChange = (page: any, redirect = true) => {
+    if (redirect) {
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, currentPage: page.selected + 1 },
+        },
+        undefined,
+        { shallow: true }
+      )
+    }
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
       window.scroll({
