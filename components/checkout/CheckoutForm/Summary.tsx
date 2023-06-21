@@ -362,7 +362,7 @@ export default function Summary({
           </Disclosure>
           {/* /////////hide data */}
           <div className="mt-0 bg-white border border-gray-200 shadow-sm deskdataonmobile hideipad">
-            <h4 className="px-5 py-4 mb-3 font-bold text-gray-900 uppercase bg-gray-200 border-b bg-nav">
+            <h4 className="px-5 py-4 mb-3 font-bold text-gray-900 uppercase bg-gray-200 border-b bg-nav !mt-0">
               {GENERAL_ORDER_SUMMARY}
             </h4>
 

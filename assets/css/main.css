@@ -914,8 +914,8 @@ body {
   margin: 25px 0;
 }
 .full-m-ex-header {
-  margin-left: -30px;
-  margin-right: -30px;
+  /* margin-left: -30px;
+  margin-right: -30px; */
   padding-left: 30px;
   padding-right: 30px;
 }
@@ -954,6 +954,12 @@ body {
   .cancel-continer {
     padding-top: 0 !important;
   }
+  .o-detail-continer {
+    max-width: 550px;
+    width: 100%;
+    padding-left: 1rem;
+  }
+  
 }
 /* cancel ui css */
 .cancel-continer {

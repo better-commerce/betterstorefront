@@ -89,7 +89,7 @@ export default function Wishlist() {
     <div className="bg-white">
       {/* Mobile menu */}
 
-      <main className="px-8 lg:px-8">
+      <main className="lg:px-8">
         <div className="max-w-4xl lg:mx-12">
           <div className="lg:px-0 sm:px-0">
             <h1 className="font-extrabold tracking-tight text-gray-900">

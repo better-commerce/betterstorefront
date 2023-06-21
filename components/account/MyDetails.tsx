@@ -91,7 +91,7 @@ export default function MyDetails() {
           <span className="leading-none">My Details</span>
         </h3>
       </div>
-      <div className='mx-8'>
+      <div className='mx-2'>
       <div className="max-w-4xl lg:mx-12 xs:ml-6">
         <div className="lg:px-0 sm:px-0">
           {/* <h1 className="font-extrabold tracking-tight text-gray-900 pt-2">

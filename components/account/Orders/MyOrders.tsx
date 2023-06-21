@@ -22,9 +22,9 @@ export default function MyOrders({
   allOrders,
   handleInfiniteScroll,
   deviceInfo,
+  isShowDetailedOrder, setIsShowDetailedOrder 
 }: any) {
   const { isMobile, isIPadorTablet } = deviceInfo
-  const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(false)
   const { user, displayAlert, alertRibbon } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>(undefined)
   // console.log(allOrders)
@@ -120,7 +120,7 @@ export default function MyOrders({
           </div> */}
 
           <div className="bg-white">
-            <main className="px-6 lg:px-8">
+            <main className="lg:px-8">
               <div className="max-w-4xl">
                 {!allOrders ? (
                   <Spinner />
