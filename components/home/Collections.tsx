@@ -35,7 +35,7 @@ export default function Collections({ data }: any) {
               dangerouslySetInnerHTML={{
                 __html: collection.collectionlist_shortdescription,
               }}
-              className="mb-3 font-normal text-gray-600 h-14"
+              className="mb-3 font-normal text-gray-600 h-auto min-height-65"
             />
             <Link
               href={collection?.collectionlist_link}
