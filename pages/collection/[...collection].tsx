@@ -264,7 +264,7 @@ export default function CollectionPage(props: any) {
     //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.products?.results?.length])
+  }, [data?.products?.results?.length,data])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
