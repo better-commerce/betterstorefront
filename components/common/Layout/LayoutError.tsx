@@ -12,12 +12,8 @@ import { WishlistSidebarView } from '@components/wishlist'
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
-import { getData } from '../../utils/clientFetcher'
-import { setItem, getItem } from '../../utils/localStorage'
 import NotifyUserPopup from '@components/ui/NotifyPopup'
-import Script from 'next/script'
 import SearchWrapper from '@components/search/index'
-import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import Router from 'next/router'
 import ProgressBar from '@components/ui/ProgressBar'
 import {
@@ -49,7 +45,7 @@ interface Props {
   pageProps: {
     pages?: Page[]
     categories: Category[],
-    navTree: [],
+    navTree: any,
   }
   nav: []
   footer: []
@@ -115,52 +111,32 @@ interface LayoutProps {
 const LayoutError: FC<Props & IExtraProps> = ({
   children,
   config,
-  pageProps: { categories = [], ...pageProps },
+  pageProps: { categories = [], navTree, ...pageProps },
   keywords,
   isLocationLoaded,
   deviceInfo,
   maxBasketItemsCount,
 }) => {
-  const navTreeFromLocalStorage: any = getItem('navTree') || {
-    nav: [],
-    footer: [],
-  }
   const [isLoading, setIsLoading] = useState(false)
   const { showSearchBar, setShowSearchBar } = useUI()
-  const [data, setData] = useState(navTreeFromLocalStorage)
+  //const [data, setData] = useState(navTreeFromLocalStorage)
 
   const { appConfig, setAppConfig } = useUI()
 
   //check if nav data is avaialbel in LocalStorage, then dont fetch from Server/API
   useEffect(() => {
-    const fetchLayout = async () => {
-      setData(pageProps?.navTree)
-      setItem('navTree', pageProps?.navTree)
-      /*try {
-        const response: any = await getData(NEXT_GET_NAVIGATION)
-        setData(response)
-        setItem('navTree', response)
-      } catch (error) {
-        console.log(error, 'error')
-      }*/
-    }
-    fetchLayout()
     setAppConfig(config)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US', ...rest } = useRouter()
 
-  const sortedData = data.nav.sort(
+  const sortedData = navTree?.nav?.sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
 
@@ -178,7 +154,7 @@ const LayoutError: FC<Props & IExtraProps> = ({
         />
         <main className="">{children}</main>
         <Footer
-          config={data.footer}
+          config={navTree?.footer}
           deviceInfo={deviceInfo}
           maxBasketItemsCount={maxBasketItemsCount}
         />
