@@ -73,13 +73,13 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                     key={`my-acc-${idx}`}
                     className={`pl-2 text-md leading-3 font-medium text-red-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"}`}
                   >
-                    <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
+                    {/* <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
                       <i
                         className={
                           item.text.toLowerCase() + ' ' + 'sprite-icon'
                         }
                       ></i>
-                    </span>
+                    </span> */}
 
                     {item.text == 'My Details' ? (
                       <div
@@ -90,13 +90,13 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                             : 'font-medium'
                         }`}
                       >
-                        <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
+                        {/* <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
                           <i
                             className={
                               item.text.toLowerCase() + ' ' + 'sprite-icon'
                             }
                           ></i>
-                        </span>
+                        </span> */}
                         <Link
                           shallow={true}
                           href={item.href}
