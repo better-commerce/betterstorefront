@@ -60,7 +60,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   return (
     <section className="relative pb-10 text-gray-900">
       <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
-        <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
+        <div className="grid w-full grid-cols-12 sm:px-2 sm:pr-0 main-account-grid">
           <div
             className={`col-span-3 md:pl-12 sm:pl-6 border-r border-gray-200 tab-list-sm sm:pt-10 mob-tab-full ${
               isShow ? `` : 'mob-hidden'
@@ -73,13 +73,13 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                     key={`my-acc-${idx}`}
                     className={`pl-2 text-md leading-3 font-medium text-red-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"}`}
                   >
-                    <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
+                    {/* <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
                       <i
                         className={
                           item.text.toLowerCase() + ' ' + 'sprite-icon'
                         }
                       ></i>
-                    </span>
+                    </span> */}
 
                     {item.text == 'My Details' ? (
                       <div
@@ -90,13 +90,13 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                             : 'font-medium'
                         }`}
                       >
-                        <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
+                        {/* <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
                           <i
                             className={
                               item.text.toLowerCase() + ' ' + 'sprite-icon'
                             }
                           ></i>
-                        </span>
+                        </span> */}
                         <Link
                           shallow={true}
                           href={item.href}
