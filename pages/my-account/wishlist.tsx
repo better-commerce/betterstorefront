@@ -62,7 +62,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
       <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
         <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
         <h3 className="max-w-4xl mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
-          <a className="mr-2 mx-1 align-middle leading-none" href="/my-account"><svg
+          <Link className="mr-2 mx-1 align-middle leading-none" href="/my-account"><svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
@@ -74,7 +74,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
               <path
                 d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
               />{' '}
-            </svg></a> 
+            </svg></Link> 
             <span className='leading-none'>Wishlist</span>
           </h3>
         </div>

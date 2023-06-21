@@ -75,7 +75,7 @@ export default function MyDetails() {
     <main className="sm:px-6 lg:px-8">
       <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
       <h3 className="max-w-4xl mt-0 mx-auto text-xl font-semibold text-black flex gap-1">
-          <a className="mr-2 mx-1 align-middle leading-none" href="/my-account">
+          <Link className="mr-2 mx-1 align-middle leading-none" href="/my-account">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -87,7 +87,7 @@ export default function MyDetails() {
               {' '}
               <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
             </svg>
-          </a>
+          </Link>
           <span className="leading-none">My Details</span>
         </h3>
       </div>
