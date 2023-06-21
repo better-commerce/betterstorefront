@@ -623,6 +623,10 @@ p {
   }
 }
 
+.min-height-65 {
+  min-height: 65px;
+}
+
 /* footer css */
 .mob-menu-icon {
   color: var(--menu-icon-color) !important;
