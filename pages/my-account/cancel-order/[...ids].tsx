@@ -173,7 +173,7 @@ export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
                                         {item?.categoryItems[0]?.categoryName}
                                       </p>
                                     </div>
-                                    <h3 className='pr-6 mt-2'>
+                                    <h3 className='pr-6 mt-2 !text-sm'>
                                       <Link href={`/${item?.slug}`} passHref className="font-semibold text-md dark:text-gray-900">
                                         {item?.name}
                                       </Link>

@@ -8,12 +8,15 @@ import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { LoadingDots } from '@components/ui'
+import { round } from 'lodash'
+import { matchStrings, priceFormat } from '@framework/utils/parse-util'
 import Image from 'next/legacy/image'
 import {
   WISHLIST_TITLE,
   WISHLIST_SUB_TITLE,
   GENERAL_VIEW_PRODUCT,
   GENERAL_ADD_TO_BASKET,
+  IMG_PLACEHOLDER,
   GENERAL_REMOVE,
 } from '@components/utils/textVariables'
 import { isCartAssociated } from '@framework/utils/app-util'
@@ -88,6 +91,7 @@ export default function Wishlist() {
   return (
     <div className="bg-white">
       {/* Mobile menu */}
+      
 
       <main className="lg:px-8">
         <div className="max-w-4xl lg:mx-12">
@@ -127,76 +131,112 @@ export default function Wishlist() {
             )}
             {isLoading ? <LoadingDots /> : null}
             <div className="space-y-16 sm:space-y-24">
-              <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
-                <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
-                  {data.map((product: any) => (
-                    <div key={product.id} className="flex py-6 sm:py-10">
-                      <div className="min-w-0 flex-1 lg:flex lg:flex-col">
-                        <div className="lg:flex-1">
-                          <div className="sm:flex">
-                            <div>
-                              <h4 className="font-medium text-gray-900">
-                                {product.name}
-                              </h4>
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html: product.shortDescription,
-                                }}
-                                className="hidden mt-2 text-sm text-gray-500 sm:block"
-                              />
+                            <div className="flow-root px-0 mt-2 sm:mt-4 sm:px-0">
+                              <div className="grid grid-cols-2 -mx-px sm:gap-y-4 sm:mx-0 md:grid-cols-4 product-listing-main lg:grid-cols-4">
+                                {data.map((product: any, wid: number) => {
+                                  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax;
+                                  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0);
+                                  return (
+                                    <div className="mb-2 origin-center group hover:bg-white" key={wid}>
+                                      <div key={product.id} className="relative px-1 pt-0 pb-2 group-hover:pb-0 sm:px-1">
+                                        <Link
+                                          passHref
+                                          href={`/${product.slug}`}
+                                        >
+                                  
+                                            <div className="relative overflow-hidden bg-gray-200 radius-xs aspect-w-1 aspect-h-1">
+                                              <div className='imae-container'>
+                                                {product.image != null ? (
+                                                  <>
+                                                    <Image
+                                                      src={product.image}
+                                                      alt={product.name}
+                                                      layout='responsive'
+                                                      width={400}
+                                                      height={600}
+                                                      className='object-cover object-center w-full h-full radius-xs sm:h-full'>
+                                                    </Image>
+                                                  </>
+                                                ) : (
+                                                  <>
+                                                    <Image
+                                                      src={IMG_PLACEHOLDER}
+                                                      alt={product.name}
+                                                      layout='responsive'
+                                                      width={400}
+                                                      height={600}
+                                                      className='object-cover object-center w-full h-full radius-xs sm:h-full'>
+                                                    </Image>
+                                                  </>
+                                                )
+                                                }
+                                                {/* <span className='absolute left-0 inline-block px-4 py-1 text-xs text-white uppercase bg-orange bottom-2'>Bestseller</span> */}
+                                              </div>
+                                              <span className="sr-only">{product.name}</span>
+                                            </div>
+                                       
+                                        </Link>
+                                        <div className="pt-0">
+                                          <div className='grid grid-cols-12 px-2 mt-2 sm:grid-cols-12 sm:gap-x-2'>
+                                            <div className="flex items-center col-span-12 sm:col-span-12">
+                                              <h3 className='text-xs truncate max-width-250 text-brown-light text-10'>{product.classification.category}</h3>
+                                            </div>
+                                          </div>
+                                          <h3 className="px-2 py-1 font-medium text-12 text-primary min-h-50 !text-sm">
+                                            <Link href={`/${product.slug}`}>
+                                             {product.name}
+                                            </Link>
+                                          </h3>
+                                          <p className="px-2 mt-1 mb-2 font-medium text-12 text-primary sm:mt-2 min-h-40 sm:mb-0">
+                                            {priceFormat(product?.price?.raw?.withTax)}
+                                            {product?.listPrice?.raw?.withTax > product?.price?.raw?.withTax ? (
+                                              <>
+                                                <span className="px-2 font-normal text-gray-500 line-through text-12">
+                                                  {priceFormat(product?.listPrice?.raw?.withTax)}
+                                                </span>
+                                                <span className='font-normal text-12 text-emerald-500'>{discount}% off</span>
+                                              </>
+                                            ) : null}
+                                          </p>
+
+                                          <div className="w-full px-2 mt-3">
+                                            {product?.currentStock > 0 ?
+                                              (
+                                                <button
+                                                  onClick={() => handleAddToCart(product)}
+                                                  className="flex items-center justify-center w-full p-3 text-xs font-semibold text-black border uppercase"
+                                                >
+                                                  <span className='mr-2'><i className="sprite-icon sprite-cart"></i></span> {GENERAL_ADD_TO_BASKET}
+                                                </button>
+                                              ) :
+                                              (
+                                                <button
+                                                  className="flex items-center justify-center w-full px-3 py-4 text-xs font-semibold text-black bg-gray-200 border"
+                                                >
+                                                  Out Of Stock
+                                                </button>
+                                              )
+                                            }
+
+                                          </div>
+                                          <div className="absolute z-10 inline-block top-3 right-1">
+                                            <button
+                                              onClick={() =>
+                                                handleRemoveFromWishlist(product)
+                                              }
+                                              className="text-red-600 hover:text-red-500"
+                                            >
+                                              <span className='mr-2'><i className="sprite-icon sprite-close"></i></span>
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )
+                                })}
+                              </div>
                             </div>
-                            <p className="mt-1 font-medium text-gray-900 sm:mt-0 sm:ml-6">
-                              {product.price.formatted.withTax}
-                            </p>
                           </div>
-                          <div className="mt-2 flex text-sm font-medium sm:mt-4">
-                            <Link
-                              href={`/${product.slug}`}
-                              className="text-indigo-600 hover:text-indigo-500"
-                            >
-                              {GENERAL_VIEW_PRODUCT}
-                            </Link>
-                            <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                className="text-indigo-600 hover:text-indigo-500"
-                              >
-                                {GENERAL_ADD_TO_BASKET}
-                              </button>
-                            </div>
-                            <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
-                              <button
-                                onClick={() =>
-                                  handleRemoveFromWishlist(product)
-                                }
-                                className="text-red-600 hover:text-red-500"
-                              >
-                                {GENERAL_REMOVE}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
-                        <Image
-                          width={80}
-                          height={130}
-                          layout="fixed"
-                          src={product.image}
-                          alt={product.name}
-                          className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52 image"
-                        ></Image>
-                        {/* <img
-                          src={product.image}
-                          alt={product.name}
-                          className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
-                        /> */}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
           </section>
         </div>
       </main>
