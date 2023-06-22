@@ -522,6 +522,10 @@ p {
   .pagination-ul li {
     display: inline-block;
   }
+
+  .pagination-ul li a {
+    font-size: 13px !important;
+  }
 }
 
 /* footer css */
