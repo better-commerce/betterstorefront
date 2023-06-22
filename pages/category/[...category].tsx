@@ -445,7 +445,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
               ))}
           </div>
         ) : (
-          <div className="p-32 mx-auto text-center max-w-7xl">
+          <div className="p-4 py-8  sm:p-32 mx-auto text-center max-w-7xl">
             <h4 className="text-3xl font-bold text-gray-300">
               No Products availabe in {category.name}
             </h4>

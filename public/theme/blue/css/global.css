@@ -618,6 +618,15 @@ p {
 
 /* flag primary css start */
 @media screen and (max-width: 767px) {
+  .pagination-ul {
+    display: block;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  .pagination-ul li {
+    display: inline-block;
+  }
   .font-36 {
     font-size: 24px !important;
   }
