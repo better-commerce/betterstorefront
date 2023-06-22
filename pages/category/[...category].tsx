@@ -182,7 +182,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     categoryId: category.id,
   }
   const [state, dispatch] = useReducer(reducer, initialState)
-  const apiEndpoint = '/api/catalog'
   const {
     data = {
       products: {
@@ -198,9 +197,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     error,
   } = useSwr(
     [
-      matchStrings(slug, 'category', true)
-        ? `${apiEndpoint}/category`
-        : `${apiEndpoint}/products`,
+      `/api/catalog/products`,
       { ...state, ...{ slug: slug, isCategory: true } },
     ],
     ([url, body]: any) => postData(url, body),
