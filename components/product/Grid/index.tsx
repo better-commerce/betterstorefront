@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
+import Router from 'next/router'
+import dynamic from 'next/dynamic'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import rangeMap from '@lib/range-map'
-import dynamic from 'next/dynamic'
 const ProductCard = dynamic(
   () => import('@components/product/ProductCard/ProductCard')
 )
@@ -16,13 +18,29 @@ interface Props {
 export default function Grid({
   products,
   currentPage,
-  handlePageChange = () => {},
+  handlePageChange = () => { },
   handleInfiniteScroll,
   deviceInfo,
   maxBasketItemsCount,
 }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL =
     process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+
+  useEffect(() => {
+    Router.events.on('routeChangeComplete', () => {
+      const currentPage: any = Router?.query?.currentPage;
+      if (currentPage) {
+
+        handlePageChange({ selected: parseInt(currentPage) - 1 }, false);
+      }
+    })
+
+    return () => {
+      Router.events.off('routeChangeComplete', () => { })
+    }
+
+  }, [Router.events])
+
   return (
     <>
       {IS_INFINITE_SCROLL && (
@@ -33,11 +51,10 @@ export default function Grid({
           currentNumber={products.results.length}
           component={
             <div
-              className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-4 px-3 sm:px-0 ${
-                products.results.length < 6
-                  ? `lg:grid-cols-4`
-                  : 'lg:grid-cols-4'
-              }`}
+              className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-4 px-3 sm:px-0 ${products.results.length < 6
+                ? `lg:grid-cols-4`
+                : 'lg:grid-cols-4'
+                }`}
             >
               {!products.results.length &&
                 rangeMap(12, (i) => (
@@ -67,9 +84,8 @@ export default function Grid({
       {!IS_INFINITE_SCROLL && (
         <>
           <div
-            className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 ${
-              products.results.length < 6 ? `lg:grid-cols-5` : 'lg:grid-cols-5'
-            }`}
+            className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-4 px-3 sm:px-0 ${products.results.length < 6 ? `lg:grid-cols-4` : 'lg:grid-cols-4'
+              }`}
           >
             {!products?.results?.length &&
               rangeMap(12, (i) => (
@@ -107,7 +123,17 @@ export default function Grid({
           {products.pages > 1 && (
             <Pagination
               currentPage={currentPage}
-              onPageChange={handlePageChange}
+              //onPageChange={handlePageChange}
+              onPageChange={(page: any) => {
+                Router.push(
+                  {
+                    pathname: Router.pathname,
+                    query: { ...Router.query, currentPage: page.selected + 1 },
+                  },
+                  undefined,
+                  { shallow: true }
+                )
+              }}
               pageCount={products.pages}
             />
           )}

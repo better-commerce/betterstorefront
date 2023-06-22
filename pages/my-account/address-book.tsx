@@ -60,7 +60,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   return (
     <section className="relative pb-10 text-gray-900 sm:text-sm">
       <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
-        <div className="px-2 py-4 mx-5 mb-4 border-b mob-header md:hidden full-m-header">
+        {/* <div className="px-2 py-4 mx-5 mb-4 border-b mob-header md:hidden full-m-header">
           <h3 className="flex max-w-4xl gap-1 mx-5 mt-2 text-xl font-semibold text-black">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
               My Saved Address
             </Link>
           </h3>
-        </div>
+        </div> */}
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
           <div className="col-span-3 border-r border-gray-200 md:pl-12 sm:pl-6 tab-list-sm sm:pt-10 mob-hidden">
             <div className="sticky left-0 z-10 flex flex-col top-36">
@@ -132,7 +132,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                               {item.mtext}
                             </span>
                             <span
-                              className={`hidden sm:inline-block text-black dark:text-black ${
+                              className={`hidden sm:inline-block text-black dark:text-black${
                                 item.text == 'My Saved Address' &&
                                 'font-display'
                               }`}

@@ -305,15 +305,8 @@ export default function AddressForm({
               </Form>
             )} */}
             {
-              <div className="flex">
-                <button
-                  type="button"
-                  // onClick={() => handleNewFormButton(values, errors)}
-                  onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="max-w-xs m-2 flex-1 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium btn-default sm:w-full"
-                >
-                  {ADD_ADDRESS}
-                </button>
+              <div className="flex lg:flex-row md:flex-row gap-2 mt-10 flex-col">
+              
                 {/* {isFormOpen && (
                   <button
                     type="button"
@@ -323,6 +316,32 @@ export default function AddressForm({
                     {GENERAL_CANCEL}
                   </button>
                 )} */}
+             
+              <button
+                type="submit"
+                onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
+                className="max-w-xs flex-1 border border-transparent text-sm rounded-sm uppercase py-3 px-8 flex items-center justify-center hover:bg-slate-900 font-medium text-white bg-black sm:w-full"
+              >
+                {btnTitle}
+              </button>
+              <button
+                  type="button"
+                  // onClick={() => handleNewFormButton(values, errors)}
+                  onClick={(ev: any) => handleOpenNewAddressModal()}
+                  className="max-w-xs flex-1 border border-black hover:bg-black hover:text-white text-sm rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium  sm:w-full"
+                >
+                  {ADD_ADDRESS}
+                </button>
+              {/* {!!closeEditMode && (
+                <button
+                  type="button"
+                  onClick={closeEditMode}
+                  className="max-w-xs flex-1 bg-gray-500 border border-transparent rounded-md py-3 ml-5 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                >
+                  {GENERAL_CANCEL}
+                </button>
+              )} */}
+        
               </div>
             }
             {/* {isSameAddressCheckboxEnabled && (
@@ -347,24 +366,7 @@ export default function AddressForm({
               </div>
             )} */}
 
-            <div className="mt-10 flex sm:flex-col1 w-full justify-center">
-              <button
-                type="submit"
-                onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
-                className="max-w-xs flex-1 border border-transparent rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
-              >
-                {btnTitle}
-              </button>
-              {/* {!!closeEditMode && (
-                <button
-                  type="button"
-                  onClick={closeEditMode}
-                  className="max-w-xs flex-1 bg-gray-500 border border-transparent rounded-md py-3 ml-5 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-                >
-                  {GENERAL_CANCEL}
-                </button>
-              )} */}
-            </div>
+           
           </>
         )
       }}

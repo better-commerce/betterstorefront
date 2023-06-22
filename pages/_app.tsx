@@ -19,6 +19,7 @@ import {
   BETTERCOMMERCE_DEFAULT_CURRENCY,
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
+  NAV_ENDPOINT,
 } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
@@ -129,7 +130,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     )
 
     document.body.appendChild(addScript)
-    ;(window as any).googleTranslateElementInit = googleTranslateElementInit
+      ; (window as any).googleTranslateElementInit = googleTranslateElementInit
     document.getElementById('goog-gt-tt')?.remove()
   }, [])
 
@@ -141,7 +142,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
     // Dispose listener.
     return () => {
-      router.events.off('routeChangeComplete', () => {})
+      router.events.off('routeChangeComplete', () => { })
     }
   }, [router.events])
 
@@ -225,15 +226,15 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
   const seoInfo =
     pageProps?.metaTitle ||
-    pageProps?.metaDescription ||
-    pageProps?.metaKeywords
+      pageProps?.metaDescription ||
+      pageProps?.metaKeywords
       ? pageProps
       : pageProps?.data?.product || undefined
 
   const seoImage =
     pageProps?.metaTitle ||
-    pageProps?.metaDescription ||
-    pageProps?.metaKeywords
+      pageProps?.metaDescription ||
+      pageProps?.metaKeywords
       ? pageProps?.products?.images[0]?.url
       : pageProps?.data?.product?.image || undefined
 
@@ -316,7 +317,10 @@ MyApp.getInitialProps = async (
 ): Promise<AppInitialProps> => {
   const { ctx, Component } = context
   const req: any = ctx?.req
-  let appConfigResult
+  let appConfigResult, navTreeResult = {
+    nav: new Array(),
+    footer: new Array(),
+  }
   let defaultCurrency = BETTERCOMMERCE_DEFAULT_CURRENCY
   let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
   let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
@@ -361,7 +365,15 @@ MyApp.getInitialProps = async (
           (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
         ).value ||
       BETTERCOMMERCE_DEFAULT_LANGUAGE
-  } catch (error: any) {}
+
+    const navResult = await cachedGetData(NAV_ENDPOINT, req?.cookies, headers)
+    if (!navResult?.message && navResult?.errors?.length == 0) {
+      navTreeResult = {
+        nav: navResult?.result?.header,
+        footer: navResult?.result?.footer
+      }
+    }
+  } catch (error: any) { }
 
   let appConfig = null
   if (appConfigResult) {
@@ -379,6 +391,7 @@ MyApp.getInitialProps = async (
   return {
     pageProps: {
       appConfig: appConfig,
+      navTree: navTreeResult,
     },
   }
 }

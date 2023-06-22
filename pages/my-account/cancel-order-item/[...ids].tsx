@@ -187,7 +187,7 @@ export default function OrderCancel({
                                     {itemData?.categoryItems && itemData?.categoryItems[0]?.categoryName}
                                   </p>
                                 </div>
-                                <h3 className="pr-6 mt-2 font-normal text-12 text-primary">
+                                <h3 className="pr-6 mt-2 font-normal text-12 text-primary !text-sm">
                                   <Link href={`/${itemData?.slug}`} passHref>
                                     {itemData?.name}
                                   </Link>
