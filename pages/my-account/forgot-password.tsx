@@ -155,7 +155,7 @@ export default function ForgotPasswordPage() {
               </button>
             </form>
           ) : (
-            <form className="flex-col w-full px-5 py-5 flex items-center justify-center font-semibold w-full sm:w-1/2">
+            <form className="flex-col px-5 py-5 flex items-center justify-center font-semibold w-full sm:w-1/2">
               <label className="text-gray-700 text-sm">Enter your email</label>
               <input
                 className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
@@ -172,7 +172,7 @@ export default function ForgotPasswordPage() {
                 <button
                   onClick={handleSubmit}
                   type="button"
-                  className="my-4 max-w-xs flex-1 btn-primary py-3 px-4 sm:w-full"
+                  className="my-4 w-full min-h-sm flex-1 btn-primary py-3 px-4"
                 >
                   {isLoading ? <LoadingDots /> : BTN_SUBMIT}
                 </button>

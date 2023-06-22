@@ -105,7 +105,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             {MESSAGE_CHARACTERS_LEFT}: {MAX_LENGTH - commentBody.length}
           </span>
           {!!error && <span className="text-sm text-red-900">{error}</span>}
-          <div className="flex mt-5 flex-center">
+          <div className="flex mt-5 flex-row items-center">
             {[1, 2, 3, 4, 5].map((num) => (
               <StarIcon
                 key={`starIcon-${num}`}
@@ -117,7 +117,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
                 aria-hidden="true"
               />
             ))}
-            <p className="ml-3 text-sm text-gray-700">
+            <p className="ml-3 mt-1 text-sm sm:text-[16px]  text-gray-700">
               {rating}
               <span className="sr-only"> {GENERAL_REVIEW_OUT_OF_FIVE}</span>
             </p>
