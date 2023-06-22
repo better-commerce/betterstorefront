@@ -63,7 +63,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                      </div>
                   </div>
                   <div className='hidden sm:block'>
-                     <h5 className='font-10 text-black-light'>Order PLACED ON</h5>
+                     <h5 className='font-10 uppercase text-black-light'>Order PLACED ON</h5>
                      <p className='text-sm dark:text-black text-primary'>{moment(new Date(details?.order.orderDate)).format(DATE_FORMAT)}</p>
                   </div>
                   <div className='hidden sm:block'>
@@ -75,11 +75,11 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                </div>
                <div className='flex justify-between py-4 mt-4 sm:pl-16 xsm:pl-16 border-t sm:hidden full-m-ex-header'>
                   <div className=''>
-                     <h3 className='font-10 text-black-light'>Order PLACED ON</h3>
+                     <h3 className='font-10 text-black-light uppercase !text-sm'>Order PLACED ON</h3>
                      <p className='text-sm text-primary'>{moment(new Date(details?.order.orderDate)).format(DATE_FORMAT)}</p>
                   </div>
                   <div className=''>
-                     <h3 className='font-10 text-black-light'>ORDER TOTAL</h3>
+                     <h3 className='font-10 text-black-light !text-sm'>ORDER TOTAL</h3>
                      <p className='text-sm text-primary'>{details?.order?.grandTotal?.formatted?.withTax}</p>
                   </div>
                </div>

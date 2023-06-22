@@ -61,11 +61,17 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
       basketOrderInfo,
+      uiContext,
       dispatchState
     )
     if (orderResult?.success && orderResult?.result?.id) {
       uiContext?.hideOverlayLoaderState()
     } else {
+      this.setState({
+        confirmed: false,
+        formLoaded: false,
+        scriptLoaded: false,
+      })
       uiContext?.hideOverlayLoaderState()
       if (state) {
         dispatchState(state)
@@ -87,7 +93,12 @@ export class CheckoutPaymentButton extends BasePaymentButton {
   private onFrameReady(): void {
     const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any =
       this.props
-    this.onPay(paymentMethod, basketOrderInfo, uiContext, dispatchState)
+    this.onPay(
+      this.state.paymentMethod,
+      basketOrderInfo,
+      uiContext,
+      dispatchState
+    )
 
     this.setState({
       formLoaded: true,

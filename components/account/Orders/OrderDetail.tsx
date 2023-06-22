@@ -4,9 +4,8 @@ import React, { Fragment, useEffect, useState } from 'react'
 // Package Imports
 import moment from 'moment'
 import Router from 'next/router'
-import Image from 'next/image'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { Dialog, Transition, Disclosure } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { Disclosure } from '@headlessui/react';
 
 // Component Imports
 import OrderStatusMapping from './OrderStatusMapping'
@@ -257,13 +256,13 @@ export default function OrderDetail({
                               )}
                             </span>
                           </p>
-                          <a className="cursor-pointer">
-                            <i
-                              className={`${
-                                open ? 'rotate-180 transform' : ''
-                              } sprite-icon sprite-up-arrow`}
+                          <button className="border rounded-full border-gray-900">
+                            <ChevronDownIcon
+                              className={`w-4 h-4 ${
+                              open && 'rotate-180 transform'
+                              }`}
                             />
-                          </a>
+                          </button>
                         </Disclosure.Button>
                       )}
                       <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">

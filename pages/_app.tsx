@@ -12,14 +12,16 @@ import { v4 as uuid_v4 } from 'uuid'
 import {
   SessionIdCookieKey,
   DeviceIdKey,
-  NEXT_INFRA_ENDPOINT,
   NEXT_API_KEYWORDS_ENDPOINT,
   SITE_NAME,
   SITE_ORIGIN_URL,
   INFRA_ENDPOINT,
+  BETTERCOMMERCE_DEFAULT_CURRENCY,
+  BETTERCOMMERCE_DEFAULT_COUNTRY,
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
+  NAV_ENDPOINT,
 } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
-import { postData } from '@components/utils/clientFetcher'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
 import analytics from '@components/services/analytics/analytics'
@@ -128,7 +130,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     )
 
     document.body.appendChild(addScript)
-    ;(window as any).googleTranslateElementInit = googleTranslateElementInit
+      ; (window as any).googleTranslateElementInit = googleTranslateElementInit
     document.getElementById('goog-gt-tt')?.remove()
   }, [])
 
@@ -140,7 +142,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
     // Dispose listener.
     return () => {
-      router.events.off('routeChangeComplete', () => {})
+      router.events.off('routeChangeComplete', () => { })
     }
   }, [router.events])
 
@@ -224,15 +226,15 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
   const seoInfo =
     pageProps?.metaTitle ||
-    pageProps?.metaDescription ||
-    pageProps?.metaKeywords
+      pageProps?.metaDescription ||
+      pageProps?.metaKeywords
       ? pageProps
       : pageProps?.data?.product || undefined
 
   const seoImage =
     pageProps?.metaTitle ||
-    pageProps?.metaDescription ||
-    pageProps?.metaKeywords
+      pageProps?.metaDescription ||
+      pageProps?.metaKeywords
       ? pageProps?.products?.images[0]?.url
       : pageProps?.data?.product?.image || undefined
 
@@ -315,55 +317,68 @@ MyApp.getInitialProps = async (
 ): Promise<AppInitialProps> => {
   const { ctx, Component } = context
   const req: any = ctx?.req
-
-  const headers = {
-    DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+  let appConfigResult, navTreeResult = {
+    nav: new Array(),
+    footer: new Array(),
   }
-  const appConfigResult: any = await cachedGetData(
-    INFRA_ENDPOINT,
-    req?.cookies,
-    headers
-  )
-  const languageCookie =
-    req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
+  let defaultCurrency = BETTERCOMMERCE_DEFAULT_CURRENCY
+  let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
+  let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
 
-  const currencyCookie =
-    req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
+  try {
+    const headers = {
+      DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+    }
+    appConfigResult = await cachedGetData(INFRA_ENDPOINT, req?.cookies, headers)
+    const languageCookie =
+      req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
 
-  const countryCookie =
-    req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
+    const currencyCookie =
+      req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
 
-  const defaultCurrency =
-    currencyCookie ||
-    appConfigResult?.result?.configSettings
-      .find((setting: any) => setting.configType === 'RegionalSettings')
-      .configKeys.find(
-        (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
-      ).value ||
-    'INR'
+    const countryCookie =
+      req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
 
-  const defaultCountry =
-    countryCookie ||
-    appConfigResult?.result?.configSettings
-      .find((setting: any) => setting.configType === 'RegionalSettings')
-      .configKeys.find(
-        (item: any) => item.key === 'RegionalSettings.DefaultCountry'
-      ).value ||
-    'US'
+    defaultCurrency =
+      currencyCookie ||
+      appConfigResult?.result?.configSettings
+        .find((setting: any) => setting.configType === 'RegionalSettings')
+        .configKeys.find(
+          (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
+        ).value ||
+      BETTERCOMMERCE_DEFAULT_CURRENCY
 
-  const defaultLanguage =
-    languageCookie ||
-    appConfigResult?.result?.configSettings
-      .find((setting: any) => setting.configType === 'RegionalSettings')
-      .configKeys.find(
-        (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
-      ).value ||
-    'en-IN'
+    defaultCountry =
+      countryCookie ||
+      appConfigResult?.result?.configSettings
+        .find((setting: any) => setting.configType === 'RegionalSettings')
+        .configKeys.find(
+          (item: any) => item.key === 'RegionalSettings.DefaultCountry'
+        ).value ||
+      BETTERCOMMERCE_DEFAULT_COUNTRY
+
+    defaultLanguage =
+      languageCookie ||
+      appConfigResult?.result?.configSettings
+        .find((setting: any) => setting.configType === 'RegionalSettings')
+        .configKeys.find(
+          (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
+        ).value ||
+      BETTERCOMMERCE_DEFAULT_LANGUAGE
+
+    const navResult = await cachedGetData(NAV_ENDPOINT, req?.cookies, headers)
+    if (!navResult?.message && navResult?.errors?.length == 0) {
+      navTreeResult = {
+        nav: navResult?.result?.header,
+        footer: navResult?.result?.footer
+      }
+    }
+  } catch (error: any) { }
 
   let appConfig = null
   if (appConfigResult) {
     const appConfigObj = {
-      ...appConfigResult?.result,
+      ...(appConfigResult?.result || {}),
       ...{
         defaultCurrency,
         defaultLanguage,
@@ -376,6 +391,7 @@ MyApp.getInitialProps = async (
   return {
     pageProps: {
       appConfig: appConfig,
+      navTree: navTreeResult,
     },
   }
 }

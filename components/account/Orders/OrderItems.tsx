@@ -60,9 +60,9 @@ const OrderItems = ({ items, details, ifCancelled, openHelpModal, setReview }: a
                                                 <label className={`px-4 py-3 text-sm font-bold leading-none ${itemStatusCss}`}>{itemStatus}</label>
                                           }
                                        </div>
-                                       <h5 className="max-w-sm pr-6 mt-2  font-semibold truncate text-primary text-ellipsis">
+                                       <h3 className="max-w-sm /xsm:max-w-full /xsm:flex /xsm:flex-col /xsm:flex-wrap xsm:w-[50vw] pr-6 mt-0 dark:text-black font-normal /truncate text-14 xsm:text-sm text-primary text-ellipsis !text-sm">
                                           <a href={`/${productItem?.slug}`}>{productItem?.name}</a>
-                                       </h5>
+                                       </h3>
                                        <p className="mt-2 text-sm font-semibold text-secondary-full-opacity">
                                           {priceFormat(productItem?.price?.raw?.withTax)}
                                           {productItem?.listPrice?.raw?.tax > 0 ? (

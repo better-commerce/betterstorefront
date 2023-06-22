@@ -5,7 +5,7 @@ import cn from 'classnames';
 // Package Imports
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
-import { CheckIcon } from '@heroicons/react/24/outline'
+import { CheckIcon } from '@heroicons/react/24/solid'
 import { Button, LoadingDots } from '@components/ui';
 import { GENERAL_CANCEL, ORDER_REFUND_INFO, REASON_CANCEL_HEADING } from '@components/utils/textVariables';
 import Spinner from '@components/ui/Spinner';
@@ -32,13 +32,13 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
               e.preventDefault()
               hideCancellationReasons()
             }}>
-              <h4 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
+              <h4 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 dark:text-black">
                 <i className="sprite-icon sprite-left-arrow mr-2"></i> {REASON_CANCEL_HEADING}
               </h4>
           </a>
           <div className='w-full py-4'>
-            <h4 className='text-base font-bold text-primary'>Why are you cancelling this {cancelTitle}?</h4>
-            <p className='text-sm text-gray-600'>This Information will help us to improve our service</p>
+            <h4 className='text-base font-bold text-primary dark:text-black'>Why are you cancelling this {cancelTitle}?</h4>
+            <p className='text-sm text-gray-600 dark:text-black'>This Information will help us to improve our service</p>
 
             {
               !cancellationReasons ? (
@@ -61,7 +61,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                               <input name="reason" type="radio" value={cancelReason?.itemValue} className='pay-inpt' />
                               <div className="py-2 control__indicator border-bottom-only">
                                 <div className="relative w-full py-2 pl-0 pr-2">
-                                  <span className="block text-sm font-normal text-primary">{cancelReason?.itemText}</span>
+                                  <span className="block text-sm font-normal text-primary dark:text-black">{cancelReason?.itemText}</span>
                                   <span className="absolute flex items-center justify-center w-5 h-5 bg-gray-200 border border-gray-100 rounded-full top-2/4 -translate-y-2/4 right-4 check-icon">
                                     <CheckIcon
                                       className="w-4 h-4 text-sm font-bold text-gray-200"
@@ -79,14 +79,14 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                     <p
                       className='relative info-text py-4 text-gray-600'>
                       <InformationCircleIcon className='inline-block w-4 h-4 mb-1' />
-                      <span className='text-sm font-normal'>
+                      <span className='text-sm font-normal dark:text-black'>
                         {'   '}{ORDER_REFUND_INFO}
                       </span>
                     </p>
 
                     <Button
                       type="button"
-                      className={`!inline-block !w-auto !py-3 text-sm font-bold text-center text-white bg-red-700 border cursor-pointer ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                      className={`!inline-block !w-auto !py-3 text-sm font-bold text-center text-white bg-red-700 border dark:text-black cursor-pointer ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
                       disabled={isDisabled}
                       onClick={openModal} 
                     >

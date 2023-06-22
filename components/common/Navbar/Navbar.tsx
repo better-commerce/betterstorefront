@@ -36,7 +36,7 @@ import {
   SELECT_LANGUAGE,
   GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
-import { getCurrentPage } from '@framework/utils/app-util'
+import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IExtraProps } from '../Layout/Layout'
 
@@ -151,11 +151,16 @@ const Navbar: FC<Props & IExtraProps> = ({
 
   const buttonRef = useRef<HTMLButtonElement>(null) // useRef<HTMLButtonElement>(null)
   const [openState, setOpenState] = useState(-1)
-  const [renderState, setRenderState] = useState(false)
+  const isProduction = process.env.NODE_ENV === 'production'
+  const [renderState, setRenderState] = useState(isProduction)
 
   // update 'renderState' to check whether the component is rendered or not
   // used for removing hydration errors
-  useEffect(() => setRenderState(true), [])
+  useEffect(() => {
+    if (!isProduction) {
+      setRenderState(true)
+    }
+  }, [])
 
   const viewWishlist = () => {
     if (currentPage) {
@@ -298,8 +303,8 @@ const Navbar: FC<Props & IExtraProps> = ({
             leaveTo="-translate-x-full"
           >
             <div className="relative flex flex-col w-full max-w-xs pb-12 overflow-y-auto bg-white shadow-xl z-9999">
-              <Logo />
-              <div className="flex px-4 pt-5 pb-2">
+              <div className="flex item-center px-4 pt-16 pb-2">
+                {/* <Logo /> */}
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
@@ -321,7 +326,9 @@ const Navbar: FC<Props & IExtraProps> = ({
                         <Link
                           key={idx}
                           title={item.caption}
-                          href={hyperlinkHandler(item.hyperlink)}
+                          href={hyperlinkHandler(
+                            removePrecedingSlash(item.hyperlink)
+                          )}
                           passHref
                           onClick={() => {
                             hamburgerMenuClick(item.caption)
@@ -364,7 +371,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                           return (
                                             <div
                                               key={`navbar-parent-${navIdx}`}
-                                              className="grid grid-cols-1 px-2 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0"
+                                              className="grid grid-cols-1 px-5 sm:px-0 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0"
                                             >
                                               <ul
                                                 role="list"
@@ -372,12 +379,14 @@ const Navbar: FC<Props & IExtraProps> = ({
                                                 className="col-span-1"
                                               >
                                                 {navBlock.navItems.map(
-                                                  (navItem: any) => (
+                                                  (navItem: any, idx: any) => (
                                                     <Link
                                                       legacyBehavior
-                                                      key={navItem.caption}
+                                                      key={`${navItem.caption}-${idx}`}
                                                       title={navItem.caption}
-                                                      href={`/${navItem.itemLink}`}
+                                                      href={`/${removePrecedingSlash(
+                                                        navItem.itemLink
+                                                      )}`}
                                                       passHref
                                                       onClick={() => {
                                                         setOpen(false)
@@ -387,7 +396,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                                         )
                                                       }}
                                                     >
-                                                      <li className="flex pb-2 my-1 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
+                                                      <li className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
                                                         {navItem.caption}
                                                       </li>
                                                     </Link>
@@ -421,14 +430,14 @@ const Navbar: FC<Props & IExtraProps> = ({
         >
           <button
             type="button"
-            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-white rounded-md sm:hidden"
+            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 rounded-md sm:hidden bg-transparent"
             onClick={() => {
               hamburgerMenu()
               setOpen(true)
             }}
           >
             <span className="sr-only">Open menu</span>
-            <Bars3Icon className="w-6 h-6 text-black" aria-hidden="true" />
+            <Bars3Icon className="w-6 h-6 mob-menu-icon" aria-hidden="true" />
           </button>
 
           <Link href="/" title="BetterCommerce">
@@ -459,7 +468,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                           )}
                         >
                           <Link
-                            href={`/${item.hyperlink}`}
+                            href={`/${removePrecedingSlash(item.hyperlink)}`}
                             className="relative flex items-center h-full text-header-clr"
                             title={item.caption}
                           >
@@ -513,7 +522,9 @@ const Navbar: FC<Props & IExtraProps> = ({
                                             )}
                                           >
                                             <Link
-                                              href={`/${navItem.itemLink}`}
+                                              href={`/${removePrecedingSlash(
+                                                navItem.itemLink
+                                              )}`}
                                               className="relative flex items-center h-full hover:text-gray-800"
                                               title={navItem.caption}
                                             >

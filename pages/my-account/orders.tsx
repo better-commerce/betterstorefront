@@ -26,7 +26,7 @@ import {
 const PAGE_SIZE = 10
 
 function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
-  const { user, deleteUser, isGuestUser } = useUI()
+  const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
@@ -98,7 +98,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
       pageSize: PAGE_SIZE,
     })
 
-    // console.log('setPagedOrders ::', ordersResult);
+    // console.log('setPagedOrders ::', ordersResult);<a
     setPagedOrders(ordersResult)
     setAllOrdersFetched(true)
   }
@@ -153,32 +153,34 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
   }
   useAnalytics(CustomerProfileViewed, loggedInEventData)
 
+  const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(displayDetailedOrder);
+  useEffect(()=>{
+    setIsShowDetailedOrder(displayDetailedOrder)
+  },[displayDetailedOrder])
+
   return (
     <section className="relative pb-10 text-gray-900">
       <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
+      {!isShowDetailedOrder && (
         <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-          <h3 className="flex gap-1 mx-5 mt-2 text-xl font-semibold text-black max-w-">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-arrow-left"
-              viewBox="0 0 16 16"
-            >
-              {' '}
-              <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
-            </svg>
-            <Link
-              legacyBehavior
-              passHref
-              className="mx-2 mr-2 leading-none"
-              href="/my-account"
-            >
-              My Orders
-            </Link>
-          </h3>
+        <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
+            <Link className="mx-2 leading-none mt-1 align-middle" href="/my-account"><svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-arrow-left"
+                viewBox="0 0 16 16"
+              >
+                {' '}
+                <path
+                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+                />{' '}
+              </svg></Link> 
+              <span className='leading-none'>My Orders</span>
+            </h3>
         </div>
+          )}
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
           <div className="col-span-3 border-r border-gray-200 md:pl-12 sm:pl-6 tab-list-sm sm:pt-10 mob-hidden">
             <div className="sticky left-0 z-10 flex flex-col top-36">
@@ -277,6 +279,8 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
                 allOrders={allOrders}
                 handleInfiniteScroll={handleInfiniteScroll}
                 deviceInfo={deviceInfo}
+                isShowDetailedOrder={isShowDetailedOrder}
+                setIsShowDetailedOrder={setIsShowDetailedOrder}
               />
             </div>
           </div>

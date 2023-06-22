@@ -168,11 +168,11 @@ export default function CollectionPage(props: any) {
 
   const [productListMemory, setProductListMemory] = useState({
     products: {
-      results: [],
+      results: [], // current page result set
       sortList: [],
-      pages: 0,
-      total: 0,
-      currentPage: 1,
+      pages: 0, // total number of pages
+      total: 0, // total numer of records
+      currentPage: 1, // current page
       filters: [],
       collectionId: props?.id,
     },
@@ -238,44 +238,45 @@ export default function CollectionPage(props: any) {
 
   useEffect(() => {
     const data = IS_INFINITE_SCROLL
-      ? productListMemory.products
-      : props?.products
+      ? productListMemory?.products
+      : productListMemory?.products //props?.products
     setProductDataToPass(data)
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productListMemory?.products, props?.products])
 
   useEffect(() => {
-    if (IS_INFINITE_SCROLL) {
-      if (
-        data.products.currentPage !== productListMemory.products.currentPage ||
-        data.products.total !== productListMemory.products.total
-      ) {
-        setProductListMemory((prevData: any) => {
-          let dataClone = { ...data }
-          if (state.currentPage > 1) {
-            dataClone.products.results = [
-              ...prevData.products.results,
-              ...dataClone.products.results,
-            ]
-          }
-          return dataClone
-        })
-      }
+    //if (IS_INFINITE_SCROLL) {
+    if (
+      data.products?.currentPage !== productListMemory.products.currentPage ||
+      data.products?.total !== productListMemory.products.total
+    ) {
+      setProductListMemory((prevData: any) => {
+        let dataClone = { ...data }
+        if (state.currentPage > 1 && IS_INFINITE_SCROLL) {
+          dataClone.products.results = [
+            ...prevData.products.results,
+            ...dataClone.products.results,
+          ]
+        }
+        return dataClone
+      })
     }
+    //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.products?.results?.length])
+  }, [data?.products?.results?.length,data])
 
-  const handlePageChange = (page: any) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, currentPage: page.selected + 1 },
-      },
-      undefined,
-      { shallow: true }
-    )
+  const handlePageChange = (page: any, redirect = true) => {
+    if (redirect) {
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, currentPage: page.selected + 1 },
+        },
+        undefined,
+        { shallow: true }
+      )
+    }
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
       window.scroll({
@@ -515,7 +516,7 @@ export default function CollectionPage(props: any) {
           ))}
 
         <div
-          className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container sm:py-4 ${cls}`}
+          className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container px-4 sm:px-0 sm:py-4 ${cls}`}
         >
           <h1 className="inline-block capitalize text-primary dark:text-primary">
             {props?.name}
@@ -526,7 +527,7 @@ export default function CollectionPage(props: any) {
           <h2>{props?.description}</h2>
         </div>
 
-        {props?.products?.total > 0 && (
+        {productDataToPass?.results?.length > 0 && (
           <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
             {props?.allowFacets ? (
               <>
@@ -558,7 +559,7 @@ export default function CollectionPage(props: any) {
                   )}
                   <ProductGridWithFacet
                     products={productDataToPass}
-                    currentPage={props?.currentPage}
+                    currentPage={state?.currentPage}
                     handlePageChange={handlePageChange}
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
@@ -570,7 +571,7 @@ export default function CollectionPage(props: any) {
               <div className="col-span-12">
                 <ProductGrid
                   products={productDataToPass}
-                  currentPage={props?.currentPage}
+                  currentPage={state?.currentPage}
                   handlePageChange={handlePageChange}
                   handleInfiniteScroll={handleInfiniteScroll}
                   deviceInfo={deviceInfo}
@@ -613,15 +614,15 @@ export default function CollectionPage(props: any) {
                 "@context": "https://schema.org/",
                 "@type": "ItemList",
                 "itemListElement": ${JSON.stringify(
-                  props?.products?.results?.map(
-                    (product: any, pId: number) => ({
-                      '@type': 'ListItem',
-                      position: pId + 1,
-                      name: product?.name,
-                      url: `${SITE_ORIGIN_URL}/${product?.slug}`,
-                    })
-                  )
-                )}
+                props?.products?.results?.map(
+                  (product: any, pId: number) => ({
+                    '@type': 'ListItem',
+                    position: pId + 1,
+                    name: product?.name,
+                    url: `${SITE_ORIGIN_URL}/${product?.slug}`,
+                  })
+                )
+              )}
               }
             `,
             }}

@@ -22,9 +22,9 @@ export default function MyOrders({
   allOrders,
   handleInfiniteScroll,
   deviceInfo,
+  isShowDetailedOrder, setIsShowDetailedOrder 
 }: any) {
   const { isMobile, isIPadorTablet } = deviceInfo
-  const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(false)
   const { user, displayAlert, alertRibbon } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>(undefined)
   // console.log(allOrders)
@@ -120,7 +120,7 @@ export default function MyOrders({
           </div> */}
 
           <div className="bg-white">
-            <main className="sm:px-6 lg:px-8">
+            <main className="lg:px-8">
               <div className="max-w-4xl">
                 {!allOrders ? (
                   <Spinner />
@@ -217,7 +217,7 @@ export default function MyOrders({
                       </>
                     ) : (
                       <>
-                        <div className="flex flex-col items-start justify-center w-full px-4 py-12 sm:items-center max-acc-container sm:px-0">
+                        <div className="flex flex-col lg:mx-8 w-full px-4 py-12 max-acc-container sm:px-0">
                           <h1 className="my-2 text-2xl font-semibold text-black">
                             No Order Available
                           </h1>
