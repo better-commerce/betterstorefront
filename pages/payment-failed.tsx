@@ -69,9 +69,9 @@ const PaymentFailedPage = ({
   if (isLoading) {
     return (
       <main className="px-4 pt-16 pb-24 bg-white sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
-        <h1 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
+        <h2 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
           {LOADING_YOUR_ORDERS}
-        </h1>
+        </h2>
         <div className="flex items-center justify-center w-full mt-10 text-gray-900">
           <LoadingDots />
         </div>
@@ -85,15 +85,15 @@ const PaymentFailedPage = ({
       <main className="px-4 pt-6 pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
-            <h1 className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
+            <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
               {order?.orderNo ? GENERAL_ORDER_FAILED : null}
-            </h1>
+            </p>
             {order?.orderNo ? (
-              <p className="mt-2 text-black">
+              <h1 className="mt-2 text-black">
                 {GENERAL_YOUR_ORDER}{' '}
                 <span className="font-bold text-black">{order?.orderNo}</span>{' '}
                 {GENERAL_ORDER_NOT_PROCESSED}
-              </p>
+              </h1>
             ) : null}
           </div>
 
@@ -135,7 +135,7 @@ const PaymentFailedPage = ({
                         dangerouslySetInnerHTML={{
                           __html: product?.shortDescription,
                         }}
-                        className="mt-2 text-sm text-gray-500"
+                        className="mt-2 text-sm text-gray-500 topspace"
                       />
                     </div>
                     <div className="flex items-end flex-1 mt-6">
@@ -160,7 +160,7 @@ const PaymentFailedPage = ({
                 </div>
               ))}
 
-              <div className="sm:ml-40 sm:pl-6">
+              <div className="lg:pl-5 sm:pl-2">
                 <h3 className="sr-only">{YOUR_INFORMATION}</h3>
 
                 <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>

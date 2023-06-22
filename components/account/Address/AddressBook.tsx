@@ -443,8 +443,8 @@ export default function AddressBook({ deviceInfo }: any) {
           Addresses
         </h3>
       </div>
-      <main className="px-0 sm:px-6 lg:px-8 mt-4">
-        <div className="max-w-4xl px-4 mx-auto">
+      <main className="lg:px-8 mt-4">
+        <div className="max-w-4xl lg:px-0 mx-auto lg:mb-14">
           <div className="px-0 sm:px-0">
             <h1 className="mb-3 font-bold tracking-tight  text-primary sm:mb-5 dark:text-black">
               <span className="hidden sm:inline-block">{title}</span>
@@ -454,7 +454,7 @@ export default function AddressBook({ deviceInfo }: any) {
         </div>
         <div className="max-w-4xl mx-auto">
           {!data.length && !isLoading && (
-            <div className="py-4 sm:py-10">{EMPTY_ADDRESS}</div>
+            <div className="py-4 sm:py-10 lg:mx-0">{EMPTY_ADDRESS}</div>
           )}
           {isLoading ? <LoadingDots /> : null}
         </div>
@@ -466,7 +466,8 @@ export default function AddressBook({ deviceInfo }: any) {
           />
         )}
         {!isNewFormMode && (
-          <div className="max-w-4xl mx-auto">
+          <>
+          <div className="grid max-w-4xl grid-cols-1 mx-auto sm:grid-cols-2 sm:gap-y-4 gap-y-2 gap-5">
             {data.map((item: any, idx: number) => {
               return (
                 <AddressItem
@@ -485,21 +486,8 @@ export default function AddressBook({ deviceInfo }: any) {
                 />
               )
             })}
-            <div className="flex items-start">
-              <div className="items-center justify-center hidden border border-gray-200 bg-black text-white sm:flex add-list-div">
-                <button
-                  type="submit"
-                  onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="p-4 font-semibold text-center cursor-pointer text-orange"
-                >
-                  {ADD_ADDRESS}{' '}
-                  <span className="inline-block ml-2 leading-none align-middle">
-                    <i className="sprite-icon icon-location-orange"></i>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div className="sticky mt-12 bottom-0 z-10 flex flex-col justify-center w-full px-6 bg-white sm:hidden">
+          
+            <div className="sticky mt-12 bottom-0 z-10 flex flex-col justify-center w-full bg-white sm:hidden">
               {/* {
                 displayAlert ? (
                     <div className="mb-3 m-[-40px] w-auto sm:hidden">
@@ -524,6 +512,21 @@ export default function AddressBook({ deviceInfo }: any) {
               </div>
             </div>
           </div>
+            <div className="flex items-start">
+            <div className="items-center justify-center hidden border border-gray-200 bg-black text-white sm:flex add-list-div">
+              <button
+                type="submit"
+                onClick={(ev: any) => handleOpenNewAddressModal()}
+                className="p-4 font-semibold text-center cursor-pointer text-orange"
+              >
+                {ADD_ADDRESS}{' '}
+                <span className="inline-block ml-2 leading-none align-middle">
+                  <i className="sprite-icon icon-location-orange"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+          </>
         )}
         <NewAddressModal
           selectedAddress={selectedAddress}

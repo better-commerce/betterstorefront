@@ -132,27 +132,28 @@ export default function AddressItem({
         />
       ) : (
         <>
-          <div className="flex flex-row items-center justify-between px-5 py-5 mt-5 mb-5 border rounded-lg">
-            <div className="flex flex-col text-md font-regular">
+     
+          <div className="flex lg:flex-row items-center justify-between px-5 py-5 mt-5 mb-5 border rounded-lg flex-col">
+            <div className="flex flex-col text-md font-regular w-full">
               <span className="text-xl font-bold">
                 {item.firstName + ' ' + item.lastName}
               </span>
               {item.label && (
-                <span className="flex items-start">
+                <span className="flex items-start mt-2">
                   <span className="p-1 bg-black text-white font-bold">
                     {label}
                   </span>
                 </span>
               )}
-              <span>{item.address1}</span>
+              <span className='mt-2'>{item.address1}</span>
               <span>{item.address2}</span>
               <span>
                 {item.city} - {item.postCode}
               </span>
               <span>{item.phoneNo}</span>
             </div>
-            <div>
-              <div className="justify-end mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
+            <div className='w-full'>
+              <div className="justify-end mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 w-full">
                 <button
                   onClick={() => {
                     onEditAddress(item?.id)
@@ -189,6 +190,7 @@ export default function AddressItem({
               </div>
             </div>
           </div>
+        
         </>
       )}
     </div>

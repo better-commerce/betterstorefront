@@ -21,6 +21,7 @@ import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
+import { matchStrings } from '@framework/utils/parse-util'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -195,7 +196,10 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: slug } }],
+    [
+      `/api/catalog/products`,
+      { ...state, ...{ slug: slug, isCategory: true } },
+    ],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -213,46 +217,52 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
       categoryId: category.id,
     },
   })
+  const [productDataToPass, setProductDataToPass] = useState(products)
 
   useEffect(() => {
     if (category.id !== state.categoryId)
       dispatch({ type: SET_CATEGORY_ID, payload: category.id })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category.id])
 
   useEffect(() => {
-    if (IS_INFINITE_SCROLL) {
-      if (
-        data?.products?.currentPage !==
-          productListMemory?.products?.currentPage ||
-        data?.products?.total !== productListMemory?.products?.total
-      ) {
-        setProductListMemory((prevData: any) => {
-          let dataClone = { ...data }
-          if (state?.currentPage > 1) {
-            dataClone.products.results = [
-              ...prevData?.products?.results,
-              ...dataClone?.products?.results,
-            ]
-          }
-          return dataClone
-        })
-      }
+    //if (IS_INFINITE_SCROLL) {
+    if (
+      data?.products?.currentPage !==
+        productListMemory?.products?.currentPage ||
+      data?.products?.total !== productListMemory?.products?.total
+    ) {
+      setProductListMemory((prevData: any) => {
+        let dataClone = { ...data }
+        if (state?.currentPage > 1 && IS_INFINITE_SCROLL) {
+          dataClone.products.results = [
+            ...prevData?.products?.results,
+            ...dataClone?.products?.results,
+          ]
+        }
+        return dataClone
+      })
     }
+    //}
+  }, [data?.products?.results?.length, data])
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.products?.results?.length])
+  useEffect(() => {
+    const data = IS_INFINITE_SCROLL
+      ? productListMemory?.products
+      : productListMemory?.products //props?.products
+    setProductDataToPass(data)
+  }, [productListMemory?.products, products])
 
-  const handlePageChange = (page: any) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, currentPage: page.selected + 1 },
-      },
-      undefined,
-      { shallow: true }
-    )
+  const handlePageChange = (page: any, redirect = true) => {
+    if (redirect) {
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, currentPage: page.selected + 1 },
+        },
+        undefined,
+        { shallow: true }
+      )
+    }
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
       window.scroll({
@@ -299,10 +309,10 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     )
   }
 
-  const productDataToPass =
+  /*const productDataToPass =
     IS_INFINITE_SCROLL && productListMemory.products?.results?.length
       ? productListMemory.products
-      : products
+      : products*/
   const css = { maxWidth: '100%', height: 'auto' }
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -358,13 +368,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         ) : null}
 
         <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
-          <span className="text-sm font-semibold text-black">
-            Showing {products.total} {RESULTS}
-          </span>
-          <h1 className="text-xl font-semibold tracking-tight text-black sm:text-xl">
-            {category.name}
-          </h1>
-          <h2 className="text-gray-500 sm:text-md">{category.description}</h2>
+          <div className="">
+            <h1 className="text-black inline-block">{category.name}</h1>
+            <span className="text-sm font-semibold text-black inline-block ml-2">
+              Showing {products.total} {RESULTS}
+            </span>
+          </div>
+          <p className="text-gray-500 sm:text-md">{category.description}</p>
         </div>
 
         {category?.subCategories?.length > 0 && (
@@ -411,7 +421,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     )}
                     <ProductGridWithFacet
                       products={productDataToPass}
-                      currentPage={products.currentPage}
+                      currentPage={state?.currentPage}
                       handlePageChange={handlePageChange}
                       handleInfiniteScroll={handleInfiniteScroll}
                       deviceInfo={deviceInfo}
@@ -423,7 +433,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                 <div className="sm:col-span-12 p-[1px] sm:mt-4 mt-2">
                   <ProductGrid
                     products={productDataToPass}
-                    currentPage={products.currentPage}
+                    currentPage={state?.currentPage}
                     handlePageChange={handlePageChange}
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
@@ -433,7 +443,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
               ))}
           </div>
         ) : (
-          <div className="p-32 mx-auto text-center max-w-7xl">
+          <div className="p-4 py-8  sm:p-32 mx-auto text-center max-w-7xl">
             <h4 className="text-3xl font-bold text-gray-300">
               No Products availabe in {category.name}
             </h4>

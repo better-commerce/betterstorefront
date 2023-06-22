@@ -189,14 +189,14 @@ function Home({
           <Link href={banner?.promotions_link} passHref legacyBehavior>
             <Image
               src={banner?.promotions_image}
-              className="object-cover object-center w-full"
+              className="object-cover object-center w-full mob-img-height"
               alt={banner?.promotions_title}
               width={2000}
               height={800}
               style={css}
             />
           </Link>
-          <div className="absolute text-5xl font-medium text-white top-1/2 right-24">
+          <div className="absolute text-sm font-medium text-white top-1/2 right-24">
             {banner?.promotions_title}
           </div>
         </div>

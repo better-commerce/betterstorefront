@@ -80,6 +80,7 @@ const initialState = {
   sidebarView: 'CART_VIEW',
   userAvatar: '',
   productId: '',
+  displayDetailedOrder:false,
   displayAlert: false,
   alertRibbon: {},
   notifyUser: false,
@@ -150,6 +151,13 @@ type Action =
       view: SIDEBAR_VIEWS
     }
   | {
+      type: 'SHOW_DETAILED_ORDER'
+    }
+  | {
+      type: 'HIDE_DETAILED_ORDER'
+    }
+  | 
+    {
       type: 'SET_USER_AVATAR'
       value: string
     }
@@ -293,6 +301,18 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         sidebarView: action.view,
+      }
+    }
+    case 'SHOW_DETAILED_ORDER': {
+      return {
+        ...state,
+        displayDetailedOrder: true,
+      }
+    }
+    case 'HIDE_DETAILED_ORDER': {
+      return {
+        ...state,
+        displayDetailedOrder: false,
       }
     }
     case 'SET_USER_AVATAR': {
@@ -550,7 +570,14 @@ export const UIProvider: React.FC<any> = (props) => {
     () => dispatch({ type: 'CLOSE_MODAL' }),
     [dispatch]
   )
-
+  const showDetailedOrder = useCallback(
+    () => dispatch({type: 'SHOW_DETAILED_ORDER'}),
+    [dispatch]
+  )
+  const hideDetailedOrder = useCallback(
+    () => dispatch({type: 'HIDE_DETAILED_ORDER'}),
+    [dispatch]
+  )
   const setUserAvatar = useCallback(
     (value: string) => dispatch({ type: 'SET_USER_AVATAR', value }),
     [dispatch]
