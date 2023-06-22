@@ -79,6 +79,9 @@ export async function getStaticProps({
       relatedProducts: relatedProducts,
       availabelPromotions: availabelPromotions,
       reviews: reviews,
+      pdpCachedImages: pdpCachedImages?.images
+        ? JSON.parse(pdpCachedImages?.images)
+        : [],
     },
     revalidate: 200,
   }

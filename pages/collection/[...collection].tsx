@@ -26,6 +26,7 @@ import {
 } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState } from '@components/ui/context'
+import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -140,6 +141,7 @@ export default function CollectionPage(props: any) {
     collectionId: props?.id,
   }
 
+  const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
@@ -264,7 +266,7 @@ export default function CollectionPage(props: any) {
     //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.products?.results?.length,data])
+  }, [data?.products?.results?.length, data])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
@@ -528,6 +530,15 @@ export default function CollectionPage(props: any) {
         </div>
 
         {productDataToPass?.results?.length > 0 && (
+          <CacheProductImages
+            data={productDataToPass?.results
+              ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
+              .flat(1)}
+            setIsLoading={setIsLoading}
+          />
+        )}
+
+        {productDataToPass?.results?.length > 0 && (
           <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
             {props?.allowFacets ? (
               <>
@@ -614,15 +625,15 @@ export default function CollectionPage(props: any) {
                 "@context": "https://schema.org/",
                 "@type": "ItemList",
                 "itemListElement": ${JSON.stringify(
-                props?.products?.results?.map(
-                  (product: any, pId: number) => ({
-                    '@type': 'ListItem',
-                    position: pId + 1,
-                    name: product?.name,
-                    url: `${SITE_ORIGIN_URL}/${product?.slug}`,
-                  })
-                )
-              )}
+                  props?.products?.results?.map(
+                    (product: any, pId: number) => ({
+                      '@type': 'ListItem',
+                      position: pId + 1,
+                      name: product?.name,
+                      url: `${SITE_ORIGIN_URL}/${product?.slug}`,
+                    })
+                  )
+                )}
               }
             `,
             }}
