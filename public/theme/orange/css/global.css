@@ -508,6 +508,26 @@ p {
 }
 
 /* flag primary css start */
+.min-height-65 {
+  min-height: 65px;
+}
+
+@media screen and (max-width: 767px) {
+  .pagination-ul {
+    display: block;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  .pagination-ul li {
+    display: inline-block;
+  }
+
+  .pagination-ul li a {
+    font-size: 13px !important;
+  }
+}
+
 /* footer css */
 .mob-menu-icon {
   color: var(--menu-icon-color) !important;

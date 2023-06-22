@@ -193,7 +193,7 @@ function Cart({ cart }: any) {
         <meta property="og:title" content="Basket" key="ogtitle" />
         <meta property="og:description" content="Basket" key="ogdesc" />
       </NextHead>
-      <div className="container w-full px-4 mx-auto mt-6 bg-white sm:px-6 sm:mt-10">
+      <div className="container w-full px-4 mx-auto mt-6 bg-white sm:px-6 sm:mt-10 mb-10">
         <h1 className="relative font-semibold tracking-tight text-black uppercase">
           {GENERAL_SHOPPING_CART}{' '}
           <span className="absolute pl-2 text-sm font-normal text-gray-400 top-2">

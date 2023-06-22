@@ -264,17 +264,19 @@ export default function CollectionPage(props: any) {
     //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.products?.results?.length])
+  }, [data?.products?.results?.length,data])
 
-  const handlePageChange = (page: any) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, currentPage: page.selected + 1 },
-      },
-      undefined,
-      { shallow: true }
-    )
+  const handlePageChange = (page: any, redirect = true) => {
+    if (redirect) {
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, currentPage: page.selected + 1 },
+        },
+        undefined,
+        { shallow: true }
+      )
+    }
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
       window.scroll({
@@ -612,15 +614,15 @@ export default function CollectionPage(props: any) {
                 "@context": "https://schema.org/",
                 "@type": "ItemList",
                 "itemListElement": ${JSON.stringify(
-                  props?.products?.results?.map(
-                    (product: any, pId: number) => ({
-                      '@type': 'ListItem',
-                      position: pId + 1,
-                      name: product?.name,
-                      url: `${SITE_ORIGIN_URL}/${product?.slug}`,
-                    })
-                  )
-                )}
+                props?.products?.results?.map(
+                  (product: any, pId: number) => ({
+                    '@type': 'ListItem',
+                    position: pId + 1,
+                    name: product?.name,
+                    url: `${SITE_ORIGIN_URL}/${product?.slug}`,
+                  })
+                )
+              )}
               }
             `,
             }}

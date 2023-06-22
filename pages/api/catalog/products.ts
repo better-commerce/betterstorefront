@@ -1,27 +1,28 @@
-import getCollectionBySlug from '@framework/api/content/getCollectionBySlug';
+import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const GetCollectionApiMiddleware = async (req: any, res: any) => {
   try {
-    let response: any;
-    const currentPage = req?.body?.currentPage || 1;
-    const filters = req?.body?.filters || [];
+    let response: any
+    const { slug, isCategory = false } = req?.body
+    const currentPage = req?.body?.currentPage || 1
+    const filters = req?.body?.filters || []
 
     // Changes for API calls optimizations.
     // Call "/slug-minimal" API20 endpoint for loading product collections with first page-set and empty filters.
-    if (req?.body?.slug && currentPage == 1 && filters?.length == 0) {
-      response = await getCollectionBySlug(req?.body?.slug, req?.cookies);
+    if (!isCategory && slug && currentPage == 1 && filters?.length == 0) {
+      response = await getCollectionBySlug(slug, req?.cookies)
     } else {
       response = await commerce.getAllProducts({
         query: req.body,
         cookies: req.cookies,
-      });
+      })
     }
-    res.status(200).json(response);
+    res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default GetCollectionApiMiddleware;
+export default GetCollectionApiMiddleware

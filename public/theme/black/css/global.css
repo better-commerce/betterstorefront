@@ -600,11 +600,26 @@ p {
 }
 
 @media screen and (max-width: 767px) {
+  .pagination-ul {
+    display: block;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  .pagination-ul li {
+    display: inline-block;
+  }
+
+  .pagination-ul li a {
+    font-size: 13px !important;
+  }
+
   .p-font-size {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 10px;
   }
+
   .font-36 {
     font-size: 24px !important;
     line-height: 26px !important;
@@ -663,7 +678,13 @@ p {
   min-height: 0 !important;
   height: auto !important;
 }
-.mob-prod-height{
+
+.mob-prod-height {
   min-height: 350px !important;
 }
+
+.min-height-65 {
+  min-height: 65px;
+}
+
 /* main css end */

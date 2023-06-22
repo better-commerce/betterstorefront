@@ -12,10 +12,9 @@ import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
 import AlertRibbon from '@components/ui/AlertRibbon'
-import { getData } from '../../utils/clientFetcher'
-import { setItem, getItem } from '../../utils/localStorage'
-import { NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import Router from 'next/router'
+import Head from 'next/head'
+import { CURRENT_THEME } from '@components/utils/constants'
 import {
   BTN_ACCEPT_COOKIE,
   GENERAL_COOKIE_TEXT,
@@ -51,7 +50,8 @@ interface Props {
   children: any
   pageProps: {
     pages?: Page[]
-    categories: Category[]
+    categories: Category[],
+    navTree?: any,
   }
   nav: []
   footer: []
@@ -129,35 +129,18 @@ export interface IExtraProps {
 const Layout: FC<Props & IExtraProps> = ({
   children,
   config,
-  pageProps: { categories = [], ...pageProps },
+  pageProps: { categories = [], navTree, ...pageProps },
   keywords,
   isLocationLoaded,
   deviceInfo,
   maxBasketItemsCount = 0,
 }) => {
-  const navTreeFromLocalStorage: any = getItem('navTree') || {
-    nav: [],
-    footer: [],
-  }
   const [isLoading, setIsLoading] = useState(false)
   const { showSearchBar, setShowSearchBar } = useUI()
-  const [data, setData] = useState(navTreeFromLocalStorage)
   const { appConfig, setAppConfig, displayAlert } = useUI()
 
   useEffect(() => {
-    const fetchLayout = async () => {
-      try {
-        const response: any = await getData(NEXT_GET_NAVIGATION)
-        setData(response)
-        setItem('navTree', response)
-      } catch (error) {
-        console.log(error, 'error')
-      }
-    }
-    fetchLayout()
     setAppConfig(config)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -169,64 +152,81 @@ const Layout: FC<Props & IExtraProps> = ({
     }
 
     return () => {
-      Router.events.off('routeChangeStart', () => {})
-      Router.events.off('routeChangeComplete', () => {})
+      Router.events.off('routeChangeStart', () => { })
+      Router.events.off('routeChangeComplete', () => { })
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US', ...rest } = useRouter()
 
-  const sortedData = data.nav?.sort(
+  const sortedData = navTree?.nav?.sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
   return (
-    <CommerceProvider locale={locale}>
-      {isLoading && <ProgressBar />}
-      <div className={cn(s.root)}>
-        {showSearchBar && (
-          <SearchWrapper
-            keywords={keywords}
-            closeWrapper={() => setShowSearchBar(false)}
+    <>
+      <Head>
+        <link rel="apple-touch-icon" sizes="57x57" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-57x57.png`} />
+        <link rel="apple-touch-icon" sizes="60x60" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-60x60.png`} />
+        <link rel="apple-touch-icon" sizes="72x72" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-72x72.png`} />
+        <link rel="apple-touch-icon" sizes="76x76" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-76x76.png`} />
+        <link rel="apple-touch-icon" sizes="114x114" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-114x114.png`} />
+        <link rel="apple-touch-icon" sizes="120x120" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-120x120.png`} />
+        <link rel="apple-touch-icon" sizes="144x144" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-144x144.png`} />
+        <link rel="apple-touch-icon" sizes="152x152" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-152x152.png`} />
+        <link rel="apple-touch-icon" sizes="180x180" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-180x180.png`} />
+        <link rel="icon" type="image/png" sizes="192x192" href={`/theme/${CURRENT_THEME}/favicon/android-icon-192x192.png`} />
+        <link rel="icon" type="image/png" sizes="32x32" href={`/theme/${CURRENT_THEME}/favicon/favicon-32x32.png`} />
+        <link rel="icon" type="image/png" sizes="96x96" href={`/theme/${CURRENT_THEME}/favicon/favicon-96x96.png`} />
+        <link rel="icon" type="image/png" sizes="16x16" href={`/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
+        <link rel="icon" href={`/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
+      </Head>
+      <CommerceProvider locale={locale}>
+        {isLoading && <ProgressBar />}
+        <div className={cn(s.root)}>
+          {showSearchBar && (
+            <SearchWrapper
+              keywords={keywords}
+              closeWrapper={() => setShowSearchBar(false)}
+            />
+          )}
+          <Navbar
+            currencies={config?.currencies}
+            config={sortedData}
+            languages={config?.languages}
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount}
           />
-        )}
-        <Navbar
-          currencies={config?.currencies}
-          config={sortedData}
-          languages={config?.languages}
-          deviceInfo={deviceInfo}
-          maxBasketItemsCount={maxBasketItemsCount}
-        />
-        <main className="pt-16 fit">
-          {displayAlert && <AlertRibbon />}
-          {children}
-        </main>
-        <Footer
-          config={data.footer}
-          deviceInfo={deviceInfo}
-          maxBasketItemsCount={maxBasketItemsCount}
-        />
-        <ModalUI />
-        <SidebarUI
-          deviceInfo={deviceInfo}
-          maxBasketItemsCount={maxBasketItemsCount}
-        />
-        <FeatureBar
-          title={GENERAL_COOKIE_TEXT}
-          hide={acceptedCookies}
-          action={
-            <Button
-              className="mx-5 btn-c btn-primary"
-              onClick={() => onAcceptCookies()}
-            >
-              {BTN_ACCEPT_COOKIE}
-            </Button>
-          }
-        />
-      </div>
-    </CommerceProvider>
+          <main className="pt-16 fit">
+            {displayAlert && <AlertRibbon />}
+            {children}
+          </main>
+          <Footer
+            config={navTree?.footer}
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount}
+          />
+          <ModalUI />
+          <SidebarUI
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount}
+          />
+          <FeatureBar
+            title={GENERAL_COOKIE_TEXT}
+            hide={acceptedCookies}
+            action={
+              <Button
+                className="mx-5 btn-c btn-primary"
+                onClick={() => onAcceptCookies()}
+              >
+                {BTN_ACCEPT_COOKIE}
+              </Button>
+            }
+          />
+        </div>
+      </CommerceProvider>
+    </>
+
   )
 }
 
