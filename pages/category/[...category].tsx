@@ -21,6 +21,7 @@ import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
+import { matchStrings } from '@framework/utils/parse-util'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -181,6 +182,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     categoryId: category.id,
   }
   const [state, dispatch] = useReducer(reducer, initialState)
+  const apiEndpoint = '/api/catalog'
   const {
     data = {
       products: {
@@ -196,7 +198,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     error,
   } = useSwr(
     [
-      '/api/catalog/products',
+      matchStrings(slug, 'category', true)
+        ? `${apiEndpoint}/category`
+        : `${apiEndpoint}/products`,
       { ...state, ...{ slug: slug, isCategory: true } },
     ],
     ([url, body]: any) => postData(url, body),
@@ -227,7 +231,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-      productListMemory?.products?.currentPage ||
+        productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -242,8 +246,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
       })
     }
     //}
-
-  }, [data?.products?.results?.length,data])
+  }, [data?.products?.results?.length, data])
 
   useEffect(() => {
     const data = IS_INFINITE_SCROLL
@@ -368,10 +371,8 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         ) : null}
 
         <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
-          <div className=''>
-            <h1 className="text-black inline-block">
-              {category.name}
-            </h1>
+          <div className="">
+            <h1 className="text-black inline-block">{category.name}</h1>
             <span className="text-sm font-semibold text-black inline-block ml-2">
               Showing {products.total} {RESULTS}
             </span>
