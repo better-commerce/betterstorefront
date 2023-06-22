@@ -354,6 +354,13 @@ export const submitData = (dispatch: any, type: number, id?: string) => {
   }
 }
 
+export const removePrecedingSlash = (value: string) => {
+  if (value && value.indexOf('/') === 0) {
+    return value.substring(1)
+  }
+  return value
+}
+
 export const parseFullName = (
   fullName: string
 ): { firstName: string | ' '; lastName: string | ' ' } => {
