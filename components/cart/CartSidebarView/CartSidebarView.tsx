@@ -948,7 +948,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                         <div className="flex items-end justify-between text-sm">
                                           {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
-                                          <div className="flex items-center justify-between w-full">
+                                          <div className="flex mt-2 items-center justify-between w-full">
                                             {product?.variantProducts?.length >
                                             0 ? (
                                               <div></div>
@@ -960,8 +960,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                   product
                                                 )}
                                               >
-                                                <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
-                                                  <p className="mr-1 text-sm text-gray-700">
+                                                <div className="border w-[fit-content] flex flex-row justify-between items-center py-2 px-2">
+                                                  <p className="mr-1 text-sm text-gray-700 m-auto">
                                                     Size{' '}
                                                     {getLineItemSizeWithoutSlug(
                                                       product

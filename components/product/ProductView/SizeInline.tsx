@@ -28,7 +28,7 @@ import cn from 'classnames'
 
 declare const window: any
 
-const DEFAULT_OPTIONS_COUNT = 20
+const DEFAULT_OPTIONS_COUNT = 10
 
 function renderRadioOptions(
   items: any,

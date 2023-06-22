@@ -576,13 +576,13 @@ export default function PLPQuickView({
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <div className="w-screen max-w-xl">
+                <div className="w-screen max-w-xl p-2">
                   <div className="flex flex-col h-full shadow-xl bg-gray-50">
                     <div className="flex-1 px-0">
                       <div className="relative py-2 mt-2 sm:px-0">
                         <button
                           type="button"
-                          className="absolute -top-2 -right-8 p-0.5 bg-gray-300 rounded-full"
+                          className="absolute -top-11 right-0 lg:-top-2 lg:-right-8 p-0.5 bg-gray-300 rounded-full"
                           onClick={() => setModelClose()}
                         >
                           <span className="sr-only">{CLOSE_PANEL}</span>
