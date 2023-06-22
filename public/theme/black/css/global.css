@@ -600,6 +600,16 @@ p {
 }
 
 @media screen and (max-width: 767px) {
+  .pagination-ul {
+    display: block;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  .pagination-ul li {
+    display: inline-block;
+  }
+
   .p-font-size {
     font-size: 14px;
     font-weight: 600;
