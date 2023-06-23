@@ -610,6 +610,10 @@ p {
     display: inline-block;
   }
 
+  .pagination-ul li a {
+    font-size: 13px !important;
+  }
+
   .p-font-size {
     font-size: 14px;
     font-weight: 600;

@@ -22,6 +22,7 @@ import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
+import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -181,8 +182,8 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     filters: adaptedQuery.filters || [],
     categoryId: category.id,
   }
+  const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
-  const apiEndpoint = '/api/catalog'
   const {
     data = {
       products: {
@@ -198,9 +199,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     error,
   } = useSwr(
     [
-      matchStrings(slug, 'category', true)
-        ? `${apiEndpoint}/category`
-        : `${apiEndpoint}/products`,
+      `/api/catalog/products`,
       { ...state, ...{ slug: slug, isCategory: true } },
     ],
     ([url, body]: any) => postData(url, body),
@@ -391,6 +390,17 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
             ))}
           </div>
         )}
+
+        {/*TODO: For browser caching of product images*/}
+        {/*{productDataToPass?.results?.length > 0 && (
+          <CacheProductImages
+            data={productDataToPass?.results
+              ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
+              .flat(1)}
+            setIsLoading={setIsLoading}
+          />
+        )}*/}
+
         {products.total > 0 ? (
           <div className="grid w-full grid-cols-1 sm:grid-cols-12">
             {!!products &&
