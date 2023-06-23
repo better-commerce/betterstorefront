@@ -107,7 +107,7 @@ function RenderRadioOptions({
               handleLessElems()
             }}
           >
-            <p className="text-gray-900 text-ms m-auto">{'<'}</p>
+            <p className="text-gray-900 text-ms m-auto px-3">{'<'}</p>
           </button>
         )}
 
