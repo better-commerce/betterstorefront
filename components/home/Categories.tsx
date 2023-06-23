@@ -3,59 +3,16 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/navigation'
-
-import SwiperCore, { Navigation } from 'swiper'
 import Link from 'next/link'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 function Categories({ data, deviceInfo }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
-  var settings = {
-    fade: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 8000,
-    centerMode: false,
-    dots: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          initialSlide: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
-
   const css = { maxWidth: '100%', minHeight: '350px' }
   const mobcss = { maxWidth: '100%', minHeight: '150px' }
-
   const [renderState, setRenderState] = useState(false)
-
-  // update 'renderState' to check whether the component is rendered or not
-  // used for removing hydration errors
   useEffect(() => setRenderState(true), [])
-
-  // this will explicitly render the component on client-side only
   if (!renderState) return null
 
   return (
@@ -84,7 +41,12 @@ function Categories({ data, deviceInfo }: any) {
             >
               {isMobile ? (
                 <Image
-                  src={category?.categorylist_image}
+                  src={
+                    generateUri(
+                      category?.categorylist_image,
+                      'h=300&fm=webp'
+                    ) || IMG_PLACEHOLDER
+                  }
                   alt={category?.categorylist_name}
                   width={300}
                   height={200}
@@ -93,7 +55,12 @@ function Categories({ data, deviceInfo }: any) {
                 />
               ) : (
                 <Image
-                  src={category?.categorylist_image}
+                  src={
+                    generateUri(
+                      category?.categorylist_image,
+                      'h=300&fm=webp'
+                    ) || IMG_PLACEHOLDER
+                  }
                   alt={category?.categorylist_name}
                   width={600}
                   height={800}

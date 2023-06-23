@@ -17,6 +17,7 @@ import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
 import { useRouter } from 'next/router'
 import os from 'os'
 import { obfuscateHostName } from '@framework/utils/app-util'
+import PromotionBanner from '@components/home/PromotionBanner'
 
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
@@ -182,26 +183,8 @@ function Home({
       </div>
 
       {pageContents?.promotions?.map((banner: any, bId: number) => (
-        <div
-          className="relative flex flex-col justify-center w-full text-center cursor-pointer"
-          key={`full-banner-${bId}`}
-        >
-          <Link href={banner?.promotions_link} passHref legacyBehavior>
-            <Image
-              src={banner?.promotions_image}
-              className="object-cover object-center w-full mob-img-height"
-              alt={banner?.promotions_title}
-              width={2000}
-              height={800}
-              style={css}
-            />
-          </Link>
-          <div className="absolute text-sm font-medium text-white top-1/2 right-24">
-            {banner?.promotions_title}
-          </div>
-        </div>
+        <PromotionBanner data={banner} key={bId} css={css} />
       ))}
-
       <div className="container px-4 py-3 mx-auto sm:px-0 sm:py-6">
         {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
           <Heading

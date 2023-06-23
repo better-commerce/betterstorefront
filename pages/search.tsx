@@ -14,6 +14,7 @@ import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
+import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -121,6 +122,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
       total: 0,
       currentPage: 1,
       filters: [],
+      sortBy: null,
     },
   })
 
@@ -147,6 +149,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     }
   )
 
+  const [isLoading, setIsLoading] = useState(true)
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
@@ -164,7 +167,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     //if (IS_INFINITE_SCROLL) {
     if (
       data.products.currentPage !== productListMemory.products.currentPage ||
-      data.products.total !== productListMemory.products.total
+      data.products.total !== productListMemory.products.total ||
+      data.products.sortBy !== productListMemory.products.sortBy
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
@@ -241,6 +245,11 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   }
 
   const handleSortBy = (payload: any) => {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router?.query, sortBy: payload },
+    })
+    
     dispatch({
       type: SORT_BY,
       payload: payload,
@@ -337,7 +346,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         />
       </NextHead>
       <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
-        <div className=''>
+        <div className="">
           <h1 className="pl-4 font-semibold tracking-tight text-black sm:px-0 inline-block">
             {GENERAL_CATALOG}
           </h1>
@@ -345,6 +354,17 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
             Showing {data.products.total} Results for
           </span>
         </div>
+
+        {/*TODO: For browser caching of product images*/}
+        {/*{productDataToPass?.results?.length > 0 && (
+          <CacheProductImages
+            data={productDataToPass?.results
+              ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
+              .flat(1)}
+            setIsLoading={setIsLoading}
+          />
+        )}*/}
+
         <div className="grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
           {isMobile ? (
             <ProductMobileFilters
