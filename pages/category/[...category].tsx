@@ -289,16 +289,10 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     dispatch({ type: PAGE, payload: 1 })
   }
 
-  const dynamicSlugValue = slug?.split('/').splice(1)
   const handleSortBy = (payload: any) => {
-    let dynamicQuery = {...router.query}
-    if(dynamicSlugValue){
-      dynamicQuery.category = [...dynamicSlugValue]
-    }
-
     router.push({
       pathname: router.pathname,
-      query: { ...dynamicQuery, sortBy: payload },
+      query: { ...router.query, sortBy: payload },
     })
     dispatch({
       type: SORT_BY,

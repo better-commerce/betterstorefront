@@ -175,7 +175,7 @@ function BrandDetailPage({
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
-        if (state.currentPage > 1) {
+        if (state.currentPage > 1 && IS_INFINITE_SCROLL) {
           dataClone.products.results = [
             ...prevData?.products?.results,
             ...dataClone?.products?.results,
@@ -189,15 +189,17 @@ function BrandDetailPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length, data])
 
-  const handlePageChange = (page: any) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, currentPage: page.selected + 1 },
-      },
-      undefined,
-      { shallow: true }
-    )
+  const handlePageChange = (page: any, redirect=true) => {
+    if(redirect){
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, currentPage: page.selected + 1 },
+        },
+        undefined,
+        { shallow: true }
+      )
+    }
     dispatch({ type: PAGE, payload: page.selected + 1 })
     window.scroll({
       top: 0,
@@ -214,16 +216,11 @@ function BrandDetailPage({
       dispatch({ type: PAGE, payload: data.products.currentPage + 1 })
     }
   }
-  const dynamicSlugValue = slug?.split('/').splice(1)
 
   const handleSortBy = (payload: any) => {
-    let dynamicQuery = {...router.query}
-    if(dynamicSlugValue){
-      dynamicQuery.brand = [...dynamicSlugValue]
-    }
     router.push({
       pathname: router.pathname,
-      query: { ...dynamicQuery, sortBy: payload },
+      query: { ...router.query, sortBy: payload },
     })
     dispatch({
       type: SORT_BY,
@@ -347,9 +344,8 @@ function BrandDetailPage({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const slug = `brands/${context.query.brand.pop()}`
+  const slug = `brands/${context.query.brand[0]}`
   const response = await getBrandBySlug(slug, context.req.cookies)
-
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
   return {
