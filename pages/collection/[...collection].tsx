@@ -26,6 +26,7 @@ import {
 } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState } from '@components/ui/context'
+import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -140,6 +141,7 @@ export default function CollectionPage(props: any) {
     collectionId: props?.id,
   }
 
+  const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
@@ -532,6 +534,15 @@ export default function CollectionPage(props: any) {
           </span>
           <h2>{props?.description}</h2>
         </div>
+
+        {productDataToPass?.results?.length > 0 && (
+          <CacheProductImages
+            data={productDataToPass?.results
+              ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
+              .flat(1)}
+            setIsLoading={setIsLoading}
+          />
+        )}
 
         {productDataToPass?.results?.length > 0 && (
           <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
