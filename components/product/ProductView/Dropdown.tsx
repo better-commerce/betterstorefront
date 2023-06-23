@@ -9,7 +9,7 @@ import { getProductFromAttributes } from '@components/utils/attributesGenerator'
 import { Dialog, RadioGroup, Switch } from '@headlessui/react'
 import { PRODUCTS_SLUG_PREFIX } from '@components/utils/constants'
 
-const DEFAULT_OPTIONS_COUNT = 10
+const DEFAULT_OPTIONS_COUNT = 8
 
 function renderRadioOptions(
   items: any,

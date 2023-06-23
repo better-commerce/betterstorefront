@@ -808,11 +808,11 @@ export default function ProductView({
                 ))}
               </div>
               {reviews?.review?.productReviews?.length > 0 ? (
-                <p className="pl-1 text-xs font-bold">
+                <p className="pl-1 text-xs font-bold my-auto">
                   ({reviews?.review?.ratingAverage})
                 </p>
               ) : (
-                <p className="pl-1 text-xs font-bold">(0)</p>
+                <p className="pl-1 text-xs font-bold my-auto">(0)</p>
               )}
             </div>
           </div>
