@@ -7,9 +7,10 @@ import { useUI } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import { getProductFromAttributes } from '@components/utils/attributesGenerator'
 import { Dialog, RadioGroup, Switch } from '@headlessui/react'
-import { PRODUCTS_SLUG_PREFIX } from '@components/utils/constants'
-
-const DEFAULT_OPTIONS_COUNT = 8
+import {
+  PDP_SIZE_OPTIONS_COUNT,
+  PRODUCTS_SLUG_PREFIX,
+} from '@components/utils/constants'
 
 function renderRadioOptions(
   items: any,
@@ -240,7 +241,7 @@ export default function Dropdown({
         <div className="dark:text-black">
           {renderRadioOptions(
             items,
-            DEFAULT_OPTIONS_COUNT,
+            PDP_SIZE_OPTIONS_COUNT,
             currentAttribute,
             openRemainElems,
             handleToggleOpenRemainElems

@@ -18,6 +18,7 @@ import {
 } from '@components/utils/textVariables'
 import {
   NEXT_CREATE_WISHLIST,
+  PDP_SIZE_OPTIONS_COUNT,
   PRODUCTS_SLUG_PREFIX,
 } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
@@ -27,8 +28,6 @@ import * as SizeChart from '@components/product/ProductView/SizeChart.json'
 import cn from 'classnames'
 
 declare const window: any
-
-const DEFAULT_OPTIONS_COUNT = 8
 
 function RenderRadioOptions({
   items,
@@ -399,7 +398,7 @@ export default function SizeInline({
           {
             <RenderRadioOptions
               items={items}
-              itemsCount={DEFAULT_OPTIONS_COUNT}
+              itemsCount={PDP_SIZE_OPTIONS_COUNT}
               currentAttribute={currentAttribute}
               selected={selected}
               openRemainElems={openRemainElems}
