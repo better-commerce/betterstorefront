@@ -122,6 +122,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
       total: 0,
       currentPage: 1,
       filters: [],
+      sortBy: null,
     },
   })
 
@@ -166,7 +167,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     //if (IS_INFINITE_SCROLL) {
     if (
       data.products.currentPage !== productListMemory.products.currentPage ||
-      data.products.total !== productListMemory.products.total
+      data.products.total !== productListMemory.products.total ||
+      data.products.sortBy !== productListMemory.products.sortBy
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
@@ -243,6 +245,11 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   }
 
   const handleSortBy = (payload: any) => {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router?.query, sortBy: payload },
+    })
+    
     dispatch({
       type: SORT_BY,
       payload: payload,
