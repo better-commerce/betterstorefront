@@ -391,14 +391,15 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           </div>
         )}
 
-        {productDataToPass?.results?.length > 0 && (
+        {/*TODO: For browser caching of product images*/}
+        {/*{productDataToPass?.results?.length > 0 && (
           <CacheProductImages
             data={productDataToPass?.results
               ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
               .flat(1)}
             setIsLoading={setIsLoading}
           />
-        )}
+        )}*/}
 
         {products.total > 0 ? (
           <div className="grid w-full grid-cols-1 sm:grid-cols-12">
