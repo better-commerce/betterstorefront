@@ -175,6 +175,7 @@ export default function CollectionPage(props: any) {
       currentPage: 1, // current page
       filters: [],
       collectionId: props?.id,
+      sortBy:null,
     },
   })
 
@@ -248,7 +249,8 @@ export default function CollectionPage(props: any) {
     //if (IS_INFINITE_SCROLL) {
     if (
       data.products?.currentPage !== productListMemory.products.currentPage ||
-      data.products?.total !== productListMemory.products.total
+      data.products?.total !== productListMemory.products.total ||
+      data.products?.sortBy !== productListMemory.products.sortBy
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
@@ -264,7 +266,7 @@ export default function CollectionPage(props: any) {
     //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.products?.results?.length,data])
+  }, [data?.products?.results?.length, data])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
@@ -305,6 +307,10 @@ export default function CollectionPage(props: any) {
   }
 
   const handleSortBy = (payload: any) => {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, sortBy: payload },
+    })
     dispatch({
       type: SORT_BY,
       payload: payload,
@@ -614,15 +620,15 @@ export default function CollectionPage(props: any) {
                 "@context": "https://schema.org/",
                 "@type": "ItemList",
                 "itemListElement": ${JSON.stringify(
-                props?.products?.results?.map(
-                  (product: any, pId: number) => ({
-                    '@type': 'ListItem',
-                    position: pId + 1,
-                    name: product?.name,
-                    url: `${SITE_ORIGIN_URL}/${product?.slug}`,
-                  })
-                )
-              )}
+                  props?.products?.results?.map(
+                    (product: any, pId: number) => ({
+                      '@type': 'ListItem',
+                      position: pId + 1,
+                      name: product?.name,
+                      url: `${SITE_ORIGIN_URL}/${product?.slug}`,
+                    })
+                  )
+                )}
               }
             `,
             }}

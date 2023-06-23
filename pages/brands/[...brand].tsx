@@ -139,6 +139,7 @@ function BrandDetailPage({
       total: 0,
       currentPage: 1,
       filters: [],
+      sortBy: null,
     },
   })
 
@@ -169,7 +170,8 @@ function BrandDetailPage({
     if (
       data?.products?.currentPage !==
       productListMemory?.products?.currentPage ||
-      data?.products?.total !== productListMemory?.products?.total
+      data?.products?.total !== productListMemory?.products?.total ||
+      data?.products?.sortBy !== productListMemory?.products?.sortBy
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
@@ -185,7 +187,7 @@ function BrandDetailPage({
     //}
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.products?.results?.length])
+  }, [data?.products?.results?.length, data])
 
   const handlePageChange = (page: any) => {
     router.push(
@@ -212,8 +214,17 @@ function BrandDetailPage({
       dispatch({ type: PAGE, payload: data.products.currentPage + 1 })
     }
   }
+  const dynamicSlugValue = slug?.split('/').splice(1)
 
   const handleSortBy = (payload: any) => {
+    let dynamicQuery = {...router.query}
+    if(dynamicSlugValue){
+      dynamicQuery.brand = [...dynamicSlugValue]
+    }
+    router.push({
+      pathname: router.pathname,
+      query: { ...dynamicQuery, sortBy: payload },
+    })
     dispatch({
       type: SORT_BY,
       payload: payload,
@@ -344,6 +355,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       query: context.query,
+      params: context.params,
       slug: slug,
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
