@@ -348,14 +348,15 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           </span>
         </div>
 
-        {productDataToPass?.results?.length > 0 && (
+        {/*TODO: For browser caching of product images*/}
+        {/*{productDataToPass?.results?.length > 0 && (
           <CacheProductImages
             data={productDataToPass?.results
               ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
               .flat(1)}
             setIsLoading={setIsLoading}
           />
-        )}
+        )}*/}
 
         <div className="grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
           {isMobile ? (
