@@ -627,6 +627,11 @@ p {
   .pagination-ul li {
     display: inline-block;
   }
+
+  .pagination-ul li a {
+    font-size: 13px !important;
+  }
+
   .font-36 {
     font-size: 24px !important;
   }
