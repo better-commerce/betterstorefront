@@ -290,6 +290,10 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   }
 
   const handleSortBy = (payload: any) => {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, sortBy: payload },
+    })
     dispatch({
       type: SORT_BY,
       payload: payload,
