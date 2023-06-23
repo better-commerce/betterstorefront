@@ -42,13 +42,26 @@ export default function PLPSort({
                 )
               }
               return (
-                <Link
+                // <Link
+                //   key={option.value}
+                //   href={{
+                //     pathname: router.pathname,
+                //     query: { ...router.query, sortBy: option.key },
+                //   }}
+                //   passHref
+                //   onClick={() => {
+                //     if (!hasFiltersLoaded) return
+                //     if (action) action(option.key)
+                //     closeSidebar()
+                //   }}
+                //   className={classNames(
+                //     'flex items-center justify-center text-xs lg:text-sm md:text-sm mt-[1px] ml-[1px] outline outline-1 hover:z-10 hover:outline-gray-900 text-gray-900 capitalize text-center px-2 py-4 h-full w-full flex-[0_0_calc(50%-1px)] truncate outline-gray-200',
+                //     !hasFiltersLoaded ? 'cursor-wait' : 'cursor-pointer'
+                //   )}
+                // title={option.value}
+                // >
+                <div
                   key={option.value}
-                  href={{
-                    pathname: router.pathname,
-                    query: { ...router.query, sortBy: option.key },
-                  }}
-                  passHref
                   onClick={() => {
                     if (!hasFiltersLoaded) return
                     if (action) action(option.key)
@@ -61,7 +74,8 @@ export default function PLPSort({
                   title={option.value}
                 >
                   {option.trimmedValue}
-                </Link>
+                </div>
+                // </Link>
               )
             })
           : null}
