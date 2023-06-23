@@ -336,7 +336,7 @@ export default function AttributesHandler({
               <Component
                 currentAttribute={originalAttribute}
                 getStockPerAttribute={getStockPerAttribute}
-                items={option.fieldValues}
+                items={optionsToPass}
                 label={option.fieldName}
                 isDisabled={!optionsToPass.length}
                 onChange={handleChange}

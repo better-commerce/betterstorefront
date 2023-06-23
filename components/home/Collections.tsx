@@ -1,3 +1,5 @@
+import { generateUri } from '@commerce/utils/uri-util'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -18,7 +20,12 @@ export default function Collections({ data }: any) {
               legacyBehavior
             >
               <Image
-                src={collection?.collectionlist_image}
+                src={
+                  generateUri(
+                    collection?.collectionlist_image,
+                    'h=300&fm=webp'
+                  ) || IMG_PLACEHOLDER
+                }
                 className="object-cover object-center cursor-pointer"
                 alt={collection?.collectionlist_title}
                 width={600}
@@ -35,7 +42,7 @@ export default function Collections({ data }: any) {
               dangerouslySetInnerHTML={{
                 __html: collection.collectionlist_shortdescription,
               }}
-              className="mb-3 font-normal text-gray-600 h-auto min-height-65"
+              className="h-auto mb-3 font-normal text-gray-600 min-height-65"
             />
             <Link
               href={collection?.collectionlist_link}

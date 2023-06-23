@@ -22,6 +22,7 @@ import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
+import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -181,6 +182,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     filters: adaptedQuery.filters || [],
     categoryId: category.id,
   }
+  const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
     data = {
@@ -288,6 +290,10 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   }
 
   const handleSortBy = (payload: any) => {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, sortBy: payload },
+    })
     dispatch({
       type: SORT_BY,
       payload: payload,
@@ -388,6 +394,17 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
             ))}
           </div>
         )}
+
+        {/*TODO: For browser caching of product images*/}
+        {/*{productDataToPass?.results?.length > 0 && (
+          <CacheProductImages
+            data={productDataToPass?.results
+              ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
+              .flat(1)}
+            setIsLoading={setIsLoading}
+          />
+        )}*/}
+
         {products.total > 0 ? (
           <div className="grid w-full grid-cols-1 sm:grid-cols-12">
             {!!products &&

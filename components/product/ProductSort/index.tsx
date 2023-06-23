@@ -44,13 +44,13 @@ export default function ProductSort({
             products.sortList.map((option: any) => (
               <Menu.Item key={option.value}>
                 {({ active }) => (
-                  <Link
-                    href={{
-                      pathname: router.pathname,
-                      query: { ...router.query, sortBy: option.key },
-                    }}
-                    passHref
-                  >
+                  // <Link
+                  //   href={{
+                  //     pathname: router.pathname,
+                  //     query: { ...router.query, sortBy: option.key },
+                  //   }}
+                  //   passHref
+                  // >
                     <span
                       onClick={() => action(option.key)}
                       className={classNames(
@@ -61,7 +61,7 @@ export default function ProductSort({
                     >
                       {option.value}
                     </span>
-                  </Link>
+                  // </Link>
                 )}
               </Menu.Item>
             ))}

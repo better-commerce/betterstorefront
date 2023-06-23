@@ -4,12 +4,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/navigation'
-
 import SwiperCore, { Navigation } from 'swiper'
-import {
-  BTN_SEE_EVERYTHING,
-  IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 
 SwiperCore.use([Navigation])
@@ -25,45 +21,9 @@ interface Props {
 }
 
 const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
-  var settings = {
-    fade: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 8000,
-    centerMode: false,
-    dots: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          initialSlide: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
   const css = { maxWidth: '100%', height: 'auto', minHeight: '400px' }
   return (
-    <div className='px-4 sm:pxy-0'>
+    <div className="px-4 sm:pxy-0">
       <Swiper
         className="mb-4 bg-white sm:mb-8"
         slidesPerView={1.5}
@@ -86,7 +46,8 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
                 <Image
                   priority
                   src={
-                    generateUri(product.image, 'h=500&fm=webp') || IMG_PLACEHOLDER
+                    generateUri(product.image, 'h=500&fm=webp') ||
+                    IMG_PLACEHOLDER
                   }
                   alt={product?.name}
                   style={css}
@@ -100,7 +61,7 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
                 <h4 className="mt-1 text-sm font-semibold text-black capitalize">
                   {product?.name}
                 </h4>
-                <span className="mt-1 text-sm font-semibold text-black block">
+                <span className="block mt-1 text-sm font-semibold text-black">
                   {product?.price?.formatted?.withTax}
                 </span>
               </div>
@@ -111,5 +72,4 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
     </div>
   )
 }
-
 export default ProductSlider
