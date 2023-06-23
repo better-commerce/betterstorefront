@@ -4,8 +4,8 @@ import classNames from '@components/utils/classNames'
 // import Link from 'next/link'
 import { CHOOSE_A_COLOR, GENERAL_COLOUR } from '@components/utils/textVariables'
 import { useState, useEffect } from 'react'
+import { PDP_SIZE_OPTIONS_COUNT } from '@components/utils/constants'
 
-const DEFAULT_OPTIONS_COUNT = 15
 function renderRadioOptions(
   items: any,
   itemsCount: any,
@@ -141,7 +141,7 @@ export default function InlineList({
         <div>
           {renderRadioOptions(
             items,
-            DEFAULT_OPTIONS_COUNT,
+            PDP_SIZE_OPTIONS_COUNT,
             currentAttribute,
             openRemainElems,
             handleToggleOpenRemainElems,

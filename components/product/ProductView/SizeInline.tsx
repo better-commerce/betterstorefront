@@ -18,6 +18,7 @@ import {
 } from '@components/utils/textVariables'
 import {
   NEXT_CREATE_WISHLIST,
+  PDP_SIZE_OPTIONS_COUNT,
   PRODUCTS_SLUG_PREFIX,
 } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
@@ -28,18 +29,17 @@ import cn from 'classnames'
 
 declare const window: any
 
-const DEFAULT_OPTIONS_COUNT = 20
-
-function renderRadioOptions(
-  items: any,
-  itemsCount: any,
-  selectedValue: any,
-  selected: any,
-  openRemainElems: boolean = false,
-  handleToggleOpenRemainElems: any,
-  sizeInit: any,
-  setSizeInit: any
-) {
+function RenderRadioOptions({
+  items,
+  itemsCount,
+  selectedValue,
+  selected,
+  openRemainElems = false,
+  handleToggleOpenRemainElems,
+  sizeInit,
+  setSizeInit,
+}: any) {
+  const [countOfItems, setCountOfItems] = useState(itemsCount)
   items.sort((s1: any, s2: any) => {
     return s1.displayOrder - s2.displayOrder
   })
@@ -55,10 +55,25 @@ function renderRadioOptions(
       selectedVal = selected[0]
     }
   }
+
+  function handleLessElems() {
+    if (items.length) {
+      setCountOfItems(itemsCount)
+    }
+    handleToggleOpenRemainElems()
+  }
+
+  function handleMoreElems() {
+    if (items.length) {
+      setCountOfItems(items.length)
+    }
+    handleToggleOpenRemainElems()
+  }
+
   return (
     <>
-      <div className="flex items-center">
-        {defaultItems.map((item: any, idx: any) => (
+      <div className="flex items-center flex-wrap">
+        {items.slice(0, countOfItems)?.map((item: any, idx: any) => (
           <>
             <RadioGroup.Option
               key={idx}
@@ -69,14 +84,14 @@ function renderRadioOptions(
                 setSizeInit('true')
               }}
               className={cn(
-                'pdp-color-swatch-item relative z-99 h-10 w-10 border border-gray-200 flex text-black items-center justify-center cursor-pointer outline-none dark:text-black hover:border-gray-900',
+                '/pdp-color-swatch-item /relative z-99 h-10 w-10 border border-gray-200 flex text-black items-center justify-center cursor-pointer outline-none dark:text-black hover:border-gray-900',
                 {
                   'border border-gray-200': selectedVal !== item.fieldValue,
                   'border border-gray-900': selectedVal === item.fieldValue,
                 }
               )}
             >
-              <RadioGroup.Label as="p" className="text-ms">
+              <RadioGroup.Label as="p" className="text-ms m-auto">
                 {item.fieldValue}
               </RadioGroup.Label>
             </RadioGroup.Option>
@@ -87,9 +102,12 @@ function renderRadioOptions(
         {openRemainElems && (
           <button
             className="relative flex items-center justify-center h-10 px-1 bg-gray-300 z-99 hover:opacity-75 bg-nav"
-            onClick={() => handleToggleOpenRemainElems()}
+            onClick={() => {
+              //  handleToggleOpenRemainElems()
+              handleLessElems()
+            }}
           >
-            <p className="text-gray-900 text-ms">{'<'}</p>
+            <p className="text-gray-900 text-ms m-auto px-3">{'<'}</p>
           </button>
         )}
 
@@ -97,12 +115,16 @@ function renderRadioOptions(
         {remainingItems && remainingItems.length > 0 && !openRemainElems && (
           <div
             className="relative flex items-center justify-center w-10 h-10 transition duration-100 bg-gray-300 outline-none cursor-pointer z-99 hover:opacity-75 bg-nav"
-            onClick={() => handleToggleOpenRemainElems()}
+            onClick={() => {
+              handleMoreElems()
+              // handleToggleOpenRemainElems()
+            }}
           >
-            <p className="text-xs text-gray-900">More</p>
+            <p className="text-xs text-gray-900 m-auto">More</p>
           </div>
         )}
       </div>
+
       <div
         className={classNames(
           sizeInit === 'error' ? '' : 'hidden',
@@ -311,7 +333,9 @@ export default function SizeInline({
 
   const [openRemainElems, setOpenRemainElems] = useState(false)
 
-  const handleToggleOpenRemainElems = () => setOpenRemainElems(!openRemainElems)
+  const handleToggleOpenRemainElems = () => {
+    setOpenRemainElems(!openRemainElems)
+  }
 
   return (
     <>
@@ -371,16 +395,18 @@ export default function SizeInline({
       <RadioGroup onChange={handleOnChange} className="mt-2 dark:text-black">
         {/* <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label> */}
         <div>
-          {renderRadioOptions(
-            items,
-            DEFAULT_OPTIONS_COUNT,
-            currentAttribute,
-            selected,
-            openRemainElems,
-            handleToggleOpenRemainElems,
-            sizeInit,
-            setSizeInit
-          )}
+          {
+            <RenderRadioOptions
+              items={items}
+              itemsCount={PDP_SIZE_OPTIONS_COUNT}
+              currentAttribute={currentAttribute}
+              selected={selected}
+              openRemainElems={openRemainElems}
+              handleToggleOpenRemainElems={handleToggleOpenRemainElems}
+              sizeInit={sizeInit}
+              setSizeInit={setSizeInit}
+            />
+          }
         </div>
       </RadioGroup>
 
