@@ -22,6 +22,7 @@ import {
 } from '@components/utils/textVariables'
 import { IDeviceInfo } from '@components/ui/context'
 import { IExtraProps } from './Layout'
+import { stringToBoolean } from '@framework/utils/parse-util'
 
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
@@ -121,7 +122,8 @@ const LayoutError: FC<Props & IExtraProps> = ({
   const { showSearchBar, setShowSearchBar } = useUI()
   //const [data, setData] = useState(navTreeFromLocalStorage)
 
-  const { appConfig, setAppConfig } = useUI()
+  const { appConfig, setAppConfig, includeVAT, setIncludeVAT, } = useUI()
+  const isIncludeVAT = stringToBoolean(includeVAT)
 
   //check if nav data is avaialbel in LocalStorage, then dont fetch from Server/API
   useEffect(() => {
@@ -140,11 +142,15 @@ const LayoutError: FC<Props & IExtraProps> = ({
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
 
+  const includeVATChanged = (value: boolean) => { setIncludeVAT(`${value}`) }
+
   return (
     <CommerceProvider locale={locale}>
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
         <Navbar
+          isIncludeVAT={isIncludeVAT}
+          onIncludeVATChanged={includeVATChanged}
           currencies={config?.currencies}
           config={sortedData}
           languages={config?.languages}

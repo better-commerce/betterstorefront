@@ -645,3 +645,21 @@ p {
 .mob-menu-icon {
   color: var(--menu-icon-color) !important;
 }
+
+.include-vat-checked {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 12px;
+  color: var(--btn-text-color-primary);
+}
+
+.include-vat-unchecked {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 12px;
+  color: var(--btn-text-color-secondary);
+}

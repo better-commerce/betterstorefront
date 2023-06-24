@@ -64,6 +64,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-merge-refs": "^2.0.2",
     "react-paginate": "^8.2.0",
+    "react-switch": "^7.0.0",
     "react-use-measure": "^2.1.1",
     "shebang-regex": "^4.0.0",
     "store": "^2.0.12",
