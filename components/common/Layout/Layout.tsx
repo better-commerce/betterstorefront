@@ -19,6 +19,7 @@ import {
   BTN_ACCEPT_COOKIE,
   GENERAL_COOKIE_TEXT,
 } from '@components/utils/textVariables'
+import { stringToBoolean } from '@framework/utils/parse-util'
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
 const CartSidebarView = dynamic(
   () => import('@components/cart/CartSidebarView')
@@ -124,6 +125,8 @@ interface LayoutProps {
 export interface IExtraProps {
   readonly deviceInfo: IDeviceInfo
   readonly maxBasketItemsCount: number
+  readonly isIncludeVAT?: boolean
+  onIncludeVATChanged?: any;
 }
 
 const Layout: FC<Props & IExtraProps> = ({
@@ -137,7 +140,8 @@ const Layout: FC<Props & IExtraProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { showSearchBar, setShowSearchBar } = useUI()
-  const { appConfig, setAppConfig, displayAlert } = useUI()
+  const { appConfig, setAppConfig, displayAlert, includeVAT, setIncludeVAT, } = useUI()
+  const isIncludeVAT = stringToBoolean(includeVAT)
 
   useEffect(() => {
     setAppConfig(config)
@@ -163,6 +167,8 @@ const Layout: FC<Props & IExtraProps> = ({
   const sortedData = navTree?.nav?.sort(
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
+  const includeVATChanged = (value: boolean) => { setIncludeVAT(`${value}`) }
+
   return (
     <>
       <Head>
@@ -191,6 +197,8 @@ const Layout: FC<Props & IExtraProps> = ({
             />
           )}
           <Navbar
+            isIncludeVAT={isIncludeVAT}
+            onIncludeVATChanged={includeVATChanged}
             currencies={config?.currencies}
             config={sortedData}
             languages={config?.languages}

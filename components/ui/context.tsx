@@ -70,6 +70,7 @@ export interface State {
   userIp: string
   overlayLoaderState: IOverlayLoaderState
   deviceInfo: IDeviceInfo
+  includeVAT: boolean
 }
 
 const initialState = {
@@ -80,7 +81,7 @@ const initialState = {
   sidebarView: 'CART_VIEW',
   userAvatar: '',
   productId: '',
-  displayDetailedOrder:false,
+  displayDetailedOrder: false,
   displayAlert: false,
   alertRibbon: {},
   notifyUser: false,
@@ -104,88 +105,89 @@ const initialState = {
     isIPadorTablet: false,
     deviceType: DeviceType.UNKNOWN,
   },
+  includeVAT: getItem('includeVAT') || 'false',
 }
 
 type Action =
   | {
-      type: 'OPEN_SIDEBAR'
-    }
+    type: 'OPEN_SIDEBAR'
+  }
   | {
-      type: 'CLOSE_SIDEBAR'
-    }
+    type: 'CLOSE_SIDEBAR'
+  }
   | {
-      type: 'OPEN_DROPDOWN'
-    }
+    type: 'OPEN_DROPDOWN'
+  }
   | {
-      type: 'CLOSE_DROPDOWN'
-    }
+    type: 'CLOSE_DROPDOWN'
+  }
   | {
-      type: 'OPEN_MODAL'
-    }
-  |  {
-      type: 'SHOW_ALERT'
-    }
+    type: 'OPEN_MODAL'
+  }
   | {
-      type: 'HIDE_ALERT'
-    }
+    type: 'SHOW_ALERT'
+  }
   | {
-      type: 'USE_ALERT'
-      payload: any
-    }
+    type: 'HIDE_ALERT'
+  }
   | {
-      type: 'OPEN_NOTIFY_USER_POPUP'
-      payload: string
-    }
+    type: 'USE_ALERT'
+    payload: any
+  }
   | {
-      type: 'CLOSE_NOTIFY_USER_POPUP'
-    }
+    type: 'OPEN_NOTIFY_USER_POPUP'
+    payload: string
+  }
   | {
-      type: 'CLOSE_MODAL'
-    }
+    type: 'CLOSE_NOTIFY_USER_POPUP'
+  }
   | {
-      type: 'SET_MODAL_VIEW'
-      view: MODAL_VIEWS
-    }
+    type: 'CLOSE_MODAL'
+  }
   | {
-      type: 'SET_SIDEBAR_VIEW'
-      view: SIDEBAR_VIEWS
-    }
+    type: 'SET_MODAL_VIEW'
+    view: MODAL_VIEWS
+  }
   | {
-      type: 'SHOW_DETAILED_ORDER'
-    }
+    type: 'SET_SIDEBAR_VIEW'
+    view: SIDEBAR_VIEWS
+  }
   | {
-      type: 'HIDE_DETAILED_ORDER'
-    }
-  | 
-    {
-      type: 'SET_USER_AVATAR'
-      value: string
-    }
+    type: 'SHOW_DETAILED_ORDER'
+  }
   | {
-      type: 'ADD_TO_WISHLIST'
-      payload: any
-    }
+    type: 'HIDE_DETAILED_ORDER'
+  }
+  |
+  {
+    type: 'SET_USER_AVATAR'
+    value: string
+  }
   | {
-      type: 'REMOVE_FROM_WISHLIST'
-      payload: any
-    }
+    type: 'ADD_TO_WISHLIST'
+    payload: any
+  }
   | {
-      type: 'ADD_TO_CART'
-      payload: any
-    }
+    type: 'REMOVE_FROM_WISHLIST'
+    payload: any
+  }
   | {
-      type: 'REMOVE_FROM_CART'
-      payload: any
-    }
+    type: 'ADD_TO_CART'
+    payload: any
+  }
+  | {
+    type: 'REMOVE_FROM_CART'
+    payload: any
+  }
   | { type: 'SET_CART_ITEMS'; payload: any }
   | {
-      type: 'SET_USER'
-      payload: any
-    }
+    type: 'SET_USER'
+    payload: any
+  }
   | {
-      type: 'SET_IS_GUEST_USER'
-      payload: boolean
-    }
+    type: 'SET_IS_GUEST_USER'
+    payload: boolean
+  }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -196,6 +198,8 @@ type Action =
   | { type: 'SET_OVERLAY_STATE'; payload: IOverlayLoaderState }
   | { type: 'SETUP_DEVICE_INFO'; payload: IDeviceInfo }
   | { type: 'SET_SELECTED_ADDRESS_ID'; payload: number }
+  | { type: 'INCLUDE_VAT'; payload: string }
+
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
   | 'LOGIN_VIEW'
@@ -421,6 +425,13 @@ function uiReducer(state: State, action: Action) {
         selectedAddressId: action.payload,
       }
     }
+
+    case 'INCLUDE_VAT': {
+      return {
+        ...state,
+        includeVAT: state?.includeVAT,
+      }
+    }
   }
 }
 
@@ -571,11 +582,11 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
   const showDetailedOrder = useCallback(
-    () => dispatch({type: 'SHOW_DETAILED_ORDER'}),
+    () => dispatch({ type: 'SHOW_DETAILED_ORDER' }),
     [dispatch]
   )
   const hideDetailedOrder = useCallback(
-    () => dispatch({type: 'HIDE_DETAILED_ORDER'}),
+    () => dispatch({ type: 'HIDE_DETAILED_ORDER' }),
     [dispatch]
   )
   const setUserAvatar = useCallback(
@@ -701,7 +712,7 @@ export const UIProvider: React.FC<any> = (props) => {
           })
           dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
           dispatch({ type: 'REMOVE_USER', payload: {} })
-           setAlert({ type: 'success', msg: LOGOUT })
+          setAlert({ type: 'success', msg: LOGOUT })
         })
       }
     },
@@ -771,6 +782,14 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setIncludeVAT = useCallback(
+    (payload: any) => {
+      setItem('includeVAT', payload)
+      dispatch({ type: 'INCLUDE_VAT', payload })
+    },
+    [dispatch]
+  )
+
   const consolidateCartItems = (payload: any) => {
     let newCartDataClone: any = { ...payload }
 
@@ -799,7 +818,7 @@ export const UIProvider: React.FC<any> = (props) => {
               x.parentProductId.trim() !== '' &&
               x.parentProductId.trim() !== Guid.empty &&
               x.parentProductId.toLowerCase().trim() ==
-                parentItem.productId.toLowerCase()
+              parentItem.productId.toLowerCase()
           )
 
           // If child items exists
@@ -901,9 +920,9 @@ export const UIProvider: React.FC<any> = (props) => {
       showAlert,
       hideAlert,
       setAlert,
+      setIncludeVAT,
     }),
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [state]
   )
 

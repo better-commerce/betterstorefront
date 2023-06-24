@@ -63,7 +63,7 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
-import { matchStrings, stringFormat } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat, } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
@@ -125,6 +125,7 @@ export default function ProductView({
   deviceInfo,
   config,
   maxBasketItemsCount,
+  isIncludeVAT,
 }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const {
@@ -831,11 +832,11 @@ export default function ProductView({
               <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
               {updatedProduct ? (
                 <p className="text-2xl font-bold text-black sm:text-xl font-24">
-                  {selectedAttrData?.price?.formatted?.withTax}
+                  {isIncludeVAT ? selectedAttrData?.price?.formatted?.withTax : selectedAttrData?.price?.formatted?.withoutTax}
                   {selectedAttrData?.listPrice?.raw.tax > 0 ? (
                     <>
                       <span className="px-2 text-sm font-medium text-gray-900 line-through">
-                        {product?.listPrice?.formatted?.withTax}
+                        {isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax}
                       </span>
                       <span className="text-sm font-medium text-red-500">
                         {discount}% off
@@ -968,7 +969,7 @@ export default function ProductView({
 
         {product?.componentProducts && (
           <Bundles
-            price={product?.price?.formatted?.withTax}
+            price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
             products={product?.componentProducts}
             productBundleUpdate={handleProductBundleUpdate}
           />
@@ -1025,8 +1026,8 @@ export default function ProductView({
           }
           productId={product?.id}
           stockCode={product?.stockCode}
-          ourCost={product?.price?.raw?.withTax}
-          rrp={product?.listPrice?.raw?.withTax}
+          ourCost={isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax}
+          rrp={isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax}
           ourDeliveryCost={product?.price?.raw?.tax}
         />
 
