@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { isDesktop, isMobile } from 'react-device-detect'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
-import { ALERT_TIMER } from '@components/utils/constants';
+import { ALERT_TIMER } from '@components/utils/constants'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
@@ -70,7 +70,7 @@ export interface State {
   userIp: string
   overlayLoaderState: IOverlayLoaderState
   deviceInfo: IDeviceInfo
-  includeVAT: boolean
+  includeVAT: string
 }
 
 const initialState = {
@@ -110,84 +110,83 @@ const initialState = {
 
 type Action =
   | {
-    type: 'OPEN_SIDEBAR'
-  }
+      type: 'OPEN_SIDEBAR'
+    }
   | {
-    type: 'CLOSE_SIDEBAR'
-  }
+      type: 'CLOSE_SIDEBAR'
+    }
   | {
-    type: 'OPEN_DROPDOWN'
-  }
+      type: 'OPEN_DROPDOWN'
+    }
   | {
-    type: 'CLOSE_DROPDOWN'
-  }
+      type: 'CLOSE_DROPDOWN'
+    }
   | {
-    type: 'OPEN_MODAL'
-  }
+      type: 'OPEN_MODAL'
+    }
   | {
-    type: 'SHOW_ALERT'
-  }
+      type: 'SHOW_ALERT'
+    }
   | {
-    type: 'HIDE_ALERT'
-  }
+      type: 'HIDE_ALERT'
+    }
   | {
-    type: 'USE_ALERT'
-    payload: any
-  }
+      type: 'USE_ALERT'
+      payload: any
+    }
   | {
-    type: 'OPEN_NOTIFY_USER_POPUP'
-    payload: string
-  }
+      type: 'OPEN_NOTIFY_USER_POPUP'
+      payload: string
+    }
   | {
-    type: 'CLOSE_NOTIFY_USER_POPUP'
-  }
+      type: 'CLOSE_NOTIFY_USER_POPUP'
+    }
   | {
-    type: 'CLOSE_MODAL'
-  }
+      type: 'CLOSE_MODAL'
+    }
   | {
-    type: 'SET_MODAL_VIEW'
-    view: MODAL_VIEWS
-  }
+      type: 'SET_MODAL_VIEW'
+      view: MODAL_VIEWS
+    }
   | {
-    type: 'SET_SIDEBAR_VIEW'
-    view: SIDEBAR_VIEWS
-  }
+      type: 'SET_SIDEBAR_VIEW'
+      view: SIDEBAR_VIEWS
+    }
   | {
-    type: 'SHOW_DETAILED_ORDER'
-  }
+      type: 'SHOW_DETAILED_ORDER'
+    }
   | {
-    type: 'HIDE_DETAILED_ORDER'
-  }
-  |
-  {
-    type: 'SET_USER_AVATAR'
-    value: string
-  }
+      type: 'HIDE_DETAILED_ORDER'
+    }
   | {
-    type: 'ADD_TO_WISHLIST'
-    payload: any
-  }
+      type: 'SET_USER_AVATAR'
+      value: string
+    }
   | {
-    type: 'REMOVE_FROM_WISHLIST'
-    payload: any
-  }
+      type: 'ADD_TO_WISHLIST'
+      payload: any
+    }
   | {
-    type: 'ADD_TO_CART'
-    payload: any
-  }
+      type: 'REMOVE_FROM_WISHLIST'
+      payload: any
+    }
   | {
-    type: 'REMOVE_FROM_CART'
-    payload: any
-  }
+      type: 'ADD_TO_CART'
+      payload: any
+    }
+  | {
+      type: 'REMOVE_FROM_CART'
+      payload: any
+    }
   | { type: 'SET_CART_ITEMS'; payload: any }
   | {
-    type: 'SET_USER'
-    payload: any
-  }
+      type: 'SET_USER'
+      payload: any
+    }
   | {
-    type: 'SET_IS_GUEST_USER'
-    payload: boolean
-  }
+      type: 'SET_IS_GUEST_USER'
+      payload: boolean
+    }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -554,14 +553,11 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
-  const showAlert = useCallback(
-    () => {
-      dispatch({ type: 'SHOW_ALERT' })
-      // const closeAlert = dispatch({type:'HIDE_ALERT'})
-      setTimeout(hideAlert, ALERT_TIMER)
-    },
-    [dispatch]
-  )
+  const showAlert = useCallback(() => {
+    dispatch({ type: 'SHOW_ALERT' })
+    // const closeAlert = dispatch({type:'HIDE_ALERT'})
+    setTimeout(hideAlert, ALERT_TIMER)
+  }, [dispatch])
   const hideAlert = useCallback(
     () => dispatch({ type: 'HIDE_ALERT' }),
     [dispatch]
@@ -818,7 +814,7 @@ export const UIProvider: React.FC<any> = (props) => {
               x.parentProductId.trim() !== '' &&
               x.parentProductId.trim() !== Guid.empty &&
               x.parentProductId.toLowerCase().trim() ==
-              parentItem.productId.toLowerCase()
+                parentItem.productId.toLowerCase()
           )
 
           // If child items exists

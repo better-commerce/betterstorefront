@@ -25,9 +25,9 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
-import { validateAddToCart } from '@framework/utils/app-util'
+import { vatIncluded, validateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import { stringFormat, stringToBoolean, } from '@framework/utils/parse-util'
+import { stringFormat } from '@framework/utils/parse-util'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -66,9 +66,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     cartItems,
     wishListItems,
     setAlert,
-    includeVAT,
+    //includeVAT,
   } = useUI()
-  const isIncludeVAT = stringToBoolean(includeVAT);
+  const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
   const [product, setProduct] = useState(productData || {})
@@ -87,9 +87,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wishListItems, productData])
 
-  useEffect(()=>{
+  useEffect(() => {
     setProduct(productData)
-  },[productData])
+  }, [productData])
 
   useEffect(() => {
     if (product?.variantProductsAttributeMinimal?.length < 1) return
@@ -366,14 +366,18 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
           <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm p-font-size">
             <span className="font-bold">
-              {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
+              {isIncludeVAT
+                ? product?.price?.formatted?.withTax
+                : product?.price?.formatted?.withoutTax}
             </span>
             {product?.listPrice?.raw?.withTax > 0 &&
               product?.listPrice?.raw?.withTax !=
                 product?.price?.raw?.withTax && (
                 <>
                   <span className="px-1 text-xs font-medium text-black line-through">
-                    {isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax}
+                    {isIncludeVAT
+                      ? product?.listPrice?.formatted?.withTax
+                      : product?.listPrice?.formatted?.withoutTax}
                   </span>
                   <span className="text-xs font-semibold text-red-600">
                     ({discount}% Off)

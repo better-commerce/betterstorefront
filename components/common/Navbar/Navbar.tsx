@@ -36,7 +36,11 @@ import {
   SELECT_LANGUAGE,
   GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
-import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
+import {
+  getCurrentPage,
+  removePrecedingSlash,
+  vatIncluded,
+} from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IExtraProps } from '../Layout/Layout'
 import ToggleSwitch from '../ToggleSwitch'
@@ -68,7 +72,6 @@ const Navbar: FC<Props & IExtraProps> = ({
   languages,
   deviceInfo,
   maxBasketItemsCount,
-  isIncludeVAT = false,
   onIncludeVATChanged,
 }) => {
   const router = useRouter()
@@ -354,10 +357,11 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 </div>
                                 <div className="pt-5 pr-3">
                                   <ChevronUpIcon
-                                    className={`${!open
-                                      ? 'transition-transform duration-150 rotate-180 transform'
-                                      : 'transition-transform duration-150 rotate-0 transform'
-                                      } h-5 w-5 text-black`}
+                                    className={`${
+                                      !open
+                                        ? 'transition-transform duration-150 rotate-180 transform'
+                                        : 'transition-transform duration-150 rotate-0 transform'
+                                    } h-5 w-5 text-black`}
                                   />
                                 </div>
                               </Disclosure.Button>
@@ -369,46 +373,46 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 <div className="space-y-4">
                                   {item.navBlocks.length
                                     ? item.navBlocks.map(
-                                      (navBlock: any, navIdx: number) => {
-                                        return (
-                                          <div
-                                            key={`navbar-parent-${navIdx}`}
-                                            className="grid grid-cols-1 px-5 sm:px-0 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0"
-                                          >
-                                            <ul
-                                              role="list"
-                                              aria-labelledby="clothing-heading"
-                                              className="col-span-1"
+                                        (navBlock: any, navIdx: number) => {
+                                          return (
+                                            <div
+                                              key={`navbar-parent-${navIdx}`}
+                                              className="grid grid-cols-1 px-5 sm:px-0 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0"
                                             >
-                                              {navBlock.navItems.map(
-                                                (navItem: any, idx: any) => (
-                                                  <Link
-                                                    legacyBehavior
-                                                    key={`${navItem.caption}-${idx}`}
-                                                    title={navItem.caption}
-                                                    href={`/${removePrecedingSlash(
-                                                      navItem.itemLink
-                                                    )}`}
-                                                    passHref
-                                                    onClick={() => {
-                                                      setOpen(false)
-                                                      hamburgerMenuClickLevel2(
-                                                        item.caption,
-                                                        navBlock.boxTitle
-                                                      )
-                                                    }}
-                                                  >
-                                                    <li className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
-                                                      {navItem.caption}
-                                                    </li>
-                                                  </Link>
-                                                )
-                                              )}
-                                            </ul>
-                                          </div>
-                                        )
-                                      }
-                                    )
+                                              <ul
+                                                role="list"
+                                                aria-labelledby="clothing-heading"
+                                                className="col-span-1"
+                                              >
+                                                {navBlock.navItems.map(
+                                                  (navItem: any, idx: any) => (
+                                                    <Link
+                                                      legacyBehavior
+                                                      key={`${navItem.caption}-${idx}`}
+                                                      title={navItem.caption}
+                                                      href={`/${removePrecedingSlash(
+                                                        navItem.itemLink
+                                                      )}`}
+                                                      passHref
+                                                      onClick={() => {
+                                                        setOpen(false)
+                                                        hamburgerMenuClickLevel2(
+                                                          item.caption,
+                                                          navBlock.boxTitle
+                                                        )
+                                                      }}
+                                                    >
+                                                      <li className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
+                                                        {navItem.caption}
+                                                      </li>
+                                                    </Link>
+                                                  )
+                                                )}
+                                              </ul>
+                                            </div>
+                                          )
+                                        }
+                                      )
                                     : null}
                                 </div>
                               </Disclosure.Panel>
@@ -631,9 +635,13 @@ const Navbar: FC<Props & IExtraProps> = ({
                   className="include-vat"
                   height={15}
                   width={40}
-                  checked={isIncludeVAT}
-                  checkedIcon={<div className='include-vat-checked ml-1'>Yes</div>}
-                  uncheckedIcon={<div className="include-vat-unchecked mr-1">No</div>}
+                  checked={vatIncluded()}
+                  checkedIcon={
+                    <div className="include-vat-checked ml-1">Yes</div>
+                  }
+                  uncheckedIcon={
+                    <div className="include-vat-unchecked mr-1">No</div>
+                  }
                   onToggleChanged={onIncludeVATChanged}
                 />
               </div>
