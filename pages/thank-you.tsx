@@ -265,13 +265,13 @@ export default function OrderConfirmation() {
                     </dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="font-medium text-gray-900">
+                    <dt className="text-lg font-bold text-gray-900">
                       {GENERAL_TOTAL}
                     </dt>
-                    <dd className="text-gray-900">
+                    <dd className="text-lg font-bold text-gray-900">
                       {isIncludeVAT
                         ? order?.grandTotal?.formatted?.withTax
-                        : order?.grandTotal?.formatted?.withoutTax}
+                        : order?.grandTotal?.formatted?.withTax}
                     </dd>
                   </div>
                 </dl>
