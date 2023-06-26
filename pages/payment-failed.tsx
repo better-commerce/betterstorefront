@@ -16,7 +16,7 @@ import { useUI } from '@components/ui/context'
 import { removeItem } from '@components/utils/localStorage'
 import { NEXT_GET_ORDER } from '@components/utils/constants'
 import { LocalStorage } from '@components/utils/payment-constants'
-import { obfuscateHostName } from '@framework/utils/app-util'
+import { obfuscateHostName, vatIncluded } from '@framework/utils/app-util'
 import {
   BTN_BACK_TO_HOME,
   GENERAL_ADDRESSES,
@@ -46,7 +46,7 @@ const PaymentFailedPage = ({
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
   const { orderId, setOrderId, user } = useUI()
-
+  const isIncludeVAT = vatIncluded()
   useEffect(() => {
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER, {
@@ -151,7 +151,9 @@ const PaymentFailedPage = ({
                             {GENERAL_PRICE}
                           </dt>
                           <dd className="ml-2 text-gray-700">
-                            {product?.price.formatted.withTax}
+                            {isIncludeVAT
+                              ? product?.price.formatted.withTax
+                              : product?.price.formatted.withoutTax}
                           </dd>
                         </div>
                       </dl>

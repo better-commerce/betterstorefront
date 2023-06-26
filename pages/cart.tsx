@@ -33,15 +33,21 @@ import {
   GENERAL_REMOVE,
   GENERAL_SHIPPING,
   GENERAL_SHOPPING_CART,
+  GENERAL_TAX,
   GENERAL_TOTAL,
   IMG_PLACEHOLDER,
   ITEMS_IN_YOUR_CART,
+  SUBTOTAL_EXCLUDING_TAX,
   SUBTOTAL_INCLUDING_TAX,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
-
+import {
+  getCurrentPage,
+  validateAddToCart,
+  vatIncluded,
+} from '@framework/utils/app-util'
 function Cart({ cart }: any) {
   const { setCartItems, cartItems, basketId, basketPromos, getBasketPromos } =
     useUI()
@@ -165,7 +171,7 @@ function Cart({ cart }: any) {
     }
     asyncHandleItem()
   }
-
+  const isIncludeVAT = vatIncluded()
   const userCart = cartItems
   const isEmpty: boolean = userCart?.lineItems?.length === 0
   const css = { maxWidth: '100%', height: 'auto' }
@@ -193,7 +199,7 @@ function Cart({ cart }: any) {
         <meta property="og:title" content="Basket" key="ogtitle" />
         <meta property="og:description" content="Basket" key="ogdesc" />
       </NextHead>
-      <div className="container w-full px-4 mx-auto mt-6 bg-white sm:px-6 sm:mt-10 mb-10">
+      <div className="container w-full px-4 mx-auto mt-6 mb-10 bg-white sm:px-6 sm:mt-10">
         <h1 className="relative font-semibold tracking-tight text-black uppercase">
           {GENERAL_SHOPPING_CART}{' '}
           <span className="absolute pl-2 text-sm font-normal text-gray-400 top-2">
@@ -233,13 +239,17 @@ function Cart({ cart }: any) {
                       </Link>
                     </h3>
                     <div className="mt-0 font-bold text-black text-md sm:font-medium">
-                      {product.price?.formatted?.withTax}
+                      {isIncludeVAT
+                        ? product.price?.formatted?.withTax
+                        : product.price?.formatted?.withoutTax}
                       {product.listPrice?.raw.withTax > 0 &&
                       product.listPrice?.raw.withTax !=
                         product.price?.raw?.withTax ? (
                         <span className="px-2 text-sm text-red-400 line-through">
                           {GENERAL_PRICE_LABEL_RRP}{' '}
-                          {product.listPrice.formatted.withTax}
+                          {isIncludeVAT
+                            ? product.listPrice.formatted?.withTax
+                            : product.listPrice.formatted?.withoutTax}
                         </span>
                       ) : null}
                     </div>
@@ -293,7 +303,9 @@ function Cart({ cart }: any) {
                           <Link href={`/${child.slug}`}>{child.name}</Link>
                           <p className="ml-4">
                             {child.price?.formatted?.withTax > 0
-                              ? child.price?.formatted?.withTax
+                              ? isIncludeVAT
+                                ? child.price?.formatted?.withTax
+                                : child.price?.formatted?.withoutTax
                               : ''}
                           </p>
                         </div>
@@ -380,10 +392,14 @@ function Cart({ cart }: any) {
               <dl className="mt-6 space-y-2 sm:space-y-2">
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">
-                    {SUBTOTAL_INCLUDING_TAX}
+                    {isIncludeVAT
+                      ? SUBTOTAL_INCLUDING_TAX
+                      : SUBTOTAL_EXCLUDING_TAX}
                   </dt>
                   <dd className="font-semibold text-black text-md">
-                    {cartItems.subTotal?.formatted?.withTax}
+                    {isIncludeVAT
+                      ? cartItems.subTotal?.formatted?.withTax
+                      : cartItems.subTotal?.formatted?.withoutTax}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between pt-2 sm:pt-1">
@@ -391,31 +407,42 @@ function Cart({ cart }: any) {
                     <span>{GENERAL_SHIPPING}</span>
                   </dt>
                   <dd className="font-semibold text-black text-md">
-                    {cartItems.shippingCharge?.formatted?.withTax}
+                    {isIncludeVAT
+                      ? cartItems.shippingCharge?.formatted?.withTax
+                      : cartItems.shippingCharge?.formatted?.withoutTax}
                   </dd>
                 </div>
-                <div className="flex items-center justify-between pt-2 sm:pt-2">
-                  {userCart.promotionsApplied?.length > 0 && (
-                    <>
-                      <dt className="flex items-center text-sm text-gray-600">
-                        <span>{GENERAL_DISCOUNT}</span>
-                      </dt>
-                      <dd className="font-semibold text-red-500 text-md">
-                        <p>
-                          {'-'}
-                          {cartItems.discount?.formatted?.withTax}
-                        </p>
-                      </dd>
-                    </>
-                  )}
+                {userCart.promotionsApplied?.length > 0 && (
+                  <div className="flex items-center justify-between pt-2 sm:pt-2">
+                    <dt className="flex items-center text-sm text-gray-600">
+                      <span>{GENERAL_DISCOUNT}</span>
+                    </dt>
+                    <dd className="font-semibold text-red-500 text-md">
+                      <p>
+                        {'-'}
+                        {isIncludeVAT
+                          ? cartItems.discount?.formatted?.withTax
+                          : cartItems.discount?.formatted?.withoutTax}
+                      </p>
+                    </dd>
+                  </div>
+                )}
+                <div className="flex items-center justify-between pt-2 sm:pt-1">
+                  <dt className="flex items-center text-sm text-gray-600">
+                    <span>{GENERAL_TAX}</span>
+                  </dt>
+                  <dd className="font-semibold text-black text-md">
+                    {cartItems.grandTotal?.formatted?.tax}
+                  </dd>
                 </div>
-
                 <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
                   <dt className="text-lg font-bold text-black">
                     {GENERAL_TOTAL}
                   </dt>
                   <dd className="text-xl font-bold text-black">
-                    {cartItems.grandTotal?.formatted?.withTax}
+                    {isIncludeVAT
+                      ? cartItems.grandTotal?.formatted?.withTax
+                      : cartItems.grandTotal?.formatted?.withoutTax}
                   </dd>
                 </div>
               </dl>

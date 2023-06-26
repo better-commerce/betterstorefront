@@ -23,7 +23,7 @@ interface Props {
 const ProductSlider: FC<React.PropsWithChildren<Props>> = ({ config }) => {
   const css = { maxWidth: '100%', height: 'auto', minHeight: '400px' }
   return (
-    <div className="px-4 sm:pxy-0">
+    <div className="px-4 sm:pxy-0 min-cls-h">
       <Swiper
         className="mb-4 bg-white sm:mb-8"
         slidesPerView={1.5}

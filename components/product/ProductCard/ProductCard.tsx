@@ -294,7 +294,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="object-cover object-center w-full h-full sm:h-full min-h-image hidden height-img-auto"
+                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
                 style={css}
                 width={400}
                 height={600}
