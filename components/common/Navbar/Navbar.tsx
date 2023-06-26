@@ -36,9 +36,15 @@ import {
   SELECT_LANGUAGE,
   GENERAL_ITEM_IN_CART,
 } from '@components/utils/textVariables'
-import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
+import {
+  getCurrentPage,
+  removePrecedingSlash,
+  vatIncluded,
+} from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IExtraProps } from '../Layout/Layout'
+import ToggleSwitch from '../ToggleSwitch'
+import { getItem, setItem } from '@components/utils/localStorage'
 
 interface Props {
   config: []
@@ -67,6 +73,7 @@ const Navbar: FC<Props & IExtraProps> = ({
   languages,
   deviceInfo,
   maxBasketItemsCount,
+  onIncludeVATChanged,
 }) => {
   const router = useRouter()
 
@@ -159,8 +166,25 @@ const Navbar: FC<Props & IExtraProps> = ({
   useEffect(() => {
     if (!isProduction) {
       setRenderState(true)
+      setIncludeVATToggle()
     }
   }, [])
+
+  const setIncludeVATToggle = () => {
+    const elemSwitch: any = document.querySelector(
+      "div.include-vat input[role='switch']"
+    )
+    if (elemSwitch && getItem('includeVAT') === 'true') {
+      setItem('includeVAT', 'false')
+      setTimeout(() => {
+        if (elemSwitch.click) {
+          elemSwitch.click()
+        } else if (elemSwitch.onClick) {
+          elemSwitch.onClick()
+        }
+      }, 100)
+    }
+  }
 
   const viewWishlist = () => {
     if (currentPage) {
@@ -618,6 +642,27 @@ const Navbar: FC<Props & IExtraProps> = ({
                   </>
                 )}
               </button>
+            </div>
+
+            <div className="flex flex-col py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap text-header-clr">
+              INC VAT
+            </div>
+            <div className="flow-root w-10 px-2 sm:w-12">
+              <div className="flex justify-center flex-1 mx-auto">
+                <ToggleSwitch
+                  className="include-vat"
+                  height={15}
+                  width={40}
+                  checked={vatIncluded()}
+                  checkedIcon={
+                    <div className="include-vat-checked ml-1">Yes</div>
+                  }
+                  uncheckedIcon={
+                    <div className="include-vat-unchecked mr-1">No</div>
+                  }
+                  onToggleChanged={onIncludeVATChanged}
+                />
+              </div>
             </div>
           </div>
         </nav>

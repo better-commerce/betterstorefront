@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { isDesktop, isMobile } from 'react-device-detect'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
-import { ALERT_TIMER } from '@components/utils/constants';
+import { ALERT_TIMER } from '@components/utils/constants'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
@@ -70,6 +70,7 @@ export interface State {
   userIp: string
   overlayLoaderState: IOverlayLoaderState
   deviceInfo: IDeviceInfo
+  includeVAT: string
 }
 
 const initialState = {
@@ -80,7 +81,7 @@ const initialState = {
   sidebarView: 'CART_VIEW',
   userAvatar: '',
   productId: '',
-  displayDetailedOrder:false,
+  displayDetailedOrder: false,
   displayAlert: false,
   alertRibbon: {},
   notifyUser: false,
@@ -104,6 +105,7 @@ const initialState = {
     isIPadorTablet: false,
     deviceType: DeviceType.UNKNOWN,
   },
+  includeVAT: getItem('includeVAT') || 'false',
 }
 
 type Action =
@@ -122,7 +124,7 @@ type Action =
   | {
       type: 'OPEN_MODAL'
     }
-  |  {
+  | {
       type: 'SHOW_ALERT'
     }
   | {
@@ -156,8 +158,7 @@ type Action =
   | {
       type: 'HIDE_DETAILED_ORDER'
     }
-  | 
-    {
+  | {
       type: 'SET_USER_AVATAR'
       value: string
     }
@@ -196,6 +197,8 @@ type Action =
   | { type: 'SET_OVERLAY_STATE'; payload: IOverlayLoaderState }
   | { type: 'SETUP_DEVICE_INFO'; payload: IDeviceInfo }
   | { type: 'SET_SELECTED_ADDRESS_ID'; payload: number }
+  | { type: 'INCLUDE_VAT'; payload: string }
+
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
   | 'LOGIN_VIEW'
@@ -421,6 +424,13 @@ function uiReducer(state: State, action: Action) {
         selectedAddressId: action.payload,
       }
     }
+
+    case 'INCLUDE_VAT': {
+      return {
+        ...state,
+        includeVAT: state?.includeVAT,
+      }
+    }
   }
 }
 
@@ -543,14 +553,11 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
-  const showAlert = useCallback(
-    () => {
-      dispatch({ type: 'SHOW_ALERT' })
-      // const closeAlert = dispatch({type:'HIDE_ALERT'})
-      setTimeout(hideAlert, ALERT_TIMER)
-    },
-    [dispatch]
-  )
+  const showAlert = useCallback(() => {
+    dispatch({ type: 'SHOW_ALERT' })
+    // const closeAlert = dispatch({type:'HIDE_ALERT'})
+    setTimeout(hideAlert, ALERT_TIMER)
+  }, [dispatch])
   const hideAlert = useCallback(
     () => dispatch({ type: 'HIDE_ALERT' }),
     [dispatch]
@@ -571,11 +578,11 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
   const showDetailedOrder = useCallback(
-    () => dispatch({type: 'SHOW_DETAILED_ORDER'}),
+    () => dispatch({ type: 'SHOW_DETAILED_ORDER' }),
     [dispatch]
   )
   const hideDetailedOrder = useCallback(
-    () => dispatch({type: 'HIDE_DETAILED_ORDER'}),
+    () => dispatch({ type: 'HIDE_DETAILED_ORDER' }),
     [dispatch]
   )
   const setUserAvatar = useCallback(
@@ -701,7 +708,7 @@ export const UIProvider: React.FC<any> = (props) => {
           })
           dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
           dispatch({ type: 'REMOVE_USER', payload: {} })
-           setAlert({ type: 'success', msg: LOGOUT })
+          setAlert({ type: 'success', msg: LOGOUT })
         })
       }
     },
@@ -767,6 +774,14 @@ export const UIProvider: React.FC<any> = (props) => {
         message: '',
       }
       dispatch({ type: 'SET_OVERLAY_STATE', payload })
+    },
+    [dispatch]
+  )
+
+  const setIncludeVAT = useCallback(
+    (payload: any) => {
+      setItem('includeVAT', payload)
+      dispatch({ type: 'INCLUDE_VAT', payload })
     },
     [dispatch]
   )
@@ -901,9 +916,9 @@ export const UIProvider: React.FC<any> = (props) => {
       showAlert,
       hideAlert,
       setAlert,
+      setIncludeVAT,
     }),
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [state]
   )
 

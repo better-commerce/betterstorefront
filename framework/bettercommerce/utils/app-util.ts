@@ -404,3 +404,7 @@ export const getMinMax = (list: Array<any>, dependantProp: string) => {
     max: highest,
   }
 }
+
+export const vatIncluded = () => {
+  return stringToBoolean((getItem('includeVAT') as string) || 'false')
+}

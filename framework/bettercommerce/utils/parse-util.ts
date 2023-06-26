@@ -68,7 +68,7 @@ export const tryParseJson = (json: any) => {
     try {
       parsed = JSON.parse(json)
       return parsed
-    } catch (e: any) {}
+    } catch (e: any) { }
   }
   return null
 }
