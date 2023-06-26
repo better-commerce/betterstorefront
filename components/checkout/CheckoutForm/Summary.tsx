@@ -605,7 +605,7 @@ export default function Summary({
                   <dd className="text-lg font-medium text-gray-900">
                     {isIncludeVAT
                       ? cart.grandTotal?.formatted?.withTax
-                      : cart.grandTotal?.formatted?.withoutTax}
+                      : cart.grandTotal?.formatted?.withTax}
                   </dd>
                 </div>
               </dl>
