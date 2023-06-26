@@ -715,4 +715,8 @@ p {
   color: var(--btn-text-color-secondary);
 }
 
+object{
+  height: auto;
+}
+
 /* main css end */

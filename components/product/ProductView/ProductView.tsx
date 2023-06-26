@@ -745,18 +745,8 @@ export default function ProductView({
               ))}
             </Swiper>
           ) : (
-            <Tab.Group
-              as="div"
-              className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp"
-              title="product images"
-            >
-              <Tab.List
-                className={
-                  content?.length > 1
-                    ? 'grid grid-cols-1 gap-2 sm:grid-cols-2'
-                    : 'grid grid-cols-1 gap-2 sm:grid-cols-1'
-                }
-              >
+            <Tab.Group as="div" className="sticky flex flex-col-reverse top-16 lg:col-span-7 min-mobile-pdp" title="product images">
+              <Tab.List className={content?.length > 1 ? 'grid grid-cols-1 gap-2 sm:grid-cols-2' : 'grid grid-cols-1 gap-2 sm:grid-cols-1'}>
                 {content?.map((image: any, idx) => (
                   <Tab key={`${idx}-tab`} title={selectedAttrData.name}>
                     {() => (
@@ -786,9 +776,7 @@ export default function ProductView({
                                 }
                               />
                             </div>
-                          ) : (
-                            <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
-                          )}
+                          ) : null}
                         </span>
                       </>
                     )}
