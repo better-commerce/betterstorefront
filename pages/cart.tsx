@@ -442,7 +442,7 @@ function Cart({ cart }: any) {
                   <dd className="text-xl font-bold text-black">
                     {isIncludeVAT
                       ? cartItems.grandTotal?.formatted?.withTax
-                      : cartItems.grandTotal?.formatted?.withoutTax}
+                      : cartItems.grandTotal?.formatted?.withTax}
                   </dd>
                 </div>
               </dl>
