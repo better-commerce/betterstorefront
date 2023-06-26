@@ -44,6 +44,7 @@ import {
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IExtraProps } from '../Layout/Layout'
 import ToggleSwitch from '../ToggleSwitch'
+import { getItem, setItem } from '@components/utils/localStorage'
 
 interface Props {
   config: []
@@ -165,8 +166,25 @@ const Navbar: FC<Props & IExtraProps> = ({
   useEffect(() => {
     if (!isProduction) {
       setRenderState(true)
+      setIncludeVATToggle()
     }
   }, [])
+
+  const setIncludeVATToggle = () => {
+    const elemSwitch: any = document.querySelector(
+      "div.include-vat input[role='switch']"
+    )
+    if (elemSwitch && getItem('includeVAT') === 'true') {
+      setItem('includeVAT', 'false')
+      setTimeout(() => {
+        if (elemSwitch.click) {
+          elemSwitch.click()
+        } else if (elemSwitch.onClick) {
+          elemSwitch.onClick()
+        }
+      }, 100)
+    }
+  }
 
   const viewWishlist = () => {
     if (currentPage) {
