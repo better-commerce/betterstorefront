@@ -687,6 +687,16 @@ p {
   min-height: 65px;
 }
 
+.min-cls-h {
+  min-height: 440px;
+}
+
+@media screen and (max-width:767px) {
+  .min-cls-h {
+    min-height: 470px;
+  }
+}
+
 .include-vat-checked {
   display: flex;
   justify-content: center;
