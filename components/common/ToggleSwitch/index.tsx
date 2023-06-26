@@ -39,7 +39,6 @@ const ToggleSwitch = ({
       height={height}
       width={width}
       checked={checked}
-      defaultChecked={checked}
       onChange={handleChange}
     />
   )
