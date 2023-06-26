@@ -54,7 +54,7 @@ const FilterItem = ({
 
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div key={option.value} className="flex items-center pt-2">
+    <div key={`option-right-value-${option.value}-${optionIdx}`} className="flex items-center pt-2">
       <input
         name={`${optionIdx}-input[]`}
         defaultValue={option.value}

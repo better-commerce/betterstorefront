@@ -820,16 +820,16 @@ export default function ProductView({
                   ))}
                 </div>
                 {reviews?.review?.productReviews?.length > 0 ? (
-                  <p className="pl-1 text-xs font-bold my-auto">
+                  <p className="pl-1 my-auto text-xs font-bold">
                     ({reviews?.review?.ratingAverage})
                   </p>
                 ) : (
-                  <p className="pl-1 text-xs font-bold my-auto">(0)</p>
+                  <p className="pl-1 my-auto text-xs font-bold">(0)</p>
                 )}
               </div>
             </div>
 
-            <h1 className="font-medium tracking-tight text-black font-36 mb-3 sm:mb-0">
+            <h1 className="mb-3 font-medium tracking-tight text-black font-36 sm:mb-0">
               {selectedAttrData.name || selectedAttrData.productName}
             </h1>
             <p className="mt-0 text-sm text-black uppercase sm:text-xs sm:mt-1">
@@ -880,6 +880,7 @@ export default function ProductView({
               <AvailableOffers
                 currency={product?.price}
                 offers={promotions?.promotions}
+                key={product?.id}
               />
             )}
             {updatedProduct ? (
@@ -970,7 +971,7 @@ export default function ProductView({
           </div>
         </div>
         <div className="flex flex-col section-devider"></div>
-        <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
+        <div className="flex flex-col w-full px-0 mx-auto sm:container page-container">
           <ProductSpecifications
             attrGroup={attrGroup}
             product={product}
@@ -994,7 +995,7 @@ export default function ProductView({
         )?.length > 0 ? (
           <>
             <div className="flex flex-col section-devider"></div>
-            <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
+            <div className="flex flex-col w-full px-0 mx-auto sm:container page-container">
               <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
                 You May Also Like
               </h3>
