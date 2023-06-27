@@ -441,6 +441,23 @@ const Navbar: FC<Props & IExtraProps> = ({
                     </div>
                   )
                 })}
+
+                <div className="text-sm px-4 font-bold text-black sm:text-lg whitespace-nowrap">
+                  INC VAT
+                  <ToggleSwitch
+                    className="include-vat px-4"
+                    height={15}
+                    width={40}
+                    checked={vatIncluded()}
+                    checkedIcon={
+                      <div className="include-vat-checked ml-1">Yes</div>
+                    }
+                    uncheckedIcon={
+                      <div className="include-vat-unchecked mr-1">No</div>
+                    }
+                    onToggleChanged={onIncludeVATChanged}
+                  />
+                </div>
               </Tab.Group>
             </div>
           </Transition.Child>
@@ -644,26 +661,30 @@ const Navbar: FC<Props & IExtraProps> = ({
               </button>
             </div>
 
-            <div className="flex flex-col py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap text-header-clr">
-              INC VAT
-            </div>
-            <div className="flow-root w-10 px-2 sm:w-12">
-              <div className="flex justify-center flex-1 mx-auto">
-                <ToggleSwitch
-                  className="include-vat"
-                  height={15}
-                  width={40}
-                  checked={vatIncluded()}
-                  checkedIcon={
-                    <div className="include-vat-checked ml-1">Yes</div>
-                  }
-                  uncheckedIcon={
-                    <div className="include-vat-unchecked mr-1">No</div>
-                  }
-                  onToggleChanged={onIncludeVATChanged}
-                />
-              </div>
-            </div>
+            {!isMobile && !isIPadorTablet && (
+              <>
+                <div className="flex flex-col py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap text-header-clr">
+                  INC VAT
+                </div>
+                <div className="flow-root w-10 px-2 sm:w-12">
+                  <div className="flex justify-center flex-1 mx-auto">
+                    <ToggleSwitch
+                      className="include-vat"
+                      height={15}
+                      width={40}
+                      checked={vatIncluded()}
+                      checkedIcon={
+                        <div className="include-vat-checked ml-1">Yes</div>
+                      }
+                      uncheckedIcon={
+                        <div className="include-vat-unchecked mr-1">No</div>
+                      }
+                      onToggleChanged={onIncludeVATChanged}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </nav>
       </header>
