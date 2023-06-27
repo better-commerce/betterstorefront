@@ -59,7 +59,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                     <div className='flex justify-between px-4 pb-4 mb-3 border-b sm:px-6'>
                                        <div>
                                           <h3 className="text-base font-bold text-black dark:text-black">Get Help with this item </h3>
-                                          <p className='text-black truncate font-10 font-normal max-w-mob'>{isHelpStatus?.name}</p>
+                                          <p className='text-black font-10 font-normal'>{isHelpStatus?.name}</p>
                                        </div>
                                        <button
                                           type="button"

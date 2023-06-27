@@ -18,6 +18,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { recordGA4Event } from '@components/services/analytics/ga4'
+import Spinner from '@components/ui/Spinner'
 
 export interface actionInterface {
   type?: string
@@ -25,18 +26,36 @@ export interface actionInterface {
 }
 
 function Checkout({ cart, config, location }: any) {
-  const { user, basketId, setCartItems, cartItems, setUser, setIsGuestUser } =
-    useUI()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const {
+    user,
+    basketId,
+    setCartItems,
+    cartItems,
+    setUser,
+    setIsGuestUser,
+    guestUser,
+    setGuestUser,
+  } = useUI()
+  const [isLoggedIn, setIsLoggedIn] = useState<any>(undefined)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
-  const [userAddresses, setUserAddresses] = useState([])
+  const [userAddresses, setUserAddresses] = useState<any>([])
 
   const { getAddress } = asyncHandler()
 
   useEffect(() => {
-    setIsLoggedIn(!!user?.userId || false)
-  }, [user, cartItems])
+    setIsLoggedIn(Boolean(user?.userId || guestUser?.userId || false))
+    if (user?.userId) {
+      fetchAddress()
+    }
+  }, [user, cartItems, guestUser])
+
+  useEffect(() => {
+    const billingAddress = userAddresses?.find((o: any) => o.isDefaultBilling)
+    const shippingAddress = userAddresses?.find((o: any) => o.isDefaultDelivery)
+    if (billingAddress) setDefaultBillingAddress(billingAddress)
+    if (shippingAddress) setDefaultShippingAddress(shippingAddress)
+  }, [userAddresses])
 
   const handleGuestMail = (values: any) => {
     const handleAsync = async () => {
@@ -44,27 +63,23 @@ function Checkout({ cart, config, location }: any) {
         basketId: basketId,
         ...values,
       })
+      setGuestUser({ userId: response.data.userId, email: response.data.userEmail, ...values })
       const newCartClone = { ...response.data, isGuestCheckout: true }
       setCartItems(newCartClone)
-      setIsLoggedIn(!!response.data.userEmail)
-      setUser({ userId: response.data.userId, email: response.data.userEmail })
+      setIsLoggedIn(Boolean(response?.data?.userEmail))
       setIsGuestUser(true)
     }
     handleAsync()
   }
+
   const fetchAddress = async () => {
     let userId =
       cartItems?.userId === EmptyGuid ? user?.userId : cartItems?.userId
     if (!userId) return
     try {
       const response: any = await getAddress(userId)
-      const billingAddress = response.find((item: any) => item.isDefaultBilling)
-      const shippingAddress = response.find(
-        (item: any) => item.isDefaultDelivery
-      )
-      if (billingAddress) setDefaultBillingAddress(billingAddress)
-      if (shippingAddress) setDefaultShippingAddress(shippingAddress)
       setUserAddresses(response)
+      return response;
     } catch (error) {
       // console.log(error, 'err')
     }
@@ -125,17 +140,16 @@ function Checkout({ cart, config, location }: any) {
     }
   }
 
-  useEffect(() => {
-    fetchAddress()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn])
+  if (isLoggedIn === undefined) {
+    return <Spinner />
+  }
 
   if (isLoggedIn) {
     return (
       <CheckoutForm
         cart={cart}
         addresses={userAddresses}
+        setUserAddresses={setUserAddresses}
         defaultBillingAddress={defaultBillingAddress}
         defaultShippingAddress={defaultShippingAddress}
         user={user}
@@ -147,14 +161,13 @@ function Checkout({ cart, config, location }: any) {
       />
     )
   }
-  if (!isLoggedIn) {
-    return (
-      <CheckoutRouter
-        setIsLoggedIn={setIsLoggedIn}
-        handleGuestMail={handleGuestMail}
-      />
-    )
-  }
+  
+  return (
+    <CheckoutRouter
+      setIsLoggedIn={setIsLoggedIn}
+      handleGuestMail={handleGuestMail}
+    />
+  )
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')

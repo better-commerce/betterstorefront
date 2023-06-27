@@ -3,6 +3,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import {
   NEXT_AUTHENTICATE,
+  NEXT_GET_CUSTOMER_DETAILS,
   OTP_LOGIN_ENABLED,
 } from '@components/utils/constants'
 import axios from 'axios'
@@ -61,7 +62,14 @@ function LoginPage({ recordEvent, setEntities }: any) {
         setNoAccount(true)
       } else if (result.data) {
         setNoAccount(false)
-        const userObj = { ...result.data }
+        let userObj = { ...result.data }
+
+        // get user updated details
+        const updatedUserObj = await axios.post(
+          `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
+        )
+        if (updatedUserObj?.data) userObj = { ...updatedUserObj?.data }
+
         const wishlist = await getWishlist(result.data.userId, wishListItems)
         setWishlist(wishlist)
         getWishlist(result.data.userId, wishListItems)

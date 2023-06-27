@@ -142,44 +142,45 @@ export default function AddressForm({
         return (
           <>
             <div className="flex flex-wrap bg-white">
-              {addresses.map((item: any, idx: number) => {
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => {
-                      setValues(item)
-                      setAddress(item)
-                    }}
-                    className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex items-center ${
-                      item.id === defaultValues.id ? 'border-black' : ''
-                    }`}
-                  >
-                    <div>
-                      {item.id === defaultValues.id ? (
-                        <CheckCircleIcon
-                          className="h-5 pr-4 text-left align-left text-black"
-                          aria-hidden="true"
-                        />
-                      ) : null}
-                      {item.id !== defaultValues.id ? (
-                        <CheckCircleIcon
-                          className="h-5 pr-4 text-left align-left text-gray-200"
-                          aria-hidden="true"
-                        />
-                      ) : null}
-                      <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end"></div>
-                    </div>
-                    <div className="flex text-md font-regular flex-wrap =">
-                      <span className="font-semibold pr-1">
-                        {item.firstName + ' ' + item.lastName},
-                      </span>
-                      <span className="pr-1">{item.address1}, </span>
-                      <span className="pr-1">{item.address2}, </span>
-                      <span className="pr-1">{item.city}, </span>
-                      <span className="pr-1">{item.postCode}, </span>
-                      <span className="pr-1">{item.country}, </span>
-                      <span className="pr-1">{item.phoneNo}</span>
-                      {/* <button
+              {!!addresses?.length ? (
+                addresses.map((item: any, idx: number) => {
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => {
+                        setValues(item)
+                        setAddress(item)
+                      }}
+                      className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex items-center ${
+                        item.id === defaultValues.id ? 'border-black' : ''
+                      }`}
+                    >
+                      <div>
+                        {item.id === defaultValues.id ? (
+                          <CheckCircleIcon
+                            className="h-5 pr-4 text-left align-left text-black"
+                            aria-hidden="true"
+                          />
+                        ) : null}
+                        {item.id !== defaultValues.id ? (
+                          <CheckCircleIcon
+                            className="h-5 pr-4 text-left align-left text-gray-200"
+                            aria-hidden="true"
+                          />
+                        ) : null}
+                        <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end"></div>
+                      </div>
+                      <div className="flex text-md font-regular flex-wrap =">
+                        <span className="font-semibold pr-1">
+                          {item.firstName + ' ' + item.lastName},
+                        </span>
+                        <span className="pr-1">{item.address1}, </span>
+                        <span className="pr-1">{item.address2}, </span>
+                        <span className="pr-1">{item.city}, </span>
+                        <span className="pr-1">{item.postCode}, </span>
+                        <span className="pr-1">{item.country}, </span>
+                        <span className="pr-1">{item.phoneNo}</span>
+                        {/* <button
                       onClick={() => {
                       onEditAddress(item?.id)
                       }}
@@ -187,10 +188,15 @@ export default function AddressForm({
                       >
                       {GENERAL_EDIT}
                       </button> */}
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })
+              ) : (
+                <div className='w-full text-center mt-4'>
+                  <span className='text-gray-500 text-sm'>No saved addresses.</span>
+                </div>
+              )}
             </div>
             {/* {isFormOpen && (
               <Form className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
@@ -305,8 +311,7 @@ export default function AddressForm({
               </Form>
             )} */}
             {
-              <div className="flex lg:flex-row md:flex-row gap-2 mt-10 flex-col">
-              
+              <div className="flex lg:flex-row md:flex-row gap-2 mt-10 flex-col flex-wrap justify-center">
                 {/* {isFormOpen && (
                   <button
                     type="button"
@@ -316,23 +321,25 @@ export default function AddressForm({
                     {GENERAL_CANCEL}
                   </button>
                 )} */}
-             
-              <button
-                type="submit"
-                onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
-                className="max-w-xs flex-1 border border-transparent text-sm rounded-sm uppercase py-3 px-8 flex items-center justify-center hover:bg-slate-900 font-medium text-white bg-black sm:w-full"
-              >
-                {btnTitle}
-              </button>
-              <button
+
+                {!!addresses?.length && (
+                  <button
+                    type="submit"
+                    onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
+                    className="max-w-xs w-full flex-1 border border-transparent text-sm rounded-sm uppercase py-3 px-8 flex items-center justify-center hover:bg-slate-900 font-medium text-white bg-black sm:w-full"
+                  >
+                    {btnTitle}
+                  </button>
+                )}
+                <button
                   type="button"
                   // onClick={() => handleNewFormButton(values, errors)}
                   onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="max-w-xs flex-1 border border-black hover:bg-black hover:text-white text-sm rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium  sm:w-full"
+                  className="max-w-xs w-full flex-1 border border-black hover:bg-black hover:text-white text-sm rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium  sm:w-full"
                 >
                   {ADD_ADDRESS}
                 </button>
-              {/* {!!closeEditMode && (
+                {/* {!!closeEditMode && (
                 <button
                   type="button"
                   onClick={closeEditMode}
@@ -341,7 +348,6 @@ export default function AddressForm({
                   {GENERAL_CANCEL}
                 </button>
               )} */}
-        
               </div>
             }
             {/* {isSameAddressCheckboxEnabled && (
@@ -365,8 +371,6 @@ export default function AddressForm({
                 </label>
               </div>
             )} */}
-
-           
           </>
         )
       }}
