@@ -267,7 +267,7 @@ function Cart({ cart }: any) {
                           <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
                             <div className="mr-1 text-sm text-gray-700">
                               Size:{' '}
-                              <span className="font-semibold text-black">
+                              <span className="font-semibold text-black uppercase">
                                 {getLineItemSizeWithoutSlug(product)}
                               </span>
                             </div>

@@ -135,6 +135,12 @@ export default function OrderConfirmation() {
                         <h4 className="font-medium text-gray-900">
                           <Link href={`/${product.slug}`}>{product.name}</Link>
                         </h4>
+                        <p className="mr-1 text-sm text-gray-700 font-medium">
+                          Size:{' '}
+                          <span className="uppercase">
+                            {product.size}
+                          </span>
+                        </p>
                       </div>
                       <div className="flex items-end mt-2">
                         <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">

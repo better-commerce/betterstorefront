@@ -91,7 +91,7 @@ function RenderRadioOptions({
                 }
               )}
             >
-              <RadioGroup.Label as="p" className="text-ms m-auto">
+              <RadioGroup.Label as="p" className="text-ms m-auto uppercase">
                 {item.fieldValue}
               </RadioGroup.Label>
             </RadioGroup.Option>

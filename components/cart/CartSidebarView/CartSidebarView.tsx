@@ -967,10 +967,10 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                               >
                                                 <div className="border w-[fit-content] flex flex-row justify-between items-center py-2 px-2">
                                                   <p className="m-auto mr-1 text-sm text-gray-700">
-                                                    Size{' '}
-                                                    {getLineItemSizeWithoutSlug(
+                                                    Size:{' '}
+                                                    <span className='uppercase'>{getLineItemSizeWithoutSlug(
                                                       product
-                                                    )}
+                                                    )}</span>
                                                   </p>
                                                   <ChevronDownIcon className="w-4 h-4 text-black" />
                                                 </div>

@@ -384,7 +384,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         </div>
 
         {category?.subCategories?.length > 0 && (
-          <div className="grid grid-cols-2 gap-2 mt-2 text-left sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-2 mt-2 text-left sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 lg:px-0 md:px-0 px-3">
             {category?.subCategories?.map((subcateg: any, idx: number) => (
               <Link href={'/' + subcateg.link} key={idx}>
                 <h3 className="flex flex-col py-2 text-xs font-semibold text-center text-black border border-gray-200 rounded cursor-pointer bg-gray-50 sm:text-sm hover:text-pink hover:bg-gray-100">

@@ -300,7 +300,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
                           {({ checked, disabled }) => (
                             <li
                               className={cn(
-                                'outline outline-gray-300 hover:outline-gray-700 hover:z-50 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-gray-100 text-gray-900 transition-colors duration-75',
+                                'outline outline-gray-300 hover:outline-gray-700 hover:z-50 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-gray-100 text-gray-900 transition-colors uppercase duration-75',
                                 {
                                   'bg-gray-100 outline-gray-700 z-50': checked,
                                   '!cursor-default': disabled,

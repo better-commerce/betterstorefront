@@ -412,15 +412,14 @@ const Navbar: FC<Props & IExtraProps> = ({
                                                         navItem.itemLink
                                                       )}`}
                                                       passHref
-                                                      onClick={() => {
+                                                    >
+                                                      <li onClick={() => {
                                                         setOpen(false)
                                                         hamburgerMenuClickLevel2(
                                                           item.caption,
                                                           navBlock.boxTitle
                                                         )
-                                                      }}
-                                                    >
-                                                      <li className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
+                                                      }} className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
                                                         {navItem.caption}
                                                       </li>
                                                     </Link>

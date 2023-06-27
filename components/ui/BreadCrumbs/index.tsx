@@ -38,7 +38,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
   return (
     <ol
       role="list"
-      className="flex items-center space-x-0 sm:space-x-0 sm:mb-4"
+      className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 lg:px-0 md:px-0 px-3"
     >
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li
