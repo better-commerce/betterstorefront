@@ -261,7 +261,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div
-        className="relative hover:outline hover:outline-1 outline-gray-200 group prod-group"
+        className="relative hover:shadow-xl shadow-gray-400 group prod-group"
         key={product.id}
       >
         <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">

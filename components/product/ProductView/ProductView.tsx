@@ -999,7 +999,7 @@ export default function ProductView({
               </h3>
               <RelatedProductWithGroup
                 products={relatedProducts?.relatedProducts}
-                productPerColumn={6}
+                productPerColumn={5}
                 deviceInfo={deviceInfo}
                 maxBasketItemsCount={maxBasketItemsCount}
               />
