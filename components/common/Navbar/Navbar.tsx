@@ -327,16 +327,31 @@ const Navbar: FC<Props & IExtraProps> = ({
             leaveTo="-translate-x-full"
           >
             <div className="relative flex flex-col w-full max-w-xs pb-12 overflow-y-auto bg-white shadow-xl z-9999">
-              <div className="flex item-center px-4 pt-16 pb-2">
-                {/* <Logo /> */}
+              <div className="flex justify-between px-4 pt-5 pb-2 item-center">
+                <div className="px-0 text-sm font-bold text-black sm:text-lg whitespace-nowrap">
+                  INC VAT
+                  <ToggleSwitch
+                    className="px-4 include-vat"
+                    height={15}
+                    width={40}
+                    checked={vatIncluded()}
+                    checkedIcon={
+                      <div className="ml-1 include-vat-checked">Yes</div>
+                    }
+                    uncheckedIcon={
+                      <div className="mr-1 include-vat-unchecked">No</div>
+                    }
+                    onToggleChanged={onIncludeVATChanged}
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="absolute inline-flex items-center justify-center p-2 -m-2 text-gray-400 rounded-md right-4 top-5"
+                  className="absolute inline-flex items-center justify-center p-2 -m-2 text-gray-400 rounded-md right-3 top-3"
                 >
                   <span className="sr-only">Close menu</span>
                   <XMarkIcon
-                    className="mt-1 text-black w-9 h-9"
+                    className="mt-1 text-black w-7 h-7"
                     aria-hidden="true"
                   />
                 </button>
@@ -395,7 +410,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                           return (
                                             <div
                                               key={`navbar-parent-${navIdx}`}
-                                              className="grid grid-cols-1 px-5 sm:px-0 py-2 border-t border-gray-200 gap-y-0 gap-x-0 lg:gap-x-0"
+                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
                                             >
                                               <ul
                                                 role="list"
@@ -413,13 +428,16 @@ const Navbar: FC<Props & IExtraProps> = ({
                                                       )}`}
                                                       passHref
                                                     >
-                                                      <li onClick={() => {
-                                                        setOpen(false)
-                                                        hamburgerMenuClickLevel2(
-                                                          item.caption,
-                                                          navBlock.boxTitle
-                                                        )
-                                                      }} className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700">
+                                                      <li
+                                                        onClick={() => {
+                                                          setOpen(false)
+                                                          hamburgerMenuClickLevel2(
+                                                            item.caption,
+                                                            navBlock.boxTitle
+                                                          )
+                                                        }}
+                                                        className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
+                                                      >
                                                         {navItem.caption}
                                                       </li>
                                                     </Link>
@@ -440,37 +458,20 @@ const Navbar: FC<Props & IExtraProps> = ({
                     </div>
                   )
                 })}
-
-                <div className="text-sm px-4 font-bold text-black sm:text-lg whitespace-nowrap">
-                  INC VAT
-                  <ToggleSwitch
-                    className="include-vat px-4"
-                    height={15}
-                    width={40}
-                    checked={vatIncluded()}
-                    checkedIcon={
-                      <div className="include-vat-checked ml-1">Yes</div>
-                    }
-                    uncheckedIcon={
-                      <div className="include-vat-unchecked mr-1">No</div>
-                    }
-                    onToggleChanged={onIncludeVATChanged}
-                  />
-                </div>
               </Tab.Group>
             </div>
           </Transition.Child>
         </Dialog>
       </Transition.Root>
 
-      <header className="fixed top-0 right-0 w-full bg-white bg-header-color shadow-md z-999 navbar-min-64">
+      <header className="fixed top-0 right-0 w-full bg-white shadow-md bg-header-color z-999 navbar-min-64">
         <nav
           aria-label="Top"
           className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
         >
           <button
             type="button"
-            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 rounded-md sm:hidden bg-transparent"
+            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md sm:hidden"
             onClick={() => {
               hamburgerMenu()
               setOpen(true)
@@ -673,10 +674,10 @@ const Navbar: FC<Props & IExtraProps> = ({
                       width={40}
                       checked={vatIncluded()}
                       checkedIcon={
-                        <div className="include-vat-checked ml-1">Yes</div>
+                        <div className="ml-1 include-vat-checked">Yes</div>
                       }
                       uncheckedIcon={
-                        <div className="include-vat-unchecked mr-1">No</div>
+                        <div className="mr-1 include-vat-unchecked">No</div>
                       }
                       onToggleChanged={onIncludeVATChanged}
                     />
