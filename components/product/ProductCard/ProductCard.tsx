@@ -260,14 +260,18 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   return (
     <>
-      <div className="relative hover:shadow-lg shadow-gray-200 group prod-group" key={product.id}>
+      <div
+        className="relative hover:shadow-lg shadow-gray-200 group prod-group"
+        key={product.id}
+      >
         <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">
           <Link
             passHref
             href={`/${currentProductData.link}`}
             onMouseEnter={(ev: any) => handleHover(ev, 'enter')}
             onMouseLeave={(ev: any) => handleHover(ev, 'leave')}
-            title={`${product.name} \t ${itemPrice}`}>
+            title={`${product.name} \t ${itemPrice}`}
+          >
             <Image
               id={`${product?.productId ?? product?.recordId}-1`}
               priority
@@ -344,7 +348,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           href={`/${currentProductData.link}`}
           title={`${product.name} \t ${itemPrice}`}
         >
-          <h4 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
+          <h4 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
             {product?.name?.toLowerCase()}
           </h4>
 
@@ -384,7 +388,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </Link>
 
         {isMobile && (
-          <div className="flex flex-wrap mt-2 border">
+          <div className="flex mt-2 border">
             <div className="w-4/12">
               <button
                 className="w-full text-center bg-white p-1.5"
