@@ -20,7 +20,7 @@ import {
   IMG_PLACEHOLDER,
   GENERAL_REMOVE,
 } from '@components/utils/textVariables'
-import { isCartAssociated } from '@framework/utils/app-util'
+import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 
 export default function Wishlist() {
   const [data, setData] = useState([])
@@ -28,6 +28,7 @@ export default function Wishlist() {
   const { user, basketId, setCartItems, openCart, setWishlist, cartItems } =
     useUI()
 
+  const isIncludeVAT = vatIncluded()
   const fetchItems = async () => {
     !isLoading && setIsLoading(true)
     try {
@@ -103,31 +104,24 @@ export default function Wishlist() {
 
           <section aria-labelledby="recent-heading" className="mt-1">
             {!data.length && !isLoading && (
-              <>
-                <div className="flex flex-col w-full py-2 max-acc-container sm:px-0">
-                  {/* <Image
-                    src="/assets/images/basket-no-item.svg"
-                    alt="no basket icon"
-                    className="m-92-img"
-                  /> */}
-                  <div className="my-0 font-semibold text-secondary-full-opacity text-m-16 text-24">
-                    {WISHLIST_SUB_TITLE}
-                  </div>
-                  <p className="text-xs sm:text-sm text-primary opacity-60">
-                    Explore more and save items in your wishlist.{' '}
-                  </p>
-                  <div className="flex w-full mt-5 sm:flex-col">
-                    <Link
-                      legacyBehavior
-                      passHref
-                      href="/search"
-                      className="w-50 flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 btn-primary"
-                    >
-                      <Button className="w-52">Start Shopping</Button>
-                    </Link>
-                  </div>
+              <div className="flex flex-col w-full py-2 max-acc-container sm:px-0">
+                <div className="my-0 font-semibold text-secondary-full-opacity text-m-16 text-24">
+                  {WISHLIST_SUB_TITLE}
                 </div>
-              </>
+                <p className="text-xs sm:text-sm text-primary opacity-60">
+                  Explore more and save items in your wishlist.{' '}
+                </p>
+                <div className="flex w-full mt-5 sm:flex-col">
+                  <Link
+                    legacyBehavior
+                    passHref
+                    href="/search"
+                    className="w-50 flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 btn-primary"
+                  >
+                    <Button className="w-52">Start Shopping</Button>
+                  </Link>
+                </div>
+              </div>
             )}
             {isLoading ? <LoadingDots /> : null}
             <div className="space-y-16 sm:space-y-24">
@@ -176,7 +170,6 @@ export default function Wishlist() {
                                     ></Image>
                                   </>
                                 )}
-                                {/* <span className='absolute left-0 inline-block px-4 py-1 text-xs text-white uppercase bg-orange bottom-2'>Bestseller</span> */}
                               </div>
                               <span className="sr-only">{product.name}</span>
                             </div>
@@ -195,14 +188,20 @@ export default function Wishlist() {
                               </Link>
                             </h3>
                             <p className="px-2 mt-1 mb-2 font-medium text-12 text-primary sm:mt-2 min-h-40 sm:mb-0">
-                              {priceFormat(product?.price?.raw?.withTax)}
+                              {isIncludeVAT
+                                ? priceFormat(product?.price?.raw?.withTax)
+                                : priceFormat(product?.price?.raw?.withoutTax)}
                               {product?.listPrice?.raw?.withTax >
                               product?.price?.raw?.withTax ? (
                                 <>
                                   <span className="px-2 font-normal text-gray-500 line-through text-12">
-                                    {priceFormat(
-                                      product?.listPrice?.raw?.withTax
-                                    )}
+                                    {isIncludeVAT
+                                      ? priceFormat(
+                                          product?.listPrice?.raw?.withTax
+                                        )
+                                      : priceFormat(
+                                          product?.listPrice?.raw?.withoutTax
+                                        )}
                                   </span>
                                   <span className="font-normal text-12 text-emerald-500">
                                     {discount}% off
@@ -215,7 +214,7 @@ export default function Wishlist() {
                               {product?.currentStock > 0 ? (
                                 <button
                                   onClick={() => handleAddToCart(product)}
-                                  className="flex items-center justify-center w-full p-3 text-xs font-semibold text-black border uppercase"
+                                  className="flex items-center justify-center w-full p-3 text-xs font-semibold text-black uppercase border"
                                 >
                                   <span className="mr-2">
                                     <i className="sprite-icon sprite-cart"></i>
