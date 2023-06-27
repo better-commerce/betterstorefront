@@ -4,8 +4,8 @@ import React, { Fragment, useEffect, useState } from 'react'
 // Package Imports
 import moment from 'moment'
 import Router from 'next/router'
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { Disclosure } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/24/outline'
+import { Disclosure } from '@headlessui/react'
 
 // Component Imports
 import OrderStatusMapping from './OrderStatusMapping'
@@ -38,6 +38,7 @@ import HelpModal from './HelpModal'
 import OrderReviewModal from './OrderReviewModal'
 import OrderDeliveryPlanItems from './OrderDeliveryPlanItems'
 import { recordGA4Event } from '@components/services/analytics/ga4'
+import { vatIncluded } from '@framework/utils/app-util'
 
 export default function OrderDetail({
   details,
@@ -210,11 +211,16 @@ export default function OrderDetail({
     if (typeof window !== 'undefined')
       recordGA4Event(window, 'proceed_to_exchange', {})
   }
-
-  const subTotalAmount = (
-    details?.order?.subTotal?.raw?.withTax -
-    details?.order?.discount?.raw?.withTax
-  ).toFixed(2)
+  const isIncludeVAT = vatIncluded()
+  const subTotalAmount = isIncludeVAT
+    ? (
+        details?.order?.subTotal?.raw?.withTax -
+        details?.order?.discount?.raw?.withTax
+      ).toFixed(2)
+    : (
+        details?.order?.subTotal?.raw?.withoutTax -
+        details?.order?.discount?.raw?.withoutTax
+      ).toFixed(2)
 
   return (
     <>
@@ -248,7 +254,7 @@ export default function OrderDetail({
                     <>
                       {details?.order.showETA && (
                         <Disclosure.Button className="flex items-center justify-between w-full py-3">
-                          <p className="text-sm text-black font-medium">
+                          <p className="text-sm font-medium text-black">
                             <span>
                               ETA:{' '}
                               {moment(new Date(details?.order.dueDate)).format(
@@ -256,10 +262,10 @@ export default function OrderDetail({
                               )}
                             </span>
                           </p>
-                          <button className="border rounded-full border-gray-900">
+                          <button className="border border-gray-900 rounded-full">
                             <ChevronDownIcon
                               className={`w-4 h-4 ${
-                              open && 'rotate-180 transform'
+                                open && 'rotate-180 transform'
                               }`}
                             />
                           </button>
