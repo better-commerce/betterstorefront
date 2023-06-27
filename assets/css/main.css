@@ -290,6 +290,10 @@ body {
     object-fit: cover !important;
     object-position: top !important;
   }
+   .promo-copied{
+    top:-46px;
+    right: -10px !important;
+  }
 }
 
 .image-container span {

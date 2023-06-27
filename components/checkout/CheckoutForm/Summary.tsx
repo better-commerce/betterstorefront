@@ -177,7 +177,7 @@ export default function Summary({
                                     </p>
                                   </div>
                                   <p className="font-normal text-gray-700 text-ms">
-                                    Size {getLineItemSizeWithoutSlug(product)}
+                                    Size: <span className='uppercase'>{getLineItemSizeWithoutSlug(product)}</span>
                                   </p>
                                   {product?.children?.map(
                                     (child: any, childId: number) => {
@@ -459,7 +459,7 @@ export default function Summary({
                               </p>
                             </div>
                             <p className="font-normal text-gray-700 text-ms">
-                              Size {getLineItemSizeWithoutSlug(product)}
+                              Size: <span className='uppercase'>{getLineItemSizeWithoutSlug(product)}</span>
                             </p>
                             <div>{}</div>
                             {product?.children?.map(

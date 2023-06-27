@@ -56,6 +56,11 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     setActive(!active)
   }
   useAnalytics(CustomerProfileViewed, loggedInEventData)
+
+  const handleToggleShowState = () => {
+    setShow(!isShow);
+  }
+
   // return(<h1>helow wprdls</h1>)
   return (
     <section className="relative pb-10 text-gray-900">
@@ -102,8 +107,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                           href={item.href}
                           passHref
                           onClick={() => {
-                            handleClick
-                            setShow(false)
+                            handleClick()
+                            handleToggleShowState()
                           }}
                           className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
                         >
@@ -126,7 +131,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                           href={item.href}
                           passHref
                           onClick={() => {
-                            handleClick
+                            handleClick()
                           }}
                           className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
                         >
@@ -151,7 +156,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
             }`}
           >
             <div className={'orders bg-white my-2 sm:my-6 px-4'}>
-              <MyDetails />
+              <MyDetails handleToggleShowState={handleToggleShowState} />
             </div>
           </div>
         </div>
