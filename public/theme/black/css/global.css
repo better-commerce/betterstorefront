@@ -556,19 +556,25 @@ p {
 }
 
 /* flag primary css start */
-
 /* product list image width and height control css  */
 .height-img-auto {
   min-height: 0 !important;
-  height: auto !important;
   object-fit: contain !important;
   object-position: inherit;
   width: auto !important;
-  min-height: 350px !important;
+  height: 180px !important;
 }
-
+@media screen and (min-width:1024px) {
+  .height-img-auto {
+    min-height: 0 !important;
+    object-fit: contain !important;
+    object-position: inherit;
+    width: auto !important;
+    height: 350px !important;
+  }
+}
 .prod-group:hover .prod-name-block {
-  display: block !important;
+  display: flex !important;
 }
 
 .prod-ul-size {
@@ -628,6 +634,14 @@ p {
 
 .mobile-card-panel.white-card {
   background: #fff !important;
+  min-height: 180px!important;
+}
+
+@media screen and (min-width:1024px) {
+  .mobile-card-panel.white-card {
+    background: #fff !important;
+    min-height: 350px!important;
+  }
 }
 
 @media screen and (min-width: 900px) and (max-width: 1300px) {

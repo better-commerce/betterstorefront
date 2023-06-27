@@ -51,7 +51,7 @@ export default function Grid({
           currentNumber={products.results.length}
           component={
             <div
-              className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-4 px-3 sm:px-0 ${products.results.length < 6
+              className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-4 px-3 sm:px-0 ${products.results.length < 5
                 ? `lg:grid-cols-4`
                 : 'lg:grid-cols-4'
                 }`}
