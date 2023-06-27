@@ -753,8 +753,8 @@ export default function ProductView({
               <Tab.List
                 className={
                   content?.length > 1
-                    ? 'grid grid-cols-1 gap-2 sm:grid-cols-2'
-                    : 'grid grid-cols-1 gap-2 sm:grid-cols-1'
+                    ? 'grid grid-cols-1 gap-10 sm:grid-cols-2'
+                    : 'grid grid-cols-1 gap-10 sm:grid-cols-1'
                 }
               >
                 {content?.map((image: any, idx) => (
