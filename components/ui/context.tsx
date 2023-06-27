@@ -63,6 +63,7 @@ export interface State {
   cartItems: any
   basketId: string
   user: any
+  guestUser: any
   isGuestUser: boolean
   showSearchBar: boolean
   appConfig: any
@@ -89,6 +90,7 @@ const initialState = {
   cartItems: getItem('cartItems') || { lineItems: [] },
   basketId: basketId(),
   user: getItem('user') || {},
+  guestUser: getItem('guestUser') || {},
   isGuestUser: getItem('isGuest') || false,
   showSearchBar: false,
   appConfig: {},
@@ -181,6 +183,10 @@ type Action =
   | { type: 'SET_CART_ITEMS'; payload: any }
   | {
       type: 'SET_USER'
+      payload: any
+    }
+  | {
+      type: 'SET_GUEST_USER'
       payload: any
     }
   | {
@@ -373,6 +379,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         user: action.payload,
+      }
+    }
+    case 'SET_GUEST_USER': {
+      return {
+        ...state,
+        guestUser: action.payload,
       }
     }
     case 'SET_IS_GUEST_USER': {
@@ -684,6 +696,14 @@ export const UIProvider: React.FC<any> = (props) => {
     },
     [dispatch]
   )
+  
+  const setGuestUser = useCallback(
+    (payload: any) => {
+      setItem('guestUser', payload)
+      dispatch({ type: 'SET_GUEST_USER', payload })
+    },
+    [dispatch]
+  )
 
   const setIsGuestUser = useCallback(
     (payload: boolean) => {
@@ -897,6 +917,7 @@ export const UIProvider: React.FC<any> = (props) => {
       removeFromCart,
       setCartItems,
       setUser,
+      setGuestUser,
       setIsGuestUser,
       deleteUser,
       openCart,

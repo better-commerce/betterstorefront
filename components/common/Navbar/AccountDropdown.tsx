@@ -55,7 +55,7 @@ export default function Account({ config, title, deviceInfo }: any) {
       >
         <Menu.Items className="absolute right-0 z-50 flex flex-col w-56 px-1 py-1 mt-2 text-gray-900 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <Menu.Item>
-            {({ active }) => (
+            {({ active, close }) => (
               <>
                 {title ? (
                   <h4 className="p-2 font-bold text-left">{title}</h4>
@@ -67,7 +67,10 @@ export default function Account({ config, title, deviceInfo }: any) {
                     passHref
                     href={item.href}
                     className={item.className}
-                    onClick={item.onClick || false}
+                    onClick={() => {
+                      if (item.onClick) item.onClick()
+                      close();
+                    }}
                   >
                     {item.title}
                   </Link>

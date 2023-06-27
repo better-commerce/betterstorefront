@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import useWishlist from '@components/services/wishlist'
-import { NEXT_LOGIN_CHECKOUT } from '@components/utils/constants'
+import { NEXT_GET_CUSTOMER_DETAILS, NEXT_LOGIN_CHECKOUT } from '@components/utils/constants'
 import axios from 'axios'
 import Form from '@components/customer'
 import GuestForm from './GuestForm'
@@ -46,7 +46,18 @@ export default function CheckoutRouter({
         setCartItems(result.data)
         setIsLoggedIn(true)
         setIsGuestUser(false);
-        setUser({ userId: result?.data?.userId, email: result?.data?.userEmail })
+        let userObj = {
+          userId: result?.data?.userId,
+          email: result?.data?.userEmail,
+        }
+        // get user updated details
+        const updatedUserObj = await axios.post(
+          `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
+        )
+        if (updatedUserObj?.data) {
+          userObj = { ...userObj, ...updatedUserObj?.data }
+        }
+        setUser(userObj)
         // getWishlist(result.data.userId, wishlistItems)
         Router.push('/checkout')
       }
