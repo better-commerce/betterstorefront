@@ -261,7 +261,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div
-        className="relative hover:shadow-lg shadow-gray-200 group prod-group"
+        className="relative pb-4 hover:shadow-lg shadow-gray-200 group prod-group"
         key={product.id}
       >
         <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">
@@ -283,7 +283,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
               style={css}
               width={400}
-              height={600}
+              height={500}
             />
             {product?.images?.length > 1 && (
               <Image
@@ -297,7 +297,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
                 style={css}
                 width={400}
-                height={600}
+                height={500}
               />
             )}
           </Link>
@@ -319,27 +319,25 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </div>
 
           {isMobile ? null : (
-            <>
-              <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-20 sm:flex group-hover:-translate-y-full">
-                {!hideWishlistCTA && (
-                  <SimpleButton
-                    variant="slim"
-                    className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
-                    onClick={handleWishList}
-                    disabled={product.hasWishlisted}
-                  >
-                    {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
-                  </SimpleButton>
-                )}
+            <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-20 sm:flex group-hover:-translate-y-full">
+              {!hideWishlistCTA && (
                 <SimpleButton
                   variant="slim"
-                  className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14"
-                  onClick={() => handleQuickViewData(product)}
+                  className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
+                  onClick={handleWishList}
+                  disabled={product.hasWishlisted}
                 >
-                  {QUICK_VIEW}
+                  {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
                 </SimpleButton>
-              </div>
-            </>
+              )}
+              <SimpleButton
+                variant="slim"
+                className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14"
+                onClick={() => handleQuickViewData(product)}
+              >
+                {QUICK_VIEW}
+              </SimpleButton>
+            </div>
           )}
         </div>
 
@@ -436,5 +434,4 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     </>
   )
 }
-
 export default ProductCard
