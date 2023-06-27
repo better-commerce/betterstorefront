@@ -22,9 +22,14 @@ import {
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER_LINE,
 } from '@components/utils/constants'
-import { GENERAL_CANCEL, ITEM_CANCELLED, PROCEED_TO_CANCEL } from '@components/utils/textVariables'
+import {
+  GENERAL_CANCEL,
+  ITEM_CANCELLED,
+  PROCEED_TO_CANCEL,
+} from '@components/utils/textVariables'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
+import { vatIncluded } from '@framework/utils/app-util'
 
 declare const window: any
 
@@ -33,7 +38,7 @@ export default function OrderCancel({
   itemId = EmptyGuid,
   deviceInfo,
 }: any) {
-  const { user, setAlert, } = useUI()
+  const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
   const [itemDatas, setItemDatas] = useState<any>(undefined)
   const [itemData, setItemData] = useState<any>(undefined)
@@ -43,17 +48,18 @@ export default function OrderCancel({
   const handleChange = (e: any) => {
     setValue(e.target.value)
   }
+  const isIncludeVAT = vatIncluded()
   const handleFetchOrderDetails = async (id: any) => {
     const { data: orderDetails }: any = await axios.post(
       NEXT_GET_ORDER_DETAILS,
-      { 
+      {
         id: user?.userId,
         orderId: id,
       }
     )
     return orderDetails
   }
-  const { isMobile, isIPadorTablet } = deviceInfo;
+  const { isMobile, isIPadorTablet } = deviceInfo
 
   let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
@@ -101,7 +107,7 @@ export default function OrderCancel({
         setCancelLineItemLoading(false)
         setAlert({ type: 'success', msg: ITEM_CANCELLED })
         Router.push('/my-account/orders')
-        if (typeof window !== "undefined") {
+        if (typeof window !== 'undefined') {
           recordGA4Event(window, 'cancel_confirm', {
             transaction_id: toNumber(payment?.id?.toString()),
             user_id: user?.userId,
@@ -123,8 +129,8 @@ export default function OrderCancel({
         const itemsDatasNew =
           orderDetails?.order?.items?.length > 0
             ? orderDetails?.order?.items?.filter((x: any) =>
-              matchStrings(x?.productId, itemId, true)
-            )
+                matchStrings(x?.productId, itemId, true)
+              )
             : []
         setItemDatas(itemsDatasNew)
         setItemData(
@@ -153,14 +159,16 @@ export default function OrderCancel({
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="sprite-icon sprite-left-arrow mr-2"></i> {GENERAL_CANCEL} Item
+                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                  {GENERAL_CANCEL} Item
                 </h3>
               </Link>
             </div>
             <div className="mx-auto cancel-continer">
-              <Link href="/my-account/orders" className='mobile-view'>
-                <h4 className="mr-2 leading-none text-xl text-gray-900 uppercase font-bold">
-                  <i className="sprite-icon sprite-left-arrow mr-2"></i> {GENERAL_CANCEL} Item
+              <Link href="/my-account/orders" className="mobile-view">
+                <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
+                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                  {GENERAL_CANCEL} Item
                 </h4>
               </Link>
               <div className="w-full">
@@ -184,7 +192,8 @@ export default function OrderCancel({
                               <div className="flex flex-col justify-between font-medium text-gray-900">
                                 <div className="flex items-center justify-between">
                                   <p className="font-normal text-10 text-brown-light ">
-                                    {itemData?.categoryItems && itemData?.categoryItems[0]?.categoryName}
+                                    {itemData?.categoryItems &&
+                                      itemData?.categoryItems[0]?.categoryName}
                                   </p>
                                 </div>
                                 <h3 className="pr-6 mt-2 font-normal text-12 text-primary !text-sm">
@@ -193,12 +202,17 @@ export default function OrderCancel({
                                   </Link>
                                 </h3>
                                 <p className="mt-2 text-xs font-semibold text-secondary-full-opacity">
-                                  {itemData?.price?.formatted?.withTax}
+                                  {isIncludeVAT
+                                    ? itemData?.price?.formatted?.withTax
+                                    : itemData?.price?.formatted?.withoutTax}
                                 </p>
                                 <div className="flex mt-3">
                                   <div className="w-24">
                                     <label className="text-xs text-primary dark:text-black">
-                                      Size: <span className='uppercase'>{itemData?.size}</span>
+                                      Size:{' '}
+                                      <span className="uppercase">
+                                        {itemData?.size}
+                                      </span>
                                     </label>
                                   </div>
                                   <div className="w-full">
