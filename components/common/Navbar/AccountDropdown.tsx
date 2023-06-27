@@ -69,7 +69,7 @@ export default function Account({ config, title, deviceInfo }: any) {
                     className={item.className}
                     onClick={item.onClick || false}
                   >
-                    {item.title}
+                    {item.title}{item?.tail ?? null}
                   </Link>
                 ))}
               </>

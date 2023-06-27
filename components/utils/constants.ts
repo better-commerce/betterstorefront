@@ -371,3 +371,8 @@ export enum AddressPageAction {
 }
 export const NEXT_PINCODE_LOOKUP = '/api/checkout/pincode-lookup'
 export const OTP_TIMER = 45
+
+export enum SocialMediaType {
+  GOOGLE = "google",
+  FACEBOOK = "facebook",
+}
