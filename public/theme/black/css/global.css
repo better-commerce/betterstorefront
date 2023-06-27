@@ -1,10 +1,6 @@
 @tailwind base;
-/* @import './base.css'; */
-
 @tailwind components;
-
 @tailwind utilities;
-
 @font-face {
   font-family: 'Inter';
   src: url('../font/Inter-Bold.woff2') format('woff2'),
