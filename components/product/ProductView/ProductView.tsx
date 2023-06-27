@@ -307,12 +307,12 @@ export default function ProductView({
         const item = await cartHandler().addToCart(
           {
             basketId: basketId,
-            productId: selectedAttrData.productId,
+            productId: selectedAttrData?.productId,
             qty: 1,
             manualUnitPrice: product?.price?.raw?.withTax,
             stockCode: selectedAttrData?.stockCode,
-            userId: user.userId,
-            isAssociated: user.isAssociated,
+            userId: user?.userId,
+            isAssociated: user?.isAssociated,
           },
           'ADD',
           { product: selectedAttrData }
@@ -435,8 +435,8 @@ export default function ProductView({
                 qty: 1,
                 manualUnitPrice: product?.price?.raw?.withTax,
                 stockCode: selectedAttrData?.stockCode,
-                userId: user.userId,
-                isAssociated: user.isAssociated,
+                userId: user?.userId,
+                isAssociated: user?.isAssociated,
               },
               'ADD',
               { product: selectedAttrData }
@@ -514,12 +514,12 @@ export default function ProductView({
     const updatedProduct = {
       ...product,
       ...{
-        recordId: selectedAttrData.productId,
-        stockCode: selectedAttrData.stockCode,
+        recordId: selectedAttrData?.productId,
+        stockCode: selectedAttrData?.stockCode,
       },
     }
     const addonProducts = relatedProducts?.relatedProducts?.filter(
-      (item: any) => item.itemType === ITEM_TYPE_ADDON_10
+      (item: any) => item?.itemType === ITEM_TYPE_ADDON_10
     )
     const addonProductsWithParentProduct = addonProducts?.map((item: any) => {
       item.parentProductId = updatedProduct?.recordId
@@ -530,31 +530,31 @@ export default function ProductView({
       updatedProduct,
     ].reduce((acc: any, obj: any) => {
       acc.push({
-        ProductId: obj.recordId || obj.productId,
+        ProductId: obj?.recordId || obj?.productId,
         BasketId: basketId,
-        ParentProductId: obj.parentProductId || null,
+        ParentProductId: obj?.parentProductId || null,
         Qty: 1,
-        DisplayOrder: obj.displayOrder || 0,
-        StockCode: obj.stockCode,
-        ItemType: obj.itemType || 0,
-        CustomInfo1: values.line1.message || null,
-        CustomInfo2: values.line1.imageUrl || null,
-        CustomInfo3: values.line3 || null,
-        CustomInfo4: values.line4 || null,
-        CustomInfo5: values.line5 || null,
-        ProductName: obj.name,
-        ManualUnitPrice: obj.manualUnitPrice || 0.0,
-        PostCode: obj.postCode || null,
-        IsSubscription: obj.subscriptionEnabled || false,
-        IsMembership: obj.hasMembership || false,
-        SubscriptionPlanId: obj.subscriptionPlanId || null,
-        SubscriptionTermId: obj.subscriptionTermId || null,
-        UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
-        GiftWrapId: obj.giftWrapConfig || null,
-        IsGiftWrapApplied: obj.isGiftWrapApplied || false,
-        ItemGroupId: obj.itemGroupId || 0,
+        DisplayOrder: obj?.displayOrder || 0,
+        StockCode: obj?.stockCode,
+        ItemType: obj?.itemType || 0,
+        CustomInfo1: values?.line1?.message || null,
+        CustomInfo2: values?.line1?.imageUrl || null,
+        CustomInfo3: values?.line3 || null,
+        CustomInfo4: values?.line4 || null,
+        CustomInfo5: values?.line5 || null,
+        ProductName: obj?.name,
+        ManualUnitPrice: obj?.manualUnitPrice || 0.0,
+        PostCode: obj?.postCode || null,
+        IsSubscription: obj?.subscriptionEnabled || false,
+        IsMembership: obj?.hasMembership || false,
+        SubscriptionPlanId: obj?.subscriptionPlanId || null,
+        SubscriptionTermId: obj?.subscriptionTermId || null,
+        UserSubscriptionPricing: obj?.userSubscriptionPricing || 0,
+        GiftWrapId: obj?.giftWrapConfig || null,
+        IsGiftWrapApplied: obj?.isGiftWrapApplied || false,
+        ItemGroupId: obj?.itemGroupId || 0,
         PriceMatchReqId:
-          obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
+          obj?.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
       })
       return acc
     }, [])
@@ -582,10 +582,10 @@ export default function ProductView({
 
   const isEngravingAvailable =
     !!relatedProducts?.relatedProducts?.filter(
-      (item: any) => item.stockCode === ITEM_TYPE_ADDON
+      (item: any) => item?.stockCode === ITEM_TYPE_ADDON
     ).length ||
     !!product?.customAttributes.filter(
-      (item: any) => item.display == 'Is Enabled'
+      (item: any) => item?.display == 'Is Enabled'
     ).length
   // const isEngravingAvailable:any = true;
 
@@ -648,7 +648,7 @@ export default function ProductView({
       const createWishlist = async () => {
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
-            id: user.userId,
+            id: user?.userId,
             productId: product?.recordId,
             flag: true,
           })
