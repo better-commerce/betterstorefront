@@ -60,35 +60,54 @@ const accountDropDownConfigUnauthorized: any = [
     title: GENERAL_LOGIN,
     className:
       'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full',
+    head: null,
+    tail: null,
   },
   {
     href: '/my-account/register',
     title: GENERAL_REGISTER,
     className:
       'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+    head: null,
+    tail: null,
   },
   {
     href: `/my-account/login/social/${SocialMediaType.GOOGLE}`,
     title: SOCIAL_REGISTER_GOOGLE,
     className:
-      'mt-5 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md op-75 py-3 px-8 flex items-center justify-center font-medium btn-primary-blue sm:w-full',
-    tail: <svg xmlns="http://www.w3.org/2000/svg" className="inline-block rounded h-5 w-5 google-plus-logo ml-2 mb-1" fill="currentColor" viewBox="0 0 24 24">
-      <path
-        d="M7 11v2.4h3.97c-.16 1.029-1.2 3.02-3.97 3.02-2.39 0-4.34-1.979-4.34-4.42 0-2.44 1.95-4.42 4.34-4.42 1.36 0 2.27.58 2.79 1.08l1.9-1.83c-1.22-1.14-2.8-1.83-4.69-1.83-3.87 0-7 3.13-7 7s3.13 7 7 7c4.04 0 6.721-2.84 6.721-6.84 0-.46-.051-.81-.111-1.16h-6.61zm0 0 17 2h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z"
-        fill-rule="evenodd"
-        clip-rule="evenodd" />
-    </svg>
+      'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+    head: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="inline-block rounded h-4 w-4 google-plus-logo mr-1"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M7 11v2.4h3.97c-.16 1.029-1.2 3.02-3.97 3.02-2.39 0-4.34-1.979-4.34-4.42 0-2.44 1.95-4.42 4.34-4.42 1.36 0 2.27.58 2.79 1.08l1.9-1.83c-1.22-1.14-2.8-1.83-4.69-1.83-3.87 0-7 3.13-7 7s3.13 7 7 7c4.04 0 6.721-2.84 6.721-6.84 0-.46-.051-.81-.111-1.16h-6.61zm0 0 17 2h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z"
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+        />
+      </svg>
+    ),
+    tail: null,
   },
   {
     href: `/my-account/login/social/${SocialMediaType.FACEBOOK}`,
     title: SOCIAL_REGISTER_FACEBOOK,
     className:
-      'mt-5 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md op-75 py-3 px-8 flex items-center justify-center font-medium btn-primary-blue sm:w-full',
-    tail: <svg xmlns="http://www.w3.org/2000/svg" className="inline-block rounded h-5 w-5 fb-logo ml-2 mb-1" fill="currentColor" viewBox="0 0 24 24">
-      <path
-        d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-    </svg>
-
+      'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+    head: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="inline-block rounded h-4 w-4 fb-logo mr-1"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+      </svg>
+    ),
+    tail: null,
   },
 ]
 
@@ -415,10 +434,11 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 </div>
                                 <div className="pt-5 pr-3">
                                   <ChevronUpIcon
-                                    className={`${!open
-                                      ? 'transition-transform duration-150 rotate-180 transform'
-                                      : 'transition-transform duration-150 rotate-0 transform'
-                                      } h-5 w-5 text-black`}
+                                    className={`${
+                                      !open
+                                        ? 'transition-transform duration-150 rotate-180 transform'
+                                        : 'transition-transform duration-150 rotate-0 transform'
+                                    } h-5 w-5 text-black`}
                                   />
                                 </div>
                               </Disclosure.Button>
@@ -430,48 +450,48 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 <div className="space-y-4">
                                   {item.navBlocks.length
                                     ? item.navBlocks.map(
-                                      (navBlock: any, navIdx: number) => {
-                                        return (
-                                          <div
-                                            key={`navbar-parent-${navIdx}`}
-                                            className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
-                                          >
-                                            <ul
-                                              role="list"
-                                              aria-labelledby="clothing-heading"
-                                              className="col-span-1"
+                                        (navBlock: any, navIdx: number) => {
+                                          return (
+                                            <div
+                                              key={`navbar-parent-${navIdx}`}
+                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
                                             >
-                                              {navBlock.navItems.map(
-                                                (navItem: any, idx: any) => (
-                                                  <Link
-                                                    legacyBehavior
-                                                    key={`${navItem.caption}-${idx}`}
-                                                    title={navItem.caption}
-                                                    href={`/${removePrecedingSlash(
-                                                      navItem.itemLink
-                                                    )}`}
-                                                    passHref
-                                                  >
-                                                    <li
-                                                      onClick={() => {
-                                                        setOpen(false)
-                                                        hamburgerMenuClickLevel2(
-                                                          item.caption,
-                                                          navBlock.boxTitle
-                                                        )
-                                                      }}
-                                                      className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
+                                              <ul
+                                                role="list"
+                                                aria-labelledby="clothing-heading"
+                                                className="col-span-1"
+                                              >
+                                                {navBlock.navItems.map(
+                                                  (navItem: any, idx: any) => (
+                                                    <Link
+                                                      legacyBehavior
+                                                      key={`${navItem.caption}-${idx}`}
+                                                      title={navItem.caption}
+                                                      href={`/${removePrecedingSlash(
+                                                        navItem.itemLink
+                                                      )}`}
+                                                      passHref
                                                     >
-                                                      {navItem.caption}
-                                                    </li>
-                                                  </Link>
-                                                )
-                                              )}
-                                            </ul>
-                                          </div>
-                                        )
-                                      }
-                                    )
+                                                      <li
+                                                        onClick={() => {
+                                                          setOpen(false)
+                                                          hamburgerMenuClickLevel2(
+                                                            item.caption,
+                                                            navBlock.boxTitle
+                                                          )
+                                                        }}
+                                                        className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
+                                                      >
+                                                        {navItem.caption}
+                                                      </li>
+                                                    </Link>
+                                                  )
+                                                )}
+                                              </ul>
+                                            </div>
+                                          )
+                                        }
+                                      )
                                     : null}
                                 </div>
                               </Disclosure.Panel>
