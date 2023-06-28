@@ -1145,7 +1145,7 @@ export default function ProductView({
             "@type": "Product",
             "name": ${product.name},
             "image": ${product.image},
-            "description": ${product.description},
+            "description": ${product.metaDescription},
             "sku": ${product.stockCode},
             "brand": {
               "@type": "Brand",
