@@ -177,7 +177,7 @@ export default function CollectionPage(props: any) {
       currentPage: 1, // current page
       filters: [],
       collectionId: props?.id,
-      sortBy:null,
+      sortBy: null,
     },
   })
 
@@ -483,7 +483,10 @@ export default function CollectionPage(props: any) {
                     const imgUrl =
                       (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
                     return (
-                      <div className="w-full h-auto px-0" key={`banner-image-${idx}`}>
+                      <div
+                        className="w-full h-auto px-0"
+                        key={`banner-image-${idx}`}
+                      >
                         <Link legacyBehavior href={img?.link || '#'}>
                           <a>
                             <Image src={imgUrl} alt="banner" />
@@ -534,16 +537,6 @@ export default function CollectionPage(props: any) {
           </span>
           <h2>{props?.description}</h2>
         </div>
-
-        {/*TODO: For browser caching of product images*/}
-        {/*{productDataToPass?.results?.length > 0 && (
-          <CacheProductImages
-            data={productDataToPass?.results
-              ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
-              .flat(1)}
-            setIsLoading={setIsLoading}
-          />
-        )}*/}
 
         {productDataToPass?.results?.length > 0 && (
           <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
