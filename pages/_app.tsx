@@ -103,16 +103,17 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
-
+  let googleTranslateElementInit: any
   //ACTIVATE ONLY OMNILYTICS ENABLED
   if (!OMNILYTICS_DISABLED) {
-    const googleTranslateElementInit = () => {
+    googleTranslateElementInit = () => {
       const windowClone: any = window
       new windowClone.google.translate.TranslateElement(
         {
           pageLanguage: 'en',
           layout:
-            windowClone.google.translate.TranslateElement.FloatPosition.TOP_LEFT,
+            windowClone.google.translate.TranslateElement.FloatPosition
+              .TOP_LEFT,
         },
         'google_translate_element'
       )
@@ -123,18 +124,20 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
         elem.setAttribute('title', 'Google Voting Frame')
       }
     }
-    useEffect(() => {
-      const addScript = document.createElement('script')
-      addScript.setAttribute(
-        'src',
-        '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
-      )
-
-      document.body.appendChild(addScript)
-        ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-      document.getElementById('goog-gt-tt')?.remove()
-    }, [])
   }
+
+  useEffect(() => {
+    const addScript = document.createElement('script')
+    addScript.setAttribute(
+      'src',
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+    )
+    if (!OMNILYTICS_DISABLED) {
+      document.body.appendChild(addScript)
+      ;(window as any).googleTranslateElementInit = googleTranslateElementInit
+      document.getElementById('goog-gt-tt')?.remove()
+    }
+  }, [])
 
   useEffect(() => {
     // Listener for snippet injector reset.
@@ -144,7 +147,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
     // Dispose listener.
     return () => {
-      router.events.off('routeChangeComplete', () => { })
+      router.events.off('routeChangeComplete', () => {})
     }
   }, [router.events])
 
@@ -228,15 +231,15 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
   const seoInfo =
     pageProps?.metaTitle ||
-      pageProps?.metaDescription ||
-      pageProps?.metaKeywords
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
       ? pageProps
       : pageProps?.data?.product || undefined
 
   const seoImage =
     pageProps?.metaTitle ||
-      pageProps?.metaDescription ||
-      pageProps?.metaKeywords
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
       ? pageProps?.products?.images[0]?.url
       : pageProps?.data?.product?.image || undefined
 
@@ -320,10 +323,11 @@ MyApp.getInitialProps = async (
 ): Promise<AppInitialProps> => {
   const { ctx, Component } = context
   const req: any = ctx?.req
-  let appConfigResult, navTreeResult = {
-    nav: new Array(),
-    footer: new Array(),
-  }
+  let appConfigResult,
+    navTreeResult = {
+      nav: new Array(),
+      footer: new Array(),
+    }
   let defaultCurrency = BETTERCOMMERCE_DEFAULT_CURRENCY
   let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
   let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
@@ -373,10 +377,10 @@ MyApp.getInitialProps = async (
     if (!navResult?.message && navResult?.errors?.length == 0) {
       navTreeResult = {
         nav: navResult?.result?.header,
-        footer: navResult?.result?.footer
+        footer: navResult?.result?.footer,
       }
     }
-  } catch (error: any) { }
+  } catch (error: any) {}
 
   let appConfig = null
   if (appConfigResult) {
