@@ -1,6 +1,11 @@
 import { Layout } from '@components/common'
-import { BTN_SUBMIT } from '@components/utils/textVariables'
+import {
+  BTN_SUBMIT,
+  FORGOT_PASSWORD,
+  DETAILS_ERROR,
+} from '@components/utils/textVariables'
 import { useEffect, useState } from 'react'
+import { Button } from '@components/ui'
 import LoadingDots from '@components/ui/LoadingDots'
 import {
   NEXT_FORGOT_PASSWORD,
@@ -10,6 +15,7 @@ import {
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
+import { useUI } from '@components/ui/context'
 
 const EMAIL_STATUSES_MAP = {
   NO_EMAIL: 0,
@@ -23,23 +29,32 @@ const EMAIL_MESSAGES: any = {
 }
 
 export default function ForgotPasswordPage() {
+  const { setAlert } = useUI()
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [emailStatus, setEmailStatus] = useState(EMAIL_STATUSES_MAP.NO_EMAIL)
-  const [isValid, setIsValid] = useState(false)
-  const [token, setToken] = useState(null)
   const [form, setForm] = useState({ userName: '', password: '' })
   const router: any = useRouter()
 
   const handleChange = (e: any) => setEmail(e.target.value)
+
+  const handleBlur = () => {
+    const isValid = isValidEmail(email)
+    if (!isValid) {
+      setEmailStatus(EMAIL_STATUSES_MAP.INVALID_EMAIL)
+    }
+  }
+
+  const isValidEmail = (email: any) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
 
   const validateToken = async (token: any) => {
     try {
       const { data }: any = await axios.post(NEXT_VALIDATE_TOKEN, { token })
       if (!data.response.result.isValid) throw new Error('error')
       else {
-        setToken(token)
-        setIsValid(true)
         setEmailStatus(EMAIL_STATUSES_MAP.VALID_EMAIL)
         setIsLoading(false)
       }
@@ -52,7 +67,6 @@ export default function ForgotPasswordPage() {
   useEffect(() => {
     const token = router.query.token
     if (token) {
-      //validate token
       setIsLoading(true)
       validateToken(token)
     }
@@ -66,119 +80,90 @@ export default function ForgotPasswordPage() {
     }
   }, [emailStatus])
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
     setIsLoading(true)
     const isValidEmail = validate(email)
-    if (isValidEmail) {
-      let { data }: any = await axios.post(NEXT_FORGOT_PASSWORD, { email })
-      if (!data.forgotRes.result.isValid) {
-        setEmailStatus(EMAIL_STATUSES_MAP.INVALID_EMAIL)
-      } else {
-        const recordIdToken: any = data.forgotRes.result.recordId
-        setToken(recordIdToken)
-        setIsValid(data.forgotRes.result.isValid)
-        setEmailStatus(EMAIL_STATUSES_MAP.VALID_EMAIL)
+    try {
+      if (isValidEmail) {
+        let { data }: any = await axios.post(NEXT_FORGOT_PASSWORD, { email })
+        if (!data.forgotRes.result.isValid) {
+          setEmailStatus(EMAIL_STATUSES_MAP.INVALID_EMAIL)
+        } else {
+          setEmailStatus(EMAIL_STATUSES_MAP.VALID_EMAIL)
+        }
+        setForm({ ...form, userName: email })
+        setEmail('')
+        if (data) {
+          setAlert({ type: 'success', msg: EMAIL_MESSAGES[2] })
+        } else if (!data) {
+          setAlert({ type: 'error', msg: EMAIL_MESSAGES[1] })
+        }
       }
-      setForm({ ...form, userName: email })
-      setEmail('')
+      setIsLoading(false)
+    } catch (error) {
+      setAlert({ type: 'error', msg: DETAILS_ERROR })
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   const config: any = [
     {
-      name: 'userName',
+      name: 'email',
       label: 'Enter your email',
-      type: 'text',
+      type: 'email',
       placeholder: 'joe@example.com',
     },
-    {
-      name: 'password',
-      label: 'Enter new password',
-      type: 'password',
-      placeholder: '*******',
-    },
+    // {
+    //   name: 'password',
+    //   label: 'Enter new password',
+    //   type: 'password',
+    //   placeholder: '*******',
+    // },
   ]
   const stateForm: any = form
 
-  const handlePasswordChangeSubmit = async (e: any) => {
-    e.preventDefault()
-    setIsLoading(true)
-    const forgotPasswordData = { ...form, token: token }
-    try {
-      await axios.post(NEXT_RESET_PASSWORD, {
-        ...forgotPasswordData,
-      })
-      setIsLoading(false)
-      alert('Success! You will be redirected to login page')
-      router.push('/my-account/login')
-    } catch (error) {
-      setIsLoading(false)
-    }
-  }
   return (
     <section>
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h1 className="my-4 font-extrabold text-center tracking-tight text-gray-900">
-            {isValid ? 'Change password' : 'Forgot password'}
+            {FORGOT_PASSWORD}
           </h1>
-          {isValid ? (
-            <form
-              onSubmit={handlePasswordChangeSubmit}
-              className="flex-col w-full px-5 py-5 flex items-center justify-center font-semibold w-full sm:w-1/2"
-            >
-              {config.map((item: any, idx: number) => {
-                return (
-                  <div key={idx} className="w-full">
-                    <label className="text-gray-700 text-sm">
-                      {item.label}
-                    </label>
-                    <input
-                      className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                      name={item.name}
-                      type={item.type}
-                      onChange={(e) =>
-                        setForm({ ...form, [item.name]: e.target.value })
-                      }
-                      value={stateForm[item.name]}
-                      placeholder={item.placeholder}
-                    />
-                  </div>
-                )
-              })}
-              <button
-                type="submit"
-                className="my-4 max-w-xs flex-1 btn-primary sm:w-full"
-              >
-                {isLoading ? <LoadingDots /> : BTN_SUBMIT}
-              </button>
-            </form>
-          ) : (
-            <form className="flex-col px-5 py-5 flex items-center justify-center font-semibold w-full sm:w-1/2">
-              <label className="text-gray-700 text-sm">Enter your email</label>
-              <input
-                className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                name="email"
-                onChange={handleChange}
-                value={email}
-                placeholder="name@example.com"
-              />
-              {emailStatus > 0 ? (
-                <div className="w-full text-gray-900">
-                  {EMAIL_MESSAGES[emailStatus]}
+          <form
+            onSubmit={handleSubmit}
+            className="flex-col px-5 py-5 flex items-center justify-center font-semibold w-full sm:w-1/2"
+          >
+            {config.map((field: any, Idx: any) => {
+              return (
+                <div key={Idx} className="w-full">
+                  <label className="text-gray-700 text-sm">{field.label}</label>
+                  <input
+                    className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                    name={field.name}
+                    value={email}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {emailStatus > 0 && (
+                    <div className="w-full text-red-600">
+                      {EMAIL_MESSAGES[emailStatus]}
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <button
-                  onClick={handleSubmit}
-                  type="button"
-                  className="my-4 w-full min-h-sm flex-1 btn-primary py-3 px-4"
-                >
-                  {isLoading ? <LoadingDots /> : BTN_SUBMIT}
-                </button>
-              )}
-            </form>
-          )}
+              )
+            })}
+            <Button
+              type="submit"
+              className="!font-normal w-full"
+              loading={isLoading}
+              disabled={isLoading}
+            >
+              {!isLoading && BTN_SUBMIT}
+            </Button>
+          </form>
         </div>
       </div>
     </section>
