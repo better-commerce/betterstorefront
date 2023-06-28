@@ -44,10 +44,10 @@ const Attributes = ({ attributes = [] }: any) => {
 
 export default function ProductDetails({ product, description }: any) {
   const detailsConfig = [
-    {
-      title: PRODUCT_SPECIFICATION,
-      InnerComponent: (props: any) => <Attributes {...props} />,
-    },
+    // {
+    //   title: PRODUCT_SPECIFICATION,
+    //   InnerComponent: (props: any) => <Attributes {...props} />,
+    // },
     {
       title: GENERAL_SHIPPING,
       InnerComponent: (props: any) => (
@@ -110,7 +110,7 @@ export default function ProductDetails({ product, description }: any) {
             {({ open }) => (
               <>
                 <Disclosure.Button className="relative flex items-center justify-between w-full py-2 pr-2 text-left group sm:py-2">
-                  <h2 className="font-18 font-bold text-black uppercase">
+                  <h2 className="font-bold text-black uppercase font-18">
                     {desc.title}
                   </h2>
                   <span className="flex items-center ml-6">
@@ -143,7 +143,7 @@ export default function ProductDetails({ product, description }: any) {
             {({ open }) => (
               <>
                 <Disclosure.Button className="relative flex items-center justify-between w-full py-2 pr-2 text-left group sm:py-2">
-                  <h2 className="font-18 font-bold text-black uppercase">
+                  <h2 className="font-bold text-black uppercase font-18">
                     {detail.title}
                   </h2>
                   <span className="flex items-center ml-6">

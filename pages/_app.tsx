@@ -50,7 +50,7 @@ import { decrypt, encrypt } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
-
+import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
 }
@@ -104,22 +104,26 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
+  let googleTranslateElementInit: any
+  //ACTIVATE ONLY OMNILYTICS ENABLED
+  if (!OMNILYTICS_DISABLED) {
+    googleTranslateElementInit = () => {
+      const windowClone: any = window
+      new windowClone.google.translate.TranslateElement(
+        {
+          pageLanguage: 'en',
+          layout:
+            windowClone.google.translate.TranslateElement.FloatPosition
+              .TOP_LEFT,
+        },
+        'google_translate_element'
+      )
 
-  const googleTranslateElementInit = () => {
-    const windowClone: any = window
-    new windowClone.google.translate.TranslateElement(
-      {
-        pageLanguage: 'en',
-        layout:
-          windowClone.google.translate.TranslateElement.FloatPosition.TOP_LEFT,
-      },
-      'google_translate_element'
-    )
-
-    const selector = "iframe[name='votingFrame']"
-    const elem = document.querySelector(selector)
-    if (elem) {
-      elem.setAttribute('title', 'Google Voting Frame')
+      const selector = "iframe[name='votingFrame']"
+      const elem = document.querySelector(selector)
+      if (elem) {
+        elem.setAttribute('title', 'Google Voting Frame')
+      }
     }
   }
 
@@ -129,10 +133,11 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       'src',
       '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
     )
-
-    document.body.appendChild(addScript)
-      ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-    document.getElementById('goog-gt-tt')?.remove()
+    if (!OMNILYTICS_DISABLED) {
+      document.body.appendChild(addScript)
+      ;(window as any).googleTranslateElementInit = googleTranslateElementInit
+      document.getElementById('goog-gt-tt')?.remove()
+    }
   }, [])
 
   useEffect(() => {
@@ -143,7 +148,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
     // Dispose listener.
     return () => {
-      router.events.off('routeChangeComplete', () => { })
+      router.events.off('routeChangeComplete', () => {})
     }
   }, [router.events])
 
@@ -227,15 +232,15 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
 
   const seoInfo =
     pageProps?.metaTitle ||
-      pageProps?.metaDescription ||
-      pageProps?.metaKeywords
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
       ? pageProps
       : pageProps?.data?.product || undefined
 
   const seoImage =
     pageProps?.metaTitle ||
-      pageProps?.metaDescription ||
-      pageProps?.metaKeywords
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
       ? pageProps?.products?.images[0]?.url
       : pageProps?.data?.product?.image || undefined
 
@@ -282,7 +287,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
       </NextHead>
 
       <Head {...appConfig}></Head>
-      <div id="google_translate_element" />
+      {OMNILYTICS_DISABLED ? null : <div id="google_translate_element" />}
+
       <ManagedUIContext>
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
         <CustomCacheBuster buildVersion={buildVersion} />
@@ -320,10 +326,11 @@ MyApp.getInitialProps = async (
 ): Promise<AppInitialProps> => {
   const { ctx, Component } = context
   const req: any = ctx?.req
-  let appConfigResult, navTreeResult = {
-    nav: new Array(),
-    footer: new Array(),
-  }
+  let appConfigResult,
+    navTreeResult = {
+      nav: new Array(),
+      footer: new Array(),
+    }
   let defaultCurrency = BETTERCOMMERCE_DEFAULT_CURRENCY
   let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
   let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
@@ -373,10 +380,10 @@ MyApp.getInitialProps = async (
     if (!navResult?.message && navResult?.errors?.length == 0) {
       navTreeResult = {
         nav: navResult?.result?.header,
-        footer: navResult?.result?.footer
+        footer: navResult?.result?.footer,
       }
     }
-  } catch (error: any) { }
+  } catch (error: any) {}
 
   let appConfig = null
   if (appConfigResult) {

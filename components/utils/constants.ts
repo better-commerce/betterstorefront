@@ -84,6 +84,7 @@ export const NEXT_ADDRESS = `/api/customer/address`
 export const NEXT_EDIT_ADDRESS = `/api/customer/edit-address`
 export const NEXT_CREATE_ADDRESS = `/api/customer/create-address`
 export const NEXT_DELETE_ADDRESS = `/api/customer/delete-address`
+export const NEXT_GET_CUSTOMER_DETAILS = `/api/customer/get-customer-details`
 
 export const NEXT_GET_ORDER = `/api/order/order-details`
 export const NEXT_CANCEL_REASON = `/api/cancel-reason`
