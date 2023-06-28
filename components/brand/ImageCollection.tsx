@@ -4,37 +4,66 @@ import 'swiper/css/navigation'
 
 import SwiperCore, { Navigation } from 'swiper'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 SwiperCore.use([Navigation])
 
 //temporary for testing purposes
-const images = [
-  'https://images.unsplash.com/photo-1640562051318-b849e5290551',
-  'https://images.unsplash.com/photo-1638864616275-9f0b291a2eb6',
-  'https://images.unsplash.com/photo-1640102371408-5fc0c42a8792',
-  'https://images.unsplash.com/photo-1640114198747-fa498a232dd7',
-  'https://images.unsplash.com/photo-1506830392367-16cbcd8b007c',
-  'https://images.unsplash.com/photo-1632494424962-ca0fb15099dc',
-]
-export default function ImageCollection(props: any) {
+export default function ImageCollection({
+  heading,
+  range,
+  ImageArray,
+  showTitle,
+}: any) {
+  const [ImageArrayToDisp, setImageArrayToDisp] = useState<any>([])
+  let TotalValues: number = 0
+
+  function handleRangeChange() {
+    return range * 2
+  }
+
+  function handleImageArray(count: number) {
+    if (ImageArray !== undefined) {
+      if (ImageArray[0]?.name === 'BrangLogo') {
+        setImageArrayToDisp(ImageArray.slice(1, count + 1))
+      } else {
+        setImageArrayToDisp(ImageArray.slice(0, count))
+      }
+    }
+  }
+
+  useEffect(() => {
+    TotalValues = handleRangeChange()
+    handleImageArray(TotalValues)
+  }, [ImageArray])
+
   return (
-    <div className="w-full flex flex-col justify-center items-center py-y">
-      <h1 className="text-gray-900 text-center font-bold text-4xl py-5 ">
-        {props.heading}
-      </h1>
-      <Swiper navigation={true} className="mySwiper">
-        {images.map((image: any, idx: number) => {
+    <>
+      <div id="ImageCollection" className={`grid grid-cols-${range} gap-5`}>
+        {ImageArrayToDisp.map((val: any, Idx: number) => {
           return (
-            <SwiperSlide key={idx}>
+            <div
+              key={Idx}
+              className="flex items-center justify-evenly border-orange-500 border-solid border group bg-orange-600"
+            >
+              {true && (
+                <p className="absolute bg-gray-50 w-48 p-4 pl-10 m-auto uppercase rounded-md z-50 md:text-lg text-sm font-semibold">
+                  {val.title || 'POWER TOOL'}
+                </p>
+              )}
               <Image
-                src={image}
-                alt=""
-                className="cursor-pointer w-full h-full object-center object-cover"
-              />
-            </SwiperSlide>
+                alt="logo"
+                key={Idx}
+                src={val.url || IMG_PLACEHOLDER}
+                width={305}
+                height={224}
+                className="w-full group-hover:opacity-20"
+              ></Image>
+            </div>
           )
         })}
-      </Swiper>
-    </div>
+      </div>
+    </>
   )
 }
