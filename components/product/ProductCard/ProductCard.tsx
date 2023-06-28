@@ -346,28 +346,26 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           href={`/${currentProductData.link}`}
           title={`${product.name} \t ${itemPrice}`}
         >
-          <h4 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
+          <h4 className="flex justify-between w-full px-2 mt-3 mb-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
             {product?.name?.toLowerCase()}
           </h4>
-
-          <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 sm:px-2 sizes-ul sm:text-sm prod-ul-size">
-            <li className="mr-1">Sizes:</li>
-            {sizeValues.map((size: any, idx: number) => (
-              <li className="inline-block uppercase" key={idx}>
-                {size?.fieldValue}{' '}
-                {sizeValues.length !== idx + 1 && (
-                  <span className="mr-1 c-sperator">,</span>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm p-font-size">
-            <span className="font-bold">
-              {isIncludeVAT
-                ? product?.price?.formatted?.withTax
-                : product?.price?.formatted?.withoutTax}
-            </span>
+          {sizeValues?.length > 0 ? (
+            <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 sm:px-2 sizes-ul sm:text-sm prod-ul-size">
+              <li className="mr-1">Sizes:</li>
+              {sizeValues.map((size: any, idx: number) => (
+                <li className="inline-block uppercase" key={idx}>
+                  {size?.fieldValue}{' '}
+                  {sizeValues.length !== idx + 1 && (
+                    <span className="mr-1 c-sperator">,</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <div className="px-2 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">
+            {isIncludeVAT
+              ? product?.price?.formatted?.withTax
+              : product?.price?.formatted?.withoutTax}
             {product?.listPrice?.raw?.withTax > 0 &&
               product?.listPrice?.raw?.withTax !=
                 product?.price?.raw?.withTax && (

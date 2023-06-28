@@ -39,7 +39,7 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({
         {config?.newincollection?.map((product?: any) => (
           <SwiperSlide
             key={product?.slug}
-            className="relative inline-flex flex-col w-64 pb-4 text-left border border-gray-200 rounded shadow cursor-pointer group lg:w-auto"
+            className="relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer group lg:w-auto"
           >
             <ProductCard
               product={product}
