@@ -46,7 +46,7 @@ import { vatIncluded } from '@framework/utils/app-util'
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
-  const { setOrderId, orderId, user } = useUI()
+  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser } = useUI()
   const isIncludeVAT = vatIncluded()
 
   useEffect(() => {
@@ -59,6 +59,8 @@ export default function OrderConfirmation() {
     }
     removeItem(LocalStorage.Key.ORDER_RESPONSE)
     removeItem(LocalStorage.Key.ORDER_PAYMENT)
+    setGuestUser({})
+    setIsGuestUser(false)
     if (orderId) fetchOrder()
     if (!orderId) setIsLoading(false)
     return function cleanup() {

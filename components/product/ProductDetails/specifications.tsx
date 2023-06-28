@@ -28,7 +28,7 @@ export default function ProductSpecifications({
   const { isOnlyMobile } = deviceInfo
   return (
     <>
-      <div className="grid sm:grid-cols-12 px-6 sm:px-0">
+      <div className="grid px-6 sm:grid-cols-12 sm:px-0">
         <div className="sm:col-span-8">
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
             <h2 className="mb-2 font-bold font-18 text-dark-brown">
@@ -275,7 +275,7 @@ export default function ProductSpecifications({
                           className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
                           key={idx}
                         >
-                          {fabriccareAttr?.fieldText}.
+                          {fabriccareAttr?.fieldText}
                           <span className="s-icon s-right-space"> </span>
                         </p>
                       )
@@ -284,6 +284,321 @@ export default function ProductSpecifications({
                 </div>
               </>
             )}
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {attrGroup['tools.product_group']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Product Group
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['tools.product_group']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['tools.type']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Type
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['tools.type']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['tools.dust_class']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Dust Class
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['tools.dust_class']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['tools.power']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Power
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['tools.power']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['tools.voltage']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Voltage
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['tools.voltage']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['global.ishazardous']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Hazardous
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['global.ishazardous']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText == 'TRUE' ? 'Yes' : 'No'}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['tools.battery_included']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Battery Included
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['tools.battery_included']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText == 'TRUE' ? 'Yes' : 'No'}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['tools.battery_capacity']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Battery Capacity
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['tools.battery_capacity']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['tools.tool_type']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Tool Type
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['tools.tool_type']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {attrGroup['hardware.sub-type']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Sub Type
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['hardware.sub-type']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['hardware.type']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Hardware Type
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['hardware.type']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['hardware.product_group']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Hardware Product Group
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['hardware.product_group']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {attrGroup['security.power_source']?.length > 0 && (
+                <div>
+                  <div className="flex flex-col mt-6">
+                    <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
+                      Power Source
+                    </h4>
+                  </div>
+                  <div className="grid">
+                    <div className="flex w-full m-colum-div">
+                      {attrGroup['security.power_source']?.map(
+                        (fabriccareAttr: any, idx: number) => (
+                          <p
+                            className="ml-0 text-xs sm:text-sm text-dark-brown care-p mob-full-p"
+                            key={idx}
+                          >
+                            {fabriccareAttr?.fieldText}
+                            <span className="s-icon s-right-space"> </span>
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="sm:col-span-4">
