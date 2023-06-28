@@ -3,6 +3,7 @@ import {
   BTN_SUBMIT,
   FORGOT_PASSWORD,
   DETAILS_ERROR,
+  ERROR_WOOPS_SOMETHING_WENT_WRONG,
 } from '@components/utils/textVariables'
 import { useEffect, useState } from 'react'
 import { Button } from '@components/ui'
@@ -17,17 +18,10 @@ import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
 import { useUI } from '@components/ui/context'
 import classNames from 'classnames'
+import { EMAIL_STATUSES_MAP,EMAIL_MESSAGES } from '@components/utils/constants'
+import { Messages } from '@components/utils/constants'
 
-const EMAIL_STATUSES_MAP = {
-  NO_EMAIL: 0,
-  INVALID_EMAIL: 1,
-  VALID_EMAIL: 2,
-}
 
-const EMAIL_MESSAGES: any = {
-  1: "We couldn't find an account with this email",
-  2: 'Success! Check your email for the link to change your password',
-}
 
 export default function ForgotPasswordPage() {
   const { setAlert } = useUI()
@@ -47,7 +41,7 @@ export default function ForgotPasswordPage() {
   }
 
   const isValidEmail = (email: any) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = Messages.Validations.RegularExpressions.EMAIL
     return emailRegex.test(email)
   }
 
@@ -60,7 +54,7 @@ export default function ForgotPasswordPage() {
         setIsLoading(false)
       }
     } catch (error) {
-      alert('Woops! Token is invalid')
+      alert(Messages.Errors.TOKEN_INVALID)
       router.push('/my-account/forgot-password')
     }
   }
@@ -72,7 +66,6 @@ export default function ForgotPasswordPage() {
       validateToken(token)
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -115,12 +108,6 @@ export default function ForgotPasswordPage() {
       type: 'email',
       placeholder: 'joe@example.com',
     },
-    // {
-    //   name: 'password',
-    //   label: 'Enter new password',
-    //   type: 'password',
-    //   placeholder: '*******',
-    // },
   ]
   const stateForm: any = form
 
