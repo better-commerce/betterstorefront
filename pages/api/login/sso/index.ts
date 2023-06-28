@@ -1,10 +1,10 @@
-import { useLogin } from '@framework/auth'
+import useSSOLogin from '@framework/auth/use-sso-login'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-const LoginApiMiddleware = async (req: any, res: any) => {
+const SSOLoginApiMiddleware = async (req: any, res: any) => {
   const { email, password }: any = req.body.data
   try {
-    const response = await useLogin()({
+    const response = await useSSOLogin()({
       email,
       password,
       cookies: req.cookies,
@@ -13,6 +13,6 @@ const LoginApiMiddleware = async (req: any, res: any) => {
   } catch (error: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default LoginApiMiddleware;
+export default SSOLoginApiMiddleware

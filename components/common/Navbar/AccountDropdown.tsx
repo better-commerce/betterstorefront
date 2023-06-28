@@ -72,7 +72,9 @@ export default function Account({ config, title, deviceInfo }: any) {
                       close()
                     }}
                   >
-                    {item.title}{item?.tail ?? null}
+                    {item?.head ?? null}
+                    {item.title}
+                    {item?.tail ?? null}
                   </Link>
                 ))}
               </>
