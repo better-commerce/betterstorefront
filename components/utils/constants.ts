@@ -202,6 +202,7 @@ export module Messages {
       export const REPLACE_DEFAULT_UPI_WEB_PREFIX_URL = /upi:\/\//g
       export const CHARACTERS_AND_ALPHABETS =
         /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g
+      export const PASSWORD_VALIDATION = /^(?=.*[A-Z]).{8,}$/
     }
 
     export const Login: any = {
@@ -276,11 +277,18 @@ export module Messages {
       PIN_CODE_MAX_LENGTH: 'Pincode must be at max 6 characters',
       PIN_CODE_INPUT: 'Pincode should only contain numbers',
     }
+    export const ResetPassword:any = {
+      PASSWORD_VALIDATION_MESSAGE: 'Password should have a minimum of 8 characters and at least 1 uppercase letter.',
+      PASSWORD_REQUIRED_MESSAGE: 'Password is required.',
+      CONFIRM_REQUIRED_MESSAGE: 'Confirm password is required.',
+      MATCHING_PASSWORD_MESSAGE: 'Passwords must match.',
+    }
   }
 
   export const Messages: any = {
     RETURN_SUCCESS: 'Return success',
     EXCHANGE_SUCCESS: 'Exchange successful',
+    RESET_PASSWORD_SUCCESS: 'Success! You will be redirected to login page'
   }
 
   export const Warnings: any = {}
@@ -306,7 +314,18 @@ export module Messages {
       'Max allowed quantity is {maxBasketItemsCount}.',
     BASKET_VALIDATION_FAILED: 'Basket validation failed',
     'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
+    TOKEN_INVALID: 'Woops! Token is invalid',
+    TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
   }
+}
+export const EMAIL_STATUSES_MAP = {
+  NO_EMAIL: 0,
+  INVALID_EMAIL: 1,
+  VALID_EMAIL: 2,
+}
+export const EMAIL_MESSAGES: any = {
+  1: "We couldn't find an account with this email",
+  2: 'Success! Check your email for the link to change your password',
 }
 
 export const ALERT_TIMER = 5000

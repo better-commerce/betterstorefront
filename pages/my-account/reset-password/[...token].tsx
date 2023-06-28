@@ -4,6 +4,7 @@ import {
 } from '@components/utils/textVariables'
 import { useEffect, useState } from 'react'
 import {
+    EmptyString,
   NEXT_FORGOT_PASSWORD,
   NEXT_RESET_PASSWORD,
   NEXT_VALIDATE_TOKEN,
@@ -15,6 +16,7 @@ import { useUI } from '@components/ui/context'
 import Spinner from '@components/ui/Spinner'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
+import { Messages } from '@components/utils/constants'
 export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [token, setToken] = useState(null)
@@ -38,9 +40,9 @@ export default function ForgotPasswordPage() {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      userName: '',
-      password: '',
-      confirmPassword: '',
+      userName: EmptyString,
+      password: EmptyString,
+      confirmPassword: EmptyString,
     },
     onSubmit: (values: any, { setSubmitting }) => {
       values = {
@@ -48,7 +50,6 @@ export default function ForgotPasswordPage() {
         token: token,
       }
       delete values.confirmPassword
-      // alert(JSON.stringify(values, null, 2))
       handlePasswordChangeSubmit(values, () => {
         setSubmitting(false)
       })
@@ -57,15 +58,15 @@ export default function ForgotPasswordPage() {
       userName: yup.string(),
       password: yup
         .string()
-        .required('Password is required.')
+        .required(Messages.Validations.ResetPassword.PASSWORD_REQUIRED_MESSAGE)
         .matches(
-          /^(?=.*[A-Z]).{8,}$/,
-          'Password should have a minimum of 8 characters and at least 1 uppercase letter.'
+          Messages.Validations.RegularExpressions.PASSWORD_VALIDATION,
+          Messages.Validations.ResetPassword.PASSWORD_VALIDATION_MESSAGE
         ),
       confirmPassword: yup
         .string()
-        .required('Confirm password is required.')
-        .oneOf([yup.ref('password')], 'Passwords must match.'),
+        .required(Messages.Validations.ResetPassword.CONFIRM_REQUIRED_MESSAGE)
+        .oneOf([yup.ref('password')], Messages.Validations.ResetPassword.MATCHING_PASSWORD_MESSAGE),
     }),
   })
 
@@ -80,7 +81,7 @@ export default function ForgotPasswordPage() {
       setIsLoading(false)
     } catch (error) {
       // setIsLoading(false)
-      setAlert({ type: 'error', msg: 'Woops! Token is expired or invalid' })
+      setAlert({ type: 'error', msg: Messages.Errors.TOKEN_EXPIRED })
       router.push('/my-account/forgot-password')
     }
   }
@@ -101,7 +102,7 @@ export default function ForgotPasswordPage() {
       setIsLoading(false)
       setAlert({
         type: 'success',
-        msg: 'Success! You will be redirected to login page',
+        msg: Messages.Messages.RESET_PASSWORD_SUCCESS,
       })
       if (cb) cb()
       router.push('/my-account/login')
