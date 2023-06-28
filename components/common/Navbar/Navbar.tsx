@@ -57,13 +57,13 @@ const accountDropDownConfigUnauthorized: any = [
     href: '/my-account/login',
     title: GENERAL_LOGIN,
     className:
-      'mt-5 max-w-xs flex-1 bg-gray-300 border font-semibold border-transparent rounded-md py-3 px-8 flex items-center justify-center btn-primary-teal sm:w-full',
+      'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full',
   },
   {
     href: '/my-account/register',
     title: GENERAL_REGISTER,
     className:
-      'mt-5 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md op-75 py-3 px-8 flex items-center justify-center font-medium btn-primary-blue sm:w-full',
+      'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
   },
 ]
 
