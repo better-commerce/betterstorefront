@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
   font-family: 'Inter';
   src: url('../font/Inter-Bold.woff2') format('woff2'),
@@ -82,7 +83,7 @@
   font-display: swap;
 }
 
-ody {
+body {
   font-family: var(--font-primary) !important;
   font-size: var(--font-14);
   font-weight: 300;
@@ -176,6 +177,12 @@ p {
   font-size: 56px !important;
 }
 
+/* bg color css */
+.bg-blue-web {
+  background: var(--barnd-blue);
+}
+
+/* bg color css */
 .primary-text-color {
   color: #000;
 }
@@ -560,6 +567,7 @@ p {
   width: auto !important;
   height: 180px !important;
 }
+
 @media screen and (min-width:1024px) {
   .height-img-auto {
     min-height: 0 !important;
@@ -569,6 +577,7 @@ p {
     height: 350px !important;
   }
 }
+
 .prod-group:hover .prod-name-block {
   display: flex !important;
 }
@@ -630,13 +639,13 @@ p {
 
 .mobile-card-panel.white-card {
   background: #fff !important;
-  min-height: 180px!important;
+  min-height: 180px !important;
 }
 
 @media screen and (min-width:1024px) {
   .mobile-card-panel.white-card {
     background: #fff !important;
-    min-height: 350px!important;
+    min-height: 350px !important;
   }
 }
 
@@ -725,8 +734,24 @@ p {
   color: var(--btn-text-color-secondary);
 }
 
-object{
+object {
   height: auto;
 }
 
+/* category landing css start */
+.cat-container {
+  max-width: 1590px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 30px;
+}
+
+@media screen and (max-width: 767px) {
+  .cat-container {
+    padding: 0px;
+  }
+}
+
+/* category landing css End */
 /* main css end */
