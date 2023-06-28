@@ -19,14 +19,12 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
   const { medium } = props
   const { data: userData, status } = useSession();
 
-
   useEffect(() => {
 
     const asyncHandler = async (media: string) => {
       switch (media) {
         case SocialMediaType.GOOGLE:
           const googleSocialLoginResult = await signIn('google')
-          debugger
           break;
 
         case SocialMediaType.FACEBOOK:
@@ -34,15 +32,11 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
       }
     }
 
-    if (!userData) {
-      asyncHandler(medium)
-    }
-
-  }, [medium]);
-
-  useEffect(() => {
     if (status === 'authenticated') {
+      const data = userData;
       debugger;
+    } else {
+      asyncHandler(medium)
     }
   }, [status])
 
