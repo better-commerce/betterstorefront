@@ -74,6 +74,7 @@ import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
+import Script from 'next/script'
 
 const AttributesHandler = dynamic(
   () => import('@components/product/ProductView/AttributesHandler')
@@ -1133,6 +1134,34 @@ export default function ProductView({
           </Transition.Root>
         ) : null}
       </div>
+      <Script
+        type="application/ld+json"
+        id="schema"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+          {
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": ${product.name},
+            "image": ${product.image},
+            "description": ${product.description},
+            "sku": ${product.stockCode},
+            "brand": {
+              "@type": "Brand",
+              "name": ${product.brand}
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": ${product.link},
+              "priceCurrency": ${product.price.currencySymbol},
+              "price": ${product.price.raw.withTax},
+              "availability": "https://schema.org/${product.seoAvailability}"
+            }
+          }
+        `,
+        }}
+      />
     </>
   )
 }
