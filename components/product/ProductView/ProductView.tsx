@@ -27,6 +27,7 @@ import {
   NEXT_UPDATE_CART_INFO,
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
+  SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -1143,20 +1144,20 @@ export default function ProductView({
           {
             "@context": "https://schema.org/",
             "@type": "Product",
-            "name": ${product.name},
-            "image": ${product.image},
-            "description": ${product.metaDescription},
-            "sku": ${product.stockCode},
+            "name": ${product?.name},
+            "image": ${product?.image},
+            "description": ${product?.metaDescription},
+            "sku": ${product?.stockCode},
             "brand": {
               "@type": "Brand",
-              "name": ${product.brand}
+              "name": ${product?.brand}
             },
             "offers": {
               "@type": "Offer",
-              "url": ${product.link},
-              "priceCurrency": ${product.price.currencySymbol},
-              "price": ${product.price.raw.withTax},
-              "availability": "https://schema.org/${product.seoAvailability}"
+              "url": ${SITE_ORIGIN_URL + '/' + product?.link},
+              "priceCurrency": ${product?.price?.currencySymbol},
+              "price": ${product?.price?.raw?.withTax},
+              "availability": "https://schema.org/${product?.seoAvailability}"
             }
           }
         `,
