@@ -16,6 +16,7 @@ import { getCurrentPage } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IExtraProps } from '../Layout/Layout'
 import Script from 'next/script'
+import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 
 interface Props {
   config: []
@@ -141,6 +142,71 @@ const Footer: FC<Props & IExtraProps> = ({
           </div>
         </div>
       </footer>
+      <Script
+        type="application/ld+json"
+        id="schema"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": ${SITE_NAME},
+                "url": ${SITE_ORIGIN_URL},
+                "logo": ${SITE_ORIGIN_URL}+"/assets/icons/logo.svg",
+                "alternateName": ${SITE_NAME},
+                "sameAs": [
+                  "https://www.instagram.com/${SITE_NAME}/",
+                  "https://www.facebook.com/${SITE_NAME}/",
+                  "https://twitter.com/${SITE_NAME}?lang=en",
+                  "https://www.linkedin.com/company/${SITE_NAME}"
+                ],
+                "contactPoint": [
+                  {
+                    "@type": "ContactPoint",
+                    "telephone": "+911234567890",
+                    "contactType": "",
+                    "email": "support@${SITE_NAME}.com",
+                    "areaServed": "IN",
+                    "availableLanguage": "en"
+                  }
+                ]
+              }
+            `,
+        }}
+      />
+      <Script
+        type="application/ld+json"
+        id="schema"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+              {
+                "@context": "https://schema.org",
+                "@type": "LocalBusiness",
+                "name":  ${SITE_NAME},
+                "image": ${SITE_ORIGIN_URL}"/assets/icons/logo.svg",
+                "@id":  ${SITE_ORIGIN_URL},
+                "url": ${SITE_ORIGIN_URL},
+                "telephone": "+91 1234567890",
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": "",
+                  "addressLocality": "",
+                  "postalCode": "",
+                  "addressCountry": "+91",
+                  "addressRegion": ""
+                },
+                "sameAs": [
+                  "https://www.instagram.com/${SITE_NAME}/",
+                  "https://www.facebook.com/${SITE_NAME}/",
+                  "https://twitter.com/${SITE_NAME}?lang=en",
+                  "https://www.linkedin.com/company/${SITE_NAME}"
+                ],
+              }
+            `,
+        }}
+      />
     </>
   )
 }
