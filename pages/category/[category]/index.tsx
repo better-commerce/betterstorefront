@@ -355,7 +355,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config }: a
         {/* Category info section start */}
         <div className='mx-auto mt-4 bg-transparent md:w-4/5 my-6 px-4 sm:px-0'>
           <h1>{category?.name}</h1>
-          <p>{category?.description}</p>
+          <div className="font-18" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
         </div>
         {/* Category info section End */}
 
@@ -392,13 +392,28 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config }: a
                   <SwiperSlide key={cdx}>
                     <div className="relative group">
                       <div className="absolute top-0 left-0 bg-transparent group-hover:bg-black/30 h-full w-full"></div>
-                      <Image
-                        src="/default-img.svg"
-                        className="object-center object-fill w-full"
-                        alt="Image"
-                        width={240}
-                        height={160}
-                      />
+                      <>
+                        {featurecat?.image != "" ?
+                          (
+                            <Image
+                              src={featurecat?.image}
+                              className="object-center object-fill w-full"
+                              alt="Image"
+                              width={240}
+                              height={160}
+                            />
+                          ) :
+                          (
+                            <Image
+                              src="/default-img.svg"
+                              className="object-center object-fill w-full"
+                              alt="Image"
+                              width={240}
+                              height={160}
+                            />
+                          )
+                        }
+                      </>
                       <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
                         <Link href={`/${featurecat?.link}`} className="btn-primary-white font-14">
                           <span>
@@ -550,13 +565,28 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config }: a
                   <SwiperSlide key={cdx}>
                     <div className="relative group">
                       <div className="absolute top-0 left-0 bg-transparent group-hover:bg-black/30 h-full w-full"></div>
-                      <Image
-                        src="/default-img.svg"
-                        className="object-center object-fill w-full"
-                        alt="Image"
-                        width={240}
-                        height={160}
-                      />
+                      <>
+                        {relatedcat?.image != "" ?
+                          (
+                            <Image
+                              src="/default-img.svg"
+                              className="object-center object-fill w-full"
+                              alt="Image"
+                              width={240}
+                              height={160}
+                            />
+                          ) :
+                          (
+                            <Image
+                              src="/default-img.svg"
+                              className="object-center object-fill w-full"
+                              alt="Image"
+                              width={240}
+                              height={160}
+                            />
+                          )
+                        }
+                      </>
                       <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
                         <Link href={`/${relatedcat?.link}`} className="btn-primary-white font-14">
                           <span>
