@@ -9,6 +9,8 @@ export default function Image({ name, heading }: any) {
           src={name}
           alt={name}
           className="w-full h-full object-center object-cover group-hover:opacity-75"
+          height={200}
+          width={220}
         />
       </div>
     </div>

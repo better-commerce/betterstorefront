@@ -1395,3 +1395,8 @@ br {
   min-width: 45% !important;
   width: 45% !important;
 }
+
+/* Explicit grid setup for edge case handling */
+#ImageCollection.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
