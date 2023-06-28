@@ -16,6 +16,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
 import { useUI } from '@components/ui/context'
+import classNames from 'classnames'
 
 const EMAIL_STATUSES_MAP = {
   NO_EMAIL: 0,
@@ -148,7 +149,7 @@ export default function ForgotPasswordPage() {
                     onBlur={handleBlur}
                   />
                   {emailStatus > 0 && (
-                    <div className="w-full text-red-600">
+                    <div className={classNames(emailStatus===2?"text-gray-700":"text-red-600","w-full ")}>
                       {EMAIL_MESSAGES[emailStatus]}
                     </div>
                   )}
