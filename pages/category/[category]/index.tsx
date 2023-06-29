@@ -237,7 +237,7 @@ function CategoryLandingPage({
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-      productListMemory?.products?.currentPage ||
+        productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -348,7 +348,7 @@ function CategoryLandingPage({
         />
       </NextHead>
       <section className="main-section">
-        <div className="px-4 mx-auto mt-4 bg-transparent md:w-4/5 sm:px-0">
+        <div className="container px-4 mx-auto mt-4 bg-transparent sm:px-0">
           {category?.breadCrumbs && (
             <BreadCrumbs
               items={category?.breadCrumbs}
@@ -356,7 +356,7 @@ function CategoryLandingPage({
             />
           )}
         </div>
-        <div className="px-4 mx-auto my-6 mt-4 bg-transparent md:w-4/5 sm:px-0">
+        <div className="container px-4 mx-auto my-6 mt-4 bg-transparent sm:px-0">
           <h1>{category?.name}</h1>
           <div
             className="font-18"
@@ -365,9 +365,9 @@ function CategoryLandingPage({
         </div>
         {/* popular category start */}
         {category?.isFeatured != false ? (
-          <div className='w-full'>
+          <div className="w-full">
             <div className="py-4">
-              <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
+              <div className="container px-4 mx-auto mb-4 sm:px-0">
                 <h2 className="font-bold font-18">Popular categories</h2>
               </div>
               <Swiper
@@ -392,44 +392,46 @@ function CategoryLandingPage({
                 }}
                 className="mySwier"
               >
-                {category?.subCategories?.map((featurecat: any, cdx: number) => (
-                  <>
-                    {featurecat?.isFeatured == true && (
-                      <SwiperSlide key={cdx}>
-                        <div className="relative group">
-                          <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                          <>
-                            {featurecat?.image != '' ? (
-                              <Image
-                                src={featurecat?.image}
-                                className="object-fill object-center w-full"
-                                alt="Image"
-                                width={240}
-                                height={160}
-                              />
-                            ) : (
-                              <Image
-                                src="/default-img.svg"
-                                className="object-fill object-center w-full"
-                                alt="Image"
-                                width={240}
-                                height={160}
-                              />
-                            )}
-                          </>
-                          <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                            <Link
-                              href={`/${featurecat?.link}`}
-                              className="btn-primary-white font-14"
-                            >
-                              <span>{featurecat?.name}</span>
-                            </Link>
+                {category?.subCategories?.map(
+                  (featurecat: any, cdx: number) => (
+                    <>
+                      {featurecat?.isFeatured == true && (
+                        <SwiperSlide key={cdx}>
+                          <div className="relative group">
+                            <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
+                            <>
+                              {featurecat?.image != '' ? (
+                                <Image
+                                  src={featurecat?.image}
+                                  className="object-fill object-center w-full"
+                                  alt="Image"
+                                  width={240}
+                                  height={160}
+                                />
+                              ) : (
+                                <Image
+                                  src="/default-img.svg"
+                                  className="object-fill object-center w-full"
+                                  alt="Image"
+                                  width={240}
+                                  height={160}
+                                />
+                              )}
+                            </>
+                            <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
+                              <Link
+                                href={`/${featurecat?.link}`}
+                                className="btn-primary-white font-14"
+                              >
+                                <span>{featurecat?.name}</span>
+                              </Link>
+                            </div>
                           </div>
-                        </div>
-                      </SwiperSlide>
-                    )}
-                  </>
-                ))}
+                        </SwiperSlide>
+                      )}
+                    </>
+                  )
+                )}
               </Swiper>
             </div>
             {/* popular category start */}
@@ -447,7 +449,9 @@ function CategoryLandingPage({
                         <div className="w-full h-full">
                           <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
                             <div className="sm:w-2/4 sm:pr-20">
-                              <h2 className="text-white uppercase">{cat?.name}</h2>
+                              <h2 className="text-white uppercase">
+                                {cat?.name}
+                              </h2>
                               <p className="mt-5 font-light text-white">
                                 {cat?.description}
                               </p>
@@ -494,9 +498,10 @@ function CategoryLandingPage({
                           Dewalt KITS & PACKS
                         </p>
                         <p className="mt-3 text-white">
-                          Unleash your full potential with DeWalt kits - featuring a
-                          range of high-quality tools that are durable, reliable,
-                          and designed to help you tackle any project with ease.
+                          Unleash your full potential with DeWalt kits -
+                          featuring a range of high-quality tools that are
+                          durable, reliable, and designed to help you tackle any
+                          project with ease.
                         </p>
                       </a>
                     </div>
@@ -519,9 +524,10 @@ function CategoryLandingPage({
                           Dewalt KITS & PACKS
                         </p>
                         <p className="mt-3 text-white">
-                          Unleash your full potential with DeWalt kits - featuring a
-                          range of high-quality tools that are durable, reliable,
-                          and designed to help you tackle any project with ease.
+                          Unleash your full potential with DeWalt kits -
+                          featuring a range of high-quality tools that are
+                          durable, reliable, and designed to help you tackle any
+                          project with ease.
                         </p>
                       </a>
                     </div>
@@ -544,9 +550,10 @@ function CategoryLandingPage({
                           Dewalt KITS & PACKS
                         </p>
                         <p className="mt-3 text-white">
-                          Unleash your full potential with DeWalt kits - featuring a
-                          range of high-quality tools that are durable, reliable,
-                          and designed to help you tackle any project with ease.
+                          Unleash your full potential with DeWalt kits -
+                          featuring a range of high-quality tools that are
+                          durable, reliable, and designed to help you tackle any
+                          project with ease.
                         </p>
                       </a>
                     </div>
@@ -630,9 +637,9 @@ function CategoryLandingPage({
           </div>
         ) : (
           <>
-            <div className='mx-auto md:w-4/5 py-6 px-4 sm:px-0'>
+            <div className="w-full px-4 py-6 mx-auto sm:px-0">
               {/* category banner info start */}
-              <div className="w-full py-4">
+              <div className="container py-4 mx-auto">
                 {category && category?.images && category?.images.length ? (
                   <>
                     {category?.images.map((cat: any, idx: number) => (
@@ -640,16 +647,14 @@ function CategoryLandingPage({
                         className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2"
                         key={idx}
                       >
-                        <div className="flex items-center justify-center order-2 p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
-                          <div className="w-full h-full">
-                            <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
-                              <div className="sm:w-2/4 sm:pr-20">
-                                <h2 className="text-white uppercase">{cat?.name}</h2>
-                                <p className="mt-5 font-light text-white">
-                                  {cat?.description}
-                                </p>
-                              </div>
-                            </div>
+                        <div className="flex items-center justify-center order-2 w-full h-full p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
+                          <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
+                            <h2 className="text-white uppercase">
+                              {cat?.name}
+                            </h2>
+                            <p className="mt-5 font-light text-white">
+                              {cat?.description}
+                            </p>
                           </div>
                         </div>
                         <div className="order-1 sm:order-2">
@@ -671,9 +676,10 @@ function CategoryLandingPage({
               </div>
               {/* category banner info End */}
               <div className="py-4">
-                <h2 className="font-bold font-18">Popular categories</h2>
+                <h2 className="container mx-auto mb-4 font-bold font-18">
+                  Popular categories
+                </h2>
                 <Swiper
-                  // install Swiper modules
                   spaceBetween={0}
                   slidesPerView={1}
                   navigation={true}
@@ -686,55 +692,57 @@ function CategoryLandingPage({
                       slidesPerView: 2.5,
                     },
                     1024: {
-                      slidesPerView: 4,
+                      slidesPerView: 6,
                     },
                     1400: {
-                      slidesPerView: 4,
+                      slidesPerView: 6,
                     },
                   }}
                   className="mySwier"
                 >
-                  {category?.subCategories?.map((featurecat: any, cdx: number) => (
-                    <>
-                      <SwiperSlide key={cdx}>
-                        <div className="relative group">
-                          <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                          <>
-                            {featurecat?.image != '' ? (
-                              <Image
-                                src={featurecat?.image}
-                                className="object-fill object-center w-full"
-                                alt="Image"
-                                width={240}
-                                height={160}
-                              />
-                            ) : (
-                              <Image
-                                src="/default-img.svg"
-                                className="object-fill object-center w-full"
-                                alt="Image"
-                                width={240}
-                                height={160}
-                              />
-                            )}
-                          </>
-                          <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                            <Link
-                              href={`/${featurecat?.link}`}
-                              className="btn-primary-white font-14"
-                            >
-                              <span>{featurecat?.name}</span>
-                            </Link>
+                  {category?.subCategories?.map(
+                    (featurecat: any, cdx: number) => (
+                      <>
+                        <SwiperSlide key={cdx}>
+                          <div className="relative group">
+                            <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
+                            <>
+                              {featurecat?.image != '' ? (
+                                <Image
+                                  src={featurecat?.image}
+                                  className="object-fill object-center w-full"
+                                  alt="Image"
+                                  width={240}
+                                  height={160}
+                                />
+                              ) : (
+                                <Image
+                                  src="/default-img.svg"
+                                  className="object-fill object-center w-full"
+                                  alt="Image"
+                                  width={240}
+                                  height={160}
+                                />
+                              )}
+                            </>
+                            <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
+                              <Link
+                                href={`/${featurecat?.link}`}
+                                className="btn-primary-white font-14"
+                              >
+                                <span>{featurecat?.name}</span>
+                              </Link>
+                            </div>
                           </div>
-                        </div>
-                      </SwiperSlide>
-                    </>
-                  ))}
+                        </SwiperSlide>
+                      </>
+                    )
+                  )}
                 </Swiper>
               </div>
               {/* popular category start */}
               {products?.total > 0 ? (
-                <div className="grid w-full grid-cols-1 sm:grid-cols-12">
+                <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
                   {!!products &&
                     (products?.filters?.length > 0 ? (
                       <>
@@ -788,7 +796,7 @@ function CategoryLandingPage({
                     ))}
                 </div>
               ) : (
-                <div className="p-4 py-8  sm:p-32 mx-auto text-center max-w-7xl">
+                <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
                   <h4 className="text-3xl font-bold text-gray-300">
                     No Products availabe in {category?.name}
                   </h4>
@@ -797,7 +805,6 @@ function CategoryLandingPage({
             </div>
           </>
         )}
-
       </section>
     </>
   )
