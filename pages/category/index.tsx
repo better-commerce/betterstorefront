@@ -48,7 +48,7 @@ export default function CategoryList(props: any) {
                         <div className="relative group">
                           <Link key={key} href={`/${category.link}`}>
                             {category?.image ? (
-                              <div className="relative overflow-hidden bg-gray-100  aspect-w-1 aspect-h-1 group-hover:bg-gray-200">
+                              <div className="relative overflow-hidden bg-gray-100 aspect-w-1 aspect-h-1 group-hover:bg-gray-200">
                                 <Image
                                   src={
                                     `${category?.image}?fm=webp&h=800&w=400` ||
@@ -62,7 +62,7 @@ export default function CategoryList(props: any) {
                                 ></Image>
                               </div>
                             ) : (
-                              <div className="relative overflow-hidden bg-gray-100  aspect-w-1 aspect-h-1 group-hover:bg-gray-200">
+                              <div className="relative overflow-hidden bg-gray-100 aspect-w-1 aspect-h-1 group-hover:bg-gray-200">
                                 <Image
                                   src={IMG_PLACEHOLDER}
                                   alt={category.name}

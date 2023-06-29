@@ -490,9 +490,8 @@ function BrandDetailPage({
         />
       </NextHead>
       {brandDetails?.showLandingPage ? (
-        <div className="bg-white">
-          {/* Mobile menu */}
-          <main className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
+        <>
+          <div className="w-full px-4 pb-20 mx-auto bg-white md:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
               <div className="flex flex-col items-center bg-[#FEBD18] min-h-full md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <Image
@@ -542,20 +541,16 @@ function BrandDetailPage({
             </div>
 
             <div className="grid grid-cols-1 gap-5 my-10 md:grid-cols-2">
-              {offerBanner?.map((val: any, Idx: number) => {
-                return (
-                  <>
-                    <OfferCard
-                      key={Idx}
-                      title={val.title}
-                      description={val.description}
-                      src={val.url}
-                    />
-                  </>
-                )
-              })}
+              {offerBanner?.map((val: any, Idx: number) => (
+                <OfferCard
+                  key={Idx}
+                  title={val.title}
+                  description={val.description}
+                  src={val.url}
+                />
+              ))}
             </div>
-          </main>
+          </div>
 
           <div className="w-full mt-10">
             <ImageBanner
@@ -574,7 +569,7 @@ function BrandDetailPage({
 
           <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
             <div className="flex justify-between pb-10 mt-4">
-              <p className="uppercase ">
+              <p className="uppercase">
                 {FEATURES_HEADING}
                 {` `}
                 {brandDetails.name}
@@ -588,7 +583,6 @@ function BrandDetailPage({
                 showTitle={false}
               />
             </div>
-
             <PlainText
               textNames={textNames}
               heading={manufacturerStateTextHeading}
@@ -608,22 +602,19 @@ function BrandDetailPage({
               <h5 className="py-10 uppercase">Popular faqs</h5>
               <Disclosure
                 heading={`Can I have my delivery sent to a different address?`}
-                details={`If you're unhappy with your purchase for any reason, email us
-         within 90 days and we'll refund you in full, no questions asked.`}
+                details={`If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.`}
               />
               <Disclosure
                 heading={`Can I request Weekend deliveries?`}
-                details={`If you're unhappy with your purchase for any reason, email us
-         within 90 days and we'll refund you in full, no questions asked.`}
+                details={`If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.`}
               />
               <Disclosure
                 heading={`Are your products brand new and in original packaging?`}
-                details={`If you're unhappy with your purchase for any reason, email us
-         within 90 days and we'll refund you in full, no questions asked.`}
+                details={`If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.`}
               />
             </div>
           </div>
-        </div>
+        </>
       ) : (
         <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
           <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
