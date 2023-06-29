@@ -11,7 +11,8 @@
     "find:unused": "npx next-unused",
     "generate:definitions": "node framework/bigcommerce/scripts/generate-definitions.js",
     "tsc": "tsc",
-    "lint-staged-configure": "npx mrm lint-staged"
+    "lint-staged-configure": "npx mrm lint-staged",
+    "generate-apple-secret": "node apple-generate-secret.js"
   },
   "sideEffects": false,
   "license": "MIT",
@@ -51,6 +52,7 @@
     "next": "13.4.1",
     "next-auth": "^4.22.1",
     "next-themes": "^0.2.1",
+    "njwt": "^2.0.0",
     "node-fetch": "^2.6.11",
     "postcss": "^8.4.23",
     "qs": "^6.11.1",
