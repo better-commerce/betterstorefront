@@ -18,8 +18,7 @@ import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
 import { useUI } from '@components/ui/context'
 import classNames from 'classnames'
-import { EMAIL_STATUSES_MAP,EMAIL_MESSAGES } from '@components/utils/constants'
-import { Messages } from '@components/utils/constants'
+import { Messages,EmptyString } from '@components/utils/constants'
 
 
 
@@ -27,7 +26,7 @@ export default function ForgotPasswordPage() {
   const { setAlert } = useUI()
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
-  const [emailStatus, setEmailStatus] = useState(EMAIL_STATUSES_MAP.NO_EMAIL)
+  const [emailStatus, setEmailStatus] = useState('')
   const [form, setForm] = useState({ userName: '', password: '' })
   const router: any = useRouter()
 
@@ -36,7 +35,7 @@ export default function ForgotPasswordPage() {
   const handleBlur = () => {
     const isValid = isValidEmail(email)
     if (!isValid) {
-      setEmailStatus(EMAIL_STATUSES_MAP.INVALID_EMAIL)
+      setEmailStatus(Messages.Validations.ResetPassword.NO_EMAIL)
     }
   }
 
@@ -45,32 +44,10 @@ export default function ForgotPasswordPage() {
     return emailRegex.test(email)
   }
 
-  const validateToken = async (token: any) => {
-    try {
-      const { data }: any = await axios.post(NEXT_VALIDATE_TOKEN, { token })
-      if (!data.response.result.isValid) throw new Error('error')
-      else {
-        setEmailStatus(EMAIL_STATUSES_MAP.VALID_EMAIL)
-        setIsLoading(false)
-      }
-    } catch (error) {
-      alert(Messages.Errors.TOKEN_INVALID)
-      router.push('/my-account/forgot-password')
-    }
-  }
-
   useEffect(() => {
-    const token = router.query.token
-    if (token) {
-      setIsLoading(true)
-      validateToken(token)
-    }
-
-  }, [])
-
-  useEffect(() => {
-    if (emailStatus === EMAIL_STATUSES_MAP.INVALID_EMAIL) {
-      setTimeout(() => setEmailStatus(EMAIL_STATUSES_MAP.NO_EMAIL), 5000)
+    if (emailStatus === Messages.Validations.ResetPassword.INVALID_EMAIL ||
+        emailStatus === Messages.Validations.ResetPassword.NO_EMAIL) {
+      setTimeout(() => setEmailStatus(EmptyString), 5000)
     }
   }, [emailStatus])
 
@@ -82,17 +59,14 @@ export default function ForgotPasswordPage() {
       if (isValidEmail) {
         let { data }: any = await axios.post(NEXT_FORGOT_PASSWORD, { email })
         if (!data.forgotRes.result.isValid) {
-          setEmailStatus(EMAIL_STATUSES_MAP.INVALID_EMAIL)
+          // setEmailStatus(Messages.Validations.ResetPassword.INVALID_EMAIL)
+          setAlert({ type: 'error', msg: Messages.Validations.ResetPassword.INVALID_EMAIL })
         } else {
-          setEmailStatus(EMAIL_STATUSES_MAP.VALID_EMAIL)
+          setEmailStatus(Messages.Validations.ResetPassword.VALID_EMAIL)
+          setAlert({ type: 'success', msg: Messages.Validations.ResetPassword.VALID_EMAIL })
         }
         setForm({ ...form, userName: email })
         setEmail('')
-        if (data) {
-          setAlert({ type: 'success', msg: EMAIL_MESSAGES[2] })
-        } else if (!data) {
-          setAlert({ type: 'error', msg: EMAIL_MESSAGES[1] })
-        }
       }
       setIsLoading(false)
     } catch (error) {
@@ -135,9 +109,9 @@ export default function ForgotPasswordPage() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {emailStatus > 0 && (
-                    <div className={classNames(emailStatus===2?"text-gray-700":"text-red-600","w-full ")}>
-                      {EMAIL_MESSAGES[emailStatus]}
+                  {emailStatus !== '' && emailStatus!==Messages.Validations.ResetPassword.VALID_EMAIL && (
+                    <div className="text-red-600 w-full">
+                      {emailStatus}
                     </div>
                   )}
                 </div>
