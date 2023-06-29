@@ -76,18 +76,25 @@ import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
 import Script from 'next/script'
-import ImageGallery from 'react-image-gallery';
+import ImageGallery from 'react-image-gallery'
 
-const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
+const AttributesHandler = dynamic(
+  () => import('@components/product/ProductView/AttributesHandler')
+)
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-const RelatedProducts = dynamic(() => import('@components/product/RelatedProducts'))
+const RelatedProducts = dynamic(
+  () => import('@components/product/RelatedProducts')
+)
 const Bundles = dynamic(() => import('@components/product/Bundles'))
 const Reviews = dynamic(() => import('@components/product/Reviews'))
 const PriceMatch = dynamic(() => import('@components/product/PriceMatch'))
 const Engraving = dynamic(() => import('@components/product/Engraving'))
-const ProductDetails = dynamic(() => import('@components/product/ProductDetails'))
+const ProductDetails = dynamic(
+  () => import('@components/product/ProductDetails')
+)
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup')
+const RelatedProductWithGroup = dynamic(
+  () => import('@components/product/RelatedProducts/RelatedProductWithGroup')
 )
 const AvailableOffers = dynamic(
   () => import('@components/product/ProductView/AvailableOffers')
@@ -686,28 +693,12 @@ export default function ProductView({
   if (!product) {
     return null
   }
-  const imagess = [
-    {
-      original: "https://picsum.photos/id/1018/1000/400/",
-      thumbnail: "https://picsum.photos/id/1018/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1015/1000/400/",
-      thumbnail: "https://picsum.photos/id/1015/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1026/1000/400/",
-      thumbnail: "https://picsum.photos/id/1026/250/150/",
-    },
-  ];
 
   const images = content.map((image: any) => {
-    return (
-      {
-        original: image.image,
-        thumbnail: image.image,
-      }
-    )
+    return {
+      original: image.image,
+      thumbnail: image.image,
+    }
   })
   return (
     <>
@@ -784,7 +775,8 @@ export default function ProductView({
                     showBullets={false}
                     showNav={false}
                     additionalClass="app-image-gallery"
-                    showFullscreenButton={true} />
+                    showFullscreenButton={true}
+                  />
                 </Tab.List>
               </Tab.Group>
             </>
@@ -792,7 +784,6 @@ export default function ProductView({
 
           {/* Product info */}
           <div className="px-4 mt-2 sm:mt-10 sm:px-8 lg:mt-0 lg:col-span-5">
-
             <div className="flex justify-between gap-4 mb-3 sm:mb-0">
               <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}
