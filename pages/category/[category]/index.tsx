@@ -9,9 +9,7 @@ import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import {
-  ChevronRightIcon, ChevronLeftIcon
-} from '@heroicons/react/24/outline'
+import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import {
   ALL_CATEGORY,
   BAD_URL_TEXT,
@@ -170,7 +168,13 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryLandingPage({ category, slug, products, deviceInfo, config }: any) {
+function CategoryLandingPage({
+  category,
+  slug,
+  products,
+  deviceInfo,
+  config,
+}: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
   const adaptedQuery: any = { ...router.query }
@@ -233,7 +237,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config }: a
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-      productListMemory?.products?.currentPage ||
+        productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -344,25 +348,25 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config }: a
         />
       </NextHead>
       <section className="main-section">
-        <div className="mx-auto mt-4 bg-transparent md:w-4/5 px-4 sm:px-0">
-          {/* breadcrumb section start */}
+        <div className="px-4 mx-auto mt-4 bg-transparent md:w-4/5 sm:px-0">
           {category?.breadCrumbs && (
-            <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
+            <BreadCrumbs
+              items={category?.breadCrumbs}
+              currentProduct={category}
+            />
           )}
-          {/* breadcrumb section End */}
         </div>
-
-        {/* Category info section start */}
-        <div className='mx-auto mt-4 bg-transparent md:w-4/5 my-6 px-4 sm:px-0'>
+        <div className="px-4 mx-auto my-6 mt-4 bg-transparent md:w-4/5 sm:px-0">
           <h1>{category?.name}</h1>
-          <div className="font-18" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
+          <div
+            className="font-18"
+            dangerouslySetInnerHTML={{ __html: category?.description }}
+          ></div>
         </div>
-        {/* Category info section End */}
-
         {/* popular category start */}
         <div className="py-4">
-          <div className='mx-auto md:w-4/5 mb-4 px-4 sm:px-0'>
-            <h2 className='font-18 font-bold'>Popular categories</h2>
+          <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
+            <h2 className="font-bold font-18">Popular categories</h2>
           </div>
           <Swiper
             // install Swiper modules
@@ -388,71 +392,72 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config }: a
           >
             {category?.subCategories?.map((featurecat: any, cdx: number) => (
               <>
-                {featurecat?.isFeatured == true &&
+                {featurecat?.isFeatured == true && (
                   <SwiperSlide key={cdx}>
                     <div className="relative group">
-                      <div className="absolute top-0 left-0 bg-transparent group-hover:bg-black/30 h-full w-full"></div>
+                      <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
                       <>
-                        {featurecat?.image != "" ?
-                          (
-                            <Image
-                              src={featurecat?.image}
-                              className="object-center object-fill w-full"
-                              alt="Image"
-                              width={240}
-                              height={160}
-                            />
-                          ) :
-                          (
-                            <Image
-                              src="/default-img.svg"
-                              className="object-center object-fill w-full"
-                              alt="Image"
-                              width={240}
-                              height={160}
-                            />
-                          )
-                        }
+                        {featurecat?.image != '' ? (
+                          <Image
+                            src={featurecat?.image}
+                            className="object-fill object-center w-full"
+                            alt="Image"
+                            width={240}
+                            height={160}
+                          />
+                        ) : (
+                          <Image
+                            src="/default-img.svg"
+                            className="object-fill object-center w-full"
+                            alt="Image"
+                            width={240}
+                            height={160}
+                          />
+                        )}
                       </>
                       <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                        <Link href={`/${featurecat?.link}`} className="btn-primary-white font-14">
-                          <span>
-                            {featurecat?.name}
-                          </span>
+                        <Link
+                          href={`/${featurecat?.link}`}
+                          className="btn-primary-white font-14"
+                        >
+                          <span>{featurecat?.name}</span>
                         </Link>
                       </div>
                     </div>
                   </SwiperSlide>
-                }
+                )}
               </>
-
             ))}
           </Swiper>
         </div>
         {/* popular category start */}
 
         {/* category banner info start */}
-        <div className='w-full py-4'>
+        <div className="w-full py-4">
           {category && category?.images && category?.images.length ? (
             <>
               {category?.images.map((cat: any, idx: number) => (
-                <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 relative" key={idx}>
-                  <div className="flex justify-center items-center bg-blue-web p-4 py-8 sm:py-0 sm:p-0 order-2 sm:order-1">
+                <div
+                  className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2"
+                  key={idx}
+                >
+                  <div className="flex items-center justify-center order-2 p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
                     <div className="w-full h-full">
-                      <div className='relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container'>
-                        <div className='sm:w-2/4 sm:pr-20'>
-                          <h2 className="uppercase text-white">{cat?.name}</h2>
-                          <p className="mt-5 text-white font-light">
+                      <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
+                        <div className="sm:w-2/4 sm:pr-20">
+                          <h2 className="text-white uppercase">{cat?.name}</h2>
+                          <p className="mt-5 font-light text-white">
                             {cat?.description}
                           </p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className='order-1 sm:order-2'>
+                  <div className="order-1 sm:order-2">
                     <Image
                       src={
-                        generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER
+                        generateUri(cat?.url, 'h=700&fm=webp') ||
+                        IMG_PLACEHOLDER
                       }
                       className="w-full"
                       alt={category?.name}
@@ -460,72 +465,87 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config }: a
                       height={700}
                     />
                   </div>
-
                 </div>
               ))}
             </>
-
           ) : null}
         </div>
         {/* category banner info End */}
 
-
         {/* feature brand section start*/}
-        <div className='mx-auto  md:w-4/5 py-6 px-4 sm:px-0'>
-          <div className="max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
-            <div className="flex flex-col shadow-lg overflow-hidden">
+        <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-0">
+          <div className="grid max-w-lg gap-5 mx-auto lg:grid-cols-3 lg:max-w-none">
+            <div className="flex flex-col overflow-hidden shadow-lg">
               <div className="flex-shrink-0">
                 <Image
                   src="/default-img.svg"
-                  className="h-auto w-full object-cover"
+                  className="object-cover w-full h-auto"
                   alt="image"
                   width={700}
                   height={700}
                 />
               </div>
-              <div className="flex-1 bg-blue-web p-6 flex flex-col justify-between">
+              <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
                 <div className="flex-1">
                   <a href="#" className="block mt-2">
-                    <p className="text-xl font-semibold text-white">Dewalt KITS & PACKS</p>
-                    <p className="mt-3 text-white">Unleash your full potential with DeWalt kits - featuring a range of high-quality tools that are durable, reliable, and designed to help you tackle any project with ease.</p>
+                    <p className="text-xl font-semibold text-white">
+                      Dewalt KITS & PACKS
+                    </p>
+                    <p className="mt-3 text-white">
+                      Unleash your full potential with DeWalt kits - featuring a
+                      range of high-quality tools that are durable, reliable,
+                      and designed to help you tackle any project with ease.
+                    </p>
                   </a>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col shadow-lg overflow-hidden">
+            <div className="flex flex-col overflow-hidden shadow-lg">
               <div className="flex-shrink-0">
                 <Image
                   src="/default-img.svg"
-                  className="h-auto w-full object-cover"
+                  className="object-cover w-full h-auto"
                   alt="image"
                   width={700}
                   height={700}
                 />
               </div>
-              <div className="flex-1 bg-blue-web p-6 flex flex-col justify-between">
+              <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
                 <div className="flex-1">
                   <a href="#" className="block mt-2">
-                    <p className="text-xl font-semibold text-white">Dewalt KITS & PACKS</p>
-                    <p className="mt-3 text-white">Unleash your full potential with DeWalt kits - featuring a range of high-quality tools that are durable, reliable, and designed to help you tackle any project with ease.</p>
+                    <p className="text-xl font-semibold text-white">
+                      Dewalt KITS & PACKS
+                    </p>
+                    <p className="mt-3 text-white">
+                      Unleash your full potential with DeWalt kits - featuring a
+                      range of high-quality tools that are durable, reliable,
+                      and designed to help you tackle any project with ease.
+                    </p>
                   </a>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col shadow-lg overflow-hidden">
+            <div className="flex flex-col overflow-hidden shadow-lg">
               <div className="flex-shrink-0">
                 <Image
                   src="/default-img.svg"
-                  className="h-auto w-full object-cover"
+                  className="object-cover w-full h-auto"
                   alt="image"
                   width={700}
                   height={700}
                 />
               </div>
-              <div className="flex-1 bg-blue-web p-6 flex flex-col justify-between">
+              <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
                 <div className="flex-1">
                   <a href="#" className="block mt-2">
-                    <p className="text-xl font-semibold text-white">Dewalt KITS & PACKS</p>
-                    <p className="mt-3 text-white">Unleash your full potential with DeWalt kits - featuring a range of high-quality tools that are durable, reliable, and designed to help you tackle any project with ease.</p>
+                    <p className="text-xl font-semibold text-white">
+                      Dewalt KITS & PACKS
+                    </p>
+                    <p className="mt-3 text-white">
+                      Unleash your full potential with DeWalt kits - featuring a
+                      range of high-quality tools that are durable, reliable,
+                      and designed to help you tackle any project with ease.
+                    </p>
                   </a>
                 </div>
               </div>
@@ -536,8 +556,10 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config }: a
 
         {/* related category  */}
         <div className="py-6">
-          <div className='mx-auto md:w-4/5 mb-4 px-4 sm:px-0'>
-            <h2 className='font-18 font-bold mb-2 uppercase'>related categories</h2>
+          <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
+            <h2 className="mb-2 font-bold uppercase font-18">
+              related categories
+            </h2>
             <Swiper
               // install Swiper modules
               spaceBetween={0}
@@ -560,51 +582,49 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config }: a
               }}
               className="mySwier"
             >
-              {category?.linkGroups[0]?.items?.map((relatedcat: any, cdx: number) => (
-                <>
-                  <SwiperSlide key={cdx}>
-                    <div className="relative group">
-                      <div className="absolute top-0 left-0 bg-transparent group-hover:bg-black/30 h-full w-full"></div>
-                      <>
-                        {relatedcat?.image != "" ?
-                          (
+              {category?.linkGroups[0]?.items?.map(
+                (relatedcat: any, cdx: number) => (
+                  <>
+                    <SwiperSlide key={cdx}>
+                      <div className="relative group">
+                        <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
+                        <>
+                          {relatedcat?.image != '' ? (
                             <Image
                               src="/default-img.svg"
-                              className="object-center object-fill w-full"
+                              className="object-fill object-center w-full"
                               alt="Image"
                               width={240}
                               height={160}
                             />
-                          ) :
-                          (
+                          ) : (
                             <Image
                               src="/default-img.svg"
-                              className="object-center object-fill w-full"
+                              className="object-fill object-center w-full"
                               alt="Image"
                               width={240}
                               height={160}
                             />
-                          )
-                        }
-                      </>
-                      <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                        <Link href={`/${relatedcat?.link}`} className="btn-primary-white font-14">
-                          <span>
-                            {relatedcat?.name}
-                          </span>
-                        </Link>
+                          )}
+                        </>
+                        <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
+                          <Link
+                            href={`/${relatedcat?.link}`}
+                            className="btn-primary-white font-14"
+                          >
+                            <span>{relatedcat?.name}</span>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  </SwiperSlide>
-                </>
-
-              ))}
+                    </SwiperSlide>
+                  </>
+                )
+              )}
             </Swiper>
           </div>
         </div>
         {/* related category  */}
         {/* related feature products start */}
-
       </section>
     </>
   )
