@@ -76,24 +76,18 @@ import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
 import Script from 'next/script'
+import ImageGallery from 'react-image-gallery';
 
-const AttributesHandler = dynamic(
-  () => import('@components/product/ProductView/AttributesHandler')
-)
+const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-const RelatedProducts = dynamic(
-  () => import('@components/product/RelatedProducts')
-)
+const RelatedProducts = dynamic(() => import('@components/product/RelatedProducts'))
 const Bundles = dynamic(() => import('@components/product/Bundles'))
 const Reviews = dynamic(() => import('@components/product/Reviews'))
 const PriceMatch = dynamic(() => import('@components/product/PriceMatch'))
 const Engraving = dynamic(() => import('@components/product/Engraving'))
-const ProductDetails = dynamic(
-  () => import('@components/product/ProductDetails')
-)
+const ProductDetails = dynamic(() => import('@components/product/ProductDetails'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const RelatedProductWithGroup = dynamic(
-  () => import('@components/product/RelatedProducts/RelatedProductWithGroup')
+const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup')
 )
 const AvailableOffers = dynamic(
   () => import('@components/product/ProductView/AvailableOffers')
@@ -692,7 +686,29 @@ export default function ProductView({
   if (!product) {
     return null
   }
+  const imagess = [
+    {
+      original: "https://picsum.photos/id/1018/1000/400/",
+      thumbnail: "https://picsum.photos/id/1018/250/150/",
+    },
+    {
+      original: "https://picsum.photos/id/1015/1000/400/",
+      thumbnail: "https://picsum.photos/id/1015/250/150/",
+    },
+    {
+      original: "https://picsum.photos/id/1026/1000/400/",
+      thumbnail: "https://picsum.photos/id/1026/250/150/",
+    },
+  ];
 
+  const images = content.map((image: any) => {
+    return (
+      {
+        original: image.image,
+        thumbnail: image.image,
+      }
+    )
+  })
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
@@ -702,6 +718,7 @@ export default function ProductView({
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
+
         <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none md:w-4/5">
           {isMobile ? (
             <Swiper
@@ -747,59 +764,35 @@ export default function ProductView({
               ))}
             </Swiper>
           ) : (
-            <Tab.Group
-              as="div"
-              className="sticky flex flex-col-reverse top-16 lg:col-span-7 min-mobile-pdp"
-              title="product images"
-            >
-              <Tab.List
-                className={
-                  content?.length > 1
-                    ? 'grid grid-cols-1 gap-10 sm:grid-cols-2'
-                    : 'grid grid-cols-1 gap-10 sm:grid-cols-1'
-                }
+            <>
+              <Tab.Group
+                as="div"
+                className="sticky flex flex-col-reverse top-16 lg:col-span-7 min-mobile-pdp"
+                title="product images"
               >
-                {content?.map((image: any, idx) => (
-                  <Tab key={`${idx}-tab`} title={selectedAttrData.name}>
-                    {() => (
-                      <>
-                        <span className="sr-only">{selectedAttrData.name}</span>
-                        <span className="relative">
-                          {image.image ? (
-                            <div className="image-container">
-                              <Image
-                                priority
-                                src={
-                                  generateUri(image.image, 'h=650&fm=webp') ||
-                                  IMG_PLACEHOLDER
-                                }
-                                alt={selectedAttrData.name}
-                                className="o`bject-cover object-center w-full h-full image"
-                                sizes="320 600 1000"
-                                width={600}
-                                height={1000}
-                                onClick={(ev: any) =>
-                                  handleImgLoadT(image.image)
-                                }
-                                quality="60"
-                                blurDataURL={
-                                  `${image.image}?h=600&w=400&fm=webp` ||
-                                  IMG_PLACEHOLDER
-                                }
-                              />
-                            </div>
-                          ) : null}
-                        </span>
-                      </>
-                    )}
-                  </Tab>
-                ))}
-              </Tab.List>
-            </Tab.Group>
+                <Tab.List
+                  className={
+                    content?.length > 1
+                      ? 'grid grid-cols-1 gap-10 sm:grid-cols-1'
+                      : 'grid grid-cols-1 gap-10 sm:grid-cols-1'
+                  }
+                >
+                  <ImageGallery
+                    items={images}
+                    thumbnailPosition="left"
+                    showPlayButton={false}
+                    showBullets={false}
+                    showNav={false}
+                    additionalClass="app-image-gallery"
+                    showFullscreenButton={true} />
+                </Tab.List>
+              </Tab.Group>
+            </>
           )}
 
           {/* Product info */}
           <div className="px-4 mt-2 sm:mt-10 sm:px-8 lg:mt-0 lg:col-span-5">
+
             <div className="flex justify-between gap-4 mb-3 sm:mb-0">
               <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}

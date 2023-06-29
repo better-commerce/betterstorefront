@@ -61,6 +61,7 @@
     "react-fast-marquee": "^1.5.2",
     "react-ga4": "^2.1.0",
     "react-gtm-module": "^2.0.11",
+    "react-image-gallery": "^1.2.12",
     "react-image-zooom": "^1.1.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-merge-refs": "^2.0.2",

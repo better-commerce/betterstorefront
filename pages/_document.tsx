@@ -28,6 +28,10 @@ export default class MyDocument extends NextDocument /*Document*/ {
             rel="stylesheet"
             href={`/theme/css/common.css`}
           />
+          <link
+            rel="stylesheet"
+            href={`/assets/css/image-gallery.css`}
+          />
           {OMNILYTICS_DISABLED ?
             null
             : <Script
