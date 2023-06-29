@@ -56,6 +56,7 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
           break
 
         case SocialMediaType.APPLE:
+          const appleSocialLoginResult = await signIn('apple')
           break
       }
     }
@@ -69,6 +70,7 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
       switch (medium) {
         case SocialMediaType.GOOGLE:
         case SocialMediaType.FACEBOOK:
+        case SocialMediaType.APPLE:
           const fullName = parseFullName(userData?.user?.name)
           data = {
             ...data,
@@ -76,9 +78,6 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
             firstName: fullName?.firstName,
             lastName: fullName?.lastName,
           }
-          break
-
-        case SocialMediaType.APPLE:
           break
       }
       const result: any = await axios.post(NEXT_SSO_AUTHENTICATE, { data })
