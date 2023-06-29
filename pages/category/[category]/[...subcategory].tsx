@@ -79,14 +79,14 @@ const generateCategories = (categories: any) => {
   const categoryMap: any = []
   const generateCategory = (category: any, categoryPrefix: any) => {
     if (category?.link) {
-        const segments = category.link.split('/');
-        if (segments.length >= 3) {
-          category?.link.includes('category/')
-            ? categoryMap.push(
-                `/${category?.link}`
-              )
-            : categoryMap.push(`/${categoryPrefix}/${category?.link}`)
-        }
+      const segments = category.link.split('/');
+      if (segments.length >= 3) {
+        category?.link.includes('category/')
+          ? categoryMap.push(
+            `/${category?.link}`
+          )
+          : categoryMap.push(`/${categoryPrefix}/${category?.link}`)
+      }
     }
     if (category?.subCategories) {
       category?.subCategories.forEach((i: any) => {
@@ -231,7 +231,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(products)
-  
+
   useEffect(() => {
     if (category?.id !== state.categoryId)
       dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
@@ -267,14 +267,14 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
-        router.push(
-          {
-            pathname: router.pathname,
-            query: { ...router.query, currentPage: page.selected + 1 },
-          },
-          undefined,
-          { shallow: true }
-        )
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, currentPage: page.selected + 1 },
+        },
+        undefined,
+        { shallow: true }
+      )
     }
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
@@ -367,7 +367,10 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         {/* Category info section start */}
         <div className='mx-auto mt-4 bg-transparent md:w-4/5 my-6 px-4 sm:px-0'>
           <h1>{category?.name}</h1>
-          <p>{category?.description}</p>
+          <div
+            className="font-18"
+            dangerouslySetInnerHTML={{ __html: category?.description }}
+          ></div>
         </div>
         {/* Category info section End */}
         {/* category banner info start */}
