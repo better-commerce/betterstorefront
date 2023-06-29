@@ -627,7 +627,9 @@ function BrandDetailPage({
       ) : (
         <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
           <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
-            <p className="flex items-end underline upper case">Back</p>
+            <Link href="/brands" passHref>
+              <span className="flex items-end upper case">Brands</span>
+            </Link>
             <div className="">
               <h1 className="inline-block text-black">{brandDetails?.name}</h1>
               <span className="inline-block ml-2 text-sm font-semibold text-black">
