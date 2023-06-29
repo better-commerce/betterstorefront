@@ -65,6 +65,7 @@ export const NEXT_GET_ORDER_DETAILS = '/api/customer/order-details'
 export const NEXT_GET_CART = `/api/get-cart`
 export const NEXT_ASSOCIATE_CART = '/api/customer/associate-cart'
 export const NEXT_MERGE_CART = '/api/merge-cart'
+export const NEXT_GET_COLLECTION_BY_ID = '/api/collection/get-collection-by-id'
 export const NEXT_GET_USER_CART = '/api/get-user-cart'
 export const NEXT_GET_ORDER_RELATED_PRODUCTS =
   '/api/catalog/get-related-products'
