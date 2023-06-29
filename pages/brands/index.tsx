@@ -63,7 +63,7 @@ function BrandsPage({ brands }: any) {
   return (
     <div className="bg-white">
       {/* Mobile menu */}
-      <main className="pb-24 mx-auto overflow-hidden max-w-7xl sm:px-6 lg:px-8">
+      <main className="container pb-24 mx-auto overflow-hidden sm:px-0 lg:px-0">
         <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-8">
           <h1 className="font-extrabold tracking-tight text-gray-900">
             Brands
@@ -79,11 +79,20 @@ function BrandsPage({ brands }: any) {
               )
               if (brandExists) {
                 return (
-                  <Link key={key} passHref href={`#${letter.toUpperCase()}`}>
-                    <span className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg">
-                      {letter.toUpperCase()}
-                    </span>
-                  </Link>
+                  <div className="flex" key={`brand-letter-${key}`}>
+                    <Link
+                      legacyBehavior
+                      passHref
+                      href={`#${letter.toUpperCase()}`}
+                    >
+                      <a
+                        href={`#${letter.toUpperCase()}`}
+                        className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg"
+                      >
+                        {letter.toUpperCase()}
+                      </a>
+                    </Link>
+                  </div>
                 )
               }
               return (
@@ -113,46 +122,34 @@ function BrandsPage({ brands }: any) {
             </div>
           </div>
         </div>
-        {normalizedBrands.map((brand: any, idx: number) => {
-          return (
-            <div
-              key={idx}
-              className="flex flex-col px-4 py-4 border-t sm:px-6 lg:px-8 sm:py-10"
+        {normalizedBrands.map((brand: any, idx: number) => (
+          <div
+            key={`brands-${idx}`}
+            className="flex flex-col px-0 py-4 border-t sm:px-2 lg:px-2 sm:py-10"
+          >
+            <h2
+              id={brand.title.toUpperCase()}
+              className="text-2xl font-extrabold text-gray-900 sm:text-4xl"
             >
-              <h2
-                id={brand.title.toUpperCase()}
-                className="text-2xl font-extrabold text-gray-900 sm:text-4xl"
-              >
-                {brand.title.toUpperCase()}
-              </h2>
-              <div className="flex flex-wrap items-center justify-between py-0 sm:py-2">
-                {brand.results.map((result: any, key: number) => {
-                  return (
-                    <div
-                      key={key}
-                      style={{ flex: '0 0 33.333333%' }}
-                      className="flex text-gray-900 sm:inline-flex "
-                    >
-                      <Link
-                        passHref
-                        href={{
-                          pathname: `/${result.link}`,
-                          query: {
-                            id: result.id,
-                          },
-                        }}
-                      >
-                        <span className="py-2 text-sm cursor-pointer sm:text-lg sm:py-5 hover:underline">
-                          {result.manufacturerName}
-                        </span>
-                      </Link>
-                    </div>
-                  )
-                })}
-              </div>
+              {brand.title.toUpperCase()}
+            </h2>
+            <div className="flex flex-wrap items-center justify-between py-0 mt-6 gap-y-4 sm:py-2">
+              {brand.results.map((brands: any, brandIdx: number) => (
+                <div
+                  key={`brand-list-${brandIdx}`}
+                  style={{ flex: '0 0 33.333333%' }}
+                  className="flex text-gray-900 sm:inline-flex"
+                >
+                  <Link passHref href={brands.link}>
+                    <span className="py-2 text-sm cursor-pointer sm:text-lg sm:py-5 hover:text-orange-500 hover:underline hover:font-medium">
+                      {brands?.manufacturerName}
+                    </span>
+                  </Link>
+                </div>
+              ))}
             </div>
-          )
-        })}
+          </div>
+        ))}
       </main>
     </div>
   )
