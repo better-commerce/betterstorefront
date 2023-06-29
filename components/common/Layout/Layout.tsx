@@ -140,14 +140,13 @@ const Layout: FC<Props & IExtraProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { showSearchBar, setShowSearchBar } = useUI()
-  const { appConfig, setAppConfig, displayAlert, includeVAT, setIncludeVAT } =
+  const { displayAlert, includeVAT, setIncludeVAT } =
     useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] =
     useState<boolean>(isIncludeVAT)
 
   useEffect(() => {
-    setAppConfig(config)
 
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))

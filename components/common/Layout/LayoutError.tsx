@@ -122,14 +122,13 @@ const LayoutError: FC<Props & IExtraProps> = ({
   const { showSearchBar, setShowSearchBar } = useUI()
   //const [data, setData] = useState(navTreeFromLocalStorage)
 
-  const { appConfig, setAppConfig, includeVAT, setIncludeVAT } = useUI()
+  const { includeVAT, setIncludeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] =
     useState<boolean>(isIncludeVAT)
 
   //check if nav data is avaialbel in LocalStorage, then dont fetch from Server/API
   useEffect(() => {
-    setAppConfig(config)
 
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))

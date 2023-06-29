@@ -589,28 +589,28 @@ export default function PLPQuickView({
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                         <div className="grid grid-cols-1 sm:grid-cols-12">
-                          <div className="sm:col-span-5">
+                          <div className="sm:col-span-7">
                             <div className="flex flex-col px-4 sm:px-6 sm:pb-3">
                               <Swiper
-                                slidesPerView={1.2}
+                                slidesPerView={1}
                                 spaceBetween={4}
                                 navigation={true}
                                 loop={false}
                                 breakpoints={{
                                   640: {
-                                    slidesPerView: 1.2,
+                                    slidesPerView: 1,
                                   },
                                   768: {
                                     slidesPerView: 1,
                                   },
                                   1024: {
-                                    slidesPerView: 1.2,
+                                    slidesPerView: 1,
                                   },
                                 }}
                               >
                                 <div
                                   role="list"
-                                  className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0"
+                                  className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-12 lg:gap-x-0"
                                 >
                                   {productData?.images?.map(
                                     (image: any, idx: number) =>
@@ -623,7 +623,7 @@ export default function PLPQuickView({
                                             key={idx}
                                             className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto"
                                           >
-                                            <div className="relative group long-image">
+                                            <div className="relative group">
                                               {image?.image ? (
                                                 <div className="image-container">
                                                   <Image
@@ -635,9 +635,9 @@ export default function PLPQuickView({
                                                       ) || IMG_PLACEHOLDER
                                                     }
                                                     alt={image.name}
-                                                    className="object-cover object-center w-full h-full image pdp-image"
+                                                    className="object-cover object-center w-full h-full image"
                                                     fill
-                                                    sizes="320 600 1000"
+                                                    // sizes="320 600 1000"
                                                     blurDataURL={
                                                       `${image?.image}?h=600&w=400&fm=webp` ||
                                                       IMG_PLACEHOLDER
@@ -656,7 +656,7 @@ export default function PLPQuickView({
                               </Swiper>
                             </div>
                           </div>
-                          <div className="sm:col-span-7">
+                          <div className="sm:col-span-5">
                             <div className="flex flex-col px-4 my-1 sm:px-6">
                               <h4 className="text-xs font-normal text-gray-400">
                                 {productData?.classification?.category}
