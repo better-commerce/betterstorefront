@@ -282,6 +282,9 @@ export module Messages {
       PASSWORD_REQUIRED_MESSAGE: 'Password is required.',
       CONFIRM_REQUIRED_MESSAGE: 'Confirm password is required.',
       MATCHING_PASSWORD_MESSAGE: 'Passwords must match.',
+      NO_EMAIL:"Please enter correct email",
+      INVALID_EMAIL: "We couldn't find an account with this email",
+      VALID_EMAIL: 'Success! Check your email for the link to change your password',
     }
   }
 
@@ -317,15 +320,6 @@ export module Messages {
     TOKEN_INVALID: 'Woops! Token is invalid',
     TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
   }
-}
-export const EMAIL_STATUSES_MAP = {
-  NO_EMAIL: 0,
-  INVALID_EMAIL: 1,
-  VALID_EMAIL: 2,
-}
-export const EMAIL_MESSAGES: any = {
-  1: "We couldn't find an account with this email",
-  2: 'Success! Check your email for the link to change your password',
 }
 
 export const ALERT_TIMER = 5000
