@@ -80,7 +80,7 @@ const accountDropDownConfigUnauthorized: any = [
     head: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="inline-block rounded h-4 w-4 google-plus-logo mr-1"
+        className="inline-block w-4 h-4 mr-1 rounded google-plus-logo"
         fill="currentColor"
         viewBox="0 0 24 24"
       >
@@ -101,7 +101,7 @@ const accountDropDownConfigUnauthorized: any = [
     head: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="inline-block rounded h-4 w-4 fb-logo mr-1"
+        className="inline-block w-4 h-4 mr-1 rounded fb-logo"
         fill="currentColor"
         viewBox="0 0 24 24"
       >
@@ -572,7 +572,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                             openState == idx
                               ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
                               : 'border-transparent text-black hover:text-black text-header-clr',
-                            'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                            'relative z-10 flex items-center sm:h-16 transition-colors ease-out uppercase hover:font-semibold duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                           )}
                         >
                           {item.caption}
@@ -608,7 +608,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                             className={classNames(
                                               openState == idx
                                                 ? ''
-                                                : 'border-gray-200 text-gray-700 hover:text-gray-800',
+                                                : 'border-gray-200 text-gray-700 hover:text-pink',
                                               'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
                                             )}
                                           >
@@ -616,7 +616,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                               href={`/${removePrecedingSlash(
                                                 navItem.itemLink
                                               )}`}
-                                              className="relative flex items-center h-full hover:text-gray-800"
+                                              className="relative flex items-center h-full hover:text-pink"
                                               title={navItem.caption}
                                             >
                                               {navItem.caption}
