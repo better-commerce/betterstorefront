@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-
+import {
+ChevronRightIcon
+} from '@heroicons/react/24/outline'
 interface Props {
   items: []
   currentProduct: any
@@ -40,6 +42,22 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
       role="list"
       className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 lg:px-0 md:px-0 px-3"
     >
+      <li className='flex items-center text-xs sm:text-sm'>
+        <Link href="/" passHref>
+          <span
+            className="font-normal hover:text-gray-900"
+          >
+            Home
+          </span>
+        </Link>
+      </li>
+      <li className='flex items-center text-xs sm:text-sm'>
+        <span
+          className="font-normal hover:text-gray-900 mx-1 inline-block"
+        >
+          <ChevronRightIcon className='h-3 w-3'></ChevronRightIcon>
+        </span>
+      </li>
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li
           key={breadcrumbIdx}
@@ -47,9 +65,8 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
         >
           <Link href={`/${breadcrumb.slug}`} passHref>
             <span
-              className={`font-normal hover:text-gray-900 ${
-                breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-black'
-              }`}
+              className={`font-normal hover:text-gray-900 ${breadcrumb.isCurrent ? 'text-black font-semibold' : 'text-black'
+                }`}
             >
               {breadcrumb.title}
             </span>

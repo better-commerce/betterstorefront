@@ -24,6 +24,10 @@ export default class MyDocument extends NextDocument /*Document*/ {
             rel="stylesheet"
             href={`/theme/${CURRENT_THEME}/css/global.css`}
           />
+          <link
+            rel="stylesheet"
+            href={`/theme/css/common.css`}
+          />
           {OMNILYTICS_DISABLED ?
             null
             : <Script

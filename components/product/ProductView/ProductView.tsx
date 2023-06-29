@@ -27,6 +27,7 @@ import {
   NEXT_UPDATE_CART_INFO,
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
+  SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -74,6 +75,7 @@ import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
+import Script from 'next/script'
 
 const AttributesHandler = dynamic(
   () => import('@components/product/ProductView/AttributesHandler')
@@ -1133,6 +1135,34 @@ export default function ProductView({
           </Transition.Root>
         ) : null}
       </div>
+      <Script
+        type="application/ld+json"
+        id="schema"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+          {
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": ${product?.name},
+            "image": ${product?.image},
+            "description": ${product?.metaDescription},
+            "sku": ${product?.stockCode},
+            "brand": {
+              "@type": "Brand",
+              "name": ${product?.brand}
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": ${SITE_ORIGIN_URL + '/' + product?.link},
+              "priceCurrency": ${product?.price?.currencySymbol},
+              "price": ${product?.price?.raw?.withTax},
+              "availability": "https://schema.org/${product?.seoAvailability}"
+            }
+          }
+        `,
+        }}
+      />
     </>
   )
 }
