@@ -74,6 +74,7 @@ export const NEXT_GET_ALT_RELATED_PRODUCTS =
 export const NEXT_SIGN_UP = `/api/signup`
 export const NEXT_VALIDATE_EMAIL = `/api/customer/validate-email`
 export const NEXT_AUTHENTICATE = `/api/login`
+export const NEXT_SSO_AUTHENTICATE = `/api/login/sso`
 export const NEXT_UPDATE_DETAILS = `/api/customer/update-details`
 export const NEXT_SUBSCRIBE = `/api/customer/subscribe`
 export const NEXT_GET_ORDERS = `/api/customer/orders`
@@ -373,3 +374,9 @@ export enum AddressPageAction {
 }
 export const NEXT_PINCODE_LOOKUP = '/api/checkout/pincode-lookup'
 export const OTP_TIMER = 45
+
+export enum SocialMediaType {
+  GOOGLE = 'google',
+  FACEBOOK = 'facebook',
+  APPLE = 'apple',
+}

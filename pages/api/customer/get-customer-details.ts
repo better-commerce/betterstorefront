@@ -1,7 +1,7 @@
 import fetcher from '@framework/fetcher'
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
 
-export default async (req: any, res: any) => {
+const GetCustomerDetailsApiMiddleware = async (req: any, res: any) => {
   try {
     const response: any = await fetcher({
       url: CUSTOMER_BASE_API + `${req.query.customerId}`,
@@ -13,3 +13,5 @@ export default async (req: any, res: any) => {
     res.status(500).json({ error })
   }
 }
+
+export default GetCustomerDetailsApiMiddleware
