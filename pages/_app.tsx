@@ -49,6 +49,7 @@ import { AppContext, AppInitialProps } from 'next/app'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
+import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -303,13 +304,15 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
             maxBasketItemsCount={maxBasketItemsCount(appConfig)}
           >
             <OverlayLoader />
-            <Component
-              {...pageProps}
-              location={location}
-              ipAddress={location.Ip}
-              config={appConfig}
-              deviceInfo={deviceInfo}
-            />
+            <SessionProvider session={pageProps?.session}>
+              <Component
+                {...pageProps}
+                location={location}
+                ipAddress={location.Ip}
+                config={appConfig}
+                deviceInfo={deviceInfo}
+              />
+            </SessionProvider>
             {/* <RedirectIntercept /> */}
           </Layout>
         </ErrorBoundary>

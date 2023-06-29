@@ -12,7 +12,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui'
 import axios from 'axios'
-import { NEXT_SET_CONFIG } from '@components/utils/constants'
+import { NEXT_SET_CONFIG, SocialMediaType } from '@components/utils/constants'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 import {
@@ -35,6 +35,8 @@ import {
   SELECT_CURRENCY,
   SELECT_LANGUAGE,
   GENERAL_ITEM_IN_CART,
+  SOCIAL_REGISTER_GOOGLE,
+  SOCIAL_REGISTER_FACEBOOK,
 } from '@components/utils/textVariables'
 import {
   getCurrentPage,
@@ -45,6 +47,7 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IExtraProps } from '../Layout/Layout'
 import ToggleSwitch from '../ToggleSwitch'
 import { getItem, setItem } from '@components/utils/localStorage'
+import { signOut } from 'next-auth/react'
 
 interface Props {
   config: []
@@ -58,12 +61,54 @@ const accountDropDownConfigUnauthorized: any = [
     title: GENERAL_LOGIN,
     className:
       'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full',
+    head: null,
+    tail: null,
   },
   {
     href: '/my-account/register',
     title: GENERAL_REGISTER,
     className:
       'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+    head: null,
+    tail: null,
+  },
+  {
+    href: `/my-account/login/social/${SocialMediaType.GOOGLE}`,
+    title: SOCIAL_REGISTER_GOOGLE,
+    className:
+      'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+    head: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="inline-block rounded h-4 w-4 google-plus-logo mr-1"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M7 11v2.4h3.97c-.16 1.029-1.2 3.02-3.97 3.02-2.39 0-4.34-1.979-4.34-4.42 0-2.44 1.95-4.42 4.34-4.42 1.36 0 2.27.58 2.79 1.08l1.9-1.83c-1.22-1.14-2.8-1.83-4.69-1.83-3.87 0-7 3.13-7 7s3.13 7 7 7c4.04 0 6.721-2.84 6.721-6.84 0-.46-.051-.81-.111-1.16h-6.61zm0 0 17 2h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z"
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+        />
+      </svg>
+    ),
+    tail: null,
+  },
+  {
+    href: `/my-account/login/social/${SocialMediaType.FACEBOOK}`,
+    title: SOCIAL_REGISTER_FACEBOOK,
+    className:
+      'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+    head: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="inline-block rounded h-4 w-4 fb-logo mr-1"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+      </svg>
+    ),
+    tail: null,
   },
 ]
 
@@ -117,10 +162,15 @@ const Navbar: FC<Props & IExtraProps> = ({
     },
     {
       href: '/',
-      onClick: () =>
+      onClick: async () => {
         deleteUser({
           router: Router,
-        }),
+        })
+
+        if (user?.socialData?.socialMediaType) {
+          await signOut()
+        }
+      },
       title: BTN_SIGN_OUT,
       className: 'text-left p-2 cursor-pointer text-red-600',
     },
