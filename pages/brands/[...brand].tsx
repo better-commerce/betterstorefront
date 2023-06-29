@@ -197,16 +197,16 @@ function BrandDetailPage({
   const [manufacturerStateTextHeading, setManufacturerStateTextHeading] =
     useState('')
   const [textNames, setTextNames] = useState([])
-  const [MaxProdToDisplayArray, setMaxProdToDispArray] = useState([])
-  const [ImgBannerCollection, setImgBannerCollection] = useState([])
-  const [ImgCategoryCollection, setImgCategoryCollection] = useState([])
-  const [ImgCollection, setImgCollection] = useState([])
-  const [OfferBanner, setOfferBanner] = useState<any>([])
+  const [recommendedProducts, setRecommendedProducts] = useState([])
+  const [imgBannerCollection, setImgBannerCollection] = useState([])
+  const [imgCategoryCollection, setImgCategoryCollection] = useState([])
+  const [imgCollection, setImgCollection] = useState([])
+  const [offerBanner, setOfferBanner] = useState<any>([])
   const [IsPrevPageLanding, setIsPrevPageLanding] = useState(true)
-  let ImageBannerCollectionResult: any = []
-  let ImageCategoryCollectionResult: any = []
-  let ImageCollectionResult: any = []
-  let OfferBannerResult: any = []
+  let imageBannerCollectionResult: any = []
+  let imageCategoryCollectionResult: any = []
+  let imageCollectionResult: any = []
+  let offerBannerResult: any = []
   const {
     data = {
       products: {
@@ -330,7 +330,7 @@ function BrandDetailPage({
     recordEvent(EVENTS.FreeText)
   })
 
-  const GetCollectionByIdFunc = async (id: any) => {
+  const getCollectionById = async (id: any) => {
     try {
       let response: any = await axios.post(NEXT_GET_COLLECTION_BY_ID, {
         recordId: id,
@@ -343,34 +343,32 @@ function BrandDetailPage({
   }
 
   const handleImageCollection = () => {
-    const Widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
-    Widgets.map(async (val: any, key: number) => {
+    const widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
+    widgets.map(async (val: any, key: number) => {
       if (
         val.manufacturerSettingType == 'ImageCollection' &&
         val.code == 'ImageBanner'
       ) {
-        ImageBannerCollectionResult = await GetCollectionByIdFunc(val.recordId)
-        setImgBannerCollection(ImageBannerCollectionResult.data.images)
+        imageBannerCollectionResult = await getCollectionById(val.recordId)
+        setImgBannerCollection(imageBannerCollectionResult.data.images)
       } else if (
         val.manufacturerSettingType == 'ImageCollection' &&
         val.code == 'MultipleImagesBanner'
       ) {
-        ImageCategoryCollectionResult = await GetCollectionByIdFunc(
-          val.recordId
-        )
-        setImgCategoryCollection(ImageCategoryCollectionResult.data.images)
+        imageCategoryCollectionResult = await getCollectionById(val.recordId)
+        setImgCategoryCollection(imageCategoryCollectionResult.data.images)
       } else if (
         val.manufacturerSettingType == 'ImageCollection' &&
         val.code == 'FeaturedDewaltImageList'
       ) {
-        ImageCollectionResult = await GetCollectionByIdFunc(val.recordId)
-        setImgCollection(ImageCollectionResult.data.images)
+        imageCollectionResult = await getCollectionById(val.recordId)
+        setImgCollection(imageCollectionResult.data.images)
       } else if (
         val.manufacturerSettingType == 'ImageCollection' &&
         val.code == 'FFXOffers'
       ) {
-        OfferBannerResult = await GetCollectionByIdFunc(val.recordId)
-        setOfferBanner(OfferBannerResult?.data?.images)
+        offerBannerResult = await getCollectionById(val.recordId)
+        setOfferBanner(offerBannerResult?.data?.images)
       }
       return
     })
@@ -417,23 +415,23 @@ function BrandDetailPage({
         val.manufacturerSettingType == 'ImageCollection' &&
         val.code == 'ImageBanner'
       ) {
-        ImageBannerCollectionResult = GetCollectionByIdFunc(val.recordId)
-        // setImageBannerCollectionResult(GetCollectionByIdFunc(val.recordId))
+        imageBannerCollectionResult = getCollectionById(val.recordId)
+        // setimageBannerCollectionResult(getCollectionById(val.recordId))
       } else if (
         val.manufacturerSettingType == 'ImageCollection' &&
         val.code == 'MultipleImagesBanner'
       ) {
-        ImageCategoryCollectionResult = GetCollectionByIdFunc(val.recordId)
+        imageCategoryCollectionResult = getCollectionById(val.recordId)
       } else if (
         val.manufacturerSettingType == 'ImageCollection' &&
         val.code == 'FeaturedDewaltImageList'
       ) {
-        ImageCollectionResult = GetCollectionByIdFunc(val.recordId)
+        imageCollectionResult = getCollectionById(val.recordId)
       } else if (
         val.manufacturingSettingType == 'ImageCollection' &&
         val.code == 'FFXOffers'
       ) {
-        OfferBannerResult = GetCollectionByIdFunc(val.recordId)
+        offerBannerResult = getCollectionById(val.recordId)
       }
       return
     })
@@ -450,7 +448,7 @@ function BrandDetailPage({
     : data.products*/
 
   useEffect(() => {
-    setMaxProdToDispArray(productDataToPass.results.slice(0, 8))
+    setRecommendedProducts(productDataToPass.results.slice(0, 8))
   }, [productDataToPass])
 
   // IMPLEMENT HANDLING FOR NULL OBJECT
@@ -491,171 +489,173 @@ function BrandDetailPage({
           key="ogdesc"
         />
       </NextHead>
-      {/* { !showLandingPageCheck && IsPrevPageLanding && <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
-        <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
-          <p className='flex items-end upper case underline' onClick={handleBackToLandingPage}>Back</p>
-          <div className=''>
-            <h1 className="text-black inline-block">
-              {brandDetails?.name}
-            </h1>
-            <span className="text-sm font-semibold text-black inline-block ml-2">
-              Showing {data?.products?.total} {RESULTS}
-            </span>
-          </div>
-          <div
-            dangerouslySetInnerHTML={{ __html: brandDetails?.description }}
-            className="mt-2 text-black sm:mt-5"
-          />
-        </div>
-        <div className="flex justify-end w-full">
-          <ProductSort
-            routerSortOption={state.sortBy}
-            products={data.products}
-            action={handleSortBy}
-          />
-        </div>
-        <ProductGrid
-          products={productDataToPass}
-          currentPage={state.currentPage}
-          handlePageChange={handlePageChange}
-          handleInfiniteScroll={handleInfiniteScroll}
-          deviceInfo={deviceInfo}
-          maxBasketItemsCount={maxBasketItemsCount(config)}
-        />
-      </div> } */}
-
-      <div className="bg-white">
-        {/* Mobile menu */}
-        <main className="w-full px-4 mx-auto md:w-4/5 lg:px-0 pb-20 sm:px-10">
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 mt-20">
-            <div className="flex flex-col items-center bg-[#FEBD18] min-h-full md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
-              <Image
-                alt="logo"
-                src={
-                  brandDetails.images.length !== 0
-                    ? brandDetails.images[0]
-                    : '/dummyLogo.svg'
-                }
-                width={212}
-                height={200}
-              ></Image>
-              <div
-                dangerouslySetInnerHTML={{ __html: brandDetails?.description }}
-                className="text-[18px] text-center leading-6 py-5"
+      {brandDetails?.showLandingPage ? (
+        <div className="bg-white">
+          {/* Mobile menu */}
+          <main className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
+            <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
+              <div className="flex flex-col items-center bg-[#FEBD18] min-h-full md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+                <Image
+                  alt="Brand Logo"
+                  src={
+                    brandDetails.images.length !== 0
+                      ? brandDetails.images[0]
+                      : '/dummyLogo.svg'
+                  }
+                  width={212}
+                  height={200}
+                />
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: brandDetails?.description,
+                  }}
+                  className="text-[18px] text-center leading-6 py-5"
+                />
+                <button className="px-6 py-3 text-white uppercase bg-black rounded-md hover:opacity-80">
+                  {SHOP_NOW}
+                </button>
+              </div>
+              <ImageCollection
+                range={2}
+                ImageArray={imgBannerCollection}
+                showTitle={true}
               />
-              <button className="bg-black uppercase hover:opacity-80 text-white py-3 px-6 rounded-md">
-                {SHOP_NOW}
-              </button>
             </div>
 
-            <ImageCollection
-              range={2}
-              ImageArray={ImgBannerCollection}
-              showTitle={true}
+            <div className="mt-10">
+              <Video
+                heading={manufacturerStateVideoHeading}
+                name={manufacturerStateVideoName}
+              />
+            </div>
+
+            <div className="mt-10">
+              <Slider images={imgCategoryCollection} />
+            </div>
+
+            <div className="mt-10">
+              <RecommendedProductCollection
+                recommendedProducts={recommendedProducts}
+                deviceInfo={deviceInfo}
+                config={config}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-5 my-10 md:grid-cols-2">
+              {offerBanner?.map((val: any, Idx: number) => {
+                return (
+                  <>
+                    <OfferCard
+                      key={Idx}
+                      title={val.title}
+                      description={val.description}
+                      src={val.url}
+                    />
+                  </>
+                )
+              })}
+            </div>
+          </main>
+
+          <div className="w-full mt-10">
+            <ImageBanner
+              manufacturerSettingTypeImgBanner={
+                manufacturerSettingTypeImgBanner
+              }
+              heading={manufacturerImgBannerHeading}
             />
+            <div className="mt-10">
+              <MultiBrandVideo
+                heading={manufacturerStateMultiBrandVidHeading || ''}
+                name={manufacturerStateMultiBrandVidNames || ''}
+              />
+            </div>
           </div>
 
-          <div className="-mt-4">
-            <Video
-              heading={manufacturerStateVideoHeading}
-              name={manufacturerStateVideoName}
+          <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
+            <div className="flex justify-between pb-10 mt-4">
+              <p className="uppercase ">
+                {FEATURES_HEADING}
+                {` `}
+                {brandDetails.name}
+              </p>
+              <p className="hidden uppercase md:block ">{BTN_SEE_ALL}</p>
+            </div>
+            <div className="mb-10">
+              <ImageCollection
+                range={4}
+                ImageArray={imgCollection}
+                showTitle={false}
+              />
+            </div>
+
+            <PlainText
+              textNames={textNames}
+              heading={manufacturerStateTextHeading}
             />
-          </div>
 
-          <div className="mt-16">
-            <Slider images={ImgCategoryCollection} />
-          </div>
-
-          <div className="mt-10">
-            <RecommendedProductCollection
-              MaxProdToDisplayArray={MaxProdToDisplayArray}
-              deviceInfo={deviceInfo}
-              config={config}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 my-10">
-            {OfferBanner?.map((val: any, Idx: number) => {
-              return (
-                <>
-                  <OfferCard
-                    key={Idx}
-                    title={val.title}
-                    description={val.description}
-                    src={val.url}
-                  />
-                </>
-              )
-            })}
-          </div>
-        </main>
-
-        <div className="w-full mt-5">
-          <ImageBanner
-            manufacturerSettingTypeImgBanner={manufacturerSettingTypeImgBanner}
-            heading={manufacturerImgBannerHeading}
-          />
-          <div className="-mt-5">
-            <MultiBrandVideo
-              heading={manufacturerStateMultiBrandVidHeading || ''}
-              name={manufacturerStateMultiBrandVidNames || ''}
-            />
-          </div>
-        </div>
-
-        <div className="w-full px-4 mx-auto md:w-4/5 lg:px-0 pb-20 sm:px-10">
-          <div className="flex justify-between pb-10 mt-4">
-            <p className="uppercase ">
-              {FEATURES_HEADING}
-              {` `}
-              {brandDetails.name}
-            </p>
-            <p className="hidden md:block uppercase ">{BTN_SEE_ALL}</p>
-          </div>
-
-          <div className="mb-10">
+            <div className="flex justify-between py-10">
+              <h5 className="uppercase">{BTN_RECOMMENDED_PROD}</h5>
+              <h5 className="hidden uppercase md:block">{BTN_SEE_ALL}</h5>
+            </div>
             <ImageCollection
               range={4}
-              ImageArray={ImgCollection}
+              ImageArray={imgCollection}
               showTitle={false}
             />
-          </div>
 
-          <PlainText
-            textNames={textNames}
-            heading={manufacturerStateTextHeading}
-          />
-
-          <div className="flex justify-between py-10">
-            <h5 className="uppercase">{BTN_RECOMMENDED_PROD}</h5>
-            <h5 className="hidden md:block uppercase">{BTN_SEE_ALL}</h5>
-          </div>
-          <ImageCollection
-            range={4}
-            ImageArray={ImgCollection}
-            showTitle={false}
-          />
-
-          <div className="mb-20">
-            <h5 className="uppercase py-10">Popular faqs</h5>
-            <Disclosure
-              heading={`Can I have my delivery sent to a different address?`}
-              details={`If you're unhappy with your purchase for any reason, email us
+            <div className="mb-20">
+              <h5 className="py-10 uppercase">Popular faqs</h5>
+              <Disclosure
+                heading={`Can I have my delivery sent to a different address?`}
+                details={`If you're unhappy with your purchase for any reason, email us
          within 90 days and we'll refund you in full, no questions asked.`}
-            />
-            <Disclosure
-              heading={`Can I request Weekend deliveries?`}
-              details={`If you're unhappy with your purchase for any reason, email us
+              />
+              <Disclosure
+                heading={`Can I request Weekend deliveries?`}
+                details={`If you're unhappy with your purchase for any reason, email us
          within 90 days and we'll refund you in full, no questions asked.`}
-            />
-            <Disclosure
-              heading={`Are your products brand new and in original packaging?`}
-              details={`If you're unhappy with your purchase for any reason, email us
+              />
+              <Disclosure
+                heading={`Are your products brand new and in original packaging?`}
+                details={`If you're unhappy with your purchase for any reason, email us
          within 90 days and we'll refund you in full, no questions asked.`}
-            />
+              />
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
+          <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
+            <p className="flex items-end underline upper case">Back</p>
+            <div className="">
+              <h1 className="inline-block text-black">{brandDetails?.name}</h1>
+              <span className="inline-block ml-2 text-sm font-semibold text-black">
+                Showing {data?.products?.total} {RESULTS}
+              </span>
+            </div>
+            <div
+              dangerouslySetInnerHTML={{ __html: brandDetails?.description }}
+              className="mt-2 text-black sm:mt-5"
+            />
+          </div>
+          <div className="flex justify-end w-full">
+            <ProductSort
+              routerSortOption={state.sortBy}
+              products={data.products}
+              action={handleSortBy}
+            />
+          </div>
+          <ProductGrid
+            products={productDataToPass}
+            currentPage={state.currentPage}
+            handlePageChange={handlePageChange}
+            handleInfiniteScroll={handleInfiniteScroll}
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount(config)}
+          />
+        </div>
+      )}
     </>
   )
 }

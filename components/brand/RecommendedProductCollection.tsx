@@ -17,7 +17,7 @@ const ProductCard = dynamic(
 )
 
 const RecommendedProductCollection = ({
-  MaxProdToDisplayArray,
+  recommendedProducts,
   deviceInfo,
   config,
 }: any) => {
@@ -27,51 +27,38 @@ const RecommendedProductCollection = ({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row justify-between">
-        <p className="font-lg font-semibold uppercase cursor-default">
+        <p className="font-semibold uppercase cursor-default font-lg">
           {BTN_RECOMMENDED_PROD}
         </p>
-        <p className="font-lg font-semibold uppercase cursor-pointer">
+        <p className="font-semibold uppercase cursor-pointer font-lg">
           {BTN_SEE_ALL}
         </p>
       </div>
       <div className="mt-4 mb-4">
         <Swiper
-          slidesPerView={4.3}
-          // navigation={false}
-
-          loop={false}
+          slidesPerView={5}
+          navigation={true}
+          loop={true}
           ref={swiperRef}
-          // navigation
           breakpoints={{
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 2,
-            },
-            640: {
-              slidesPerView: 1.1,
-            },
-            768: {
-              slidesPerView: 1.1,
-            },
-            1024: {
-              slidesPerView: 4.2,
-            },
+            320: { slidesPerView: 1, spaceBetween: 2 },
+            640: { slidesPerView: 1.1 },
+            768: { slidesPerView: 1.1 },
+            1024: { slidesPerView: 4.2 },
           }}
         >
-          {MaxProdToDisplayArray.map((val: any, productIdx: number) => {
+          {recommendedProducts.map((product: any, productIdx: number) => {
             return (
-              <>
-                <SwiperSlide
-                  className="py-0 2xl:w-[300px] w-[25vw] h-full"
-                  key={val.name}
-                >
-                  <ProductCard
-                    product={val}
-                    deviceInfo={deviceInfo}
-                    maxBasketItemsCount={maxBasketItemsCount(config)}
-                  />
-                </SwiperSlide>
-              </>
+              <SwiperSlide
+                className="py-0 2xl:w-[300px] w-[25vw] h-full"
+                key={`brand-landing-${productIdx}`}
+              >
+                <ProductCard
+                  product={product}
+                  deviceInfo={deviceInfo}
+                  maxBasketItemsCount={maxBasketItemsCount(config)}
+                />
+              </SwiperSlide>
             )
           })}
         </Swiper>
