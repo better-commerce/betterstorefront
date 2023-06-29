@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Router from 'next/router'
 import { GetServerSideProps } from 'next'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession, signIn } from 'next-auth/react'
 
 // Component Imports
 import Spinner from '@components/ui/Spinner'
@@ -52,6 +52,7 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
           break
 
         case SocialMediaType.FACEBOOK:
+          const facebookSocialLoginResult = await signIn('facebook')
           break
 
         case SocialMediaType.APPLE:
@@ -67,6 +68,7 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
 
       switch (medium) {
         case SocialMediaType.GOOGLE:
+        case SocialMediaType.FACEBOOK:
           const fullName = parseFullName(userData?.user?.name)
           data = {
             ...data,
@@ -76,14 +78,10 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
           }
           break
 
-        case SocialMediaType.FACEBOOK:
-          break
-
         case SocialMediaType.APPLE:
           break
       }
       const result: any = await axios.post(NEXT_SSO_AUTHENTICATE, { data })
-      debugger
 
       if (result.data) {
         setNoAccount(false)
@@ -110,7 +108,10 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
         } else {
           userObj.isAssociated = false
         }
-        setUser(userObj)
+        setUser({
+          ...userObj,
+          socialData: { ...data, expires: userData?.expires },
+        })
         setIsGuestUser(false)
         Router.push('/')
       } else {
