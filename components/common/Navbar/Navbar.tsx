@@ -513,8 +513,33 @@ const Navbar: FC<Props & IExtraProps> = ({
           </Transition.Child>
         </Dialog>
       </Transition.Root>
-
-      <header className="fixed top-0 right-0 w-full bg-white shadow-md bg-header-color z-999 navbar-min-64">
+      {!isMobile && !isIPadorTablet && (
+        <div className="fixed top-0 w-full h-6 bg-gray-300 z-999">
+          <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
+            <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">
+              Prices inc VAT
+            </div>
+            <div className="flow-root w-10 px-2 sm:w-12">
+              <div className="flex justify-center flex-1 mx-auto">
+                <ToggleSwitch
+                  className="include-vat"
+                  height={15}
+                  width={40}
+                  checked={vatIncluded()}
+                  checkedIcon={
+                    <div className="ml-1 include-vat-checked">Yes</div>
+                  }
+                  uncheckedIcon={
+                    <div className="mr-1 include-vat-unchecked">No</div>
+                  }
+                  onToggleChanged={onIncludeVATChanged}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <header className="fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64">
         <nav
           aria-label="Top"
           className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
@@ -710,31 +735,6 @@ const Navbar: FC<Props & IExtraProps> = ({
                 )}
               </button>
             </div>
-
-            {!isMobile && !isIPadorTablet && (
-              <>
-                <div className="flex flex-col py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap text-header-clr">
-                  INC VAT
-                </div>
-                <div className="flow-root w-10 px-2 sm:w-12">
-                  <div className="flex justify-center flex-1 mx-auto">
-                    <ToggleSwitch
-                      className="include-vat"
-                      height={15}
-                      width={40}
-                      checked={vatIncluded()}
-                      checkedIcon={
-                        <div className="ml-1 include-vat-checked">Yes</div>
-                      }
-                      uncheckedIcon={
-                        <div className="mr-1 include-vat-unchecked">No</div>
-                      }
-                      onToggleChanged={onIncludeVATChanged}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </nav>
       </header>
