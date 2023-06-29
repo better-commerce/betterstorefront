@@ -140,14 +140,12 @@ const Layout: FC<Props & IExtraProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { showSearchBar, setShowSearchBar } = useUI()
-  const { displayAlert, includeVAT, setIncludeVAT } =
-    useUI()
+  const { displayAlert, includeVAT, setIncludeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] =
     useState<boolean>(isIncludeVAT)
 
   useEffect(() => {
-
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
 
@@ -266,7 +264,7 @@ const Layout: FC<Props & IExtraProps> = ({
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount}
           />
-          <main className="pt-16 fit">
+          <main className="pt-16 sm:pt-20 fit">
             {displayAlert && <AlertRibbon />}
             {children}
           </main>

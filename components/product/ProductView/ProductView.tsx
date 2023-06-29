@@ -758,7 +758,7 @@ export default function ProductView({
             <>
               <Tab.Group
                 as="div"
-                className="sticky flex flex-col-reverse top-16 lg:col-span-7 min-mobile-pdp"
+                className="sticky flex flex-col-reverse top-24 lg:col-span-7 min-mobile-pdp"
                 title="product images"
               >
                 <Tab.List
