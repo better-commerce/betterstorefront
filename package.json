@@ -86,6 +86,7 @@
     "@types/js-cookie": "^3.0.3",
     "@types/lodash.random": "^3.2.7",
     "@types/memory-cache": "^0.2.2",
+    "@types/next-auth": "^3.15.0",
     "@types/node": "^20.1.2",
     "@types/react": "^18.2.6",
     "@types/string-format": "^2.0.0",

@@ -304,7 +304,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
             maxBasketItemsCount={maxBasketItemsCount(appConfig)}
           >
             <OverlayLoader />
-            <SessionProvider>
+            <SessionProvider session={pageProps?.session}>
               <Component
                 {...pageProps}
                 location={location}

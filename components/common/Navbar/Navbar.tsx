@@ -47,6 +47,7 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IExtraProps } from '../Layout/Layout'
 import ToggleSwitch from '../ToggleSwitch'
 import { getItem, setItem } from '@components/utils/localStorage'
+import { signOut } from 'next-auth/react'
 
 interface Props {
   config: []
@@ -161,10 +162,15 @@ const Navbar: FC<Props & IExtraProps> = ({
     },
     {
       href: '/',
-      onClick: () =>
+      onClick: async () => {
         deleteUser({
           router: Router,
-        }),
+        })
+
+        if (user?.socialData?.socialMediaType) {
+          await signOut()
+        }
+      },
       title: BTN_SIGN_OUT,
       className: 'text-left p-2 cursor-pointer text-red-600',
     },
