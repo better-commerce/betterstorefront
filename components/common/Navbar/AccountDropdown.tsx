@@ -67,8 +67,8 @@ export default function Account({ config, title, deviceInfo }: any) {
                     passHref
                     href={item.href}
                     className={`hover:text-orange-600 ${item.className}`}
-                    onClick={() => {
-                      if (item.onClick) item.onClick()
+                    onClick={(ev: any) => {
+                      if (item.onClick) item.onClick(ev)
                       close()
                     }}
                   >
