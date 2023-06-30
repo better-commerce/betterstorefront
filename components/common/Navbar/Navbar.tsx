@@ -37,6 +37,7 @@ import {
   GENERAL_ITEM_IN_CART,
   SOCIAL_REGISTER_GOOGLE,
   SOCIAL_REGISTER_FACEBOOK,
+  SOCIAL_REGISTER_APPLE,
 } from '@components/utils/textVariables'
 import {
   getCurrentPage,
@@ -107,6 +108,22 @@ const accountDropDownConfigUnauthorized: any = [
       >
         <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
       </svg>
+    ),
+    tail: null,
+  },
+  {
+    href: `/my-account/login/social/${SocialMediaType.APPLE}`,
+    title: SOCIAL_REGISTER_APPLE,
+    className:
+      'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+    head: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="inline-block w-4 h-4 mr-1 rounded apple-logo"
+        width="4"
+        height="4"
+        viewBox="0 0 496.255 608.728"
+      ><path d="M273.81 52.973C313.806.257 369.41 0 369.41 0s8.271 49.562-31.463 97.306c-42.426 50.98-90.649 42.638-90.649 42.638s-9.055-40.094 26.512-86.971zM252.385 174.662c20.576 0 58.764-28.284 108.471-28.284 85.562 0 119.222 60.883 119.222 60.883s-65.833 33.659-65.833 115.331c0 92.133 82.01 123.885 82.01 123.885s-57.328 161.357-134.762 161.357c-35.565 0-63.215-23.967-100.688-23.967-38.188 0-76.084 24.861-100.766 24.861C89.33 608.73 0 455.666 0 332.628c0-121.052 75.612-184.554 146.533-184.554 46.105 0 81.883 26.588 105.852 26.588z" /></svg>
     ),
     tail: null,
   },
@@ -440,11 +457,10 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 </div>
                                 <div className="pt-5 pr-3">
                                   <ChevronUpIcon
-                                    className={`${
-                                      !open
-                                        ? 'transition-transform duration-150 rotate-180 transform'
-                                        : 'transition-transform duration-150 rotate-0 transform'
-                                    } h-5 w-5 text-black`}
+                                    className={`${!open
+                                      ? 'transition-transform duration-150 rotate-180 transform'
+                                      : 'transition-transform duration-150 rotate-0 transform'
+                                      } h-5 w-5 text-black`}
                                   />
                                 </div>
                               </Disclosure.Button>
@@ -456,48 +472,48 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 <div className="space-y-4">
                                   {item.navBlocks.length
                                     ? item.navBlocks.map(
-                                        (navBlock: any, navIdx: number) => {
-                                          return (
-                                            <div
-                                              key={`navbar-parent-${navIdx}`}
-                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
+                                      (navBlock: any, navIdx: number) => {
+                                        return (
+                                          <div
+                                            key={`navbar-parent-${navIdx}`}
+                                            className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
+                                          >
+                                            <ul
+                                              role="list"
+                                              aria-labelledby="clothing-heading"
+                                              className="col-span-1"
                                             >
-                                              <ul
-                                                role="list"
-                                                aria-labelledby="clothing-heading"
-                                                className="col-span-1"
-                                              >
-                                                {navBlock.navItems.map(
-                                                  (navItem: any, idx: any) => (
-                                                    <Link
-                                                      legacyBehavior
-                                                      key={`${navItem.caption}-${idx}`}
-                                                      title={navItem.caption}
-                                                      href={`/${removePrecedingSlash(
-                                                        navItem.itemLink
-                                                      )}`}
-                                                      passHref
+                                              {navBlock.navItems.map(
+                                                (navItem: any, idx: any) => (
+                                                  <Link
+                                                    legacyBehavior
+                                                    key={`${navItem.caption}-${idx}`}
+                                                    title={navItem.caption}
+                                                    href={`/${removePrecedingSlash(
+                                                      navItem.itemLink
+                                                    )}`}
+                                                    passHref
+                                                  >
+                                                    <li
+                                                      onClick={() => {
+                                                        setOpen(false)
+                                                        hamburgerMenuClickLevel2(
+                                                          item.caption,
+                                                          navBlock.boxTitle
+                                                        )
+                                                      }}
+                                                      className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
                                                     >
-                                                      <li
-                                                        onClick={() => {
-                                                          setOpen(false)
-                                                          hamburgerMenuClickLevel2(
-                                                            item.caption,
-                                                            navBlock.boxTitle
-                                                          )
-                                                        }}
-                                                        className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
-                                                      >
-                                                        {navItem.caption}
-                                                      </li>
-                                                    </Link>
-                                                  )
-                                                )}
-                                              </ul>
-                                            </div>
-                                          )
-                                        }
-                                      )
+                                                      {navItem.caption}
+                                                    </li>
+                                                  </Link>
+                                                )
+                                              )}
+                                            </ul>
+                                          </div>
+                                        )
+                                      }
+                                    )
                                     : null}
                                 </div>
                               </Disclosure.Panel>
