@@ -66,7 +66,6 @@ import useTranslation, {
   SUBTOTAL_EXCLUDING_TAX,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { EmptyGuid } from '@components/utils/constants'
 import { getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { data } from 'autoprefixer'
@@ -74,6 +73,7 @@ import Engraving from '@components/product/Engraving'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
 import { IExtraProps } from '@components/common/Layout/Layout'
+import { Guid } from '@commerce/types'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   deviceInfo,
@@ -156,7 +156,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   }
   let currentPage = getCurrentPage()
   const getUserId = () => {
-    return user?.userId && user?.userId != EmptyGuid
+    return user?.userId && user?.userId != Guid.empty
       ? user?.userId
       : cartItems?.userId
   }
@@ -311,7 +311,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
     if (isBasketFetched) {
       let preferredPaymentMethod: any = undefined
       const userId = getUserId()
-      if (isGuestUser || (userId && matchStrings(userId, EmptyGuid, true))) {
+      if (isGuestUser || (userId && matchStrings(userId, Guid.empty, true))) {
         // preferredPaymentMethod = "";
       } else {
         // preferredPaymentMethod = getDefaultPaymentMethod();
@@ -569,7 +569,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                   item_var_id: product?.stockCode,
                 },
               ],
-              loggedin: user?.userId && user?.userId !== EmptyGuid,
+              loggedin: user?.userId && user?.userId !== Guid.empty,
               current_page: 'Cart',
             },
           })
@@ -613,7 +613,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
             })),
           ],
           current_page: 'Checkout',
-          loggedin_status: user?.userId && user?.userId !== EmptyGuid,
+          loggedin_status: user?.userId && user?.userId !== Guid.empty,
           paymode: '',
           address: '',
           value: cartItems?.grandTotal?.raw?.withTax,
@@ -968,9 +968,11 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                 <div className="border w-[fit-content] flex flex-row justify-between items-center py-2 px-2">
                                                   <p className="m-auto mr-1 text-sm text-gray-700">
                                                     Size:{' '}
-                                                    <span className='uppercase'>{getLineItemSizeWithoutSlug(
-                                                      product
-                                                    )}</span>
+                                                    <span className="uppercase">
+                                                      {getLineItemSizeWithoutSlug(
+                                                        product
+                                                      )}
+                                                    </span>
                                                   </p>
                                                   <ChevronDownIcon className="w-4 h-4 text-black" />
                                                 </div>

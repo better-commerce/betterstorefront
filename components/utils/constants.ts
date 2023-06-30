@@ -29,6 +29,7 @@ export const BASKET_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/comm
 export const GET_BASKET_PROMOTIONS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/basket-promotions`
 export const BASKET_VALIDATE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket/validate`
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
+export const REGISTER_CUSTOMER_TRADING_ACCOUNT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/create`
 export const AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/authenticate`
 export const CUSTOMER_BASE_API = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/`
 export const CUSTOMER_NEWSLETTER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/newsletter/subscribe`
@@ -72,6 +73,7 @@ export const NEXT_GET_ORDER_RELATED_PRODUCTS =
 export const NEXT_GET_ALT_RELATED_PRODUCTS =
   '/api/catalog/get-alternate-related-product'
 export const NEXT_SIGN_UP = `/api/signup`
+export const NEXT_SIGN_UP_TRADING_ACCOUNT = `/api/signup-trading-account`
 export const NEXT_VALIDATE_EMAIL = `/api/customer/validate-email`
 export const NEXT_AUTHENTICATE = `/api/login`
 export const NEXT_SSO_AUTHENTICATE = `/api/login/sso`
@@ -279,21 +281,23 @@ export module Messages {
       PIN_CODE_MAX_LENGTH: 'Pincode must be at max 6 characters',
       PIN_CODE_INPUT: 'Pincode should only contain numbers',
     }
-    export const ResetPassword:any = {
-      PASSWORD_VALIDATION_MESSAGE: 'Password should have a minimum of 8 characters and at least 1 uppercase letter.',
+    export const ResetPassword: any = {
+      PASSWORD_VALIDATION_MESSAGE:
+        'Password should have a minimum of 8 characters and at least 1 uppercase letter.',
       PASSWORD_REQUIRED_MESSAGE: 'Password is required.',
       CONFIRM_REQUIRED_MESSAGE: 'Confirm password is required.',
       MATCHING_PASSWORD_MESSAGE: 'Passwords must match.',
-      NO_EMAIL:"Please enter correct email",
+      NO_EMAIL: 'Please enter correct email',
       INVALID_EMAIL: "We couldn't find an account with this email",
-      VALID_EMAIL: 'Success! Check your email for the link to change your password',
+      VALID_EMAIL:
+        'Success! Check your email for the link to change your password',
     }
   }
 
   export const Messages: any = {
     RETURN_SUCCESS: 'Return success',
     EXCHANGE_SUCCESS: 'Exchange successful',
-    RESET_PASSWORD_SUCCESS: 'Success! You will be redirected to login page'
+    RESET_PASSWORD_SUCCESS: 'Success! You will be redirected to login page',
   }
 
   export const Warnings: any = {}
@@ -329,7 +333,6 @@ export const ALERT_TIMER = 5000
 export const DATE_FORMAT = 'DD-MMM-yy'
 export const DATE_TIME_FORMAT = 'DD-MMM-yy HH:mm'
 export const PRODUCTS_SLUG_PREFIX = 'products/'
-export const EmptyGuid = '00000000-0000-0000-0000-000000000000'
 export const EmptyString = ''
 export const collectionSlug = 'you-may-also-like'
 export const CLOTH_SIZE_ATTRIB_NAME = 'clothing.size'

@@ -12,13 +12,14 @@ import { useCart as getCart } from '@framework/cart'
 import { GetServerSideProps } from 'next'
 import { useUI } from '@components/ui/context'
 import { asyncHandler } from '@components/account/Address/AddressBook'
-import { EmptyGuid, NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
+import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
 import axios from 'axios'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
+import { Guid } from '@commerce/types'
 
 export interface actionInterface {
   type?: string
@@ -63,7 +64,11 @@ function Checkout({ cart, config, location }: any) {
         basketId: basketId,
         ...values,
       })
-      setGuestUser({ userId: response.data.userId, email: response.data.userEmail, ...values })
+      setGuestUser({
+        userId: response.data.userId,
+        email: response.data.userEmail,
+        ...values,
+      })
       const newCartClone = { ...response.data, isGuestCheckout: true }
       setCartItems(newCartClone)
       setIsLoggedIn(Boolean(response?.data?.userEmail))
@@ -74,12 +79,12 @@ function Checkout({ cart, config, location }: any) {
 
   const fetchAddress = async () => {
     let userId =
-      cartItems?.userId === EmptyGuid ? user?.userId : cartItems?.userId
+      cartItems?.userId === Guid.empty ? user?.userId : cartItems?.userId
     if (!userId) return
     try {
       const response: any = await getAddress(userId)
       setUserAddresses(response)
-      return response;
+      return response
     } catch (error) {
       // console.log(error, 'err')
     }
@@ -161,7 +166,7 @@ function Checkout({ cart, config, location }: any) {
       />
     )
   }
-  
+
   return (
     <CheckoutRouter
       setIsLoggedIn={setIsLoggedIn}

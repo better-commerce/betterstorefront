@@ -14,7 +14,6 @@ import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   NEXT_ADDRESS,
   AddressPageAction,
-  EmptyGuid,
 } from '@components/utils/constants'
 import {
   shippingFormConfig,
@@ -48,6 +47,7 @@ import {
 import { matchStrings } from '@framework/utils/parse-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 import NewAddressModal from './NewAddressModal'
+import { Guid } from '@commerce/types'
 
 const Spinner = () => {
   return (
@@ -350,9 +350,9 @@ export default function CheckoutForm({
               if (!createAddressResult?.id) {
                 throw new Error('Something went wrong!!')
               }
-              
+
               let updatedAddressesArr = await fetchAddress()
-              
+
               // save only selected addresses in case of 'Guest' checkout
               if (isGuestUser || guestUser?.userId) {
                 const mapSavedAddressIds = addresses
@@ -697,7 +697,7 @@ export default function CheckoutForm({
       user,
       basketId,
       customerId:
-        cartItems.userId != EmptyGuid ? cartItems.userId : user?.userId,
+        cartItems.userId != Guid.empty ? cartItems.userId : user?.userId,
       basket: cartItems,
       billingAddress: {
         ...billingInfoClone,
