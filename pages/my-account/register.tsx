@@ -70,7 +70,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
         />
       </div>
 
-      <SocialSignInLinks />
+      <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto sm:w-1/2" />
     </div>
   )
 }
