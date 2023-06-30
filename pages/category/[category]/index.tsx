@@ -237,7 +237,7 @@ function CategoryLandingPage({
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-        productListMemory?.products?.currentPage ||
+      productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -367,9 +367,12 @@ function CategoryLandingPage({
         {category?.isFeatured != false ? (
           <div className="w-full">
             <div className="py-4">
-              <div className="container px-4 mx-auto mb-4 sm:px-0">
-                <h2 className="font-bold font-18">Popular categories</h2>
-              </div>
+              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length && (
+                <div className="container px-4 mx-auto mb-4 sm:px-0">
+                  <h2 className="font-bold font-18">Popular categories</h2>
+                </div>
+              )
+              }
               <Swiper
                 // install Swiper modules
                 spaceBetween={0}
@@ -676,9 +679,12 @@ function CategoryLandingPage({
               </div>
               {/* category banner info End */}
               <div className="py-4">
-                <h2 className="container mx-auto mb-4 font-bold font-18">
-                  Popular categories
-                </h2>
+                {category?.subCategories?.filter((x: any) => x.isFeatured == true).length && (
+                  <h2 className="container mx-auto mb-4 font-bold font-18">
+                    Popular categories
+                  </h2>
+                )
+                }
                 <Swiper
                   spaceBetween={0}
                   slidesPerView={1}
@@ -701,40 +707,42 @@ function CategoryLandingPage({
                   className="mySwier"
                 >
                   {category?.subCategories?.map(
-                    (featurecat: any, cdx: number) => (
+                    (featurecat: any, ckdx: number) => (
                       <>
-                        <SwiperSlide key={cdx}>
-                          <div className="relative group">
-                            <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                            <>
-                              {featurecat?.image != '' ? (
-                                <Image
-                                  src={featurecat?.image}
-                                  className="object-fill object-center w-full"
-                                  alt="Image"
-                                  width={240}
-                                  height={160}
-                                />
-                              ) : (
-                                <Image
-                                  src="/default-img.svg"
-                                  className="object-fill object-center w-full"
-                                  alt="Image"
-                                  width={240}
-                                  height={160}
-                                />
-                              )}
-                            </>
-                            <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                              <Link
-                                href={`/${featurecat?.link}`}
-                                className="btn-primary-white font-14"
-                              >
-                                <span>{featurecat?.name}</span>
-                              </Link>
+                        {featurecat?.isFeatured == true && (
+                          <SwiperSlide key={ckdx}>
+                            <div className="relative group">
+                              <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
+                              <>
+                                {featurecat?.image != '' ? (
+                                  <Image
+                                    src={featurecat?.image}
+                                    className="object-fill object-center w-full"
+                                    alt="Image"
+                                    width={240}
+                                    height={160}
+                                  />
+                                ) : (
+                                  <Image
+                                    src="/default-img.svg"
+                                    className="object-fill object-center w-full"
+                                    alt="Image"
+                                    width={240}
+                                    height={160}
+                                  />
+                                )}
+                              </>
+                              <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
+                                <Link
+                                  href={`/${featurecat?.link}`}
+                                  className="btn-primary-white font-14"
+                                >
+                                  <span>{featurecat?.name}</span>
+                                </Link>
+                              </div>
                             </div>
-                          </div>
-                        </SwiperSlide>
+                          </SwiperSlide>
+                        )}
                       </>
                     )
                   )}
