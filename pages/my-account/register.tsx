@@ -6,6 +6,8 @@ import {
   NEXT_SIGN_UP,
   NEXT_VALIDATE_EMAIL,
   NEXT_ASSOCIATE_CART,
+  NEXT_SIGN_UP_TRADING_ACCOUNT,
+  Messages,
 } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
@@ -28,6 +30,7 @@ import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
 import commerce from '@lib/api/commerce'
 import { decrypt, encrypt } from '@framework/utils/cipher'
+import { Guid } from '@commerce/types'
 
 const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   const [error, setError] = useState(apiError)
@@ -124,21 +127,73 @@ function RegisterPage({ recordEvent, setEntities, appConfig }: any) {
   }
 
   const handleUserRegister = async (values: any) => {
-    const response: any = await axios.post(NEXT_SIGN_UP, {
-      data: { ...values, email: userEmail },
-    })
-    eventDispatcher(CustomerCreated, {
-      entity: JSON.stringify({
-        id: response.data.recordId,
-        name: values.firstName + values.lastName,
-        email: values.email,
-      }),
-      eventType: CustomerCreated,
-    })
-    await handleBasketAssociation(response.data.recordId)
-    setSuccessMessage('Success!')
-    setIsGuestUser(false)
-    Router.push('/my-account/login')
+    let userCreated = false
+    let recordId = Guid.empty
+    const reqData = {
+      ...values,
+      email: userEmail,
+      title: values?.title ?? '',
+      gender: values?.gender ?? '',
+      firstName: values?.firstName ?? '',
+      lastName: values?.lastName ?? '',
+      address1: values?.address1 ?? '',
+      address2: values?.address2 ?? '',
+      address3: values?.address3 ?? '',
+      city: values?.city ?? '',
+      state: values?.state ?? '',
+      country: values?.country ?? '',
+      countryCode: values?.countryCode ?? '',
+      postCode: values?.postCode ?? '',
+      companyName: values?.companyName ?? '',
+    }
+
+    // Register trading account, if opted for.
+    if (values.isRequestTradingAccount) {
+      const tradingAccountResponse: any = await axios.post(
+        NEXT_SIGN_UP_TRADING_ACCOUNT,
+        {
+          data: reqData,
+        }
+      )
+
+      userCreated =
+        tradingAccountResponse &&
+        tradingAccountResponse.data?.recordId &&
+        tradingAccountResponse.data?.recordId != Guid.empty
+          ? true
+          : false
+      recordId = tradingAccountResponse.data?.recordId
+    } else {
+      // Otherwise, consider it as user registration.
+
+      const response: any = await axios.post(NEXT_SIGN_UP, {
+        data: { ...values, email: userEmail },
+      })
+
+      userCreated = (response && response.data?.id) ?? false
+      recordId = response.data?.recordId
+    }
+
+    // Trigger error message for failed registration.
+    if (!userCreated) {
+      setError(Messages.Errors['GENERIC_ERROR'])
+    }
+
+    // If registration is SUCCESS
+    if (userCreated) {
+      eventDispatcher(CustomerCreated, {
+        entity: JSON.stringify({
+          id: recordId,
+          name: values.firstName + values.lastName,
+          email: values.email,
+        }),
+        eventType: CustomerCreated,
+      })
+      await handleBasketAssociation(recordId)
+      setSuccessMessage('Success!')
+      setIsGuestUser(false)
+      Router.push('/my-account/login')
+    }
   }
 
   const handleEmailSubmit = async (email: string) => {

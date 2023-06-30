@@ -5,7 +5,6 @@ import {
   NEXT_GET_USER_CART,
   NEXT_ASSOCIATE_CART,
   NEXT_MERGE_CART,
-  EmptyGuid,
 } from '@components/utils/constants'
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -159,7 +158,7 @@ export default function cartHandler() {
       return response
     },
     getCartByUser: async ({ userId, basketId }: any) => {
-      if (userId && userId !== EmptyGuid) {
+      if (userId && userId !== Guid.empty) {
         try {
           const { data: userCart }: any = await axios.get(NEXT_GET_USER_CART, {
             params: {
