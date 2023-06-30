@@ -18,10 +18,10 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.FACEBOOK_APP_SECRET!,
     }),
 
-    /*AppleProvider({
+    AppleProvider({
       clientId: process.env.APPLE_CLIENT_ID!,
       clientSecret: process.env.APPLE_CLIENT_SECRET!,
-    })*/
+    }),
   ],
   session: {
     strategy: 'jwt',
