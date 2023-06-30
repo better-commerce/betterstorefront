@@ -23,6 +23,7 @@ import {
   VALIDATION_ENTER_A_VALID_EMAIL,
   VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
 } from '@components/utils/textVariables'
+import SocialSignInLinks from '@components/account/SocialSignInLinks'
 
 const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   const [error, setError] = useState(apiError)
@@ -68,6 +69,8 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
           title={'Submit'}
         />
       </div>
+
+      <SocialSignInLinks />
     </div>
   )
 }
