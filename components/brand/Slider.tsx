@@ -21,25 +21,19 @@ const Slider = ({ images }: data) => {
 
   const handlePrevClick = () => {
     setCurrentImageIndex((index) =>
-      index === 0 ? images.length - 1 : index - 1
+      index === 0 ? images?.length - 1 : index - 1
     )
   }
 
   const handleNextClick = () => {
     setCurrentImageIndex((index) =>
-      index === images.length - 1 ? 0 : index + 1
+      index === images?.length - 1 ? 0 : index + 1
     )
   }
 
   return (
     <div className="relative w-full">
       <div className="flex justify-center">
-        {/* <Image
-          height={1280}
-          width={1280}
-          src={images[currentImageIndex]}
-          alt={`Slide ${currentImageIndex}`}
-        /> */}
         <Swiper
           slidesPerView={4.3}
           // navigation={false}
@@ -85,47 +79,51 @@ const Slider = ({ images }: data) => {
           })}
         </Swiper>
 
-        <div
-          className="absolute right-24 top-12 z-999 bg-white  text-gray-400 cursor-pointer border-2  border-gray-400 rounded-sm p-1 hover:text-gray-700 /hover:border-gray-700"
-          onClick={handlePrevClick}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-12 h-10 rounded-md"
+        {images?.length > 0 && (
+          <div
+            className="absolute right-20 top-10 z-99 /bg-white text-gray-300 cursor-pointer border-2  border-gray-300 rounded-sm p-1 hover:text-gray-500 hover:border-gray-500"
+            onClick={handlePrevClick}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-            />
-          </svg>
-        </div>
-        <div
-          className="absolute right-10 top-12 z-999 bg-white text-gray-400 cursor-pointer border-2 border-gray-400 rounded-sm p-1 hover:text-gray-700 /hover:border-gray-700"
-          onClick={handleNextClick}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-12 h-10 rounded-md"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-7 h-7 rounded-md"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+              />
+            </svg>
+          </div>
+        )}
+        {images?.length > 0 && (
+          <div
+            className="absolute right-10 top-10 z-99 text-gray-300 cursor-pointer border-2 border-gray-300 rounded-sm p-1 hover:text-gray-500 hover:border-gray-500"
+            onClick={handleNextClick}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-            />
-          </svg>
-        </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-7 h-7 rounded-md"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              />
+            </svg>
+          </div>
+        )}
       </div>
       <div className="slider-active-bar">
-        {images.map((_, index) => (
+        {images?.map((_, index) => (
           <div
             key={index}
             className={`slider-active-bar-dot ${

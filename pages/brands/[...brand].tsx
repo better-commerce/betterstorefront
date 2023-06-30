@@ -125,9 +125,15 @@ function BrandDetailPage({
   slug,
   deviceInfo,
   config,
+  obj, // ...for Image Collection api response
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  let imageBannerCollectionResponse: any = obj.imageBannerCollectionResponse
+  let imageCategoryCollectionResponse: any = obj.imageCategoryCollectionResponse
+  let imageCollectionResponse: any = obj.imageCollectionResponse
+  let offerBannerResult: any = obj.offerBannerResult
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -189,24 +195,12 @@ function BrandDetailPage({
     manufacturerStateMultiBrandVidNames,
     setManufacturerStateMultiBrandVidNames,
   ] = useState('')
-  const [
-    manufacturerStateMultiBrandVidHeading,
-    setManufacturerStateMultiBrandVidHeading,
-  ] = useState('')
+  const [multiBrandVidHeading, setMultiBrandVidHeading] = useState('')
   const [manufacturerStateTextName, setManufacturerStateTextName] = useState('')
   const [manufacturerStateTextHeading, setManufacturerStateTextHeading] =
     useState('')
   const [textNames, setTextNames] = useState([])
   const [recommendedProducts, setRecommendedProducts] = useState([])
-  const [imgBannerCollection, setImgBannerCollection] = useState([])
-  const [imgCategoryCollection, setImgCategoryCollection] = useState([])
-  const [imgCollection, setImgCollection] = useState([])
-  const [offerBanner, setOfferBanner] = useState<any>([])
-  const [IsPrevPageLanding, setIsPrevPageLanding] = useState(true)
-  let imageBannerCollectionResult: any = []
-  let imageCategoryCollectionResult: any = []
-  let imageCollectionResult: any = []
-  let offerBannerResult: any = []
   const {
     data = {
       products: {
@@ -330,59 +324,6 @@ function BrandDetailPage({
     recordEvent(EVENTS.FreeText)
   })
 
-  const getCollectionById = async (id: any) => {
-    try {
-      let response: any = await axios.post(NEXT_GET_COLLECTION_BY_ID, {
-        recordId: id,
-      })
-      let res = await response
-      return res
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const handleImageCollection = () => {
-    const widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
-    widgets.map(async (val: any, key: number) => {
-      if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'ImageBanner'
-      ) {
-        imageBannerCollectionResult = await getCollectionById(val.recordId)
-        setImgBannerCollection(imageBannerCollectionResult.data.images)
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'MultipleImagesBanner'
-      ) {
-        imageCategoryCollectionResult = await getCollectionById(val.recordId)
-        setImgCategoryCollection(imageCategoryCollectionResult.data.images)
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'FeaturedDewaltImageList'
-      ) {
-        imageCollectionResult = await getCollectionById(val.recordId)
-        setImgCollection(imageCollectionResult.data.images)
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'FFXOffers'
-      ) {
-        offerBannerResult = await getCollectionById(val.recordId)
-        setOfferBanner(offerBannerResult?.data?.images)
-      }
-      return
-    })
-  }
-
-  // function handleShopNow(){
-  //   setShowLandingPageCheck(false);
-  // }
-
-  // function handleBackToLandingPage(){
-  //   setIsPrevPageLanding(false);
-  //   setShowLandingPageCheck(true);
-  // }
-
   useEffect(() => {
     const Widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
     Widgets.map((val: any) => {
@@ -400,7 +341,7 @@ function BrandDetailPage({
         val.code === 'MultipleBrandVideos'
       ) {
         setManufacturerStateMultiBrandVidNames(val.name)
-        setManufacturerStateMultiBrandVidHeading(val.heading)
+        setMultiBrandVidHeading(val.heading)
       } else if (
         val.manufacturerSettingType == 'PlainText' &&
         val.code == 'BrandInnovations'
@@ -411,35 +352,9 @@ function BrandDetailPage({
           const TextNames = val.name.split('  ')
           setTextNames(TextNames)
         }
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'ImageBanner'
-      ) {
-        imageBannerCollectionResult = getCollectionById(val.recordId)
-        // setimageBannerCollectionResult(getCollectionById(val.recordId))
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'MultipleImagesBanner'
-      ) {
-        imageCategoryCollectionResult = getCollectionById(val.recordId)
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'FeaturedDewaltImageList'
-      ) {
-        imageCollectionResult = getCollectionById(val.recordId)
-      } else if (
-        val.manufacturingSettingType == 'ImageCollection' &&
-        val.code == 'FFXOffers'
-      ) {
-        offerBannerResult = getCollectionById(val.recordId)
       }
       return
     })
-    handleImageCollection() // call to handle all the Image collection
-    // if (brandDetails?.showLandingPage) {
-    //   setShowLandingPageCheck(true)
-    //   setIsPrevPageLanding(true)
-    // }
   }, [])
 
   const productDataToPass = productListMemory.products
@@ -516,7 +431,7 @@ function BrandDetailPage({
               </div>
               <ImageCollection
                 range={2}
-                ImageArray={imgBannerCollection}
+                ImageArray={imageBannerCollectionResponse?.images || []}
                 showTitle={true}
               />
             </div>
@@ -529,7 +444,7 @@ function BrandDetailPage({
             </div>
 
             <div className="mt-10">
-              <Slider images={imgCategoryCollection} />
+              <Slider images={imageCategoryCollectionResponse || []} />
             </div>
 
             <div className="mt-10">
@@ -541,7 +456,7 @@ function BrandDetailPage({
             </div>
 
             <div className="grid grid-cols-1 gap-5 my-10 md:grid-cols-2">
-              {offerBanner?.map((val: any, Idx: number) => (
+              {offerBannerResult?.map((val: any, Idx: number) => (
                 <OfferCard
                   key={Idx}
                   title={val.title}
@@ -561,7 +476,7 @@ function BrandDetailPage({
             />
             <div className="mt-10">
               <MultiBrandVideo
-                heading={manufacturerStateMultiBrandVidHeading || ''}
+                heading={multiBrandVidHeading || ''}
                 name={manufacturerStateMultiBrandVidNames || ''}
               />
             </div>
@@ -579,7 +494,7 @@ function BrandDetailPage({
             <div className="mb-10">
               <ImageCollection
                 range={4}
-                ImageArray={imgCollection}
+                ImageArray={imageCollectionResponse?.images || []}
                 showTitle={false}
               />
             </div>
@@ -594,7 +509,7 @@ function BrandDetailPage({
             </div>
             <ImageCollection
               range={4}
-              ImageArray={imgCollection}
+              ImageArray={imageCollectionResponse?.images || []}
               showTitle={false}
             />
 
@@ -658,6 +573,43 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const response = await getBrandBySlug(slug, context.req.cookies)
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
+
+  const obj: any = {
+    imageBannerCollectionResponse: [],
+    imageCategoryCollectionResponse: [],
+    imageCollectionResponse: [],
+    offerBannerResult: [],
+  }
+
+  const widgets = JSON.parse(response?.result?.widgetsConfig || '[]')
+  for (var i = 0; i < widgets.length; i++) {
+    if (
+      widgets[i].manufacturerSettingType == 'ImageCollection' &&
+      widgets[i].code == 'ImageBanner'
+    ) {
+      obj.imageBannerCollectionResponse = await getCollectionById(
+        widgets[i].recordId
+      )
+    } else if (
+      widgets[i].manufacturerSettingType == 'ImageCollection' &&
+      widgets[i].code == 'MultipleImagesBanner'
+    ) {
+      const res = await getCollectionById(widgets[i].recordId)
+      obj.imageCategoryCollectionResponse = res?.images
+    } else if (
+      widgets[i].manufacturerSettingType == 'ImageCollection' &&
+      widgets[i].code == 'FeaturedDewaltImageList'
+    ) {
+      obj.imageCollectionResponse = await getCollectionById(widgets[i].recordId)
+    } else if (
+      widgets[i].manufacturerSettingType == 'ImageCollection' &&
+      widgets[i].code == 'FFXOffers'
+    ) {
+      const res = await getCollectionById(widgets[i].recordId)
+      obj.offerBannerResult = res.images
+    }
+  }
+
   return {
     props: {
       query: context.query,
@@ -666,6 +618,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
+      obj: obj ?? [],
     }, // will be passed to the page component as props
   }
 }
