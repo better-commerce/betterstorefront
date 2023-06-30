@@ -16,7 +16,6 @@ import { Layout } from '@components/common'
 import { matchStrings } from '@framework/utils/parse-util'
 import {
   NEXT_RETURN_REASON,
-  EmptyGuid,
   NEXT_GET_ORDER_DETAILS,
   NEXT_RETURN_ORDER_LINE,
   Messages,
@@ -24,10 +23,11 @@ import {
 import { sanitizeBase64, vatIncluded } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
+import { Guid } from '@commerce/types'
 
 export default function ReturnOrder({
-  orderId = EmptyGuid,
-  itemId = EmptyGuid,
+  orderId = Guid.empty,
+  itemId = Guid.empty,
   deviceInfo,
 }: any) {
   const { setAlert, user } = useUI()
@@ -333,8 +333,8 @@ export async function getServerSideProps(context: any) {
   const ids = context?.query?.ids
   return {
     props: {
-      orderId: ids?.length > 0 ? ids[0] : EmptyGuid,
-      itemId: ids?.length > 1 ? ids[1] : EmptyGuid,
+      orderId: ids?.length > 0 ? ids[0] : Guid.empty,
+      itemId: ids?.length > 1 ? ids[1] : Guid.empty,
     }, // will be passed to the page component as props
   }
 }

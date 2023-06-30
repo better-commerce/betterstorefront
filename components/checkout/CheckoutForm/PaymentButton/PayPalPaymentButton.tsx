@@ -18,7 +18,6 @@ import { IPaymentButtonProps } from './BasePaymentButton'
 // Other Imports
 import {
   BETTERCOMMERCE_DEFAULT_CURRENCY,
-  EmptyGuid,
   EmptyString,
   Messages,
 } from '@components/utils/constants'

@@ -18,7 +18,6 @@ import { useUI } from '@components/ui'
 import { matchStrings } from '@framework/utils/parse-util'
 import {
   NEXT_CANCEL_REASON,
-  EmptyGuid,
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER_LINE,
 } from '@components/utils/constants'
@@ -30,12 +29,13 @@ import {
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
+import { Guid } from '@commerce/types'
 
 declare const window: any
 
 export default function OrderCancel({
-  orderId = EmptyGuid,
-  itemId = EmptyGuid,
+  orderId = Guid.empty,
+  itemId = Guid.empty,
   deviceInfo,
 }: any) {
   const { user, setAlert } = useUI()
@@ -317,8 +317,8 @@ export async function getServerSideProps(context: any) {
   const ids = context?.query?.ids
   return {
     props: {
-      orderId: ids?.length > 0 ? ids[0] : EmptyGuid,
-      itemId: ids?.length > 1 ? ids[1] : EmptyGuid,
+      orderId: ids?.length > 0 ? ids[0] : Guid.empty,
+      itemId: ids?.length > 1 ? ids[1] : Guid.empty,
     }, // will be passed to the page component as props
   }
 }
