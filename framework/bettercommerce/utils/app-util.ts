@@ -7,7 +7,6 @@ import { decrypt, encrypt } from './cipher'
 import fetcher from '@framework/fetcher'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import {
-  EmptyGuid,
   EmptyString,
   INFRA_LOG_ENDPOINT,
   PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
@@ -19,9 +18,10 @@ import { LocalStorage } from '@components/utils/payment-constants'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { DataSubmit } from '@commerce/utils/use-data-submit'
 import axios from 'axios'
+import { Guid } from '@commerce/types'
 
 export const isCartAssociated = (cartItems: any) => {
-  if (cartItems?.userId && cartItems?.userId !== EmptyGuid) {
+  if (cartItems?.userId && cartItems?.userId !== Guid.empty) {
     return true
   }
   return false

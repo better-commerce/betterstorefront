@@ -5,7 +5,7 @@ type data = {
   details: string
   heading: string
 }
-export default function ({ details, heading }: data) {
+const BrandDisclosure = ({ details, heading }: data) => {
   return (
     <div className="w-full">
       <div className="mx-auto w-full bg-white py-2">
@@ -28,3 +28,5 @@ export default function ({ details, heading }: data) {
     </div>
   )
 }
+
+export default BrandDisclosure
