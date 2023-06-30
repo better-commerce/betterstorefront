@@ -24,6 +24,10 @@ import {
   VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
 } from '@components/utils/textVariables'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
+import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
+import { GetServerSideProps } from 'next'
+import commerce from '@lib/api/commerce'
+import { decrypt, encrypt } from '@framework/utils/cipher'
 
 const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   const [error, setError] = useState(apiError)
@@ -74,7 +78,12 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
     </div>
   )
 }
-function RegisterPage({ recordEvent, setEntities }: any) {
+
+function RegisterPage({ recordEvent, setEntities, appConfig }: any) {
+  if (appConfig) {
+    appConfig = tryParseJson(decrypt(appConfig))
+  }
+  let b2bSettings = []
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
   const [userEmail, setUserEmail] = useState('')
@@ -83,6 +92,13 @@ function RegisterPage({ recordEvent, setEntities }: any) {
   const [successMessage, setSuccessMessage] = useState('')
   const { addToCart, associateCart } = cartHandler()
   const { CustomerCreated, PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  if (appConfig?.configSettings?.length) {
+    b2bSettings =
+      appConfig?.configSettings?.find((x: any) =>
+        matchStrings(x?.configType, 'B2BSettings', true)
+      )?.configKeys || []
+  }
 
   useAnalytics(PageViewed, {
     eventType: PageViewed,
@@ -157,7 +173,12 @@ function RegisterPage({ recordEvent, setEntities }: any) {
                 apiError={error}
               />
             ) : (
-              <Form type="register" onSubmit={handleUserRegister} />
+              <Form
+                type="register"
+                b2bSettings={b2bSettings}
+                email={userEmail}
+                onSubmit={handleUserRegister}
+              />
             )}
           </>
         )}
@@ -173,3 +194,14 @@ RegisterPage.Layout = Layout
 
 const PAGE_TYPE = PAGE_TYPES.Page
 export default withDataLayer(RegisterPage, PAGE_TYPE)
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const infraPromise = commerce.getInfra()
+  const infra = await infraPromise
+
+  return {
+    props: {
+      appConfig: encrypt(JSON.stringify(infra)),
+    }, // will be passed to the page component as props
+  }
+}
