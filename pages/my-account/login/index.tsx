@@ -22,8 +22,9 @@ import {
 import Link from 'next/link'
 import LoginOtp from '../../../components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
+import { GetServerSideProps } from 'next'
 
-function LoginPage({ recordEvent, setEntities }: any) {
+function LoginPage({ recordEvent, setEntities, config }: any) {
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -135,3 +136,9 @@ LoginPage.Layout = Layout
 
 const PAGE_TYPE = PAGE_TYPES.Page
 export default withDataLayer(LoginPage, PAGE_TYPE)
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}

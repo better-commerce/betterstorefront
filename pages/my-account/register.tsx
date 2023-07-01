@@ -82,10 +82,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   )
 }
 
-function RegisterPage({ recordEvent, setEntities, appConfig }: any) {
-  if (appConfig) {
-    appConfig = tryParseJson(decrypt(appConfig))
-  }
+function RegisterPage({ recordEvent, setEntities, config }: any) {
   let b2bSettings = []
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
@@ -96,9 +93,9 @@ function RegisterPage({ recordEvent, setEntities, appConfig }: any) {
   const { addToCart, associateCart } = cartHandler()
   const { CustomerCreated, PageViewed } = EVENTS_MAP.EVENT_TYPES
 
-  if (appConfig?.configSettings?.length) {
+  if (config?.configSettings?.length) {
     b2bSettings =
-      appConfig?.configSettings?.find((x: any) =>
+      config?.configSettings?.find((x: any) =>
         matchStrings(x?.configType, 'B2BSettings', true)
       )?.configKeys || []
   }
@@ -251,12 +248,7 @@ const PAGE_TYPE = PAGE_TYPES.Page
 export default withDataLayer(RegisterPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
-
   return {
-    props: {
-      appConfig: encrypt(JSON.stringify(infra)),
-    }, // will be passed to the page component as props
+    props: {}, // will be passed to the page component as props
   }
 }
