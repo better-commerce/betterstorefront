@@ -58,10 +58,7 @@ interface Props {
 
 const accountDropDownConfigUnauthorized: any = [
   {
-    href: '#',
-    onClick: (ev: any) => {
-      window.location.href = '/my-account/login'
-    },
+    href: '/my-account/login',
     title: GENERAL_LOGIN,
     className:
       'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full',
@@ -69,10 +66,7 @@ const accountDropDownConfigUnauthorized: any = [
     tail: null,
   },
   {
-    href: '#',
-    onClick: (ev: any) => {
-      window.location.href = '/my-account/register'
-    },
+    href: '/my-account/register',
     title: GENERAL_REGISTER,
     className:
       'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
