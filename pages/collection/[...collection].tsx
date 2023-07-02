@@ -177,7 +177,7 @@ export default function CollectionPage(props: any) {
       currentPage: 1, // current page
       filters: [],
       collectionId: props?.id,
-      sortBy:null,
+      sortBy: null,
     },
   })
 
@@ -423,7 +423,7 @@ export default function CollectionPage(props: any) {
                       const imgUrl =
                         (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
                       return (
-                        <div key={idx}>
+                        <div key={`property-images-${idx}`}>
                           <div className="relative w-full h-auto px-0 collection-multi-vimage">
                             <Link
                               legacyBehavior
@@ -483,7 +483,10 @@ export default function CollectionPage(props: any) {
                     const imgUrl =
                       (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
                     return (
-                      <div className="w-full h-auto px-0" key={idx}>
+                      <div
+                        className="w-full h-auto px-0"
+                        key={`banner-image-${idx}`}
+                      >
                         <Link legacyBehavior href={img?.link || '#'}>
                           <a>
                             <Image src={imgUrl} alt="banner" />
@@ -505,7 +508,7 @@ export default function CollectionPage(props: any) {
               className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0"
             >
               {props?.images?.map((img: any, idx: number) => (
-                <SwiperSlide key={idx}>
+                <SwiperSlide key={`horizontal-slider-${idx}`}>
                   <Link href={img.link || '#'}>
                     <Image
                       style={css}
@@ -534,16 +537,6 @@ export default function CollectionPage(props: any) {
           </span>
           <h2>{props?.description}</h2>
         </div>
-
-        {/*TODO: For browser caching of product images*/}
-        {/*{productDataToPass?.results?.length > 0 && (
-          <CacheProductImages
-            data={productDataToPass?.results
-              ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
-              .flat(1)}
-            setIsLoading={setIsLoading}
-          />
-        )}*/}
 
         {productDataToPass?.results?.length > 0 && (
           <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">

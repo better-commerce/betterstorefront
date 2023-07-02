@@ -27,6 +27,7 @@ import {
   NEXT_UPDATE_CART_INFO,
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
+  SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -65,11 +66,17 @@ import { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { getCurrentPage, validateAddToCart } from '@framework/utils/app-util'
+import {
+  getCurrentPage,
+  validateAddToCart,
+  vatIncluded,
+} from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
+import Script from 'next/script'
+import ImageGallery from 'react-image-gallery'
 
 const AttributesHandler = dynamic(
   () => import('@components/product/ProductView/AttributesHandler')
@@ -138,6 +145,7 @@ export default function ProductView({
     user,
     openCart,
   } = useUI()
+  const isIncludeVAT = vatIncluded()
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
@@ -302,12 +310,12 @@ export default function ProductView({
         const item = await cartHandler().addToCart(
           {
             basketId: basketId,
-            productId: selectedAttrData.productId,
+            productId: selectedAttrData?.productId,
             qty: 1,
             manualUnitPrice: product?.price?.raw?.withTax,
             stockCode: selectedAttrData?.stockCode,
-            userId: user.userId,
-            isAssociated: user.isAssociated,
+            userId: user?.userId,
+            isAssociated: user?.isAssociated,
           },
           'ADD',
           { product: selectedAttrData }
@@ -430,8 +438,8 @@ export default function ProductView({
                 qty: 1,
                 manualUnitPrice: product?.price?.raw?.withTax,
                 stockCode: selectedAttrData?.stockCode,
-                userId: user.userId,
-                isAssociated: user.isAssociated,
+                userId: user?.userId,
+                isAssociated: user?.isAssociated,
               },
               'ADD',
               { product: selectedAttrData }
@@ -509,12 +517,12 @@ export default function ProductView({
     const updatedProduct = {
       ...product,
       ...{
-        recordId: selectedAttrData.productId,
-        stockCode: selectedAttrData.stockCode,
+        recordId: selectedAttrData?.productId,
+        stockCode: selectedAttrData?.stockCode,
       },
     }
     const addonProducts = relatedProducts?.relatedProducts?.filter(
-      (item: any) => item.itemType === ITEM_TYPE_ADDON_10
+      (item: any) => item?.itemType === ITEM_TYPE_ADDON_10
     )
     const addonProductsWithParentProduct = addonProducts?.map((item: any) => {
       item.parentProductId = updatedProduct?.recordId
@@ -525,31 +533,31 @@ export default function ProductView({
       updatedProduct,
     ].reduce((acc: any, obj: any) => {
       acc.push({
-        ProductId: obj.recordId || obj.productId,
+        ProductId: obj?.recordId || obj?.productId,
         BasketId: basketId,
-        ParentProductId: obj.parentProductId || null,
+        ParentProductId: obj?.parentProductId || null,
         Qty: 1,
-        DisplayOrder: obj.displayOrder || 0,
-        StockCode: obj.stockCode,
-        ItemType: obj.itemType || 0,
-        CustomInfo1: values.line1.message || null,
-        CustomInfo2: values.line1.imageUrl || null,
-        CustomInfo3: values.line3 || null,
-        CustomInfo4: values.line4 || null,
-        CustomInfo5: values.line5 || null,
-        ProductName: obj.name,
-        ManualUnitPrice: obj.manualUnitPrice || 0.0,
-        PostCode: obj.postCode || null,
-        IsSubscription: obj.subscriptionEnabled || false,
-        IsMembership: obj.hasMembership || false,
-        SubscriptionPlanId: obj.subscriptionPlanId || null,
-        SubscriptionTermId: obj.subscriptionTermId || null,
-        UserSubscriptionPricing: obj.userSubscriptionPricing || 0,
-        GiftWrapId: obj.giftWrapConfig || null,
-        IsGiftWrapApplied: obj.isGiftWrapApplied || false,
-        ItemGroupId: obj.itemGroupId || 0,
+        DisplayOrder: obj?.displayOrder || 0,
+        StockCode: obj?.stockCode,
+        ItemType: obj?.itemType || 0,
+        CustomInfo1: values?.line1?.message || null,
+        CustomInfo2: values?.line1?.imageUrl || null,
+        CustomInfo3: values?.line3 || null,
+        CustomInfo4: values?.line4 || null,
+        CustomInfo5: values?.line5 || null,
+        ProductName: obj?.name,
+        ManualUnitPrice: obj?.manualUnitPrice || 0.0,
+        PostCode: obj?.postCode || null,
+        IsSubscription: obj?.subscriptionEnabled || false,
+        IsMembership: obj?.hasMembership || false,
+        SubscriptionPlanId: obj?.subscriptionPlanId || null,
+        SubscriptionTermId: obj?.subscriptionTermId || null,
+        UserSubscriptionPricing: obj?.userSubscriptionPricing || 0,
+        GiftWrapId: obj?.giftWrapConfig || null,
+        IsGiftWrapApplied: obj?.isGiftWrapApplied || false,
+        ItemGroupId: obj?.itemGroupId || 0,
         PriceMatchReqId:
-          obj.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
+          obj?.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
       })
       return acc
     }, [])
@@ -577,10 +585,10 @@ export default function ProductView({
 
   const isEngravingAvailable =
     !!relatedProducts?.relatedProducts?.filter(
-      (item: any) => item.stockCode === ITEM_TYPE_ADDON
+      (item: any) => item?.stockCode === ITEM_TYPE_ADDON
     ).length ||
     !!product?.customAttributes.filter(
-      (item: any) => item.display == 'Is Enabled'
+      (item: any) => item?.display == 'Is Enabled'
     ).length
   // const isEngravingAvailable:any = true;
 
@@ -643,7 +651,7 @@ export default function ProductView({
       const createWishlist = async () => {
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
-            id: user.userId,
+            id: user?.userId,
             productId: product?.recordId,
             flag: true,
           })
@@ -686,6 +694,12 @@ export default function ProductView({
     return null
   }
 
+  const images = content.map((image: any) => {
+    return {
+      original: image.image,
+      thumbnail: image.image,
+    }
+  })
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
@@ -695,6 +709,7 @@ export default function ProductView({
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
+
         <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none md:w-4/5">
           {isMobile ? (
             <Swiper
@@ -728,7 +743,8 @@ export default function ProductView({
                         width={600}
                         height={1000}
                         blurDataURL={
-                          `${image.image}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER
+                          `${image.image}?h=600&w=400&fm=webp` ||
+                          IMG_PLACEHOLDER
                         }
                       />
                     </div>
@@ -739,55 +755,31 @@ export default function ProductView({
               ))}
             </Swiper>
           ) : (
-            <Tab.Group
-              as="div"
-              className="flex flex-col-reverse lg:col-span-7 min-mobile-pdp"
-              title="product images"
-            >
-              <Tab.List
-                className={
-                  content?.length > 1
-                    ? 'grid grid-cols-1 gap-2 sm:grid-cols-2'
-                    : 'grid grid-cols-1 gap-2 sm:grid-cols-1'
-                }
+            <>
+              <Tab.Group
+                as="div"
+                className="sticky flex flex-col-reverse top-24 lg:col-span-7 min-mobile-pdp"
+                title="product images"
               >
-                {content?.map((image: any, idx) => (
-                  <Tab key={`${idx}-tab`} title={selectedAttrData.name}>
-                    {() => (
-                      <>
-                        <span className="sr-only">{selectedAttrData.name}</span>
-                        <span className="relative">
-                          {image.image ? (
-                            <div className="image-container">
-                              <Image
-                                priority
-                                src={
-                                  generateUri(image.image, 'h=650&fm=webp') ||
-                                  IMG_PLACEHOLDER
-                                }
-                                alt={selectedAttrData.name}
-                                className="o`bject-cover object-center w-full h-full image"
-                                sizes="320 600 1000"
-                                width={600}
-                                height={1000}
-                                onClick={(ev: any) => handleImgLoadT(image.image)}
-                                quality="60"
-                                blurDataURL={
-                                  `${image.image}?h=600&w=400&fm=webp` ||
-                                  IMG_PLACEHOLDER
-                                }
-                              />
-                            </div>
-                          ) : (
-                            <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
-                          )}
-                        </span>
-                      </>
-                    )}
-                  </Tab>
-                ))}
-              </Tab.List>
-            </Tab.Group>
+                <Tab.List
+                  className={
+                    content?.length > 1
+                      ? 'grid grid-cols-1 gap-10 sm:grid-cols-1'
+                      : 'grid grid-cols-1 gap-10 sm:grid-cols-1'
+                  }
+                >
+                  <ImageGallery
+                    items={images}
+                    thumbnailPosition="left"
+                    showPlayButton={false}
+                    showBullets={false}
+                    showNav={false}
+                    additionalClass="app-image-gallery"
+                    showFullscreenButton={true}
+                  />
+                </Tab.List>
+              </Tab.Group>
+            </>
           )}
 
           {/* Product info */}
@@ -812,16 +804,16 @@ export default function ProductView({
                   ))}
                 </div>
                 {reviews?.review?.productReviews?.length > 0 ? (
-                  <p className="pl-1 text-xs font-bold my-auto">
+                  <p className="pl-1 my-auto text-xs font-bold">
                     ({reviews?.review?.ratingAverage})
                   </p>
                 ) : (
-                  <p className="pl-1 text-xs font-bold my-auto">(0)</p>
+                  <p className="pl-1 my-auto text-xs font-bold">(0)</p>
                 )}
               </div>
             </div>
 
-            <h1 className="font-medium tracking-tight text-black font-36 mb-3 sm:mb-0">
+            <h1 className="mb-3 font-medium tracking-tight text-black font-36 sm:mb-0">
               {selectedAttrData.name || selectedAttrData.productName}
             </h1>
             <p className="mt-0 text-sm text-black uppercase sm:text-xs sm:mt-1">
@@ -831,11 +823,15 @@ export default function ProductView({
               <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
               {updatedProduct ? (
                 <p className="text-2xl font-bold text-black sm:text-xl font-24">
-                  {selectedAttrData?.price?.formatted?.withTax}
+                  {isIncludeVAT
+                    ? selectedAttrData?.price?.formatted?.withTax
+                    : selectedAttrData?.price?.formatted?.withoutTax}
                   {selectedAttrData?.listPrice?.raw.tax > 0 ? (
                     <>
                       <span className="px-2 text-sm font-medium text-gray-900 line-through">
-                        {product?.listPrice?.formatted?.withTax}
+                        {isIncludeVAT
+                          ? product?.listPrice?.formatted?.withTax
+                          : product?.listPrice?.formatted?.withoutTax}
                       </span>
                       <span className="text-sm font-medium text-red-500">
                         {discount}% off
@@ -868,6 +864,7 @@ export default function ProductView({
               <AvailableOffers
                 currency={product?.price}
                 offers={promotions?.promotions}
+                key={product?.id}
               />
             )}
             {updatedProduct ? (
@@ -958,7 +955,7 @@ export default function ProductView({
           </div>
         </div>
         <div className="flex flex-col section-devider"></div>
-        <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
+        <div className="flex flex-col w-full px-0 mx-auto sm:container page-container">
           <ProductSpecifications
             attrGroup={attrGroup}
             product={product}
@@ -968,7 +965,11 @@ export default function ProductView({
 
         {product?.componentProducts && (
           <Bundles
-            price={product?.price?.formatted?.withTax}
+            price={
+              isIncludeVAT
+                ? product?.price?.formatted?.withTax
+                : product?.price?.formatted?.withoutTax
+            }
             products={product?.componentProducts}
             productBundleUpdate={handleProductBundleUpdate}
           />
@@ -978,13 +979,13 @@ export default function ProductView({
         )?.length > 0 ? (
           <>
             <div className="flex flex-col section-devider"></div>
-            <div className="flex flex-col px-0 mx-auto sm:container page-container w-full">
+            <div className="flex flex-col w-full px-0 mx-auto sm:container page-container">
               <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
                 You May Also Like
               </h3>
               <RelatedProductWithGroup
                 products={relatedProducts?.relatedProducts}
-                productPerColumn={6}
+                productPerColumn={5}
                 deviceInfo={deviceInfo}
                 maxBasketItemsCount={maxBasketItemsCount}
               />
@@ -1025,8 +1026,16 @@ export default function ProductView({
           }
           productId={product?.id}
           stockCode={product?.stockCode}
-          ourCost={product?.price?.raw?.withTax}
-          rrp={product?.listPrice?.raw?.withTax}
+          ourCost={
+            isIncludeVAT
+              ? product?.price?.raw?.withTax
+              : product?.price?.raw?.withoutTax
+          }
+          rrp={
+            isIncludeVAT
+              ? product?.listPrice?.raw?.withTax
+              : product?.listPrice?.raw?.withoutTax
+          }
           ourDeliveryCost={product?.price?.raw?.tax}
         />
 
@@ -1110,6 +1119,34 @@ export default function ProductView({
           </Transition.Root>
         ) : null}
       </div>
+      <Script
+        type="application/ld+json"
+        id="schema"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+          {
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": ${product?.name},
+            "image": ${product?.image},
+            "description": ${product?.metaDescription},
+            "sku": ${product?.stockCode},
+            "brand": {
+              "@type": "Brand",
+              "name": ${product?.brand}
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": ${SITE_ORIGIN_URL + '/' + product?.link},
+              "priceCurrency": ${product?.price?.currencySymbol},
+              "price": ${product?.price?.raw?.withTax},
+              "availability": "https://schema.org/${product?.seoAvailability}"
+            }
+          }
+        `,
+        }}
+      />
     </>
   )
 }

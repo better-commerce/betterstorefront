@@ -40,6 +40,7 @@ function RenderRadioOptions({
   setSizeInit,
 }: any) {
   const [countOfItems, setCountOfItems] = useState(itemsCount)
+  const [showMoreSize, setShowMoreSize] = useState(true)
   items.sort((s1: any, s2: any) => {
     return s1.displayOrder - s2.displayOrder
   })
@@ -70,6 +71,12 @@ function RenderRadioOptions({
     handleToggleOpenRemainElems()
   }
 
+  useEffect(() => {
+    if (items.length == 0) {
+      setShowMoreSize(false)
+    }
+  }, [items])
+
   return (
     <>
       <div className="flex items-center flex-wrap">
@@ -91,7 +98,7 @@ function RenderRadioOptions({
                 }
               )}
             >
-              <RadioGroup.Label as="p" className="text-ms m-auto">
+              <RadioGroup.Label as="p" className="text-ms m-auto uppercase">
                 {item.fieldValue}
               </RadioGroup.Label>
             </RadioGroup.Option>
@@ -112,17 +119,20 @@ function RenderRadioOptions({
         )}
 
         {/* show more button */}
-        {remainingItems && remainingItems.length > 0 && !openRemainElems && (
-          <div
-            className="relative flex items-center justify-center w-10 h-10 transition duration-100 bg-gray-300 outline-none cursor-pointer z-99 hover:opacity-75 bg-nav"
-            onClick={() => {
-              handleMoreElems()
-              // handleToggleOpenRemainElems()
-            }}
-          >
-            <p className="text-xs text-gray-900 m-auto">More</p>
-          </div>
-        )}
+        {showMoreSize &&
+          remainingItems &&
+          remainingItems.length > 0 &&
+          !openRemainElems && (
+            <div
+              className="relative flex items-center justify-center w-10 h-10 transition duration-100 bg-gray-300 outline-none cursor-pointer z-99 hover:opacity-75 bg-nav"
+              onClick={() => {
+                handleMoreElems()
+                // handleToggleOpenRemainElems()
+              }}
+            >
+              <p className="text-xs text-gray-900 m-auto">More</p>
+            </div>
+          )}
       </div>
 
       <div

@@ -179,7 +179,7 @@ function Home({
             key={`product-heading-${Pid}`}
           />
         ))}
-        <ProductSlider config={pageContents} />
+        <ProductSlider config={pageContents} deviceInfo={deviceInfo} />
       </div>
 
       {pageContents?.promotions?.map((banner: any, bId: number) => (

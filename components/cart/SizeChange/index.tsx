@@ -9,12 +9,12 @@ import axios from 'axios'
 import { CHANGE_SIZE } from '@components/utils/textVariables'
 import { Button, LoadingDots, useUI } from '@components/ui'
 import {
-  EmptyGuid,
   NEXT_BULK_ADD_TO_CART,
   NEXT_GET_PRODUCT,
   PRODUCTS_SLUG_PREFIX,
 } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
+import { Guid } from '@commerce/types'
 
 const SIZE_ATTRIBUTE = 'clothing.size'
 
@@ -137,13 +137,13 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
         const itemToBeDeleted = {
           productId: selectedProduct?.productId, // old product id for old size item
           stockCode: selectedProduct?.stockCode, // old stock code
-          parentProductId: EmptyGuid,
+          parentProductId: Guid.empty,
           qty: 0,
         }
 
         const itemToBeSaved = {
           productId: newItemId, // new product id for new size item
-          parentProductId: EmptyGuid,
+          parentProductId: Guid.empty,
           stockCode: newStockCode, // new stock code
           qty: oldLineItem?.qty,
           displayOrder: oldLineItem?.displayOrder,
@@ -189,7 +189,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
           products,
         })
 
-        if (newCart?.id && newCart?.id != EmptyGuid) {
+        if (newCart?.id && newCart?.id != Guid.empty) {
           setCartItems(newCart)
           // setAlert({
           //   type: 'success',
@@ -300,7 +300,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
                           {({ checked, disabled }) => (
                             <li
                               className={cn(
-                                'outline outline-gray-300 hover:outline-gray-700 hover:z-50 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-gray-100 text-gray-900 transition-colors duration-75',
+                                'outline outline-gray-300 hover:outline-gray-700 hover:z-50 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-gray-100 text-gray-900 transition-colors uppercase duration-75',
                                 {
                                   'bg-gray-100 outline-gray-700 z-50': checked,
                                   '!cursor-default': disabled,

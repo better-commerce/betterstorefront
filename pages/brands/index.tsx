@@ -1,4 +1,5 @@
 import type { GetStaticPropsContext } from 'next'
+import NextHead from 'next/head'
 import { GetServerSideProps } from 'next'
 import { useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -59,65 +60,91 @@ function BrandsPage({ brands }: any) {
   })
   useEffect(() => {}, [])
   const totalResults = normalizedBrands.map((i: any) => i.results).flat().length
-
+  let absPath = ''
+  if (typeof window !== 'undefined') {
+    absPath = window?.location?.href
+  }
   return (
-    <div className="bg-white">
-      {/* Mobile menu */}
-      <main className="pb-24 mx-auto overflow-hidden max-w-7xl sm:px-6 lg:px-8">
-        <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-8">
-          <h1 className="font-extrabold tracking-tight text-gray-900">
-            Brands
-          </h1>
-          <h2 className="mt-2 font-medium tracking-tight text-gray-500 sm:text-xl">
-            {totalResults} results
-          </h2>
-          <div className="flex flex-wrap items-center justify-center w-full py-5">
-            {ALPHABET.split('').map((letter: any, key: number) => {
-              const brandExists = !!normalizedBrands.find(
-                (brand: any) =>
-                  brand.title.toUpperCase() === letter.toUpperCase()
-              )
-              if (brandExists) {
-                return (
-                  <Link key={key} passHref href={`#${letter.toUpperCase()}`}>
-                    <span className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg">
-                      {letter.toUpperCase()}
-                    </span>
-                  </Link>
+    <>
+      <NextHead>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
+        <link rel="canonical" id="canonical" href={absPath} />
+        <title>Brands</title>
+        <meta name="title" content="Brands" />
+        <meta name="description" content="Brands" />
+        <meta name="keywords" content="Brands" />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content="Brands" key="ogtitle" />
+        <meta property="og:description" content="Brands" key="ogdesc" />
+      </NextHead>
+      <div className="bg-white">
+        {/* Mobile menu */}
+        <main className="container pb-24 mx-auto overflow-hidden sm:px-0 lg:px-0">
+          <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-8">
+            <h1 className="font-extrabold tracking-tight text-gray-900">
+              Brands
+            </h1>
+            <h2 className="mt-2 font-medium tracking-tight text-gray-500 sm:text-xl">
+              {totalResults} results
+            </h2>
+            <div className="flex flex-wrap items-center justify-center w-full py-5">
+              {ALPHABET.split('').map((letter: any, key: number) => {
+                const brandExists = !!normalizedBrands.find(
+                  (brand: any) =>
+                    brand.title.toUpperCase() === letter.toUpperCase()
                 )
-              }
-              return (
-                <span
-                  key={key}
-                  className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border pointer-events-none sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg opacity-40"
-                >
-                  {letter.toUpperCase()}
-                </span>
-              )
-            })}
-          </div>
-          <div className="flex items-center justify-center w-full py-5">
-            <div className="flex flex-row w-1/3 px-4 py-2 border border-gray-300 rounded-md shadow-sm min-w-searchbar ">
-              <label className="hidden" htmlFor={'search-bar'}>
-                Search
-              </label>
-              <input
-                id={'search-bar'}
-                className="w-full min-w-0 text-gray-700 placeholder-gray-500 bg-white appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                placeholder="Search..."
-                onChange={(e: any) => handleSearch(e.target.value)}
-              />
-              <div className="text-gray-400">
-                <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
+                if (brandExists) {
+                  return (
+                    <div className="flex" key={`brand-letter-${key}`}>
+                      <Link
+                        legacyBehavior
+                        passHref
+                        href={`#${letter.toUpperCase()}`}
+                      >
+                        <a
+                          href={`#${letter.toUpperCase()}`}
+                          className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg"
+                        >
+                          {letter.toUpperCase()}
+                        </a>
+                      </Link>
+                    </div>
+                  )
+                }
+                return (
+                  <span
+                    key={key}
+                    className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border pointer-events-none sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg opacity-40"
+                  >
+                    {letter.toUpperCase()}
+                  </span>
+                )
+              })}
+            </div>
+            <div className="flex items-center justify-center w-full py-5">
+              <div className="flex flex-row w-1/3 px-4 py-2 border border-gray-300 rounded-md shadow-sm min-w-searchbar ">
+                <label className="hidden" htmlFor={'search-bar'}>
+                  Search
+                </label>
+                <input
+                  id={'search-bar'}
+                  className="w-full min-w-0 text-gray-700 placeholder-gray-500 bg-white appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  placeholder="Search..."
+                  onChange={(e: any) => handleSearch(e.target.value)}
+                />
+                <div className="text-gray-400">
+                  <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {normalizedBrands.map((brand: any, idx: number) => {
-          return (
+          {normalizedBrands.map((brand: any, idx: number) => (
             <div
-              key={idx}
-              className="flex flex-col px-4 py-4 border-t sm:px-6 lg:px-8 sm:py-10"
+              key={`brands-${idx}`}
+              className="flex flex-col px-0 py-4 border-t sm:px-2 lg:px-2 sm:py-10"
             >
               <h2
                 id={brand.title.toUpperCase()}
@@ -125,36 +152,26 @@ function BrandsPage({ brands }: any) {
               >
                 {brand.title.toUpperCase()}
               </h2>
-              <div className="flex flex-wrap items-center justify-between py-0 sm:py-2">
-                {brand.results.map((result: any, key: number) => {
-                  return (
-                    <div
-                      key={key}
-                      style={{ flex: '0 0 33.333333%' }}
-                      className="flex text-gray-900 sm:inline-flex "
-                    >
-                      <Link
-                        passHref
-                        href={{
-                          pathname: `/${result.link}`,
-                          query: {
-                            id: result.id,
-                          },
-                        }}
-                      >
-                        <span className="py-2 text-sm cursor-pointer sm:text-lg sm:py-5 hover:underline">
-                          {result.manufacturerName}
-                        </span>
-                      </Link>
-                    </div>
-                  )
-                })}
+              <div className="flex flex-wrap items-center justify-between py-0 mt-6 gap-y-4 sm:py-2">
+                {brand.results.map((brands: any, brandIdx: number) => (
+                  <div
+                    key={`brand-list-${brandIdx}`}
+                    style={{ flex: '0 0 33.333333%' }}
+                    className="flex text-gray-900 sm:inline-flex"
+                  >
+                    <Link passHref href={brands.link}>
+                      <span className="py-2 text-sm cursor-pointer sm:text-lg sm:py-5 hover:text-orange-500 hover:underline hover:font-medium">
+                        {brands?.manufacturerName}
+                      </span>
+                    </Link>
+                  </div>
+                ))}
               </div>
             </div>
-          )
-        })}
-      </main>
-    </div>
+          ))}
+        </main>
+      </div>
+    </>
   )
 }
 

@@ -14,7 +14,6 @@ import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   NEXT_ADDRESS,
   AddressPageAction,
-  EmptyGuid,
 } from '@components/utils/constants'
 import {
   shippingFormConfig,
@@ -48,6 +47,7 @@ import {
 import { matchStrings } from '@framework/utils/parse-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 import NewAddressModal from './NewAddressModal'
+import { Guid } from '@commerce/types'
 
 const Spinner = () => {
   return (
@@ -64,6 +64,7 @@ export default function CheckoutForm({
   defaultShippingAddress,
   defaultBillingAddress,
   addresses = [],
+  setUserAddresses,
   getAddress,
   fetchAddress,
   config,
@@ -79,6 +80,8 @@ export default function CheckoutForm({
     setBasketId,
     setAddressId,
     isGuestUser,
+    guestUser,
+    setGuestUser,
   } = useUI()
 
   const uiContext = useUI()
@@ -328,7 +331,7 @@ export default function CheckoutForm({
     }
     const newValues = {
       ...values,
-      userId: user?.userId,
+      userId: getUserId(),
       country:
         state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
       countryCode:
@@ -338,15 +341,31 @@ export default function CheckoutForm({
       lookupAddressId(newValues).then((addressId: number) => {
         if (addressId == 0) {
           createAddress(newValues)
-            .then((createAddressResult: any) => {
+            .then(async (createAddressResult: any) => {
               // const updatedUser = { ...user, ...{ notifyByWhatsapp: data?.whtsappUpdated } };
               // setUser(updatedUser);
               // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
               // });
-              fetchAddress()
-              const values = {
-                ...newValues,
-                ...{ id: createAddressResult?.id, state: newValues?.state },
+
+              if (!createAddressResult?.id) {
+                throw new Error('Something went wrong!!')
+              }
+
+              let updatedAddressesArr = await fetchAddress()
+
+              // save only selected addresses in case of 'Guest' checkout
+              if (isGuestUser || guestUser?.userId) {
+                const mapSavedAddressIds = addresses
+                  .map((o: any) => o.id)
+                  .concat(createAddressResult.id)
+                updatedAddressesArr = updatedAddressesArr.filter((o: any) => {
+                  if (mapSavedAddressIds.includes(o.id)) return o
+                })
+                setGuestUser({
+                  ...guestUser,
+                  addresses: [...updatedAddressesArr],
+                })
+                setUserAddresses([...updatedAddressesArr])
               }
 
               if (callback) {
@@ -358,6 +377,7 @@ export default function CheckoutForm({
             })
             .catch((error: any) => {
               // setAlert({type:'error',msg:NETWORK_ERR})
+              closeNewAddressModal()
               console.log(error)
             })
         } else {
@@ -390,7 +410,7 @@ export default function CheckoutForm({
   }
   const handleEditAddress = async (id: number) => {
     const { data }: any = await axios.post(NEXT_ADDRESS, {
-      id: user?.userId,
+      id: getUserId(),
       addressId: id,
     })
     let res = data.find((el: any) => el?.id === id)
@@ -528,7 +548,7 @@ export default function CheckoutForm({
               id: addressId,
               country: state?.deliveryMethod?.name,
               countryCode: state?.deliveryMethod?.twoLetterIsoCode,
-              customerId: user?.userId,
+              customerId: getUserId(),
               isDefault: false,
               isDefaultBilling: false,
               isDefaultDelivery: false,
@@ -548,7 +568,7 @@ export default function CheckoutForm({
               id: addressId,
               country: state.deliveryMethod.name,
               countryCode: state.deliveryMethod.twoLetterIsoCode,
-              customerId: user.userId,
+              customerId: getUserId(),
               isDefault: false,
               isDefaultBilling: false,
               isDefaultDelivery: false,
@@ -591,7 +611,7 @@ export default function CheckoutForm({
   }
 
   const loadAddressIDs = async (): Promise<Array<any>> => {
-    const response = await getAddress(user.userId)
+    const response = await getAddress(getUserId())
     return response
   }
 
@@ -677,7 +697,7 @@ export default function CheckoutForm({
       user,
       basketId,
       customerId:
-        cartItems.userId != EmptyGuid ? cartItems.userId : user?.userId,
+        cartItems.userId != Guid.empty ? cartItems.userId : user?.userId,
       basket: cartItems,
       billingAddress: {
         ...billingInfoClone,

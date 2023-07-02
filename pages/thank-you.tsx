@@ -23,12 +23,14 @@ import {
   GENERAL_SHIPPING_ADDRESS,
   GENERAL_SHIPPING_METHOD,
   GENERAL_SUMMARY,
+  GENERAL_TAX,
   GENERAL_THANK_YOU,
   GENERAL_TOTAL,
   GENERAL_YOUR_ORDER,
   IMG_PLACEHOLDER,
   LOADING_YOUR_ORDERS,
   NO_ORDER_PROVIDED,
+  SUBTOTAL_EXCLUDING_TAX,
   SUBTOTAL_INCLUDING_TAX,
   YOUR_INFORMATION,
 } from '@components/utils/textVariables'
@@ -39,11 +41,13 @@ import {
 import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
+import { vatIncluded } from '@framework/utils/app-util'
 
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
-  const { setOrderId, orderId, user } = useUI()
+  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser } = useUI()
+  const isIncludeVAT = vatIncluded()
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -55,6 +59,8 @@ export default function OrderConfirmation() {
     }
     removeItem(LocalStorage.Key.ORDER_RESPONSE)
     removeItem(LocalStorage.Key.ORDER_PAYMENT)
+    setGuestUser({})
+    setIsGuestUser(false)
     if (orderId) fetchOrder()
     if (!orderId) setIsLoading(false)
     return function cleanup() {
@@ -131,6 +137,12 @@ export default function OrderConfirmation() {
                         <h4 className="font-medium text-gray-900">
                           <Link href={`/${product.slug}`}>{product.name}</Link>
                         </h4>
+                        <p className="mr-1 text-sm text-gray-700 font-medium">
+                          Size:{' '}
+                          <span className="uppercase">
+                            {product.size}
+                          </span>
+                        </p>
                       </div>
                       <div className="flex items-end mt-2">
                         <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
@@ -159,12 +171,12 @@ export default function OrderConfirmation() {
                     dangerouslySetInnerHTML={{
                       __html: product.shortDescription,
                     }}
-                    className="text-sm text-gray-500 topspace lg:pl-5 sm:pl-2 mb-10 mt-10"
+                    className="mt-10 mb-10 text-sm text-gray-500 topspace lg:pl-5 sm:pl-2"
                   />
                 </>
               ))}
 
-              <div className="lg:pl-5 sm:pl-2 border-t border-gray-200 ">
+              <div className="border-t border-gray-200 lg:pl-5 sm:pl-2 ">
                 <h3 className="sr-only">{YOUR_INFORMATION}</h3>
 
                 <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>
@@ -234,10 +246,14 @@ export default function OrderConfirmation() {
                 <dl className="pt-10 space-y-6 text-sm border-t border-gray-200">
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
-                      {SUBTOTAL_INCLUDING_TAX}
+                      {isIncludeVAT
+                        ? SUBTOTAL_INCLUDING_TAX
+                        : SUBTOTAL_EXCLUDING_TAX}
                     </dt>
                     <dd className="text-gray-700">
-                      {order?.subTotal?.formatted?.withTax}
+                      {isIncludeVAT
+                        ? order?.subTotal?.formatted?.withTax
+                        : order?.subTotal?.formatted?.withoutTax}
                     </dd>
                   </div>
                   <div className="flex justify-between">
@@ -245,15 +261,25 @@ export default function OrderConfirmation() {
                       {GENERAL_SHIPPING}
                     </dt>
                     <dd className="text-gray-700">
-                      {order?.shippingCharge.formatted.withTax}
+                      {isIncludeVAT
+                        ? order?.shippingCharge.formatted?.withTax
+                        : order?.shippingCharge.formatted?.withoutTax}
                     </dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="font-medium text-gray-900">
+                    <dt className="font-medium text-gray-900">{GENERAL_TAX}</dt>
+                    <dd className="text-gray-700">
+                      {order?.grandTotal.formatted?.tax}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-lg font-bold text-gray-900">
                       {GENERAL_TOTAL}
                     </dt>
-                    <dd className="text-gray-900">
-                      {order?.grandTotal?.formatted?.withTax}
+                    <dd className="text-lg font-bold text-gray-900">
+                      {isIncludeVAT
+                        ? order?.grandTotal?.formatted?.withTax
+                        : order?.grandTotal?.formatted?.withTax}
                     </dd>
                   </div>
                 </dl>
@@ -262,7 +288,7 @@ export default function OrderConfirmation() {
           ) : null}
           <div className="max-w-xl mt-5 text-center">
             <Link href={`/`} passHref>
-              <span className="font-medium btn-primary p-3">
+              <span className="p-3 font-medium btn-primary">
                 {BTN_BACK_TO_HOME}
               </span>
             </Link>

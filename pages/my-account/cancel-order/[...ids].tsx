@@ -16,23 +16,29 @@ import ConfirmDialog from '@components/common/ConfirmModal/ConfirmDialog'
 import { Button, useUI } from '@components/ui'
 import {
   NEXT_CANCEL_REASON,
-  EmptyGuid,
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER,
 } from '@components/utils/constants'
-import { CANCEL_ORDER, ORDER_CANCELLED, PROCEED_TO_CANCEL, REASON_CANCEL_HEADING } from '@components/utils/textVariables'
+import {
+  CANCEL_ORDER,
+  ORDER_CANCELLED,
+  PROCEED_TO_CANCEL,
+  REASON_CANCEL_HEADING,
+} from '@components/utils/textVariables'
 import Spinner from '@components/ui/Spinner'
+import { vatIncluded } from '@framework/utils/app-util'
+import { Guid } from '@commerce/types'
 
 declare const window: any
 
-export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
-  const { user, setAlert, } = useUI()
+export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
+  const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
   const [itemDatas, setItemDatas] = useState<any>(undefined)
   const [itemData, setItemData] = useState<any>(undefined)
   const [showCancellationReasons, setShowCancellationReasons] = useState(false)
   const [cancellationReasons, setCancellationReasons] = useState<any>(undefined)
-
+  const isIncludeVAT = vatIncluded()
   const handleFetchOrderDetails = async (id: any) => {
     const { data: orderDetails }: any = await axios.post(
       NEXT_GET_ORDER_DETAILS,
@@ -43,7 +49,7 @@ export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
     )
     return orderDetails
   }
-  const { isMobile, isIPadorTablet } = deviceInfo;
+  const { isMobile, isIPadorTablet } = deviceInfo
 
   let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
@@ -108,7 +114,7 @@ export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
         const itemsDatasNew =
           orderDetails?.order?.items?.length > 0
             ? orderDetails?.order?.items
-            : [];
+            : []
         setItemDatas(itemsDatasNew)
         setItemData(
           itemsDatasNew?.length > 0
@@ -137,15 +143,17 @@ export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="sprite-icon sprite-left-arrow mr-2"></i> {CANCEL_ORDER}
+                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                  {CANCEL_ORDER}
                 </h3>
               </Link>
             </div>
 
             <div className="mx-auto cancel-continer">
-              <Link href="/my-account/orders" className='mobile-view'>
-                <h4 className="mr-2 leading-none text-xl text-gray-900 uppercase font-bold">
-                  <i className="sprite-icon sprite-left-arrow mr-2"></i> {CANCEL_ORDER}
+              <Link href="/my-account/orders" className="mobile-view">
+                <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
+                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                  {CANCEL_ORDER}
                 </h4>
               </Link>
               <div className="w-full">
@@ -169,17 +177,23 @@ export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
                                 <div>
                                   <div className="flex flex-col justify-between font-medium text-gray-900">
                                     <div className="flex items-center justify-between">
-                                      <p className="font-medium uppercase text-sm">
+                                      <p className="text-sm font-medium uppercase">
                                         {item?.categoryItems[0]?.categoryName}
                                       </p>
                                     </div>
-                                    <h3 className='pr-6 mt-2 !text-sm'>
-                                      <Link href={`/${item?.slug}`} passHref className="font-semibold text-md dark:text-gray-900">
+                                    <h3 className="pr-6 mt-2 !text-sm">
+                                      <Link
+                                        href={`/${item?.slug}`}
+                                        passHref
+                                        className="font-semibold text-md dark:text-gray-900"
+                                      >
                                         {item?.name}
                                       </Link>
                                     </h3>
                                     <p className="mt-2 text-sm font-medium">
-                                      {item?.price?.formatted?.withTax}
+                                      {isIncludeVAT
+                                        ? item?.price?.formatted?.withTax
+                                        : item?.price?.formatted?.withoutTax}
                                     </p>
                                     <div className="flex mt-3 text-sm">
                                       <div className="w-24">
@@ -203,14 +217,14 @@ export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
                     </ul>
                     <div className="w-full py-4">
                       <Button
-                        variant='slim'
+                        variant="slim"
                         onClick={() => {
                           onCancelReason()
                           hideCancellationReasons()
                         }}
-                        type='button'
+                        type="button"
                       >
-                        <span className='block py-1 font-bold'>
+                        <span className="block py-1 font-bold">
                           {PROCEED_TO_CANCEL}
                         </span>
                       </Button>
@@ -226,12 +240,17 @@ export default function OrderCancel({ orderId = EmptyGuid, deviceInfo, }: any) {
             style={{ display: showCancellationReasons ? 'block' : 'none' }}
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
-              <a className="block mr-2 leading-none" href="#" onClick={(e) => {
-                e.preventDefault()
-                hideCancellationReasons()
-              }}>
+              <a
+                className="block mr-2 leading-none"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault()
+                  hideCancellationReasons()
+                }}
+              >
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="sprite-icon sprite-left-arrow mr-2"></i> {REASON_CANCEL_HEADING}
+                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                  {REASON_CANCEL_HEADING}
                 </h3>
               </a>
             </div>
@@ -256,8 +275,8 @@ export async function getServerSideProps(context: any) {
   const ids = context?.query?.ids
   return {
     props: {
-      orderId: ids?.length > 0 ? ids[0] : EmptyGuid,
-      itemId: ids?.length > 1 ? ids[1] : EmptyGuid,
+      orderId: ids?.length > 0 ? ids[0] : Guid.empty,
+      itemId: ids?.length > 1 ? ids[1] : Guid.empty,
     }, // will be passed to the page component as props
   }
 }

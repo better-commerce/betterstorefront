@@ -21,7 +21,7 @@ import {
   GENERAL_CREATE_RETURN,
 } from '@components/utils/textVariables'
 import ReturnModal from '@components/returns/Modal'
-import { isCartAssociated } from '@framework/utils/app-util'
+import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import Image from 'next/image'
 
 export default function MyOrders({ deviceInfo }: any) {
@@ -29,7 +29,7 @@ export default function MyOrders({ deviceInfo }: any) {
   const [productIdsInReturn, setProductIdsInReturn] = useState([''])
   const [returnData, setReturnData] = useState({ product: {}, order: {} })
   const { user, basketId, setCartItems, openCart, cartItems } = useUI()
-
+  const isIncludeVAT = vatIncluded()
   useEffect(() => {
     const fetchOrders = async () => {
       const response: any = await axios.post(NEXT_GET_ORDERS, {
@@ -148,8 +148,8 @@ export default function MyOrders({ deviceInfo }: any) {
                       {new Date(order.orderDate).toLocaleDateString()}
                     </time>
                   </h3>
-                  <div className="bg-gray-50 px-4 py-8 sm:rounded-lg sm:p-8 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-10">
-                    <dl className="divide-y divide-gray-200 space-y-6 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-5 md:gap-x-10 w-full lg:flex-none lg:gap-x-10">
+                  <div className="px-4 py-8 bg-gray-50 sm:rounded-lg sm:p-8 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-10">
+                    <dl className="flex-auto w-full space-y-6 text-sm text-gray-600 divide-y divide-gray-200 md:divide-y-0 md:space-y-0 md:grid md:grid-cols-5 md:gap-x-10 lg:flex-none lg:gap-x-10">
                       <div className="flex justify-between md:block">
                         <dt className="font-medium text-gray-900">
                           {GENERAL_ORDER_NUMBER}
@@ -169,7 +169,9 @@ export default function MyOrders({ deviceInfo }: any) {
                       <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
                         <dt>{GENERAL_TOTAL}</dt>
                         <dd className="md:mt-1">
-                          {order?.subTotal?.formatted?.withTax}
+                          {isIncludeVAT
+                            ? order?.subTotal?.formatted?.withTax
+                            : order?.subTotal?.formatted?.withoutTax}
                         </dd>
                       </div>
                       <div className="flex justify-between md:block">
@@ -181,7 +183,7 @@ export default function MyOrders({ deviceInfo }: any) {
                         {/* <dd className="md:mt-1">{order.orderStatus}</dd> */}
                         <a
                           href={order.trackingLink}
-                          className="md:mt-1 text-indigo-600 hover:indigo-500"
+                          className="text-indigo-600 md:mt-1 hover:indigo-500"
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -190,11 +192,11 @@ export default function MyOrders({ deviceInfo }: any) {
                       </div>
                     </dl>
                   </div>
-                  <div className="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
+                  <div className="flow-root px-4 mt-6 sm:mt-10 sm:px-0">
                     <div className="-my-6 divide-y divide-gray-200 sm:-my-10">
                       {order.itemsBasic.map((product: any) => (
                         <div key={product.id} className="flex py-6 sm:py-10">
-                          <div className="min-w-0 flex-1 lg:flex lg:flex-col">
+                          <div className="flex-1 min-w-0 lg:flex lg:flex-col">
                             <div className="lg:flex-1">
                               <div className="sm:flex">
                                 <div>
@@ -209,17 +211,19 @@ export default function MyOrders({ deviceInfo }: any) {
                                   />
                                 </div>
                                 <p className="mt-1 font-medium text-gray-900 sm:mt-0 sm:ml-6">
-                                  {product.price?.formatted?.withTax}
+                                  {isIncludeVAT
+                                    ? product.price?.formatted?.withTax
+                                    : product.price?.formatted?.withoutTax}
                                 </p>
                               </div>
-                              <div className="mt-2 flex text-sm font-medium sm:mt-4">
+                              <div className="flex mt-2 text-sm font-medium sm:mt-4">
                                 <Link
                                   href={`/${product.slug || '#'}`}
                                   className="text-indigo-600 hover:text-indigo-500"
                                 >
                                   {GENERAL_VIEW_PRODUCT}
                                 </Link>
-                                <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
+                                <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
                                   <button
                                     onClick={() => handleAddToCart(product)}
                                     className="text-indigo-600 hover:text-indigo-500"
@@ -230,7 +234,7 @@ export default function MyOrders({ deviceInfo }: any) {
                                 {productIdsInReturn.includes(
                                   product.productId
                                 ) ? (
-                                  <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
+                                  <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
                                     <button
                                       type="button"
                                       className="text-indigo-600 hover:text-indigo-500"
@@ -239,7 +243,7 @@ export default function MyOrders({ deviceInfo }: any) {
                                     </button>
                                   </div>
                                 ) : (
-                                  <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
+                                  <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
                                     <button
                                       onClick={() =>
                                         handleCreateReturn(product, order)
@@ -256,11 +260,11 @@ export default function MyOrders({ deviceInfo }: any) {
                               </div>
                             </div>
                           </div>
-                          <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
+                          <div className="flex-shrink-0 ml-4 sm:m-0 sm:mr-6 sm:order-first">
                             <Image
                               src={product.image}
                               alt={product.name}
-                              className="col-start-2 col-end-3 sm:col-start-1 sm:row-start-1 sm:row-span-2 w-20 h-20 rounded-lg object-center object-cover sm:w-40 sm:h-40 lg:w-52 lg:h-52"
+                              className="object-cover object-center w-20 h-20 col-start-2 col-end-3 rounded-lg sm:col-start-1 sm:row-start-1 sm:row-span-2 sm:w-40 sm:h-40 lg:w-52 lg:h-52"
                             />
                           </div>
                         </div>

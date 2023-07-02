@@ -10,6 +10,9 @@ import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import {
+  ChevronRightIcon, ChevronLeftIcon
+} from '@heroicons/react/24/outline'
+import {
   ALL_CATEGORY,
   BAD_URL_TEXT,
   IMG_PLACEHOLDER,
@@ -42,12 +45,13 @@ declare const window: any
 
 export async function getStaticProps(context: any) {
   const slugName = Object.keys(context.params)[0]
-  const slug = slugName + '/' + context.params[slugName].join('/')
+  const childSlugName = Object.keys(context.params)[1]
+  const slug = slugName + '/' + context.params[slugName] + '/' + context.params[childSlugName].join('/')
   const category = await getCategoryBySlug(slug)
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
   if (category) {
-    const categoryProducts = await getCategoryProducts(category.id)
+    const categoryProducts = await getCategoryProducts(category?.id)
     return {
       props: {
         category,
@@ -73,17 +77,24 @@ export async function getStaticProps(context: any) {
 
 const generateCategories = (categories: any) => {
   const categoryMap: any = []
-  const generateCategory = (category: any) => {
-    if (category.link) {
-      category.link.includes('category/')
-        ? categoryMap.push(`/${category.link}`)
-        : categoryMap.push(`/category/${category.link}`)
+  const generateCategory = (category: any, categoryPrefix: any) => {
+    if (category?.link) {
+      const segments = category.link.split('/');
+      if (segments.length >= 3) {
+        category?.link.includes('category/')
+          ? categoryMap.push(
+            `/${category?.link}`
+          )
+          : categoryMap.push(`/${categoryPrefix}/${category?.link}`)
+      }
     }
-    if (category.subCategories) {
-      category.subCategories.forEach((i: any) => generateCategory(i))
+    if (category?.subCategories) {
+      category?.subCategories.forEach((i: any) => {
+        generateCategory(i, category?.link)
+      })
     }
   }
-  categories.forEach((category: any) => generateCategory(category))
+  categories.forEach((category: any) => generateCategory(category, category?.link))
   return categoryMap
 }
 
@@ -180,7 +191,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   const initialState = {
     ...DEFAULT_STATE,
     filters: adaptedQuery.filters || [],
-    categoryId: category.id,
+    categoryId: category?.id,
   }
   const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -193,7 +204,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         total: 0,
         currentPage: 1,
         filters: [],
-        categoryId: category.id,
+        categoryId: category?.id,
       },
     },
     error,
@@ -216,21 +227,21 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
       total: 0,
       currentPage: 1,
       filters: [],
-      categoryId: category.id,
+      categoryId: category?.id,
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(products)
 
   useEffect(() => {
-    if (category.id !== state.categoryId)
-      dispatch({ type: SET_CATEGORY_ID, payload: category.id })
-  }, [category.id])
+    if (category?.id !== state.categoryId)
+      dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
+  }, [category?.id])
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-        productListMemory?.products?.currentPage ||
+      productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -344,59 +355,65 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           key="ogdesc"
         />
       </NextHead>
-      <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
-        {category.breadCrumbs && (
-          <BreadCrumbs items={category.breadCrumbs} currentProduct={category} />
-        )}
-        {category && category.images && category.images.length ? (
-          <Swiper
-            navigation={true}
-            loop={true}
-            className="flex items-center justify-center w-full mt-0 mySwiper sm:mt-4 sm:px-0"
-          >
-            {category.images.map((image: any, idx: number) => (
-              <SwiperSlide key={idx}>
-                <Link href={image.link || '#'}>
-                  <Image
-                    style={css}
-                    width={1920}
-                    height={460}
-                    src={
-                      generateUri(image.url, 'h=700&fm=webp') || IMG_PLACEHOLDER
-                    }
-                    alt={category.name}
-                    className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
-                  />
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : null}
-
-        <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
-          <div className="">
-            <h1 className="text-black inline-block">{category.name}</h1>
-            <span className="text-sm font-semibold text-black inline-block ml-2">
-              Showing {products.total} {RESULTS}
-            </span>
-          </div>
-          <p className="text-gray-500 sm:text-md">{category.description}</p>
+      <section className="main-section">
+        <div className="mx-auto mt-4 bg-transparent md:w-4/5 px-4 sm:px-0">
+          {/* breadcrumb section start */}
+          {category?.breadCrumbs && (
+            <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
+          )}
+          {/* breadcrumb section End */}
         </div>
 
-        {category?.subCategories?.length > 0 && (
-          <div className="grid grid-cols-2 gap-2 mt-2 text-left sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-            {category?.subCategories?.map((subcateg: any, idx: number) => (
-              <Link href={'/' + subcateg.link} key={idx}>
-                <h3 className="flex flex-col py-2 text-xs font-semibold text-center text-black border border-gray-200 rounded cursor-pointer bg-gray-50 sm:text-sm hover:text-pink hover:bg-gray-100">
-                  {subcateg.name}
-                </h3>
-              </Link>
-            ))}
-          </div>
-        )}
+        {/* Category info section start */}
+        <div className='mx-auto mt-4 bg-transparent md:w-4/5 my-6 px-4 sm:px-0'>
+          <h1>{category?.name}</h1>
+          <div
+            className="font-18"
+            dangerouslySetInnerHTML={{ __html: category?.description }}
+          ></div>
+        </div>
+        {/* Category info section End */}
+        {/* category banner info start */}
+        <div className='w-full py-4'>
+          {category && category?.images && category?.images.length ? (
+            <>
+              {category?.images.map((cat: any, idx: number) => (
+                <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 relative" key={idx}>
+                  <div className="flex justify-center items-center bg-blue-web p-4 py-8 sm:py-0 sm:p-0 order-2 sm:order-1">
+                    <div className="w-full h-full">
+                      <div className='relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container'>
+                        <div className='sm:w-2/4 sm:pr-20'>
+                          <h2 className="uppercase text-white">{cat?.name}</h2>
+                          <p className="mt-5 text-white font-light">
+                            {cat?.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='order-1 sm:order-2'>
+                    <Image
+                      src={
+                        generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER
+                      }
+                      className="w-full"
+                      alt={category?.name}
+                      width={700}
+                      height={700}
+                    />
+                  </div>
 
-        {/*TODO: For browser caching of product images*/}
-        {/*{productDataToPass?.results?.length > 0 && (
+                </div>
+              ))}
+            </>
+
+          ) : null}
+        </div>
+        <div className='mx-auto md:w-4/5 py-6 px-4 sm:px-0'>
+          {/* category banner info End */}
+
+          {/*TODO: For browser caching of product images*/}
+          {/*{productDataToPass?.results?.length > 0 && (
           <CacheProductImages
             data={productDataToPass?.results
               ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
@@ -405,38 +422,50 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           />
         )}*/}
 
-        {products.total > 0 ? (
-          <div className="grid w-full grid-cols-1 sm:grid-cols-12">
-            {!!products &&
-              (products?.filters?.length > 0 ? (
-                <>
-                  {isMobile ? (
-                    <ProductMobileFilters
-                      handleFilters={handleFilters}
-                      products={products}
-                      routerFilters={state.filters}
-                      handleSortBy={handleSortBy}
-                      clearAll={clearAll}
-                      routerSortOption={state.sortBy}
-                    />
-                  ) : (
-                    <ProductFilterRight
-                      handleFilters={handleFilters}
-                      products={productDataToPass}
-                      routerFilters={state.filters}
-                    />
-                  )}
-                  <div className="sm:col-span-10 p-[1px]">
-                    {isMobile ? null : (
-                      <ProductFiltersTopBar
+          {products?.total > 0 ? (
+            <div className="grid w-full grid-cols-1 sm:grid-cols-12">
+              {!!products &&
+                (products?.filters?.length > 0 ? (
+                  <>
+                    {isMobile ? (
+                      <ProductMobileFilters
+                        handleFilters={handleFilters}
                         products={products}
-                        handleSortBy={handleSortBy}
                         routerFilters={state.filters}
+                        handleSortBy={handleSortBy}
                         clearAll={clearAll}
                         routerSortOption={state.sortBy}
                       />
+                    ) : (
+                      <ProductFilterRight
+                        handleFilters={handleFilters}
+                        products={productDataToPass}
+                        routerFilters={state.filters}
+                      />
                     )}
-                    <ProductGridWithFacet
+                    <div className="sm:col-span-10 p-[1px]">
+                      {isMobile ? null : (
+                        <ProductFiltersTopBar
+                          products={products}
+                          handleSortBy={handleSortBy}
+                          routerFilters={state.filters}
+                          clearAll={clearAll}
+                          routerSortOption={state.sortBy}
+                        />
+                      )}
+                      <ProductGridWithFacet
+                        products={productDataToPass}
+                        currentPage={state?.currentPage}
+                        handlePageChange={handlePageChange}
+                        handleInfiniteScroll={handleInfiniteScroll}
+                        deviceInfo={deviceInfo}
+                        maxBasketItemsCount={maxBasketItemsCount(config)}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <div className="sm:col-span-12 p-[1px] sm:mt-4 mt-2">
+                    <ProductGrid
                       products={productDataToPass}
                       currentPage={state?.currentPage}
                       handlePageChange={handlePageChange}
@@ -445,28 +474,17 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                       maxBasketItemsCount={maxBasketItemsCount(config)}
                     />
                   </div>
-                </>
-              ) : (
-                <div className="sm:col-span-12 p-[1px] sm:mt-4 mt-2">
-                  <ProductGrid
-                    products={productDataToPass}
-                    currentPage={state?.currentPage}
-                    handlePageChange={handlePageChange}
-                    handleInfiniteScroll={handleInfiniteScroll}
-                    deviceInfo={deviceInfo}
-                    maxBasketItemsCount={maxBasketItemsCount(config)}
-                  />
-                </div>
-              ))}
-          </div>
-        ) : (
-          <div className="p-4 py-8  sm:p-32 mx-auto text-center max-w-7xl">
-            <h4 className="text-3xl font-bold text-gray-300">
-              No Products availabe in {category.name}
-            </h4>
-          </div>
-        )}
-      </div>
+                ))}
+            </div>
+          ) : (
+            <div className="p-4 py-8  sm:p-32 mx-auto text-center max-w-7xl">
+              <h4 className="text-3xl font-bold text-gray-300">
+                No Products availabe in {category?.name}
+              </h4>
+            </div>
+          )}
+        </div>
+      </section>
     </>
   )
 }

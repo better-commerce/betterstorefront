@@ -48,12 +48,12 @@ export default function CategoryGrid({
       {IS_INFINITE_SCROLL && (
         <InfiniteScroll
           fetchData={handleInfiniteScroll}
-          className="w-full mx-auto overflow-hidden sm:pl-4"
+          className="w-full mx-auto overflow-hidden sm:px-8"
           total={products.total}
           currentNumber={products?.results?.length}
           component={
             <div
-              className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 px-3 sm:px-0 ${products?.results?.length < 6
+              className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 px-3 sm:px-0 ${products?.results?.length < 6
                   ? `lg:grid-cols-5`
                   : 'lg:grid-cols-5'
                 }`}

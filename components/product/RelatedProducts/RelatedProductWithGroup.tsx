@@ -7,12 +7,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import cartHandler from '@components/services/cart'
 import 'swiper/css'
 import 'swiper/css/navigation'
-const ProductCard = dynamic(
-  () => import('@components/product/ProductCard/ProductCard')
-)
-const QuickViewModal = dynamic(
-  () => import('@components/product/QuickView/ProductQuickView')
-)
+const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
+const QuickViewModal = dynamic(() => import('@components/product/QuickView/ProductQuickView'))
 
 export default function RelatedProductWithGroup({
   products,
@@ -111,7 +107,7 @@ export default function RelatedProductWithGroup({
     <>
       <Swiper
         slidesPerView={1}
-        spaceBetween={4}
+        spaceBetween={20}
         navigation={true}
         loop={true}
         breakpoints={{

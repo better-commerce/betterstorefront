@@ -31,3 +31,4 @@ export const HTTP_MESSAGES = {
   SERVER_ERROR: 'Internal server error',
 }
 export const PRODUCT_IMAGE_CDN_URL = process.env.PRODUCT_IMAGE_CDN_URL
+export const OMNILYTICS_DISABLED = stringToBoolean(process.env.OMNILYTICS_DISABLED)

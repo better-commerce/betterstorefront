@@ -1,10 +1,7 @@
 @tailwind base;
-@import './base.css';
-
 @tailwind components;
-
 @tailwind utilities;
-
+@import "~react-image-gallery/styles/css/image-gallery.css";
 @font-face {
   font-family: 'Inter';
   src: url('../font/Inter-Bold.woff2') format('woff2'),
@@ -86,7 +83,7 @@
   font-display: swap;
 }
 
-ody {
+body {
   font-family: var(--font-primary) !important;
   font-size: var(--font-14);
   font-weight: 300;
@@ -180,6 +177,12 @@ p {
   font-size: 56px !important;
 }
 
+/* bg color css */
+.bg-blue-web {
+  background: var(--barnd-blue);
+}
+
+/* bg color css */
 .primary-text-color {
   color: #000;
 }
@@ -556,19 +559,27 @@ p {
 }
 
 /* flag primary css start */
-
 /* product list image width and height control css  */
 .height-img-auto {
   min-height: 0 !important;
-  height: auto !important;
   object-fit: contain !important;
   object-position: inherit;
   width: auto !important;
-  min-height: 350px !important;
+  height: 180px !important;
+}
+
+@media screen and (min-width:1024px) {
+  .height-img-auto {
+    min-height: 0 !important;
+    object-fit: contain !important;
+    object-position: inherit;
+    width: auto !important;
+    height: 350px !important;
+  }
 }
 
 .prod-group:hover .prod-name-block {
-  display: block !important;
+  display: flex !important;
 }
 
 .prod-ul-size {
@@ -628,6 +639,14 @@ p {
 
 .mobile-card-panel.white-card {
   background: #fff !important;
+  min-height: 180px !important;
+}
+
+@media screen and (min-width:1024px) {
+  .mobile-card-panel.white-card {
+    background: #fff !important;
+    min-height: 350px !important;
+  }
 }
 
 @media screen and (min-width: 900px) and (max-width: 1300px) {
@@ -687,4 +706,52 @@ p {
   min-height: 65px;
 }
 
+.min-cls-h {
+  min-height: 440px;
+}
+
+@media screen and (max-width:767px) {
+  .min-cls-h {
+    min-height: 470px;
+  }
+}
+
+.include-vat-checked {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 12px;
+  color: var(--btn-text-color-primary);
+}
+
+.include-vat-unchecked {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 12px;
+  color: var(--btn-text-color-secondary);
+}
+
+object {
+  height: auto;
+}
+
+/* category landing css start */
+.cat-container {
+  max-width: 1590px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 30px;
+}
+
+@media screen and (max-width: 767px) {
+  .cat-container {
+    padding: 0px;
+  }
+}
+
+/* category landing css End */
 /* main css end */
