@@ -22,7 +22,7 @@ export default function ProductSort({
     (item: any) => item.key === routerSortOption
   )[0]
   return (
-    <Menu as="div" className="relative flex mb-0 sm:mb-4 pr-4 sm:pr-0">
+    <Menu as="div" className="relative flex pr-4 mb-0 sm:mb-4 sm:pr-0">
       <Menu.Button className="inline-flex justify-center font-semibold text-black text-md group hover:text-gray-900">
         {GENERAL_SORT}{' '}
         <ChevronDownIcon
@@ -42,26 +42,18 @@ export default function ProductSort({
         <Menu.Items className="absolute right-0 z-10 w-40 mt-6 text-left origin-top-right bg-white rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
           {products.sortList.length &&
             products.sortList.map((option: any) => (
-              <Menu.Item key={option.value}>
+              <Menu.Item key={`short-by-option-${option.value}`}>
                 {({ active }) => (
-                  // <Link
-                  //   href={{
-                  //     pathname: router.pathname,
-                  //     query: { ...router.query, sortBy: option.key },
-                  //   }}
-                  //   passHref
-                  // >
-                    <span
-                      onClick={() => action(option.key)}
-                      className={classNames(
-                        'text-gray-500 hover:bg-gray-100',
-                        currentOption?.key === option.key ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm'
-                      )}
-                    >
-                      {option.value}
-                    </span>
-                  // </Link>
+                  <span
+                    onClick={() => action(option.key)}
+                    className={classNames(
+                      'text-gray-500 hover:bg-gray-100',
+                      currentOption?.key === option.key ? 'bg-gray-100' : '',
+                      'block px-4 py-2 text-sm'
+                    )}
+                  >
+                    {option.value}
+                  </span>
                 )}
               </Menu.Item>
             ))}

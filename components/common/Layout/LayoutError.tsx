@@ -22,6 +22,7 @@ import {
 } from '@components/utils/textVariables'
 import { IDeviceInfo } from '@components/ui/context'
 import { IExtraProps } from './Layout'
+import { stringToBoolean } from '@framework/utils/parse-util'
 
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
@@ -44,8 +45,8 @@ interface Props {
   children: any
   pageProps: {
     pages?: Page[]
-    categories: Category[],
-    navTree: any,
+    categories: Category[]
+    navTree: any
   }
   nav: []
   footer: []
@@ -121,16 +122,21 @@ const LayoutError: FC<Props & IExtraProps> = ({
   const { showSearchBar, setShowSearchBar } = useUI()
   //const [data, setData] = useState(navTreeFromLocalStorage)
 
-  const { appConfig, setAppConfig } = useUI()
+  const { includeVAT, setIncludeVAT } = useUI()
+  const isIncludeVAT = stringToBoolean(includeVAT)
+  const [isIncludeVATState, setIsIncludeVATState] =
+    useState<boolean>(isIncludeVAT)
 
   //check if nav data is avaialbel in LocalStorage, then dont fetch from Server/API
   useEffect(() => {
-    setAppConfig(config)
-  }, [])
 
-  useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
+
+    return () => {
+      Router.events.off('routeChangeStart', () => {})
+      Router.events.off('routeChangeComplete', () => {})
+    }
   }, [])
 
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
@@ -140,11 +146,20 @@ const LayoutError: FC<Props & IExtraProps> = ({
     (a: any, b: any) => a.displayOrder - b.displayOrder
   )
 
+  const includeVATChanged = (value: boolean) => {
+    setIncludeVAT(`${value}`)
+
+    setTimeout(() => {
+      setIsIncludeVATState(value)
+    }, 50)
+  }
+
   return (
     <CommerceProvider locale={locale}>
       {isLoading && <ProgressBar />}
       <div className={cn(s.root)}>
         <Navbar
+          onIncludeVATChanged={includeVATChanged}
           currencies={config?.currencies}
           config={sortedData}
           languages={config?.languages}

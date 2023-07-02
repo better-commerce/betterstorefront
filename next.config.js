@@ -88,6 +88,7 @@ module.exports = withCommerceConfig({
     CURRENT_THEME: process.env.CURRENT_THEME,
     PDP_SIZE_OPTIONS_COUNT: process.env.PDP_SIZE_OPTIONS_COUNT,
     PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
+    OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
   },
 })
 

@@ -36,7 +36,7 @@ export default function CollectionList(props: any) {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h1 className="flex w-full pt-2 font-medium text-gray-900 sm:text-xl text-md">
+                    <h1 className="flex w-full pt-2 font-medium text-gray-900 sm:text-xl text-md text-sm">
                       {collection.name}
                     </h1>
 

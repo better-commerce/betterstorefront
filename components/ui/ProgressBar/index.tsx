@@ -12,13 +12,13 @@ export default function ProgressBar() {
 
   return (
     <div className="fixed top-0 w-full z-9999">
-      <div className="overflow-hidden h-1 text-xs flex bg-gray-50">
+      <div className="flex h-1 overflow-hidden text-xs bg-gray-50">
         <div
           style={{
             transition: 'width 1s ease-in-out',
             width: `${progressPercent}%`,
           }}
-          className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-black"
+          className="flex flex-col justify-center text-center text-white bg-orange-500 shadow-none whitespace-nowrap"
         ></div>
       </div>
     </div>

@@ -25,7 +25,7 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
-import { validateAddToCart } from '@framework/utils/app-util'
+import { vatIncluded, validateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
 import { stringFormat } from '@framework/utils/parse-util'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
@@ -66,7 +66,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     cartItems,
     wishListItems,
     setAlert,
+    //includeVAT,
   } = useUI()
+  const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
   const [product, setProduct] = useState(productData || {})
@@ -85,9 +87,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wishListItems, productData])
 
-  useEffect(()=>{
+  useEffect(() => {
     setProduct(productData)
-  },[productData])
+  }, [productData])
 
   useEffect(() => {
     if (product?.variantProductsAttributeMinimal?.length < 1) return
@@ -259,7 +261,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div
-        className="relative hover:outline hover:outline-1 outline-gray-200 group prod-group"
+        className="relative pb-4 hover:shadow-lg shadow-gray-200 group prod-group"
         key={product.id}
       >
         <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">
@@ -281,7 +283,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
               style={css}
               width={400}
-              height={600}
+              height={500}
             />
             {product?.images?.length > 1 && (
               <Image
@@ -292,10 +294,10 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="object-cover object-center w-full h-full sm:h-full min-h-image hidden height-img-auto"
+                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
                 style={css}
                 width={400}
-                height={600}
+                height={500}
               />
             )}
           </Link>
@@ -317,27 +319,25 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </div>
 
           {isMobile ? null : (
-            <>
-              <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-0 sm:flex group-hover:-translate-y-full">
-                {!hideWishlistCTA && (
-                  <SimpleButton
-                    variant="slim"
-                    className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
-                    onClick={handleWishList}
-                    disabled={product.hasWishlisted}
-                  >
-                    {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
-                  </SimpleButton>
-                )}
+            <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-20 sm:flex group-hover:-translate-y-full">
+              {!hideWishlistCTA && (
                 <SimpleButton
                   variant="slim"
-                  className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14"
-                  onClick={() => handleQuickViewData(product)}
+                  className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
+                  onClick={handleWishList}
+                  disabled={product.hasWishlisted}
                 >
-                  {QUICK_VIEW}
+                  {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
                 </SimpleButton>
-              </div>
-            </>
+              )}
+              <SimpleButton
+                variant="slim"
+                className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14"
+                onClick={() => handleQuickViewData(product)}
+              >
+                {QUICK_VIEW}
+              </SimpleButton>
+            </div>
           )}
         </div>
 
@@ -346,32 +346,34 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           href={`/${currentProductData.link}`}
           title={`${product.name} \t ${itemPrice}`}
         >
-          <h4 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-black capitalize group-hover:hidden product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
+          <h4 className="flex justify-between w-full px-2 mt-3 mb-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
             {product?.name?.toLowerCase()}
           </h4>
-
-          <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 group-hover:flex sm:px-2 sizes-ul sm:text-sm prod-ul-size">
-            <li className="mr-1">Sizes:</li>
-            {sizeValues.map((size: any, idx: number) => (
-              <li className="inline-block uppercase" key={idx}>
-                {size?.fieldValue}{' '}
-                {sizeValues.length !== idx + 1 && (
-                  <span className="mr-1 c-sperator">,</span>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm p-font-size">
-            <span className="font-bold">
-              {product?.price?.formatted?.withTax}
-            </span>
+          {sizeValues?.length > 0 ? (
+            <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 sm:px-2 sizes-ul sm:text-sm prod-ul-size">
+              <li className="mr-1">Sizes:</li>
+              {sizeValues.map((size: any, idx: number) => (
+                <li className="inline-block uppercase" key={idx}>
+                  {size?.fieldValue}{' '}
+                  {sizeValues.length !== idx + 1 && (
+                    <span className="mr-1 c-sperator">,</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <div className="px-2 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">
+            {isIncludeVAT
+              ? product?.price?.formatted?.withTax
+              : product?.price?.formatted?.withoutTax}
             {product?.listPrice?.raw?.withTax > 0 &&
               product?.listPrice?.raw?.withTax !=
                 product?.price?.raw?.withTax && (
                 <>
                   <span className="px-1 text-xs font-medium text-black line-through">
-                    {product?.listPrice?.formatted?.withTax}
+                    {isIncludeVAT
+                      ? product?.listPrice?.formatted?.withTax
+                      : product?.listPrice?.formatted?.withoutTax}
                   </span>
                   <span className="text-xs font-semibold text-red-600">
                     ({discount}% Off)
@@ -382,7 +384,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </Link>
 
         {isMobile && (
-          <div className="flex flex-wrap mt-2 border">
+          <div className="flex mt-2 border">
             <div className="w-4/12">
               <button
                 className="w-full text-center bg-white p-1.5"
@@ -430,5 +432,4 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     </>
   )
 }
-
 export default ProductCard

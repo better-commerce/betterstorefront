@@ -1,48 +1,42 @@
 import dynamic from 'next/dynamic'
-import { FC } from 'react'
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-const AttributeSelector = dynamic(() => import('./AttributeSelector'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
-import cartHandler from '@components/services/cart'
+import { FC, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
-import { NEXT_CREATE_WISHLIST, Messages } from '@components/utils/constants'
 import {
-  ArrowsPointingOutIcon,
-  CursorArrowRaysIcon,
-  EyeIcon,
-  HeartIcon,
-  PlusSmallIcon,
-  StarIcon,
-} from '@heroicons/react/24/outline'
+  CLOTH_COLOUR_ATTRIB_NAME,
+  CLOTH_SIZE_ATTRIB_NAME,
+  NEXT_CREATE_WISHLIST,
+  Messages,
+} from '@components/utils/constants'
+import { HeartIcon } from '@heroicons/react/24/outline'
 import { round } from 'lodash'
 import {
-  ALERT_SUCCESS_WISHLIST_MESSAGE,
-  BTN_ADD_TO_WISHLIST,
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
   GENERAL_ADD_TO_BASKET,
-  GENERAL_PRICE_LABEL_RRP,
   IMG_PLACEHOLDER,
+  ITEM_WISHLISTED,
   QUICK_VIEW,
+  WISHLIST_TITLE,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { validateAddToCart } from '@framework/utils/app-util'
-import QuickViewModal from '@components/product/QuickView/ProductQuickView'
+import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
+import { vatIncluded, validateAddToCart } from '@framework/utils/app-util'
+import { hideElement, showElement } from '@framework/utils/ui-util'
 import { stringFormat } from '@framework/utils/parse-util'
+const SimpleButton = dynamic(() => import('@components/ui/Button'))
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const PLPQuickView = dynamic(
+  () => import('@components/product/QuickView/PLPQuickView')
+)
+
 interface Props {
   product: any
-}
-
-const colorKey = 'global.colour'
-
-const WISHLIST_BUTTON_COLOR_SCHEME = {
-  bgColor: 'bg-gray-500',
-  hoverBgColor: 'bg-gray-400',
-  focusRingColor: 'focus-gray-400',
+  hideWishlistCTA?: any
 }
 
 interface Attribute {
@@ -52,32 +46,79 @@ interface Attribute {
 }
 
 const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
-  product,
+  product: productData,
+  hideWishlistCTA = false,
+  deviceInfo,
   maxBasketItemsCount,
 }) => {
-  const [isInWishList, setItemsInWishList] = useState(false)
-  const [isQuickview, setQuickview] = useState(undefined)
-  const [isQuickviewOpen, setQuickviewOpen] = useState(false)
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
-    image: product.image,
-    link: product.slug,
+    image: productData.image,
+    link: productData.slug,
   })
   const {
     basketId,
     user,
     addToWishlist,
     openWishlist,
-    cartItems,
-    setAlert,
     setCartItems,
     openNotifyUser,
+    cartItems,
+    wishListItems,
+    setAlert,
+    //includeVAT,
   } = useUI()
+  const isIncludeVAT = vatIncluded()
+  const [quickViewData, setQuickViewData] = useState(null)
+  const [sizeValues, setSizeValues] = useState([])
+  const [product, setProduct] = useState(productData || {})
+
+  const handleUpdateWishlistItem = useCallback(() => {
+    if (wishListItems.length < 1) return
+    const wishlistItemIds = wishListItems.map((o: any) => o.recordId)
+    setProduct({
+      ...productData,
+      hasWishlisted: wishlistItemIds.includes(productData.recordId),
+    })
+  }, [wishListItems, productData])
+
+  useEffect(() => {
+    handleUpdateWishlistItem()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wishListItems, productData])
+
+  useEffect(() => {
+    setProduct(productData)
+  }, [productData])
+
+  useEffect(() => {
+    if (product?.variantProductsAttributeMinimal?.length < 1) return
+    let sizeAttribData = product?.variantProductsAttributeMinimal?.find(
+      (o: any) => o.fieldCode === CLOTH_SIZE_ATTRIB_NAME
+    )
+    sizeAttribData =
+      sizeAttribData?.fieldValues?.sort(
+        (a: { displayOrder: number }, b: { displayOrder: number }) =>
+          a.displayOrder > b.displayOrder ? 1 : -1
+      ) || []
+    if (sizeAttribData) setSizeValues(sizeAttribData)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.variantProductsAttributeMinimal])
+
+  const handleQuickViewData = (data: any) => {
+    setQuickViewData(data)
+  }
+
+  const handleCloseQuickView = () => {
+    setQuickViewData(null)
+  }
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
-    setItemsInWishList(true)
     openWishlist()
   }
+
   const handleWishList = async () => {
     const accessToken = localStorage.getItem('user')
     if (accessToken) {
@@ -110,7 +151,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const productWithColors =
     product.variantProductsAttributeMinimal &&
     product.variantProductsAttributeMinimal.find(
-      (item: Attribute) => item.fieldCode === colorKey
+      (item: Attribute) => item.fieldCode === CLOTH_COLOUR_ATTRIB_NAME
     )
 
   const hasColorVariation =
@@ -136,11 +177,23 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const secondImage = product.images[1]?.image
 
-  const handleHover = (type: string) => {
-    if (type === 'enter' && secondImage)
-      setCurrentProductData({ ...currentProductData, image: secondImage })
-    if (type === 'leave' && secondImage)
-      setCurrentProductData({ ...currentProductData, image: product.image })
+  const handleHover = (ev: any, type: string) => {
+    if (hideWishlistCTA) return
+
+    const parentElem = ev?.target?.parentElement
+    if (parentElem) {
+      if (type === 'enter' && secondImage) {
+        hideElement(ev?.target?.parentElement?.childNodes[0])
+        showElement(ev?.target?.parentElement?.childNodes[1])
+        //setCurrentProductData({ ...currentProductData, image: secondImage })
+      }
+
+      if (type === 'leave' && secondImage) {
+        hideElement(ev?.target?.parentElement?.childNodes[1])
+        showElement(ev?.target?.parentElement?.childNodes[0])
+        //setCurrentProductData({ ...currentProductData, image: product.image })
+      }
+    }
   }
 
   const handleNotification = () => {
@@ -167,15 +220,15 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         return isValid
       },
       action: async () => {
-        const item = await cartHandler().addToCart(
+        const item = await cartHandler()?.addToCart(
           {
             basketId,
-            productId: product.recordId,
+            productId: product?.recordId,
             qty: 1,
-            manualUnitPrice: product.price.raw.withTax,
-            stockCode: product.stockCode,
-            userId: user.userId,
-            isAssociated: user.isAssociated,
+            manualUnitPrice: product?.price?.raw?.withTax,
+            stockCode: product?.stockCode,
+            userId: user?.userId,
+            isAssociated: user?.isAssociated,
           },
           'ADD',
           { product }
@@ -189,11 +242,11 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       buttonConfig.isNotifyMeEnabled = true
       buttonConfig.action = async () => handleNotification()
       buttonConfig.buttonType = 'button'
-    } else if (!product.currentStock && product.preOrder.isEnabled) {
+    } else if (!product?.currentStock && product?.preOrder?.isEnabled) {
       buttonConfig.title = BTN_PRE_ORDER
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
-      buttonConfig.shortMessage = product.preOrder.shortMessage
+      buttonConfig.shortMessage = product?.preOrder?.shortMessage
     }
     return buttonConfig
   }
@@ -202,143 +255,183 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
   const css = { maxWidth: '100%', height: 'auto' }
-  const onViewApiKey = (isQuickview: any) => {
-    setQuickview(isQuickview)
-    setQuickviewOpen(true)
-  }
+
+  const itemPrice = product?.price?.formatted?.withTax
 
   return (
     <>
       <div
-        className="bg-white hover:outline hover:outline-1 outline-gray-200 group"
+        className="relative pb-4 hover:shadow-lg shadow-gray-200 group prod-group"
         key={product.id}
       >
-        <div className="relative py-3 sm:py-3">
-          <div className="relative overflow-hidden group aspect-w-1 aspect-h-1 hover:opacity-75">
-            <Link
-              passHref
-              href={`/${currentProductData.link}`}
-              key={'data-product' + currentProductData.link}
-            >
+        <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">
+          <Link
+            passHref
+            href={`/${currentProductData.link}`}
+            onMouseEnter={(ev: any) => handleHover(ev, 'enter')}
+            onMouseLeave={(ev: any) => handleHover(ev, 'leave')}
+            title={`${product.name} \t ${itemPrice}`}
+          >
+            <Image
+              id={`${product?.productId ?? product?.recordId}-1`}
+              priority
+              src={
+                generateUri(currentProductData.image, 'h=350&fm=webp') ||
+                IMG_PLACEHOLDER
+              }
+              alt={product.name}
+              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
+              style={css}
+              width={400}
+              height={500}
+            />
+            {product?.images?.length > 1 && (
               <Image
+                id={`${product?.productId ?? product?.recordId}-2`}
                 priority
                 src={
-                  generateUri(currentProductData.image, 'h=350&fm=webp') ||
+                  generateUri(product?.images[1]?.image, 'h=500&fm=webp') ||
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                onMouseEnter={() => handleHover('enter')}
-                onMouseLeave={() => handleHover('leave')}
-                className="object-cover object-center w-full h-full rounded sm:h-full min-h-image"
+                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
                 style={css}
                 width={400}
-                height={600}
-                quality="100"
-              ></Image>
-            </Link>
-            {buttonConfig.isPreOrderEnabled && (
-              <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
-                {BTN_PRE_ORDER}
-              </div>
+                height={500}
+              />
             )}
-            {buttonConfig.isNotifyMeEnabled && (
-              <div className="absolute px-1 py-1 text-white bg-red-400 rounded-sm top-2">
-                {BTN_NOTIFY_ME}
-              </div>
-            )}
-            {isInWishList ? (
-              <span className="text-gray-900">
-                {ALERT_SUCCESS_WISHLIST_MESSAGE}
-              </span>
-            ) : (
+          </Link>
+          {buttonConfig.isPreOrderEnabled && (
+            <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
+              {BTN_PRE_ORDER}
+            </div>
+          )}
+          {buttonConfig.isNotifyMeEnabled && (
+            <div className="absolute px-2 py-1 text-xs font-semibold text-white bg-red-800 rounded-sm top-2">
+              {BTN_NOTIFY_ME}
+            </div>
+          )}
+
+          <div className="absolute bottom-1 left-1 text-gray-900 bg-gray-100 px-[0.4rem] py-0 text-xs font-semibold sm:font-bold">
+            <div className="flex items-center gap-1 star-rating">
+              {product?.rating}
+            </div>
+          </div>
+
+          {isMobile ? null : (
+            <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-20 sm:flex group-hover:-translate-y-full">
+              {!hideWishlistCTA && (
+                <SimpleButton
+                  variant="slim"
+                  className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
+                  onClick={handleWishList}
+                  disabled={product.hasWishlisted}
+                >
+                  {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
+                </SimpleButton>
+              )}
+              <SimpleButton
+                variant="slim"
+                className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14"
+                onClick={() => handleQuickViewData(product)}
+              >
+                {QUICK_VIEW}
+              </SimpleButton>
+            </div>
+          )}
+        </div>
+
+        <Link
+          passHref
+          href={`/${currentProductData.link}`}
+          title={`${product.name} \t ${itemPrice}`}
+        >
+          <h4 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
+            {product?.name?.toLowerCase()}
+          </h4>
+
+          <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 sm:px-2 sizes-ul sm:text-sm prod-ul-size">
+            <li className="mr-1">Sizes:</li>
+            {sizeValues.map((size: any, idx: number) => (
+              <li className="inline-block uppercase" key={idx}>
+                {size?.fieldValue}{' '}
+                {sizeValues.length !== idx + 1 && (
+                  <span className="mr-1 c-sperator">,</span>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm p-font-size">
+            <span className="font-bold">
+              {isIncludeVAT
+                ? product?.price?.formatted?.withTax
+                : product?.price?.formatted?.withoutTax}
+            </span>
+            {product?.listPrice?.raw?.withTax > 0 &&
+              product?.listPrice?.raw?.withTax !=
+                product?.price?.raw?.withTax && (
+                <>
+                  <span className="px-1 text-xs font-medium text-black line-through">
+                    {isIncludeVAT
+                      ? product?.listPrice?.formatted?.withTax
+                      : product?.listPrice?.formatted?.withoutTax}
+                  </span>
+                  <span className="text-xs font-semibold text-red-600">
+                    ({discount}% Off)
+                  </span>
+                </>
+              )}
+          </div>
+        </Link>
+
+        {isMobile && (
+          <div className="flex mt-2 border">
+            <div className="w-4/12">
               <button
-                className="absolute top-2 right-2 z-99"
+                className="w-full text-center bg-white p-1.5"
                 onClick={handleWishList}
+                title="Wishlist"
+                disabled={product.hasWishlisted}
               >
                 <HeartIcon
-                  className="z-50 flex-shrink-0 w-8 h-8 p-1 text-gray-800 hover:text-gray-500 rounded-3xl opacity-80"
+                  className={`inline-block w-4 h-4 ${
+                    product.hasWishlisted && 'fill-red-600 text-red-800'
+                  }`}
                   aria-hidden="true"
                 />
-                <span className="ml-2 text-sm font-medium text-gray-700 hover:text-red-800"></span>
-                <span className="sr-only">f</span>
               </button>
-            )}
-            <button
-              type="button"
-              className="absolute z-10 w-11/12 px-4 py-2 mx-2 text-sm text-white bg-black rounded-md opacity-0 bg-opacity-60 focus:opacity-0 group-hover:opacity-100 bottom-2"
-              onClick={() => onViewApiKey(product)}
-            >
-              Quick View
-            </button>
-          </div>
-
-          <div className="pt-0 text-left">
-            {hasColorVariation ? (
-              <AttributeSelector
-                attributes={product.variantProductsAttributeMinimal}
-                onChange={handleVariableProduct}
-                link={currentProductData.link}
-              />
-            ) : (
-              <div className="inline-block w-1 h-1 mt-2 mr-1 sm:h-6 sm:w-6 sm:mr-2" />
-            )}
-            <div className="grid grid-cols-3">
-              <div className="col-span-2">
-                <h3 className="font-normal text-gray-700 truncate sm:text-sm">
-                  <Link href={`/${currentProductData.link}`}>
-                    {product.name}
-                  </Link>
-                </h3>
-              </div>
-              <div className="justify-end col-span-1 pr-2 mt-1 text-right">
-                <h4 className="text-sm font-bold text-gray-600">
-                  <StarIcon className="relative inline-block w-4 h-4 text-gray-600 -top-0.5" />{' '}
-                  {product?.rating}
-                </h4>
-              </div>
             </div>
-
-            <div className="grid grid-cols-12">
-              <div className="col-span-9">
-                <p className="mt-1 font-bold text-gray-900 sm:mt-1 text-md">
-                  {product?.price?.formatted?.withTax}
-                  {product?.listPrice?.raw?.withTax > 0 &&
-                    product?.listPrice?.raw?.withTax !=
-                      product?.price?.raw?.withTax && (
-                      <>
-                        <span className="px-2 text-sm font-normal text-gray-400 line-through">
-                          {product?.listPrice?.formatted?.withTax}
-                        </span>
-                        <span className="text-sm font-semibold text-red-600">
-                          {discount}% Off
-                        </span>
-                      </>
-                    )}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <Button
-                className="hidden mt-2"
-                title={buttonConfig.title}
-                action={buttonConfig.action}
+            <div className="w-8/12 text-center border-l sm:col-span-8">
+              <button
                 type="button"
-                buttonType={buttonConfig.buttonType || 'cart'}
-              />
+                onClick={() => handleQuickViewData(product)}
+                className="w-full text-primary dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
+              >
+                {QUICK_VIEW}
+              </button>
             </div>
           </div>
+        )}
+
+        <div className="flex flex-col">
+          <Button
+            className="hidden mt-2"
+            title={buttonConfig.title}
+            action={buttonConfig.action}
+            type="button"
+            buttonType={buttonConfig.buttonType || 'cart'}
+          />
         </div>
       </div>
-      <QuickViewModal
-        isQuickview={isQuickview}
-        setQuickview={setQuickview}
-        productData={isQuickview}
-        isQuickviewOpen={isQuickviewOpen}
-        setQuickviewOpen={setQuickviewOpen}
+      <PLPQuickView
+        isQuickview={Boolean(quickViewData)}
+        setQuickview={() => {}}
+        productData={quickViewData}
+        isQuickviewOpen={Boolean(quickViewData)}
+        setQuickviewOpen={handleCloseQuickView}
       />
     </>
   )
 }
-
 export default SearchProductCard

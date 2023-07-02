@@ -290,6 +290,10 @@ body {
     object-fit: cover !important;
     object-position: top !important;
   }
+   .promo-copied{
+    top:-46px;
+    right: -10px !important;
+  }
 }
 
 .image-container span {
@@ -425,7 +429,6 @@ body {
 
 @media screen and (min-width: 768px) {
   .swiper-slide img {
-    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -968,7 +971,6 @@ body {
     height: 15px;
     margin: 10px 0;
   }
-  
 }
 /* cancel ui css */
 .cancel-continer {
@@ -1176,13 +1178,12 @@ body {
   vertical-align: middle;
 }
 
-.main-custom-check-label
-{
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.14);
-    border-radius: 2px;
-    color: #000;
-    padding: 11px 15px;
+.main-custom-check-label {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 2px;
+  color: #000;
+  padding: 11px 15px;
 }
 
 .main-custom-check {
@@ -1244,17 +1245,22 @@ body {
 }
 
 /* end */
-.topspace h2, h4, p, ul, li, br {
+.topspace h2,
+h4,
+p,
+ul,
+li,
+br {
   margin-top: 10px; /* Adjust the value as needed */
 }
-.topspace p{
+.topspace p {
   line-height: 25px;
 }
-.topspace h2{
+.topspace h2 {
   font-size: 18px;
-  }
+}
 
-  /* order status timeline css */
+/* order status timeline css */
 .order-track-step {
   display: flex;
   height: 50px;
@@ -1335,7 +1341,6 @@ body {
 }
 /* order status timeline ends */
 
-
 .paymentBox.paymentbox-sec .control {
   padding: 0 !important;
 }
@@ -1367,7 +1372,11 @@ body {
   background: #000;
 }
 
-.paymentBox .control input.pay-inpt:checked~.control__indicator .pay-btn-section {
+.paymentBox
+  .control
+  input.pay-inpt:checked
+  ~ .control__indicator
+  .pay-btn-section {
   display: grid;
 }
 
@@ -1382,7 +1391,91 @@ body {
   line-height: 30px;
   font-weight: 400;
 }
-.logowidth{
-min-width: 45% !important;
-width: 45% !important;
+.logowidth {
+  min-width: 45% !important;
+  width: 45% !important;
+}
+
+/* Explicit grid setup for edge case handling */
+#ImageCollection.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.react-cookie-law-dialog {
+  background: rgba(0, 0, 0, 0.05);
+  position: fixed;
+  z-index: 99;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  padding: 15px 10px;
+  color: #ffffff;
+}
+
+.react-cookie-law-container {
+  max-width: 400px !important;
+  height: auto;
+  padding: 30px !important;
+  background-color: rgba(0, 0, 0, 0.9);
+  margin: 0;
+  position: fixed;
+  left: 30px;
+  bottom: 20px;
+  border-radius: 10px !important;
+}
+
+.react-cookie-law-msg {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 500;
+  font-family: "Urbanist", "sans-serif" !important;
+  line-height: 25px !important;
+}
+
+.react-cookie-law-button-wrapper {
+  width: 100% !important;
+  float: left;
+}
+
+.react-cookie-law-manage-btn,
+.react-cookie-law-save-btn {
+  background-color: #ffc600 !important;
+  color: #020510 !important;
+  padding: 7px 20px !important;
+  border-radius: 30px !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-family: Raleway, "sans-serif" !important;
+  font-size: 16px !important;
+  display: block !important;
+  width: 100%;
+  margin-bottom: 10px !important;
+}
+
+.react-cookie-law-accept-btn {
+  background-color: #ffc600 !important;
+  color: #020510 !important;
+  padding: 7px 20px !important;
+  border-radius: 30px !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-family: Raleway, "sans-serif" !important;
+  font-size: 16px !important;
+  display: block !important;
+  width: 100%;
+  margin-bottom: 10px !important;
+}
+
+.react-cookie-law-policy {
+  color: #ffffff !important;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+  display: block !important;
+  font-family: Raleway, "sans-serif" !important;
+  font-size: 16px !important;
 }

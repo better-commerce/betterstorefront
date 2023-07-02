@@ -17,7 +17,7 @@ import { findByFieldName } from '@framework/utils/app-util'
 import FormField from '@components/utils/FormField'
 import { Messages } from '@components/utils/constants'
 
-export default function MyDetails() {
+export default function MyDetails({ handleToggleShowState }: any) {
   const [title, setTitle] = useState('My Details')
   const [phoneVal, setPhoneVal] = useState('')
   const { user, setUser } = useUI()
@@ -74,8 +74,14 @@ export default function MyDetails() {
   return (
     <main className="sm:px-6 lg:px-8">
       <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-      <h3 className="max-w-4xl mt-0 mx-auto text-xl font-semibold text-black flex gap-1">
-          <Link className="mr-2 mx-1 align-middle leading-none" href="/my-account">
+        <h3 className="max-w-4xl mt-0 mx-auto text-xl font-semibold text-black flex gap-1">
+          <Link
+            onClick={() => {
+              handleToggleShowState()
+            }}
+            className="mr-2 mx-1 align-middle leading-none"
+            href="/my-account"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -91,93 +97,96 @@ export default function MyDetails() {
           <span className="leading-none">My Details</span>
         </h3>
       </div>
-      <div className='mx-2'>
-      <div className="max-w-4xl lg:mx-12 xs:ml-6">
-        <div className="lg:px-0 sm:px-0">
-          {/* <h1 className="font-extrabold tracking-tight text-gray-900 pt-2">
+      <div className="mx-2">
+        <div className="max-w-4xl lg:mx-12 xs:ml-6">
+          <div className="lg:px-0 sm:px-0">
+            {/* <h1 className="font-extrabold tracking-tight text-gray-900 pt-2">
             {title}
           </h1> */}
-          <p className="mt-2 text-sm text-black font-normal">
-            {MY_DETAIL_TEXT}
-          </p>
+            <p className="mt-2 text-sm text-black font-normal">
+              {MY_DETAIL_TEXT}
+            </p>
+          </div>
         </div>
-      </div>
-      <div>
-        <Formik
-          enableReinitialize={true}
-          validationSchema={schema}
-          initialValues={initialValues}
-          onSubmit={handleDataSubmit}
-        >
-          {(context) => {
-            const {
-              errors,
-              touched,
-              handleSubmit,
-              values,
-              handleChange,
-              isSubmitting,
-            }: any = context
-            return (
-              <div className="flex-col w-full py-5 flex items-flex-start lg:mx-12 xs:ml-6 max-w-4xl justify-center">
-                <Form className="font-normal w-full sm:w-1/2">
-                  {formConfig.map((formItem: any, idx: number) => {
-                    return (
-                      formItem.type !== 'singleSelectButtonGroup' && (
-                        <div key={`${formItem.label}_${idx}`}>
-                          <label className="text-black font-medium text-sm">
-                            {formItem.label}
-                          </label>
+        <div>
+          <Formik
+            enableReinitialize={true}
+            validationSchema={schema}
+            initialValues={initialValues}
+            onSubmit={handleDataSubmit}
+          >
+            {(context) => {
+              const {
+                errors,
+                touched,
+                handleSubmit,
+                values,
+                handleChange,
+                isSubmitting,
+              }: any = context
+              return (
+                <div className="flex-col w-full py-5 flex items-flex-start lg:mx-12 xs:ml-6 max-w-4xl justify-center">
+                  <Form className="font-normal w-full sm:w-1/2">
+                    {formConfig.map((formItem: any, idx: number) => {
+                      return (
+                        formItem.type !== 'singleSelectButtonGroup' && (
+                          <div key={`${formItem.label}_${idx}`}>
+                            <label className="text-black font-medium text-sm">
+                              {formItem.label}
+                            </label>
 
-                          <Field
-                            key={idx}
-                            name={formItem.name}
-                            placeholder={formItem.placeholder}
-                            onChange={(e: any) =>
-                              formikHandleChange(e, handleChange)
-                            }
-                            value={values[formItem.name]}
-                            type={formItem.type}
-                            maxLength={formItem.maxLength}
-                            className="mb-2 mt-2 font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 !px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
-                          />
+                            <Field
+                              key={idx}
+                              name={formItem.name}
+                              placeholder={formItem.placeholder}
+                              onChange={(e: any) =>
+                                formikHandleChange(e, handleChange)
+                              }
+                              value={values[formItem.name]}
+                              type={formItem.type}
+                              maxLength={formItem.maxLength}
+                              className="mb-2 mt-2 font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 !px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                            />
 
-                          {errors[formItem.name] && touched[formItem.name] ? (
-                            <div className="text-red-400 text-xs mb-2">
-                              {errors[formItem.name]}
-                            </div>
-                          ) : null}
-                        </div>
+                            {errors[formItem.name] && touched[formItem.name] ? (
+                              <div className="text-red-400 text-xs mb-2">
+                                {errors[formItem.name]}
+                              </div>
+                            ) : null}
+                          </div>
+                        )
                       )
-                    )
-                  })}
-                  {(formConfig?.length
-                    ? Array.from<any>([]).concat([
-                        findByFieldName(formConfig, 'gender'),
-                      ])
-                    : []
-                  )?.map((item: any, idx: number) => (
-                    <div key={item?.name} className="w-full py-4 address-type">
-                      {<FormField context={context} item={item} />}
+                    })}
+                    {(formConfig?.length
+                      ? Array.from<any>([]).concat([
+                          findByFieldName(formConfig, 'gender'),
+                        ])
+                      : []
+                    )?.map((item: any, idx: number) => (
+                      <div
+                        key={item?.name}
+                        className="w-full py-4 address-type"
+                      >
+                        {<FormField context={context} item={item} />}
+                      </div>
+                    ))}
+                    <div className="mt-10 flex sm:flex-col1 w-60">
+                      <Button
+                        type="submit"
+                        onClick={handleSubmit}
+                        className="link-button !py-3 btn-c btn-primary"
+                        loading={isSubmitting}
+                        disabled={isSubmitting}
+                      >
+                        {!isSubmitting && GENERAL_SAVE_CHANGES}
+                      </Button>
                     </div>
-                  ))}
-                  <div className="mt-10 flex sm:flex-col1 w-60">
-                    <Button
-                      type="submit"
-                      onClick={handleSubmit}
-                      className="link-button !py-3 btn-c btn-primary"
-                      loading={isSubmitting}
-                      disabled={isSubmitting}
-                    >
-                      {!isSubmitting && GENERAL_SAVE_CHANGES}
-                    </Button>
-                  </div>
-                </Form>
-              </div>
-            )
-          }}
-        </Formik>
-      </div>
+                  </Form>
+                </div>
+              )
+            }}
+          </Formik>
+        </div>
       </div>
     </main>
   )
