@@ -208,6 +208,7 @@ type Action =
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
   | 'LOGIN_VIEW'
+  | 'LOGIN_VIEWD'
   | 'FORGOT_VIEW'
   | 'NEW_SHIPPING_ADDRESS'
   | 'NEW_PAYMENT_METHOD'
@@ -215,6 +216,8 @@ type MODAL_VIEWS =
 
 type SIDEBAR_VIEWS =
   | 'CART_VIEW'
+  | 'LOGIN_VIEW'
+  | 'LOGIN_VIEWD'
   | 'CHECKOUT_VIEW'
   | 'PAYMENT_METHOD_VIEW'
   | 'WISHLIST_VIEW'
@@ -748,6 +751,11 @@ export const UIProvider: React.FC<any> = (props) => {
     openSidebar()
   }
 
+  const openLogin = () => {
+    setSidebarView('LOGIN_VIEWD')
+    openSidebar()
+  }
+
   const setBasketId = useCallback(
     (basketId: string) => {
       Cookies.set('basketId', basketId, {
@@ -921,6 +929,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setIsGuestUser,
       deleteUser,
       openCart,
+      openLogin,
       openWishlist,
       setWishlist,
       removeFromWishlist,

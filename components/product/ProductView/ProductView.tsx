@@ -144,6 +144,8 @@ export default function ProductView({
     setCartItems,
     user,
     openCart,
+    openLogin,
+    isGuestUser
   } = useUI()
   const isIncludeVAT = vatIncluded()
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
@@ -647,6 +649,11 @@ export default function ProductView({
     }
 
     const accessToken = localStorage.getItem('user')
+    if (!accessToken || isGuestUser) {
+      //  setAlert({ type: 'success', msg:" Please Login "})
+      openLogin()
+      return
+    }
     if (accessToken) {
       const createWishlist = async () => {
         try {
