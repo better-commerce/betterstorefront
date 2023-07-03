@@ -18,6 +18,7 @@ import {
   BETTERCOMMERCE_DEFAULT_CURRENCY,
   EmptyString,
 } from '@components/utils/constants'
+import { Cookie } from '@framework/utils/constants'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
 export const DELIVERY_FORM_FIELDS = [
@@ -82,7 +83,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
 
   const getCurrencySymbol = () => {
     const currency =
-      Cookies.get('Currency') ||
+      Cookies.get(Cookie.Key.CURRENCY) ||
       BETTERCOMMERCE_CURRENCY ||
       BETTERCOMMERCE_DEFAULT_CURRENCY
     return (

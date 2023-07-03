@@ -155,6 +155,7 @@ export default function CollectionPage(props: any) {
         currentPage: 1,
         filters: [],
         collectionId: props?.id,
+        sortBy: null,
       },
     },
     error,
@@ -250,12 +251,12 @@ export default function CollectionPage(props: any) {
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
     if (
-      data.products?.currentPage !== productListMemory.products.currentPage ||
-      data.products?.total !== productListMemory.products.total ||
-      data.products?.sortBy !== productListMemory.products.sortBy
+      data?.products?.currentPage !== productListMemory.products.currentPage ||
+      data?.products?.total !== productListMemory.products.total ||
+      data?.products?.sortBy !== productListMemory.products.sortBy
     ) {
       setProductListMemory((prevData: any) => {
-        let dataClone = { ...data }
+        let dataClone: any = { ...data }
         if (state.currentPage > 1 && IS_INFINITE_SCROLL) {
           dataClone.products.results = [
             ...prevData.products.results,
