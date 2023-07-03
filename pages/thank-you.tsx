@@ -1,10 +1,30 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import axios from 'axios'
-import { NEXT_GET_ORDER } from '@components/utils/constants'
-import { LoadingDots } from '@components/ui'
+import { Transition, Dialog } from '@headlessui/react'
+import {
+  ChatBubbleLeftEllipsisIcon,
+  EnvelopeIcon,
+  LinkIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
+import { Fragment } from 'react'
+import { CLOSE_PANEL } from '@components/utils/textVariables'
+import {
+  NEXT_GET_ORDER,
+  NEXT_REFERRAL_ADD_USER_REFEREE,
+  NEXT_REFERRAL_BY_EMAIL,
+  NEXT_REFERRAL_BY_USERID,
+  NEXT_REFERRAL_BY_USERNAME,
+  NEXT_REFERRAL_CLICK_ON_INVITE,
+  NEXT_REFERRAL_INVITE_SENT,
+  NEXT_REFERRAL_SEARCH,
+  NEXT_REFERRAL_INFO,
+} from '@components/utils/constants'
+import { Button, LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
 import {
   BTN_BACK_TO_HOME,
@@ -42,13 +62,41 @@ import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
+import classNames from 'classnames'
 
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
+  const [isReferModalOpen, setIsReferModalOpen] = useState(false)
+  const [shareReferralView, setShareReferralView] = useState(false)
+  const [referralObj, setReferralObj] = useState({
+    id: '',
+    userId: '',
+    name: '',
+    slug: '',
+    invitesSent: 0,
+    clickOnInvites: 0,
+    successfulInvites: 0,
+  })
+  const [copied, setCopied] = useState(false)
+  let referralLink=''
+  if(typeof window !== undefined ){
+    const hostname = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : '';
+    referralLink = hostname + '/?referral-code=' + (referralObj?.slug || '')
+  }
+
+
+  const handleCopyClick = async () => {
+    try {
+      await navigator.clipboard.writeText(referralLink)
+      setCopied(true)
+    } catch (error) {
+      console.error('Failed to copy link:', error)
+    }
+  }
   const { setOrderId, orderId, user, setGuestUser, setIsGuestUser } = useUI()
   const isIncludeVAT = vatIncluded()
-
+  const router = useRouter()
   useEffect(() => {
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER, {
@@ -69,6 +117,28 @@ export default function OrderConfirmation() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const setModelClose = () => {
+    setIsReferModalOpen(false)
+  }
+
+  const handleReferralByEmail = async (e: any) => {
+    // setIsReferModalOpen(true)
+    let { data: data } = await axios.post(NEXT_REFERRAL_BY_EMAIL, {
+      email: user.email,
+    })
+    setReferralObj(data?.referralDetails)
+    // console.log('data in handle by email: ', data)
+  }
+
+  const handleReferralInfo = async (e: any) => {
+    let { data: data } = await axios.get(NEXT_REFERRAL_INFO)
+    console.log('data in referral Info ', data)
+    if (data?.referralDetails?.referrerPromo) {
+      setIsReferModalOpen(true)
+      handleReferralByEmail(e)
+    }
+  }
 
   if (isLoading) {
     return (
@@ -139,9 +209,7 @@ export default function OrderConfirmation() {
                         </h4>
                         <p className="mr-1 text-sm text-gray-700 font-medium">
                           Size:{' '}
-                          <span className="uppercase">
-                            {product.size}
-                          </span>
+                          <span className="uppercase">{product.size}</span>
                         </p>
                       </div>
                       <div className="flex items-end mt-2">
@@ -300,6 +368,141 @@ export default function OrderConfirmation() {
       <div
         className={`${ELEM_ATTR}${ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS[0]}`}
       ></div>
+      <Transition.Root show={isReferModalOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 overflow-hidden z-999"
+          onClose={() => setModelClose()}
+        >
+          <div className="absolute inset-0 overflow-hidden z-999">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay
+                className="w-full h-screen bg-black opacity-50"
+                onClick={() => setModelClose()}
+              />
+            </Transition.Child>
+
+            <div className="fixed inset-0 flex items-center justify-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="w-screen max-w-xl">
+                  <div className="flex flex-col h-full overflow-y-auto rounded shadow-xl bg-gray-50">
+                    <div className="flex-1 px-0 overflow-y-auto">
+                      <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
+                        <Dialog.Title className="text-lg font-medium text-gray-900">
+                          Refer a Friend
+                        </Dialog.Title>
+                        <div className="flex items-center ml-3 h-7">
+                          <button
+                            type="button"
+                            className="p-2 -m-2 text-gray-400 hover:text-gray-500"
+                            onClick={() => setModelClose()}
+                          >
+                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <XMarkIcon className="w-6 h-6" aria-hidden="true" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="\py-2 mt-2 sm:px-0 flex flex-row">
+                        {/*Referal Program Info view*/}
+                        {shareReferralView ? (
+                          <div className="my-20 flex w-full flex-col justify-center items-center">
+                            <h3 className="px-5 text-center">
+                              {referralObj.name} {'Invite now using:'}
+                            </h3>
+                            <div className="flex flex-row justify-center items-center">
+                              <span className="h-5 w-5 mx-2 my-2 text-black">
+                                <ChatBubbleLeftEllipsisIcon />
+                              </span>
+                              <span className="h-5 w-5 mx-2 my-2 text-black">
+                                <EnvelopeIcon />
+                              </span>
+                              <span className="h-5 w-5 mx-2 my-2 text-black">
+                                <LinkIcon />
+                              </span>
+                            </div>
+                            <p className="px-5 text-center">
+                              Tell your friends to enter your name like this at
+                              Checkout
+                            </p>
+                            <h2 className="mx-2 text-lg">{referralObj?.name}</h2>
+                            <Button className="my-3" onClick={() => {}}>
+                              Tell them in person
+                            </Button>
+                            {referralObj?.slug && (
+                              <div className="\w-full flex flex-col border-[1px] items-center justify-center border-black px-2 py-2">
+                                <p className='w-full text-left'>or share a link:</p>
+                                <div className="w-full flex items-center justify-between">
+                                  <p className="mx-1 truncate">{referralLink}</p>
+                                  <Button
+                                    className="h-4 !text-[10px]"
+                                    onClick={handleCopyClick}
+                                  >
+                                    {copied ? 'COPIED' : 'COPY LINK'}
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div
+                            className={classNames(
+                              'my-20 flex w-full flex-col justify-center items-center'
+                            )}
+                          >
+                            <h2 className="px-5 text-center">
+                              Treat a friend to $20 off and get $20 OFF when you
+                              spend over $100 yourself
+                            </h2>
+                            <p className="px-5 text-center">
+                              Our refer-a-friend programme is managed by Mention
+                              Me who will process your data and send you
+                              referral service emails.
+                            </p>
+                            <Button
+                              className="my-3"
+                              onClick={() => {
+                                setShareReferralView(true)
+                              }}
+                            >
+                              GET £20 OFF
+                            </Button>
+                          </div>
+                        )}
+                        <div className="flex w-full">
+                          <Image
+                          src={'/assets/images/refer-a-friend.jpg'}
+                          alt='banner'
+                          height={700}
+                          width={480}
+                          className='object-cover'
+                          >
+                          </Image>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
     </>
   )
 }
