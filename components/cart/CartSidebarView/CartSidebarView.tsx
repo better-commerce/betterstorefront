@@ -774,49 +774,11 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                           </h4>
                         </div>
                       )}
-                      <div className="px-4 mt-8 sm:px-6">
+                      <div className="mt-8">
                         <div className="flow-root">
-                          {isEmpty && (
-                            <div className="flex flex-col items-center justify-between w-full h-full py-9">
-                              <Image
-                                height="100"
-                                width="100"
-                                src="/assets/images/cart.jpg"
-                                alt="cart"
-                                className="text-center"
-                              />
-                              <p className="mt-5 text-gray-700">
-                                {WISHLIST_SIDEBAR_MESSAGE}
-                              </p>
-                              <Link href="/search">
-                                <button
-                                  type="button"
-                                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                                  onClick={handleClose}
-                                >
-                                  {GENERAL_CATALOG}
-                                  <span aria-hidden="true"> &rarr;</span>
-                                </button>
-                              </Link>
-                              {altRelatedProducts?.relatedProducts && (
-                                <div className="flex flex-col px-4 pb-10 mt-0 sm:px-8 sm:pb-16 cart-related-prod ">
-                                  {/* {JSON.stringify(altRelatedProducts?.relatedProducts?.products?.results)} */}
-                                  <RelatedProductWithGroup
-                                    products={
-                                      altRelatedProducts?.relatedProducts
-                                        ?.products?.results || []
-                                    }
-                                    productPerColumn={1.7}
-                                    deviceInfo={deviceInfo}
-                                    maxBasketItemsCount={maxBasketItemsCount}
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          )}
                           <ul
                             role="list"
-                            className="-my-6 divide-y divide-gray-200"
+                            className="-my-6 divide-y divide-gray-200 px-4 sm:px-6"
                           >
                             {cartItems.lineItems
                               ?.sort((lineItem1: any, lineItem2: any) => {
@@ -1061,13 +1023,72 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                               </div>
                             )}
                           </ul>
+                          {isEmpty && (
+                            <div className="flex flex-col items-center justify-between w-full h-full py-9">
+                              <Image
+                                height="100"
+                                width="100"
+                                src="/assets/images/cart.jpg"
+                                alt="cart"
+                                className="text-center"
+                              />
+                              <p className="mt-5 text-gray-700">
+                                {WISHLIST_SIDEBAR_MESSAGE}
+                              </p>
+                              <Link href="/search">
+                                <button
+                                  type="button"
+                                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                                  onClick={handleClose}
+                                >
+                                  {GENERAL_CATALOG}
+                                  <span aria-hidden="true"> &rarr;</span>
+                                </button>
+                              </Link>
+                              {altRelatedProducts?.relatedProducts && (
+                                <div className="flex flex-col px-4 pb-10 mt-0 sm:px-8 sm:pb-16 cart-related-prod ">
+                                  {/* {JSON.stringify(altRelatedProducts?.relatedProducts?.products?.results)} */}
+                                  <RelatedProductWithGroup
+                                    products={
+                                      altRelatedProducts?.relatedProducts
+                                        ?.products?.results || []
+                                    }
+                                    productPerColumn={1.7}
+                                    deviceInfo={deviceInfo}
+                                    maxBasketItemsCount={maxBasketItemsCount}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          {!isEmpty && relatedProductData && (
+                            <>
+                              <div className="flex flex-col">
+                                <div className="section-devider-sm"></div>
+                              </div>
+                              <div className="flex flex-col mt-0 cart-related-prod px-4 sm:px-6">
+                                <RelatedProducts
+                                  relatedProducts={relatedProductData}
+                                  productPerColumn={1.8}
+                                  checkout_refrence={true}
+                                  title="Frequently Bought Together"
+                                  handleQuickAddToBag={handleQuickAddToBag}
+                                  deviceInfo={deviceInfo}
+                                />
+                              </div>
+                              <div className="flex flex-col">
+                                <div className="section-devider-sm"></div>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col">
-                      <div className="section-devider-sm"></div>
-                    </div>
-
+                    {!relatedProductData && (
+                      <div className="flex flex-col">
+                        <div className="section-devider-sm"></div>
+                      </div>
+                    )}
                     <Transition appear show={isOpen} as={Fragment}>
                       <Dialog
                         as="div"
@@ -1140,7 +1161,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                     </Transition>
 
                     {!isEmpty && (
-                      <div className="sticky bottom-0 pt-4 pb-1 mt-2 ml-5 mr-5 bg-white">
+                      <div className="sticky bottom-0 pt-4 pb-1 mt-2 pl-5 pr-5 bg-white">
                         <div className="-mt-3">
                           <Disclosure defaultOpen>
                             {({ open }) => (
