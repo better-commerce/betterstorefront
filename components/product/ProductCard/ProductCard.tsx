@@ -346,9 +346,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           href={`/${currentProductData.link}`}
           title={`${product.name} \t ${itemPrice}`}
         >
-          <h4 className="flex justify-between w-full px-2 mt-3 mb-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
+          <div className="flex justify-between w-full px-2 mt-3 mb-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
             {product?.name?.toLowerCase()}
-          </h4>
+          </div>
           {sizeValues?.length > 0 ? (
             <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 sm:px-2 sizes-ul sm:text-sm prod-ul-size">
               <li className="mr-1">Sizes:</li>

@@ -35,9 +35,9 @@ export default function Collections({ data }: any) {
             </Link>
           </div>
           <div className="flex flex-col w-full px-0 py-2 text-left">
-            <h4 className="mt-3 mb-2 font-bold text-black">
+            <div className="mt-3 mb-2 font-bold text-black">
               {collection?.collectionlist_title}
-            </h4>
+            </div>
             <div
               dangerouslySetInnerHTML={{
                 __html: collection.collectionlist_shortdescription,
