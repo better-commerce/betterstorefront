@@ -48,6 +48,7 @@ import MultiBrandVideo from '@components/brand/MultiBrandVideo'
 import axios from 'axios'
 import { NEXT_GET_COLLECTION_BY_ID } from '@components/utils/constants'
 import OfferCard from '@components/brand/OfferCard'
+import { tryParseJson } from '@framework/utils/parse-util'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -125,15 +126,17 @@ function BrandDetailPage({
   slug,
   deviceInfo,
   config,
-  obj, // ...for Image Collection api response
+  collections, // ...for Image Collection api response
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
 
-  let imageBannerCollectionResponse: any = obj.imageBannerCollectionResponse
-  let imageCategoryCollectionResponse: any = obj.imageCategoryCollectionResponse
-  let imageCollectionResponse: any = obj.imageCollectionResponse
-  let offerBannerResult: any = obj.offerBannerResult
+  let imageBannerCollectionResponse: any =
+    collections.imageBannerCollectionResponse
+  let imageCategoryCollectionResponse: any =
+    collections.imageCategoryCollectionResponse
+  let imageCollectionResponse: any = collections.imageCollectionResponse
+  let offerBannerResult: any = collections.offerBannerResult
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -581,7 +584,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     offerBannerResult: [],
   }
 
-  const widgets = JSON.parse(response?.result?.widgetsConfig || '[]')
+  // const widgets = JSON.parse(response?.result?.widgetsConfig || '[]')
+  let widgets: any = tryParseJson(response?.result?.widgetsConfig)
+  console.log(widgets, 'widgets')
+
   for (var i = 0; i < widgets.length; i++) {
     if (
       widgets[i].manufacturerSettingType == 'ImageCollection' &&
@@ -618,7 +624,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
-      obj: obj ?? [],
+      collections: obj ?? [],
     }, // will be passed to the page component as props
   }
 }
