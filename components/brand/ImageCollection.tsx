@@ -6,6 +6,7 @@ import SwiperCore, { Navigation } from 'swiper'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import Link from 'next/link'
 
 SwiperCore.use([Navigation])
 
@@ -43,12 +44,16 @@ export default function ImageCollection({
       <div id="ImageCollection" className={`grid grid-cols-${range} gap-5`}>
         {ImageArrayToDisp.map((val: any, Idx: number) => {
           return (
-            <div
+            <Link
               key={Idx}
               className="flex items-center justify-evenly border-orange-500 border-solid border group bg-orange-600"
+              href={val.link ? val.link : '#'}
             >
               {true && (
-                <p className="absolute bg-gray-50 w-48 p-4 pl-10 m-auto uppercase rounded-md z-50 md:text-lg text-sm font-semibold">
+                <p
+                  key={Idx}
+                  className="absolute bg-gray-50 w-48 p-4 pl-10 m-auto uppercase rounded-md z-50 md:text-lg text-sm font-semibold"
+                >
                   {val.title || 'POWER TOOL'}
                 </p>
               )}
@@ -60,7 +65,7 @@ export default function ImageCollection({
                 height={224}
                 className="w-full group-hover:opacity-20"
               ></Image>
-            </div>
+            </Link>
           )
         })}
       </div>
