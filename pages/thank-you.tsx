@@ -122,7 +122,7 @@ export default function OrderConfirmation() {
     setIsReferModalOpen(false)
   }
 
-  const handleReferralByEmail = async (e: any) => {
+  const handleReferralByEmail = async () => {
     // setIsReferModalOpen(true)
     let { data: data } = await axios.post(NEXT_REFERRAL_BY_EMAIL, {
       email: user.email,
@@ -131,14 +131,17 @@ export default function OrderConfirmation() {
     // console.log('data in handle by email: ', data)
   }
 
-  const handleReferralInfo = async (e: any) => {
+  const handleReferralInfo = async () => {
     let { data: data } = await axios.get(NEXT_REFERRAL_INFO)
-    console.log('data in referral Info ', data)
     if (data?.referralDetails?.referrerPromo) {
       setIsReferModalOpen(true)
-      handleReferralByEmail(e)
+      handleReferralByEmail()
     }
   }
+
+  useEffect(()=>{
+    handleReferralInfo()
+  },[])
 
   if (isLoading) {
     return (
@@ -418,7 +421,7 @@ export default function OrderConfirmation() {
                           </button>
                         </div>
                       </div>
-                      <div className="\py-2 mt-2 sm:px-0 flex flex-row">
+                      <div className="\py-2  sm:px-0 flex flex-row">
                         {/*Referal Program Info view*/}
                         {shareReferralView ? (
                           <div className="my-20 flex w-full flex-col justify-center items-center">
