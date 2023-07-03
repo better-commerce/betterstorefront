@@ -31,6 +31,7 @@ import {
   EmptyString,
   Messages,
 } from '@components/utils/constants'
+import { Cookie } from '@framework/utils/constants'
 
 declare const Klarna: any
 
@@ -161,7 +162,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         phone: basketOrderInfo?.billingAddress?.phoneNo,
         country:
           basketOrderInfo?.billingAddress?.countryCode ||
-          Cookies.get('Country') ||
+          Cookies.get(Cookie.Key.COUNTRY) ||
           BETTERCOMMERCE_COUNTRY ||
           BETTERCOMMERCE_DEFAULT_COUNTRY,
       },
@@ -178,7 +179,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         phone: basketOrderInfo?.shippingAddress?.phoneNo,
         country:
           basketOrderInfo?.shippingAddress?.countryCode ||
-          Cookies.get('Country') ||
+          Cookies.get(Cookie.Key.COUNTRY) ||
           BETTERCOMMERCE_COUNTRY ||
           BETTERCOMMERCE_DEFAULT_COUNTRY,
       },
@@ -216,7 +217,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
               phone: basketOrderInfo?.billingAddress?.phoneNo,
               country:
                 basketOrderInfo?.billingAddress?.countryCode ||
-                Cookies.get('Country') ||
+                Cookies.get(Cookie.Key.COUNTRY) ||
                 BETTERCOMMERCE_COUNTRY ||
                 BETTERCOMMERCE_DEFAULT_COUNTRY,
             },
@@ -233,7 +234,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
               phone: basketOrderInfo?.shippingAddress?.phoneNo,
               country:
                 basketOrderInfo?.shippingAddress?.countryCode ||
-                Cookies.get('Country') ||
+                Cookies.get(Cookie.Key.COUNTRY) ||
                 BETTERCOMMERCE_COUNTRY ||
                 BETTERCOMMERCE_DEFAULT_COUNTRY,
             },
@@ -323,12 +324,12 @@ export class KlarnaPaymentButton extends BasePaymentButton {
       return {
         intent: 'buy',
         purchase_country:
-          Cookies.get('Country') ||
+          Cookies.get(Cookie.Key.COUNTRY) ||
           BETTERCOMMERCE_COUNTRY ||
           BETTERCOMMERCE_DEFAULT_COUNTRY,
         purchase_currency: orderResult?.currencyCode,
         locale:
-          Cookies.get('Language') ||
+          Cookies.get(Cookie.Key.COUNTRY) ||
           BETTERCOMMERCE_LANGUAGE ||
           BETTERCOMMERCE_DEFAULT_LANGUAGE,
         order_amount: parseFloat(

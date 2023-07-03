@@ -21,6 +21,7 @@ import {
   Messages,
 } from '@components/utils/constants'
 import Router from 'next/router'
+import { Cookie } from '@framework/utils/constants'
 
 declare const AfterPay: any
 
@@ -95,7 +96,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
         (clientResult: any) => {
           AfterPay.initialize({
             countryCode:
-              Cookies.get('Country') ||
+              Cookies.get(Cookie.Key.COUNTRY) ||
               BETTERCOMMERCE_COUNTRY ||
               BETTERCOMMERCE_DEFAULT_COUNTRY,
           })
@@ -172,7 +173,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
       const orderId = orderResult?.id
       const data: any = {
         purchaseCountry:
-          Cookies.get('Country') ||
+          Cookies.get(Cookie.Key.COUNTRY) ||
           BETTERCOMMERCE_COUNTRY ||
           BETTERCOMMERCE_DEFAULT_COUNTRY ||
           EmptyString,
@@ -229,7 +230,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
           area2: EmptyString,
           countryCode:
             billingAddress?.countryCode ||
-            Cookies.get('Country') ||
+            Cookies.get(Cookie.Key.COUNTRY) ||
             BETTERCOMMERCE_COUNTRY ||
             BETTERCOMMERCE_DEFAULT_COUNTRY,
           line1: billingAddress?.address1,
@@ -246,7 +247,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
           area2: EmptyString,
           countryCode:
             shippingAddress?.countryCode ||
-            Cookies.get('Country') ||
+            Cookies.get(Cookie.Key.COUNTRY) ||
             BETTERCOMMERCE_COUNTRY ||
             BETTERCOMMERCE_DEFAULT_COUNTRY,
           line1: shippingAddress?.address1,

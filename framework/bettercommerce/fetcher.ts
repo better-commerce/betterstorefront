@@ -10,6 +10,7 @@ import {
   BETTERCOMMERCE_DEFAULT_CURRENCY,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   BETTERCOMMERCE_LANGUAGE,
+  EmptyString,
   NEXT_PUBLIC_API_CACHING_LOG_ENABLED,
 } from '@components/utils/constants'
 
@@ -102,19 +103,23 @@ const fetcher = async ({
       cookies.Currency ||
       store.get('Currency') ||
       BETTERCOMMERCE_CURRENCY ||
-      BETTERCOMMERCE_DEFAULT_CURRENCY,
+      BETTERCOMMERCE_DEFAULT_CURRENCY ||
+      EmptyString,
     Language:
       cookies.Language ||
       store.get('Language') ||
       BETTERCOMMERCE_LANGUAGE ||
-      BETTERCOMMERCE_DEFAULT_LANGUAGE,
+      BETTERCOMMERCE_DEFAULT_LANGUAGE ||
+      EmptyString,
     Country:
       cookies.Country ||
       store.get('Country') ||
       BETTERCOMMERCE_COUNTRY ||
-      BETTERCOMMERCE_DEFAULT_COUNTRY,
-    DeviceId: cookies?.deviceId || '',
-    SessionId: cookies?.sessionId || '',
+      BETTERCOMMERCE_DEFAULT_COUNTRY ||
+      EmptyString,
+    DeviceId: cookies?.deviceId || EmptyString,
+    SessionId: cookies?.sessionId || EmptyString,
+    CompanyId: cookies?.cmpId || EmptyString,
   }
   const config: any = {
     method: method,
