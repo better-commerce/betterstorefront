@@ -1,15 +1,23 @@
 // Base Imports
-import React from 'react'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
 import type { GetStaticPropsContext } from 'next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import NextHead from 'next/head'
 import Link from 'next/link'
+import axios from 'axios'
 // Other Imports
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
-import { HOMEPAGE_SLUG, SITE_ORIGIN_URL } from '@components/utils/constants'
+import {
+  HOMEPAGE_SLUG,
+  NEXT_REFERRAL_ADD_USER_REFEREE,
+  NEXT_REFERRAL_BY_SLUG,
+  NEXT_REFERRAL_CLICK_ON_INVITE,
+  SITE_ORIGIN_URL,
+} from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -18,12 +26,16 @@ import { useRouter } from 'next/router'
 import os from 'os'
 import { obfuscateHostName } from '@framework/utils/app-util'
 import PromotionBanner from '@components/home/PromotionBanner'
+import { FeatureBar } from '@components/common'
+import { Button } from '@components/ui'
+import ReferralCard from '@components/customer/ReferralCard'
 
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/product/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
+const RefferalCard = dynamic(() => import('@components/customer/ReferralCard'))
 
 export async function getStaticProps({
   preview,
@@ -90,10 +102,66 @@ function Home({
   hostName,
   deviceInfo,
 }: any) {
+  const [referralAvailable, setReferralAvailable] = useState(false)
+  // console.log("referralAvailable:",referralAvailable);
+  
+  const [referralEmail,setReferralEmail] = useState('')
+  const [isLoading,setIsLoading] = useState(false)
+  const [voucher,setVoucher] = useState<any>(null)
+  // console.log("voucher :",voucher);
+  
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb
+
+  const handleNewReferral = async (e:any)=>{
+    e.preventDefault()
+    setIsLoading(true)
+    let {data} = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE,referralEmail)
+    // console.log("handleNewReferral ",data);
+    if(data?.referralDetails){ 
+      setIsLoading(false)
+      setVoucher(data?.referralDetails)
+      setReferralAvailable(false)
+    }  
+    
+  }
+  const handleInputChange=(e:any)=>{
+    setReferralEmail(e.target.value)
+  }
+
+  const handleReferralClickOnInvite = async(referralId:any)=>{
+    let {data:response} = await axios.post(NEXT_REFERRAL_CLICK_ON_INVITE,{referralId:referralId})
+    if(response?.referralDetails){
+      // console.log("Click capture successful");
+      
+    }
+  }
+
+  const handleReferralSlug = async (referralSlug: any) => {
+    let {data:referralValid} = await axios.post(NEXT_REFERRAL_BY_SLUG,{slug:referralSlug})
+    // console.log("referralValid",referralValid);
+    if(referralValid?.referralDetails){ //?.referralDetails
+      handleReferralClickOnInvite(referralValid?.referralDetails?.id)
+      setReferralAvailable(true)
+    }
+  } 
+
+  useEffect(() => {
+    const fetchReferralSlug = () => {
+      if (router.isReady) {
+        const referralSlug = router?.query?.['referral-code']
+        // console.log('in useEffect referralSlug', referralSlug)
+        if (referralSlug) {
+          handleReferralSlug(referralSlug)
+        }
+      }
+    }
+
+    fetchReferralSlug()
+  }, [router.query])
+
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
       id: slugs?.id,
@@ -194,6 +262,18 @@ function Home({
           />
         ))}
         <Collections data={pageContents?.collectionlist} />
+        {/*<RefferalCard referralAvailable={referralAvailable}/>*/}
+        {referralAvailable && (
+          <ReferralCard
+            title={'Get your Discount Coupon'}
+            hide={referralAvailable}
+            className="!flex !flex-col gap-y-2 !max-w-xs"
+            handleInputChange={handleInputChange}
+            handleNewReferral={handleNewReferral}
+            isLoading={isLoading}
+            voucher = {voucher}
+          />
+        )}
       </div>
     </>
   )
