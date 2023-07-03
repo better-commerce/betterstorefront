@@ -17,6 +17,7 @@ import { PaymentStatus } from '@components/utils/payment-constants'
 import { IGatewayPageProps } from 'pages/payment-notification/[...gateway]'
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { Cookie } from '@framework/utils/constants'
 
 const IS_RESPONSE_REDIRECT_ENABLED = true
 
@@ -140,9 +141,9 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
         eventType: CheckoutConfirmation,
       })
 
-      Cookies.remove('sessionId')
+      Cookies.remove(Cookie.Key.SESSION_ID)
       setSessionIdCookie()
-      Cookies.remove('basketId')
+      Cookies.remove(Cookie.Key.BASKET_ID)
       const generatedBasketId = generateBasketId()
       setBasketId(generatedBasketId)
       const userId = cartItems.userId
