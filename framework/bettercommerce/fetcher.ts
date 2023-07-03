@@ -1,11 +1,5 @@
 import { Fetcher } from '@commerce/utils/types'
-import {
-  BASE_URL,
-  AUTH_URL,
-  CLIENT_ID,
-  SHARED_SECRET,
-  Cookie,
-} from './utils/constants'
+import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
 import axios from 'axios'
 import store from 'store'
 import { writeFetcherLog } from './utils'
@@ -125,7 +119,7 @@ const fetcher = async ({
       EmptyString,
     DeviceId: cookies?.deviceId || EmptyString,
     SessionId: cookies?.sessionId || EmptyString,
-    CompanyId: cookies[Cookie.Key.COMPANY_ID] || EmptyString,
+    CompanyId: cookies?.cmpId || EmptyString,
   }
   const config: any = {
     method: method,
