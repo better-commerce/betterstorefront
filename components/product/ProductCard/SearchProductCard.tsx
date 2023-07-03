@@ -65,6 +65,8 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     openNotifyUser,
     cartItems,
     wishListItems,
+    isGuestUser,
+    openLogin,
     setAlert,
     //includeVAT,
   } = useUI()
@@ -121,6 +123,11 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const handleWishList = async () => {
     const accessToken = localStorage.getItem('user')
+    if (!accessToken || isGuestUser) {
+      //  setAlert({ type: 'success', msg:" Please Login "})
+      openLogin()
+      return
+    }
     if (accessToken) {
       const createWishlist = async () => {
         try {

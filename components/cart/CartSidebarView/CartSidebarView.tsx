@@ -89,6 +89,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
     setCartItems,
     cartItems,
     basketId,
+    openLogin,
     user,
     isGuestUser,
     displaySidebar,
@@ -421,6 +422,11 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   const handleWishList = async (product: any | Array<any>) => {
     closeModal()
     const accessToken = localStorage.getItem('user')
+    if (!accessToken || isGuestUser) {
+      //  setAlert({ type: 'success', msg:" Please Login "})
+      openLogin()
+      return
+    }
     if (accessToken) {
       const createWishlist = async (product: any) => {
         try {

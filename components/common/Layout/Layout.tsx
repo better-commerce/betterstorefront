@@ -8,6 +8,7 @@ import type { Page } from '@commerce/types/page'
 import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
 import { WishlistSidebarView } from '@components/wishlist'
+import { LoginSidebarView } from '@components/product/LoginSidebar'
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
@@ -98,6 +99,7 @@ const SidebarView: FC<
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
       {sidebarView === 'PAYMENT_VIEW' && <PaymentMethodView />}
       {sidebarView === 'SHIPPING_VIEW' && <ShippingView />}
+      {sidebarView === 'LOGIN_VIEWD' && <LoginSidebarView />}
     </Sidebar>
   )
 }

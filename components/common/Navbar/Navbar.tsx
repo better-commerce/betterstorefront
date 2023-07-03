@@ -150,6 +150,7 @@ const Navbar: FC<Props & IExtraProps> = ({
     openCart,
     openWishlist,
     setShowSearchBar,
+    openLogin,
   } = useUI()
 
   let currentPage = getCurrentPage()
@@ -255,18 +256,39 @@ const Navbar: FC<Props & IExtraProps> = ({
     }
   }
 
-  const viewWishlist = () => {
-    if (currentPage) {
-      if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'wishlist', {
-          ecommerce: {
-            header: 'Menu Bar',
-            current_page: currentPage,
-          },
-        })
+  function handleWishlist(){
+    try {
+      const viewWishlist = () => {
+        if (currentPage) {
+          if (typeof window !== 'undefined') {
+            recordGA4Event(window, 'wishlist', {
+              ecommerce: {
+                header: 'Menu Bar',
+                current_page: currentPage,
+              },
+            })
+          }
+        }
       }
+      console.log('aaja')
+      const accessToken = localStorage.getItem('user')
+      if (!accessToken || isGuestUser) {
+      console.log('khuljaa')
+      //  setAlert({ type: 'success', msg:" Please Login "})
+        openLogin();
+        return;
+      }
+      if(accessToken){
+        openWishlist();
+      }
+    } catch (error) {
+      console.log(error)
     }
+
   }
+
+
+  
 
   function viewCart(cartItems: any) {
     if (currentPage) {
@@ -362,7 +384,7 @@ const Navbar: FC<Props & IExtraProps> = ({
     }
   }
 
-  useEffect(() => {
+   useEffect(() => {
     setDelayEffect(true)
   }, [])
 
@@ -710,8 +732,7 @@ const Navbar: FC<Props & IExtraProps> = ({
               <button
                 className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
                 onClick={() => {
-                  viewWishlist()
-                  openWishlist()
+                  handleWishlist()
                 }}
               >
                 <HeartIcon

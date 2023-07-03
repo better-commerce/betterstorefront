@@ -146,7 +146,7 @@ function LoginOTPPage() {
   )
 }
 
-LoginOTPPage.Layout = Layout
+// LoginOTPPage.Layout = Layout
 
 const PAGE_TYPE = PAGE_TYPES.Page
 export default withDataLayer(LoginOTPPage, PAGE_TYPE)
