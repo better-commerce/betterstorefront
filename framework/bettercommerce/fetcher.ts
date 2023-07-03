@@ -1,5 +1,11 @@
 import { Fetcher } from '@commerce/utils/types'
-import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
+import {
+  BASE_URL,
+  AUTH_URL,
+  CLIENT_ID,
+  SHARED_SECRET,
+  Cookie,
+} from './utils/constants'
 import axios from 'axios'
 import store from 'store'
 import { writeFetcherLog } from './utils'
@@ -10,6 +16,7 @@ import {
   BETTERCOMMERCE_DEFAULT_CURRENCY,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   BETTERCOMMERCE_LANGUAGE,
+  EmptyString,
   NEXT_PUBLIC_API_CACHING_LOG_ENABLED,
 } from '@components/utils/constants'
 
@@ -102,19 +109,23 @@ const fetcher = async ({
       cookies.Currency ||
       store.get('Currency') ||
       BETTERCOMMERCE_CURRENCY ||
-      BETTERCOMMERCE_DEFAULT_CURRENCY,
+      BETTERCOMMERCE_DEFAULT_CURRENCY ||
+      EmptyString,
     Language:
       cookies.Language ||
       store.get('Language') ||
       BETTERCOMMERCE_LANGUAGE ||
-      BETTERCOMMERCE_DEFAULT_LANGUAGE,
+      BETTERCOMMERCE_DEFAULT_LANGUAGE ||
+      EmptyString,
     Country:
       cookies.Country ||
       store.get('Country') ||
       BETTERCOMMERCE_COUNTRY ||
-      BETTERCOMMERCE_DEFAULT_COUNTRY,
-    DeviceId: cookies?.deviceId || '',
-    SessionId: cookies?.sessionId || '',
+      BETTERCOMMERCE_DEFAULT_COUNTRY ||
+      EmptyString,
+    DeviceId: cookies?.deviceId || EmptyString,
+    SessionId: cookies?.sessionId || EmptyString,
+    CompanyId: cookies[Cookie.Key.COMPANY_ID] || EmptyString,
   }
   const config: any = {
     method: method,
