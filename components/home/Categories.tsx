@@ -71,9 +71,9 @@ function Categories({ data, deviceInfo }: any) {
             </Link>
           </div>
           <div className="flex flex-col w-full px-2 text-center sm:px-4 style-newin_article-title">
-            <h3 className="pt-1 text-sm font-semibold text-white b-2">
+            <div className="pt-1 text-sm font-semibold text-white b-2">
               {category?.categorylist_name}
-            </h3>
+            </div>
             <Link
               title={category?.categorylist_buttontext}
               href={category?.categorylist_link}
