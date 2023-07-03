@@ -736,7 +736,7 @@ export default function ProductView({
                           generateUri(image.image, 'h=600&fm=webp') ||
                           IMG_PLACEHOLDER
                         }
-                        alt={image.name}
+                        alt={product?.name}
                         className="object-cover object-center w-full h-full image"
                         sizes="320 600 1000"
                         quality="70"
@@ -769,6 +769,9 @@ export default function ProductView({
                   }
                 >
                   <ImageGallery
+                    thumbnailAlt={product?.name}
+                    thumbnailTitle={product?.name}
+                    originalAlt={product?.name}
                     items={images}
                     thumbnailPosition="left"
                     showPlayButton={false}
