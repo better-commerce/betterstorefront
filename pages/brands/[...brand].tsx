@@ -584,35 +584,37 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     offerBannerResult: [],
   }
 
-  // const widgets = JSON.parse(response?.result?.widgetsConfig || '[]')
-  let widgets: any = tryParseJson(response?.result?.widgetsConfig)
-  console.log(widgets, 'widgets')
+  const widgets: any = tryParseJson(response?.result?.widgetsConfig)
 
-  for (var i = 0; i < widgets.length; i++) {
-    if (
-      widgets[i].manufacturerSettingType == 'ImageCollection' &&
-      widgets[i].code == 'ImageBanner'
-    ) {
-      obj.imageBannerCollectionResponse = await getCollectionById(
-        widgets[i].recordId
-      )
-    } else if (
-      widgets[i].manufacturerSettingType == 'ImageCollection' &&
-      widgets[i].code == 'MultipleImagesBanner'
-    ) {
-      const res = await getCollectionById(widgets[i].recordId)
-      obj.imageCategoryCollectionResponse = res?.images
-    } else if (
-      widgets[i].manufacturerSettingType == 'ImageCollection' &&
-      widgets[i].code == 'FeaturedDewaltImageList'
-    ) {
-      obj.imageCollectionResponse = await getCollectionById(widgets[i].recordId)
-    } else if (
-      widgets[i].manufacturerSettingType == 'ImageCollection' &&
-      widgets[i].code == 'FFXOffers'
-    ) {
-      const res = await getCollectionById(widgets[i].recordId)
-      obj.offerBannerResult = res.images
+  if (widgets) {
+    for (var i = 0; i < widgets?.length; i++) {
+      if (
+        widgets[i].manufacturerSettingType == 'ImageCollection' &&
+        widgets[i].code == 'ImageBanner'
+      ) {
+        obj.imageBannerCollectionResponse = await getCollectionById(
+          widgets[i].recordId
+        )
+      } else if (
+        widgets[i].manufacturerSettingType == 'ImageCollection' &&
+        widgets[i].code == 'MultipleImagesBanner'
+      ) {
+        const res = await getCollectionById(widgets[i].recordId)
+        obj.imageCategoryCollectionResponse = res?.images
+      } else if (
+        widgets[i].manufacturerSettingType == 'ImageCollection' &&
+        widgets[i].code == 'FeaturedDewaltImageList'
+      ) {
+        obj.imageCollectionResponse = await getCollectionById(
+          widgets[i].recordId
+        )
+      } else if (
+        widgets[i].manufacturerSettingType == 'ImageCollection' &&
+        widgets[i].code == 'FFXOffers'
+      ) {
+        const res = await getCollectionById(widgets[i].recordId)
+        obj.offerBannerResult = res.images
+      }
     }
   }
 
