@@ -7,9 +7,6 @@ export default function getCollectionById(id: string, cookies?: any) {
         url: COLLECTIONS_ENDPOINT + `/id/${id}`,
         method: 'get',
         cookies: cookies,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
       })
       return { ...response.result, ...{ snippets: response?.snippets ?? [] } }
     } catch (error: any) {
