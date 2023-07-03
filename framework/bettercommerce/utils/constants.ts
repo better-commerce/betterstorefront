@@ -43,7 +43,7 @@ export module Cookie {
     export const SESSION_ID = 'sessionId'
     export const BASKET_ID = 'basketId'
     export const ORDER_ID = 'orderId'
-    export const COMPANY_ID = 'cmpid'
+    export const COMPANY_ID = 'cmpId'
     export const GOOGLE_TRANSLATE = 'googtrans'
   }
 }
