@@ -1,19 +1,20 @@
 import cn from 'classnames'
-import s from './ReferralCard.module.css'
+import s from './index.module.css'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import classNames from 'classnames'
 import { Button, LoadingDots } from '@components/ui'
 import { ClipboardIcon } from '@heroicons/react/24/outline'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
+
 interface ReferralCardProps {
   className?: string
   title: string
   description?: string
   hide?: boolean
   action?: React.ReactNode
-  handleInputChange?: any
-  handleNewReferral?: any
+  onInputChange?: any
+  onNewReferral?: any
   isLoading?: any
   voucher?: any
 }
@@ -24,8 +25,8 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
   className,
   action,
   hide,
-  handleInputChange,
-  handleNewReferral,
+  onInputChange,
+  onNewReferral,
   isLoading,
   voucher,
 }) => {
@@ -69,19 +70,19 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
               {description}
             </span>
             <form
-              onSubmit={handleNewReferral}
+              onSubmit={onNewReferral}
               className="flex items-center flex-col justify-center gap-3"
             >
               <input
                 type="email"
                 placeholder="Enter your email"
                 className="bg-gray-100 rounded-lg  px-2 py-3"
-                onChange={handleInputChange}
+                onChange={onInputChange}
               />
               <Button
                 type="submit"
                 className="mx-5 !text-sm btn-c btn-primary"
-                // onClick={handleNewReferral}
+                // onClick={onInputChange}
               >
                 {isLoading ? <LoadingDots /> : 'Claim your Gift!'}
               </Button>

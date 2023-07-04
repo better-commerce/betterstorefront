@@ -55,6 +55,7 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import CustomerReferral from '@components/customer/Referral'
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
 }
@@ -308,6 +309,7 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
             maxBasketItemsCount={maxBasketItemsCount(appConfig)}
           >
             <OverlayLoader />
+            <CustomerReferral router={router} />
             <SessionProvider session={pageProps?.session}>
               <Component
                 {...pageProps}

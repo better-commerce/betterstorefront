@@ -28,14 +28,13 @@ import { obfuscateHostName } from '@framework/utils/app-util'
 import PromotionBanner from '@components/home/PromotionBanner'
 import { FeatureBar } from '@components/common'
 import { Button } from '@components/ui'
-import ReferralCard from '@components/customer/ReferralCard'
 
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/product/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
-const RefferalCard = dynamic(() => import('@components/customer/ReferralCard'))
+const RefferalCard = dynamic(() => import('@components/customer/Referral/ReferralCard'))
 
 export async function getStaticProps({
   preview,
@@ -101,66 +100,11 @@ function Home({
   pageContentsMobileWeb,
   hostName,
   deviceInfo,
-}: any) {
-  const [referralAvailable, setReferralAvailable] = useState(false)
-  // console.log("referralAvailable:",referralAvailable);
-  const [referralInfoObj,setReferralInfoObj] = useState<any>(null)
-  const [referralEmail,setReferralEmail] = useState('')
-  const [isLoading,setIsLoading] = useState(false)
-  const [voucher,setVoucher] = useState<any>(null)
-  // console.log("voucher :",voucher);
-  
+}: any) { 
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb
-
-  const handleNewReferral = async (e:any)=>{
-    e.preventDefault()
-    setIsLoading(true)
-    let {data} = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE,{referralId:referralInfoObj?.id,email:referralEmail})
-    if(data?.referralDetails){ 
-      setIsLoading(false)
-      setVoucher(data?.referralDetails)
-      // setReferralAvailable(false)
-    }  
-    
-  }
-  const handleInputChange=(e:any)=>{
-    setReferralEmail(e.target.value)
-  }
-
-  const handleReferralClickOnInvite = async(referralId:any)=>{
-    let {data:response} = await axios.post(NEXT_REFERRAL_CLICK_ON_INVITE,{referralId:referralId})
-    if(response?.referralDetails){
-      // console.log("Click capture successful");
-      
-    }
-  }
-
-  const handleReferralSlug = async (referralSlug: any) => {
-    let {data:referralValid} = await axios.post(NEXT_REFERRAL_BY_SLUG,{slug:referralSlug})
-    // console.log("referralValid",referralValid);
-    if(referralValid?.referralDetails){ //?.referralDetails
-      handleReferralClickOnInvite(referralValid?.referralDetails?.id)
-      setReferralAvailable(true)
-      setReferralInfoObj(referralValid?.referralDetails)
-    }
-  } 
-
-  useEffect(() => {
-    const fetchReferralSlug = () => {
-      if (router.isReady) {
-        const referralSlug = router?.query?.['referral-code']
-        // console.log('in useEffect referralSlug', referralSlug)
-        if (referralSlug) {
-          handleReferralSlug(referralSlug)
-        }
-      }
-    }
-
-    fetchReferralSlug()
-  }, [router.query])
 
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
@@ -262,18 +206,6 @@ function Home({
           />
         ))}
         <Collections data={pageContents?.collectionlist} />
-        {/*<RefferalCard referralAvailable={referralAvailable}/>*/}
-        {referralAvailable && (
-          <ReferralCard
-            title={'Get your Discount Coupon'}
-            hide={referralAvailable}
-            className="!flex !flex-col gap-y-2 !max-w-xs"
-            handleInputChange={handleInputChange}
-            handleNewReferral={handleNewReferral}
-            isLoading={isLoading}
-            voucher = {voucher}
-          />
-        )}
       </div>
     </>
   )
