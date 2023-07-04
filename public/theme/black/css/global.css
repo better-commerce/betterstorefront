@@ -756,7 +756,7 @@ object {
 
 /* category landing css End */
 /* main css end */
-.cookie-bannner .ftroky,
+.cookie-bannner > div,
 .jsnRff {
   width: 350px;
   max-width: 100%;
