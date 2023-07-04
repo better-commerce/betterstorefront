@@ -3,22 +3,22 @@ import Image from 'next/image'
 import { SHOP_NOW } from '@components/utils/textVariables'
 import Router from 'next/router'
 
-const OfferCard = ({ title, description, src, link }: any) => {
+const OfferCard = ({ title, description, src, link, index }: any) => {
   const [bgColour, setBgColor] = useState('')
   const [fontColor, setFontColour] = useState('text-black')
 
   useEffect(() => {
-    if (title === 'Free Delivery') {
+    if (index === 0) {
       setBgColor('bg-[#FEBD18]')
     }
-    if (title === 'Newsletter') {
+    if (index === 1) {
       setBgColor('bg-[#212530]')
       setFontColour('text-white')
     }
-    if (title === 'Offers') {
+    if (index === 2) {
       setBgColor('bg-[#2125300D]')
     }
-    if (title === 'Bag') {
+    if (index === 3) {
       setBgColor('bg-[#FFEBCD]')
     }
   }, [title])

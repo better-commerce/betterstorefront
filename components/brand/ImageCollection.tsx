@@ -51,8 +51,9 @@ export default function ImageCollection({
               {val.title !== '' && (
                 <p
                   key={Idx}
-                  className="absolute bg-gray-50 w-48 py-4 px-7 /pl-8 m-auto uppercase rounded-md z-50 md:text-lg text-sm font-semibold"
+                  className="absolute flex bg-gray-50 px-8 justify-center py-4 m-auto uppercase rounded-md z-50 md:text-md 2xl:text-lg text-sm font-semibold"
                 >
+                  {' '}
                   {val.title.replace(/([A-Z]+)/g, ' $1').replace(/^ /, '')}
                 </p>
               )}
