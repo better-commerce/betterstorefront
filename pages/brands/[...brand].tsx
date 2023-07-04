@@ -488,6 +488,7 @@ function BrandDetailPage({
               {offerBannerResult?.map((val: any, Idx: number) => (
                 <OfferCard
                   key={Idx}
+                  index={Idx}
                   title={val.title}
                   description={val.description}
                   src={val.url}
