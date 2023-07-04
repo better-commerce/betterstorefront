@@ -6,6 +6,7 @@ import NextHead from 'next/head'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import Image from 'next/image'
+import faq from '@components/brand/faqData.json'
 const ProductGrid = dynamic(
   () => import('@components/product/Grid/ProductGrid')
 )
@@ -192,6 +193,7 @@ function BrandDetailPage({
     manufacturerSettingTypeImgBanner,
     setManufacturerSettingTypeImgBanner,
   ] = useState(IMG_PLACEHOLDER)
+  const [manufImgBannerLink, setManufImgBannerLink] = useState('')
   const [manufacturerImgBannerHeading, setManufacturerImgBannerHeading] =
     useState('')
   const [
@@ -204,6 +206,7 @@ function BrandDetailPage({
     useState('')
   const [textNames, setTextNames] = useState([])
   const [recommendedProducts, setRecommendedProducts] = useState([])
+  const [showLandingPage, setShowLandingPage] = useState(true)
   const {
     data = {
       products: {
@@ -249,6 +252,11 @@ function BrandDetailPage({
     //}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length, data])
+
+  const handleClick = () => {
+    setShowLandingPage(false)
+    window.scrollTo(0, 0)
+  }
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
@@ -339,6 +347,7 @@ function BrandDetailPage({
       ) {
         setManufacturerSettingTypeImgBanner(val.name)
         setManufacturerImgBannerHeading(val.heading)
+        setManufImgBannerLink(val.buttonLink)
       } else if (
         val.manufacturerSettingType == 'Video' &&
         val.code === 'MultipleBrandVideos'
@@ -407,7 +416,7 @@ function BrandDetailPage({
           key="ogdesc"
         />
       </NextHead>
-      {brandDetails?.showLandingPage ? (
+      {brandDetails?.showLandingPage && showLandingPage ? (
         <>
           <div className="w-full px-4 pb-20 mx-auto bg-white md:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
@@ -428,7 +437,10 @@ function BrandDetailPage({
                   }}
                   className="text-[18px] text-center leading-6 py-5"
                 />
-                <button className="px-6 py-3 text-white uppercase bg-black rounded-md hover:opacity-80">
+                <button
+                  className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80"
+                  onClick={handleClick}
+                >
                   {SHOP_NOW}
                 </button>
               </div>
@@ -451,11 +463,25 @@ function BrandDetailPage({
             </div>
 
             <div className="mt-10">
-              <RecommendedProductCollection
-                recommendedProducts={recommendedProducts}
-                deviceInfo={deviceInfo}
-                config={config}
-              />
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-row justify-between">
+                  <p className="font-semibold uppercase cursor-default font-lg">
+                    {BTN_RECOMMENDED_PROD}
+                  </p>
+                  <button
+                    className="font-semibold uppercase cursor-pointer font-lg hover:underline"
+                    onClick={handleClick}
+                  >
+                    {BTN_SEE_ALL}
+                  </button>
+                </div>
+
+                <RecommendedProductCollection
+                  recommendedProducts={recommendedProducts}
+                  deviceInfo={deviceInfo}
+                  config={config}
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-5 my-10 md:grid-cols-2">
@@ -465,6 +491,7 @@ function BrandDetailPage({
                   title={val.title}
                   description={val.description}
                   src={val.url}
+                  link={val.link}
                 />
               ))}
             </div>
@@ -476,6 +503,7 @@ function BrandDetailPage({
                 manufacturerSettingTypeImgBanner
               }
               heading={manufacturerImgBannerHeading}
+              link={manufImgBannerLink}
             />
             <div className="mt-10">
               <MultiBrandVideo
@@ -487,12 +515,17 @@ function BrandDetailPage({
 
           <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
             <div className="flex justify-between pb-10 mt-4">
-              <p className="uppercase">
+              <p className="font-semibold uppercase cursor-default font-lg">
                 {FEATURES_HEADING}
                 {` `}
                 {brandDetails.name}
               </p>
-              <p className="hidden uppercase md:block ">{BTN_SEE_ALL}</p>
+              <button
+                className="hidden font-semibold uppercase cursor-pointer font-lg md:block hover:underline"
+                onClick={handleClick}
+              >
+                {BTN_SEE_ALL}
+              </button>
             </div>
             <div className="mb-10">
               <ImageCollection
@@ -507,8 +540,15 @@ function BrandDetailPage({
             />
 
             <div className="flex justify-between py-10">
-              <h5 className="uppercase">{BTN_RECOMMENDED_PROD}</h5>
-              <h5 className="hidden uppercase md:block">{BTN_SEE_ALL}</h5>
+              <p className="font-semibold uppercase cursor-default font-lg">
+                {BTN_RECOMMENDED_PROD}
+              </p>
+              <button
+                className="font-semibold uppercase cursor-pointer font-lg hover:underline"
+                onClick={handleClick}
+              >
+                {BTN_SEE_ALL}
+              </button>
             </div>
             <ImageCollection
               range={4}
@@ -517,19 +557,14 @@ function BrandDetailPage({
             />
 
             <div className="mb-20">
-              <h5 className="py-10 uppercase">Popular faqs</h5>
-              <Disclosure
-                heading={`Can I have my delivery sent to a different address?`}
-                details={`If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.`}
-              />
-              <Disclosure
-                heading={`Can I request Weekend deliveries?`}
-                details={`If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.`}
-              />
-              <Disclosure
-                heading={`Are your products brand new and in original packaging?`}
-                details={`If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.`}
-              />
+              <p className="font-semibold my-10 uppercase cursor-default font-lg">
+                {faq.title}
+              </p>
+              {faq?.results?.map((val: any, Idx: number) => {
+                return (
+                  <Disclosure key={Idx} heading={val.faq} details={val.ans} />
+                )
+              })}
             </div>
           </div>
         </>

@@ -10,7 +10,6 @@ import Link from 'next/link'
 
 SwiperCore.use([Navigation])
 
-//temporary for testing purposes
 export default function ImageCollection({
   heading,
   range,
@@ -49,12 +48,12 @@ export default function ImageCollection({
               className="flex items-center justify-evenly border-orange-500 border-solid border group bg-orange-600"
               href={val.link ? val.link : '#'}
             >
-              {true && (
+              {val.title !== '' && (
                 <p
                   key={Idx}
-                  className="absolute bg-gray-50 w-48 p-4 pl-10 m-auto uppercase rounded-md z-50 md:text-lg text-sm font-semibold"
+                  className="absolute bg-gray-50 w-48 py-4 px-7 /pl-8 m-auto uppercase rounded-md z-50 md:text-lg text-sm font-semibold"
                 >
-                  {val.title || 'POWER TOOL'}
+                  {val.title.replace(/([A-Z]+)/g, ' $1').replace(/^ /, '')}
                 </p>
               )}
               <Image
