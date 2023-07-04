@@ -13,6 +13,7 @@ import {
   EmptyString,
   NEXT_PUBLIC_API_CACHING_LOG_ENABLED,
 } from '@components/utils/constants'
+import { Guid } from '@commerce/types'
 
 const SingletonFactory = (function () {
   let accessToken = ''
@@ -119,8 +120,12 @@ const fetcher = async ({
       EmptyString,
     DeviceId: cookies?.deviceId || EmptyString,
     SessionId: cookies?.sessionId || EmptyString,
-    CompanyId: cookies?.cmpId || EmptyString,
+    CompanyId:
+      cookies?.CompanyId && cookies?.CompanyId != Guid.empty
+        ? cookies?.CompanyId
+        : Guid.empty,
   }
+
   const config: any = {
     method: method,
     url: computedUrl.href,
