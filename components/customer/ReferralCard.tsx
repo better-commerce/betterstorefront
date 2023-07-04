@@ -29,7 +29,7 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
   isLoading,
   voucher,
 }) => {
-  const [show, setShow] = useState(hide)
+  const [show, setShow] = useState(hide||!!voucher)
   const [copied, setCopied] = useState(false)
   // console.log('show:', show)
   const handleCopyClick = async () => {

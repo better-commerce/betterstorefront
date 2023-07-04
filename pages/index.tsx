@@ -104,7 +104,7 @@ function Home({
 }: any) {
   const [referralAvailable, setReferralAvailable] = useState(false)
   // console.log("referralAvailable:",referralAvailable);
-  
+  const [referralInfoObj,setReferralInfoObj] = useState<any>(null)
   const [referralEmail,setReferralEmail] = useState('')
   const [isLoading,setIsLoading] = useState(false)
   const [voucher,setVoucher] = useState<any>(null)
@@ -118,12 +118,11 @@ function Home({
   const handleNewReferral = async (e:any)=>{
     e.preventDefault()
     setIsLoading(true)
-    let {data} = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE,referralEmail)
-    // console.log("handleNewReferral ",data);
+    let {data} = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE,{referralId:referralInfoObj?.id,email:referralEmail})
     if(data?.referralDetails){ 
       setIsLoading(false)
       setVoucher(data?.referralDetails)
-      setReferralAvailable(false)
+      // setReferralAvailable(false)
     }  
     
   }
@@ -145,6 +144,7 @@ function Home({
     if(referralValid?.referralDetails){ //?.referralDetails
       handleReferralClickOnInvite(referralValid?.referralDetails?.id)
       setReferralAvailable(true)
+      setReferralInfoObj(referralValid?.referralDetails)
     }
   } 
 
