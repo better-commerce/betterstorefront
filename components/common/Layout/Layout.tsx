@@ -8,7 +8,6 @@ import type { Page } from '@commerce/types/page'
 import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
 import { WishlistSidebarView } from '@components/wishlist'
-// import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { CookieBanner } from '@schlomoh/react-cookieConsent'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
@@ -165,7 +164,6 @@ const Layout: FC<Props & IExtraProps> = ({
     }
   }, [])
 
-  // const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US', ...rest } = useRouter()
 
   const sortedData = navTree?.nav?.sort(
@@ -284,18 +282,6 @@ const Layout: FC<Props & IExtraProps> = ({
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount}
           />
-          {/* <FeatureBar
-            title={GENERAL_COOKIE_TEXT}
-            hide={acceptedCookies}
-            action={
-              <Button
-                className="mx-5 btn-c btn-primary"
-                onClick={() => onAcceptCookies()}
-              >
-                {BTN_ACCEPT_COOKIE}
-              </Button>
-            }
-          /> */}
           <div className='cookie-bannner'>
             <CookieBanner
               enableManagement
