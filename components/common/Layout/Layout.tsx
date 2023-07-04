@@ -8,7 +8,7 @@ import type { Page } from '@commerce/types/page'
 import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
 import { WishlistSidebarView } from '@components/wishlist'
-import { CookieBanner } from '@schlomoh/react-cookieConsent'
+import { CookieBanner } from '@schlomoh/react-cookieconsent'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
 import AlertRibbon from '@components/ui/AlertRibbon'
@@ -46,8 +46,8 @@ const dynamicProps = {
 const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
   ...dynamicProps,
 })
-const primaryButtonStyle={backgroundColor:'black'}
-const secondaryButtonStyle={backgroundColor:'gray'}
+const primaryButtonStyle = { backgroundColor: 'black' }
+const secondaryButtonStyle = { backgroundColor: 'gray' }
 const Content = () => (
   <>
     <h3></h3>
@@ -161,8 +161,8 @@ const Layout: FC<Props & IExtraProps> = ({
     }
 
     return () => {
-      Router.events.off('routeChangeStart', () => { })
-      Router.events.off('routeChangeComplete', () => { })
+      Router.events.off('routeChangeStart', () => {})
+      Router.events.off('routeChangeComplete', () => {})
     }
   }, [])
 
@@ -284,11 +284,11 @@ const Layout: FC<Props & IExtraProps> = ({
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount}
           />
-          <div className='cookie-bannner'>
+          <div className="cookie-bannner">
             <CookieBanner
               enableManagement
-              managementButtonText='Manage Cookies'
-              headingColor='white'
+              managementButtonText="Manage Cookies"
+              headingColor="white"
               managementContent={<Content />}
               cookieCategories={['analytics', 'advertisement']}
               infoContent={<Content />}
