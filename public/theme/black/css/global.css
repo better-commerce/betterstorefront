@@ -781,14 +781,20 @@ object {
   padding: 5px 10px;
 }
 
+.cookie-bannner .sc-fqkvVR.dudcbn {
+  background-color: black !important;
+}
+
 .cookie-bannner p {
   color: #fff !important;
   margin-bottom: 10px;
 }
+
 .cookie-bannner .QknHa p {
   margin: 0 0 0 20px;
 }
-.cookie-bannner .fECRuD{
+
+.cookie-bannner .fECRuD {
   -webkit-align-items: start;
   -webkit-box-align: start;
   -ms-flex-align: start;
