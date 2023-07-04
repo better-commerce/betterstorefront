@@ -6,6 +6,7 @@ import NextHead from 'next/head'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import Image from 'next/image'
+import faq from '@components/brand/faqData.json'
 const ProductGrid = dynamic(
   () => import('@components/product/Grid/ProductGrid')
 )
@@ -48,6 +49,7 @@ import MultiBrandVideo from '@components/brand/MultiBrandVideo'
 import axios from 'axios'
 import { NEXT_GET_COLLECTION_BY_ID } from '@components/utils/constants'
 import OfferCard from '@components/brand/OfferCard'
+import { tryParseJson } from '@framework/utils/parse-util'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -125,9 +127,17 @@ function BrandDetailPage({
   slug,
   deviceInfo,
   config,
+  collections, // ...for Image Collection api response
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
+
+  let imageBannerCollectionResponse: any =
+    collections.imageBannerCollectionResponse
+  let imageCategoryCollectionResponse: any =
+    collections.imageCategoryCollectionResponse
+  let imageCollectionResponse: any = collections.imageCollectionResponse
+  let offerBannerResult: any = collections.offerBannerResult
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -183,30 +193,20 @@ function BrandDetailPage({
     manufacturerSettingTypeImgBanner,
     setManufacturerSettingTypeImgBanner,
   ] = useState(IMG_PLACEHOLDER)
+  const [manufImgBannerLink, setManufImgBannerLink] = useState('')
   const [manufacturerImgBannerHeading, setManufacturerImgBannerHeading] =
     useState('')
   const [
     manufacturerStateMultiBrandVidNames,
     setManufacturerStateMultiBrandVidNames,
   ] = useState('')
-  const [
-    manufacturerStateMultiBrandVidHeading,
-    setManufacturerStateMultiBrandVidHeading,
-  ] = useState('')
+  const [multiBrandVidHeading, setMultiBrandVidHeading] = useState('')
   const [manufacturerStateTextName, setManufacturerStateTextName] = useState('')
   const [manufacturerStateTextHeading, setManufacturerStateTextHeading] =
     useState('')
   const [textNames, setTextNames] = useState([])
   const [recommendedProducts, setRecommendedProducts] = useState([])
-  const [imgBannerCollection, setImgBannerCollection] = useState([])
-  const [imgCategoryCollection, setImgCategoryCollection] = useState([])
-  const [imgCollection, setImgCollection] = useState([])
-  const [offerBanner, setOfferBanner] = useState<any>([])
-  const [IsPrevPageLanding, setIsPrevPageLanding] = useState(true)
-  let imageBannerCollectionResult: any = []
-  let imageCategoryCollectionResult: any = []
-  let imageCollectionResult: any = []
-  let offerBannerResult: any = []
+  const [showLandingPage, setShowLandingPage] = useState(true)
   const {
     data = {
       products: {
@@ -252,6 +252,11 @@ function BrandDetailPage({
     //}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length, data])
+
+  const handleClick = () => {
+    setShowLandingPage(false)
+    window.scrollTo(0, 0)
+  }
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
@@ -330,59 +335,6 @@ function BrandDetailPage({
     recordEvent(EVENTS.FreeText)
   })
 
-  const getCollectionById = async (id: any) => {
-    try {
-      let response: any = await axios.post(NEXT_GET_COLLECTION_BY_ID, {
-        recordId: id,
-      })
-      let res = await response
-      return res
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const handleImageCollection = () => {
-    const widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
-    widgets.map(async (val: any, key: number) => {
-      if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'ImageBanner'
-      ) {
-        imageBannerCollectionResult = await getCollectionById(val.recordId)
-        setImgBannerCollection(imageBannerCollectionResult.data.images)
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'MultipleImagesBanner'
-      ) {
-        imageCategoryCollectionResult = await getCollectionById(val.recordId)
-        setImgCategoryCollection(imageCategoryCollectionResult.data.images)
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'FeaturedDewaltImageList'
-      ) {
-        imageCollectionResult = await getCollectionById(val.recordId)
-        setImgCollection(imageCollectionResult.data.images)
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'FFXOffers'
-      ) {
-        offerBannerResult = await getCollectionById(val.recordId)
-        setOfferBanner(offerBannerResult?.data?.images)
-      }
-      return
-    })
-  }
-
-  // function handleShopNow(){
-  //   setShowLandingPageCheck(false);
-  // }
-
-  // function handleBackToLandingPage(){
-  //   setIsPrevPageLanding(false);
-  //   setShowLandingPageCheck(true);
-  // }
-
   useEffect(() => {
     const Widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
     Widgets.map((val: any) => {
@@ -395,12 +347,13 @@ function BrandDetailPage({
       ) {
         setManufacturerSettingTypeImgBanner(val.name)
         setManufacturerImgBannerHeading(val.heading)
+        setManufImgBannerLink(val.buttonLink)
       } else if (
         val.manufacturerSettingType == 'Video' &&
         val.code === 'MultipleBrandVideos'
       ) {
         setManufacturerStateMultiBrandVidNames(val.name)
-        setManufacturerStateMultiBrandVidHeading(val.heading)
+        setMultiBrandVidHeading(val.heading)
       } else if (
         val.manufacturerSettingType == 'PlainText' &&
         val.code == 'BrandInnovations'
@@ -411,35 +364,9 @@ function BrandDetailPage({
           const TextNames = val.name.split('  ')
           setTextNames(TextNames)
         }
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'ImageBanner'
-      ) {
-        imageBannerCollectionResult = getCollectionById(val.recordId)
-        // setimageBannerCollectionResult(getCollectionById(val.recordId))
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'MultipleImagesBanner'
-      ) {
-        imageCategoryCollectionResult = getCollectionById(val.recordId)
-      } else if (
-        val.manufacturerSettingType == 'ImageCollection' &&
-        val.code == 'FeaturedDewaltImageList'
-      ) {
-        imageCollectionResult = getCollectionById(val.recordId)
-      } else if (
-        val.manufacturingSettingType == 'ImageCollection' &&
-        val.code == 'FFXOffers'
-      ) {
-        offerBannerResult = getCollectionById(val.recordId)
       }
       return
     })
-    handleImageCollection() // call to handle all the Image collection
-    // if (brandDetails?.showLandingPage) {
-    //   setShowLandingPageCheck(true)
-    //   setIsPrevPageLanding(true)
-    // }
   }, [])
 
   const productDataToPass = productListMemory.products
@@ -489,7 +416,7 @@ function BrandDetailPage({
           key="ogdesc"
         />
       </NextHead>
-      {brandDetails?.showLandingPage ? (
+      {brandDetails?.showLandingPage && showLandingPage ? (
         <>
           <div className="w-full px-4 pb-20 mx-auto bg-white md:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
@@ -510,13 +437,16 @@ function BrandDetailPage({
                   }}
                   className="text-[18px] text-center leading-6 py-5"
                 />
-                <button className="px-6 py-3 text-white uppercase bg-black rounded-md hover:opacity-80">
+                <button
+                  className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80"
+                  onClick={handleClick}
+                >
                   {SHOP_NOW}
                 </button>
               </div>
               <ImageCollection
                 range={2}
-                ImageArray={imgBannerCollection}
+                ImageArray={imageBannerCollectionResponse?.images || []}
                 showTitle={true}
               />
             </div>
@@ -529,24 +459,39 @@ function BrandDetailPage({
             </div>
 
             <div className="mt-10">
-              <Slider images={imgCategoryCollection} />
+              <Slider images={imageCategoryCollectionResponse || []} />
             </div>
 
             <div className="mt-10">
-              <RecommendedProductCollection
-                recommendedProducts={recommendedProducts}
-                deviceInfo={deviceInfo}
-                config={config}
-              />
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-row justify-between">
+                  <p className="font-semibold uppercase cursor-default font-lg">
+                    {BTN_RECOMMENDED_PROD}
+                  </p>
+                  <button
+                    className="font-semibold uppercase cursor-pointer font-lg hover:underline"
+                    onClick={handleClick}
+                  >
+                    {BTN_SEE_ALL}
+                  </button>
+                </div>
+
+                <RecommendedProductCollection
+                  recommendedProducts={recommendedProducts}
+                  deviceInfo={deviceInfo}
+                  config={config}
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-5 my-10 md:grid-cols-2">
-              {offerBanner?.map((val: any, Idx: number) => (
+              {offerBannerResult?.map((val: any, Idx: number) => (
                 <OfferCard
                   key={Idx}
                   title={val.title}
                   description={val.description}
                   src={val.url}
+                  link={val.link}
                 />
               ))}
             </div>
@@ -558,10 +503,11 @@ function BrandDetailPage({
                 manufacturerSettingTypeImgBanner
               }
               heading={manufacturerImgBannerHeading}
+              link={manufImgBannerLink}
             />
             <div className="mt-10">
               <MultiBrandVideo
-                heading={manufacturerStateMultiBrandVidHeading || ''}
+                heading={multiBrandVidHeading || ''}
                 name={manufacturerStateMultiBrandVidNames || ''}
               />
             </div>
@@ -569,17 +515,22 @@ function BrandDetailPage({
 
           <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
             <div className="flex justify-between pb-10 mt-4">
-              <p className="uppercase">
+              <p className="font-semibold uppercase cursor-default font-lg">
                 {FEATURES_HEADING}
                 {` `}
                 {brandDetails.name}
               </p>
-              <p className="hidden uppercase md:block ">{BTN_SEE_ALL}</p>
+              <button
+                className="hidden font-semibold uppercase cursor-pointer font-lg md:block hover:underline"
+                onClick={handleClick}
+              >
+                {BTN_SEE_ALL}
+              </button>
             </div>
             <div className="mb-10">
               <ImageCollection
                 range={4}
-                ImageArray={imgCollection}
+                ImageArray={imageCollectionResponse?.images || []}
                 showTitle={false}
               />
             </div>
@@ -589,29 +540,31 @@ function BrandDetailPage({
             />
 
             <div className="flex justify-between py-10">
-              <h5 className="uppercase">{BTN_RECOMMENDED_PROD}</h5>
-              <h5 className="hidden uppercase md:block">{BTN_SEE_ALL}</h5>
+              <p className="font-semibold uppercase cursor-default font-lg">
+                {BTN_RECOMMENDED_PROD}
+              </p>
+              <button
+                className="font-semibold uppercase cursor-pointer font-lg hover:underline"
+                onClick={handleClick}
+              >
+                {BTN_SEE_ALL}
+              </button>
             </div>
             <ImageCollection
               range={4}
-              ImageArray={imgCollection}
+              ImageArray={imageCollectionResponse?.images || []}
               showTitle={false}
             />
 
             <div className="mb-20">
-              <h5 className="py-10 uppercase">Popular faqs</h5>
-              <Disclosure
-                heading={`Can I have my delivery sent to a different address?`}
-                details={`If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.`}
-              />
-              <Disclosure
-                heading={`Can I request Weekend deliveries?`}
-                details={`If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.`}
-              />
-              <Disclosure
-                heading={`Are your products brand new and in original packaging?`}
-                details={`If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.`}
-              />
+              <p className="font-semibold my-10 uppercase cursor-default font-lg">
+                {faq.title}
+              </p>
+              {faq?.results?.map((val: any, Idx: number) => {
+                return (
+                  <Disclosure key={Idx} heading={val.faq} details={val.ans} />
+                )
+              })}
             </div>
           </div>
         </>
@@ -658,6 +611,48 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const response = await getBrandBySlug(slug, context.req.cookies)
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
+
+  const obj: any = {
+    imageBannerCollectionResponse: [],
+    imageCategoryCollectionResponse: [],
+    imageCollectionResponse: [],
+    offerBannerResult: [],
+  }
+
+  const widgets: any = tryParseJson(response?.result?.widgetsConfig)
+
+  if (widgets) {
+    for (var i = 0; i < widgets?.length; i++) {
+      if (
+        widgets[i].manufacturerSettingType == 'ImageCollection' &&
+        widgets[i].code == 'ImageBanner'
+      ) {
+        obj.imageBannerCollectionResponse = await getCollectionById(
+          widgets[i].recordId
+        )
+      } else if (
+        widgets[i].manufacturerSettingType == 'ImageCollection' &&
+        widgets[i].code == 'MultipleImagesBanner'
+      ) {
+        const res = await getCollectionById(widgets[i].recordId)
+        obj.imageCategoryCollectionResponse = res?.images
+      } else if (
+        widgets[i].manufacturerSettingType == 'ImageCollection' &&
+        widgets[i].code == 'FeaturedDewaltImageList'
+      ) {
+        obj.imageCollectionResponse = await getCollectionById(
+          widgets[i].recordId
+        )
+      } else if (
+        widgets[i].manufacturerSettingType == 'ImageCollection' &&
+        widgets[i].code == 'FFXOffers'
+      ) {
+        const res = await getCollectionById(widgets[i].recordId)
+        obj.offerBannerResult = res.images
+      }
+    }
+  }
+
   return {
     props: {
       query: context.query,
@@ -666,6 +661,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
+      collections: obj ?? [],
     }, // will be passed to the page component as props
   }
 }

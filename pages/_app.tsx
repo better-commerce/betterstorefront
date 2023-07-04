@@ -37,7 +37,11 @@ import OverlayLoader from '@components/common/OverlayLoader'
 import { resetSnippetElements } from '@framework/content/use-content-snippet'
 import { ContentSnippet } from '@components/common/Content'
 import NextHead from 'next/head'
-import { GA4_DISABLED, GA4_MEASUREMENT_ID } from '@framework/utils/constants'
+import {
+  Cookie,
+  GA4_DISABLED,
+  GA4_MEASUREMENT_ID,
+} from '@framework/utils/constants'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { DeviceType } from '@commerce/utils/use-device'
 import InitDeviceInfo from '@components/common/InitDeviceInfo'
@@ -181,8 +185,8 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     initializeGTM()
     document.body.classList?.remove('loading')
     if (appConfig) {
-      Cookies.set('Currency', appConfig?.defaultCurrency)
-      Cookies.set('Language', appConfig?.defaultLanguage)
+      Cookies.set(Cookie.Key.CURRENCY, appConfig?.defaultCurrency)
+      Cookies.set(Cookie.Key.LANGUAGE, appConfig?.defaultLanguage)
     }
     fetchKeywords()
 

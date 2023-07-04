@@ -1,6 +1,6 @@
 import { useSignupTradingAccount } from '@framework/auth'
 
-export default async (req: any, res: any) => {
+const SignUpTradingAccountApiMiddleware = async (req: any, res: any) => {
   const {
     title,
     firstName,
@@ -47,3 +47,5 @@ export default async (req: any, res: any) => {
     throw new Error(error)
   }
 }
+
+export default SignUpTradingAccountApiMiddleware

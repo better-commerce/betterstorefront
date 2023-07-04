@@ -48,6 +48,7 @@ import { matchStrings } from '@framework/utils/parse-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 import NewAddressModal from './NewAddressModal'
 import { Guid } from '@commerce/types'
+import { Cookie } from '@framework/utils/constants'
 
 const Spinner = () => {
   return (
@@ -143,9 +144,9 @@ export default function CheckoutForm({
   }
 
   const checkoutCallback = async (orderId: any) => {
-    Cookies.remove('sessionId')
+    Cookies.remove(Cookie.Key.SESSION_ID)
     setSessionIdCookie()
-    Cookies.remove('basketId')
+    Cookies.remove(Cookie.Key.BASKET_ID)
     const generatedBasketId = generateBasketId()
     setBasketId(generatedBasketId)
     const userId = cartItems.userId
