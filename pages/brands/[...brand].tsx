@@ -279,8 +279,8 @@ function BrandDetailPage({
 
   const handleInfiniteScroll = () => {
     if (
-      data.products.pages &&
-      data.products.currentPage < data.products.pages
+      data?.products?.pages &&
+      data?.products?.currentPage < data?.products?.pages
     ) {
       dispatch({ type: PAGE, payload: data.products.currentPage + 1 })
     }
@@ -369,10 +369,10 @@ function BrandDetailPage({
     })
   }, [])
 
-  const productDataToPass = productListMemory.products
-  /*const productDataToPass = IS_INFINITE_SCROLL
+  //const productDataToPass = productListMemory.products
+  const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory.products
-    : data.products*/
+    : data?.products
 
   useEffect(() => {
     setRecommendedProducts(productDataToPass.results.slice(0, 8))
