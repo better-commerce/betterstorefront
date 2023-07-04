@@ -46,6 +46,8 @@ const dynamicProps = {
 const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
   ...dynamicProps,
 })
+const primaryButtonStyle={backgroundColor:'black'}
+const secondaryButtonStyle={backgroundColor:'gray'}
 const Content = () => (
   <>
     <h3></h3>
@@ -290,6 +292,8 @@ const Layout: FC<Props & IExtraProps> = ({
               managementContent={<Content />}
               cookieCategories={['analytics', 'advertisement']}
               infoContent={<Content />}
+              primaryButtonStyle={primaryButtonStyle}
+              secondaryButtonStyle={secondaryButtonStyle}
             />
           </div>
         </div>

@@ -756,8 +756,7 @@ object {
 
 /* category landing css End */
 /* main css end */
-.cookie-bannner > div,
-.jsnRff {
+.cookie-bannner>div {
   width: 350px;
   max-width: 100%;
   background-color: #000;
@@ -766,37 +765,27 @@ object {
   transition: transform 0s ease-in-out, visibility 0s
 }
 
-.cookie-bannner .sc-aXZVg.dnIGur {
-  display: flex !important;
-  flex-direction: column-reverse;
-  justify-content: normal;
+.cookie-bannner div:has(button) {
+  display: flex;
+  flex-direction: column;
 }
 
-.cookie-bannner .sc-aXZVg.dnIGur button {
+.cookie-bannner button {
   width: 100%;
   display: block;
-  margin: 5px 0 5px 0 !important;
+  margin: 5px 5px 5px 0 !important;
   border: 1px solid #fff !important;
   min-height: 30px;
   padding: 5px 10px;
 }
 
-.cookie-bannner .sc-fqkvVR.dudcbn {
-  background-color: black !important;
-}
-
 .cookie-bannner p {
   color: #fff !important;
-  margin-bottom: 10px;
 }
 
-.cookie-bannner .QknHa p {
-  margin: 0 0 0 20px;
-}
-
-.cookie-bannner .fECRuD {
-  -webkit-align-items: start;
-  -webkit-box-align: start;
-  -ms-flex-align: start;
-  align-items: start;
+@media screen and (max-width:767px) {
+  .cookie-bannner>div {
+    width: 100%;
+    max-width: 100%;
+  }
 }
