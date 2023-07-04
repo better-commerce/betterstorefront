@@ -75,7 +75,7 @@
     "store": "^2.0.12",
     "string-format": "^2.0.0",
     "stripe": "^12.4.0",
-    "styled-components": "^6.0.2",
+    "styled-components": "5.3.6",
     "swiper": "^9.3.1",
     "swr": "^2.1.5",
     "tabbable": "^6.1.2",
