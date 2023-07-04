@@ -8,7 +8,8 @@ import type { Page } from '@commerce/types/page'
 import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
 import { WishlistSidebarView } from '@components/wishlist'
-import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
+// import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
+import { CookieBanner } from '@schlomoh/react-cookieConsent'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
 import AlertRibbon from '@components/ui/AlertRibbon'
@@ -46,7 +47,12 @@ const dynamicProps = {
 const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
   ...dynamicProps,
 })
-
+const Content = () => (
+  <>
+    <h3></h3>
+    <p>{GENERAL_COOKIE_TEXT}</p>
+  </>
+)
 interface Props {
   children: any
   pageProps: {
@@ -154,12 +160,12 @@ const Layout: FC<Props & IExtraProps> = ({
     }
 
     return () => {
-      Router.events.off('routeChangeStart', () => {})
-      Router.events.off('routeChangeComplete', () => {})
+      Router.events.off('routeChangeStart', () => { })
+      Router.events.off('routeChangeComplete', () => { })
     }
   }, [])
 
-  const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
+  // const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US', ...rest } = useRouter()
 
   const sortedData = navTree?.nav?.sort(
@@ -278,7 +284,7 @@ const Layout: FC<Props & IExtraProps> = ({
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount}
           />
-          <FeatureBar
+          {/* <FeatureBar
             title={GENERAL_COOKIE_TEXT}
             hide={acceptedCookies}
             action={
@@ -289,7 +295,17 @@ const Layout: FC<Props & IExtraProps> = ({
                 {BTN_ACCEPT_COOKIE}
               </Button>
             }
-          />
+          /> */}
+          <div className='cookie-bannner'>
+            <CookieBanner
+              enableManagement
+              managementButtonText='Manage Cookies'
+              headingColor='white'
+              managementContent={<Content />}
+              cookieCategories={['analytics', 'advertisement']}
+              infoContent={<Content />}
+            />
+          </div>
         </div>
       </CommerceProvider>
     </>
