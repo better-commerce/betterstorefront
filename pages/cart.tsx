@@ -149,7 +149,7 @@ function Cart({ cart }: any) {
   }
 
   const handleReferralRegisterUser=async(referralId:any)=>{
-    let {data:voucherInfo} = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE,{referralId:referralId,email:'c@gmail.com'})//user?.email})
+    let {data:voucherInfo} = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE,{referralId:referralId,email:user?.email})
     if(voucherInfo?.referralDetails){
       // console.log("voucherInfo",voucherInfo);
       setReferralInfo(voucherInfo?.referralDetails)
@@ -163,9 +163,7 @@ function Cart({ cart }: any) {
     setIsLoading(true)
     let {data:referralSearch} = await axios.post(NEXT_REFERRAL_SEARCH,{name:nameInput})
     if(referralSearch?.referralDetails){
-      // console.log('referralSearch?.referralDetails',referralSearch?.referralDetails);
       let referrerReferralId = referralSearch?.referralDetails?.find((x:any)=>{return x?.name.toLowerCase().includes(nameInput)})?.id
-      // console.log("referrerReferralId",referrerReferralId);
       
       handleReferralRegisterUser(referrerReferralId)  
     }
@@ -193,17 +191,17 @@ function Cart({ cart }: any) {
     } catch (error) {
       console.error('Failed to copy link:', error)
     }
-  }
+}
 
   useEffect(()=>{
     const fetchReferralPromotion = async()=>{
       let {data:referralPromotions} = await axios.post(NEXT_REFERRAL_INFO)
-      // console.log("referralINfo in fetchReferralPromotion: ",referralPromotions?.referralDetails);
       if(referralPromotions?.referralDetails){
         setReferralAvailable(true)
       }
     }
-    fetchReferralPromotion()
+    //COOMMENTS NOT TO BE REMOVED, for future use
+    // fetchReferralPromotion()
   },[])
 
   const handleItem = (product: any, type = 'increase') => {
@@ -451,12 +449,12 @@ function Cart({ cart }: any) {
                     </>
                   )}
                 </Disclosure>
-                {referralAvailable && (
+                {/* {referralAvailable && (
                 <h3 className='text-sm text-green underline font-semibold cursor-pointer' onClick={()=>{setReferralModalShow(true)}}>
                   Been Referred by a Friend?
                 </h3>
                 )
-                }
+                } */} {/*CODE NOT TO BE REMOVED, FOR FUTURE USE*/}
               </div>
               <dl className="mt-6 space-y-2 sm:space-y-2">
                 <div className="flex items-center justify-between">
@@ -548,9 +546,9 @@ function Cart({ cart }: any) {
           handleToggleOpen={handleToggleOpenSizeChangeModal}
           product={selectedProductOnSizeChange}
         />
-        {/*Referred By a friend*/}
+        {/*Referred By a friend*/}{/*CODE NOT TO BE REMOVED, FOR FUTURE USE*/}
       </div>
-      <Transition.Root show={referralModalShow} as={Fragment}>
+      {/* <Transition.Root show={referralModalShow} as={Fragment}>
         <Dialog
           as="div"
           className="fixed inset-0 overflow-hidden z-999"
@@ -601,7 +599,7 @@ function Cart({ cart }: any) {
                         </div>
                       </div>
                       <div className="sm:px-0 flex flex-row">
-                        {/*Referal Program Info view*/}
+                        {/*Referal Program Info view 
                         {referralAvailable && !referralInfo &&(
                           <div className="my-10 flex w-full flex-col justify-center items-center max-w-lg px-9">
                             <h2 className="mx-2 text-[30px] text-center">Search your Friend by their name</h2>
@@ -623,20 +621,7 @@ function Cart({ cart }: any) {
                             className="my-3" onClick={() => {handleReferralSearch()}}>
                               {isLoading?<LoadingDots/>:'Find Them!'}
                             </Button>
-                            {/* {referralObj?.slug && (
-                              <div className="\w-full flex flex-col border-[1px] items-center justify-center border-black px-2 py-2">
-                                <p className='w-full text-left'>or share a link:</p>
-                                <div className="w-full flex items-center justify-between">
-                                  <p className="mx-1 truncate">{referralLink}</p>
-                                  <Button
-                                    className="h-4 !text-[10px]"
-                                    onClick={handleCopyClick}
-                                  >
-                                    {copied ? 'COPIED' : 'COPY LINK'}
-                                  </Button>
-                                </div>
-                              </div>
-                            )} */}
+                           
                           </div>
                         ) }
                          {referralInfo && (
@@ -663,7 +648,7 @@ function Cart({ cart }: any) {
                                 <ClipboardFill className='flex justify-center items-center'/>
                                 )
                             }
-                            {/* {copied ? 'COPIED' : 'COPY CODE'} */}
+                            {/* {copied ? 'COPIED' : 'COPY CODE'} 
                             </div>
                             </div>
                             <p className='px-5 text-center font-bold'>
@@ -696,7 +681,7 @@ function Cart({ cart }: any) {
             </div>
           </div>
         </Dialog>
-      </Transition.Root>
+      </Transition.Root> */}{/*CODE NOT TO BE REMOVED, FOR FUTURE USE*/}
     </>
   )
 }

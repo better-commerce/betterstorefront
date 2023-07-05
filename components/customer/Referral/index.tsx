@@ -18,6 +18,7 @@ const CustomerReferral = ({ router }: any) => {
     const [referralEmail, setReferralEmail] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [voucher, setVoucher] = useState<any>(null)
+    const [errors,setErrors] = useState('')
     // console.log("voucher :",voucher);
 
     const onReferralClickOnInvite = async (referralId: any) => {
@@ -46,6 +47,9 @@ const CustomerReferral = ({ router }: any) => {
             setIsLoading(false)
             setVoucher(data?.referralDetails)
             // setReferralAvailable(false)
+        } else{
+            setIsLoading(false)
+            setErrors('Offer already used by this email address')
         }
 
     }
@@ -74,11 +78,12 @@ const CustomerReferral = ({ router }: any) => {
                 <ReferralCard
                     title={'Get your Discount Coupon'}
                     hide={isReferralAvailable}
-                    className="!flex !flex-col gap-y-2 !max-w-xs"
+                    className="!flex !flex-col gap-y-2 "
                     onInputChange={onInputChange}
                     onNewReferral={onNewReferral}
                     isLoading={isLoading}
                     voucher={voucher}
+                    errors={errors}
                 />
             )}
         </>
