@@ -72,7 +72,7 @@ const Slider = ({ images }: data) => {
                     alt={`Slide ${currentImageIndex}`}
                   />
                   <p
-                    className="absolute hover:bg-gray-200 2xl:left-12 pt-2 2xl:pt-4 md:pt-4 2xl:bottom-64 md:left-8 md:bottom-48 h-12 w-48 uppercase cursor-pointer bg-white rounded-md p-1 z-50 md:text-lg text-sm font-semibold"
+                    className="absolute flex hover:bg-gray-200 m-auto justify-center 2xl:left-12 pt-2 2xl:pt-4 md:pt-4 2xl:bottom-64 md:left-8 md:bottom-48 h-12 w-48 uppercase cursor-pointer bg-white rounded-md p-1 z-50 md:text-lg text-sm font-semibold"
                     onClick={() => {
                       Router.push(val.link ? val.link : '#')
                     }}
