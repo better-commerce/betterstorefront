@@ -35,7 +35,7 @@ const RecommendedProductCollection = ({
           320: { slidesPerView: 1, spaceBetween: 2 },
           640: { slidesPerView: 1.1 },
           768: { slidesPerView: 1.1 },
-          1024: { slidesPerView: 4.2 },
+          1024: { slidesPerView: 4 },
         }}
       >
         {recommendedProducts.map((product: any, productIdx: number) => {

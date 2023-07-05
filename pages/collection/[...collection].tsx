@@ -18,7 +18,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import {
   maxBasketItemsCount,
@@ -387,12 +387,19 @@ export default function CollectionPage(props: any) {
         <meta name="title" content={props?.name} />
         <meta name="description" content={props?.metaDescription} />
         <meta name="keywords" content={props?.metaKeywords} />
+
         <meta property="og:image" content="" />
         <meta property="og:title" content={props?.name} key="ogtitle" />
         <meta
           property="og:description"
           content={props?.metaDescription}
           key="ogdesc"
+        />
+        <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
+        <meta
+          property="og:url"
+          content={absPath || SITE_ORIGIN_URL + router.asPath}
+          key="ogurl"
         />
       </NextHead>
       {props?.hostName && (

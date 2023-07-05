@@ -25,30 +25,6 @@ export default function PLPSort({
 
   return (
     <>
-      {/* <div>
-        <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
-          <div className="flex flex-col py-0 text-xs font-medium text-black uppercase sm:text-xs whitespace-nowrap">
-            Compare Items
-          </div>
-          <div className="flow-root w-10 px-2 sm:w-12">
-            <div className="flex justify-center flex-1 mx-auto">
-              <ToggleSwitch
-                className="include-vat"
-                height={15}
-                width={40}
-                checked={vatIncluded()}
-                checkedIcon={
-                  <div className="ml-1 include-vat-checked">Yes</div>
-                }
-                uncheckedIcon={
-                  <div className="mr-1 include-vat-unchecked">No</div>
-                }
-                onToggleChanged={() => getCompare()}
-              />
-            </div>
-          </div>
-        </div>
-      </div> */}
       <div className="pb-3">
         <h6 className="font-medium">Sort By</h6>
       </div>
