@@ -778,7 +778,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                         <div className="flow-root">
                           <ul
                             role="list"
-                            className="-my-6 divide-y divide-gray-200 px-4 sm:px-6"
+                            className="px-4 -my-6 divide-y divide-gray-200 sm:px-6"
                           >
                             {cartItems.lineItems
                               ?.sort((lineItem1: any, lineItem2: any) => {
@@ -1047,7 +1047,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                               </Link>
                               {altRelatedProducts?.relatedProducts && (
                                 <div className="flex flex-col px-4 pb-10 mt-0 sm:px-8 sm:pb-16 cart-related-prod ">
-                                  {/* {JSON.stringify(altRelatedProducts?.relatedProducts?.products?.results)} */}
                                   <RelatedProductWithGroup
                                     products={
                                       altRelatedProducts?.relatedProducts
@@ -1066,7 +1065,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                               <div className="flex flex-col">
                                 <div className="section-devider-sm"></div>
                               </div>
-                              <div className="flex flex-col mt-0 cart-related-prod px-4 sm:px-6">
+                              <div className="flex flex-col px-4 mt-0 cart-related-prod sm:px-6">
                                 <RelatedProducts
                                   relatedProducts={relatedProductData}
                                   productPerColumn={1.8}
@@ -1161,7 +1160,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                     </Transition>
 
                     {!isEmpty && (
-                      <div className="sticky bottom-0 pt-4 pb-1 mt-2 pl-5 pr-5 bg-white">
+                      <div className="sticky bottom-0 pt-4 pb-1 pl-5 pr-5 mt-2 bg-white">
                         <div className="-mt-3">
                           <Disclosure defaultOpen>
                             {({ open }) => (
