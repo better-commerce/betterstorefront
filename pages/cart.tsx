@@ -343,10 +343,11 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
         />
       </NextHead>
       <div className="container w-full px-4 mx-auto mt-6 mb-10 bg-white sm:px-6 sm:mt-10">
-        <h1 className="relative font-semibold tracking-tight text-black uppercase">
+        <h1 className="relative flex items-baseline font-semibold tracking-tight text-black uppercase">
           {GENERAL_SHOPPING_CART}{' '}
-          <span className="absolute pl-2 text-sm font-normal text-gray-400 top-2">
-            {userCart?.lineItems?.length} Items added
+          <span className="pl-2 text-sm font-normal text-gray-400 top-2">
+            {userCart?.lineItems?.length}{' '}
+            {userCart?.lineItems?.length > 1 ? 'Items' : 'Item'} added
           </span>
         </h1>
         {!isEmpty && (
@@ -373,7 +374,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
                       />
                     </div>
                     <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
-                      <h3 className="py-0 text-sm font-semibold text-black sm:py-0 sm:text-sm">
+                      <h3 className="py-0 text-xs font-normal text-black sm:py-0 sm:text-xs">
                         {product.brand}
                       </h3>
                       <h3 className="my-2 text-sm sm:text-sm sm:my-1">
@@ -383,7 +384,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
                           </span>
                         </Link>
                       </h3>
-                      <div className="mt-0 font-bold text-black text-md sm:font-medium">
+                      <div className="mt-0 font-bold text-black text-md sm:font-semibold">
                         {isIncludeVAT
                           ? product.price?.formatted?.withTax
                           : product.price?.formatted?.withoutTax}
