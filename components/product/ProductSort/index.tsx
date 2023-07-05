@@ -30,8 +30,8 @@ export default function ProductSort({
   }
   const isCompaired = getCompare()
   return (
-    <div className="flex">
-      {/* <div>
+    <div className="flex items-center">
+      <div>
         <div className="container flex items-center justify-end w-full px-6 pt-1 mx-auto">
           <div className="flex flex-col py-0 text-xs font-medium text-black uppercase sm:text-xs whitespace-nowrap">
             Compare Items
@@ -58,8 +58,8 @@ export default function ProductSort({
             </div>
           </div>
         </div>
-      </div> */}
-      <Menu as="div" className="relative flex pr-4 mb-0 sm:mb-4 sm:pr-0">
+      </div>
+      <Menu as="div" className="relative flex pr-4 sm:pr-0">
         <Menu.Button className="inline-flex justify-center font-semibold text-black text-md group hover:text-gray-900">
           {GENERAL_SORT}{' '}
           <ChevronDownIcon
@@ -84,9 +84,9 @@ export default function ProductSort({
                     <span
                       onClick={() => action(option.key)}
                       className={classNames(
-                        'text-gray-500 hover:bg-gray-100',
+                        'hover:bg-gray-100',
                         currentOption?.key === option.key ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm'
+                        'block px-4 py-2 text-sm text-black font-normal cursor-pointer hover:font-semibold hover:text-orange-600'
                       )}
                     >
                       {option.value}
