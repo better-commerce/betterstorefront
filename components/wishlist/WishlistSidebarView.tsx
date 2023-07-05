@@ -19,6 +19,7 @@ import {
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
+import { vatIncluded } from '@framework/utils/app-util'
 
 const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
   const {
@@ -32,6 +33,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     setCartItems,
     removeFromWishlist,
   } = useUI()
+  const isIncludeVAT = vatIncluded()
   const { getWishlist, deleteWishlistItem } = useWishlist()
   const [openWishlistSidebar, setOpenWishlistSidebar] = useState(false)
 
@@ -228,7 +230,9 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                       </Link>
                                     </h5>
                                     <p className="ml-4">
-                                      {product.price?.formatted?.withTax}
+                                      {isIncludeVAT
+                                        ? product.price?.formatted?.withTax
+                                        : product.price?.formatted?.withoutTax}
                                     </p>
                                   </div>
                                   {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
