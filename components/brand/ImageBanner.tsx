@@ -1,8 +1,13 @@
 import React from 'react'
 import Image from 'next/image'
 import { SHOP_NOW } from '@components/utils/textVariables'
+import Router from 'next/router'
 
-const ImageBanner = ({ heading, manufacturerSettingTypeImgBanner }: any) => {
+const ImageBanner = ({
+  heading,
+  manufacturerSettingTypeImgBanner,
+  link,
+}: any) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
       <div className="bg-gray-500 h-[452px] w-full">
@@ -18,7 +23,12 @@ const ImageBanner = ({ heading, manufacturerSettingTypeImgBanner }: any) => {
         <h2 className="text-4xl tracking-wider">
           {heading ? heading : 'BUILD A BESPOKE PACKAGE WITH OUR KIT BUILDER'}
         </h2>
-        <button className="bg-black text-white hover:opacity-80 py-3 px-6 rounded-md">
+        <button
+          className="bg-black uppercase font-semibold text-white hover:opacity-80 py-3 px-6 rounded-md"
+          onClick={() => {
+            Router.push(link ? link : '#')
+          }}
+        >
           {SHOP_NOW}
         </button>
       </div>

@@ -1,36 +1,20 @@
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
-import cn from 'classnames'
-import { groupBy, round, sortBy } from 'lodash'
+import { groupBy, sortBy } from 'lodash'
 import SwiperCore, { Navigation } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-
-// @components
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
-const Engraving = dynamic(() => import('@components/product/Engraving'))
-import {
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_ENGRAVING,
-  GENERAL_QUICK_VIEW,
-  IMG_PLACEHOLDER,
-  ITEM_TYPE_ADDON,
-} from '@components/utils/textVariables'
+import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 const PLPQuickView = dynamic(
   () => import('@components/product/QuickView/PLPQuickView')
 )
-
-// @others
-import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
-import { priceFormat } from '@framework/utils/parse-util'
-import { generateUri } from '@commerce/utils/uri-util'
-
-// constants
+const ProductCard = dynamic(
+  () => import('@components/product/ProductCard/ProductCard')
+)
 declare const window: any
 interface Attribute {
   fieldName?: string
@@ -48,15 +32,11 @@ export default function RelatedProducts({
   title,
   handleQuickAddToBag,
   deviceInfo,
+  maxBasketItemsCount,
 }: any) {
-  const {
-    basketId,
-    setCartItems,
-    user,
-  } = useUI()
+  const { basketId, setCartItems, user } = useUI()
   const [quickViewProduct, setQuickViewProduct] = useState<any>(undefined)
-  const [isEngravingOpen, showEngravingModal] = useState(false)
-  const [relatedProductsData, setRelatedProductsData] = useState<any>(null);
+  const [relatedProductsData, setRelatedProductsData] = useState<any>(null)
   let currentPage = getCurrentPage()
 
   useEffect(() => {
@@ -209,7 +189,15 @@ export default function RelatedProducts({
                   <div>
                     <div className="flex flex-col mb-3">
                       <h2 className="text-lg font-medium text-gray-900">
-                        {key == "You May Also Like" ? "Frequent Bought Together" : key == "undefined" ? "Frequent Bought Together" : key == "Upgrade" ? "Quick Add" : key == "Basket Group" ? "Frequent Bought Together" : key}
+                        {key == 'You May Also Like'
+                          ? 'Frequent Bought Together'
+                          : key == 'undefined'
+                          ? 'Frequent Bought Together'
+                          : key == 'Upgrade'
+                          ? 'Quick Add'
+                          : key == 'Basket Group'
+                          ? 'Frequent Bought Together'
+                          : key}
                       </h2>
                     </div>
                   </div>
@@ -220,174 +208,21 @@ export default function RelatedProducts({
                       navigation={true}
                       loop={false}
                       breakpoints={{
-                        640: {
-                          slidesPerView: 2.3,
-                          spaceBetween: 4,
-                        },
-                        768: {
-                          slidesPerView: 2.3,
-                          spaceBetween: 15,
-                        },
-                        1024: {
-                          slidesPerView: 2.3,
-                          spaceBetween: 15,
-                        },
+                        640: { slidesPerView: 2.3, spaceBetween: 4 },
+                        768: { slidesPerView: 2.3, spaceBetween: 15 },
+                        1024: { slidesPerView: 2.3, spaceBetween: 15 },
                       }}
                       className="mySwiper"
                     >
                       {values?.map((product: any, pid: number) => {
-                        const isEngravingAvailable =
-                          product.stockCode === ITEM_TYPE_ADDON
-                        const saving =
-                          product?.price?.maxPrice -
-                          product?.price?.minPrice
-                        const discount = round(
-                          (saving / product?.price?.maxPrice) * 100,
-                          0
-                        )
                         return (
                           <SwiperSlide key={pid}>
-                            <div className="grid w-full grid-cols-1 text-left">
-                              <div className="relative">
-                                <div className="overflow-hidden border border-gray-200 rounded-md">
-                                  <Link
-                                    href={`/${removePrecedingSlash(
-                                      product?.slug
-                                    )}`}
-                                    passHref
-                                    legacyBehavior
-                                  >
-                                    <a
-                                      onClick={() =>
-                                        viewProductDetail(product, pid)
-                                      }
-                                    >
-                                      <Image
-                                        src={
-                                          generateUri(
-                                            product?.image,
-                                            'h=300&fm=webp'
-                                          ) || IMG_PLACEHOLDER
-                                        }
-                                        className="object-cover object-center w-full h-full radius-xs sm:h-full"
-                                        alt={product?.name}
-                                        priority
-                                        width={284}
-                                        height={505}
-                                        style={css}
-                                      />
-                                    </a>
-                                  </Link>
-                                </div>
-                                {/* <div className="grid grid-cols-12 px-2 sm:grid-cols-12 sm:gap-x-2">
-                                <div className="col-span-8 text-left sm:col-span-8 hf-28px">
-                                  <h5 className="w-11/12 py-1 mt-1 overflow-hidden font-normal truncate text-10 text-brown-light dark:text-brown-light sm:text-10 sm:group-hover:hidden fh-24">
-                                    {product?.classification?.category}
-                                  </h5>
-                                </div>
-                                {product?.rating > 0 && (
-                                  <div className="col-span-4 text-right sm:col-span-4">
-                                    <i className="sprite-icon sprite-star"></i>
-                                    <span className="ml-2 font-semibold text-12 text-primary dark:text-primary">
-                                      {product?.rating}
-                                    </span>
-                                  </div>
-                                )}
-                              </div> */}
-                                <div className="relative px-0 text-left">
-                                  <h3 className="px-0 py-1 font-normal leading-4 text-primary dark:text-primary sm:group-hover:hidden text-sm">
-                                    <Link
-                                      href={`/${removePrecedingSlash(
-                                        product?.slug
-                                      )}`}
-                                      passHref
-                                      legacyBehavior
-                                    >
-                                      <a
-                                        href={`/${removePrecedingSlash(
-                                          product?.slug
-                                        )}`}
-                                        onClick={() =>
-                                          viewProductDetail(product, pid)
-                                        }
-                                      >
-                                        {product?.name}
-                                      </a>
-                                    </Link>
-                                  </h3>
-                                </div>
-
-                                <div className="flex px-0">
-                                  <p className="mt-2 mb-2 font-medium text-left text-primary xs-text-10 text-12 sm:mt-1 sm:group-hover:hidden sm:mb-0">
-                                    {priceFormat(product?.price?.minPrice)}
-                                    {discount > 0 ? (
-                                      <>
-                                        <span className="px-1 font-normal text-gray-400 line-through sm:px-2 xs-text-10 text-12">
-                                          {priceFormat(
-                                            product?.price?.maxPrice
-                                          )}
-                                        </span>
-                                        <span className="inline-block xs-text-10 text-12 text-green">
-                                          {discount}% off
-                                        </span>
-                                      </>
-                                    ) : null}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="flex justify-around mt-2">
-                                <button
-                                  onClick={() => {
-                                    if (key === 'Upgrade') {
-                                      handleQuickAddToBag(product, key)
-                                    } else {
-                                      onProductQuickView(product, pid)
-                                    }
-                                  }}
-                                  type="button"
-                                  className={cn(
-                                    'relative flex items-center justify-center w-full px-1 py-1 text-xs font-semibold sm:text-sm btn-basic-property-sm cart-btn',
-                                    {
-                                      'border-black bg-black hover:bg-gray-900 text-white':
-                                        key === 'Upgrade',
-                                      'text-black bg-white border border-gray-300':
-                                        key !== 'Upgrade',
-                                    }
-                                  )}
-                                >
-                                  {key === 'Upgrade'
-                                    ? GENERAL_ADD_TO_BASKET
-                                    : GENERAL_QUICK_VIEW}
-                                </button>
-                                <Link
-                                  href={`/${removePrecedingSlash(
-                                    product?.slug
-                                  )}`}
-                                  passHref
-                                >
-                                  <span className="sr-only">
-                                    , {product.name}
-                                  </span>
-                                </Link>
-                                {isEngravingAvailable && (
-                                  <>
-                                    <button
-                                      className="relative flex items-center justify-center w-full py-2 mt-2 text-sm font-semibold text-white bg-gray-400 border border-transparent rounded-md btn-basic-property cart-btn hover:bg-gray-500"
-                                      onClick={() => showEngravingModal(true)}
-                                    >
-                                      <span className="font-bold">
-                                        {GENERAL_ENGRAVING}
-                                      </span>
-                                    </button>
-                                    <Engraving
-                                      show={isEngravingOpen}
-                                      submitForm={() => addToCart(product)}
-                                      onClose={() => showEngravingModal(false)}
-                                    />
-                                  </>
-                                )}
-                              </div>
-                            </div>
+                            <ProductCard
+                              product={product}
+                              hideWishlistCTA={true}
+                              deviceInfo={deviceInfo}
+                              maxBasketItemsCount={maxBasketItemsCount}
+                            />
                           </SwiperSlide>
                         )
                       })}
