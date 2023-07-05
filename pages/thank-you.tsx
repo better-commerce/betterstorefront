@@ -12,7 +12,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
-import { CLOSE_PANEL } from '@components/utils/textVariables'
+import { CLOSE_PANEL, SHARE_IN_PERSON } from '@components/utils/textVariables'
 import {
   NEXT_GET_ORDER,
   NEXT_REFERRAL_ADD_USER_REFEREE,
@@ -23,6 +23,8 @@ import {
   NEXT_REFERRAL_INVITE_SENT,
   NEXT_REFERRAL_SEARCH,
   NEXT_REFERRAL_INFO,
+  FACEBOOK_SHARE_STRING,
+  TWITTER_SHARE_STRING,
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
@@ -78,13 +80,118 @@ export default function OrderConfirmation() {
     clickOnInvites: 0,
     successfulInvites: 0,
   })
+  const [referralOffers, setReferralOffers] = useState<any>(null)
+  const [shareMethod, setShareMethod] = useState('')
+  const [referralLink, setReferralLink] = useState('')
   const [copied, setCopied] = useState(false)
-  let referralLink=''
-  if(typeof window !== undefined ){
-    const hostname = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : '';
-    referralLink = hostname + '/?referral-code=' + (referralObj?.slug || '')
-  }
+  const [isReferralSlugLoading,setIsReferralSlugLoading] = useState(false)
 
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const hostname =
+        typeof window !== 'undefined' && window.location.hostname
+          ? window.location.hostname
+          : ''
+      setReferralLink(
+        'https://' + hostname + '/?referral-code=' + (referralObj?.slug || '')
+      )
+    }
+  }, [referralObj?.slug])
+
+  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser } = useUI()
+  const shareOptionsConfig = [
+   
+    {
+      name: 'email',
+      onClick: () => {
+        setShareMethod('email')
+        handleInviteSent()
+      },
+      icon: (
+        <Link href={`mailto:?body=${referralOffers?.refereePromo}, Just use the following link: ${referralLink}&subject=Your friend has sent you a gift!`}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-6 h-6"
+          >
+            <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+            <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+          </svg>
+        </Link>
+      ),
+    },
+    {
+      name: 'facebook',
+      onClick: () => {
+        setShareMethod('facebook')
+        handleInviteSent()
+        window.open(`${FACEBOOK_SHARE_STRING}?u=${referralLink}&quote='Referral Link'`)
+      },
+      icon: (
+          <svg
+            viewBox="-5 0 20 20"
+            className="w-6 h-6"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="#000000"
+          >
+            <g id=" " stroke-width="0"></g>
+            <g
+              id=" "
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id=" ">
+              <defs> </defs>{' '}
+              <g
+                id="Page-1"
+                stroke="none"
+                stroke-width="1"
+                fill="none"
+                fill-rule="evenodd"
+              >
+                {' '}
+                <g
+                  id="Dribbble-Light-Preview"
+                  transform="translate(-385.000000, -7399.000000)"
+                  fill="#000000"
+                >
+                  {' '}
+                  <g id="icons" transform="translate(56.000000, 160.000000)">
+                    {' '}
+                    <path
+                      d="M335.821282,7259 L335.821282,7250 L338.553693,7250 L339,7246 L335.821282,7246 L335.821282,7244.052 C335.821282,7243.022 335.847593,7242 337.286884,7242 L338.744689,7242 L338.744689,7239.14 C338.744689,7239.097 337.492497,7239 336.225687,7239 C333.580004,7239 331.923407,7240.657 331.923407,7243.7 L331.923407,7246 L329,7246 L329,7250 L331.923407,7250 L331.923407,7259 L335.821282,7259 Z"
+                      id="facebook-[#176]"
+                    >
+                      {' '}
+                    </path>{' '}
+                  </g>{' '}
+                </g>{' '}
+              </g>{' '}
+            </g>
+          </svg>
+      ),
+    },
+    {
+      name: 'twitter',
+      onClick: () => {
+        setShareMethod('twitter')
+        handleInviteSent()
+        window.open(`${TWITTER_SHARE_STRING}?url=${referralLink}&text=Referral Link`)
+      },
+      icon: (
+          <svg fill="#000000" className='h-6 w-6' viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M245.65723,77.65674l-30.16407,30.16455C209.4707,177.70215,150.53809,232,80,232c-14.52441,0-26.49414-2.30273-35.57764-6.84473-7.33056-3.665-10.33349-7.59912-11.07861-8.71777a8,8,0,0,1,3.84717-11.92822c.25732-.09717,23.84814-9.15772,39.09521-26.40869a109.574,109.574,0,0,1-24.72656-24.355c-13.708-18.60352-28.206-50.91114-19.43066-99.17676a8.00023,8.00023,0,0,1,13.52832-4.22559c.35254.35156,33.64209,33.1709,74.3374,43.772L120,87.99609a48.31863,48.31863,0,0,1,48.6084-47.99267,48.11329,48.11329,0,0,1,40.96875,23.99609L240,64a8.0001,8.0001,0,0,1,5.65723,13.65674Z"></path> </g></svg>
+      ),
+    },
+    
+  ]
+
+  const handleInviteSent = async () => {
+    let acknowledge = await axios.post(NEXT_REFERRAL_INVITE_SENT, {
+      referralId: referralObj?.id,
+    })
+  }
 
   const handleCopyClick = async () => {
     try {
@@ -94,9 +201,27 @@ export default function OrderConfirmation() {
       console.error('Failed to copy link:', error)
     }
   }
-  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser } = useUI()
   const isIncludeVAT = vatIncluded()
   const router = useRouter()
+  const referralDescription = (
+    <>
+      {' '}
+      Our refer-a-friend programme is managed by Mention Me who will process
+      your data and send you referral service emails.{' '}
+      <a href="#">
+        <b>More info and your privacy rights</b>
+      </a>
+    </>
+  )
+  const referralTermsAndConditions = (
+    <>
+      By accepting this offer you agree to the{' '}
+      <a href="#">
+        <b>Terms and Conditions</b>
+      </a>
+    </>
+  )
+
   useEffect(() => {
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER, {
@@ -124,24 +249,29 @@ export default function OrderConfirmation() {
 
   const handleReferralByEmail = async () => {
     // setIsReferModalOpen(true)
+    setIsReferralSlugLoading(true)
     let { data: data } = await axios.post(NEXT_REFERRAL_BY_EMAIL, {
       email: user.email,
     })
-    setReferralObj(data?.referralDetails)
+    if (data?.referralDetails?.id) {
+      setReferralObj(data?.referralDetails)
+      setIsReferralSlugLoading(false)
+    }
     // console.log('data in handle by email: ', data)
   }
 
   const handleReferralInfo = async () => {
     let { data: data } = await axios.get(NEXT_REFERRAL_INFO)
     if (data?.referralDetails?.referrerPromo) {
+      setReferralOffers(data?.referralDetails)
       setIsReferModalOpen(true)
       handleReferralByEmail()
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     handleReferralInfo()
-  },[])
+  }, [])
 
   if (isLoading) {
     return (
@@ -426,10 +556,28 @@ export default function OrderConfirmation() {
                         {shareReferralView ? (
                           <div className="my-20 flex w-full flex-col justify-center items-center">
                             <h3 className="px-5 text-center">
-                              {referralObj.name} {'Invite now using:'}
+                              {user.firstName} {'Invite now using:'}
                             </h3>
-                            <div className="flex flex-row justify-center items-center">
-                              <span className="h-5 w-5 mx-2 my-2 text-black">
+                            <div className="flex  flex-row gap-x-5 justify-center items-center">
+                              {shareOptionsConfig?.map(
+                                (shareOpt: any, Idx: any) => {
+                                  return (
+                                    <span
+                                      key={Idx}
+                                      onClick={shareOpt.onClick}
+                                      className={classNames(
+                                        shareOpt.name === shareMethod
+                                          ? 'border-b-[3px]  border-black'
+                                          : 'border-none',
+                                        'border-b-1[px] py-2 mx-4 w-8 my-2 flex items-center justify-center cursor-pointer text-black'
+                                      )}
+                                    >
+                                      {shareOpt?.icon}
+                                    </span>
+                                  )
+                                }
+                              )}
+                              {/* <span className="h-5 w-5 mx-2 my-2 text-black">
                                 <ChatBubbleLeftEllipsisIcon />
                               </span>
                               <span className="h-5 w-5 mx-2 my-2 text-black">
@@ -437,29 +585,42 @@ export default function OrderConfirmation() {
                               </span>
                               <span className="h-5 w-5 mx-2 my-2 text-black">
                                 <LinkIcon />
-                              </span>
+                              </span> */}
                             </div>
                             <p className="px-5 text-center">
                               Tell your friends to enter your name like this at
                               Checkout
                             </p>
-                            <h2 className="mx-2 text-lg">{referralObj?.name}</h2>
+                            <h2 className="mx-2 text-lg">
+                              {referralObj?.name}
+                            </h2>
                             <Button className="my-3" onClick={() => {}}>
-                              Tell them in person
+                              {SHARE_IN_PERSON}
                             </Button>
+
                             {referralObj?.slug && (
-                              <div className="\w-full flex flex-col border-[1px] items-center justify-center border-black px-2 py-2">
-                                <p className='w-full text-left'>or share a link:</p>
-                                <div className="w-full flex items-center justify-between">
-                                  <p className="mx-1 truncate">{referralLink}</p>
-                                  <Button
-                                    className="h-4 !text-[10px]"
-                                    onClick={handleCopyClick}
-                                  >
-                                    {copied ? 'COPIED' : 'COPY LINK'}
-                                  </Button>
-                                </div>
-                              </div>
+                              <>
+                                {isReferralSlugLoading ? (
+                                  <LoadingDots />
+                                ) : (
+                                  <div className="\w-full w-[450px] flex flex-col border-[1px] items-center justify-center border-black px-2 py-2">
+                                    <p className="w-full text-left">
+                                      or share a link:
+                                    </p>
+                                    <div className="w-full flex items-center justify-between">
+                                      <p className="mx-1 truncate">
+                                        {referralLink}
+                                      </p>
+                                      <Button
+                                        className="h-4 !text-[10px]"
+                                        onClick={handleCopyClick}
+                                      >
+                                        {copied ? 'COPIED!' : 'COPY'}
+                                      </Button>
+                                    </div>
+                                  </div>
+                                )}
+                              </>
                             )}
                           </div>
                         ) : (
@@ -469,13 +630,10 @@ export default function OrderConfirmation() {
                             )}
                           >
                             <h2 className="px-5 text-center">
-                              Treat a friend to $20 off and get $20 OFF when you
-                              spend over $100 yourself
+                              {referralOffers?.refereePromo}
                             </h2>
                             <p className="px-5 text-center">
-                              Our refer-a-friend programme is managed by Mention
-                              Me who will process your data and send you
-                              referral service emails.
+                              {referralDescription}
                             </p>
                             <Button
                               className="my-3"
@@ -483,19 +641,21 @@ export default function OrderConfirmation() {
                                 setShareReferralView(true)
                               }}
                             >
-                              GET £20 OFF
+                              {referralOffers?.referrerPromo}
                             </Button>
+                            <p className="px-5 text-center">
+                              {referralTermsAndConditions}
+                            </p>
                           </div>
                         )}
                         <div className="flex w-full">
                           <Image
-                          src={'/assets/images/refer-a-friend.jpg'}
-                          alt='banner'
-                          height={700}
-                          width={480}
-                          className='object-cover'
-                          >
-                          </Image>
+                            src={'/assets/images/refer-a-friend.jpg'}
+                            alt="banner"
+                            height={700}
+                            width={480}
+                            className="object-cover"
+                          ></Image>
                         </div>
                       </div>
                     </div>

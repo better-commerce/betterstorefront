@@ -20,23 +20,34 @@ import axios from 'axios'
 import {
   NEXT_REFERRAL_BY_EMAIL,
   NEXT_REFERRAL_CLICK_ON_INVITE,
+  NEXT_REFERRAL_INFO,
   NEXT_REFERRAL_INVITE_SENT,
 } from '@components/utils/constants'
-import { Minus } from '@components/icons'
-import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
+import {
+  INVITES_SENT ,
+  CLICKS_ON_INVITES,
+  SUCCESSFUL_INVITES,
+  NO_INVITES,
+  SHARE_IN_PERSON,
+  SHARE_BY_EMAIL,
+  SUCCESSFUL_INVITE,
+} from '@components/utils/textVariables'
+import { ChevronDownIcon, ChevronUpIcon, MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
+import Spinner from '@components/ui/Spinner'
 
 const PAGE_SIZE = 10
 
 function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const [active, setActive] = useState(false)
-  const [pageNumber, setPageNumber] = useState<number>(1)
+  const [referralLink, setReferralLink] = useState('')
+  const [referralOffers,setReferralOffers] = useState<any>(null)
+  const [isLoading,setIsLoading] = useState(false)
   const [referralInfo,setReferralInfo] = useState({
     id: "",
     userId: "",
@@ -48,27 +59,40 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
 })
 
   const handleInviteSent = async (referralId:any)=>{
-    // let inviteInfo = await axios.post(NEXT_REFERRAL_INVITE_SENT,referralId)
-    // console.log("inviteInfo",inviteInfo);
+    let inviteInfo = await axios.post(NEXT_REFERRAL_INVITE_SENT,{referralId:referralInfo?.id})
     
   }
 
-  const handleClickOnInvite = async (referralId:any)=>{
-    // let clickOnInviteInfo = await axios.post(NEXT_REFERRAL_CLICK_ON_INVITE,referralId)
-    // console.log(" clickOnInviteInfo",clickOnInviteInfo);
-    
-}
+useEffect(() => {
+  if (typeof window !== undefined) {
+    const hostname =
+      typeof window !== 'undefined' && window.location.hostname
+        ? window.location.hostname
+        : ''
+    setReferralLink(
+      'https://' + hostname + '/?referral-code=' + (referralInfo?.slug || '')
+    )
+  }
+}, [referralInfo?.slug])
+
+useEffect(()=>{
+  const getReferralOffers = async ()=>{
+    let {data:referralProgram} = await axios.post(NEXT_REFERRAL_INFO)
+    if(referralProgram?.referralDetails?.refereePromo){
+      setReferralOffers(referralProgram?.referralDetails)
+    }
+  }
+  getReferralOffers()
+},[])
 
   useEffect(()=>{
+    setIsLoading(true)
     const fetchReferralInfo = async ()=>{
-        // console.log("user",user);
-        
+
         let {data:referralInfo} = await axios.post(NEXT_REFERRAL_BY_EMAIL,{email:user?.email})
-        // console.log("data in my accountreferralInfo",referralInfo);
         if(referralInfo?.referralDetails){
-        //     handleInviteSent(referralInfo)
-        //     handleClickOnInvite(referralInfo)
         setReferralInfo(referralInfo?.referralDetails)
+        setIsLoading(false)
         }
     }
     fetchReferralInfo()
@@ -208,29 +232,32 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
             </div>
           </div>
 
+          {isLoading?(
+            <Spinner/>
+          ):(
           <div
-            className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
+            className={`relative col-span-9 px-10 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
               isShow ? `` : ''
             }`}
           >
             <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-              <h2 className='py-2 px-5'>
-                {referralInfo?.successfulInvites>0?`${referralInfo?.successfulInvites} Successful Invites`:'No successful Referrals Yet'}
-              </h2>
-              <div className='w-full border-t-2 border-black border-b-2 '>
-                <div className='border-b-[1px] border-black flex flex-row justify-between px-5 py-2'>
-                    <p className='text-lg text-black font-semibold'>
-                        Invites sent                        
+              <h1 className='py-2  px-5 font-bold'>
+                {referralInfo?.successfulInvites>0? referralInfo?.successfulInvites==1 ?`1 ${SUCCESSFUL_INVITE}`:`${referralInfo?.successfulInvites} ${SUCCESSFUL_INVITES}`:NO_INVITES}
+              </h1>
+              <div className='w-full border-t-[1px] mt-4 border-gray-300 border-b-[1px] '>
+                <div className='border-b-[1px] border-gray-300 flex flex-row justify-between px-5 py-2'>
+                    <p className='text-sm text-black font-semibold '>
+                        {INVITES_SENT}                        
                     </p>
-                    <p className='text-lg text-black font-semibold'>
+                    <p className='text-sm text-black font-semibold'>
                         {referralInfo?.invitesSent}
                     </p>
                 </div>
                 <div className='flex flex-row justify-between px-5 py-2'>
-                    <p className='text-lg text-black font-semibold'>
-                        Clicks on Invites
+                    <p className='text-sm text-black font-semibold'>
+                        {CLICKS_ON_INVITES}
                     </p>
-                    <p className='text-lg text-black font-semibold'>
+                    <p className='text-sm text-black font-semibold'>
                         {referralInfo?.clickOnInvites}
                     </p>
                 </div>
@@ -239,14 +266,14 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                   defaultOpen={true}
                 >
                   {({ open }) => (
-                    <div className='border-b-[1px] border-gray-300 '>
-                      <Disclosure.Button className="flex w-full justify-between px-5 mx-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
+                    <div className='border-b-[1px] border-gray-300 pt-2'>
+                      <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
                         <div className=' w-full flex flex-row justify-between items-center'>
-                            <h2>
-                                Tell them in Person
+                            <h2 className='text-sm text-black font-semibold capitalize'>
+                                {SHARE_IN_PERSON}
                             </h2>
-                            <span className='h-5 w-5 text-gray-400'>
-                            {open?<MinusCircleIcon/>:<PlusCircleIcon/>}
+                            <span className='h-5 w-5 text-gray-500'>
+                            {open?<ChevronUpIcon/>:<ChevronDownIcon/>}
                             </span>
                         </div>
                       </Disclosure.Button>
@@ -259,15 +286,17 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                         leaveTo="transform scale-95 opacity-0"
                       >
                         <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
-                          <div className='px-8 py-2 text-[24px]'>
-                            Just tell your friends to mention your name
-                            <div className='px-20 my-8 py-4 text-[24px]'>
+                          <div className='px-0 text-sm'>
+                            <p className='px-5'>
+                              Just tell your friends to mention your name
+                            </p>
+                            <div className='px-5 my-4 text-sm'>
                                 Your friends Enter:
-                                <h2 className='text-black flex justify-center py-5'>
+                                <h2 className='text-black text-lg'>
                                     {user?.firstName+" "+ user?.lastName}
                                 </h2>
                             </div>
-                            <div className='flex justify-center items-center text-[24px] leading-relaxed text-center'>
+                            <div className='px-5 flex justify-center items-center text-sm leading-relaxed '>
                             All they need to do to get their reward is to click on the Link asking if
 they've Been referred by a friend? in the checkout and enter your name.
                             </div>
@@ -281,14 +310,14 @@ they've Been referred by a friend? in the checkout and enter your name.
                   defaultOpen={false}
                 >
                   {({ open }) => (
-                    <div className='border-b-[1px] border-gray-300 '>
-                      <Disclosure.Button className="flex w-full justify-between px-5 mx-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
+                    <div className='border-b-[1px] border-gray-300 pt-2'>
+                      <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
                         <div className=' w-full flex flex-row justify-between items-center'>
-                            <h2>
-                                Share By Email
+                            <h2 className='text-sm text-black font-semibold capitalize'>
+                                {SHARE_BY_EMAIL}
                             </h2>
-                            <span className='h-5 w-5 text-gray-400'>
-                            {open?<MinusCircleIcon/>:<PlusCircleIcon/>}
+                            <span className='h-5 w-5 text-gray-500'>
+                            {open?<ChevronUpIcon/>:<ChevronDownIcon/>}
                             </span>
                         </div>
                       </Disclosure.Button>
@@ -301,8 +330,17 @@ they've Been referred by a friend? in the checkout and enter your name.
                         leaveTo="transform scale-95 opacity-0"
                       >
                         <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
-                          <div className='px-8 py-2 text-[24px]'>
+                          <div className='px-5 py-2 text-sm'>
+                            <p>
                             Share Referral by Email
+                            </p>
+                            <Link
+                              href={`mailto:?body=${referralOffers?.refereePromo}, Just use the following link: ${referralLink}&subject=Your friend has sent you a gift!`}
+                              className='font-bold'
+                              onClick={handleInviteSent}
+                              >
+                              Click here to share Referral link by Email
+                            </Link>
                           </div>
                         </Disclosure.Panel>
                       </Transition>
@@ -311,10 +349,11 @@ they've Been referred by a friend? in the checkout and enter your name.
                 </Disclosure>
             </div>
           </div>
+          )}
         </div>
-      </div>
+        </div>
     </section>
-  )
+    )
 }
 
 ReferralPage.Layout = Layout

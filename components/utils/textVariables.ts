@@ -385,3 +385,13 @@ export const CHANGE_SIZE = 'Change Size'
 export const LOGOUT = 'Logout Successful'
 export const PRODUCT_DELIVERY_MESSAGE =
   'For orders above {currencySymbol}{freeShippingOverXValue}, Usually delivered in 2-5 days.'
+export const INVITES_SENT = 'Invites Sent'
+export const CLICKS_ON_INVITES = 'Clicks on Invites'
+export const SUCCESSFUL_INVITES = 'Successful Invites'
+export const SUCCESSFUL_INVITE = 'Successful Invite'
+export const NO_INVITES = 'No Successful Invites Yet'
+export const SHARE_IN_PERSON = 'Tell them in Person'
+export const SHARE_BY_EMAIL = 'Share by Email'
+export const BEEN_REFERRED_BY_A_FRIEND = 'Been Referred by a Friend?'
+export const FIND_THEM = 'Find Them!'
+export const USER_NOT_FOUND = "Unfortunately, couldn't find a user with this name"

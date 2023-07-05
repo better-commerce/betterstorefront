@@ -61,6 +61,8 @@ export const REFERRAL_BY_USERID = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/c
 export const REFERRAL_REFEREE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referee/`
 export const REFERRAL_BY_USERNAME = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-username`
 export const REFERRAL_SEARCH = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/search`
+export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
+export const TWITTER_SHARE_STRING =  `https://twitter.com/intent/tweet`
 
 //LOCAL ENDPOINTS
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
