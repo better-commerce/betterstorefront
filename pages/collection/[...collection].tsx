@@ -18,7 +18,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import {
   maxBasketItemsCount,
@@ -27,6 +27,7 @@ import {
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState } from '@components/ui/context'
 import CacheProductImages from '@components/product/ProductView/CacheProductImages'
+
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -141,7 +142,6 @@ export default function CollectionPage(props: any) {
     collectionId: props?.id,
   }
 
-  const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
@@ -197,8 +197,6 @@ export default function CollectionPage(props: any) {
         pages: productDataToPass?.pages || 0,
       })
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productDataToPass])
 
   useEffect(() => {
@@ -208,8 +206,6 @@ export default function CollectionPage(props: any) {
       loading: loadingState,
     })
     setSwrLoading(loadingState)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, collection])
 
   useEffect(() => {
@@ -236,17 +232,14 @@ export default function CollectionPage(props: any) {
         })
       }
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productDataToPass])
 
   useEffect(() => {
-    const data = IS_INFINITE_SCROLL
+    const dataToPass = IS_INFINITE_SCROLL
       ? productListMemory?.products
-      : productListMemory?.products //props?.products
-    setProductDataToPass(data)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productListMemory?.products, props?.products])
+      : data?.products // productListMemory?.products
+    setProductDataToPass(dataToPass)
+  }, [productListMemory?.products, data?.products])
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
@@ -267,8 +260,6 @@ export default function CollectionPage(props: any) {
       })
     }
     //}
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length, data])
 
   const handlePageChange = (page: any, redirect = true) => {
@@ -347,15 +338,13 @@ export default function CollectionPage(props: any) {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [visible, setVisible] = useState(true)
   const [appliedFilters, setAppliedFilters] = useState<any[]>([])
 
   useEffect(() => {
-    const currentFilters = props?.products?.filters?.reduce(
+    const currentFilters = data?.products?.filters?.reduce(
       (acc: any, obj: any) => {
         acc.forEach((item: any) => {
           if (item.Key === obj.key) {
@@ -369,7 +358,7 @@ export default function CollectionPage(props: any) {
       [...state?.filters]
     )
     setAppliedFilters(currentFilters)
-  }, [state?.filters, props?.products])
+  }, [state?.filters, data?.products])
 
   const cls = visible
     ? 'sticky w-full mx-auto bg-white top-108 sm:container'
@@ -398,12 +387,19 @@ export default function CollectionPage(props: any) {
         <meta name="title" content={props?.name} />
         <meta name="description" content={props?.metaDescription} />
         <meta name="keywords" content={props?.metaKeywords} />
+
         <meta property="og:image" content="" />
         <meta property="og:title" content={props?.name} key="ogtitle" />
         <meta
           property="og:description"
           content={props?.metaDescription}
           key="ogdesc"
+        />
+        <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
+        <meta
+          property="og:url"
+          content={absPath || SITE_ORIGIN_URL + router.asPath}
+          key="ogurl"
         />
       </NextHead>
       {props?.hostName && (
@@ -615,7 +611,7 @@ export default function CollectionPage(props: any) {
           plpFilterState={plpFilterState}
         />
 
-        {props?.products?.results?.length > 0 && (
+        {data?.products?.results?.length > 0 && (
           <Script
             type="application/ld+json"
             id="schema"
@@ -626,14 +622,12 @@ export default function CollectionPage(props: any) {
                 "@context": "https://schema.org/",
                 "@type": "ItemList",
                 "itemListElement": ${JSON.stringify(
-                  props?.products?.results?.map(
-                    (product: any, pId: number) => ({
-                      '@type': 'ListItem',
-                      position: pId + 1,
-                      name: product?.name,
-                      url: `${SITE_ORIGIN_URL}/${product?.slug}`,
-                    })
-                  )
+                  data?.products?.results?.map((product: any, pId: number) => ({
+                    '@type': 'ListItem',
+                    position: pId + 1,
+                    name: product?.name,
+                    url: `${SITE_ORIGIN_URL}/${product?.slug}`,
+                  }))
                 )}
               }
             `,

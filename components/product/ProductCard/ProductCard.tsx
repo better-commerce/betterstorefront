@@ -319,7 +319,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </div>
 
           {isMobile ? null : (
-            <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-20 sm:flex group-hover:-translate-y-full">
+            <div className="absolute flex-wrap hidden w-full gap-1 px-0 py-2 transition-transform duration-500 bg-white sm:translate-y-20 sm:flex group-hover:-translate-y-full">
               {!hideWishlistCTA && (
                 <SimpleButton
                   variant="slim"

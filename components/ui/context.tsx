@@ -696,7 +696,7 @@ export const UIProvider: React.FC<any> = (props) => {
       if (payload?.companyId) {
         Cookies.set(Cookie.Key.COMPANY_ID, payload?.companyId)
       } else {
-        Cookies.set(Cookie.Key.COMPANY_ID, Guid.empty)
+        Cookies.remove(Cookie.Key.COMPANY_ID)
       }
       dispatch({ type: 'SET_USER', payload })
     },
@@ -728,7 +728,7 @@ export const UIProvider: React.FC<any> = (props) => {
           setItem('wishListItems', [])
           setItem('cartItems', { lineItems: [] })
           dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
-          Cookies.set(Cookie.Key.COMPANY_ID, Guid.empty)
+          Cookies.remove(Cookie.Key.COMPANY_ID)
           const basketIdRef = uuid()
           Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
             expires: getExpiry(getMinutesInDays(365)),

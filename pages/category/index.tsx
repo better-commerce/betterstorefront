@@ -2,6 +2,7 @@ import type { GetStaticPropsContext } from 'next'
 import { getAllCategories } from '@framework/category'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import NextHead from 'next/head'
 import { Layout } from '@components/common'
 import {
@@ -9,11 +10,13 @@ import {
   SHOP_BY_CATEGORY,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 export default function CategoryList(props: any) {
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+  const router = useRouter()
   return (
     <>
       <NextHead>
@@ -26,9 +29,16 @@ export default function CategoryList(props: any) {
         <meta name="title" content="Category" />
         <meta name="description" content="Category" />
         <meta name="keywords" content="Category" />
+
         <meta property="og:image" content="" />
         <meta property="og:title" content="Category" key="ogtitle" />
         <meta property="og:description" content="Category" key="ogdesc" />
+        <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
+        <meta
+          property="og:url"
+          content={absPath || SITE_ORIGIN_URL + router.asPath}
+          key="ogurl"
+        />
       </NextHead>
       <main className="w-full px-4 mx-auto sm:px-0 md:w-4/5 lg:px-0">
         <section aria-labelledby="products-heading ">

@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import "~react-image-gallery/styles/css/image-gallery.css";
+
 @font-face {
   font-family: 'Inter';
   src: url('../font/Inter-Bold.woff2') format('woff2'),
@@ -755,3 +756,36 @@ object {
 
 /* category landing css End */
 /* main css end */
+.cookie-bannner>div {
+  width: 350px;
+  max-width: 100%;
+  background-color: #000;
+  -webkit-transition: -webkit-transform 0s ease-in-out, visibility 0s;
+  -webkit-transition: transform 0s ease-in-out, visibility 0s;
+  transition: transform 0s ease-in-out, visibility 0s
+}
+
+.cookie-bannner div:has(button) {
+  display: flex;
+  flex-direction: column;
+}
+
+.cookie-bannner button {
+  width: 100%;
+  display: block;
+  margin: 5px 5px 5px 0 !important;
+  border: 1px solid #fff !important;
+  min-height: 30px;
+  padding: 5px 10px;
+}
+
+.cookie-bannner p {
+  color: #fff !important;
+}
+
+@media screen and (max-width:767px) {
+  .cookie-bannner>div {
+    width: 100%;
+    max-width: 100%;
+  }
+}

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper.min.css'
 import SwiperCore, { Navigation } from 'swiper'
@@ -9,6 +9,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import { Button } from '@components/ui'
 import { BTN_FIND_MORE } from '@components/utils/textVariables'
+import Router from 'next/router'
 type data = {
   images: Array<string>
 }
@@ -70,7 +71,12 @@ const Slider = ({ images }: data) => {
                     src={val.url}
                     alt={`Slide ${currentImageIndex}`}
                   />
-                  <p className="absolute hover:bg-gray-200 2xl:left-12 pt-2 2xl:pt-4 md:pt-4 2xl:bottom-64 md:left-8 md:bottom-48 h-12 w-48 uppercase cursor-pointer bg-white rounded-md p-1 z-50 md:text-lg text-sm font-semibold">
+                  <p
+                    className="absolute flex hover:bg-gray-200 m-auto justify-center 2xl:left-12 pt-2 2xl:pt-4 md:pt-4 2xl:bottom-64 md:left-8 md:bottom-48 h-12 w-48 uppercase cursor-pointer bg-white rounded-md p-1 z-50 md:text-lg text-sm font-semibold"
+                    onClick={() => {
+                      Router.push(val.link ? val.link : '#')
+                    }}
+                  >
                     {BTN_FIND_MORE}
                   </p>
                 </SwiperSlide>
