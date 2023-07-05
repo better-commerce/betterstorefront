@@ -47,7 +47,11 @@ import RecommendedProductCollection from '@components/brand/RecommendedProductCo
 import ImageBanner from '@components/brand/ImageBanner'
 import MultiBrandVideo from '@components/brand/MultiBrandVideo'
 import axios from 'axios'
-import { NEXT_GET_COLLECTION_BY_ID } from '@components/utils/constants'
+import {
+  NEXT_GET_COLLECTION_BY_ID,
+  SITE_NAME,
+  SITE_ORIGIN_URL,
+} from '@components/utils/constants'
 import OfferCard from '@components/brand/OfferCard'
 import { tryParseJson } from '@framework/utils/parse-util'
 
@@ -408,12 +412,19 @@ function BrandDetailPage({
         <meta name="title" content={brandDetails?.name || 'Brands'} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
+
         <meta property="og:image" content="" />
         <meta property="og:title" content={brandDetails?.name} key="ogtitle" />
         <meta
           property="og:description"
           content={brandDetails?.metaDescription}
           key="ogdesc"
+        />
+        <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
+        <meta
+          property="og:url"
+          content={absPath || SITE_ORIGIN_URL + router.asPath}
+          key="ogurl"
         />
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
@@ -558,7 +569,7 @@ function BrandDetailPage({
             />
 
             <div className="mb-20">
-              <p className="font-semibold my-10 uppercase cursor-default font-lg">
+              <p className="my-10 font-semibold uppercase cursor-default font-lg">
                 {faq.title}
               </p>
               {faq?.results?.map((val: any, Idx: number) => {
