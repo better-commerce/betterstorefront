@@ -25,7 +25,7 @@ module.exports = withCommerceConfig({
       'ffxcdn.azureedge.net',
       'ffxlivestorage.blob.core.windows.net',
       'livekstmcdn.azureedge.net',
-      'devocxstorage.blob.core.windows.net'
+      'devocxstorage.blob.core.windows.net',
     ],
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
