@@ -395,3 +395,5 @@ export const SHARE_BY_EMAIL = 'Share by Email'
 export const BEEN_REFERRED_BY_A_FRIEND = 'Been Referred by a Friend?'
 export const FIND_THEM = 'Find Them!'
 export const USER_NOT_FOUND = "Unfortunately, couldn't find a user with this name"
+export const VOUCHERS_EARNED = "Vouchers Earned"
+export const VOUCHERS_NOT_EARNED = "No Vouchers Earned Yet"

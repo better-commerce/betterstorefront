@@ -22,6 +22,7 @@ import {
   NEXT_REFERRAL_CLICK_ON_INVITE,
   NEXT_REFERRAL_INFO,
   NEXT_REFERRAL_INVITE_SENT,
+  NEXT_REFERRAL_VOUCHERS,
 } from '@components/utils/constants'
 import {
   INVITES_SENT ,
@@ -31,6 +32,8 @@ import {
   SHARE_IN_PERSON,
   SHARE_BY_EMAIL,
   SUCCESSFUL_INVITE,
+  VOUCHERS_EARNED,
+  VOUCHERS_NOT_EARNED,
 } from '@components/utils/textVariables'
 import { ChevronDownIcon, ChevronUpIcon, MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
 import Spinner from '@components/ui/Spinner'
@@ -48,6 +51,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
   const [referralLink, setReferralLink] = useState('')
   const [referralOffers,setReferralOffers] = useState<any>(null)
   const [isLoading,setIsLoading] = useState(false)
+  const [vouchersEarned,setVouchersEarned] = useState<any>(null)
   const [referralInfo,setReferralInfo] = useState({
     id: "",
     userId: "",
@@ -61,6 +65,25 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
   const handleInviteSent = async (referralId:any)=>{
     let inviteInfo = await axios.post(NEXT_REFERRAL_INVITE_SENT,{referralId:referralInfo?.id})
     
+  }
+
+  const dateConverter = (dateString:any)=>{
+    let date = new Date(dateString)
+    return date.toLocaleDateString()
+  }
+  const handleVouchers = async (userId:any) =>{
+    let {data:referralVouchers} = await axios.post(NEXT_REFERRAL_VOUCHERS,{userId:userId})
+    // let sampleObj =  [
+    //   {
+    //     "promoName": "Hurray! Get 20 % off",
+    //     "voucherCode": "KYUJJ764M6WN799Q",
+    //     "validityDate": "2023-07-15T08:47:59.597"
+    //   },   
+    // ]
+    // setVouchersEarned(sampleObj)
+    if (referralVouchers?.referralDetails){
+      setVouchersEarned(referralVouchers?.referralDetails)
+    }
   }
 
 useEffect(() => {
@@ -92,6 +115,7 @@ useEffect(()=>{
         let {data:referralInfo} = await axios.post(NEXT_REFERRAL_BY_EMAIL,{email:user?.email})
         if(referralInfo?.referralDetails){
         setReferralInfo(referralInfo?.referralDetails)
+        handleVouchers(referralInfo?.referralDetails?.userId)
         setIsLoading(false)
         }
     }
@@ -262,6 +286,7 @@ useEffect(()=>{
                     </p>
                 </div>
               </div>
+              {/* Tell them in person section */}
               <Disclosure
                   defaultOpen={true}
                 >
@@ -293,12 +318,12 @@ useEffect(()=>{
                             <div className='px-5 my-4 text-sm'>
                                 Your friends Enter:
                                 <h2 className='text-black text-lg'>
-                                    {user?.firstName+" "+ user?.lastName}
+                                    {referralInfo?.slug} {/* {user?.firstName+" "+ user?.lastName} */}
                                 </h2>
                             </div>
                             <div className='px-5 flex justify-center items-center text-sm leading-relaxed '>
                             All they need to do to get their reward is to click on the Link asking if
-they've Been referred by a friend? in the checkout and enter your name.
+they've Been referred by a friend? in the checkout and enter Referral Code.
                             </div>
                           </div>
                         </Disclosure.Panel>
@@ -306,6 +331,7 @@ they've Been referred by a friend? in the checkout and enter your name.
                     </div>
                   )}
                 </Disclosure>
+                {/* Share by email section */}
                 <Disclosure
                   defaultOpen={false}
                 >
@@ -341,6 +367,66 @@ they've Been referred by a friend? in the checkout and enter your name.
                               >
                               Click here to share Referral link by Email
                             </Link>
+                          </div>
+                        </Disclosure.Panel>
+                      </Transition>
+                    </div>
+                  )}
+                </Disclosure>
+                {/* Vouchers Earned Section */}
+                <Disclosure
+                  defaultOpen={false}
+                >
+                  {({ open }) => (
+                    <div className='border-b-[1px] border-gray-300 pt-2'>
+                      <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
+                        <div className=' w-full flex flex-row justify-between items-center'>
+                            <h2 className='text-sm text-black font-semibold capitalize'>
+                                {VOUCHERS_EARNED}
+                            </h2>
+                            <span className='h-5 w-5 text-gray-500'>
+                            {open?<ChevronUpIcon/>:<ChevronDownIcon/>}
+                            </span>
+                        </div>
+                      </Disclosure.Button>
+                      <Transition
+                        enter="transition duration-100 ease-out"
+                        enterFrom="transform scale-95 opacity-0"
+                        enterTo="transform scale-100 opacity-100"
+                        leave="transition duration-75 ease-out"
+                        leaveFrom="transform scale-100 opacity-100"
+                        leaveTo="transform scale-95 opacity-0"
+                      >
+                        <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
+                          <div className='px-5 py-2 text-sm'>
+                            {vouchersEarned?.length>0 ? (
+                            <div className='flex flex-col'>
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th>Voucher Code</th>
+                                    <th>Offer</th>
+                                    <th>Validity</th>
+                                  </tr>
+                                </thead>
+                                <tbody className=''>
+                                  {vouchersEarned?.map((voucher:any, Idx:any) => {
+                                    return (
+                                      <tr key={Idx} className=''>
+                                        <td className='text-center'>{voucher?.voucherCode}</td>
+                                        <td className='text-center'>{voucher?.promoName}</td>
+                                        <td className='text-center'>{dateConverter(voucher?.validityDate)}</td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </div>
+                            ):(
+                              <p>
+                                {VOUCHERS_NOT_EARNED}
+                              </p>
+                            )}
                           </div>
                         </Disclosure.Panel>
                       </Transition>

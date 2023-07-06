@@ -61,6 +61,7 @@ export const REFERRAL_BY_USERID = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/c
 export const REFERRAL_REFEREE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referee/`
 export const REFERRAL_BY_USERNAME = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-username`
 export const REFERRAL_SEARCH = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/search`
+export const REFERRAL_VOUCHERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/vouchers`
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
 export const TWITTER_SHARE_STRING =  `https://twitter.com/intent/tweet`
 
@@ -145,6 +146,7 @@ export const NEXT_REFERRAL_ADD_USER_REFEREE = '/api/customer/referral-add-user-r
 export const NEXT_REFERRAL_INVITE_SENT = '/api/customer/referral-invite-sent'
 export const NEXT_REFERRAL_CLICK_ON_INVITE = '/api/customer/referral-click-on-invite'
 export const NEXT_REFERRAL_INFO = '/api/customer/referral-info'
+export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral-vouchers'
 //CONSTANTS
 
 export const NEXT_GET_PRODUCT_QUICK_VIEW = '/api/catalog/get-product-quick-view'
