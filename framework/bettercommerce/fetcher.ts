@@ -124,6 +124,7 @@ const fetcher = async ({
       cookies?.CompanyId && cookies?.CompanyId != Guid.empty
         ? cookies?.CompanyId
         : Guid.empty,
+    ClientIP: cookies?.clientIP ?? null,
   }
 
   const config: any = {
