@@ -45,5 +45,6 @@ export module Cookie {
     export const ORDER_ID = 'orderId'
     export const COMPANY_ID = 'CompanyId'
     export const GOOGLE_TRANSLATE = 'googtrans'
+    export const IP_ADDRESS = 'client_ip'
   }
 }
