@@ -752,7 +752,7 @@ export default function Summary({
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                       >
-                        <div className="2xl:w-screen h-[500px] max-w-xl 2xl:max-w-xl">
+                        <div className="2xl:w-screen 2xl:h-auto  xl:h-[500px] max-w-xl 2xl:max-w-xl">
                           <div className="flex flex-col h-full overflow-y-auto rounded shadow-xl bg-gray-50">
                             <div className="flex-1 px-0 overflow-y-auto">
                               <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
