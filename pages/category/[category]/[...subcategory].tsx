@@ -9,9 +9,7 @@ import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import {
-  ChevronRightIcon, ChevronLeftIcon
-} from '@heroicons/react/24/outline'
+import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import {
   ALL_CATEGORY,
   BAD_URL_TEXT,
@@ -46,7 +44,12 @@ declare const window: any
 export async function getStaticProps(context: any) {
   const slugName = Object.keys(context.params)[0]
   const childSlugName = Object.keys(context.params)[1]
-  const slug = slugName + '/' + context.params[slugName] + '/' + context.params[childSlugName].join('/')
+  const slug =
+    slugName +
+    '/' +
+    context.params[slugName] +
+    '/' +
+    context.params[childSlugName].join('/')
   const category = await getCategoryBySlug(slug)
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
@@ -79,12 +82,10 @@ const generateCategories = (categories: any) => {
   const categoryMap: any = []
   const generateCategory = (category: any, categoryPrefix: any) => {
     if (category?.link) {
-      const segments = category.link.split('/');
+      const segments = category.link.split('/')
       if (segments.length >= 3) {
         category?.link.includes('category/')
-          ? categoryMap.push(
-            `/${category?.link}`
-          )
+          ? categoryMap.push(`/${category?.link}`)
           : categoryMap.push(`/${categoryPrefix}/${category?.link}`)
       }
     }
@@ -94,7 +95,9 @@ const generateCategories = (categories: any) => {
       })
     }
   }
-  categories.forEach((category: any) => generateCategory(category, category?.link))
+  categories.forEach((category: any) =>
+    generateCategory(category, category?.link)
+  )
   return categoryMap
 }
 
@@ -193,7 +196,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     filters: adaptedQuery.filters || [],
     categoryId: category?.id,
   }
-  const [isLoading, setIsLoading] = useState(true)
+
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
     data = {
@@ -230,7 +233,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
       categoryId: category?.id,
     },
   })
-  const [productDataToPass, setProductDataToPass] = useState(products)
+  const [productDataToPass, setProductDataToPass] = useState(data?.products)
 
   useEffect(() => {
     if (category?.id !== state.categoryId)
@@ -241,7 +244,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-      productListMemory?.products?.currentPage ||
+        productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -259,10 +262,10 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    const data = IS_INFINITE_SCROLL
+    const dataToPass = IS_INFINITE_SCROLL
       ? productListMemory?.products
-      : productListMemory?.products //props?.products
-    setProductDataToPass(data)
+      : data?.products // productListMemory?.products
+    setProductDataToPass(dataToPass)
   }, [productListMemory?.products, products])
 
   const handlePageChange = (page: any, redirect = true) => {
@@ -359,13 +362,16 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         <div className="mx-auto mt-4 bg-transparent md:w-4/5 px-4 sm:px-0">
           {/* breadcrumb section start */}
           {category?.breadCrumbs && (
-            <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
+            <BreadCrumbs
+              items={category?.breadCrumbs}
+              currentProduct={category}
+            />
           )}
           {/* breadcrumb section End */}
         </div>
 
         {/* Category info section start */}
-        <div className='mx-auto mt-4 bg-transparent md:w-4/5 my-6 px-4 sm:px-0'>
+        <div className="mx-auto mt-4 bg-transparent md:w-4/5 my-6 px-4 sm:px-0">
           <h1>{category?.name}</h1>
           <div
             className="font-18"
@@ -374,15 +380,18 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         </div>
         {/* Category info section End */}
         {/* category banner info start */}
-        <div className='w-full py-4'>
+        <div className="w-full py-4">
           {category && category?.images && category?.images.length ? (
             <>
               {category?.images.map((cat: any, idx: number) => (
-                <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 relative" key={idx}>
+                <div
+                  className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 relative"
+                  key={idx}
+                >
                   <div className="flex justify-center items-center bg-blue-web p-4 py-8 sm:py-0 sm:p-0 order-2 sm:order-1">
                     <div className="w-full h-full">
-                      <div className='relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container'>
-                        <div className='sm:w-2/4 sm:pr-20'>
+                      <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
+                        <div className="sm:w-2/4 sm:pr-20">
                           <h2 className="uppercase text-white">{cat?.name}</h2>
                           <p className="mt-5 text-white font-light">
                             {cat?.description}
@@ -391,10 +400,11 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                       </div>
                     </div>
                   </div>
-                  <div className='order-1 sm:order-2'>
+                  <div className="order-1 sm:order-2">
                     <Image
                       src={
-                        generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER
+                        generateUri(cat?.url, 'h=700&fm=webp') ||
+                        IMG_PLACEHOLDER
                       }
                       className="w-full"
                       alt={category?.name}
@@ -402,14 +412,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                       height={700}
                     />
                   </div>
-
                 </div>
               ))}
             </>
-
           ) : null}
         </div>
-        <div className='mx-auto md:w-4/5 py-6 px-4 sm:px-0'>
+        <div className="mx-auto md:w-4/5 py-6 px-4 sm:px-0">
           {/* category banner info End */}
 
           {/*TODO: For browser caching of product images*/}

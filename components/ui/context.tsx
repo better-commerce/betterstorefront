@@ -12,15 +12,16 @@ import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import { resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { LOGOUT } from '@components/utils/textVariables'
+import { Cookie } from '@framework/utils/constants'
 
 declare const window: any
 
 export const basketId = () => {
-  if (Cookies.get('basketId')) {
-    return Cookies.get('basketId') || ''
+  if (Cookies.get(Cookie.Key.BASKET_ID)) {
+    return Cookies.get(Cookie.Key.BASKET_ID) || ''
   }
   const basketId = uuid()
-  Cookies.set('basketId', basketId, {
+  Cookies.set(Cookie.Key.BASKET_ID, basketId, {
     expires: getExpiry(getMinutesInDays(365)),
   })
   return basketId
@@ -695,11 +696,16 @@ export const UIProvider: React.FC<any> = (props) => {
   const setUser = useCallback(
     (payload: any) => {
       setItem('user', payload)
+      if (payload?.companyId) {
+        Cookies.set(Cookie.Key.COMPANY_ID, payload?.companyId)
+      } else {
+        Cookies.remove(Cookie.Key.COMPANY_ID)
+      }
       dispatch({ type: 'SET_USER', payload })
     },
     [dispatch]
   )
-  
+
   const setGuestUser = useCallback(
     (payload: any) => {
       setItem('guestUser', payload)
@@ -725,8 +731,9 @@ export const UIProvider: React.FC<any> = (props) => {
           setItem('wishListItems', [])
           setItem('cartItems', { lineItems: [] })
           dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+          Cookies.remove(Cookie.Key.COMPANY_ID)
           const basketIdRef = uuid()
-          Cookies.set('basketId', basketIdRef, {
+          Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
             expires: getExpiry(getMinutesInDays(365)),
           })
           dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
@@ -758,7 +765,7 @@ export const UIProvider: React.FC<any> = (props) => {
 
   const setBasketId = useCallback(
     (basketId: string) => {
-      Cookies.set('basketId', basketId, {
+      Cookies.set(Cookie.Key.BASKET_ID, basketId, {
         expires: getExpiry(getMinutesInDays(365)),
       })
       dispatch({ type: 'SET_BASKET_ID', payload: basketId })
@@ -774,9 +781,9 @@ export const UIProvider: React.FC<any> = (props) => {
   const setOrderId = useCallback(
     (payload: string) => {
       if (payload) {
-        Cookies.set('orderId', payload)
+        Cookies.set(Cookie.Key.ORDER_ID, payload)
       } else {
-        Cookies.remove('orderId')
+        Cookies.remove(Cookie.Key.ORDER_ID)
       }
       dispatch({ type: 'SET_ORDER_ID', payload })
     },

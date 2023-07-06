@@ -1,6 +1,8 @@
 import classNames from '@components/utils/classNames'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import ToggleSwitch from '@components/common/ToggleSwitch'
+import { vatIncluded } from '@framework/utils/app-util'
 
 const MAX_CHARS = 19
 
@@ -16,6 +18,10 @@ export default function PLPSort({
   const currentOption = sortList?.filter(
     (item: any) => item.key === routerSortOption
   )[0]
+
+  const getCompare = () => {
+    //TO DO
+  }
 
   return (
     <>

@@ -1,47 +1,63 @@
-import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
+import { groupBy, sortBy } from 'lodash'
+import SwiperCore, { Navigation } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
-import {
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_ENGRAVING,
-  IMG_PLACEHOLDER,
-  ITEM_TYPE_ADDON,
-} from '@components/utils/textVariables'
-import Image from 'next/image'
-import { generateUri } from '@commerce/utils/uri-util'
-const Engraving = dynamic(() => import('@components/product/Engraving'))
+import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+const PLPQuickView = dynamic(
+  () => import('@components/product/QuickView/PLPQuickView')
+)
+const ProductCard = dynamic(
+  () => import('@components/product/ProductCard/ProductCard')
+)
+declare const window: any
+interface Attribute {
+  fieldName?: string
+  fieldCode?: string
+  fieldValues?: []
+}
+
+// swiper setup
+SwiperCore.use([Navigation])
+
 export default function RelatedProducts({
-  relatedProducts = [],
-  relatedProductList = [],
+  relatedProducts,
+  productPerColumn,
+  checkout_refrence,
+  title,
+  handleQuickAddToBag,
+  deviceInfo,
+  maxBasketItemsCount,
 }: any) {
-  const [isEngravingOpen, showEngravingModal] = useState(false)
   const { basketId, setCartItems, user } = useUI()
-  const computeRelatedItems = () => {
-    const relatedProductsClone = [...relatedProducts]
-    const tempArr: any = {}
-    relatedProductList.reduce((acc: any, obj: any) => {
-      acc.forEach((item: any) => {
-        if (item.stockCode === obj.stockCode) {
-          if (!tempArr[item.relatedTypeCode]) {
-            tempArr[item.relatedTypeCode] = { relatedProducts: [] }
-            tempArr[item.relatedTypeCode] = {
-              ...tempArr[item.relatedTypeCode],
-              ...item,
-            }
-          }
-          tempArr[item.relatedTypeCode]['relatedProducts'] = [
-            ...tempArr[item.relatedTypeCode].relatedProducts,
-            obj,
-          ]
-        }
-      })
-      return acc
-    }, relatedProductsClone)
-    return tempArr
-  }
-  const computedItems = computeRelatedItems()
+  const [quickViewProduct, setQuickViewProduct] = useState<any>(undefined)
+  const [relatedProductsData, setRelatedProductsData] = useState<any>(null)
+  let currentPage = getCurrentPage()
+
+  useEffect(() => {
+    if (relatedProducts?.length) {
+      // sort the data by 'displayOrder'
+      const sortedData = sortBy(relatedProducts, 'displayOrder')
+
+      // group the data by specific group name
+      const groupLength = sortedData?.find(
+        (x: any) => x.groupNameList
+      )?.groupNameList
+      let relatedProductGroup: any
+      if (groupLength?.length === 2) {
+        relatedProductGroup = groupBy(sortedData, 'groupNameList[1].name')
+      } else {
+        relatedProductGroup = groupBy(sortedData, 'groupNameList[0].name')
+      }
+      setRelatedProductsData(relatedProductGroup)
+    }
+  }, [relatedProducts])
+
   const addToCart = (product: any) => {
     const asyncAddToCart = async () => {
       const item = await cartHandler().addToCart(
@@ -61,103 +77,170 @@ export default function RelatedProducts({
     }
     asyncAddToCart()
   }
+
   const css = { maxWidth: '100%', height: 'auto' }
+
+  // record analytics
+  function viewProductDetail(product: any, pid: number) {
+    if (typeof window !== 'undefined') {
+      recordGA4Event(window, 'select_item', {
+        ecommerce: {
+          items: [
+            {
+              item_id: product?.sku,
+              item_name: product?.name,
+              price: product?.price?.raw?.withTax,
+              item_brand: product?.brand,
+              item_category: product?.classification?.mainCategoryName,
+              item_category2: product?.classification?.category,
+              item_variant: product?.variantGroupCode,
+              item_list_name: product?.classification?.category,
+              item_list_id: product?.classification?.categoryId,
+              index: pid + 1,
+            },
+          ],
+          color: product?.variantGroupCode,
+          position: pid + 1,
+          item_var_id: product?.stockCode,
+          current_page: currentPage,
+          section_title: 'Frequently Bought Together',
+        },
+      })
+      recordGA4Event(window, 'view_item', {
+        ecommerce: {
+          items: [
+            {
+              item_name: product?.name,
+              item_brand: product?.brand,
+              item_category: product?.classification?.mainCategoryName,
+              item_category2: product?.classification?.category,
+              item_variant: product?.variantGroupCode,
+              quantity: 1,
+              item_id: product?.sku,
+              item_var_id: product?.stockCode,
+              price: product?.price?.raw?.withTax,
+            },
+          ],
+          section_title: title,
+          value: product?.price?.raw?.withTax,
+        },
+      })
+      recordGA4Event(window, 'view_prod_details', {
+        category_selected: product?.name,
+        header: title,
+        current_page: 'Cart',
+      })
+      if (checkout_refrence == true) {
+        recordGA4Event(window, 'referrer_banners', {
+          cross_sell_category_position: 'Checkout',
+          section_title: title,
+          product_name: product?.name,
+          product_clicked_position: pid + 1,
+          current_page: 'Cart',
+        })
+      }
+    }
+  }
+
+  const onProductQuickView = (product: any, pid: any) => {
+    setQuickViewProduct(product)
+    if (typeof window !== 'undefined') {
+      recordGA4Event(window, 'popup_view', {
+        product_name: product?.name,
+        category: product?.classification?.mainCategoryName,
+        page: window.location.href,
+        position: pid + 1,
+        color: product?.variantGroupCode,
+        price: product?.price?.raw?.withTax,
+        current_page: 'Cart',
+      })
+      recordGA4Event(window, 'quick_view_click', {
+        ecommerce: {
+          items: {
+            product_name: product?.name,
+            position: pid + 1,
+            product_price: product?.price?.raw?.withTax,
+            color: product?.variantGroupCode,
+            category: product?.classification?.mainCategoryName,
+            current_page: 'Cart',
+            header: title,
+          },
+        },
+      })
+    }
+  }
+
+  const handleCloseQuickView = () => {
+    setQuickViewProduct(undefined)
+  }
+
+  if (!relatedProductsData) {
+    return <></>
+  }
+
   return (
-    <section
-      aria-labelledby="related-heading"
-      className="px-4 py-8 mt-10 border-t border-gray-200 sm:px-0"
-    >
-      {Object.keys(computedItems).map(
-        (relatedItem: any, relatedItemIdx: number) => (
-          <div key={`relatedItemIdx-${relatedItemIdx}`}>
-            {computedItems[relatedItem].relatedProducts && (
-              <h2
-                id="related-heading"
-                className="mt-6 text-xl font-bold text-gray-900"
-              >
-                {computedItems[relatedItem].name}
-              </h2>
-            )}
-            <div className="grid grid-cols-1 mt-8 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-              {computedItems[relatedItem].relatedProducts &&
-                computedItems[relatedItem].relatedProducts.map(
-                  (product: any) => {
-                    const isEngravingAvailable =
-                      product.stockCode === ITEM_TYPE_ADDON
-                    return (
-                      <div key={product.id}>
-                        <div className="relative w-full overflow-hidden rounded-lg h-72">
-                          <Link href={`/${product.slug}`} passHref>
-                            <div className="image-container">
-                              <Image
-                                style={css}
-                                height={20}
-                                width={20}
-                                src={
-                                  generateUri(product.image, 'h=500&fm=webp') ||
-                                  IMG_PLACEHOLDER
-                                }
-                                alt={product.name}
-                                className="object-cover object-center w-full h-full image"
-                              />
-                            </div>
-                          </Link>
-                          <h3 className="relative mt-4 text-sm font-medium text-gray-900 min-h-50px">
-                            <Link href={`/${product.slug}`} passHref>
-                              {product.name}
-                            </Link>
-                          </h3>
-                          <div className="absolute inset-x-0 top-0 flex items-end justify-end p-4 overflow-hidden rounded-lg h-72">
-                            <div
-                              aria-hidden="true"
-                              className="absolute inset-x-0 bottom-0 opacity-50 h-36 bg-gradient-to-t from-black"
+    <>
+      <section aria-labelledby="related-heading" className="px-0 pr-0 sm:px-0">
+        {Object.entries(relatedProductsData)?.map(
+          ([key, values]: any, idx: number) => {
+            return (
+              key != 'You May Also Like' && (
+                <div key={idx}>
+                  <div>
+                    <div className="flex flex-col mb-3">
+                      <h2 className="text-lg font-medium text-gray-900">
+                        {key == 'You May Also Like'
+                          ? 'Frequent Bought Together'
+                          : key == 'undefined'
+                          ? 'Frequent Bought Together'
+                          : key == 'Upgrade'
+                          ? 'Quick Add'
+                          : key == 'Basket Group'
+                          ? 'Frequent Bought Together'
+                          : key}
+                      </h2>
+                    </div>
+                  </div>
+                  <div className="mb-8 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-8">
+                    <Swiper
+                      slidesPerView={2.3}
+                      spaceBetween={8}
+                      navigation={true}
+                      loop={false}
+                      breakpoints={{
+                        640: { slidesPerView: 2.3, spaceBetween: 4 },
+                        768: { slidesPerView: 2.3, spaceBetween: 15 },
+                        1024: { slidesPerView: 2.3, spaceBetween: 15 },
+                      }}
+                      className="mySwiper"
+                    >
+                      {values?.map((product: any, pid: number) => {
+                        return (
+                          <SwiperSlide key={pid}>
+                            <ProductCard
+                              product={product}
+                              hideWishlistCTA={true}
+                              deviceInfo={deviceInfo}
+                              maxBasketItemsCount={maxBasketItemsCount}
                             />
-                            <p className="relative text-lg font-semibold text-white">
-                              {product.price.formatted.withTax}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="mt-6">
-                          <button
-                            onClick={() => addToCart(product)}
-                            type="button"
-                            className="relative flex items-center justify-center w-full px-8 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-transparent rounded-md hover:bg-gray-200"
-                          >
-                            {GENERAL_ADD_TO_BASKET}
-                          </button>
-                          <Link
-                            href={`/${product.slug}`}
-                            passHref
-                            legacyBehavior
-                          >
-                            <span className="sr-only">, {product.name}</span>
-                          </Link>
-                          {isEngravingAvailable && (
-                            <>
-                              <button
-                                className="relative flex items-center justify-center w-full py-2 mt-2 text-sm font-medium text-white bg-gray-400 border border-transparent rounded-md hover:bg-gray-500"
-                                onClick={() => showEngravingModal(true)}
-                              >
-                                <span className="font-bold">
-                                  {GENERAL_ENGRAVING}
-                                </span>
-                              </button>
-                              <Engraving
-                                show={isEngravingOpen}
-                                submitForm={() => addToCart(product)}
-                                onClose={() => showEngravingModal(false)}
-                              />
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    )
-                  }
-                )}
-            </div>
-          </div>
-        )
-      )}
-    </section>
+                          </SwiperSlide>
+                        )
+                      })}
+                    </Swiper>
+                  </div>
+                </div>
+              )
+            )
+          }
+        )}
+      </section>
+      <PLPQuickView
+        isQuickview={Boolean(quickViewProduct)}
+        setQuickview={() => {}}
+        productData={quickViewProduct}
+        isQuickviewOpen={Boolean(quickViewProduct)}
+        setQuickviewOpen={handleCloseQuickView}
+      />
+    </>
   )
 }

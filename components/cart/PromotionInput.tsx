@@ -29,6 +29,7 @@ import {
 } from '@components/utils/textVariables'
 import useDevice from '@commerce/utils/use-device'
 import Image from 'next/image'
+import { GifIcon } from '@heroicons/react/24/solid'
 
 declare const window: any
 
@@ -306,7 +307,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
               <div className="flex justify-end col-span-4 mt-3">
                 {getBasketPromos(basketPromos)?.length > 0 ? (
                   <h3
-                    className="text-sm font-display text-black cursor-pointer mob-font-small-screen"
+                    className="text-sm text-black cursor-pointer font-display mob-font-small-screen"
                     onClick={() => viewCoupons(basketPromos, items)}
                   >
                     View Coupons
@@ -316,7 +317,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     {(isMobile || isIPadorTablet) && (
                       <div className="flex justify-end col-span-4">
                         <h3
-                          className="text-sm font-display text-black cursor-pointer mob-font-small-screen"
+                          className="text-sm text-black cursor-pointer font-display mob-font-small-screen"
                           onClick={() => viewCoupons(basketPromos, items)}
                         >
                           Apply Coupons
@@ -330,12 +331,10 @@ const PromotionInput = (props: IPromotionInputProps) => {
 
             <div className="flex items-center justify-between mb-1">
               {/* {cartItems.promotionsApplied?.length === 0 ? ( */}
-              <div className="flex items-center justify-start gap-4">
-                <div className="flex">
-                  <span className="sprite-icon coupon-icon"></span>
-                </div>
+              <div className="flex items-center justify-start">
                 <div className="flex flex-col col-span-7">
-                  <p className="font-semibold text-md dark:text-black">
+                  <p className="flex items-center gap-1 font-semibold text-md dark:text-black">
+                    <GifIcon className="w-4 h-4 text-emerald-500" />
                     {PromotionsCount > 0 ? `${PromotionsCount}` : 'No'}{' '}
                     {PromotionsCount > 1
                       ? 'Coupons Available'
@@ -371,7 +370,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     {(isMobile || isIPadorTablet) && (
                       <div className="flex justify-end col-span-4">
                         <h3
-                          className="text-sm font-semibold text-orange-500 cursor-pointer truncate mob-font-small-screen"
+                          className="text-sm font-semibold text-orange-500 truncate cursor-pointer mob-font-small-screen"
                           onClick={() => {
                             viewCoupons(
                               basketPromos?.applicablePromotions,
@@ -395,54 +394,6 @@ const PromotionInput = (props: IPromotionInputProps) => {
           </>
         )}
       </div>
-      {/* <div className="flex flex-col justify-start my-0 sm:my-0">
-        {cartItems.promotionsApplied?.length
-          ? cartItems.promotionsApplied.map((promo: any, key: number) => {
-              return (
-                <>
-                  <div className="pt-2 mt-2 border-t border-gray-200">
-                    <div
-                      className="flex justify-between gap-4 pb-2 my-1"
-                      key={key}
-                    >
-                      <div className="flex">
-                        <h5 className="font-medium uppercase text-primary dark:text-black text-14 xs-text-14">
-                          {' '}
-                          {promo.promoCode}
-                        </h5>
-                      </div>
-                      <div className="flex justify-end">
-                        <h5 className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
-                          {promo?.discountAmt?.raw?.withTax > 0 ? (
-                            <>
-                              <span>
-                                -{promo?.discountAmt?.formatted?.withTax}
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <span>Free Gift Added</span>
-                            </>
-                          )}
-                          {!promo?.autoApply && (
-                            <a href="javascript: void(0);">
-                              <span
-                                className="relative ml-2 sprite-icon cross-icon top-0.5"
-                                onClick={() =>
-                                  handleSubmit('remove', promo.promoCode)
-                                }
-                              ></span>
-                            </a>
-                          )}
-                        </h5>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )
-            })
-          : null}
-      </div> */}
 
       <div className="flex flex-col justify-start my-0 sm:my-0">
         {cartItems.promotionsApplied?.length
@@ -469,7 +420,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                                   -{promo?.discountAmt?.formatted?.withTax}
                                 </span>
                                 <TrashIcon
-                                  className="ml-5 cursor-pointer text-black hover:text-gray-700 max-w-xs h-5"
+                                  className="h-5 max-w-xs ml-5 text-black cursor-pointer hover:text-gray-700"
                                   onClick={() =>
                                     handleSubmit(
                                       'remove',
@@ -503,34 +454,29 @@ const PromotionInput = (props: IPromotionInputProps) => {
       </div>
 
       {/* More Offer MSG */}
-      <div className="flex flex-col my-2">
-        {basketPromos?.availablePromotions?.length > 0 && (
-          <>
-            {basketPromos?.availablePromotions
-              ?.filter((x: any) => !!x?.croMessage)
-              ?.map((promo: any, crdx: number) => {
-                return (
-                  <>
-                    <div
-                      className="m-offer-info my-1 bg-sky-offer offer-m-sec text-secondary-full-opacity pl-16 relative"
-                      key={crdx}
-                    >
-                      <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
-                        <Image
-                          className="w-auto"
-                          src="/assets/icons/more-offer-icon.svg"
-                          alt=""
-                          width={15}
-                          height={10}
-                        />
-                      </span>{' '}
-                      {promo.croMessage}
-                    </div>
-                  </>
-                )
-              })}
-          </>
-        )}
+      <div className="flex flex-col gap-2 my-2">
+        {basketPromos?.availablePromotions?.length > 0 &&
+          basketPromos?.availablePromotions
+            ?.filter((x: any) => !!x?.croMessage)
+            ?.map((promo: any, crdx: number) => {
+              return (
+                <div
+                  className="relative px-2 py-1 font-semibold border rounded border-emerald-500 m-offer-info bg-emerald-100 text-emerald-500 offer-m-sec text-secondary-full-opacity"
+                  key={crdx}
+                >
+                  <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
+                    <Image
+                      className="w-auto"
+                      src="/assets/icons/more-offer-icon.svg"
+                      alt=""
+                      width={15}
+                      height={10}
+                    />
+                  </span>{' '}
+                  {promo.croMessage}
+                </div>
+              )
+            })}
 
         {basketPromos?.applicablePromotions?.length > 0 && (
           <>
@@ -540,7 +486,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                 return (
                   <>
                     <div
-                      className="m-offer-info my-1 bg-sky-offer offer-m-sec text-secondary-full-opacity pl-16 relative"
+                      className="relative pl-16 my-1 m-offer-info bg-sky-offer offer-m-sec text-secondary-full-opacity"
                       key={crdx}
                     >
                       <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
@@ -563,20 +509,20 @@ const PromotionInput = (props: IPromotionInputProps) => {
       {/* More Offer MSG */}
 
       {SHOW_APPLY_COUPON_SECTION && !(isMobile || isIPadorTablet) && (
-        <div className="flex items-center w-full pt-0 mt-0">
+        <div className="flex items-center w-full pt-0 mt-3">
           <div className="w-full">
-            {/* <h3 className="text-lg font-display text-gray-900">Use Coupon</h3>
+            {/* <h3 className="text-lg text-gray-900 font-display">Use Coupon</h3>
             <label className="text-sm font-light text-gray-600">
               You may apply mutliple codes for max discount
             </label> */}
             <div className="flex flex-col mt-0">
-              <div className="flex mb-2 gap-2 justify-between items-center -mt-1 text">
+              <div className="flex items-center justify-between gap-2 mb-2 -mt-1 text">
                 <input
                   name={'promotion-code'}
                   placeholder={APPLY_PROMOTION}
                   onChange={handleChange}
                   value={value}
-                  className="text-md text-gray-900 appearance-none min-w-0 lg:h-10 md:h-10 border xsm:h-10 border-gray-300 px-3 placeholder-gray-500 placeholder:text-sm focus:outline-none focus:border-gray-700 bg-white w-full py-2"
+                  className="w-full min-w-0 px-3 py-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 appearance-none text-md lg:h-10 md:h-10 xsm:h-10 placeholder:text-sm focus:outline-none focus:border-gray-700"
                   required
                 />
 
@@ -836,13 +782,13 @@ const PromotionInput = (props: IPromotionInputProps) => {
                                                       : 'bg-black coupon-code-panel'
                                                   }`}
                                                 >
-                                                  <h3 className="font-display text-white uppercase coupon-text-rotate">
+                                                  <h3 className="text-white uppercase font-display coupon-text-rotate">
                                                     {promo?.additionalInfo7}
                                                   </h3>
                                                 </div>
                                                 <div className="col-span-11 p-4 coupon-code-data">
                                                   <div className="flex justify-between">
-                                                    <h3 className="mb-1 text-md font-display text-black uppercase">
+                                                    <h3 className="mb-1 text-black uppercase text-md font-display">
                                                       {promo?.code}
                                                     </h3>
                                                     {applied?.promoCode ==
@@ -859,7 +805,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                                                       <>
                                                         <button
                                                           type="button"
-                                                          className="text-md font-display text-black"
+                                                          className="text-black text-md font-display"
                                                           onClick={(ev: any) =>
                                                             applyCoupon(
                                                               promo,
@@ -873,12 +819,12 @@ const PromotionInput = (props: IPromotionInputProps) => {
                                                     )}
                                                   </div>
                                                   <div className="flex flex-col">
-                                                    <p className="text-ms font-medium text-emerald-500">
+                                                    <p className="font-medium text-ms text-emerald-500">
                                                       {promo?.name}
                                                     </p>
                                                   </div>
                                                   <div className="flex flex-col pt-4 mt-4 border-t border-gray-200 border-dotted px">
-                                                    <p className="text-ms font-normal text-gray-400">
+                                                    <p className="font-normal text-gray-400 text-ms">
                                                       {promo?.additionalInfo6}
                                                     </p>
                                                   </div>
@@ -933,7 +879,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                 >
                   <Dialog.Panel className="w-screen pointer-events-auto">
                     <div className="relative flex flex-col h-full shadow-xl bg-black/20 z-99">
-                      <div className="w-full h-auto max-w-md mx-auto bg-white center-fix-panel top-2/4 -translate-y-2/4 relative">
+                      <div className="relative w-full h-auto max-w-md mx-auto bg-white center-fix-panel top-2/4 -translate-y-2/4">
                         <div className="sticky top-0 z-10 px-4 py-4 border-b border-gray-200 sm:px-6 left-1">
                           <div className="flex justify-between">
                             <h3 className="text-xl font-bold text-black dark:text-black">

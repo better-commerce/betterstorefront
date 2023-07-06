@@ -36,7 +36,8 @@ export default function AvailableOffers({ currency, offers, key }: any) {
 
   const bestprice = parseInt(offers?.bestAvailablePromotion?.additionalInfo10)
   return (
-    <section key={key}
+    <section
+      key={key}
       aria-labelledby="details-heading"
       className="mt-4 border-t border-gray-200 sm:mt-2 ipad-border-none-pdp"
     >
@@ -62,10 +63,11 @@ export default function AvailableOffers({ currency, offers, key }: any) {
           </div>
           <div className="relative col-span-5 sm:col-span-3 item-right mob-left-5">
             <div
-              className={`bg-black px-2 py-1 promo-copied text-xs capitalize text-white text-center rounded-md ${isCopied && copyData == offers?.bestAvailablePromotion?.code
-                ? 'block'
-                : 'hidden'
-                }`}
+              className={`bg-black px-2 py-1 promo-copied text-xs capitalize text-white text-center rounded-md ${
+                isCopied && copyData == offers?.bestAvailablePromotion?.code
+                  ? 'block'
+                  : 'hidden'
+              }`}
             >
               Copied!
             </div>
@@ -88,35 +90,61 @@ export default function AvailableOffers({ currency, offers, key }: any) {
         <h2 className="mb-2 font-semibold text-black uppercase opacity_056 text-primary font-18 dark:text-black">
           More Offers
         </h2>
-        <Swiper role="list" className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0 h-60" slidesPerView={2.3} spaceBetween={4} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3.1 } }}>
+        <Swiper
+          className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0 h-60"
+          slidesPerView={2.3}
+          spaceBetween={4}
+          navigation={true}
+          loop={false}
+          breakpoints={{
+            640: { slidesPerView: 2.3 },
+            768: { slidesPerView: 3 },
+            1024: { slidesPerView: 3.1 },
+          }}
+        >
           {offers?.availablePromotions?.map((saving: any, sid: number) => {
             const percentagePrice = saving?.additionalInfo1
             //AMOUNT DISCOUNT CALCULATION
             const amountPrice = saving?.additionalInfo1
             const amountDiscount = currency.raw.withTax - amountPrice
             //PERCENTAGE DISCOUNT CALCULATION
-            const percentDiscount = (currency.raw.withTax * percentagePrice) / 100
+            const percentDiscount =
+              (currency.raw.withTax * percentagePrice) / 100
             const percentagePay = currency.raw.withTax - percentDiscount
             return (
               saving?.additionalInfo8 == 'False' && (
-                <SwiperSlide className="h-auto px-1 z-1" key={`promo-${sid}-best-available-${saving?.code}`}>
-                  <div key={`promotions-${sid}-best-available-${saving?.code}`} className="relative inline-flex flex-col w-full h-24 text-left cursor-pointer group" onClick={() => setOfferData(saving)}>
+                <SwiperSlide
+                  className="h-auto px-1 z-1"
+                  key={`promo-${sid}-best-available-${saving?.code}`}
+                >
+                  <div
+                    key={`promotions-${sid}-best-available-${saving?.code}`}
+                    className="relative inline-flex flex-col w-full h-24 text-left cursor-pointer group"
+                    onClick={() => setOfferData(saving)}
+                  >
                     <div className="box-border h-full p-2 bg-transparent border cursor-pointer promo-bg sm:p-3">
-                      <h3 className="font-bold text-left text-black uppercase font-14 break-word-text">{saving.name}</h3>
+                      <h3 className="font-bold text-left text-black uppercase font-14 break-word-text">
+                        {saving.name}
+                      </h3>
                       {saving?.promoType == 1 && (
                         <span>
-                          {saving.additionalInfo2 == 'False' || saving.additionalInfo2 == 'false' ? (
+                          {saving.additionalInfo2 == 'False' ||
+                          saving.additionalInfo2 == 'false' ? (
                             <p className="mt-1 text-xs font-medium text-left text-black break-word-text">
-                              {saving?.code}, Save{' '}{currency?.currencySymbol}{amountPrice} extra
+                              {saving?.code}, Save {currency?.currencySymbol}
+                              {amountPrice} extra
                             </p>
                           ) : (
                             <p className="mt-1 font-mono text-sm font-medium text-left text-black break-word-text">
-                              {saving?.code}, Save{' '}{currency?.currencySymbol}{percentDiscount?.toFixed(2)} extra
+                              {saving?.code}, Save {currency?.currencySymbol}
+                              {percentDiscount?.toFixed(2)} extra
                             </p>
                           )}
                         </span>
                       )}
-                      <p className="mt-1 font-mono text-sm font-bold text-left text-gray-700 break-word-text">{saving?.additionalInfo6}</p>
+                      <p className="mt-1 font-mono text-sm font-bold text-left text-gray-700 break-word-text">
+                        {saving?.additionalInfo6}
+                      </p>
                     </div>
                   </div>
                 </SwiperSlide>

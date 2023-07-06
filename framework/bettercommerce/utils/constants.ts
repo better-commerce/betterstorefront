@@ -31,4 +31,19 @@ export const HTTP_MESSAGES = {
   SERVER_ERROR: 'Internal server error',
 }
 export const PRODUCT_IMAGE_CDN_URL = process.env.PRODUCT_IMAGE_CDN_URL
-export const OMNILYTICS_DISABLED = stringToBoolean(process.env.OMNILYTICS_DISABLED)
+export const OMNILYTICS_DISABLED = stringToBoolean(
+  process.env.OMNILYTICS_DISABLED
+)
+
+export module Cookie {
+  export module Key {
+    export const CURRENCY = 'Currency'
+    export const LANGUAGE = 'Language'
+    export const COUNTRY = 'Country'
+    export const SESSION_ID = 'sessionId'
+    export const BASKET_ID = 'basketId'
+    export const ORDER_ID = 'orderId'
+    export const COMPANY_ID = 'CompanyId'
+    export const GOOGLE_TRANSLATE = 'googtrans'
+  }
+}

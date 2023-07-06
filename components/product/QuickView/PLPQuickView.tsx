@@ -37,7 +37,7 @@ import { useUI } from '@components/ui'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { getCurrentPage } from '@framework/utils/app-util'
+import { getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 
 SwiperCore.use([Navigation])
 
@@ -96,6 +96,7 @@ export default function PLPQuickView({
     setCartItems,
     user,
   } = useUI()
+  const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
   const [close, setClose] = useState(isQuickviewOpen)
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
@@ -693,15 +694,18 @@ export default function PLPQuickView({
                             </div>
                             <div className="flex flex-col px-4 mt-1 sm:px-6">
                               <p className="mb-2 text-lg font-semibold text-primary sm:text-md">
-                                {productData?.price?.formatted?.withTax}
+                                {isIncludeVAT
+                                  ? productData?.price?.formatted?.withTax
+                                  : productData?.price?.formatted?.withoutTax}
 
                                 {productData?.listPrice?.raw.tax > 0 ? (
                                   <>
                                     <span className="px-2 text-lg font-normal text-gray-500 line-through sm:text-md">
-                                      {
-                                        productData?.listPrice?.formatted
-                                          ?.withTax
-                                      }
+                                      {isIncludeVAT
+                                        ? productData?.listPrice?.formatted
+                                            ?.withTax
+                                        : productData?.listPrice?.formatted
+                                            ?.withoutTax}
                                     </span>
                                     <span className="text-lg font-normal text-red-500 sm:text-md">
                                       {discount}% off
