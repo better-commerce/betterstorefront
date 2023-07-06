@@ -19,6 +19,7 @@ import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { DataSubmit } from '@commerce/utils/use-data-submit'
 import axios from 'axios'
 import { Guid } from '@commerce/types'
+import { Cookie } from './constants'
 
 export const isCartAssociated = (cartItems: any) => {
   if (cartItems?.userId && cartItems?.userId !== Guid.empty) {
@@ -94,9 +95,9 @@ export const sanitizeBase64 = (base64: string) => {
 }
 
 export const resetBasket = async (setBasketId: any, generateBasketId: any) => {
-  Cookies.remove('sessionId')
+  Cookies.remove(Cookie.Key.SESSION_ID)
   setSessionIdCookie()
-  Cookies.remove('basketId')
+  Cookies.remove(Cookie.Key.BASKET_ID)
   const generatedBasketId = generateBasketId()
   if (setBasketId) {
     setBasketId(generatedBasketId)

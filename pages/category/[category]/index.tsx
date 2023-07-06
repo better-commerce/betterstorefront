@@ -189,7 +189,6 @@ function CategoryLandingPage({
     filters: adaptedQuery.filters || [],
     categoryId: category.id,
   }
-  const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
     data = {
@@ -226,7 +225,7 @@ function CategoryLandingPage({
       categoryId: category.id,
     },
   })
-  const [productDataToPass, setProductDataToPass] = useState(products)
+  const [productDataToPass, setProductDataToPass] = useState(data?.products)
 
   useEffect(() => {
     if (category.id !== state.categoryId)
@@ -237,7 +236,7 @@ function CategoryLandingPage({
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-      productListMemory?.products?.currentPage ||
+        productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -255,11 +254,11 @@ function CategoryLandingPage({
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    const data = IS_INFINITE_SCROLL
+    const dataToPass = IS_INFINITE_SCROLL
       ? productListMemory?.products
-      : productListMemory?.products //props?.products
-    setProductDataToPass(data)
-  }, [productListMemory?.products, products])
+      : data?.products // productListMemory?.products
+    setProductDataToPass(dataToPass)
+  }, [productListMemory?.products, data?.products])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
@@ -367,12 +366,12 @@ function CategoryLandingPage({
         {category?.isFeatured != false ? (
           <div className="w-full">
             <div className="py-4">
-              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length && (
+              {category?.subCategories?.filter((x: any) => x.isFeatured == true)
+                .length && (
                 <div className="container px-4 mx-auto mb-4 sm:px-0">
                   <h2 className="font-bold font-18">Popular categories</h2>
                 </div>
-              )
-              }
+              )}
               <Swiper
                 // install Swiper modules
                 spaceBetween={0}
@@ -679,12 +678,13 @@ function CategoryLandingPage({
               </div>
               {/* category banner info End */}
               <div className="py-4">
-                {category?.subCategories?.filter((x: any) => x.isFeatured == true).length && (
+                {category?.subCategories?.filter(
+                  (x: any) => x.isFeatured == true
+                ).length && (
                   <h2 className="container mx-auto mb-4 font-bold font-18">
                     Popular categories
                   </h2>
-                )
-                }
+                )}
                 <Swiper
                   spaceBetween={0}
                   slidesPerView={1}

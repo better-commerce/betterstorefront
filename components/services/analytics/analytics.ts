@@ -1,3 +1,4 @@
+import { Cookie } from '@framework/utils/constants'
 import { EVENTS_MAP } from './constants'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -87,7 +88,7 @@ const publisher = async (data: any, event: string) => {
       utmTerm: getQueryStringValue('utm_term'),
       pageUrl: window.location.href,
       urlReferrer: document.referrer,
-      currency: Cookies.get('Currency'),
+      currency: Cookies.get(Cookie.Key.CURRENCY),
       visitorEmail: visitorData.email,
       visitorExistingCustomer: visitorData.userName || '',
       visitorId: visitorData.userId || '',
