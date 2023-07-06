@@ -27,9 +27,8 @@ import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { GetServerSideProps } from 'next'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import LoginPage from '../../../pages/my-account/login'
-import  LoginView  from './LoginView'
 
-const LoginSidebar: FC<React.PropsWithChildren<unknown>> = () => {
+const LoginView: FC<React.PropsWithChildren<unknown>> = () => {
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -115,23 +114,40 @@ const LoginSidebar: FC<React.PropsWithChildren<unknown>> = () => {
   }
 
   if (otpEnabled) {
-    // return <LoginOtp />
+    return <LoginOtp />
   }
   return (
     <section aria-labelledby="trending-heading" className="bg-white h-screen">
-        <div className="flex pt-5 justify-end pr-10">
-            <button
-              type="button"
-              className="text-gray-400 transition hover:text-gray-500"
-              onClick={handleClose}
-            >
-              <span className="sr-only">{CLOSE_PANEL}</span>
-              <XMarkIcon className="w-5 h-5" aria-hidden="true" />
-            </button>
-          </div>
-      <LoginView />
+      <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
+        <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+          <h1 className="font-extrabold tracking-tight text-center text-gray-900">
+            {GENERAL_LOGIN}
+          </h1>
+        </div>
+        <Form
+          btnText="Login"
+          type="login"
+          onSubmit={handleUserLogin}
+          apiError={noAccount ? VALIDATION_NO_ACCOUNT_FOUND : ''}
+        />
+        <div className="flex flex-col items-center justify-center w-full">
+          {noAccount && (
+            <span className="text-lg text-red-700">
+              {VALIDATION_NO_ACCOUNT_FOUND}
+            </span>
+          )}
+        </div>
+        <SocialSignInLinks containerCss="flex justify-center gap-2 px-3 mx-auto sm:w-1/2" />
+        <div className="flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 sm:w-1/2">
+          <Link href="/my-account/forgot-password" passHref>
+            <span className="block font-medium text-indigo-600 underline cursor-pointer hover:text-indigo-800 hover:underline">
+              Forgot password?
+            </span>
+          </Link>
+        </div>
+      </div>
     </section>
   )
 }
 
-export default LoginSidebar
+export default LoginView
