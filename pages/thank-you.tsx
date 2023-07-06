@@ -587,11 +587,11 @@ export default function OrderConfirmation() {
                               </span> */}
                             </div>
                             <p className="px-5 text-center">
-                              Tell your friends to enter your name like this at
+                              Tell your friends to enter your Referral Code like this at
                               Checkout
                             </p>
-                            <h2 className="mx-2 text-lg">
-                              {referralObj?.name}
+                            <h2 className="mx-2 text-lg ">
+                              {referralObj?.slug}
                             </h2>
                             <Button className="my-3" onClick={() => {}}>
                               {SHARE_IN_PERSON}

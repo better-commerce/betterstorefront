@@ -112,22 +112,26 @@ export default function Summary({
   }
 
   const handleReferralSearch = async () => {
-    setIsLoading(true)
-    let { data: referralSearch } = await axios.post(NEXT_REFERRAL_SEARCH, {
-      name: nameInput,
-    })
-    if (referralSearch?.referralDetails) {
-      let referrerReferralId = referralSearch?.referralDetails?.find(
-        (x: any) => {
-          return x?.name.toLowerCase() === nameInput.toLowerCase()
+    if(nameInput.trim().length > 0 ){
+      setIsLoading(true)
+      let { data: referralSearch } = await axios.post(NEXT_REFERRAL_SEARCH, {
+        name: nameInput.trim(),
+      })
+      if (referralSearch?.referralDetails) {
+        let referrerReferralId = referralSearch?.referralDetails?.find(
+          (x: any) => {
+            return x?.name.toLowerCase() === nameInput.toLowerCase()
+          }
+        )?.id
+        if(referrerReferralId){
+          handleReferralRegisterUser(referrerReferralId)
+        } else{
+          setIsLoading(false)
+          setError(USER_NOT_FOUND)
         }
-      )?.id
-      if(referrerReferralId){
-        handleReferralRegisterUser(referrerReferralId)
-      } else{
-        setIsLoading(false)
-        setError(USER_NOT_FOUND)
       }
+    } else {
+      setError('Please enter appropriate Referral Code')
     }
   }
 
