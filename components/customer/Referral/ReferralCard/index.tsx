@@ -69,7 +69,7 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
         {!voucher ? (
           <>
             <span className="block md:inline">{title}</span>
-            <span className="block mb-6 md:inline md:mb-0 md:ml-2">
+            <span className="block mb-6 md:inline md:mb-0 md:ml-2 font-normal text-center">
               {description}
             </span>
             <form

@@ -257,7 +257,6 @@ export default function OrderConfirmation() {
       setReferralObj(data?.referralDetails)
       setIsReferralSlugLoading(false)
     }
-    // console.log('data in handle by email: ', data)
   }
 
   const handleReferralInfo = async () => {
