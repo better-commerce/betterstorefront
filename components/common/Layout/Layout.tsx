@@ -102,11 +102,12 @@ const SidebarView: FC<
           maxBasketItemsCount={maxBasketItemsCount}
         />
       )}
+      {/* {sidebarView === 'LOGIN_VIEWD' && <LoginSidebarView />} */}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
       {sidebarView === 'PAYMENT_VIEW' && <PaymentMethodView />}
       {sidebarView === 'SHIPPING_VIEW' && <ShippingView />}
-      {/* {sidebarView === 'LOGIN_VIEWD' && <LoginSidebarView />} */}
+      
     </Sidebar>
   )
 }
