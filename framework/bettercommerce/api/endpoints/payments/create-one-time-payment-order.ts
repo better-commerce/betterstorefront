@@ -8,7 +8,13 @@ import {
   BCEnvironment,
   PaymentOperation,
 } from '@better-commerce/bc-payments-sdk'
-import { CLIENT_ID, SHARED_SECRET } from '@framework/utils/constants'
+import {
+  AUTH_URL,
+  BASE_URL,
+  CLIENT_ID,
+  SHARED_SECRET,
+} from '@framework/utils/constants'
+import { EmptyString } from '@components/utils/constants'
 
 const logId = 'Payments | OneTimePaymentOrder'
 
@@ -33,13 +39,13 @@ const OneTimePaymentOrderApiMiddleware = function () {
           paymentGatewayId: config?.id || 0,
           data: logData,
           cookies,
-          pageUrl: '',
+          pageUrl: EmptyString,
           objectId,
         },
         `${logId} Request`
       )
 
-      BCEnvironment.init(CLIENT_ID || '', SHARED_SECRET || '', config)
+      BCEnvironment.init(CLIENT_ID!, SHARED_SECRET!, config, AUTH_URL, BASE_URL)
       const oneTimePaymentResult =
         await new PaymentOperation().createOneTimePaymentOrder(data)
 
@@ -51,7 +57,7 @@ const OneTimePaymentOrderApiMiddleware = function () {
           paymentGatewayId: config?.id || 0,
           data: logData,
           cookies,
-          pageUrl: '',
+          pageUrl: EmptyString,
           objectId,
         },
         `${logId} Response`
@@ -67,7 +73,7 @@ const OneTimePaymentOrderApiMiddleware = function () {
           paymentGatewayId: config?.id || 0,
           data: logData,
           cookies,
-          pageUrl: '',
+          pageUrl: EmptyString,
           objectId,
         },
         `${logId} Error`

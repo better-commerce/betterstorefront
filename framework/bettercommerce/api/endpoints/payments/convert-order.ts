@@ -8,7 +8,13 @@ import {
   BCEnvironment,
   BetterCommerceOperation,
 } from '@better-commerce/bc-payments-sdk'
-import { CLIENT_ID, SHARED_SECRET } from '@framework/utils/constants'
+import {
+  AUTH_URL,
+  BASE_URL,
+  CLIENT_ID,
+  SHARED_SECRET,
+} from '@framework/utils/constants'
+import { EmptyString } from '@components/utils/constants'
 
 const logId = 'Payments | ConvertOrder'
 
@@ -38,13 +44,13 @@ const ConvertOrderApiMiddleware = function () {
           paymentGatewayId: config?.id || 0,
           data: logData,
           cookies,
-          pageUrl: '',
+          pageUrl: EmptyString,
           objectId,
         },
         `${logId} Request`
       )
 
-      BCEnvironment.init(CLIENT_ID || '', SHARED_SECRET || '', config)
+      BCEnvironment.init(CLIENT_ID!, SHARED_SECRET!, config, AUTH_URL, BASE_URL)
       const paymentResponseResult =
         await new BetterCommerceOperation().convertOrder(params)
 
@@ -56,7 +62,7 @@ const ConvertOrderApiMiddleware = function () {
           paymentGatewayId: config?.id || 0,
           data: logData,
           cookies,
-          pageUrl: '',
+          pageUrl: EmptyString,
           objectId,
         },
         `${logId} Response`
@@ -72,7 +78,7 @@ const ConvertOrderApiMiddleware = function () {
           paymentGatewayId: config?.id || 0,
           data: logData,
           cookies,
-          pageUrl: '',
+          pageUrl: EmptyString,
           objectId,
         },
         `${logId} Error`
