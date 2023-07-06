@@ -99,7 +99,7 @@ const SidebarView: FC<
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
       {sidebarView === 'PAYMENT_VIEW' && <PaymentMethodView />}
       {sidebarView === 'SHIPPING_VIEW' && <ShippingView />}
-      {sidebarView === 'LOGIN_VIEWD' && <LoginSidebarView />}
+      {/* {sidebarView === 'LOGIN_VIEWD' && <LoginSidebarView />} */}
     </Sidebar>
   )
 }
