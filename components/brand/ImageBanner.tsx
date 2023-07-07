@@ -10,7 +10,7 @@ const ImageBanner = ({
 }: any) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
-      <div className="bg-gray-500 h-[452px] w-full">
+      <div className="bg-gray-500 h-[225px] md:h-[452px] w-full">
         <Image
           src={manufacturerSettingTypeImgBanner || '/brands/ImageBanner.png'}
           height={240}
@@ -19,8 +19,8 @@ const ImageBanner = ({
           className="w-full h-full"
         />
       </div>
-      <div className="flex flex-col items-start bg-yellow-500 px-14 h-[452px] justify-evenly py-2">
-        <h2 className="text-4xl tracking-wider">
+      <div className="flex flex-col items-start bg-yellow-500 px-14 h-[225px] md:h-[452px] justify-evenly py-2">
+        <h2 className="text-2xl md:text-4xl tracking-wider">
           {heading ? heading : 'BUILD A BESPOKE PACKAGE WITH OUR KIT BUILDER'}
         </h2>
         <button

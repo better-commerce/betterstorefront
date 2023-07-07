@@ -131,7 +131,7 @@ function BrandDetailPage({
   slug,
   deviceInfo,
   config,
-  collections, // ...for Image Collection api response
+  collections, // ...for Attribute Collection api response
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -140,8 +140,9 @@ function BrandDetailPage({
     collections.imageBannerCollectionResponse
   let imageCategoryCollectionResponse: any =
     collections.imageCategoryCollectionResponse
-  let imageCollectionResponse: any = collections.imageCollectionResponse
+  let imgFeatureCollection: any = collections.imgFeatureCollection
   let offerBannerResult: any = collections.offerBannerResult
+  let productCollectionRes: any = collections.productCollectionRes
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -371,6 +372,8 @@ function BrandDetailPage({
       }
       return
     })
+    console.log(brandDetails.widgetsConfig, 'brandsDeatils.widgetsConfig')
+    console.log(deviceInfo, 'deviceInfo')
   }, [])
 
   //const productDataToPass = productListMemory.products
@@ -429,9 +432,9 @@ function BrandDetailPage({
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
-          <div className="w-full px-4 pb-20 mx-auto bg-white md:w-4/5 lg:px-0 sm:px-10">
+          <div className="w-full px-4 pb-0 md:pb-20 mx-auto bg-white md:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
-              <div className="flex flex-col items-center bg-[#FEBD18] min-h-full md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+              <div className="flex flex-col items-center bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <Image
                   alt="Brand Logo"
                   src={
@@ -457,12 +460,12 @@ function BrandDetailPage({
               </div>
               <ImageCollection
                 range={2}
-                ImageArray={imageBannerCollectionResponse?.images || []}
+                AttrArray={imageBannerCollectionResponse?.images || []}
                 showTitle={true}
               />
             </div>
 
-            <div className="mt-10">
+            <div className="mt-0 md:mt-10">
               <Video
                 heading={manufacturerStateVideoHeading}
                 name={manufacturerStateVideoName}
@@ -470,7 +473,10 @@ function BrandDetailPage({
             </div>
 
             <div className="mt-10">
-              <Slider images={imageCategoryCollectionResponse || []} />
+              <Slider
+                images={imageCategoryCollectionResponse || []}
+                isBanner={true}
+              />
             </div>
 
             <div className="mt-10">
@@ -504,6 +510,7 @@ function BrandDetailPage({
                   description={val.description}
                   src={val.url}
                   link={val.link}
+                  buttonText={val.buttonText}
                 />
               ))}
             </div>
@@ -533,17 +540,22 @@ function BrandDetailPage({
                 {brandDetails.name}
               </p>
               <button
-                className="hidden font-semibold uppercase cursor-pointer font-lg md:block hover:underline"
+                className="hidden sm:block font-semibold uppercase cursor-pointer font-lg md:block hover:underline"
                 onClick={handleClick}
               >
                 {BTN_SEE_ALL}
               </button>
             </div>
-            <div className="mb-10">
+            <div className="mb-10 hidden sm:block">
               <ImageCollection
                 range={4}
-                ImageArray={imageCollectionResponse?.images || []}
-                showTitle={false}
+                AttrArray={imgFeatureCollection?.images || []}
+              />
+            </div>
+            <div className="sm:hidden block mb-10 max-h-[30vh]">
+              <Slider
+                images={imgFeatureCollection?.images || []}
+                isBanner={false}
               />
             </div>
             <PlainText
@@ -551,7 +563,7 @@ function BrandDetailPage({
               heading={manufacturerStateTextHeading}
             />
 
-            <div className="flex justify-between py-10">
+            <div className="hidden sm:flex sm:justify-between py-10">
               <p className="font-semibold uppercase cursor-default font-lg">
                 {BTN_RECOMMENDED_PROD}
               </p>
@@ -562,11 +574,12 @@ function BrandDetailPage({
                 {BTN_SEE_ALL}
               </button>
             </div>
-            <ImageCollection
-              range={4}
-              ImageArray={imageCollectionResponse?.images || []}
-              showTitle={false}
-            />
+            <div className="hidden sm:block">
+              <ImageCollection
+                range={4}
+                AttrArray={productCollectionRes || []}
+              />
+            </div>
 
             <div className="mb-20">
               <p className="my-10 font-semibold uppercase cursor-default font-lg">
@@ -627,8 +640,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const obj: any = {
     imageBannerCollectionResponse: [],
     imageCategoryCollectionResponse: [],
-    imageCollectionResponse: [],
+    imgFeatureCollection: [],
     offerBannerResult: [],
+    productCollectionRes: [],
   }
 
   const widgets: any = tryParseJson(response?.result?.widgetsConfig)
@@ -652,15 +666,19 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         widgets[i].manufacturerSettingType == 'ImageCollection' &&
         widgets[i].code == 'FeaturedDewaltImageList'
       ) {
-        obj.imageCollectionResponse = await getCollectionById(
-          widgets[i].recordId
-        )
+        obj.imgFeatureCollection = await getCollectionById(widgets[i].recordId)
       } else if (
         widgets[i].manufacturerSettingType == 'ImageCollection' &&
         widgets[i].code == 'FFXOffers'
       ) {
         const res = await getCollectionById(widgets[i].recordId)
         obj.offerBannerResult = res.images
+      } else if (
+        widgets[i].manufacturerSettingType == 'ProductCollection' &&
+        widgets[i].code == 'FeaturedDewaltSaws'
+      ) {
+        const res = await getCollectionById(widgets[i].recordId)
+        obj.productCollectionRes = res.products.results
       }
     }
   }

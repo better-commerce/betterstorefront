@@ -3,7 +3,14 @@ import Image from 'next/image'
 import { SHOP_NOW } from '@components/utils/textVariables'
 import Router from 'next/router'
 
-const OfferCard = ({ title, description, src, link, index }: any) => {
+const OfferCard = ({
+  title,
+  description,
+  src,
+  link,
+  index,
+  buttonText,
+}: any) => {
   const [bgColour, setBgColor] = useState('')
   const [fontColor, setFontColour] = useState('text-black')
 
@@ -45,7 +52,7 @@ const OfferCard = ({ title, description, src, link, index }: any) => {
         } font-semibold uppercase py-3 px-6 rounded-md`}
         onClick={() => handleClick(link)}
       >
-        {SHOP_NOW}
+        {buttonText ? buttonText : { SHOP_NOW }}
       </button>
     </div>
   )
