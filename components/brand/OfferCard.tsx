@@ -3,7 +3,14 @@ import Image from 'next/image'
 import { SHOP_NOW } from '@components/utils/textVariables'
 import Router from 'next/router'
 
-const OfferCard = ({ title, description, src, link, index }: any) => {
+const OfferCard = ({
+  title,
+  description,
+  src,
+  link,
+  index,
+  buttonText,
+}: any) => {
   const [bgColour, setBgColor] = useState('')
   const [fontColor, setFontColour] = useState('text-black')
 
@@ -31,7 +38,7 @@ const OfferCard = ({ title, description, src, link, index }: any) => {
     <div
       className={`flex flex-col items-start pl-10 ${bgColour} h-[400px] justify-evenly py-2`}
     >
-      <Image alt="logo" src={src} width={62} height={51}></Image>
+      <Image alt="brand" src={src} width={62} height={51} />
       <p
         className={`text-[20px] w-3/4 text-start ${fontColor} font-semibold cursor-default uppercase leading-8 py-5`}
       >
@@ -45,10 +52,9 @@ const OfferCard = ({ title, description, src, link, index }: any) => {
         } font-semibold uppercase py-3 px-6 rounded-md`}
         onClick={() => handleClick(link)}
       >
-        {SHOP_NOW}
+        {buttonText ? buttonText : { SHOP_NOW }}
       </button>
     </div>
   )
 }
-
 export default OfferCard

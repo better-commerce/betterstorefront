@@ -254,7 +254,7 @@ export default function CheckoutForm({
   const { addToCart, associateCart } = cartHandler()
   const { state: submitState, dispatch: submitDispatch } = useDataSubmit()
 
-  const { createAddress } = asyncHandler()
+  const { createAddress, updateAddress: updateAddressHandler } = asyncHandler()
 
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
@@ -383,6 +383,42 @@ export default function CheckoutForm({
             })
         } else {
           // Duplicate address exists
+          updateAddressHandler({
+            ...newValues,
+            ...{ id: addressId, customerId: cartItems?.userId },
+          })
+            .then(async (saveAddressResult: any) => {
+              // const updatedUser = { ...user, ...{ notifyByWhatsapp: data?.whtsappUpdated } };
+              // setUser(updatedUser);
+              // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
+              // });
+
+              let updatedAddressesArr = await fetchAddress()
+
+              // get only selected addresses in case of 'Guest' checkout
+              if (isGuestUser || guestUser?.userId) {
+                const mapSavedAddressIds = addresses
+                  .map((o: any) => o.id)
+                  .concat(addressId)
+                updatedAddressesArr = updatedAddressesArr.filter((o: any) => {
+                  if (mapSavedAddressIds.includes(o.id)) return o
+                })
+                setGuestUser({
+                  ...guestUser,
+                  addresses: [...updatedAddressesArr],
+                })
+                setUserAddresses([...updatedAddressesArr])
+              }
+
+              if (callback) {
+                callback()
+              }
+              closeNewAddressModal()
+              // setAlert({type:'success',msg:ADDRESS_UPDATE})
+            })
+            .catch((error: any) => {
+              console.log(error)
+            })
         }
       })
     }

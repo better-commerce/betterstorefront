@@ -1,6 +1,6 @@
 export default function Video({ heading, name }: any) {
   return (
-    <div className="w-full flex flex-col justify-center items-center h-[50vh] /py-y gap-x-2">
+    <div className="w-full flex flex-col justify-center items-center max-h-44 md:max-h-full h-[60vh]  /py-y gap-x-2">
       <h1 className="text-gray-900 text-center font-bold text-4xl py-5 ">
         {heading}
       </h1>
