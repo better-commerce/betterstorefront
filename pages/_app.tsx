@@ -86,7 +86,14 @@ const setDeviceIdCookie = () => {
   }
 }
 
-function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
+function MyApp({
+  Component,
+  pageProps,
+  nav,
+  footer,
+  clientIPAddress,
+  ...props
+}: any) {
   const [location, setUserLocation] = useState({ Ip: '' })
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
   const [keywordsData, setKeywordsData] = useState([])
@@ -131,7 +138,14 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
     }
   }
 
+  const setClientIPAddress = (pageProps: any) => {
+    if (pageProps?.clientIPAddress) {
+      Cookies.set(Cookie.Key.CLIENT_IP_ADDRESS, pageProps?.clientIPAddress)
+    }
+  }
+
   useEffect(() => {
+    setClientIPAddress(pageProps)
     const addScript = document.createElement('script')
     addScript.setAttribute(
       'src',
@@ -147,12 +161,13 @@ function MyApp({ Component, pageProps, nav, footer, ...props }: any) {
   useEffect(() => {
     // Listener for snippet injector reset.
     router.events.on('routeChangeStart', () => {
+      setClientIPAddress(pageProps)
       resetSnippetElements()
     })
 
     // Dispose listener.
     return () => {
-      router.events.off('routeChangeComplete', () => {})
+      router.events.off('routeChangeStart', () => {})
     }
   }, [router.events])
 
@@ -330,6 +345,14 @@ MyApp.getInitialProps = async (
 ): Promise<AppInitialProps> => {
   const { ctx, Component } = context
   const req: any = ctx?.req
+  const res: any = ctx?.res
+
+  let clientIPAddress = req.ip ?? req?.headers['x-real-ip']
+  const forwardedFor = req?.headers['x-forwarded-for']
+  if (!clientIPAddress && forwardedFor) {
+    clientIPAddress = forwardedFor.split(',').at(0) ?? ''
+  }
+
   let appConfigResult,
     navTreeResult = {
       nav: new Array(),
@@ -406,6 +429,7 @@ MyApp.getInitialProps = async (
     pageProps: {
       appConfig: appConfig,
       navTree: navTreeResult,
+      clientIPAddress: clientIPAddress,
     },
   }
 }

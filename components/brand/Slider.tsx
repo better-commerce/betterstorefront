@@ -12,9 +12,10 @@ import { BTN_FIND_MORE } from '@components/utils/textVariables'
 import Router from 'next/router'
 type data = {
   images: Array<string>
+  isBanner: Boolean
 }
 
-const Slider = ({ images }: data) => {
+const Slider = ({ images, isBanner }: data) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   SwiperCore.use([Navigation])
@@ -61,7 +62,7 @@ const Slider = ({ images }: data) => {
             return (
               <>
                 <SwiperSlide
-                  className="py-0 2xl:w-[300px] w-[25vw] h-full "
+                  className="py-0 2xl:w-[300px] w-[25vw] h-full"
                   key={val.name}
                 >
                   <Image
@@ -71,14 +72,26 @@ const Slider = ({ images }: data) => {
                     src={val.url}
                     alt={`Slide ${currentImageIndex}`}
                   />
-                  <p
-                    className="absolute flex hover:bg-gray-200 m-auto justify-center 2xl:left-12 pt-2 2xl:pt-4 md:pt-4 2xl:bottom-64 md:left-8 md:bottom-48 h-12 w-48 uppercase cursor-pointer bg-white rounded-md p-1 z-50 md:text-lg text-sm font-semibold"
-                    onClick={() => {
-                      Router.push(val.link ? val.link : '#')
-                    }}
-                  >
-                    {BTN_FIND_MORE}
-                  </p>
+                  {isBanner && (
+                    <p
+                      className="absolute flex hover:bg-gray-200 m-auto justify-center 2xl:left-12 pt-2 2xl:pt-4 md:pt-4 2xl:bottom-64 md:left-8 md:bottom-48 h-12 w-48 uppercase cursor-pointer bg-white rounded-md p-1 z-50 md:text-lg text-sm font-semibold"
+                      onClick={() => {
+                        Router.push(val.link ? val.link : '#')
+                      }}
+                    >
+                      {BTN_FIND_MORE}
+                    </p>
+                  )}
+                  {!isBanner && (
+                    <p
+                      className="flex items-center justify-center text-sm font-semibold sm:hidden border h-10 -mt-0 border-orange-300 bg-gray-50"
+                      onClick={() => {
+                        Router.push(val.link ? val.link : '#')
+                      }}
+                    >
+                      {val.title}
+                    </p>
+                  )}
                 </SwiperSlide>
               </>
             )
@@ -87,7 +100,7 @@ const Slider = ({ images }: data) => {
 
         {images?.length > 0 && (
           <div
-            className="absolute right-20 top-10 z-99 /bg-white text-gray-300 cursor-pointer border-2  border-gray-300 rounded-sm p-1 hover:text-gray-500 hover:border-gray-500"
+            className="absolute right-20 top-10 z-99 hidden sm:block text-gray-300 cursor-pointer border-2  border-gray-300 rounded-sm p-1 hover:text-gray-500 hover:border-gray-500"
             onClick={handlePrevClick}
           >
             <svg
@@ -108,7 +121,7 @@ const Slider = ({ images }: data) => {
         )}
         {images?.length > 0 && (
           <div
-            className="absolute right-10 top-10 z-99 text-gray-300 cursor-pointer border-2 border-gray-300 rounded-sm p-1 hover:text-gray-500 hover:border-gray-500"
+            className="absolute right-10 top-10 z-99 hidden sm:block text-gray-300 cursor-pointer border-2 border-gray-300 rounded-sm p-1 hover:text-gray-500 hover:border-gray-500"
             onClick={handleNextClick}
           >
             <svg

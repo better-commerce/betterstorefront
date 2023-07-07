@@ -29,13 +29,18 @@ const RecommendedProductCollection = ({
       <Swiper
         slidesPerView={5}
         navigation={true}
-        loop={true}
+        loop={false}
         ref={swiperRef}
         breakpoints={{
-          320: { slidesPerView: 1, spaceBetween: 2 },
+          320: {
+            slidesPerView: 1.2,
+            centeredSlides: true,
+            centeredSlidesBounds: true,
+            spaceBetween: 12,
+          },
           640: { slidesPerView: 1.1 },
           768: { slidesPerView: 1.1 },
-          1024: { slidesPerView: 4 },
+          1024: { slidesPerView: 4, spaceBetween: 24 },
         }}
       >
         {recommendedProducts.map((product: any, productIdx: number) => {
