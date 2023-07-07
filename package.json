@@ -1,6 +1,6 @@
 {
   "name": "betterstorefront-bettercommerce",
-  "version": "1.0.3",
+  "version": "1.0.2",
   "scripts": {
     "dev": "node generate-locales.js && cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "node generate-locales.js && next build",
@@ -11,8 +11,7 @@
     "find:unused": "npx next-unused",
     "generate:definitions": "node framework/bigcommerce/scripts/generate-definitions.js",
     "tsc": "tsc",
-    "lint-staged-configure": "npx mrm lint-staged",
-    "generate-apple-secret": "node apple-generate-secret.js"
+    "lint-staged-configure": "npx mrm lint-staged"
   },
   "sideEffects": false,
   "license": "MIT",
@@ -25,7 +24,6 @@
     "@heroicons/react": "^2.0.18",
     "@paypal/react-paypal-js": "7.8.3",
     "@react-spring/web": "^9.7.2",
-    "@schlomoh/react-cookieconsent": "1.6.1",
     "@stripe/react-stripe-js": "^2.1.0",
     "@stripe/stripe-js": "^1.52.1",
     "@types/qs": "^6.9.7",
@@ -51,9 +49,7 @@
     "moment": "^2.29.4",
     "mrm": "^4.1.14",
     "next": "13.4.1",
-    "next-auth": "^4.22.1",
     "next-themes": "^0.2.1",
-    "njwt": "^2.0.0",
     "node-fetch": "^2.6.11",
     "postcss": "^8.4.23",
     "qs": "^6.11.1",
@@ -64,18 +60,15 @@
     "react-fast-marquee": "^1.5.2",
     "react-ga4": "^2.1.0",
     "react-gtm-module": "^2.0.11",
-    "react-image-gallery": "^1.2.12",
     "react-image-zooom": "^1.1.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-merge-refs": "^2.0.2",
     "react-paginate": "^8.2.0",
-    "react-switch": "^7.0.0",
     "react-use-measure": "^2.1.1",
     "shebang-regex": "^4.0.0",
     "store": "^2.0.12",
     "string-format": "^2.0.0",
     "stripe": "^12.4.0",
-    "styled-components": "5.3.6",
     "swiper": "^9.3.1",
     "swr": "^2.1.5",
     "tabbable": "^6.1.2",
@@ -83,7 +76,7 @@
     "uuid": "^9.0.0",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
-    "yup": "0.32.10"
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@types/body-scroll-lock": "^3.1.0",
@@ -91,7 +84,6 @@
     "@types/js-cookie": "^3.0.3",
     "@types/lodash.random": "^3.2.7",
     "@types/memory-cache": "^0.2.2",
-    "@types/next-auth": "^3.15.0",
     "@types/node": "^20.1.2",
     "@types/react": "^18.2.6",
     "@types/string-format": "^2.0.0",
