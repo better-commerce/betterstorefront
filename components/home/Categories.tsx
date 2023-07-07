@@ -20,7 +20,7 @@ function Categories({ data, deviceInfo }: any) {
       slidesPerView={1.5}
       spaceBetween={10}
       navigation={true}
-      loop={true}
+      // loop={true}
       breakpoints={{
         640: { slidesPerView: 3.2 },
         768: { slidesPerView: 4.5 },
