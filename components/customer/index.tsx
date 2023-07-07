@@ -118,6 +118,7 @@ const COMPONENTS_MAP: any = {
 
 export default function CustomerForm({
   type = 'register',
+  loginsidebar,
   onSubmit = () => {},
   btnText = GENERAL_REGISTER,
   email = '', // This prop contains the value of "Email Address" that is validated for availability at first step.
@@ -185,7 +186,8 @@ export default function CustomerForm({
       }: any) => {
         return (
           <div className="flex flex-col items-center justify-center w-full px-5 py-1">
-            <Form className="w-full font-semibold sm:w-1/2">
+            
+            <Form className={`w-full font-semibold ${loginsidebar !=='loginsidebar' && `sm:w-1/2`}`}>
               {extendedConfig.map((formItem: any, idx: number) => {
                 function handleKeyPress(e: any) {
                   if (e.keyCode == 13) {
@@ -242,7 +244,7 @@ export default function CustomerForm({
                 )
               })}
             </Form>
-            <div className="flex items-center justify-center w-full my-5 sm:w-1/2">
+            <div className={`flex items-center justify-center w-full my-5 ${loginsidebar !=='loginsidebar' && `sm:w-1/2`}`}>
               <Button
                 type="submit"
                 onClick={handleSubmit}
