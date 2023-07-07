@@ -138,7 +138,14 @@ function MyApp({
     }
   }
 
+  const setClientIPAddress = (pageProps: any) => {
+    if (pageProps?.clientIPAddress) {
+      Cookies.set(Cookie.Key.CLIENT_IP_ADDRESS, pageProps?.clientIPAddress)
+    }
+  }
+
   useEffect(() => {
+    setClientIPAddress(pageProps)
     const addScript = document.createElement('script')
     addScript.setAttribute(
       'src',
@@ -154,10 +161,7 @@ function MyApp({
   useEffect(() => {
     // Listener for snippet injector reset.
     router.events.on('routeChangeStart', () => {
-      if (pageProps?.clientIPAddress) {
-        Cookies.set(Cookie.Key.CLIENT_IP_ADDRESS, pageProps?.clientIPAddress)
-      }
-
+      setClientIPAddress(pageProps)
       resetSnippetElements()
     })
 
