@@ -25,9 +25,12 @@ import {
   obfuscateHostName,
 } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
-import { IPLPFilterState } from '@components/ui/context'
+import { IPLPFilterState, useUI } from '@components/ui/context'
 import CacheProductImages from '@components/product/ProductView/CacheProductImages'
-
+import { Product } from '@commerce/types'
+const CompareSelectionBar = dynamic(
+  () => import('@components/product/ProductCompare/compareSelectionBar')
+)
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -117,6 +120,7 @@ export default function CollectionPage(props: any) {
   const { isOnlyMobile, isMobile, isIPadorTablet } = deviceInfo
   const router = useRouter()
   const [paddingTop, setPaddingTop] = useState('0')
+  const [isProductCompare, setProductCompare] = useState(false)
   const adaptedQuery: any = { ...router.query }
   const [plpFilterState, setPLPFilterState] = useState<IPLPFilterState>({
     filters: [],
@@ -128,6 +132,7 @@ export default function CollectionPage(props: any) {
     pages: 0,
     loading: false,
   })
+  const { isCompared } = useUI()
 
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -375,6 +380,15 @@ export default function CollectionPage(props: any) {
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+
+  const showCompareProducts = () => {
+    setProductCompare(true)
+  }
+
+  const closeCompareProducts = () => {
+    setProductCompare(false)
+  }
+
   return (
     <>
       <NextHead>
@@ -610,6 +624,17 @@ export default function CollectionPage(props: any) {
           handleTogglePLPSidebar={handleTogglePLPSidebar}
           plpFilterState={plpFilterState}
         />
+        {isCompared === 'true' && (
+          <CompareSelectionBar
+            name={props?.name}
+            showCompareProducts={showCompareProducts}
+            products={data.products}
+            isCompare={isProductCompare}
+            maxBasketItemsCount={maxBasketItemsCount(config)}
+            closeCompareProducts={closeCompareProducts}
+            deviceInfo={deviceInfo}
+          />
+        )}
 
         {data?.products?.results?.length > 0 && (
           <Script

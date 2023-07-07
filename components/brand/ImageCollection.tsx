@@ -11,7 +11,7 @@ import Link from 'next/link'
 SwiperCore.use([Navigation])
 
 export default function ImageCollection({ heading, range, AttrArray }: any) {
-  const [ImageArrayToDisp, setImageArrayToDisp] = useState<any>([])
+  const [bannerCollection, setbannerCollection] = useState<any>([])
   const [obj, setObj] = useState({
     productName: '',
     prodSlug: '',
@@ -26,9 +26,9 @@ export default function ImageCollection({ heading, range, AttrArray }: any) {
   function handleImageArray(count: number) {
     if (AttrArray !== undefined) {
       if (AttrArray[0]?.name === 'BrangLogo') {
-        setImageArrayToDisp(AttrArray.slice(1, count + 1))
+        setbannerCollection(AttrArray.slice(1, count + 1))
       } else {
-        setImageArrayToDisp(AttrArray.slice(0, count))
+        setbannerCollection(AttrArray.slice(0, count))
       }
     }
   }
@@ -41,17 +41,17 @@ export default function ImageCollection({ heading, range, AttrArray }: any) {
   return (
     <>
       <div id="ImageCollection" className={`grid grid-cols-${range} gap-5`}>
-        {ImageArrayToDisp.map((val: any, Idx: number) => {
+        {bannerCollection.map((val: any, Idx: number) => {
           return (
             <Link
               key={Idx}
-              className="flex items-center justify-evenly border-orange-500 border-solid border group bg-orange-600"
+              className="flex items-center bg-orange-600 border border-orange-500 border-solid justify-evenly group"
               href={val.link ? val.link : val.slug ? val.slug : '/#'}
             >
               {val.title !== '' && (
                 <p
                   key={Idx}
-                  className="absolute flex bg-gray-50 px-9 sm:px-8  mt-24 sm:mt-0 justify-center py-2 sm:py-4 m-auto uppercase rounded-md z-50 md:text-md 2xl:text-lg text-sm font-semibold"
+                  className="absolute z-50 flex justify-center py-2 m-auto mt-24 text-sm font-semibold uppercase rounded-md bg-gray-50 px-9 sm:px-8 sm:mt-0 sm:py-4 md:text-md 2xl:text-lg"
                 >
                   {' '}
                   <span className="md:max-w-[10rem] 2xl:max-w-[13rem] truncate">
