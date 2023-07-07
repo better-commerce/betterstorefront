@@ -20,7 +20,7 @@ import {
 } from '@components/utils/textVariables'
 import LoginOTPForm from '@components/customer/login-otp-form'
 
-function LoginOTPPage() {
+function LoginOTPComp() {
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -146,7 +146,4 @@ function LoginOTPPage() {
   )
 }
 
-LoginOTPPage.Layout = Layout
-
-const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(LoginOTPPage, PAGE_TYPE)
+export default LoginOTPComp
