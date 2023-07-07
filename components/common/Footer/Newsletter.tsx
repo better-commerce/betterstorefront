@@ -1,19 +1,18 @@
-
 import {
   GENERAL_EMAIL_ADDRESS,
   BTN_SIGN_UP,
   SIGN_UP_FOR_NEWSLETTER,
   SIGN_UP_TEXT,
 } from '@components/utils/textVariables'
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { NEXT_SUBSCRIBE, Messages } from '@components/utils/constants';
-import { useUI } from '@components/ui';
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { NEXT_SUBSCRIBE, Messages } from '@components/utils/constants'
+import { useUI } from '@components/ui'
 export default function Newsletter() {
   const [value, setValue] = useState('')
   const [err, setErr] = useState<any>(null)
-  const { setAlert } = useUI();
+  const { setAlert } = useUI()
   const handleChange = (e: any) => {
     setValue(e.target.value)
   }
@@ -25,7 +24,10 @@ export default function Newsletter() {
         notifyByEmail: true,
       })
       setValue('')
-      setAlert({ type: 'success', msg: "Email Registered Successfully for Newsletter" })
+      setAlert({
+        type: 'success',
+        msg: 'Email Registered Successfully for Newsletter',
+      })
     } else setErr('Enter a valid email')
   }
 
@@ -35,7 +37,6 @@ export default function Newsletter() {
 
   return (
     <>
-
       {/* footer newsletter start */}
       <h4 className="my-4 font-bold text-black uppercase sm:my-0 text-footer-clr ">
         {SIGN_UP_FOR_NEWSLETTER}
@@ -43,10 +44,13 @@ export default function Newsletter() {
       <p className="mt-1 text-gray-900 text-md text-footer-clr ">
         {SIGN_UP_TEXT}
       </p>
-      <form className="flex mt-6 sm:max-w-md" onSubmit={(e) => {
-        e.preventDefault();
-        submitSubscription(value)
-      }}>
+      <form
+        className="flex mt-6 sm:max-w-md"
+        onSubmit={(e) => {
+          e.preventDefault()
+          submitSubscription(value)
+        }}
+      >
         <label htmlFor="email-address" className="sr-only">
           {GENERAL_EMAIL_ADDRESS}
         </label>
@@ -68,13 +72,8 @@ export default function Newsletter() {
           </button>
         </div>
       </form>
-      {
-        err
-          ? <p className="text-red-500 text-sm mt-2">{err}</p>
-          : null
-      }
+      {err ? <p className="text-red-500 text-sm mt-2">{err}</p> : null}
       {/* footer newsletter start */}
     </>
-
-  );
+  )
 }

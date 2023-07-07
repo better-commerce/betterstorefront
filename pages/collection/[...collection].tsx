@@ -636,6 +636,18 @@ export default function CollectionPage(props: any) {
           />
         )}
 
+        {isCompared === 'true' && (
+          <CompareSelectionBar
+            name={props?.name}
+            showCompareProducts={showCompareProducts}
+            products={data.products}
+            isCompare={isProductCompare}
+            maxBasketItemsCount={maxBasketItemsCount(config)}
+            closeCompareProducts={closeCompareProducts}
+            deviceInfo={deviceInfo}
+          />
+        )}
+
         {data?.products?.results?.length > 0 && (
           <Script
             type="application/ld+json"

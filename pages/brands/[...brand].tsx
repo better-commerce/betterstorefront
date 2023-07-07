@@ -44,6 +44,8 @@ import faq from '@components/brand/faqData.json'
 import SwiperCore, { Navigation } from 'swiper'
 import 'swiper/swiper.min.css'
 import 'swiper/css'
+import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import { useUI } from '@components/ui'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -201,6 +203,7 @@ function BrandDetailPage({
   const [textNames, setTextNames] = useState([])
   const [recommendedProducts, setRecommendedProducts] = useState([])
   const [showLandingPage, setShowLandingPage] = useState(true)
+  const [isProductCompare, setProductCompare] = useState(false)
   const {
     data = {
       products: {
@@ -373,7 +376,14 @@ function BrandDetailPage({
   useEffect(() => {
     setRecommendedProducts(productDataToPass.results.slice(0, 8))
   }, [productDataToPass])
+  const showCompareProducts = () => {
+    setProductCompare(true)
+  }
 
+  const closeCompareProducts = () => {
+    setProductCompare(false)
+  }
+  const { isCompared } = useUI()
   // IMPLEMENT HANDLING FOR NULL OBJECT
   if (brandDetails === null) {
     return (
@@ -614,6 +624,17 @@ function BrandDetailPage({
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount(config)}
           />
+          {isCompared === 'true' && (
+            <CompareSelectionBar
+              name={brandDetails?.name}
+              showCompareProducts={showCompareProducts}
+              products={productDataToPass}
+              isCompare={isProductCompare}
+              maxBasketItemsCount={maxBasketItemsCount(config)}
+              closeCompareProducts={closeCompareProducts}
+              deviceInfo={deviceInfo}
+            />
+          )}
         </div>
       )}
     </>

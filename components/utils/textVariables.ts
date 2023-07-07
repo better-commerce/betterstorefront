@@ -202,8 +202,7 @@ export const SIGN_UP_TEXT =
   'The latest deals and savings, sent to your inbox weekly.'
 export const GENERAL_EMAIL_ADDRESS = 'Email address'
 export const BTN_SIGN_UP = 'Sign up'
-export const COPYRIGHT_FOOTER_INFO =
-  'BetterCommerce, Inc. All rights reserved.'
+export const COPYRIGHT_FOOTER_INFO = 'BetterCommerce, Inc. All rights reserved.'
 export const GENERAL_COOKIE_TEXT =
   'This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.'
 export const BTN_ACCEPT_COOKIE = 'Accept cookies'
