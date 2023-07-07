@@ -282,7 +282,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 IMG_PLACEHOLDER
               }
               alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm"
+              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
               style={css}
               width={400}
               height={500}
@@ -296,7 +296,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm"
+                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
                 style={css}
                 width={400}
                 height={500}
