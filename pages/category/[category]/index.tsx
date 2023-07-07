@@ -24,6 +24,8 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
 import CacheProductImages from '@components/product/ProductView/CacheProductImages'
+import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import { useUI } from '@components/ui'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -184,6 +186,8 @@ function CategoryLandingPage({
   adaptedQuery.filters
     ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
     : false
+  const [isProductCompare, setProductCompare] = useState(false)
+  const { isCompared } = useUI()
   const initialState = {
     ...DEFAULT_STATE,
     filters: adaptedQuery.filters || [],
@@ -325,6 +329,14 @@ function CategoryLandingPage({
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
+  }
+
+  const showCompareProducts = () => {
+    setProductCompare(true)
+  }
+
+  const closeCompareProducts = () => {
+    setProductCompare(false)
   }
   return (
     <>
@@ -773,7 +785,7 @@ function CategoryLandingPage({
                         <div className="sm:col-span-10 p-[1px]">
                           {isMobile ? null : (
                             <ProductFiltersTopBar
-                              products={products}
+                              products={productDataToPass}
                               handleSortBy={handleSortBy}
                               routerFilters={state.filters}
                               clearAll={clearAll}
@@ -792,6 +804,13 @@ function CategoryLandingPage({
                       </>
                     ) : (
                       <div className="sm:col-span-12 p-[1px] sm:mt-4 mt-2">
+                        <ProductFiltersTopBar
+                          products={productDataToPass}
+                          handleSortBy={handleSortBy}
+                          routerFilters={state.filters}
+                          clearAll={clearAll}
+                          routerSortOption={state.sortBy}
+                        />
                         <ProductGrid
                           products={productDataToPass}
                           currentPage={state?.currentPage}
@@ -802,6 +821,17 @@ function CategoryLandingPage({
                         />
                       </div>
                     ))}
+                  {isCompared === 'true' && (
+                    <CompareSelectionBar
+                      name={category?.name}
+                      showCompareProducts={showCompareProducts}
+                      products={productDataToPass}
+                      isCompare={isProductCompare}
+                      maxBasketItemsCount={maxBasketItemsCount(config)}
+                      closeCompareProducts={closeCompareProducts}
+                      deviceInfo={deviceInfo}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
