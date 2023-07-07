@@ -101,7 +101,7 @@ export default function ProductCompare({
                       <div className="sm:col-span-10">
                         <div className="grid grid-cols-5 gap-3">
                           {products?.results
-                            ?.slice(4, 9)
+                            ?.slice(0, 5)
                             ?.map((product: any, productIdx: number) => (
                               <div key={`compare-product-${productIdx}`}>
                                 <Products
