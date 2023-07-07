@@ -10,13 +10,13 @@ import Link from 'next/link'
 
 SwiperCore.use([Navigation])
 
-export default function ImageCollection({
-  heading,
-  range,
-  ImageArray,
-  showTitle,
-}: any) {
+export default function ImageCollection({ heading, range, AttrArray }: any) {
   const [ImageArrayToDisp, setImageArrayToDisp] = useState<any>([])
+  const [obj, setObj] = useState({
+    productName: '',
+    prodSlug: '',
+    prodImage: '',
+  })
   let TotalValues: number = 0
 
   function handleRangeChange() {
@@ -24,11 +24,11 @@ export default function ImageCollection({
   }
 
   function handleImageArray(count: number) {
-    if (ImageArray !== undefined) {
-      if (ImageArray[0]?.name === 'BrangLogo') {
-        setImageArrayToDisp(ImageArray.slice(1, count + 1))
+    if (AttrArray !== undefined) {
+      if (AttrArray[0]?.name === 'BrangLogo') {
+        setImageArrayToDisp(AttrArray.slice(1, count + 1))
       } else {
-        setImageArrayToDisp(ImageArray.slice(0, count))
+        setImageArrayToDisp(AttrArray.slice(0, count))
       }
     }
   }
@@ -36,7 +36,7 @@ export default function ImageCollection({
   useEffect(() => {
     TotalValues = handleRangeChange()
     handleImageArray(TotalValues)
-  }, [ImageArray])
+  }, [AttrArray])
 
   return (
     <>
@@ -46,21 +46,25 @@ export default function ImageCollection({
             <Link
               key={Idx}
               className="flex items-center justify-evenly border-orange-500 border-solid border group bg-orange-600"
-              href={val.link ? val.link : '#'}
+              href={val.link ? val.link : val.slug ? val.slug : '/#'}
             >
               {val.title !== '' && (
                 <p
                   key={Idx}
-                  className="absolute flex bg-gray-50 px-8 justify-center py-4 m-auto uppercase rounded-md z-50 md:text-md 2xl:text-lg text-sm font-semibold"
+                  className="absolute flex bg-gray-50 px-9 sm:px-8  mt-24 sm:mt-0 justify-center py-2 sm:py-4 m-auto uppercase rounded-md z-50 md:text-md 2xl:text-lg text-sm font-semibold"
                 >
                   {' '}
-                  {val.title.replace(/([A-Z]+)/g, ' $1').replace(/^ /, '')}
+                  <span className="md:max-w-[10rem] 2xl:max-w-[13rem] truncate">
+                    {val.title
+                      ? val.title.replace(/([A-Z]+)/g, ' $1').replace(/^ /, '')
+                      : val.name}
+                  </span>
                 </p>
               )}
               <Image
                 alt="logo"
                 key={Idx}
-                src={val.url || IMG_PLACEHOLDER}
+                src={val.url ? val.url || IMG_PLACEHOLDER : val.image}
                 width={305}
                 height={224}
                 className="w-full group-hover:opacity-20"
