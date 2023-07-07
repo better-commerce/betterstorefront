@@ -13,6 +13,7 @@ import { resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { LOGOUT } from '@components/utils/textVariables'
 import { Cookie } from '@framework/utils/constants'
+import { tryParseJson } from '@framework/utils/parse-util'
 
 declare const window: any
 
@@ -73,6 +74,7 @@ export interface State {
   overlayLoaderState: IOverlayLoaderState
   deviceInfo: IDeviceInfo
   includeVAT: string
+  isCompared: string
 }
 
 const initialState = {
@@ -109,6 +111,7 @@ const initialState = {
     deviceType: DeviceType.UNKNOWN,
   },
   includeVAT: getItem('includeVAT') || 'false',
+  isCompared: getItem('isCompared') || 'false',
 }
 
 type Action =
@@ -205,6 +208,7 @@ type Action =
   | { type: 'SETUP_DEVICE_INFO'; payload: IDeviceInfo }
   | { type: 'SET_SELECTED_ADDRESS_ID'; payload: number }
   | { type: 'INCLUDE_VAT'; payload: string }
+  | { type: 'IS_COMPARED'; payload: string }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -442,6 +446,13 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         includeVAT: state?.includeVAT,
+      }
+    }
+
+    case 'IS_COMPARED': {
+      return {
+        ...state,
+        isCompared: action?.payload,
       }
     }
   }
@@ -813,6 +824,14 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setIsCompared = useCallback(
+    (payload: any) => {
+      setItem('isCompared', payload)
+      dispatch({ type: 'IS_COMPARED', payload })
+    },
+    [dispatch]
+  )
+
   const consolidateCartItems = (payload: any) => {
     let newCartDataClone: any = { ...payload }
 
@@ -945,6 +964,7 @@ export const UIProvider: React.FC<any> = (props) => {
       hideAlert,
       setAlert,
       setIncludeVAT,
+      setIsCompared,
     }),
 
     [state]

@@ -576,9 +576,22 @@ p {
   height: 180px !important;
 }
 
+.height-img-auto-sm {
+  min-height: 0 !important;
+  object-fit: contain !important;
+  object-position: inherit;
+  width: auto !important;
+  height: 120px !important;
+}
 .mobile-card-panel.white-card {
   background: #fff !important;
   min-height: 180px !important;
+}
+
+
+.mobile-card-panel.white-card-sm {
+  background: #fff !important;
+  min-height: 120px !important;
 }
 
 @media screen and (min-width:1024px) {
@@ -590,12 +603,23 @@ p {
     height: 350px !important;
   }
 
+  .height-img-auto-sm {
+    min-height: 0 !important;
+    object-fit: contain !important;
+    object-position: inherit;
+    width: auto !important;
+    height: 250px !important;
+  }
   .mobile-card-panel.white-card {
     background: #fff !important;
     min-height: 350px !important;
   }
-}
 
+  .mobile-card-panel.white-card-sm {
+    background: #fff !important;
+    min-height: 250px !important;
+  }
+}
 .cookie-bannner>div {
   width: 350px;
   max-width: 100%;
@@ -628,4 +652,26 @@ p {
     width: 100%;
     max-width: 100%;
   }
+}
+
+.bg-tan{
+ background: var(--tan-clr);
+}
+.custom-scroll{
+max-height: 700px;
+overflow-y: auto;
+}
+.custom-scroll::-webkit-scrollbar {
+  width: 0px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: #fff;
+  opacity: 1;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #d3d3d36e !important;
+  width: 0px;
+  border-radius: 0px;
 }

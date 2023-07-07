@@ -343,9 +343,9 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
         />
       </NextHead>
       <div className="container w-full px-4 mx-auto mt-6 mb-10 bg-white sm:px-6 sm:mt-10">
-        <h1 className="relative flex items-baseline font-semibold tracking-tight text-black uppercase">
+        <h1 className="relative flex items-baseline font-semibold tracking-tighter text-black uppercase">
           {GENERAL_SHOPPING_CART}{' '}
-          <span className="pl-2 text-sm font-normal text-gray-400 top-2">
+          <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
             {userCart?.lineItems?.length > 1 ? 'Items' : 'Item'} added
           </span>
