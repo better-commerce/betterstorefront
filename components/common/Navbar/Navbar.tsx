@@ -270,10 +270,8 @@ const Navbar: FC<Props & IExtraProps> = ({
           }
         }
       }
-      console.log('aaja')
       const accessToken = localStorage.getItem('user')
       if (!accessToken || isGuestUser) {
-      console.log('khuljaa')
       //  setAlert({ type: 'success', msg:" Please Login "})
         openLogin();
         return;
