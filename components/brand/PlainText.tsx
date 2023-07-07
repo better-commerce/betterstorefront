@@ -27,7 +27,7 @@ export default function PlainText({ textNames, heading }: any) {
       </div>
       <div className="">
         <p>
-          {textNames.length > 0 &&
+          {textNames?.length > 0 &&
             textNames.map((val: any, index: number) => {
               return (
                 <span
