@@ -23,7 +23,10 @@ import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
-import CacheProductImages from '@components/product/ProductView/CacheProductImages'
+import getAllProductsOperation from '@framework/api/operations/get-all-products'
+import { ProductCard } from '@components/product'
+import axios from 'axios'
+import { NEXT_GET_CATALOG_PRODUCTS } from '@components/utils/constants'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
 const ProductFilterRight = dynamic(
@@ -193,7 +196,9 @@ function CategoryLandingPage({
     filters: adaptedQuery.filters || [],
     categoryId: category.id,
   }
+  const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [minimalProd, setMinimalProd] = useState<any>([])
   const {
     data = {
       products: {
@@ -258,9 +263,35 @@ function CategoryLandingPage({
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
+    let CSVCollection: any = []
+    CSVCollection = category?.featuredProductCSV?.split(',')
+    async function handleApiCall() {
+      const data: any = Promise.all(
+        CSVCollection.map(async (val: any) => {
+          const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
+            sortBy: '',
+            sortOrder: '',
+            currentPage: 1,
+            filters: [],
+            freeText: val || '',
+          })
+          return res?.data.products
+        })
+      )
+        .then((results) => {
+          setMinimalProd(results)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    handleApiCall()
+  }, [])
+
+  useEffect(() => {
     const dataToPass = IS_INFINITE_SCROLL
-      ? productListMemory?.products
-      : data?.products // productListMemory?.products
+    ? productListMemory?.products
+    : data?.products // productListMemory?.products
     setProductDataToPass(dataToPass)
   }, [productListMemory?.products, data?.products])
 
@@ -575,6 +606,56 @@ function CategoryLandingPage({
                 </div>
               </div>
             </div>
+
+            {/* minimalProd?.length > 0 && <div className="py-6">
+              <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
+                <h2 className="mb-2 font-bold uppercase font-18">
+                  Related categories
+                </h2>
+                <Swiper
+                  // install Swiper modules
+                  spaceBetween={0}
+                  slidesPerView={1}
+                  navigation={true}
+                  loop={false}
+                  breakpoints={{
+                    640: {
+                      slidesPerView: 1,
+                    },
+                    768: {
+                      slidesPerView: 2.5,
+                    },
+                    1024: {
+                      slidesPerView: 4,
+                    },
+                    1400: {
+                      slidesPerView: 5,
+                    },
+                  }}
+                  className="mySwier"
+                >
+                  {minimalProd?.map(
+                    (product: any, cdx: number) => (
+                      <>
+                        <SwiperSlide key={cdx}>
+                          <div className="relative group">
+                            <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
+                            <>
+                              <ProductCard
+                               product={product.results || []}
+                               deviceInfo={deviceInfo}
+                               maxBasketItemsCount={maxBasketItemsCount(config)}
+                               />
+                            </>
+                          </div>
+                        </SwiperSlide>
+                      </>
+                    )
+                  )}
+                </Swiper>
+              </div>
+            </div> */}
+
             {/* feature brand section End*/}
 
             {/* related category  */}
