@@ -1,32 +1,15 @@
 import dynamic from 'next/dynamic'
+import NextHead from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
+import useSwr from 'swr'
+import commerce from '@lib/api/commerce'
 import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
-import useSwr from 'swr'
-import NextHead from 'next/head'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
-import Image from 'next/image'
-import faq from '@components/brand/faqData.json'
-const ProductGrid = dynamic(
-  () => import('@components/product/Grid/ProductGrid')
-)
-import cn from 'classnames'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/swiper.min.css'
-import SwiperCore, { Navigation } from 'swiper'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
-const ProductSort = dynamic(() => import('@components/product/ProductSort'))
-import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import useAnalytics from '@components/services/analytics/useAnalytics'
-import Link from 'next/link'
-import commerce from '@lib/api/commerce'
-import Slider from '@components/brand/Slider'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
+import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import {
   BTN_RECOMMENDED_PROD,
   BTN_SEE_ALL,
@@ -35,26 +18,34 @@ import {
   RESULTS,
   SHOP_NOW,
 } from '@components/utils/textVariables'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
-import brands from '.'
-import Disclosure from '@components/brand/Disclosure'
-import { ImageCollection, PlainText, Video } from '@components/brand'
-import { before, indexOf } from 'lodash'
-import getCollectionById from '@framework/api/content/getCollectionById'
-import ProductCard from '@components/product/ProductCard/ProductCard'
-import { Product } from '@commerce/types'
-import RecommendedProductCollection from '@components/brand/RecommendedProductCollection'
-import ImageBanner from '@components/brand/ImageBanner'
-import MultiBrandVideo from '@components/brand/MultiBrandVideo'
-import axios from 'axios'
-import {
-  NEXT_GET_COLLECTION_BY_ID,
-  SITE_NAME,
-  SITE_ORIGIN_URL,
-} from '@components/utils/constants'
-import OfferCard from '@components/brand/OfferCard'
+import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
-
+import { ImageCollection, PlainText, Video } from '@components/brand'
+import getCollectionById from '@framework/api/content/getCollectionById'
+import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+const RecommendedProductCollection = dynamic(
+  () => import('@components/brand/RecommendedProductCollection')
+)
+const ImageBanner = dynamic(() => import('@components/brand/ImageBanner'))
+const MultiBrandVideo = dynamic(
+  () => import('@components/brand/MultiBrandVideo')
+)
+const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
+const ProductSort = dynamic(() => import('@components/product/ProductSort'))
+const ProductGrid = dynamic(
+  () => import('@components/product/Grid/ProductGrid')
+)
+const Slider = dynamic(() => import('@components/brand/Slider'))
+const Disclosure = dynamic(() => import('@components/brand/Disclosure'))
+import faq from '@components/brand/faqData.json'
+import SwiperCore, { Navigation } from 'swiper'
+import 'swiper/swiper.min.css'
+import 'swiper/css'
+import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import { useUI } from '@components/ui'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -131,7 +122,7 @@ function BrandDetailPage({
   slug,
   deviceInfo,
   config,
-  collections, // ...for Image Collection api response
+  collections, // ...for Attribute Collection api response
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -140,8 +131,9 @@ function BrandDetailPage({
     collections.imageBannerCollectionResponse
   let imageCategoryCollectionResponse: any =
     collections.imageCategoryCollectionResponse
-  let imageCollectionResponse: any = collections.imageCollectionResponse
+  let imgFeatureCollection: any = collections.imgFeatureCollection
   let offerBannerResult: any = collections.offerBannerResult
+  let productCollectionRes: any = collections.productCollectionRes
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -211,6 +203,7 @@ function BrandDetailPage({
   const [textNames, setTextNames] = useState([])
   const [recommendedProducts, setRecommendedProducts] = useState([])
   const [showLandingPage, setShowLandingPage] = useState(true)
+  const [isProductCompare, setProductCompare] = useState(false)
   const {
     data = {
       products: {
@@ -371,6 +364,8 @@ function BrandDetailPage({
       }
       return
     })
+    console.log(brandDetails.widgetsConfig, 'brandsDeatils.widgetsConfig')
+    console.log(deviceInfo, 'deviceInfo')
   }, [])
 
   //const productDataToPass = productListMemory.products
@@ -381,7 +376,14 @@ function BrandDetailPage({
   useEffect(() => {
     setRecommendedProducts(productDataToPass.results.slice(0, 8))
   }, [productDataToPass])
+  const showCompareProducts = () => {
+    setProductCompare(true)
+  }
 
+  const closeCompareProducts = () => {
+    setProductCompare(false)
+  }
+  const { isCompared } = useUI()
   // IMPLEMENT HANDLING FOR NULL OBJECT
   if (brandDetails === null) {
     return (
@@ -429,9 +431,9 @@ function BrandDetailPage({
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
-          <div className="w-full px-4 pb-20 mx-auto bg-white md:w-4/5 lg:px-0 sm:px-10">
+          <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 md:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
-              <div className="flex flex-col items-center bg-[#FEBD18] min-h-full md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+              <div className="flex flex-col items-center bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <Image
                   alt="Brand Logo"
                   src={
@@ -457,12 +459,12 @@ function BrandDetailPage({
               </div>
               <ImageCollection
                 range={2}
-                ImageArray={imageBannerCollectionResponse?.images || []}
+                AttrArray={imageBannerCollectionResponse?.images || []}
                 showTitle={true}
               />
             </div>
 
-            <div className="mt-10">
+            <div className="mt-0 md:mt-10">
               <Video
                 heading={manufacturerStateVideoHeading}
                 name={manufacturerStateVideoName}
@@ -470,7 +472,10 @@ function BrandDetailPage({
             </div>
 
             <div className="mt-10">
-              <Slider images={imageCategoryCollectionResponse || []} />
+              <Slider
+                images={imageCategoryCollectionResponse || []}
+                isBanner={true}
+              />
             </div>
 
             <div className="mt-10">
@@ -504,6 +509,7 @@ function BrandDetailPage({
                   description={val.description}
                   src={val.url}
                   link={val.link}
+                  buttonText={val.buttonText}
                 />
               ))}
             </div>
@@ -533,17 +539,22 @@ function BrandDetailPage({
                 {brandDetails.name}
               </p>
               <button
-                className="hidden font-semibold uppercase cursor-pointer font-lg md:block hover:underline"
+                className="hidden font-semibold uppercase cursor-pointer sm:block font-lg md:block hover:underline"
                 onClick={handleClick}
               >
                 {BTN_SEE_ALL}
               </button>
             </div>
-            <div className="mb-10">
+            <div className="hidden mb-10 sm:block">
               <ImageCollection
                 range={4}
-                ImageArray={imageCollectionResponse?.images || []}
-                showTitle={false}
+                AttrArray={imgFeatureCollection?.images || []}
+              />
+            </div>
+            <div className="sm:hidden block mb-10 max-h-[30vh]">
+              <Slider
+                images={imgFeatureCollection?.images || []}
+                isBanner={false}
               />
             </div>
             <PlainText
@@ -551,7 +562,7 @@ function BrandDetailPage({
               heading={manufacturerStateTextHeading}
             />
 
-            <div className="flex justify-between py-10">
+            <div className="hidden py-10 sm:flex sm:justify-between">
               <p className="font-semibold uppercase cursor-default font-lg">
                 {BTN_RECOMMENDED_PROD}
               </p>
@@ -562,11 +573,12 @@ function BrandDetailPage({
                 {BTN_SEE_ALL}
               </button>
             </div>
-            <ImageCollection
-              range={4}
-              ImageArray={imageCollectionResponse?.images || []}
-              showTitle={false}
-            />
+            <div className="hidden sm:block">
+              <ImageCollection
+                range={4}
+                AttrArray={productCollectionRes || []}
+              />
+            </div>
 
             <div className="mb-20">
               <p className="my-10 font-semibold uppercase cursor-default font-lg">
@@ -612,6 +624,17 @@ function BrandDetailPage({
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount(config)}
           />
+          {isCompared === 'true' && (
+            <CompareSelectionBar
+              name={brandDetails?.name}
+              showCompareProducts={showCompareProducts}
+              products={productDataToPass}
+              isCompare={isProductCompare}
+              maxBasketItemsCount={maxBasketItemsCount(config)}
+              closeCompareProducts={closeCompareProducts}
+              deviceInfo={deviceInfo}
+            />
+          )}
         </div>
       )}
     </>
@@ -627,8 +650,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const obj: any = {
     imageBannerCollectionResponse: [],
     imageCategoryCollectionResponse: [],
-    imageCollectionResponse: [],
+    imgFeatureCollection: [],
     offerBannerResult: [],
+    productCollectionRes: [],
   }
 
   const widgets: any = tryParseJson(response?.result?.widgetsConfig)
@@ -652,15 +676,19 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         widgets[i].manufacturerSettingType == 'ImageCollection' &&
         widgets[i].code == 'FeaturedDewaltImageList'
       ) {
-        obj.imageCollectionResponse = await getCollectionById(
-          widgets[i].recordId
-        )
+        obj.imgFeatureCollection = await getCollectionById(widgets[i].recordId)
       } else if (
         widgets[i].manufacturerSettingType == 'ImageCollection' &&
         widgets[i].code == 'FFXOffers'
       ) {
         const res = await getCollectionById(widgets[i].recordId)
         obj.offerBannerResult = res.images
+      } else if (
+        widgets[i].manufacturerSettingType == 'ProductCollection' &&
+        widgets[i].code == 'FeaturedDewaltSaws'
+      ) {
+        const res = await getCollectionById(widgets[i].recordId)
+        obj.productCollectionRes = res.products.results
       }
     }
   }

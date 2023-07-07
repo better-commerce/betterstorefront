@@ -367,11 +367,11 @@ function CategoryLandingPage({
           <div className="w-full">
             <div className="py-4">
               {category?.subCategories?.filter((x: any) => x.isFeatured == true)
-                .length && (
+                .length > 0 ? (
                 <div className="container px-4 mx-auto mb-4 sm:px-0">
                   <h2 className="font-bold font-18">Popular categories</h2>
                 </div>
-              )}
+              ) : null}
               <Swiper
                 // install Swiper modules
                 spaceBetween={0}
@@ -680,11 +680,11 @@ function CategoryLandingPage({
               <div className="py-4">
                 {category?.subCategories?.filter(
                   (x: any) => x.isFeatured == true
-                ).length && (
+                ).length > 0 ? (
                   <h2 className="container mx-auto mb-4 font-bold font-18">
                     Popular categories
                   </h2>
-                )}
+                ) : null}
                 <Swiper
                   spaceBetween={0}
                   slidesPerView={1}

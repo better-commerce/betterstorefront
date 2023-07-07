@@ -28,14 +28,16 @@ const MultiBrandVideo = ({ array, heading, name }: any) => {
     <div className="mt-10 mb-10 gap-x-4">
       <Swiper
         slidesPerView={4.3}
-        // navigation={false}
+        navigation={true}
         loop={false}
         ref={swiperRef}
         // navigation
         breakpoints={{
           320: {
-            slidesPerView: 1,
-            spaceBetween: 2,
+            slidesPerView: 1.4,
+            centeredSlides: true,
+            centeredSlidesBounds: true,
+            spaceBetween: 12,
           },
           640: {
             slidesPerView: 1.1,
@@ -44,7 +46,9 @@ const MultiBrandVideo = ({ array, heading, name }: any) => {
             slidesPerView: 1.1,
           },
           1024: {
-            slidesPerView: 2.8,
+            slidesPerView: 2.4,
+            centeredSlides: false,
+            spaceBetween: 24,
           },
         }}
       >
