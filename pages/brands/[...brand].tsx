@@ -1,32 +1,15 @@
 import dynamic from 'next/dynamic'
+import NextHead from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
+import useSwr from 'swr'
+import commerce from '@lib/api/commerce'
 import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
-import useSwr from 'swr'
-import NextHead from 'next/head'
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
-import Image from 'next/image'
-import faq from '@components/brand/faqData.json'
-const ProductGrid = dynamic(
-  () => import('@components/product/Grid/ProductGrid')
-)
-import cn from 'classnames'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/swiper.min.css'
-import SwiperCore, { Navigation } from 'swiper'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
-const ProductSort = dynamic(() => import('@components/product/ProductSort'))
-import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import useAnalytics from '@components/services/analytics/useAnalytics'
-import Link from 'next/link'
-import commerce from '@lib/api/commerce'
-import Slider from '@components/brand/Slider'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
+import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import {
   BTN_RECOMMENDED_PROD,
   BTN_SEE_ALL,
@@ -35,26 +18,32 @@ import {
   RESULTS,
   SHOP_NOW,
 } from '@components/utils/textVariables'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
-import brands from '.'
-import Disclosure from '@components/brand/Disclosure'
-import { ImageCollection, PlainText, Video } from '@components/brand'
-import { before, indexOf } from 'lodash'
-import getCollectionById from '@framework/api/content/getCollectionById'
-import ProductCard from '@components/product/ProductCard/ProductCard'
-import { Product } from '@commerce/types'
-import RecommendedProductCollection from '@components/brand/RecommendedProductCollection'
-import ImageBanner from '@components/brand/ImageBanner'
-import MultiBrandVideo from '@components/brand/MultiBrandVideo'
-import axios from 'axios'
-import {
-  NEXT_GET_COLLECTION_BY_ID,
-  SITE_NAME,
-  SITE_ORIGIN_URL,
-} from '@components/utils/constants'
-import OfferCard from '@components/brand/OfferCard'
+import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
-
+import { ImageCollection, PlainText, Video } from '@components/brand'
+import getCollectionById from '@framework/api/content/getCollectionById'
+import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+const RecommendedProductCollection = dynamic(
+  () => import('@components/brand/RecommendedProductCollection')
+)
+const ImageBanner = dynamic(() => import('@components/brand/ImageBanner'))
+const MultiBrandVideo = dynamic(
+  () => import('@components/brand/MultiBrandVideo')
+)
+const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
+const ProductSort = dynamic(() => import('@components/product/ProductSort'))
+const ProductGrid = dynamic(
+  () => import('@components/product/Grid/ProductGrid')
+)
+const Slider = dynamic(() => import('@components/brand/Slider'))
+const Disclosure = dynamic(() => import('@components/brand/Disclosure'))
+import faq from '@components/brand/faqData.json'
+import SwiperCore, { Navigation } from 'swiper'
+import 'swiper/swiper.min.css'
+import 'swiper/css'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -432,7 +421,7 @@ function BrandDetailPage({
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
-          <div className="w-full px-4 pb-0 md:pb-20 mx-auto bg-white md:w-4/5 lg:px-0 sm:px-10">
+          <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 md:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
               <div className="flex flex-col items-center bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <Image
@@ -540,13 +529,13 @@ function BrandDetailPage({
                 {brandDetails.name}
               </p>
               <button
-                className="hidden sm:block font-semibold uppercase cursor-pointer font-lg md:block hover:underline"
+                className="hidden font-semibold uppercase cursor-pointer sm:block font-lg md:block hover:underline"
                 onClick={handleClick}
               >
                 {BTN_SEE_ALL}
               </button>
             </div>
-            <div className="mb-10 hidden sm:block">
+            <div className="hidden mb-10 sm:block">
               <ImageCollection
                 range={4}
                 AttrArray={imgFeatureCollection?.images || []}
@@ -563,7 +552,7 @@ function BrandDetailPage({
               heading={manufacturerStateTextHeading}
             />
 
-            <div className="hidden sm:flex sm:justify-between py-10">
+            <div className="hidden py-10 sm:flex sm:justify-between">
               <p className="font-semibold uppercase cursor-default font-lg">
                 {BTN_RECOMMENDED_PROD}
               </p>
