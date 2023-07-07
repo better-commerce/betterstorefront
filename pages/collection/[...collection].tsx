@@ -591,6 +591,13 @@ export default function CollectionPage(props: any) {
               </>
             ) : (
               <div className="col-span-12">
+                <ProductFiltersTopBar
+                  products={data.products}
+                  handleSortBy={handleSortBy}
+                  routerFilters={state.filters}
+                  clearAll={clearAll}
+                  routerSortOption={state.sortBy}
+                />
                 <ProductGrid
                   products={productDataToPass}
                   currentPage={state?.currentPage}
