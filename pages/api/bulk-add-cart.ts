@@ -2,7 +2,7 @@ import { useBulkAdd } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 
 const BulkAddCartApiMiddleware = async (req: any, res: any) => {
-  const { basketId, products }: any = req.body
+  const { basketId, products }: any = req.body.data
   try {
     const response = await useBulkAdd()({
       basketId,
@@ -15,4 +15,4 @@ const BulkAddCartApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default BulkAddCartApiMiddleware;
+export default BulkAddCartApiMiddleware

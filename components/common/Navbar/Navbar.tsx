@@ -24,6 +24,7 @@ import {
 const Account = dynamic(() => import('./AccountDropdown'))
 const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
+const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
 import {
   BTN_SIGN_OUT,
   GENERAL_LOGIN,
@@ -49,11 +50,13 @@ import { IExtraProps } from '../Layout/Layout'
 import ToggleSwitch from '../ToggleSwitch'
 import { getItem, setItem } from '@components/utils/localStorage'
 import { signOut } from 'next-auth/react'
+import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 
 interface Props {
   config: []
   currencies: []
   languages: []
+  configSettings: any
 }
 
 const accountDropDownConfigUnauthorized: any = [
@@ -133,6 +136,7 @@ const accountDropDownConfigUnauthorized: any = [
 
 const Navbar: FC<Props & IExtraProps> = ({
   config,
+  configSettings,
   currencies,
   languages,
   deviceInfo,
@@ -150,11 +154,23 @@ const Navbar: FC<Props & IExtraProps> = ({
     openCart,
     openWishlist,
     setShowSearchBar,
+    openBulkAdd,
   } = useUI()
 
   let currentPage = getCurrentPage()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [delayEffect, setDelayEffect] = useState(false)
+  const b2bSettings =
+    configSettings?.find((x: any) =>
+      matchStrings(x?.configType, 'B2BSettings', true)
+    )?.configKeys || []
+
+  // Read b2b enabled value from settings
+  const b2bEnabled = b2bSettings?.length
+    ? stringToBoolean(
+        b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
+      )
+    : false
 
   let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
@@ -696,6 +712,14 @@ const Navbar: FC<Props & IExtraProps> = ({
               deviceInfo={deviceInfo}
             />
             <div className="hidden sm:flex">
+              {/* Bulk Add */}
+              {b2bEnabled && (
+                <BulkAddTopNav
+                  b2bSettings={b2bSettings}
+                  onClick={openBulkAdd}
+                />
+              )}
+
               <CurrencySwitcher
                 config={currencies}
                 title={SELECT_CURRENCY}
