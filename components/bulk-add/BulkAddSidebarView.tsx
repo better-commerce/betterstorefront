@@ -1,5 +1,5 @@
 // Base Imports
-import React, { FC, Fragment, useState } from 'react'
+import React, { FC, Fragment, useEffect, useState } from 'react'
 
 // Package Imports
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -28,7 +28,15 @@ import { stringToNumber } from '@framework/utils/parse-util'
 import { Messages } from '@components/utils/constants'
 
 const BulkAddSidebarView: FC = () => {
-  const { user, basketId, setCartItems, openCart, closeSidebar } = useUI()
+  const [bulkOrderSidebarOpen, setBulkOrderSidebarOpen] = useState(false)
+  const {
+    user,
+    basketId,
+    setCartItems,
+    displaySidebar,
+    openCart,
+    closeSidebar,
+  } = useUI()
   const [isLineByLine, setIsLineByLine] = useState<boolean>(true)
 
   /**
@@ -112,29 +120,36 @@ const BulkAddSidebarView: FC = () => {
         items
       )
       if (item) {
-        closeSidebar()
+        handleClose()
         setCartItems(item)
         setTimeout(() => {
           openCart()
-        }, 50)
+        }, 750)
       }
     }
   }
 
-  const handleClose = () => closeSidebar()
+  const handleClose = () => {
+    setTimeout(() => closeSidebar(), 500)
+    setBulkOrderSidebarOpen(false)
+  }
 
   const addToBasketBtn = (
     <AddToBasketButton buttonText={GENERAL_ADD_TO_BASKET} />
   )
 
+  useEffect(() => {
+    setTimeout(() => setBulkOrderSidebarOpen(displaySidebar), 250)
+  }, [displaySidebar])
+
   return (
-    <Transition.Root show={true} as={Fragment}>
+    <Transition.Root show={bulkOrderSidebarOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 overflow-hidden z-50 overflow-x-hidden"
+        className="fixed inset-0 overflow-hidden z-99"
         onClose={handleClose}
       >
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden z-99">
           <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-500"
@@ -147,7 +162,7 @@ const BulkAddSidebarView: FC = () => {
             <Dialog.Overlay className="" />
           </Transition.Child>
 
-          <div className="fixed inset-y-0 right-0 pl-0 max-w-full flex overflow-x-hidden">
+          <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -157,8 +172,8 @@ const BulkAddSidebarView: FC = () => {
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
-              <div className="w-screen max-w-md relative overflow-x-hidden">
-                <div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll overflow-x-hidden">
+              <div className="w-screen max-w-md">
+                <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
                   <div className="flex-1 py-6 overflow-y-auto px-0 sm:px-0 overflow-x-hidden">
                     {/* Dialog title */}
                     <div className="flex items-start justify-between border-b pb-3">
