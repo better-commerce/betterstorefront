@@ -23,6 +23,7 @@ import {
 import { IDeviceInfo } from '@components/ui/context'
 import { IExtraProps } from './Layout'
 import { stringToBoolean } from '@framework/utils/parse-util'
+import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
 
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
@@ -87,6 +88,7 @@ const SidebarView: FC<
           maxBasketItemsCount={maxBasketItemsCount}
         />
       )}
+      {sidebarView === 'BULK_ADD_VIEW' && <BulkAddSidebarView />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
     </Sidebar>
   )
