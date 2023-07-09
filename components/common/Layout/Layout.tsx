@@ -266,6 +266,7 @@ const Layout: FC<Props & IExtraProps> = ({
             onIncludeVATChanged={includeVATChanged}
             currencies={config?.currencies}
             config={sortedData}
+            configSettings={config?.configSettings}
             languages={config?.languages}
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount}

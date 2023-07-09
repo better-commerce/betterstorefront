@@ -147,6 +147,58 @@ export default function cartHandler() {
 
       return response.data
     },
+    bulkAddToCart: async (
+      userId: string,
+      basketId: string,
+      isAssociated: boolean = true,
+      type = 'ADD',
+      data: Array<any> = []
+    ) => {
+      const url = NEXT_BULK_ADD_TO_CART
+      const postData = {
+        basketId,
+        products: data,
+      }
+      const response: any = await axios.post(url, {
+        data: postData,
+      })
+      if (userId && !isAssociated) {
+        await cartHandler().associateCart(userId, basketId)
+      }
+      const eventData = {
+        entity: JSON.stringify({
+          basketId,
+          //id: productId,
+          //name: data?.product?.name,
+          //price: data?.product?.price?.raw?.withTax,
+          quantity: data.map((x: any) => x.quantity),
+          stockCode: data.map((x: any) => x.stockCode),
+        }),
+        basketItems: JSON.stringify(
+          response?.data?.lineItems?.map((obj: any) => {
+            return {
+              basketId,
+              id: obj?.id,
+              img: obj?.image,
+              name: obj?.name,
+              price: obj?.price?.raw?.withTax,
+              qty: obj?.qty,
+              stockCode: obj?.stockCode,
+              tax: obj?.price?.raw?.tax,
+            }
+          })
+        ),
+        basketItemCount: response?.data?.lineItems?.length || 0,
+        basketTotal: response?.data?.grandTotal?.raw?.withTax,
+        entityId: null,
+        entityType: 'product',
+        eventType: BasketItemAdded,
+        entityName: null,
+      }
+
+      eventDispatcher(BasketItemAdded, eventData)
+      return response.data
+    },
     getCart: async ({ basketId }: GetCart) => {
       const response = await axios.get(`${NEXT_GET_CART}?basketId=${basketId}`)
       return response.data

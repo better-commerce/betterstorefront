@@ -207,12 +207,19 @@ export module Messages {
       export const CHARACTERS_AND_ALPHABETS =
         /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g
       export const PASSWORD_VALIDATION = /^(?=.*[A-Z]).{8,}$/
+      export const STOCK_CODE = /^[a-zA-Z0-9\\-]+$/g
+      export const QUANTITY = /^[1-9]{1}[0-9]*$/g
+      export const CSV_DATA = /^[a-zA-Z0-9\-]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
     }
 
     export const Login: any = {
       MOBILE_NUMBER_REQUIRED: 'Mobile number is a required field',
       MOBILE_NUMBER_INPUT: 'Mobile number should only contain numbers',
       MOBILE_NUMBER_LENGTH: 'Mobile number should be 10 characters',
+    }
+
+    export const BulkOrder: any = {
+      DEFAULT_ENTRY_FIELD_COUNT: 5,
     }
 
     export const Profile: any = {

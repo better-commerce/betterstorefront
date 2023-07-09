@@ -129,7 +129,6 @@ const LayoutError: FC<Props & IExtraProps> = ({
 
   //check if nav data is avaialbel in LocalStorage, then dont fetch from Server/API
   useEffect(() => {
-
     Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => setIsLoading(false))
 
@@ -162,6 +161,7 @@ const LayoutError: FC<Props & IExtraProps> = ({
           onIncludeVATChanged={includeVATChanged}
           currencies={config?.currencies}
           config={sortedData}
+          configSettings={config?.configSettings}
           languages={config?.languages}
           key="navbar"
           deviceInfo={deviceInfo}

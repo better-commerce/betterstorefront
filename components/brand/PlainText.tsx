@@ -1,4 +1,5 @@
 import cn from 'classnames'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 export default function PlainText({ textNames, heading }: any) {
@@ -57,7 +58,7 @@ export default function PlainText({ textNames, heading }: any) {
           }}
         >
           <span>Expand</span>
-          <img
+          <Image
             src="/brands/downArrow.svg"
             alt={'downArrow'}
             className="h-5 w-6"
@@ -71,7 +72,7 @@ export default function PlainText({ textNames, heading }: any) {
           }}
         >
           <span>Collapse</span>
-          <img
+          <Image
             src="/brands/downArrow.svg"
             alt={'downArrow'}
             className="h-5 w-6 rotate-180"
