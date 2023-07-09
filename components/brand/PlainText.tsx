@@ -1,7 +1,6 @@
 import cn from 'classnames'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 
 export default function PlainText({ textNames, heading }: any) {
   const [height, setHeight] = useState('h-[612px]')

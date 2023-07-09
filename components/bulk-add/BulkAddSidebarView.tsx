@@ -168,7 +168,7 @@ const BulkAddSidebarView: FC = () => {
                       <div className="flex">
                         {isLineByLine ? (
                           <button
-                            className="flex justify-center px-6 mr-3 text-sm items-center py-2 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 "
+                            className="flex justify-center px-6 mr-3 py-3 capitalize transition btn-primary hover:opacity-75"
                             onClick={() => setIsLineByLine(false)}
                           >
                             {GENERAL_COPY_AND_PASTE}
