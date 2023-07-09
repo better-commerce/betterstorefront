@@ -16,3 +16,7 @@
 .min-height-com{
     min-height: 425px;
 }
+
+.cursor-not-allowed {
+    min-height: 2.5em;
+}
