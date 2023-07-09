@@ -246,7 +246,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
   )
 
   const PromotionsCount =
-    basketPromos?.availablePromotions?.length +
+    basketPromos?.applicablePromotions?.length +
     basketPromos?.availablePromotions?.length
   return (
     <>

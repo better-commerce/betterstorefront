@@ -24,6 +24,8 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
 import CacheProductImages from '@components/product/ProductView/CacheProductImages'
+import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import { useUI } from '@components/ui'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -191,6 +193,8 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   adaptedQuery.filters
     ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
     : false
+  const [isProductCompare, setProductCompare] = useState(false)
+  const { isCompared } = useUI()
   const initialState = {
     ...DEFAULT_STATE,
     filters: adaptedQuery.filters || [],
@@ -338,6 +342,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+  const showCompareProducts = () => {
+    setProductCompare(true)
+  }
+
+  const closeCompareProducts = () => {
+    setProductCompare(false)
+  }
   return (
     <>
       <NextHead>
@@ -359,7 +370,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         />
       </NextHead>
       <section className="main-section">
-        <div className="mx-auto mt-4 bg-transparent md:w-4/5 px-4 sm:px-0">
+        <div className="px-4 mx-auto mt-4 bg-transparent md:w-4/5 sm:px-0">
           {/* breadcrumb section start */}
           {category?.breadCrumbs && (
             <BreadCrumbs
@@ -371,7 +382,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         </div>
 
         {/* Category info section start */}
-        <div className="mx-auto mt-4 bg-transparent md:w-4/5 my-6 px-4 sm:px-0">
+        <div className="px-4 mx-auto my-6 mt-4 bg-transparent md:w-4/5 sm:px-0">
           <h1>{category?.name}</h1>
           <div
             className="font-18"
@@ -385,15 +396,15 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
             <>
               {category?.images.map((cat: any, idx: number) => (
                 <div
-                  className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 relative"
+                  className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2"
                   key={idx}
                 >
-                  <div className="flex justify-center items-center bg-blue-web p-4 py-8 sm:py-0 sm:p-0 order-2 sm:order-1">
+                  <div className="flex items-center justify-center order-2 p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
                     <div className="w-full h-full">
                       <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
                         <div className="sm:w-2/4 sm:pr-20">
-                          <h2 className="uppercase text-white">{cat?.name}</h2>
-                          <p className="mt-5 text-white font-light">
+                          <h2 className="text-white uppercase">{cat?.name}</h2>
+                          <p className="mt-5 font-light text-white">
                             {cat?.description}
                           </p>
                         </div>
@@ -417,7 +428,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
             </>
           ) : null}
         </div>
-        <div className="mx-auto md:w-4/5 py-6 px-4 sm:px-0">
+        <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-0">
           {/* category banner info End */}
 
           {/*TODO: For browser caching of product images*/}
@@ -473,6 +484,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                   </>
                 ) : (
                   <div className="sm:col-span-12 p-[1px] sm:mt-4 mt-2">
+                    <ProductFiltersTopBar
+                      products={productDataToPass}
+                      handleSortBy={handleSortBy}
+                      routerFilters={state.filters}
+                      clearAll={clearAll}
+                      routerSortOption={state.sortBy}
+                    />
                     <ProductGrid
                       products={productDataToPass}
                       currentPage={state?.currentPage}
@@ -483,9 +501,20 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     />
                   </div>
                 ))}
+              {isCompared === 'true' && (
+                <CompareSelectionBar
+                  name={category?.name}
+                  showCompareProducts={showCompareProducts}
+                  products={productDataToPass}
+                  isCompare={isProductCompare}
+                  maxBasketItemsCount={maxBasketItemsCount(config)}
+                  closeCompareProducts={closeCompareProducts}
+                  deviceInfo={deviceInfo}
+                />
+              )}
             </div>
           ) : (
-            <div className="p-4 py-8  sm:p-32 mx-auto text-center max-w-7xl">
+            <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
               <h4 className="text-3xl font-bold text-gray-300">
                 No Products availabe in {category?.name}
               </h4>

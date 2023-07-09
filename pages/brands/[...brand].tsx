@@ -126,7 +126,7 @@ function BrandDetailPage({
 }: any) {
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
-
+  const { isMobile, isOnlyMobile } = deviceInfo
   let imageBannerCollectionResponse: any =
     collections.imageBannerCollectionResponse
   let imageCategoryCollectionResponse: any =
@@ -364,8 +364,6 @@ function BrandDetailPage({
       }
       return
     })
-    console.log(brandDetails.widgetsConfig, 'brandsDeatils.widgetsConfig')
-    console.log(deviceInfo, 'deviceInfo')
   }, [])
 
   //const productDataToPass = productListMemory.products
@@ -538,47 +536,54 @@ function BrandDetailPage({
                 {` `}
                 {brandDetails.name}
               </p>
-              <button
-                className="hidden font-semibold uppercase cursor-pointer sm:block font-lg md:block hover:underline"
-                onClick={handleClick}
-              >
-                {BTN_SEE_ALL}
-              </button>
+              {!isOnlyMobile && (
+                <button
+                  className="font-semibold uppercase cursor-pointer font-lg md:block hover:underline"
+                  onClick={handleClick}
+                >
+                  {BTN_SEE_ALL}
+                </button>
+              )}
             </div>
-            <div className="hidden mb-10 sm:block">
-              <ImageCollection
-                range={4}
-                AttrArray={imgFeatureCollection?.images || []}
-              />
-            </div>
-            <div className="sm:hidden block mb-10 max-h-[30vh]">
-              <Slider
-                images={imgFeatureCollection?.images || []}
-                isBanner={false}
-              />
-            </div>
+            {isOnlyMobile ? (
+              <div className="mb-10 max-h-[30vh]">
+                <Slider
+                  images={imgFeatureCollection?.images || []}
+                  isBanner={false}
+                />
+              </div>
+            ) : (
+              <div className="mb-10">
+                <ImageCollection
+                  range={4}
+                  AttrArray={imgFeatureCollection?.images || []}
+                />
+              </div>
+            )}
             <PlainText
-              textNames={textNames}
+              textNames={textNames || []}
               heading={manufacturerStateTextHeading}
             />
 
-            <div className="hidden py-10 sm:flex sm:justify-between">
-              <p className="font-semibold uppercase cursor-default font-lg">
-                {BTN_RECOMMENDED_PROD}
-              </p>
-              <button
-                className="font-semibold uppercase cursor-pointer font-lg hover:underline"
-                onClick={handleClick}
-              >
-                {BTN_SEE_ALL}
-              </button>
-            </div>
-            <div className="hidden sm:block">
-              <ImageCollection
-                range={4}
-                AttrArray={productCollectionRes || []}
-              />
-            </div>
+            {!isOnlyMobile && (
+              <>
+                <div className="py-10 flex justify-between">
+                  <p className="font-semibold uppercase cursor-default font-lg">
+                    {BTN_RECOMMENDED_PROD}
+                  </p>
+                  <button
+                    className="font-semibold uppercase cursor-pointer font-lg hover:underline"
+                    onClick={handleClick}
+                  >
+                    {BTN_SEE_ALL}
+                  </button>
+                </div>
+                <ImageCollection
+                  range={4}
+                  AttrArray={productCollectionRes || []}
+                />
+              </>
+            )}
 
             <div className="mb-20">
               <p className="my-10 font-semibold uppercase cursor-default font-lg">

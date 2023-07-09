@@ -263,7 +263,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div
-        className="sticky top-0 z-10 flex flex-col bg-white prod-group"
+        className="sticky top-0 z-10 flex flex-col bg-white prod-group pb-14 min-height-com"
         key={product.id}
       >
         <div className="relative mb-4 overflow-hidden bg-gray-200 border aspect-w-1 aspect-h-1 mobile-card-panel white-card-sm">
@@ -282,7 +282,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 IMG_PLACEHOLDER
               }
               alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm"
+              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
               style={css}
               width={400}
               height={500}
@@ -296,7 +296,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm"
+                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
                 style={css}
                 width={400}
                 height={500}
@@ -333,7 +333,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.name?.toLowerCase()}
           </div>
         </Link>
-        <div className="flex flex-col">
+        <div className="flex flex-col absolute bottom-0 left-0 right-0">
           <Button
             className="mt-2 text-sm font-medium rounded-md"
             title={buttonConfig.title}

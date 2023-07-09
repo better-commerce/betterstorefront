@@ -683,6 +683,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                               }
                                               className="relative flex items-center h-full hover:text-pink"
                                               title={navItem.caption}
+                                              onClick={() => setOpenState(-1)}
                                             >
                                               {navItem.caption}
                                             </Link>
