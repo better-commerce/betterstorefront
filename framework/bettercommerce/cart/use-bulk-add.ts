@@ -10,7 +10,6 @@ interface Props {
 export default function useBulkAdd() {
   return async function handler({ basketId, products, cookies }: Props) {
     try {
-      console.log('api call made to backend .')
       const response: any = await fetcher({
         url: `${BASKET_ENDPOINT}/${basketId}/items/add-bulk`,
         method: 'PUT',
@@ -18,6 +17,7 @@ export default function useBulkAdd() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies,
       })
       return response.result
     } catch (error: any) {

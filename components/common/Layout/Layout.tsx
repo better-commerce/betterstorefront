@@ -20,6 +20,7 @@ import {
   GENERAL_COOKIE_TEXT,
 } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
+import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
 const CartSidebarView = dynamic(
   () => import('@components/cart/CartSidebarView')
@@ -101,6 +102,7 @@ const SidebarView: FC<
           maxBasketItemsCount={maxBasketItemsCount}
         />
       )}
+      {sidebarView === 'BULK_ADD_VIEW' && <BulkAddSidebarView />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
       {sidebarView === 'PAYMENT_VIEW' && <PaymentMethodView />}

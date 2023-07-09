@@ -22,12 +22,12 @@ const TopNav: React.FC<ITopNavProps> = (props: ITopNavProps) => {
         onClick={onClick}
       >
         <DocumentDuplicateIcon
-          className="flex-shrink-0 h-5 w-5 inline-block text-white group-hover:text-gray-300 mx-auto"
+          className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500"
           aria-hidden="true"
           aria-label="Bulk Add"
         />
-        <span className="font-semibold text-sm text-white pl-1 hover:text-gray-300">
-          Quick Order
+        <span className="font-normal text-sm text-black pl-1 hover:text-gray-500">
+          QuickOrder
         </span>
       </button>
     </div>
