@@ -13,3 +13,6 @@
     background-color: #000;
     fill: #fff;
 }
+.min-height-com{
+    min-height: 425px;
+}
