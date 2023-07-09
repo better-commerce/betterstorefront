@@ -12,10 +12,11 @@ import { IBulkAddData } from '.'
 import { CSVForm } from './CSVForm'
 import { GridForm } from './GridForm'
 import { AddToBasketButton } from './AddToBasketButon'
+import { useUI } from '@components/ui/context'
+import useDataSubmit from '@commerce/utils/use-data-submit'
 
 // Other Imports
 import { Guid } from '@commerce/types'
-import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
 import {
   CLOSE_PANEL,
@@ -25,7 +26,8 @@ import {
   GENERAL_LINE_BY_LINE,
 } from '@components/utils/textVariables'
 import { stringToNumber } from '@framework/utils/parse-util'
-import { Messages } from '@components/utils/constants'
+import { Messages, PageActions } from '@components/utils/constants'
+import { resetSubmitData, submitData } from '@framework/utils/app-util'
 
 const BulkAddSidebarView: FC = () => {
   const [bulkOrderSidebarOpen, setBulkOrderSidebarOpen] = useState(false)
@@ -37,6 +39,7 @@ const BulkAddSidebarView: FC = () => {
     openCart,
     closeSidebar,
   } = useUI()
+  const { state: submitState, dispatch: submitDispatch } = useDataSubmit()
   const [isLineByLine, setIsLineByLine] = useState<boolean>(true)
 
   /**
@@ -62,6 +65,7 @@ const BulkAddSidebarView: FC = () => {
    * @param data
    */
   const onGridSubmit = async (data: IBulkAddData) => {
+    submitData(submitDispatch, PageActions.BulkOrder.ADD_TO_CART)
     if (data && data.orderPads && data.orderPads.length) {
       const values = data.orderPads.filter(
         (x: { stockCode: string; quantity: string }) => {
@@ -69,10 +73,11 @@ const BulkAddSidebarView: FC = () => {
         }
       )
 
-      if (values && values.length) {
+      if (values && values?.length) {
         await onAddToCart(values)
       }
     }
+    resetSubmitData(submitDispatch)
   }
 
   /**
@@ -80,6 +85,7 @@ const BulkAddSidebarView: FC = () => {
    * @param data
    */
   const onCSVSubmit = async (data: any) => {
+    submitData(submitDispatch, PageActions.BulkOrder.ADD_TO_CART)
     if (data && data.data && data.data.trim().length) {
       const value = data.data.trim()
       const regExp = new RegExp(
@@ -101,6 +107,7 @@ const BulkAddSidebarView: FC = () => {
         await onAddToCart(csvData)
       }
     }
+    resetSubmitData(submitDispatch)
   }
 
   /**
@@ -135,7 +142,12 @@ const BulkAddSidebarView: FC = () => {
   }
 
   const addToBasketBtn = (
-    <AddToBasketButton buttonText={GENERAL_ADD_TO_BASKET} />
+    <AddToBasketButton
+      cssClass=""
+      submitState={submitState}
+      source={PageActions.BulkOrder.ADD_TO_CART}
+      buttonText={GENERAL_ADD_TO_BASKET}
+    />
   )
 
   useEffect(() => {

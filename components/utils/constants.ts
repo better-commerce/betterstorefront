@@ -336,6 +336,13 @@ export module Messages {
   }
 }
 
+export module PageActions {
+  // Actions assigned: 1 to 50
+  export enum BulkOrder {
+    ADD_TO_CART = 1,
+  }
+}
+
 export const ALERT_TIMER = 5000
 
 export const DATE_FORMAT = 'DD-MMM-yy'
