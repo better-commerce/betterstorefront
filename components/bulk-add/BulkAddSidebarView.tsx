@@ -65,7 +65,6 @@ const BulkAddSidebarView: FC = () => {
    * @param data
    */
   const onGridSubmit = async (data: IBulkAddData) => {
-    debugger
     submitData(submitDispatch, PageActions.BulkOrder.ADD_TO_CART)
     if (data && data.orderPads && data.orderPads.length) {
       const values = data.orderPads.filter(
@@ -86,6 +85,7 @@ const BulkAddSidebarView: FC = () => {
    * @param data
    */
   const onCSVSubmit = async (data: any) => {
+    submitData(submitDispatch, PageActions.BulkOrder.ADD_TO_CART)
     if (data && data.data && data.data.trim().length) {
       const value = data.data.trim()
       const regExp = new RegExp(
@@ -107,6 +107,7 @@ const BulkAddSidebarView: FC = () => {
         await onAddToCart(csvData)
       }
     }
+    resetSubmitData(submitDispatch)
   }
 
   /**
