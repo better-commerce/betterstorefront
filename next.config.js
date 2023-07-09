@@ -24,6 +24,8 @@ module.exports = withCommerceConfig({
       'img.ffx.co.uk',
       'ffxcdn.azureedge.net',
       'ffxlivestorage.blob.core.windows.net',
+      'livekstmcdn.azureedge.net',
+      'devocxstorage.blob.core.windows.net',
     ],
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
@@ -86,6 +88,9 @@ module.exports = withCommerceConfig({
     ERROR_LOG_ENABLED: process.env.ERROR_LOG_ENABLED,
     ERROR_LOG_OUTPUT_DIR: process.env.ERROR_LOG_OUTPUT_DIR,
     CURRENT_THEME: process.env.CURRENT_THEME,
+    PDP_SIZE_OPTIONS_COUNT: process.env.PDP_SIZE_OPTIONS_COUNT,
+    PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
+    OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
   },
 })
 
