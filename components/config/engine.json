@@ -1,0 +1,24 @@
+{
+  "engineName": "ffx-dev-search-engine",
+  "endpointBase": "https://entappsearch-ffx-dev.ent.uksouth.azure.elastic-cloud.com",
+  "searchKey": "search-q7w8qp14rvioedtgji1ddvwm",
+  "resultFields": [
+    "listprice",
+    "iid",
+    "sellprice",
+    "name",
+    "attributes",
+    "categories",
+    "sku",
+    "brand",
+    "barcode",
+    "stockcode",
+    "id"
+  ],
+  "sortFields": ["sellprice"],
+  "facets": ["brand", "categories", "sellprice"],
+  "titleField": "name",
+  "brandField": "brand",
+  "categoriesField": "categories",
+  "listpriceField": "listprice"
+}

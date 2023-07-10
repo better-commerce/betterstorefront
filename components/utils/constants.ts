@@ -175,6 +175,7 @@ export const SITE_NAME = process.env.SITE_NAME
 export const ENABLE_SECURED_PAYMENT_PAYLOAD = stringToBoolean(
   process.env.ENABLE_SECURED_PAYMENT_PAYLOAD
 )
+export const ENABLE_ELASTIC_SEARCH = process.env.ENABLE_ELASTIC_SEARCH
 export const SECURE_PAYMENT_METHODS_SETTINGS_FIELDS = stringToBoolean(
   process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS
 )
