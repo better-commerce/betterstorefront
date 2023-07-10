@@ -124,7 +124,7 @@ export const GridForm: FC<IGridFormProps> = ({
                                   x.className +
                                   (orderPadErrors[x.key] &&
                                   orderPadTouched[x.key]
-                                    ? '  border rounded placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-2 pr-2 pl-12 border-red-500 border-red-500'
+                                    ? '  border rounded placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-2 pr-2 pl-12 border-red-500'
                                     : '')
                                 }
                               />
