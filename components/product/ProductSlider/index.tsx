@@ -35,7 +35,7 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({
         1024: { slidesPerView: 5 },
       }}
     >
-      {config?.newincollection?.map((product?: any) => (
+      {config?.newincollection?.slice(0, 6)?.map((product?: any) => (
         <SwiperSlide
           key={product?.slug}
           className="relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer group lg:w-auto"
