@@ -1,9 +1,12 @@
-import { Layout } from '@components/common'
-import { CLOSE_PANEL } from '@components/utils/textVariables'
+import { useState, useEffect, Fragment } from 'react'
+import _ from 'lodash'
 import { Dialog, Transition } from '@headlessui/react'
 import { ArrowLeftIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Fragment } from 'react'
+
+import { Layout } from '@components/common'
+import { CLOSE_PANEL } from '@components/utils/textVariables'
 import Products from './Products'
+
 export default function ProductCompare({
   products,
   isCompare,
@@ -11,6 +14,14 @@ export default function ProductCompare({
   deviceInfo,
   maxBasketItemsCount,
 }: any) {
+  const [attributeNames, setAttributeNames] = useState([])
+
+  useEffect(() => {
+    let mappedAttribsArrStr = products.map((o: any) => o.attributes).flat()
+    mappedAttribsArrStr = _.uniq(mappedAttribsArrStr.map((o: any) => o.display))
+    setAttributeNames(mappedAttribsArrStr)
+  }, [products])
+
   return (
     <Transition.Root show={isCompare} as={Fragment}>
       <Dialog
@@ -53,7 +64,7 @@ export default function ProductCompare({
                           onClick={() => closeCompareProducts()}
                           className="w-4 h-4 text-black"
                         />{' '}
-                        Comparing 5 Items
+                        Comparing {products?.length} Items
                       </Dialog.Title>
                       <div className="flex items-center ml-3 h-7">
                         <button
@@ -76,42 +87,27 @@ export default function ProductCompare({
                             Ratings
                           </span>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            Feature 1
+                            Brand
                           </span>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            Feature 2
-                          </span>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            Feature 3
-                          </span>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            Feature 4
-                          </span>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            Feature 5
-                          </span>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            Feature 6
-                          </span>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            Feature 7
-                          </span>
+                          {attributeNames?.map((attribName: any) => (
+                            <span key={attribName} className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
+                              {attribName}
+                            </span>
+                          ))}
                         </div>
                       </div>
                       <div className="sm:col-span-10">
                         <div className="grid grid-cols-5 gap-3">
-                          {products?.results
-                            ?.slice(0, 5)
-                            ?.map((product: any, productIdx: number) => (
-                              <div key={`compare-product-${productIdx}`}>
-                                <Products
-                                  product={product}
-                                  hideWishlistCTA={true}
-                                  deviceInfo={deviceInfo}
-                                  maxBasketItemsCount={maxBasketItemsCount}
-                                />
-                              </div>
-                            ))}
+                          {products?.map((product: any, productIdx: number) => (
+                            <div key={`compare-product-${productIdx}`}>
+                              <Products
+                                product={product}
+                                hideWishlistCTA={true}
+                                deviceInfo={deviceInfo}
+                                maxBasketItemsCount={maxBasketItemsCount}
+                              />
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>

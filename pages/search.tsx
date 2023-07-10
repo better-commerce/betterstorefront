@@ -410,17 +410,15 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
               isCompared={isCompared}
             />
           </div>
-          {isCompared === 'true' && (
-            <CompareSelectionBar
-              name={GENERAL_CATALOG}
-              showCompareProducts={showCompareProducts}
-              products={data.products}
-              isCompare={isProductCompare}
-              maxBasketItemsCount={maxBasketItemsCount(config)}
-              closeCompareProducts={closeCompareProducts}
-              deviceInfo={deviceInfo}
-            />
-          )}
+          <CompareSelectionBar
+            name={GENERAL_CATALOG}
+            showCompareProducts={showCompareProducts}
+            products={data.products}
+            isCompare={isProductCompare}
+            maxBasketItemsCount={maxBasketItemsCount(config)}
+            closeCompareProducts={closeCompareProducts}
+            deviceInfo={deviceInfo}
+          />
         </div>
       </div>
       <Script

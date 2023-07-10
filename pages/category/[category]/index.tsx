@@ -904,7 +904,6 @@ function CategoryLandingPage({
                         />
                       </div>
                     ))}
-                  {isCompared === 'true' && (
                     <CompareSelectionBar
                       name={category?.name}
                       showCompareProducts={showCompareProducts}
@@ -914,7 +913,6 @@ function CategoryLandingPage({
                       closeCompareProducts={closeCompareProducts}
                       deviceInfo={deviceInfo}
                     />
-                  )}
                 </div>
               ) : (
                 <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
