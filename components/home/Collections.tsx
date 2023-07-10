@@ -28,8 +28,8 @@ export default function Collections({ data }: any) {
                 }
                 className="object-cover object-center cursor-pointer"
                 alt={collection?.collectionlist_title}
-                width={600}
-                height={800}
+                width={500}
+                height={300}
                 style={css}
               />
             </Link>

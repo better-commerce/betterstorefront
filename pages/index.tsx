@@ -1,24 +1,21 @@
-// Base Imports
 import React from 'react'
+import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
 import NextHead from 'next/head'
-import Link from 'next/link'
-// Other Imports
+import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
+import { HOMEPAGE_SLUG, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
+import { obfuscateHostName } from '@framework/utils/app-util'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
-import { HOMEPAGE_SLUG, SITE_ORIGIN_URL } from '@components/utils/constants'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
-import { useRouter } from 'next/router'
-import os from 'os'
-import { obfuscateHostName } from '@framework/utils/app-util'
-import PromotionBanner from '@components/home/PromotionBanner'
-
+const PromotionBanner = dynamic(
+  () => import('@components/home/PromotionBanner')
+)
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
@@ -35,7 +32,6 @@ export async function getStaticProps({
   const slugs = await slugsPromise
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
-
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { pages } = await pagesPromise
@@ -46,7 +42,7 @@ export async function getStaticProps({
     const PageContentsPromiseWeb = commerce.getPagePreviewContent({
       id: '', //pageId,
       slug: HOME_PAGE_DEFAULT_SLUG,
-      workingVersion: process.env.NODE_ENV === 'production' ? false : false, // TRUE for preview, FALSE for prod.
+      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
       channel: 'Web',
     })
     pageContentsWeb = await PageContentsPromiseWeb
@@ -54,7 +50,7 @@ export async function getStaticProps({
     const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
       id: '', //pageId,
       slug: HOME_PAGE_DEFAULT_SLUG,
-      workingVersion: process.env.NODE_ENV === 'production' ? false : false, // TRUE for preview, FALSE for prod.
+      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
       channel: 'MobileWeb',
     })
     pageContentsMobileWeb = await PageContentsPromiseMobileWeb

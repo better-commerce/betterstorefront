@@ -20,7 +20,6 @@ function Categories({ data, deviceInfo }: any) {
       slidesPerView={1.5}
       spaceBetween={10}
       navigation={true}
-      // loop={true}
       breakpoints={{
         640: { slidesPerView: 3.2 },
         768: { slidesPerView: 4.5 },
@@ -48,8 +47,8 @@ function Categories({ data, deviceInfo }: any) {
                     ) || IMG_PLACEHOLDER
                   }
                   alt={category?.categorylist_name}
-                  width={300}
-                  height={200}
+                  width={500}
+                  height={300}
                   style={mobcss}
                   className="cursor-pointer"
                 />
@@ -62,8 +61,8 @@ function Categories({ data, deviceInfo }: any) {
                     ) || IMG_PLACEHOLDER
                   }
                   alt={category?.categorylist_name}
-                  width={600}
-                  height={800}
+                  width={400}
+                  height={300}
                   style={css}
                   className="cursor-pointer"
                 />
