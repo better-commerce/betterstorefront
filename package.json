@@ -83,7 +83,9 @@
     "uuid": "^9.0.0",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
-    "yup": "0.32.10"
+    "yup": "0.32.10",
+    "@elastic/react-search-ui": "^1.15.0",
+    "@elastic/search-ui-app-search-connector": "^1.15.0"
   },
   "devDependencies": {
     "@types/body-scroll-lock": "^3.1.0",

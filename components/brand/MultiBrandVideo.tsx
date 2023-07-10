@@ -52,22 +52,14 @@ const MultiBrandVideo = ({ array, heading, name }: any) => {
           },
         }}
       >
-        {NameArray?.map((val: any, productIdx: number) => {
-          return (
-            <>
-              <SwiperSlide
-                className="py-0 2xl:w-[300px] w-[25vw] h-full "
-                key={val.name}
-              >
-                <Video
-                  key={productIdx}
-                  heading={heading || ''}
-                  name={val || ''}
-                />
-              </SwiperSlide>
-            </>
-          )
-        })}
+        {NameArray?.map((val: any, productIdx: number) => (
+          <SwiperSlide
+            className="py-0 2xl:w-[300px] w-[25vw] h-full "
+            key={val.name}
+          >
+            <Video key={productIdx} heading={heading || ''} name={val || ''} />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   )
