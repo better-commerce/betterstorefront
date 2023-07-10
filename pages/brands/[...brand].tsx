@@ -567,7 +567,7 @@ function BrandDetailPage({
 
             {!isOnlyMobile && (
               <>
-                <div className="py-10 flex justify-between">
+                <div className="flex justify-between py-10">
                   <p className="font-semibold uppercase cursor-default font-lg">
                     {BTN_RECOMMENDED_PROD}
                   </p>
@@ -628,6 +628,7 @@ function BrandDetailPage({
             handleInfiniteScroll={handleInfiniteScroll}
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount(config)}
+            isCompared={isCompared}
           />
           {isCompared === 'true' && (
             <CompareSelectionBar

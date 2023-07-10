@@ -586,6 +586,7 @@ export default function CollectionPage(props: any) {
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
                     maxBasketItemsCount={maxBasketItemsCount(config)}
+                    isCompared={isCompared}
                   />
                 </div>
               </>
@@ -605,6 +606,7 @@ export default function CollectionPage(props: any) {
                   handleInfiniteScroll={handleInfiniteScroll}
                   deviceInfo={deviceInfo}
                   maxBasketItemsCount={maxBasketItemsCount(config)}
+                  isCompared={isCompared}
                 />
               </div>
             )}
@@ -631,18 +633,6 @@ export default function CollectionPage(props: any) {
           handleTogglePLPSidebar={handleTogglePLPSidebar}
           plpFilterState={plpFilterState}
         />
-        {isCompared === 'true' && (
-          <CompareSelectionBar
-            name={props?.name}
-            showCompareProducts={showCompareProducts}
-            products={data.products}
-            isCompare={isProductCompare}
-            maxBasketItemsCount={maxBasketItemsCount(config)}
-            closeCompareProducts={closeCompareProducts}
-            deviceInfo={deviceInfo}
-          />
-        )}
-
         {isCompared === 'true' && (
           <CompareSelectionBar
             name={props?.name}
