@@ -27,7 +27,7 @@ const TopNav: React.FC<ITopNavProps> = (props: ITopNavProps) => {
           aria-label="Bulk Add"
         />
         <span className="flex flex-col py-0 text-xs font-medium text-black group-hover:text-orange-600 sm:text-xs whitespace-nowrap">
-          QuickOrder
+          Quick Order
         </span>
       </button>
     </div>
