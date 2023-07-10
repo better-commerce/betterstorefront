@@ -61,10 +61,10 @@ export const GridForm: FC<IGridFormProps> = ({
           <Field name="noOfFields">
             {(fieldProps: any) => (
               <>
-                <div className="grid grid-cols-2 gap-x-2 mt-4">
+                <div className="grid grid-cols-1 mt-4 gap-x-2">
                   <div>
                     <button
-                      className="flex justify-center w-full text-sm items-center py-2 border border-gray-800 rounded-sm shadow-sm font-medium text-white hover:text-white bg-gray-400 hover:bg-gray-900 "
+                      className="flex justify-center px-6 py-2 mr-3 text-sm font-medium text-black uppercase transition border border-black rounded bg-tan hover:opacity-75"
                       onClick={(e) =>
                         onAddMoreOrderPads(
                           e,
@@ -82,7 +82,7 @@ export const GridForm: FC<IGridFormProps> = ({
             )}
           </Field>
 
-          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-sm mt-4">
+          <div className="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-sm">
             <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-100">
                 <tr key={'header'}>
@@ -107,14 +107,14 @@ export const GridForm: FC<IGridFormProps> = ({
                         <tr key={i}>
                           <td
                             key={i}
-                            className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                            className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 whitespace-nowrap sm:pl-6"
                           >
                             {i + 1}
                           </td>
                           {config?.map((x: any, idx: number) => (
                             <td
                               key={`inner-${idx}`}
-                              className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                              className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap"
                             >
                               <Field
                                 key={`field_${i}_${x.key}`}
@@ -132,7 +132,7 @@ export const GridForm: FC<IGridFormProps> = ({
                                 key={`err_${i}_${x.key}`}
                                 name={`orderPads.${i}.${x.key}`}
                                 component="div"
-                                className=" text-red-500 text-xs mt-1 ml-1"
+                                className="mt-1 ml-1 text-xs text-red-500 "
                               />
                             </td>
                           ))}

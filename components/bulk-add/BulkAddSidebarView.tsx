@@ -186,23 +186,23 @@ const BulkAddSidebarView: FC = () => {
             >
               <div className="w-screen max-w-md">
                 <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
-                  <div className="flex-1 py-6 overflow-y-auto px-0 sm:px-0 overflow-x-hidden">
+                  <div className="flex-1 px-0 py-6 overflow-x-hidden overflow-y-auto sm:px-0">
                     {/* Dialog title */}
-                    <div className="flex items-start justify-between border-b pb-3">
-                      <Dialog.Title className="text-lg font-medium text-gray-900 pl-6">
+                    <div className="flex items-start justify-between pb-3 border-b">
+                      <Dialog.Title className="pl-6 text-lg font-medium text-gray-900">
                         {GENERAL_BULK_ORDER_PAD}
                       </Dialog.Title>
                       <div className="flex">
                         {isLineByLine ? (
                           <button
-                            className="flex justify-center px-6 mr-3 py-3 capitalize transition btn-primary hover:opacity-75"
+                            className="flex justify-center px-6 py-2 mr-3 text-sm font-medium text-black uppercase transition bg-white border border-black rounded hover:opacity-75"
                             onClick={() => setIsLineByLine(false)}
                           >
                             {GENERAL_COPY_AND_PASTE}
                           </button>
                         ) : (
                           <button
-                            className="flex justify-center px-6 mr-3 text-sm items-center py-2 border border-transparent rounded-sm shadow-sm font-medium text-white bg-black hover:bg-gray-900 "
+                            className="flex justify-center px-6 py-2 mr-3 text-sm font-medium text-black uppercase transition bg-white border border-black rounded hover:opacity-75"
                             onClick={() => setIsLineByLine(true)}
                           >
                             {GENERAL_LINE_BY_LINE}
@@ -211,11 +211,11 @@ const BulkAddSidebarView: FC = () => {
 
                         <button
                           type="button"
-                          className="-m-2 p-2 text-gray-400 hover:text-gray-500"
+                          className="p-2 -m-2 text-gray-400 hover:text-gray-500"
                           onClick={handleClose}
                         >
                           <span className="sr-only">{CLOSE_PANEL}</span>
-                          <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                          <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                       </div>
                     </div>
@@ -236,7 +236,7 @@ const BulkAddSidebarView: FC = () => {
 
                     {/*COPY AND PASTE PANEL*/}
                     {!isLineByLine && (
-                      <div className="flex flex-col mt-4 px-6">
+                      <div className="flex flex-col px-6 mt-4">
                         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                             <CSVForm

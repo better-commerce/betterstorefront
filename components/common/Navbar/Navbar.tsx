@@ -551,6 +551,9 @@ const Navbar: FC<Props & IExtraProps> = ({
       {!isMobile && !isIPadorTablet && (
         <div className="fixed top-0 w-full h-6 bg-gray-300 z-999">
           <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
+            {b2bEnabled && (
+              <BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />
+            )}
             <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">
               Prices inc VAT
             </div>
@@ -712,14 +715,6 @@ const Navbar: FC<Props & IExtraProps> = ({
               deviceInfo={deviceInfo}
             />
             <div className="hidden sm:flex">
-              {/* Bulk Add */}
-              {b2bEnabled && (
-                <BulkAddTopNav
-                  b2bSettings={b2bSettings}
-                  onClick={openBulkAdd}
-                />
-              )}
-
               <CurrencySwitcher
                 config={currencies}
                 title={SELECT_CURRENCY}
