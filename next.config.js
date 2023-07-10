@@ -92,6 +92,20 @@ module.exports = withCommerceConfig({
     PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
     OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
   },
+  async headers() {
+    return [
+      {
+        source: '/:all*(svg|jpg|png|woff|woff2)',
+        locale: false,
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=9999999999, must-revalidate',
+          },
+        ],
+      },
+    ]
+  },
 })
 
 // Don't delete this console log, useful to see the commerce config in Vercel deployments
