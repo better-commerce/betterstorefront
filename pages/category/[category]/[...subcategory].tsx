@@ -479,6 +479,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                         handleInfiniteScroll={handleInfiniteScroll}
                         deviceInfo={deviceInfo}
                         maxBasketItemsCount={maxBasketItemsCount(config)}
+                        isCompared={isCompared}
                       />
                     </div>
                   </>
@@ -498,6 +499,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                       handleInfiniteScroll={handleInfiniteScroll}
                       deviceInfo={deviceInfo}
                       maxBasketItemsCount={maxBasketItemsCount(config)}
+                      isCompared={isCompared}
                     />
                   </div>
                 ))}

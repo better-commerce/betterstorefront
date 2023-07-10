@@ -407,6 +407,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
               handleInfiniteScroll={handleInfiniteScroll}
               deviceInfo={deviceInfo}
               maxBasketItemsCount={maxBasketItemsCount(config)}
+              isCompared={isCompared}
             />
           </div>
           {isCompared === 'true' && (

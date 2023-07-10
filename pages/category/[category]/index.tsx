@@ -290,8 +290,8 @@ function CategoryLandingPage({
 
   useEffect(() => {
     const dataToPass = IS_INFINITE_SCROLL
-    ? productListMemory?.products
-    : data?.products // productListMemory?.products
+      ? productListMemory?.products
+      : data?.products // productListMemory?.products
     setProductDataToPass(dataToPass)
   }, [productListMemory?.products, data?.products])
 
@@ -880,6 +880,7 @@ function CategoryLandingPage({
                             handleInfiniteScroll={handleInfiniteScroll}
                             deviceInfo={deviceInfo}
                             maxBasketItemsCount={maxBasketItemsCount(config)}
+                            isCompared={isCompared}
                           />
                         </div>
                       </>
@@ -899,6 +900,7 @@ function CategoryLandingPage({
                           handleInfiniteScroll={handleInfiniteScroll}
                           deviceInfo={deviceInfo}
                           maxBasketItemsCount={maxBasketItemsCount(config)}
+                          isCompared={isCompared}
                         />
                       </div>
                     ))}

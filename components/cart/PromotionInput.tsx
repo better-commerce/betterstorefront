@@ -354,11 +354,6 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     className="text-sm font-semibold text-orange-500 cursor-pointer mob-font-small-screen"
                     onClick={() => {
                       viewCoupons(basketPromos?.applicablePromotions, items)
-                      Router?.push(
-                        { pathname: `${asPath}#couponopen` },
-                        `${asPath}`,
-                        { shallow: true, scroll: false }
-                      )
                     }}
                   >
                     {promoTypeNot22?.length > 1
