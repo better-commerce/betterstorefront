@@ -12,9 +12,9 @@ export const AddToBasketButton: FC<
 > = (props: IAddToBasketButtonProps & ISubmitButtonProps) => {
   const { source, submitState, buttonText } = props
   return (
-    <div className="flex flex-col grid absolute justify-items-end align-right bottom-0 right-0 z-999 w-full px-4 bg-gray-50 border-t py-4">
+    <div className="absolute bottom-0 right-0 flex justify-end w-full px-4 py-4 border-t justify-items-end align-right z-999 bg-gray-50">
       <SubmitButton
-        cssClass="flex w-2/5 px-6 mr-3 items-center justify-center py-3 capitalize transition btn-primary hover:opacity-75"
+        cssClass="flex w-2/5 px-6 mr-3 items-center justify-center py-3 rounded font-medium bg-black text-white uppercase transition hover:opacity-75"
         submitState={submitState}
         source={source}
       >
