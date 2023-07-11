@@ -3,12 +3,13 @@ import { useRouter } from 'next/router'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Transition } from '@headlessui/react'
 import { BTN_SEARCH } from '@components/utils/textVariables'
-import { ENABLE_ELASTIC_SEARCH } from '@components/utils/constants'
-import App from '@components/search/elasticSearch'
+import SearchResults from '@components/search/elasticSearchResult'
+import App from '@components/search/elasticSearchBar'
 interface Props {
   id?: string
   onClick: any
 }
+  const ENABLE_ELASTIC_SEARCH = process.env.ENABLE_ELASTIC_SEARCH;
 
 const Searchbar: FC<React.PropsWithChildren<Props>> = ({
   id = 'search',
@@ -16,25 +17,15 @@ const Searchbar: FC<React.PropsWithChildren<Props>> = ({
 }) => {
   return (
     <>
-      {ENABLE_ELASTIC_SEARCH ? (
+      {ENABLE_ELASTIC_SEARCH == "true" ? (
         <>
-          <div className="flex flex-row rounded-sm sm:mr-8 sm:pr-2 sm:bg-gray-100 sm:border">
+          <div className="flex flex-row rounded-sm w-96">
             <button
               onClick={onClick}
-              className="relative pr-3 text-gray-400 sm:p-1 sm:pl-3 sm:pr-16 hover:text-gray-500"
+              className="relative items-start w-full pr-3 text-left text-gray-400 sm:p-1 hover:text-gray-500"
               aria-label="Search"
             >
-              <span className="sr-only" aria-label="Search">
-                {BTN_SEARCH}
-              </span>
-              <span className="hidden pr-2 text-sm font-normal text-black sm:inline-block sm:pr-32">
-                Search
-              </span>
-              <MagnifyingGlassIcon
-                className="w-6 h-6 text-black sm:w-4 sm:h-4 sm:absolute sm:top-2 sm:right-0 sm:text-gray-400"
-                aria-hidden="true"
-                aria-label="Search"
-              />
+              <App />
             </button>
           </div>
         </>
