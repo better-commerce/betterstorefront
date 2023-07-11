@@ -5,19 +5,20 @@ import { Transition } from '@headlessui/react'
 import { BTN_SEARCH } from '@components/utils/textVariables'
 import SearchResults from '@components/search/elasticSearchResult'
 import App from '@components/search/elasticSearchBar'
-interface Props {
+import { ENABLE_ELASTIC_SEARCH } from '@components/utils/constants'
+
+interface ISearchBarProps {
   id?: string
   onClick: any
 }
-const ENABLE_ELASTIC_SEARCH = process.env.ENABLE_ELASTIC_SEARCH
 
-const Searchbar: FC<React.PropsWithChildren<Props>> = ({
+const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
   id = 'search',
   onClick,
 }) => {
   return (
     <>
-      {ENABLE_ELASTIC_SEARCH == 'true' ? (
+      {ENABLE_ELASTIC_SEARCH ? (
         <>
           <div className="flex flex-row rounded-sm sm:mr-8 sm:pr-2 sm:bg-gray-100 sm:border">
             <button
@@ -75,4 +76,4 @@ const Searchbar: FC<React.PropsWithChildren<Props>> = ({
   )
 }
 
-export default memo(Searchbar)
+export default memo(SearchBar)
