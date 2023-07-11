@@ -1,9 +1,10 @@
 export enum BCPaymentEndpoint {
-  CONVERT_ORDER = 'CO',
+  CONVERT_ORDER = 'co',
   INIT_PAYMENT = 'ip',
   REQUEST_PAYMENT = 'rp',
   CREATE_ONE_TIME_PAY_ORDER = 'cotpo',
   PAYMENT_RESPONSE = 'pr',
+  B2B_COMPANY_DETAILS = 'cd',
 }
 
 export enum PayPalOrderIntent {
