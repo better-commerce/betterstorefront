@@ -54,6 +54,11 @@ const LoginSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     eventType: PageViewed,
   })
 
+  useEffect(() => {
+    // set to 'true'
+    setOpenSidebar(displaySidebar)
+  }, [displaySidebar])
+
   if (!isGuestUser && user.userId) {
     Router.push('/')
   }
@@ -103,10 +108,6 @@ const LoginSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     }
     asyncLoginUser()
   }
-  useEffect(() => {
-    // set to 'true'
-    setOpenSidebar(displaySidebar)
-  }, [displaySidebar])
 
   function handleClose(value: any) {
     closeSidebar()
@@ -117,6 +118,7 @@ const LoginSidebar: FC<React.PropsWithChildren<unknown>> = () => {
   if (otpEnabled) {
     // return <LoginOtp />
   }
+
   return (
     <section aria-labelledby="trending-heading" className="bg-white h-screen">
         <div className="flex pt-5 justify-end pr-10">
