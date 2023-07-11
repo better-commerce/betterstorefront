@@ -84,8 +84,8 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
   return (
     <>
       {ENABLE_ELASTIC_SEARCH ? (
-        <div className="fixed w-full h-full max-h-screen overflow-y-auto bg-white z-9999 top-[88px]">
-          <div className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10">
+        <div className="absolute z-10 w-full h-auto border-b border-gray-300 shadow min-h-screen bg-white top-[88px]">
+          <div className="absolute text-gray-900 cursor-pointer h-7 w-7 right-10 top-10">
             <XMarkIcon onClick={closeWrapper} />
           </div>
           <div className="flex flex-col items-center justify-center w-full px-0 pb-5 mt-0 sm:px-0">
