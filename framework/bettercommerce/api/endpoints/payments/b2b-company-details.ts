@@ -16,10 +16,10 @@ import {
 } from '@framework/utils/constants'
 import { EmptyString } from '@components/utils/constants'
 
-const logId = 'Payments | ConvertOrder'
+const logId = 'B2BCompanyDetails'
 
-const ConvertOrderApiMiddleware = function () {
-  return async function useConvertOrder({
+const B2BCompanyDetailsApiMiddleware = function () {
+  return async function useB2BCompanyDetails({
     data,
     config,
     cookies,
@@ -51,11 +51,11 @@ const ConvertOrderApiMiddleware = function () {
       )
 
       BCEnvironment.init(CLIENT_ID!, SHARED_SECRET!, config, AUTH_URL, BASE_URL)
-      const convertOrderResult =
-        await new BetterCommerceOperation().convertOrder(params)
+      const b2bCompanyDetailsResult =
+        await new BetterCommerceOperation().getCompanyDetails(params)
 
       logData = {}
-      logData['response'] = convertOrderResult
+      logData['response'] = b2bCompanyDetailsResult
       await logPaymentRequest(
         {
           //headers: {},
@@ -68,7 +68,7 @@ const ConvertOrderApiMiddleware = function () {
         `${logId} Response`
       )
 
-      return convertOrderResult
+      return b2bCompanyDetailsResult
     } catch (error: any) {
       logData = {}
       logData['error'] = error
@@ -90,4 +90,4 @@ const ConvertOrderApiMiddleware = function () {
   }
 }
 
-export default ConvertOrderApiMiddleware
+export default B2BCompanyDetailsApiMiddleware
