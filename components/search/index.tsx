@@ -80,18 +80,18 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Router.asPath])
-  const ENABLE_ELASTIC_SEARCH = process.env.ENABLE_ELASTIC_SEARCH;
+  const ENABLE_ELASTIC_SEARCH = process.env.ENABLE_ELASTIC_SEARCH
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <>
-      
-      {ENABLE_ELASTIC_SEARCH == "true" ? (
+      {ENABLE_ELASTIC_SEARCH == 'true' ? (
         <div className="absolute z-10 w-full h-auto border-b border-gray-300 shadow min-h-screen bg-white top-[88px]">
           <div className="absolute text-gray-900 cursor-pointer h-7 w-7 right-10 top-10">
             <XMarkIcon onClick={closeWrapper} />
           </div>
-          <div className="flex flex-col items-center justify-center w-full px-0 pb-5 mt-0 sm:px-0">
-            <SearchResults />
+          <div className="flex flex-col items-center justify-center w-full px-0 pb-5 mt-5 sm:px-0">
+            <ElasticSearch />
+            {/* <SearchResults /> */}
           </div>
         </div>
       ) : (
@@ -101,7 +101,7 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
               className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10"
               onClick={closeWrapper}
             >
-             <XMarkIcon />
+              <XMarkIcon />
             </div>
             <div className="flex flex-col items-center justify-center w-full px-4 py-5 mt-10 sm:px-10">
               <div className="w-full mx-auto mb-4 sm:w-3/5">
