@@ -59,7 +59,7 @@ const CustomResultView = ({ result }) => {
       <a href="">
         <div className="p-2 mb-4 border border-gray-200 group-hover:border-gray-700">
           <img
-            src={`https://ffxcdn.azureedge.net/${result?.imageurl?.raw}`}
+            src={result?.imageurl?.raw}
             className="object-contain w-48 h-48"
           />
         </div>
@@ -71,9 +71,9 @@ const CustomResultView = ({ result }) => {
           {result?.title?.raw}
         </h4>
         <h5 className="mt-2 text-sm font-semibold text-black capitalize">
-          {isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
+           {result?.currency_uk?.raw}{isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
           <span className="pl-2 text-xs font-normal text-gray-400 line-through">
-            {isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
+             {result?.currency_uk?.raw}{isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
           </span>
         </h5>
       </a>
@@ -81,7 +81,7 @@ const CustomResultView = ({ result }) => {
   )
 }
 
-export default function App() {
+export default function SearchResults() {
   return (
     <SearchProvider config={config}>
       <WithSearch mapContextToProps={({ wasSearched }) => ({ wasSearched })}>
@@ -90,7 +90,6 @@ export default function App() {
             <div className="App">
               <ErrorBoundary>
                 <Layout
-                  header={<SearchBox autocompleteSuggestions={true} />}
                   sideContent={
                     <div>
                       {wasSearched && (

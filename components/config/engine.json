@@ -33,13 +33,18 @@
     "mpn",
     "lastpartialupdate",
     "salesavg",
+    "currency_uk",
     "modelnumber",
     "imageurl",
     "subtitle",
     "objectid",
     "id"
   ],
-  "sortFields": [],
-  "facets": ["brand", "categories", "availability"],
+  "sortFields": [
+      "title"
+  ],
+  "facets": [
+      "brand","categories","availability"
+  ],
   "titleField": "title"
 }
