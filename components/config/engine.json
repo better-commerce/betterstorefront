@@ -1,9 +1,8 @@
 {
-  "engineName": "ffx-search-demo",
+  "engineName": "ffx-search-demo2",
   "endpointBase": "https://entappsearch-ffx-dev.ent.uksouth.azure.elastic-cloud.com",
   "searchKey": "search-q7w8qp14rvioedtgji1ddvwm",
   "resultFields": [
-    "keywords",
     "webstock",
     "wasprice",
     "rrp_uk",
@@ -14,10 +13,8 @@
     "price_ie",
     "title",
     "itemvisibleonwebsite",
-    "eta",
     "price_uk",
     "bulkbuydiscount",
-    "weburl",
     "isagerestricted",
     "antikeywords",
     "categories",
@@ -36,15 +33,10 @@
     "currency_uk",
     "modelnumber",
     "imageurl",
-    "subtitle",
     "objectid",
     "id"
   ],
-  "sortFields": [
-      "title"
-  ],
-  "facets": [
-      "brand","categories","availability"
-  ],
+  "sortFields": ["brand", "categories"],
+  "facets": ["brand", "categories", "availability"],
   "titleField": "title"
 }

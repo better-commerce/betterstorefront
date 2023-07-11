@@ -90,14 +90,14 @@ export default function App() {
         {({ wasSearched }) => {
           return (
             <SearchBox
-              autocompleteMinimumCharacters={3}
+              autocompleteMinimumCharacters={1}
               autocompleteResults={{
-                linkTarget: "_blank",
-                sectionTitle: "Results",
-                titleField: "title",
-                urlField: "nps_link",
+                linkTarget: '_blank',
+                sectionTitle: 'Results',
+                titleField: 'title',
+                urlField: 'nps_link',
                 shouldTrackClickThrough: true,
-                clickThroughTags: ["test"]
+                clickThroughTags: ['test'],
               }}
               autocompleteSuggestions={true}
             />
