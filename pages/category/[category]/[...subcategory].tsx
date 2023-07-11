@@ -503,7 +503,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     />
                   </div>
                 ))}
-              {isCompared === 'true' && (
                 <CompareSelectionBar
                   name={category?.name}
                   showCompareProducts={showCompareProducts}
@@ -513,7 +512,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                   closeCompareProducts={closeCompareProducts}
                   deviceInfo={deviceInfo}
                 />
-              )}
             </div>
           ) : (
             <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
