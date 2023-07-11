@@ -53,6 +53,11 @@ const LoginView: FC<React.PropsWithChildren<unknown>> = () => {
     eventType: PageViewed,
   })
 
+  useEffect(() => {
+    // set to 'true'
+    setOpenSidebar(displaySidebar)
+  }, [displaySidebar])
+
   if (!isGuestUser && user.userId) {
     Router.push('/')
   }
@@ -102,10 +107,6 @@ const LoginView: FC<React.PropsWithChildren<unknown>> = () => {
     }
     asyncLoginUser()
   }
-  useEffect(() => {
-    // set to 'true'
-    setOpenSidebar(displaySidebar)
-  }, [displaySidebar])
 
   function handleClose(value: any) {
     closeSidebar()
