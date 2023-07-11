@@ -10,6 +10,7 @@ import ReferralCard from '@components/customer/Referral/ReferralCard'
 
 // Other Imports
 import { NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_CLICK_ON_INVITE } from "@components/utils/constants"
+import { EMAIL_FIELD_VALIDATION } from "@components/utils/textVariables"
 
 const CustomerReferral = ({ router }: any) => {
     const [referralInfoObj, setReferralInfoObj] = useState<any>(null)
@@ -34,17 +35,20 @@ const CustomerReferral = ({ router }: any) => {
 
     const onNewReferral = async (e: any) => {
         e.preventDefault()
-        setIsLoading(true)
-        let { data } = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE, { referralId: referralInfoObj?.id, email: referralEmail })
-        if (data?.referralDetails) {
-            setIsLoading(false)
-            setVoucher(data?.referralDetails)
-            // setReferralAvailable(false)
+        if(referralEmail.length<1){
+            setErrors(EMAIL_FIELD_VALIDATION)
         } else{
-            setIsLoading(false)
-            setErrors('Offer already used by this email address')
+            setIsLoading(true)
+            let { data } = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE, { referralId: referralInfoObj?.id, email: referralEmail })
+            if (data?.referralDetails) {
+                setIsLoading(false)
+                setVoucher(data?.referralDetails)
+                // setReferralAvailable(false)
+            } else{
+                setIsLoading(false)
+                setErrors('Offer already used by this email address')
+            }
         }
-
     }
 
     const onInputChange = (e: any) => {
@@ -55,7 +59,6 @@ const CustomerReferral = ({ router }: any) => {
         const fetchReferralSlug = () => {
             if (router.isReady) {
                 const referralSlug = router?.query?.['referral-code']
-                // console.log('in useEffect referralSlug', referralSlug)
                 if (referralSlug) {
                     onReferralSlug(referralSlug)
                 }

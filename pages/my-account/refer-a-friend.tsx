@@ -1,21 +1,16 @@
 import { useState, useEffect, Fragment } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { Tab } from '@headlessui/react'
 import { config } from '@components/utils/myAccount'
-import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
-
 import React from 'react'
 import { Disclosure } from '@headlessui/react'
 import { Transition } from '@headlessui/react'
-import { matchStrings } from '@framework/utils/parse-util'
 import axios from 'axios'
 import {
   NEXT_REFERRAL_BY_EMAIL,
@@ -25,7 +20,7 @@ import {
   NEXT_REFERRAL_VOUCHERS,
 } from '@components/utils/constants'
 import {
-  INVITES_SENT ,
+  INVITES_SENT,
   CLICKS_ON_INVITES,
   SUCCESSFUL_INVITES,
   NO_INVITES,
@@ -34,11 +29,14 @@ import {
   SUCCESSFUL_INVITE,
   VOUCHERS_EARNED,
   VOUCHERS_NOT_EARNED,
+  CLICK_TO_SHARE_BY_EMAIL,
 } from '@components/utils/textVariables'
-import { ChevronDownIcon, ChevronUpIcon, MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from '@heroicons/react/24/outline'
 import Spinner from '@components/ui/Spinner'
 
-const PAGE_SIZE = 10
 
 function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
@@ -49,78 +47,100 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const [active, setActive] = useState(false)
   const [referralLink, setReferralLink] = useState('')
-  const [referralOffers,setReferralOffers] = useState<any>(null)
-  const [isLoading,setIsLoading] = useState(false)
-  const [vouchersEarned,setVouchersEarned] = useState<any>(null)
-  const [referralInfo,setReferralInfo] = useState({
-    id: "",
-    userId: "",
-    name: "",
-    slug: "",
+  const [referralOffers, setReferralOffers] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [vouchersEarned, setVouchersEarned] = useState<any>(null)
+  const [referralInfo, setReferralInfo] = useState({
+    id: '',
+    userId: '',
+    name: '',
+    slug: '',
     invitesSent: 0,
     clickOnInvites: 0,
-    successfulInvites: 0
-})
+    successfulInvites: 0,
+  })
 
-  const handleInviteSent = async (referralId:any)=>{
-    let inviteInfo = await axios.post(NEXT_REFERRAL_INVITE_SENT,{referralId:referralInfo?.id})
-    
+  const REFERRAL_CODE_INSTRUCTIONS = <><p className="px-5">
+  Just tell your friends to mention your Referral Code
+</p></>
+
+  const REFERRAL_INSTRUCTIONS = <> All they need to do to get their reward is to
+  click on the Link asking if they've <b>Been referred
+  by a friend?</b> in the checkout and enter Referral
+  Code.</>
+
+  const handleInviteSent = async (referralId: any) => {
+    let inviteInfo = await axios.post(NEXT_REFERRAL_INVITE_SENT, {
+      referralId: referralInfo?.id,
+    })
   }
 
-  const dateConverter = (dateString:any)=>{
+  const dateConverter = (dateString: any) => {
     let date = new Date(dateString)
     return date.toLocaleDateString()
   }
-  const handleVouchers = async (userId:any) =>{
-    let {data:referralVouchers} = await axios.post(NEXT_REFERRAL_VOUCHERS,{userId:userId})
-    // let sampleObj =  [
-    //   {
-    //     "promoName": "Hurray! Get 20 % off",
-    //     "voucherCode": "KYUJJ764M6WN799Q",
-    //     "validityDate": "2023-07-15T08:47:59.597"
-    //   },   
-    // ]
-    // setVouchersEarned(sampleObj)
-    if (referralVouchers?.referralDetails){
-      setVouchersEarned(referralVouchers?.referralDetails)
+  const handleVouchers = async (userId: any) => {
+    let { data: referralVouchers } = await axios.post(NEXT_REFERRAL_VOUCHERS, {
+      userId: userId,
+    })
+    let sampleObj = [
+      {
+        promoName: 'Hurray! Get 20 % off',
+        voucherCode: 'KYUJJ764M6WN799Q',
+        validityDate: '2023-07-15T08:47:59.597',
+        referee: 'kc@gmail.com'
+      },
+      {
+        promoName: 'Hurray! Get 20 % off',
+        voucherCode: 'KYUJJ764M6WN799Q',
+        validityDate: '2023-07-15T08:47:59.597',
+        referee: 'cj@gmail.com'
+      },
+    ]
+   
+    setVouchersEarned(sampleObj)
+
+    if (referralVouchers?.referralDetails) {
+      // setVouchersEarned(referralVouchers?.referralDetails)
     }
   }
 
-useEffect(() => {
-  if (typeof window !== undefined) {
-    const hostname =
-      typeof window !== 'undefined' && window.location.hostname
-        ? window.location.hostname
-        : ''
-    setReferralLink(
-      'https://' + hostname + '/?referral-code=' + (referralInfo?.slug || '')
-    )
-  }
-}, [referralInfo?.slug])
-
-useEffect(()=>{
-  const getReferralOffers = async ()=>{
-    let {data:referralProgram} = await axios.post(NEXT_REFERRAL_INFO)
-    if(referralProgram?.referralDetails?.refereePromo){
-      setReferralOffers(referralProgram?.referralDetails)
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const hostname =
+        typeof window !== 'undefined' && window.location.hostname
+          ? window.location.hostname
+          : ''
+      setReferralLink(
+        'https://' + hostname + '/?referral-code=' + (referralInfo?.slug || '')
+      )
     }
-  }
-  getReferralOffers()
-},[])
+  }, [referralInfo?.slug])
 
-  useEffect(()=>{
+  useEffect(() => {
+    const getReferralOffers = async () => {
+      let { data: referralProgram } = await axios.post(NEXT_REFERRAL_INFO)
+      if (referralProgram?.referralDetails?.refereePromo) {
+        setReferralOffers(referralProgram?.referralDetails)
+      }
+    }
+    getReferralOffers()
+  }, [])
+
+  useEffect(() => {
     setIsLoading(true)
-    const fetchReferralInfo = async ()=>{
-
-        let {data:referralInfo} = await axios.post(NEXT_REFERRAL_BY_EMAIL,{email:user?.email})
-        if(referralInfo?.referralDetails){
+    const fetchReferralInfo = async () => {
+      let { data: referralInfo } = await axios.post(NEXT_REFERRAL_BY_EMAIL, {
+        email: user?.email,
+      })
+      if (referralInfo?.referralDetails) {
         setReferralInfo(referralInfo?.referralDetails)
         handleVouchers(referralInfo?.referralDetails?.userId)
         setIsLoading(false)
-        }
+      }
     }
     fetchReferralInfo()
-  },[])
+  }, [])
 
   useEffect(() => {
     if (isGuestUser) {
@@ -128,7 +148,6 @@ useEffect(()=>{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
 
   useEffect(() => {
     if (router.query.view && view !== router.query.view) {
@@ -167,7 +186,6 @@ useEffect(()=>{
   return (
     <section className="relative pb-10 text-gray-900">
       <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
-     
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
           <div className="col-span-3 border-r border-gray-200 md:pl-12 sm:pl-6 tab-list-sm sm:pt-10 mob-hidden">
             <div className="sticky left-0 z-10 flex flex-col top-36">
@@ -256,50 +274,52 @@ useEffect(()=>{
             </div>
           </div>
 
-          {isLoading?(
-            <Spinner/>
-          ):(
-          <div
-            className={`relative col-span-9 px-10 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
-              isShow ? `` : ''
-            }`}
-          >
-            <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-              <h1 className='py-2  px-5 font-bold'>
-                {referralInfo?.successfulInvites>0? referralInfo?.successfulInvites==1 ?`1 ${SUCCESSFUL_INVITE}`:`${referralInfo?.successfulInvites} ${SUCCESSFUL_INVITES}`:NO_INVITES}
-              </h1>
-              <div className='w-full border-t-[1px] mt-4 border-gray-300 border-b-[1px] '>
-                <div className='border-b-[1px] border-gray-300 flex flex-row justify-between px-5 py-2'>
-                    <p className='text-sm text-black font-semibold '>
-                        {INVITES_SENT}                        
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <div
+              className={`relative col-span-9 px-10 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
+                isShow ? `` : ''
+              }`}
+            >
+              <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
+                <h1 className="py-2  px-5 font-bold">
+                  {referralInfo?.successfulInvites > 0
+                    ? referralInfo?.successfulInvites == 1
+                      ? `1 ${SUCCESSFUL_INVITE}`
+                      : `${referralInfo?.successfulInvites} ${SUCCESSFUL_INVITES}`
+                    : NO_INVITES}
+                </h1>
+                <div className="w-full border-t-[1px] mt-4 border-gray-300 border-b-[1px] ">
+                  <div className="border-b-[1px] border-gray-300 flex flex-row justify-between px-5 py-2">
+                    <p className="text-sm text-black font-semibold ">
+                      {INVITES_SENT}
                     </p>
-                    <p className='text-sm text-black font-semibold'>
-                        {referralInfo?.invitesSent}
+                    <p className="text-sm text-black font-semibold">
+                      {referralInfo?.invitesSent}
                     </p>
+                  </div>
+                  <div className="flex flex-row justify-between px-5 py-2">
+                    <p className="text-sm text-black font-semibold">
+                      {CLICKS_ON_INVITES}
+                    </p>
+                    <p className="text-sm text-black font-semibold">
+                      {referralInfo?.clickOnInvites}
+                    </p>
+                  </div>
                 </div>
-                <div className='flex flex-row justify-between px-5 py-2'>
-                    <p className='text-sm text-black font-semibold'>
-                        {CLICKS_ON_INVITES}
-                    </p>
-                    <p className='text-sm text-black font-semibold'>
-                        {referralInfo?.clickOnInvites}
-                    </p>
-                </div>
-              </div>
-              {/* Tell them in person section */}
-              <Disclosure
-                  defaultOpen={true}
-                >
+                {/* Tell them in person section */}
+                <Disclosure defaultOpen={true}>
                   {({ open }) => (
-                    <div className='border-b-[1px] border-gray-300 pt-2'>
+                    <div className="border-b-[1px] border-gray-300 pt-2">
                       <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
-                        <div className=' w-full flex flex-row justify-between items-center'>
-                            <h2 className='text-sm text-black font-semibold capitalize'>
-                                {SHARE_IN_PERSON}
-                            </h2>
-                            <span className='h-5 w-5 text-gray-500'>
-                            {open?<ChevronUpIcon/>:<ChevronDownIcon/>}
-                            </span>
+                        <div className=" w-full flex flex-row justify-between items-center">
+                          <h2 className="text-sm text-black font-semibold capitalize">
+                            {SHARE_IN_PERSON}
+                          </h2>
+                          <span className="h-5 w-5 text-gray-500">
+                            {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                          </span>
                         </div>
                       </Disclosure.Button>
                       <Transition
@@ -311,19 +331,17 @@ useEffect(()=>{
                         leaveTo="transform scale-95 opacity-0"
                       >
                         <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
-                          <div className='px-0 text-sm'>
-                            <p className='px-5'>
-                              Just tell your friends to mention your name
-                            </p>
-                            <div className='px-5 my-4 text-sm'>
-                                Your friends Enter:
-                                <h2 className='text-black text-lg'>
-                                    {referralInfo?.slug} {/* {user?.firstName+" "+ user?.lastName} */}
-                                </h2>
+                          <div className="px-0 text-sm">
+                            {REFERRAL_CODE_INSTRUCTIONS}
+                            <div className="px-5 my-4 text-sm">
+                              Your friends Enter:
+                              <h2 className="text-black text-lg">
+                                {referralInfo?.slug}{' '}
+                                {/* {user?.firstName+" "+ user?.lastName} */}
+                              </h2>
                             </div>
-                            <div className='px-5 flex justify-center items-center text-sm leading-relaxed '>
-                            All they need to do to get their reward is to click on the Link asking if
-they've Been referred by a friend? in the checkout and enter Referral Code.
+                            <div className="px-5 text-sm leading-relaxed ">
+                             {REFERRAL_INSTRUCTIONS}
                             </div>
                           </div>
                         </Disclosure.Panel>
@@ -332,19 +350,17 @@ they've Been referred by a friend? in the checkout and enter Referral Code.
                   )}
                 </Disclosure>
                 {/* Share by email section */}
-                <Disclosure
-                  defaultOpen={false}
-                >
+                <Disclosure defaultOpen={false}>
                   {({ open }) => (
-                    <div className='border-b-[1px] border-gray-300 pt-2'>
+                    <div className="border-b-[1px] border-gray-300 pt-2">
                       <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
-                        <div className=' w-full flex flex-row justify-between items-center'>
-                            <h2 className='text-sm text-black font-semibold capitalize'>
-                                {SHARE_BY_EMAIL}
-                            </h2>
-                            <span className='h-5 w-5 text-gray-500'>
-                            {open?<ChevronUpIcon/>:<ChevronDownIcon/>}
-                            </span>
+                        <div className=" w-full flex flex-row justify-between items-center">
+                          <h2 className="text-sm text-black font-semibold capitalize">
+                            {SHARE_BY_EMAIL}
+                          </h2>
+                          <span className="h-5 w-5 text-gray-500">
+                            {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                          </span>
                         </div>
                       </Disclosure.Button>
                       <Transition
@@ -356,16 +372,14 @@ they've Been referred by a friend? in the checkout and enter Referral Code.
                         leaveTo="transform scale-95 opacity-0"
                       >
                         <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
-                          <div className='px-5 py-2 text-sm'>
-                            <p>
-                            Share Referral by Email
-                            </p>
+                          <div className="px-5 py-2 text-sm">
+                            <p>Share Referral by Email</p>
                             <Link
                               href={`mailto:?body=${referralOffers?.refereePromo}, Just use the following link: ${referralLink}&subject=Your friend has sent you a gift!`}
-                              className='font-bold'
+                              className="font-bold"
                               onClick={handleInviteSent}
-                              >
-                              Click here to share Referral link by Email
+                            >
+                              {CLICK_TO_SHARE_BY_EMAIL}
                             </Link>
                           </div>
                         </Disclosure.Panel>
@@ -374,19 +388,17 @@ they've Been referred by a friend? in the checkout and enter Referral Code.
                   )}
                 </Disclosure>
                 {/* Vouchers Earned Section */}
-                <Disclosure
-                  defaultOpen={false}
-                >
+                <Disclosure defaultOpen={false}>
                   {({ open }) => (
-                    <div className='border-b-[1px] border-gray-300 pt-2'>
+                    <div className="border-b-[1px] border-gray-300 pt-2">
                       <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
-                        <div className=' w-full flex flex-row justify-between items-center'>
-                            <h2 className='text-sm text-black font-semibold capitalize'>
-                                {VOUCHERS_EARNED}
-                            </h2>
-                            <span className='h-5 w-5 text-gray-500'>
-                            {open?<ChevronUpIcon/>:<ChevronDownIcon/>}
-                            </span>
+                        <div className=" w-full flex flex-row justify-between items-center">
+                          <h2 className="text-sm text-black font-semibold capitalize">
+                            {VOUCHERS_EARNED}
+                          </h2>
+                          <span className="h-5 w-5 text-gray-500">
+                            {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                          </span>
                         </div>
                       </Disclosure.Button>
                       <Transition
@@ -398,34 +410,46 @@ they've Been referred by a friend? in the checkout and enter Referral Code.
                         leaveTo="transform scale-95 opacity-0"
                       >
                         <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
-                          <div className='px-5 py-2 text-sm'>
-                            {vouchersEarned?.length>0 ? (
-                            <div className='flex flex-col'>
-                              <table>
-                                <thead>
-                                  <tr>
-                                    <th>Voucher Code</th>
-                                    <th>Offer</th>
-                                    <th>Validity</th>
-                                  </tr>
-                                </thead>
-                                <tbody className=''>
-                                  {vouchersEarned?.map((voucher:any, Idx:any) => {
-                                    return (
-                                      <tr key={Idx} className=''>
-                                        <td className='text-center'>{voucher?.voucherCode}</td>
-                                        <td className='text-center'>{voucher?.promoName}</td>
-                                        <td className='text-center'>{dateConverter(voucher?.validityDate)}</td>
-                                      </tr>
-                                    );
-                                  })}
-                                </tbody>
-                              </table>
-                            </div>
-                            ):(
-                              <p>
-                                {VOUCHERS_NOT_EARNED}
-                              </p>
+                          <div className="px-5 py-2 text-sm">
+                            {vouchersEarned?.length > 0 ? (
+                              <div className="flex flex-col">
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>Referral</th>
+                                      <th>Voucher Code</th>
+                                      <th>Offer</th>
+                                      <th>Validity</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody className="">
+                                    {vouchersEarned?.map(
+                                      (voucher: any, Idx: any) => {
+                                        return (
+                                          <tr key={Idx} className="">
+                                            <td className='text-center'>
+                                              {voucher?.referee}
+                                            </td>
+                                            <td className="text-center">
+                                              {voucher?.voucherCode}
+                                            </td>
+                                            <td className="text-center">
+                                              {voucher?.promoName}
+                                            </td>
+                                            <td className="text-center">
+                                              {dateConverter(
+                                                voucher?.validityDate
+                                              )}
+                                            </td>
+                                          </tr>
+                                        )
+                                      }
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                            ) : (
+                              <p>{VOUCHERS_NOT_EARNED}</p>
                             )}
                           </div>
                         </Disclosure.Panel>
@@ -433,13 +457,13 @@ they've Been referred by a friend? in the checkout and enter Referral Code.
                     </div>
                   )}
                 </Disclosure>
+              </div>
             </div>
-          </div>
           )}
         </div>
-        </div>
+      </div>
     </section>
-    )
+  )
 }
 
 ReferralPage.Layout = Layout
@@ -451,7 +475,7 @@ export async function getServerSideProps(context: any) {
     config.findIndex((element: any) => element.props === context.query.view) ||
     0
   return {
-    props: { defaultView: defaultIndex }, 
+    props: { defaultView: defaultIndex },
   }
 }
 
