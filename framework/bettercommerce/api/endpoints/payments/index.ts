@@ -128,6 +128,7 @@ const getPaymentConfig = async ({
       BETTERCOMMERCE_CURRENCY ||
       BETTERCOMMERCE_DEFAULT_CURRENCY,
     basketId: cookies?.basketId,
+    cookies,
     secureFieldValuesExplicitlyDisabled: true,
   })
   const paymentConfig = response?.length

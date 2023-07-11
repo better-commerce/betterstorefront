@@ -172,7 +172,7 @@ export class AccountPaymentButton extends BasePaymentButton {
 
         {this.state.isPaymentInitiated && (
           <PaymentGatewayNotification
-            isCOD={true}
+            isCOD={false}
             gateway={this.state?.paymentMethod?.systemName}
             params={{
               token: EmptyString,

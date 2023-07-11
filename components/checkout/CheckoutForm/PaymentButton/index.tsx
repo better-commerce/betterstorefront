@@ -55,8 +55,12 @@ const PaymentButton = (props: IPaymentButtonProps & IDispatchState) => {
     )
   ) {
     Component = AccountPaymentButton
-  } else {
+  } else if (
+    matchStrings(paymentMethod?.systemName, PaymentMethodType.COD, true)
+  ) {
     Component = CODPaymentButton
+  } else {
+    Component = <></>
   }
 
   useEffect(() => {
