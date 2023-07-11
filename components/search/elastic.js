@@ -71,9 +71,11 @@ const CustomResultView = ({ result }) => {
           {result?.title?.raw}
         </h4>
         <h5 className="mt-2 text-sm font-semibold text-black capitalize">
-           {result?.currency_uk?.raw}{isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
+          {result?.currency_uk?.raw}
+          {isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
           <span className="pl-2 text-xs font-normal text-gray-400 line-through">
-             {result?.currency_uk?.raw}{isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
+            {result?.currency_uk?.raw}
+            {isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
           </span>
         </h5>
       </a>
@@ -90,7 +92,19 @@ export default function ElasticSearch() {
             <div className="App">
               <ErrorBoundary>
                 <Layout
-                  header={<SearchBox autocompleteSuggestions={true} />}
+                  header={
+                    <SearchBox
+                      autocompleteSuggestions={true}
+                      autocompleteResults={{
+                        linkTarget: '_blank',
+                        sectionTitle: 'Results',
+                        titleField: 'title',
+                        urlField: 'nps_link',
+                        shouldTrackClickThrough: true,
+                        clickThroughTags: ['test'],
+                      }}
+                    />
+                  }
                   sideContent={
                     <div>
                       {wasSearched && (
