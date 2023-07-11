@@ -873,6 +873,7 @@ overflow-y: auto;
 
 .sui-layout{
   width: 1536px !important;
+  max-width: 100% !important;
 }
 
 .sui-layout-body:after{
@@ -902,4 +903,16 @@ overflow-y: auto;
   margin-bottom: 4px !important;
   font-size: 15px !important;
   font-family: var(--font-primary) !important;
+}
+
+.outline-primary{
+  outline-color:  var(--outline-color-red);
+}
+
+@media screen and (max-width:1520px) {
+  .sui-layout{
+    width: 90% !important;
+    max-width: 90% !important;
+    margin: 0 auto;
+  }
 }
