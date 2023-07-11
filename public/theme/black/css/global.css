@@ -863,7 +863,7 @@ overflow-y: auto;
 }
 
 .sui-layout-header{
-  padding: 0px !important;
+  padding: 0px 24px !important;
 }
 
 .sui-result + .sui-result,
