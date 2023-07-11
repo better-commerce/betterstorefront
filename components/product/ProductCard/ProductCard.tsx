@@ -268,28 +268,27 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const itemPrice = product?.price?.formatted?.withTax
 
-  const [isEligibleToCompare, setIsEligibleToCompare] = useState(false)
+  // const [isEligibleToCompare, setIsEligibleToCompare] = useState(false)
   const [compareAttributes, setCompareAttributes] = useState<any>([])
 
   useEffect(() => {
     const { attributes } = product
     if (!attributes || attributes?.length < 1) return
-    let shouldEnabled = false
+    // let shouldEnabled = false
     let mappedAttribs: any = []
     attributes.forEach((attrib: any) => {
       if (attrib.compareAtPLP) {
-        shouldEnabled = true
+        // shouldEnabled = true
         mappedAttribs.push(attrib)
       }
     })
     setCompareAttributes(_.uniqBy(mappedAttribs, 'key'))
-    if (shouldEnabled) {
-      setIsEligibleToCompare(shouldEnabled)
-    }
+    // if (shouldEnabled) {
+    //   setIsEligibleToCompare(shouldEnabled)
+    // }
   }, [product])
 
   const handleSetCompareProduct = () => {
-    if (!isEligibleToCompare) return;
     if (product.compared) {
       setCompareProducts({
         id: product.recordId,
@@ -324,7 +323,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         )}
         key={product.id}
       >
-        {isComparedEnabled && isEligibleToCompare && (
+        {isComparedEnabled && (
           <div className="absolute top-0 right-0 z-10 p-2">
             {product.compared ? (
               <CheckSolidCircleIcon className="w-5 h-5 stroke-gray-400" />

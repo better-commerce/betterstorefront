@@ -18,7 +18,7 @@ export default function CompareSelectionBar({
 
   useEffect(() => {
     setIsCompared('false')
-  }, [router.asPath])
+  }, [router.pathname])
   
   useEffect(() => {
     setProducts(Object.values(compareProductList))
