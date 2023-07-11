@@ -87,7 +87,7 @@ export default function CategoryGrid({
       {!IS_INFINITE_SCROLL && (
         <>
           <div
-            className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 px-3 sm:px-0 ${
+            className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-2 sm:mx-0 md:grid-cols-5 px-3 sm:px-2 ${
               products?.results?.length < 6
                 ? `lg:grid-cols-5`
                 : 'lg:grid-cols-5'
