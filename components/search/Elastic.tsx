@@ -13,7 +13,7 @@ import {
   Paging,
   Sorting,
   WithSearch,
-  Autocomplete,
+  //Autocomplete,
 } from '@elastic/react-search-ui'
 import { Layout } from '@elastic/react-search-ui-views'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
@@ -44,8 +44,8 @@ const config = {
   apiConnector: connector,
   alwaysSearchOnInitialLoad: true,
 }
- const isIncludeVAT = vatIncluded()
-const CustomResultsView = ({ children }) => {
+const isIncludeVAT = vatIncluded()
+const CustomResultsView = ({ children }: any) => {
   return (
     <div className="relative ">
       <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">{children}</ul>
@@ -53,7 +53,7 @@ const CustomResultsView = ({ children }) => {
   )
 }
 
-const CustomResultView = ({ result }) => {
+const CustomResultView = ({ result }: any) => {
   return (
     <li className="mb-4 bg-white snap-start hover:text-blue-600 group">
       <a href="">
@@ -71,9 +71,11 @@ const CustomResultView = ({ result }) => {
           {result?.title?.raw}
         </h4>
         <h5 className="mt-2 text-sm font-semibold text-black capitalize">
-           {result?.currency_uk?.raw}{isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
+          {result?.currency_uk?.raw}
+          {isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
           <span className="pl-2 text-xs font-normal text-gray-400 line-through">
-             {result?.currency_uk?.raw}{isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
+            {result?.currency_uk?.raw}
+            {isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
           </span>
         </h5>
       </a>
@@ -81,7 +83,7 @@ const CustomResultView = ({ result }) => {
   )
 }
 
-export default function SearchResults() {
+export default function ElasticSearch() {
   return (
     <SearchProvider config={config}>
       <WithSearch mapContextToProps={({ wasSearched }) => ({ wasSearched })}>
@@ -90,6 +92,19 @@ export default function SearchResults() {
             <div className="App">
               <ErrorBoundary>
                 <Layout
+                  header={
+                    <SearchBox
+                      autocompleteSuggestions={true}
+                      autocompleteResults={{
+                        linkTarget: '_blank',
+                        sectionTitle: 'Results',
+                        titleField: 'title',
+                        urlField: 'nps_link',
+                        shouldTrackClickThrough: true,
+                        clickThroughTags: ['test'],
+                      }}
+                    />
+                  }
                   sideContent={
                     <div>
                       {wasSearched && (
@@ -98,7 +113,7 @@ export default function SearchResults() {
                           sortOptions={buildSortOptionsFromConfig()}
                         />
                       )}
-                      {getFacetFields().map((field) => (
+                      {getFacetFields().map((field: any) => (
                         <>
                           <Facet
                             key={field}
