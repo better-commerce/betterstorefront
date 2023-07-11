@@ -318,7 +318,8 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         className={cn(
           'relative pb-4 hover:shadow-lg shadow-gray-200 group prod-group',
           {
-            'outline outline-gray-200 outline-1 hover:outline-gray-300': isComparedEnabled,
+            'outline outline-gray-200 outline-1': isComparedEnabled,
+            'outline outline-primary': product.compared,
           }
         )}
         key={product.id}
@@ -420,7 +421,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         <ButtonLink
           isComparedEnabled={isComparedEnabled}
           href={`/${currentProductData.link}`}
-          handleHover={() => {}}
+          handleHover={() => { }}
           itemPrice={itemPrice}
           productName={product.name}
           onClick={handleSetCompareProduct.bind(null, product)}
@@ -447,7 +448,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               : product?.price?.formatted?.withoutTax}
             {product?.listPrice?.raw?.withTax > 0 &&
               product?.listPrice?.raw?.withTax !=
-                product?.price?.raw?.withTax && (
+              product?.price?.raw?.withTax && (
                 <>
                   <span className="px-1 text-xs font-medium text-black line-through">
                     {isIncludeVAT
@@ -460,8 +461,21 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 </>
               )}
           </div>
+          {/* compare remove button */}
+          {isComparedEnabled && (
+            <div className="w-full px-2 my-2">
+              {product.compared ? (
+                <button className='btn-primary-white w-full font-14 font-semibold'
+                >
+                  Remove
+                </button>
+              ) : (
+                <></>
+              )}
+            </div>
+          )}
+          {/* compare remove button */}
         </ButtonLink>
-
         {isMobile && (
           <div className="flex mt-2 border">
             <div className="w-4/12">
@@ -472,9 +486,8 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 disabled={product.hasWishlisted}
               >
                 <HeartIcon
-                  className={`inline-block w-4 h-4 ${
-                    product.hasWishlisted && 'fill-red-600 text-red-800'
-                  }`}
+                  className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-800'
+                    }`}
                   aria-hidden="true"
                 />
               </button>
@@ -503,7 +516,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       </div>
       <PLPQuickView
         isQuickview={Boolean(quickViewData)}
-        setQuickview={() => {}}
+        setQuickview={() => { }}
         productData={quickViewData}
         isQuickviewOpen={Boolean(quickViewData)}
         setQuickviewOpen={handleCloseQuickView}

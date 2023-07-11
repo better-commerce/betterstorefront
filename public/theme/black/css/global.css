@@ -837,3 +837,6 @@ overflow-y: auto;
   width: 0px;
   border-radius: 0px;
 }
+.outline-primary{
+  outline-color:  var(--outline-color-red);
+}
