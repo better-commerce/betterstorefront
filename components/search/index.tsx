@@ -2,7 +2,10 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
-import { NEXT_SEARCH_PRODUCTS } from '@components/utils/constants'
+import {
+  ENABLE_ELASTIC_SEARCH,
+  NEXT_SEARCH_PRODUCTS,
+} from '@components/utils/constants'
 import Link from 'next/link'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import rangeMap from '@lib/range-map'
@@ -15,6 +18,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import App from './elasticSearchBar'
 import ElasticSearch from './elastic'
 import SearchResults from './elasticSearchResult'
+
 export default function Search({ closeWrapper = () => {}, keywords }: any) {
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
@@ -80,11 +84,10 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Router.asPath])
-  const ENABLE_ELASTIC_SEARCH = process.env.ENABLE_ELASTIC_SEARCH
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <>
-      {ENABLE_ELASTIC_SEARCH == 'true' ? (
+      {ENABLE_ELASTIC_SEARCH ? (
         <div className="absolute z-10 w-full h-auto border-b border-gray-300 shadow min-h-screen bg-white top-[88px]">
           <div className="absolute text-gray-900 cursor-pointer h-7 w-7 right-10 top-7">
             <XMarkIcon onClick={closeWrapper} />
