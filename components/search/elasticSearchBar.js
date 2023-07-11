@@ -90,10 +90,16 @@ export default function App() {
         {({ wasSearched }) => {
           return (
             <SearchBox
-              autocompleteSuggestions={true}
-              onSubmit={(searchTerm) => {
-                window.location.href = `?q=${searchTerm}`
+              autocompleteMinimumCharacters={3}
+              autocompleteResults={{
+                linkTarget: "_blank",
+                sectionTitle: "Results",
+                titleField: "title",
+                urlField: "nps_link",
+                shouldTrackClickThrough: true,
+                clickThroughTags: ["test"]
               }}
+              autocompleteSuggestions={true}
             />
           )
         }}
