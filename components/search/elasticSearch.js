@@ -26,6 +26,7 @@ import {
   getConfig,
   getFacetFields,
 } from '@components/config/config-helper'
+import { vatIncluded } from '@framework/utils/app-util'
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
 const connector = new AppSearchAPIConnector({
@@ -43,28 +44,38 @@ const config = {
   apiConnector: connector,
   alwaysSearchOnInitialLoad: true,
 }
-
+ const isIncludeVAT = vatIncluded()
 const CustomResultsView = ({ children }) => {
   return (
-    <div className="relative overflow-x-auto">
-      <ul className="flex snap-x">{children}</ul>
+    <div className="relative ">
+      <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">{children}</ul>
     </div>
   )
 }
 
 const CustomResultView = ({ result }) => {
   return (
-    <li
-      className="px-3 py-3 snap-start hover:text-blue-600"
-      style={{ width: '200px' }}
-    >
-      <a href={result.url.raw}>
-        <img
-          src={result.image.raw}
-          alt={result.name.raw}
-          className="object-contain w-48 h-48"
-        />
-        <h4 className="text-sm truncate">{result.name.raw}</h4>
+    <li className="mb-4 bg-white snap-start hover:text-blue-600 group">
+      <a href="">
+        <div className="p-2 mb-4 border border-gray-200 group-hover:border-gray-700">
+          <img
+            src={`https://ffxcdn.azureedge.net/${result?.imageurl?.raw}`}
+            className="object-contain w-48 h-48"
+          />
+        </div>
+        <h3 className="text-sm font-semibold text-black capitalize">
+          {result?.brand?.raw}
+        </h3>
+
+        <h4 className="text-xs font-medium text-black capitalize h-14">
+          {result?.title?.raw}
+        </h4>
+        <h5 className="mt-2 text-sm font-semibold text-black capitalize">
+          {isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
+          <span className="pl-2 text-xs font-normal text-gray-400 line-through">
+            {isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
+          </span>
+        </h5>
       </a>
     </li>
   )
@@ -102,10 +113,16 @@ export default function App() {
                   }
                   bodyContent={
                     <>
-                      <Results
-                        view={CustomResultsView}
-                        resultView={CustomResultView}
-                      />
+                      {wasSearched && (
+                        <Results
+                          titleField={getConfig().titleField}
+                          urlField={getConfig().urlField}
+                          thumbnailField={getConfig().titleField}
+                          shouldTrackClickThrough={true}
+                          view={CustomResultsView}
+                          resultView={CustomResultView}
+                        />
+                      )}
                     </>
                   }
                   bodyHeader={
