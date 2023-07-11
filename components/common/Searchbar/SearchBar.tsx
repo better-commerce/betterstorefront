@@ -3,9 +3,11 @@ import { useRouter } from 'next/router'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Transition } from '@headlessui/react'
 import { BTN_SEARCH } from '@components/utils/textVariables'
-import SearchResults from '@components/search/elasticSearchResult'
-import App from '@components/search/elasticSearchBar'
+//import SearchResults from '@components/search/elasticSearchResult'
+//import ElasticSearchBar from '@components/search/ElasticSearchBar'
 import { ENABLE_ELASTIC_SEARCH } from '@components/utils/constants'
+import dynamic from 'next/dynamic'
+const SearchWrapper = dynamic(() => import('@components/search'))
 
 interface ISearchBarProps {
   id?: string
@@ -20,6 +22,10 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
     <>
       {ENABLE_ELASTIC_SEARCH ? (
         <>
+          {/*<SearchWrapper
+            keywords={""}
+            closeWrapper={() => { }}
+          />*/}
           <div className="flex flex-row rounded-sm sm:mr-8 sm:pr-2 sm:bg-gray-100 sm:border">
             <button
               onClick={onClick}

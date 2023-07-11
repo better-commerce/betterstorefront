@@ -13,7 +13,7 @@ import {
   Paging,
   Sorting,
   WithSearch,
-  Autocomplete,
+  //Autocomplete,
 } from '@elastic/react-search-ui'
 import { Layout } from '@elastic/react-search-ui-views'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
@@ -45,7 +45,7 @@ const config = {
   alwaysSearchOnInitialLoad: true,
 }
 const isIncludeVAT = vatIncluded()
-const CustomResultsView = ({ children }) => {
+const CustomResultsView = ({ children }: any) => {
   return (
     <div className="relative ">
       <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">{children}</ul>
@@ -53,7 +53,7 @@ const CustomResultsView = ({ children }) => {
   )
 }
 
-const CustomResultView = ({ result }) => {
+const CustomResultView = ({ result }: any) => {
   return (
     <li className="mb-4 bg-white snap-start hover:text-blue-600 group">
       <a href="">
@@ -83,72 +83,24 @@ const CustomResultView = ({ result }) => {
   )
 }
 
-export default function ElasticSearch() {
+export default function App() {
   return (
     <SearchProvider config={config}>
       <WithSearch mapContextToProps={({ wasSearched }) => ({ wasSearched })}>
         {({ wasSearched }) => {
           return (
-            <div className="App">
-              <ErrorBoundary>
-                <Layout
-                  header={
-                    <SearchBox
-                      autocompleteSuggestions={true}
-                      autocompleteResults={{
-                        linkTarget: '_blank',
-                        sectionTitle: 'Results',
-                        titleField: 'title',
-                        urlField: 'nps_link',
-                        shouldTrackClickThrough: true,
-                        clickThroughTags: ['test'],
-                      }}
-                    />
-                  }
-                  sideContent={
-                    <div>
-                      {wasSearched && (
-                        <Sorting
-                          label={'Sort by'}
-                          sortOptions={buildSortOptionsFromConfig()}
-                        />
-                      )}
-                      {getFacetFields().map((field) => (
-                        <>
-                          <Facet
-                            key={field}
-                            field={field}
-                            label={field}
-                            autocompleteSuggestions={true}
-                          />
-                        </>
-                      ))}
-                    </div>
-                  }
-                  bodyContent={
-                    <>
-                      {wasSearched && (
-                        <Results
-                          titleField={getConfig().titleField}
-                          urlField={getConfig().urlField}
-                          thumbnailField={getConfig().titleField}
-                          shouldTrackClickThrough={true}
-                          view={CustomResultsView}
-                          resultView={CustomResultView}
-                        />
-                      )}
-                    </>
-                  }
-                  bodyHeader={
-                    <React.Fragment>
-                      {wasSearched && <PagingInfo />}
-                      {wasSearched && <ResultsPerPage />}
-                    </React.Fragment>
-                  }
-                  bodyFooter={<Paging />}
-                />
-              </ErrorBoundary>
-            </div>
+            <SearchBox
+              autocompleteMinimumCharacters={1}
+              autocompleteResults={{
+                linkTarget: '_blank',
+                sectionTitle: 'Results',
+                titleField: 'title',
+                urlField: 'nps_link',
+                shouldTrackClickThrough: true,
+                clickThroughTags: ['test'],
+              }}
+              autocompleteSuggestions={true}
+            />
           )
         }}
       </WithSearch>
