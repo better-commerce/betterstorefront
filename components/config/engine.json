@@ -3,6 +3,7 @@
   "endpointBase": "https://entappsearch-ffx-dev.ent.uksouth.azure.elastic-cloud.com",
   "searchKey": "search-q7w8qp14rvioedtgji1ddvwm",
   "resultFields": [
+    "keywords",
     "webstock",
     "wasprice",
     "rrp_uk",
@@ -13,8 +14,10 @@
     "price_ie",
     "title",
     "itemvisibleonwebsite",
+    "eta",
     "price_uk",
     "bulkbuydiscount",
+    "weburl",
     "isagerestricted",
     "antikeywords",
     "categories",
@@ -32,6 +35,7 @@
     "salesavg",
     "currency_uk",
     "modelnumber",
+    "subtitle",
     "imageurl",
     "objectid",
     "id"
