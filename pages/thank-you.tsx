@@ -85,20 +85,10 @@ export default function OrderConfirmation() {
   const [referralLink, setReferralLink] = useState('')
   const [copied, setCopied] = useState(false)
   const [isReferralSlugLoading,setIsReferralSlugLoading] = useState(false)
-
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      const hostname =
-        typeof window !== 'undefined' && window.location.hostname
-          ? window.location.hostname
-          : ''
-      setReferralLink(
-        'https://' + hostname + '/?referral-code=' + (referralObj?.slug || '')
-      )
-    }
-  }, [referralObj?.slug])
-
-  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser } = useUI()
+  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser, isGuestUser } = useUI()
+  //handling if guest user can also refer new users
+  // const guestUserObj = guestUser 
+  
   const shareOptionsConfig = [
    
     {
@@ -223,6 +213,18 @@ export default function OrderConfirmation() {
   )
 
   useEffect(() => {
+    if (typeof window !== undefined) {
+      const hostname =
+        typeof window !== 'undefined' && window.location.hostname
+          ? window.location.hostname
+          : ''
+      setReferralLink(
+        'https://' + hostname + '/?referral-code=' + (referralObj?.slug || '')
+      )
+    }
+  }, [referralObj?.slug])
+
+  useEffect(() => {
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER, {
         id: orderId,
@@ -249,19 +251,30 @@ export default function OrderConfirmation() {
 
   const handleReferralByEmail = async () => {
     // setIsReferModalOpen(true)
+    let referrerEmail = user?.email
+    //if(user?.email){
+    //   referralEmail = user?.email
+    // }
+    // else{
+    //   console.log('guestUserObj',guestUserObj);
+      
+    //   referrerEmail = guestUserObj?.email
+    // } //if guest user can refer new users
     setIsReferralSlugLoading(true)
     let { data: data } = await axios.post(NEXT_REFERRAL_BY_EMAIL, {
-      email: user.email,
+      email: referrerEmail,
     })
     if (data?.referralDetails?.id) {
       setReferralObj(data?.referralDetails)
+      setIsReferralSlugLoading(false)
+    } else{
       setIsReferralSlugLoading(false)
     }
   }
 
   const handleReferralInfo = async () => {
     let { data: data } = await axios.get(NEXT_REFERRAL_INFO)
-    if (data?.referralDetails?.referrerPromo) {
+    if (data?.referralDetails?.referrerPromo && !isGuestUser) { //rm user?.email if guest user can refer
       setReferralOffers(data?.referralDetails)
       setIsReferModalOpen(true)
       handleReferralByEmail()

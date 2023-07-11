@@ -397,3 +397,5 @@ export const FIND_THEM = 'Find Them!'
 export const USER_NOT_FOUND = "Unfortunately, couldn't find a user with this name"
 export const VOUCHERS_EARNED = "Vouchers Earned"
 export const VOUCHERS_NOT_EARNED = "No Vouchers Earned Yet"
+export const EMAIL_FIELD_VALIDATION = "Email field cannot be empty!"
+export const CLICK_TO_SHARE_BY_EMAIL = "Click here to share Referral link by Email"

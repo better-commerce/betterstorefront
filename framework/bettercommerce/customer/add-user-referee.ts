@@ -8,7 +8,7 @@ interface props{
 
 export default function useAddUserReferee(){
     return async function handler(referralId?:any,email?:any){
-        const url = REFERRAL_REFEREE_ENDPOINT + `/${referralId}/register?email=${email}`
+        const url = REFERRAL_REFEREE_ENDPOINT + `${referralId}/register?email=${email}`
         try {
             const response: any = await fetcher({
                 url,

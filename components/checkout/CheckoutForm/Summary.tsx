@@ -18,12 +18,8 @@ import {
   NEXT_REFERRAL_INFO,
   NEXT_REFERRAL_SEARCH,
   NEXT_REFERRAL_ADD_USER_REFEREE,
+  NEXT_REFERRAL_BY_SLUG,
 } from '@components/utils/constants'
-import {
-  BEEN_REFERRED_BY_A_FRIEND,
-  CLOSE_PANEL,
-  USER_NOT_FOUND,
-} from '@components/utils/textVariables'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import {
   GENERAL_DISCOUNT,
@@ -37,6 +33,9 @@ import {
   SUBTOTAL_EXCLUDING_TAX,
   SUBTOTAL_INCLUDING_TAX,
   FIND_THEM,
+  BEEN_REFERRED_BY_A_FRIEND,
+  CLOSE_PANEL,
+  USER_NOT_FOUND,
 } from '@components/utils/textVariables'
 import { useState } from 'react'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -58,12 +57,12 @@ export default function Summary({
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const [referralAvailable, setReferralAvailable] = useState(false)
   const [referralModalShow, setReferralModalShow] = useState(false)
-  const [nameInput, setNameInput] = useState('')
+  const [refCodeInput, setRefCodeInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [referralInfo, setReferralInfo] = useState<any>(null)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
-  const { user } = useUI()
+  const { user,guestUser,isGuestUser } = useUI()
   const handleToggleEngravingModal = (product?: any) => {
     if (product) setSelectedEngravingProduct(product)
     setIsEngravingOpen(!isEngravingOpen)
@@ -96,13 +95,19 @@ export default function Summary({
   }
 
   const handleInputChange = (e: any) => {
-    setNameInput(e.target.value)
+    setRefCodeInput(e.target.value)
   }
 
   const handleReferralRegisterUser = async (referralId: any) => {
+    let referralEmail = ''
+    if(guestUser?.email){
+      referralEmail = guestUser?.email
+    } else{
+      referralEmail = user?.email
+    } 
     let { data: voucherInfo } = await axios.post(
       NEXT_REFERRAL_ADD_USER_REFEREE,
-      { referralId: referralId, email: user?.email})
+      { referralId: referralId, email: referralEmail})
     if (voucherInfo?.referralDetails) {
       setReferralInfo(voucherInfo?.referralDetails)
     } else {
@@ -112,17 +117,13 @@ export default function Summary({
   }
 
   const handleReferralSearch = async () => {
-    if(nameInput.trim().length > 0 ){
+    if(refCodeInput.trim().length > 0 ){
       setIsLoading(true)
-      let { data: referralSearch } = await axios.post(NEXT_REFERRAL_SEARCH, {
-        name: nameInput.trim(),
+      let { data: referralSearch } = await axios.post(NEXT_REFERRAL_BY_SLUG, {
+        slug: refCodeInput.trim(),
       })
       if (referralSearch?.referralDetails) {
-        let referrerReferralId = referralSearch?.referralDetails?.find(
-          (x: any) => {
-            return x?.name.toLowerCase() === nameInput.toLowerCase()
-          }
-        )?.id
+        let referrerReferralId = referralSearch?.referralDetails?.id
         if(referrerReferralId){
           handleReferralRegisterUser(referrerReferralId)
         } else{
@@ -644,7 +645,7 @@ export default function Summary({
                     </>
                   )}
                 </Disclosure>
-                {referralAvailable && (
+                {referralAvailable && guestUser?.email && (
                   <h3
                     className="text-sm text-green underline font-semibold cursor-pointer"
                     onClick={() => {
@@ -786,7 +787,7 @@ export default function Summary({
                                 {referralAvailable && !referralInfo && (
                                   <div className="my-10 flex w-full flex-col 2xl:justify-center xl:items-center max-w-lg px-9">
                                     <h2 className="mx-2 text-[30px] text-center">
-                                      Search your Friend by their name
+                                      Search your Friend by their Referral Code
                                     </h2>
                                     <p className="px-8 text-[18px] text-center">
                                       If you think they have signed up, please
@@ -794,7 +795,7 @@ export default function Summary({
                                     </p>
                                     <input
                                       type="text"
-                                      placeholder="Enter your friend's name.."
+                                      placeholder="Enter your friend's Referral Code.."
                                       className="px-5 w-full my-2 py-3 border-[1px] border-gray-500"
                                       onChange={handleInputChange}
                                     />
