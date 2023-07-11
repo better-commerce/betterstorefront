@@ -25,7 +25,11 @@ export default function ProductSort({
 }: Props) {
   const router = useRouter()
   const { isCompared, setIsCompared } = useUI()
-  const [enabled, setEnabled] = useState(isCompared === 'true')
+  const [enabled, setEnabled] = useState(false)
+
+  useEffect(() => {
+    setEnabled(stringToBoolean(isCompared))
+  }, [isCompared])
 
   const handleChange = (val: boolean) => {
     setEnabled(val)
