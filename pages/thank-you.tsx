@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import axios from 'axios'
-import { NEXT_GET_ORDER, NEXT_GET_ORDERS, NEXT_INFRA_ENDPOINT } from '@components/utils/constants'
+import { Messages, NEXT_GET_ORDER, NEXT_GET_ORDERS, NEXT_INFRA_ENDPOINT } from '@components/utils/constants'
 import { LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
 import {
@@ -14,7 +14,6 @@ import {
   GENERAL_DELIVERY_ADDRESS,
   GENERAL_ITEMS,
   GENERAL_NEXT_ORDER_PROMO,
-  GENERAL_NEXT_ORDER_VALIDITY,
   GENERAL_ON_THE_WAY,
   GENERAL_ORDER_WILL_BE_WITH_YOU_SOON,
   GENERAL_PAYMENT,
@@ -28,7 +27,6 @@ import {
   GENERAL_TAX,
   GENERAL_THANK_YOU,
   GENERAL_TOTAL,
-  GENERAL_VALIDITY_DAYS,
   GENERAL_YOUR_ORDER,
   IMG_PLACEHOLDER,
   LOADING_YOUR_ORDERS,
@@ -45,19 +43,18 @@ import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
-import { stringToBoolean } from '@framework/utils/parse-util'
+import { stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 
-export default function OrderConfirmation() {
+export default function OrderConfirmation({config}:any) {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
-  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser } = useUI()
-  const guestUserObj = guestUser
+  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser,guestUser} = useUI()
   const isIncludeVAT = vatIncluded()
   
   const [isNextorderPromo,setIsNextOrderPromo] = useState(false)
   const [nextOrderPromo,setNextOrderPromo] = useState({
     isNextPromoEnabled:false,
-          nextOrderPromoname:'',
+          nextOrderPromoName:'',
           nextOrderPromoId:'',
           nextOrderPromoValidity:'',
           firstOrderSetting:false,
@@ -68,13 +65,13 @@ export default function OrderConfirmation() {
   useEffect(()=>{
     const fetchNextOrderPromo = async ()=>{
       try {
-        const { data: nextOrderConfig } = await axios.post(NEXT_INFRA_ENDPOINT);
+        let nextOrderConfig = {...config}
         const getPromotionConfig = (key:any) =>
-          nextOrderConfig?.result?.configSettings?.find((x:any) => x.configType === "PromotionSettings")
+          nextOrderConfig?.configSettings?.find((x:any) => x.configType === "PromotionSettings")
             ?.configKeys?.find((x:any) => x.key === key)?.value;
     
         const isNextPromoEnabled = stringToBoolean(getPromotionConfig("PromotionSettings.EnableNextPurchasePromotion"));
-        const nextOrderPromoname = getPromotionConfig("PromotionSettings.PromotionName");
+        const nextOrderPromoName = getPromotionConfig("PromotionSettings.PromotionName");
         const nextOrderPromoId = getPromotionConfig("PromotionSettings.PromotionId");
         const nextOrderPromoValidity = getPromotionConfig("PromotionSettings.VoucherValidityDays");
         const firstOrderSetting = stringToBoolean(getPromotionConfig("PromotionSettings.SentWithFirstOrder"));
@@ -82,7 +79,7 @@ export default function OrderConfirmation() {
     
         const nextOrderPromoDetails = {
           isNextPromoEnabled,
-          nextOrderPromoname,
+          nextOrderPromoName,
           nextOrderPromoId,
           nextOrderPromoValidity,
           firstOrderSetting,
@@ -104,7 +101,7 @@ export default function OrderConfirmation() {
   },[])
 
   const firstOrderCheck = async ()=>{
-    let userInfo = user?.userId ? {...user} : {...guestUserObj}
+    let userInfo = user?.userId ? {...user} : {...guestUser}
       let {data} = await axios.post(NEXT_GET_ORDERS,{
       id: userInfo.userId,
       hasMembership: userInfo.hasMembership,
@@ -170,7 +167,6 @@ export default function OrderConfirmation() {
               </p>
             ) : null}
           </div>
-
           {order?.orderNo ? (
             <section
               aria-labelledby="order-heading"
@@ -312,14 +308,10 @@ export default function OrderConfirmation() {
                <div className='text-sm font-semibold my-2 py-2 bg-lime-100 text-center'>
                <p className=''>
                 {GENERAL_NEXT_ORDER_PROMO}{' '}
-                <span className='font-bold text-indigo-600'>{nextOrderPromo?.nextOrderPromoname}</span>
+                <span className='font-bold text-indigo-600'>{nextOrderPromo?.nextOrderPromoName}</span>
                </p>
                <p>
-                {GENERAL_NEXT_ORDER_VALIDITY}{' '}
-                <span className='font-bold'>
-                  {nextOrderPromo?.nextOrderPromoValidity}
-                </span>
-                 {' '}{GENERAL_VALIDITY_DAYS}
+                {stringFormat(Messages.Validations.NextOrderPromotion['OFFER_VALIDITY'],{days:nextOrderPromo?.nextOrderPromoValidity})}
                </p> 
                </div>
               )}
@@ -327,14 +319,10 @@ export default function OrderConfirmation() {
                <div className='text-sm font-semibold my-2 py-2 bg-lime-100 text-center'>
                <p className=''>
                 {GENERAL_NEXT_ORDER_PROMO}{' '}
-                <span className='font-bold text-indigo-600'>{nextOrderPromo?.nextOrderPromoname}</span>
+                <span className='font-bold text-indigo-600'>{nextOrderPromo?.nextOrderPromoName}</span>
                </p>
                <p>
-                {GENERAL_NEXT_ORDER_VALIDITY}{' '}
-                <span className='font-bold'>
-                  {nextOrderPromo?.nextOrderPromoValidity}
-                </span>
-                 {' '}{GENERAL_VALIDITY_DAYS}
+                {stringFormat(Messages.Validations.NextOrderPromotion['OFFER_VALIDITY'],{days:nextOrderPromo?.nextOrderPromoValidity})}
                </p> 
                </div>
               )}
