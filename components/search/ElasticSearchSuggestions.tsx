@@ -48,5 +48,4 @@ function ElasticSearchSuggestions(props: any) {
     </fieldset>
   )
 }
-
 export default withSearch((state) => state)(ElasticSearchSuggestions)
