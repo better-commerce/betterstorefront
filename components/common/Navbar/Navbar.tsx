@@ -602,7 +602,7 @@ const Navbar: FC<Props & IExtraProps> = ({
           </button>
 
           <Link href="/" title="BetterCommerce">
-            <div className="flex w-32 cursor-pointer">
+            <div className="flex w-20 cursor-pointer sm:w-32">
               <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
               <Logo />
             </div>
