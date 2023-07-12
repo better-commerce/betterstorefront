@@ -32,7 +32,7 @@ const CheckoutSidebarView = dynamic(
   () => import('@components/checkout/CheckoutSidebarView')
 )
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
-const SearchWrapper = dynamic(() => import('@components/search/index'))
+const SearchWrapper = dynamic(() => import('@components/search'))
 const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">

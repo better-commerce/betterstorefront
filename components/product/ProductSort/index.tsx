@@ -88,23 +88,26 @@ export default function ProductSort({
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 z-10 w-40 mt-6 text-left origin-top-right bg-white rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-            {products.sortList.length &&
-              products.sortList.map((option: any) => (
-                <Menu.Item key={`short-by-option-${option.value}`}>
-                  {({ active }) => (
-                    <span
-                      onClick={() => action(option.key)}
-                      className={classNames(
-                        'hover:bg-gray-100',
-                        currentOption?.key === option.key ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm text-black font-normal cursor-pointer hover:font-semibold hover:text-orange-600'
-                      )}
-                    >
-                      {option.value}
-                    </span>
-                  )}
-                </Menu.Item>
-              ))}
+            {products.sortList.length > 0
+              ? products.sortList.map((option: any) => (
+                  <Menu.Item key={`short-by-option-${option.value}`}>
+                    {({ active }) => (
+                      <span
+                        onClick={() => action(option.key)}
+                        className={classNames(
+                          'hover:bg-gray-100',
+                          currentOption?.key === option.key
+                            ? 'bg-gray-100'
+                            : '',
+                          'block px-4 py-2 text-sm text-black font-normal cursor-pointer hover:font-semibold hover:text-orange-600'
+                        )}
+                      >
+                        {option.value}
+                      </span>
+                    )}
+                  </Menu.Item>
+                ))
+              : null}
           </Menu.Items>
         </Transition>
       </Menu>

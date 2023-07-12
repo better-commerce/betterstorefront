@@ -580,7 +580,7 @@ const Navbar: FC<Props & IExtraProps> = ({
       <header className="fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64">
         <nav
           aria-label="Top"
-          className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
+          className="relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
         >
           <button
             type="button"
