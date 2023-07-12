@@ -375,7 +375,7 @@ MyApp.getInitialProps = async (
   const req: any = ctx?.req
   const res: any = ctx?.res
 
-  let clientIPAddress = req.ip ?? req?.headers['x-real-ip']
+  let clientIPAddress = req?.ip ?? req?.headers['x-real-ip']
   const forwardedFor = req?.headers['x-forwarded-for']
   if (!clientIPAddress && forwardedFor) {
     clientIPAddress = forwardedFor.split(',').at(0) ?? ''
