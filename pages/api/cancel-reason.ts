@@ -5,6 +5,7 @@ const CancelReasonApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getCancelReason({
       query: req.body,
+      cookies: req?.cookies,
     })
     res.status(200).json(response)
   } catch (error) {
@@ -16,8 +17,8 @@ export const config = {
   api: {
     bodyParser: {
       sizeLimit: '60mb',
-    }
-  }
+    },
+  },
 }
 
-export default CancelReasonApiMiddleware;
+export default CancelReasonApiMiddleware

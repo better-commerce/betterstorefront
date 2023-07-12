@@ -27,7 +27,7 @@ import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, validateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import { stringFormat } from '@framework/utils/parse-util'
+import { stringFormat, tryParseJson } from '@framework/utils/parse-util'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
@@ -260,10 +260,34 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const itemPrice = product?.price?.formatted?.withTax
 
+  const getAttribValue = (val: any) => {
+    const parsed = tryParseJson(val)
+    switch (parsed) {
+      case true:
+        return (
+          <Image
+            alt="check_circle"
+            width={36}
+            height={36}
+            src="/assets/images/check_circle.svg"
+          />
+        )
+      case false:
+        <Image
+          alt="cross_icon"
+          width={36}
+          height={36}
+          src="/assets/images/cross_icon.svg"
+        />
+      default:
+        return val
+    }
+  }
+
   return (
     <>
       <div
-        className="sticky top-0 z-10 flex flex-col bg-white prod-group"
+        className="sticky top-0 z-10 flex flex-col bg-white prod-group pb-14 min-height-com"
         key={product.id}
       >
         <div className="relative mb-4 overflow-hidden bg-gray-200 border aspect-w-1 aspect-h-1 mobile-card-panel white-card-sm">
@@ -282,7 +306,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 IMG_PLACEHOLDER
               }
               alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm"
+              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
               style={css}
               width={400}
               height={500}
@@ -296,7 +320,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm"
+                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
                 style={css}
                 width={400}
                 height={500}
@@ -333,7 +357,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.name?.toLowerCase()}
           </div>
         </Link>
-        <div className="flex flex-col">
+        <div className="flex flex-col absolute bottom-0 left-0 right-0">
           <Button
             className="mt-2 text-sm font-medium rounded-md"
             title={buttonConfig.title}
@@ -362,124 +386,15 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </label>
         </div>
         <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
-          <span className="font-semibold text-black">
-            {product?.brand}
-          </span>
+          <span className="font-semibold text-black">{product?.brand}</span>
         </div>
-        <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
-          <span>
-            {product?.fulfilFromWarehouse ? (
-              <Image
-                alt={product?.fulfilFromWarehouse}
-                width={36}
-                height={36}
-                src="/assets/images/check_circle.svg"
-              />
-            ) : (
-              <Image
-                alt={product?.fulfilFromWarehouse}
-                width={36}
-                height={36}
-                src="/assets/images/cross_icon.svg"
-              />
-            )}
-          </span>
-        </div>
-        <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
-          <span>
-            {product?.exclusive ? (
-              <Image
-                alt={product?.exclusive}
-                width={36}
-                height={36}
-                src="/assets/images/check_circle.svg"
-              />
-            ) : (
-              <Image
-                alt={product?.exclusive}
-                width={36}
-                height={36}
-                src="/assets/images/cross_icon.svg"
-              />
-            )}
-          </span>
-        </div>
-        <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
-          <span>
-            {product?.isVisible ? (
-              <Image
-                alt={product?.isVisible}
-                width={36}
-                height={36}
-                src="/assets/images/check_circle.svg"
-              />
-            ) : (
-              <Image
-                alt={product?.isVisible}
-                width={36}
-                height={36}
-                src="/assets/images/cross_icon.svg"
-              />
-            )}
-          </span>
-        </div>
-        <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
-          <span>
-            {product?.bestSeller ? (
-              <Image
-                alt={product?.bestSeller}
-                width={36}
-                height={36}
-                src="/assets/images/check_circle.svg"
-              />
-            ) : (
-              <Image
-                alt={product?.bestSeller}
-                width={36}
-                height={36}
-                src="/assets/images/cross_icon.svg"
-              />
-            )}
-          </span>
-        </div>
-        <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
-          <span>
-            {product?.trending ? (
-              <Image
-                alt={product?.trending}
-                width={36}
-                height={36}
-                src="/assets/images/check_circle.svg"
-              />
-            ) : (
-              <Image
-                alt={product?.trending}
-                width={36}
-                height={36}
-                src="/assets/images/cross_icon.svg"
-              />
-            )}
-          </span>
-        </div>
-        <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
-          <span>
-            {product?.onSale ? (
-              <Image
-                alt={product?.onSale}
-                width={36}
-                height={36}
-                src="/assets/images/check_circle.svg"
-              />
-            ) : (
-              <Image
-                alt={product?.onSale}
-                width={36}
-                height={36}
-                src="/assets/images/cross_icon.svg"
-              />
-            )}
-          </span>
-        </div>
+        {product.attributes?.map((attrib: any) => (
+          <div key={attrib.key} className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
+            <span>
+              {getAttribValue(attrib.value)}
+            </span>
+          </div>
+        ))}
       </div>
     </>
   )

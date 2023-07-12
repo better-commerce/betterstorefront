@@ -586,11 +586,19 @@ export default function CollectionPage(props: any) {
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
                     maxBasketItemsCount={maxBasketItemsCount(config)}
+                    isCompared={isCompared}
                   />
                 </div>
               </>
             ) : (
               <div className="col-span-12">
+                <ProductFiltersTopBar
+                  products={data.products}
+                  handleSortBy={handleSortBy}
+                  routerFilters={state.filters}
+                  clearAll={clearAll}
+                  routerSortOption={state.sortBy}
+                />
                 <ProductGrid
                   products={productDataToPass}
                   currentPage={state?.currentPage}
@@ -598,6 +606,7 @@ export default function CollectionPage(props: any) {
                   handleInfiniteScroll={handleInfiniteScroll}
                   deviceInfo={deviceInfo}
                   maxBasketItemsCount={maxBasketItemsCount(config)}
+                  isCompared={isCompared}
                 />
               </div>
             )}
@@ -624,29 +633,15 @@ export default function CollectionPage(props: any) {
           handleTogglePLPSidebar={handleTogglePLPSidebar}
           plpFilterState={plpFilterState}
         />
-        {isCompared === 'true' && (
-          <CompareSelectionBar
-            name={props?.name}
-            showCompareProducts={showCompareProducts}
-            products={data.products}
-            isCompare={isProductCompare}
-            maxBasketItemsCount={maxBasketItemsCount(config)}
-            closeCompareProducts={closeCompareProducts}
-            deviceInfo={deviceInfo}
-          />
-        )}
 
-        {isCompared === 'true' && (
-          <CompareSelectionBar
-            name={props?.name}
-            showCompareProducts={showCompareProducts}
-            products={data.products}
-            isCompare={isProductCompare}
-            maxBasketItemsCount={maxBasketItemsCount(config)}
-            closeCompareProducts={closeCompareProducts}
-            deviceInfo={deviceInfo}
-          />
-        )}
+        <CompareSelectionBar
+          name={props?.name}
+          showCompareProducts={showCompareProducts}
+          isCompare={isProductCompare}
+          maxBasketItemsCount={maxBasketItemsCount(config)}
+          closeCompareProducts={closeCompareProducts}
+          deviceInfo={deviceInfo}
+        />
 
         {data?.products?.results?.length > 0 && (
           <Script

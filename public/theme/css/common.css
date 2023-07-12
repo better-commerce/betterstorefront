@@ -13,3 +13,25 @@
     background-color: #000;
     fill: #fff;
 }
+
+.min-height-com {
+    min-height: 425px;
+}
+
+.cursor-not-allowed {
+    min-height: 2.5em;
+}
+
+.height-auto-slide {
+    height: auto !important;
+}
+
+.height-auto-slide .height-full {
+    height: 100% !important;
+    padding-bottom: 0 !important;
+}
+
+.height-auto-slide .height-full .slider-mb-4{
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}

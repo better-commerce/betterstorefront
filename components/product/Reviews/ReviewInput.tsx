@@ -7,11 +7,12 @@ import {
   ERROR_WOOPS_SOMETHING_WENT_WRONG,
   GENERAL_REVIEW_OUT_OF_FIVE,
   MESSAGE_CHARACTERS_LEFT,
-  MIN_BODY_LENGTH_ERROR,
   POST_YOUR_REVIEW,
   REVIEW_COMMENT,
   REVIEW_TITLE,
 } from '@components/utils/textVariables'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
 
 import { NEXT_CREATE_REVIEW } from '@components/utils/constants'
 import axios from 'axios'
@@ -29,54 +30,50 @@ interface ReviewInputProps {
 
 const ReviewInput = ({ productId }: ReviewInputProps) => {
   const [rating, setRating] = useState(5)
-  const [commentBody, setCommentBody] = useState('')
-  const [error, setError] = useState('')
-  const [commentTitle, setCommentTitle] = useState('')
   const [asyncMessage, setAsyncMessage] = useState('')
 
   const { user } = useUI()
-
-  const handleCommentChange = (e: any) => {
-    if (e.target.value.length <= MAX_LENGTH) {
-      setCommentBody(e.target.value)
-    }
-  }
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      title: '',
+      comment: '',
+    },
+    validationSchema: yup.object({
+      title: yup.string().required('Title is required.'),
+      comment: yup.string().required('Please add your review.'),
+    }),
+    onSubmit: (values, { setSubmitting, resetForm }) => {
+      handleSubmitReview(values, () => {
+        setSubmitting(false)
+        resetForm()
+      })
+    },
+  })
 
   const handleRatingChange = (value: number) => setRating(value)
 
-  const handleSubmit = () => {
-    if (!error && commentBody.length < MIN_LENGTH) {
-      setError(MIN_BODY_LENGTH_ERROR)
-    }
-    if (error && commentBody.length >= MIN_LENGTH) {
-      setError('')
-    }
+  const handleSubmitReview = (values: any, cb: any) => {
     const createAsyncReview = async () => {
       try {
         const response: any = await axios.post(NEXT_CREATE_REVIEW, {
-          title: commentTitle,
+          title: values?.title,
           rating: rating,
-          comment: commentBody,
+          comment: values?.comment,
           userId: user.userId,
           userEmail: user.email,
           nickname: user.nickname,
           productId,
         })
-        setCommentBody('')
-        setCommentTitle('')
         setRating(1)
-        setAsyncMessage(response.data.message)
+        if (cb) cb()
+        setAsyncMessage('Review submitted successfully.')
       } catch (error) {
         setAsyncMessage(ERROR_WOOPS_SOMETHING_WENT_WRONG)
+        if (cb) cb()
       }
     }
     createAsyncReview()
-  }
-
-  const handleCommentTitle = (e: any) => {
-    if (e.target.value.length <= TITLE_MAX_LENGTH) {
-      setCommentTitle(e.target.value)
-    }
   }
 
   return (
@@ -87,24 +84,35 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
       {asyncMessage ? (
         <span className="text-2xl text-gray-900">{asyncMessage}</span>
       ) : (
-        <>
+        <form onSubmit={formik.handleSubmit}>
           <input
+            name="title"
             placeholder={REVIEW_TITLE}
-            onChange={handleCommentTitle}
-            value={commentTitle}
-            className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none sm:mb-5 sm:w-1/3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+            value={formik.values.title}
+            onChange={formik.handleChange}
+            className="w-full min-w-0 px-4 py-2 mt-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none sm:mb-5 sm:w-1/3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
           />
+          {formik.touched.title && formik.errors.title && (
+            <span className="block text-sm text-red-400">
+              {formik.errors.title}
+            </span>
+          )}
           <textarea
-            className="w-full h-20 px-3 py-2 font-medium leading-normal text-gray-900 placeholder-gray-700 border border-gray-400 rounded-sm bg-gray-50 focus:outline-none focus:bg-white"
+            name="comment"
+            value={formik.values.comment}
+            onChange={formik.handleChange}
+            className="w-full h-20 mt-2 px-3 py-2 font-medium leading-normal text-gray-900 placeholder-gray-700 border border-gray-400 rounded-sm bg-gray-50 focus:outline-none focus:bg-white"
             placeholder={REVIEW_COMMENT}
-            value={commentBody}
-            onChange={handleCommentChange}
-            required
           />
+          {formik.touched.comment && formik.errors.comment && (
+            <span className="text-sm text-red-400">
+              {formik.errors.comment}
+            </span>
+          )}
           <span className="float-right text-sm text-gray-900">
-            {MESSAGE_CHARACTERS_LEFT}: {MAX_LENGTH - commentBody.length}
+            {MESSAGE_CHARACTERS_LEFT}:{' '}
+            {MAX_LENGTH - formik.values.comment.length}
           </span>
-          {!!error && <span className="text-sm text-red-900">{error}</span>}
           <div className="flex mt-5 flex-row items-center">
             {[1, 2, 3, 4, 5].map((num) => (
               <StarIcon
@@ -123,13 +131,13 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             </p>
           </div>
           <button
-            type="button"
-            onClick={handleSubmit}
-            className="flex items-center justify-center flex-1 float-right max-w-xs px-4 py-2 btn-primary uppercase sm:w-full"
+            type="submit"
+            className="flex items-center justify-center flex-1 float-right max-w-xs px-4 py-2 btn-primary uppercase sm:w-full disabled:!bg-gray-100 !text-gray-300 disabled:cursor-not-allowed disabled:select-none"
+            disabled={formik.isSubmitting}
           >
             {BTN_SUBMIT}
           </button>
-        </>
+        </form>
       )}
     </>
   )

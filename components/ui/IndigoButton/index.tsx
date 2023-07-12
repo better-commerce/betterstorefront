@@ -65,7 +65,7 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
     <button
       onClick={handleAction}
       type="button"
-      className={`xs:max-w-xs flex-1 ${bgColor} border border-transparent rounded-sm uppercase lg:py-2 py-3 sm:px-8 px-1 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className} btn-c btn-primary`}
+      className={`xs:max-w-xs flex-1 ${bgColor} border border-transparent rounded-sm uppercase lg:py-2 py-3 sm:px-4 px-1 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className} btn-c btn-primary`}
       disabled={disabled}
     >
       {isLoading ? <LoadingDots /> : title}

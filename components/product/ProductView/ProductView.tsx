@@ -77,6 +77,7 @@ import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
 import Script from 'next/script'
 import ImageGallery from 'react-image-gallery'
+import PDPCompare from '../PDPCompare'
 
 const AttributesHandler = dynamic(
   () => import('@components/product/ProductView/AttributesHandler')
@@ -132,6 +133,7 @@ export default function ProductView({
   deviceInfo,
   config,
   maxBasketItemsCount,
+  allProductsByBrand,
 }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const {
@@ -145,7 +147,8 @@ export default function ProductView({
     user,
     openCart,
     openLogin,
-    isGuestUser
+    isGuestUser,
+    setIsCompared,
   } = useUI()
   const isIncludeVAT = vatIncluded()
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
@@ -216,6 +219,7 @@ export default function ProductView({
 
   useEffect(() => {
     fetchProduct()
+    setIsCompared('true')
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug])
@@ -716,7 +720,6 @@ export default function ProductView({
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
-
         <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none md:w-4/5">
           {isMobile ? (
             <Swiper
@@ -969,6 +972,14 @@ export default function ProductView({
           <ProductSpecifications
             attrGroup={attrGroup}
             product={product}
+            deviceInfo={deviceInfo}
+          />
+        </div>
+        <div className="flex flex-col w-full px-0 mx-auto sm:container page-container">
+          <PDPCompare
+            name={data?.brand || ''}
+            pageConfig={config}
+            products={allProductsByBrand}
             deviceInfo={deviceInfo}
           />
         </div>

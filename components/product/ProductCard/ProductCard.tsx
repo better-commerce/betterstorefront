@@ -11,8 +11,9 @@ import {
   NEXT_CREATE_WISHLIST,
   Messages,
 } from '@components/utils/constants'
-import { HeartIcon } from '@heroicons/react/24/outline'
-import { round } from 'lodash'
+import { HeartIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
+import { CheckCircleIcon as CheckSolidCircleIcon, } from '@heroicons/react/24/solid'
+import _, { round } from 'lodash'
 import {
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
@@ -27,7 +28,8 @@ import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, validateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import { stringFormat } from '@framework/utils/parse-util'
+import { stringFormat, stringToBoolean } from '@framework/utils/parse-util'
+import cn from 'classnames'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -68,7 +70,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     isGuestUser,
     openLogin,
     setAlert,
-    //includeVAT,
+    isCompared,
+    compareProductList,
+    setCompareProducts,
   } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
@@ -90,8 +94,14 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }, [wishListItems, productData])
 
   useEffect(() => {
-    setProduct(productData)
-  }, [productData])
+    const compared = Boolean(
+      compareProductList && compareProductList[productData.recordId]
+    )
+    setProduct({
+      ...productData,
+      compared,
+    })
+  }, [productData, compareProductList])
 
   useEffect(() => {
     if (product?.variantProductsAttributeMinimal?.length < 1) return
@@ -265,19 +275,79 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const itemPrice = product?.price?.formatted?.withTax
 
+  // const [isEligibleToCompare, setIsEligibleToCompare] = useState(false)
+  const [compareAttributes, setCompareAttributes] = useState<any>([])
+
+  useEffect(() => {
+    const { attributes } = product
+    if (!attributes || attributes?.length < 1) return
+    // let shouldEnabled = false
+    let mappedAttribs: any = []
+    attributes.forEach((attrib: any) => {
+      if (attrib.compareAtPLP) {
+        // shouldEnabled = true
+        mappedAttribs.push(attrib)
+      }
+    })
+    setCompareAttributes(_.uniqBy(mappedAttribs, 'key'))
+    // if (shouldEnabled) {
+    //   setIsEligibleToCompare(shouldEnabled)
+    // }
+  }, [product])
+
+  const handleSetCompareProduct = () => {
+    if (product.compared) {
+      setCompareProducts({
+        id: product.recordId,
+        type: 'remove'
+      })
+    } else {
+      setCompareProducts({
+        id: product.recordId,
+        data: {
+          ...product,
+          attributes: compareAttributes,
+        },
+        type: 'add'
+      })
+    }
+    setProduct((v: any) => ({
+      ...v,
+      compared: !v.compared
+    }))
+  }
+
+  const isComparedEnabled = stringToBoolean(isCompared)
+
   return (
     <>
       <div
-        className="relative pb-4 hover:shadow-lg shadow-gray-200 group prod-group"
+        className={cn(
+          'relative pb-4 hover:shadow-lg shadow-gray-200 group prod-group',
+          {
+            'outline outline-gray-200 outline-1 height-full': isComparedEnabled,
+            'outline outline-primary height-full': product.compared,
+          }
+        )}
         key={product.id}
       >
+        {isComparedEnabled && (
+          <div className="absolute top-0 right-0 z-10 p-2">
+            {product.compared ? (
+              <CheckSolidCircleIcon className="w-5 h-5 stroke-gray-400" />
+            ) : (
+              <CheckCircleIcon className="w-5 h-5 stroke-gray-400" />
+            )}
+          </div>
+        )}
         <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">
-          <Link
-            passHref
+          <ButtonLink
+            isComparedEnabled={isComparedEnabled}
             href={`/${currentProductData.link}`}
-            onMouseEnter={(ev: any) => handleHover(ev, 'enter')}
-            onMouseLeave={(ev: any) => handleHover(ev, 'leave')}
-            title={`${product.name} \t ${itemPrice}`}
+            handleHover={handleHover}
+            itemPrice={itemPrice}
+            productName={product.name}
+            onClick={handleSetCompareProduct}
           >
             <Image
               id={`${product?.productId ?? product?.recordId}-1`}
@@ -307,7 +377,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 height={500}
               />
             )}
-          </Link>
+          </ButtonLink>
           {buttonConfig.isPreOrderEnabled && (
             <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
               {BTN_PRE_ORDER}
@@ -326,7 +396,14 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </div>
 
           {isMobile ? null : (
-            <div className="absolute flex-wrap hidden w-full gap-1 px-0 py-2 transition-transform duration-500 bg-white sm:translate-y-20 sm:flex group-hover:-translate-y-full">
+            <div
+              className={cn(
+                'absolute flex-wrap hidden w-full gap-1 px-0 py-2 transition-transform duration-500 bg-white sm:translate-y-20 sm:flex group-hover:-translate-y-full',
+                {
+                  'group-hover:translate-y-full': isComparedEnabled,
+                }
+              )}
+            >
               {!hideWishlistCTA && (
                 <SimpleButton
                   variant="slim"
@@ -348,10 +425,14 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           )}
         </div>
 
-        <Link
-          passHref
+        <ButtonLink
+          isComparedEnabled={isComparedEnabled}
           href={`/${currentProductData.link}`}
-          title={`${product.name} \t ${itemPrice}`}
+          handleHover={() => { }}
+          itemPrice={itemPrice}
+          productName={product.name}
+          onClick={handleSetCompareProduct.bind(null, product)}
+          className="w-full"
         >
           <div className="flex justify-between w-full px-2 mt-3 mb-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
             {product?.name?.toLowerCase()}
@@ -375,7 +456,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               : product?.price?.formatted?.withoutTax}
             {product?.listPrice?.raw?.withTax > 0 &&
               product?.listPrice?.raw?.withTax !=
-                product?.price?.raw?.withTax && (
+              product?.price?.raw?.withTax && (
                 <>
                   <span className="px-1 text-xs font-medium text-black line-through">
                     {isIncludeVAT
@@ -388,8 +469,21 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 </>
               )}
           </div>
-        </Link>
-
+          {/* compare remove button */}
+          {isComparedEnabled && (
+            <div className="px-2 my-2 slider-mb-4">
+              {product.compared ? (
+                <button className='btn-primary-white w-full font-14 font-semibold'
+                >
+                  Remove
+                </button>
+              ) : (
+                <></>
+              )}
+            </div>
+          )}
+          {/* compare remove button */}
+        </ButtonLink>
         {isMobile && (
           <div className="flex mt-2 border">
             <div className="w-4/12">
@@ -400,9 +494,8 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 disabled={product.hasWishlisted}
               >
                 <HeartIcon
-                  className={`inline-block w-4 h-4 ${
-                    product.hasWishlisted && 'fill-red-600 text-red-800'
-                  }`}
+                  className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-800'
+                    }`}
                   aria-hidden="true"
                 />
               </button>
@@ -431,7 +524,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       </div>
       <PLPQuickView
         isQuickview={Boolean(quickViewData)}
-        setQuickview={() => {}}
+        setQuickview={() => { }}
         productData={quickViewData}
         isQuickviewOpen={Boolean(quickViewData)}
         setQuickviewOpen={handleCloseQuickView}
@@ -439,4 +532,37 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     </>
   )
 }
+
+const ButtonLink = (props: any) => {
+  const {
+    isComparedEnabled,
+    children,
+    href,
+    handleHover,
+    itemPrice,
+    productName,
+    onClick,
+  } = props
+
+  if (isComparedEnabled) {
+    return (
+      <button onClick={onClick}>
+        {children}
+      </button>
+    )
+  }
+
+  return (
+    <Link
+      passHref
+      href={href}
+      onMouseEnter={(ev: any) => handleHover(ev, 'enter')}
+      onMouseLeave={(ev: any) => handleHover(ev, 'leave')}
+      title={`${productName} \t ${itemPrice}`}
+    >
+      {children}
+    </Link>
+  )
+}
+
 export default ProductCard
