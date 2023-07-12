@@ -16,7 +16,7 @@ import { useUI } from '@components/ui/context'
 import { BTN_SEARCH, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 //import ElasticSearchBar from './ElasticSearchBar'
-import ElasticSearch from './Elastic'
+import ElasticSearch from './ElasticSearch'
 //import SearchResults from './ElasticSearchResult'
 
 export default function Search({ closeWrapper = () => {}, keywords }: any) {
