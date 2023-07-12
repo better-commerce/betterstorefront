@@ -1,44 +1,8 @@
 import React from 'react'
-
-import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector'
-
-import {
-  ErrorBoundary,
-  Facet,
-  SearchProvider,
-  SearchBox,
-  Results,
-  PagingInfo,
-  ResultsPerPage,
-  Paging,
-  Sorting,
-  WithSearch,
-  // Autocomplete,
-  withSearch,
-} from '@elastic/react-search-ui'
-import { Layout } from '@elastic/react-search-ui-views'
+import { SearchBox, withSearch } from '@elastic/react-search-ui'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
-import Image from 'next/image'
 
-import {
-  buildAutocompleteQueryConfig,
-  buildFacetConfigFromConfig,
-  buildSearchOptionsFromConfig,
-  buildSortOptionsFromConfig,
-  getConfig,
-  getFacetFields,
-} from '@components/config/config-helper'
-import { vatIncluded } from '@framework/utils/app-util'
-
-const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
-const connector = new AppSearchAPIConnector({
-  searchKey,
-  engineName,
-  hostIdentifier,
-  endpointBase,
-})
-
-function App() {
+function ElasticSearchBar() {
   return (
     <SearchBox
       autocompleteSuggestions={true}
@@ -49,4 +13,4 @@ function App() {
   )
 }
 
-export default withSearch((props) => props)(App)
+export default withSearch((state) => state)(ElasticSearchBar)

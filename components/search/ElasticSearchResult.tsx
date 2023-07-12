@@ -5,19 +5,17 @@ import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector'
 import {
   ErrorBoundary,
   Facet,
-  SearchProvider,
-  SearchBox,
   Results,
   PagingInfo,
   ResultsPerPage,
   Paging,
   Sorting,
-  WithSearch,
-  //Autocomplete,
+  withSearch,
 } from '@elastic/react-search-ui'
 import { Layout } from '@elastic/react-search-ui-views'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
 import Image from 'next/image'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 import {
   buildAutocompleteQueryConfig,
@@ -28,6 +26,7 @@ import {
   getFacetFields,
 } from '@components/config/config-helper'
 import { vatIncluded } from '@framework/utils/app-util'
+import ElasticSearchSuggestions from './ElasticSearchSuggestions'
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
 const connector = new AppSearchAPIConnector({
@@ -87,54 +86,74 @@ const CustomResultView = ({ result }: any) => {
   )
 }
 
-export default function SearchResults() {
+function ElasticSearchResult({
+  closeWrapper,
+  wasSearched,
+  setSearchTerm,
+  clearFilters,
+}: any) {
   return (
-    <div className="App">
-      <ErrorBoundary>
-        <Layout
-          sideContent={
-            <div>
-              {true && (
-                <Sorting
-                  label={'Sort by'}
-                  sortOptions={buildSortOptionsFromConfig()}
-                />
-              )}
-              {getFacetFields().map((field: any) => (
-                <>
-                  <Facet
-                    key={field}
-                    field={field}
-                    label={field}
-                    // autocompleteSuggestions={true}
-                  />
-                </>
-              ))}
-            </div>
-          }
-          bodyContent={
-            <>
-              {true && (
-                <Results
-                  titleField={getConfig().titleField}
-                  urlField={getConfig().urlField}
-                  thumbnailField={getConfig().titleField}
-                  shouldTrackClickThrough={true}
-                  view={CustomResultsView}
-                  resultView={CustomResultView}
-                />
-              )}
-            </>
-          }
-          bodyHeader={
-            <React.Fragment>
-              {true && <PagingInfo />}
-              {true && <ResultsPerPage />}
-            </React.Fragment>
-          }
-          bodyFooter={<Paging />}
+    <div className="absolute z-10 w-full h-auto border-b border-gray-300 shadow min-h-screen bg-white top-[88px]">
+      <div className="absolute text-gray-900 cursor-pointer h-7 w-7 right-10 top-7">
+        <XMarkIcon
+          onClick={() => {
+            closeWrapper()
+            setSearchTerm('')
+            clearFilters()
+          }}
         />
-      </ErrorBoundary>
+      </div>
+      <div className="flex flex-col items-center justify-center w-full px-0 pb-5 mt-5 sm:px-0">
+        <div className="App">
+          <ErrorBoundary>
+            <Layout
+              sideContent={
+                <div>
+                  <ElasticSearchSuggestions />
+                  {wasSearched && (
+                    <Sorting
+                      label={'Sort by'}
+                      sortOptions={buildSortOptionsFromConfig()}
+                    />
+                  )}
+                  {getFacetFields().map((field: any) => (
+                    <>
+                      <Facet key={field} field={field} label={field} />
+                    </>
+                  ))}
+                </div>
+              }
+              bodyContent={
+                <>
+                  {wasSearched && (
+                    <Results
+                      titleField={getConfig().titleField}
+                      urlField={getConfig().urlField}
+                      thumbnailField={getConfig().titleField}
+                      shouldTrackClickThrough={true}
+                      view={CustomResultsView}
+                      resultView={CustomResultView}
+                    />
+                  )}
+                </>
+              }
+              bodyHeader={
+                <React.Fragment>
+                  {wasSearched && <PagingInfo />}
+                  {wasSearched && <ResultsPerPage />}
+                </React.Fragment>
+              }
+              bodyFooter={<Paging />}
+            />
+          </ErrorBoundary>
+        </div>
+      </div>
     </div>
   )
 }
+
+export default withSearch(({ wasSearched, setSearchTerm, clearFilters }) => ({
+  wasSearched,
+  setSearchTerm,
+  clearFilters,
+}))(ElasticSearchResult)
