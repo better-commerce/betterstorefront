@@ -14,6 +14,7 @@ import {
   Sorting,
   WithSearch,
   Autocomplete,
+  withSearch,
 } from '@elastic/react-search-ui'
 import { Layout } from '@elastic/react-search-ui-views'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
@@ -83,21 +84,15 @@ const CustomResultView = ({ result }) => {
   )
 }
 
-export default function App() {
+function App() {
   return (
-    <SearchProvider config={config}>
-      <WithSearch mapContextToProps={({ wasSearched }) => ({ wasSearched })}>
-        {({ wasSearched }) => {
-          return (
-            <SearchBox
-              autocompleteSuggestions={true}
-              onSubmit={(searchTerm) => {
-                window.location.href = `?q=${searchTerm}`
-              }}
-            />
-          )
-        }}
-      </WithSearch>
-    </SearchProvider>
+    <SearchBox
+      autocompleteSuggestions={true}
+      onSubmit={(searchTerm) => {
+        window.location.href = `?q=${searchTerm}`
+      }}
+    />
   )
 }
+
+export default withSearch((props) => (props))(App);
