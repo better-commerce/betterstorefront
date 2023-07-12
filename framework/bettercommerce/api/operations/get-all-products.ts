@@ -20,10 +20,12 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       currentPage,
       collectionId = '',
       categoryId = '',
+      brandId = '',
+      pageSize = 20,
     } = query
     const data: any = {
       freeText,
-      pageSize: 20,
+      pageSize,
       allowFacet: true,
       facetOnly: false,
       sortBy,
@@ -31,9 +33,10 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       currentPage,
       collectionId,
       categoryId,
+      brandId,
     }
 
-    if (filters.length) {
+    if (filters?.length) {
       data.filters = filters
     }
 

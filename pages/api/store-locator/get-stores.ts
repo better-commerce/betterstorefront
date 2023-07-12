@@ -4,7 +4,7 @@ import { apiMiddlewareErrorHandler } from '@framework/utils'
 export default async function getStoresMiddleware(req: any, res: any) {
   const { postCode } = req.body // == const postCode = req.body.postCode
   try {
-    const response = await getStores(postCode)
+    const response = await getStores(postCode, req?.cookies)
     res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)

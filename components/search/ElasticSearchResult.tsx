@@ -13,8 +13,7 @@ import {
   Paging,
   Sorting,
   WithSearch,
-  Autocomplete,
-  withSearch,
+  //Autocomplete,
 } from '@elastic/react-search-ui'
 import { Layout } from '@elastic/react-search-ui-views'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
@@ -46,7 +45,7 @@ const config = {
   alwaysSearchOnInitialLoad: true,
 }
 const isIncludeVAT = vatIncluded()
-const CustomResultsView = ({ children }) => {
+const CustomResultsView = ({ children }: any) => {
   return (
     <div className="relative ">
       <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">{children}</ul>
@@ -54,7 +53,7 @@ const CustomResultsView = ({ children }) => {
   )
 }
 
-const CustomResultView = ({ result }) => {
+const CustomResultView = ({ result }: any) => {
   return (
     <li className="mb-4 bg-white snap-start hover:text-blue-600 group">
       <a href="">
@@ -84,15 +83,54 @@ const CustomResultView = ({ result }) => {
   )
 }
 
-function App() {
+export default function SearchResults() {
   return (
-    <SearchBox
-      autocompleteSuggestions={true}
-      onSubmit={(searchTerm) => {
-        window.location.href = `?q=${searchTerm}`
-      }}
-    />
+    <div className="App">
+      <ErrorBoundary>
+        <Layout
+          sideContent={
+            <div>
+              {true && (
+                <Sorting
+                  label={'Sort by'}
+                  sortOptions={buildSortOptionsFromConfig()}
+                />
+              )}
+              {getFacetFields().map((field: any) => (
+                <>
+                  <Facet
+                    key={field}
+                    field={field}
+                    label={field}
+                    // autocompleteSuggestions={true}
+                  />
+                </>
+              ))}
+            </div>
+          }
+          bodyContent={
+            <>
+              {true && (
+                <Results
+                  titleField={getConfig().titleField}
+                  urlField={getConfig().urlField}
+                  thumbnailField={getConfig().titleField}
+                  shouldTrackClickThrough={true}
+                  view={CustomResultsView}
+                  resultView={CustomResultView}
+                />
+              )}
+            </>
+          }
+          bodyHeader={
+            <React.Fragment>
+              {true && <PagingInfo />}
+              {true && <ResultsPerPage />}
+            </React.Fragment>
+          }
+          bodyFooter={<Paging />}
+        />
+      </ErrorBoundary>
+    </div>
   )
 }
-
-export default withSearch((props) => (props))(App);
