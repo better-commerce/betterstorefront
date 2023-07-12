@@ -63,6 +63,8 @@ const CustomResultView = ({ result }: any) => {
             src={result?.imageurl?.raw}
             alt={''}
             className="object-contain w-48 h-48"
+            width={300}
+            height={400}
           />
         </div>
         <h3 className="text-sm font-semibold text-black capitalize">
