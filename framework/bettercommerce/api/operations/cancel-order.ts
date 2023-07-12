@@ -4,8 +4,8 @@ interface Props {
   id?: string
 }
 export default function cancelOrder() {
-  return async function handler(id?: string) {
-    const url = `${ORDERS_ENDPOINT}/${id}/cancel`;
+  return async function handler(id?: string, cookies?: any) {
+    const url = `${ORDERS_ENDPOINT}/${id}/cancel`
     try {
       const response: any = await fetcher({
         url,
@@ -13,6 +13,7 @@ export default function cancelOrder() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies,
       })
       return response.result
     } catch (error: any) {
