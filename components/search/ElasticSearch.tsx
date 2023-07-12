@@ -17,6 +17,7 @@ import {
 } from '@elastic/react-search-ui'
 import { Layout } from '@elastic/react-search-ui-views'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
+import Image from 'next/image'
 
 import {
   buildAutocompleteQueryConfig,
@@ -58,8 +59,9 @@ const CustomResultView = ({ result }: any) => {
     <li className="mb-4 bg-white snap-start hover:text-blue-600 group">
       <a href="">
         <div className="p-2 mb-4 border border-gray-200 group-hover:border-gray-700">
-          <img
+          <Image
             src={result?.imageurl?.raw}
+            alt={''}
             className="object-contain w-48 h-48"
           />
         </div>
