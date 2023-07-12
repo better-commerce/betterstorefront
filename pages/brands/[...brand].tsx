@@ -330,7 +330,7 @@ function BrandDetailPage({
     })
 
     recordEvent(EVENTS.FreeText)
-  })
+  }, [])
 
   useEffect(() => {
     const Widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
@@ -372,8 +372,11 @@ function BrandDetailPage({
     : data?.products
 
   useEffect(() => {
-    setRecommendedProducts(productDataToPass.results.slice(0, 8))
+    if (productDataToPass?.results?.length > 0) {
+      setRecommendedProducts(productDataToPass.results.slice(0, 8))
+    }
   }, [productDataToPass])
+
   const showCompareProducts = () => {
     setProductCompare(true)
   }
