@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { withSearch } from '@elastic/react-search-ui';
-import cn from 'classnames';
+import { withSearch } from '@elastic/react-search-ui'
+import cn from 'classnames'
 
 function ElasticSearchSuggestions(props: any) {
   const { autocompletedSuggestions, searchTerm, setSearchTerm } = props
@@ -38,6 +38,7 @@ function ElasticSearchSuggestions(props: any) {
       {suggestionList &&
         suggestionList?.map((o: any, i: number) => (
           <div
+            key={`suggession-${i}`}
             className="hover:underline cursor-pointer text-[15px] text-[#4f4f4f]"
             onClick={() => setSearchTerm(o.suggestion)}
           >
@@ -48,4 +49,4 @@ function ElasticSearchSuggestions(props: any) {
   )
 }
 
-export default withSearch((state) => (state))(ElasticSearchSuggestions);
+export default withSearch((state) => state)(ElasticSearchSuggestions)
