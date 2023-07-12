@@ -318,8 +318,8 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         className={cn(
           'relative pb-4 hover:shadow-lg shadow-gray-200 group prod-group',
           {
-            'outline outline-gray-200 outline-1': isComparedEnabled,
-            'outline outline-primary': product.compared,
+            'outline outline-gray-200 outline-1 height-full': isComparedEnabled,
+            'outline outline-primary height-full': product.compared,
           }
         )}
         key={product.id}
@@ -425,6 +425,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           itemPrice={itemPrice}
           productName={product.name}
           onClick={handleSetCompareProduct.bind(null, product)}
+          className="w-full"
         >
           <div className="flex justify-between w-full px-2 mt-3 mb-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
             {product?.name?.toLowerCase()}
@@ -463,7 +464,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </div>
           {/* compare remove button */}
           {isComparedEnabled && (
-            <div className="w-full px-2 my-2">
+            <div className="px-2 my-2 slider-mb-4">
               {product.compared ? (
                 <button className='btn-primary-white w-full font-14 font-semibold'
                 >
