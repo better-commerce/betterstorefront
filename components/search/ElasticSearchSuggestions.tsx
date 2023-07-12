@@ -38,6 +38,7 @@ function ElasticSearchSuggestions(props: any) {
       {suggestionList &&
         suggestionList?.map((o: any, i: number) => (
           <div
+            key={i}
             className="hover:underline cursor-pointer text-[15px] text-[#4f4f4f]"
             onClick={() => setSearchTerm(o.suggestion)}
           >
