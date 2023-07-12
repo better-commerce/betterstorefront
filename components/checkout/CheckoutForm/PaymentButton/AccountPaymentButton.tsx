@@ -135,21 +135,33 @@ export class AccountPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
+    const { uiContext }: any = this.props
+
     return (
       <>
         <div className="w-full">
-          <p className="text-muted text-center">
-            Credit Available:{' '}
-            {this.state?.paymentMethod?.settings?.find((x: any) =>
-              matchStrings(x?.key, 'AvailableCredit', true)
-            )?.value || EmptyString}
-          </p>
-          <p className="text-muted text-center pb-10">
-            Credit Limit:{' '}
-            {this.state?.paymentMethod?.settings?.find((x: any) =>
-              matchStrings(x?.key, 'CreditLimit', true)
-            )?.value || EmptyString}
-          </p>
+          <dl className="w-2/5 mt-2 space-y-2 sm:space-y-2 px-2 py-3">
+            <div className="flex items-center justify-between">
+              <dt className="text-sm text-gray-600">Available Credit</dt>
+              <dd className="font-semibold text-black text-md">
+                {uiContext?.cartItems?.currencySymbol || EmptyString}
+                {this.state?.paymentMethod?.settings?.find((x: any) =>
+                  matchStrings(x?.key, 'AvailableCredit', true)
+                )?.value || EmptyString}
+              </dd>
+            </div>
+            <div className="flex items-center justify-between pt-2 sm:pt-1">
+              <dt className="flex items-center text-sm text-gray-600">
+                <span>Credit Limit</span>
+              </dt>
+              <dd className="font-semibold text-black text-md">
+                {uiContext?.cartItems?.currencySymbol || EmptyString}
+                {this.state?.paymentMethod?.settings?.find((x: any) =>
+                  matchStrings(x?.key, 'CreditLimit', true)
+                )?.value || EmptyString}
+              </dd>
+            </div>
+          </dl>
 
           {this.baseRender({
             ...this?.props,
