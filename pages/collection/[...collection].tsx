@@ -633,17 +633,15 @@ export default function CollectionPage(props: any) {
           handleTogglePLPSidebar={handleTogglePLPSidebar}
           plpFilterState={plpFilterState}
         />
-        {isCompared === 'true' && (
-          <CompareSelectionBar
-            name={props?.name}
-            showCompareProducts={showCompareProducts}
-            products={data.products}
-            isCompare={isProductCompare}
-            maxBasketItemsCount={maxBasketItemsCount(config)}
-            closeCompareProducts={closeCompareProducts}
-            deviceInfo={deviceInfo}
-          />
-        )}
+
+        <CompareSelectionBar
+          name={props?.name}
+          showCompareProducts={showCompareProducts}
+          isCompare={isProductCompare}
+          maxBasketItemsCount={maxBasketItemsCount(config)}
+          closeCompareProducts={closeCompareProducts}
+          deviceInfo={deviceInfo}
+        />
 
         {data?.products?.results?.length > 0 && (
           <Script

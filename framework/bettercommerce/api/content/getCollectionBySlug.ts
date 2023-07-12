@@ -6,9 +6,9 @@ export default function getCollectionBySlug(slug: string, cookies?: any) {
       const response: any = await fetcher({
         url: COLLECTIONS_ENDPOINT + `/slug-minimal/?slug=${slug}`,
         method: 'get',
-        cookies: cookies,
+        cookies,
       })
-      return { ...response.result, ...{ snippets: response?.snippets ?? [] } };
+      return { ...response.result, ...{ snippets: response?.snippets ?? [] } }
     } catch (error: any) {
       console.log(error)
       // throw new Error(error.message)

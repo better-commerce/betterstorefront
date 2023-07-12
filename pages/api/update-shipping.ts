@@ -8,11 +8,12 @@ const UpdateShippingApiMiddleware = async (req: any, res: any) => {
       basketId,
       countryCode,
       shippingId,
+      cookies: req?.cookies,
     })
     res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default UpdateShippingApiMiddleware;
+export default UpdateShippingApiMiddleware

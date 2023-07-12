@@ -1,5 +1,5 @@
 {
-  "engineName": "ffx-search-demo",
+  "engineName": "ffx-search-demo2",
   "endpointBase": "https://entappsearch-ffx-dev.ent.uksouth.azure.elastic-cloud.com",
   "searchKey": "search-q7w8qp14rvioedtgji1ddvwm",
   "resultFields": [
@@ -35,16 +35,12 @@
     "salesavg",
     "currency_uk",
     "modelnumber",
-    "imageurl",
     "subtitle",
+    "imageurl",
     "objectid",
     "id"
   ],
-  "sortFields": [
-      "title"
-  ],
-  "facets": [
-      "brand","categories","availability"
-  ],
+  "sortFields": ["brand", "categories"],
+  "facets": ["brand", "categories", "availability"],
   "titleField": "title"
 }
