@@ -185,7 +185,7 @@ export default function CustomerForm({
         isSubmitting,
       }: any) => {
         return (
-          <div className="flex flex-col items-center justify-center w-full px-5 py-1">
+          <div className={`flex flex-col items-center justify-center w-full px-0 py-1 ${loginsidebar !=='loginsidebar' && `px-5`}`}>
             
             <Form className={`w-full font-semibold ${loginsidebar !=='loginsidebar' && `sm:w-1/2`}`}>
               {extendedConfig.map((formItem: any, idx: number) => {

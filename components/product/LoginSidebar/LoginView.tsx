@@ -118,8 +118,8 @@ const LoginView: FC<React.PropsWithChildren<unknown>> = () => {
     return <LoginOtp />
   }
   return (
-    <section aria-labelledby="trending-heading" className="bg-white h-screen">
-      <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
+    <section aria-labelledby="trending-heading" className="bg-white h-screen overflow-y-auto">
+      <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 px-12 lg:px-8">
         <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
           <h1 className="font-extrabold tracking-tight text-center text-gray-900">
             {GENERAL_LOGIN}

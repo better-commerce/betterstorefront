@@ -116,12 +116,12 @@ const LoginSidebar: FC<React.PropsWithChildren<unknown>> = () => {
   }
 
   if (otpEnabled) {
-    // return <LoginOtp />
+    return <LoginOtp />
   }
 
   return (
-    <section aria-labelledby="trending-heading" className="bg-white h-screen">
-        <div className="flex pt-5 justify-end pr-10">
+    <section aria-labelledby="trending-heading" className="bg-white h-screen overflow-y-auto">
+        <div className="flex pt-5 justify-end pr-14 sm:pr-18 lg:pr-8">
             <button
               type="button"
               className="text-gray-400 transition hover:text-gray-500"
