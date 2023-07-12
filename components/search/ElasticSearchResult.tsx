@@ -109,7 +109,9 @@ function ElasticSearchResult({
             <Layout
               sideContent={
                 <div>
-                  <ElasticSearchSuggestions />
+                  <div className="flex-col hidden sm:flex">
+                    <ElasticSearchSuggestions />
+                  </div>
                   {wasSearched && (
                     <Sorting
                       label={'Sort by'}
