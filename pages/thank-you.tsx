@@ -50,7 +50,8 @@ import { stringToBoolean } from '@framework/utils/parse-util'
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
-  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser } = useUI()
+  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser } = useUI()
+  const guestUserObj = guestUser
   const isIncludeVAT = vatIncluded()
   
   const [isNextorderPromo,setIsNextOrderPromo] = useState(false)
@@ -90,6 +91,9 @@ export default function OrderConfirmation() {
         if(nextOrderPromoDetails?.isNextPromoEnabled){
           setIsNextOrderPromo(nextOrderPromoDetails?.isNextPromoEnabled)
           setNextOrderPromo(nextOrderPromoDetails)
+          if(nextOrderPromoDetails?.firstOrderSetting){
+            firstOrderCheck()
+          }
         }
       } catch (error) {
         console.error(error);
@@ -99,21 +103,19 @@ export default function OrderConfirmation() {
     fetchNextOrderPromo()
   },[])
 
-  useEffect(()=>{
-    const firstOrderCheck = async ()=>{
+  const firstOrderCheck = async ()=>{
+    let userInfo = user?.userId ? {...user} : {...guestUserObj}
       let {data} = await axios.post(NEXT_GET_ORDERS,{
-        id: user.userId,
-        hasMembership: user.hasMembership,
-      })
-      if(data?.length){
-        setIsFirstOrderValid(false)
-      } else {
-        setIsFirstOrderValid(true)
-      }
-      
+      id: userInfo.userId,
+      hasMembership: userInfo.hasMembership,
+    })
+    if(data?.length){
+      setIsFirstOrderValid(false)
+    } else {
+      setIsFirstOrderValid(true)
     }
-    firstOrderCheck()
-  },[isNextorderPromo])
+    
+  }
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -306,7 +308,7 @@ export default function OrderConfirmation() {
                     </dd>
                   </div>
                 </dl>
-                { isNextorderPromo && nextOrderPromo?.firstOrderSetting && isFirstOrderValid && (
+                { isNextorderPromo && nextOrderPromo?.firstOrderSetting && !isFirstOrderValid && (
                <div className='text-sm font-semibold my-2 py-2 bg-lime-100 text-center'>
                <p className=''>
                 {GENERAL_NEXT_ORDER_PROMO}{' '}
