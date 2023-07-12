@@ -337,6 +337,8 @@ export module Messages {
     'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
     TOKEN_INVALID: 'Woops! Token is invalid',
     TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
+    COMPANY_NOT_FOUND: 'Company not found.',
+    COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
   }
 }
 
