@@ -5,6 +5,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 export async function updateOrder(
   id: string,
   paymentIntent: string,
+  cookies?: any,
   status?: string,
   externalStatus?: string,
   comment?: string,
@@ -31,6 +32,7 @@ export async function updateOrder(
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies,
       })
       return response
     } catch (error: any) {

@@ -93,6 +93,7 @@ module.exports = withCommerceConfig({
     PDP_SIZE_OPTIONS_COUNT: process.env.PDP_SIZE_OPTIONS_COUNT,
     PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
     OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
+    ENABLE_ELASTIC_SEARCH: process.env.ENABLE_ELASTIC_SEARCH,
   },
   async headers() {
     return [

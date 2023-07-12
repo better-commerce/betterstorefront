@@ -229,6 +229,9 @@
   --bg-footer-color: #ECE5C7;
   --text-footer-clr: #000;
   /* footer variable */
+  /* compare outline color */
+  --outline-color-red: #ECE5C7;
+  /* compare outline color */
 }
 
 [data-theme='dark'] {

@@ -31,6 +31,7 @@ export const BASKET_VALIDATE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERS
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
 export const REGISTER_CUSTOMER_TRADING_ACCOUNT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/create`
 export const AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/authenticate`
+export const SOCIAL_AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/social-login`
 export const CUSTOMER_BASE_API = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/`
 export const CUSTOMER_NEWSLETTER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/newsletter/subscribe`
 export const ORDERS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/order/`
@@ -174,6 +175,9 @@ export const SITE_ORIGIN_URL = process.env.SITE_ORIGIN_URL
 export const SITE_NAME = process.env.SITE_NAME
 export const ENABLE_SECURED_PAYMENT_PAYLOAD = stringToBoolean(
   process.env.ENABLE_SECURED_PAYMENT_PAYLOAD
+)
+export const ENABLE_ELASTIC_SEARCH = stringToBoolean(
+  process.env.ENABLE_ELASTIC_SEARCH
 )
 export const SECURE_PAYMENT_METHODS_SETTINGS_FIELDS = stringToBoolean(
   process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS
