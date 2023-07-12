@@ -20,7 +20,7 @@ function ElasticSearchSuggestions(props: any) {
           <span
             key={i}
             className={cn('', {
-              'bg-yellow-200': part.toLowerCase() === highlight.toLowerCase(),
+              'bg-yellow-300': part.toLowerCase() === highlight.toLowerCase(),
             })}
           >
             {part}
@@ -32,14 +32,16 @@ function ElasticSearchSuggestions(props: any) {
 
   return (
     <fieldset className="sui-facet !mb-4">
-      <legend className="sui-facet__title">
-        Search Suggestions ({suggestionList?.length})
-      </legend>
+      {suggestionList?.length > 0 && (
+        <legend className="mb-3 sui-facet__title">
+          Search Suggestions ({suggestionList?.length})
+        </legend>
+      )}
       {suggestionList &&
         suggestionList?.map((o: any, i: number) => (
           <div
             key={`suggession-${i}`}
-            className="hover:underline cursor-pointer text-[15px] text-[#4f4f4f]"
+            className="hover:underline cursor-pointer mb-[6px] font-medium text-[14px] text-black"
             onClick={() => setSearchTerm(o.suggestion)}
           >
             {getHighlightedText(o.suggestion, searchTerm)}
