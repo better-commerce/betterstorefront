@@ -5,7 +5,10 @@ import Cookies from 'js-cookie'
 import { KlarnaOrderLine } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
-import { PaymentGateway, Payments } from '@components/utils/payment-constants'
+import {
+  PaymentMethodType,
+  Payments,
+} from '@components/utils/payment-constants'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import { IPaymentButtonProps } from './BasePaymentButton'
 
@@ -194,7 +197,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
     })
     Klarna.Payments.authorize(
       {
-        payment_method_category: PaymentGateway.KLARNA,
+        payment_method_category: PaymentMethodType.KLARNA,
       },
       authorizeInput,
       (authorizeResult: any) => {
@@ -293,7 +296,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         Klarna.Payments.load(
           {
             container: '#klarna-payments-container',
-            payment_method_category: PaymentGateway.KLARNA,
+            payment_method_category: PaymentMethodType.KLARNA,
           },
           (result: any) => {
             that.setState({
