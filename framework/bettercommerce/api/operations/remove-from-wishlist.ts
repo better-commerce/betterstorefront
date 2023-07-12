@@ -1,12 +1,13 @@
 import fetcher from '../../fetcher'
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
 export default function removeFromWishlist() {
-  async function removeFromWishlistAsync({ query }: any) {
+  async function removeFromWishlistAsync({ query, cookies }: any) {
     try {
       const response: any = await fetcher({
         url: `${CUSTOMER_BASE_API}${query.id}/wishlist/remove-item?productId=${query.productId}&saveForLater=${query.flag}`,
         method: 'delete',
         data: query,
+        cookies,
       })
       return response.result
     } catch (error: any) {

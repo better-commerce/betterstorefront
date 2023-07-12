@@ -630,17 +630,15 @@ function BrandDetailPage({
             maxBasketItemsCount={maxBasketItemsCount(config)}
             isCompared={isCompared}
           />
-          {isCompared === 'true' && (
-            <CompareSelectionBar
-              name={brandDetails?.name}
-              showCompareProducts={showCompareProducts}
-              products={productDataToPass}
-              isCompare={isProductCompare}
-              maxBasketItemsCount={maxBasketItemsCount(config)}
-              closeCompareProducts={closeCompareProducts}
-              deviceInfo={deviceInfo}
-            />
-          )}
+          <CompareSelectionBar
+            name={brandDetails?.name}
+            showCompareProducts={showCompareProducts}
+            products={productDataToPass}
+            isCompare={isProductCompare}
+            maxBasketItemsCount={maxBasketItemsCount(config)}
+            closeCompareProducts={closeCompareProducts}
+            deviceInfo={deviceInfo}
+          />
         </div>
       )}
     </>

@@ -234,6 +234,10 @@
   --text-footer-clr: #fff;
   --text-font-weight: 300;
   /* footer variable */
+
+  /* compare outline color */
+  --outline-color-red: #DF340C;
+  /* compare outline color */
 }
 
 [data-theme='dark'] {
