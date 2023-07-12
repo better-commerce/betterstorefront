@@ -83,60 +83,52 @@ const CustomResultView = ({ result }) => {
 
 export default function SearchResults() {
   return (
-    <SearchProvider config={config}>
-      <WithSearch mapContextToProps={({ wasSearched }) => ({ wasSearched })}>
-        {({ wasSearched }) => {
-          return (
-            <div className="App">
-              <ErrorBoundary>
-                <Layout
-                  sideContent={
-                    <div>
-                      {wasSearched && (
-                        <Sorting
-                          label={'Sort by'}
-                          sortOptions={buildSortOptionsFromConfig()}
-                        />
-                      )}
-                      {getFacetFields().map((field) => (
-                        <>
-                          <Facet
-                            key={field}
-                            field={field}
-                            label={field}
-                            autocompleteSuggestions={true}
-                          />
-                        </>
-                      ))}
-                    </div>
-                  }
-                  bodyContent={
-                    <>
-                      {wasSearched && (
-                        <Results
-                          titleField={getConfig().titleField}
-                          urlField={getConfig().urlField}
-                          thumbnailField={getConfig().titleField}
-                          shouldTrackClickThrough={true}
-                          view={CustomResultsView}
-                          resultView={CustomResultView}
-                        />
-                      )}
-                    </>
-                  }
-                  bodyHeader={
-                    <React.Fragment>
-                      {wasSearched && <PagingInfo />}
-                      {wasSearched && <ResultsPerPage />}
-                    </React.Fragment>
-                  }
-                  bodyFooter={<Paging />}
+    <div className="App">
+      <ErrorBoundary>
+        <Layout
+          sideContent={
+            <div>
+              {true && (
+                <Sorting
+                  label={'Sort by'}
+                  sortOptions={buildSortOptionsFromConfig()}
                 />
-              </ErrorBoundary>
+              )}
+              {getFacetFields().map((field) => (
+                <>
+                  <Facet
+                    key={field}
+                    field={field}
+                    label={field}
+                    autocompleteSuggestions={true}
+                  />
+                </>
+              ))}
             </div>
-          )
-        }}
-      </WithSearch>
-    </SearchProvider>
+          }
+          bodyContent={
+            <>
+              {true && (
+                <Results
+                  titleField={getConfig().titleField}
+                  urlField={getConfig().urlField}
+                  thumbnailField={getConfig().titleField}
+                  shouldTrackClickThrough={true}
+                  view={CustomResultsView}
+                  resultView={CustomResultView}
+                />
+              )}
+            </>
+          }
+          bodyHeader={
+            <React.Fragment>
+              {true && <PagingInfo />}
+              {true && <ResultsPerPage />}
+            </React.Fragment>
+          }
+          bodyFooter={<Paging />}
+        />
+      </ErrorBoundary>
+    </div>
   )
 }
