@@ -266,6 +266,10 @@ export module Messages {
       ADDRESS_TYPE_INPUT: 'Address should only contain alpha-numerics',
     }
 
+    export const NextOrderPromotion: any = {
+      OFFER_VALIDITY: 'Your offer is valid for {days} Days'
+    }
+
     export const AddNewCard: any = {
       CARD_NUMBER_REQUIRED: 'Card number is a required field',
       CARD_NUMBER_MIN_LENGTH: 'Card Number must be at least 14 characters',
