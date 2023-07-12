@@ -24,6 +24,7 @@ import {
 const Account = dynamic(() => import('./AccountDropdown'))
 const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
+const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
 import {
   BTN_SIGN_OUT,
   GENERAL_LOGIN,
@@ -49,11 +50,13 @@ import { IExtraProps } from '../Layout/Layout'
 import ToggleSwitch from '../ToggleSwitch'
 import { getItem, setItem } from '@components/utils/localStorage'
 import { signOut } from 'next-auth/react'
+import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 
 interface Props {
   config: []
   currencies: []
   languages: []
+  configSettings: any
 }
 
 const accountDropDownConfigUnauthorized: any = [
@@ -133,6 +136,7 @@ const accountDropDownConfigUnauthorized: any = [
 
 const Navbar: FC<Props & IExtraProps> = ({
   config,
+  configSettings,
   currencies,
   languages,
   deviceInfo,
@@ -151,11 +155,23 @@ const Navbar: FC<Props & IExtraProps> = ({
     openWishlist,
     setShowSearchBar,
     openLogin,
+    openBulkAdd,
   } = useUI()
 
   let currentPage = getCurrentPage()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [delayEffect, setDelayEffect] = useState(false)
+  const b2bSettings =
+    configSettings?.find((x: any) =>
+      matchStrings(x?.configType, 'B2BSettings', true)
+    )?.configKeys || []
+
+  // Read b2b enabled value from settings
+  const b2bEnabled = b2bSettings?.length
+    ? stringToBoolean(
+        b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
+      )
+    : false
 
   let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
@@ -555,6 +571,9 @@ const Navbar: FC<Props & IExtraProps> = ({
       {!isMobile && !isIPadorTablet && (
         <div className="fixed top-0 w-full h-6 bg-gray-300 z-999">
           <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
+            {b2bEnabled && (
+              <BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />
+            )}
             <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">
               Prices inc VAT
             </div>
@@ -581,7 +600,7 @@ const Navbar: FC<Props & IExtraProps> = ({
       <header className="fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64">
         <nav
           aria-label="Top"
-          className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
+          className="relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
         >
           <button
             type="button"
@@ -687,6 +706,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                               }
                                               className="relative flex items-center h-full hover:text-pink"
                                               title={navItem.caption}
+                                              onClick={() => setOpenState(-1)}
                                             >
                                               {navItem.caption}
                                             </Link>

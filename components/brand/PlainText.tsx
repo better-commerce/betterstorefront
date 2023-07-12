@@ -1,4 +1,5 @@
 import cn from 'classnames'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 export default function PlainText({ textNames, heading }: any) {
@@ -27,7 +28,7 @@ export default function PlainText({ textNames, heading }: any) {
       </div>
       <div className="">
         <p>
-          {textNames.length > 0 &&
+          {textNames?.length > 0 &&
             textNames.map((val: any, index: number) => {
               return (
                 <span
@@ -51,13 +52,15 @@ export default function PlainText({ textNames, heading }: any) {
       </div>
       {!isExpandable ? (
         <div
-          className="sm:hidden flex flex-col items-center font-bold gap-y-2"
+          className="sm:hidden flex flex-col uppercase items-center font-bold gap-y-2"
           onClick={() => {
             setIsExpandable(true)
           }}
         >
           <span>Expand</span>
-          <img
+          <Image
+            height={150}
+            width={150}
             src="/brands/downArrow.svg"
             alt={'downArrow'}
             className="h-5 w-6"
@@ -65,13 +68,15 @@ export default function PlainText({ textNames, heading }: any) {
         </div>
       ) : (
         <div
-          className="sm:hidden flex flex-col items-center font-bold gap-y-2"
+          className="sm:hidden flex flex-col uppercase items-center font-bold gap-y-2"
           onClick={() => {
             setIsExpandable(false)
           }}
         >
           <span>Collapse</span>
-          <img
+          <Image
+            height={50}
+            width={50}
             src="/brands/downArrow.svg"
             alt={'downArrow'}
             className="h-5 w-6 rotate-180"
