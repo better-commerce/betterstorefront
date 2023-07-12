@@ -39,6 +39,7 @@ import {
   SUBTOTAL_EXCLUDING_TAX,
   SUBTOTAL_INCLUDING_TAX,
   YOUR_INFORMATION,
+  OFFER_VALIDITY
 } from '@components/utils/textVariables'
 import {
   ELEM_ATTR,
@@ -332,9 +333,7 @@ export default function OrderConfirmation({ config }: any) {
                       </p>
                       <p>
                         {stringFormat(
-                          Messages.Validations.NextOrderPromotion[
-                            'OFFER_VALIDITY'
-                          ],
+                          OFFER_VALIDITY,
                           { days: nextOrderPromo?.nextOrderPromoValidity }
                         )}
                       </p>
@@ -352,9 +351,7 @@ export default function OrderConfirmation({ config }: any) {
                       </p>
                       <p>
                         {stringFormat(
-                          Messages.Validations.NextOrderPromotion[
-                            'OFFER_VALIDITY'
-                          ],
+                          OFFER_VALIDITY,
                           { days: nextOrderPromo?.nextOrderPromoValidity }
                         )}
                       </p>
