@@ -119,7 +119,7 @@ export default function ElasticSearch() {
                             key={field}
                             field={field}
                             label={field}
-                            autocompleteSuggestions={true}
+                            // autocompleteSuggestions={true}
                           />
                         </>
                       ))}

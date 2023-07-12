@@ -16,8 +16,7 @@ import { useUI } from '@components/ui/context'
 import { BTN_SEARCH, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 //import ElasticSearchBar from './ElasticSearchBar'
-import ElasticSearch from './Elastic'
-import SearchResults from './ElasticSearchResult'
+import ElasticSearch from './ElasticSearch'
 //import SearchResults from './ElasticSearchResult'
 
 export default function Search({ closeWrapper = () => {}, keywords }: any) {
@@ -95,8 +94,8 @@ export default function Search({ closeWrapper = () => {}, keywords }: any) {
             <XMarkIcon onClick={closeWrapper} />
           </div>
           <div className="flex flex-col items-center justify-center w-full px-0 pb-5 mt-5 sm:px-0">
-            {/* <ElasticSearch /> */}
-            <SearchResults />
+            <ElasticSearch />
+            {/*<SearchResults />*/}
           </div>
         </div>
       ) : (
