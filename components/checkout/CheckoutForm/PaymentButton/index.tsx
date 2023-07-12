@@ -11,6 +11,7 @@ import { StripePaymentButton } from './StripePaymentButton'
 import { KlarnaPaymentButton } from './KlarnaPaymentButton'
 import { ClearPayPaymentButton } from './ClearPayPaymentButton'
 import AccountPaymentButton from './AccountPaymentButton'
+import ChequePaymentButton from './ChequePaymentButton'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'
@@ -55,6 +56,10 @@ const PaymentButton = (props: IPaymentButtonProps & IDispatchState) => {
     )
   ) {
     Component = AccountPaymentButton
+  } else if (
+    matchStrings(paymentMethod?.systemName, PaymentMethodType.CHEQUE, true)
+  ) {
+    Component = ChequePaymentButton
   } else if (
     matchStrings(paymentMethod?.systemName, PaymentMethodType.COD, true)
   ) {
