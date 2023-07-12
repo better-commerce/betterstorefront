@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import axios from 'axios'
-import { NEXT_GET_ORDER } from '@components/utils/constants'
+import { NEXT_GET_ORDER, NEXT_GET_ORDERS, NEXT_INFRA_ENDPOINT } from '@components/utils/constants'
 import { LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
 import {
@@ -13,6 +13,8 @@ import {
   GENERAL_DELIVERED_BY,
   GENERAL_DELIVERY_ADDRESS,
   GENERAL_ITEMS,
+  GENERAL_NEXT_ORDER_PROMO,
+  GENERAL_NEXT_ORDER_VALIDITY,
   GENERAL_ON_THE_WAY,
   GENERAL_ORDER_WILL_BE_WITH_YOU_SOON,
   GENERAL_PAYMENT,
@@ -26,6 +28,7 @@ import {
   GENERAL_TAX,
   GENERAL_THANK_YOU,
   GENERAL_TOTAL,
+  GENERAL_VALIDITY_DAYS,
   GENERAL_YOUR_ORDER,
   IMG_PLACEHOLDER,
   LOADING_YOUR_ORDERS,
@@ -42,12 +45,75 @@ import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
+import { stringToBoolean } from '@framework/utils/parse-util'
 
 export default function OrderConfirmation() {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
   const { setOrderId, orderId, user, setGuestUser, setIsGuestUser } = useUI()
   const isIncludeVAT = vatIncluded()
+  
+  const [isNextorderPromo,setIsNextOrderPromo] = useState(false)
+  const [nextOrderPromo,setNextOrderPromo] = useState({
+    isNextPromoEnabled:false,
+          nextOrderPromoname:'',
+          nextOrderPromoId:'',
+          nextOrderPromoValidity:'',
+          firstOrderSetting:false,
+          everyOrderSetting:false,
+  })
+  const [isFirstOrderValid,setIsFirstOrderValid] = useState(false)
+
+  useEffect(()=>{
+    const fetchNextOrderPromo = async ()=>{
+      try {
+        const { data: nextOrderConfig } = await axios.post(NEXT_INFRA_ENDPOINT);
+        const getPromotionConfig = (key:any) =>
+          nextOrderConfig?.result?.configSettings?.find((x:any) => x.configType === "PromotionSettings")
+            ?.configKeys?.find((x:any) => x.key === key)?.value;
+    
+        const isNextPromoEnabled = stringToBoolean(getPromotionConfig("PromotionSettings.EnableNextPurchasePromotion"));
+        const nextOrderPromoname = getPromotionConfig("PromotionSettings.PromotionName");
+        const nextOrderPromoId = getPromotionConfig("PromotionSettings.PromotionId");
+        const nextOrderPromoValidity = getPromotionConfig("PromotionSettings.VoucherValidityDays");
+        const firstOrderSetting = stringToBoolean(getPromotionConfig("PromotionSettings.SentWithFirstOrder"));
+        const everyOrderSetting = stringToBoolean(getPromotionConfig("PromotionSettings.SentWithEveryOrder"));
+    
+        const nextOrderPromoDetails = {
+          isNextPromoEnabled,
+          nextOrderPromoname,
+          nextOrderPromoId,
+          nextOrderPromoValidity,
+          firstOrderSetting,
+          everyOrderSetting,
+        };
+        if(nextOrderPromoDetails?.isNextPromoEnabled){
+          setIsNextOrderPromo(nextOrderPromoDetails?.isNextPromoEnabled)
+          setNextOrderPromo(nextOrderPromoDetails)
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchNextOrderPromo()
+  },[])
+
+  useEffect(()=>{
+    const firstOrderCheck = async ()=>{
+      let {data} = await axios.post(NEXT_GET_ORDERS,{
+        id: user.userId,
+        hasMembership: user.hasMembership,
+      })
+      if(data?.length){
+        setIsFirstOrderValid(false)
+      } else {
+        setIsFirstOrderValid(true)
+      }
+      
+    }
+    firstOrderCheck()
+  },[isNextorderPromo])
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -240,9 +306,37 @@ export default function OrderConfirmation() {
                     </dd>
                   </div>
                 </dl>
-
+                { isNextorderPromo && nextOrderPromo?.firstOrderSetting && isFirstOrderValid && (
+               <div className='text-sm font-semibold my-2 py-2 bg-lime-100 text-center'>
+               <p className=''>
+                {GENERAL_NEXT_ORDER_PROMO}{' '}
+                <span className='font-bold text-indigo-600'>{nextOrderPromo?.nextOrderPromoname}</span>
+               </p>
+               <p>
+                {GENERAL_NEXT_ORDER_VALIDITY}{' '}
+                <span className='font-bold'>
+                  {nextOrderPromo?.nextOrderPromoValidity}
+                </span>
+                 {' '}{GENERAL_VALIDITY_DAYS}
+               </p> 
+               </div>
+              )}
+              { isNextorderPromo && nextOrderPromo?.everyOrderSetting && !isFirstOrderValid && (
+               <div className='text-sm font-semibold my-2 py-2 bg-lime-100 text-center'>
+               <p className=''>
+                {GENERAL_NEXT_ORDER_PROMO}{' '}
+                <span className='font-bold text-indigo-600'>{nextOrderPromo?.nextOrderPromoname}</span>
+               </p>
+               <p>
+                {GENERAL_NEXT_ORDER_VALIDITY}{' '}
+                <span className='font-bold'>
+                  {nextOrderPromo?.nextOrderPromoValidity}
+                </span>
+                 {' '}{GENERAL_VALIDITY_DAYS}
+               </p> 
+               </div>
+              )}
                 <h3 className="sr-only">{GENERAL_SUMMARY}</h3>
-
                 <dl className="pt-10 space-y-6 text-sm border-t border-gray-200">
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
