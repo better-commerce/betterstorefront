@@ -5,7 +5,7 @@ import { ENABLE_SECURED_PAYMENT_PAYLOAD } from './constants'
 export const LOG_REQUEST_OPTIONS = false
 export const TEST_PAYMENT_AMOUNT_FORMATTED = `₹${TEST_PAYMENT_AMOUNT}`
 
-export enum PaymentGateway {
+export enum PaymentMethodType {
   COD = 'cod',
   JUSPAY = 'juspay',
   PAYPAL = 'paypal',
@@ -14,9 +14,11 @@ export enum PaymentGateway {
   CLEAR_PAY = 'clearpay',
   KLARNA = 'klarna',
   STRIPE = 'stripe',
+  ACCOUNT_CREDIT = 'accountcredit',
+  CHEQUE = 'cheque',
 }
 
-export enum PaymentGatewayId {
+export enum PaymentMethodTypeId {
   COD = 0,
   JUSPAY = 1,
   PAYPAL = 2,
@@ -25,6 +27,8 @@ export enum PaymentGatewayId {
   CLEAR_PAY = 5,
   KLARNA = 6,
   STRIPE = 7,
+  ACCOUNT_CREDIT = 8,
+  CHEQUE = 9,
 }
 
 export module Payments {
@@ -37,6 +41,11 @@ export module Payments {
   export const CLEARPAY_SCRIPT_SRC = 'afterpay.js'
 
   export module RequestParams {
+    export const B2B_COMPANY_DETAILS: any = {
+      t: BCPaymentEndpoint.B2B_COMPANY_DETAILS,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
+    }
+
     export const CONVERT_ORDER: any = {
       t: BCPaymentEndpoint.CONVERT_ORDER,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
@@ -116,7 +125,7 @@ export enum PaymentStatus {
   PO_RECEIVED = 15,
 }
 
-export enum PaymentMethodType {
+export enum CheckoutPaymentMethodType {
   CARD = 'CARD',
   NETBANKING = 'NB',
   WALLET = 'WALLET',

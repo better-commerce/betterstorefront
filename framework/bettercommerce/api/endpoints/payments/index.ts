@@ -17,6 +17,7 @@ import useRequestPayment from './request-payment'
 import useInitPayment from './init-payment'
 import useOneTimePaymentOrder from './create-one-time-payment-order'
 import useConvertOrder from './convert-order'
+import useB2BCompanyDetails from './b2b-company-details'
 
 const PaymentsApiMiddleware = async function useBCPayments({
   data = {},
@@ -28,6 +29,7 @@ const PaymentsApiMiddleware = async function useBCPayments({
   const { t: type, s: isSecured, gid: gatewayId } = params
   let response = undefined
   let paymentConfig: any
+  const b2bCompanyDetails = useB2BCompanyDetails()
   const convertOrder = useConvertOrder()
   const updatePaymentResponse = useUpdatePaymentResponse()
   const initPayment = useInitPayment()
@@ -45,6 +47,15 @@ const PaymentsApiMiddleware = async function useBCPayments({
     }
 
     switch (type) {
+      // ------------------ B2B ------------------
+      case BCPaymentEndpoint.B2B_COMPANY_DETAILS:
+        response = await b2bCompanyDetails({
+          data,
+          config: paymentConfig,
+          cookies,
+        })
+        break
+
       // ------------------ Checkout ------------------
       case BCPaymentEndpoint.CONVERT_ORDER:
         response = await convertOrder({ data, config: paymentConfig, cookies })
@@ -117,6 +128,7 @@ const getPaymentConfig = async ({
       BETTERCOMMERCE_CURRENCY ||
       BETTERCOMMERCE_DEFAULT_CURRENCY,
     basketId: cookies?.basketId,
+    cookies,
     secureFieldValuesExplicitlyDisabled: true,
   })
   const paymentConfig = response?.length
