@@ -7,7 +7,7 @@ export default function Video({ heading, name }: any) {
       <iframe
         width="560"
         height="315"
-        src={`https://www.youtube.com/embed/${name}`}
+        src={`https://www.youtube-nocookie.com/embed/${name}`}
         title="YouTube video player"
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

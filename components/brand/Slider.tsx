@@ -60,40 +60,38 @@ const Slider = ({ images, isBanner }: data) => {
         >
           {images?.map((val: any, productIdx: number) => {
             return (
-              <>
-                <SwiperSlide
-                  className="py-0 2xl:w-[300px] w-[25vw] h-full"
-                  key={val.name}
-                >
-                  <Image
-                    key={productIdx}
-                    height={1280}
-                    width={1280}
-                    src={val.url}
-                    alt={`Slide ${currentImageIndex}`}
-                  />
-                  {isBanner && (
-                    <p
-                      className="absolute flex hover:bg-gray-200 m-auto justify-center 2xl:left-12 pt-2 2xl:pt-4 md:pt-4 2xl:bottom-64 md:left-8 md:bottom-48 h-12 w-48 uppercase cursor-pointer bg-white rounded-md p-1 z-50 md:text-lg text-sm font-semibold"
-                      onClick={() => {
-                        Router.push(val.link ? val.link : '#')
-                      }}
-                    >
-                      {BTN_FIND_MORE}
-                    </p>
-                  )}
-                  {!isBanner && (
-                    <p
-                      className="flex items-center justify-center text-sm font-semibold sm:hidden border h-10 -mt-0 border-orange-300 bg-gray-50"
-                      onClick={() => {
-                        Router.push(val.link ? val.link : '#')
-                      }}
-                    >
-                      {val.title}
-                    </p>
-                  )}
-                </SwiperSlide>
-              </>
+              <SwiperSlide
+                className="py-0 2xl:w-[300px] w-[25vw] h-full"
+                key={productIdx}
+              >
+                <Image
+                  key={productIdx}
+                  height={1280}
+                  width={1280}
+                  src={val.url}
+                  alt={`Slide ${currentImageIndex}`}
+                />
+                {isBanner && (
+                  <p
+                    className="absolute flex hover:bg-gray-200 m-auto justify-center 2xl:left-12 pt-2 2xl:pt-4 md:pt-4 2xl:bottom-64 md:left-8 md:bottom-48 h-12 w-48 uppercase cursor-pointer bg-white rounded-md p-1 z-50 md:text-lg text-sm font-semibold"
+                    onClick={() => {
+                      Router.push(val.link ? val.link : '#')
+                    }}
+                  >
+                    {BTN_FIND_MORE}
+                  </p>
+                )}
+                {!isBanner && (
+                  <p
+                    className="flex items-center justify-center text-sm font-semibold sm:hidden border h-10 -mt-0 border-orange-300 bg-gray-50"
+                    onClick={() => {
+                      Router.push(val.link ? val.link : '#')
+                    }}
+                  >
+                    {val.title}
+                  </p>
+                )}
+              </SwiperSlide>
             )
           })}
         </Swiper>
