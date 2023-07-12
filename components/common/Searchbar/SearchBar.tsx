@@ -3,10 +3,11 @@ import { useRouter } from 'next/router'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Transition } from '@headlessui/react'
 import { BTN_SEARCH } from '@components/utils/textVariables'
-//import SearchResults from '@components/search/elasticSearchResult'
+import ElasticSearch from '@components/search/Elastic'
 //import ElasticSearchBar from '@components/search/ElasticSearchBar'
 import { ENABLE_ELASTIC_SEARCH } from '@components/utils/constants'
 import dynamic from 'next/dynamic'
+import ElasticSearchBar from '@components/search/ElasticSearchBar'
 const SearchWrapper = dynamic(() => import('@components/search'))
 
 interface ISearchBarProps {
@@ -26,7 +27,7 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
             keywords={""}
             closeWrapper={() => { }}
           />*/}
-          <div className="flex flex-row rounded-sm sm:mr-8 sm:pr-2 sm:bg-gray-100 sm:border">
+          {/* <div className="flex flex-row rounded-sm sm:mr-8 sm:pr-2 sm:bg-gray-100 sm:border">
             <button
               onClick={onClick}
               className="relative pr-3 text-gray-400 sm:p-1 sm:pl-3 sm:pr-16 hover:text-gray-500"
@@ -44,16 +45,16 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
                 aria-label="Search"
               />
             </button>
-          </div>
-          {/* <div className="flex flex-row rounded-sm w-96">
+          </div> */}
+          <div className="flex flex-row rounded-sm w-96">
             <button
               onClick={onClick}
               className="relative items-start w-full pr-3 text-left text-gray-400 sm:p-1 hover:text-gray-500"
               aria-label="Search"
             >
-              <App />
+              <ElasticSearchBar />
             </button>
-          </div> */}
+          </div>
         </>
       ) : (
         <>
