@@ -121,7 +121,6 @@ const LayoutError: FC<Props & IExtraProps> = ({
   maxBasketItemsCount,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const { showSearchBar, setShowSearchBar } = useUI()
   //const [data, setData] = useState(navTreeFromLocalStorage)
 
   const { includeVAT, setIncludeVAT } = useUI()
