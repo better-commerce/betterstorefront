@@ -655,7 +655,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                             <div className="relative grid items-start w-4/5 grid-cols-1 px-4 pt-10 pb-12 mx-auto bg-white sm:px-0 lg:px-0 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
                               {item.navBlocks.map(
                                 (navBlock: any, navIdx: number) => (
-                                  <>
+                                  <div key={navIdx}>
                                     <h5 className="text-xl font-semibold text-gray-900 capitalize">
                                       {navBlock.boxTitle}
                                     </h5>
@@ -694,7 +694,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                         )
                                       )}
                                     </div>
-                                  </>
+                                  </div>
                                 )
                               )}
                             </div>
