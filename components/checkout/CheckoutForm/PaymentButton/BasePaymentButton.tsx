@@ -16,6 +16,7 @@ import {
 import { parsePaymentMethods } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
+import { IPaymentInfo } from '@better-commerce/bc-payments-sdk'
 
 export interface IPaymentButtonProps {
   readonly paymentMethod: any | null
@@ -55,12 +56,23 @@ export default abstract class BasePaymentButton
     data: any,
     uiContext: any,
     dispatchState: Function,
-    isCOD: boolean = false
+    isCOD: boolean = false,
+    paymentInfo?: IPaymentInfo
   ): Promise<{ status: boolean; state: any; result?: any }> {
     try {
       const convertOrderInput: any = !isCOD
-        ? this.getNonCODConvertOrderPayload(paymentMethod, data, uiContext)
-        : this.getCODConvertOrderPayload(paymentMethod, data, uiContext)
+        ? this.getNonCODConvertOrderPayload(
+            paymentMethod,
+            data,
+            uiContext,
+            paymentInfo
+          )
+        : this.getCODConvertOrderPayload(
+            paymentMethod,
+            data,
+            uiContext,
+            paymentInfo
+          )
       const orderResult: any = await convertOrder(convertOrderInput)
       if (orderResult?.message || orderResult?.errors?.length) {
         let errorResult
@@ -174,10 +186,77 @@ export default abstract class BasePaymentButton
     )
   }
 
+  protected getPaymentInfoPayload(paymentInfo: IPaymentInfo) {
+    /* ******
+        Info
+        ******
+        paymentInfo1 is for [pspInformation[]
+        paymentInfo2 is for [paymentIdentifier]
+        paymentInfo3 is for gateway type i.e. Billdesk, Razorpay, etc
+        paymentInfo4 is for [cardType]
+        paymentInfo5 is for [cardIssuer]
+        paymentInfo6 is for [cardBrand]
+        paymentInfo7 is for [chequeNumber]
+        paymentInfo8 is untilized
+    */
+
+    let info: any = {}
+    if (paymentInfo?.paymentInfo1) {
+      info = {
+        ...info,
+        paymentInfo1: paymentInfo?.paymentInfo1,
+      }
+    }
+    if (paymentInfo?.paymentInfo2) {
+      info = {
+        ...info,
+        paymentInfo2: paymentInfo?.paymentInfo2,
+      }
+    }
+    if (paymentInfo?.paymentInfo3) {
+      info = {
+        ...info,
+        paymentInfo3: paymentInfo?.paymentInfo3,
+      }
+    }
+    if (paymentInfo?.paymentInfo4) {
+      info = {
+        ...info,
+        paymentInfo4: paymentInfo?.paymentInfo4,
+      }
+    }
+    if (paymentInfo?.paymentInfo5) {
+      info = {
+        ...info,
+        paymentInfo5: paymentInfo?.paymentInfo5,
+      }
+    }
+    if (paymentInfo?.paymentInfo6) {
+      info = {
+        ...info,
+        paymentInfo6: paymentInfo?.paymentInfo6,
+      }
+    }
+    if (paymentInfo?.paymentInfo7) {
+      info = {
+        ...info,
+        paymentInfo7: paymentInfo?.paymentInfo7,
+      }
+    }
+    if (paymentInfo?.paymentInfo8) {
+      info = {
+        ...info,
+        paymentInfo8: paymentInfo?.paymentInfo8,
+      }
+    }
+    return info
+  }
+
   protected getCODConvertOrderPayload(
     paymentMethod: any,
     basketOrderInfo: any,
-    uiContext: any
+    uiContext: any,
+    paymentInfo?: IPaymentInfo
   ) {
     let additionalServiceCharge =
       paymentMethod?.settings?.find((x: any) =>
@@ -238,6 +317,7 @@ export default abstract class BasePaymentButton
               isMoto: false,
               additionalServiceCharge,
             },
+            ...{ ...this.getPaymentInfoPayload(paymentInfo || {}) },
           },
         },
       }
@@ -250,7 +330,8 @@ export default abstract class BasePaymentButton
   protected getNonCODConvertOrderPayload(
     paymentMethod: any,
     basketOrderInfo: any,
-    uiContext: any
+    uiContext: any,
+    paymentInfo?: IPaymentInfo
   ) {
     let additionalServiceCharge =
       paymentMethod?.settings?.find((x: any) =>
@@ -310,6 +391,7 @@ export default abstract class BasePaymentButton
               isMoto: false,
               additionalServiceCharge,
             },
+            ...{ ...this.getPaymentInfoPayload(paymentInfo || {}) },
           },
         },
       }
