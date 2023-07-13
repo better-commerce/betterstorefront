@@ -134,30 +134,37 @@ export default function Bundles({
                   </span>
                 </h4>
               </div>
-              {product.variantAttributes.map((attribute: any, aid: number) => {
-                attribute.fieldName == 'Size' ? (
-                  <div className="flex flex-col mt-1" key={aid}>
-                    <label className="text-sm font-semibold text-black">
-                      {attribute.fieldName}:
-                    </label>
-                    <select
-                      className="p-2 text-sm font-semibold text-black uppercase border border-gray-400 rounded-sm"
-                      onChange={(ev) => handleSizeChanged(ev, product)}
-                    >
-                      {attribute.fieldValues.map((size: any, vdx: number) => (
-                        <option
-                          className="uppercase"
-                          key={vdx}
-                          value={size.fieldValue}
-                          selected={getSizeSelection(size.fieldValue, product)}
-                        >
-                          {size.fieldValue}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                ) : null
-              })}
+              {product?.variantAttributes?.map(
+                (attribute: any, aid: number) => {
+                  attribute.fieldName == 'Size' ? (
+                    <div className="flex flex-col mt-1" key={aid}>
+                      <label className="text-sm font-semibold text-black">
+                        {attribute?.fieldName}:
+                      </label>
+                      <select
+                        className="p-2 text-sm font-semibold text-black uppercase border border-gray-400 rounded-sm"
+                        onChange={(ev) => handleSizeChanged(ev, product)}
+                      >
+                        {attribute?.fieldValues?.map(
+                          (size: any, vdx: number) => (
+                            <option
+                              className="uppercase"
+                              key={vdx}
+                              value={size?.fieldValue}
+                              selected={getSizeSelection(
+                                size.fieldValue,
+                                product
+                              )}
+                            >
+                              {size?.fieldValue}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                  ) : null
+                }
+              )}
             </div>
           </div>
         ))}
