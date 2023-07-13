@@ -264,28 +264,30 @@ function CategoryLandingPage({
 
   useEffect(() => {
     let CSVCollection: any = []
-    CSVCollection = category?.featuredProductCSV?.split(',')
-    async function handleApiCall() {
-      const data: any = Promise.all(
-        CSVCollection.map(async (val: any) => {
-          const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
-            sortBy: '',
-            sortOrder: '',
-            currentPage: 1,
-            filters: [],
-            freeText: val || '',
+    if (category.featuredProductCSV != '' && category.featuredProductCSV) {
+      CSVCollection = category?.featuredProductCSV?.split(',')
+      async function handleApiCall() {
+        const data: any = Promise.all(
+          CSVCollection.map(async (val: any) => {
+            const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
+              sortBy: '',
+              sortOrder: '',
+              currentPage: 1,
+              filters: [],
+              freeText: val || '',
+            })
+            return res?.data.products
           })
-          return res?.data.products
-        })
-      )
-        .then((results) => {
-          setMinimalProd(results)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+        )
+          .then((results) => {
+            setMinimalProd(results)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+      handleApiCall()
     }
-    handleApiCall()
   }, [])
 
   useEffect(() => {
@@ -439,7 +441,7 @@ function CategoryLandingPage({
               >
                 {category?.subCategories?.map(
                   (featurecat: any, cdx: number) => (
-                    <>
+                    <div key={cdx}>
                       {featurecat?.isFeatured == true && (
                         <SwiperSlide key={cdx}>
                           <div className="relative group">
@@ -450,6 +452,7 @@ function CategoryLandingPage({
                                   src={featurecat?.image}
                                   className="object-fill object-center w-full"
                                   alt="Image"
+                                  priority
                                   width={240}
                                   height={160}
                                 />
@@ -458,6 +461,7 @@ function CategoryLandingPage({
                                   src="/default-img.svg"
                                   className="object-fill object-center w-full"
                                   alt="Image"
+                                  priority
                                   width={240}
                                   height={160}
                                 />
@@ -474,7 +478,7 @@ function CategoryLandingPage({
                           </div>
                         </SwiperSlide>
                       )}
-                    </>
+                    </div>
                   )
                 )}
               </Swiper>
@@ -688,40 +692,38 @@ function CategoryLandingPage({
                 >
                   {category?.linkGroups[0]?.items?.map(
                     (relatedcat: any, cdx: number) => (
-                      <>
-                        <SwiperSlide key={cdx}>
-                          <div className="relative group">
-                            <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                            <>
-                              {relatedcat?.image != '' ? (
-                                <Image
-                                  src="/default-img.svg"
-                                  className="object-fill object-center w-full"
-                                  alt="Image"
-                                  width={240}
-                                  height={160}
-                                />
-                              ) : (
-                                <Image
-                                  src="/default-img.svg"
-                                  className="object-fill object-center w-full"
-                                  alt="Image"
-                                  width={240}
-                                  height={160}
-                                />
-                              )}
-                            </>
-                            <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                              <Link
-                                href={`/${relatedcat?.link}`}
-                                className="btn-primary-white font-14"
-                              >
-                                <span>{relatedcat?.name}</span>
-                              </Link>
-                            </div>
+                      <SwiperSlide key={cdx}>
+                        <div className="relative group">
+                          <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
+                          <>
+                            {relatedcat?.image != '' ? (
+                              <Image
+                                src="/default-img.svg"
+                                className="object-fill object-center w-full"
+                                alt="Image"
+                                width={240}
+                                height={160}
+                              />
+                            ) : (
+                              <Image
+                                src="/default-img.svg"
+                                className="object-fill object-center w-full"
+                                alt="Image"
+                                width={240}
+                                height={160}
+                              />
+                            )}
+                          </>
+                          <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
+                            <Link
+                              href={`/${relatedcat?.link}`}
+                              className="btn-primary-white font-14"
+                            >
+                              <span>{relatedcat?.name}</span>
+                            </Link>
                           </div>
-                        </SwiperSlide>
-                      </>
+                        </div>
+                      </SwiperSlide>
                     )
                   )}
                 </Swiper>
@@ -801,7 +803,7 @@ function CategoryLandingPage({
                 >
                   {category?.subCategories?.map(
                     (featurecat: any, ckdx: number) => (
-                      <>
+                      <div key={ckdx}>
                         {featurecat?.isFeatured == true && (
                           <SwiperSlide key={ckdx}>
                             <div className="relative group">
@@ -836,7 +838,7 @@ function CategoryLandingPage({
                             </div>
                           </SwiperSlide>
                         )}
-                      </>
+                      </div>
                     )
                   )}
                 </Swiper>
@@ -904,15 +906,15 @@ function CategoryLandingPage({
                         />
                       </div>
                     ))}
-                    <CompareSelectionBar
-                      name={category?.name}
-                      showCompareProducts={showCompareProducts}
-                      products={productDataToPass}
-                      isCompare={isProductCompare}
-                      maxBasketItemsCount={maxBasketItemsCount(config)}
-                      closeCompareProducts={closeCompareProducts}
-                      deviceInfo={deviceInfo}
-                    />
+                  <CompareSelectionBar
+                    name={category?.name}
+                    showCompareProducts={showCompareProducts}
+                    products={productDataToPass}
+                    isCompare={isProductCompare}
+                    maxBasketItemsCount={maxBasketItemsCount(config)}
+                    closeCompareProducts={closeCompareProducts}
+                    deviceInfo={deviceInfo}
+                  />
                 </div>
               ) : (
                 <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">

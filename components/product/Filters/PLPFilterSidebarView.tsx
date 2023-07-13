@@ -38,9 +38,12 @@ const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({
   const [hasFiltersLoaded, setHasFiltersLoaded] = useState(false)
 
   useEffect(() => {
-    setHasFiltersLoaded(
-      !plpFilterState.loading && !!plpFilterState.sortList.length
-    )
+    if (!plpFilterState.loading && !!plpFilterState.sortList.length) {
+      setHasFiltersLoaded(true)
+    }
+    // setHasFiltersLoaded(
+    //   !plpFilterState.loading && !!plpFilterState.sortList.length
+    // )
   }, [plpFilterState.loading, plpFilterState.sortList])
 
   useEffect(() => {
