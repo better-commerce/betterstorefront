@@ -15,7 +15,7 @@ import {
 import { Layout } from '@elastic/react-search-ui-views'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
 import Image from 'next/image'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { NoSymbolIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 import {
   buildAutocompleteQueryConfig,
@@ -27,6 +27,7 @@ import {
 } from '@components/config/config-helper'
 import { vatIncluded } from '@framework/utils/app-util'
 import ElasticSearchSuggestions from './ElasticSearchSuggestions'
+import { CloudIcon } from '@heroicons/react/20/solid'
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
 const connector = new AppSearchAPIConnector({
@@ -48,7 +49,16 @@ const isIncludeVAT = vatIncluded()
 const CustomResultsView = ({ children }: any) => {
   return (
     <div className="relative ">
-      <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">{children}</ul>
+      {children.length > 0 ? (
+        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">{children}</ul>
+      ) : (
+        <div className="flex items-center justify-center w-full py-6 mt-3 text-lg font-medium text-center text-black bg-gray-100">
+          <div className="flex items-center gap-2">
+            <NoSymbolIcon className="mx-auto text-gray-200 w-7 h-7" /> No
+            Product Found
+          </div>
+        </div>
+      )}
     </div>
   )
 }
