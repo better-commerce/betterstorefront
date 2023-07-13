@@ -57,6 +57,7 @@ interface Props {
   currencies: []
   languages: []
   configSettings: any
+  keywords?: any
 }
 
 const accountDropDownConfigUnauthorized: any = [
@@ -142,6 +143,7 @@ const Navbar: FC<Props & IExtraProps> = ({
   deviceInfo,
   maxBasketItemsCount,
   onIncludeVATChanged,
+  keywords,
 }) => {
   const router = useRouter()
 
@@ -715,7 +717,7 @@ const Navbar: FC<Props & IExtraProps> = ({
             </Popover.Group>
           )}
           <div className="flex items-center justify-end flex-1 cart-icon-dark-white">
-            <Searchbar onClick={setShowSearchBar} />
+            <Searchbar onClick={setShowSearchBar} keywords={keywords} />
             <Account
               title={title}
               config={accountDropdownConfig}
