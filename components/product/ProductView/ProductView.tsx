@@ -704,6 +704,22 @@ export default function ProductView({
       thumbnail: image.image,
     }
   })
+
+  const handleBulkAddToCart = async () => {
+      if(product?.componentProducts)
+      {
+       const item = await cartHandler().bulkAddToCart(
+          user?.userId,
+          basketId,
+          user?.isAssociated,
+          "ADD",
+          product?.componentProducts
+        )
+        setCartItems(item)
+        openCart()
+      }
+  }
+
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
@@ -981,6 +997,7 @@ export default function ProductView({
               products={product?.componentProducts}
               productBundleUpdate={handleProductBundleUpdate}
               deviceInfo={deviceInfo}
+              handleBulkAdd={handleBulkAddToCart}
             />
           </>
         ) : null}

@@ -13,6 +13,7 @@ export default function Bundles({
   products = [],
   productBundleUpdate = () => {},
   deviceInfo,
+  handleBulkAdd = () => {},
 }: any) {
   const [productData, setProductData] = useState(null)
   const handleProduct = (product: any) => {
@@ -75,13 +76,19 @@ export default function Bundles({
         <h2 id="bundle" className="text-xl font-bold text-left text-gray-900">
           Buy together and save
         </h2>
-        <div>
+        <div className="flex">
           <p className="font-semibold text-right text-black text-md flext-col align-right item-right">
             Total
           </p>
           <p className="flex flex-col pb-2 text-3xl font-bold text-right text-gray-900 align-right item-right">
             {price}
           </p>
+          <button
+            className="ml-2 flex-1 bg-black border rounded-sm uppercase lg:py-2 py-3 sm:px-4 px-1 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full  btn-c btn-primary"
+            onClick={handleBulkAdd}
+          >
+            Add Bundle To basket
+          </button>
         </div>
       </div>
 
