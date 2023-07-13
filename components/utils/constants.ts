@@ -195,6 +195,7 @@ export const PDP_SIZE_OPTIONS_COUNT = parseInt(
 export module Messages {
   export module Validations {
     export module RegularExpressions {
+      export const NUMBERS_ONLY = /^[0-9]*$/
       export const MOBILE_NUMBER =
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
       export const EMAIL =
@@ -266,7 +267,6 @@ export module Messages {
       ADDRESS_TYPE_INPUT: 'Address should only contain alpha-numerics',
     }
 
-
     export const AddNewCard: any = {
       CARD_NUMBER_REQUIRED: 'Card number is a required field',
       CARD_NUMBER_MIN_LENGTH: 'Card Number must be at least 14 characters',
@@ -304,6 +304,11 @@ export module Messages {
       INVALID_EMAIL: "We couldn't find an account with this email",
       VALID_EMAIL:
         'Success! Check your email for the link to change your password',
+    }
+
+    export const ChequePayment: any = {
+      CHEQUE_NUMBER_REQUIRED: 'Cheque number is a required',
+      CHEQUE_NUMBER_INPUT: 'Cheque Number should only contain digits',
     }
   }
 
