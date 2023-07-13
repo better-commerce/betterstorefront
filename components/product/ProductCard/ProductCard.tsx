@@ -12,7 +12,7 @@ import {
   Messages,
 } from '@components/utils/constants'
 import { HeartIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
-import { CheckCircleIcon as CheckSolidCircleIcon, } from '@heroicons/react/24/solid'
+import { CheckCircleIcon as CheckSolidCircleIcon } from '@heroicons/react/24/solid'
 import _, { round } from 'lodash'
 import {
   BTN_NOTIFY_ME,
@@ -247,7 +247,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       },
       shortMessage: '',
     }
-    if (!product.currentStock && !product.preOrder.isEnabled) {
+    if (!product?.currentStock && !product?.preOrder?.isEnabled) {
       buttonConfig.title = BTN_NOTIFY_ME
       buttonConfig.isNotifyMeEnabled = true
       buttonConfig.action = async () => handleNotification()
@@ -292,7 +292,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     if (product.compared) {
       setCompareProducts({
         id: product.recordId,
-        type: 'remove'
+        type: 'remove',
       })
     } else {
       setCompareProducts({
@@ -301,12 +301,12 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           ...product,
           attributes: compareAttributes,
         },
-        type: 'add'
+        type: 'add',
       })
     }
     setProduct((v: any) => ({
       ...v,
-      compared: !v.compared
+      compared: !v.compared,
     }))
   }
 
@@ -421,7 +421,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         <ButtonLink
           isComparedEnabled={isComparedEnabled}
           href={`/${currentProductData.link}`}
-          handleHover={() => { }}
+          handleHover={() => {}}
           itemPrice={itemPrice}
           productName={product.name}
           onClick={handleSetCompareProduct.bind(null, product)}
@@ -449,7 +449,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               : product?.price?.formatted?.withoutTax}
             {product?.listPrice?.raw?.withTax > 0 &&
               product?.listPrice?.raw?.withTax !=
-              product?.price?.raw?.withTax && (
+                product?.price?.raw?.withTax && (
                 <>
                   <span className="px-1 text-xs font-medium text-black line-through">
                     {isIncludeVAT
@@ -466,8 +466,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           {isComparedEnabled && (
             <div className="px-2 my-2 slider-mb-4">
               {product.compared ? (
-                <button className='btn-primary-white w-full font-14 font-semibold'
-                >
+                <button className="w-full font-semibold btn-primary-white font-14">
                   Remove
                 </button>
               ) : (
@@ -487,8 +486,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 disabled={product.hasWishlisted}
               >
                 <HeartIcon
-                  className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-800'
-                    }`}
+                  className={`inline-block w-4 h-4 ${
+                    product.hasWishlisted && 'fill-red-600 text-red-800'
+                  }`}
                   aria-hidden="true"
                 />
               </button>
@@ -517,7 +517,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       </div>
       <PLPQuickView
         isQuickview={Boolean(quickViewData)}
-        setQuickview={() => { }}
+        setQuickview={() => {}}
         productData={quickViewData}
         isQuickviewOpen={Boolean(quickViewData)}
         setQuickviewOpen={handleCloseQuickView}
@@ -538,11 +538,7 @@ const ButtonLink = (props: any) => {
   } = props
 
   if (isComparedEnabled) {
-    return (
-      <button onClick={onClick}>
-        {children}
-      </button>
-    )
+    return <button onClick={onClick}>{children}</button>
   }
 
   return (
