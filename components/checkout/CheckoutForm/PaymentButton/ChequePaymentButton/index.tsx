@@ -1,7 +1,7 @@
 // Component Imports
-import { getB2BCompanyDetails } from '@framework/utils/payment-util'
-import { IPaymentButtonProps } from './BasePaymentButton'
-import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
+import ChequePayment, { CHEQUE_PAYMENT_FORM_ID } from './ChequePayment'
+import { IPaymentButtonProps } from '../BasePaymentButton'
+import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
 import PaymentGatewayNotification from '@components/checkout/PaymentGatewayNotification'
 
 // Other Imports
@@ -44,6 +44,10 @@ export class ChequePaymentButton extends BasePaymentButton {
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
   }
 
+  private async onChequeSubmit(data: any): Promise<void> {
+    debugger
+  }
+
   /**
    * Renders the component.
    * @returns {React.JSX.Element}
@@ -52,7 +56,24 @@ export class ChequePaymentButton extends BasePaymentButton {
     const that = this
     const { uiContext }: any = this.props
 
-    return <></>
+    return (
+      <>
+        <div className="w-full">
+          <dl className="w-2/5 space-y-2 sm:space-y-2 py-2">
+            <ChequePayment
+              onSubmit={async (data: any) => await that.onChequeSubmit(data)}
+            />
+          </dl>
+
+          {this.baseRender({
+            ...this?.props,
+            ...{
+              formId: CHEQUE_PAYMENT_FORM_ID,
+            },
+          })}
+        </div>
+      </>
+    )
   }
 }
 

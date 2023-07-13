@@ -156,9 +156,12 @@ export default abstract class BasePaymentButton
     disabled,
     stripe = null,
     stripeElements = null,
+    formId = null,
   }: any) {
     return (
       <DefaultButton
+        // For the scenario where formId is provided, buttonType will be overridden to "submit"
+        formId={formId}
         buttonType="button"
         action={async () => {
           if (onPay) {
