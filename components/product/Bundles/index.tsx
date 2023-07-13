@@ -139,25 +139,27 @@ export default function Bundles({
                   attribute.fieldName == 'Size' ? (
                     <div className="flex flex-col mt-1" key={aid}>
                       <label className="text-sm font-semibold text-black">
-                        {attribute.fieldName}:
+                        {attribute?.fieldName}:
                       </label>
                       <select
                         className="p-2 text-sm font-semibold text-black uppercase border border-gray-400 rounded-sm"
                         onChange={(ev) => handleSizeChanged(ev, product)}
                       >
-                        {attribute.fieldValues.map((size: any, vdx: number) => (
-                          <option
-                            className="uppercase"
-                            key={vdx}
-                            value={size.fieldValue}
-                            selected={getSizeSelection(
-                              size.fieldValue,
-                              product
-                            )}
-                          >
-                            {size.fieldValue}
-                          </option>
-                        ))}
+                        {attribute?.fieldValues?.map(
+                          (size: any, vdx: number) => (
+                            <option
+                              className="uppercase"
+                              key={vdx}
+                              value={size?.fieldValue}
+                              selected={getSizeSelection(
+                                size.fieldValue,
+                                product
+                              )}
+                            >
+                              {size?.fieldValue}
+                            </option>
+                          )
+                        )}
                       </select>
                     </div>
                   ) : null
