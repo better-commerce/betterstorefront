@@ -13,7 +13,7 @@ const CustomView = (props: any) => {
   }
 
   const handleChange = (e: any) => {
-    setShowSearchBar(e.target?.value?.length >= 3)
+    setShowSearchBar(e.target?.value?.length >= 2)
     onChange(e.target.value)
   }
 
