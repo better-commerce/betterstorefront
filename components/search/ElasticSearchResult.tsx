@@ -28,6 +28,7 @@ import {
 import { vatIncluded } from '@framework/utils/app-util'
 import ElasticSearchSuggestions from './ElasticSearchSuggestions'
 import { CloudIcon } from '@heroicons/react/20/solid'
+import Link from 'next/link'
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
 const connector = new AppSearchAPIConnector({
@@ -66,32 +67,34 @@ const CustomResultsView = ({ children }: any) => {
 const CustomResultView = ({ result }: any) => {
   return (
     <li className="mb-4 bg-white snap-start hover:text-blue-600 group">
-      <a href="">
-        <div className="p-2 mb-4 border border-gray-200 group-hover:border-gray-700">
-          <Image
-            src={result?.imageurl?.raw}
-            alt={''}
-            className="object-contain w-48 h-48"
-            width={300}
-            height={400}
-          />
-        </div>
-        <h3 className="text-sm font-semibold text-black capitalize">
-          {result?.brand?.raw}
-        </h3>
+      <Link href={`/${result?.weburl?.raw}` || '#'} passHref legacyBehavior>
+        <a>
+          <div className="p-2 mb-4 border border-gray-200 group-hover:border-gray-700">
+            <Image
+              src={result?.imageurl?.raw}
+              alt={''}
+              className="object-contain w-48 h-48"
+              width={300}
+              height={400}
+            />
+          </div>
+          <h3 className="text-sm font-semibold text-black capitalize">
+            {result?.brand?.raw}
+          </h3>
 
-        <h4 className="text-xs font-medium text-black capitalize h-14">
-          {result?.title?.raw}
-        </h4>
-        <h5 className="mt-2 text-sm font-semibold text-black capitalize">
-          {result?.currency_uk?.raw}
-          {isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
-          <span className="pl-2 text-xs font-normal text-gray-400 line-through">
+          <h4 className="text-xs font-medium text-black capitalize h-14">
+            {result?.title?.raw}
+          </h4>
+          <h5 className="mt-2 text-sm font-semibold text-black capitalize">
             {result?.currency_uk?.raw}
-            {isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
-          </span>
-        </h5>
-      </a>
+            {isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
+            <span className="pl-2 text-xs font-normal text-gray-400 line-through">
+              {result?.currency_uk?.raw}
+              {isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
+            </span>
+          </h5>
+        </a>
+      </Link>
     </li>
   )
 }
