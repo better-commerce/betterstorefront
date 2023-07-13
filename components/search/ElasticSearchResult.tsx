@@ -106,7 +106,7 @@ function ElasticSearchResult({
   clearFilters,
 }: any) {
   return (
-    <div className="absolute custom-scroll-bar z-10 w-full h-auto border-b border-gray-300 shadow min-h-screen min-height-scroll bg-white sm:top-[63px] top-[68px] left-0">
+    <div className="absolute z-10 w-full h-auto border-b border-gray-300 shadow min-h-screen bg-white sm:top-[88px] top-[68px]">
       <div className="absolute text-gray-900 cursor-pointer top-1 h-7 w-7 sm:right-10 sm:top-7 right-4">
         <XMarkIcon
           onClick={() => {
