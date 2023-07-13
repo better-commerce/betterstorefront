@@ -55,6 +55,31 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import { SearchProvider } from '@elastic/react-search-ui'
+
+import {
+  buildAutocompleteQueryConfig,
+  buildFacetConfigFromConfig,
+  buildSearchOptionsFromConfig,
+  getConfig,
+} from '@components/config/config-helper'
+import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector'
+const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
+const connector = new AppSearchAPIConnector({
+  searchKey,
+  engineName,
+  hostIdentifier,
+  endpointBase,
+})
+const elasticConfig = {
+  searchQuery: {
+    facets: buildFacetConfigFromConfig(),
+    ...buildSearchOptionsFromConfig(),
+  },
+  autocompleteQuery: buildAutocompleteQueryConfig(),
+  apiConnector: connector,
+  alwaysSearchOnInitialLoad: true,
+}
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -309,34 +334,36 @@ function MyApp({
       <Head {...appConfig}></Head>
       {OMNILYTICS_DISABLED ? null : <div id="google_translate_element" />}
 
-      <ManagedUIContext>
-        {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
-        <CustomCacheBuster buildVersion={buildVersion} />
-        <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
-        <ErrorBoundary>
-          <Layout
-            nav={nav}
-            footer={footer}
-            config={appConfig}
-            pageProps={pageProps}
-            keywords={keywordsData}
-            deviceInfo={deviceInfo}
-            maxBasketItemsCount={maxBasketItemsCount(appConfig)}
-          >
-            <OverlayLoader />
-            <SessionProvider session={pageProps?.session}>
-              <Component
-                {...pageProps}
-                location={location}
-                ipAddress={location.Ip}
-                config={appConfig}
-                deviceInfo={deviceInfo}
-              />
-            </SessionProvider>
-            {/* <RedirectIntercept /> */}
-          </Layout>
-        </ErrorBoundary>
-      </ManagedUIContext>
+      <SearchProvider config={elasticConfig}>
+        <ManagedUIContext>
+          {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
+          <CustomCacheBuster buildVersion={buildVersion} />
+          <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
+          <ErrorBoundary>
+            <Layout
+              nav={nav}
+              footer={footer}
+              config={appConfig}
+              pageProps={pageProps}
+              keywords={keywordsData}
+              deviceInfo={deviceInfo}
+              maxBasketItemsCount={maxBasketItemsCount(appConfig)}
+            >
+              <OverlayLoader />
+              <SessionProvider session={pageProps?.session}>
+                <Component
+                  {...pageProps}
+                  location={location}
+                  ipAddress={location.Ip}
+                  config={appConfig}
+                  deviceInfo={deviceInfo}
+                />
+              </SessionProvider>
+              {/* <RedirectIntercept /> */}
+            </Layout>
+          </ErrorBoundary>
+        </ManagedUIContext>
+      </SearchProvider>
     </>
   )
 }
