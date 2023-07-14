@@ -24,7 +24,7 @@ const CustomView = (props: any) => {
   }
 
   return (
-    <form role="combobox" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <div className="sui-search-box">
         <div className="sui-search-box__wrapper">
           <input

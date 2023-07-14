@@ -106,9 +106,10 @@ function ElasticSearchResult({
   clearFilters,
 }: any) {
   return (
-    <div className="absolute z-10 w-full h-auto border-b border-gray-300 shadow min-h-screen bg-white sm:top-[64px] top-[64px]">
-      <div className="absolute text-gray-900 cursor-pointer top-1 h-7 w-7 sm:right-10 sm:top-7 right-4">
+    <div className="absolute z-10 w-screen h-auto border-b border-gray-300 shadow min-h-screen bg-white top-[68px] search-wrapper">
+      <div className="absolute top-1 sm:right-10 sm:top-7 right-4">
         <XMarkIcon
+          className="!text-gray-900 cursor-pointer h-7 w-7"
           onClick={() => {
             closeWrapper()
             setSearchTerm('')
