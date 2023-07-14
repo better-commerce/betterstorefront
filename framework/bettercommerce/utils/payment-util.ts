@@ -4,8 +4,8 @@ import axios from 'axios'
 // Other Imports
 import { decipherPayload } from './app-util'
 import {
-  PaymentGateway,
-  PaymentGatewayId,
+  PaymentMethodType,
+  PaymentMethodTypeId,
 } from '@components/utils/payment-constants'
 import {
   ENABLE_SECURED_PAYMENT_PAYLOAD,
@@ -42,45 +42,71 @@ export const cancelStorefrontOrder = async (orderId: string) => {
 }
 
 export const getGatewayId = (gatewayName: string) => {
-  if (matchStrings(gatewayName, PaymentGateway.PAYPAL, true)) {
-    return PaymentGatewayId.PAYPAL
-  } else if (matchStrings(gatewayName, PaymentGateway.CHECKOUT, true)) {
-    return PaymentGatewayId.CHECKOUT
-  } else if (matchStrings(gatewayName, PaymentGateway.KLARNA, true)) {
-    return PaymentGatewayId.KLARNA
-  } else if (matchStrings(gatewayName, PaymentGateway.CLEAR_PAY, true)) {
-    return PaymentGatewayId.CLEAR_PAY
-  } else if (matchStrings(gatewayName, PaymentGateway.MASTER_CARD, true)) {
-    return PaymentGatewayId.MASTER_CARD
-  } else if (matchStrings(gatewayName, PaymentGateway.JUSPAY, true)) {
-    return PaymentGatewayId.JUSPAY
-  } else if (matchStrings(gatewayName, PaymentGateway.STRIPE, true)) {
-    return PaymentGatewayId.STRIPE
-  } else if (matchStrings(gatewayName, PaymentGateway.COD, true)) {
-    return PaymentGatewayId.COD
+  if (matchStrings(gatewayName, PaymentMethodType.PAYPAL, true)) {
+    return PaymentMethodTypeId.PAYPAL
+  } else if (matchStrings(gatewayName, PaymentMethodType.CHECKOUT, true)) {
+    return PaymentMethodTypeId.CHECKOUT
+  } else if (matchStrings(gatewayName, PaymentMethodType.KLARNA, true)) {
+    return PaymentMethodTypeId.KLARNA
+  } else if (matchStrings(gatewayName, PaymentMethodType.CLEAR_PAY, true)) {
+    return PaymentMethodTypeId.CLEAR_PAY
+  } else if (matchStrings(gatewayName, PaymentMethodType.MASTER_CARD, true)) {
+    return PaymentMethodTypeId.MASTER_CARD
+  } else if (matchStrings(gatewayName, PaymentMethodType.JUSPAY, true)) {
+    return PaymentMethodTypeId.JUSPAY
+  } else if (matchStrings(gatewayName, PaymentMethodType.STRIPE, true)) {
+    return PaymentMethodTypeId.STRIPE
+  } else if (matchStrings(gatewayName, PaymentMethodType.COD, true)) {
+    return PaymentMethodTypeId.COD
+  } else if (
+    matchStrings(gatewayName, PaymentMethodType.ACCOUNT_CREDIT, true)
+  ) {
+    return PaymentMethodTypeId.ACCOUNT_CREDIT
+  } else if (matchStrings(gatewayName, PaymentMethodType.CHEQUE, true)) {
+    return PaymentMethodTypeId.CHEQUE
   }
   return -1
 }
 
 export const getGatewayName = (id: number) => {
-  if (id === PaymentGatewayId.PAYPAL) {
-    return PaymentGateway.PAYPAL
-  } else if (id === PaymentGatewayId.CHECKOUT) {
-    return PaymentGateway.CHECKOUT
-  } else if (id === PaymentGatewayId.KLARNA) {
-    return PaymentGateway.KLARNA
-  } else if (id === PaymentGatewayId.CLEAR_PAY) {
-    return PaymentGateway.CLEAR_PAY
-  } else if (id === PaymentGatewayId.MASTER_CARD) {
-    return PaymentGateway.MASTER_CARD
-  } else if (id === PaymentGatewayId.JUSPAY) {
-    return PaymentGateway.JUSPAY
-  } else if (id === PaymentGatewayId.STRIPE) {
-    return PaymentGateway.STRIPE
-  } else if (id === PaymentGatewayId.COD) {
-    return PaymentGateway.COD
+  if (id === PaymentMethodTypeId.PAYPAL) {
+    return PaymentMethodType.PAYPAL
+  } else if (id === PaymentMethodTypeId.CHECKOUT) {
+    return PaymentMethodType.CHECKOUT
+  } else if (id === PaymentMethodTypeId.KLARNA) {
+    return PaymentMethodType.KLARNA
+  } else if (id === PaymentMethodTypeId.CLEAR_PAY) {
+    return PaymentMethodType.CLEAR_PAY
+  } else if (id === PaymentMethodTypeId.MASTER_CARD) {
+    return PaymentMethodType.MASTER_CARD
+  } else if (id === PaymentMethodTypeId.JUSPAY) {
+    return PaymentMethodType.JUSPAY
+  } else if (id === PaymentMethodTypeId.STRIPE) {
+    return PaymentMethodType.STRIPE
+  } else if (id === PaymentMethodTypeId.COD) {
+    return PaymentMethodType.COD
+  } else if (id === PaymentMethodTypeId.ACCOUNT_CREDIT) {
+    return PaymentMethodType.ACCOUNT_CREDIT
+  } else if (id === PaymentMethodTypeId.CHEQUE) {
+    return PaymentMethodType.CHEQUE
   }
   return -1
+}
+
+export const getB2BCompanyDetails = async (gatewayName: string, data: any) => {
+  const gid = getGatewayId(gatewayName)
+  const { data: b2bCompanyDetailsResult } = await axios.post(
+    PAYMENTS_API, // Endpoint url
+    ENABLE_SECURED_PAYMENT_PAYLOAD
+      ? encrypt(JSON.stringify(data))
+      : JSON.stringify(data), // Data
+    {
+      params: { ...Payments.RequestParams.B2B_COMPANY_DETAILS, gid },
+    }
+  ) // Params
+  return ENABLE_SECURED_PAYMENT_PAYLOAD
+    ? decipherPayload(b2bCompanyDetailsResult)
+    : tryParseJson(b2bCompanyDetailsResult)
 }
 
 export const convertOrder = async (data: any) => {
@@ -106,7 +132,6 @@ export const convertOrder = async (data: any) => {
     storeId,
     Payment,
   }
-  console.log('payload', payload)
   const { data: orderDetailResult } = await axios.post(
     PAYMENTS_API, // Endpoint url
     ENABLE_SECURED_PAYMENT_PAYLOAD

@@ -19,20 +19,10 @@ import { AddressPageAction } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { NEW_ADDRESS_FORM_FIELDS } from './NewAddressModal'
 import SubmitButton from '@components/common/SubmitButton'
+import { IFormProps } from 'framework/contracts/IFormProps'
+import { INewAddressFormProps } from 'framework/contracts/address/INewAddressFormProps'
 
-interface INewAddressFormProps {
-  readonly submitState: any
-  readonly formId: string
-  readonly schema: any
-  readonly initialValues?: any
-  readonly defaultValues?: any
-  readonly btnTitle?: any
-  readonly formFields: Array<any>
-  readonly isRegisterAsGuestUser: boolean
-  onSubmit?: any
-}
-
-const NewAddressForm = (props: INewAddressFormProps) => {
+const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
   const newAddressFormRef: any = useRef(null)
   const {
     submitState,
