@@ -88,7 +88,7 @@ export default function CheckoutRouter({
               <div
                 key={idx}
                 onClick={() => handleTabChange(item.key)}
-                className={`cursor-pointer py-2 font-semibold text-gray-900 sm:w-1/3 w-2/3 sm:px-12 px-6 text-center border-b-2 ${
+                className={`cursor-pointer py-2 font-semibold text-gray-900 sm:w-1/4 w-2/3 sm:px-12 px-6 text-center border-b-2 ${
                   activeTab.key === item.key
                     ? 'border-gray-900'
                     : 'border-gray-300'
@@ -100,7 +100,7 @@ export default function CheckoutRouter({
           })}
         </div>
         {activeTab.key === 'logIn' && (
-          <div className="flex justify-center items-center flex-col sm:pl-10 sm:pr-10">
+          <div className="flex justify-center items-center flex-col">
             <Form btnText="Login" type="login" onSubmit={handleUserLogin} />
             <div>
               <Link href="/my-account/register">

@@ -40,9 +40,9 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
   return (
     <ol
       role="list"
-      className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0"
+      className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 lg:px-0 md:px-0 px-3"
     >
-      <li className='flex items-center text-10-mob sm:text-sm'>
+      <li className='flex items-center text-xs sm:text-sm'>
         <Link href="/" passHref>
           <span
             className="font-normal hover:text-gray-900"
@@ -51,7 +51,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
           </span>
         </Link>
       </li>
-      <li className='flex items-center text-10-mob sm:text-sm'>
+      <li className='flex items-center text-xs sm:text-sm'>
         <span
           className="font-normal hover:text-gray-900 mx-1 inline-block"
         >
@@ -61,7 +61,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li
           key={breadcrumbIdx}
-          className="flex items-center text-10-mob sm:text-sm"
+          className="flex items-center text-xs sm:text-sm"
         >
           <Link href={`/${breadcrumb.slug}`} passHref>
             <span

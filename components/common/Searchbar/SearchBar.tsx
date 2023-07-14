@@ -49,7 +49,7 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
   if (ENABLE_ELASTIC_SEARCH) {
     return (
       <SearchProvider config={elasticConfig}>
-        <div className="flex flex-row w-full rounded-sm sm:w-80 md:w-80 lg:w-96">
+        <div className="flex flex-row w-full rounded-sm sm:w-96">
           <div
             className="relative items-start w-full pr-3 text-left text-gray-400 sm:p-1 hover:text-gray-500"
             aria-label="Search"

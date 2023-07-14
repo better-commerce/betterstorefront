@@ -100,7 +100,7 @@ function LoginPage({ recordEvent, setEntities, config }: any) {
   }
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8 sm:p-10">
+      <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
           <h1 className="font-extrabold tracking-tight text-center text-gray-900">
             {GENERAL_LOGIN}
@@ -119,8 +119,8 @@ function LoginPage({ recordEvent, setEntities, config }: any) {
             </span>
           )}
         </div>
-        <SocialSignInLinks containerCss="flex justify-center gap-2 px-3 mx-auto md:w-1/2" />
-        <div className="flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 md:w-1/2">
+        <SocialSignInLinks containerCss="flex justify-center gap-2 px-3 mx-auto sm:w-1/2" />
+        <div className="flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 sm:w-1/2">
           <Link href="/my-account/forgot-password" passHref>
             <span className="block font-medium text-indigo-600 underline cursor-pointer hover:text-indigo-800 hover:underline">
               Forgot password?

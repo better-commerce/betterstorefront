@@ -287,7 +287,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div
-        className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14 min-height-com"
+        className="sticky top-0 z-10 flex flex-col bg-white prod-group pb-14 min-height-com"
         key={product.id}
       >
         <div className="relative mb-4 overflow-hidden bg-gray-200 border aspect-w-1 aspect-h-1 mobile-card-panel white-card-sm">
@@ -357,7 +357,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.name?.toLowerCase()}
           </div>
         </Link>
-        <div className="flex flex-col absolute bottom-0 left-0 right-0 p-2">
+        <div className="flex flex-col absolute bottom-0 left-0 right-0">
           <Button
             className="mt-2 text-sm font-medium rounded-md"
             title={buttonConfig.title}
@@ -367,7 +367,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           />
         </div>
       </div>
-      <div className="lg:mt-10 mt-5 bg-white border-t border-gray-200">
+      <div className="mt-10 bg-white border-t border-gray-200">
         <div className="flex items-center justify-center w-full pb-4 my-4 text-center border-b border-gray-200">
           {[0, 1, 2, 3, 4].map((rating) => (
             <StarIcon

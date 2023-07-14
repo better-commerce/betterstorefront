@@ -111,8 +111,8 @@ export default function RelatedProductWithGroup({
         navigation={true}
         loop={true}
         breakpoints={{
-          640: { slidesPerView: 1.5 },
-          768: { slidesPerView: 4 },
+          640: { slidesPerView: 1 },
+          768: { slidesPerView: productPerColumn },
           1024: { slidesPerView: productPerColumn },
         }}
       >

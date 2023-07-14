@@ -590,7 +590,7 @@ export default function PLPQuickView({
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                         <div className="grid grid-cols-1 sm:grid-cols-12">
-                          <div className="sm:col-span-5 md:col-span-5 lg:col-span-7">
+                          <div className="sm:col-span-7">
                             <div className="flex flex-col px-4 sm:px-6 sm:pb-3">
                               <Swiper
                                 slidesPerView={1}
@@ -662,8 +662,8 @@ export default function PLPQuickView({
                               <h4 className="text-xs font-normal text-gray-400">
                                 {productData?.classification?.category}
                               </h4>
-                              <h3 className="grid grid-cols-12 mb-2 lg:text-xl md:text-xl text-sm font-bold tracking-tight text-primary sm:text-2xl sm:grid-cols-6">
-                                <div className="col-span-8 sm:col-span-4 text-sm sm:text-sm md:text-sm lg:text-lg">
+                              <h3 className="grid grid-cols-12 mb-2 text-xl font-bold tracking-tight text-primary sm:text-2xl sm:grid-cols-6">
+                                <div className="col-span-8 sm:col-span-4">
                                   <Link
                                     href={`/${productData?.slug}`}
                                     passHref
@@ -729,7 +729,7 @@ export default function PLPQuickView({
                                     setSizeInit={setSizeInit}
                                   />
                                   {!isEngravingAvailable && (
-                                    <div className="flex mt-6 sm:mt-0 sm:flex-col1 !text-sm">
+                                    <div className="flex mt-6 sm:mt-0 sm:flex-col1">
                                       <Button
                                         title={buttonConfig.title}
                                         action={buttonConfig.action}

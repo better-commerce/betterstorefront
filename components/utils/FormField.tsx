@@ -159,7 +159,7 @@ const FormField = (props: IFormFieldProps) => {
                         }
                       />
                       <label
-                        className="text-sm main-custom-check-label flex"
+                        className="text-sm main-custom-check-label"
                         htmlFor={option?.label}
                         title="Smooth Payments"
                       >

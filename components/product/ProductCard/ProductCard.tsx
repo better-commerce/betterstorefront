@@ -350,7 +350,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 IMG_PLACEHOLDER
               }
               alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto"
+              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
               style={css}
               width={400}
               height={500}
@@ -364,7 +364,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto"
+                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
                 style={css}
                 width={400}
                 height={500}
@@ -477,7 +477,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           {/* compare remove button */}
         </ButtonLink>
         {isMobile && (
-          <div className="flex m-2 border">
+          <div className="flex mt-2 border">
             <div className="w-4/12">
               <button
                 className="w-full text-center bg-white p-1.5"
