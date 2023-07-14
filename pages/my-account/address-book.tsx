@@ -14,7 +14,7 @@ import { useUI } from '@components/ui/context'
 
 import React from 'react'
 import AddressBook from '@components/account/Address/AddressBook'
-//D:\Projects\kstmstorefront\components\account\Address\AddressBook.tsx
+
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)

@@ -1,7 +1,7 @@
 import useValidateChangedUsernameOTP from '@framework/api/endpoints/notification/validate-change-username-otp'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-const ValidateChangedUsernameOTPApiMiddleware = async (req: any, res: any) => {
+export default async function (req: any, res: any) {
   const { mobileNo, otp } = req.body
   try {
     const response = await useValidateChangedUsernameOTP({
@@ -14,5 +14,3 @@ const ValidateChangedUsernameOTPApiMiddleware = async (req: any, res: any) => {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
-
-export default ValidateChangedUsernameOTPApiMiddleware

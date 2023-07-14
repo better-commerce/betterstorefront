@@ -82,7 +82,7 @@ export default function ProductCompare({
                     <div className="grid grid-cols-12 gap-4">
                       <div className="sm:col-span-2">
                         <div className="flex flex-col items-start justify-start w-full text-left">
-                          <div className="sticky w-full top-0 z-10 flex flex-col bg-white h-[430px]"></div>
+                          <div className="sticky w-full top-0 z-10 flex flex-col bg-white h-[465px]"></div>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
                             Ratings
                           </span>
@@ -90,7 +90,10 @@ export default function ProductCompare({
                             Brand
                           </span>
                           {attributeNames?.map((attribName: any) => (
-                            <span key={attribName} className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
+                            <span
+                              key={attribName}
+                              className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg"
+                            >
                               {attribName}
                             </span>
                           ))}

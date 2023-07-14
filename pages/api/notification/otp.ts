@@ -1,7 +1,7 @@
 import useNotificationOTP from '@framework/api/endpoints/notification/otp'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-const OTPNotificationApiMiddleware = async (req: any, res: any) => {
+export default async function (req: any, res: any) {
   const { mobileNo, entityType, templateId } = req.body
   try {
     const response = await useNotificationOTP({
@@ -15,5 +15,3 @@ const OTPNotificationApiMiddleware = async (req: any, res: any) => {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
-
-export default OTPNotificationApiMiddleware

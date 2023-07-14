@@ -1,7 +1,7 @@
 import useSSOLogin from '@framework/auth/use-sso-login'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-const SSOLoginApiMiddleware = async (req: any, res: any) => {
+export default async function (req: any, res: any) {
   const { username, firstName, lastName, mobile, socialMediaType }: any =
     req.body
   try {
@@ -18,5 +18,3 @@ const SSOLoginApiMiddleware = async (req: any, res: any) => {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
-
-export default SSOLoginApiMiddleware
