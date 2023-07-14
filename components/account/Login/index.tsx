@@ -123,7 +123,9 @@ export default function Login({ isLoginSidebarOpen }: any) {
             isLoginSidebarOpen ? 'sm:w-full !px-0' : 'sm:w-1/2'
           }`}
         />
-        <div className="flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 sm:w-1/2">
+        <div className={`flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 ${
+            isLoginSidebarOpen ? 'sm:w-full' : 'sm:w-1/2'
+          }`}>
           <Link href="/my-account/forgot-password" passHref>
             <span className="block font-medium text-indigo-600 underline cursor-pointer hover:text-indigo-800 hover:underline">
               Forgot password?
