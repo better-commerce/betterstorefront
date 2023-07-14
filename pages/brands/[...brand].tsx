@@ -415,7 +415,6 @@ function BrandDetailPage({
         <meta name="title" content={brandDetails?.name || 'Brands'} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
-
         <meta property="og:image" content="" />
         <meta property="og:title" content={brandDetails?.name} key="ogtitle" />
         <meta
@@ -434,22 +433,24 @@ function BrandDetailPage({
         <>
           <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 md:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
-              <div className="flex flex-col items-center bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <Image
                   alt="Brand Logo"
                   src={
                     brandDetails.images.length !== 0
                       ? brandDetails.images[0]
-                      : '/dummyLogo.svg'
+                      : IMG_PLACEHOLDER
                   }
                   width={212}
                   height={200}
+                  priority
+                  className="w-[120px] md:w-[212px] h-auto"
                 />
                 <div
                   dangerouslySetInnerHTML={{
                     __html: brandDetails?.description,
                   }}
-                  className="text-[18px] text-center leading-6 py-5"
+                  className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5"
                 />
                 <button
                   className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80"
@@ -482,11 +483,11 @@ function BrandDetailPage({
             <div className="mt-10">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-row justify-between">
-                  <p className="font-semibold uppercase cursor-default font-lg">
+                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
                     {BTN_RECOMMENDED_PROD}
                   </p>
                   <button
-                    className="font-semibold uppercase cursor-pointer font-lg hover:underline"
+                    className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline"
                     onClick={handleClick}
                   >
                     {BTN_SEE_ALL}
@@ -534,14 +535,14 @@ function BrandDetailPage({
 
           <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
             <div className="flex justify-between pb-10 mt-4">
-              <p className="font-semibold uppercase cursor-default font-lg">
+              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
                 {FEATURES_HEADING}
                 {` `}
                 {brandDetails.name}
               </p>
               {!isOnlyMobile && (
                 <button
-                  className="font-semibold uppercase cursor-pointer font-lg md:block hover:underline"
+                  className="font-semibold text-[#212530] uppercase cursor-pointer font-lg md:block hover:underline"
                   onClick={handleClick}
                 >
                   {BTN_SEE_ALL}
@@ -571,11 +572,11 @@ function BrandDetailPage({
             {!isOnlyMobile && (
               <>
                 <div className="flex justify-between py-10">
-                  <p className="font-semibold uppercase cursor-default font-lg">
+                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
                     {BTN_RECOMMENDED_PROD}
                   </p>
                   <button
-                    className="font-semibold uppercase cursor-pointer font-lg hover:underline"
+                    className="font-semibold text-[#212530] uppercase cursor-pointer font-lg hover:underline"
                     onClick={handleClick}
                   >
                     {BTN_SEE_ALL}
@@ -589,7 +590,7 @@ function BrandDetailPage({
             )}
 
             <div className="mb-20">
-              <p className="my-10 font-semibold uppercase cursor-default font-lg">
+              <p className="my-10 font-semibold text-[#212530] uppercase cursor-default font-lg">
                 {faq.title}
               </p>
               {faq?.results?.map((val: any, Idx: number) => {
