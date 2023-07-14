@@ -968,26 +968,35 @@ export default function ProductView({
             deviceInfo={deviceInfo}
           />
         </div>
-        <div className="flex flex-col w-full px-0 mx-auto sm:container page-container">
-          <PDPCompare
-            name={data?.brand || ''}
-            pageConfig={config}
-            products={allProductsByBrand}
-            deviceInfo={deviceInfo}
-          />
-        </div>
 
-        {product?.componentProducts && (
-          <Bundles
-            price={
-              isIncludeVAT
-                ? product?.price?.formatted?.withTax
-                : product?.price?.formatted?.withoutTax
-            }
-            products={product?.componentProducts}
-            productBundleUpdate={handleProductBundleUpdate}
-          />
-        )}
+        {product?.componentProducts ? (
+          <>
+            <div className="flex flex-col section-devider"></div>
+            <Bundles
+              price={
+                isIncludeVAT
+                  ? product?.price?.formatted?.withTax
+                  : product?.price?.formatted?.withoutTax
+              }
+              products={product?.componentProducts}
+              productBundleUpdate={handleProductBundleUpdate}
+              deviceInfo={deviceInfo}
+            />
+          </>
+        ) : null}
+
+        {allProductsByBrand?.length > 0 ? (
+          <div className="flex flex-col w-full px-0 mx-auto ">
+            <div className="flex flex-col section-devider"></div>
+            <PDPCompare
+              name={data?.brand || ''}
+              pageConfig={config}
+              products={allProductsByBrand}
+              deviceInfo={deviceInfo}
+            />
+          </div>
+        ) : null}
+
         {relatedProducts?.relatedProducts?.filter((x: any) =>
           matchStrings(x?.relatedType, 'ALSOLIKE', true)
         )?.length > 0 ? (

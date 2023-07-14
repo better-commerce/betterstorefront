@@ -324,7 +324,9 @@ export const GENERAL_SHIPPING_ADDRESS = 'Shipping address'
 export const GENERAL_BILLING_ADDRESS = 'Billing address'
 export const GENERAL_DELIVERED_BY = 'Delivered by'
 export const GENERAL_SUMMARY = 'Summary'
+export const GENERAL_NEXT_ORDER_PROMO = 'Congratulations! You can get a discount on your next order using code'
 export const VALIDATION_YOU_ARE_ALREADY_LOGGED_IN = "You're already logged in"
+export const OFFER_VALIDITY='Your offer is valid for {days} days'
 export const VALIDATION_NO_ACCOUNT_FOUND =
   'No account has been found with this email/password'
 export const VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP =

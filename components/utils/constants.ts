@@ -195,6 +195,7 @@ export const PDP_SIZE_OPTIONS_COUNT = parseInt(
 export module Messages {
   export module Validations {
     export module RegularExpressions {
+      export const NUMBERS_ONLY = /^[0-9]*$/
       export const MOBILE_NUMBER =
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
       export const EMAIL =
@@ -304,6 +305,11 @@ export module Messages {
       VALID_EMAIL:
         'Success! Check your email for the link to change your password',
     }
+
+    export const ChequePayment: any = {
+      CHEQUE_NUMBER_REQUIRED: 'Cheque number is a required',
+      CHEQUE_NUMBER_INPUT: 'Cheque Number should only contain digits',
+    }
   }
 
   export const Messages: any = {
@@ -337,6 +343,8 @@ export module Messages {
     'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
     TOKEN_INVALID: 'Woops! Token is invalid',
     TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
+    COMPANY_NOT_FOUND: 'Company not found.',
+    COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
   }
 }
 

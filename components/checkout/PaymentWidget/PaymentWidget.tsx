@@ -5,7 +5,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { processPaymentResponse } from '@framework/utils/payment-util'
 import {
-  PaymentGateway,
+  PaymentMethodType,
   PaymentStatus,
 } from '@components/utils/payment-constants'
 
@@ -63,7 +63,7 @@ export default function PaymentWidget({
 
   const CODHandler = async (paymentResponseRequest: any) => {
     const res: any = await processPaymentResponse(
-      PaymentGateway.COD,
+      PaymentMethodType.COD,
       paymentResponseRequest
     )
     if (res === PaymentStatus.AUTHORIZED) {
