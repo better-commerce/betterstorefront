@@ -36,10 +36,8 @@
     margin-bottom: 1.5rem;
 }
 .search-wrapper {
-    left: -190px
-}
-@media (max-width: 800px) {
-    .search-wrapper {
-        left: 0
-    }
+    right: 0;
+    width: 100%;
+    left: 0;
+    z-index: 999;
 }
