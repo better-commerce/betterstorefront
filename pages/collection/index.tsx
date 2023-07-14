@@ -12,7 +12,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 export default function CollectionList(props: any) {
   const css = { maxWidth: '100%', height: 'auto' }
   return (
-    <main className="w-full px-6 mx-auto md:w-4/5 sm:px-0">
+    <main className="w-full px-6 mx-auto md:w-4/5 sm:px-4">
       <section aria-labelledby="products-heading" className="mt-8">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
           {SHOP_BY_COLLECTION}

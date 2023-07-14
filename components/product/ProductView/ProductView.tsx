@@ -727,20 +727,21 @@ export default function ProductView({
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
       <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
-        <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-2 sm:mb-6">
+        <div className="px-4 mx-auto mb-4 lg:w-4/5 sm:px-4 sm:mb-6">
           {breadcrumbs && (
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
-        <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none md:w-4/5">
+        <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none lg:w-4/5">
           {isMobile ? (
             <Swiper
               slidesPerView={1}
               spaceBetween={4}
               navigation={true}
               loop={true}
+              className='!px-4 lg:px-0'
               breakpoints={{
-                640: { slidesPerView: 1 },
+                640: { slidesPerView: 1.2 },
                 768: { slidesPerView: 4 },
                 1024: { slidesPerView: 4 },
               }}
@@ -808,7 +809,7 @@ export default function ProductView({
           )}
 
           {/* Product info */}
-          <div className="px-4 mt-2 sm:mt-10 sm:px-8 lg:mt-0 lg:col-span-5">
+          <div className="px-4 mt-2 sm:mt-10 sm:px-4 lg:mt-0 lg:col-span-5">
             <div className="flex justify-between gap-4 mb-3 sm:mb-0">
               <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}
@@ -980,7 +981,7 @@ export default function ProductView({
           </div>
         </div>
         <div className="flex flex-col section-devider"></div>
-        <div className="flex flex-col w-full px-0 mx-auto sm:container page-container">
+        <div className="flex flex-col w-full px-0 lg:mx-auto sm:container page-container">
           <ProductSpecifications
             attrGroup={attrGroup}
             product={product}
@@ -1022,7 +1023,7 @@ export default function ProductView({
         )?.length > 0 ? (
           <>
             <div className="flex flex-col section-devider"></div>
-            <div className="flex flex-col w-full px-0 mx-auto sm:container page-container">
+            <div className="flex flex-col w-full px-4 lg:mx-auto sm:container page-container sm:px-4 lg:px-0 md:px-4">
               <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
                 You May Also Like
               </h3>
@@ -1047,7 +1048,7 @@ export default function ProductView({
           </>
         )}
         <div className="flex flex-col section-devider" aria-hidden="true"></div>
-        <div className="px-6 pb-5 mx-auto mb-5 sm:px-0 sm:container sm:pb-10 sm:mb-10">
+        <div className="px-4 pb-5 mx-auto mb-5 sm:px-4 lg:container sm:pb-10 sm:mb-10 md:px-4 lg:px-0">
           {reviewInput && <ReviewInput productId={product?.recordId} />}
         </div>
         {isEngravingAvailable && (

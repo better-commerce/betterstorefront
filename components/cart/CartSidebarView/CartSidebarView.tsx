@@ -1153,7 +1153,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                         </div>
                       </Dialog>
                     </Transition>
-                    <div className="sm:px-4">
+                    <div className="sm:px-4 px-4">
                       <PromotionInput
                         basketPromos={basketPromos}
                         items={cartItems}

@@ -433,7 +433,7 @@ export default function AddressBook({ deviceInfo }: any) {
   }
   return (
     <>
-      <div className="px-2 py-4 mb-4 border-b mob-header sm:hidden full-m-header">
+      <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
         <h3 className="max-w-4xl mx-auto text-xl font-semibold text-black">
           <Link href="/my-account">
             <span className="mr-2 leading-none">
@@ -443,11 +443,11 @@ export default function AddressBook({ deviceInfo }: any) {
           Addresses
         </h3>
       </div>
-      <main className="lg:px-8 mt-4">
-        <div className="max-w-4xl lg:px-0 mx-auto lg:mb-14">
-          <div className="px-0 sm:px-0">
+      <main className="lg:px-8 px-4 mt-4">
+        <div className="lg:px-0 mx-auto lg:mb-14">
+          <div className="px-0 sm:px-0 pt-10">
             <h1 className="mb-3 font-bold tracking-tight  text-primary sm:mb-5 dark:text-black">
-              <span className="hidden sm:inline-block">{title}</span>
+              <span className="hidden text-xl sm:inline-block">{title}</span>
               <span className="inline-block sm:hidden">Saved Addresses</span>
             </h1>
           </div>
@@ -467,7 +467,7 @@ export default function AddressBook({ deviceInfo }: any) {
         )}
         {!isNewFormMode && (
           <>
-          <div className="grid max-w-4xl grid-cols-1 mx-auto sm:grid-cols-2 sm:gap-y-4 gap-y-2 gap-5">
+          <div className="grid grid-cols-1 mx-auto sm:grid-cols-2 sm:gap-y-4 gap-y-2 gap-5">
             {data.map((item: any, idx: number) => {
               return (
                 <AddressItem

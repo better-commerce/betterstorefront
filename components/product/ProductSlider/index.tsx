@@ -25,13 +25,13 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({
 }) => {
   return (
     <Swiper
-      className="px-4 mb-4 bg-white sm:mb-8 sm:pxy-0 min-cls-h"
+      className="px-4 mb-4 bg-white sm:mb-8 sm:px-0 min-cls-h"
       slidesPerView={1.5}
       spaceBetween={10}
       navigation={true}
       // loop={true}
       breakpoints={{
-        640: { slidesPerView: 1.5 },
+        640: { slidesPerView: 2.5 },
         768: { slidesPerView: 4 },
         1024: { slidesPerView: 5 },
       }}

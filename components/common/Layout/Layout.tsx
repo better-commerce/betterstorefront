@@ -269,7 +269,7 @@ const Layout: FC<Props & IExtraProps> = ({
             maxBasketItemsCount={maxBasketItemsCount}
             keywords={keywords}
           />
-          <main className="pt-16 sm:pt-20 fit">
+          <main className="pt-16 sm:pt-16 fit">
             {displayAlert && <AlertRibbon />}
             {children}
           </main>

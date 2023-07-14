@@ -598,7 +598,7 @@ function BrandDetailPage({
           </div>
         </>
       ) : (
-        <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
+        <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6 sm:px-4">
           <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
             <Link href="/brands" passHref>
               <span className="flex items-end upper case">Brands</span>
