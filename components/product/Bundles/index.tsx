@@ -13,7 +13,7 @@ export default function Bundles({
   products = [],
   productBundleUpdate = () => {},
   deviceInfo,
-  handleBulkAdd = () => {},
+  onBundleAddToCart = () => {},
 }: any) {
   const [productData, setProductData] = useState(null)
   const handleProduct = (product: any) => {
@@ -85,7 +85,7 @@ export default function Bundles({
           </p>
           <button
             className="ml-2 flex-1 bg-black border rounded-sm uppercase lg:py-2 py-3 sm:px-4 px-1 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full  btn-c btn-primary"
-            onClick={handleBulkAdd}
+            onClick={onBundleAddToCart}
           >
             Add Bundle To basket
           </button>
