@@ -7,28 +7,63 @@ import { BTN_SEARCH } from '@components/utils/textVariables'
 import { ENABLE_ELASTIC_SEARCH } from '@components/utils/constants'
 import dynamic from 'next/dynamic'
 import ElasticSearchBar from '@components/search/ElasticSearchBar'
-const SearchWrapper = dynamic(() => import('@components/search'))
+import { SearchProvider } from '@elastic/react-search-ui'
+import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector'
 
+import {
+  buildAutocompleteQueryConfig,
+  buildFacetConfigFromConfig,
+  buildSearchOptionsFromConfig,
+  getConfig,
+} from '@components/config/config-helper'
+import { useUI } from '@components/ui'
+const SearchWrapper = dynamic(() => import('@components/search'))
+const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
+const connector = new AppSearchAPIConnector({
+  searchKey,
+  engineName,
+  hostIdentifier,
+  endpointBase,
+})
+const elasticConfig = {
+  searchQuery: {
+    facets: buildFacetConfigFromConfig(),
+    ...buildSearchOptionsFromConfig(),
+  },
+  autocompleteQuery: buildAutocompleteQueryConfig(),
+  apiConnector: connector,
+  alwaysSearchOnInitialLoad: true,
+}
 interface ISearchBarProps {
   id?: string
   onClick: any
+  keywords?: any
 }
-
 const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
   id = 'search',
   onClick,
+  keywords,
 }) => {
+  const { showSearchBar, setShowSearchBar } = useUI()
 
   if (ENABLE_ELASTIC_SEARCH) {
     return (
-      <div className="flex flex-row w-full rounded-sm sm:w-96">
-        <div
-          className="relative items-start w-full pr-3 text-left text-gray-400 sm:p-1 hover:text-gray-500"
-          aria-label="Search"
-        >
-          <ElasticSearchBar />
+      <SearchProvider config={elasticConfig}>
+        <div className="flex flex-row w-full rounded-sm sm:w-96">
+          <div
+            className="relative items-start w-full pr-3 text-left text-gray-400 sm:p-1 hover:text-gray-500"
+            aria-label="Search"
+          >
+            <ElasticSearchBar />
+          </div>
         </div>
-      </div>
+        {showSearchBar && (
+          <SearchWrapper
+            keywords={keywords}
+            closeWrapper={() => setShowSearchBar(false)}
+          />
+        )}
+      </SearchProvider>
     )
   }
 
