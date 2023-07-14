@@ -705,19 +705,22 @@ export default function ProductView({
     }
   })
 
-  const handleBundleAddToCart = async () => {
-      if(product?.componentProducts)
+  const bundleAddToCart = async () => {
+    const item = await cartHandler().addToCart(
       {
-       const item = await cartHandler().bulkAddToCart(
-          user?.userId,
-          basketId,
-          user?.isAssociated,
-          "ADD",
-          product?.componentProducts
-        )
-        setCartItems(item)
-        openCart()
-      }
+        basketId,
+        productId: product?.recordId ?? product?.productId,
+        qty: 1,
+        manualUnitPrice: product?.price?.raw?.withTax,
+        stockCode: product?.stockCode,
+        userId: user?.userId,
+        isAssociated: user?.isAssociated,
+      },
+      'ADD',
+      { product }
+    )
+    setCartItems(item)
+    openCart()
   }
 
   return (
@@ -997,7 +1000,7 @@ export default function ProductView({
               products={product?.componentProducts}
               productBundleUpdate={handleProductBundleUpdate}
               deviceInfo={deviceInfo}
-              onBundleAddToCart={handleBundleAddToCart}
+              onBundleAddToCart={bundleAddToCart}
             />
           </>
         ) : null}
