@@ -5,6 +5,8 @@ import { Popover, Transition, Dialog, Tab, Disclosure } from '@headlessui/react'
 import { Searchbar } from '@components/common'
 import { Logo } from '@components/ui'
 import Link from 'next/link'
+import cn from 'classnames'
+
 //
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
@@ -611,7 +613,14 @@ const Navbar: FC<Props & IExtraProps> = ({
         </div>
       )}
       <SearchProvider config={elasticConfig}>
-        <header className="fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64">
+        <header
+          className={cn(
+            'fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64',
+            {
+              '!absolute': showSearchBar,
+            }
+          )}
+        >
           <nav
             aria-label="Top"
             className="relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
@@ -742,7 +751,10 @@ const Navbar: FC<Props & IExtraProps> = ({
               </Popover.Group>
             )}
             <div className="flex items-center justify-end flex-1 cart-icon-dark-white">
-              <Searchbar onClick={setShowSearchBar} />
+              <Searchbar
+                onClick={setShowSearchBar}
+                keywords={keywords}
+              />
               <Account
                 title={title}
                 config={accountDropdownConfig}
