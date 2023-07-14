@@ -523,7 +523,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                           return (
                                             <div
                                               key={`navbar-parent-${navIdx}`}
-                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
+                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-6 gap-y-0 gap-x-0 lg:gap-x-0"
                                             >
                                               <ul
                                                 role="list"
@@ -537,8 +537,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                                       key={`${navItem.caption}-${idx}`}
                                                       title={navItem.caption}
                                                       href={
-                                                        navBlock?.navBlockType ==
-                                                        9
+                                                        navBlock?.navBlockType == 9
                                                           ? `/collection/${removePrecedingSlash(
                                                               navItem.itemLink
                                                             )}`
@@ -615,7 +614,7 @@ const Navbar: FC<Props & IExtraProps> = ({
       <SearchProvider config={elasticConfig}>
         <header
           className={cn(
-            'fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64',
+            'fixed top-0 right-0 w-full bg-white shadow-md xl:top-6 bg-header-color z-999 navbar-min-64',
             {
               '!absolute': showSearchBar,
             }
@@ -623,11 +622,11 @@ const Navbar: FC<Props & IExtraProps> = ({
         >
           <nav
             aria-label="Top"
-            className="relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
+            className="relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-4 md:px-4 lg:px-0 ipad-nav"
           >
             <button
               type="button"
-              className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md sm:hidden"
+              className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md xl:hidden"
               onClick={() => {
                 hamburgerMenu()
                 setOpen(true)
@@ -638,13 +637,13 @@ const Navbar: FC<Props & IExtraProps> = ({
             </button>
 
             <Link href="/" title="BetterCommerce">
-              <div className="flex w-20 cursor-pointer sm:w-32">
+              <div className="flex w-20 cursor-pointer md:w-32">
                 <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
                 <Logo />
               </div>
             </Link>
             {renderState && (
-              <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16">
+              <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16 mob-landscape-hidden">
                 {config?.map((item: any, idx: number) => (
                   <Popover
                     key={`popover-fly-menu-${idx}`}
@@ -772,7 +771,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                   action={configAction}
                 />
               </div>
-              <div className="flow-root w-10 px-1 sm:w-16">
+              <div className="flow-root w-10 px-1 md:w-16 lg:w-16">
                 <button
                   className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
                   onClick={() => {
@@ -797,7 +796,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                 </button>
               </div>
 
-              <div className="flow-root w-10 px-1 sm:w-16">
+              <div className="flow-root w-10 px-1 md:w-12 lg:w-16">
                 <button
                   className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
                   onClick={() => {

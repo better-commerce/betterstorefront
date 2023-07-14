@@ -5,7 +5,7 @@ import { setCookie } from '@components/utils/cookieHandler'
 
 export default function CurrencySwitcher({ config = [], title, action }: any) {
   return (
-    <Menu as="div" className="relative flow-root w-10 px-1 text-left sm:w-16">
+    <Menu as="div" className="relative flow-root w-10 px-1 text-left md:w-12 lg:w-16">
       <Menu.Button
         className="grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
         aria-label="Currency"

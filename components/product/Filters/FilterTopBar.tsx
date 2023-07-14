@@ -36,7 +36,7 @@ export default function FiltersRightOpen({
   return (
     <section
       aria-labelledby="filter-heading"
-      className="items-center justify-between flex-1 hidden w-full py-4 text-center sm:mb-0 sm:flex sm:pr-2 lg:pr-6 flex-end"
+      className="items-center justify-between flex-1 hidden w-full py-4 text-center sm:mb-0 sm:flex sm:pr-2 lg:pr-6 flex-end mob-landscape-hidden"
     >
       {appliedFilters?.length > 0 ? (
         <div className="relative col-start-1 row-start-1 py-2">

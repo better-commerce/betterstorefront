@@ -45,7 +45,7 @@ export default function ProductSort({
   return (
     <div className="flex items-center">
       <div>
-        <div className="container flex items-center justify-end w-full px-6 pt-1 mx-auto">
+        <div className="container flex items-center justify-end w-full px-4 pt-1 mx-auto">
           <div className="flex flex-col py-0 text-xs font-medium text-black uppercase sm:text-xs whitespace-nowrap">
             Compare Items
           </div>

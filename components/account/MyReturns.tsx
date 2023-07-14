@@ -91,8 +91,8 @@ export default function MyReturns() {
 
       <main className="lg:px-8">
         <div className="max-w-4xl lg:mx-12">
-          <div className="lg:px-0 sm:px-0">
-            <h1 className="font-extrabold tracking-tight text-gray-900">
+          <div className="lg:px-0 sm:px-5 px-5 pt-5">
+            <h1 className="font-extrabold text-lg tracking-tight text-gray-900">
               {RETURN_ORDER_TITLE}
             </h1>
             <p className="mt-2 text-sm font-normal text-black">

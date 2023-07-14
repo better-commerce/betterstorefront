@@ -40,7 +40,7 @@ export default function CategoryList(props: any) {
           key="ogurl"
         />
       </NextHead>
-      <main className="w-full px-4 mx-auto sm:px-0 md:w-4/5 lg:px-0">
+      <main className="w-full px-4 mx-auto sm:px-4 md:w-4/5 lg:px-0">
         <section aria-labelledby="products-heading ">
           <h1 className="mt-4 tracking-tight dark:text-gray-700">
             {SHOP_BY_CATEGORY}
