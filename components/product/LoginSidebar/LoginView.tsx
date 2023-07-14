@@ -128,7 +128,7 @@ const LoginView: FC<React.PropsWithChildren<unknown>> = () => {
         <Form
           btnText="Login"
           type="login"
-          loginsidebar="loginsidebar"
+          isLoginSidebarOpen="isLoginSidebarOpen"
           onSubmit={handleUserLogin}
           className="!w-full font-semibold"
           apiError={noAccount ? VALIDATION_NO_ACCOUNT_FOUND : ''}
@@ -140,7 +140,7 @@ const LoginView: FC<React.PropsWithChildren<unknown>> = () => {
             </span>
           )}
         </div>
-        <SocialSignInLinks loginsidebar="loginsidebar" containerCss="flex justify-center gap-1" />
+        <SocialSignInLinks isLoginSidebarOpen="isLoginSidebarOpen" containerCss="flex justify-center gap-1" />
         <div className="flex flex-col items-end justify-end w-full px-3 mx-auto mt-4">
           <Link href="/my-account/forgot-password" passHref>
             <span className="block font-medium text-indigo-600 underline cursor-pointer hover:text-indigo-800 hover:underline">
