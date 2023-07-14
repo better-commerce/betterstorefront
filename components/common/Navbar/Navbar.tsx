@@ -154,7 +154,7 @@ const Navbar: FC<Props & IExtraProps> = ({
     openCart,
     openWishlist,
     setShowSearchBar,
-    openLogin,
+    openLoginSideBar,
     openBulkAdd,
   } = useUI()
 
@@ -286,13 +286,13 @@ const Navbar: FC<Props & IExtraProps> = ({
           }
         }
       }
-      const accessToken = localStorage.getItem('user')
-      if (!accessToken || isGuestUser) {
+      const objUser = localStorage.getItem('user')
+      if (!objUser || isGuestUser) {
       //  setAlert({ type: 'success', msg:" Please Login "})
-        openLogin();
+        openLoginSideBar();
         return;
       }
-      if(accessToken){
+      if(objUser){
         openWishlist();
       }
     } catch (error) {

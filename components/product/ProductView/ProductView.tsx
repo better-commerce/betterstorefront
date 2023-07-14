@@ -146,7 +146,7 @@ export default function ProductView({
     setCartItems,
     user,
     openCart,
-    openLogin,
+    openLoginSideBar,
     isGuestUser,
     setIsCompared,
   } = useUI()
@@ -652,13 +652,13 @@ export default function ProductView({
       }
     }
 
-    const accessToken = localStorage.getItem('user')
-    if (!accessToken || isGuestUser) {
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
       //  setAlert({ type: 'success', msg:" Please Login "})
-      openLogin()
+      openLoginSideBar()
       return
     }
-    if (accessToken) {
+    if (objUser) {
       const createWishlist = async () => {
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {

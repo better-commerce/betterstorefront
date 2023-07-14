@@ -68,7 +68,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     cartItems,
     wishListItems,
     isGuestUser,
-    openLogin,
+    openLoginSideBar,
     setAlert,
     isCompared,
     compareProductList,
@@ -132,13 +132,13 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
 
   const handleWishList = async () => {
-    const accessToken = localStorage.getItem('user')
-    if (!accessToken || isGuestUser) {
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
       //  setAlert({ type: 'success', msg:" Please Login "})
-      openLogin()
+      openLoginSideBar()
       return
     }
-    if (accessToken) {
+    if (objUser) {
       const createWishlist = async () => {
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
