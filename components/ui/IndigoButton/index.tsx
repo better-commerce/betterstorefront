@@ -11,6 +11,7 @@ interface Props {
   colorScheme?: any
   disabled?: boolean
   validateAction?: any
+  formId?: string
 }
 
 const DEFAULT_COLOR_SCHEME = {
@@ -27,6 +28,7 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
   colorScheme = DEFAULT_COLOR_SCHEME,
   disabled = false,
   validateAction = null,
+  formId = null,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -35,24 +37,23 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
   const handleAction = () => {
     setIsLoading(true)
     if (buttonType === 'cart') {
-
       if (validateAction) {
         validateAction().then((status: boolean) => {
           setIsLoading(false)
           if (status) {
-            setIsLoading(true); // Set isLoading to true before performing action
+            setIsLoading(true) // Set isLoading to true before performing action
             action().then(() => {
               setIsLoading(false)
               openCart()
-            });
+            })
           }
         })
       } else {
-      action()?.then(() => {
-        setIsLoading(false)
-        openCart()
-      })
-    }
+        action()?.then(() => {
+          setIsLoading(false)
+          openCart()
+        })
+      }
     } else
       action()?.then(() => {
         setIsLoading(false)
@@ -61,7 +62,16 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
 
   const { bgColor, hoverBgColor, focusRingColor } = colorScheme
 
-  return (
+  return formId ? (
+    <button
+      type="submit"
+      form={formId}
+      className={`xs:max-w-xs flex-1 ${bgColor} border border-transparent rounded-sm uppercase lg:py-2 py-3 sm:px-4 px-1 flex items-center justify-center font-medium text-white hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} sm:w-full ${className} btn-c btn-primary`}
+      disabled={disabled}
+    >
+      {isLoading ? <LoadingDots /> : title}
+    </button>
+  ) : (
     <button
       onClick={handleAction}
       type="button"

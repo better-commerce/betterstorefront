@@ -70,7 +70,7 @@ export default function cartHandler() {
         url = NEXT_BULK_ADD_TO_CART // Modify url
         const mainProduct = [
           {
-            productId: data.product.productId, // ?? data.product.recordId,
+            productId: data.product.productId ?? data.product.recordId,
             stockCode: data.product.stockCode,
             productName: data.product.name,
             qty: 1,
@@ -83,7 +83,7 @@ export default function cartHandler() {
           findComplementaryStatus && findComplementaryStatus.length
         const bundledProducts = data.product.componentProducts.map((x: any) => {
           return {
-            productId: x.productId, // ?? x.recordId,
+            productId: x.productId ?? x.recordId,
             stockCode: x.stockCode,
             productName: x.name,
             parentProductId: isComplementary ? Guid.empty : productId,

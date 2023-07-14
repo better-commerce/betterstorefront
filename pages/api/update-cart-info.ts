@@ -1,7 +1,7 @@
 import { useUpdateCartInfo } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-const UpdateCartInfoApiMiddleware = async (req: any, res: any) => {
+export default async function (req: any, res: any) {
   const { basketId, info, lineInfo }: any = req.body
   try {
     const response = await useUpdateCartInfo()({
@@ -14,6 +14,4 @@ const UpdateCartInfoApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
-
-export default UpdateCartInfoApiMiddleware;
+}

@@ -139,6 +139,7 @@ export interface IExtraProps {
   readonly maxBasketItemsCount: number
   readonly isIncludeVAT?: boolean
   onIncludeVATChanged?: any
+  keywords?: any
 }
 
 const Layout: FC<Props & IExtraProps> = ({
@@ -261,12 +262,6 @@ const Layout: FC<Props & IExtraProps> = ({
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         <div className={cn(s.root)}>
-          {showSearchBar && (
-            <SearchWrapper
-              keywords={keywords}
-              closeWrapper={() => setShowSearchBar(false)}
-            />
-          )}
           <Navbar
             onIncludeVATChanged={includeVATChanged}
             currencies={config?.currencies}
@@ -275,6 +270,7 @@ const Layout: FC<Props & IExtraProps> = ({
             languages={config?.languages}
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount}
+            keywords={keywords}
           />
           <main className="pt-16 sm:pt-20 fit">
             {displayAlert && <AlertRibbon />}
