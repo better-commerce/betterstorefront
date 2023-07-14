@@ -83,7 +83,7 @@ const Slider = ({ images, isBanner }: data) => {
                 )}
                 {!isBanner && (
                   <p
-                    className="flex items-center justify-center text-sm font-semibold sm:hidden border h-10 -mt-0 border-orange-300 bg-gray-50"
+                    className="flex items-center text-[#212530] justify-center text-sm font-semibold sm:hidden border h-10 -mt-0 border-orange-300 bg-gray-50"
                     onClick={() => {
                       Router.push(val.link ? val.link : '#')
                     }}

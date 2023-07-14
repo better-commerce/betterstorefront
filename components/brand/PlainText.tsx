@@ -20,7 +20,7 @@ export default function PlainText({ textNames, heading }: any) {
       className={`bg-[#F3EDE3] grid grid-cols-1 gap-5 md:grid-cols-2 ${height} p-10 sm:p-20`}
     >
       <div className="flex items-center sm:items-end py-0 sm:py-10">
-        <p className="font-semibold text-[12px] md:text-[32px] leading-2 sm:leading-10 text-sm">
+        <p className="font-semibold text-[12px] text-[#212530] md:text-[32px] leading-2 sm:leading-10 text-sm">
           {heading
             ? heading
             : 'The brand represents performance, innovation, andreliability, with a hard-earned reputation for quality and highlevels of durability.'}
@@ -34,7 +34,7 @@ export default function PlainText({ textNames, heading }: any) {
                 <span
                   key={index}
                   className={cn(
-                    'font-bold text-[10px] md:text-sm leading-1 sm:leading-4',
+                    'font-bold text-[10px] text-[#212530] md:text-sm leading-1 sm:leading-4',
                     {
                       'font-semibold': index != 0,
                       'font-bold': index == 0,
@@ -57,7 +57,7 @@ export default function PlainText({ textNames, heading }: any) {
             setIsExpandable(true)
           }}
         >
-          <span>Expand</span>
+          <span className="text-[#212530]">Expand</span>
           <Image
             height={150}
             width={150}
@@ -73,7 +73,7 @@ export default function PlainText({ textNames, heading }: any) {
             setIsExpandable(false)
           }}
         >
-          <span>Collapse</span>
+          <span className="text-[#212530]">Collapse</span>
           <Image
             height={50}
             width={50}
