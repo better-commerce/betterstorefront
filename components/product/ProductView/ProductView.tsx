@@ -705,7 +705,7 @@ export default function ProductView({
     }
   })
 
-  const handleBulkAddToCart = async () => {
+  const handleBundleAddToCart = async () => {
       if(product?.componentProducts)
       {
        const item = await cartHandler().bulkAddToCart(
@@ -997,7 +997,7 @@ export default function ProductView({
               products={product?.componentProducts}
               productBundleUpdate={handleProductBundleUpdate}
               deviceInfo={deviceInfo}
-              handleBulkAdd={handleBulkAddToCart}
+              onBundleAddToCart={handleBundleAddToCart}
             />
           </>
         ) : null}
