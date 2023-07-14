@@ -134,7 +134,7 @@ export default function Filters({
 
       <section
         aria-labelledby="filter-heading-filter"
-        className="flex items-center justify-between px-0 py-0 text-center w-screen border-t border-gray-200 sm:px-4 lg:max-w-7xl lg:px-8"
+        className="flex items-center justify-between px-0 py-0 text-center border-t border-gray-200 sm:px-6 lg:max-w-7xl lg:px-8"
       >
         <h2 id="filter-heading-filter" className="sr-only">
           {GENERAL_FILTER_TITLE}

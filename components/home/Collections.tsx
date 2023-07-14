@@ -6,7 +6,7 @@ import Link from 'next/link'
 export default function Collections({ data }: any) {
   const css = { maxWidth: '100%', minHeight: '350px' }
   return (
-    <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-4 sm:grid-cols-3 lg:px-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 px-4">
       {data?.map((collection: any, colId: number) => (
         <div
           className="relative flex flex-col sm:col-span-1"
@@ -34,7 +34,7 @@ export default function Collections({ data }: any) {
               />
             </Link>
           </div>
-          <div className="flex flex-col w-full px-0 py-2 text-left h-full">
+          <div className="flex flex-col w-full px-0 py-2 text-left">
             <div className="mt-3 mb-2 font-bold text-black">
               {collection?.collectionlist_title}
             </div>

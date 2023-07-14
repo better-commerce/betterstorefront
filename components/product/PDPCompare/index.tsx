@@ -16,7 +16,7 @@ const PDPCompare = ({ pageConfig, name, products, deviceInfo }: any) => {
   }
 
   return (
-    <div className="lg:mx-auto container page-container px-4 sm:px-4 lg:px-4">
+    <div className="mx-auto sm:container page-container">
       <div className="sm:col-span-8">
         <div className="flex-1 pb-0 pr-4 sm:pb-4">
           <h2 className="mb-2 font-bold font-18 text-dark-brown">

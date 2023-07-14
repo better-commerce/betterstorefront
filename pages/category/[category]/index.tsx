@@ -660,7 +660,7 @@ function CategoryLandingPage({
 
             {/* related category  */}
             <div className="py-6">
-              <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-4">
+              <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
                 <h2 className="mb-2 font-bold uppercase font-18">
                   related categories
                 </h2>

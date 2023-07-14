@@ -10,7 +10,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 function Categories({ data, deviceInfo }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const css = { maxWidth: '100%', minHeight: '350px' }
-  const mobcss = { maxWidth: '100%', minHeight: '250px' }
+  const mobcss = { maxWidth: '100%', minHeight: '150px' }
   const [renderState, setRenderState] = useState(false)
   useEffect(() => setRenderState(true), [])
   if (!renderState) return null

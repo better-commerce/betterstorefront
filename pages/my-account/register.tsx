@@ -56,8 +56,8 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
   }
 
   return (
-    <div className="w-full flex justify-center mt-10 flex-col items-center sm:pl-10 sm:pr-10">
-      <div className="font-semibold w-full px-4 sm:px-0 md:w-1/2">
+    <div className="w-full flex justify-center mt-10 flex-col items-center">
+      <div className="font-semibold w-full px-4 sm:px-0 sm:w-1/2">
         <label className="text-gray-700 text-sm">{GENERAL_EMAIL}</label>
         <input
           className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
@@ -68,7 +68,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
         />
       </div>
       {error ? <span className="text-red-500 capitalize">{error}</span> : null}
-      <div className="w-full px-4 sm:px-0 md:w-1/2 flex justify-center items-center my-5">
+      <div className="w-full px-4 sm:px-0 sm:w-1/2 flex justify-center items-center my-5">
         <Button
           className="btn-c btn-primary"
           buttonType="default"
@@ -77,7 +77,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
         />
       </div>
 
-      <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto md:w-1/2 px-3 sm:w-full sm:px-0" />
+      <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto sm:w-1/2" />
     </div>
   )
 }
