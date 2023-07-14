@@ -704,6 +704,25 @@ export default function ProductView({
       thumbnail: image.image,
     }
   })
+
+  const bundleAddToCart = async () => {
+    const item = await cartHandler().addToCart(
+      {
+        basketId,
+        productId: product?.recordId ?? product?.productId,
+        qty: 1,
+        manualUnitPrice: product?.price?.raw?.withTax,
+        stockCode: product?.stockCode,
+        userId: user?.userId,
+        isAssociated: user?.isAssociated,
+      },
+      'ADD',
+      { product }
+    )
+    setCartItems(item)
+    openCart()
+  }
+
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
@@ -981,6 +1000,7 @@ export default function ProductView({
               products={product?.componentProducts}
               productBundleUpdate={handleProductBundleUpdate}
               deviceInfo={deviceInfo}
+              onBundleAddToCart={bundleAddToCart}
             />
           </>
         ) : null}
