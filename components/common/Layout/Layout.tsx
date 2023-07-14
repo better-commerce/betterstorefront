@@ -9,7 +9,6 @@ import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
 import { WishlistSidebarView } from '@components/wishlist'
 import { CookieBanner } from '@schlomoh/react-cookieconsent'
-import { LoginSidebarView } from '@components/product/LoginSidebar'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
 import AlertRibbon from '@components/ui/AlertRibbon'
@@ -22,6 +21,7 @@ import {
 } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
+import LoginSidebarView from '@components/account/Login/LoginSidebar'
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
 const CartSidebarView = dynamic(
   () => import('@components/cart/CartSidebarView')
