@@ -7,11 +7,12 @@ const UpdateAddressApiMiddleware = async (req: any, res: any) => {
     const response = await updateAddress()({
       basketId,
       model,
+      cookies: req?.cookies,
     })
     res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default UpdateAddressApiMiddleware;
+export default UpdateAddressApiMiddleware

@@ -4,7 +4,7 @@ import { decipherPayload } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
 import usePayments from 'framework/bettercommerce/api/endpoints/payments'
 
-const PaymentsApiMiddleware = async (req: any, res: any) => {
+export default async function (req: any, res: any) {
   let referer
   let origin: string = req?.headers?.referer
   if (origin) {
@@ -42,5 +42,3 @@ const PaymentsApiMiddleware = async (req: any, res: any) => {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
-
-export default PaymentsApiMiddleware

@@ -119,6 +119,10 @@ export const WISHLIST_SIDEBAR_MESSAGE =
   'Uh-oh, you don’t have any items in here'
 export const GENERAL_SHOPPING_CART = 'Shopping cart'
 export const GENERAL_TOTAL_SAVINGS = 'Total Savings'
+export const GENERAL_BULK_ORDER_PAD = 'Bulk Order'
+export const GENERAL_SHOW_MORE_ENTRY_FIELDS = 'Show More Entry Fields'
+export const GENERAL_COPY_AND_PASTE = 'Copy and Paste'
+export const GENERAL_LINE_BY_LINE = 'Line By Line'
 export const CLOSE_PANEL = 'Close panel'
 export const SUBTOTAL_INCLUDING_TAX = 'Subtotal (taxes included)'
 export const SUBTOTAL_EXCLUDING_TAX = 'Subtotal (taxes excluded)'
@@ -202,8 +206,7 @@ export const SIGN_UP_TEXT =
   'The latest deals and savings, sent to your inbox weekly.'
 export const GENERAL_EMAIL_ADDRESS = 'Email address'
 export const BTN_SIGN_UP = 'Sign up'
-export const COPYRIGHT_FOOTER_INFO =
-  '2022 BetterCommerce, Inc. All rights reserved.'
+export const COPYRIGHT_FOOTER_INFO = 'BetterCommerce, Inc. All rights reserved.'
 export const GENERAL_COOKIE_TEXT =
   'This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.'
 export const BTN_ACCEPT_COOKIE = 'Accept cookies'
@@ -277,6 +280,7 @@ export const BTN_ADD_TO_WISHLIST = 'Add to wishlist'
 export const BTN_MOVE_TO_WISHLIST = 'Move to Wishlist'
 export const ALERT_SUCCESS_WISHLIST_MESSAGE = 'Wishlisted'
 export const PRODUCT_SPECIFICATION = 'Product specification'
+export const PDP_BRAND_COMPARE = 'Compare same brand products'
 export const GENERAL_NOT_AVAILABLE = 'Not Available'
 export const GENERAL_CARE_TITLE = 'Care'
 export const PERFECT_FOR = 'Perfect for'
@@ -320,7 +324,9 @@ export const GENERAL_SHIPPING_ADDRESS = 'Shipping address'
 export const GENERAL_BILLING_ADDRESS = 'Billing address'
 export const GENERAL_DELIVERED_BY = 'Delivered by'
 export const GENERAL_SUMMARY = 'Summary'
+export const GENERAL_NEXT_ORDER_PROMO = 'Congratulations! You can get a discount on your next order using code'
 export const VALIDATION_YOU_ARE_ALREADY_LOGGED_IN = "You're already logged in"
+export const OFFER_VALIDITY='Your offer is valid for {days} days'
 export const VALIDATION_NO_ACCOUNT_FOUND =
   'No account has been found with this email/password'
 export const VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP =

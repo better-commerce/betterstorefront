@@ -13,6 +13,7 @@ import { resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { LOGOUT } from '@components/utils/textVariables'
 import { Cookie } from '@framework/utils/constants'
+import { tryParseJson } from '@framework/utils/parse-util'
 
 declare const window: any
 
@@ -73,6 +74,8 @@ export interface State {
   overlayLoaderState: IOverlayLoaderState
   deviceInfo: IDeviceInfo
   includeVAT: string
+  isCompared: string
+  compareProductList: any
 }
 
 const initialState = {
@@ -81,6 +84,7 @@ const initialState = {
   displayModal: false,
   modalView: 'LOGIN_VIEW',
   sidebarView: 'CART_VIEW',
+  bulkAddView: 'BULK_ADD_VIEW',
   userAvatar: '',
   productId: '',
   displayDetailedOrder: false,
@@ -109,6 +113,8 @@ const initialState = {
     deviceType: DeviceType.UNKNOWN,
   },
   includeVAT: getItem('includeVAT') || 'false',
+  isCompared: getItem('isCompared') || 'false',
+  compareProductList: getItem('compareProductList') || {},
 }
 
 type Action =
@@ -205,6 +211,9 @@ type Action =
   | { type: 'SETUP_DEVICE_INFO'; payload: IDeviceInfo }
   | { type: 'SET_SELECTED_ADDRESS_ID'; payload: number }
   | { type: 'INCLUDE_VAT'; payload: string }
+  | { type: 'IS_COMPARED'; payload: string }
+  | { type: 'SET_COMPARE_PRODUCTS'; payload: any }
+  | { type: 'RESET_COMPARE_PRODUCTS'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -216,6 +225,7 @@ type MODAL_VIEWS =
 
 type SIDEBAR_VIEWS =
   | 'CART_VIEW'
+  | 'BULK_ADD_VIEW'
   | 'CHECKOUT_VIEW'
   | 'PAYMENT_METHOD_VIEW'
   | 'WISHLIST_VIEW'
@@ -444,6 +454,47 @@ function uiReducer(state: State, action: Action) {
         includeVAT: state?.includeVAT,
       }
     }
+
+    case 'IS_COMPARED': {
+      return {
+        ...state,
+        isCompared: action?.payload,
+      }
+    }
+    case 'SET_COMPARE_PRODUCTS': {
+      if (action.payload.type === 'add') {
+        state = {
+          ...state,
+          compareProductList: {
+            ...(state?.compareProductList || {}),
+            [action.payload.id]: action.payload.data,
+          }
+        }
+        setItem('compareProductList', state.compareProductList)
+        return state
+      }
+      if (action.payload.type === 'remove') {
+        delete state.compareProductList[action.payload.id]
+        state = {
+          ...state,
+          compareProductList: {
+            ...(state?.compareProductList || {}),
+          }
+        }
+        setItem('compareProductList', state.compareProductList)
+        return state
+      }
+      return state
+    }
+    case 'RESET_COMPARE_PRODUCTS': {
+      state = {
+        ...state,
+        compareProductList: {}
+      }
+      setItem('compareProductList', {})
+      return state
+    }
+
   }
 }
 
@@ -755,6 +806,11 @@ export const UIProvider: React.FC<any> = (props) => {
     openSidebar()
   }
 
+  const openBulkAdd = () => {
+    setSidebarView('BULK_ADD_VIEW')
+    openSidebar()
+  }
+
   const setBasketId = useCallback(
     (basketId: string) => {
       Cookies.set(Cookie.Key.BASKET_ID, basketId, {
@@ -809,6 +865,29 @@ export const UIProvider: React.FC<any> = (props) => {
     (payload: any) => {
       setItem('includeVAT', payload)
       dispatch({ type: 'INCLUDE_VAT', payload })
+    },
+    [dispatch]
+  )
+
+  const setIsCompared = useCallback(
+    (payload: any) => {
+      setItem('isCompared', payload)
+      dispatch({ type: 'IS_COMPARED', payload })
+      resetCompareProducts()
+    },
+    [dispatch]
+  )
+
+  const setCompareProducts = useCallback(
+    (payload: any) => {
+      dispatch({ type: 'SET_COMPARE_PRODUCTS', payload })
+    },
+    [dispatch]
+  )
+
+  const resetCompareProducts = useCallback(
+    () => {
+      dispatch({ type: 'RESET_COMPARE_PRODUCTS' })
     },
     [dispatch]
   )
@@ -928,6 +1007,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setIsGuestUser,
       deleteUser,
       openCart,
+      openBulkAdd,
       openWishlist,
       setWishlist,
       removeFromWishlist,
@@ -945,6 +1025,9 @@ export const UIProvider: React.FC<any> = (props) => {
       hideAlert,
       setAlert,
       setIncludeVAT,
+      setIsCompared,
+      setCompareProducts,
+      resetCompareProducts,
     }),
 
     [state]

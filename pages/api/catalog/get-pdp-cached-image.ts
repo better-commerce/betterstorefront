@@ -5,6 +5,7 @@ const GetPDPCachedImagesApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getPdpCachedImage({
       query: req.body.productCode,
+      cookies: req?.cookies,
     })
     res.status(200).json(response)
   } catch (error) {
@@ -12,4 +13,4 @@ const GetPDPCachedImagesApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default GetPDPCachedImagesApiMiddleware;
+export default GetPDPCachedImagesApiMiddleware
