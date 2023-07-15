@@ -2,7 +2,7 @@ import cn from 'classnames'
 import Link from 'next/link'
 import axios from 'axios'
 import { FC } from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
 import { useEffect, useState, Fragment } from 'react'
 import {
@@ -20,6 +20,8 @@ import {
   ChevronDownIcon,
   EyeIcon,
   CheckCircleIcon,
+  TrashIcon,
+  HeartIcon,
 } from '@heroicons/react/24/outline'
 import PromotionInput from '../PromotionInput'
 import RelatedProducts from '@components/product/RelatedProducts'
@@ -735,9 +737,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
               >
                 <div className="w-screen max-w-md">
                   <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
-                    <div className="flex-1 py-6 ">
-                      <div className="flex items-start justify-between px-4 mb-1 sm:px-6">
-                        <Dialog.Title className="text-lg font-medium text-gray-900">
+                    <div className="flex-1">
+                      <div className="sticky top-0 z-10 flex items-start justify-between px-4 py-4 mb-1 bg-white shadow sm:px-6">
+                        <Dialog.Title className="text-lg font-medium text-gray-900 ">
                           {GENERAL_SHOPPING_CART}
                           {itemsInBag() > 0 ? (
                             <>
@@ -774,7 +776,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                           </h4>
                         </div>
                       )}
-                      <div className="mt-8">
+                      <div className="mt-2">
                         <div className="flow-root">
                           <ul
                             role="list"
@@ -824,13 +826,13 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
 
                                       <div className="flex flex-col flex-1 ml-4">
                                         <div>
-                                          <div className="flex justify-between font-semibold text-gray-900 font-sm">
+                                          <div className="flex justify-between font-normal text-gray-900 font-sm">
                                             <h5 onClick={handleClose}>
                                               <Link href={`/${product.slug}`}>
                                                 {product.name}
                                               </Link>
                                             </h5>
-                                            <p className="ml-4">
+                                            <p className="ml-4 font-semibold">
                                               {isIncludeVAT
                                                 ? product.price?.formatted
                                                     ?.withTax
@@ -838,7 +840,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                     ?.withoutTax}
                                             </p>
                                           </div>
-                                          {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                         </div>
                                         <div className="">
                                           {product.children?.map(
@@ -860,17 +861,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                           >
                                                             <EyeIcon className="inline-block w-4 h-4 hover:text-gray-400 lg:-mt-2 md:-mt-1 xsm:-mt-3 xsm:h-5" />
                                                           </span>
-                                                          {/* <Image
-                                                  style={css}
-                                                  width={220}
-                                                  height={240}
-                                                  // src={
-                                                  //   generateUri(child.customInfo2, '') || (child.image, 'h=200&fm=webp') || IMG_PLACEHOLDER
-                                                  // }
-                                                  src={child.customInfo2 || child.image}
-                                                  alt={child.name}
-                                                  className="object-cover object-center w-full h-full image"
-                                                ></Image> */}
                                                         </div>
                                                         <p className="ml-1 mr-1 font-thin text-gray-500">
                                                           {' '}
@@ -918,8 +908,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                           <div className="flex items-center justify-between w-full mt-2">
                                             {product?.variantProducts?.length >
                                             0 ? (
-                                              <div></div>
-                                            ) : (
                                               <div
                                                 role="button"
                                                 onClick={handleToggleOpenSizeChangeModal.bind(
@@ -939,6 +927,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                   <ChevronDownIcon className="w-4 h-4 text-black" />
                                                 </div>
                                               </div>
+                                            ) : (
+                                              <div></div>
                                             )}
                                             <div className="flex flex-row px-4 text-gray-900 border">
                                               <MinusSmallIcon
@@ -988,25 +978,30 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                               )}
                                           </div>
                                         </div>
-                                        <div className="flex flex-row justify-between mt-2 \text-left">
+                                        <div className="flex flex-row justify-between mt-3 \text-left">
                                           <button
                                             type="button"
-                                            className="font-medium text-left text-red-300 hover:text-red-500"
+                                            className="flex items-center gap-1 text-xs font-normal text-left text-red-400 group "
                                             onClick={() => {
                                               openModal()
                                               setItemClicked(product)
                                             }}
                                           >
-                                            {GENERAL_REMOVE}
+                                            <TrashIcon className="w-4 h-4 text-red-400 group-hover:text-red-700" />
+                                            <span className="group-hover:text-red-700">
+                                              {' '}
+                                              {GENERAL_REMOVE}
+                                            </span>
                                           </button>
 
                                           <button
-                                            className="font-medium text-left text-gray-700 hover:text-indigo-500"
+                                            className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black"
                                             onClick={() => {
                                               insertToLocalWishlist(product)
                                             }}
                                           >
-                                            {BTN_ADD_TO_WISHLIST}
+                                            <HeartIcon className="w-4 h-4 text-gray-700 hover:text-gray-900" />{' '}
+                                            {BTN_MOVE_TO_WISHLIST}
                                           </button>
                                         </div>
                                       </div>
@@ -1158,36 +1153,15 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                         </div>
                       </Dialog>
                     </Transition>
-
+                    <div className="sm:px-4">
+                      <PromotionInput
+                        basketPromos={basketPromos}
+                        items={cartItems}
+                        getBasketPromoses={getBasketPromos}
+                      />
+                    </div>
                     {!isEmpty && (
-                      <div className="sticky bottom-0 pt-4 pb-1 pl-5 pr-5 mt-2 bg-white">
-                        <div className="-mt-3">
-                          <Disclosure defaultOpen>
-                            {({ open }) => (
-                              <>
-                                <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
-                                  <span className="">Apply Promo?</span>
-                                </Disclosure.Button>
-                                <Transition
-                                  enter="transition duration-100 ease-out"
-                                  enterFrom="transform scale-95 opacity-0"
-                                  enterTo="transform scale-100 opacity-100"
-                                  leave="transition duration-75 ease-out"
-                                  leaveFrom="transform scale-100 opacity-100"
-                                  leaveTo="transform scale-95 opacity-0"
-                                >
-                                  <Disclosure.Panel className="pt-4 pb-2 text-sm text-gray-500 /px-4">
-                                    <PromotionInput
-                                      basketPromos={basketPromos}
-                                      items={cartItems}
-                                      getBasketPromoses={getBasketPromos}
-                                    />
-                                  </Disclosure.Panel>
-                                </Transition>
-                              </>
-                            )}
-                          </Disclosure>
-                        </div>
+                      <div className="pt-4 pb-3 pl-5 pr-5 mt-2 bg-white">
                         <div className="flex justify-between text-sm text-gray-900">
                           <p>
                             {isIncludeVAT
@@ -1230,18 +1204,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                             {cartItems.grandTotal?.formatted?.withTax}
                           </p>
                         </div>
-                        <div className="mt-3 mb-10">
-                          <Link
-                            href="/cart"
-                            onClick={() => {
-                              handleClose()
-                              beginCheckout(cartItems)
-                            }}
-                            className="flex items-center justify-center py-3 capitalize transition btn-primary hover:opacity-75"
-                          >
-                            {content.GENERAL_CHECKOUT}
-                          </Link>
-                        </div>
                       </div>
                     )}
                     {/* read-only engraving modal */}
@@ -1254,6 +1216,18 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                         readOnly={true}
                       />
                     )}
+                    <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
+                      <Link
+                        href="/cart"
+                        onClick={() => {
+                          handleClose()
+                          beginCheckout(cartItems)
+                        }}
+                        className="flex items-center justify-center py-3 capitalize transition btn-primary hover:opacity-75"
+                      >
+                        {content.GENERAL_CHECKOUT}
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </Transition.Child>

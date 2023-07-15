@@ -2,7 +2,10 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
-import { NEXT_SEARCH_PRODUCTS } from '@components/utils/constants'
+import {
+  ENABLE_ELASTIC_SEARCH,
+  NEXT_SEARCH_PRODUCTS,
+} from '@components/utils/constants'
 import Link from 'next/link'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import rangeMap from '@lib/range-map'
@@ -12,8 +15,12 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import { BTN_SEARCH, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+//import ElasticSearchBar from './ElasticSearchBar'
+import ElasticSearch from './ElasticSearch'
+import ElasticSearchResult from './ElasticSearchResult'
 
-export default function Search({ closeWrapper = () => { }, keywords }: any) {
+export default function Search(props: any) {
+  const { closeWrapper = () => {}, keywords } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])
@@ -78,8 +85,12 @@ export default function Search({ closeWrapper = () => { }, keywords }: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Router.asPath])
-
   const css = { maxWidth: '100%', height: 'auto' }
+
+  if (ENABLE_ELASTIC_SEARCH) {
+    return <ElasticSearchResult {...props} />
+  }
+
   return (
     <div className="absolute w-full h-full bg-white z-9999">
       <div
@@ -102,7 +113,10 @@ export default function Search({ closeWrapper = () => { }, keywords }: any) {
               onChange={(e: any) => setInputValue(e.target.value)}
             />
             <div className="relative py-4 text-gray-400 right-10">
-              <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
+              <MagnifyingGlassIcon
+                className="w-6 h-6"
+                aria-hidden="true"
+              />
             </div>
           </div>
         </div>
@@ -123,7 +137,10 @@ export default function Search({ closeWrapper = () => { }, keywords }: any) {
             ))}
           {products?.map((product: any, idx: number) => {
             return (
-              <div className="border-b border-r border-gray-200" key={idx}>
+              <div
+                className="border-b border-r border-gray-200"
+                key={idx}
+              >
                 <div className="relative p-4 group sm:p-6">
                   <Link passHref href={`/${product.slug}`}>
                     <div className="relative overflow-hidden bg-gray-200 rounded-lg aspect-w-1 aspect-h-1 group-hover:opacity-75">
@@ -131,8 +148,10 @@ export default function Search({ closeWrapper = () => { }, keywords }: any) {
                         {product.image && (
                           <Image
                             src={
-                              generateUri(product.image, 'h=200&fm=webp') ||
-                              IMG_PLACEHOLDER
+                              generateUri(
+                                product.image,
+                                'h=200&fm=webp'
+                              ) || IMG_PLACEHOLDER
                             }
                             alt={product.name}
                             width={20}
@@ -148,7 +167,9 @@ export default function Search({ closeWrapper = () => { }, keywords }: any) {
 
                   <div className="pt-10 pb-4 text-center">
                     <h3 className="text-sm font-medium text-gray-900 min-h-50px">
-                      <Link href={`/${product.slug}`}>{product.name}</Link>
+                      <Link href={`/${product.slug}`}>
+                        {product.name}
+                      </Link>
                     </h3>
 
                     <p className="mt-4 font-medium text-gray-900">

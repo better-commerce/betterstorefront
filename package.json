@@ -1,6 +1,6 @@
 {
   "name": "betterstorefront-bettercommerce",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "scripts": {
     "dev": "node generate-locales.js && cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "node generate-locales.js && next build",
@@ -20,7 +20,9 @@
     "node": ">=14.x"
   },
   "dependencies": {
-    "@better-commerce/bc-payments-sdk": "0.0.4",
+    "@better-commerce/bc-payments-sdk": "0.0.6",
+    "@elastic/react-search-ui": "^1.20.2",
+    "@elastic/search-ui-app-search-connector": "^1.20.2",
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.18",
     "@paypal/react-paypal-js": "7.8.3",
@@ -91,7 +93,6 @@
     "@types/js-cookie": "^3.0.3",
     "@types/lodash.random": "^3.2.7",
     "@types/memory-cache": "^0.2.2",
-    "@types/next-auth": "^3.15.0",
     "@types/node": "^20.1.2",
     "@types/react": "^18.2.6",
     "@types/string-format": "^2.0.0",

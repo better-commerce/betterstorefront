@@ -15,6 +15,7 @@ export class CODPaymentButton extends BasePaymentButton {
     super(props)
     this.state = {
       isPaymentInitiated: false,
+      paymentMethod: super.getPaymentMethod(props?.paymentMethod),
     }
   }
 
@@ -102,7 +103,7 @@ export class CODPaymentButton extends BasePaymentButton {
         {this.state.isPaymentInitiated && (
           <PaymentGatewayNotification
             isCOD={true}
-            gateway={this.props?.paymentMethod?.systemName}
+            gateway={this.state?.paymentMethod?.systemName}
             params={{
               token: EmptyString,
               orderId: EmptyString,

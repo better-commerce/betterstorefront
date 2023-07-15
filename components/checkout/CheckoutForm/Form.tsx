@@ -113,12 +113,14 @@ export default function AddressForm({
   }
 
   const handleFormSubmit = (handleSubmit: any, ...args: any) => {
-    formikRef.current.validateForm()
+    if (formikRef) {
+      formikRef?.current?.validateForm()
+    }
     handleSubmit(...args)
     if (itemsToHide.length > 0) {
       setItemsToHide([])
     }
-    formikRef.current.setTouched(touchedValidationObject)
+    formikRef?.current?.setTouched(touchedValidationObject)
   }
 
   return (
@@ -193,8 +195,10 @@ export default function AddressForm({
                   )
                 })
               ) : (
-                <div className='w-full text-center mt-4'>
-                  <span className='text-gray-500 text-sm'>No saved addresses.</span>
+                <div className="w-full text-center mt-4">
+                  <span className="text-gray-500 text-sm">
+                    No saved addresses.
+                  </span>
                 </div>
               )}
             </div>
@@ -325,7 +329,9 @@ export default function AddressForm({
                 {!!addresses?.length && (
                   <button
                     type="submit"
-                    onClick={(...args) => handleFormSubmit(handleSubmit, ...args)}
+                    onClick={(...args) =>
+                      handleFormSubmit(handleSubmit, ...args)
+                    }
                     className="max-w-xs w-full flex-1 border border-transparent text-sm rounded-sm uppercase py-3 px-8 flex items-center justify-center hover:bg-slate-900 font-medium text-white bg-black sm:w-full"
                   >
                     {btnTitle}

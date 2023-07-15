@@ -31,6 +31,7 @@ export const BASKET_VALIDATE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERS
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
 export const REGISTER_CUSTOMER_TRADING_ACCOUNT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/create`
 export const AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/authenticate`
+export const SOCIAL_AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/social-login`
 export const CUSTOMER_BASE_API = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/`
 export const CUSTOMER_NEWSLETTER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/newsletter/subscribe`
 export const ORDERS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/order/`
@@ -68,6 +69,7 @@ export const NEXT_ASSOCIATE_CART = '/api/customer/associate-cart'
 export const NEXT_MERGE_CART = '/api/merge-cart'
 export const NEXT_GET_COLLECTION_BY_ID = '/api/collection/get-collection-by-id'
 export const NEXT_GET_USER_CART = '/api/get-user-cart'
+export const NEXT_GET_CATALOG_PRODUCTS = '/api/catalog/products'
 export const NEXT_GET_ORDER_RELATED_PRODUCTS =
   '/api/catalog/get-related-products'
 export const NEXT_GET_ALT_RELATED_PRODUCTS =
@@ -174,6 +176,9 @@ export const SITE_NAME = process.env.SITE_NAME
 export const ENABLE_SECURED_PAYMENT_PAYLOAD = stringToBoolean(
   process.env.ENABLE_SECURED_PAYMENT_PAYLOAD
 )
+export const ENABLE_ELASTIC_SEARCH = stringToBoolean(
+  process.env.ENABLE_ELASTIC_SEARCH
+)
 export const SECURE_PAYMENT_METHODS_SETTINGS_FIELDS = stringToBoolean(
   process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS
 )
@@ -190,6 +195,7 @@ export const PDP_SIZE_OPTIONS_COUNT = parseInt(
 export module Messages {
   export module Validations {
     export module RegularExpressions {
+      export const NUMBERS_ONLY = /^[0-9]*$/
       export const MOBILE_NUMBER =
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
       export const EMAIL =
@@ -207,12 +213,19 @@ export module Messages {
       export const CHARACTERS_AND_ALPHABETS =
         /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g
       export const PASSWORD_VALIDATION = /^(?=.*[A-Z]).{8,}$/
+      export const STOCK_CODE = /^[a-zA-Z0-9\\-]+$/g
+      export const QUANTITY = /^[1-9]{1}[0-9]*$/g
+      export const CSV_DATA = /^[a-zA-Z0-9\-]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
     }
 
     export const Login: any = {
       MOBILE_NUMBER_REQUIRED: 'Mobile number is a required field',
       MOBILE_NUMBER_INPUT: 'Mobile number should only contain numbers',
       MOBILE_NUMBER_LENGTH: 'Mobile number should be 10 characters',
+    }
+
+    export const BulkOrder: any = {
+      DEFAULT_ENTRY_FIELD_COUNT: 5,
     }
 
     export const Profile: any = {
@@ -292,6 +305,11 @@ export module Messages {
       VALID_EMAIL:
         'Success! Check your email for the link to change your password',
     }
+
+    export const ChequePayment: any = {
+      CHEQUE_NUMBER_REQUIRED: 'Cheque number is a required',
+      CHEQUE_NUMBER_INPUT: 'Cheque Number should only contain digits',
+    }
   }
 
   export const Messages: any = {
@@ -325,6 +343,15 @@ export module Messages {
     'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
     TOKEN_INVALID: 'Woops! Token is invalid',
     TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
+    COMPANY_NOT_FOUND: 'Company not found.',
+    COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
+  }
+}
+
+export module PageActions {
+  // Actions assigned: 1 to 50
+  export enum BulkOrder {
+    ADD_TO_CART = 1,
   }
 }
 

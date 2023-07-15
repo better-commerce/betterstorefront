@@ -5,6 +5,7 @@ const GetPdpLookbookProductApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getPdpLookbookProduct({
       query: req.body.slug,
+      cookies: req?.cookies,
     })
     res.status(200).json(response)
   } catch (error) {
@@ -12,4 +13,4 @@ const GetPdpLookbookProductApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default GetPdpLookbookProductApiMiddleware;
+export default GetPdpLookbookProductApiMiddleware

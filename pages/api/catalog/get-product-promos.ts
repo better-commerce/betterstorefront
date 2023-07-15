@@ -5,6 +5,7 @@ const GetProductPromosApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getProductPromos({
       query: req.body.recordId,
+      cookies: req?.cookies,
     })
     res.status(200).json(response)
   } catch (error) {
@@ -12,4 +13,4 @@ const GetProductPromosApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default GetProductPromosApiMiddleware;
+export default GetProductPromosApiMiddleware

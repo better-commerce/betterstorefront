@@ -8,13 +8,13 @@ import SubmittingLoader from '../SubmitingLoader'
 import { submittingClassName } from '@framework/utils/app-util'
 import { ISubmitStateInterface } from '@commerce/utils/use-data-submit'
 
-interface ISubmitButtonProps {
+export interface ISubmitButtonProps {
   readonly formId?: string
   readonly loaderId?: string
   readonly cssClass: string
   readonly submitState: ISubmitStateInterface
   readonly source: number
-  readonly children: any
+  readonly children?: any
   readonly disabled?: boolean
   onClick?: Function
 }

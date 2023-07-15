@@ -22,10 +22,12 @@ import { IMG_PLACEHOLDER, SHOP_THE_LOOK } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
+import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 
 function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
   const router = useRouter()
-  const { basketId, openCart, setCartItems } = useUI()
+  const { basketId, openCart, setCartItems, isCompared } = useUI()
+  const [isProductCompare, setProductCompare] = useState(false)
   const [products, setProducts] = useState(data.products)
   const loadProducts = async () => {
     const response: any = await axios.post(NEXT_GET_SINGLE_LOOKBOOK, { slug })
@@ -83,7 +85,13 @@ function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
       openCart()
     }
   }
+  const showCompareProducts = () => {
+    setProductCompare(true)
+  }
 
+  const closeCompareProducts = () => {
+    setProductCompare(false)
+  }
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <div className="flex flex-col items-center w-full px-4 py-0 pb-24 mx-auto text-left bg-white sm:px-0 lg:px-0">
@@ -123,8 +131,20 @@ function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
           handleInfiniteScroll={() => {}}
           deviceInfo={deviceInfo}
           maxBasketItemsCount={maxBasketItemsCount(config)}
+          isCompared={isCompared}
         />
       </div>
+      {isCompared === 'true' && (
+        <CompareSelectionBar
+          name={data.name}
+          showCompareProducts={showCompareProducts}
+          products={products}
+          isCompare={isProductCompare}
+          maxBasketItemsCount={maxBasketItemsCount(config)}
+          closeCompareProducts={closeCompareProducts}
+          deviceInfo={deviceInfo}
+        />
+      )}
     </div>
   )
 }

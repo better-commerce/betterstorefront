@@ -29,29 +29,32 @@ const RecommendedProductCollection = ({
       <Swiper
         slidesPerView={5}
         navigation={true}
-        loop={true}
+        loop={false}
         ref={swiperRef}
         breakpoints={{
-          320: { slidesPerView: 1, spaceBetween: 2 },
+          320: {
+            slidesPerView: 1.2,
+            centeredSlides: true,
+            centeredSlidesBounds: true,
+            spaceBetween: 12,
+          },
           640: { slidesPerView: 1.1 },
           768: { slidesPerView: 1.1 },
-          1024: { slidesPerView: 4 },
+          1024: { slidesPerView: 4, spaceBetween: 24 },
         }}
       >
-        {recommendedProducts.map((product: any, productIdx: number) => {
-          return (
-            <SwiperSlide
-              className="py-0 2xl:w-[300px] w-[25vw] h-full"
-              key={`brand-landing-${productIdx}`}
-            >
-              <ProductCard
-                product={product}
-                deviceInfo={deviceInfo}
-                maxBasketItemsCount={maxBasketItemsCount(config)}
-              />
-            </SwiperSlide>
-          )
-        })}
+        {recommendedProducts.map((product: any, productIdx: number) => (
+          <SwiperSlide
+            className="py-0 2xl:w-[300px] w-[25vw] h-full"
+            key={`brand-landing-${productIdx}`}
+          >
+            <ProductCard
+              product={product}
+              deviceInfo={deviceInfo}
+              maxBasketItemsCount={maxBasketItemsCount(config)}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   )
