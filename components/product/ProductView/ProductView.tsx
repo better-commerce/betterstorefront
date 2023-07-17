@@ -146,6 +146,8 @@ export default function ProductView({
     setCartItems,
     user,
     openCart,
+    openLoginSideBar,
+    isGuestUser,
     setIsCompared,
   } = useUI()
   const isIncludeVAT = vatIncluded()
@@ -650,8 +652,13 @@ export default function ProductView({
       }
     }
 
-    const accessToken = localStorage.getItem('user')
-    if (accessToken) {
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
+      //  setAlert({ type: 'success', msg:" Please Login "})
+      openLoginSideBar()
+      return
+    }
+    if (objUser) {
       const createWishlist = async () => {
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
