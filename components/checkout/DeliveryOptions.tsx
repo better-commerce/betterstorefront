@@ -1,63 +1,43 @@
-import classNames from '@components/utils/classNames'
-import React, { useState, useEffect, SyntheticEvent } from 'react'
 import { RadioGroup } from '@headlessui/react'
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import CncInput from './CncInput'
+import { CheckCircleIcon } from '@heroicons/react/24/outline'
+import classNames from 'classnames'
+import React, { useEffect, useState } from 'react'
+import CncInput from './CheckoutForm/CncInput'
+import CncList from './CheckoutForm/CncList'
+import { useUI } from '@components/ui'
 import { postData } from '@components/utils/clientFetcher'
-import {
-  NEXT_SHIPPING_ENDPOINT,
-  NEXT_UPDATE_SHIPPING,
-  NEXT_CLICK_AND_COLLECT,
-} from '@components/utils/constants'
-import { useUI } from '@components/ui/context'
-import Button from '@components/ui/IndigoButton'
-import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
-import axios from 'axios'
-import CncList from './CncList'
-import {
-  ADDRESS_OF_YOUR_CHOICE,
-  IN_STORE_OR_COLLECT_PLUS,
-  GENERAL_SELECT_COUNTRY,
-  GENERAL_EDIT,
-  GENERAL_CONFIRM,
-  GENERAL_DELIVERY_METHOD,
-  IMG_PLACEHOLDER,
-  GENERAL_PRICE_LABEL_RRP,
-} from '@components/utils/textVariables'
-import Link from 'next/link'
-import Image from 'next/image'
-import { tryParseJson } from '@framework/utils/parse-util'
-import EyeIcon from '@heroicons/react/24/solid'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { NEXT_UPDATE_SHIPPING, NEXT_SHIPPING_ENDPOINT, NEXT_CLICK_AND_COLLECT } from '@components/utils/constants'
+import geoData from '@components/utils/geographicService'
 import { vatIncluded } from '@framework/utils/app-util'
-import SplitDelivery from '../SplitDelivery'
-const DELIVERY_METHODS_TYPE = [
-  {
-    id: 1,
-    title: 'Deliver',
-    content: ADDRESS_OF_YOUR_CHOICE,
-    children: [],
-    type: 2,
-  },
-  {
-    id: 2,
-    type: 1,
-    title: 'Collect',
-    content: IN_STORE_OR_COLLECT_PLUS,
-    children: [],
-  },
-]
+import axios from 'axios'
+import { ADDRESS_OF_YOUR_CHOICE, IN_STORE_OR_COLLECT_PLUS } from '@components/utils/textVariables'
 
-export default function Delivery({
-  toggleDelivery,
-  isDeliveryMethodSelected,
-  setParentShipping,
-  appConfig,
-  geoData,
-  splitDeliveryItems,
-  handleUpdatedShippingPlans,
-}: any) {
-  const { basketId, setCartItems, cartItems, isSplitDelivery } = useUI()
+function DeliveryOptions({
+    products,
+    appConfig,
+    setParentShipping,
+    toggleDelivery,
+    geoData,
+    count,
+}:any) {
+    //split delivery options pending, hence using standard shipping options
+    const DELIVERY_METHODS_TYPE = [
+        {
+          id: 1,
+          title: 'Deliver',
+          content: ADDRESS_OF_YOUR_CHOICE,
+          children: [],
+          type: 2,
+        },
+        {
+          id: 2,
+          type: 1,
+          title: 'Collect',
+          content: IN_STORE_OR_COLLECT_PLUS,
+          children: [],
+        },
+      ]
+    const { basketId, setCartItems, cartItems } = useUI()
   const isIncludeVAT = vatIncluded()
   const [selectedCountry, setSelectedCountry] = useState({
     name: 'Country',
@@ -91,11 +71,7 @@ export default function Delivery({
   const isCncMethod = shippingMethod.shippingCode === 'CNC'
 
   const submitShippingMethod = (storeId?: string) => {
-    if(isSplitDelivery){
-      handleUpdatedShippingPlans()
-    }
-    
-      return axios
+    return axios
       .post(NEXT_UPDATE_SHIPPING, {
         basketId,
         countryCode: selectedCountry.twoLetterIsoCode,
@@ -208,88 +184,19 @@ export default function Delivery({
   }
 
   return (
-    <div className="py-6 mt-0 border border-gray-200 bg-white shadow p-6">
-      {isDeliveryMethodSelected ? (
-        <>
-          <h4 className="font-bold uppercase text-black">Delivery method</h4>
-          <ConfirmedGeneralComponent
-            onStateChange={toggleDelivery}
-            content={content}
-          />
-        </>
-      ) : (
-        <>
-          <div className="py-5">
-            <h1 className="text-lg font-semibold text-gray-900">
-              {GENERAL_SELECT_COUNTRY}
-            </h1>
-
-            {isSelected ? (
-              <div className="py-5 flex justify-between items-center">
-                <span className="font-normal d-inline font-sm pr-1 text-gray-900">
-                  {selectedCountry.name}
-                </span>
-                <div className="flex">
-                  <button
-                    onClick={() => setIsSelected(false)}
-                    className="btn text-pink font-xs"
-                    type="button"
-                  >
-                    {GENERAL_EDIT}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <select
-                  onChange={handleChange}
-                  className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
-                >
-                  {appConfig.shippingCountries?.map(
-                    (country: any, idx: number) => {
-                      return (
-                        <option
-                          key={idx}
-                          selected={country.name === selectedCountry.name}
-                          value={country.name}
-                        >
-                          {country.name}
-                        </option>
-                      )
-                    }
-                  )}
-                </select>
-                <div className="py-2 h-12 flex justify-left w-full">
-                  <Button
-                    buttonType="button"
-                    action={async () => setIsSelected(true)}
-                    title={GENERAL_CONFIRM}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-          {isSplitDelivery && (
-          <SplitDelivery
-            splitDeliveryItems={splitDeliveryItems}
-            appConfig={appConfig}
-            setParentShipping={setParentShipping}
-            toggleDelivery={toggleDelivery}
-            geoData={geoData}
-            showDeliveryOptions={true}
-          />
-          )}
-          <RadioGroup
+    <div>
+        <RadioGroup
             value={selectedDeliveryMethod}
-            onChange={handleDeliveryMethodChange}
+            onChange= {()=>{}}//{handleDeliveryMethodChange}
           >
-            <RadioGroup.Label className="text-lg font-semibold text-gray-900">
-              {GENERAL_DELIVERY_METHOD}
-            </RadioGroup.Label>
+            {/* <RadioGroup.Label className="text-lg font-semibold text-gray-900">
+              {`Delivery ${count+1}`}
+            </RadioGroup.Label> */}
+
 
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
               {deliveryMethods.map(
-                (deliveryMethod: any, deliveryIdx) =>
+                (deliveryMethod: any, deliveryIdx:any) =>
                   !!deliveryMethod.children.length && (
                     <RadioGroup.Option
                       key={deliveryIdx}
@@ -358,9 +265,9 @@ export default function Delivery({
                     >
                       <div>
                         <h4 className="uppercase font-bold text-gray-900">
-                          {item.displayName}
+                          {'Standard Shipping'} {/* {item.displayName} */}
                         </h4>
-                        <p className="text-sm py-2">{item.description}</p>
+                        <p className="text-sm py-2">{products[0]?.shippingSpeed}</p>
                       </div>
                       <div className="flex flex-row justify-center items-center">
                         <h3 className="text-lg uppercase font-bold text-gray-900">
@@ -391,17 +298,8 @@ export default function Delivery({
               })}
             </ul>
           </RadioGroup>
-          {selectedDeliveryMethod.id ? (
-            <div className="py-5 flex justify-center w-40">
-              <Button
-                buttonType="button"
-                action={submitShippingMethod}
-                title={GENERAL_CONFIRM}
-              />
-            </div>
-          ) : null}
-        </>
-      )}
     </div>
   )
 }
+
+export default DeliveryOptions
