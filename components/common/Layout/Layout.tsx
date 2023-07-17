@@ -21,7 +21,7 @@ import {
 } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
-import LoginSidebarView from '@components/account/Login/LoginSideBar'
+import LoginSidebarView from '@components/account/Login/LoginSideBarView'
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
 const CartSidebarView = dynamic(
   () => import('@components/cart/CartSidebarView')

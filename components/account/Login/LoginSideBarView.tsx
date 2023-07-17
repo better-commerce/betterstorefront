@@ -5,7 +5,7 @@ import { CLOSE_PANEL } from '@components/utils/textVariables'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Login from './index'
 
-const LoginSideBar: FC<React.PropsWithChildren<unknown>> = () => {
+const LoginSideBarView: FC<React.PropsWithChildren<unknown>> = () => {
   const { closeSidebar, displaySidebar } = useUI()
   const [openSidebar, setOpenSidebar] = useState(false)
 
@@ -40,4 +40,4 @@ const LoginSideBar: FC<React.PropsWithChildren<unknown>> = () => {
   )
 }
 
-export default LoginSideBar
+export default LoginSideBarView
