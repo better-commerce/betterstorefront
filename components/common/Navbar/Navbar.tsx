@@ -198,8 +198,8 @@ const Navbar: FC<Props & IExtraProps> = ({
   // Read b2b enabled value from settings
   const b2bEnabled = b2bSettings?.length
     ? stringToBoolean(
-        b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
-      )
+      b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
+    )
     : false
 
   let deviceCheck = ''
@@ -300,7 +300,7 @@ const Navbar: FC<Props & IExtraProps> = ({
     }
   }
 
-  function handleWishlist(){
+  function handleWishlist() {
     try {
       const viewWishlist = () => {
         if (currentPage) {
@@ -316,11 +316,11 @@ const Navbar: FC<Props & IExtraProps> = ({
       }
       const objUser = localStorage.getItem('user')
       if (!objUser || isGuestUser) {
-      //  setAlert({ type: 'success', msg:" Please Login "})
+        //  setAlert({ type: 'success', msg:" Please Login "})
         openLoginSideBar();
         return;
       }
-      if(objUser){
+      if (objUser) {
         openWishlist();
       }
     } catch (error) {
@@ -330,7 +330,7 @@ const Navbar: FC<Props & IExtraProps> = ({
   }
 
 
-  
+
 
   function viewCart(cartItems: any) {
     if (currentPage) {
@@ -426,7 +426,7 @@ const Navbar: FC<Props & IExtraProps> = ({
     }
   }
 
-   useEffect(() => {
+  useEffect(() => {
     setDelayEffect(true)
   }, [])
 
@@ -523,11 +523,10 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 </div>
                                 <div className="pt-5 pr-3">
                                   <ChevronUpIcon
-                                    className={`${
-                                      !open
+                                    className={`${!open
                                         ? 'transition-transform duration-150 rotate-180 transform'
                                         : 'transition-transform duration-150 rotate-0 transform'
-                                    } h-5 w-5 text-black`}
+                                      } h-5 w-5 text-black`}
                                   />
                                 </div>
                               </Disclosure.Button>
@@ -539,55 +538,55 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 <div className="space-y-4">
                                   {item.navBlocks.length
                                     ? item.navBlocks.map(
-                                        (navBlock: any, navIdx: number) => {
-                                          return (
-                                            <div
-                                              key={`navbar-parent-${navIdx}`}
-                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
+                                      (navBlock: any, navIdx: number) => {
+                                        return (
+                                          <div
+                                            key={`navbar-parent-${navIdx}`}
+                                            className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
+                                          >
+                                            <ul
+                                              role="list"
+                                              aria-labelledby="clothing-heading"
+                                              className="col-span-1"
                                             >
-                                              <ul
-                                                role="list"
-                                                aria-labelledby="clothing-heading"
-                                                className="col-span-1"
-                                              >
-                                                {navBlock.navItems.map(
-                                                  (navItem: any, idx: any) => (
-                                                    <Link
-                                                      legacyBehavior
-                                                      key={`${navItem.caption}-${idx}`}
-                                                      title={navItem.caption}
-                                                      href={
-                                                        navBlock?.navBlockType ==
+                                              {navBlock.navItems.map(
+                                                (navItem: any, idx: any) => (
+                                                  <Link
+                                                    legacyBehavior
+                                                    key={`${navItem.caption}-${idx}`}
+                                                    title={navItem.caption}
+                                                    href={
+                                                      navBlock?.navBlockType ==
                                                         9
-                                                          ? `/collection/${removePrecedingSlash(
-                                                              navItem.itemLink
-                                                            )}`
-                                                          : `/${removePrecedingSlash(
-                                                              navItem.itemLink
-                                                            )}`
-                                                      }
-                                                      passHref
+                                                        ? `/collection/${removePrecedingSlash(
+                                                          navItem.itemLink
+                                                        )}`
+                                                        : `/${removePrecedingSlash(
+                                                          navItem.itemLink
+                                                        )}`
+                                                    }
+                                                    passHref
+                                                  >
+                                                    <li
+                                                      onClick={() => {
+                                                        setOpen(false)
+                                                        hamburgerMenuClickLevel2(
+                                                          item.caption,
+                                                          navBlock.boxTitle
+                                                        )
+                                                      }}
+                                                      className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
                                                     >
-                                                      <li
-                                                        onClick={() => {
-                                                          setOpen(false)
-                                                          hamburgerMenuClickLevel2(
-                                                            item.caption,
-                                                            navBlock.boxTitle
-                                                          )
-                                                        }}
-                                                        className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
-                                                      >
-                                                        {navItem.caption}
-                                                      </li>
-                                                    </Link>
-                                                  )
-                                                )}
-                                              </ul>
-                                            </div>
-                                          )
-                                        }
-                                      )
+                                                      {navItem.caption}
+                                                    </li>
+                                                  </Link>
+                                                )
+                                              )}
+                                            </ul>
+                                          </div>
+                                        )
+                                      }
+                                    )
                                     : null}
                                 </div>
                               </Disclosure.Panel>
@@ -632,221 +631,221 @@ const Navbar: FC<Props & IExtraProps> = ({
           </div>
         </div>
       )}
-     
-        <header
-          className={cn(
-            'fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64',
-            {
-              '!absolute': showSearchBar,
-            }
-          )}
-        >
-          <nav
-            aria-label="Top"
-            className="relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
-          >
-            <button
-              type="button"
-              className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md sm:hidden"
-              onClick={() => {
-                hamburgerMenu()
-                setOpen(true)
-              }}
-            >
-              <span className="sr-only">Open menu</span>
-              <Bars3Icon className="w-6 h-6 mob-menu-icon" aria-hidden="true" />
-            </button>
 
-            <Link href="/" title="BetterCommerce">
-              <div className="flex w-20 cursor-pointer sm:w-32">
-                <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
-                <Logo />
-              </div>
-            </Link>
-            {renderState && (
-              <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16">
-                {config?.map((item: any, idx: number) => (
-                  <Popover
-                    key={`popover-fly-menu-${idx}`}
-                    className="flex"
-                    onMouseEnter={() => setOpenState(idx)}
-                    onMouseLeave={() => setOpenState(-1)}
-                  >
-                    {({ open }) => (
-                      <>
-                        {!item.navBlocks.length ? (
-                          <Popover.Button
-                            className={classNames(
-                              openState == idx
-                                ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
-                                : 'border-transparent text-black hover:text-black text-header-clr',
-                              'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                            )}
-                          >
-                            <Link
-                              href={`/${removePrecedingSlash(item.hyperlink)}`}
-                              className="relative flex items-center h-full text-header-clr"
-                              title={item.caption}
-                            >
-                              {item.caption}
-                            </Link>
-                          </Popover.Button>
-                        ) : (
-                          <Popover.Button
-                            className={classNames(
-                              openState == idx
-                                ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
-                                : 'border-transparent text-black hover:text-black text-header-clr',
-                              'relative z-10 flex items-center sm:h-16 transition-colors ease-out uppercase hover:font-semibold duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                            )}
+      <header
+        className={cn(
+          'fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64',
+          {
+            '!absolute': showSearchBar,
+          }
+        )}
+      >
+        <nav
+          aria-label="Top"
+          className="relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
+        >
+          <button
+            type="button"
+            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md sm:hidden"
+            onClick={() => {
+              hamburgerMenu()
+              setOpen(true)
+            }}
+          >
+            <span className="sr-only">Open menu</span>
+            <Bars3Icon className="w-6 h-6 mob-menu-icon" aria-hidden="true" />
+          </button>
+
+          <Link href="/" title="BetterCommerce">
+            <div className="flex w-20 cursor-pointer sm:w-32">
+              <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
+              <Logo />
+            </div>
+          </Link>
+          {renderState && (
+            <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16">
+              {config?.map((item: any, idx: number) => (
+                <Popover
+                  key={`popover-fly-menu-${idx}`}
+                  className="flex"
+                  onMouseEnter={() => setOpenState(idx)}
+                  onMouseLeave={() => setOpenState(-1)}
+                >
+                  {({ open }) => (
+                    <>
+                      {!item.navBlocks.length ? (
+                        <Popover.Button
+                          className={classNames(
+                            openState == idx
+                              ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
+                              : 'border-transparent text-black hover:text-black text-header-clr',
+                            'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                          )}
+                        >
+                          <Link
+                            href={`/${removePrecedingSlash(item.hyperlink)}`}
+                            className="relative flex items-center h-full text-header-clr"
+                            title={item.caption}
                           >
                             {item.caption}
-                          </Popover.Button>
-                        )}
-                        {item.navBlocks.length ? (
-                          <Transition
-                            show={openState == idx}
-                            as={Fragment}
-                            enter="transition ease-out duration-200"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="transition ease-in duration-150"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                          >
-                            <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
-                              <div className="relative grid items-start w-4/5 grid-cols-1 px-4 pt-10 pb-12 mx-auto bg-white sm:px-0 lg:px-0 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
-                                {item.navBlocks.map(
-                                  (navBlock: any, navIdx: number) => (
-                                    <div key={navIdx}>
-                                      <h5 className="text-xl font-semibold text-gray-900 capitalize">
-                                        {navBlock.boxTitle}
-                                      </h5>
-                                      <div
-                                        key={`navItems-${navIdx}`}
-                                        className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8"
-                                      >
-                                        {navBlock.navItems.map(
-                                          (navItem: any, idx: number) => (
-                                            <Popover.Button
-                                              key={`popover-button-${idx}`}
-                                              className={classNames(
-                                                openState == idx
-                                                  ? ''
-                                                  : 'border-gray-200 text-gray-700 hover:text-pink',
-                                                'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
-                                              )}
-                                            >
-                                              <Link
-                                                href={
-                                                  navBlock?.navBlockType == 9
-                                                    ? `/collection/${removePrecedingSlash(
-                                                        navItem.itemLink
-                                                      )}`
-                                                    : `/${removePrecedingSlash(
-                                                        navItem.itemLink
-                                                      )}`
-                                                }
-                                                className="relative flex items-center h-full hover:text-pink"
-                                                title={navItem.caption}
-                                                onClick={() => setOpenState(-1)}
-                                              >
-                                                {navItem.caption}
-                                              </Link>
-                                            </Popover.Button>
-                                          )
-                                        )}
-                                      </div>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </Popover.Panel>
-                          </Transition>
-                        ) : null}
-                      </>
-                    )}
-                  </Popover>
-                ))}
-              </Popover.Group>
-            )}
-            <div className="flex items-center justify-end flex-1 cart-icon-dark-white">
-              <Searchbar
-                onClick={setShowSearchBar}
-                keywords={keywords}
-              />
-              <Account
-                title={title}
-                config={accountDropdownConfig}
-                deviceInfo={deviceInfo}
-              />
-              <div className="hidden sm:flex">
-                <CurrencySwitcher
-                  config={currencies}
-                  title={SELECT_CURRENCY}
-                  action={configAction}
-                />
-                <LanguageSwitcher
-                  config={languages}
-                  title={SELECT_LANGUAGE}
-                  action={configAction}
-                />
-              </div>
-              <div className="flow-root w-10 px-1 sm:w-16">
-                <button
-                  className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
-                  onClick={() => {
-                    handleWishlist()
-                  }}
-                >
-                  <HeartIcon
-                    className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600"
-                    aria-hidden="true"
-                    aria-label="Wishlist"
-                  />
-                  <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
-                    Wishlist
-                  </span>
-                  {wishListItems.length > 0 && delayEffect && (
-                    <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-gray-500 rounded-full -top-1 sm:block -right-1">
-                      {wishListItems.length}
-                    </span>
-                  )}
-                  <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
-                </button>
-              </div>
-
-              <div className="flow-root w-10 px-1 sm:w-16">
-                <button
-                  className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
-                  onClick={() => {
-                    viewCart(cartItems)
-                    openCart()
-                  }}
-                >
-                  <ShoppingCartIcon
-                    className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500"
-                    aria-hidden="true"
-                    aria-label="Add to cart"
-                  />
-                  <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
-                    Cart
-                  </span>
-                  {renderState && (
-                    <>
-                      {cartItems.lineItems?.length > 0 && (
-                        <span className="absolute w-4 h-4 ml-2 text-xs font-medium text-center text-white bg-gray-500 rounded-full -top-1 -right-2">
-                          {cartItems.lineItems?.length}
-                        </span>
+                          </Link>
+                        </Popover.Button>
+                      ) : (
+                        <Popover.Button
+                          className={classNames(
+                            openState == idx
+                              ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
+                              : 'border-transparent text-black hover:text-black text-header-clr',
+                            'relative z-10 flex items-center sm:h-16 transition-colors ease-out uppercase hover:font-semibold duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                          )}
+                        >
+                          {item.caption}
+                        </Popover.Button>
                       )}
-                      <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                      {item.navBlocks.length ? (
+                        <Transition
+                          show={openState == idx}
+                          as={Fragment}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
+                            <div className="relative grid items-start w-4/5 grid-cols-1 px-4 pt-10 pb-12 mx-auto bg-white sm:px-0 lg:px-0 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
+                              {item.navBlocks.map(
+                                (navBlock: any, navIdx: number) => (
+                                  <div key={navIdx}>
+                                    <h5 className="text-xl font-semibold text-gray-900 capitalize">
+                                      {navBlock.boxTitle}
+                                    </h5>
+                                    <div
+                                      key={`navItems-${navIdx}`}
+                                      className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8"
+                                    >
+                                      {navBlock.navItems.map(
+                                        (navItem: any, idx: number) => (
+                                          <Popover.Button
+                                            key={`popover-button-${idx}`}
+                                            className={classNames(
+                                              openState == idx
+                                                ? ''
+                                                : 'border-gray-200 text-gray-700 hover:text-pink',
+                                              'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
+                                            )}
+                                          >
+                                            <Link
+                                              href={
+                                                navBlock?.navBlockType == 9
+                                                  ? `/collection/${removePrecedingSlash(
+                                                    navItem.itemLink
+                                                  )}`
+                                                  : `/${removePrecedingSlash(
+                                                    navItem.itemLink
+                                                  )}`
+                                              }
+                                              className="relative flex items-center h-full hover:text-pink"
+                                              title={navItem.caption}
+                                              onClick={() => setOpenState(-1)}
+                                            >
+                                              {navItem.caption}
+                                            </Link>
+                                          </Popover.Button>
+                                        )
+                                      )}
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </Popover.Panel>
+                        </Transition>
+                      ) : null}
                     </>
                   )}
-                </button>
-              </div>
+                </Popover>
+              ))}
+            </Popover.Group>
+          )}
+          <div className="flex items-center justify-end flex-1 cart-icon-dark-white">
+            <Searchbar
+              onClick={setShowSearchBar}
+              keywords={keywords}
+            />
+            <Account
+              title={title}
+              config={accountDropdownConfig}
+              deviceInfo={deviceInfo}
+            />
+            <div className="hidden sm:flex">
+              <CurrencySwitcher
+                config={currencies}
+                title={SELECT_CURRENCY}
+                action={configAction}
+              />
+              <LanguageSwitcher
+                config={languages}
+                title={SELECT_LANGUAGE}
+                action={configAction}
+              />
             </div>
-          </nav>
-        </header>
+            <div className="flow-root w-10 px-1 sm:w-16">
+              <button
+                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
+                onClick={() => {
+                  handleWishlist()
+                }}
+              >
+                <HeartIcon
+                  className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600"
+                  aria-hidden="true"
+                  aria-label="Wishlist"
+                />
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
+                  Wishlist
+                </span>
+                {wishListItems.length > 0 && delayEffect && (
+                  <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-gray-500 rounded-full -top-1 sm:block -right-1">
+                    {wishListItems.length}
+                  </span>
+                )}
+                <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+              </button>
+            </div>
+
+            <div className="flow-root w-10 px-1 sm:w-16">
+              <button
+                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
+                onClick={() => {
+                  viewCart(cartItems)
+                  openCart()
+                }}
+              >
+                <ShoppingCartIcon
+                  className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500"
+                  aria-hidden="true"
+                  aria-label="Add to cart"
+                />
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
+                  Cart
+                </span>
+                {renderState && (
+                  <>
+                    {cartItems.lineItems?.length > 0 && (
+                      <span className="absolute w-4 h-4 ml-2 text-xs font-medium text-center text-white bg-gray-500 rounded-full -top-1 -right-2">
+                        {cartItems.lineItems?.length}
+                      </span>
+                    )}
+                    <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </nav>
+      </header>
     </>
   )
 }
