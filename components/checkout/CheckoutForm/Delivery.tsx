@@ -23,6 +23,7 @@ import {
   GENERAL_DELIVERY_METHOD,
   IMG_PLACEHOLDER,
   GENERAL_PRICE_LABEL_RRP,
+  GENERAL_COMBINED_DELIVERY,
 } from '@components/utils/textVariables'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -211,7 +212,7 @@ export default function Delivery({
     <div className="py-6 mt-0 border border-gray-200 bg-white shadow p-6">
       {isDeliveryMethodSelected ? (
         <>
-          <h4 className="font-bold uppercase text-black">Delivery method</h4>
+          <h4 className="font-bold uppercase text-black">{isSplitDelivery?GENERAL_COMBINED_DELIVERY:GENERAL_DELIVERY_METHOD}</h4>
           <ConfirmedGeneralComponent
             onStateChange={toggleDelivery}
             content={content}
@@ -284,7 +285,7 @@ export default function Delivery({
             onChange={handleDeliveryMethodChange}
           >
             <RadioGroup.Label className="text-lg font-semibold text-gray-900">
-              {GENERAL_DELIVERY_METHOD}
+              {isSplitDelivery?GENERAL_COMBINED_DELIVERY:GENERAL_DELIVERY_METHOD}
             </RadioGroup.Label>
 
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
