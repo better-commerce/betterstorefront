@@ -632,7 +632,7 @@ const Navbar: FC<Props & IExtraProps> = ({
           </div>
         </div>
       )}
-      <SearchProvider config={elasticConfig}>
+     
         <header
           className={cn(
             'fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64',
@@ -847,13 +847,6 @@ const Navbar: FC<Props & IExtraProps> = ({
             </div>
           </nav>
         </header>
-        {showSearchBar && (
-          <SearchWrapper
-            keywords={keywords}
-            closeWrapper={() => setShowSearchBar(false)}
-          />
-        )}
-      </SearchProvider>
     </>
   )
 }
