@@ -323,6 +323,7 @@ export const GENERAL_ADDRESSES = 'Addresses'
 export const GENERAL_SHIPPING_ADDRESS = 'Shipping address'
 export const GENERAL_BILLING_ADDRESS = 'Billing address'
 export const GENERAL_DELIVERED_BY = 'Delivered by'
+export const GENERAL_SPLIT_DELIVERY = 'Split Delivery'
 export const GENERAL_SUMMARY = 'Summary'
 export const GENERAL_NEXT_ORDER_PROMO = 'Congratulations! You can get a discount on your next order using code'
 export const VALIDATION_YOU_ARE_ALREADY_LOGGED_IN = "You're already logged in"

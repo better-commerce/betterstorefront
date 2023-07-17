@@ -71,6 +71,8 @@ export default function CheckoutForm({
   config,
   location,
   recordShippingInfo,
+  splitDeliveryItems,
+  handleUpdatedShippingPlans,
 }: any) {
   const {
     setCartItems,
@@ -819,6 +821,8 @@ export default function CheckoutForm({
                   setParentShipping={setShippingMethod}
                   toggleDelivery={toggleDelivery}
                   isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
+                  splitDeliveryItems = {splitDeliveryItems}
+                  handleUpdatedShippingPlans={handleUpdatedShippingPlans}
                 />
               )}
 
