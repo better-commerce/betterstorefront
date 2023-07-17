@@ -243,7 +243,9 @@ export default function CollectionPage(props: any) {
     const dataToPass = IS_INFINITE_SCROLL
       ? productListMemory?.products
       : data?.products // productListMemory?.products
-    setProductDataToPass(dataToPass)
+    if (dataToPass.results.length > 0) {
+      setProductDataToPass(dataToPass)
+    }
   }, [productListMemory?.products, data?.products])
 
   useEffect(() => {

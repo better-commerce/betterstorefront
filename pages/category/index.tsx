@@ -65,8 +65,9 @@ export default function CategoryList(props: any) {
                                     IMG_PLACEHOLDER
                                   }
                                   alt={category.name}
-                                  className="object-cover object-center w-full h-full sm:h-full"
-                                  layout="responsive"
+                                  className="object-cover object-center w-full h-auto sm:h-full"
+                                  // layout="responsive"
+                                  priority
                                   width={600}
                                   height={900}
                                 ></Image>
@@ -76,8 +77,9 @@ export default function CategoryList(props: any) {
                                 <Image
                                   src={IMG_PLACEHOLDER}
                                   alt={category.name}
-                                  className="object-cover object-center w-full h-full sm:h-full"
-                                  layout="responsive"
+                                  className="object-cover object-center w-full h-auto sm:h-full"
+                                  // layout="responsive"
+                                  priority
                                   width={600}
                                   height={900}
                                 ></Image>
