@@ -1,3 +1,5 @@
+import { YOUTUBE_VIDEO_EMBED_PREFIX_URL } from '@components/utils/constants'
+
 export default function Video({ heading, name }: any) {
   return (
     <div className="w-full flex flex-col justify-center items-center max-h-44 md:max-h-full h-[60vh]  /py-y gap-x-2">
@@ -7,7 +9,7 @@ export default function Video({ heading, name }: any) {
       <iframe
         width="560"
         height="315"
-        src={`https://www.youtube-nocookie.com/embed/${name}`}
+        src={`${YOUTUBE_VIDEO_EMBED_PREFIX_URL}/${name}`}
         title="YouTube video player"
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
