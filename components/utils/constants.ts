@@ -131,6 +131,8 @@ export const NEXT_VALIDATE_CHANGE_USERNAME_OTP =
 
 //CONSTANTS
 
+export const YOUTUBE_VIDEO_EMBED_PREFIX_URL =
+  'https://www.youtube-nocookie.com/embed'
 export const NEXT_GET_PRODUCT_QUICK_VIEW = '/api/catalog/get-product-quick-view'
 
 export const NEXT_GET_PRODUCT_REVIEW = '/api/catalog/get-product-reviews'
