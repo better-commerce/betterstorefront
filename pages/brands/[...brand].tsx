@@ -21,7 +21,7 @@ import {
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
-import { ImageCollection, PlainText, Video } from '@components/brand'
+import { PlainText, Video } from '@components/brand'
 import getCollectionById from '@framework/api/content/getCollectionById'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -29,10 +29,12 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 const RecommendedProductCollection = dynamic(
   () => import('@components/brand/RecommendedProductCollection')
 )
-const ImageBanner = dynamic(() => import('@components/brand/ImageBanner'))
-const MultiBrandVideo = dynamic(
-  () => import('@components/brand/MultiBrandVideo')
-)
+import ImageCollection from '@components/brand/ImageCollection'
+import ImageBanner from '@components/brand/ImageBanner'
+// const MultiBrandVideo = dynamic(
+//   () => import('@components/brand/MultiBrandVideo')
+// )
+import MultiBrandVideo from '@components/brand/MultiBrandVideo'
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
 const ProductSort = dynamic(() => import('@components/product/ProductSort'))
 const ProductGrid = dynamic(
@@ -443,6 +445,7 @@ function BrandDetailPage({
                   }
                   width={212}
                   height={200}
+                  loading="eager"
                   priority
                   className="w-[120px] md:w-[212px] h-auto"
                 />
