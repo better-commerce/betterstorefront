@@ -7,7 +7,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
   return (
     <>
       <div className="w-full pb-6 o-detail-header">
-        <div className="pt-4 sm:pl-8 sm:pt-0">
+        <div className="sm:pl-8 sm:pt-5 pt-5">
           <div className="flex justify-between">
             <div className="relative pl-9">
               <a

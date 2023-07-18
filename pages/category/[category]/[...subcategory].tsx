@@ -369,8 +369,8 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           key="ogdesc"
         />
       </NextHead>
-      <section className="main-section">
-        <div className="px-4 mx-auto mt-4 bg-transparent md:w-4/5 sm:px-0">
+      <section className="main-section sm:px-4">
+        <div className="px-4 mx-auto mt-4 bg-transparent md:w-4/5 sm:px-4">
           {/* breadcrumb section start */}
           {category?.breadCrumbs && (
             <BreadCrumbs
@@ -382,7 +382,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         </div>
 
         {/* Category info section start */}
-        <div className="px-4 mx-auto my-6 mt-4 bg-transparent md:w-4/5 sm:px-0">
+        <div className="px-4 mx-auto my-6 mt-4 bg-transparent md:w-4/5 sm:px-4">
           <h1>{category?.name}</h1>
           <div
             className="font-18"
@@ -428,7 +428,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
             </>
           ) : null}
         </div>
-        <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-0">
+        <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-4">
           {/* category banner info End */}
 
           {/*TODO: For browser caching of product images*/}
@@ -484,7 +484,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     </div>
                   </>
                 ) : (
-                  <div className="sm:col-span-12 p-[1px] sm:mt-4 mt-2">
+                  <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
                     <ProductFiltersTopBar
                       products={productDataToPass}
                       handleSortBy={handleSortBy}

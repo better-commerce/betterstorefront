@@ -130,12 +130,12 @@ export default function MyOrders({
                       <>
                         <section
                           aria-labelledby="recent-heading"
-                          className="mt-2"
+                          className="mt-2 pt-5"
                         >
                           <h2 id="recent-heading" className="sr-only">
                             {GENERAL_RECENT_ORDERS}
                           </h2>
-                          <div className="w-full mx-auto overflow-hidden sm:px-0 lg:px-0 paged-orders">
+                          <div className="w-full mx-auto overflow-hidden sm:px-4 lg:px-0 paged-orders">
                             <InfiniteScroll
                               fetchData={handleInfiniteScroll}
                               total={
