@@ -421,14 +421,14 @@ export default function CollectionPage(props: any) {
       {props?.hostName && (
         <input className="inst" type="hidden" value={props?.hostName} />
       )}
-      <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
+      <div className="pt-6 pb-24 mx-auto bg-transparent 2xl:w-4/5 sm:px-0">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
 
         {props?.customInfo3 == 'vertical' && (
           <>
-            <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-0 sm:px-0 sm:mt-4">
+            <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-4 sm:px-4 2xl:sm:px-0 sm:mt-4">
               {props?.images?.length > 1 ? (
                 <>
                   <div className="w-full v-image-space">
@@ -540,7 +540,7 @@ export default function CollectionPage(props: any) {
           ))}
 
         <div
-          className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container px-4 sm:px-0 sm:py-4 ${cls}`}
+          className={`sticky w-full py-4 mx-auto bg-white top-108 container px-4 sm:px-4 md:px-6 2xl:px-0 sm:py-4 ${cls}`}
         >
           <h1 className="inline-block capitalize text-primary dark:text-primary">
             {props?.name}
@@ -552,7 +552,7 @@ export default function CollectionPage(props: any) {
         </div>
 
         {productDataToPass?.results?.length > 0 && (
-          <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 md:grid-cols-3 gap-1 overflow-hidden sm:grid-cols-3">
             {props?.allowFacets ? (
               <>
                 {isMobile ? (

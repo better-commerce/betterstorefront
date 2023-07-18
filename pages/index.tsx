@@ -159,7 +159,7 @@ function Home({
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <Hero banners={pageContents?.banner} />
-      <div className="container py-3 mx-auto sm:py-6">
+      <div className="lg:container py-3 mx-auto sm:py-6 px-4 sm:px-4 md:px-4 lg:px-6 2xl:px-0">
         {pageContents?.heading?.map((heading: any, hId: number) => (
           <Heading
             title={heading?.heading_title}
@@ -181,7 +181,7 @@ function Home({
       {pageContents?.promotions?.map((banner: any, bId: number) => (
         <PromotionBanner data={banner} key={bId} css={css} />
       ))}
-      <div className="container px-4 py-3 mx-auto sm:px-0 sm:py-6">
+      <div className="lg:container px-4 py-3 mx-auto sm:px-4 lg:px-0 sm:py-6 md:px-4">
         {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
           <Heading
             title={heading?.collectionheadings_title}

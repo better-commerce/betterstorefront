@@ -433,7 +433,7 @@ function BrandDetailPage({
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
-          <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 md:w-4/5 lg:px-0 sm:px-10">
+          <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 2xl:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
               <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <Image
@@ -484,7 +484,7 @@ function BrandDetailPage({
             </div>
 
             <div className="mt-10">
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 sm:px-4">
                 <div className="flex flex-row justify-between">
                   <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
                     {BTN_RECOMMENDED_PROD}
@@ -605,7 +605,7 @@ function BrandDetailPage({
           </div>
         </>
       ) : (
-        <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
+        <div className="pt-5 pb-0 mx-auto mt-4 bg-transparent 2xl:w-4/5 sm:mt-6 sm:px-6 md:px-6 2xl:px-0">
           <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
             <Link href="/brands" passHref>
               <span className="flex items-end upper case">Brands</span>

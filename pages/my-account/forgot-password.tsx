@@ -1,4 +1,5 @@
 import { Layout } from '@components/common'
+import { GetServerSideProps } from 'next'
 import {
   BTN_SUBMIT,
   FORGOT_PASSWORD,
@@ -19,10 +20,11 @@ import { validate } from 'email-validator'
 import { useUI } from '@components/ui/context'
 import classNames from 'classnames'
 import { Messages,EmptyString } from '@components/utils/constants'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 
 
 
-export default function ForgotPasswordPage() {
+ function ForgotPasswordPage() {
   const { setAlert } = useUI()
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
@@ -133,3 +135,11 @@ export default function ForgotPasswordPage() {
 }
 
 ForgotPasswordPage.Layout = Layout
+const PAGE_TYPE = PAGE_TYPES.Page
+export default withDataLayer(ForgotPasswordPage, PAGE_TYPE)
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}
