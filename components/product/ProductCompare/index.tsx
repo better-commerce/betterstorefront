@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from 'react'
 import _ from 'lodash'
 import { Dialog, Transition } from '@headlessui/react'
 import { ArrowLeftIcon, XMarkIcon } from '@heroicons/react/24/outline'
-
+import { Swiper, SwiperSlide } from 'swiper/react'
 import { Layout } from '@components/common'
 import { CLOSE_PANEL } from '@components/utils/textVariables'
 import Products from './Products'
@@ -78,11 +78,11 @@ export default function ProductCompare({
                       </div>
                     </div>
                   </div>
-                  <div className="container py-2 mx-auto mt-2 sm:px-0 max-h-[700px] overflow-y-auto custom-scroll">
-                    <div className="grid grid-cols-12 gap-4">
-                      <div className="sm:col-span-2">
-                        <div className="flex flex-col items-start justify-start w-full text-left">
-                          <div className="sticky w-full top-0 z-10 flex flex-col bg-white h-[465px]"></div>
+                  <div className="container py-2 mx-auto mt-2 sm:px-0 !max-h-[504px] sm:!max-h-[215px] md:!max-h-[215px] lg:!max-h-[70vh] 2xl:!max-h-[700px] overflow-y-auto custom-scroll">
+                    <div className="grid lg:grid-cols-12 md:grid-cols-12 grid-cols-2 sm:grid-cols-3 gap-4">
+                      <div className="md:col-span-2 sm:col-span-1">
+                        <div className="flex flex-col items-start justify-start w-full text-left p-2">
+                          <div className="sticky w-full top-0 z-10 flex flex-col bg-white sm:h-[220px] md:h-[430px] h-[520px] lg:h-[516px]"></div>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
                             Ratings
                           </span>
@@ -99,19 +99,39 @@ export default function ProductCompare({
                           ))}
                         </div>
                       </div>
-                      <div className="sm:col-span-10">
-                        <div className="grid grid-cols-5 gap-3">
+                      <div className="md:col-span-10 sm:col-span-2">
+                        <Swiper
+                          spaceBetween={10}
+                          slidesPerView={1.1}
+                          navigation={false}
+                          loop={false}
+                          breakpoints={{
+                            640: {
+                              slidesPerView: 2.5,
+                            },
+                            768: {
+                              slidesPerView: 2.5,
+                            },
+                            1024: {
+                              slidesPerView: 5.2,
+                            },
+                          }}
+                          className="mySwier grid grid-cols-5 gap-3"
+                        >
+                          {' '}
                           {products?.map((product: any, productIdx: number) => (
-                            <div key={`compare-product-${productIdx}`}>
-                              <Products
-                                product={product}
-                                hideWishlistCTA={true}
-                                deviceInfo={deviceInfo}
-                                maxBasketItemsCount={maxBasketItemsCount}
-                              />
-                            </div>
-                          ))}
-                        </div>
+                              <div key={`compare-product-${productIdx}`}>
+                                <SwiperSlide>
+                                  <Products
+                                    product={product}
+                                    hideWishlistCTA={true}
+                                    deviceInfo={deviceInfo}
+                                    maxBasketItemsCount={maxBasketItemsCount}
+                                  />
+                                </SwiperSlide>
+                              </div>
+                            ))}
+                        </Swiper>
                       </div>
                     </div>
                   </div>

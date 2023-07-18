@@ -542,7 +542,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                       </h3>
                       <h3 className="my-2 text-sm sm:text-sm sm:my-1">
                         <Link href={`/${product.slug}`}>
-                          <span className="font-normal text-gray-700 hover:text-gray-800">
+                          <span className="font-normal text-gray-700 hover:text-gray-800 pr-6">
                             {product.name}
                           </span>
                         </Link>

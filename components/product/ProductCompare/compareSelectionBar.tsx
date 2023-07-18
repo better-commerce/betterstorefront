@@ -32,10 +32,10 @@ export default function CompareSelectionBar({
   
   return (
     <>
-      <div className="fixed bottom-0 left-0 z-10 flex items-center justify-between w-full h-20 py-3 bg-tan">
-        <div className="container flex items-center mx-auto sm:px-4">
-          <div className="flex gap-10">
-            <h5 className="font-semibold uppercase">
+      <div className="fixed bottom-0 left-0 z-10 flex items-center justify-between w-full h-32 sm:h-20 md:h-20 lg:h-20 py-3 bg-tan lg:p-0 md:p-2 p-2">
+        <div className="container flex flex-col sm:flex-row md:flex-row lg:flex-row justify-center items-center mx-auto sm:px-4 gap-4 py-2">
+          <div className="flex gap-0 sm:gap-10 md:gap-10 lg:gap-10 flex-col items-center sm:flex-row lg:flex-row md:flex-row">
+            <h5 className="font-semibold uppercase text-sm">
               {products?.length || "No"} Item(s) Selected
             </h5>
             <h6 className="font-semibold">
@@ -46,7 +46,7 @@ export default function CompareSelectionBar({
             <button
               type="button"
               onClick={() => showCompareProducts()}
-              className="px-5 py-3 text-sm font-semibold text-center text-white uppercase bg-black rounded disabled:cursor-not-allowed disabled:opacity-60"
+              className="p-3 font-semibold text-center text-white sm:truncate uppercase bg-black rounded disabled:cursor-not-allowed disabled:opacity-60"
               disabled={!Boolean(products?.length > 1)}
               title={!Boolean(products?.length > 1) ? 'Please select atleast 2 items.' : ''}
             >

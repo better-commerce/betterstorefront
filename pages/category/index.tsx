@@ -40,9 +40,9 @@ export default function CategoryList(props: any) {
           key="ogurl"
         />
       </NextHead>
-      <main className="w-full px-4 mx-auto sm:px-0 md:w-4/5 lg:px-0">
+      <main className="w-full px-4 mx-auto sm:px-6 2xl:w-4/5 lg:px-6 2xl:px-0">
         <section aria-labelledby="products-heading ">
-          <h1 className="mt-4 tracking-tight dark:text-gray-700">
+          <h1 className="mt-4 tracking-tight pt-5 dark:text-gray-700">
             {SHOP_BY_CATEGORY}
           </h1>
           {props?.data.length > 0 && (
@@ -65,7 +65,7 @@ export default function CategoryList(props: any) {
                                     IMG_PLACEHOLDER
                                   }
                                   alt={category.name}
-                                  className="object-cover object-center w-full h-auto sm:h-full"
+                                  className="object-cover object-center w-full h-auto sm:h-full aspect-[4/3]"
                                   // layout="responsive"
                                   priority
                                   width={600}
@@ -73,7 +73,7 @@ export default function CategoryList(props: any) {
                                 ></Image>
                               </div>
                             ) : (
-                              <div className="relative overflow-hidden bg-gray-100 aspect-w-1 aspect-h-1 group-hover:bg-gray-200">
+                              <div className="relative overflow-hidden bg-gray-100 aspect-[4/3] group-hover:bg-gray-200">
                                 <Image
                                   src={IMG_PLACEHOLDER}
                                   alt={category.name}
