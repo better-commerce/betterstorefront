@@ -63,6 +63,7 @@ import { useRouter } from 'next/router'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 import SplitDelivery from '@components/checkout/SplitDelivery'
 import { LoadingDots } from '@components/ui'
+import { Guid } from '@commerce/types'
 function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
   const {
     setCartItems,
@@ -285,7 +286,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
 
     const model = {
       BasketId: basketId,
-      OrderId: '00000000-0000-0000-0000-000000000000',
+      OrderId: Guid.empty,
       PostCode: cartItems?.postCode || '',
       ShippingMethodType: shippingMethodItem.type,
       ShippingMethodId: cart?.shippingMethodId,
@@ -294,7 +295,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
       DeliveryItems: cart?.lineItems?.map((item: any) => {
         return {
           BasketLineId: Number(item.id),
-          OrderLineRecordId: '00000000-0000-0000-0000-000000000000',
+          OrderLineRecordId: Guid.empty,
           ProductId: item.productId,
           ParentProductId: item.parentProductId,
           StockCode: item.stockCode,
@@ -304,7 +305,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
       }),
       AllowPartialOrderDelivery: true,
       AllowPartialLineDelivery: true,
-      PickupStoreId: '00000000-0000-0000-0000-000000000000',
+      PickupStoreId: Guid.empty,
       RefStoreId: null,
       PrimaryInventoryPool: 'PrimaryInvPool',
       SecondaryInventoryPool: 'PrimaryInvPool',
@@ -315,7 +316,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
 
     const splitModel = {
       BasketId: basketId,
-      OrderId: '00000000-0000-0000-0000-000000000000',
+      OrderId: Guid.empty,
       PostCode: cartItems?.postCode || '',
       ShippingMethodType: shippingMethodItem.type,
       ShippingMethodId: cart?.shippingMethodId,
@@ -324,7 +325,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
       DeliveryItems: cart?.lineItems?.map((item: any) => {
         return {
           BasketLineId: Number(item.id),
-          OrderLineRecordId: '00000000-0000-0000-0000-000000000000',
+          OrderLineRecordId: Guid.empty,
           ProductId: item.productId,
           ParentProductId: item.parentProductId,
           StockCode: item.stockCode,
@@ -334,7 +335,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount }: any) {
       }),
       AllowPartialOrderDelivery: true,
       AllowPartialLineDelivery: false,
-      PickupStoreId: '00000000-0000-0000-0000-000000000000',
+      PickupStoreId: Guid.empty,
       RefStoreId: null,
       PrimaryInventoryPool: 'PrimaryInvPool',
       SecondaryInventoryPool: 'PrimaryInvPool',
