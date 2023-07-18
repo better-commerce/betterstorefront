@@ -71,7 +71,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       ?.find((x: any) => x.configType === 'OrderSettings')
       ?.configKeys?.find(
         (x: any) => x.key === 'OrderSettings.AllowCustometToSplitShipping'
-      )?.value
+      )?.value || ''
   )
 
   const {
