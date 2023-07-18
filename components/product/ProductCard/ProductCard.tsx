@@ -192,7 +192,8 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     }
   }
 
-  const secondImage = product.images[1]?.image
+  const secondImage =
+    product?.images.length > 0 ? product.images[1]?.image : null
 
   const handleHover = (ev: any, type: string) => {
     if (hideWishlistCTA) return

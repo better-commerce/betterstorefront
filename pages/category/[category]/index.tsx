@@ -611,54 +611,56 @@ function CategoryLandingPage({
               </div>
             </div>
 
-            {/* minimalProd?.length > 0 && <div className="py-6">
-              <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
-                <h2 className="mb-2 font-bold uppercase font-18">
-                  Related categories
-                </h2>
-                <Swiper
-                  // install Swiper modules
-                  spaceBetween={0}
-                  slidesPerView={1}
-                  navigation={true}
-                  loop={false}
-                  breakpoints={{
-                    640: {
-                      slidesPerView: 1,
-                    },
-                    768: {
-                      slidesPerView: 2.5,
-                    },
-                    1024: {
-                      slidesPerView: 4,
-                    },
-                    1400: {
-                      slidesPerView: 5,
-                    },
-                  }}
-                  className="mySwier"
-                >
-                  {minimalProd?.map(
-                    (product: any, cdx: number) => (
+            {minimalProd?.length > 0 && (
+              <div className="py-6">
+                <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
+                  <h2 className="mb-2 font-bold uppercase font-18">
+                    Related categories
+                  </h2>
+                  <Swiper
+                    // install Swiper modules
+                    spaceBetween={0}
+                    slidesPerView={1}
+                    navigation={true}
+                    loop={false}
+                    breakpoints={{
+                      640: {
+                        slidesPerView: 1,
+                      },
+                      768: {
+                        slidesPerView: 2.5,
+                      },
+                      1024: {
+                        slidesPerView: 4,
+                      },
+                      1400: {
+                        slidesPerView: 5,
+                      },
+                    }}
+                    className="mySwier"
+                  >
+                    {minimalProd?.map((product: any, cdx: number) => (
                       <>
                         <SwiperSlide key={cdx}>
                           <div className="relative group">
                             <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
                             <>
                               <ProductCard
-                               product={product.results || []}
-                               deviceInfo={deviceInfo}
-                               maxBasketItemsCount={maxBasketItemsCount(config)}
-                               />
+                                product={product.results || []}
+                                deviceInfo={deviceInfo}
+                                maxBasketItemsCount={maxBasketItemsCount(
+                                  config
+                                )}
+                              />
                             </>
                           </div>
                         </SwiperSlide>
                       </>
-                    )
-                  )}
-                </Swiper>
+                    ))}
+                  </Swiper>
+                </div>
               </div>
-            </div> */}
+            )}
 
             {/* feature brand section End*/}
 
