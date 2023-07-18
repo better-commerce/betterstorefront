@@ -362,7 +362,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       model: allowSplitShipping ? splitModel : model,
     })
     // const shippingPlans = await getShippingPlans()({ model: model })
-    if (shippingPlans.length > 1) {
+    if (shippingPlans.length > 1 && allowSplitShipping) {
       setIsSplitDelivery(true)
       splitDeliveryExtract(
         mapSplitDeliveryPlansToItems(shippingPlans || [], items.lineItems) //cart
