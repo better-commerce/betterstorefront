@@ -77,6 +77,7 @@ export const NEXT_GET_ALT_RELATED_PRODUCTS =
 export const NEXT_SIGN_UP = `/api/signup`
 export const NEXT_SIGN_UP_TRADING_ACCOUNT = `/api/signup-trading-account`
 export const NEXT_VALIDATE_EMAIL = `/api/customer/validate-email`
+export const NEXT_VALIDATE_PAYMENT_LINK = `/api/payments/validate-payment-link`
 export const NEXT_AUTHENTICATE = `/api/login`
 export const NEXT_SSO_AUTHENTICATE = `/api/login/sso`
 export const NEXT_UPDATE_DETAILS = `/api/customer/update-details`
