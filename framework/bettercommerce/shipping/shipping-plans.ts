@@ -29,7 +29,7 @@ export default function getShippingPlans() {
         },
         baseUrl: OMS_BASE_URL,
       })
-      return response.Result
+      return response.Result //for omsapi20 response.Result, for oms.dev-omnicx response.result
     } catch (error: any) {
       console.log(error)
       // throw new Error(error.message)
