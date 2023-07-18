@@ -1,4 +1,4 @@
-import config from "../config/engine.json";
+import { ElasticEngineConfig } from './engines'
 
 /**
  * This file abstracts most logic around the configuration of the Reference UI.
@@ -10,57 +10,63 @@ import config from "../config/engine.json";
  */
 
 export function getConfig() {
-  if (process.env.NODE_ENV === "test") {
-    return {};
+  if (process.env.NODE_ENV === 'test') {
+    return {}
   }
 
-  if (config.engineName) return config;
+  let config = {}
+  const engineName = process.env.SEARCH_ENGINE_CONFIG
+  if (engineName) {
+    config = ElasticEngineConfig[engineName]
+  }
+
+  if (config.engineName) return config
 
   if (
-    typeof window !== "undefined" &&
+    typeof window !== 'undefined' &&
     window.appConfig &&
     window.appConfig.engineName
   ) {
-    return window.appConfig;
+    return window.appConfig
   }
 
-  return {};
+  return {}
 }
 
 function toLowerCase(string) {
-  if (string) return string.toLowerCase();
+  if (string) return string.toLowerCase()
 }
 
 function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
 export function getTitleField() {
   // If no title field configuration has been provided, we attempt
   // to use a "title" field, if one exists
-  return getConfig().titleField || "title";
+  return getConfig().titleField || 'title'
 }
 
 export function getUrlField() {
-  return getConfig().urlField;
+  return getConfig().urlField
 }
 
 export function getThumbnailField() {
-  return getConfig().thumbnailField;
+  return getConfig().thumbnailField
 }
 
 export function getFacetFields() {
-  return getConfig().facets || [];
+  return getConfig().facets || []
 }
 
 export function getSortFields() {
-  return getConfig().sortFields || [];
+  return getConfig().sortFields || []
 }
 
 export function getResultTitle(result) {
-  const titleField = getTitleField();
+  const titleField = getTitleField()
 
-  return result.getSnippet(titleField);
+  return result.getSnippet(titleField)
 }
 
 // Because if a field is configured to display as a "title", we don't want
@@ -69,46 +75,46 @@ export function stripUnnecessaryResultFields(resultFields) {
   return Object.keys(resultFields).reduce((acc, n) => {
     if (
       [
-        "_meta",
-        "id",
+        '_meta',
+        'id',
         toLowerCase(getTitleField()),
         toLowerCase(getUrlField()),
         toLowerCase(getThumbnailField()),
       ].includes(toLowerCase(n))
     ) {
-      return acc;
+      return acc
     }
 
-    acc[n] = resultFields[n];
-    return acc;
-  }, {});
+    acc[n] = resultFields[n]
+    return acc
+  }, {})
 }
 
 export function buildSearchOptionsFromConfig() {
-  const config = getConfig();
+  const config = getConfig()
   const searchFields = (config.searchFields || config.fields || []).reduce(
     (acc, n) => {
-      acc = acc || {};
-      acc[n] = {};
-      return acc;
+      acc = acc || {}
+      acc[n] = {}
+      return acc
     },
     undefined
-  );
+  )
 
   const resultFields = (config.resultFields || config.fields || []).reduce(
     (acc, n) => {
-      acc = acc || {};
+      acc = acc || {}
       acc[n] = {
         raw: {},
         snippet: {
           size: 100,
-          fallback: true
-        }
-      };
-      return acc;
+          fallback: true,
+        },
+      }
+      return acc
     },
     undefined
-  );
+  )
 
   // We can't use url, thumbnail, or title fields unless they're actually
   // in the reuslts.
@@ -117,9 +123,9 @@ export function buildSearchOptionsFromConfig() {
       raw: {},
       snippet: {
         size: 100,
-        fallback: true
-      }
-    };
+        fallback: true,
+      },
+    }
   }
 
   if (config.thumbnailField) {
@@ -127,9 +133,9 @@ export function buildSearchOptionsFromConfig() {
       raw: {},
       snippet: {
         size: 100,
-        fallback: true
-      }
-    };
+        fallback: true,
+      },
+    }
   }
 
   if (config.titleField) {
@@ -137,73 +143,73 @@ export function buildSearchOptionsFromConfig() {
       raw: {},
       snippet: {
         size: 100,
-        fallback: true
-      }
-    };
+        fallback: true,
+      },
+    }
   }
 
-  const searchOptions = {};
-  searchOptions.result_fields = resultFields;
-  searchOptions.search_fields = searchFields;
-  return searchOptions;
+  const searchOptions = {}
+  searchOptions.result_fields = resultFields
+  searchOptions.search_fields = searchFields
+  return searchOptions
 }
 
 export function buildFacetConfigFromConfig() {
-  const config = getConfig();
+  const config = getConfig()
 
   const facets = (config.facets || []).reduce((acc, n) => {
-    acc = acc || {};
+    acc = acc || {}
     acc[n] = {
-      type: "value",
-      size: 100
-    };
-    return acc;
-  }, undefined);
+      type: 'value',
+      size: 100,
+    }
+    return acc
+  }, undefined)
 
-  return facets;
+  return facets
 }
 
 export function buildSortOptionsFromConfig() {
-  const config = getConfig();
+  const config = getConfig()
   return [
     {
-      name: "Relevance",
-      value: "",
-      direction: ""
+      name: 'Relevance',
+      value: '',
+      direction: '',
     },
     ...(config.sortFields || []).reduce((acc, sortField) => {
       acc.push({
         name: `${capitalizeFirstLetter(sortField)} ASC`,
         value: sortField,
-        direction: "asc"
-      });
+        direction: 'asc',
+      })
       acc.push({
         name: `${capitalizeFirstLetter(sortField)} DESC`,
         value: sortField,
-        direction: "desc"
-      });
-      return acc;
-    }, [])
-  ];
+        direction: 'desc',
+      })
+      return acc
+    }, []),
+  ]
 }
 
 export function buildAutocompleteQueryConfig() {
-  const querySuggestFields = getConfig().querySuggestFields;
+  const querySuggestFields = getConfig().querySuggestFields
   if (
     !querySuggestFields ||
     !Array.isArray(querySuggestFields) ||
     querySuggestFields.length === 0
   ) {
-    return {};
+    return {}
   }
 
   return {
     suggestions: {
       types: {
         documents: {
-          fields: getConfig().querySuggestFields
-        }
-      }
-    }
-  };
+          fields: getConfig().querySuggestFields,
+        },
+      },
+    },
+  }
 }

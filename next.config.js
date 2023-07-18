@@ -93,6 +93,7 @@ module.exports = withCommerceConfig({
     PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
     OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
     ENABLE_ELASTIC_SEARCH: process.env.ENABLE_ELASTIC_SEARCH,
+    SEARCH_ENGINE_CONFIG: process.env.SEARCH_ENGINE_CONFIG,
   },
   async headers() {
     return [
