@@ -68,9 +68,15 @@ import { stringToBoolean } from '@framework/utils/parse-util'
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
+      ?.find((x: any) => x.configType === 'DomainSettings')
+      ?.configKeys?.find(
+        (x: any) => x.key === "DomainSettings.EnableOmniOms"
+      )?.value || ''
+  ) && stringToBoolean(
+    config?.configSettings
       ?.find((x: any) => x.configType === 'OrderSettings')
       ?.configKeys?.find(
-        (x: any) => x.key === 'OrderSettings.AllowCustometToSplitShipping'
+        (x: any) => x.key === "OrderSettings.EnabledPartialDelivery"
       )?.value || ''
   )
 
