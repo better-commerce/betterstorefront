@@ -106,7 +106,7 @@ function ElasticSearchResult({
   clearFilters,
 }: any) {
   return (
-    <div className="absolute z-10 w-screen h-auto border-b border-gray-300 shadow min-h-screen bg-white top-[63px] sm:top-[88px] search-wrapper">
+    <div className="absolute z-10 w-screen h-auto border-b border-gray-300 shadow min-h-screen bg-white top-[63px] sm:top-[64px] search-wrapper">
       <div className="absolute top-1 sm:right-10 sm:top-7 right-4">
         <XMarkIcon
           className="!text-gray-900 cursor-pointer h-7 w-7"
@@ -117,7 +117,7 @@ function ElasticSearchResult({
           }}
         />
       </div>
-      <div className="flex flex-col items-center justify-center w-full px-0 pb-5 mt-0 sm:mt-5 sm:px-0">
+      <div className="flex flex-col items-center justify-center w-full px-0 pb-5 mt-0 sm:mt-0 sm:px-0">
         <div className="App">
           <ErrorBoundary>
             <Layout

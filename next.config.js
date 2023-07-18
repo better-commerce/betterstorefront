@@ -93,20 +93,7 @@ module.exports = withCommerceConfig({
     PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
     OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
     ENABLE_ELASTIC_SEARCH: process.env.ENABLE_ELASTIC_SEARCH,
-  },
-  async headers() {
-    return [
-      {
-        source: '/:all*(svg|jpg|png|woff|woff2)',
-        locale: false,
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=9999999999, must-revalidate',
-          },
-        ],
-      },
-    ]
+    SEARCH_ENGINE_CONFIG: process.env.SEARCH_ENGINE_CONFIG,
   },
 })
 

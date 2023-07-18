@@ -1,5 +1,5 @@
-import config from '../config/engine.json'
-const engine = process.env.ELASTIC_ENGINE_NAME
+import { ElasticEngineConfig } from './engines'
+
 /**
  * This file abstracts most logic around the configuration of the Reference UI.
  *
@@ -12,6 +12,12 @@ const engine = process.env.ELASTIC_ENGINE_NAME
 export function getConfig() {
   if (process.env.NODE_ENV === 'test') {
     return {}
+  }
+
+  let config = {}
+  const engineName = process.env.SEARCH_ENGINE_CONFIG
+  if (engineName) {
+    config = ElasticEngineConfig[engineName]
   }
 
   if (config.engineName) return config
