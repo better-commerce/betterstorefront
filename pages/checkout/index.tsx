@@ -46,7 +46,7 @@ function Checkout({ cart, config, location }: any) {
   
   const { getAddress } = asyncHandler()
 
-  const handleUpdatedShippingPlans = async ()=>{
+  const onShippingPlansUpdated = async ()=>{
     let lineItems = [...cartItems?.lineItems]
     // console.log("lineItems:  ",lineItems);
     
@@ -61,7 +61,7 @@ function Checkout({ cart, config, location }: any) {
 
   useEffect(()=>{
     if(isSplitDelivery){
-      handleUpdatedShippingPlans()
+      onShippingPlansUpdated()
     }
   },[])
 
@@ -209,7 +209,7 @@ function Checkout({ cart, config, location }: any) {
         location={location}
         recordShippingInfo={recordShippingInfo}
         splitDeliveryItems={splitDeliveryItems}
-        handleUpdatedShippingPlans={handleUpdatedShippingPlans}
+        onShippingPlansUpdated={onShippingPlansUpdated}
       />
     )
   }

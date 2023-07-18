@@ -72,7 +72,7 @@ export default function CheckoutForm({
   location,
   recordShippingInfo,
   splitDeliveryItems,
-  handleUpdatedShippingPlans,
+  onShippingPlansUpdated,
 }: any) {
   const {
     setCartItems,
@@ -822,7 +822,7 @@ export default function CheckoutForm({
                   toggleDelivery={toggleDelivery}
                   isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
                   splitDeliveryItems = {splitDeliveryItems}
-                  handleUpdatedShippingPlans={handleUpdatedShippingPlans}
+                  onShippingPlansUpdated={onShippingPlansUpdated}
                 />
               )}
 

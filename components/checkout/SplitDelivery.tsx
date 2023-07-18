@@ -78,7 +78,7 @@ function SplitDelivery({
           {splitDeliveryDates?.map((deliveryDate: any, Idx: any) => (
             <div
               key={Idx}
-              className="flex w-full border-b-2 border-gray-30 gap-x-5 flex-row"
+              className="flex w-full  border-gray-30 gap-x-5 flex-row"
             >
               <div className="\h-full w-full">
                 <h2 className="text-sm font-bold">{`Delivery ${Idx + 1}`}</h2>
@@ -211,7 +211,7 @@ function SplitDelivery({
                 </ul>
               </div>
               {showDeliveryOptions ? (
-                  <div className="flex \h-full py-4 items-end"> 
+                  <div className="flex \h-full w-full pt-4 items-end"> 
                   <DeliveryOptions
                     products={splitDeliveryItems[deliveryDate]}
                     appConfig={appConfig}

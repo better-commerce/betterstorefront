@@ -97,7 +97,7 @@ const initialState = {
   user: getItem('user') || {},
   guestUser: getItem('guestUser') || {},
   isGuestUser: getItem('isGuest') || false,
-  isSplitDelivery: getItem('isSplitDelivery' || false),
+  isSplitDelivery: getItem('isSplitDelivery') || false,
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
