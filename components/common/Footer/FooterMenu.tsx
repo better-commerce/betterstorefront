@@ -27,7 +27,7 @@ const FooterMenu: FC<Props> = ({ config }: any) => {
             {config?.map((item: any, idx: number) => (
               <div
                 key={idx}
-                className="flex md:flex-row flex-col gap-y-4 sm:gap-y-0"
+                className="flex md:flex-row flex-col gap-y-4 sm:gap-y-4"
               >
                 {item?.navBlocks
                   ?.sort(

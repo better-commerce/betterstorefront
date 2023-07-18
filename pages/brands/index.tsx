@@ -89,7 +89,7 @@ function BrandsPage({ brands }: any) {
       <div className="bg-white">
         {/* Mobile menu */}
         <main className="container pb-24 mx-auto overflow-hidden sm:px-0 lg:px-0">
-          <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-8">
+          <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-6">
             <h1 className="font-extrabold tracking-tight text-gray-900">
               Brands
             </h1>
@@ -154,7 +154,7 @@ function BrandsPage({ brands }: any) {
           {normalizedBrands.map((brand: any, idx: number) => (
             <div
               key={`brands-${idx}`}
-              className="flex flex-col px-0 py-4 border-t sm:px-2 lg:px-2 sm:py-10"
+              className="flex flex-col px-0 py-4 border-t sm:px-4 md:px-6 lg:px-6 2xl:px-2 sm:py-10"
             >
               <h2
                 id={brand.title.toUpperCase()}

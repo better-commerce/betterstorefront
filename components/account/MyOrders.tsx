@@ -123,7 +123,7 @@ export default function MyOrders({ deviceInfo }: any) {
 
       <main className="sm:px-6 lg:px-8">
         <div className="max-w-4xl lg:mx-12">
-          <div className="lg:px-4 sm:px-0">
+          <div className="lg:px-4 sm:px-0 pt-5">
             <h1 className="font-extrabold tracking-tight text-gray-900">
               {ORDER_HISTORY_TITLE}
             </h1>

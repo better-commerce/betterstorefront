@@ -64,10 +64,10 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   // return(<h1>helow wprdls</h1>)
   return (
     <section className="relative pb-10 text-gray-900">
-      <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
+      <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
         <div className="grid w-full grid-cols-12 sm:px-2 sm:pr-0 main-account-grid">
           <div
-            className={`col-span-3 md:pl-12 sm:pl-6 border-r border-gray-200 tab-list-sm sm:pt-10 mob-tab-full ${
+            className={`col-span-3 md:pl-2 sm:pl-2 border-r border-gray-200 tab-list-sm sm:pt-10 mob-tab-full ${
               isShow ? `` : 'mob-hidden'
             }`}
           >
