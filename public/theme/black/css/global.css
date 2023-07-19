@@ -622,8 +622,11 @@ p {
 }
 
 .long-f-name {
-  width: 150px;
+  width: 140px;
   float: right;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
 }
 
 .light-font-weight {
@@ -687,13 +690,16 @@ p {
 
 @media screen and (min-width: 900px) and (max-width: 1300px) {
   .long-f-name {
-    width: 94px;
+    width: 75px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
   }
 }
 
 @media screen and (min-width: 1301px) and (max-width: 1550px) {
   .long-f-name {
-    width: 122px;
+    width: 110px;
   }
 }
 
