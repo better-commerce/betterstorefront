@@ -17,6 +17,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
   GENERAL_LOGIN,
   VALIDATION_NO_ACCOUNT_FOUND,
+  LOGIN_SUCCESSFULLY,
   VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
 } from '@components/utils/textVariables'
 import LoginOtp from '@components/account/login-otp'
@@ -54,7 +55,7 @@ export default function Login({ isLoginSidebarOpen }: any) {
         setAlert({type:'error',msg:VALIDATION_NO_ACCOUNT_FOUND})
       } else if (result.data) {
         setNoAccount(false)
-        setAlert({type:'success',msg:"login successfully"})
+        setAlert({type:'success',msg: LOGIN_SUCCESSFULLY})
         let userObj = { ...result.data }
 
         // get user updated details
