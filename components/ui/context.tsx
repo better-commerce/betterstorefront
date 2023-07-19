@@ -76,6 +76,7 @@ export interface State {
   includeVAT: string
   isCompared: string
   compareProductList: any
+  isPaymentLink: boolean
 }
 
 const initialState = {
@@ -115,6 +116,7 @@ const initialState = {
   includeVAT: getItem('includeVAT') || 'false',
   isCompared: getItem('isCompared') || 'false',
   compareProductList: getItem('compareProductList') || {},
+  isPaymentLink: getItem('isPaymentLink') || false,
 }
 
 type Action =
@@ -198,6 +200,10 @@ type Action =
     }
   | {
       type: 'SET_IS_GUEST_USER'
+      payload: boolean
+    }
+  | {
+      type: 'SET_IS_PAYMENT_LINK'
       payload: boolean
     }
   | { type: 'REMOVE_USER'; payload: any }
@@ -406,6 +412,12 @@ function uiReducer(state: State, action: Action) {
         isGuestUser: action.payload,
       }
     }
+    case 'SET_IS_PAYMENT_LINK': {
+      return {
+        ...state,
+        isPaymentLink: action.payload,
+      }
+    }
     case 'REMOVE_USER': {
       return {
         ...state,
@@ -470,7 +482,7 @@ function uiReducer(state: State, action: Action) {
           compareProductList: {
             ...(state?.compareProductList || {}),
             [action.payload.id]: action.payload.data,
-          }
+          },
         }
         setItem('compareProductList', state.compareProductList)
         return state
@@ -481,7 +493,7 @@ function uiReducer(state: State, action: Action) {
           ...state,
           compareProductList: {
             ...(state?.compareProductList || {}),
-          }
+          },
         }
         setItem('compareProductList', state.compareProductList)
         return state
@@ -491,12 +503,11 @@ function uiReducer(state: State, action: Action) {
     case 'RESET_COMPARE_PRODUCTS': {
       state = {
         ...state,
-        compareProductList: {}
+        compareProductList: {},
       }
       setItem('compareProductList', {})
       return state
     }
-
   }
 }
 
@@ -772,24 +783,43 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setIsPaymentLink = useCallback(
+    (payload: boolean) => {
+      setItem('isPaymentLink', payload)
+      dispatch({ type: 'SET_IS_PAYMENT_LINK', payload })
+    },
+    [dispatch]
+  )
+
   const deleteUser = useCallback(
     (payload: any) => {
+      const { isSilentLogout = false } = payload
+
+      const logoutUser = (isSilentLogout: boolean) => {
+        removeItem('user')
+        dispatch({ type: 'SET_WISHLIST', payload: [] })
+        setItem('wishListItems', [])
+        setItem('cartItems', { lineItems: [] })
+        dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+        Cookies.remove(Cookie.Key.COMPANY_ID)
+        const basketIdRef = uuid()
+        Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
+          expires: getExpiry(getMinutesInDays(365)),
+        })
+        dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
+        dispatch({ type: 'REMOVE_USER', payload: {} })
+
+        if (!isSilentLogout) {
+          setAlert({ type: 'success', msg: LOGOUT })
+        }
+      }
+
       if (payload?.router) {
         payload?.router?.push('/').then(() => {
-          removeItem('user')
-          dispatch({ type: 'SET_WISHLIST', payload: [] })
-          setItem('wishListItems', [])
-          setItem('cartItems', { lineItems: [] })
-          dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
-          Cookies.remove(Cookie.Key.COMPANY_ID)
-          const basketIdRef = uuid()
-          Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
-            expires: getExpiry(getMinutesInDays(365)),
-          })
-          dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
-          dispatch({ type: 'REMOVE_USER', payload: {} })
-          setAlert({ type: 'success', msg: LOGOUT })
+          logoutUser(isSilentLogout)
         })
+      } else {
+        logoutUser(isSilentLogout)
       }
     },
     [dispatch]
@@ -892,12 +922,9 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
-  const resetCompareProducts = useCallback(
-    () => {
-      dispatch({ type: 'RESET_COMPARE_PRODUCTS' })
-    },
-    [dispatch]
-  )
+  const resetCompareProducts = useCallback(() => {
+    dispatch({ type: 'RESET_COMPARE_PRODUCTS' })
+  }, [dispatch])
 
   const consolidateCartItems = (payload: any) => {
     let newCartDataClone: any = { ...payload }
@@ -1012,6 +1039,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setUser,
       setGuestUser,
       setIsGuestUser,
+      setIsPaymentLink,
       deleteUser,
       openCart,
       openLoginSideBar,
