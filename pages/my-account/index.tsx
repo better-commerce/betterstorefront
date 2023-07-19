@@ -51,7 +51,6 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     }
   }
   const [active, setActive] = useState(false)
-
   const handleClick = () => {
     setActive(!active)
   }
