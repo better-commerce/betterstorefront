@@ -47,7 +47,7 @@ export default function Delivery({
   appConfig,
   geoData,
 }: any) {
-  const { basketId, setCartItems, cartItems } = useUI()
+  const { basketId, setCartItems, cartItems, isPaymentLink } = useUI()
 
   const [selectedCountry, setSelectedCountry] = useState({
     name: 'Country',
@@ -120,6 +120,12 @@ export default function Delivery({
   }
 
   useEffect(() => {
+    if (isPaymentLink) {
+      submitShippingMethod()
+    }
+  }, [])
+
+  useEffect(() => {
     const getDefaultCountry = async () => {
       const { CountryCode } = geoData
       const defaultSelectedCountry: any = appConfig.shippingCountries?.find(
@@ -145,8 +151,6 @@ export default function Delivery({
     setSelectedDeliveryMethod({ id: 0, children: [], type: 0 })
 
     fetchDeliveryMethods()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCountry])
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -201,6 +205,7 @@ export default function Delivery({
           <ConfirmedGeneralComponent
             onStateChange={toggleDelivery}
             content={content}
+            isPaymentLink={isPaymentLink}
           />
         </>
       ) : (
@@ -211,20 +216,24 @@ export default function Delivery({
             </h1>
 
             {isSelected ? (
-              <div className="py-5 flex justify-between items-center">
-                <span className="font-normal d-inline font-sm pr-1 text-gray-900">
-                  {selectedCountry.name}
-                </span>
-                <div className="flex">
-                  <button
-                    onClick={() => setIsSelected(false)}
-                    className="btn text-pink font-xs"
-                    type="button"
-                  >
-                    {GENERAL_EDIT}
-                  </button>
-                </div>
-              </div>
+              <>
+                {!isPaymentLink && (
+                  <div className="py-5 flex justify-between items-center">
+                    <span className="font-normal d-inline font-sm pr-1 text-gray-900">
+                      {selectedCountry.name}
+                    </span>
+                    <div className="flex">
+                      <button
+                        onClick={() => setIsSelected(false)}
+                        className="btn text-pink font-xs"
+                        type="button"
+                      >
+                        {GENERAL_EDIT}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               <>
                 <select

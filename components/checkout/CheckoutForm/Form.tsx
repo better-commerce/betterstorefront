@@ -117,7 +117,7 @@ export default function AddressForm({
       formikRef?.current?.validateForm()
     }
     handleSubmit(...args)
-    if (itemsToHide.length > 0) {
+    if (itemsToHide?.length > 0) {
       setItemsToHide([])
     }
     formikRef?.current?.setTouched(touchedValidationObject)
@@ -129,7 +129,7 @@ export default function AddressForm({
       initialValues={initState}
       onSubmit={(values: any) => {
         // Pass on dirty flag to the parent ref.
-        onSubmit({ ...values, ...{ isDirty: formikRef.current.dirty } })
+        onSubmit({ ...values, ...{ isDirty: formikRef?.current?.dirty } })
       }}
       innerRef={formikRef}
     >
