@@ -16,8 +16,8 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
   GENERAL_LOGIN,
-  VALIDATION_NO_ACCOUNT_FOUND,
-  LOGIN_SUCCESSFULLY,
+  INVALID_ACCOUNT,
+  LOGIN_SUCCESSFUL,
   VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
 } from '@components/utils/textVariables'
 import LoginOtp from '@components/account/login-otp'
@@ -52,10 +52,10 @@ export default function Login({ isLoginSidebarOpen }: any) {
       const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       if (!result.data) {
         setNoAccount(true)
-        setAlert({type:'error',msg:VALIDATION_NO_ACCOUNT_FOUND})
+        setAlert({type:'error',msg:INVALID_ACCOUNT})
       } else if (result.data) {
         setNoAccount(false)
-        setAlert({type:'success',msg: LOGIN_SUCCESSFULLY})
+        setAlert({type:'success',msg: LOGIN_SUCCESSFUL})
         let userObj = { ...result.data }
 
         // get user updated details
@@ -112,14 +112,14 @@ export default function Login({ isLoginSidebarOpen }: any) {
           btnText="Login"
           type="login"
           onSubmit={handleUserLogin}
-          apiError={noAccount ? VALIDATION_NO_ACCOUNT_FOUND : ''}
+          apiError={noAccount ? INVALID_ACCOUNT : ''}
           isLoginSidebarOpen={isLoginSidebarOpen}
         />
         {/* <div className="flex flex-col items-center justify-center w-full">
           {noAccount && (
-            setAlert({type:'success',msg:VALIDATION_NO_ACCOUNT_FOUND})
+            setAlert({type:'success',msg:INVALID_ACCOUNT})
             <span className="text-lg text-red-700">
-              {VALIDATION_NO_ACCOUNT_FOUND}
+              {INVALID_ACCOUNT}
             </span>
           )}
         </div> */}
