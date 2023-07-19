@@ -30,6 +30,7 @@ export default function Login({ isLoginSidebarOpen }: any) {
     setUser,
     user,
     wishListItems,
+    setAlert,
     setCartItems,
     setBasketId,
     setWishlist,
@@ -45,13 +46,15 @@ export default function Login({ isLoginSidebarOpen }: any) {
     eventType: PageViewed,
   })
 
-  const handleUserLogin = (values: any) => {
+  const handleUserLogin = (values: any, cb?: any) => {
     const asyncLoginUser = async () => {
       const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       if (!result.data) {
         setNoAccount(true)
+        setAlert({type:'error',msg:VALIDATION_NO_ACCOUNT_FOUND})
       } else if (result.data) {
         setNoAccount(false)
+        setAlert({type:'success',msg:"login successfully"})
         let userObj = { ...result.data }
 
         // get user updated details
@@ -79,6 +82,7 @@ export default function Login({ isLoginSidebarOpen }: any) {
         setIsGuestUser(false)
         Router.push('/')
       }
+      if (cb) cb();
     }
     asyncLoginUser()
   }
@@ -110,13 +114,14 @@ export default function Login({ isLoginSidebarOpen }: any) {
           apiError={noAccount ? VALIDATION_NO_ACCOUNT_FOUND : ''}
           isLoginSidebarOpen={isLoginSidebarOpen}
         />
-        <div className="flex flex-col items-center justify-center w-full">
+        {/* <div className="flex flex-col items-center justify-center w-full">
           {noAccount && (
+            setAlert({type:'success',msg:VALIDATION_NO_ACCOUNT_FOUND})
             <span className="text-lg text-red-700">
               {VALIDATION_NO_ACCOUNT_FOUND}
             </span>
           )}
-        </div>
+        </div> */}
         <SocialSignInLinks
           isLoginSidebarOpen={isLoginSidebarOpen}
           containerCss={`flex justify-center gap-2 px-3 mx-auto ${
