@@ -83,6 +83,7 @@ export default function CheckoutForm({
     isGuestUser,
     guestUser,
     setGuestUser,
+    isPaymentLink,
   } = useUI()
 
   const uiContext = useUI()
@@ -631,7 +632,7 @@ export default function CheckoutForm({
   }
 
   const handleShippingSubmit = (values: any) => {
-    if (values.isDirty) {
+    if (values?.isDirty) {
       delete values.isDirty
     }
     toggleShipping()
@@ -853,6 +854,7 @@ export default function CheckoutForm({
                         }}
                         // onEditAddress={handleEditAddress}
                         handleOpenNewAddressModal={handleOpenNewAddressModal}
+                        isPaymentLink={isPaymentLink}
                       />
                     </>
                   ) : null}
