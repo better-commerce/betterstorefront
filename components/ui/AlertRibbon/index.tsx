@@ -50,7 +50,7 @@ const AlertRibbon: FC = () => {
           >
             {alertRibbon?.msg}
           </h4>
-        </div
+        </div>
         <div>
           <XMarkIcon
             onClick={hideAlert}
