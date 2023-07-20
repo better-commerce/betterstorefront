@@ -702,12 +702,16 @@ export default function CheckoutForm({
   }
 
   useEffect(() => {
+    if (isPaymentLink && addresses?.length) {
+      handleShippingSubmit(addresses[0])
+    }
+  }, [addresses])
+
+  useEffect(() => {
     if (!Object.keys(state.shippingInformation).length) {
       setShippingInformation(defaultShippingAddress)
       setBillingInformation(defaultBillingAddress, false)
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultShippingAddress])
 
   const [basketOrderInfo, setbasketOrderInfo] = useState<any>()
@@ -719,8 +723,6 @@ export default function CheckoutForm({
         }
       )
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.isPaymentInformationCompleted])
 
   const getPaymentOrderInfo = async (paymentMethod: any) => {

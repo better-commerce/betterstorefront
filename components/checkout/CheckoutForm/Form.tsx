@@ -59,6 +59,7 @@ export default function AddressForm({
           postCode: defaultValues.postCode,
           phone: defaultValues.phoneNo,
         }}
+        isPaymentLink={isPaymentLink}
       />
     )
   }
@@ -123,17 +124,6 @@ export default function AddressForm({
     }
     formikRef?.current?.setTouched(touchedValidationObject)
   }
-
-  // TODO: Set address for checkout via payment link
-  /*useEffect(() => {
-    if (isPaymentLink && addresses?.length) {
-      //setValues(addresses[0])
-      setAddress(addresses[0])
-      setTimeout(() => {
-        onSubmit(addresses[0])
-      }, 2000);
-    }
-  }, [addresses])*/
 
   return (
     <Formik
