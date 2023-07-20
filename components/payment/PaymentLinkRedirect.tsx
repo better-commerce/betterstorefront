@@ -15,18 +15,23 @@ const PAYMENT_LINK_ALLOWED_URLS = [
 ]
 
 const PaymentLinkRedirect = ({ router }: any) => {
-  const { isPaymentLink } = useUI()
-  //const [showLoader, setShowLoader] = useState(false)
+  const { isPaymentLink, setOverlayLoaderState } = useUI()
 
   const redirect = (isPaymentLink: boolean, url: string) => {
     if (isPaymentLink) {
+
+      setOverlayLoaderState({
+        visible: true,
+        message: 'Please wait...',
+        backdropInvisible: true
+      })
+
       const newUrl = url === '/' ? '' : url
       const lookupUrl = PAYMENT_LINK_ALLOWED_URLS?.find((x: string) =>
         x?.startsWith(newUrl)
       )
 
       if (!newUrl || !lookupUrl) {
-        //setShowLoader(true)
         router.push('/checkout')
       }
     }
@@ -44,18 +49,12 @@ const PaymentLinkRedirect = ({ router }: any) => {
 
     // Dispose listener.
     return () => {
-      router.events.off('routeChangeStart', () => {})
+      router.events.off('routeChangeStart', () => { })
     }
   }, [router.events])
 
   return (
-    <>
-      {/*{
-                showLoader && (
-                    <Spinner />
-                )
-            }*/}
-    </>
+    <></>
   )
 }
 

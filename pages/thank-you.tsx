@@ -54,7 +54,7 @@ import { stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
-  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser } =
+  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser, resetIsPaymentLink } =
     useUI()
   const isIncludeVAT = vatIncluded()
 
@@ -143,6 +143,7 @@ export default function OrderConfirmation({ config }: any) {
     }
     removeItem(LocalStorage.Key.ORDER_RESPONSE)
     removeItem(LocalStorage.Key.ORDER_PAYMENT)
+    resetIsPaymentLink()
     setGuestUser({})
     setIsGuestUser(false)
     if (orderId) fetchOrder()
@@ -151,7 +152,6 @@ export default function OrderConfirmation({ config }: any) {
       setOrderId('')
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isLoading) {

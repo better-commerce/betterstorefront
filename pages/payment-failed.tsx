@@ -40,12 +40,13 @@ import {
 } from '@framework/content/use-content-snippet'
 
 const PaymentFailedPage = ({
-  /*orderId: guidOrderId,*/ config,
+  //orderId: guidOrderId,
+  config,
   hostName,
 }: any) => {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
-  const { orderId, setOrderId, user } = useUI()
+  const { orderId, setOrderId, user, resetIsPaymentLink } = useUI()
   const isIncludeVAT = vatIncluded()
   useEffect(() => {
     const fetchOrder = async () => {
@@ -55,6 +56,7 @@ const PaymentFailedPage = ({
       setOrderData(data.order)
       setIsLoading(false)
     }
+    resetIsPaymentLink()
     removeItem(LocalStorage.Key.ORDER_RESPONSE)
     removeItem(LocalStorage.Key.ORDER_PAYMENT)
     if (orderId) fetchOrder()
@@ -63,7 +65,6 @@ const PaymentFailedPage = ({
       setOrderId('')
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isLoading) {
