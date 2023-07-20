@@ -65,7 +65,7 @@ export async function getStaticProps({
       pages,
       slugs,
       globalSnippets: infra?.snippets ?? [],
-      snippets: slugs?.snippets,
+      snippets: slugs?.snippets ?? [],
       pageContentsWeb: pageContentsWeb ?? {},
       pageContentsMobileWeb: pageContentsMobileWeb ?? {},
       hostName: obfuscateHostName(hostName),

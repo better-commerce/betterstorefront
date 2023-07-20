@@ -39,6 +39,7 @@ export interface IDeviceInfo {
 export interface IOverlayLoaderState {
   readonly visible: boolean
   readonly message?: string
+  readonly backdropInvisible?: boolean
 }
 
 export interface IPLPFilterState {
@@ -105,6 +106,7 @@ const initialState = {
   overlayLoaderState: {
     visible: false,
     message: '',
+    backdropInvisible: false,
   },
   deviceInfo: {
     isMobile: false,
@@ -121,91 +123,91 @@ const initialState = {
 
 type Action =
   | {
-      type: 'OPEN_SIDEBAR'
-    }
+    type: 'OPEN_SIDEBAR'
+  }
   | {
-      type: 'CLOSE_SIDEBAR'
-    }
+    type: 'CLOSE_SIDEBAR'
+  }
   | {
-      type: 'OPEN_DROPDOWN'
-    }
+    type: 'OPEN_DROPDOWN'
+  }
   | {
-      type: 'CLOSE_DROPDOWN'
-    }
+    type: 'CLOSE_DROPDOWN'
+  }
   | {
-      type: 'OPEN_MODAL'
-    }
+    type: 'OPEN_MODAL'
+  }
   | {
-      type: 'SHOW_ALERT'
-    }
+    type: 'SHOW_ALERT'
+  }
   | {
-      type: 'HIDE_ALERT'
-    }
+    type: 'HIDE_ALERT'
+  }
   | {
-      type: 'USE_ALERT'
-      payload: any
-    }
+    type: 'USE_ALERT'
+    payload: any
+  }
   | {
-      type: 'OPEN_NOTIFY_USER_POPUP'
-      payload: string
-    }
+    type: 'OPEN_NOTIFY_USER_POPUP'
+    payload: string
+  }
   | {
-      type: 'CLOSE_NOTIFY_USER_POPUP'
-    }
+    type: 'CLOSE_NOTIFY_USER_POPUP'
+  }
   | {
-      type: 'CLOSE_MODAL'
-    }
+    type: 'CLOSE_MODAL'
+  }
   | {
-      type: 'SET_MODAL_VIEW'
-      view: MODAL_VIEWS
-    }
+    type: 'SET_MODAL_VIEW'
+    view: MODAL_VIEWS
+  }
   | {
-      type: 'SET_SIDEBAR_VIEW'
-      view: SIDEBAR_VIEWS
-    }
+    type: 'SET_SIDEBAR_VIEW'
+    view: SIDEBAR_VIEWS
+  }
   | {
-      type: 'SHOW_DETAILED_ORDER'
-    }
+    type: 'SHOW_DETAILED_ORDER'
+  }
   | {
-      type: 'HIDE_DETAILED_ORDER'
-    }
+    type: 'HIDE_DETAILED_ORDER'
+  }
   | {
-      type: 'SET_USER_AVATAR'
-      value: string
-    }
+    type: 'SET_USER_AVATAR'
+    value: string
+  }
   | {
-      type: 'ADD_TO_WISHLIST'
-      payload: any
-    }
+    type: 'ADD_TO_WISHLIST'
+    payload: any
+  }
   | {
-      type: 'REMOVE_FROM_WISHLIST'
-      payload: any
-    }
+    type: 'REMOVE_FROM_WISHLIST'
+    payload: any
+  }
   | {
-      type: 'ADD_TO_CART'
-      payload: any
-    }
+    type: 'ADD_TO_CART'
+    payload: any
+  }
   | {
-      type: 'REMOVE_FROM_CART'
-      payload: any
-    }
+    type: 'REMOVE_FROM_CART'
+    payload: any
+  }
   | { type: 'SET_CART_ITEMS'; payload: any }
   | {
-      type: 'SET_USER'
-      payload: any
-    }
+    type: 'SET_USER'
+    payload: any
+  }
   | {
-      type: 'SET_GUEST_USER'
-      payload: any
-    }
+    type: 'SET_GUEST_USER'
+    payload: any
+  }
   | {
-      type: 'SET_IS_GUEST_USER'
-      payload: boolean
-    }
+    type: 'SET_IS_GUEST_USER'
+    payload: boolean
+  }
   | {
-      type: 'SET_IS_PAYMENT_LINK'
-      payload: boolean
-    }
+    type: 'SET_IS_PAYMENT_LINK'
+    payload: boolean
+  }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -783,11 +785,19 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
-  const setIsPaymentLink = useCallback(
-    (payload: boolean) => {
-      setItem('isPaymentLink', payload)
-      dispatch({ type: 'SET_IS_PAYMENT_LINK', payload })
-    },
+  const setIsPaymentLink = useCallback((payload: boolean) => {
+    setItem('isPaymentLink', payload)
+    Cookies.set(Cookie.Key.IS_PAYMENT_LINK, `${payload}`)
+    dispatch({ type: 'SET_IS_PAYMENT_LINK', payload })
+  },
+    [dispatch]
+  )
+
+  const resetIsPaymentLink = useCallback(() => {
+    dispatch({ type: 'SET_IS_PAYMENT_LINK', payload: false })
+    removeItem('isPaymentLink')
+    Cookies.remove(Cookie.Key.IS_PAYMENT_LINK)
+  },
     [dispatch]
   )
 
@@ -808,6 +818,8 @@ export const UIProvider: React.FC<any> = (props) => {
         })
         dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
         dispatch({ type: 'REMOVE_USER', payload: {} })
+        removeItem('isPaymentLink')
+        Cookies.remove(Cookie.Key.IS_PAYMENT_LINK)
 
         if (!isSilentLogout) {
           setAlert({ type: 'success', msg: LOGOUT })
@@ -887,11 +899,13 @@ export const UIProvider: React.FC<any> = (props) => {
       payload: IOverlayLoaderState = {
         visible: false,
         message: '',
+        backdropInvisible: false,
       }
     ) => {
       const data: IOverlayLoaderState = {
         visible: false,
         message: '',
+        backdropInvisible: false,
       }
       dispatch({ type: 'SET_OVERLAY_STATE', payload })
     },
@@ -954,7 +968,7 @@ export const UIProvider: React.FC<any> = (props) => {
               x.parentProductId.trim() !== '' &&
               x.parentProductId.trim() !== Guid.empty &&
               x.parentProductId.toLowerCase().trim() ==
-                parentItem.productId.toLowerCase()
+              parentItem.productId.toLowerCase()
           )
 
           // If child items exists
@@ -1040,6 +1054,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setGuestUser,
       setIsGuestUser,
       setIsPaymentLink,
+      resetIsPaymentLink,
       deleteUser,
       openCart,
       openLoginSideBar,

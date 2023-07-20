@@ -84,6 +84,7 @@ export default function CheckoutForm({
     guestUser,
     setGuestUser,
     isPaymentLink,
+    hideOverlayLoaderState,
   } = useUI()
 
   const uiContext = useUI()
@@ -703,6 +704,7 @@ export default function CheckoutForm({
 
   useEffect(() => {
     if (isPaymentLink && addresses?.length) {
+      hideOverlayLoaderState()
       handleShippingSubmit(addresses[0])
     }
   }, [addresses])
@@ -944,6 +946,7 @@ export default function CheckoutForm({
                 isShippingDisabled={isShippingDisabled}
                 cart={cartItems}
                 handleItem={handleItem}
+                isPaymentLink={isPaymentLink}
               />
             </div>
           </div>

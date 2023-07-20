@@ -195,7 +195,7 @@ export async function getStaticProps({
   return {
     props: {
       brands: response.result,
-      snippets: response.snippets,
+      snippets: response?.snippets ?? [],
     },
     revalidate: 200,
   }

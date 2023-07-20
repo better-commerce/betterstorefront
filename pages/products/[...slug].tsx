@@ -86,7 +86,7 @@ export async function getStaticProps({
       data: product,
       slug: params!.slug[0],
       globalSnippets: infra?.snippets ?? [],
-      snippets: product?.snippets,
+      snippets: product?.snippets ?? [],
       relatedProducts: relatedProducts,
       availabelPromotions: availabelPromotions,
       allProductsByBrand: allProductsByBrand,
