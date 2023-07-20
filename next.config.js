@@ -12,6 +12,7 @@ const isBC = provider === 'bigcommerce'
 const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({
+  poweredByHeader: false,
   images: {
     domains: [
       'liveocxcdn.azureedge.net',
