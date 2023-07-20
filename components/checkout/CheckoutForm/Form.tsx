@@ -1,7 +1,7 @@
 import { Formik, Form, Field } from 'formik'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   ADD_ADDRESS,
   BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS,
@@ -34,6 +34,7 @@ export default function AddressForm({
   infoType,
   retrieveAddress,
   handleOpenNewAddressModal,
+  isPaymentLink,
 }: any) {
   const defaultItemsToHide = ['address1', 'address2', 'city', 'postCode']
   const [isFormOpen, setNewFormOpen] = useState(!addresses.length)
@@ -123,6 +124,17 @@ export default function AddressForm({
     formikRef?.current?.setTouched(touchedValidationObject)
   }
 
+  // TODO: Set address for checkout via payment link
+  /*useEffect(() => {
+    if (isPaymentLink && addresses?.length) {
+      //setValues(addresses[0])
+      setAddress(addresses[0])
+      setTimeout(() => {
+        onSubmit(addresses[0])
+      }, 2000);
+    }
+  }, [addresses])*/
+
   return (
     <Formik
       validationSchema={schema}
@@ -145,55 +157,58 @@ export default function AddressForm({
           <>
             <div className="flex flex-wrap bg-white">
               {!!addresses?.length ? (
-                addresses.map((item: any, idx: number) => {
-                  return (
-                    <div
-                      key={idx}
-                      onClick={() => {
-                        setValues(item)
-                        setAddress(item)
-                      }}
-                      className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex items-center ${
-                        item.id === defaultValues.id ? 'border-black' : ''
-                      }`}
-                    >
-                      <div>
-                        {item.id === defaultValues.id ? (
-                          <CheckCircleIcon
-                            className="h-5 pr-4 text-left align-left text-black"
-                            aria-hidden="true"
-                          />
-                        ) : null}
-                        {item.id !== defaultValues.id ? (
-                          <CheckCircleIcon
-                            className="h-5 pr-4 text-left align-left text-gray-200"
-                            aria-hidden="true"
-                          />
-                        ) : null}
-                        <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end"></div>
-                      </div>
-                      <div className="flex text-md font-regular flex-wrap =">
-                        <span className="font-semibold pr-1">
-                          {item.firstName + ' ' + item.lastName},
-                        </span>
-                        <span className="pr-1">{item.address1}, </span>
-                        <span className="pr-1">{item.address2}, </span>
-                        <span className="pr-1">{item.city}, </span>
-                        <span className="pr-1">{item.postCode}, </span>
-                        <span className="pr-1">{item.country}, </span>
-                        <span className="pr-1">{item.phoneNo}</span>
-                        {/* <button
-                      onClick={() => {
-                      onEditAddress(item?.id)
-                      }}
-                      className="flex items-end justify-end w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
-                      >
-                      {GENERAL_EDIT}
-                      </button> */}
-                      </div>
-                    </div>
-                  )
-                })
+                <>
+                  {!isPaymentLink &&
+                    addresses.map((item: any, idx: number) => {
+                      return (
+                        <div
+                          key={idx}
+                          onClick={() => {
+                            setValues(item)
+                            setAddress(item)
+                          }}
+                          className={`w-full cursor-pointer text-gray-900 border border-gray-200 rounded-lg py-2 px-5 mb-0 mt-3 flex items-center ${
+                            item.id === defaultValues.id ? 'border-black' : ''
+                          }`}
+                        >
+                          <div>
+                            {item.id === defaultValues.id ? (
+                              <CheckCircleIcon
+                                className="h-5 pr-4 text-left align-left text-black"
+                                aria-hidden="true"
+                              />
+                            ) : null}
+                            {item.id !== defaultValues.id ? (
+                              <CheckCircleIcon
+                                className="h-5 pr-4 text-left align-left text-gray-200"
+                                aria-hidden="true"
+                              />
+                            ) : null}
+                            <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end"></div>
+                          </div>
+                          <div className="flex text-md font-regular flex-wrap =">
+                            <span className="font-semibold pr-1">
+                              {item.firstName + ' ' + item.lastName},
+                            </span>
+                            <span className="pr-1">{item.address1}, </span>
+                            <span className="pr-1">{item.address2}, </span>
+                            <span className="pr-1">{item.city}, </span>
+                            <span className="pr-1">{item.postCode}, </span>
+                            <span className="pr-1">{item.country}, </span>
+                            <span className="pr-1">{item.phoneNo}</span>
+                            {/* <button
+                            onClick={() => {
+                            onEditAddress(item?.id)
+                            }}
+                            className="flex items-end justify-end w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                            >
+                            {GENERAL_EDIT}
+                            </button> */}
+                          </div>
+                        </div>
+                      )
+                    })}
+                </>
               ) : (
                 <div className="w-full text-center mt-4">
                   <span className="text-gray-500 text-sm">
@@ -314,7 +329,7 @@ export default function AddressForm({
                 })}
               </Form>
             )} */}
-            {
+            {!isPaymentLink && (
               <div className="flex lg:flex-row md:flex-row gap-2 mt-10 flex-col flex-wrap justify-center">
                 {/* {isFormOpen && (
                   <button
@@ -355,7 +370,7 @@ export default function AddressForm({
                 </button>
               )} */}
               </div>
-            }
+            )}
             {/* {isSameAddressCheckboxEnabled && (
               <div className="flex items-center mt-10">
                 <input
