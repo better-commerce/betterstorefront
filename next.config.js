@@ -56,6 +56,19 @@ module.exports = withCommerceConfig({
       // to make the session cookies work.
     ].filter(Boolean)
   },
+  headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+        ],
+      },
+    ]
+  },
   env: {
     BETTERCOMMERCE_AUTH_URL: process.env.BETTERCOMMERCE_AUTH_URL,
     BETTERCOMMERCE_BASE_URL: process.env.BETTERCOMMERCE_BASE_URL,
