@@ -15,15 +15,17 @@ import Router from 'next/router'
 import React from 'react'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import MyDetails from '@components/account/MyDetails'
+import { Guid } from '@commerce/types'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
-  const { user, deleteUser, isGuestUser,isB2B } = useUI()
+  const { user, deleteUser, isGuestUser} = useUI()
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   let newConfig:any = []
   if (config && typeof window !== 'undefined') {
+    let isB2B = user?.companyId!==Guid.empty
     const hasMyCompany = config.some(
       (item: any) => item?.props === 'my-company'
     )
@@ -37,13 +39,6 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
       }
     }
     if (!isB2B) {
-      console.log('no is b2b')
-      // let i = config.length
-      // while (i--) {
-      //   if (config[i]?.props === 'my-company') {
-      //     config.splice(i, 1)
-      //   }
-      // }
       newConfig = [...config]
     } else if (!hasMyCompany) {
       console.log('is b2b')
@@ -56,7 +51,6 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
       })
     }
 
-    console.log('new config : ', newConfig)
   }
 
   useEffect(() => {

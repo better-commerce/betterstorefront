@@ -18,6 +18,7 @@ import { NEXT_GET_ORDERS, NEXT_GET_ORDER_DETAILS } from '@components/utils/const
 import Spinner from '@components/ui/Spinner'
 import Link from 'next/link'
 import { matchStrings } from '@framework/utils/parse-util'
+import OrdersListView from './OrdersListView'
 
 export default function B2BOrders({
 //   allOrders,
@@ -40,9 +41,6 @@ export default function B2BOrders({
     undefined
   )
   const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
-  console.log('all orders:',allOrders);
-  
-
   useEffect(() => {
     if (allOrdersFetched) {
       setAllOrderIds(pagedOrders?.map((x: any) => x?.id))
@@ -64,7 +62,7 @@ export default function B2BOrders({
         for (const data of IdMapArray) {
           const { userId, orders } = data;
           const foundOrder = orders.find((order:any) => order === orderId);
-          if (foundOrder) {
+          if (foundOrder) { 
             return userId;
           }
         }
@@ -75,7 +73,7 @@ export default function B2BOrders({
   useEffect(() => {
     if (allOrderIds?.length) {
       allOrderIds?.forEach((id: string, index: number) => {
-        let userMappedId = findUserIdByOrderId(userOrderIdMap,id)
+        let userMappedId = findUserIdByOrderId(userOrderIdMap,id) 
         handleFetchOrderDetails(id,userMappedId?userMappedId:user?.userId).then((orderDetails: any) => {
           const newOrders = pagedOrders?.map((obj: any) =>
             matchStrings(obj?.id, id, true)
@@ -103,7 +101,6 @@ export default function B2BOrders({
       pageSize: PAGE_SIZE,
     })
 
-    // console.log('setPagedOrders ::', ordersResult);<a
     setPagedOrders(ordersResult)
     setAllOrdersFetched(true)
   }
@@ -111,7 +108,7 @@ export default function B2BOrders({
   const handleInfiniteScroll = () => {
     //alert(pageNumber)
     setPageNumber(pageNumber + 1)
-  }
+  } //TILL HERE DONE
 
   const handleFetchOrderDetails = async (id: any,userId:any) => {
     const { data: orderDetails }: any = await axios.post(
@@ -156,17 +153,9 @@ export default function B2BOrders({
   }, [allOrders])
 
   useEffect(()=>{
-    // if(!isAdmin){
-    //     let specificOrders = allOrders?.filter((x:any)=>(x?.orderDetails?.order?.customerId===user?.userId))
-    //     console.log('specificOrders:',specificOrders);
-    //     if(specificOrders){
-    //         setOrdersList(specificOrders)
-    //     }
-    // } else {
         if(allOrders){
             setOrdersList(allOrders)
         }
-    // }
   },[allOrders])
 
   let deviceCheck = ''
@@ -197,7 +186,22 @@ export default function B2BOrders({
 
   return (
     <>
-      {isShowDetailedOrder ? (
+    <OrdersListView
+      isShowDetailedOrder={isShowDetailedOrder}
+      alertRibbon={alertRibbon}
+      displayAlert={displayAlert}
+      isIPadorTablet={isIPadorTablet}
+      isMobile={isMobile}
+      alertBgColor={alertBgColor}
+      ordersList={ordersList}
+      trackPackage={trackPackage}
+      onOrderDetail={onOrderDetail}
+      handleInfiniteScroll={handleInfiniteScroll}
+      setIsShowDetailedOrder={setIsShowDetailedOrder}
+      deviceInfo={deviceInfo}
+      orderDetails={orderDetails}
+    />
+      {/* {isShowDetailedOrder ? (
         <div id="OrderDetail" className="w-full">
           <OrderDetail
             show={isShowDetailedOrder}
@@ -350,7 +354,7 @@ export default function B2BOrders({
             </main>
           </div>
         </>
-      )}
+      )} */}
     </>
   )
 }

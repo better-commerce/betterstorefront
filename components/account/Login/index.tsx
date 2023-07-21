@@ -36,7 +36,6 @@ export default function Login({ isLoginSidebarOpen }: any) {
     setWishlist,
     cartItems,
     basketId,
-    setIsB2B,
   } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
@@ -78,15 +77,6 @@ export default function Login({ isLoginSidebarOpen }: any) {
         }
         setUser(userObj)
         setIsGuestUser(false)
-        if (
-          userObj?.companyId !== Guid.empty &&
-          userObj?.companyName &&
-          userObj?.companyUserRole !== 0
-        ) {
-          setIsB2B(true)
-        } else {
-          setIsB2B(false)
-        }
         Router.push('/')
       }
     }
