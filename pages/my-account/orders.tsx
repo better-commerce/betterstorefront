@@ -13,6 +13,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 
 import React from 'react'
+import { stringToBoolean } from '@framework/utils/parse-util'
 import MyDetails from '@components/account/MyDetails'
 // import MyOrders from '@components/account/MyOrders'
 import MyOrders from '@components/account/Orders/MyOrders'
@@ -22,6 +23,7 @@ import {
   NEXT_GET_ORDERS,
   NEXT_GET_ORDER_DETAILS,
 } from '@components/utils/constants'
+import SideMenu from '@components/account/SideMenu'
 
 const PAGE_SIZE = 10
 
@@ -41,6 +43,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
   const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
   const [active, setActive] = useState(false)
   const [pageNumber, setPageNumber] = useState<number>(1)
+  const currentOption = "My Orders"
 
   useEffect(() => {
     if (allOrdersFetched) {
@@ -83,7 +86,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
   useEffect(() => {
     if (isGuestUser) {
       router.push('/')
-    } else {
+    } else { //todo get new users created with different roles and make them place orders to verify the endpoint
       fetchOrders(pageNumber)
     }
 
@@ -182,7 +185,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
         </div>
           )}
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-          <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
+          {/* <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
             <div className="sticky left-0 z-10 flex flex-col top-36">
               {config.map((item: any, idx: number) => (
                 <>
@@ -267,8 +270,12 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
                 </>
               ))}
             </div>
-          </div>
-
+          </div> */}
+          <SideMenu
+                    handleClick={handleClick}
+                    setShow={setShow}
+                    currentOption={currentOption}
+                />
           <div
             className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
               isShow ? `` : ''
