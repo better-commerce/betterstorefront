@@ -49,11 +49,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   const [active, setActive] = useState(false)
 
   const [selectedOption, setSelectedOption] = useState<any>('Users')
-  console.log('selectedOption:', selectedOption)
-
   const [currentTab, setCurrentTab] = useState(0)
-  console.log('currentTab: ', currentTab)
-
   const [b2bUsers, setB2BUsers] = useState<any>(null)
   const [b2bQuotes, setB2BQuotes] = useState<any>(null)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -115,7 +111,6 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
           })
       );
           setUserOrderIdMap([...userOrderMap])
-      console.log('userOrderMap: ', userOrderMap);
     };
   
     fetchData();
@@ -126,7 +121,6 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
       let Index = optionsConfig.findIndex(
         (x: any) => x.value === selectedOption
       )
-      console.log('handleCurrentTab called, Index:', Index, selectedOption)
 
       setCurrentTab(Index)
     }
@@ -154,7 +148,6 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
     let { data: b2bUsers } = await axios.post(NEXT_B2B_GET_USERS, {
       companyId: user?.companyId,
     })
-    console.log('data: ', b2bUsers)
     if (b2bUsers?.length) {
       setB2BUsers(b2bUsers)
       userAdminCheck(b2bUsers)
@@ -166,7 +159,6 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
     let { data: b2bQuotes } = await axios.post(NEXT_B2B_GET_QUOTES, {
       userId: user?.userId,
     })
-    console.log('data quotes: ', b2bQuotes)
     setB2BQuotes(b2bQuotes)
   }
 
@@ -182,8 +174,6 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   const fetchB2BAddressBook = async () => {
     try {
       const response: any = await getAddress()(user?.userId)
-      console.log('Addressbook : ', response)
-
       //   setIsLoading(false)
       //   setData(response)
     } catch (error) {
@@ -193,7 +183,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
     }
   }
   const fetchB2BInvoices = async () => {
-    //api logic
+    //api logic 
   }
 
   useEffect(() => {
@@ -206,23 +196,9 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
     } else if (selectedOption === 'Invoices') {
       fetchB2BInvoices()
     }
-    // else if (selectedOption==="Orders"){
-    //         fetchOrders(pageNumber)
-    // }
+   
   }, [selectedOption])
 
-  const handleFetchOrderDetails = async (id: any) => {
-    // if(selectedOption==="Orders"){
-    const { data: orderDetails }: any = await axios.post(
-      NEXT_GET_ORDER_DETAILS,
-      {
-        id: user?.userId,
-        orderId: id,
-      }
-    )
-    return orderDetails
-    // }
-  }
 
   useEffect(() => {
     if (router.query.view && view !== router.query.view) {
@@ -303,149 +279,17 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
               </div>
             )}
             <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-              {/* <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden"> */}
-              {/* <div className="sticky left-0 z-10 flex flex-col top-36">
-                  {config.map((item: any, idx: number) => (
-                    <>
-                      <div
-                        key={`my-acc-${idx}`}
-                        // href="#"
-                        className={`hover:bg-white hover:text-indigo-600 border border-transparent text-md leading-3 font-medium text-gray-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"}`}
-                      >
-                        <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
-                          <i
-                            className={
-                              item.text.toLowerCase() + ' ' + 'sprite-icon'
-                            }
-                          ></i>
-                        </span>
-
-                        {item.text == 'My Company' ? (
-                          <>
-                            <div
-                              key={`my-acc-${idx}`}
-                              className={`relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${
-                                item.text == 'My Company'
-                                  ? 'bg-gray-200 text-black font-semibold border-l-4 sm:border-b-0 sm:border-l-4 sm:border-black opacity-full'
-                                  : 'font-medium'
-                              }`}
-                            >
-                              <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
-                                <i
-                                  className={
-                                    item.text.toLowerCase() +
-                                    ' ' +
-                                    'sprite-icon'
-                                  }
-                                ></i>
-                              </span>
-                              <Link
-                                shallow={true}
-                                href={item.href}
-                                passHref
-                                onClick={() => {
-                                  handleClick
-                                  setShow(false)
-                                }}
-                                className="inline-block w-full h-full py-4 text-sm text-primary"
-                              >
-                                <span className="inline-block text-black sm:hidden dark:text-black">
-                                  {item.mtext}
-                                </span>
-                                <span
-                                  className={`hidden sm:inline-block text-black dark:text-black ${
-                                    item.text == 'My Company' && 'font-display'
-                                  }`}
-                                >
-                                  {item.text}
-                                </span>
-                              </Link>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <Link
-                              shallow={true}
-                              href={item.href}
-                              passHref
-                              onClick={() => {
-                                handleClick
-                              }}
-                              className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
-                            >
-                              <span className="inline-block text-black sm:hidden dark:text-black">
-                                {item.mtext}
-                              </span>
-                              <span
-                                className={`hidden sm:inline-block text-black dark:text-black ${
-                                  item.text == 'My Company' && 'font-display'
-                                }`}
-                              >
-                                {item.text}
-                              </span>
-                            </Link>
-                          </>
-                        )}
-                      </div>
-                    </>
-                  ))}
-                </div> */}
               <SideMenu
                 handleClick={handleClick}
                 setShow={setShow}
                 currentOption={currentOption}
               />
-              {/* </div> */}
               <div
                 className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
                   isShow ? `` : ''
                 }`}
               >
                 <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-                  {/* <div className="flex justify-center mt-9 flex-row gap-x-6">
-                  {optionsConfig?.map((option: any, Idx: any) => (
-                    <div
-                      className={classNames(
-                        selectedOption === option.value
-                          ? 'border-b-[2px] border-black text-brand-blue'
-                          : 'text-gray-500',
-                        'cursor-pointer text-lg font-Inter font-semibold px-6'
-                      )}
-                      onClick={() => {
-                        option.onClick(option?.value)
-                      }}
-                    >
-                      {option.name}
-                    </div>
-                  ))}
-                </div> */}
-                  {/* {selectedOption === 'Users' && (
-                  <>
-                    <CompanyUsers users={b2bUsers} />
-                  </>
-                )} */}
-                  {/* {selectedOption === 'Orders' && (
-                  //   <MyOrders
-                  //     allOrders={allOrders}
-                  //     handleInfiniteScroll={handleInfiniteScroll}
-                  //     deviceInfo={deviceInfo}
-                  //     isShowDetailedOrder={isShowDetailedOrder}
-                  //     setIsShowDetailedOrder={setIsShowDetailedOrder}
-                  //   />
-                  <B2BOrders
-                    allOrders={allOrders}
-                    handleInfiniteScroll={handleInfiniteScroll}
-                    deviceInfo={deviceInfo}
-                    isShowDetailedOrder={isShowDetailedOrder}
-                    setIsShowDetailedOrder={setIsShowDetailedOrder}
-                    isAdmin={isAdmin}
-                  />
-                )} */}
-                  {/* {selectedOption === 'Quotes' && (
-                  <>
-                    <B2BQuotes quotes={b2bQuotes} />
-                  </>
-                )} */}
                   <div className="w-full \max-w-md px-2 py-9 sm:px-0">
                     <Tab.Group selectedIndex={currentTab}>
                       <Tab.List
@@ -456,7 +300,6 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
                         {optionsConfig?.map((option: any, Idx: any) => (
                           <Tab as={Fragment} key={Idx}>
                             {({ selected }) => (
-                              /* Use the `selected` state to conditionally style the selected tab. */
                               <button
                                 className={classNames(
                                   'w-full rounded-lg py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
@@ -472,7 +315,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
                                 {option.name}
                               </button>
                             )}
-                          </Tab> //todo Add 2 more tabs addressbook and invoices
+                          </Tab>
                         ))}
                       </Tab.List>
                       <Tab.Panels>
@@ -481,9 +324,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
                         </Tab.Panel>
                         <Tab.Panel>
                           <B2BOrders
-                            // allOrders={allOrders}
                             selectedOption={selectedOption}
-                            // handleInfiniteScroll={handleInfiniteScroll}
                             deviceInfo={deviceInfo}
                             isShowDetailedOrder={isShowDetailedOrder}
                             setIsShowDetailedOrder={setIsShowDetailedOrder}
