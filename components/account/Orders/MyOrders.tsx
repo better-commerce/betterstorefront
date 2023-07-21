@@ -17,6 +17,7 @@ import { GENERAL_RECENT_ORDERS } from '@components/utils/textVariables'
 import { NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
 import Link from 'next/link'
+import OrdersListView from './OrdersListView'
 
 export default function MyOrders({
   allOrders,
@@ -27,7 +28,6 @@ export default function MyOrders({
   const { isMobile, isIPadorTablet } = deviceInfo
   const { user, displayAlert, alertRibbon } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>(undefined)
-  // console.log(allOrders)
 
   const handleFetchOrderDetails = async (id: any) => {
     const { data: orderDetails }: any = await axios.post(
@@ -99,7 +99,22 @@ export default function MyOrders({
 
   return (
     <>
-      {isShowDetailedOrder ? (
+    <OrdersListView
+      isShowDetailedOrder={isShowDetailedOrder}
+      alertRibbon={alertRibbon}
+      displayAlert={displayAlert}
+      isIPadorTablet={isIPadorTablet}
+      isMobile={isMobile}
+      alertBgColor={alertBgColor}
+      ordersList={allOrders}
+      trackPackage={trackPackage}
+      onOrderDetail={onOrderDetail}
+      handleInfiniteScroll={handleInfiniteScroll}
+      setIsShowDetailedOrder={setIsShowDetailedOrder}
+      deviceInfo={deviceInfo}
+      orderDetails={orderDetails}
+    />
+      {/* {isShowDetailedOrder ? (
         <div id="OrderDetail" className="w-full">
           <OrderDetail
             show={isShowDetailedOrder}
@@ -117,7 +132,7 @@ export default function MyOrders({
               </Link>
               My Orders
             </h3>
-          </div> */}
+          </div> *
 
           <div className="bg-white">
             <main className="lg:px-8">
@@ -261,7 +276,7 @@ export default function MyOrders({
             </main>
           </div>
         </>
-      )}
+      )} */}
     </>
   )
 }

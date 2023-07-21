@@ -14,7 +14,7 @@ import { useUI } from '@components/ui/context'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import React from 'react'
 import AddressBook from '@components/account/Address/AddressBook'
-import SideMenu from '@components/account/SideMenu'
+import SideMenu from '@components/account/MyAccountMenu'
 
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)

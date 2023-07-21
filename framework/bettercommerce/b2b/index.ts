@@ -1,2 +1,2 @@
-export { default as useB2BCompanyUsers } from './get-company-users'
-export { default as useB2BUserQuotes } from './get-user-quotes'
+export { default as useB2BCompanyUsers } from './get-users'
+export { default as useB2BUserQuotes } from './get-quotes'

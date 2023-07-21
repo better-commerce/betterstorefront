@@ -23,7 +23,7 @@ import {
   NEXT_GET_ORDERS,
   NEXT_GET_ORDER_DETAILS,
 } from '@components/utils/constants'
-import SideMenu from '@components/account/SideMenu'
+import SideMenu from '@components/account/MyAccountMenu'
 
 const PAGE_SIZE = 10
 

@@ -15,7 +15,7 @@ import AddressBook from '@components/account/Address/AddressBook'
 import React from 'react'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import ContactPreferences from '@components/account/ContactPreferences'
-import SideMenu from '@components/account/SideMenu'
+import SideMenu from '@components/account/MyAccountMenu'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)

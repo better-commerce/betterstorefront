@@ -16,7 +16,7 @@ import React from 'react'
 import Wishlist from '@components/account/Wishlist'
 import wishlist from 'pages/wishlist'
 import { vatIncluded } from '@framework/utils/app-util'
-import SideMenu from '@components/account/SideMenu'
+import SideMenu from '@components/account/MyAccountMenu'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)

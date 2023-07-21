@@ -34,11 +34,12 @@ import AddressBook from '@components/account/Address/AddressBook'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import B2BAddressBook from '@components/account/B2BAddressBook'
 import Spinner from '@components/ui/Spinner'
-import SideMenu from '@components/account/SideMenu'
+import SideMenu from '@components/account/MyAccountMenu'
 import { isArray } from 'lodash'
+import { Guid } from '@commerce/types'
 
 function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
-  const { user, deleteUser, isGuestUser, displayDetailedOrder, isB2B } = useUI()
+  const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
@@ -130,7 +131,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   useEffect(() => {
     if (isGuestUser) {
       router.push('/')
-    } else if (!isB2B) {
+    } else if (user?.companyId===Guid.empty) {
       router.push('/404')
     }
 
@@ -248,7 +249,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
 
   return (
     <>
-      {!isB2B ? (
+      {! (user?.companyId!==Guid.empty) ? (
         <>
           <Spinner />
         </>
@@ -336,7 +337,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
                           <B2BQuotes quotes={b2bQuotes} />
                         </Tab.Panel>
                         <Tab.Panel>
-                          <B2BAddressBook isAdmin={isAdmin} />
+                          <AddressBook/>
                         </Tab.Panel>
                         <Tab.Panel>
                           <div className='font-Inter text-lg font-bold text-brand-blue p-10'>{`No Invoices Generated Yet`}</div>

@@ -1,3 +1,4 @@
+import { Guid } from '@commerce/types'
 import { useUI } from '@components/ui'
 import { config } from '@components/utils/myAccount'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -5,7 +6,8 @@ import Link from 'next/link'
 import React from 'react'
 
 function SideMenu({ handleClick, setShow, currentOption }: any) {
-    const {isB2B} = useUI()
+    const {user} = useUI()
+    let isB2B = user?.companyId!==Guid.empty
     let newConfig:any = []
     if (config && typeof window !== 'undefined') {
       const hasMyCompany = config.some(

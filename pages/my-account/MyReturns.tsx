@@ -17,7 +17,7 @@ import { stringToBoolean } from '@framework/utils/parse-util'
 import MyDetails from '@components/account/MyDetails'
 import MyOrders from '@components/account/MyOrders'
 import MyReturns from '@components/account/MyReturns'
-import SideMenu from '@components/account/SideMenu'
+import SideMenu from '@components/account/MyAccountMenu'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
