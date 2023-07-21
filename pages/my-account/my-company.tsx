@@ -338,6 +338,9 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
                         <Tab.Panel>
                           <B2BAddressBook isAdmin={isAdmin} />
                         </Tab.Panel>
+                        <Tab.Panel>
+                          <div className='font-Inter text-lg font-bold text-brand-blue p-10'>{`No Invoices Generated Yet`}</div>
+                        </Tab.Panel>
                       </Tab.Panels>
                     </Tab.Group>
                   </div>
