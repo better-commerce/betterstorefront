@@ -98,6 +98,7 @@ const initialState = {
   guestUser: getItem('guestUser') || {},
   isGuestUser: getItem('isGuest') || false,
   isSplitDelivery: getItem('isSplitDelivery') || false,
+  isB2B: getItem('isB2B') || false,
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
@@ -204,7 +205,11 @@ type Action =
   | {
     type: 'SET_IS_SPLIT_DELIVERY'
     payload: boolean
-  }
+  } |
+  {
+    type: 'SET_IS_B2B'
+    payload:boolean
+}
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -415,6 +420,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         isSplitDelivery: action.payload,
+      }
+    }
+    case 'SET_IS_B2B':{
+      return {
+        ...state,
+        isB2B: action.payload,
       }
     }
     case 'REMOVE_USER': {
@@ -791,6 +802,14 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setIsB2B = useCallback(
+    (payload: boolean) => {
+      setItem('isB2B', payload)
+      dispatch({ type: 'SET_IS_B2B', payload })
+    },
+    [dispatch]
+  )
+
   const deleteUser = useCallback(
     (payload: any) => {
       if (payload?.router) {
@@ -1032,6 +1051,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setGuestUser,
       setIsGuestUser,
       setIsSplitDelivery,
+      setIsB2B,
       deleteUser,
       openCart,
       openLoginSideBar,

@@ -21,6 +21,7 @@ import {
 } from '@components/utils/textVariables'
 import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
+import { Guid } from '@commerce/types'
 
 export default function Login({ isLoginSidebarOpen }: any) {
   const [noAccount, setNoAccount] = useState(false)
@@ -35,6 +36,7 @@ export default function Login({ isLoginSidebarOpen }: any) {
     setWishlist,
     cartItems,
     basketId,
+    setIsB2B,
   } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
@@ -53,7 +55,6 @@ export default function Login({ isLoginSidebarOpen }: any) {
       } else if (result.data) {
         setNoAccount(false)
         let userObj = { ...result.data }
-
         // get user updated details
         const updatedUserObj = await axios.post(
           `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
@@ -77,6 +78,15 @@ export default function Login({ isLoginSidebarOpen }: any) {
         }
         setUser(userObj)
         setIsGuestUser(false)
+        if (
+          userObj?.companyId !== Guid.empty &&
+          userObj?.companyName &&
+          userObj?.companyUserRole !== 0
+        ) {
+          setIsB2B(true)
+        } else {
+          setIsB2B(false)
+        }
         Router.push('/')
       }
     }
@@ -120,12 +130,16 @@ export default function Login({ isLoginSidebarOpen }: any) {
         <SocialSignInLinks
           isLoginSidebarOpen={isLoginSidebarOpen}
           containerCss={`flex justify-center gap-2 px-3 mx-auto ${
-            isLoginSidebarOpen ? 'sm:w-full width-md-full !px-0' : 'width-md-full sm:w-1/2'
+            isLoginSidebarOpen
+              ? 'sm:w-full width-md-full !px-0'
+              : 'width-md-full sm:w-1/2'
           }`}
         />
-        <div className={`flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 ${
+        <div
+          className={`flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 ${
             isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-1/2'
-          }`}>
+          }`}
+        >
           <Link href="/my-account/forgot-password" passHref>
             <span className="block font-medium text-indigo-600 underline cursor-pointer hover:text-indigo-800 hover:underline">
               Forgot password?

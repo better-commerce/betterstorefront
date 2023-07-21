@@ -185,6 +185,7 @@ const Navbar: FC<Props & IExtraProps> = ({
     openLoginSideBar,
     openBulkAdd,
     showSearchBar,
+    isB2B,
   } = useUI()
 
   let currentPage = getCurrentPage()
@@ -216,7 +217,7 @@ const Navbar: FC<Props & IExtraProps> = ({
       className: 'text-left p-2 cursor-pointer',
     },
     {
-      href: '/my-account/orders',
+      href: isB2B?'/my-account/my-company?tab=orders':'/my-account/orders',
       title: GENERAL_MY_ORDERS,
       className: 'text-left p-2 cursor-pointer',
     },
@@ -234,6 +235,9 @@ const Navbar: FC<Props & IExtraProps> = ({
 
         if (user?.socialData?.socialMediaType) {
           await signOut()
+        }
+        if(typeof window!=='undefined'){
+          localStorage.removeItem('isB2B')
         }
       },
       title: BTN_SIGN_OUT,
