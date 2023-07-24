@@ -51,13 +51,7 @@ export const config: any = [
     props: 'contact',
    href:"/my-account/contact"
   },
-  {
-    type: 'tab',
-    text: 'Refer a Friend',
-    mtext: 'Refer a Friend',
-    props: 'refer-a-friend',
-    href:"/my-account/refer-a-friend"
-  },
+ 
 ]
 
 

@@ -14,7 +14,6 @@ import {
 import { Fragment } from 'react'
 import { CLOSE_PANEL, SHARE_IN_PERSON } from '@components/utils/textVariables'
 import {
-  NEXT_GET_ORDER,
   NEXT_REFERRAL_ADD_USER_REFEREE,
   NEXT_REFERRAL_BY_EMAIL,
   NEXT_REFERRAL_BY_USERID,
@@ -25,15 +24,15 @@ import {
   NEXT_REFERRAL_INFO,
   FACEBOOK_SHARE_STRING,
   TWITTER_SHARE_STRING,
-} from '@components/utils/constants'
-import { Button, LoadingDots } from '@components/ui'
-import {
   Messages,
   NEXT_GET_ORDER,
   NEXT_GET_ORDERS,
   NEXT_INFRA_ENDPOINT,
 } from '@components/utils/constants'
-import { LoadingDots } from '@components/ui'
+import { Button, LoadingDots } from '@components/ui'
+import {
+  
+} from '@components/utils/constants'
 import { removeItem } from '@components/utils/localStorage'
 import {
   BTN_BACK_TO_HOME,
@@ -201,8 +200,6 @@ export default function OrderConfirmation({ config }: any) {
       console.error('Failed to copy link:', error)
     }
   }
-  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser } =
-    useUI()
   const isIncludeVAT = vatIncluded()
   const router = useRouter()
   const referralDescription = (
