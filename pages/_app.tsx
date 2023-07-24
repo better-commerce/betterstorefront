@@ -314,7 +314,8 @@ function MyApp({
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
         <CustomCacheBuster buildVersion={buildVersion} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
-        <PaymentLinkRedirect router={router} />
+        {/* TODO: Disable client-side payment link redirect */}
+        {/*<PaymentLinkRedirect router={router} />*/}
         <ErrorBoundary>
           <Layout
             nav={nav}
