@@ -16,6 +16,7 @@ import React from 'react'
 import Wishlist from '@components/account/Wishlist'
 import wishlist from 'pages/wishlist'
 import { vatIncluded } from '@framework/utils/app-util'
+import SideMenu from '@components/account/MyAccountMenu'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
@@ -24,6 +25,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const { user, deleteUser, isGuestUser } = useUI()
   const isIncludeVAT = vatIncluded()
+  const currentOption = "Wishlist"
+
   useEffect(() => {
     if (isGuestUser) {
       router.push('/')
@@ -84,7 +87,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
           </h3>
         </div>
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-          <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
+          {/* <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
             <div className="sticky left-0 z-10 flex flex-col top-36">
               {config.map((item: any, idx: number) => (
                 <>
@@ -169,8 +172,12 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                 </>
               ))}
             </div>
-          </div>
-
+          </div> */}
+          <SideMenu
+            handleClick={handleClick}
+            setShow={setShow}
+            currentOption={currentOption}
+                />
           <div
             className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${
               isShow ? `` : ''

@@ -162,7 +162,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                              {CHAT_WITH_US}
                                           </a>
                                           {
-                                             details.order.allowedToCancel && details?.order?.paymentStatus != 0 ?
+                                             details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 ?
                                                 <a href="javascript:void(0);" className='block w-full hover:opacity-90 dark:hover:bg-accent-8 px-4 py-2 mb-2 bg-gray-900 font-bold uppercase text-center text-white border btn-basic-property'
                                                    onClick={() => onCancelOrder("Cancel")}>
                                                    {CANCEL_ORDER}

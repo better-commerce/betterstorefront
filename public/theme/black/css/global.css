@@ -192,6 +192,10 @@ p {
   background: var(--barnd-blue);
 }
 
+.text-brand-blue {
+  color: var(--barnd-blue);
+}
+
 /* bg color css */
 .primary-text-color {
   color: #000;
