@@ -9,8 +9,9 @@ import { useRouter } from "next/router"
 import ReferralCard from '@components/customer/Referral/ReferralCard'
 
 // Other Imports
-import { NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_CLICK_ON_INVITE } from "@components/utils/constants"
+import { NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_CLICK_ON_INVITE, NEXT_REFERRAL_INFO } from "@components/utils/constants"
 import { EMAIL_FIELD_VALIDATION } from "@components/utils/textVariables"
+import { useUI } from "@components/ui"
 
 const CustomerReferral = ({ router }: any) => {
     const [referralInfoObj, setReferralInfoObj] = useState<any>(null)
@@ -19,6 +20,7 @@ const CustomerReferral = ({ router }: any) => {
     const [isLoading, setIsLoading] = useState(false)
     const [voucher, setVoucher] = useState<any>(null)
     const [errors,setErrors] = useState('')
+    const {setReferralProgramActive} = useUI()
 
     const onReferralClickOnInvite = async (referralId: any) => {
         let { data: response } = await axios.post(NEXT_REFERRAL_CLICK_ON_INVITE, { referralId: referralId })
@@ -32,7 +34,14 @@ const CustomerReferral = ({ router }: any) => {
             setReferralInfoObj(referralValid?.referralDetails)
         }
     }
-
+    const checkReferralProgram = async ()=>{
+              let { data: referralProgram } = await axios.post(NEXT_REFERRAL_INFO)
+              if (referralProgram?.referralDetails?.refereePromo) {
+                setReferralProgramActive(true)
+              } else {
+                setReferralProgramActive(false)
+              }
+    }
     const onNewReferral = async (e: any) => {
         e.preventDefault()
         if(referralEmail.length<1){
@@ -65,6 +74,7 @@ const CustomerReferral = ({ router }: any) => {
             }
         }
 
+        checkReferralProgram()
         fetchReferralSlug()
     }, [router.query])
 

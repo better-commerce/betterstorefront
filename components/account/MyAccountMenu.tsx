@@ -1,21 +1,37 @@
 import { Guid } from '@commerce/types'
 import { useUI } from '@components/ui'
+import { NEXT_REFERRAL_INFO } from '@components/utils/constants'
 import { config } from '@components/utils/myAccount'
 import { stringToBoolean } from '@framework/utils/parse-util'
+import axios from 'axios'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 function SideMenu({ handleClick, setShow, currentOption }: any) {
-  const { user } = useUI()
+  const { user, referralProgramActive } = useUI()
   let isB2B = user?.companyId !== Guid.empty
   let newConfig: any = []
   if (config && typeof window !== 'undefined') {
     const hasMyCompany = config.some(
       (item: any) => item?.props === 'my-company'
     )
+    const hasReferral = config.some(
+      (item:any)=> item?.props ==='refer-a-friend'
+    )
     newConfig = [...config]
     if (isB2B) {
       let i = newConfig.length
+      if(referralProgramActive){
+        if (!hasReferral){
+          newConfig.push( {
+            type: 'tab',
+            text: 'Refer a Friend',
+            mtext: 'Refer a Friend',
+            props: 'refer-a-friend',
+            href:"/my-account/refer-a-friend"
+          })
+        }
+      }
       while (i--) {
         if (
           newConfig[i]?.props === 'address-book' ||
@@ -26,7 +42,20 @@ function SideMenu({ handleClick, setShow, currentOption }: any) {
       }
     }
     if (!isB2B) {
-      newConfig = [...config]
+      if(referralProgramActive){
+        if (!hasReferral){
+          newConfig = [...config]
+          newConfig.push( {
+            type: 'tab',
+            text: 'Refer a Friend',
+            mtext: 'Refer a Friend',
+            props: 'refer-a-friend',
+            href:"/my-account/refer-a-friend"
+          })
+        }
+      } else {
+        newConfig = [...config]
+      }
     } else if (!hasMyCompany) {
       newConfig.push({
         type: 'tab',
@@ -35,7 +64,7 @@ function SideMenu({ handleClick, setShow, currentOption }: any) {
         props: 'my-company',
         href: '/my-account/my-company',
       })
-    }
+    } 
   }
   return (
     <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">

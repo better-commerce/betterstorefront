@@ -36,6 +36,7 @@ import {
   ChevronUpIcon,
 } from '@heroicons/react/24/outline'
 import Spinner from '@components/ui/Spinner'
+import SideMenu from '@components/account/MyAccountMenu'
 
 
 function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
@@ -59,7 +60,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
     clickOnInvites: 0,
     successfulInvites: 0,
   })
-
+  const currentOption = "Refer a Friend"
   const REFERRAL_CODE_INSTRUCTIONS = <><p className="px-5">
   Just tell your friends to mention your Referral Code
 </p></>
@@ -83,173 +84,61 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
     let { data: referralVouchers } = await axios.post(NEXT_REFERRAL_VOUCHERS, {
       userId: userId,
     })
-    let sampleObj =  [
-      {
-          "refereeUserId": "ae8e8681-2326-ee11-833f-000d3a25433a",
-          "refereeUserName": "referee@bettercommerce.io",
-          "refereeFirstName": null,
-          "refereeLastName": null,
-          "refereePhoneNo": null,
-          "refereeEmail": "referee@bettercommerce.io",
-          "refereeOrderStatusText": "Approved",
-          "refereeOrderStatus": 3,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "ZFEMDRC2KWORJHXM",
-          "validFrom": "2023-07-19T11:06:12.25",
-          "validTo": "2023-07-30T11:06:12.263",
-          "claimedOn": "0001-01-01T00:00:00"
-      },
-      {
-          "refereeUserId": "ec5ae61c-2726-ee11-833f-000d3a25433a",
-          "refereeUserName": "referee2@bettercommerce.io",
-          "refereeFirstName": null,
-          "refereeLastName": null,
-          "refereePhoneNo": null,
-          "refereeEmail": "referee2@bettercommerce.io",
-          "refereeOrderStatusText": "Approved",
-          "refereeOrderStatus": 3,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "BCJCG9QCGHNT48Z2",
-          "validFrom": "2023-07-20T11:28:50.613",
-          "validTo": "2023-07-30T11:28:50.62",
-          "claimedOn": "0001-01-01T00:00:00"
-      },
-      {
-          "refereeUserId": "04c5177a-2926-ee11-833f-000d3a25433a",
-          "refereeUserName": "referee4@bettercommerce.io",
-          "refereeFirstName": null,
-          "refereeLastName": null,
-          "refereePhoneNo": null,
-          "refereeEmail": "referee4@bettercommerce.io",
-          "refereeOrderStatusText": "Approved",
-          "refereeOrderStatus": 3,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "KPTOE4HJHYF9P3Z7",
-          "validFrom": "2023-07-19T11:06:12.25",
-          "validTo": "2023-07-30T11:45:03.34",
-          "claimedOn": "0001-01-01T00:00:00"
-      },
-      {
-          "refereeUserId": "3072e9b0-2a26-ee11-833f-000d3a25433a",
-          "refereeUserName": "referee5@bettercommerce.io",
-          "refereeFirstName": null,
-          "refereeLastName": null,
-          "refereePhoneNo": null,
-          "refereeEmail": "referee5@bettercommerce.io",
-          "refereeOrderStatusText": "Approved",
-          "refereeOrderStatus": 3,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "KQF3GOZ8O3HXAA3Q",
-          "validFrom": "2023-07-19T11:54:21.783",
-          "validTo": "2023-07-21T11:54:21.787",
-          "claimedOn": "0001-01-01T00:00:00"
-      },
-      {
-          "refereeUserId": "b9baff1e-ce26-ee11-8341-000d3a25433a",
-          "refereeUserName": "referee6@bettercommerce.io",
-          "refereeFirstName": null,
-          "refereeLastName": null,
-          "refereePhoneNo": null,
-          "refereeEmail": "referee6@bettercommerce.io",
-          "refereeOrderStatusText": "Approved",
-          "refereeOrderStatus": 3,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "GY47V8H6R627V24O",
-          "validFrom": "2023-07-20T07:26:09.747",
-          "validTo": "2023-07-22T07:26:09.753",
-          "claimedOn": "0001-01-01T00:00:00"
-      },
-      {
-          "refereeUserId": "cc2cfe0c-d326-ee11-8341-000d3a25433a",
-          "refereeUserName": "referee7@bettercommerce.io",
-          "refereeFirstName": null,
-          "refereeLastName": null,
-          "refereePhoneNo": null,
-          "refereeEmail": "referee7@bettercommerce.io",
-          "refereeOrderStatusText": "Approved",
-          "refereeOrderStatus": 3,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "78EQDHTGOK6M3M2H",
-          "validFrom": "2023-07-20T08:09:24.36",
-          "validTo": "2023-07-22T08:09:24.37",
-          "claimedOn": "0001-01-01T00:00:00"
-      },
-      {
-          "refereeUserId": "12b4e95e-df26-ee11-8341-000d3a25433a",
-          "refereeUserName": "referee8@bettercommerce.io",
-          "refereeFirstName": null,
-          "refereeLastName": null,
-          "refereePhoneNo": null,
-          "refereeEmail": "referee8@bettercommerce.io",
-          "refereeOrderStatusText": "Dispatch",
-          "refereeOrderStatus": 9,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "",
-          "validFrom": "2023-07-20T09:30:12.457",
-          "validTo": "2023-07-22T09:30:12.46",
-          "claimedOn": "0001-01-01T00:00:00"
-      },
-      {
-          "refereeUserId": "b9045c73-e426-ee11-8341-000d3a25433a",
-          "refereeUserName": "referee9@bettercommerce.io",
-          "refereeFirstName": "etrerter",
-          "refereeLastName": "tretert",
-          "refereePhoneNo": "3453453453",
-          "refereeEmail": "referee9@bettercommerce.io",
-          "refereeOrderStatusText": "CancelledByStore",
-          "refereeOrderStatus": 102,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "",
-          "validFrom": "2023-07-19T11:06:12.25",
-          "validTo": "2023-08-13T10:12:19.52",
-          "claimedOn": "0001-01-01T00:00:00"
-      },
-      {
-          "refereeUserId": "3942646c-be27-ee11-8343-000d3a25433a",
-          "refereeUserName": "referee12@bettercommerce.io",
-          "refereeFirstName": "asdasdasd",
-          "refereeLastName": "sadasd",
-          "refereePhoneNo": "2342342342",
-          "refereeEmail": "referee12@bettercommerce.io",
-          "refereeOrderStatusText": "Approved",
-          "refereeOrderStatus": 3,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "",
-          "validFrom": "0001-01-01T00:00:00",
-          "validTo": "2023-08-14T12:04:21.167",
-          "claimedOn": "0001-01-01T00:00:00"
-      },
-      {
-          "refereeUserId": "0482b322-c227-ee11-8343-000d3a25433a",
-          "refereeUserName": "referee14@bettercommerce.io",
-          "refereeFirstName": null,
-          "refereeLastName": null,
-          "refereePhoneNo": null,
-          "refereeEmail": "referee14@bettercommerce.io",
-          "refereeOrderStatusText": "Approved",
-          "refereeOrderStatus": 3,
-          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-          "promoName": "20% Off Sale",
-          "voucherCode": "CHEVYYA367ZJ88G2",
-          "validFrom": "2023-07-21T12:31:37.12",
-          "validTo": "2023-08-12T12:31:37.13",
-          "claimedOn": "2023-07-21T12:35:31.397"
-      }
-  ]
+  //   let sampleObj =  [
+  //     {
+  //         "refereeUserId": "ae8e8681-2326-ee11-833f-000d3a25433a",
+  //         "refereeUserName": "referee@bettercommerce.io",
+  //         "refereeFirstName": null,
+  //         "refereeLastName": null,
+  //         "refereePhoneNo": null,
+  //         "refereeEmail": "referee@bettercommerce.io",
+  //         "refereeOrderStatusText": "Approved",
+  //         "refereeOrderStatus": 3,
+  //         "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+  //         "promoName": "20% Off Sale",
+  //         "voucherCode": "ZFEMDRC2KWORJHXM",
+  //         "validFrom": "2023-07-19T11:06:12.25",
+  //         "validTo": "2023-07-30T11:06:12.263",
+  //         "claimedOn": "0001-01-01T00:00:00"
+  //     },
+  //     {
+  //         "refereeUserId": "3942646c-be27-ee11-8343-000d3a25433a",
+  //         "refereeUserName": "referee12@bettercommerce.io",
+  //         "refereeFirstName": "asdasdasd",
+  //         "refereeLastName": "sadasd",
+  //         "refereePhoneNo": "2342342342",
+  //         "refereeEmail": "referee12@bettercommerce.io",
+  //         "refereeOrderStatusText": "Approved",
+  //         "refereeOrderStatus": 3,
+  //         "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+  //         "promoName": "20% Off Sale",
+  //         "voucherCode": "",
+  //         "validFrom": "0001-01-01T00:00:00",
+  //         "validTo": "2023-08-14T12:04:21.167",
+  //         "claimedOn": "0001-01-01T00:00:00"
+  //     },
+  //     {
+  //         "refereeUserId": "0482b322-c227-ee11-8343-000d3a25433a",
+  //         "refereeUserName": "referee14@bettercommerce.io",
+  //         "refereeFirstName": null,
+  //         "refereeLastName": null,
+  //         "refereePhoneNo": null,
+  //         "refereeEmail": "referee14@bettercommerce.io",
+  //         "refereeOrderStatusText": "Approved",
+  //         "refereeOrderStatus": 3,
+  //         "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+  //         "promoName": "20% Off Sale",
+  //         "voucherCode": "CHEVYYA367ZJ88G2",
+  //         "validFrom": "2023-07-21T12:31:37.12",
+  //         "validTo": "2023-08-12T12:31:37.13",
+  //         "claimedOn": "2023-07-21T12:35:31.397"
+  //     }
+  // ]
    
-    setVouchersEarned(sampleObj)
+    // setVouchersEarned(sampleObj)
 
     if (referralVouchers?.referralDetails) {
-      // setVouchersEarned(referralVouchers?.referralDetails)
+      setVouchersEarned(referralVouchers?.referralDetails)
     }
   }
 
@@ -335,92 +224,11 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
     <section className="relative pb-10 text-gray-900">
       <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-          <div className="col-span-3 border-r border-gray-200 md:pl-12 sm:pl-6 tab-list-sm sm:pt-10 mob-hidden">
-            <div className="sticky left-0 z-10 flex flex-col top-36">
-              {config.map((item: any, idx: number) => (
-                <>
-                  <div
-                    key={`my-acc-${idx}`}
-                    // href="#"
-                    className={`hover:bg-white hover:text-indigo-600 border border-transparent text-md leading-3 font-medium text-gray-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"}`}
-                  >
-                    <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
-                      <i
-                        className={
-                          item.text.toLowerCase() + ' ' + 'sprite-icon'
-                        }
-                      ></i>
-                    </span>
-
-                    {item.text == 'Refer a Friend' ? (
-                      <>
-                        <div
-                          key={`my-acc-${idx}`}
-                          className={`relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${
-                            item.text == 'Refer a Friend'
-                              ? 'bg-gray-200 text-black font-semibold border-l-4 sm:border-b-0 sm:border-l-4 sm:border-black opacity-full'
-                              : 'font-medium'
-                          }`}
-                        >
-                          <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
-                            <i
-                              className={
-                                item.text.toLowerCase() + ' ' + 'sprite-icon'
-                              }
-                            ></i>
-                          </span>
-                          <Link
-                            shallow={true}
-                            href={item.href}
-                            passHref
-                            onClick={() => {
-                              handleClick
-                              setShow(false)
-                            }}
-                            className="inline-block w-full h-full py-4 text-sm text-primary"
-                          >
-                            <span className="inline-block text-black sm:hidden dark:text-black">
-                              {item.mtext}
-                            </span>
-                            <span
-                              className={`hidden sm:inline-block text-black dark:text-black ${
-                                item.text == 'Refer a Friend' && 'font-display'
-                              }`}
-                            >
-                              {item.text}
-                            </span>
-                          </Link>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <Link
-                          shallow={true}
-                          href={item.href}
-                          passHref
-                          onClick={() => {
-                            handleClick
-                          }}
-                          className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
-                        >
-                          <span className="inline-block text-black sm:hidden dark:text-black">
-                            {item.mtext}
-                          </span>
-                          <span
-                            className={`hidden sm:inline-block text-black dark:text-black ${
-                              item.text == 'Refer a Friend' && 'font-display'
-                            }`}
-                          >
-                            {item.text}
-                          </span>
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                </>
-              ))}
-            </div>
-          </div>
+        <SideMenu
+              handleClick={handleClick}
+              setShow={setShow}
+              currentOption={currentOption}
+              />
 
           {isLoading ? (
             <Spinner />
@@ -593,7 +401,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                                               {voucher?.refereeOrderStatusText}
                                             </td>
                                             <td className="text-center border-b-[1px]">
-                                              {voucher?.voucherCode}
+                                              {voucher?.voucherCode!==''?voucher?.voucherCode:"Voucher Not Valid yet"}
                                             </td>
                                             <td className="text-center border-b-[1px]">
                                               {voucher?.promoName}

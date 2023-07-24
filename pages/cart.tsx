@@ -68,7 +68,6 @@ import {
 import { useRouter } from 'next/router'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 import SplitDelivery from '@components/checkout/SplitDelivery'
-import { LoadingDots } from '@components/ui'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {

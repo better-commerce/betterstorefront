@@ -19,7 +19,7 @@ import { Guid } from '@commerce/types'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
-  const { user, deleteUser, isGuestUser } = useUI()
+  const { user, deleteUser, isGuestUser,referralProgramActive } = useUI()
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
@@ -29,9 +29,23 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     const hasMyCompany = config.some(
       (item: any) => item?.props === 'my-company'
     )
+    const hasReferral = config.some(
+      (item:any)=> item?.props ==='refer-a-friend'
+    )
     newConfig = [...config]
     if (isB2B) {
       let i = newConfig.length
+      if(referralProgramActive){
+        if (!hasReferral){
+          newConfig.push( {
+            type: 'tab',
+            text: 'Refer a Friend',
+            mtext: 'Refer a Friend',
+            props: 'refer-a-friend',
+            href:"/my-account/refer-a-friend"
+          })
+        }
+      }
       while (i--) {
         if (
           newConfig[i]?.props === 'address-book' ||
@@ -42,9 +56,21 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
       }
     }
     if (!isB2B) {
-      newConfig = [...config]
+      if(referralProgramActive){
+        if (!hasReferral){
+          newConfig = [...config]
+          newConfig.push( {
+            type: 'tab',
+            text: 'Refer a Friend',
+            mtext: 'Refer a Friend',
+            props: 'refer-a-friend',
+            href:"/my-account/refer-a-friend"
+          })
+        }
+      } else {
+        newConfig = [...config]
+      }
     } else if (!hasMyCompany) {
-      console.log('is b2b')
       newConfig.push({
         type: 'tab',
         text: 'My Company',
@@ -52,7 +78,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
         props: 'my-company',
         href: '/my-account/my-company',
       })
-    }
+    } 
   }
 
   useEffect(() => {
