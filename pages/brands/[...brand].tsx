@@ -658,50 +658,91 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
 
-  const obj: any = {
-    imageBannerCollectionResponse: [],
-    imageCategoryCollectionResponse: [],
+  const collections: any = {
+    imageBannerCollection: [],
+    imageCategoryCollection: [],
     imgFeatureCollection: [],
-    offerBannerResult: [],
-    productCollectionRes: [],
+    offerBannerCollection: [],
+    productCollection: [],
   }
 
+  let promises: any = []
   const widgets: any = tryParseJson(response?.result?.widgetsConfig)
-
-  if (widgets) {
-    for (var i = 0; i < widgets?.length; i++) {
+  if (widgets?.length) {
+    widgets?.forEach(async (widget: any) => {
       if (
-        widgets[i].manufacturerSettingType == 'ImageCollection' &&
-        widgets[i].code == 'ImageBanner'
+        widget.manufacturerSettingType == 'ImageCollection' &&
+        widget.code == 'ImageBanner'
       ) {
-        obj.imageBannerCollectionResponse = await getCollectionById(
-          widgets[i].recordId
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              collections.imageBannerCollection = await getCollectionById(
+                widget.recordId
+              )
+            } catch (error: any) {}
+            resolve()
+          })
         )
       } else if (
-        widgets[i].manufacturerSettingType == 'ImageCollection' &&
-        widgets[i].code == 'MultipleImagesBanner'
+        widget.manufacturerSettingType == 'ImageCollection' &&
+        widget.code == 'MultipleImagesBanner'
       ) {
-        const res = await getCollectionById(widgets[i].recordId)
-        obj.imageCategoryCollectionResponse = res?.images
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              const res = await getCollectionById(widget.recordId)
+              collections.imageCategoryCollection = res?.images
+            } catch (error: any) {}
+            resolve()
+          })
+        )
       } else if (
-        widgets[i].manufacturerSettingType == 'ImageCollection' &&
-        widgets[i].code == 'FeaturedDewaltImageList'
+        widget.manufacturerSettingType == 'ImageCollection' &&
+        widget.code == 'FeaturedDewaltImageList'
       ) {
-        obj.imgFeatureCollection = await getCollectionById(widgets[i].recordId)
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              collections.imgFeatureCollection = await getCollectionById(
+                widget.recordId
+              )
+            } catch (error: any) {}
+            resolve()
+          })
+        )
       } else if (
-        widgets[i].manufacturerSettingType == 'ImageCollection' &&
-        widgets[i].code == 'FFXOffers'
+        widget.manufacturerSettingType == 'ImageCollection' &&
+        widget.code == 'FFXOffers'
       ) {
-        const res = await getCollectionById(widgets[i].recordId)
-        obj.offerBannerResult = res.images
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              const res = await getCollectionById(widget.recordId)
+              collections.offerBannerCollection = res.images
+            } catch (error: any) {}
+            resolve()
+          })
+        )
       } else if (
-        widgets[i].manufacturerSettingType == 'ProductCollection' &&
-        widgets[i].code == 'FeaturedDewaltSaws'
+        widget.manufacturerSettingType == 'ProductCollection' &&
+        widget.code == 'FeaturedDewaltSaws'
       ) {
-        const res = await getCollectionById(widgets[i].recordId)
-        obj.productCollectionRes = res.products.results
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              const res = await getCollectionById(widget.recordId)
+              collections.productCollection = res.products.results
+            } catch (error: any) {}
+            resolve()
+          })
+        )
       }
-    }
+    })
+  }
+
+  if (promises?.length) {
+    await Promise.all(promises)
   }
 
   return {
@@ -712,7 +753,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
-      collections: obj ?? [],
+      collections: collections ?? [],
     }, // will be passed to the page component as props
   }
 }
