@@ -111,13 +111,13 @@ export default function RelatedProductWithGroup({
         navigation={true}
         loop={true}
         breakpoints={{
-          640: { slidesPerView: 1 },
+          640: { slidesPerView: 1.5 },
           768: { slidesPerView: productPerColumn },
           1024: { slidesPerView: productPerColumn },
         }}
       >
         {products?.map((product: any, pId: number) => (
-          <SwiperSlide key={pId}>
+          <SwiperSlide key={pId} className="height-auto-slide relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer group lg:w-auto h-100">
             <ProductCard
               product={product}
               hideWishlistCTA={true}

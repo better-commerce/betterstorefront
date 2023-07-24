@@ -826,6 +826,23 @@ body {
 }
 
 @media screen and (max-width: 767px) {
+.style-newin_article-title {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  z-index: 3;
+  font-weight: 500;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: 0.25s transform ease;
+  box-sizing: border-box;
+  color: #fff;
+  text-rendering: geometricPrecision;
+  text-align: center;
+  transform: translate(0, 40px);
+  }
   /* my account mobile css start */
   .main-account-grid .col-span-3.mob-tab-full,
   .main-account-grid .col-span-9.mob-tab-full {
@@ -1481,4 +1498,12 @@ br {
 .login-side-padding{
   padding-left: 1rem;
   padding-right: 3rem;
+}
+@media screen and (max-width: 1024px) {
+  .mob-landscape-hidden{
+    display: none !important;
+  }
+  .ipad-nav{
+    width: 98% !important;
+  }
 }

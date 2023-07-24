@@ -99,6 +99,7 @@ const initialState = {
   user: getItem('user') || {},
   guestUser: getItem('guestUser') || {},
   isGuestUser: getItem('isGuest') || false,
+  isSplitDelivery: getItem('isSplitDelivery') || false,
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
@@ -206,6 +207,10 @@ type Action =
   }
   | {
     type: 'SET_IS_PAYMENT_LINK'
+    payload: boolean
+  }
+  | {
+    type: 'SET_IS_SPLIT_DELIVERY'
     payload: boolean
   }
   | { type: 'REMOVE_USER'; payload: any }
@@ -418,6 +423,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         isPaymentLink: action.payload,
+      }
+    }
+    case 'SET_IS_SPLIT_DELIVERY': {
+      return {
+        ...state,
+        isSplitDelivery: action.payload,
       }
     }
     case 'REMOVE_USER': {
@@ -801,6 +812,15 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setIsSplitDelivery = useCallback(
+    (payload: boolean) => {
+      setItem('isSplitDelivery', payload)
+      dispatch({ type: 'SET_IS_SPLIT_DELIVERY', payload })
+    },
+    [dispatch]
+  )
+
+
   const deleteUser = useCallback(
     (payload: any) => {
       const { isSilentLogout = false } = payload
@@ -1055,6 +1075,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setIsGuestUser,
       setIsPaymentLink,
       resetIsPaymentLink,
+      setIsSplitDelivery,
       deleteUser,
       openCart,
       openLoginSideBar,

@@ -12,7 +12,7 @@ import { useCart as getCart } from '@framework/cart'
 import { GetServerSideProps } from 'next'
 import { useUI } from '@components/ui/context'
 import { asyncHandler } from '@components/account/Address/AddressBook'
-import { NEXT_GUEST_CHECKOUT } from '@components/utils/constants'
+import { NEXT_GUEST_CHECKOUT, NEXT_UPDATE_DELIVERY_INFO } from '@components/utils/constants'
 import axios from 'axios'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -37,13 +37,58 @@ function Checkout({ cart, config, location }: any) {
     guestUser,
     setGuestUser,
     isPaymentLink,
+    isSplitDelivery,
   } = useUI()
   const [isLoggedIn, setIsLoggedIn] = useState<any>(undefined)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
   const [userAddresses, setUserAddresses] = useState<any>([])
-
+  const [splitDeliveryItems,setSplitDeliveryItems] = useState<any>(null)
+  
   const { getAddress } = asyncHandler()
+
+  const onShippingPlansUpdated = async ()=>{
+    let lineItems = [...cartItems?.lineItems]
+    // console.log("lineItems:  ",lineItems);
+    
+    let shippingPlansList = []
+    for(const item in lineItems){
+      
+      shippingPlansList.push({...lineItems[item]?.shippingPlan})
+    }
+
+    let {data:response} = await axios.post(NEXT_UPDATE_DELIVERY_INFO,{data:shippingPlansList,id:cartItems?.id}) 
+  }
+
+  useEffect(()=>{
+    if(isSplitDelivery){
+      onShippingPlansUpdated()
+    }
+  },[])
+
+  useEffect(()=>{
+    function groupItemsByDeliveryDate(items:any) {
+      const groupedItems:any = {};
+      
+      for (const item of items) {
+        const deliveryDate = new Date(item.deliveryDateTarget).toLocaleDateString();
+        
+        if (groupedItems.hasOwnProperty(deliveryDate)) {
+          groupedItems[deliveryDate].push(item);
+        } else {
+          groupedItems[deliveryDate] = [item];
+        }
+      }
+      
+      return groupedItems;
+    }
+    const splitDeliveryExtract = ()=>{
+      let deliveryPlans = groupItemsByDeliveryDate([...cartItems?.lineItems])
+      setSplitDeliveryItems(deliveryPlans)
+    }
+    splitDeliveryExtract()
+  },[])
+
 
   useEffect(() => {
     setIsLoggedIn(Boolean(user?.userId || guestUser?.userId || false))
@@ -164,6 +209,8 @@ function Checkout({ cart, config, location }: any) {
         config={config}
         location={location}
         recordShippingInfo={recordShippingInfo}
+        splitDeliveryItems={splitDeliveryItems}
+        onShippingPlansUpdated={onShippingPlansUpdated}
       />
     )
   }

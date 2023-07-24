@@ -16,11 +16,13 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
   GENERAL_LOGIN,
-  VALIDATION_NO_ACCOUNT_FOUND,
+  INVALID_ACCOUNT,
+  LOGIN_SUCCESSFUL,
   VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
 } from '@components/utils/textVariables'
 import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
+import { Guid } from '@commerce/types'
 
 export default function Login({ isLoginSidebarOpen }: any) {
   const [noAccount, setNoAccount] = useState(false)
@@ -30,6 +32,7 @@ export default function Login({ isLoginSidebarOpen }: any) {
     setUser,
     user,
     wishListItems,
+    setAlert,
     setCartItems,
     setBasketId,
     setWishlist,
@@ -45,15 +48,16 @@ export default function Login({ isLoginSidebarOpen }: any) {
     eventType: PageViewed,
   })
 
-  const handleUserLogin = (values: any) => {
+  const handleUserLogin = (values: any, cb?: any) => {
     const asyncLoginUser = async () => {
       const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       if (!result.data) {
         setNoAccount(true)
+        setAlert({type:'error',msg:INVALID_ACCOUNT})
       } else if (result.data) {
         setNoAccount(false)
+        setAlert({type:'success',msg: LOGIN_SUCCESSFUL})
         let userObj = { ...result.data }
-
         // get user updated details
         const updatedUserObj = await axios.post(
           `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
@@ -79,6 +83,7 @@ export default function Login({ isLoginSidebarOpen }: any) {
         setIsGuestUser(false)
         Router.push('/')
       }
+      if (cb) cb();
     }
     asyncLoginUser()
   }
@@ -107,25 +112,30 @@ export default function Login({ isLoginSidebarOpen }: any) {
           btnText="Login"
           type="login"
           onSubmit={handleUserLogin}
-          apiError={noAccount ? VALIDATION_NO_ACCOUNT_FOUND : ''}
+          apiError={noAccount ? INVALID_ACCOUNT : ''}
           isLoginSidebarOpen={isLoginSidebarOpen}
         />
-        <div className="flex flex-col items-center justify-center w-full">
+        {/* <div className="flex flex-col items-center justify-center w-full">
           {noAccount && (
+            setAlert({type:'success',msg:INVALID_ACCOUNT})
             <span className="text-lg text-red-700">
-              {VALIDATION_NO_ACCOUNT_FOUND}
+              {INVALID_ACCOUNT}
             </span>
           )}
-        </div>
+        </div> */}
         <SocialSignInLinks
           isLoginSidebarOpen={isLoginSidebarOpen}
           containerCss={`flex justify-center gap-2 px-3 mx-auto ${
-            isLoginSidebarOpen ? 'sm:w-full !px-0' : 'sm:w-1/2'
+            isLoginSidebarOpen
+              ? 'sm:w-full width-md-full !px-0'
+              : 'width-md-full sm:w-1/2'
           }`}
         />
-        <div className={`flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 ${
-            isLoginSidebarOpen ? 'sm:w-full' : 'sm:w-1/2'
-          }`}>
+        <div
+          className={`flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 ${
+            isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-1/2'
+          }`}
+        >
           <Link href="/my-account/forgot-password" passHref>
             <span className="block font-medium text-indigo-600 underline cursor-pointer hover:text-indigo-800 hover:underline">
               Forgot password?
