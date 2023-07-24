@@ -1,5 +1,5 @@
 import classNames from '@components/utils/classNames'
-import { Fragment, useState } from 'react'
+import { Fragment, use, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
@@ -7,8 +7,11 @@ import { useRouter } from 'next/router'
 import { GENERAL_SORT } from '@components/utils/textVariables'
 import ToggleSwitch from '@components/common/ToggleSwitch'
 import { vatIncluded } from '@framework/utils/app-util'
-import { stringToBoolean } from '@framework/utils/parse-util'
+import { stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
 import { getItem } from '@components/utils/localStorage'
+import { useUI } from '@components/ui'
+import { Switch } from '@headlessui/react'
+
 interface Props {
   products: any
   action: any
@@ -21,40 +24,48 @@ export default function ProductSort({
   routerSortOption,
 }: Props) {
   const router = useRouter()
+  const { isCompared, setIsCompared } = useUI()
   const [enabled, setEnabled] = useState(false)
+
+  useEffect(() => {
+    setEnabled(stringToBoolean(isCompared))
+  }, [isCompared])
+
+  const handleChange = (val: boolean) => {
+    setEnabled(val)
+    setIsCompared(String(val))
+  }
+
   const currentOption = products.sortList?.filter(
     (item: any) => item.key === routerSortOption
   )[0]
   const getCompare = () => {
     return stringToBoolean((getItem('includeVAT') as string) || 'false')
   }
-  const isCompaired = getCompare()
   return (
     <div className="flex items-center">
       <div>
-        <div className="container flex items-center justify-end w-full px-6 pt-1 mx-auto">
+        <div className="container flex items-center justify-end w-full px-4 pt-1 mx-auto">
           <div className="flex flex-col py-0 text-xs font-medium text-black uppercase sm:text-xs whitespace-nowrap">
             Compare Items
           </div>
-          <div className="flow-root w-10 px-2 sm:w-20">
+          <div className="flow-root w-10 px-2 sm:w-14">
             <div className="flex justify-center flex-1 mx-auto">
-              <label className="relative inline-flex items-center mr-5 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="sr-only peer"
-                  checked={enabled}
-                  readOnly
+              <Switch
+                checked={enabled}
+                onChange={handleChange}
+                className={`${
+                  enabled ? 'bg-emerald-600' : 'bg-gray-300'
+                } relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+              >
+                <span className="sr-only">Compare Items</span>
+                <span
+                  aria-hidden="true"
+                  className={`${
+                    enabled ? 'translate-x-4' : 'translate-x-0'
+                  } pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                 />
-                <div
-                  onClick={() => {
-                    setEnabled(!enabled)
-                  }}
-                  className="w-11 h-6 bg-gray-200 rounded-full peer  peer-focus:ring-green-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"
-                ></div>
-                <span className="ml-2 text-sm font-medium text-gray-900">
-                  {enabled}
-                </span>
-              </label>
+              </Switch>
             </div>
           </div>
         </div>
@@ -77,23 +88,26 @@ export default function ProductSort({
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 z-10 w-40 mt-6 text-left origin-top-right bg-white rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-            {products.sortList.length &&
-              products.sortList.map((option: any) => (
-                <Menu.Item key={`short-by-option-${option.value}`}>
-                  {({ active }) => (
-                    <span
-                      onClick={() => action(option.key)}
-                      className={classNames(
-                        'hover:bg-gray-100',
-                        currentOption?.key === option.key ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm text-black font-normal cursor-pointer hover:font-semibold hover:text-orange-600'
-                      )}
-                    >
-                      {option.value}
-                    </span>
-                  )}
-                </Menu.Item>
-              ))}
+            {products.sortList.length > 0
+              ? products.sortList.map((option: any) => (
+                  <Menu.Item key={`short-by-option-${option.value}`}>
+                    {({ active }) => (
+                      <span
+                        onClick={() => action(option.key)}
+                        className={classNames(
+                          'hover:bg-gray-100',
+                          currentOption?.key === option.key
+                            ? 'bg-gray-100'
+                            : '',
+                          'block px-4 py-2 text-sm text-black font-normal cursor-pointer hover:font-semibold hover:text-orange-600'
+                        )}
+                      >
+                        {option.value}
+                      </span>
+                    )}
+                  </Menu.Item>
+                ))
+              : null}
           </Menu.Items>
         </Transition>
       </Menu>

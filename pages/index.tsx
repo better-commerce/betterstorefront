@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import type { GetStaticPropsContext } from 'next'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
 import NextHead from 'next/head'
 import Link from 'next/link'
 import axios from 'axios'
@@ -20,15 +19,14 @@ import {
 } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
-import { useRouter } from 'next/router'
-import os from 'os'
 import { obfuscateHostName } from '@framework/utils/app-util'
-import PromotionBanner from '@components/home/PromotionBanner'
 import { FeatureBar } from '@components/common'
 import { Button } from '@components/ui'
 
+const PromotionBanner = dynamic(
+  () => import('@components/home/PromotionBanner')
+)
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
@@ -42,11 +40,8 @@ export async function getStaticProps({
   locales,
 }: GetStaticPropsContext) {
   const config = { locale, locales }
-  const slugsPromise = commerce.getSlugs({ slug: HOMEPAGE_SLUG })
-  const slugs = await slugsPromise
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
-
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { pages } = await pagesPromise
@@ -57,7 +52,7 @@ export async function getStaticProps({
     const PageContentsPromiseWeb = commerce.getPagePreviewContent({
       id: '', //pageId,
       slug: HOME_PAGE_DEFAULT_SLUG,
-      workingVersion: process.env.NODE_ENV === 'production' ? false : false, // TRUE for preview, FALSE for prod.
+      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
       channel: 'Web',
     })
     pageContentsWeb = await PageContentsPromiseWeb
@@ -65,7 +60,7 @@ export async function getStaticProps({
     const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
       id: '', //pageId,
       slug: HOME_PAGE_DEFAULT_SLUG,
-      workingVersion: process.env.NODE_ENV === 'production' ? false : false, // TRUE for preview, FALSE for prod.
+      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
       channel: 'MobileWeb',
     })
     pageContentsMobileWeb = await PageContentsPromiseMobileWeb
@@ -78,9 +73,7 @@ export async function getStaticProps({
       categories,
       brands,
       pages,
-      slugs,
       globalSnippets: infra?.snippets ?? [],
-      snippets: slugs?.snippets,
       pageContentsWeb: pageContentsWeb ?? {},
       pageContentsMobileWeb: pageContentsMobileWeb ?? {},
       hostName: obfuscateHostName(hostName),
@@ -92,7 +85,6 @@ export async function getStaticProps({
 const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({
-  slugs,
   setEntities,
   recordEvent,
   ipAddress,
@@ -108,19 +100,19 @@ function Home({
 
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
-      id: slugs?.id,
-      name: slugs?.name,
-      metaTitle: slugs?.metaTitle,
-      MetaKeywords: slugs?.metaKeywords,
-      MetaDescription: slugs?.metaDescription,
-      Slug: slugs?.slug,
-      Title: slugs?.title,
-      ViewType: slugs?.viewType,
+      id: '',
+      name: pageContents?.metatitle,
+      metaTitle: pageContents?.metaTitle,
+      MetaKeywords: pageContents?.metaKeywords,
+      MetaDescription: pageContents?.metaDescription,
+      Slug: pageContents?.slug,
+      Title: pageContents?.metatitle,
+      ViewType: 'Page View',
     }),
     entityName: PAGE_TYPE,
-    pageTitle: slugs?.title,
+    pageTitle: pageContents?.metaTitle,
     entityType: 'Page',
-    entityId: slugs?.id,
+    entityId: '',
     eventType: 'PageViewed',
   })
   const css = { maxWidth: '100%', minHeight: '350px' }
@@ -175,7 +167,7 @@ function Home({
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <Hero banners={pageContents?.banner} />
-      <div className="container py-3 mx-auto sm:py-6">
+      <div className="px-4 py-3 mx-auto lg:container sm:py-6 sm:px-4 md:px-4 lg:px-6 2xl:px-0">
         {pageContents?.heading?.map((heading: any, hId: number) => (
           <Heading
             title={heading?.heading_title}
@@ -197,7 +189,7 @@ function Home({
       {pageContents?.promotions?.map((banner: any, bId: number) => (
         <PromotionBanner data={banner} key={bId} css={css} />
       ))}
-      <div className="container px-4 py-3 mx-auto sm:px-0 sm:py-6">
+      <div className="px-4 py-3 mx-auto lg:container sm:px-4 lg:px-0 sm:py-6 md:px-4">
         {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
           <Heading
             title={heading?.collectionheadings_title}

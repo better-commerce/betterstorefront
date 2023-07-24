@@ -25,9 +25,12 @@ import {
   obfuscateHostName,
 } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
-import { IPLPFilterState } from '@components/ui/context'
+import { IPLPFilterState, useUI } from '@components/ui/context'
 import CacheProductImages from '@components/product/ProductView/CacheProductImages'
-
+import { Product } from '@commerce/types'
+const CompareSelectionBar = dynamic(
+  () => import('@components/product/ProductCompare/compareSelectionBar')
+)
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -117,6 +120,7 @@ export default function CollectionPage(props: any) {
   const { isOnlyMobile, isMobile, isIPadorTablet } = deviceInfo
   const router = useRouter()
   const [paddingTop, setPaddingTop] = useState('0')
+  const [isProductCompare, setProductCompare] = useState(false)
   const adaptedQuery: any = { ...router.query }
   const [plpFilterState, setPLPFilterState] = useState<IPLPFilterState>({
     filters: [],
@@ -128,6 +132,7 @@ export default function CollectionPage(props: any) {
     pages: 0,
     loading: false,
   })
+  const { isCompared } = useUI()
 
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -238,7 +243,9 @@ export default function CollectionPage(props: any) {
     const dataToPass = IS_INFINITE_SCROLL
       ? productListMemory?.products
       : data?.products // productListMemory?.products
-    setProductDataToPass(dataToPass)
+    if (dataToPass.results.length > 0) {
+      setProductDataToPass(dataToPass)
+    }
   }, [productListMemory?.products, data?.products])
 
   useEffect(() => {
@@ -375,6 +382,15 @@ export default function CollectionPage(props: any) {
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+
+  const showCompareProducts = () => {
+    setProductCompare(true)
+  }
+
+  const closeCompareProducts = () => {
+    setProductCompare(false)
+  }
+
   return (
     <>
       <NextHead>
@@ -405,14 +421,14 @@ export default function CollectionPage(props: any) {
       {props?.hostName && (
         <input className="inst" type="hidden" value={props?.hostName} />
       )}
-      <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
+      <div className="pt-6 pb-24 mx-auto bg-transparent 2xl:w-4/5 sm:px-0">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
 
         {props?.customInfo3 == 'vertical' && (
           <>
-            <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-0 sm:px-0 sm:mt-4">
+            <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-4 sm:px-4 2xl:sm:px-0 sm:mt-4">
               {props?.images?.length > 1 ? (
                 <>
                   <div className="w-full v-image-space">
@@ -524,7 +540,7 @@ export default function CollectionPage(props: any) {
           ))}
 
         <div
-          className={`sticky w-full py-4 mx-auto bg-white top-108 sm:container px-4 sm:px-0 sm:py-4 ${cls}`}
+          className={`sticky w-full py-4 mx-auto bg-white top-108 container px-4 sm:px-4 md:px-6 2xl:px-0 sm:py-4 ${cls}`}
         >
           <h1 className="inline-block capitalize text-primary dark:text-primary">
             {props?.name}
@@ -536,7 +552,7 @@ export default function CollectionPage(props: any) {
         </div>
 
         {productDataToPass?.results?.length > 0 && (
-          <div className="grid grid-cols-1 gap-1 overflow-hidden sm:grid-cols-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 md:grid-cols-3 gap-1 overflow-hidden sm:grid-cols-3">
             {props?.allowFacets ? (
               <>
                 {isMobile ? (
@@ -572,11 +588,19 @@ export default function CollectionPage(props: any) {
                     handleInfiniteScroll={handleInfiniteScroll}
                     deviceInfo={deviceInfo}
                     maxBasketItemsCount={maxBasketItemsCount(config)}
+                    isCompared={isCompared}
                   />
                 </div>
               </>
             ) : (
               <div className="col-span-12">
+                <ProductFiltersTopBar
+                  products={data.products}
+                  handleSortBy={handleSortBy}
+                  routerFilters={state.filters}
+                  clearAll={clearAll}
+                  routerSortOption={state.sortBy}
+                />
                 <ProductGrid
                   products={productDataToPass}
                   currentPage={state?.currentPage}
@@ -584,6 +608,7 @@ export default function CollectionPage(props: any) {
                   handleInfiniteScroll={handleInfiniteScroll}
                   deviceInfo={deviceInfo}
                   maxBasketItemsCount={maxBasketItemsCount(config)}
+                  isCompared={isCompared}
                 />
               </div>
             )}
@@ -609,6 +634,15 @@ export default function CollectionPage(props: any) {
           openSidebar={openPLPSidebar}
           handleTogglePLPSidebar={handleTogglePLPSidebar}
           plpFilterState={plpFilterState}
+        />
+
+        <CompareSelectionBar
+          name={props?.name}
+          showCompareProducts={showCompareProducts}
+          isCompare={isProductCompare}
+          maxBasketItemsCount={maxBasketItemsCount(config)}
+          closeCompareProducts={closeCompareProducts}
+          deviceInfo={deviceInfo}
         />
 
         {data?.products?.results?.length > 0 && (

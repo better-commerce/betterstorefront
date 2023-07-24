@@ -18,11 +18,22 @@ export async function getStaticProps({
     pdpLookbook = null,
     pdpCachedImages = null
   let availabelPromotions = null
+  let allProductsByBrand = null
   let pdpLookbookProducts = {}
 
   try {
     const productPromise = commerce.getProduct({ query: params!?.slug[0] })
     product = await productPromise
+
+    const allProductsByBrandRes = await commerce.getAllProducts({
+      query: {
+        brandId: product?.product?.brandId,
+        pageSize: 10,
+      },
+    })
+    if (allProductsByBrandRes?.products?.results?.length > 0) {
+      allProductsByBrand = allProductsByBrandRes?.products?.results
+    }
 
     const availabelPromotionsPromise = commerce.getProductPromos({
       query: product?.product?.recordId,
@@ -78,6 +89,7 @@ export async function getStaticProps({
       snippets: product?.snippets,
       relatedProducts: relatedProducts,
       availabelPromotions: availabelPromotions,
+      allProductsByBrand: allProductsByBrand,
       reviews: reviews,
       pdpCachedImages: pdpCachedImages?.images
         ? JSON.parse(pdpCachedImages?.images)
@@ -106,6 +118,7 @@ function Slug({
   slug,
   relatedProducts,
   availabelPromotions,
+  allProductsByBrand,
   pdpLookbookProducts,
   pdpCachedImages,
   reviews,
@@ -125,6 +138,7 @@ function Slug({
         snippets={data.snippets}
         relatedProducts={relatedProducts}
         promotions={availabelPromotions}
+        allProductsByBrand={allProductsByBrand}
         pdpLookbookProducts={pdpLookbookProducts}
         pdpCachedImages={pdpCachedImages}
         reviews={reviews}

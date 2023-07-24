@@ -246,7 +246,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
   )
 
   const PromotionsCount =
-    basketPromos?.availablePromotions?.length +
+    basketPromos?.applicablePromotions?.length +
     basketPromos?.availablePromotions?.length
   return (
     <>
@@ -354,11 +354,6 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     className="text-sm font-semibold text-orange-500 cursor-pointer mob-font-small-screen"
                     onClick={() => {
                       viewCoupons(basketPromos?.applicablePromotions, items)
-                      Router?.push(
-                        { pathname: `${asPath}#couponopen` },
-                        `${asPath}`,
-                        { shallow: true, scroll: false }
-                      )
                     }}
                   >
                     {promoTypeNot22?.length > 1
@@ -399,55 +394,54 @@ const PromotionInput = (props: IPromotionInputProps) => {
         {cartItems.promotionsApplied?.length
           ? cartItems.promotionsApplied.map((promo: any, key: number) => {
               return (
-                <>
-                  <div className="pt-2 mt-2 border-t border-gray-200">
-                    <div
-                      className="flex justify-between gap-4 pb-2 my-1"
-                      key={key}
-                    >
-                      <div className="flex">
-                        <h5 className="font-medium uppercase text-primary dark:text-black text-14 xs-text-14">
-                          {' '}
-                          {promo.promoCode}
-                        </h5>
-                      </div>
-                      <div className="flex justify-end">
-                        <h5 className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
-                          {promo?.discountAmt?.raw?.withTax > 0 ? (
-                            <>
-                              <div className="flex">
-                                <span>
-                                  -{promo?.discountAmt?.formatted?.withTax}
-                                </span>
-                                <TrashIcon
-                                  className="h-5 max-w-xs ml-5 text-black cursor-pointer hover:text-gray-700"
-                                  onClick={() =>
-                                    handleSubmit(
-                                      'remove',
-                                      cartItems?.promotionsApplied[0]?.promoCode
-                                    )
-                                  }
-                                />
-                              </div>
-                            </>
-                          ) : (
-                            <span>Free Gift Added</span>
-                          )}
-                          {!promo?.autoApply && (
-                            <a href="javascript: void(0);">
-                              <span
-                                className="relative ml-2 sprite-icon cross-icon top-0.5"
-                                onClick={() =>
-                                  handleSubmit('remove', promo.promoCode)
-                                }
-                              ></span>
-                            </a>
-                          )}
-                        </h5>
-                      </div>
+                <div
+                  className="pt-2 mt-2 border-t border-gray-200"
+                  key={`promo-${key}`}
+                >
+                  <div
+                    className="flex justify-between gap-4 pb-2 my-1"
+                    key={key}
+                  >
+                    <div className="flex">
+                      <h5 className="font-medium uppercase text-primary dark:text-black text-14 xs-text-14">
+                        {' '}
+                        {promo.promoCode}
+                      </h5>
+                    </div>
+                    <div className="flex justify-end">
+                      <h5 className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
+                        {promo?.discountAmt?.raw?.withTax > 0 ? (
+                          <div className="flex">
+                            <span>
+                              -{promo?.discountAmt?.formatted?.withTax}
+                            </span>
+                            <TrashIcon
+                              className="h-5 max-w-xs ml-5 text-black cursor-pointer hover:text-gray-700"
+                              onClick={() =>
+                                handleSubmit(
+                                  'remove',
+                                  cartItems?.promotionsApplied[0]?.promoCode
+                                )
+                              }
+                            />
+                          </div>
+                        ) : (
+                          <span>Free Gift Added</span>
+                        )}
+                        {!promo?.autoApply && (
+                          <a href="javascript: void(0);">
+                            <span
+                              className="relative ml-2 sprite-icon cross-icon top-0.5"
+                              onClick={() =>
+                                handleSubmit('remove', promo.promoCode)
+                              }
+                            ></span>
+                          </a>
+                        )}
+                      </h5>
                     </div>
                   </div>
-                </>
+                </div>
               )
             })
           : null}
@@ -484,23 +478,21 @@ const PromotionInput = (props: IPromotionInputProps) => {
               ?.filter((x: any) => x?.promoType == 21 && !!x?.croMessage)
               ?.map((promo: any, crdx: number) => {
                 return (
-                  <>
-                    <div
-                      className="relative pl-16 my-1 m-offer-info bg-sky-offer offer-m-sec text-secondary-full-opacity"
-                      key={crdx}
-                    >
-                      <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
-                        <Image
-                          className="w-auto"
-                          src="/assets/icons/more-offer-icon.svg"
-                          alt=""
-                          width={15}
-                          height={10}
-                        />
-                      </span>{' '}
-                      {promo.croMessage}
-                    </div>
-                  </>
+                  <div
+                    className="relative pl-16 my-1 m-offer-info bg-sky-offer offer-m-sec text-secondary-full-opacity"
+                    key={`promo-sec-${crdx}`}
+                  >
+                    <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
+                      <Image
+                        className="w-auto"
+                        src="/assets/icons/more-offer-icon.svg"
+                        alt=""
+                        width={15}
+                        height={10}
+                      />
+                    </span>{' '}
+                    {promo.croMessage}
+                  </div>
                 )
               })}
           </>
@@ -630,53 +622,51 @@ const PromotionInput = (props: IPromotionInputProps) => {
                             ? cartItems.promotionsApplied.map(
                                 (promo: any, key: number) => {
                                   return (
-                                    <>
-                                      <div
-                                        className="flex justify-between gap-4 pt-2 my-1"
-                                        key={key}
-                                      >
-                                        {/* //promo code applied */}
-                                        <div className="flex">
-                                          <h5 className="font-medium uppercase text-primary dark:text-black text-14 xs-text-14">
-                                            {' '}
-                                            {promo.promoCode}
-                                          </h5>
-                                        </div>
-                                        <div className="flex justify-end">
-                                          <h5 className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
-                                            {promo?.discountAmt?.raw?.withTax >
-                                            0 ? (
-                                              <>
-                                                <span>
-                                                  -
-                                                  {
-                                                    promo?.discountAmt
-                                                      ?.formatted?.withTax
-                                                  }
-                                                </span>
-                                              </>
-                                            ) : (
-                                              <>
-                                                <span>Free Gift Added</span>
-                                              </>
-                                            )}
-                                            {!promo?.autoApply && (
-                                              <a href="javascript: void(0);">
-                                                <span
-                                                  className="relative ml-2 sprite-icon cross-icon top-0.5"
-                                                  onClick={() =>
-                                                    handleSubmit(
-                                                      'remove',
-                                                      promo.promoCode
-                                                    )
-                                                  }
-                                                ></span>
-                                              </a>
-                                            )}
-                                          </h5>
-                                        </div>
+                                    <div
+                                      className="flex justify-between gap-4 pt-2 my-1"
+                                      key={key}
+                                    >
+                                      {/* //promo code applied */}
+                                      <div className="flex">
+                                        <h5 className="font-medium uppercase text-primary dark:text-black text-14 xs-text-14">
+                                          {' '}
+                                          {promo.promoCode}
+                                        </h5>
                                       </div>
-                                    </>
+                                      <div className="flex justify-end">
+                                        <h5 className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
+                                          {promo?.discountAmt?.raw?.withTax >
+                                          0 ? (
+                                            <>
+                                              <span>
+                                                -
+                                                {
+                                                  promo?.discountAmt?.formatted
+                                                    ?.withTax
+                                                }
+                                              </span>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <span>Free Gift Added</span>
+                                            </>
+                                          )}
+                                          {!promo?.autoApply && (
+                                            <a href="javascript: void(0);">
+                                              <span
+                                                className="relative ml-2 sprite-icon cross-icon top-0.5"
+                                                onClick={() =>
+                                                  handleSubmit(
+                                                    'remove',
+                                                    promo.promoCode
+                                                  )
+                                                }
+                                              ></span>
+                                            </a>
+                                          )}
+                                        </h5>
+                                      </div>
+                                    </div>
                                   )
                                 }
                               )
@@ -698,51 +688,49 @@ const PromotionInput = (props: IPromotionInputProps) => {
                                   {multiSelectPromo?.map(
                                     (promo: any, idx: number) => {
                                       return (
-                                        <>
-                                          <div
-                                            key={idx}
-                                            className="mt-3 border border-gray-200"
-                                          >
-                                            <div className="grid grid-cols-12">
-                                              <div className="relative col-span-1 text-white bg-black coupon-code-panel coupon-cross">
-                                                <h3 className="font-semibold text-white uppercase coupon-text-rotate">
-                                                  {promo?.additionalInfo7}
+                                        <div
+                                          key={idx}
+                                          className="mt-3 border border-gray-200"
+                                        >
+                                          <div className="grid grid-cols-12">
+                                            <div className="relative col-span-1 text-white bg-black coupon-code-panel coupon-cross">
+                                              <h3 className="font-semibold text-white uppercase coupon-text-rotate">
+                                                {promo?.additionalInfo7}
+                                              </h3>
+                                            </div>
+                                            <div className="col-span-11 p-4 coupon-code-data">
+                                              <div className="flex justify-between">
+                                                <h3 className="mb-1 text-sm font-semibold text-black uppercase">
+                                                  {promo?.code}
                                                 </h3>
+                                                <div className="font-medium text-left text-black text-md">
+                                                  <input
+                                                    type="checkbox"
+                                                    className="custom-checkbox-promo"
+                                                    checked={multiPromo?.includes(
+                                                      promo
+                                                    )}
+                                                    onChange={() =>
+                                                      handleMultiPromo(promo)
+                                                    }
+                                                    value={promo?.code}
+                                                    name="applyPromo"
+                                                  />
+                                                </div>
                                               </div>
-                                              <div className="col-span-11 p-4 coupon-code-data">
-                                                <div className="flex justify-between">
-                                                  <h3 className="mb-1 text-sm font-semibold text-black uppercase">
-                                                    {promo?.code}
-                                                  </h3>
-                                                  <div className="font-medium text-left text-black text-md">
-                                                    <input
-                                                      type="checkbox"
-                                                      className="custom-checkbox-promo"
-                                                      checked={multiPromo?.includes(
-                                                        promo
-                                                      )}
-                                                      onChange={() =>
-                                                        handleMultiPromo(promo)
-                                                      }
-                                                      value={promo?.code}
-                                                      name="applyPromo"
-                                                    />
-                                                  </div>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                  <p className="text-xs font-medium text-emerald-500">
-                                                    {promo?.name}
-                                                  </p>
-                                                </div>
-                                                <div className="flex flex-col pt-4 mt-4 border-t border-gray-200 border-dotted px">
-                                                  <p className="text-xs font-normal text-gray-400">
-                                                    {promo?.additionalInfo6}
-                                                  </p>
-                                                </div>
+                                              <div className="flex flex-col">
+                                                <p className="text-xs font-medium text-emerald-500">
+                                                  {promo?.name}
+                                                </p>
+                                              </div>
+                                              <div className="flex flex-col pt-4 mt-4 border-t border-gray-200 border-dotted px">
+                                                <p className="text-xs font-normal text-gray-400">
+                                                  {promo?.additionalInfo6}
+                                                </p>
                                               </div>
                                             </div>
                                           </div>
-                                        </>
+                                        </div>
                                       )
                                     }
                                   )}

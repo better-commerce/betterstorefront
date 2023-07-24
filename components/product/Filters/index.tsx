@@ -134,25 +134,35 @@ export default function Filters({
 
       <section
         aria-labelledby="filter-heading-filter"
-        className="flex items-center justify-between px-0 py-0 text-center border-t border-gray-200 sm:px-6 lg:max-w-7xl lg:px-8"
+        className="flex items-center justify-between px-0 py-0 text-center w-screen border-t border-gray-200 sm:px-4 lg:max-w-7xl lg:px-8"
       >
         <h2 id="filter-heading-filter" className="sr-only">
           {GENERAL_FILTER_TITLE}
         </h2>
         <div className="relative col-start-1 row-start-1 py-3">
-          <div className="flex px-4 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex px-4 pr-2 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
             <button
               onClick={() => setOpen(true)}
               title="Product Filter"
-              className="flex items-center font-medium text-gray-700 group"
+              className="flex items-center font-medium text-gray-700 group px-4 py-2 bg-gray-200"
             >
-              <FunnelIcon
-                className="flex-none w-5 h-5 mr-2 text-gray-900 group-hover:text-gray-500"
-                title="Filter"
-                aria-hidden="true"
-              />
-              {appliedFilters?.length > 0 && routerFilters.length}
+           FILTER
+              {/* {appliedFilters?.length > 0 && routerFilters.length} */}
             </button>
+          </div>
+        </div>
+        <ProductSort
+          routerSortOption={routerSortOption}
+          products={products}
+          action={handleSortBy}
+        />
+      </section>
+      {appliedFilters?.length > 0 && (
+        <>
+          <div className='flex justify-between px-4 items-center'>
+            <h4 className="flex mb-2 text-sm font-bold">
+              Applied Filters
+            </h4>
             <div className="pl-6">
               <button
                 onClick={clearAll}
@@ -163,18 +173,7 @@ export default function Filters({
               </button>
             </div>
           </div>
-        </div>
-        <ProductSort
-          routerSortOption={routerSortOption}
-          products={products}
-          action={handleSortBy}
-        />
-      </section>
-      {appliedFilters?.length > 0 && (
           <div className="grid flex-col grid-cols-1 px-4 py-2 border-t border-gray-100 my-2">
-            <h4 className="flex w-full mb-2 text-sm font-bold">
-              Applied Filters
-            </h4>
             <div className="grid grid-cols-2">
               {appliedFilters.map((appliedFilter: any, idx: number) => (
                 <div
@@ -193,7 +192,8 @@ export default function Filters({
               ))}
             </div>
           </div>
-        )}
+        </>
+      )}
     </>
   )
 }

@@ -10,14 +10,8 @@ import PaymentGatewayNotification from '@components/checkout/PaymentGatewayNotif
 
 // Other Imports
 import { EmptyString } from '@components/utils/constants'
-import { PaymentGateway } from '@components/utils/payment-constants'
-
-export interface IGatewayPageProps {
-  readonly gateway: string
-  readonly params?: { token?: string; orderId?: string; payerId?: string }
-  readonly isCancelled: boolean
-  readonly isCOD?: boolean
-}
+import { PaymentMethodType } from '@components/utils/payment-constants'
+import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 
 const GatewayPage = (props: IGatewayPageProps) => {
   const { gateway, params, isCancelled } = props
@@ -46,8 +40,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       : false
 
   switch (gateway) {
-    case PaymentGateway.CHECKOUT:
-    case PaymentGateway.PAYPAL:
+    case PaymentMethodType.CHECKOUT:
+    case PaymentMethodType.PAYPAL:
       const payerId = !isCancelled
         ? params?.PayerID || params?.payerID || params?.payerId
         : ''
@@ -59,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       }
       break
 
-    case PaymentGateway.STRIPE:
+    case PaymentMethodType.STRIPE:
       propParams = {
         token: params?.payment_intent_client_secret, // For Stripe
         orderId: !isCancelled ? params?.payment_intent : EmptyString, // For Stripe
@@ -67,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       }
       break
 
-    case PaymentGateway.KLARNA:
+    case PaymentMethodType.KLARNA:
       propParams = {
         token: EmptyString, // For Klarna
         orderId: !isCancelled ? params?.orderId : EmptyString, // For Klarna
@@ -75,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       }
       break
 
-    case PaymentGateway.CLEAR_PAY:
+    case PaymentMethodType.CLEAR_PAY:
       propParams = {
         token: params?.token,
         orderId: !isCancelled ? params?.orderId : EmptyString,

@@ -5,10 +5,16 @@ interface Props {
   basketId?: string
   countryCode?: string
   shippingId?: string
+  cookies?: any
 }
 
 export default function updateShippingMethod() {
-  return async function handler({ basketId, shippingId, countryCode }: Props) {
+  return async function handler({
+    basketId,
+    shippingId,
+    countryCode,
+    cookies,
+  }: Props) {
     const url =
       CHECKOUT_ENDPOINT +
       `/${basketId}/delivery/shipping-method?shippingMethodId=${shippingId}&countryCode=${countryCode}`
@@ -19,6 +25,7 @@ export default function updateShippingMethod() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        cookies,
       })
       return response.result
     } catch (error: any) {

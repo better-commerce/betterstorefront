@@ -12,7 +12,7 @@ const BrandDisclosure = ({ details, heading }: data) => {
         <Disclosure>
           {({ open }) => (
             <>
-              <Disclosure.Button className="flex w-full justify-between py-2 text-left text-sm font-medium  focus:outline-none border-b-2 border-black">
+              <Disclosure.Button className="flex w-full text-[#212530] justify-between py-2 text-left text-sm font-medium  focus:outline-none border-b-2 border-black">
                 <span className="uppercase">{heading}</span>
                 <ChevronDownIcon
                   className={`${open ? 'rotate-180 transform' : ''} h-5 w-5 `}

@@ -1,7 +1,7 @@
 import { useAddItem } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 
-const AddItemCartApiMiddleware = async (req: any, res: any) => {
+export default async function (req: any, res: any) {
   const {
     basketId,
     productId,
@@ -25,5 +25,3 @@ const AddItemCartApiMiddleware = async (req: any, res: any) => {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
-
-export default AddItemCartApiMiddleware;

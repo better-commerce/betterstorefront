@@ -51,11 +51,11 @@ const ConvertOrderApiMiddleware = function () {
       )
 
       BCEnvironment.init(CLIENT_ID!, SHARED_SECRET!, config, AUTH_URL, BASE_URL)
-      const paymentResponseResult =
+      const convertOrderResult =
         await new BetterCommerceOperation().convertOrder(params)
 
       logData = {}
-      logData['response'] = paymentResponseResult
+      logData['response'] = convertOrderResult
       await logPaymentRequest(
         {
           //headers: {},
@@ -68,7 +68,7 @@ const ConvertOrderApiMiddleware = function () {
         `${logId} Response`
       )
 
-      return paymentResponseResult
+      return convertOrderResult
     } catch (error: any) {
       logData = {}
       logData['error'] = error
