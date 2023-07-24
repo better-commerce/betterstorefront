@@ -39,6 +39,7 @@ export interface IDeviceInfo {
 export interface IOverlayLoaderState {
   readonly visible: boolean
   readonly message?: string
+  readonly backdropInvisible?: boolean
 }
 
 export interface IPLPFilterState {
@@ -76,6 +77,7 @@ export interface State {
   includeVAT: string
   isCompared: string
   compareProductList: any
+  isPaymentLink: boolean
 }
 
 const initialState = {
@@ -105,6 +107,7 @@ const initialState = {
   overlayLoaderState: {
     visible: false,
     message: '',
+    backdropInvisible: false,
   },
   deviceInfo: {
     isMobile: false,
@@ -116,95 +119,100 @@ const initialState = {
   includeVAT: getItem('includeVAT') || 'false',
   isCompared: getItem('isCompared') || 'false',
   compareProductList: getItem('compareProductList') || {},
+  isPaymentLink: getItem('isPaymentLink') || false,
 }
 
 type Action =
   | {
-      type: 'OPEN_SIDEBAR'
-    }
+    type: 'OPEN_SIDEBAR'
+  }
   | {
-      type: 'CLOSE_SIDEBAR'
-    }
+    type: 'CLOSE_SIDEBAR'
+  }
   | {
-      type: 'OPEN_DROPDOWN'
-    }
+    type: 'OPEN_DROPDOWN'
+  }
   | {
-      type: 'CLOSE_DROPDOWN'
-    }
+    type: 'CLOSE_DROPDOWN'
+  }
   | {
-      type: 'OPEN_MODAL'
-    }
+    type: 'OPEN_MODAL'
+  }
   | {
-      type: 'SHOW_ALERT'
-    }
+    type: 'SHOW_ALERT'
+  }
   | {
-      type: 'HIDE_ALERT'
-    }
+    type: 'HIDE_ALERT'
+  }
   | {
-      type: 'USE_ALERT'
-      payload: any
-    }
+    type: 'USE_ALERT'
+    payload: any
+  }
   | {
-      type: 'OPEN_NOTIFY_USER_POPUP'
-      payload: string
-    }
+    type: 'OPEN_NOTIFY_USER_POPUP'
+    payload: string
+  }
   | {
-      type: 'CLOSE_NOTIFY_USER_POPUP'
-    }
+    type: 'CLOSE_NOTIFY_USER_POPUP'
+  }
   | {
-      type: 'CLOSE_MODAL'
-    }
+    type: 'CLOSE_MODAL'
+  }
   | {
-      type: 'SET_MODAL_VIEW'
-      view: MODAL_VIEWS
-    }
+    type: 'SET_MODAL_VIEW'
+    view: MODAL_VIEWS
+  }
   | {
-      type: 'SET_SIDEBAR_VIEW'
-      view: SIDEBAR_VIEWS
-    }
+    type: 'SET_SIDEBAR_VIEW'
+    view: SIDEBAR_VIEWS
+  }
   | {
-      type: 'SHOW_DETAILED_ORDER'
-    }
+    type: 'SHOW_DETAILED_ORDER'
+  }
   | {
-      type: 'HIDE_DETAILED_ORDER'
-    }
+    type: 'HIDE_DETAILED_ORDER'
+  }
   | {
-      type: 'SET_USER_AVATAR'
-      value: string
-    }
+    type: 'SET_USER_AVATAR'
+    value: string
+  }
   | {
-      type: 'ADD_TO_WISHLIST'
-      payload: any
-    }
+    type: 'ADD_TO_WISHLIST'
+    payload: any
+  }
   | {
-      type: 'REMOVE_FROM_WISHLIST'
-      payload: any
-    }
+    type: 'REMOVE_FROM_WISHLIST'
+    payload: any
+  }
   | {
-      type: 'ADD_TO_CART'
-      payload: any
-    }
+    type: 'ADD_TO_CART'
+    payload: any
+  }
   | {
-      type: 'REMOVE_FROM_CART'
-      payload: any
-    }
+    type: 'REMOVE_FROM_CART'
+    payload: any
+  }
   | { type: 'SET_CART_ITEMS'; payload: any }
   | {
-      type: 'SET_USER'
-      payload: any
-    }
+    type: 'SET_USER'
+    payload: any
+  }
   | {
-      type: 'SET_GUEST_USER'
-      payload: any
-    }
+    type: 'SET_GUEST_USER'
+    payload: any
+  }
   | {
-      type: 'SET_IS_GUEST_USER'
-      payload: boolean
-    }
+    type: 'SET_IS_GUEST_USER'
+    payload: boolean
+  }
+  | {
+    type: 'SET_IS_PAYMENT_LINK'
+    payload: boolean
+  }
   | {
     type: 'SET_IS_SPLIT_DELIVERY'
     payload: boolean
-  } 
+  }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -411,7 +419,13 @@ function uiReducer(state: State, action: Action) {
         isGuestUser: action.payload,
       }
     }
-    case 'SET_IS_SPLIT_DELIVERY':{
+    case 'SET_IS_PAYMENT_LINK': {
+      return {
+        ...state,
+        isPaymentLink: action.payload,
+      }
+    }
+    case 'SET_IS_SPLIT_DELIVERY': {
       return {
         ...state,
         isSplitDelivery: action.payload,
@@ -481,7 +495,7 @@ function uiReducer(state: State, action: Action) {
           compareProductList: {
             ...(state?.compareProductList || {}),
             [action.payload.id]: action.payload.data,
-          }
+          },
         }
         setItem('compareProductList', state.compareProductList)
         return state
@@ -492,7 +506,7 @@ function uiReducer(state: State, action: Action) {
           ...state,
           compareProductList: {
             ...(state?.compareProductList || {}),
-          }
+          },
         }
         setItem('compareProductList', state.compareProductList)
         return state
@@ -502,12 +516,11 @@ function uiReducer(state: State, action: Action) {
     case 'RESET_COMPARE_PRODUCTS': {
       state = {
         ...state,
-        compareProductList: {}
+        compareProductList: {},
       }
       setItem('compareProductList', {})
       return state
     }
-
   }
 }
 
@@ -783,6 +796,22 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setIsPaymentLink = useCallback((payload: boolean) => {
+    setItem('isPaymentLink', payload)
+    Cookies.set(Cookie.Key.IS_PAYMENT_LINK, `${payload}`)
+    dispatch({ type: 'SET_IS_PAYMENT_LINK', payload })
+  },
+    [dispatch]
+  )
+
+  const resetIsPaymentLink = useCallback(() => {
+    dispatch({ type: 'SET_IS_PAYMENT_LINK', payload: false })
+    removeItem('isPaymentLink')
+    Cookies.remove(Cookie.Key.IS_PAYMENT_LINK)
+  },
+    [dispatch]
+  )
+
   const setIsSplitDelivery = useCallback(
     (payload: boolean) => {
       setItem('isSplitDelivery', payload)
@@ -794,22 +823,35 @@ export const UIProvider: React.FC<any> = (props) => {
 
   const deleteUser = useCallback(
     (payload: any) => {
+      const { isSilentLogout = false } = payload
+
+      const logoutUser = (isSilentLogout: boolean) => {
+        removeItem('user')
+        dispatch({ type: 'SET_WISHLIST', payload: [] })
+        setItem('wishListItems', [])
+        setItem('cartItems', { lineItems: [] })
+        dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+        Cookies.remove(Cookie.Key.COMPANY_ID)
+        const basketIdRef = uuid()
+        Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
+          expires: getExpiry(getMinutesInDays(365)),
+        })
+        dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
+        dispatch({ type: 'REMOVE_USER', payload: {} })
+        removeItem('isPaymentLink')
+        Cookies.remove(Cookie.Key.IS_PAYMENT_LINK)
+
+        if (!isSilentLogout) {
+          setAlert({ type: 'success', msg: LOGOUT })
+        }
+      }
+
       if (payload?.router) {
         payload?.router?.push('/').then(() => {
-          removeItem('user')
-          dispatch({ type: 'SET_WISHLIST', payload: [] })
-          setItem('wishListItems', [])
-          setItem('cartItems', { lineItems: [] })
-          dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
-          Cookies.remove(Cookie.Key.COMPANY_ID)
-          const basketIdRef = uuid()
-          Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
-            expires: getExpiry(getMinutesInDays(365)),
-          })
-          dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
-          dispatch({ type: 'REMOVE_USER', payload: {} })
-          setAlert({ type: 'success', msg: LOGOUT })
+          logoutUser(isSilentLogout)
         })
+      } else {
+        logoutUser(isSilentLogout)
       }
     },
     [dispatch]
@@ -877,11 +919,13 @@ export const UIProvider: React.FC<any> = (props) => {
       payload: IOverlayLoaderState = {
         visible: false,
         message: '',
+        backdropInvisible: false,
       }
     ) => {
       const data: IOverlayLoaderState = {
         visible: false,
         message: '',
+        backdropInvisible: false,
       }
       dispatch({ type: 'SET_OVERLAY_STATE', payload })
     },
@@ -912,12 +956,9 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
-  const resetCompareProducts = useCallback(
-    () => {
-      dispatch({ type: 'RESET_COMPARE_PRODUCTS' })
-    },
-    [dispatch]
-  )
+  const resetCompareProducts = useCallback(() => {
+    dispatch({ type: 'RESET_COMPARE_PRODUCTS' })
+  }, [dispatch])
 
   const consolidateCartItems = (payload: any) => {
     let newCartDataClone: any = { ...payload }
@@ -947,7 +988,7 @@ export const UIProvider: React.FC<any> = (props) => {
               x.parentProductId.trim() !== '' &&
               x.parentProductId.trim() !== Guid.empty &&
               x.parentProductId.toLowerCase().trim() ==
-                parentItem.productId.toLowerCase()
+              parentItem.productId.toLowerCase()
           )
 
           // If child items exists
@@ -1032,6 +1073,8 @@ export const UIProvider: React.FC<any> = (props) => {
       setUser,
       setGuestUser,
       setIsGuestUser,
+      setIsPaymentLink,
+      resetIsPaymentLink,
       setIsSplitDelivery,
       deleteUser,
       openCart,
