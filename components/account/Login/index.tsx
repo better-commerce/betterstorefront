@@ -22,6 +22,7 @@ import {
 } from '@components/utils/textVariables'
 import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
+import { Guid } from '@commerce/types'
 
 export default function Login({ isLoginSidebarOpen }: any) {
   const [noAccount, setNoAccount] = useState(false)
@@ -57,7 +58,6 @@ export default function Login({ isLoginSidebarOpen }: any) {
         setNoAccount(false)
         setAlert({type:'success',msg: LOGIN_SUCCESSFUL})
         let userObj = { ...result.data }
-
         // get user updated details
         const updatedUserObj = await axios.post(
           `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
@@ -126,12 +126,16 @@ export default function Login({ isLoginSidebarOpen }: any) {
         <SocialSignInLinks
           isLoginSidebarOpen={isLoginSidebarOpen}
           containerCss={`flex justify-center gap-2 px-3 mx-auto ${
-            isLoginSidebarOpen ? 'sm:w-full width-md-full !px-0' : 'width-md-full sm:w-1/2'
+            isLoginSidebarOpen
+              ? 'sm:w-full width-md-full !px-0'
+              : 'width-md-full sm:w-1/2'
           }`}
         />
-        <div className={`flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 ${
+        <div
+          className={`flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 ${
             isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-1/2'
-          }`}>
+          }`}
+        >
           <Link href="/my-account/forgot-password" passHref>
             <span className="block font-medium text-indigo-600 underline cursor-pointer hover:text-indigo-800 hover:underline">
               Forgot password?

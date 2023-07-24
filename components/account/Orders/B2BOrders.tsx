@@ -14,26 +14,114 @@ import InfiniteScroll from '@components/ui/InfiniteScroll'
 
 // Other Imports
 import { GENERAL_RECENT_ORDERS } from '@components/utils/textVariables'
-import { NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
+import {
+  NEXT_GET_ORDERS,
+  NEXT_GET_ORDER_DETAILS,
+} from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
 import Link from 'next/link'
+import { matchStrings } from '@framework/utils/parse-util'
 import OrdersListView from './OrdersListView'
 
-export default function MyOrders({
-  allOrders,
-  handleInfiniteScroll,
+export default function B2BOrders({
+  //   allOrders,
+  selectedOption,
+  //   handleInfiniteScroll,
   deviceInfo,
-  isShowDetailedOrder, setIsShowDetailedOrder 
+  isShowDetailedOrder,
+  setIsShowDetailedOrder,
+  isAdmin,
+  userOrderIdMap,
 }: any) {
+  const PAGE_SIZE = 10
   const { isMobile, isIPadorTablet } = deviceInfo
   const { user, displayAlert, alertRibbon } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>(undefined)
+  const [ordersList, setOrdersList] = useState<any>(null)
+  const [allOrders, setAllOrders] = useState<Array<any> | undefined>(undefined)
+  const [pagedOrders, setPagedOrders] = useState<Array<any>>()
+  const [pageNumber, setPageNumber] = useState<number>(1)
+  const [allOrderIds, setAllOrderIds] = useState<Array<string> | undefined>(
+    undefined
+  )
+  const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
+  useEffect(() => {
+    if (allOrdersFetched) {
+      setAllOrderIds(pagedOrders?.map((x: any) => x?.id))
+    } else {
+      fetchOrders(pageNumber)
+    }
 
-  const handleFetchOrderDetails = async (id: any) => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allOrdersFetched])
+
+  useEffect(() => {
+    setAllOrdersFetched(false)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber])
+
+  const findUserIdByOrderId = (IdMapArray: any, orderId: any) => {
+    if (IdMapArray) {
+      for (const data of IdMapArray) {
+        const { userId, orders } = data
+        const foundOrder = orders.find((order: any) => order === orderId)
+        if (foundOrder) {
+          return userId
+        }
+      }
+    }
+    return null
+  }
+
+  useEffect(() => {
+    if (allOrderIds?.length) {
+      allOrderIds?.forEach((id: string, index: number) => {
+        let userMappedId = findUserIdByOrderId(userOrderIdMap, id)
+        handleFetchOrderDetails(
+          id,
+          userMappedId ? userMappedId : user?.userId
+        ).then((orderDetails: any) => {
+          const newOrders = pagedOrders?.map((obj: any) =>
+            matchStrings(obj?.id, id, true)
+              ? Object.assign(obj, { orderDetails: orderDetails })
+              : obj
+          )
+          setPagedOrders(newOrders)
+          setAllOrders((allOrders ?? [])?.concat(newOrders))
+        })
+      })
+    } else {
+      if (allOrderIds !== undefined) {
+        setAllOrders([])
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allOrderIds])
+
+  const fetchOrders = async (pageNumber: number) => {
+    const { data: ordersResult }: any = await axios.post(NEXT_GET_ORDERS, {
+      id: user?.userId,
+      hasMembership: user?.hasMembership,
+      pageNumber: pageNumber,
+      pageSize: PAGE_SIZE,
+    })
+
+    setPagedOrders(ordersResult)
+    setAllOrdersFetched(true)
+  }
+
+  const handleInfiniteScroll = () => {
+    //alert(pageNumber)
+    setPageNumber(pageNumber + 1)
+  } //TILL HERE DONE
+
+  const handleFetchOrderDetails = async (id: any, userId: any) => {
     const { data: orderDetails }: any = await axios.post(
       NEXT_GET_ORDER_DETAILS,
       {
-        id: user?.userId,
+        id: userId,
         orderId: id,
       }
     )
@@ -41,7 +129,7 @@ export default function MyOrders({
   }
 
   const fetchOrderDetails = async (id: any) => {
-    const { orderDetails } = allOrders.find((order: any) => order.id === id)
+    const { orderDetails } = allOrders?.find((order: any) => order.id === id)
     setOrderDetails(orderDetails)
   }
 
@@ -69,6 +157,12 @@ export default function MyOrders({
           })
       }
     })
+  }, [allOrders])
+
+  useEffect(() => {
+    if (allOrders) {
+      setOrdersList(allOrders)
+    }
   }, [allOrders])
 
   let deviceCheck = ''
@@ -99,21 +193,21 @@ export default function MyOrders({
 
   return (
     <>
-    <OrdersListView
-      isShowDetailedOrder={isShowDetailedOrder}
-      alertRibbon={alertRibbon}
-      displayAlert={displayAlert}
-      isIPadorTablet={isIPadorTablet}
-      isMobile={isMobile}
-      alertBgColor={alertBgColor}
-      ordersList={allOrders}
-      trackPackage={trackPackage}
-      onOrderDetail={onOrderDetail}
-      handleInfiniteScroll={handleInfiniteScroll}
-      setIsShowDetailedOrder={setIsShowDetailedOrder}
-      deviceInfo={deviceInfo}
-      orderDetails={orderDetails}
-    />
+      <OrdersListView
+        isShowDetailedOrder={isShowDetailedOrder}
+        alertRibbon={alertRibbon}
+        displayAlert={displayAlert}
+        isIPadorTablet={isIPadorTablet}
+        isMobile={isMobile}
+        alertBgColor={alertBgColor}
+        ordersList={ordersList}
+        trackPackage={trackPackage}
+        onOrderDetail={onOrderDetail}
+        handleInfiniteScroll={handleInfiniteScroll}
+        setIsShowDetailedOrder={setIsShowDetailedOrder}
+        deviceInfo={deviceInfo}
+        orderDetails={orderDetails}
+      />
       {/* {isShowDetailedOrder ? (
         <div id="OrderDetail" className="w-full">
           <OrderDetail
@@ -125,15 +219,6 @@ export default function MyOrders({
         </div>
       ) : (
         <>
-          {/* <div className='px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header'>
-            <h3 className='max-w-4xl mx-auto text-xl font-semibold text-black'>
-              <Link href="/my-account" className='mr-2 leading-none'>
-                <i className='sprite-icon sprite-left-arrow'></i>
-              </Link>
-              My Orders
-            </h3>
-          </div> *
-
           <div className="bg-white">
             <main className="lg:px-8">
               <div className="max-w-4xl">
@@ -141,7 +226,7 @@ export default function MyOrders({
                   <Spinner />
                 ) : (
                   <>
-                    {allOrders?.length > 0 ? (
+                    {ordersList?.length > 0 ? (
                       <>
                         <section
                           aria-labelledby="recent-heading"
@@ -154,12 +239,12 @@ export default function MyOrders({
                             <InfiniteScroll
                               fetchData={handleInfiniteScroll}
                               total={
-                                allOrders?.length
-                                  ? allOrders[0]?.totalRecord
+                                ordersList?.length
+                                  ?ordersList[0]?.totalRecord
                                   : 0
                               }
-                              currentNumber={allOrders?.length}
-                              component={allOrders?.map((order: any) => {
+                              currentNumber={ordersList?.length}
+                              component={ordersList?.map((order: any) => {
                                 const groups: any = groupBy(
                                   order?.itemsBasic,
                                   'category'
@@ -216,8 +301,8 @@ export default function MyOrders({
                                 )
                               })}
                             />
-                            {allOrders[0]?.totalRecord > 10 &&
-                              allOrders[0]?.totalRecord > allOrders?.length && (
+                            {ordersList[0].totalRecord > 10 &&
+                              ordersList[0].totalRecord > ordersList?.length && ( 
                                 <div className="flex justify-center flex-1 mx-auto">
                                   <button
                                     className="px-6 py-2 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white"

@@ -13,6 +13,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 
 import React from 'react'
+import { stringToBoolean } from '@framework/utils/parse-util'
 import MyDetails from '@components/account/MyDetails'
 // import MyOrders from '@components/account/MyOrders'
 import MyOrders from '@components/account/Orders/MyOrders'
@@ -22,6 +23,7 @@ import {
   NEXT_GET_ORDERS,
   NEXT_GET_ORDER_DETAILS,
 } from '@components/utils/constants'
+import SideMenu from '@components/account/MyAccountMenu'
 
 const PAGE_SIZE = 10
 
@@ -41,6 +43,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
   const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
   const [active, setActive] = useState(false)
   const [pageNumber, setPageNumber] = useState<number>(1)
+  const currentOption = 'My Orders'
 
   useEffect(() => {
     if (allOrdersFetched) {
@@ -84,6 +87,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
     if (isGuestUser) {
       router.push('/')
     } else {
+      //todo get new users created with different roles and make them place orders to verify the endpoint
       fetchOrders(pageNumber)
     }
 
@@ -153,36 +157,40 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
   }
   useAnalytics(CustomerProfileViewed, loggedInEventData)
 
-  const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(displayDetailedOrder);
-  useEffect(()=>{
+  const [isShowDetailedOrder, setIsShowDetailedOrder] =
+    useState(displayDetailedOrder)
+  useEffect(() => {
     setIsShowDetailedOrder(displayDetailedOrder)
-  },[displayDetailedOrder])
+  }, [displayDetailedOrder])
 
   return (
     <section className="relative pb-10 text-gray-900">
       <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
-      {!isShowDetailedOrder && (
-        <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-        <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
-            <Link className="mx-2 leading-none mt-1 align-middle" href="/my-account"><svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                className="bi bi-arrow-left"
-                viewBox="0 0 16 16"
+        {!isShowDetailedOrder && (
+          <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
+            <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
+              <Link
+                className="mx-2 leading-none mt-1 align-middle"
+                href="/my-account"
               >
-                {' '}
-                <path
-                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
-                />{' '}
-              </svg></Link> 
-              <span className='leading-none'>My Orders</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-arrow-left"
+                  viewBox="0 0 16 16"
+                >
+                  {' '}
+                  <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
+                </svg>
+              </Link>
+              <span className="leading-none">My Orders</span>
             </h3>
-        </div>
-          )}
+          </div>
+        )}
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-          <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
+          {/* <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
             <div className="sticky left-0 z-10 flex flex-col top-36">
               {config.map((item: any, idx: number) => (
                 <>
@@ -267,8 +275,12 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
                 </>
               ))}
             </div>
-          </div>
-
+          </div> */}
+          <SideMenu
+            handleClick={handleClick}
+            setShow={setShow}
+            currentOption={currentOption}
+          />
           <div
             className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
               isShow ? `` : ''

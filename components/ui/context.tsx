@@ -204,7 +204,7 @@ type Action =
   | {
     type: 'SET_IS_SPLIT_DELIVERY'
     payload: boolean
-  }
+  } 
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -790,6 +790,7 @@ export const UIProvider: React.FC<any> = (props) => {
     },
     [dispatch]
   )
+
 
   const deleteUser = useCallback(
     (payload: any) => {
