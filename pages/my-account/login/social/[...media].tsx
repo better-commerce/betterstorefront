@@ -81,11 +81,11 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
           }
           break
       }
-      const result: any = await axios.post(NEXT_SSO_AUTHENTICATE, { data })
+      const result: any = await axios.post(NEXT_SSO_AUTHENTICATE, { ...data })
 
-      if (result.data) {
+      if (result?.data) {
         setNoAccount(false)
-        let userObj = { ...result.data }
+        let userObj = { ...result?.data }
 
         // get user updated details
         const updatedUserObj = await axios.post(
@@ -93,17 +93,17 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
         )
         if (updatedUserObj?.data) userObj = { ...updatedUserObj?.data }
 
-        const wishlist = await getWishlist(result.data.userId, wishListItems)
+        const wishlist = await getWishlist(result?.data?.userId, wishListItems)
         setWishlist(wishlist)
-        getWishlist(result.data.userId, wishListItems)
+        getWishlist(result?.data?.userId, wishListItems)
         const cart: any = await getCartByUser({
-          userId: result.data.userId,
+          userId: result?.data?.userId,
           cart: cartItems,
           basketId,
         })
         if (cart && cart.id) {
           setCartItems(cart)
-          setBasketId(cart.id)
+          setBasketId(cart?.id)
           userObj.isAssociated = true
         } else {
           userObj.isAssociated = false
