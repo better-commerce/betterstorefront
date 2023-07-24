@@ -6,34 +6,37 @@ import Link from 'next/link'
 import React from 'react'
 
 function SideMenu({ handleClick, setShow, currentOption }: any) {
-    const {user} = useUI()
-    let isB2B = user?.companyId!==Guid.empty
-    let newConfig:any = []
-    if (config && typeof window !== 'undefined') {
-      const hasMyCompany = config.some(
-        (item: any) => item?.props === 'my-company'
-      )
+  const { user } = useUI()
+  let isB2B = user?.companyId !== Guid.empty
+  let newConfig: any = []
+  if (config && typeof window !== 'undefined') {
+    const hasMyCompany = config.some(
+      (item: any) => item?.props === 'my-company'
+    )
     newConfig = [...config]
-      if(isB2B){
-        let i = newConfig.length
-        while (i--) {
-          if (newConfig[i]?.props ==='address-book' || newConfig[i]?.props ==='orders') {
-            newConfig.splice(i, 1)
-          }
+    if (isB2B) {
+      let i = newConfig.length
+      while (i--) {
+        if (
+          newConfig[i]?.props === 'address-book' ||
+          newConfig[i]?.props === 'orders'
+        ) {
+          newConfig.splice(i, 1)
         }
       }
-      if (!isB2B) {
-        newConfig = [...config]
-      } else if (!hasMyCompany) {
-        newConfig.push({
-          type: 'tab',
-          text: 'My Company',
-          mtext: 'My Company',
-          props: 'my-company',
-          href: '/my-account/my-company',
-        })
-      }
     }
+    if (!isB2B) {
+      newConfig = [...config]
+    } else if (!hasMyCompany) {
+      newConfig.push({
+        type: 'tab',
+        text: 'My Company',
+        mtext: 'My Company',
+        props: 'my-company',
+        href: '/my-account/my-company',
+      })
+    }
+  }
   return (
     <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
       <div className="sticky left-0 z-10 flex flex-col top-36">

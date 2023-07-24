@@ -27,8 +27,12 @@ function CompanyUsers({ users }: any) {
               </div>
               <div className="flex flex-row gap-x-6">
                 {user?.username && <span>Username: {user?.username}</span>}
-                <span className='font-Inter font-light leading-4 text-sm tracking-[2%]'>Email: {user?.email}</span>
-                <span className='font-Inter font-light leading-4 text-sm tracking-[2%]'>Phone No: {user?.phoneNo}</span>
+                <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
+                  Email: {user?.email}
+                </span>
+                <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
+                  Phone No: {user?.phoneNo}
+                </span>
               </div>
             </div>
           ))}

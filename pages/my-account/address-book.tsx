@@ -23,8 +23,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
-  const currentOption = "My Saved Address"
-  
+  const currentOption = 'My Saved Address'
+
   useEffect(() => {
     if (isGuestUser) {
       router.push('/')
@@ -171,10 +171,10 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
             </div>
           </div> */}
           <SideMenu
-                    handleClick={handleClick}
-                    setShow={setShow}
-                    currentOption={currentOption}
-                />
+            handleClick={handleClick}
+            setShow={setShow}
+            currentOption={currentOption}
+          />
           <div
             className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${
               isShow ? `` : ''

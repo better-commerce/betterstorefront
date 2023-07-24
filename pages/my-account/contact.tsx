@@ -23,7 +23,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const { user, deleteUser, isGuestUser } = useUI()
-  const currentOption = "Contact Preferences"
+  const currentOption = 'Contact Preferences'
 
   useEffect(() => {
     if (isGuestUser) {
@@ -63,21 +63,24 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     <section className="relative pb-10 text-gray-900">
       <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
         <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-        <h3 className="max-w-4xl mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
-          <Link className="mr-2 mx-1 align-middle leading-none" href="/my-account"><svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-arrow-left xsm:mt-1"
-              viewBox="0 0 16 16"
+          <h3 className="max-w-4xl mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
+            <Link
+              className="mr-2 mx-1 align-middle leading-none"
+              href="/my-account"
             >
-              {' '}
-              <path
-                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
-              />{' '}
-            </svg></Link> 
-            <span className='leading-none'>Contact</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-arrow-left xsm:mt-1"
+                viewBox="0 0 16 16"
+              >
+                {' '}
+                <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
+              </svg>
+            </Link>
+            <span className="leading-none">Contact</span>
           </h3>
         </div>
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
@@ -165,10 +168,10 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
             </div>
           </div> */}
           <SideMenu
-                    handleClick={handleClick}
-                    setShow={setShow}
-                    currentOption={currentOption}
-                />
+            handleClick={handleClick}
+            setShow={setShow}
+            currentOption={currentOption}
+          />
 
           <div
             className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${
