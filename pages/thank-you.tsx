@@ -95,9 +95,6 @@ export default function OrderConfirmation({ config }: any) {
   const [copied, setCopied] = useState(false)
   const [isReferralSlugLoading,setIsReferralSlugLoading] = useState(false)
   const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser, isGuestUser } = useUI()
-  //handling if guest user can also refer new users
-  // const guestUserObj = guestUser 
-  
   const shareOptionsConfig = [
    
     {
@@ -336,14 +333,6 @@ export default function OrderConfirmation({ config }: any) {
   const handleReferralByEmail = async () => {
     // setIsReferModalOpen(true)
     let referrerEmail = user?.email
-    //if(user?.email){
-    //   referralEmail = user?.email
-    // }
-    // else{
-    //   console.log('guestUserObj',guestUserObj);
-      
-    //   referrerEmail = guestUserObj?.email
-    // } //if guest user can refer new users
     setIsReferralSlugLoading(true)
     let { data: data } = await axios.post(NEXT_REFERRAL_BY_EMAIL, {
       email: referrerEmail,

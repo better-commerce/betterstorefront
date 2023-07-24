@@ -84,58 +84,6 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
     let { data: referralVouchers } = await axios.post(NEXT_REFERRAL_VOUCHERS, {
       userId: userId,
     })
-  //   let sampleObj =  [
-  //     {
-  //         "refereeUserId": "ae8e8681-2326-ee11-833f-000d3a25433a",
-  //         "refereeUserName": "referee@bettercommerce.io",
-  //         "refereeFirstName": null,
-  //         "refereeLastName": null,
-  //         "refereePhoneNo": null,
-  //         "refereeEmail": "referee@bettercommerce.io",
-  //         "refereeOrderStatusText": "Approved",
-  //         "refereeOrderStatus": 3,
-  //         "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-  //         "promoName": "20% Off Sale",
-  //         "voucherCode": "ZFEMDRC2KWORJHXM",
-  //         "validFrom": "2023-07-19T11:06:12.25",
-  //         "validTo": "2023-07-30T11:06:12.263",
-  //         "claimedOn": "0001-01-01T00:00:00"
-  //     },
-  //     {
-  //         "refereeUserId": "3942646c-be27-ee11-8343-000d3a25433a",
-  //         "refereeUserName": "referee12@bettercommerce.io",
-  //         "refereeFirstName": "asdasdasd",
-  //         "refereeLastName": "sadasd",
-  //         "refereePhoneNo": "2342342342",
-  //         "refereeEmail": "referee12@bettercommerce.io",
-  //         "refereeOrderStatusText": "Approved",
-  //         "refereeOrderStatus": 3,
-  //         "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-  //         "promoName": "20% Off Sale",
-  //         "voucherCode": "",
-  //         "validFrom": "0001-01-01T00:00:00",
-  //         "validTo": "2023-08-14T12:04:21.167",
-  //         "claimedOn": "0001-01-01T00:00:00"
-  //     },
-  //     {
-  //         "refereeUserId": "0482b322-c227-ee11-8343-000d3a25433a",
-  //         "refereeUserName": "referee14@bettercommerce.io",
-  //         "refereeFirstName": null,
-  //         "refereeLastName": null,
-  //         "refereePhoneNo": null,
-  //         "refereeEmail": "referee14@bettercommerce.io",
-  //         "refereeOrderStatusText": "Approved",
-  //         "refereeOrderStatus": 3,
-  //         "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
-  //         "promoName": "20% Off Sale",
-  //         "voucherCode": "CHEVYYA367ZJ88G2",
-  //         "validFrom": "2023-07-21T12:31:37.12",
-  //         "validTo": "2023-08-12T12:31:37.13",
-  //         "claimedOn": "2023-07-21T12:35:31.397"
-  //     }
-  // ]
-   
-    // setVouchersEarned(sampleObj)
 
     if (referralVouchers?.referralDetails) {
       setVouchersEarned(referralVouchers?.referralDetails)
