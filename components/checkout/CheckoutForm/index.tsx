@@ -85,6 +85,8 @@ export default function CheckoutForm({
     isGuestUser,
     guestUser,
     setGuestUser,
+    isPaymentLink,
+    hideOverlayLoaderState,
   } = useUI()
 
   const uiContext = useUI()
@@ -633,7 +635,7 @@ export default function CheckoutForm({
   }
 
   const handleShippingSubmit = (values: any) => {
-    if (values.isDirty) {
+    if (values?.isDirty) {
       delete values.isDirty
     }
     toggleShipping()
@@ -703,12 +705,17 @@ export default function CheckoutForm({
   }
 
   useEffect(() => {
+    if (isPaymentLink && addresses?.length) {
+      hideOverlayLoaderState()
+      handleShippingSubmit(addresses[0])
+    }
+  }, [addresses])
+
+  useEffect(() => {
     if (!Object.keys(state.shippingInformation).length) {
       setShippingInformation(defaultShippingAddress)
       setBillingInformation(defaultBillingAddress, false)
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultShippingAddress])
 
   const [basketOrderInfo, setbasketOrderInfo] = useState<any>()
@@ -720,8 +727,6 @@ export default function CheckoutForm({
         }
       )
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.isPaymentInformationCompleted])
 
   const getPaymentOrderInfo = async (paymentMethod: any) => {
@@ -857,6 +862,7 @@ export default function CheckoutForm({
                         }}
                         // onEditAddress={handleEditAddress}
                         handleOpenNewAddressModal={handleOpenNewAddressModal}
+                        isPaymentLink={isPaymentLink}
                       />
                     </>
                   ) : null}
@@ -944,6 +950,7 @@ export default function CheckoutForm({
                 isShippingDisabled={isShippingDisabled}
                 cart={cartItems}
                 handleItem={handleItem}
+                isPaymentLink={isPaymentLink}
               />
             </div>
           </div>

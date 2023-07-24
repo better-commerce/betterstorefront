@@ -316,6 +316,10 @@ export module Messages {
       CHEQUE_NUMBER_REQUIRED: 'Cheque number is a required',
       CHEQUE_NUMBER_INPUT: 'Cheque Number should only contain digits',
     }
+
+    export const PaymentLink: any = {
+      LINK_EXPIRED: 'Payment link is expired',
+    }
   }
 
   export const Messages: any = {

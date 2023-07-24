@@ -55,6 +55,7 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import PaymentLinkRedirect from '@components/payment/PaymentLinkRedirect'
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -313,6 +314,7 @@ function MyApp({
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
         <CustomCacheBuster buildVersion={buildVersion} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
+        <PaymentLinkRedirect router={router} />
         <ErrorBoundary>
           <Layout
             nav={nav}

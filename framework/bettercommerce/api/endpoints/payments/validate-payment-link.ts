@@ -12,6 +12,10 @@ export default async function useValidatePaymentLink({ link, cookies }: any) {
     return response
   } catch (error: any) {
     console.log(error)
-    return { hasError: true, error: error?.message }
+    return {
+      hasError: true,
+      errorId: error?.data?.errorId,
+      error: error?.data?.message,
+    }
   }
 }
