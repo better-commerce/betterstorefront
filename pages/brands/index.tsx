@@ -1,7 +1,7 @@
 import type { GetStaticPropsContext } from 'next'
 import NextHead from 'next/head'
 import { GetServerSideProps } from 'next'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
 import getBrands from '@framework/api/endpoints/catalog/brands'
@@ -59,6 +59,12 @@ function BrandsPage({ brands }: any) {
     pageTitle: 'Brands',
   })
   useEffect(() => {}, [])
+
+  function handleScrollView(letter: any) {
+    window.location.href = `#${letter.target.text?.toUpperCase()}`
+    window.scrollBy(0, -100)
+  }
+
   const totalResults = normalizedBrands.map((i: any) => i.results).flat().length
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -83,7 +89,7 @@ function BrandsPage({ brands }: any) {
       <div className="bg-white">
         {/* Mobile menu */}
         <main className="container pb-24 mx-auto overflow-hidden sm:px-0 lg:px-0">
-          <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-8">
+          <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-6">
             <h1 className="font-extrabold tracking-tight text-gray-900">
               Brands
             </h1>
@@ -99,18 +105,22 @@ function BrandsPage({ brands }: any) {
                 if (brandExists) {
                   return (
                     <div className="flex" key={`brand-letter-${key}`}>
-                      <Link
+                      {/* <Link
                         legacyBehavior
                         passHref
-                        href={`#${letter.toUpperCase()}`}
+                        // href={`#${letter.toUpperCase()}`}
+                        // href={ {pathname: `#${letter.toUpperCase()}`, query: { scrollOffset: 100 }} }
+                        onClick={handleScrollView}
+                      > */}
+                      <a
+                        onClick={(letter: any) => {
+                          handleScrollView(letter)
+                        }}
+                        className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg"
                       >
-                        <a
-                          href={`#${letter.toUpperCase()}`}
-                          className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg"
-                        >
-                          {letter.toUpperCase()}
-                        </a>
-                      </Link>
+                        {letter.toUpperCase()}
+                      </a>
+                      {/* </Link> */}
                     </div>
                   )
                 }
@@ -144,7 +154,7 @@ function BrandsPage({ brands }: any) {
           {normalizedBrands.map((brand: any, idx: number) => (
             <div
               key={`brands-${idx}`}
-              className="flex flex-col px-0 py-4 border-t sm:px-2 lg:px-2 sm:py-10"
+              className="flex flex-col px-0 py-4 border-t sm:px-4 md:px-6 lg:px-6 2xl:px-2 sm:py-10"
             >
               <h2
                 id={brand.title.toUpperCase()}

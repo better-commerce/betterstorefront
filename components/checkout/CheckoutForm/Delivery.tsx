@@ -21,8 +21,17 @@ import {
   GENERAL_EDIT,
   GENERAL_CONFIRM,
   GENERAL_DELIVERY_METHOD,
+  IMG_PLACEHOLDER,
+  GENERAL_PRICE_LABEL_RRP,
+  GENERAL_COMBINED_DELIVERY,
 } from '@components/utils/textVariables'
-
+import Link from 'next/link'
+import Image from 'next/image'
+import { tryParseJson } from '@framework/utils/parse-util'
+import EyeIcon from '@heroicons/react/24/solid'
+import { PlusIcon } from '@heroicons/react/24/outline'
+import { vatIncluded } from '@framework/utils/app-util'
+import SplitDelivery from '../SplitDelivery'
 const DELIVERY_METHODS_TYPE = [
   {
     id: 1,
@@ -46,9 +55,11 @@ export default function Delivery({
   setParentShipping,
   appConfig,
   geoData,
+  splitDeliveryItems,
+  onShippingPlansUpdated,
 }: any) {
-  const { basketId, setCartItems, cartItems } = useUI()
-
+  const { basketId, setCartItems, cartItems, isSplitDelivery } = useUI()
+  const isIncludeVAT = vatIncluded()
   const [selectedCountry, setSelectedCountry] = useState({
     name: 'Country',
     twoLetterIsoCode: geoData.CountryCode,
@@ -81,6 +92,10 @@ export default function Delivery({
   const isCncMethod = shippingMethod.shippingCode === 'CNC'
 
   const submitShippingMethod = (storeId?: string) => {
+    if (isSplitDelivery) {
+      onShippingPlansUpdated()
+    }
+
     return axios
       .post(NEXT_UPDATE_SHIPPING, {
         basketId,
@@ -197,7 +212,11 @@ export default function Delivery({
     <div className="py-6 mt-0 border border-gray-200 bg-white shadow p-6">
       {isDeliveryMethodSelected ? (
         <>
-          <h4 className="font-bold uppercase text-black">Delivery method</h4>
+          <h4 className="font-bold uppercase text-black">
+            {isSplitDelivery
+              ? GENERAL_COMBINED_DELIVERY
+              : GENERAL_DELIVERY_METHOD}
+          </h4>
           <ConfirmedGeneralComponent
             onStateChange={toggleDelivery}
             content={content}
@@ -255,12 +274,24 @@ export default function Delivery({
               </>
             )}
           </div>
+          {isSplitDelivery && (
+            <SplitDelivery
+              splitDeliveryItems={splitDeliveryItems}
+              appConfig={appConfig}
+              setParentShipping={setParentShipping}
+              toggleDelivery={toggleDelivery}
+              geoData={geoData}
+              showDeliveryOptions={true}
+            />
+          )}
           <RadioGroup
             value={selectedDeliveryMethod}
             onChange={handleDeliveryMethodChange}
           >
             <RadioGroup.Label className="text-lg font-semibold text-gray-900">
-              {GENERAL_DELIVERY_METHOD}
+              {isSplitDelivery
+                ? GENERAL_COMBINED_DELIVERY
+                : GENERAL_DELIVERY_METHOD}
             </RadioGroup.Label>
 
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">

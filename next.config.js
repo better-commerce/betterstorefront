@@ -12,6 +12,7 @@ const isBC = provider === 'bigcommerce'
 const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({
+  poweredByHeader: false,
   images: {
     domains: [
       'liveocxcdn.azureedge.net',
@@ -26,6 +27,7 @@ module.exports = withCommerceConfig({
       'ffxlivestorage.blob.core.windows.net',
       'livekstmcdn.azureedge.net',
       'devocxstorage.blob.core.windows.net',
+      'www.imagedelivery.space',
     ],
     // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
   },
@@ -53,6 +55,19 @@ module.exports = withCommerceConfig({
       // For Vendure, rewrite the local api url to the remote (external) api url. This is required
       // to make the session cookies work.
     ].filter(Boolean)
+  },
+  headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+        ],
+      },
+    ]
   },
   env: {
     BETTERCOMMERCE_AUTH_URL: process.env.BETTERCOMMERCE_AUTH_URL,
@@ -91,6 +106,8 @@ module.exports = withCommerceConfig({
     PDP_SIZE_OPTIONS_COUNT: process.env.PDP_SIZE_OPTIONS_COUNT,
     PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
     OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
+    ENABLE_ELASTIC_SEARCH: process.env.ENABLE_ELASTIC_SEARCH,
+    SEARCH_ENGINE_CONFIG: process.env.SEARCH_ENGINE_CONFIG,
   },
 })
 

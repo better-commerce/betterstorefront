@@ -5,6 +5,8 @@ import { Popover, Transition, Dialog, Tab, Disclosure } from '@headlessui/react'
 import { Searchbar } from '@components/common'
 import { Logo } from '@components/ui'
 import Link from 'next/link'
+import cn from 'classnames'
+
 //
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
@@ -24,6 +26,7 @@ import {
 const Account = dynamic(() => import('./AccountDropdown'))
 const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
+const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
 import {
   BTN_SIGN_OUT,
   GENERAL_LOGIN,
@@ -49,11 +52,39 @@ import { IExtraProps } from '../Layout/Layout'
 import ToggleSwitch from '../ToggleSwitch'
 import { getItem, setItem } from '@components/utils/localStorage'
 import { signOut } from 'next-auth/react'
-
+import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
+import { SearchProvider } from '@elastic/react-search-ui'
+import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector'
+const SearchWrapper = dynamic(() => import('@components/search'))
+import {
+  buildAutocompleteQueryConfig,
+  buildFacetConfigFromConfig,
+  buildSearchOptionsFromConfig,
+  getConfig,
+} from '@components/config/config-helper'
+import { Guid } from '@commerce/types'
+const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
+const connector = new AppSearchAPIConnector({
+  searchKey,
+  engineName,
+  hostIdentifier,
+  endpointBase,
+})
+const elasticConfig = {
+  searchQuery: {
+    facets: buildFacetConfigFromConfig(),
+    ...buildSearchOptionsFromConfig(),
+  },
+  autocompleteQuery: buildAutocompleteQueryConfig(),
+  apiConnector: connector,
+  alwaysSearchOnInitialLoad: true,
+}
 interface Props {
   config: []
   currencies: []
   languages: []
+  configSettings: any
+  keywords?: any
 }
 
 const accountDropDownConfigUnauthorized: any = [
@@ -133,11 +164,13 @@ const accountDropDownConfigUnauthorized: any = [
 
 const Navbar: FC<Props & IExtraProps> = ({
   config,
+  configSettings,
   currencies,
   languages,
   deviceInfo,
   maxBasketItemsCount,
   onIncludeVATChanged,
+  keywords,
 }) => {
   const router = useRouter()
 
@@ -150,11 +183,25 @@ const Navbar: FC<Props & IExtraProps> = ({
     openCart,
     openWishlist,
     setShowSearchBar,
+    openLoginSideBar,
+    openBulkAdd,
+    showSearchBar,
   } = useUI()
 
   let currentPage = getCurrentPage()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [delayEffect, setDelayEffect] = useState(false)
+  const b2bSettings =
+    configSettings?.find((x: any) =>
+      matchStrings(x?.configType, 'B2BSettings', true)
+    )?.configKeys || []
+
+  // Read b2b enabled value from settings
+  const b2bEnabled = b2bSettings?.length
+    ? stringToBoolean(
+      b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
+    )
+    : false
 
   let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
@@ -170,7 +217,7 @@ const Navbar: FC<Props & IExtraProps> = ({
       className: 'text-left p-2 cursor-pointer',
     },
     {
-      href: '/my-account/orders',
+      href: user?.companyId!==Guid.empty?'/my-account/my-company?tab=orders':'/my-account/orders',
       title: GENERAL_MY_ORDERS,
       className: 'text-left p-2 cursor-pointer',
     },
@@ -224,7 +271,6 @@ const Navbar: FC<Props & IExtraProps> = ({
   }
 
   const [open, setOpen] = useState(false)
-
   const buttonRef = useRef<HTMLButtonElement>(null) // useRef<HTMLButtonElement>(null)
   const [openState, setOpenState] = useState(-1)
   const isProduction = process.env.NODE_ENV === 'production'
@@ -255,18 +301,37 @@ const Navbar: FC<Props & IExtraProps> = ({
     }
   }
 
-  const viewWishlist = () => {
-    if (currentPage) {
-      if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'wishlist', {
-          ecommerce: {
-            header: 'Menu Bar',
-            current_page: currentPage,
-          },
-        })
+  function handleWishlist() {
+    try {
+      const viewWishlist = () => {
+        if (currentPage) {
+          if (typeof window !== 'undefined') {
+            recordGA4Event(window, 'wishlist', {
+              ecommerce: {
+                header: 'Menu Bar',
+                current_page: currentPage,
+              },
+            })
+          }
+        }
       }
+      const objUser = localStorage.getItem('user')
+      if (!objUser || isGuestUser) {
+        //  setAlert({ type: 'success', msg:" Please Login "})
+        openLoginSideBar();
+        return;
+      }
+      if (objUser) {
+        openWishlist();
+      }
+    } catch (error) {
+      console.log(error)
     }
+
   }
+
+
+
 
   function viewCart(cartItems: any) {
     if (currentPage) {
@@ -459,11 +524,10 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 </div>
                                 <div className="pt-5 pr-3">
                                   <ChevronUpIcon
-                                    className={`${
-                                      !open
+                                    className={`${!open
                                         ? 'transition-transform duration-150 rotate-180 transform'
                                         : 'transition-transform duration-150 rotate-0 transform'
-                                    } h-5 w-5 text-black`}
+                                      } h-5 w-5 text-black`}
                                   />
                                 </div>
                               </Disclosure.Button>
@@ -475,48 +539,55 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 <div className="space-y-4">
                                   {item.navBlocks.length
                                     ? item.navBlocks.map(
-                                        (navBlock: any, navIdx: number) => {
-                                          return (
-                                            <div
-                                              key={`navbar-parent-${navIdx}`}
-                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
+                                      (navBlock: any, navIdx: number) => {
+                                        return (
+                                          <div
+                                            key={`navbar-parent-${navIdx}`}
+                                            className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-6 gap-y-0 gap-x-0 lg:gap-x-0"
+                                          >
+                                            <ul
+                                              role="list"
+                                              aria-labelledby="clothing-heading"
+                                              className="col-span-1"
                                             >
-                                              <ul
-                                                role="list"
-                                                aria-labelledby="clothing-heading"
-                                                className="col-span-1"
-                                              >
-                                                {navBlock.navItems.map(
-                                                  (navItem: any, idx: any) => (
-                                                    <Link
-                                                      legacyBehavior
-                                                      key={`${navItem.caption}-${idx}`}
-                                                      title={navItem.caption}
-                                                      href={`/${removePrecedingSlash(
-                                                        navItem.itemLink
-                                                      )}`}
-                                                      passHref
+                                              {navBlock.navItems.map(
+                                                (navItem: any, idx: any) => (
+                                                  <Link
+                                                    legacyBehavior
+                                                    key={`${navItem.caption}-${idx}`}
+                                                    title={navItem.caption}
+                                                    href={
+                                                      navBlock?.navBlockType ==
+                                                        9
+                                                        ? `/collection/${removePrecedingSlash(
+                                                          navItem.itemLink
+                                                        )}`
+                                                        : `/${removePrecedingSlash(
+                                                          navItem.itemLink
+                                                        )}`
+                                                    }
+                                                    passHref
+                                                  >
+                                                    <li
+                                                      onClick={() => {
+                                                        setOpen(false)
+                                                        hamburgerMenuClickLevel2(
+                                                          item.caption,
+                                                          navBlock.boxTitle
+                                                        )
+                                                      }}
+                                                      className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
                                                     >
-                                                      <li
-                                                        onClick={() => {
-                                                          setOpen(false)
-                                                          hamburgerMenuClickLevel2(
-                                                            item.caption,
-                                                            navBlock.boxTitle
-                                                          )
-                                                        }}
-                                                        className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
-                                                      >
-                                                        {navItem.caption}
-                                                      </li>
-                                                    </Link>
-                                                  )
-                                                )}
-                                              </ul>
-                                            </div>
-                                          )
-                                        }
-                                      )
+                                                      {navItem.caption}
+                                                    </li>
+                                                  </Link>
+                                                )
+                                              )}
+                                            </ul>
+                                          </div>
+                                        )
+                                      }
+                                    )
                                     : null}
                                 </div>
                               </Disclosure.Panel>
@@ -535,6 +606,9 @@ const Navbar: FC<Props & IExtraProps> = ({
       {!isMobile && !isIPadorTablet && (
         <div className="fixed top-0 w-full h-6 bg-gray-300 z-999">
           <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
+            {b2bEnabled && (
+              <BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />
+            )}
             <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">
               Prices inc VAT
             </div>
@@ -558,14 +632,22 @@ const Navbar: FC<Props & IExtraProps> = ({
           </div>
         </div>
       )}
-      <header className="fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64">
+
+      <header
+        className={cn(
+          'fixed top-0 right-0 w-full bg-white shadow-md lg:top-6 bg-header-color z-999 navbar-min-64',
+          {
+            '!absolute': showSearchBar,
+          }
+        )}
+      >
         <nav
           aria-label="Top"
-          className="flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
+          className="relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 container sm:px-4 md:px-4 lg:px-4 ipad-nav"
         >
           <button
             type="button"
-            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md sm:hidden"
+            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md lg:hidden"
             onClick={() => {
               hamburgerMenu()
               setOpen(true)
@@ -576,13 +658,13 @@ const Navbar: FC<Props & IExtraProps> = ({
           </button>
 
           <Link href="/" title="BetterCommerce">
-            <div className="flex w-32 cursor-pointer">
+            <div className="flex w-20 cursor-pointer xl:w-32">
               <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
               <Logo />
             </div>
           </Link>
           {renderState && (
-            <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16">
+            <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16 mob-landscape-hidden">
               {config?.map((item: any, idx: number) => (
                 <Popover
                   key={`popover-fly-menu-${idx}`}
@@ -636,7 +718,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                             <div className="relative grid items-start w-4/5 grid-cols-1 px-4 pt-10 pb-12 mx-auto bg-white sm:px-0 lg:px-0 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
                               {item.navBlocks.map(
                                 (navBlock: any, navIdx: number) => (
-                                  <>
+                                  <div key={navIdx}>
                                     <h5 className="text-xl font-semibold text-gray-900 capitalize">
                                       {navBlock.boxTitle}
                                     </h5>
@@ -659,14 +741,15 @@ const Navbar: FC<Props & IExtraProps> = ({
                                               href={
                                                 navBlock?.navBlockType == 9
                                                   ? `/collection/${removePrecedingSlash(
-                                                      navItem.itemLink
-                                                    )}`
+                                                    navItem.itemLink
+                                                  )}`
                                                   : `/${removePrecedingSlash(
-                                                      navItem.itemLink
-                                                    )}`
+                                                    navItem.itemLink
+                                                  )}`
                                               }
                                               className="relative flex items-center h-full hover:text-pink"
                                               title={navItem.caption}
+                                              onClick={() => setOpenState(-1)}
                                             >
                                               {navItem.caption}
                                             </Link>
@@ -674,7 +757,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                         )
                                       )}
                                     </div>
-                                  </>
+                                  </div>
                                 )
                               )}
                             </div>
@@ -688,7 +771,10 @@ const Navbar: FC<Props & IExtraProps> = ({
             </Popover.Group>
           )}
           <div className="flex items-center justify-end flex-1 cart-icon-dark-white">
-            <Searchbar onClick={setShowSearchBar} />
+            <Searchbar
+              onClick={setShowSearchBar}
+              keywords={keywords}
+            />
             <Account
               title={title}
               config={accountDropdownConfig}
@@ -706,12 +792,11 @@ const Navbar: FC<Props & IExtraProps> = ({
                 action={configAction}
               />
             </div>
-            <div className="flow-root w-10 px-1 sm:w-16">
+            <div className="flow-root w-10 px-1 md:w-12 xl:w-16">
               <button
                 className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
                 onClick={() => {
-                  viewWishlist()
-                  openWishlist()
+                  handleWishlist()
                 }}
               >
                 <HeartIcon
@@ -723,7 +808,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                   Wishlist
                 </span>
                 {wishListItems.length > 0 && delayEffect && (
-                  <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full sm:block -right-0">
+                  <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-gray-500 rounded-full -top-1 sm:block -right-1">
                     {wishListItems.length}
                   </span>
                 )}
@@ -731,7 +816,7 @@ const Navbar: FC<Props & IExtraProps> = ({
               </button>
             </div>
 
-            <div className="flow-root w-10 px-1 sm:w-16">
+            <div className="flow-root w-10 px-1 md:w-12 xl:w-16">
               <button
                 className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
                 onClick={() => {

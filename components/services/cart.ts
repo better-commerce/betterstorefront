@@ -70,7 +70,7 @@ export default function cartHandler() {
         url = NEXT_BULK_ADD_TO_CART // Modify url
         const mainProduct = [
           {
-            productId: data.product.productId, // ?? data.product.recordId,
+            productId: data.product.productId ?? data.product.recordId,
             stockCode: data.product.stockCode,
             productName: data.product.name,
             qty: 1,
@@ -83,7 +83,7 @@ export default function cartHandler() {
           findComplementaryStatus && findComplementaryStatus.length
         const bundledProducts = data.product.componentProducts.map((x: any) => {
           return {
-            productId: x.productId, // ?? x.recordId,
+            productId: x.productId ?? x.recordId,
             stockCode: x.stockCode,
             productName: x.name,
             parentProductId: isComplementary ? Guid.empty : productId,
@@ -145,6 +145,58 @@ export default function cartHandler() {
           eventType: BasketItemRemoved,
         })
 
+      return response.data
+    },
+    bulkAddToCart: async (
+      userId: string,
+      basketId: string,
+      isAssociated: boolean = true,
+      type = 'ADD',
+      data: Array<any> = []
+    ) => {
+      const url = NEXT_BULK_ADD_TO_CART
+      const postData = {
+        basketId,
+        products: data,
+      }
+      const response: any = await axios.post(url, {
+        data: postData,
+      })
+      if (userId && !isAssociated) {
+        await cartHandler().associateCart(userId, basketId)
+      }
+      const eventData = {
+        entity: JSON.stringify({
+          basketId,
+          //id: productId,
+          //name: data?.product?.name,
+          //price: data?.product?.price?.raw?.withTax,
+          quantity: data.map((x: any) => x.quantity),
+          stockCode: data.map((x: any) => x.stockCode),
+        }),
+        basketItems: JSON.stringify(
+          response?.data?.lineItems?.map((obj: any) => {
+            return {
+              basketId,
+              id: obj?.id,
+              img: obj?.image,
+              name: obj?.name,
+              price: obj?.price?.raw?.withTax,
+              qty: obj?.qty,
+              stockCode: obj?.stockCode,
+              tax: obj?.price?.raw?.tax,
+            }
+          })
+        ),
+        basketItemCount: response?.data?.lineItems?.length || 0,
+        basketTotal: response?.data?.grandTotal?.raw?.withTax,
+        entityId: null,
+        entityType: 'product',
+        eventType: BasketItemAdded,
+        entityName: null,
+      }
+
+      eventDispatcher(BasketItemAdded, eventData)
       return response.data
     },
     getCart: async ({ basketId }: GetCart) => {

@@ -65,6 +65,8 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     openNotifyUser,
     cartItems,
     wishListItems,
+    isGuestUser,
+    openLoginSideBar,
     setAlert,
     //includeVAT,
   } = useUI()
@@ -120,8 +122,13 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
 
   const handleWishList = async () => {
-    const accessToken = localStorage.getItem('user')
-    if (accessToken) {
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
+      //  setAlert({ type: 'success', msg:" Please Login "})
+      openLoginSideBar()
+      return
+    }
+    if (objUser) {
       const createWishlist = async () => {
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
@@ -280,7 +287,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 IMG_PLACEHOLDER
               }
               alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
+              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto" 
               style={css}
               width={400}
               height={500}
@@ -294,7 +301,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto"
+                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto"
                 style={css}
                 width={400}
                 height={500}
@@ -386,7 +393,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </Link>
 
         {isMobile && (
-          <div className="flex mt-2 border">
+          <div className="flex m-2 border">
             <div className="w-4/12">
               <button
                 className="w-full text-center bg-white p-1.5"

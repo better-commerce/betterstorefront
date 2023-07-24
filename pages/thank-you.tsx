@@ -27,6 +27,13 @@ import {
   TWITTER_SHARE_STRING,
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
+import {
+  Messages,
+  NEXT_GET_ORDER,
+  NEXT_GET_ORDERS,
+  NEXT_INFRA_ENDPOINT,
+} from '@components/utils/constants'
+import { LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
 import {
   BTN_BACK_TO_HOME,
@@ -35,6 +42,7 @@ import {
   GENERAL_DELIVERED_BY,
   GENERAL_DELIVERY_ADDRESS,
   GENERAL_ITEMS,
+  GENERAL_NEXT_ORDER_PROMO,
   GENERAL_ON_THE_WAY,
   GENERAL_ORDER_WILL_BE_WITH_YOU_SOON,
   GENERAL_PAYMENT,
@@ -55,6 +63,7 @@ import {
   SUBTOTAL_EXCLUDING_TAX,
   SUBTOTAL_INCLUDING_TAX,
   YOUR_INFORMATION,
+  OFFER_VALIDITY
 } from '@components/utils/textVariables'
 import {
   ELEM_ATTR,
@@ -65,8 +74,9 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
+import { stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 
-export default function OrderConfirmation() {
+export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
   const [isReferModalOpen, setIsReferModalOpen] = useState(false)
@@ -191,6 +201,8 @@ export default function OrderConfirmation() {
       console.error('Failed to copy link:', error)
     }
   }
+  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser } =
+    useUI()
   const isIncludeVAT = vatIncluded()
   const router = useRouter()
   const referralDescription = (
@@ -223,6 +235,81 @@ export default function OrderConfirmation() {
       )
     }
   }, [referralObj?.slug])
+
+  const [isNextorderPromo, setIsNextOrderPromo] = useState(false)
+  const [nextOrderPromo, setNextOrderPromo] = useState({
+    isNextPromoEnabled: false,
+    nextOrderPromoName: '',
+    nextOrderPromoId: '',
+    nextOrderPromoValidity: '',
+    firstOrderSetting: false,
+    everyOrderSetting: false,
+  })
+  const [isFirstOrderValid, setIsFirstOrderValid] = useState(false)
+
+  useEffect(() => {
+    const fetchNextOrderPromo = async () => {
+      try {
+        let nextOrderConfig = { ...config }
+        const getPromotionConfig = (key: any) =>
+          nextOrderConfig?.configSettings
+            ?.find((x: any) => x.configType === 'PromotionSettings')
+            ?.configKeys?.find((x: any) => x.key === key)?.value
+
+        const isNextPromoEnabled = stringToBoolean(
+          getPromotionConfig('PromotionSettings.EnableNextPurchasePromotion')
+        )
+        const nextOrderPromoName = getPromotionConfig(
+          'PromotionSettings.PromotionName'
+        )
+        const nextOrderPromoId = getPromotionConfig(
+          'PromotionSettings.PromotionId'
+        )
+        const nextOrderPromoValidity = getPromotionConfig(
+          'PromotionSettings.VoucherValidityDays'
+        )
+        const firstOrderSetting = stringToBoolean(
+          getPromotionConfig('PromotionSettings.SentWithFirstOrder')
+        )
+        const everyOrderSetting = stringToBoolean(
+          getPromotionConfig('PromotionSettings.SentWithEveryOrder')
+        )
+
+        const nextOrderPromoDetails = {
+          isNextPromoEnabled,
+          nextOrderPromoName,
+          nextOrderPromoId,
+          nextOrderPromoValidity,
+          firstOrderSetting,
+          everyOrderSetting,
+        }
+        if (nextOrderPromoDetails?.isNextPromoEnabled) {
+          setIsNextOrderPromo(nextOrderPromoDetails?.isNextPromoEnabled)
+          setNextOrderPromo(nextOrderPromoDetails)
+          if (nextOrderPromoDetails?.firstOrderSetting) {
+            firstOrderCheck()
+          }
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchNextOrderPromo()
+  }, [])
+
+  const firstOrderCheck = async () => {
+    let userInfo = user?.userId ? { ...user } : { ...guestUser }
+    let { data } = await axios.post(NEXT_GET_ORDERS, {
+      id: userInfo.userId,
+      hasMembership: userInfo.hasMembership,
+    })
+    if (data?.length) {
+      setIsFirstOrderValid(false)
+    } else {
+      setIsFirstOrderValid(true)
+    }
+  }
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -317,7 +404,6 @@ export default function OrderConfirmation() {
               </p>
             ) : null}
           </div>
-
           {order?.orderNo ? (
             <section
               aria-labelledby="order-heading"
@@ -453,9 +539,43 @@ export default function OrderConfirmation() {
                     </dd>
                   </div>
                 </dl>
-
+                {isNextorderPromo &&
+                  nextOrderPromo?.firstOrderSetting &&
+                  !isFirstOrderValid && (
+                    <div className="text-sm font-semibold my-2 py-2 bg-lime-100 text-center">
+                      <p className="">
+                        {GENERAL_NEXT_ORDER_PROMO}{' '}
+                        <span className="font-bold text-indigo-600">
+                          {nextOrderPromo?.nextOrderPromoName}
+                        </span>
+                      </p>
+                      <p>
+                        {stringFormat(
+                          OFFER_VALIDITY,
+                          { days: nextOrderPromo?.nextOrderPromoValidity }
+                        )}
+                      </p>
+                    </div>
+                  )}
+                {isNextorderPromo &&
+                  nextOrderPromo?.everyOrderSetting &&
+                  !isFirstOrderValid && (
+                    <div className="text-sm font-semibold my-2 py-2 bg-lime-100 text-center">
+                      <p className="">
+                        {GENERAL_NEXT_ORDER_PROMO}{' '}
+                        <span className="font-bold text-indigo-600">
+                          {nextOrderPromo?.nextOrderPromoName}
+                        </span>
+                      </p>
+                      <p>
+                        {stringFormat(
+                          OFFER_VALIDITY,
+                          { days: nextOrderPromo?.nextOrderPromoValidity }
+                        )}
+                      </p>
+                    </div>
+                  )}
                 <h3 className="sr-only">{GENERAL_SUMMARY}</h3>
-
                 <dl className="pt-10 space-y-6 text-sm border-t border-gray-200">
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">

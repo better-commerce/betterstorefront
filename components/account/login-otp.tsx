@@ -20,7 +20,7 @@ import {
 } from '@components/utils/textVariables'
 import LoginOTPForm from '@components/customer/login-otp-form'
 
-function LoginOTPPage() {
+function LoginOTPComp() {
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -126,7 +126,7 @@ function LoginOTPPage() {
     return null
   }
   return (
-    <section aria-labelledby="trending-heading" className="bg-white">
+    <section aria-labelledby="trending-heading" className="bg-white h-full">
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h1 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
@@ -146,7 +146,4 @@ function LoginOTPPage() {
   )
 }
 
-LoginOTPPage.Layout = Layout
-
-const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(LoginOTPPage, PAGE_TYPE)
+export default LoginOTPComp

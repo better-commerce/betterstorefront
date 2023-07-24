@@ -10,15 +10,18 @@ export default function getProductOperation({
 }: OperationContext<any>) {
   async function getPdpCachedImage({
     query = '',
+    cookies,
   }: {
     query?: string
+    cookies?: any
   } = {}): Promise<any> {
     const response: any = await fetcher({
       url: `${CACHED_IMAGE_ENDPOINT}/${query}/image`,
       method: 'post',
+      cookies,
     })
     return {
-      images: response.result
+      images: response.result,
     }
   }
 

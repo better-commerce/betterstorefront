@@ -15,6 +15,7 @@ import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CacheProductImages from '@components/product/ProductView/CacheProductImages'
+import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -100,6 +101,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 
 function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
+  const [isProductCompare, setProductCompare] = useState(false)
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -324,6 +326,14 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+  const { isCompared } = useUI()
+  const showCompareProducts = () => {
+    setProductCompare(true)
+  }
+
+  const closeCompareProducts = () => {
+    setProductCompare(false)
+  }
 
   return (
     <>
@@ -345,9 +355,9 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           key="ogdesc"
         />
       </NextHead>
-      <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
+      <div className="pt-6 pb-24 mx-auto bg-transparent 2xl:w-4/5">
         <div className="">
-          <h1 className="inline-block pl-4 font-semibold tracking-tight text-black sm:px-0">
+          <h1 className="inline-block pl-4 font-semibold tracking-tight text-black sm:px-4">
             {GENERAL_CATALOG}
           </h1>
           <span className="inline-block ml-2 text-sm font-medium sm:px-0">
@@ -365,7 +375,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           />
         )}*/}
 
-        <div className="grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
+        <div className="grid w-full grid-cols-1 sm:grid-cols-3 lg:grid-cols-12 gap-1 px-0 mx-auto mt-6 overflow-hidden md:grid-cols-4 sm:px-0 lg:px-0">
           {isMobile ? (
             <ProductMobileFilters
               handleFilters={handleFilters}
@@ -397,8 +407,18 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
               handleInfiniteScroll={handleInfiniteScroll}
               deviceInfo={deviceInfo}
               maxBasketItemsCount={maxBasketItemsCount(config)}
+              isCompared={isCompared}
             />
           </div>
+          <CompareSelectionBar
+            name={GENERAL_CATALOG}
+            showCompareProducts={showCompareProducts}
+            products={data.products}
+            isCompare={isProductCompare}
+            maxBasketItemsCount={maxBasketItemsCount(config)}
+            closeCompareProducts={closeCompareProducts}
+            deviceInfo={deviceInfo}
+          />
         </div>
       </div>
       <Script

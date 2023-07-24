@@ -4,6 +4,8 @@ import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
 import ProductGrid from '@components/product/Grid'
 import ProductSort from '@components/product/ProductSort'
+import { useUI } from '@components/ui'
+import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -88,6 +90,8 @@ export default function ProductCollection({
     ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
     : false
 
+  const [isProductCompare, setProductCompare] = useState(false)
+  const { isCompared } = useUI()
   const initialState = {
     ...DEFAULT_STATE,
     ...{
@@ -178,6 +182,13 @@ export default function ProductCollection({
     ? productListMemory.products
     : data.products
 
+  const showCompareProducts = () => {
+    setProductCompare(true)
+  }
+
+  const closeCompareProducts = () => {
+    setProductCompare(false)
+  }
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -209,7 +220,19 @@ export default function ProductCollection({
           handleInfiniteScroll={handleInfiniteScroll}
           deviceInfo={deviceInfo}
           maxBasketItemsCount={maxBasketItemsCount}
+          isCompared={isCompared}
         />
+        {isCompared === 'true' && (
+          <CompareSelectionBar
+            name={state.filters[0]?.Value}
+            showCompareProducts={showCompareProducts}
+            products={productDataToPass}
+            isCompare={isProductCompare}
+            maxBasketItemsCount={maxBasketItemsCount}
+            closeCompareProducts={closeCompareProducts}
+            deviceInfo={deviceInfo}
+          />
+        )}
       </main>
     </div>
   )

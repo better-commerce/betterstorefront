@@ -14,6 +14,7 @@ interface Props {
     paragraph?: string
     buttonText?: string
     subTitle?: string
+    limit?: number
   }
   deviceInfo: any
 }
@@ -24,21 +25,21 @@ const ProductSlider: FC<React.PropsWithChildren<Props>> = ({
 }) => {
   return (
     <Swiper
-      className="px-4 mb-4 bg-white sm:mb-8 sm:pxy-0 min-cls-h"
+      className="px-4 mb-4 bg-white sm:mb-8 sm:px-0 min-cls-h"
       slidesPerView={1.5}
       spaceBetween={10}
       navigation={true}
-      loop={true}
+      // loop={true}
       breakpoints={{
-        640: { slidesPerView: 1.5 },
+        640: { slidesPerView: 2.5 },
         768: { slidesPerView: 4 },
         1024: { slidesPerView: 5 },
       }}
     >
-      {config?.newincollection?.map((product?: any) => (
+      {config?.newincollection?.slice(0, config?.limit || 6)?.map((product?: any) => (
         <SwiperSlide
           key={product?.slug}
-          className="relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer group lg:w-auto"
+          className="height-auto-slide relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer group lg:w-auto h-100"
         >
           <ProductCard
             product={product}

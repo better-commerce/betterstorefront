@@ -28,7 +28,7 @@ export default function ProductSpecifications({
   const { isOnlyMobile } = deviceInfo
   return (
     <>
-      <div className="grid px-6 sm:grid-cols-12 sm:px-0">
+      <div className="grid px-4 sm:grid-cols-12 sm:px-4 md:px-6 lg:px-6 2xl:px-0">
         <div className="sm:col-span-8">
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
             <h2 className="mb-2 font-bold font-18 text-dark-brown">

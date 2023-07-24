@@ -13,6 +13,7 @@ import { resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { LOGOUT } from '@components/utils/textVariables'
 import { Cookie } from '@framework/utils/constants'
+import { tryParseJson } from '@framework/utils/parse-util'
 
 declare const window: any
 
@@ -73,6 +74,8 @@ export interface State {
   overlayLoaderState: IOverlayLoaderState
   deviceInfo: IDeviceInfo
   includeVAT: string
+  isCompared: string
+  compareProductList: any
 }
 
 const initialState = {
@@ -81,6 +84,7 @@ const initialState = {
   displayModal: false,
   modalView: 'LOGIN_VIEW',
   sidebarView: 'CART_VIEW',
+  bulkAddView: 'BULK_ADD_VIEW',
   userAvatar: '',
   productId: '',
   displayDetailedOrder: false,
@@ -93,6 +97,7 @@ const initialState = {
   user: getItem('user') || {},
   guestUser: getItem('guestUser') || {},
   isGuestUser: getItem('isGuest') || false,
+  isSplitDelivery: getItem('isSplitDelivery') || false,
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
@@ -109,6 +114,8 @@ const initialState = {
     deviceType: DeviceType.UNKNOWN,
   },
   includeVAT: getItem('includeVAT') || 'false',
+  isCompared: getItem('isCompared') || 'false',
+  compareProductList: getItem('compareProductList') || {},
 }
 
 type Action =
@@ -194,6 +201,10 @@ type Action =
       type: 'SET_IS_GUEST_USER'
       payload: boolean
     }
+  | {
+    type: 'SET_IS_SPLIT_DELIVERY'
+    payload: boolean
+  } 
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -205,10 +216,14 @@ type Action =
   | { type: 'SETUP_DEVICE_INFO'; payload: IDeviceInfo }
   | { type: 'SET_SELECTED_ADDRESS_ID'; payload: number }
   | { type: 'INCLUDE_VAT'; payload: string }
+  | { type: 'IS_COMPARED'; payload: string }
+  | { type: 'SET_COMPARE_PRODUCTS'; payload: any }
+  | { type: 'RESET_COMPARE_PRODUCTS'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
   | 'LOGIN_VIEW'
+  | 'LOGIN_SIDEBAR_VIEW'
   | 'FORGOT_VIEW'
   | 'NEW_SHIPPING_ADDRESS'
   | 'NEW_PAYMENT_METHOD'
@@ -216,6 +231,8 @@ type MODAL_VIEWS =
 
 type SIDEBAR_VIEWS =
   | 'CART_VIEW'
+  | 'LOGIN_SIDEBAR_VIEW'
+  | 'BULK_ADD_VIEW'
   | 'CHECKOUT_VIEW'
   | 'PAYMENT_METHOD_VIEW'
   | 'WISHLIST_VIEW'
@@ -394,6 +411,12 @@ function uiReducer(state: State, action: Action) {
         isGuestUser: action.payload,
       }
     }
+    case 'SET_IS_SPLIT_DELIVERY':{
+      return {
+        ...state,
+        isSplitDelivery: action.payload,
+      }
+    }
     case 'REMOVE_USER': {
       return {
         ...state,
@@ -444,6 +467,47 @@ function uiReducer(state: State, action: Action) {
         includeVAT: state?.includeVAT,
       }
     }
+
+    case 'IS_COMPARED': {
+      return {
+        ...state,
+        isCompared: action?.payload,
+      }
+    }
+    case 'SET_COMPARE_PRODUCTS': {
+      if (action.payload.type === 'add') {
+        state = {
+          ...state,
+          compareProductList: {
+            ...(state?.compareProductList || {}),
+            [action.payload.id]: action.payload.data,
+          }
+        }
+        setItem('compareProductList', state.compareProductList)
+        return state
+      }
+      if (action.payload.type === 'remove') {
+        delete state.compareProductList[action.payload.id]
+        state = {
+          ...state,
+          compareProductList: {
+            ...(state?.compareProductList || {}),
+          }
+        }
+        setItem('compareProductList', state.compareProductList)
+        return state
+      }
+      return state
+    }
+    case 'RESET_COMPARE_PRODUCTS': {
+      state = {
+        ...state,
+        compareProductList: {}
+      }
+      setItem('compareProductList', {})
+      return state
+    }
+
   }
 }
 
@@ -719,6 +783,15 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setIsSplitDelivery = useCallback(
+    (payload: boolean) => {
+      setItem('isSplitDelivery', payload)
+      dispatch({ type: 'SET_IS_SPLIT_DELIVERY', payload })
+    },
+    [dispatch]
+  )
+
+
   const deleteUser = useCallback(
     (payload: any) => {
       if (payload?.router) {
@@ -752,6 +825,16 @@ export const UIProvider: React.FC<any> = (props) => {
 
   const openCart = () => {
     setSidebarView('CART_VIEW')
+    openSidebar()
+  }
+
+  const openLoginSideBar = () => {
+    setSidebarView('LOGIN_SIDEBAR_VIEW')
+    openSidebar()
+  }
+
+  const openBulkAdd = () => {
+    setSidebarView('BULK_ADD_VIEW')
     openSidebar()
   }
 
@@ -809,6 +892,29 @@ export const UIProvider: React.FC<any> = (props) => {
     (payload: any) => {
       setItem('includeVAT', payload)
       dispatch({ type: 'INCLUDE_VAT', payload })
+    },
+    [dispatch]
+  )
+
+  const setIsCompared = useCallback(
+    (payload: any) => {
+      setItem('isCompared', payload)
+      dispatch({ type: 'IS_COMPARED', payload })
+      resetCompareProducts()
+    },
+    [dispatch]
+  )
+
+  const setCompareProducts = useCallback(
+    (payload: any) => {
+      dispatch({ type: 'SET_COMPARE_PRODUCTS', payload })
+    },
+    [dispatch]
+  )
+
+  const resetCompareProducts = useCallback(
+    () => {
+      dispatch({ type: 'RESET_COMPARE_PRODUCTS' })
     },
     [dispatch]
   )
@@ -926,8 +1032,11 @@ export const UIProvider: React.FC<any> = (props) => {
       setUser,
       setGuestUser,
       setIsGuestUser,
+      setIsSplitDelivery,
       deleteUser,
       openCart,
+      openLoginSideBar,
+      openBulkAdd,
       openWishlist,
       setWishlist,
       removeFromWishlist,
@@ -945,6 +1054,9 @@ export const UIProvider: React.FC<any> = (props) => {
       hideAlert,
       setAlert,
       setIncludeVAT,
+      setIsCompared,
+      setCompareProducts,
+      resetCompareProducts,
     }),
 
     [state]
