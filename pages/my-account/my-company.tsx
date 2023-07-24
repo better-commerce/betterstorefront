@@ -46,7 +46,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   const [view, setView] = useState(defaultView)
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
-  const [userOrderIdMap,setUserOrderIdMap] = useState<any>(null)
+  const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const [active, setActive] = useState(false)
 
   const [selectedOption, setSelectedOption] = useState<any>('Users')
@@ -96,26 +96,26 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!b2bUsers) return;
-  
-      const fetchOrders = async (userId:any) => {
-        const { data } = await axios.post(NEXT_GET_ORDERS, { id: userId });
-        return data?.map((order:any) => order?.id) || [];
-      };
-  
+      if (!b2bUsers) return
+
+      const fetchOrders = async (userId: any) => {
+        const { data } = await axios.post(NEXT_GET_ORDERS, { id: userId })
+        return data?.map((order: any) => order?.id) || []
+      }
+
       const userOrderMap = await Promise.all(
         b2bUsers
-          .filter((user:any) => user?.companyUserRole !== 'Admin')
-          .map(async (user:any) => {
-            const orders = await fetchOrders(user.userId);
-            return { userId: user.userId, orders };
+          .filter((user: any) => user?.companyUserRole !== 'Admin')
+          .map(async (user: any) => {
+            const orders = await fetchOrders(user.userId)
+            return { userId: user.userId, orders }
           })
-      );
-          setUserOrderIdMap([...userOrderMap])
-    };
-  
-    fetchData();
-  }, [b2bUsers]);
+      )
+      setUserOrderIdMap([...userOrderMap])
+    }
+
+    fetchData()
+  }, [b2bUsers])
 
   useEffect(() => {
     const handleCurrentTab = () => {
@@ -131,7 +131,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   useEffect(() => {
     if (isGuestUser) {
       router.push('/')
-    } else if (user?.companyId===Guid.empty) {
+    } else if (user?.companyId === Guid.empty) {
       router.push('/404')
     }
 
@@ -184,7 +184,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
     }
   }
   const fetchB2BInvoices = async () => {
-    //api logic 
+    //api logic
   }
 
   useEffect(() => {
@@ -197,9 +197,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
     } else if (selectedOption === 'Invoices') {
       fetchB2BInvoices()
     }
-   
   }, [selectedOption])
-
 
   useEffect(() => {
     if (router.query.view && view !== router.query.view) {
@@ -249,7 +247,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
 
   return (
     <>
-      {! (user?.companyId!==Guid.empty) ? (
+      {!(user?.companyId !== Guid.empty) ? (
         <>
           <Spinner />
         </>
@@ -337,10 +335,10 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
                           <B2BQuotes quotes={b2bQuotes} />
                         </Tab.Panel>
                         <Tab.Panel>
-                          <AddressBook/>
+                          <AddressBook />
                         </Tab.Panel>
                         <Tab.Panel>
-                          <div className='font-Inter text-lg font-bold text-brand-blue p-10'>{`No Invoices Generated Yet`}</div>
+                          <div className="font-Inter text-lg font-bold text-brand-blue p-10">{`No Invoices Generated Yet`}</div>
                         </Tab.Panel>
                       </Tab.Panels>
                     </Tab.Group>

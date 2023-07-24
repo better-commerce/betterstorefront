@@ -14,26 +14,30 @@ import InfiniteScroll from '@components/ui/InfiniteScroll'
 
 // Other Imports
 import { GENERAL_RECENT_ORDERS } from '@components/utils/textVariables'
-import { NEXT_GET_ORDERS, NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
+import {
+  NEXT_GET_ORDERS,
+  NEXT_GET_ORDER_DETAILS,
+} from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
 import Link from 'next/link'
 import { matchStrings } from '@framework/utils/parse-util'
 import OrdersListView from './OrdersListView'
 
 export default function B2BOrders({
-//   allOrders,
+  //   allOrders,
   selectedOption,
-//   handleInfiniteScroll,
+  //   handleInfiniteScroll,
   deviceInfo,
-  isShowDetailedOrder, setIsShowDetailedOrder,
-  isAdmin, 
+  isShowDetailedOrder,
+  setIsShowDetailedOrder,
+  isAdmin,
   userOrderIdMap,
 }: any) {
   const PAGE_SIZE = 10
   const { isMobile, isIPadorTablet } = deviceInfo
   const { user, displayAlert, alertRibbon } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>(undefined)
-  const [ordersList,setOrdersList] = useState<any>(null)
+  const [ordersList, setOrdersList] = useState<any>(null)
   const [allOrders, setAllOrders] = useState<Array<any> | undefined>(undefined)
   const [pagedOrders, setPagedOrders] = useState<Array<any>>()
   const [pageNumber, setPageNumber] = useState<number>(1)
@@ -57,24 +61,27 @@ export default function B2BOrders({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber])
 
-  const findUserIdByOrderId = (IdMapArray:any, orderId:any)=> {
-    if(IdMapArray){
-        for (const data of IdMapArray) {
-          const { userId, orders } = data;
-          const foundOrder = orders.find((order:any) => order === orderId);
-          if (foundOrder) { 
-            return userId;
-          }
+  const findUserIdByOrderId = (IdMapArray: any, orderId: any) => {
+    if (IdMapArray) {
+      for (const data of IdMapArray) {
+        const { userId, orders } = data
+        const foundOrder = orders.find((order: any) => order === orderId)
+        if (foundOrder) {
+          return userId
         }
+      }
     }
-    return null; 
+    return null
   }
 
   useEffect(() => {
     if (allOrderIds?.length) {
       allOrderIds?.forEach((id: string, index: number) => {
-        let userMappedId = findUserIdByOrderId(userOrderIdMap,id) 
-        handleFetchOrderDetails(id,userMappedId?userMappedId:user?.userId).then((orderDetails: any) => {
+        let userMappedId = findUserIdByOrderId(userOrderIdMap, id)
+        handleFetchOrderDetails(
+          id,
+          userMappedId ? userMappedId : user?.userId
+        ).then((orderDetails: any) => {
           const newOrders = pagedOrders?.map((obj: any) =>
             matchStrings(obj?.id, id, true)
               ? Object.assign(obj, { orderDetails: orderDetails })
@@ -110,7 +117,7 @@ export default function B2BOrders({
     setPageNumber(pageNumber + 1)
   } //TILL HERE DONE
 
-  const handleFetchOrderDetails = async (id: any,userId:any) => {
+  const handleFetchOrderDetails = async (id: any, userId: any) => {
     const { data: orderDetails }: any = await axios.post(
       NEXT_GET_ORDER_DETAILS,
       {
@@ -152,11 +159,11 @@ export default function B2BOrders({
     })
   }, [allOrders])
 
-  useEffect(()=>{
-        if(allOrders){
-            setOrdersList(allOrders)
-        }
-  },[allOrders])
+  useEffect(() => {
+    if (allOrders) {
+      setOrdersList(allOrders)
+    }
+  }, [allOrders])
 
   let deviceCheck = ''
   if (isMobile || isIPadorTablet) {
@@ -186,21 +193,21 @@ export default function B2BOrders({
 
   return (
     <>
-    <OrdersListView
-      isShowDetailedOrder={isShowDetailedOrder}
-      alertRibbon={alertRibbon}
-      displayAlert={displayAlert}
-      isIPadorTablet={isIPadorTablet}
-      isMobile={isMobile}
-      alertBgColor={alertBgColor}
-      ordersList={ordersList}
-      trackPackage={trackPackage}
-      onOrderDetail={onOrderDetail}
-      handleInfiniteScroll={handleInfiniteScroll}
-      setIsShowDetailedOrder={setIsShowDetailedOrder}
-      deviceInfo={deviceInfo}
-      orderDetails={orderDetails}
-    />
+      <OrdersListView
+        isShowDetailedOrder={isShowDetailedOrder}
+        alertRibbon={alertRibbon}
+        displayAlert={displayAlert}
+        isIPadorTablet={isIPadorTablet}
+        isMobile={isMobile}
+        alertBgColor={alertBgColor}
+        ordersList={ordersList}
+        trackPackage={trackPackage}
+        onOrderDetail={onOrderDetail}
+        handleInfiniteScroll={handleInfiniteScroll}
+        setIsShowDetailedOrder={setIsShowDetailedOrder}
+        deviceInfo={deviceInfo}
+        orderDetails={orderDetails}
+      />
       {/* {isShowDetailedOrder ? (
         <div id="OrderDetail" className="w-full">
           <OrderDetail

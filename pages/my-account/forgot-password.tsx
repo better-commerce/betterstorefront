@@ -19,12 +19,10 @@ import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
 import { useUI } from '@components/ui/context'
 import classNames from 'classnames'
-import { Messages,EmptyString } from '@components/utils/constants'
+import { Messages, EmptyString } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 
-
-
- function ForgotPasswordPage() {
+function ForgotPasswordPage() {
   const { setAlert } = useUI()
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
@@ -47,8 +45,10 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
   }
 
   useEffect(() => {
-    if (emailStatus === Messages.Validations.ResetPassword.INVALID_EMAIL ||
-        emailStatus === Messages.Validations.ResetPassword.NO_EMAIL) {
+    if (
+      emailStatus === Messages.Validations.ResetPassword.INVALID_EMAIL ||
+      emailStatus === Messages.Validations.ResetPassword.NO_EMAIL
+    ) {
       setTimeout(() => setEmailStatus(EmptyString), 5000)
     }
   }, [emailStatus])
@@ -62,10 +62,16 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
         let { data }: any = await axios.post(NEXT_FORGOT_PASSWORD, { email })
         if (!data.forgotRes.result.isValid) {
           // setEmailStatus(Messages.Validations.ResetPassword.INVALID_EMAIL)
-          setAlert({ type: 'error', msg: Messages.Validations.ResetPassword.INVALID_EMAIL })
+          setAlert({
+            type: 'error',
+            msg: Messages.Validations.ResetPassword.INVALID_EMAIL,
+          })
         } else {
           setEmailStatus(Messages.Validations.ResetPassword.VALID_EMAIL)
-          setAlert({ type: 'success', msg: Messages.Validations.ResetPassword.VALID_EMAIL })
+          setAlert({
+            type: 'success',
+            msg: Messages.Validations.ResetPassword.VALID_EMAIL,
+          })
         }
         setForm({ ...form, userName: email })
         setEmail('')
@@ -111,11 +117,11 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {emailStatus !== '' && emailStatus!==Messages.Validations.ResetPassword.VALID_EMAIL && (
-                    <div className="text-red-600 w-full">
-                      {emailStatus}
-                    </div>
-                  )}
+                  {emailStatus !== '' &&
+                    emailStatus !==
+                      Messages.Validations.ResetPassword.VALID_EMAIL && (
+                      <div className="text-red-600 w-full">{emailStatus}</div>
+                    )}
                 </div>
               )
             })}

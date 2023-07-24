@@ -19,21 +19,24 @@ import { Guid } from '@commerce/types'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
-  const { user, deleteUser, isGuestUser} = useUI()
+  const { user, deleteUser, isGuestUser } = useUI()
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
-  let newConfig:any = []
+  let newConfig: any = []
   if (config && typeof window !== 'undefined') {
-    let isB2B = user?.companyId!==Guid.empty
+    let isB2B = user?.companyId !== Guid.empty
     const hasMyCompany = config.some(
       (item: any) => item?.props === 'my-company'
     )
-  newConfig = [...config]
-    if(isB2B){
+    newConfig = [...config]
+    if (isB2B) {
       let i = newConfig.length
       while (i--) {
-        if (newConfig[i]?.props ==='address-book' || newConfig[i]?.props ==='orders') {
+        if (
+          newConfig[i]?.props === 'address-book' ||
+          newConfig[i]?.props === 'orders'
+        ) {
           newConfig.splice(i, 1)
         }
       }
@@ -50,7 +53,6 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
         href: '/my-account/my-company',
       })
     }
-
   }
 
   useEffect(() => {
@@ -89,7 +91,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   useAnalytics(CustomerProfileViewed, loggedInEventData)
 
   const handleToggleShowState = () => {
-    setShow(!isShow);
+    setShow(!isShow)
   }
 
   // return(<h1>helow wprdls</h1>)

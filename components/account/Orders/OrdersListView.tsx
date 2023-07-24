@@ -9,10 +9,24 @@ import DeliveryOrderLines from './DeliveryOrderLines'
 import OrderDetail from './OrderDetail'
 import OrderLines from './OrderLines'
 
-function OrdersListView({isShowDetailedOrder,alertRibbon,displayAlert,isIPadorTablet,isMobile,alertBgColor,ordersList,trackPackage,onOrderDetail,handleInfiniteScroll,setIsShowDetailedOrder,deviceInfo,orderDetails}:any) {
+function OrdersListView({
+  isShowDetailedOrder,
+  alertRibbon,
+  displayAlert,
+  isIPadorTablet,
+  isMobile,
+  alertBgColor,
+  ordersList,
+  trackPackage,
+  onOrderDetail,
+  handleInfiniteScroll,
+  setIsShowDetailedOrder,
+  deviceInfo,
+  orderDetails,
+}: any) {
   return (
     <>
-    {isShowDetailedOrder ? (
+      {isShowDetailedOrder ? (
         <div id="OrderDetail" className="w-full">
           <OrderDetail
             show={isShowDetailedOrder}
@@ -44,7 +58,7 @@ function OrdersListView({isShowDetailedOrder,alertRibbon,displayAlert,isIPadorTa
                               fetchData={handleInfiniteScroll}
                               total={
                                 ordersList?.length
-                                  ?ordersList[0]?.totalRecord
+                                  ? ordersList[0]?.totalRecord
                                   : 0
                               }
                               currentNumber={ordersList?.length}
@@ -106,7 +120,8 @@ function OrdersListView({isShowDetailedOrder,alertRibbon,displayAlert,isIPadorTa
                               })}
                             />
                             {ordersList[0].totalRecord > 10 &&
-                              ordersList[0].totalRecord > ordersList?.length && ( 
+                              ordersList[0].totalRecord >
+                                ordersList?.length && (
                                 <div className="flex justify-center flex-1 mx-auto">
                                   <button
                                     className="px-6 py-2 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white"
