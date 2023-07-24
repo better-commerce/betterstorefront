@@ -83,20 +83,168 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
     let { data: referralVouchers } = await axios.post(NEXT_REFERRAL_VOUCHERS, {
       userId: userId,
     })
-    let sampleObj = [
+    let sampleObj =  [
       {
-        promoName: 'Hurray! Get 20 % off',
-        voucherCode: 'KYUJJ764M6WN799Q',
-        validityDate: '2023-07-15T08:47:59.597',
-        referee: 'kc@gmail.com'
+          "refereeUserId": "ae8e8681-2326-ee11-833f-000d3a25433a",
+          "refereeUserName": "referee@bettercommerce.io",
+          "refereeFirstName": null,
+          "refereeLastName": null,
+          "refereePhoneNo": null,
+          "refereeEmail": "referee@bettercommerce.io",
+          "refereeOrderStatusText": "Approved",
+          "refereeOrderStatus": 3,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "ZFEMDRC2KWORJHXM",
+          "validFrom": "2023-07-19T11:06:12.25",
+          "validTo": "2023-07-30T11:06:12.263",
+          "claimedOn": "0001-01-01T00:00:00"
       },
       {
-        promoName: 'Hurray! Get 20 % off',
-        voucherCode: 'KYUJJ764M6WN799Q',
-        validityDate: '2023-07-15T08:47:59.597',
-        referee: 'cj@gmail.com'
+          "refereeUserId": "ec5ae61c-2726-ee11-833f-000d3a25433a",
+          "refereeUserName": "referee2@bettercommerce.io",
+          "refereeFirstName": null,
+          "refereeLastName": null,
+          "refereePhoneNo": null,
+          "refereeEmail": "referee2@bettercommerce.io",
+          "refereeOrderStatusText": "Approved",
+          "refereeOrderStatus": 3,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "BCJCG9QCGHNT48Z2",
+          "validFrom": "2023-07-20T11:28:50.613",
+          "validTo": "2023-07-30T11:28:50.62",
+          "claimedOn": "0001-01-01T00:00:00"
       },
-    ]
+      {
+          "refereeUserId": "04c5177a-2926-ee11-833f-000d3a25433a",
+          "refereeUserName": "referee4@bettercommerce.io",
+          "refereeFirstName": null,
+          "refereeLastName": null,
+          "refereePhoneNo": null,
+          "refereeEmail": "referee4@bettercommerce.io",
+          "refereeOrderStatusText": "Approved",
+          "refereeOrderStatus": 3,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "KPTOE4HJHYF9P3Z7",
+          "validFrom": "2023-07-19T11:06:12.25",
+          "validTo": "2023-07-30T11:45:03.34",
+          "claimedOn": "0001-01-01T00:00:00"
+      },
+      {
+          "refereeUserId": "3072e9b0-2a26-ee11-833f-000d3a25433a",
+          "refereeUserName": "referee5@bettercommerce.io",
+          "refereeFirstName": null,
+          "refereeLastName": null,
+          "refereePhoneNo": null,
+          "refereeEmail": "referee5@bettercommerce.io",
+          "refereeOrderStatusText": "Approved",
+          "refereeOrderStatus": 3,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "KQF3GOZ8O3HXAA3Q",
+          "validFrom": "2023-07-19T11:54:21.783",
+          "validTo": "2023-07-21T11:54:21.787",
+          "claimedOn": "0001-01-01T00:00:00"
+      },
+      {
+          "refereeUserId": "b9baff1e-ce26-ee11-8341-000d3a25433a",
+          "refereeUserName": "referee6@bettercommerce.io",
+          "refereeFirstName": null,
+          "refereeLastName": null,
+          "refereePhoneNo": null,
+          "refereeEmail": "referee6@bettercommerce.io",
+          "refereeOrderStatusText": "Approved",
+          "refereeOrderStatus": 3,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "GY47V8H6R627V24O",
+          "validFrom": "2023-07-20T07:26:09.747",
+          "validTo": "2023-07-22T07:26:09.753",
+          "claimedOn": "0001-01-01T00:00:00"
+      },
+      {
+          "refereeUserId": "cc2cfe0c-d326-ee11-8341-000d3a25433a",
+          "refereeUserName": "referee7@bettercommerce.io",
+          "refereeFirstName": null,
+          "refereeLastName": null,
+          "refereePhoneNo": null,
+          "refereeEmail": "referee7@bettercommerce.io",
+          "refereeOrderStatusText": "Approved",
+          "refereeOrderStatus": 3,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "78EQDHTGOK6M3M2H",
+          "validFrom": "2023-07-20T08:09:24.36",
+          "validTo": "2023-07-22T08:09:24.37",
+          "claimedOn": "0001-01-01T00:00:00"
+      },
+      {
+          "refereeUserId": "12b4e95e-df26-ee11-8341-000d3a25433a",
+          "refereeUserName": "referee8@bettercommerce.io",
+          "refereeFirstName": null,
+          "refereeLastName": null,
+          "refereePhoneNo": null,
+          "refereeEmail": "referee8@bettercommerce.io",
+          "refereeOrderStatusText": "Dispatch",
+          "refereeOrderStatus": 9,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "",
+          "validFrom": "2023-07-20T09:30:12.457",
+          "validTo": "2023-07-22T09:30:12.46",
+          "claimedOn": "0001-01-01T00:00:00"
+      },
+      {
+          "refereeUserId": "b9045c73-e426-ee11-8341-000d3a25433a",
+          "refereeUserName": "referee9@bettercommerce.io",
+          "refereeFirstName": "etrerter",
+          "refereeLastName": "tretert",
+          "refereePhoneNo": "3453453453",
+          "refereeEmail": "referee9@bettercommerce.io",
+          "refereeOrderStatusText": "CancelledByStore",
+          "refereeOrderStatus": 102,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "",
+          "validFrom": "2023-07-19T11:06:12.25",
+          "validTo": "2023-08-13T10:12:19.52",
+          "claimedOn": "0001-01-01T00:00:00"
+      },
+      {
+          "refereeUserId": "3942646c-be27-ee11-8343-000d3a25433a",
+          "refereeUserName": "referee12@bettercommerce.io",
+          "refereeFirstName": "asdasdasd",
+          "refereeLastName": "sadasd",
+          "refereePhoneNo": "2342342342",
+          "refereeEmail": "referee12@bettercommerce.io",
+          "refereeOrderStatusText": "Approved",
+          "refereeOrderStatus": 3,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "",
+          "validFrom": "0001-01-01T00:00:00",
+          "validTo": "2023-08-14T12:04:21.167",
+          "claimedOn": "0001-01-01T00:00:00"
+      },
+      {
+          "refereeUserId": "0482b322-c227-ee11-8343-000d3a25433a",
+          "refereeUserName": "referee14@bettercommerce.io",
+          "refereeFirstName": null,
+          "refereeLastName": null,
+          "refereePhoneNo": null,
+          "refereeEmail": "referee14@bettercommerce.io",
+          "refereeOrderStatusText": "Approved",
+          "refereeOrderStatus": 3,
+          "promotionId": "f7480179-ec0b-4985-8b3e-7b97a19d5aa4",
+          "promoName": "20% Off Sale",
+          "voucherCode": "CHEVYYA367ZJ88G2",
+          "validFrom": "2023-07-21T12:31:37.12",
+          "validTo": "2023-08-12T12:31:37.13",
+          "claimedOn": "2023-07-21T12:35:31.397"
+      }
+  ]
    
     setVouchersEarned(sampleObj)
 
@@ -419,7 +567,9 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                                       <th>Referral</th>
                                       <th>Voucher Code</th>
                                       <th>Offer</th>
-                                      <th>Validity</th>
+                                      <th>Valid From</th>
+                                      <th>Valid Till</th>
+                                      <th>Claimed On</th>
                                     </tr>
                                   </thead>
                                   <tbody className="">
@@ -427,8 +577,13 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                                       (voucher: any, Idx: any) => {
                                         return (
                                           <tr key={Idx} className="">
-                                            <td className='text-center'>
-                                              {voucher?.referee}
+                                            <td className='text-center flex flex-col'>
+                                              <span> //todo Format voucher table according to new response
+                                                {voucher?.refereeFirstName+" " + voucher?.refereeLastName}
+                                              </span>
+                                              <span>
+                                              {voucher?.refereeUserName}
+                                              </span>
                                             </td>
                                             <td className="text-center">
                                               {voucher?.voucherCode}
@@ -438,9 +593,25 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                                             </td>
                                             <td className="text-center">
                                               {dateConverter(
-                                                voucher?.validityDate
+                                                voucher?.validFrom
                                               )}
                                             </td>
+                                            <td className="text-center">
+                                              {dateConverter(
+                                                voucher?.validTo
+                                              )}
+                                            </td>
+                                            <td className="text-center">
+                                              {voucher?.claimedOn!=="0001-01-01T00:00:00" && dateConverter(
+                                                voucher?.claimedOn
+                                              )}
+                                              {voucher?.claimedOn==="0001-01-01T00:00:00" && (
+                                                "Not Claimed"
+                                              )
+
+                                              }
+                                            </td>
+
                                           </tr>
                                         )
                                       }
