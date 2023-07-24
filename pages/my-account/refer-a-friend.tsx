@@ -561,10 +561,11 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                           <div className="px-5 py-2 text-sm">
                             {vouchersEarned?.length > 0 ? (
                               <div className="flex flex-col">
-                                <table>
+                                <table className='border-separate border-spacing-y-3'>
                                   <thead>
                                     <tr>
                                       <th>Referral</th>
+                                      <th>Order Status</th>
                                       <th>Voucher Code</th>
                                       <th>Offer</th>
                                       <th>Valid From</th>
@@ -576,32 +577,38 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                                     {vouchersEarned?.map(
                                       (voucher: any, Idx: any) => {
                                         return (
-                                          <tr key={Idx} className="">
-                                            <td className='text-center flex flex-col'>
-                                              <span> //todo Format voucher table according to new response
-                                                {voucher?.refereeFirstName+" " + voucher?.refereeLastName}
+                                          <tr key={Idx} className="py-2 my-2">
+                                            <td className='text-center border-b-[1px] flex flex-col'>
+                                              {voucher?.refereeFirstName && voucher?.refereeLastName && (
+                                              <span>
+                                                {voucher?.refereeFirstName +" " + voucher?.refereeLastName}
                                               </span>
+                                              )
+                                              }
                                               <span>
                                               {voucher?.refereeUserName}
                                               </span>
                                             </td>
-                                            <td className="text-center">
+                                            <td className='text-center border-b-[1px]'>
+                                              {voucher?.refereeOrderStatusText}
+                                            </td>
+                                            <td className="text-center border-b-[1px]">
                                               {voucher?.voucherCode}
                                             </td>
-                                            <td className="text-center">
+                                            <td className="text-center border-b-[1px]">
                                               {voucher?.promoName}
                                             </td>
-                                            <td className="text-center">
+                                            <td className="text-center border-b-[1px]">
                                               {dateConverter(
                                                 voucher?.validFrom
                                               )}
                                             </td>
-                                            <td className="text-center">
+                                            <td className="text-center border-b-[1px]">
                                               {dateConverter(
                                                 voucher?.validTo
                                               )}
                                             </td>
-                                            <td className="text-center">
+                                            <td className="text-center border-b-[1px]">
                                               {voucher?.claimedOn!=="0001-01-01T00:00:00" && dateConverter(
                                                 voucher?.claimedOn
                                               )}
