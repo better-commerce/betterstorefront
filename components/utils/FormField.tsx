@@ -159,9 +159,9 @@ const FormField = (props: IFormFieldProps) => {
                         }
                       />
                       <label
-                        className="text-sm main-custom-check-label"
+                        className="text-sm main-custom-check-label flex"
                         htmlFor={option?.label}
-                        title="Smooth Payments"
+                        //title={`Smooth Payments`}
                       >
                         {option?.label}
                       </label>

@@ -12,6 +12,7 @@ const isBC = provider === 'bigcommerce'
 const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({
+  poweredByHeader: false,
   images: {
     domains: [
       'liveocxcdn.azureedge.net',
@@ -54,6 +55,19 @@ module.exports = withCommerceConfig({
       // For Vendure, rewrite the local api url to the remote (external) api url. This is required
       // to make the session cookies work.
     ].filter(Boolean)
+  },
+  headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+        ],
+      },
+    ]
   },
   env: {
     BETTERCOMMERCE_AUTH_URL: process.env.BETTERCOMMERCE_AUTH_URL,

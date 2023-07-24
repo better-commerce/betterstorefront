@@ -245,7 +245,7 @@ function CategoryLandingPage({
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-        productListMemory?.products?.currentPage ||
+      productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -268,7 +268,7 @@ function CategoryLandingPage({
       CSVCollection = category?.featuredProductCSV?.split(',')
       async function handleApiCall() {
         const data: any = Promise.all(
-          CSVCollection.map(async (val: any) => {
+          CSVCollection?.map(async (val: any) => {
             const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
               sortBy: '',
               sortOrder: '',
@@ -391,8 +391,8 @@ function CategoryLandingPage({
           key="ogdesc"
         />
       </NextHead>
-      <section className="main-section">
-        <div className="container px-4 mx-auto mt-4 bg-transparent sm:px-0">
+      <section className="main-section sm:px-4">
+        <div className="container px-4 mx-auto mt-4 bg-transparent sm:px-4 lg:px-6 lg:pt-6 2xl:px-0">
           {category?.breadCrumbs && (
             <BreadCrumbs
               items={category?.breadCrumbs}
@@ -400,7 +400,7 @@ function CategoryLandingPage({
             />
           )}
         </div>
-        <div className="container px-4 mx-auto my-6 mt-4 bg-transparent sm:px-0">
+        <div className="container px-4 mx-auto my-0 mt-4 bg-transparent sm:px-6 lg:px-6 2xl:px-0">
           <h1>{category?.name}</h1>
           <div
             className="font-18"
@@ -425,7 +425,7 @@ function CategoryLandingPage({
                 loop={false}
                 breakpoints={{
                   640: {
-                    slidesPerView: 1,
+                    slidesPerView: 2,
                   },
                   768: {
                     slidesPerView: 2.5,
@@ -530,86 +530,50 @@ function CategoryLandingPage({
             {/* feature brand section start*/}
             <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-0">
               <div className="grid max-w-lg gap-5 mx-auto lg:grid-cols-3 lg:max-w-none">
-                <div className="flex flex-col overflow-hidden shadow-lg">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src="/default-img.svg"
-                      className="object-cover w-full h-auto"
-                      alt="image"
-                      width={700}
-                      height={700}
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
-                    <div className="flex-1">
-                      <a href="#" className="block mt-2">
-                        <p className="text-xl font-semibold text-white">
-                          Dewalt KITS & PACKS
-                        </p>
-                        <p className="mt-3 text-white">
-                          Unleash your full potential with DeWalt kits -
-                          featuring a range of high-quality tools that are
-                          durable, reliable, and designed to help you tackle any
-                          project with ease.
-                        </p>
-                      </a>
+                {category?.featuredBrand?.map((feature: any, fdx: number) => (
+                  <div className="flex flex-col overflow-hidden shadow-lg" key={fdx}>
+                    <div className="flex-shrink-0">
+                      <>
+                        {feature?.logoImageName != '' ? (
+                          <Image
+                            src={feature?.logoImageName}
+                            className="object-fill object-center w-full"
+                            alt="Image"
+                            width={240}
+                            height={160}
+                          />
+                        ) : (
+                          <Image
+                            src="/default-img.svg"
+                            className="object-fill object-center w-full"
+                            alt="Image"
+                            width={240}
+                            height={160}
+                          />
+                        )}
+                      </>
+                    </div>
+                    <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
+                      <div className="flex-1">
+                        <Link
+                          href={`/${feature?.slug}`}
+                          className="block mt-2"
+                        >
+                          <p className="text-xl font-semibold text-white">
+                            {feature?.manufacturerName}
+                          </p>
+                          <div
+                            className="mt-3 font-18 text-white"
+                            dangerouslySetInnerHTML={{ __html: feature?.description }}
+                          ></div>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex flex-col overflow-hidden shadow-lg">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src="/default-img.svg"
-                      className="object-cover w-full h-auto"
-                      alt="image"
-                      width={700}
-                      height={700}
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
-                    <div className="flex-1">
-                      <a href="#" className="block mt-2">
-                        <p className="text-xl font-semibold text-white">
-                          Dewalt KITS & PACKS
-                        </p>
-                        <p className="mt-3 text-white">
-                          Unleash your full potential with DeWalt kits -
-                          featuring a range of high-quality tools that are
-                          durable, reliable, and designed to help you tackle any
-                          project with ease.
-                        </p>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col overflow-hidden shadow-lg">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src="/default-img.svg"
-                      className="object-cover w-full h-auto"
-                      alt="image"
-                      width={700}
-                      height={700}
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
-                    <div className="flex-1">
-                      <a href="#" className="block mt-2">
-                        <p className="text-xl font-semibold text-white">
-                          Dewalt KITS & PACKS
-                        </p>
-                        <p className="mt-3 text-white">
-                          Unleash your full potential with DeWalt kits -
-                          featuring a range of high-quality tools that are
-                          durable, reliable, and designed to help you tackle any
-                          project with ease.
-                        </p>
-                      </a>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
+            {/* feature brand section End*/}
 
             {minimalProd?.length > 0 && (
               <div className="py-6">
@@ -666,7 +630,7 @@ function CategoryLandingPage({
 
             {/* related category  */}
             <div className="py-6">
-              <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
+              <div className="px-4 mx-auto mb-4 2xl:w-4/5 sm:px-4 lg:px-6 2xl:px-0">
                 <h2 className="mb-2 font-bold uppercase font-18">
                   related categories
                 </h2>
@@ -678,7 +642,7 @@ function CategoryLandingPage({
                   loop={false}
                   breakpoints={{
                     640: {
-                      slidesPerView: 1,
+                      slidesPerView: 2,
                     },
                     768: {
                       slidesPerView: 2.5,
@@ -736,9 +700,9 @@ function CategoryLandingPage({
           </div>
         ) : (
           <>
-            <div className="w-full px-4 py-6 mx-auto sm:px-0">
+            <div className="w-full px-4 py-0 mx-auto sm:px-0">
               {/* category banner info start */}
-              <div className="container py-4 mx-auto">
+              <div className="container py-0 mx-auto">
                 {category && category?.images && category?.images.length ? (
                   <>
                     {category?.images.map((cat: any, idx: number) => (
@@ -748,12 +712,14 @@ function CategoryLandingPage({
                       >
                         <div className="flex items-center justify-center order-2 w-full h-full p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
                           <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
-                            <h2 className="text-white uppercase">
-                              {cat?.name}
-                            </h2>
-                            <p className="mt-5 font-light text-white">
-                              {cat?.description}
-                            </p>
+                            <div className="sm:w-2/4 sm:pr-20">
+                              <h2 className="text-white uppercase">
+                                {cat?.name}
+                              </h2>
+                              <p className="mt-5 font-light text-white">
+                                {cat?.description}
+                              </p>
+                            </div>
                           </div>
                         </div>
                         <div className="order-1 sm:order-2">
@@ -774,7 +740,7 @@ function CategoryLandingPage({
                 ) : null}
               </div>
               {/* category banner info End */}
-              <div className="py-4">
+              <div className="py-0">
                 {category?.subCategories?.filter(
                   (x: any) => x.isFeatured == true
                 ).length > 0 ? (
@@ -889,7 +855,7 @@ function CategoryLandingPage({
                         </div>
                       </>
                     ) : (
-                      <div className="sm:col-span-12 p-[1px] sm:mt-4 mt-2">
+                      <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
                         <ProductFiltersTopBar
                           products={productDataToPass}
                           handleSortBy={handleSortBy}

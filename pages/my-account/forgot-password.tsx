@@ -1,4 +1,5 @@
 import { Layout } from '@components/common'
+import { GetServerSideProps } from 'next'
 import {
   BTN_SUBMIT,
   FORGOT_PASSWORD,
@@ -18,11 +19,10 @@ import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
 import { useUI } from '@components/ui/context'
 import classNames from 'classnames'
-import { Messages,EmptyString } from '@components/utils/constants'
+import { Messages, EmptyString } from '@components/utils/constants'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 
-
-
-export default function ForgotPasswordPage() {
+function ForgotPasswordPage() {
   const { setAlert } = useUI()
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
@@ -45,8 +45,10 @@ export default function ForgotPasswordPage() {
   }
 
   useEffect(() => {
-    if (emailStatus === Messages.Validations.ResetPassword.INVALID_EMAIL ||
-        emailStatus === Messages.Validations.ResetPassword.NO_EMAIL) {
+    if (
+      emailStatus === Messages.Validations.ResetPassword.INVALID_EMAIL ||
+      emailStatus === Messages.Validations.ResetPassword.NO_EMAIL
+    ) {
       setTimeout(() => setEmailStatus(EmptyString), 5000)
     }
   }, [emailStatus])
@@ -60,10 +62,16 @@ export default function ForgotPasswordPage() {
         let { data }: any = await axios.post(NEXT_FORGOT_PASSWORD, { email })
         if (!data.forgotRes.result.isValid) {
           // setEmailStatus(Messages.Validations.ResetPassword.INVALID_EMAIL)
-          setAlert({ type: 'error', msg: Messages.Validations.ResetPassword.INVALID_EMAIL })
+          setAlert({
+            type: 'error',
+            msg: Messages.Validations.ResetPassword.INVALID_EMAIL,
+          })
         } else {
           setEmailStatus(Messages.Validations.ResetPassword.VALID_EMAIL)
-          setAlert({ type: 'success', msg: Messages.Validations.ResetPassword.VALID_EMAIL })
+          setAlert({
+            type: 'success',
+            msg: Messages.Validations.ResetPassword.VALID_EMAIL,
+          })
         }
         setForm({ ...form, userName: email })
         setEmail('')
@@ -109,11 +117,11 @@ export default function ForgotPasswordPage() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {emailStatus !== '' && emailStatus!==Messages.Validations.ResetPassword.VALID_EMAIL && (
-                    <div className="text-red-600 w-full">
-                      {emailStatus}
-                    </div>
-                  )}
+                  {emailStatus !== '' &&
+                    emailStatus !==
+                      Messages.Validations.ResetPassword.VALID_EMAIL && (
+                      <div className="text-red-600 w-full">{emailStatus}</div>
+                    )}
                 </div>
               )
             })}
@@ -133,3 +141,11 @@ export default function ForgotPasswordPage() {
 }
 
 ForgotPasswordPage.Layout = Layout
+const PAGE_TYPE = PAGE_TYPES.Page
+export default withDataLayer(ForgotPasswordPage, PAGE_TYPE)
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}

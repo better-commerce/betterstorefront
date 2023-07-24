@@ -11,9 +11,10 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
-
+import { stringToBoolean } from '@framework/utils/parse-util'
 import React from 'react'
 import AddressBook from '@components/account/Address/AddressBook'
+import SideMenu from '@components/account/MyAccountMenu'
 
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
@@ -22,6 +23,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
+  const currentOption = 'My Saved Address'
+
   useEffect(() => {
     if (isGuestUser) {
       router.push('/')
@@ -59,7 +62,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
 
   return (
     <section className="relative pb-10 text-gray-900 sm:text-sm">
-      <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
+      <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
         {/* <div className="px-2 py-4 mx-5 mb-4 border-b mob-header md:hidden full-m-header">
           <h3 className="flex max-w-4xl gap-1 mx-5 mt-2 text-xl font-semibold text-black">
             <svg
@@ -84,7 +87,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
           </h3>
         </div> */}
         <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-          <div className="col-span-3 border-r border-gray-200 md:pl-12 sm:pl-6 tab-list-sm sm:pt-10 mob-hidden">
+          {/* <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
             <div className="sticky left-0 z-10 flex flex-col top-36">
               {config.map((item: any, idx: number) => (
                 <>
@@ -166,8 +169,12 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                 </>
               ))}
             </div>
-          </div>
-
+          </div> */}
+          <SideMenu
+            handleClick={handleClick}
+            setShow={setShow}
+            currentOption={currentOption}
+          />
           <div
             className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${
               isShow ? `` : ''
