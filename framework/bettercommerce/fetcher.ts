@@ -89,7 +89,7 @@ export const setGeneralParams = (param: any, value: any) => {
   store.set(param, value)
 }
 
-const fetcher = async (props: IFetcherProps) => {
+const fetcher = async (props: IFetcherProps | any) => {
   const {
     url = '',
     method = 'post',
