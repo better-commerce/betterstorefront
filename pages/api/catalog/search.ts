@@ -1,7 +1,8 @@
 import searchProducts from '@framework/api/operations/search-product'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const SearchProductsApiMiddleware = async (req: any, res: any) => {
+const searchProductsApiMiddleware = async (req: any, res: any) => {
   const { value }: any = req.body
   try {
     const response = await searchProducts()({
@@ -14,4 +15,4 @@ const SearchProductsApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default SearchProductsApiMiddleware
+export default apiRouteGuard(searchProductsApiMiddleware)

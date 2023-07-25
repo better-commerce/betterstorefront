@@ -1,7 +1,8 @@
 import { useSignup } from '@framework/auth'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function registerUserApiMiddleware(req: any, res: any) {
   const { email, password, confirmPassword, firstName, lastName }: any =
     req.body.data
   try {
@@ -18,3 +19,5 @@ export default async function (req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(registerUserApiMiddleware)

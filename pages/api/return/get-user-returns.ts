@@ -1,7 +1,8 @@
 import getReturns from '@framework/return/get-user-returns'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-export default async function getUserReturns(req: any, res: any) {
+async function getUserReturnsApiMiddleware(req: any, res: any) {
   try {
     const response = await getReturns(req.body.userId, req.cookies)
     res.status(200).json({ response })
@@ -9,3 +10,5 @@ export default async function getUserReturns(req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(getUserReturnsApiMiddleware)

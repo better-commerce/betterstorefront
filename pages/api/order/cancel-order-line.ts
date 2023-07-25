@@ -1,7 +1,8 @@
 import useCancelOrderLine from '@framework/checkout/cancel-order-line'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function cancelOrderLineApiMiddleware(req: any, res: any) {
   try {
     const response = await useCancelOrderLine()({
       data: req?.body,
@@ -12,3 +13,5 @@ export default async function (req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(cancelOrderLineApiMiddleware)

@@ -1,7 +1,8 @@
 import { getPaymentMethods } from '@framework/payment'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-const GetPaymentMethodsapiMiddleware = async (req: any, res: any) => {
+const getPaymentMethodsapiMiddleware = async (req: any, res: any) => {
   const { countryCode, currencyCode, basketId }: any = req.body
   try {
     const response = await getPaymentMethods()({
@@ -16,4 +17,4 @@ const GetPaymentMethodsapiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default GetPaymentMethodsapiMiddleware
+export default apiRouteGuard(getPaymentMethodsapiMiddleware)

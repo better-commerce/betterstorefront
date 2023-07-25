@@ -46,5 +46,7 @@ export module Cookie {
     export const COMPANY_ID = 'CompanyId'
     export const GOOGLE_TRANSLATE = 'googtrans'
     export const CLIENT_IP_ADDRESS = 'ClientIP'
+    export const IS_PAYMENT_LINK = 'ipl'
+    export const API_TOKEN = 'i'
   }
 }

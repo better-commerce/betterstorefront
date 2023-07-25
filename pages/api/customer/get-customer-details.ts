@@ -1,7 +1,8 @@
 import fetcher from '@framework/fetcher'
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
+import apiRouteGuard from '../base/api-route-guard'
 
-const GetCustomerDetailsApiMiddleware = async (req: any, res: any) => {
+const getCustomerDetailsApiMiddleware = async (req: any, res: any) => {
   try {
     const response: any = await fetcher({
       url: CUSTOMER_BASE_API + `${req.query.customerId}`,
@@ -14,4 +15,4 @@ const GetCustomerDetailsApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default GetCustomerDetailsApiMiddleware
+export default apiRouteGuard(getCustomerDetailsApiMiddleware)

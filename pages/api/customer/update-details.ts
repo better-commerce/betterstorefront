@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const UpdateDetailsApiMiddleware = async (req: any, res: any) => {
+const updateDetailsApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.updateDetails({
       query: req.body,
@@ -11,6 +12,6 @@ const UpdateDetailsApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default UpdateDetailsApiMiddleware;
+export default apiRouteGuard(updateDetailsApiMiddleware)

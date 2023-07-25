@@ -52,6 +52,7 @@ export default function Summary({
   cartItems,
   getBasketPromos,
   isShippingDisabled,
+  isPaymentLink = false,
 }: any) {
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
@@ -188,9 +189,8 @@ export default function Summary({
                     </div>
                     <div className="mobile-view-on">
                       <ChevronUpIcon
-                        className={`${
-                          !open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 mt-1 ml-1 text-gray-900`}
+                        className={`${!open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 mt-1 ml-1 text-gray-900`}
                       />
                     </div>
                     <div className="flex-1 font-bold text-right xsm:w-full">
@@ -249,15 +249,15 @@ export default function Summary({
                                         ? product.price?.formatted?.withTax
                                         : product.price?.formatted?.withoutTax}
                                       {product.listPrice?.raw.withTax > 0 &&
-                                      product.listPrice?.raw.withTax !=
+                                        product.listPrice?.raw.withTax !=
                                         product.price?.raw?.withTax ? (
                                         <span className="px-2 text-sm text-red-400 line-through">
                                           {GENERAL_PRICE_LABEL_RRP}{' '}
                                           {isIncludeVAT
                                             ? product.listPrice.formatted
-                                                ?.withTax
+                                              ?.withTax
                                             : product.listPrice.formatted
-                                                ?.withoutTax}
+                                              ?.withoutTax}
                                         </span>
                                       ) : null}
                                     </p>
@@ -303,9 +303,9 @@ export default function Summary({
                                               />
                                               {isIncludeVAT
                                                 ? child?.price?.formatted
-                                                    ?.withTax
+                                                  ?.withTax
                                                 : child?.price?.formatted
-                                                    ?.withoutTax}
+                                                  ?.withoutTax}
                                             </label>
                                           </div>
                                           <div className="text-gray-700 text-ms">
@@ -366,35 +366,40 @@ export default function Summary({
                       })}
                     </ul>
                     <hr></hr>
-                    <div className="pt-2 mx-4 ">
-                      <Disclosure
-                        defaultOpen={cart.promotionsApplied?.length > 0}
-                      >
-                        {({ open }) => (
-                          <>
-                            <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
-                              <span>Apply Promo?</span>
-                            </Disclosure.Button>
-                            <Transition
-                              enter="transition duration-100 ease-out"
-                              enterFrom="transform scale-95 opacity-0"
-                              enterTo="transform scale-100 opacity-100"
-                              leave="transition duration-75 ease-out"
-                              leaveFrom="transform scale-100 opacity-100"
-                              leaveTo="transform scale-95 opacity-0"
-                            >
-                              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                <PromotionInput
-                                  basketPromos={basketPromos}
-                                  items={cartItems}
-                                  getBasketPromoses={getBasketPromos}
-                                />
-                              </Disclosure.Panel>
-                            </Transition>
-                          </>
-                        )}
-                      </Disclosure>
-                    </div>
+                    {
+                      !isPaymentLink && (
+                        <div className="pt-2 mx-4 ">
+                          <Disclosure
+                            defaultOpen={cart.promotionsApplied?.length > 0}
+                          >
+                            {({ open }) => (
+                              <>
+                                <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
+                                  <span>Apply Promo?</span>
+                                </Disclosure.Button>
+                                <Transition
+                                  enter="transition duration-100 ease-out"
+                                  enterFrom="transform scale-95 opacity-0"
+                                  enterTo="transform scale-100 opacity-100"
+                                  leave="transition duration-75 ease-out"
+                                  leaveFrom="transform scale-100 opacity-100"
+                                  leaveTo="transform scale-95 opacity-0"
+                                >
+                                  <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                    <PromotionInput
+                                      basketPromos={basketPromos}
+                                      items={cartItems}
+                                      getBasketPromoses={getBasketPromos}
+                                    />
+                                  </Disclosure.Panel>
+                                </Transition>
+                              </>
+                            )}
+                          </Disclosure>
+                        </div>
+                      )
+                    }
+
                     <dl className="px-4 py-2 space-y-2 border-gray-200 sm:px-6">
                       <div className="flex items-center justify-between">
                         <dt className="text-sm text-gray-900">
@@ -506,7 +511,7 @@ export default function Summary({
                       })}
                       <div className="flex-shrink-0">
                         <Link
-                          href={`/${product.slug}`}
+                          href={!isPaymentLink ? `/${product.slug}` : "#"}
                           className="inline-block font-medium text-gray-700 hover:text-gray-800 hover:underline"
                         >
                           <Image
@@ -525,7 +530,7 @@ export default function Summary({
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between text-sm">
                               <Link
-                                href={`/${product.slug}`}
+                                href={!isPaymentLink ? `/${product.slug}` : "#"}
                                 className="inline-block font-bold text-gray-700 uppercase hover:text-gray-800 hover:underline"
                               >
                                 <p>{product?.name}</p>
@@ -535,14 +540,14 @@ export default function Summary({
                                   ? product.price?.formatted?.withTax
                                   : product.price?.formatted?.withoutTax}
                                 {product.listPrice?.raw.withTax > 0 &&
-                                product.listPrice?.raw.withTax !=
+                                  product.listPrice?.raw.withTax !=
                                   product.price?.raw?.withTax ? (
                                   <span className="px-2 text-sm text-red-400 line-through">
                                     {GENERAL_PRICE_LABEL_RRP}{' '}
                                     {isIncludeVAT
                                       ? product.listPrice?.formatted?.withTax
                                       : product.listPrice?.formatted
-                                          ?.withoutTax}
+                                        ?.withoutTax}
                                   </span>
                                 ) : null}
                               </p>
@@ -553,7 +558,7 @@ export default function Summary({
                                 {getLineItemSizeWithoutSlug(product)}
                               </span>
                             </p>
-                            <div>{}</div>
+                            <div>{ }</div>
                             {product?.children?.map(
                               (child: any, childId: number) => {
                                 const customInfo1: any = tryParseJson(
