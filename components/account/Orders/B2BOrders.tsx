@@ -22,6 +22,7 @@ import Spinner from '@components/ui/Spinner'
 import Link from 'next/link'
 import { matchStrings } from '@framework/utils/parse-util'
 import OrdersListView from './OrdersListView'
+import React from 'react'
 
 export default function B2BOrders({
   //   allOrders,

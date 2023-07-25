@@ -62,6 +62,7 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import CustomerReferral from '@components/customer/Referral'
 import PaymentLinkRedirect from '@components/payment/PaymentLinkRedirect'
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
@@ -335,6 +336,7 @@ function MyApp({
             maxBasketItemsCount={maxBasketItemsCount(appConfig)}
           >
             <OverlayLoader />
+            <CustomerReferral router={router} />
             <SessionProvider session={pageProps?.session}>
               <Component
                 {...pageProps}
