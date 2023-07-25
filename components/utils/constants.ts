@@ -56,9 +56,9 @@ export const PRODUCT_PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_AP
 export const INFRA_LOG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/log`
 export const NOTIFICATION_OTP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/notification/otp`
 export const VALIDATE_CHANGE_USERNAME_OTP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/notification`
-export const REFERRAL_INFO_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/program` 
+export const REFERRAL_INFO_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/program`
 export const REFERRAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer`
-export const REFERRAL_BY_EMAIL = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-email` 
+export const REFERRAL_BY_EMAIL = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-email`
 export const REFERRAL_BY_SLUG = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/validate-code`
 export const REFERRAL_BY_USERID = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-userid`
 export const REFERRAL_REFEREE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referee/`
@@ -66,7 +66,7 @@ export const REFERRAL_BY_USERNAME = `/api/${process.env.NEXT_PUBLIC_API_VERSION}
 export const REFERRAL_SEARCH = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/search`
 export const REFERRAL_VOUCHERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/vouchers`
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
-export const TWITTER_SHARE_STRING =  `https://twitter.com/intent/tweet`
+export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`
 
 //LOCAL ENDPOINTS
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
@@ -143,16 +143,21 @@ export const PAYMENTS_API = `/api/payments`
 export const NEXT_OTP_REQUEST = '/api/notification/otp'
 export const NEXT_VALIDATE_CHANGE_USERNAME_OTP =
   '/api/notification/validate-change-username-otp'
-export const NEXT_REFERRAL_BY_EMAIL = '/api/customer/referral-by-email'
-export const NEXT_REFERRAL_BY_USERID = '/api/customer/referral-by-userId'
-export const NEXT_REFERRAL_BY_USERNAME= '/api/customer/referral-by-username'
-export const NEXT_REFERRAL_BY_SLUG= '/api/customer/referral-by-slug'
-export const NEXT_REFERRAL_SEARCH = '/api/customer/referral-search'
-export const NEXT_REFERRAL_ADD_USER_REFEREE = '/api/customer/referral-add-user-referee'
-export const NEXT_REFERRAL_INVITE_SENT = '/api/customer/referral-invite-sent'
-export const NEXT_REFERRAL_CLICK_ON_INVITE = '/api/customer/referral-click-on-invite'
-export const NEXT_REFERRAL_INFO = '/api/customer/referral-info'
-export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral-vouchers'
+export const NEXT_REFERRAL_BY_EMAIL = '/api/customer/referral/referral-by-email'
+export const NEXT_REFERRAL_BY_USERID =
+  '/api/customer/referral/referral-by-userId'
+export const NEXT_REFERRAL_BY_USERNAME =
+  '/api/customer/referral/referral-by-username'
+export const NEXT_REFERRAL_BY_SLUG = '/api/customer/referral/referral-by-slug'
+export const NEXT_REFERRAL_SEARCH = '/api/customer/referral/referral-search'
+export const NEXT_REFERRAL_ADD_USER_REFEREE =
+  '/api/customer/referral/referral-add-user-referee'
+export const NEXT_REFERRAL_INVITE_SENT =
+  '/api/customer/referral/referral-invite-sent'
+export const NEXT_REFERRAL_CLICK_ON_INVITE =
+  '/api/customer/referral/referral-click-on-invite'
+export const NEXT_REFERRAL_INFO = '/api/customer/referral/referral-info'
+export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral/referral-vouchers'
 //CONSTANTS
 
 export const YOUTUBE_VIDEO_EMBED_PREFIX_URL =

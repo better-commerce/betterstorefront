@@ -1,7 +1,8 @@
 import { useReferralByEmail } from '@framework/customer'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../../base/api-route-guard'
 
-const ReferralByEmailApiMiddleware = async (req: any, res: any) => {
+const referralByEmailApiMiddleware = async (req: any, res: any) => {
   const { email }: any = req.body
   try {
     const response: any = await useReferralByEmail()(email)
@@ -9,6 +10,6 @@ const ReferralByEmailApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default ReferralByEmailApiMiddleware;
+export default apiRouteGuard(referralByEmailApiMiddleware)

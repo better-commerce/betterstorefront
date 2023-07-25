@@ -1,7 +1,8 @@
 import { useReferralBySlug } from '@framework/customer'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../../base/api-route-guard'
 
-const ReferralBySlugApiMiddleware = async (req: any, res: any) => {
+const referralBySlugApiMiddleware = async (req: any, res: any) => {
   const { slug }: any = req.body
   try {
     const response: any = await useReferralBySlug()(slug)
@@ -9,6 +10,6 @@ const ReferralBySlugApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default ReferralBySlugApiMiddleware;
+export default apiRouteGuard(referralBySlugApiMiddleware)
