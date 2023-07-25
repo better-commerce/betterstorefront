@@ -36,6 +36,7 @@ function Checkout({ cart, config, location }: any) {
     setIsGuestUser,
     guestUser,
     setGuestUser,
+    isPaymentLink,
     isSplitDelivery,
   } = useUI()
   const [isLoggedIn, setIsLoggedIn] = useState<any>(undefined)
@@ -214,12 +215,16 @@ function Checkout({ cart, config, location }: any) {
     )
   }
 
-  return (
-    <CheckoutRouter
-      setIsLoggedIn={setIsLoggedIn}
-      handleGuestMail={handleGuestMail}
-    />
-  )
+  if (!isPaymentLink) {
+    return (
+      <CheckoutRouter
+        setIsLoggedIn={setIsLoggedIn}
+        handleGuestMail={handleGuestMail}
+      />
+    )
+  }
+
+  return <></>
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')

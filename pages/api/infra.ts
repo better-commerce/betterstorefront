@@ -1,7 +1,8 @@
 import useInfra from '@framework/api/endpoints/infra'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function getInfraApiMiddleware(req: any, res: any) {
   const { setHeader = false } = req.body
   try {
     const response = await useInfra(req)(setHeader)
@@ -10,3 +11,5 @@ export default async function (req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(getInfraApiMiddleware)

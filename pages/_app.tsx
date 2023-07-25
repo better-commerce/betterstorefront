@@ -7,6 +7,7 @@ import { FC, useEffect, useState } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import 'swiper/css/bundle'
+import jwt from 'jsonwebtoken'
 import Cookies from 'js-cookie'
 import { v4 as uuid_v4 } from 'uuid'
 import {
@@ -20,6 +21,7 @@ import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NAV_ENDPOINT,
+  EmptyString,
 } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
@@ -37,10 +39,15 @@ import OverlayLoader from '@components/common/OverlayLoader'
 import { resetSnippetElements } from '@framework/content/use-content-snippet'
 import { ContentSnippet } from '@components/common/Content'
 import NextHead from 'next/head'
+import qs from 'querystring'
+import { IncomingMessage, ServerResponse } from 'http'
 import {
+  AUTH_URL,
+  CLIENT_ID,
   Cookie,
   GA4_DISABLED,
   GA4_MEASUREMENT_ID,
+  SHARED_SECRET,
 } from '@framework/utils/constants'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { DeviceType } from '@commerce/utils/use-device'
@@ -56,6 +63,9 @@ import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import CustomerReferral from '@components/customer/Referral'
+import PaymentLinkRedirect from '@components/payment/PaymentLinkRedirect'
+
+const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
 }
@@ -313,6 +323,8 @@ function MyApp({
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
         <CustomCacheBuster buildVersion={buildVersion} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
+        {/* TODO: Disable client-side payment link redirect */}
+        {/*<PaymentLinkRedirect router={router} />*/}
         <ErrorBoundary>
           <Layout
             nav={nav}
@@ -345,9 +357,67 @@ function MyApp({
 MyApp.getInitialProps = async (
   context: AppContext
 ): Promise<AppInitialProps> => {
+  /**
+   * Generates a new auth token.
+   * @param authUrl
+   * @param clientId
+   * @param sharedSecret
+   * @returns
+   */
+  const generateToken = async (
+    authUrl: string,
+    clientId: string,
+    sharedSecret: string
+  ) => {
+    const url = new URL('oAuth/token', authUrl)
+    const { data: tokenResult } = await axios({
+      url: url.href,
+      method: 'post',
+      data: `client_id=${clientId}&client_secret=${sharedSecret}&grant_type=client_credentials`,
+    })
+    return tokenResult?.access_token
+  }
+
+  /**
+   * Manages auth token used for securing Next.js API routes.
+   * @param req
+   * @returns
+   */
+  const getToken = async (req: any) => {
+    let token = EmptyString
+    const cookies = qs.decode(req?.headers?.cookie, '; ')
+    if (cookies[Cookie.Key.API_TOKEN]) {
+      token = cookies[Cookie.Key.API_TOKEN] as string
+      const jwtResult: any = jwt.decode(decrypt(token))
+      if (jwtResult?.exp) {
+        const expiryTime = jwtResult?.exp * 1000
+        const nowTime = new Date().getTime()
+
+        if (nowTime >= expiryTime) {
+          // Generate new token
+          token = await generateToken(AUTH_URL!, CLIENT_ID!, SHARED_SECRET!)
+        }
+      }
+    } else {
+      // Generate new token
+      token = await generateToken(AUTH_URL!, CLIENT_ID!, SHARED_SECRET!)
+    }
+    return token
+  }
+
   const { ctx, Component } = context
   const req: any = ctx?.req
-  const res: any = ctx?.res
+  const res: ServerResponse<IncomingMessage> | undefined = ctx?.res
+
+  const token = await getToken(req)
+  if (token) {
+    res?.setHeader(
+      'Set-Cookie',
+      `${Cookie.Key.API_TOKEN}=${encrypt(
+        token
+      )}; Path=/; Max-Age=${API_TOKEN_EXPIRY_IN_SECONDS};`
+    )
+  }
 
   let clientIPAddress = req?.ip ?? req?.headers['x-real-ip']
   const forwardedFor = req?.headers['x-forwarded-for']

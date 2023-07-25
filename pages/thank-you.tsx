@@ -31,7 +31,7 @@ import {
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import {
-  
+
 } from '@components/utils/constants'
 import { removeItem } from '@components/utils/localStorage'
 import {
@@ -93,10 +93,10 @@ export default function OrderConfirmation({ config }: any) {
   const [shareMethod, setShareMethod] = useState('')
   const [referralLink, setReferralLink] = useState('')
   const [copied, setCopied] = useState(false)
-  const [isReferralSlugLoading,setIsReferralSlugLoading] = useState(false)
-  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser, isGuestUser } = useUI()
+  const [isReferralSlugLoading, setIsReferralSlugLoading] = useState(false)
+  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser, isGuestUser, resetIsPaymentLink } = useUI()
   const shareOptionsConfig = [
-   
+
     {
       name: 'email',
       onClick: () => {
@@ -125,48 +125,48 @@ export default function OrderConfirmation({ config }: any) {
         window.open(`${FACEBOOK_SHARE_STRING}?u=${referralLink}&quote='Referral Link'`)
       },
       icon: (
-          <svg
-            viewBox="-5 0 20 20"
-            className="w-6 h-6"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="#000000"
-          >
-            <g id=" " stroke-width="0"></g>
+        <svg
+          viewBox="-5 0 20 20"
+          className="w-6 h-6"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="#000000"
+        >
+          <g id=" " stroke-width="0"></g>
+          <g
+            id=" "
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
+          <g id=" ">
+            <defs> </defs>{' '}
             <g
-              id=" "
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></g>
-            <g id=" ">
-              <defs> </defs>{' '}
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+              {' '}
               <g
-                id="Page-1"
-                stroke="none"
-                stroke-width="1"
-                fill="none"
-                fill-rule="evenodd"
+                id="Dribbble-Light-Preview"
+                transform="translate(-385.000000, -7399.000000)"
+                fill="#000000"
               >
                 {' '}
-                <g
-                  id="Dribbble-Light-Preview"
-                  transform="translate(-385.000000, -7399.000000)"
-                  fill="#000000"
-                >
+                <g id="icons" transform="translate(56.000000, 160.000000)">
                   {' '}
-                  <g id="icons" transform="translate(56.000000, 160.000000)">
+                  <path
+                    d="M335.821282,7259 L335.821282,7250 L338.553693,7250 L339,7246 L335.821282,7246 L335.821282,7244.052 C335.821282,7243.022 335.847593,7242 337.286884,7242 L338.744689,7242 L338.744689,7239.14 C338.744689,7239.097 337.492497,7239 336.225687,7239 C333.580004,7239 331.923407,7240.657 331.923407,7243.7 L331.923407,7246 L329,7246 L329,7250 L331.923407,7250 L331.923407,7259 L335.821282,7259 Z"
+                    id="facebook-[#176]"
+                  >
                     {' '}
-                    <path
-                      d="M335.821282,7259 L335.821282,7250 L338.553693,7250 L339,7246 L335.821282,7246 L335.821282,7244.052 C335.821282,7243.022 335.847593,7242 337.286884,7242 L338.744689,7242 L338.744689,7239.14 C338.744689,7239.097 337.492497,7239 336.225687,7239 C333.580004,7239 331.923407,7240.657 331.923407,7243.7 L331.923407,7246 L329,7246 L329,7250 L331.923407,7250 L331.923407,7259 L335.821282,7259 Z"
-                      id="facebook-[#176]"
-                    >
-                      {' '}
-                    </path>{' '}
-                  </g>{' '}
+                  </path>{' '}
                 </g>{' '}
               </g>{' '}
-            </g>
-          </svg>
+            </g>{' '}
+          </g>
+        </svg>
       ),
     },
     {
@@ -177,10 +177,10 @@ export default function OrderConfirmation({ config }: any) {
         window.open(`${TWITTER_SHARE_STRING}?url=${referralLink}&text=Referral Link`)
       },
       icon: (
-          <svg fill="#000000" className='h-6 w-6' viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M245.65723,77.65674l-30.16407,30.16455C209.4707,177.70215,150.53809,232,80,232c-14.52441,0-26.49414-2.30273-35.57764-6.84473-7.33056-3.665-10.33349-7.59912-11.07861-8.71777a8,8,0,0,1,3.84717-11.92822c.25732-.09717,23.84814-9.15772,39.09521-26.40869a109.574,109.574,0,0,1-24.72656-24.355c-13.708-18.60352-28.206-50.91114-19.43066-99.17676a8.00023,8.00023,0,0,1,13.52832-4.22559c.35254.35156,33.64209,33.1709,74.3374,43.772L120,87.99609a48.31863,48.31863,0,0,1,48.6084-47.99267,48.11329,48.11329,0,0,1,40.96875,23.99609L240,64a8.0001,8.0001,0,0,1,5.65723,13.65674Z"></path> </g></svg>
+        <svg fill="#000000" className='h-6 w-6' viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M245.65723,77.65674l-30.16407,30.16455C209.4707,177.70215,150.53809,232,80,232c-14.52441,0-26.49414-2.30273-35.57764-6.84473-7.33056-3.665-10.33349-7.59912-11.07861-8.71777a8,8,0,0,1,3.84717-11.92822c.25732-.09717,23.84814-9.15772,39.09521-26.40869a109.574,109.574,0,0,1-24.72656-24.355c-13.708-18.60352-28.206-50.91114-19.43066-99.17676a8.00023,8.00023,0,0,1,13.52832-4.22559c.35254.35156,33.64209,33.1709,74.3374,43.772L120,87.99609a48.31863,48.31863,0,0,1,48.6084-47.99267,48.11329,48.11329,0,0,1,40.96875,23.99609L240,64a8.0001,8.0001,0,0,1,5.65723,13.65674Z"></path> </g></svg>
       ),
     },
-    
+
   ]
 
   const handleInviteSent = async () => {
@@ -315,6 +315,7 @@ export default function OrderConfirmation({ config }: any) {
     }
     removeItem(LocalStorage.Key.ORDER_RESPONSE)
     removeItem(LocalStorage.Key.ORDER_PAYMENT)
+    resetIsPaymentLink()
     setGuestUser({})
     setIsGuestUser(false)
     if (orderId) fetchOrder()
@@ -323,7 +324,6 @@ export default function OrderConfirmation({ config }: any) {
       setOrderId('')
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const setModelClose = () => {
@@ -340,7 +340,7 @@ export default function OrderConfirmation({ config }: any) {
     if (data?.referralDetails?.id) {
       setReferralObj(data?.referralDetails)
       setIsReferralSlugLoading(false)
-    } else{
+    } else {
       setIsReferralSlugLoading(false)
     }
   }
@@ -712,7 +712,7 @@ export default function OrderConfirmation({ config }: any) {
                             <h2 className="mx-2 text-lg ">
                               {referralObj?.slug}
                             </h2>
-                            <Button className="my-3" onClick={() => {}}>
+                            <Button className="my-3" onClick={() => { }}>
                               {SHARE_IN_PERSON}
                             </Button>
 

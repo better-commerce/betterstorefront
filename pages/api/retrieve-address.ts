@@ -1,7 +1,8 @@
 import { retrieveAddress } from '@framework/checkout'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-const RetrieveAddressApiMiddleware = async (req: any, res: any) => {
+const retrieveAddressApiMiddleware = async (req: any, res: any) => {
   const { id }: any = req.body
   try {
     const response = await retrieveAddress()(id, req.cookies)
@@ -9,6 +10,6 @@ const RetrieveAddressApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default RetrieveAddressApiMiddleware;
+export default apiRouteGuard(retrieveAddressApiMiddleware)

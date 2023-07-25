@@ -89,6 +89,7 @@ module.exports = withCommerceConfig({
     BETTERCMS_API_VERSION: process.env.BETTERCMS_API_VERSION,
     BETTERCMS_API_URL: process.env.BETTERCMS_API_URL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    SITE_HOST: process.env.SITE_HOST,
     SITE_ORIGIN_URL: process.env.SITE_ORIGIN_URL,
     SITE_NAME: process.env.SITE_NAME,
     GA4_DISABLED: process.env.GA4_DISABLED,
