@@ -1,7 +1,8 @@
 import { useReferralByUsername } from '@framework/customer'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../../base/api-route-guard'
 
-const ReferralByUsernameApiMiddleware = async (req: any, res: any) => {
+const referralByUsernameApiMiddleware = async (req: any, res: any) => {
   const { username }: any = req.body
   try {
     const response: any = await useReferralByUsername()(username)
@@ -9,6 +10,6 @@ const ReferralByUsernameApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default ReferralByUsernameApiMiddleware;
+export default apiRouteGuard(referralByUsernameApiMiddleware)
