@@ -1,6 +1,7 @@
 import { getOrderDetails } from '@framework/checkout'
+import apiRouteGuard from '../base/api-route-guard'
 
-const OrderDetailsApiMiddleware = async (req: any, res: any) => {
+const orderDetailsApiMiddleware = async (req: any, res: any) => {
   const { id }: any = req.body
   try {
     const response: any = await getOrderDetails()(id, req?.cookies)
@@ -10,4 +11,4 @@ const OrderDetailsApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default OrderDetailsApiMiddleware
+export default apiRouteGuard(orderDetailsApiMiddleware)

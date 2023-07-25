@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const EditAddressApiMiddleware = async (req: any, res: any) => {
+const editAddressApiMiddleware = async (req: any, res: any) => {
   try {
     console.group(req.body, 'req body')
     const response = await commerce.editAddress({
@@ -12,6 +13,6 @@ const EditAddressApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default EditAddressApiMiddleware;
+export default apiRouteGuard(editAddressApiMiddleware)

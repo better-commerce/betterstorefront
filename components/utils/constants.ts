@@ -177,6 +177,7 @@ export const BETTERCOMMERCE_LANGUAGE = process.env.BETTERCOMMERCE_LANGUAGE
 export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY
 export const SHOW_APPLY_COUPON_SECTION = true
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY
+export const SITE_HOST = process.env.SITE_HOST
 export const SITE_ORIGIN_URL = process.env.SITE_ORIGIN_URL
 export const SITE_NAME = process.env.SITE_NAME
 export const ENABLE_SECURED_PAYMENT_PAYLOAD = stringToBoolean(
