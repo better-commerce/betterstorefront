@@ -1,7 +1,8 @@
 import createReturn from '@framework/return/create'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-export default async function createReturnEndpoint(req: any, res: any) {
+async function createReturnApiMiddleware(req: any, res: any) {
   try {
     const response = await createReturn(req.body.model, req.cookies)
     res.status(200).json({ response })
@@ -9,3 +10,5 @@ export default async function createReturnEndpoint(req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(createReturnApiMiddleware)

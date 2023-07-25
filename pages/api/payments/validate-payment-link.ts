@@ -1,7 +1,8 @@
 import useValidatePaymentLink from '@framework/api/endpoints/payments/validate-payment-link'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function validatePaymentLinkApiMiddleware(req: any, res: any) {
   const link = req?.body?.data
   try {
     const response = await useValidatePaymentLink({
@@ -13,3 +14,5 @@ export default async function (req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(validatePaymentLinkApiMiddleware)

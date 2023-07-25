@@ -1,7 +1,8 @@
 import { updateAddress } from '@framework/checkout'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-const UpdateAddressApiMiddleware = async (req: any, res: any) => {
+const updateAddressApiMiddleware = async (req: any, res: any) => {
   const { basketId, model }: any = req.body
   try {
     const response = await updateAddress()({
@@ -15,4 +16,4 @@ const UpdateAddressApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default UpdateAddressApiMiddleware
+export default apiRouteGuard(updateAddressApiMiddleware)

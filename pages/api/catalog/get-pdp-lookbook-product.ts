@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const GetPdpLookbookProductApiMiddleware = async (req: any, res: any) => {
+const getPdpLookbookProductApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getPdpLookbookProduct({
       query: req.body.slug,
@@ -13,4 +14,4 @@ const GetPdpLookbookProductApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default GetPdpLookbookProductApiMiddleware
+export default apiRouteGuard(getPdpLookbookProductApiMiddleware)

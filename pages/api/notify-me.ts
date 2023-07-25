@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-const NotifyMeApiMiddleware = async (req: any, res: any) => {
+const notifyMeApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.notifyMe({
       email: req.query.email,
@@ -14,4 +15,4 @@ const NotifyMeApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default NotifyMeApiMiddleware;
+export default apiRouteGuard(notifyMeApiMiddleware)

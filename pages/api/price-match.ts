@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-const PriceMatchApiMiddleware = async (req: any, res: any) => {
+const priceMatchApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.priceMatch(
       {
@@ -13,6 +14,6 @@ const PriceMatchApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default PriceMatchApiMiddleware;
+export default apiRouteGuard(priceMatchApiMiddleware)
