@@ -57,5 +57,6 @@ export const config = {
      * - assets
      */
     '/((?!api|_next/static|_next/image|favicon.ico|serviceworker.js|theme|assets).*)',
+    '/',
   ],
 }
