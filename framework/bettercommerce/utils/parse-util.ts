@@ -8,7 +8,7 @@
 // Package Imports
 import { DATE_TIME_FORMAT } from '@components/utils/constants'
 import { CURRENCY_SYMBOL_POUND } from '@components/utils/textVariables'
-import { toInteger, toNumber } from 'lodash'
+import { toNumber } from 'lodash'
 import { hrtime } from 'process'
 const format = require('string-format')
 
@@ -68,7 +68,7 @@ export const tryParseJson = (json: any) => {
     try {
       parsed = JSON.parse(json)
       return parsed
-    } catch (e: any) { }
+    } catch (e: any) {}
   }
   return null
 }
@@ -86,7 +86,7 @@ export const priceFormat = (
       intParsed = parseInt(value)
     } else {
       floatParsed = value
-      intParsed = toInteger(value)
+      intParsed = parseInt(value.toString())
     }
 
     if (floatParsed % intParsed === 0) {

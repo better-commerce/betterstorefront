@@ -9,6 +9,7 @@ import cookie from 'cookie'
 import { basketId as basketIdGenerator } from '@components/ui/context'
 import Link from 'next/link'
 import { useUI } from '@components/ui/context'
+import classNames from 'classnames'
 import cartHandler from '@components/services/cart'
 import {
   PlusSmallIcon,
@@ -16,13 +17,18 @@ import {
   ChevronDownIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline'
+import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 const PromotionInput = dynamic(
   () => import('../components/cart/PromotionInput')
 )
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
-import { Disclosure, Transition } from '@headlessui/react'
+import { Disclosure, Transition,Dialog  } from '@headlessui/react'
+import { Fragment } from 'react'
+import { Button, LoadingDots } from '@components/ui'
+import {XMarkIcon} from '@heroicons/react/24/outline'
+import { CLOSE_PANEL } from '@components/utils/textVariables'
 import { getShippingPlans } from '@framework/shipping'
 import {
   BTN_CHECKOUT_NOW,
@@ -62,7 +68,6 @@ import {
 import { useRouter } from 'next/router'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 import SplitDelivery from '@components/checkout/SplitDelivery'
-import { LoadingDots } from '@components/ui'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
@@ -1079,7 +1084,142 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
           handleToggleOpen={handleToggleOpenSizeChangeModal}
           product={selectedProductOnSizeChange}
         />
+        {/*Referred By a friend*/}{/*CODE NOT TO BE REMOVED, FOR FUTURE USE*/}
       </div>
+      {/* <Transition.Root show={referralModalShow} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 overflow-hidden z-999"
+          onClose={() => {setReferralModalShow(!referralModalShow)}}
+        >
+          <div className="absolute inset-0 overflow-hidden z-999">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay
+                className="w-full h-screen bg-black opacity-50"
+                onClick={() => {setReferralModalShow(!referralModalShow)}}
+              />
+            </Transition.Child>
+
+            <div className="fixed inset-0 flex items-center justify-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="w-screen max-w-xl">
+                  <div className="flex flex-col h-full overflow-y-auto rounded shadow-xl bg-gray-50">
+                    <div className="flex-1 px-0 overflow-y-auto">
+                      <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
+                        <Dialog.Title className="text-lg font-medium text-gray-900">
+                          Been Referred by a Friend?
+                        </Dialog.Title>
+                        <div className="flex items-center ml-3 h-7">
+                          <button
+                            type="button"
+                            className="p-2 -m-2 text-gray-400 hover:text-gray-500"
+                            onClick={() => {setReferralModalShow(!referralModalShow)}}
+                          >
+                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <XMarkIcon className="w-6 h-6" aria-hidden="true" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="sm:px-0 flex flex-row">
+                        {/*Referal Program Info view 
+                        {referralAvailable && !referralInfo &&(
+                          <div className="my-10 flex w-full flex-col justify-center items-center max-w-lg px-9">
+                            <h2 className="mx-2 text-[30px] text-center">Search your Friend by their name</h2>
+                            <p className="px-8 text-[18px] text-center">
+                              If you think they have signed up, please check and confirm their details below
+                            </p>
+                            <input
+                            type="text"
+                            placeholder="Enter your friend's name.."
+                            className='px-5 w-full my-2 py-3 border-[1px] border-gray-500'
+                            onChange={handleInputChange}
+                            />
+                            {error && (
+                              <p className='text-sm text-red-700'>
+                                {error}
+                              </p>
+                            )}
+                            <Button
+                            className="my-3" onClick={() => {handleReferralSearch()}}>
+                              {isLoading?<LoadingDots/>:'Find Them!'}
+                            </Button>
+                           
+                          </div>
+                        ) }
+                         {referralInfo && (
+                          <div
+                            className={classNames(
+                              'my-20 flex w-full flex-col justify-center items-center'
+                            )}
+                          >
+                            <h2 className="px-5 text-center">
+                              Congratulations, We found your friend!
+                            </h2>
+                            <div className='py-2 flex flex-row border-[1px] my-5 items-center justify-center border-gray-600'>
+                            <p className='px-3 !mt-0 text-center font-bold '>
+                              Voucher-code: {referralInfo?.voucherCode}
+                            </p>
+                            <div
+                            className="w-5 m-0 "
+                            onClick={handleCopyClick}
+                            >
+                            {!copied ? 
+                            (
+                              <ClipboardIcon className='flex justify-center items-center'/>
+                              ):(
+                                <ClipboardFill className='flex justify-center items-center'/>
+                                )
+                            }
+                            {/* {copied ? 'COPIED' : 'COPY CODE'} 
+                            </div>
+                            </div>
+                            <p className='px-5 text-center font-bold'>
+                              Offer: {referralInfo?.promoName}
+                            </p>
+                            <p className='font-bold'>
+                              Validity: {`This offer is valid for ${referralInfo?.validityDays} Days`}
+                            </p>
+                            <p className="px-12 text-center">
+                              Use this voucher code in the Apply promotion section to avail this offer
+                            </p>
+                            
+                          </div>
+                        )}
+                        <div className="flex w-full">
+                          <Image
+                          src={'/assets/images/refer-a-friend.jpg'}
+                          alt='banner'
+                          height={700}
+                          width={480}
+                          className='object-cover'
+                          >
+                          </Image>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root> */}{/*CODE NOT TO BE REMOVED, FOR FUTURE USE*/}
     </>
   )
 }

@@ -1,18 +1,32 @@
-import React from 'react'
-import os from 'os'
+// Base Imports
+import React, { useState } from 'react'
+import { useEffect } from 'react'
 import type { GetStaticPropsContext } from 'next'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
+import axios from 'axios'
+// Other Imports
 import commerce from '@lib/api/commerce'
-import { HOMEPAGE_SLUG, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
-import { obfuscateHostName } from '@framework/utils/app-util'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import useAnalytics from '@components/services/analytics/useAnalytics'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
+import {
+  HOMEPAGE_SLUG,
+  NEXT_REFERRAL_ADD_USER_REFEREE,
+  NEXT_REFERRAL_BY_SLUG,
+  NEXT_REFERRAL_CLICK_ON_INVITE,
+  SITE_ORIGIN_URL,
+} from '@components/utils/constants'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
+import { useRouter } from 'next/router'
+import os from 'os'
+import { obfuscateHostName } from '@framework/utils/app-util'
+import { FeatureBar } from '@components/common'
+import { Button } from '@components/ui'
+
 const PromotionBanner = dynamic(
   () => import('@components/home/PromotionBanner')
 )
@@ -21,6 +35,7 @@ const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/product/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
+const RefferalCard = dynamic(() => import('@components/customer/Referral/ReferralCard'))
 
 export async function getStaticProps({
   preview,
@@ -80,11 +95,12 @@ function Home({
   pageContentsMobileWeb,
   hostName,
   deviceInfo,
-}: any) {
+}: any) { 
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb
+
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
       id: '',

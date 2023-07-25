@@ -100,6 +100,7 @@ const initialState = {
   guestUser: getItem('guestUser') || {},
   isGuestUser: getItem('isGuest') || false,
   isSplitDelivery: getItem('isSplitDelivery') || false,
+  referralProgramActive: getItem('referralProgramActive') || false,
   showSearchBar: false,
   appConfig: {},
   orderId: getItem('orderId') || '',
@@ -211,6 +212,9 @@ type Action =
   }
   | {
     type: 'SET_IS_SPLIT_DELIVERY'
+    payload: boolean
+  } | {
+    type: 'SET_REFERRAL_PROGRAM_ACTIVE'
     payload: boolean
   }
   | { type: 'REMOVE_USER'; payload: any }
@@ -429,6 +433,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         isSplitDelivery: action.payload,
+      }
+    }
+    case 'SET_REFERRAL_PROGRAM_ACTIVE': {
+      return {
+        ...state,
+        referralProgramActive: action.payload,
       }
     }
     case 'REMOVE_USER': {
@@ -820,6 +830,13 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setReferralProgramActive = useCallback(
+    (payload: boolean) => {
+      setItem('referralProgramActive', payload)
+      dispatch({ type: 'SET_REFERRAL_PROGRAM_ACTIVE', payload })
+    },
+    [dispatch]
+  )
 
   const deleteUser = useCallback(
     (payload: any) => {
@@ -1076,6 +1093,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setIsPaymentLink,
       resetIsPaymentLink,
       setIsSplitDelivery,
+      setReferralProgramActive,
       deleteUser,
       openCart,
       openLoginSideBar,
