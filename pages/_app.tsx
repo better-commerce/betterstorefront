@@ -54,7 +54,7 @@ import { DeviceType } from '@commerce/utils/use-device'
 import InitDeviceInfo from '@components/common/InitDeviceInfo'
 import ErrorBoundary from '@components/error'
 import CustomCacheBuster from '@components/common/CustomCacheBuster'
-import { version as buildVersion } from '../package.json'
+import packageInfo from '../package.json'
 import { cachedGetData } from '@framework/api/utils/cached-fetch'
 import { AppContext, AppInitialProps } from 'next/app'
 import { decrypt, encrypt } from '@framework/utils/cipher'
@@ -321,7 +321,7 @@ function MyApp({
 
       <ManagedUIContext>
         {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
-        <CustomCacheBuster buildVersion={buildVersion} />
+        <CustomCacheBuster buildVersion={packageInfo?.version} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
         {/* TODO: Disable client-side payment link redirect */}
         {/*<PaymentLinkRedirect router={router} />*/}
