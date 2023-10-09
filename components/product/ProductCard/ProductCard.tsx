@@ -477,48 +477,22 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         {isMobile && (
           <div className="flex m-2 border">
             <div className="w-4/12">
-              <button
-                className="w-full text-center bg-white p-1.5"
-                onClick={handleWishList}
-                title="Wishlist"
-                disabled={product.hasWishlisted}
-              >
-                <HeartIcon
-                  className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-800'
-                    }`}
-                  aria-hidden="true"
-                />
+              <button className="w-full text-center bg-white p-1.5" onClick={handleWishList} title="Wishlist" disabled={product.hasWishlisted}>
+                <HeartIcon className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-800'}`} aria-hidden="true" />
               </button>
             </div>
             <div className="w-8/12 text-center border-l sm:col-span-8">
-              <button
-                type="button"
-                onClick={() => handleQuickViewData(product)}
-                className="w-full text-primary dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
-              >
+              <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">
                 {QUICK_VIEW}
               </button>
             </div>
           </div>
         )}
-
         <div className="flex flex-col">
-          <Button
-            className="hidden mt-2"
-            title={buttonConfig.title}
-            action={buttonConfig.action}
-            type="button"
-            buttonType={buttonConfig.buttonType || 'cart'}
-          />
+          <Button className="hidden mt-2" title={buttonConfig.title} action={buttonConfig.action} type="button" buttonType={buttonConfig.buttonType || 'cart'} />
         </div>
       </div>
-      <PLPQuickView
-        isQuickview={Boolean(quickViewData)}
-        setQuickview={() => { }}
-        productData={quickViewData}
-        isQuickviewOpen={Boolean(quickViewData)}
-        setQuickviewOpen={handleCloseQuickView}
-      />
+      <PLPQuickView isQuickview={Boolean(quickViewData)} setQuickview={() => { }} productData={quickViewData} isQuickviewOpen={Boolean(quickViewData)} setQuickviewOpen={handleCloseQuickView} />
     </>
   )
 }
