@@ -14,22 +14,8 @@ const isBetterCommerce = provider === 'bettercommerce'
 module.exports = withCommerceConfig({
   poweredByHeader: false,
   images: {
-    domains: [
-      'liveocxcdn.azureedge.net',
-      'liveocxstorage.blob.core.windows.net',
-      'cdnbs.bettercommerce.io',
-      'dev-da-cdn-erf7a6h0byf7e6f0.z01.azurefd.net',
-      'cdn.shopify.com',
-      'liveocx.imgix.net',
-      'devocxblob.blob.core.windows.net',
-      'img.ffx.co.uk',
-      'ffxcdn.azureedge.net',
-      'ffxlivestorage.blob.core.windows.net',
-      'livekstmcdn.azureedge.net',
-      'devocxstorage.blob.core.windows.net',
-      'www.imagedelivery.space',
-    ],
-    // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
+    domains: process.env.NEXT_IMAGES_ALLOWED_DOMAINS.split(','),
+    cacheDuration: 31536000,
   },
   commerce,
   i18n: {
