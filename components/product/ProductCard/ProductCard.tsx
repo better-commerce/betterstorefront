@@ -458,9 +458,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 <span className="px-1 text-xs font-medium text-black line-through">
                   {isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax}
                 </span>
-                <span className="text-xs font-semibold text-red-600">
-                  ({discount}% Off)
-                </span>
+                <span className="text-xs font-semibold text-red-600">({discount}% Off)</span>
               </>
             )}
           </div>
