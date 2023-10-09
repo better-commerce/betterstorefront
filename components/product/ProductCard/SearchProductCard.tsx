@@ -287,7 +287,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 IMG_PLACEHOLDER
               }
               alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto" 
+              className="object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto"
               style={css}
               width={400}
               height={500}
@@ -301,7 +301,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto"
+                className="hidden object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto"
                 style={css}
                 width={400}
                 height={500}
@@ -363,7 +363,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               <li className="inline-block uppercase" key={idx}>
                 {size?.fieldValue}{' '}
                 {sizeValues.length !== idx + 1 && (
-                  <span className="mr-1 c-sperator">,</span>
+                  <span className="mr-1 c-separator">,</span>
                 )}
               </li>
             ))}

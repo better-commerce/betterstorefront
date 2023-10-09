@@ -358,7 +358,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 IMG_PLACEHOLDER
               }
               alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto"
+              className="object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto"
               style={css}
               width={400}
               height={500}
@@ -372,7 +372,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto"
+                className="hidden object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto"
                 style={css}
                 width={400}
                 height={500}
@@ -432,7 +432,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           handleHover={() => {}}
           itemPrice={itemPrice}
           productName={product.name}
-          onClick={handleSetCompareProduct.bind(null, product)}
+          onClick={handleSetCompareProduct}
           className="w-full"
         >
           <div className="flex justify-between w-full px-2 mt-3 mb-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
@@ -445,7 +445,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 <li className="inline-block uppercase" key={idx}>
                   {size?.fieldValue}{' '}
                   {sizeValues.length !== idx + 1 && (
-                    <span className="mr-1 c-sperator">,</span>
+                    <span className="mr-1 c-separator">,</span>
                   )}
                 </li>
               ))}
