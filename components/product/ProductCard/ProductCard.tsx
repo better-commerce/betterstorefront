@@ -429,7 +429,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         <ButtonLink
           isComparedEnabled={isComparedEnabled}
           href={`/${currentProductData.link}`}
-          handleHover={() => {}}
+          handleHover={() => { }}
           itemPrice={itemPrice}
           productName={product.name}
           onClick={handleSetCompareProduct}
@@ -452,23 +452,17 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             </ul>
           ) : null}
           <div className="px-2 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">
-            {isIncludeVAT
-              ? product?.price?.formatted?.withTax
-              : product?.price?.formatted?.withoutTax}
-            {product?.listPrice?.raw?.withTax > 0 &&
-              product?.listPrice?.raw?.withTax !=
-                product?.price?.raw?.withTax && (
-                <>
-                  <span className="px-1 text-xs font-medium text-black line-through">
-                    {isIncludeVAT
-                      ? product?.listPrice?.formatted?.withTax
-                      : product?.listPrice?.formatted?.withoutTax}
-                  </span>
-                  <span className="text-xs font-semibold text-red-600">
-                    ({discount}% Off)
-                  </span>
-                </>
-              )}
+            {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
+            {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax && (
+              <>
+                <span className="px-1 text-xs font-medium text-black line-through">
+                  {isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax}
+                </span>
+                <span className="text-xs font-semibold text-red-600">
+                  ({discount}% Off)
+                </span>
+              </>
+            )}
           </div>
           {/* compare remove button */}
           {isComparedEnabled && (
@@ -494,9 +488,8 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 disabled={product.hasWishlisted}
               >
                 <HeartIcon
-                  className={`inline-block w-4 h-4 ${
-                    product.hasWishlisted && 'fill-red-600 text-red-800'
-                  }`}
+                  className={`inline-block w-4 h-4 ${product.hasWishlisted && 'fill-red-600 text-red-800'
+                    }`}
                   aria-hidden="true"
                 />
               </button>
@@ -525,7 +518,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       </div>
       <PLPQuickView
         isQuickview={Boolean(quickViewData)}
-        setQuickview={() => {}}
+        setQuickview={() => { }}
         productData={quickViewData}
         isQuickviewOpen={Boolean(quickViewData)}
         setQuickviewOpen={handleCloseQuickView}
