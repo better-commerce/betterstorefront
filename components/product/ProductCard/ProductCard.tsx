@@ -466,9 +466,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           {isComparedEnabled && (
             <div className="px-2 my-2 slider-mb-4">
               {product.compared ? (
-                <button className="w-full font-semibold btn-primary-white font-14">
-                  Remove
-                </button>
+                <button className="w-full font-semibold btn-primary-white font-14">Remove</button>
               ) : (
                 <></>
               )}
