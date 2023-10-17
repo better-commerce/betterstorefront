@@ -466,7 +466,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
   return (
     <>
-      <div  className={cn('relative height-full border-gray-200 hover:border-gray-500 grid grid-cols-12 gap-2 sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-4 pb-4 sm:pb-0 bg-white',)} key={product.id}>
+      <div className={cn('relative height-full border-gray-200 hover:border-gray-500 grid grid-cols-12 gap-2 sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-4 pb-4 sm:pb-0 bg-white',)} key={product.id}>
         <div className={`${product?.currentStock == 0 ? 'opacity-40' : ''} relative col-span-4 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card`}>
           <div className="absolute top-0 right-0 z-10 flex items-center justify-between w-full pos-inherit">
             <ProductTag product={product} />
@@ -556,14 +556,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             </div>
 
             {isMobile || isIPadorTablet ? null :
-              <div className="flex items-center justify-between w-full px-0 py-2 text-sm font-semibold text-left text-black border-t border-gray-200 h-9 product-name hover:text-gray-950">
-                <span>
-                  Get it by{' '}{deliveryDateFormat(EtaDate)}
-                </span>
-              </div>
-            }
-            {isMobile || isIPadorTablet ? null :
-              <div className="flex flex-col w-full gap-0">
+              <div className="flex flex-col w-full gap-0 py-3 mt-3 border-t border-gray-200">
                 {attributesMap?.map((attrib: any, attribIdx: any) => (
                   <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                     <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
@@ -587,60 +580,15 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                       )}
                     />
                   ))}
-                  <p className="pl-1 my-auto text-2xl font-light">
+                  <p className="pl-1 my-auto text-xl font-light">
                     {product?.rating}
                   </p>
-                  <span className="text-xs font-normal text-gray-500">
-                    ({product?.reviewCount})
-                  </span>
-                </div>
-                <div className="">
-                  <>
-                    {WarrantyYear?.map((Warranty: any, wdx: number) => (
-                      <>
-                        {Warranty?.value == '1000' ? (
-                          <>
-                            <div
-                              className="relative flex items-center leading-none"
-                              key={wdx}
-                            >
-                              <span className="relative inline-block font-normal">
-                                {' '}
-                                <i className="sprite-icons sprite-warranty-blank"></i>{' '}
-                                <span className="absolute left-2/4 top-1.5 -translate-x-2/4 font-12">
-                                  &#x221E;
-                                </span>
-                              </span>
-                              <span className="uppercase font-10 warranty-info-span">
-                                life time warranty
-                              </span>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="relative leading-none" key={wdx}>
-                              <span className="relative inline-block font-normal">
-                                {' '}
-                                <i className="sprite-icons sprite-warranty-blank"></i>{' '}
-                                <span className="absolute left-2/4 top-pos-7 -translate-x-2/4 font-12">
-                                  {Warranty?.value}
-                                </span>
-                              </span>
-                              <span className="uppercase font-10 warranty-info-span">
-                                {Warranty?.value} year warranty
-                              </span>
-                            </div>
-                          </>
-                        )}
-                      </>
-                    ))}
-                  </>
-                </div>
+                </div>                
               </div>
             )}
           </ButtonLink>
           {isMobile || isIPadorTablet ? null : (
-            <div className={cn('absolute flex flex-col left-0 w-full opacity-0 group-hover:opacity-100 gap-1 pr-0 mx-auto py-2 group-hover:flex bottom-0 duration-300 bg-transparent rounded-md',)}>
+            <div className={cn('absolute flex flex-col left-0 w-full z-10 bg-white opacity-0 group-hover:opacity-100 gap-1 pr-0 mx-auto py-2 group-hover:flex bottom-0 duration-300 bg-transparent rounded-md',)}>
               <div className="flex justify-between gap-4 px-4">
                 <SimpleButton
                   variant="slim"
@@ -674,11 +622,6 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               ))}
             </div>
             <div className='flex items-center justify-between w-full col-span-12 gap-2 py-2 border-gray-200 border-y'>
-              <div className="flex items-center w-full text-sm font-semibold text-left text-black product-name hover:text-gray-950">
-                <span>
-                  Get it by{' '}{deliveryDateFormat(EtaDate)}
-                </span>
-              </div>
               <div className="relative items-end justify-end w-full text-sm font-semibold text-right text-black top-1 product-name hover:text-gray-950">
                 {isInWishList ? (
                   <SimpleButton
@@ -709,7 +652,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                     title={buttonConfig.title}
                     action={buttonConfig.action}
                     validateAction={buttonConfig.validateAction}
-                    type="button" 
+                    type="button"
                     aria-label="Cart"
                     buttonType={buttonConfig.buttonType || 'cart'}
                   />

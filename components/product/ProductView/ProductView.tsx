@@ -29,6 +29,7 @@ import {
   NEXT_GET_PRODUCT_PREVIEW,
   SITE_ORIGIN_URL,
   NEXT_GET_CATALOG_PRODUCTS,
+  NEXT_GET_ORDER_RELATED_PRODUCTS
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -79,6 +80,8 @@ import CacheProductImages from './CacheProductImages'
 import Script from 'next/script'
 import ImageGallery from 'react-image-gallery'
 import PDPCompare from '../PDPCompare'
+import { decrypt, encrypt } from '@framework/utils/cipher'
+import { LocalStorage } from '@components/utils/payment-constants'
 
 const AttributesHandler = dynamic(
   () => import('@components/product/ProductView/AttributesHandler')
@@ -126,7 +129,7 @@ export default function ProductView({
   recordEvent,
   slug,
   isPreview = false,
-  relatedProducts,
+  relatedProductsProp,
   promotions,
   pdpLookbookProducts,
   pdpCachedImages: cachedImages,
@@ -150,10 +153,11 @@ export default function ProductView({
     openLoginSideBar,
     isGuestUser,
     setIsCompared,
+    removeFromWishlist,
     currency,
   } = useUI()
   const isIncludeVAT = vatIncluded()
-  const [updatedProduct, setUpdatedProduct] = useState<any>(null)
+  const [product, setUpdatedProduct] = useState<any>(data)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
@@ -169,15 +173,38 @@ export default function ProductView({
   const [fullscreen, setFullscreen] = useState(false);
   const [attributeNames, setAttributeNames] = useState([])
   const [compareProducts, setCompareProduct] = useState([])
-  let currentPage = getCurrentPage()
   const [allProductsByCategory, setAllProductsByCategory] = useState<any>(allProductsByCategoryProp)
-  const product = updatedProduct || data
-
+  const [relatedProducts, setRelatedProducts] = useState<any>(relatedProductsProp)
+  const variantProductsCount = product?.variantProducts?.length
+  let currentPage = getCurrentPage()
   const [selectedAttrData, setSelectedAttrData] = useState({
     productId: product?.recordId,
     stockCode: product?.stockCode,
     ...product,
   })
+  useEffect(() => {
+    axios
+      .post(NEXT_GET_CATALOG_PRODUCTS, {
+        isCategory: true,
+        categoryId: product?.classification?.categoryCode,
+        pageSize: 50,
+      })
+      .then((res: any) => {
+        if (res?.data?.products?.results) {
+          setAllProductsByCategory(res?.data?.products?.results)
+        }
+      })
+  }, [product, currency])
+
+  const fetchRelatedProducts = async (productId: string) => {
+    const { data: relatedProducts }: any = await axios.post(
+      NEXT_GET_ORDER_RELATED_PRODUCTS,
+      {
+        recordId: productId,
+      }
+    )
+    setRelatedProducts(relatedProducts)
+  }
   useEffect(() => {
     if (allProductsByCategory?.length < 0) return
     let mappedAttribsArrStr = allProductsByCategory?.map((o: any) => o.attributes).flat()
@@ -213,6 +240,29 @@ export default function ProductView({
     const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW
     const response: any = await axios.post(url, { slug: slug })
     if (response?.data?.product) {
+      fetchRelatedProducts(response?.data?.product?.recordId)
+      const recentlyViewedProduct: any = response?.data?.product?.stockCode;
+
+      let viewedProductsList = []
+      viewedProductsList = localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) ? JSON.parse(decrypt(
+        localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) || '[]'
+      )) : []
+      if (viewedProductsList?.length == 0) {
+        viewedProductsList?.push(recentlyViewedProduct)
+      } else {
+        const checkDuplicate: any = viewedProductsList?.some(
+          (val: any) => val === recentlyViewedProduct
+        )
+        if (!checkDuplicate) {
+          viewedProductsList.push(recentlyViewedProduct)
+        }
+      }
+      localStorage.setItem(
+        LocalStorage.Key.RECENTLY_VIEWED,
+        encrypt(JSON.stringify(viewedProductsList))
+      )
+    }
+    if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
         entity: JSON.stringify({
           id: response?.data?.product?.recordId,
@@ -239,9 +289,7 @@ export default function ProductView({
   useEffect(() => {
     fetchProduct()
     setIsCompared('true')
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug])
+  }, [slug, currency])
 
   useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
@@ -700,7 +748,7 @@ export default function ProductView({
 
   const handleProductBundleUpdate = (bundledProduct: any) => {
     if (bundledProduct && bundledProduct?.id) {
-      let clonedProduct = Object.assign({}, updatedProduct)
+      let clonedProduct = Object.assign({}, product)
       if (clonedProduct && clonedProduct?.componentProducts) {
         setUpdatedProduct(clonedProduct)
       }
@@ -756,8 +804,8 @@ export default function ProductView({
   const renderCustomControls = () => {
     if (fullscreen) {
       return (
-        <button className='flex-end items-center justify-center rounded icon-container absolute right-5 z-999 ' onClick={exitFullscreen}>
-          <XMarkIcon className="text-white w-8 h-8 border-2 rounded-sm mt-3 hover:text-orange-500 hover:border-orange-500" aria-hidden="true" />
+        <button className='absolute items-center justify-center rounded flex-end icon-container right-5 z-999 ' onClick={exitFullscreen}>
+          <XMarkIcon className="w-8 h-8 mt-3 text-white border-2 rounded-sm hover:text-orange-500 hover:border-orange-500" aria-hidden="true" />
         </button>
       );
     }
@@ -765,7 +813,7 @@ export default function ProductView({
   };
 
   const exitFullscreen = () => {
-    if(document) document?.exitFullscreen();
+    if (document) document?.exitFullscreen();
     return
   };
 
@@ -895,7 +943,7 @@ export default function ProductView({
             </p>
             <div className="my-4">
               <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
-              {updatedProduct ? (
+              {product ? (
                 <p className="text-2xl font-bold text-black sm:text-xl font-24">
                   {isIncludeVAT
                     ? selectedAttrData?.price?.formatted?.withTax
@@ -941,7 +989,7 @@ export default function ProductView({
                 key={product?.id}
               />
             )}
-            {updatedProduct ? (
+            {product ? (
               <>
                 {isEngravingAvailable ? (
                   <>
