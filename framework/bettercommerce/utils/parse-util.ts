@@ -9,6 +9,7 @@
 import { DATE_TIME_FORMAT } from '@components/utils/constants'
 import { CURRENCY_SYMBOL_POUND } from '@components/utils/textVariables'
 import { toNumber } from 'lodash'
+import moment from 'moment'
 import { hrtime } from 'process'
 const format = require('string-format')
 
@@ -157,4 +158,18 @@ export const stringFormat = (input: string, data: object) => {
     return format(input, data)
   }
   return ''
+}
+
+
+export const dateFormat = (date: string | Date, format: string): string => {
+  let dt = date
+  if (typeof date === 'string') {
+    dt = new Date(date)
+  }
+
+  return moment(dt).format(format)
+}
+
+export const deliveryDateFormat = (date: string | Date): string => {
+  return dateFormat(date, 'DD/MM/yyyy')
 }

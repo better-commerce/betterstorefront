@@ -79,8 +79,8 @@ function RenderRadioOptions({
 
   return (
     <>
-      <div className="flex items-center flex-wrap">
-        {items.slice(0, countOfItems)?.map((item: any, idx: any) => (
+      <div className="flex flex-wrap items-center gap-2">
+        {items?.map((item: any, idx: any) => (
           <>
             <RadioGroup.Option
               key={idx}
@@ -91,48 +91,21 @@ function RenderRadioOptions({
                 setSizeInit('true')
               }}
               className={cn(
-                '/pdp-color-swatch-item /relative z-99 h-10 w-10 border border-gray-200 flex text-black items-center justify-center cursor-pointer outline-none dark:text-black hover:border-gray-900',
+                '/pdp-color-swatch-item /relative z-99 h-10 w-10 rounded-full border border-gray-200 flex text-black items-center justify-center cursor-pointer outline-none dark:text-black hover:border-gray-900',
                 {
                   'border border-gray-200': selectedVal !== item.fieldValue,
                   'border border-gray-900': selectedVal === item.fieldValue,
                 }
               )}
             >
-              <RadioGroup.Label as="p" className="text-ms m-auto uppercase">
+              <RadioGroup.Label as="p" className="m-auto uppercase text-ms">
                 {item.fieldValue}
               </RadioGroup.Label>
             </RadioGroup.Option>
           </>
         ))}
 
-        {/* show less button */}
-        {openRemainElems && (
-          <button
-            className="relative flex items-center justify-center h-10 px-1 bg-gray-300 z-99 hover:opacity-75 bg-nav"
-            onClick={() => {
-              //  handleToggleOpenRemainElems()
-              handleLessElems()
-            }}
-          >
-            <p className="text-gray-900 text-ms m-auto px-3">{'<'}</p>
-          </button>
-        )}
-
-        {/* show more button */}
-        {showMoreSize &&
-          remainingItems &&
-          remainingItems.length > 0 &&
-          !openRemainElems && (
-            <div
-              className="relative flex items-center justify-center w-10 h-10 transition duration-100 bg-gray-300 outline-none cursor-pointer z-99 hover:opacity-75 bg-nav"
-              onClick={() => {
-                handleMoreElems()
-                // handleToggleOpenRemainElems()
-              }}
-            >
-              <p className="text-xs text-gray-900 m-auto">More</p>
-            </div>
-          )}
+       
       </div>
 
       <div

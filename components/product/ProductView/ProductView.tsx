@@ -28,6 +28,7 @@ import {
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
   SITE_ORIGIN_URL,
+  NEXT_GET_CATALOG_PRODUCTS,
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -62,7 +63,7 @@ import {
   PDP_ELEM_SELECTORS,
 } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
-import { groupBy, round } from 'lodash'
+import _, { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
@@ -133,7 +134,7 @@ export default function ProductView({
   deviceInfo,
   config,
   maxBasketItemsCount,
-  allProductsByBrand,
+  allProductsByCategory: allProductsByCategoryProp,
 }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const {
@@ -149,6 +150,7 @@ export default function ProductView({
     openLoginSideBar,
     isGuestUser,
     setIsCompared,
+    currency,
   } = useUI()
   const isIncludeVAT = vatIncluded()
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
@@ -164,8 +166,10 @@ export default function ProductView({
   const [isLoading, setIsLoading] = useState(true)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
+  const [attributeNames, setAttributeNames] = useState([])
+  const [compareProducts, setCompareProduct] = useState([])
   let currentPage = getCurrentPage()
-
+  const [allProductsByCategory, setAllProductsByCategory] = useState<any>(allProductsByCategoryProp)
   const product = updatedProduct || data
 
   const [selectedAttrData, setSelectedAttrData] = useState({
@@ -173,6 +177,20 @@ export default function ProductView({
     stockCode: product?.stockCode,
     ...product,
   })
+  useEffect(() => {
+    if (allProductsByCategory?.length < 0) return
+    let mappedAttribsArrStr = allProductsByCategory?.map((o: any) => o.attributes).flat()
+    mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o.display))
+    setAttributeNames(mappedAttribsArrStr)
+  }, [allProductsByCategory])
+
+  useEffect(() => {
+    axios.post(NEXT_GET_CATALOG_PRODUCTS, { isCategory: true, categoryId: product?.classification?.categoryCode, pageSize: 50, }).then((res: any) => {
+      if (res?.data?.products?.results) {
+        setAllProductsByCategory(res?.data?.products?.results)
+      }
+    })
+  }, [product, currency])
 
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
   const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
@@ -1013,15 +1031,10 @@ export default function ProductView({
           </>
         ) : null}
 
-        {allProductsByBrand?.length > 0 ? (
+        {allProductsByCategory?.length > 0 ? (
           <div className="flex flex-col w-full px-0 mx-auto ">
             <div className="flex flex-col section-devider"></div>
-            <PDPCompare
-              name={data?.brand || ''}
-              pageConfig={config}
-              products={allProductsByBrand}
-              deviceInfo={deviceInfo}
-            />
+            <PDPCompare name={data?.brand || ''} pageConfig={config} products={allProductsByCategory} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount} attributeNames={attributeNames} />
           </div>
         ) : null}
 
@@ -1030,7 +1043,7 @@ export default function ProductView({
         )?.length > 0 ? (
           <>
             <div className="flex flex-col section-devider"></div>
-            <div className="flex flex-col w-full px-4 mx-auto container page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
+            <div className="container flex flex-col w-full px-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
               <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
                 You May Also Like
               </h3>
@@ -1133,34 +1146,32 @@ export default function ProductView({
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   >
                     <div className="relative px-4 pt-5 pb-4 mx-auto overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-2/6 sm:p-2">
-                      <div>
-                        <div className="flex items-center">
-                          <button
-                            type="button"
-                            className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
-                            onClick={handlePreviewClose}
-                          >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
-                            <XMarkIcon
-                              className="w-6 h-6 text-black"
-                              aria-hidden="true"
+                      <div className="flex items-center">
+                        <button
+                          type="button"
+                          className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
+                          onClick={handlePreviewClose}
+                        >
+                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <XMarkIcon
+                            className="w-6 h-6 text-black"
+                            aria-hidden="true"
+                          />
+                        </button>
+                      </div>
+                      <div className="text-center">
+                        {previewImg && (
+                          <div key={previewImg.name + 'tab-panel'}>
+                            <ImageZoom
+                              src={previewImg || IMG_PLACEHOLDER}
+                              alt={previewImg.name}
+                              blurDataURL={
+                                `${previewImg}?h=600&w=400&fm=webp` ||
+                                IMG_PLACEHOLDER
+                              }
                             />
-                          </button>
-                        </div>
-                        <div className="text-center">
-                          {previewImg && (
-                            <div key={previewImg.name + 'tab-panel'}>
-                              <ImageZoom
-                                src={previewImg || IMG_PLACEHOLDER}
-                                alt={previewImg.name}
-                                blurDataURL={
-                                  `${previewImg}?h=600&w=400&fm=webp` ||
-                                  IMG_PLACEHOLDER
-                                }
-                              />
-                            </div>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Transition.Child>

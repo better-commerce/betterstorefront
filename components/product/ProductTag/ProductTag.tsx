@@ -1,36 +1,96 @@
-import cn from 'classnames'
-import { inherits } from 'util'
-import s from './ProductTag.module.css'
+import { useEffect, useState } from 'react'
 
-interface ProductTagProps {
-  className?: string
-  name: string
-  price: string
-  fontSize?: number
+//
+import { BTN_NOTIFY_ME, BTN_PRE_ORDER } from '@components/utils/textVariables'
+import { PRODUCT_TAGS } from '@components/utils/constants'
+
+interface Props {
+  product: any
 }
 
-const ProductTag: React.FC<React.PropsWithChildren<ProductTagProps>> = ({
-  name,
-  price,
-  className = '',
-  fontSize = 32,
-}) => {
-  return (
-    <div className={cn(s.root, className)}>
-      <h3 className={s.name}>
-        <span
-          className={cn({ [s.fontsizing]: fontSize < 32 })}
-          style={{
-            fontSize: `${fontSize}px`,
-            lineHeight: `${fontSize}px`,
-          }}
-        >
-          {name}
-        </span>
-      </h3>
-      <div className={s.price}>{price}</div>
-    </div>
-  )
-}
+export default function ProductTag({ product }: Props) {
+  const [isNotifyMeEnabled, setIsNotifyMeEnabled] = useState(false)
+  const [isPreorderEnabled, setIsPreorderEnabled] = useState(false)
+  const [tagValues, setTagValues] = useState({
+    newLaunch: false,
+    onSale: false,
+    trending: false,
+    exclusive: false,
+    bestSeller: false,
+  })
 
-export default ProductTag
+  useEffect(() => {
+    // check for algolia document object
+    if (product?.objectID) {
+      setTagValues({
+        newLaunch: product?.tags?.indexOf(PRODUCT_TAGS.newLaunch) > -1,
+        onSale: product?.tags?.indexOf(PRODUCT_TAGS.onSale) > -1,
+        trending: product?.tags?.indexOf(PRODUCT_TAGS.trending) > -1,
+        exclusive: product?.tags?.indexOf(PRODUCT_TAGS.exclusive) > -1,
+        bestSeller: product?.tags?.indexOf(PRODUCT_TAGS.bestSeller) > -1,
+      })
+      setIsNotifyMeEnabled(product?.webstock < 1)
+      setIsPreorderEnabled(product?.preorder)
+    } else {
+      setTagValues({
+        newLaunch: product?.newLaunch,
+        onSale: product?.onSale,
+        trending: product?.trending,
+        exclusive: product?.exclusive,
+        bestSeller: product?.bestSeller,
+      })
+      setIsNotifyMeEnabled(product?.currentStock < 1 && !product?.preOrder?.isEnabled)
+      setIsPreorderEnabled(product?.currentStock < 1 && product?.preOrder?.isEnabled)
+    }
+  }, [product])
+
+  if (isNotifyMeEnabled) {
+    return (
+      <div className="w-1/2 !min-w-[100px] text-white bg-red-800 ribbon">
+        {BTN_NOTIFY_ME}
+      </div>
+    )
+  }
+
+  if (tagValues?.newLaunch) {
+    return <div className="w-1/2 text-white bg-black ribbon">New</div>
+  }
+
+  if (tagValues?.onSale) {
+    return <div className="w-1/2 text-white bg-red-700 ribbon">On Sale</div>
+  }
+
+  if (tagValues?.bestSeller) {
+    return (
+      <div className="w-1/2 sm:!min-w-[110px] text-white ribbon bg-sky-800">
+        Best Seller
+      </div>
+    )
+  }
+
+  if (isPreorderEnabled) {
+    return (
+      <div className="w-1/2 sm:!min-w-[105px] text-white bg-yellow-600 ribbon">
+        {BTN_PRE_ORDER}
+      </div>
+    )
+  }
+
+  if (tagValues?.trending) {
+    return (
+      <div className="w-1/2 sm:!min-w-[97px] text-white ribbon bg-sky-800">
+        Trending
+      </div>
+    )
+  }
+
+  if (tagValues?.exclusive) {
+    return (
+      <div className="w-1/2 sm:!min-w-[100px] text-black bg-tan ribbon">
+        Exclusive
+      </div>
+    )
+  }
+
+  return <></>
+}
