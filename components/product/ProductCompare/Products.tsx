@@ -30,6 +30,7 @@ import { hideElement, showElement } from '@framework/utils/ui-util'
 import { stringFormat, tryParseJson } from '@framework/utils/parse-util'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
+import ButtonNotifyMe from '../ButtonNotifyMe'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -260,12 +261,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       },
       shortMessage: '',
     }
-    if (!product.currentStock && !product.preOrder.isEnabled) {
-      buttonConfig.title = BTN_NOTIFY_ME
-      buttonConfig.isNotifyMeEnabled = true
-      buttonConfig.action = async () => handleNotification()
-      buttonConfig.buttonType = 'button'
-    } else if (!product?.currentStock && product?.preOrder?.isEnabled) {
+   if (!product?.currentStock && product?.preOrder?.isEnabled) {
       buttonConfig.title = BTN_PRE_ORDER
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
@@ -385,13 +381,15 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </div>
         </Link>
         <div className="absolute bottom-0 left-0 right-0 flex flex-col p-2">
-          <Button
+          {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
+            <ButtonNotifyMe product={product} className="mt-2 text-sm font-medium rounded-md" />
+          ) : (<Button
             className="mt-2 text-sm font-medium rounded-md"
             title={buttonConfig.title}
             action={buttonConfig.action}
             type="button"
             buttonType={buttonConfig.buttonType || 'cart'}
-          />
+          />)}
         </div>
       </div>
       <div className="mt-5 bg-white border-t border-gray-200 lg:mt-10">
