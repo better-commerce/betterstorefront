@@ -702,14 +702,18 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             </div>
             <div className="col-span-12">
               <div className="grid grid-cols-2 gap-1 sm:mb-4 justify-evenly">
-                <Button
-                  title={buttonConfig.title}
-                  action={buttonConfig.action}
-                  validateAction={buttonConfig.validateAction}
-                  type="button"
-                  aria-label="Cart"
-                  buttonType={buttonConfig.buttonType || 'cart'}
-                />
+                {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
+                  <ButtonNotifyMe product={product} />
+                ) : (
+                  <Button
+                    title={buttonConfig.title}
+                    action={buttonConfig.action}
+                    validateAction={buttonConfig.validateAction}
+                    type="button" 
+                    aria-label="Cart"
+                    buttonType={buttonConfig.buttonType || 'cart'}
+                  />
+                )}
                 <button
                   type="button"
                   onClick={() => handleQuickViewData(product)}

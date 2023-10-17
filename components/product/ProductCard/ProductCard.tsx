@@ -518,7 +518,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               </div>
             </div>
             <div className="grid grid-cols-2 col-span-12 gap-1 sm:mb-4 justify-evenly">
-              <Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} type="button" buttonType={buttonConfig.buttonType || 'cart'} />
+              {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
+                <ButtonNotifyMe product={product} />
+              ) : (<Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} type="button" buttonType={buttonConfig.buttonType || 'cart'} />)}
               <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary bg-orange-600 text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">
                 {QUICK_VIEW}
               </button>

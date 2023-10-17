@@ -166,6 +166,7 @@ export default function ProductView({
   const [isLoading, setIsLoading] = useState(true)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
+  const [fullscreen, setFullscreen] = useState(false);
   const [attributeNames, setAttributeNames] = useState([])
   const [compareProducts, setCompareProduct] = useState([])
   let currentPage = getCurrentPage()
@@ -748,6 +749,26 @@ export default function ProductView({
     openCart()
   }
 
+  const toggleFullscreen = () => {
+    setFullscreen(!fullscreen);
+  };
+
+  const renderCustomControls = () => {
+    if (fullscreen) {
+      return (
+        <button className='flex-end items-center justify-center rounded icon-container absolute right-5 z-999 ' onClick={exitFullscreen}>
+          <XMarkIcon className="text-white w-8 h-8 border-2 rounded-sm mt-3 hover:text-orange-500 hover:border-orange-500" aria-hidden="true" />
+        </button>
+      );
+    }
+    return
+  };
+
+  const exitFullscreen = () => {
+    if(document) document?.exitFullscreen();
+    return
+  };
+
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
@@ -825,8 +846,10 @@ export default function ProductView({
                     showPlayButton={false}
                     showBullets={false}
                     showNav={false}
-                    additionalClass="app-image-gallery"
+                    additionalClass={`app-image-gallery ${fullscreen ? 'fullscreen' : ''}`}
                     showFullscreenButton={true}
+                    onScreenChange={toggleFullscreen}
+                    renderCustomControls={renderCustomControls}
                   />
                 </Tab.List>
               </Tab.Group>
