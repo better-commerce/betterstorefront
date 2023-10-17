@@ -408,7 +408,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     <>
       <div className={cn(`relative hover:border-orange-500 grid grid-cols-12 gap-2 overflow-hidden sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-0 pb-4 sm:pb-0 bg-white ${product?.currentStock == 0 ? 'hover:border-gray-200 border-gray-100' : 'hover:border-orange-500 border-gray-200'}`, { 'height-full border-gray-200': isComparedEnabled, 'height-full border-orange-500': product.compared, })} key={product.id}>
         <div className={`${product?.currentStock == 0 || product?.currentStock < 0 ? 'opacity-40' : ''} relative col-span-4 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card`}>
-          <div className="absolute top-0 right-0 z-10 flex items-center justify-between w-full pos-inherit">
+          <div className="absolute top-0 right-0 flex items-center justify-between w-full z-1 pos-inherit">
             <ProductTag product={product} />
             {isMobile || isIPadorTablet ? null : (
               product?.currentStock < 11 && product?.currentStock > 0 &&
@@ -477,16 +477,6 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             }
           </div>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${currentProductData.link}`} handleHover={() => { }} itemPrice={itemPrice} productName={product.name} onClick={handleSetCompareProduct} className="w-full px-0">
-            {product?.promotions?.length > 0 && (
-              <div className="flex w-auto gap-1 px-2 py-1 text-xs font-semibold text-black rounded-md bg-tan">
-                <i className="sprite-star-black sprite-icons" />
-                {product?.promotions?.map((promo: any, promoIdx: number) => {
-                  return (
-                    <span key={`promo-${promoIdx}`}>{promo?.promoCode}</span>
-                  )
-                })}
-              </div>
-            )}
             <div className="flex justify-between w-full px-0 mb-1 font-semibold text-left text-black capitalize font-16 product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
               {productNameWithAttr}
             </div>
@@ -503,8 +493,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                       )}
                     />
                   ))}
-                  <p className="pl-1 my-auto text-2xl font-light">{product?.rating}</p>
-                  <span className="text-xs font-normal text-gray-500">({product?.reviewCount})</span>
+                  <p className="relative pl-1 my-auto text-xl font-light -top-0.5">{product?.rating}</p>
                 </div>
               </div>
             )}
