@@ -11,6 +11,8 @@ import {
   INFRA_LOG_ENDPOINT,
   PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
   NEXT_PINCODE_LOOKUP,
+  BETTERCOMMERCE_DEFAULT_CURRENCY,
+  BETTERCOMMERCE_CURRENCY,
 } from '@components/utils/constants'
 import { stringToBoolean, tryParseJson, matchStrings } from './parse-util'
 import { ILogRequestParams } from '@framework/api/operations/log-request'
@@ -441,4 +443,99 @@ export const cartItemsValidateAddToCart = (
     }
   }
   return true
+}
+export const getCurrency = () => {
+  const currencyCode = Cookies.get(Cookie.Key.CURRENCY) || BETTERCOMMERCE_DEFAULT_CURRENCY! || BETTERCOMMERCE_CURRENCY!
+  return currencyCode
+}
+
+export const resetAlgoliaSearch = () => {
+  const btnReset: any = document.querySelector("button.ais-SearchBox-reset")
+  if (btnReset) {
+    if (btnReset.click) {
+      btnReset.click()
+    } else if (btnReset.onClick) {
+      btnReset.onClick()
+    }
+  }
+}
+
+export const getAlgoliaSearchPriceColumn = (isIncludeVAT: boolean) => {
+  const currencyCode = getCurrency()
+
+  switch (currencyCode.toUpperCase()) {
+    case "GBP":
+      return isIncludeVAT ? "price_uk" : "priceex_uk"
+
+    case "EUR":
+      return isIncludeVAT ? "price_ie" : "priceex_ie"
+
+    case "USD":
+      return isIncludeVAT ? "price_us" : "priceex_us"
+      break
+
+    default:
+      return isIncludeVAT ? "price_uk" : "priceex_uk"
+  }
+}
+
+export const getAlgoliaSearchListPriceColumn = (isIncludeVAT: boolean) => {
+  const currencyCode = getCurrency()
+
+  switch (currencyCode.toUpperCase()) {
+    case "GBP":
+      return isIncludeVAT ? "listprice_uk" : "listpriceex_uk"
+
+    case "EUR":
+      return isIncludeVAT ? "listprice_ie" : "listpriceex_ie"
+
+    case "USD":
+      return isIncludeVAT ? "listprice_us" : "listpriceex_us"
+      break
+
+    default:
+      return isIncludeVAT ? "listprice_uk" : "listpriceex_uk"
+  }
+}
+
+export const getAlgoliaSearchCurrencyLabel = () => {
+  const currencyCode = getCurrency()
+
+  switch (currencyCode.toUpperCase()) {
+    case "GBP":
+      return "currency_uk"
+
+    case "EUR":
+      return "currency_ie"
+
+    case "USD":
+      return "currency_us"
+      break
+
+    default:
+      return "currency_uk"
+  }
+}
+
+export const getElasticSearchPriceColumn = (isIncludeVAT: boolean) => {
+  const currencyCode = getCurrency()
+
+  switch (currencyCode.toUpperCase()) {
+    case "GBP":
+      return isIncludeVAT ? "price_uk" : "price_uk"
+
+    case "EUR":
+      return isIncludeVAT ? "price_ie" : "price_ie"
+
+    case "USD":
+      return isIncludeVAT ? "price_us" : "price_us"
+      break
+
+    default:
+      return isIncludeVAT ? "price_uk" : "price_uk"
+  }
+}
+
+export const isB2BUser = (user: any): boolean => {
+  return (user?.companyId && user?.companyId !== Guid.empty)
 }

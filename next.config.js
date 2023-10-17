@@ -95,6 +95,7 @@ module.exports = withCommerceConfig({
     OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
     ENABLE_ELASTIC_SEARCH: process.env.ENABLE_ELASTIC_SEARCH,
     SEARCH_ENGINE_CONFIG: process.env.SEARCH_ENGINE_CONFIG,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER,
   },
 })
 
