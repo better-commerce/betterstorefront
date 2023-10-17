@@ -52,13 +52,13 @@ const DEFAULT_STATE = {
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
-      return { ...state, sortBy: payload }
+      return { ...state, sortBy: payload, currentPage: 1 }
     case PAGE:
       return { ...state, currentPage: payload }
     case SORT_ORDER:
       return { ...state, sortOrder: payload }
     case CLEAR:
-      return { ...state, filters: [] }
+      return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
     case ADD_FILTERS:
