@@ -51,7 +51,13 @@ export default function ProductTag({ product }: Props) {
       </div>
     )
   }
-
+  if (isPreorderEnabled) {
+    return (
+      <div className="w-1/2 sm:!min-w-[105px] text-white bg-yellow-600 ribbon">
+        {BTN_PRE_ORDER}
+      </div>
+    )
+  }
   if (tagValues?.newLaunch) {
     return <div className="w-1/2 text-white bg-black ribbon">New</div>
   }
@@ -64,14 +70,6 @@ export default function ProductTag({ product }: Props) {
     return (
       <div className="w-1/2 sm:!min-w-[110px] text-white ribbon bg-sky-800">
         Best Seller
-      </div>
-    )
-  }
-
-  if (isPreorderEnabled) {
-    return (
-      <div className="w-1/2 sm:!min-w-[105px] text-white bg-yellow-600 ribbon">
-        {BTN_PRE_ORDER}
       </div>
     )
   }
