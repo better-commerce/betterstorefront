@@ -478,7 +478,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             <ProductTag product={product} />
             {isMobile || isIPadorTablet ? null : (
               product?.currentStock < 11 && product?.currentStock > 0 &&
-              <div className={`${product?.currentStock > 0 ? 'bg-yellow-300 text-black' : 'bg-red-500 text-white'} w-28 absolute text-center right-0 px-2 py-1 text-xs font-semibold  rounded-md sm:top-2`}>
+              <div className={`${product?.currentStock > 0 ? 'bg-red-500 text-white' : 'bg-red-500 text-white'} w-18 absolute text-center right-0 px-2 py-1 text-xs font-semibold  rounded-md sm:top-2`}>
                 Only {product?.currentStock} left!
               </div>
             )}
