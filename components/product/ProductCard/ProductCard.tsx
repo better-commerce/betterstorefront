@@ -518,34 +518,19 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               </div>
             ) : null}
           </ButtonLink>
-
         </div>
         {isMobile || isIPadorTablet ? (
           <>
             <div className="flex items-center justify-between w-full col-span-12 gap-2 py-2 border-gray-200 border-y">
               <div className="relative items-end justify-end w-full text-sm font-semibold text-right text-black top-1 product-name hover:text-gray-950">
-                <SimpleButton
-                  variant="slim"
-                  className={`!p-0 flex-1 !bg-white text-right hover:!bg-white ${isInWishList ? 'cursor-none' : ''}`}
-                  onClick={isInWishList ? undefined : handleWishList}
-                >
+                <SimpleButton variant="slim" className={`!p-0 flex-1 !bg-white text-right hover:!bg-white ${isInWishList ? 'cursor-none' : ''}`} onClick={isInWishList ? undefined : handleWishList}>
                   <i className={`sprite-icons ${isInWishList ? 'sprite-wishlist-active' : 'sprite-wishlist'}`} />
                 </SimpleButton>
               </div>
             </div>
             <div className="grid grid-cols-2 col-span-12 gap-1 sm:mb-4 justify-evenly">
-              <Button
-                title={buttonConfig.title}
-                action={buttonConfig.action}
-                validateAction={buttonConfig.validateAction}
-                type="button"
-                buttonType={buttonConfig.buttonType || 'cart'}
-              />
-              <button
-                type="button"
-                onClick={() => handleQuickViewData(product)}
-                className="w-full text-primary bg-orange-600 text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
-              >
+              <Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} type="button" buttonType={buttonConfig.buttonType || 'cart'} />
+              <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary bg-orange-600 text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">
                 {QUICK_VIEW}
               </button>
             </div>
