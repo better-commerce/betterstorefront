@@ -39,6 +39,7 @@ const PLPQuickView = dynamic(
 interface Props {
   product: any
   hideWishlistCTA?: any
+  attributesCount?: number
 }
 
 interface Attribute {
@@ -47,11 +48,19 @@ interface Attribute {
   fieldValues?: []
 }
 
+const EMPTY_COMPARE_SET = {
+  key: '-',
+  value: '-',
+  display: '-',
+  compareAtPLP: false,
+}
+
 const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   product: productData,
   hideWishlistCTA = false,
   deviceInfo,
   maxBasketItemsCount,
+  attributesCount = 0,
 }) => {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
@@ -74,6 +83,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
   const [product, setProduct] = useState(productData || {})
+  const [attribs, setAttribs] = useState<any>([])
 
   const handleUpdateWishlistItem = useCallback(() => {
     if (wishListItems.length < 1) return
@@ -91,6 +101,17 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   useEffect(() => {
     setProduct(productData)
+    if (productData.attributes?.length > 0) {
+      if (productData.attributes?.length !== attributesCount) {
+        const emptySetCount = attributesCount - productData.attributes?.length
+        const emptyCompareSet = Array(emptySetCount).fill(EMPTY_COMPARE_SET)
+        setAttribs([...productData.attributes, ...emptyCompareSet])
+        return
+      }
+      setAttribs([...productData.attributes])
+    } else {
+      setAttribs(Array(attributesCount).fill(EMPTY_COMPARE_SET))
+    }
   }, [productData])
 
   useEffect(() => {
@@ -273,12 +294,14 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           />
         )
       case false:
-        <Image
-          alt="cross_icon"
-          width={36}
-          height={36}
-          src="/assets/images/cross_icon.svg"
-        />
+        return (
+          <Image
+            alt="cross_icon"
+            width={36}
+            height={36}
+            src="/assets/images/cross_icon.svg"
+          />
+        )
       default:
         return val
     }
@@ -306,7 +329,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 IMG_PLACEHOLDER
               }
               alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
+              className="object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
               style={css}
               width={400}
               height={500}
@@ -320,7 +343,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
+                className="hidden object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
                 style={css}
                 width={400}
                 height={500}
@@ -348,7 +371,11 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                       : product?.listPrice?.formatted?.withoutTax}
                   </span>
                   <span className="text-xs font-semibold text-red-600">
-                    ({discount}% Off)
+                    {discount > 0 && (
+                      <span className="text-xs font-semibold text-red-600">
+                        ({discount}% Off)
+                      </span>
+                    )}
                   </span>
                 </>
               )}
@@ -357,7 +384,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.name?.toLowerCase()}
           </div>
         </Link>
-        <div className="flex flex-col absolute bottom-0 left-0 right-0 p-2">
+        <div className="absolute bottom-0 left-0 right-0 flex flex-col p-2">
           <Button
             className="mt-2 text-sm font-medium rounded-md"
             title={buttonConfig.title}
@@ -367,7 +394,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           />
         </div>
       </div>
-      <div className="lg:mt-10 mt-5 bg-white border-t border-gray-200">
+      <div className="mt-5 bg-white border-t border-gray-200 lg:mt-10">
         <div className="flex items-center justify-center w-full pb-4 my-4 text-center border-b border-gray-200">
           {[0, 1, 2, 3, 4].map((rating) => (
             <StarIcon
@@ -388,8 +415,8 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
           <span className="font-semibold text-black">{product?.brand}</span>
         </div>
-        {product.attributes?.map((attrib: any) => (
-          <div key={attrib.key} className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
+        {attribs?.map?.map((attrib: any, idx: number) => (
+          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
             <span>
               {getAttribValue(attrib.value)}
             </span>

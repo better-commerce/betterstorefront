@@ -407,7 +407,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div className={cn(`relative hover:border-orange-500 grid grid-cols-12 gap-2 overflow-hidden sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-0 pb-4 sm:pb-0 bg-white ${product?.currentStock == 0 ? 'hover:border-gray-200 border-gray-100' : 'hover:border-orange-500 border-gray-200'}`, { 'height-full border-gray-200': isComparedEnabled, 'height-full border-orange-500': product.compared, })} key={product.id}>
-        <div className={`${product?.currentStock == 0 || product?.currentStock < 0 ? 'opacity-40' : ''} relative col-span-4 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card`}>
+        <div className={`${product?.currentStock == 0 || product?.currentStock < 0 ? 'opacity-100' : ''} relative col-span-4 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card`}>
           <div className="absolute top-0 right-0 flex items-center justify-between w-full z-1 pos-inherit">
             <ProductTag product={product} />
             {isMobile || isIPadorTablet ? null : (
