@@ -30,6 +30,7 @@ import { vatIncluded, validateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
 import { stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import cn from 'classnames'
+import ProductTag from '../ProductTag/ProductTag'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -342,6 +343,15 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </div>
         )}
         <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">
+          <div className="absolute top-0 right-0 z-10 flex items-center justify-between w-full pos-inherit">
+            <ProductTag product={product} />
+            {isMobile || isIPadorTablet ? null : (
+              product?.currentStock < 20 && product?.currentStock > 0 &&
+              <div className={`${product?.currentStock > 0 ? 'bg-yellow-300 text-black' : 'bg-red-500 text-white'} w-28 absolute text-center right-0 px-2 py-1 text-xs font-semibold  rounded-md sm:top-2`}>
+                Only {product?.currentStock} left!
+              </div>
+            )}
+          </div>
           <ButtonLink
             isComparedEnabled={isComparedEnabled}
             href={`/${currentProductData.link}`}
@@ -379,16 +389,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               />
             )}
           </ButtonLink>
-          {buttonConfig.isPreOrderEnabled && (
-            <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
-              {BTN_PRE_ORDER}
-            </div>
-          )}
-          {buttonConfig.isNotifyMeEnabled && (
-            <div className="absolute px-2 py-1 text-xs font-semibold text-white bg-red-800 rounded-sm top-2">
-              {BTN_NOTIFY_ME}
-            </div>
-          )}
+
 
           <div className="absolute bottom-1 left-1 text-gray-900 bg-gray-100 px-[0.4rem] py-0 text-xs font-semibold sm:font-bold">
             <div className="flex items-center gap-1 star-rating">

@@ -223,7 +223,8 @@ export const OMNILYTICS_DISABLED = process.env.OMNILYTICS_DISABLED
 export const PDP_SIZE_OPTIONS_COUNT = parseInt(
   process.env.PDP_SIZE_OPTIONS_COUNT || '0'
 )
-
+export const MAX_ADD_TO_CART_LIMIT = 5
+export const NEXT_GET_PROOMO_DETAILS = '/api/catalog/get-promo-details'
 export module Messages {
   export module Validations {
     export module RegularExpressions {
@@ -458,4 +459,13 @@ export enum SocialMediaType {
   GOOGLE = 'google',
   FACEBOOK = 'facebook',
   APPLE = 'apple',
+}
+
+
+export const PRODUCT_TAGS = {
+  newLaunch: 'New Launch',
+  onSale: 'On Sale',
+  trending: 'Trending',
+  exclusive: 'Exclusive',
+  bestSeller: 'BestSeller',
 }

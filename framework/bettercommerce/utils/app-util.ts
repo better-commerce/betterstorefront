@@ -20,6 +20,7 @@ import { DataSubmit } from '@commerce/utils/use-data-submit'
 import axios from 'axios'
 import { Guid } from '@commerce/types'
 import { Cookie } from './constants'
+import { sumBy } from 'lodash'
 
 export const isCartAssociated = (cartItems: any) => {
   if (cartItems?.userId && cartItems?.userId !== Guid.empty) {
@@ -408,4 +409,36 @@ export const getMinMax = (list: Array<any>, dependantProp: string) => {
 
 export const vatIncluded = () => {
   return stringToBoolean((getItem('includeVAT') as string) || 'false')
+}
+const kitCartItems: any = (cartItems: any) => {
+  const cartItemsExcludingKitItem = cartItems?.lineItems?.filter((val: any) => val?.basketItemGroupId != "")
+  return sumBy(cartItemsExcludingKitItem, 'qty');
+}
+
+export const cartItemsValidateAddToCart = (
+  cartItems: any,
+  maxBasketItemsCount: number,
+  quantity?: any,
+) => {
+  let sumOfItemsQty = sumBy(cartItems?.lineItems, 'qty')
+  const kitCartItemsQuant = kitCartItems(cartItems)
+  sumOfItemsQty = sumOfItemsQty - (kitCartItemsQuant > 0 ? kitCartItemsQuant : 0)
+  if (quantity) {
+    sumOfItemsQty = JSON.parse(quantity) + sumOfItemsQty;
+    if (sumOfItemsQty > maxBasketItemsCount && maxBasketItemsCount !== 0) {
+      return false
+    }
+    else if (maxBasketItemsCount === 0) {
+      return true
+    }
+  }
+  else {
+    if (sumOfItemsQty >= maxBasketItemsCount && maxBasketItemsCount !== 0) {
+      return false
+    }
+    else if (maxBasketItemsCount === 0) {
+      return true
+    }
+  }
+  return true
 }
