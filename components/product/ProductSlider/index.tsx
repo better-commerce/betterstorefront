@@ -41,7 +41,7 @@ const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({ config, deviceI
         </div>
       </div>
       <Swiper className="px-4 pb-5 mb-4 bg-white sm:mb-8 sm:px-0 min-cls-h" slidesPerView={1.1} spaceBetween={10} navigation={false} ref={swiperRef}
-        breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 4.01 }, 1024: { slidesPerView: 4.01 }, }}>
+        breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 4.1 }, 1024: { slidesPerView: 4.1 }, }}>
         <SwiperSlide className="relative inline-flex flex-col w-64 h-auto pb-5 text-left border border-gray-500 rounded-md cursor-pointer height-auto-slide group lg:w-auto">
           <CompareProductCard attributeNames={attributeNames} product={activeProduct} hideWishlistCTA={false} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
         </SwiperSlide>
