@@ -424,7 +424,11 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             )}
           </ButtonLink>
           {isMobile ? null : (
-            <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:-translate-y-full">
+            <div
+              className={cn(
+                'absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:-translate-y-full',
+                { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled }
+              )}>
               {!hideWishlistCTA && (
                 <SimpleButton
                   variant="slim"
@@ -486,7 +490,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             <div className="flex justify-between w-full px-0 mb-1 font-semibold text-left text-black capitalize font-16 product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
               {productNameWithAttr}
             </div>
-           
+
             {isMobile || isIPadorTablet ? null : (
               <div className="flex items-center justify-between w-full px-0 py-2 text-xs font-medium text-black border-t border-gray-200 sm:font-bold">
                 <div className="flex items-center gap-0">
@@ -505,9 +509,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               </div>
             )}
             {isComparedEnabled && product?.compared ? (
-              <div className="absolute bottom-0 flex flex-col gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
+              <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
                 {product?.compared ? (
-                  <button className="w-full font-semibold uppercase border border-black btn-primary-white font-14">
+                  <button className="w-full font-semibold uppercase border border-transparent btn-primary-white font-14">
                     Remove
                   </button>
                 ) : null}
