@@ -426,7 +426,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           {isMobile ? null : (
             <div
               className={cn(
-                'absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:-translate-y-full',
+                'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20',
                 { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled }
               )}>
               {!hideWishlistCTA && (
