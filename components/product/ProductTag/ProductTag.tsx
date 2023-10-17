@@ -46,14 +46,14 @@ export default function ProductTag({ product }: Props) {
 
   if (isNotifyMeEnabled) {
     return (
-      <div className="w-1/2 !min-w-[100px] text-white bg-red-800 ribbon">
+      <div className="w-1/2 !min-w-[100px] text-white bg-red-500 ribbon">
         {BTN_NOTIFY_ME}
       </div>
     )
   }
   if (isPreorderEnabled) {
     return (
-      <div className="w-1/2 sm:!min-w-[105px] text-white bg-yellow-600 ribbon">
+      <div className="w-1/2 sm:!min-w-[105px] text-white bg-emerald-500 ribbon">
         {BTN_PRE_ORDER}
       </div>
     )

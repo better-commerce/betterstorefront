@@ -79,9 +79,9 @@ export default function ProductCompare({
                     </div>
                   </div>
                   <div className="container py-2 mx-auto mt-2 sm:px-0 !max-h-[504px] sm:!max-h-[215px] md:!max-h-[215px] lg:!max-h-[70vh] 2xl:!max-h-[700px] overflow-y-auto custom-scroll">
-                    <div className="grid lg:grid-cols-12 md:grid-cols-12 grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-4 lg:grid-cols-12 md:grid-cols-12 sm:grid-cols-3">
                       <div className="md:col-span-2 sm:col-span-1">
-                        <div className="flex flex-col items-start justify-start w-full text-left p-2">
+                        <div className="flex flex-col items-start justify-start w-full p-2 text-left">
                           <div className="sticky w-full top-0 z-10 flex flex-col bg-white sm:h-[220px] md:h-[430px] h-[520px] lg:h-[516px]"></div>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
                             Ratings
@@ -116,21 +116,22 @@ export default function ProductCompare({
                               slidesPerView: 5.2,
                             },
                           }}
-                          className="mySwier grid grid-cols-5 gap-3"
+                          className="grid grid-cols-5 gap-3 mySwier"
                         >
                           {' '}
                           {products?.map((product: any, productIdx: number) => (
-                              <div key={`compare-product-${productIdx}`}>
-                                <SwiperSlide>
-                                  <Products
-                                    product={product}
-                                    hideWishlistCTA={true}
-                                    deviceInfo={deviceInfo}
-                                    maxBasketItemsCount={maxBasketItemsCount}
-                                  />
-                                </SwiperSlide>
-                              </div>
-                            ))}
+                            <div key={`compare-product-${productIdx}`}>
+                              <SwiperSlide>
+                                <Products
+                                  product={product}
+                                  hideWishlistCTA={true}
+                                  deviceInfo={deviceInfo}
+                                  maxBasketItemsCount={maxBasketItemsCount}
+                                  attributesCount={attributeNames?.length || 0}
+                                />
+                              </SwiperSlide>
+                            </div>
+                          ))}
                         </Swiper>
                       </div>
                     </div>

@@ -33,7 +33,7 @@ const PromotionBanner = dynamic(
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
-const ProductSlider = dynamic(() => import('@components/product/ProductSlider'))
+const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 const RefferalCard = dynamic(() => import('@components/customer/Referral/ReferralCard'))
 

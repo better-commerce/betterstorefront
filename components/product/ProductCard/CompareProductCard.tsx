@@ -90,8 +90,8 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   })
   const { isMobile, isIPadorTablet } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
-    image: productData.image,
-    link: productData.slug,
+    image: productData?.image,
+    link: productData?.slug,
   })
   const {
     basketId,
@@ -168,7 +168,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   useEffect(() => {
     const compared = Boolean(
-      compareProductList && compareProductList[productData.recordId]
+      compareProductList && compareProductList[productData?.recordId]
     )
     setProduct({
       ...productData,
