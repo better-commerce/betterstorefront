@@ -1538,3 +1538,22 @@ br {
 .prod-name-block{
   min-height: 48px;
 }
+
+.instant-search-bar #searchbox {
+  margin-bottom: 0 !important;
+}
+.search-input-icon.instant-search-bar .ais-SearchBox-input {
+  padding-left: 40px !important;
+  min-height: 47px !important;
+}
+  .instant-search-bar .right-panel {
+    padding-left: 0 !important;
+  }
+ .instant-search-bar .ais-Hits-list {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+@media only screen and (min-width: 768px) and (max-width: 1024px){
+  .instant-search-bar .ais-Hits-list {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+}

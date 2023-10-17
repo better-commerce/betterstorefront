@@ -48,7 +48,10 @@ export const stringToNumber = (stringValue: string | undefined): number => {
   }
   return 0
 }
-
+export const roundToDecimalPlaces = (value: any, decimalPlaces: number = 2): any => {
+  const decPlaces = Math.pow(10, decimalPlaces)
+  return Math.round((value + Number.EPSILON) * decPlaces) / decPlaces
+}
 export const matchStrings = (
   input1: string,
   input2: string,

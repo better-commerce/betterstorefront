@@ -185,7 +185,7 @@ export const NEXT_PUBLIC_DEFAULT_CACHE_TIME =
   process.env.NEXT_PUBLIC_DEFAULT_CACHE_TIME_IN_MILLI_SECS
 export const NEXT_PUBLIC_API_CACHING_LOG_ENABLED =
   process.env.NEXT_PUBLIC_API_CACHING_LOG_ENABLED
-
+export const SEARCH_PROVIDER = process.env.SEARCH_PROVIDER
 // Default currency, language & country settings.
 export const BETTERCOMMERCE_DEFAULT_CURRENCY =
   process.env.BETTERCOMMERCE_DEFAULT_CURRENCY

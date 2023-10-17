@@ -177,7 +177,7 @@ export default function OrderConfirmation({ config }: any) {
         window.open(`${TWITTER_SHARE_STRING}?url=${referralLink}&text=Referral Link`)
       },
       icon: (
-        <svg fill="#000000" className='h-6 w-6' viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M245.65723,77.65674l-30.16407,30.16455C209.4707,177.70215,150.53809,232,80,232c-14.52441,0-26.49414-2.30273-35.57764-6.84473-7.33056-3.665-10.33349-7.59912-11.07861-8.71777a8,8,0,0,1,3.84717-11.92822c.25732-.09717,23.84814-9.15772,39.09521-26.40869a109.574,109.574,0,0,1-24.72656-24.355c-13.708-18.60352-28.206-50.91114-19.43066-99.17676a8.00023,8.00023,0,0,1,13.52832-4.22559c.35254.35156,33.64209,33.1709,74.3374,43.772L120,87.99609a48.31863,48.31863,0,0,1,48.6084-47.99267,48.11329,48.11329,0,0,1,40.96875,23.99609L240,64a8.0001,8.0001,0,0,1,5.65723,13.65674Z"></path> </g></svg>
+        <svg fill="#000000" className='w-6 h-6' viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M245.65723,77.65674l-30.16407,30.16455C209.4707,177.70215,150.53809,232,80,232c-14.52441,0-26.49414-2.30273-35.57764-6.84473-7.33056-3.665-10.33349-7.59912-11.07861-8.71777a8,8,0,0,1,3.84717-11.92822c.25732-.09717,23.84814-9.15772,39.09521-26.40869a109.574,109.574,0,0,1-24.72656-24.355c-13.708-18.60352-28.206-50.91114-19.43066-99.17676a8.00023,8.00023,0,0,1,13.52832-4.22559c.35254.35156,33.64209,33.1709,74.3374,43.772L120,87.99609a48.31863,48.31863,0,0,1,48.6084-47.99267,48.11329,48.11329,0,0,1,40.96875,23.99609L240,64a8.0001,8.0001,0,0,1,5.65723,13.65674Z"></path> </g></svg>
       ),
     },
 
@@ -201,12 +201,7 @@ export default function OrderConfirmation({ config }: any) {
   const router = useRouter()
   const referralDescription = (
     <>
-      {' '}
-      Our refer-a-friend programme is managed by Mention Me who will process
-      your data and send you referral service emails.{' '}
-      <a href="#">
-        <b>More info and your privacy rights</b>
-      </a>
+      Our refer-a-friend programme will process your data and send you referral service emails.
     </>
   )
   const referralTermsAndConditions = (
@@ -424,7 +419,7 @@ export default function OrderConfirmation({ config }: any) {
                         <h4 className="font-medium text-gray-900">
                           <Link href={`/${product.slug}`}>{product.name}</Link>
                         </h4>
-                        <p className="mr-1 text-sm text-gray-700 font-medium">
+                        <p className="mr-1 text-sm font-medium text-gray-700">
                           Size:{' '}
                           <span className="uppercase">{product.size}</span>
                         </p>
@@ -528,7 +523,7 @@ export default function OrderConfirmation({ config }: any) {
                 {isNextorderPromo &&
                   nextOrderPromo?.firstOrderSetting &&
                   !isFirstOrderValid && (
-                    <div className="text-sm font-semibold my-2 py-2 bg-lime-100 text-center">
+                    <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
                       <p className="">
                         {GENERAL_NEXT_ORDER_PROMO}{' '}
                         <span className="font-bold text-indigo-600">
@@ -546,7 +541,7 @@ export default function OrderConfirmation({ config }: any) {
                 {isNextorderPromo &&
                   nextOrderPromo?.everyOrderSetting &&
                   !isFirstOrderValid && (
-                    <div className="text-sm font-semibold my-2 py-2 bg-lime-100 text-center">
+                    <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
                       <p className="">
                         {GENERAL_NEXT_ORDER_PROMO}{' '}
                         <span className="font-bold text-indigo-600">
@@ -672,11 +667,11 @@ export default function OrderConfirmation({ config }: any) {
                       <div className="\py-2  sm:px-0 flex flex-row">
                         {/*Referal Program Info view*/}
                         {shareReferralView ? (
-                          <div className="my-20 flex w-full flex-col justify-center items-center">
+                          <div className="flex flex-col items-center justify-center w-full my-20">
                             <h3 className="px-5 text-center">
                               {user.firstName} {'Invite now using:'}
                             </h3>
-                            <div className="flex  flex-row gap-x-5 justify-center items-center">
+                            <div className="flex flex-row items-center justify-center gap-x-5">
                               {shareOptionsConfig?.map(
                                 (shareOpt: any, Idx: any) => {
                                   return (
@@ -695,13 +690,13 @@ export default function OrderConfirmation({ config }: any) {
                                   )
                                 }
                               )}
-                              {/* <span className="h-5 w-5 mx-2 my-2 text-black">
+                              {/* <span className="w-5 h-5 mx-2 my-2 text-black">
                                 <ChatBubbleLeftEllipsisIcon />
                               </span>
-                              <span className="h-5 w-5 mx-2 my-2 text-black">
+                              <span className="w-5 h-5 mx-2 my-2 text-black">
                                 <EnvelopeIcon />
                               </span>
-                              <span className="h-5 w-5 mx-2 my-2 text-black">
+                              <span className="w-5 h-5 mx-2 my-2 text-black">
                                 <LinkIcon />
                               </span> */}
                             </div>
@@ -725,7 +720,7 @@ export default function OrderConfirmation({ config }: any) {
                                     <p className="w-full text-left">
                                       or share a link:
                                     </p>
-                                    <div className="w-full flex items-center justify-between">
+                                    <div className="flex items-center justify-between w-full">
                                       <p className="mx-1 truncate">
                                         {referralLink}
                                       </p>
