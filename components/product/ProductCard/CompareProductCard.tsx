@@ -583,15 +583,15 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               <div className="flex items-center justify-between w-full px-0 py-2 text-xs font-medium text-black border-t border-gray-200 sm:font-bold">
                 <div className="flex items-center gap-0">
                   {[0, 1, 2, 3, 4].map((rating) => (
-                    <i
+                    <StarIcon
                       key={rating}
                       className={classNames(
                         product?.rating > rating
-                          ? 'sprite-red-star-filled'
-                          : 'sprite-red-star',
-                        'flex-shrink-0 sprite-icons relative -top-0.5'
+                          ? 'text-orange-500'
+                          : 'text-gray-500',
+                        'flex-shrink-0 w-5 h-5 relative -top-0.5'
                       )}
-                    ></i>
+                    />
                   ))}
                   <p className="pl-1 my-auto text-2xl font-light">
                     {product?.rating}
