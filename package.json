@@ -20,6 +20,7 @@
     "node": ">=14.x"
   },
   "dependencies": {
+    "@algolia/autocomplete-plugin-query-suggestions": "^1.11.0",
     "@better-commerce/bc-payments-sdk": "0.0.6",
     "@elastic/react-search-ui": "^1.20.2",
     "@elastic/search-ui-app-search-connector": "^1.20.2",
