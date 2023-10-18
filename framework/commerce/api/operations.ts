@@ -53,6 +53,7 @@ export const OPERATIONS = [
   'getReturnReason',
   'resetCache',
   'logRequest',
+  'getCountries',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -105,6 +106,7 @@ export type Operations<P extends APIProvider> = {
   getCancelReason: {}
   cancelOrder: {}
   getReturnReason: {}
+  getCountries: {}
   getAllPages: {
     <T extends GetAllPagesOperation>(opts?: {
       config?: P['config']
