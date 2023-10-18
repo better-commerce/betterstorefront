@@ -315,7 +315,7 @@ function BrandDetailPage({
       filters: state.filters,
       freeText: '',
       gender: null,
-      ignoreDisplayInSerach: false,
+      ignoreDisplayInSearch: false,
       includeExcludedBrand: false,
       page: state.currentPage,
       pageSize: 0,
