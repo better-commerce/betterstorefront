@@ -83,9 +83,7 @@ import PDPCompare from '../PDPCompare'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { LocalStorage } from '@components/utils/payment-constants'
 
-const AttributesHandler = dynamic(
-  () => import('@components/product/ProductView/AttributesHandler')
-)
+const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const RelatedProducts = dynamic(() => import('@components/product/RelatedProducts'))
 const Bundles = dynamic(() => import('@components/product/Bundles'))
