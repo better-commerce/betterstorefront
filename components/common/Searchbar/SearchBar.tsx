@@ -139,25 +139,29 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
   const { showSearchBar, setShowSearchBar } = useUI()
 
   const defaultSearch = (
-    <div className="flex flex-row w-full rounded-sm sm:w-80 md:w-64 xl:w-96">
-      <button
-        onClick={onClick}
-        className="relative w-full px-4 pr-3 text-gray-400 bg-gray-100 border border-gray-400 rounded-md sm:p-2 sm:pl-3 sm:pr-16 hover:text-gray-500"
-        aria-label="Search"
-      >
-        <span className="sr-only" aria-label="Search">
-          {BTN_SEARCH}
-        </span>
-        <span className="hidden w-full pr-2 text-sm font-normal text-left text-black sm:inline-block">
-          Search
-        </span>
-        <MagnifyingGlassIcon
-          className="w-6 h-6 text-black sm:w-4 sm:h-4 sm:absolute right-4 sm:top-3 sm:right-4 sm:text-gray-400"
-          aria-hidden="true"
+    <>
+      <div className="flex flex-row w-full rounded-sm sm:w-80 md:w-64 xl:w-96">
+        <button
+          onClick={onClick}
+          className="relative w-full px-4 pr-3 text-gray-400 bg-gray-100 border border-gray-400 rounded-md sm:p-2 sm:pl-3 sm:pr-16 hover:text-gray-500"
           aria-label="Search"
+        >
+          <span className="sr-only" aria-label="Search">
+            {BTN_SEARCH}
+          </span>
+          <span className="hidden w-full pr-2 text-sm font-normal text-left text-black sm:inline-block">
+            Search
+          </span>
+          <MagnifyingGlassIcon className="w-6 h-6 text-black sm:w-4 sm:h-4 sm:absolute right-4 sm:top-3 sm:right-4 sm:text-gray-400" aria-hidden="true" aria-label="Search" />
+        </button>
+      </div>
+      {showSearchBar && (
+        <SearchWrapper
+          keywords={keywords}
+          closeWrapper={() => setShowSearchBar(false)}
         />
-      </button>
-    </div>
+      )}
+    </>
   )
   const elasticSearch = (
     <SearchProvider config={elasticConfig}>
@@ -186,6 +190,7 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
 
   return (
     <>
+
       {
         matchStrings(SEARCH_PROVIDER!, Provider.DEFAULT) && (
           <>{defaultSearch}</>

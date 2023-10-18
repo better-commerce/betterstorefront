@@ -635,7 +635,7 @@ const Navbar: FC<Props & IExtraProps> = ({
         className={cn(
           'fixed top-0 right-0 w-full bg-white shadow-md lg:top-6 bg-header-color z-999 navbar-min-64',
           {
-            '!absolute': showSearchBar,
+            'fixed': showSearchBar,
           }
         )}
       >
