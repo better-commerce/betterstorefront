@@ -256,18 +256,15 @@ const Navbar: FC<Props & IExtraProps> = ({
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
 
-  const configAction = (pair: any) => {
+  const configAction = async (pair: any) => {
+    if (!pair) return
     const value: any = Object.values(pair)[0]
     const key = Object.keys(pair)[0]
-    const { pathname, asPath, query } = Router
+    const { data: configActionResult } = await axios.post(NEXT_SET_CONFIG, { obj: pair })
     Cookies.set(key, value)
-    axios
-      .post(NEXT_SET_CONFIG, { obj: pair })
-      .then(() => {
-        Router.reload()
-      })
-      .catch((err: any) => console.log(err))
+    router.reload()
   }
+
 
   const hyperlinkHandler = (hyperlink: string) => {
     return hyperlink[0] === '/' ? hyperlink : `/${hyperlink}`

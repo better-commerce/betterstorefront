@@ -231,6 +231,7 @@ type Action =
   | { type: 'IS_COMPARED'; payload: string }
   | { type: 'SET_COMPARE_PRODUCTS'; payload: any }
   | { type: 'RESET_COMPARE_PRODUCTS'; payload: any }
+  | { type: 'SET_CURRENCY'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -530,6 +531,12 @@ function uiReducer(state: State, action: Action) {
       }
       setItem('compareProductList', {})
       return state
+    }
+    case 'SET_CURRENCY': {
+      return {
+        ...state,
+        currency: action.payload,
+      }
     }
   }
 }
@@ -1066,7 +1073,12 @@ export const UIProvider: React.FC<any> = (props) => {
 
     return newCartDataClone
   }
-
+  const setCurrency = useCallback(
+    (payload: any) => {
+      dispatch({ type: 'SET_CURRENCY', payload })
+    },
+    [dispatch]
+  )
   const value = useMemo(
     () => ({
       ...state,
@@ -1118,6 +1130,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setIsCompared,
       setCompareProducts,
       resetCompareProducts,
+      setCurrency,
     }),
 
     [state]
