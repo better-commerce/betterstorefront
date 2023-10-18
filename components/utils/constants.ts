@@ -384,7 +384,7 @@ export module Messages {
     COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
   }
 }
-
+export const EmptyObject: any = {}
 export module PageActions {
   // Actions assigned: 1 to 50
   export enum BulkOrder {
