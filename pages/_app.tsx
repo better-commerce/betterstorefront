@@ -165,7 +165,7 @@ function MyApp({
     )
     if (!OMNILYTICS_DISABLED) {
       document.body.appendChild(addScript)
-      ;(window as any).googleTranslateElementInit = googleTranslateElementInit
+        ; (window as any).googleTranslateElementInit = googleTranslateElementInit
       document.getElementById('goog-gt-tt')?.remove()
     }
   }, [])
@@ -179,7 +179,7 @@ function MyApp({
 
     // Dispose listener.
     return () => {
-      router.events.off('routeChangeStart', () => {})
+      router.events.off('routeChangeStart', () => { })
     }
   }, [router.events])
 
@@ -263,15 +263,15 @@ function MyApp({
 
   const seoInfo =
     pageProps?.metaTitle ||
-    pageProps?.metaDescription ||
-    pageProps?.metaKeywords
+      pageProps?.metaDescription ||
+      pageProps?.metaKeywords
       ? pageProps
       : pageProps?.data?.product || undefined
 
   const seoImage =
     pageProps?.metaTitle ||
-    pageProps?.metaDescription ||
-    pageProps?.metaKeywords
+      pageProps?.metaDescription ||
+      pageProps?.metaKeywords
       ? pageProps?.products?.images[0]?.url
       : pageProps?.data?.product?.image || undefined
 
@@ -483,12 +483,33 @@ MyApp.getInitialProps = async (
         footer: navResult?.result?.footer,
       }
     }
-  } catch (error: any) {}
+  } catch (error: any) { }
 
   let appConfig = null
   if (appConfigResult) {
+    const { result: appConfigData } = appConfigResult
+    const {
+      configSettings,
+      shippingCountries,
+      billingCountries,
+      currencies,
+      languages,
+      snippets,
+    } = appConfigData
     const appConfigObj = {
-      ...(appConfigResult?.result || {}),
+      ...{
+        configSettings:
+          configSettings?.filter((x: any) =>
+            ['B2BSettings', 'BasketSettings', 'ShippingSettings'].includes(
+              x?.configType
+            )
+          ) || [],
+        shippingCountries,
+        billingCountries,
+        currencies,
+        languages,
+        snippets,
+      },
       ...{
         defaultCurrency,
         defaultLanguage,
