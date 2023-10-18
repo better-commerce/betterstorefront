@@ -58,7 +58,7 @@ const QuerySuggestions = ({ searchClient, indexName, indexSourceId, searchTerm, 
                         </ul>
                     </div>
                 ) : (
-                    <div className="ml-4 m-2">
+                    <div className="m-2 ml-4">
                         No results found for <strong><mark>{searchTerm}</mark></strong>.
                     </div>
                 )}
