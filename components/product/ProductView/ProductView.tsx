@@ -87,26 +87,16 @@ const AttributesHandler = dynamic(
   () => import('@components/product/ProductView/AttributesHandler')
 )
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-const RelatedProducts = dynamic(
-  () => import('@components/product/RelatedProducts')
-)
+const RelatedProducts = dynamic(() => import('@components/product/RelatedProducts'))
 const Bundles = dynamic(() => import('@components/product/Bundles'))
 const Reviews = dynamic(() => import('@components/product/Reviews'))
 const PriceMatch = dynamic(() => import('@components/product/PriceMatch'))
 const Engraving = dynamic(() => import('@components/product/Engraving'))
-const ProductDetails = dynamic(
-  () => import('@components/product/ProductDetails')
-)
+const ProductDetails = dynamic(() => import('@components/product/ProductDetails'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const RelatedProductWithGroup = dynamic(
-  () => import('@components/product/RelatedProducts/RelatedProductWithGroup')
-)
-const AvailableOffers = dynamic(
-  () => import('@components/product/ProductView/AvailableOffers')
-)
-const ReviewInput = dynamic(
-  () => import('@components/product/Reviews/ReviewInput')
-)
+const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup'))
+const AvailableOffers = dynamic(() => import('@components/product/ProductView/AvailableOffers'))
+const ReviewInput = dynamic(() => import('@components/product/Reviews/ReviewInput'))
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
