@@ -1543,8 +1543,15 @@ br {
   margin-bottom: 0 !important;
 }
 .search-input-icon.instant-search-bar .ais-SearchBox-input {
-  padding-left: 40px !important;
-  min-height: 47px !important;
+    padding-left: 15px !important;
+    min-height: 47px !important;
+    border: 1px solid #222;
+    background: #f3f3f3;
+}
+.sui-search-box__text-input{
+  padding: 10px 15px !important;
+  border: 1px solid #222 !important;
+  background: #f3f3f3 !important;
 }
   .instant-search-bar .right-panel {
     padding-left: 0 !important;
