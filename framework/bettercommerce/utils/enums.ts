@@ -17,3 +17,7 @@ export enum SearchProvider {
   ELASTIC = 'elastic',
   ALGOLIA = 'algolia',
 }
+
+export enum UserRoleType {
+  ADMIN = 1,
+}

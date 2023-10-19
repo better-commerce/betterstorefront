@@ -407,3 +407,6 @@ export const VOUCHERS_NOT_EARNED = "No Vouchers Earned Yet"
 export const EMAIL_FIELD_VALIDATION = "Email field cannot be empty!"
 export const CLICK_TO_SHARE_BY_EMAIL = "Click here to share Referral link by Email"
 export const GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT = 'Include out of stock products'
+export const GENERAL_PROMOCODE = 'Promo Code'
+export const GENERAL_QUOTE_SUMMARY = 'Quote summary'
+export const RELATED_PRODUCT_WITHGROUP_TEXT = 'Related Products'
