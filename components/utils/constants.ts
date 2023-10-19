@@ -158,6 +158,7 @@ export const NEXT_REFERRAL_CLICK_ON_INVITE =
   '/api/customer/referral/referral-click-on-invite'
 export const NEXT_REFERRAL_INFO = '/api/customer/referral/referral-info'
 export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral/referral-vouchers'
+export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
 //CONSTANTS
 
 export const YOUTUBE_VIDEO_EMBED_PREFIX_URL =
@@ -469,3 +470,21 @@ export const PRODUCT_TAGS = {
   exclusive: 'Exclusive',
   bestSeller: 'BestSeller',
 }
+
+export enum CheckoutStepType {
+  NONE = 0,
+  CONTACT_DETAILS = 1,
+  DELIVERY_DETAILS = 2,
+  DELIVERY_METHOD = 3,
+  PAYMENT_METHOD = 4,
+  REVIEW_AND_PLACE_ORDER = 5,
+  BILLING_DELIVERY_DETAILS = 6,
+}
+
+export enum LoadingActionType {
+  NONE = 0,
+  REMOVE_ITEM = 1,
+  MOVE_TO_WISHLIST = 2,
+}
+
+export const EmptyGuid = '00000000-0000-0000-0000-000000000000'

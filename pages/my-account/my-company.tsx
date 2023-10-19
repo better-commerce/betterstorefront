@@ -37,6 +37,8 @@ import Spinner from '@components/ui/Spinner'
 import SideMenu from '@components/account/MyAccountMenu'
 import { isArray } from 'lodash'
 import { Guid } from '@commerce/types'
+import { isB2BUser } from '@framework/utils/app-util'
+import { UserRoleType } from '@framework/utils/enums'
 
 function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
@@ -247,12 +249,12 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
 
   return (
     <>
-      {!(user?.companyId !== Guid.empty) ? (
+      {!isB2BUser(user) ? (
         <>
           <Spinner />
         </>
       ) : (
-        <section className="relative pb-10 text-gray-900">
+       <section className="relative pb-10 text-gray-900">
           <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
             {!isShowDetailedOrder && (
               <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
@@ -297,8 +299,12 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
                         }
                       >
                         {optionsConfig?.map((option: any, Idx: any) => (
-                          <Tab as={Fragment} key={Idx}>
-                            {({ selected }) => (
+                          <>
+                          {option?.name == 'Users' ? (
+                            <>
+                             {user?.companyUserRole === UserRoleType.ADMIN &&
+                             <Tab as={Fragment} key={Idx}>
+                             {({ selected }) => (
                               <button
                                 className={classNames(
                                   'w-full rounded-lg py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
@@ -308,19 +314,45 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
                                     : 'text-blue-100 hover:bg-white/[0.32] '
                                 )}
                                 onClick={() => {
-                                  option.onClick(option?.value)
+                                  option?.onClick(option?.value)
                                 }}
                               >
-                                {option.name}
+                                {option?.name}
                               </button>
                             )}
-                          </Tab>
+                             </Tab>}
+                            </>
+                          ) : (
+                            <>
+                              <Tab as={Fragment} key={Idx}>
+                              {({ selected }) => (
+                                <button
+                                  className={classNames(
+                                    'w-full rounded-lg py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                                    'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
+                                    selected
+                                      ? 'bg-white shadow hover:bg-gray-50'
+                                      : 'text-blue-100 hover:bg-white/[0.32] '
+                                  )}
+                                  onClick={() => {
+                                    option?.onClick(option?.value)
+                                  }}
+                                >
+                                  {option?.name}
+                                </button>
+                                )}
+                              </Tab>
+                            </>
+                          )}
+                          </>
                         ))}
                       </Tab.List>
                       <Tab.Panels>
-                        <Tab.Panel>
-                          <CompanyUsers users={b2bUsers} />
-                        </Tab.Panel>
+                        {user?.companyUserRole === UserRoleType.ADMIN &&
+                            <Tab.Panel>
+                              <CompanyUsers users={b2bUsers} />
+                            </Tab.Panel>
+                          }
                         <Tab.Panel>
                           <B2BOrders
                             selectedOption={selectedOption}
