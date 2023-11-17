@@ -62,6 +62,8 @@ interface Props {
   product: any
   hideWishlistCTA?: any
   attributeNames?: any
+  compareProductsAttributes?: any
+  active?: boolean
 }
 
 interface Attribute {
@@ -81,11 +83,21 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   deviceInfo,
   maxBasketItemsCount,
   attributeNames,
+  compareProductsAttributes,
+  active
 }) => {
   const attributesMap = attributeNames?.map((attrib: any) => {
-    return {
-      name: attrib,
-      value: productData?.attributes?.find((x: any) => x.display === attrib)?.value,
+    let currentProduct = compareProductsAttributes?.find((x: any) => x.stockCode == productData?.stockCode)
+    if (active) {
+      return {
+        name: attrib,
+        value: productData?.customAttributes?.find((x: any) => x.display === attrib)?.value,
+      }
+    } else {
+      return {
+        name: attrib,
+        value: currentProduct?.customAttributes?.find((x: any) => x.fieldName === attrib)?.fieldValue,
+      }
     }
   })
   const { isMobile, isIPadorTablet } = deviceInfo
@@ -120,14 +132,11 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const [attribs, setAttribs] = useState<any>([])
 
   useEffect(() => {
-    if (product?.attributes?.length > 0) {
-      if (product?.attributes?.length !== attributeNames?.length) {
-        const emptySetCount =
-          attributeNames?.length - product?.attributes?.length
-        const emptyCompareSet = Array(Math.abs(emptySetCount)).fill(
-          EMPTY_COMPARE_SET
-        )
-        setAttribs([...product.attributes, ...emptyCompareSet])
+    if (compareProductsAttributes?.length > 0) {
+      if (compareProductsAttributes?.length !== attributeNames?.length) {
+        const emptySetCount = attributeNames?.length - compareProductsAttributes?.length
+        const emptyCompareSet = Array(Math.abs(emptySetCount)).fill(EMPTY_COMPARE_SET)
+        setAttribs([...emptyCompareSet])
         return
       }
       setAttribs([...product.attributes])
@@ -557,10 +566,15 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
             {isMobile || isIPadorTablet ? null :
               <div className="flex flex-col w-full gap-0 py-3 mt-3 border-t border-gray-200">
-                {attributesMap?.map((attrib: any, attribIdx: any) => (
+                 {attributesMap?.map((attrib: any, attribIdx: any) => (
                   <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                     <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
-                    {attrib?.name}{' '}:{' '}{attrib?.value ? <>{attrib?.value}</> : <>{'-'}</>}
+                    {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
+                      <><Image alt={attrib?.value} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
+                      : attrib?.value == "True" || attrib?.value == "Yes" ?
+                        <><Image alt={attrib?.value} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
+                        : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
+                      <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
                   </span>
                 ))}
               </div>
@@ -614,10 +628,15 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         {isMobile || isIPadorTablet ? (
           <>
             <div className="flex flex-col w-full col-span-12 gap-0">
-              {attributesMap?.map((attrib: any, attribIdx: any) => (
+             {attributesMap?.map((attrib: any, attribIdx: any) => (
                 <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                   <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
-                  {attrib?.name}{' '}:{' '}{attrib?.value ? <>{attrib?.value}</> : <>{'-'}</>}
+                  {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
+                    <><Image alt={attrib?.value} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
+                    : attrib?.value == "True" || attrib?.value == "Yes" ?
+                      <><Image alt={attrib?.value} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
+                      : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
+                    <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
                 </span>
               ))}
             </div>
