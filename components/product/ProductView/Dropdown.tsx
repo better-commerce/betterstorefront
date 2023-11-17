@@ -149,26 +149,12 @@ export default function Dropdown({
                   return (
                     <Listbox.Option
                       key={item.fieldValue}
-                      className={({ active }) =>
-                        classNames(
-                          active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                          'cursor-default select-none relative py-2 pl-3 pr-9'
-                        )
-                      }
-                      value={{
-                        currentAttribute: item.fieldValue,
-                        stock: stockAmount,
-                      }}
-                    >
+                      className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')}
+                      value={{currentAttribute: item.fieldValue, stock: stockAmount,}}>
                       {({ selected, active }) => (
                         <>
                           <div className="flex items-center">
-                            <span
-                              className={classNames(
-                                selected ? 'font-semibold' : 'font-normal',
-                                'ml-3 block truncate'
-                              )}
-                            >
+                            <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}>
                               {item.fieldValue
                                 ? generateItemOption(item.fieldValue, stockAmount)
                                 : null}
