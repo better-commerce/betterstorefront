@@ -46,17 +46,9 @@ export default function Dropdown({
   }, [currentAttribute])
 
   useEffect(() => {
-    const getStockPerAttrData = getStockPerAttribute(
-      fieldCode,
-      currentAttribute
-    )
+    const getStockPerAttrData = getStockPerAttribute(fieldCode, currentAttribute)
     setProductData(getStockPerAttrData)
-    setSelected({
-      currentAttribute,
-      stock: getStockPerAttrData.currentStock,
-      productId: getStockPerAttrData.productId,
-      stockCode: getStockPerAttrData.stockCode,
-    })
+    setSelected({currentAttribute, stock: getStockPerAttrData.currentStock, productId: getStockPerAttrData.productId, stockCode: getStockPerAttrData.stockCode,})
   }, [productId])
 
   const isPreOrderEnabled = productData.isPreOrderEnabled
