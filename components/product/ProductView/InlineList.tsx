@@ -31,7 +31,7 @@ function renderRadioOptions(
           }}
           style={{ backgroundColor: item.fieldValue }}
           className={cn(
-            'pdp-color-swatch-item relative z-1 h-8 w-8 rounded-full border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
+            'pdp-color-swatch-item relative z-1 h-8 w-8 rounded border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-offset-1 hover:ring-1',
             {
               'ring-1 z-1': selectedValue === item.fieldValue,
             }

@@ -1,30 +1,11 @@
 import React, { useState } from 'react'
-
 import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector'
-
-import {
-  ErrorBoundary,
-  Facet,
-  Results,
-  PagingInfo,
-  ResultsPerPage,
-  Paging,
-  Sorting,
-  withSearch,
-} from '@elastic/react-search-ui'
+import { ErrorBoundary, Facet, Results, PagingInfo, ResultsPerPage, Paging, Sorting, withSearch, } from '@elastic/react-search-ui'
 import { Layout } from '@elastic/react-search-ui-views'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
 import Image from 'next/image'
 import { NoSymbolIcon, XMarkIcon } from '@heroicons/react/24/outline'
-
-import {
-  buildAutocompleteQueryConfig,
-  buildFacetConfigFromConfig,
-  buildSearchOptionsFromConfig,
-  buildSortOptionsFromConfig,
-  getConfig,
-  getFacetFields,
-} from '@components/config/config-helper'
+import { buildAutocompleteQueryConfig, buildFacetConfigFromConfig, buildSearchOptionsFromConfig, buildSortOptionsFromConfig, getConfig, getFacetFields, } from '@components/config/config-helper'
 import { cartItemsValidateAddToCart, getElasticSearchPriceColumn, vatIncluded } from '@framework/utils/app-util'
 import ElasticSearchSuggestions from './ElasticSearchSuggestions'
 import { CloudIcon } from '@heroicons/react/20/solid'
@@ -49,12 +30,7 @@ import { deliveryDateFormat, matchStrings, priceFormat } from '@framework/utils/
 import { Switch } from '@headlessui/react'
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
-const connector = new AppSearchAPIConnector({
-  searchKey,
-  engineName,
-  hostIdentifier,
-  endpointBase,
-})
+const connector = new AppSearchAPIConnector({ searchKey, engineName, hostIdentifier, endpointBase, })
 const config = {
   searchQuery: {
     facets: buildFacetConfigFromConfig(),
@@ -343,7 +319,7 @@ function ElasticSearchResult({
                     <div className="justify-end col-span-8 sm:col-span-6">
                       <div className="sm:flex sm:justify-end">
                         {/* show on desktop */}
-                        <div className="hidden md:flex items-center justify-end flex-1 mx-auto mt-2 mr-4">
+                        <div className="items-center justify-end flex-1 hidden mx-auto mt-2 mr-4 md:flex">
                           <div className="flex flex-col py-0 pr-2 text-xs font-normal font-14 whitespace-nowrap">
                             {GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT}
                           </div>
@@ -355,15 +331,15 @@ function ElasticSearchResult({
                               )
                             }}
                             className={`${includeOutOfStockProduct
-                                ? 'bg-black'
-                                : 'bg-gray-300'
+                              ? 'bg-black'
+                              : 'bg-gray-300'
                               } relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
                           >
                             <span
                               aria-hidden="true"
                               className={`${includeOutOfStockProduct
-                                  ? 'translate-x-4'
-                                  : 'translate-x-0'
+                                ? 'translate-x-4'
+                                : 'translate-x-0'
                                 } pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                             />
                           </Switch>
@@ -381,7 +357,7 @@ function ElasticSearchResult({
 
                     </div>
                     {/* show on mobile */}
-                    <div className='block md:hidden col-span-12'>
+                    <div className='block col-span-12 md:hidden'>
                       <div className="flex items-center justify-end flex-1 mx-auto mt-2 ">
                         <div className="flex flex-col py-0 pr-2 text-xs font-normal font-14 whitespace-nowrap">
                           {GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT}
@@ -392,15 +368,15 @@ function ElasticSearchResult({
                             setIncludeOutOfStockProduct(!includeOutOfStockProduct)
                           }}
                           className={`${includeOutOfStockProduct
-                              ? 'bg-black'
-                              : 'bg-gray-300'
+                            ? 'bg-black'
+                            : 'bg-gray-300'
                             } relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
                         >
                           <span
                             aria-hidden="true"
                             className={`${includeOutOfStockProduct
-                                ? 'translate-x-4'
-                                : 'translate-x-0'
+                              ? 'translate-x-4'
+                              : 'translate-x-0'
                               } pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                           />
                         </Switch>
