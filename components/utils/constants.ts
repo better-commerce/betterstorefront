@@ -21,8 +21,8 @@ export const SEARCH_MINIMAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSI
 export const SEARCH_ADVANCED_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced`
 export const CACHED_IMAGE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product`
 export const LOOKBOOK_SLUG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook/slug`
-export const NEXT_SEARCH_ADVANCED_ENDPOINT =
-  '/api/catalog/get-category-products'
+export const NEXT_SEARCH_ADVANCED_ENDPOINT ='/api/catalog/get-category-products'
+export const PRODUCT_CUSTOM_ATTRIBUTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/custom-attributes`
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
 export const PRODUCT_PREVIEW_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/preview`
 export const BASKET_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket`
@@ -159,6 +159,7 @@ export const NEXT_REFERRAL_CLICK_ON_INVITE =
 export const NEXT_REFERRAL_INFO = '/api/customer/referral/referral-info'
 export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral/referral-vouchers'
 export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
+export const NEXT_COMPARE_ATTRIBUTE = '/api/compare-attributes'
 //CONSTANTS
 
 export const YOUTUBE_VIDEO_EMBED_PREFIX_URL =

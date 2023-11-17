@@ -29,7 +29,8 @@ import {
   NEXT_GET_PRODUCT_PREVIEW,
   SITE_ORIGIN_URL,
   NEXT_GET_CATALOG_PRODUCTS,
-  NEXT_GET_ORDER_RELATED_PRODUCTS
+  NEXT_GET_ORDER_RELATED_PRODUCTS,
+  NEXT_COMPARE_ATTRIBUTE
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -48,6 +49,7 @@ import {
   IMG_PLACEHOLDER,
   ITEM_TYPE_ADDON,
   ITEM_TYPE_ADDON_10,
+  ITEM_TYPE_ALTERNATIVE,
   PRICEMATCH_ADDITIONAL_DETAILS,
   PRICEMATCH_BEST_PRICE,
   PRICEMATCH_SEEN_IT_CHEAPER,
@@ -163,13 +165,16 @@ export default function ProductView({
   const [compareProducts, setCompareProduct] = useState([])
   const [allProductsByCategory, setAllProductsByCategory] = useState<any>(allProductsByCategoryProp)
   const [relatedProducts, setRelatedProducts] = useState<any>(relatedProductsProp)
+  const [compareProductsAttributes, setCompareProductAttribute] = useState([])
   const variantProductsCount = product?.variantProducts?.length
   let currentPage = getCurrentPage()
-  const [selectedAttrData, setSelectedAttrData] = useState({
-    productId: product?.recordId,
-    stockCode: product?.stockCode,
-    ...product,
-  })
+  const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
+  useEffect(() => {
+    if (compareProductsAttributes?.length < 0) return
+    let mappedAttribsArrStr: any = compareProductsAttributes?.map((o: any) => o?.customAttributes).flat()
+    mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o?.fieldName))
+    setAttributeNames(mappedAttribsArrStr)
+  }, [compareProductsAttributes])
   useEffect(() => {
     axios
       .post(NEXT_GET_CATALOG_PRODUCTS, {
@@ -185,14 +190,18 @@ export default function ProductView({
   }, [product, currency])
 
   const fetchRelatedProducts = async (productId: string) => {
-    const { data: relatedProducts }: any = await axios.post(
-      NEXT_GET_ORDER_RELATED_PRODUCTS,
-      {
-        recordId: productId,
-      }
-    )
+    const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId: productId, })
     setRelatedProducts(relatedProducts)
+    const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item?.relatedType == ITEM_TYPE_ALTERNATIVE)
+    const stockCodeArray = alternativeProducts?.map((item: { stockCode: any }) => item?.stockCode);
+    const newArray = stockCodeArray?.concat(product?.stockCode);
+
+    if (alternativeProducts?.length > 0) {
+      const { data: compareDataResult }: any = await axios.post(NEXT_COMPARE_ATTRIBUTE, { stockCodes: newArray || [], compareAtPDP: true })
+      setCompareProductAttribute(compareDataResult)
+    }
   }
+  const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
   useEffect(() => {
     if (allProductsByCategory?.length < 0) return
     let mappedAttribsArrStr = allProductsByCategory?.map((o: any) => o.attributes).flat()
@@ -1089,17 +1098,14 @@ export default function ProductView({
             />
           </>
         ) : null}
-
-        {allProductsByCategory?.length > 0 ? (
-          <div className="flex flex-col w-full px-0 mx-auto ">
+        {alternativeProducts?.length > 0 ? (
+          <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto">
             <div className="flex flex-col section-devider"></div>
-            <PDPCompare name={data?.brand || ''} pageConfig={config} products={allProductsByCategory} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount} attributeNames={attributeNames} />
+            <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} />
           </div>
         ) : null}
 
-        {relatedProducts?.relatedProducts?.filter((x: any) =>
-          matchStrings(x?.relatedType, 'ALSOLIKE', true)
-        )?.length > 0 ? (
+        {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 ? (
           <>
             <div className="flex flex-col section-devider"></div>
             <div className="container flex flex-col w-full px-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
