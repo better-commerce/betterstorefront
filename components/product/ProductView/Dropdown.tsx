@@ -21,15 +21,9 @@ export default function Dropdown({
   variant,
 }: any) {
   const { openNotifyUser, closeNotifyUser } = useUI()
-
   const router = useRouter()
-
   const slug = `products/${router.query.slug}`
-
-  const [productData, setProductData] = useState(
-    getStockPerAttribute(fieldCode, currentAttribute)
-  )
-
+  const [productData, setProductData] = useState(getStockPerAttribute(fieldCode, currentAttribute))
   const [selected, setSelected] = useState({
     currentAttribute,
     stock: productData.currentStock,
@@ -79,11 +73,6 @@ export default function Dropdown({
   }
 
   const handleOnChange = (value: any) => {
-    // const stockPerAttrValue = getStockPerAttribute(
-    //   fieldCode,
-    //   value.currentAttribute
-    // )
-
     const stockPerAttrValue = getProductFromAttributes(
       fieldCode,
       value.currentAttribute,
