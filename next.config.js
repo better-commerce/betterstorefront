@@ -14,7 +14,12 @@ const isBetterCommerce = provider === 'bettercommerce'
 module.exports = withCommerceConfig({
   poweredByHeader: false,
   images: {
-    domains: process.env.NEXT_IMAGES_ALLOWED_DOMAINS.split(','),
+    domains: [
+      'liveocxcdn.azureedge.net',
+      'liveocxstorage.blob.core.windows.net',
+      'devocxstorage.blob.core.windows.net',
+      'www.imagedelivery.space',
+    ],
     cacheDuration: 31536000,
   },
   commerce,
