@@ -1,6 +1,7 @@
 import { useSignupTradingAccount } from '@framework/auth'
+import apiRouteGuard from './base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function registerB2BUserApiMiddleware(req: any, res: any) {
   const {
     title,
     firstName,
@@ -47,3 +48,5 @@ export default async function (req: any, res: any) {
     throw new Error(error)
   }
 }
+
+export default apiRouteGuard(registerB2BUserApiMiddleware)

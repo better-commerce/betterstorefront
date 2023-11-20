@@ -1,7 +1,8 @@
 import { getUserCarts } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-const GetUserCartsApiMiddleware = async (req: any, res: any) => {
+const getUserCartsApiMiddleware = async (req: any, res: any) => {
   const { userId }: any = req.query
   try {
     const response = await getUserCarts()({
@@ -12,6 +13,6 @@ const GetUserCartsApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default GetUserCartsApiMiddleware;
+export default apiRouteGuard(getUserCartsApiMiddleware)

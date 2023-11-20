@@ -1,12 +1,13 @@
 import { clickAndCollect } from '@framework/shipping'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
 interface BodyProps {
   items: []
   postCode: string
 }
 
-const ClickAndCollectApiMiddleware = async (req: any, res: any) => {
+const clickAndCollectApiMiddleware = async (req: any, res: any) => {
   const { items, postCode }: any = req.body
   try {
     const response = await clickAndCollect()({
@@ -18,6 +19,6 @@ const ClickAndCollectApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default ClickAndCollectApiMiddleware;
+export default apiRouteGuard(clickAndCollectApiMiddleware)

@@ -21,8 +21,8 @@ export const SEARCH_MINIMAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSI
 export const SEARCH_ADVANCED_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced`
 export const CACHED_IMAGE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product`
 export const LOOKBOOK_SLUG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook/slug`
-export const NEXT_SEARCH_ADVANCED_ENDPOINT =
-  '/api/catalog/get-category-products'
+export const NEXT_SEARCH_ADVANCED_ENDPOINT ='/api/catalog/get-category-products'
+export const PRODUCT_CUSTOM_ATTRIBUTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/custom-attributes`
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
 export const PRODUCT_PREVIEW_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/preview`
 export const BASKET_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket`
@@ -30,6 +30,8 @@ export const GET_BASKET_PROMOTIONS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_AP
 export const BASKET_VALIDATE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket/validate`
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
 export const REGISTER_CUSTOMER_TRADING_ACCOUNT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/create`
+export const B2B_COMPANY_USERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
+export const B2B_USER_QUOTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
 export const AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/authenticate`
 export const SOCIAL_AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/social-login`
 export const CUSTOMER_BASE_API = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/`
@@ -54,7 +56,18 @@ export const PRODUCT_PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_AP
 export const INFRA_LOG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/log`
 export const NOTIFICATION_OTP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/notification/otp`
 export const VALIDATE_CHANGE_USERNAME_OTP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/notification`
-
+export const REFERRAL_INFO_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/program`
+export const REFERRAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer`
+export const REFERRAL_BY_EMAIL = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-email`
+export const REFERRAL_BY_SLUG = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/validate-code`
+export const REFERRAL_BY_USERID = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-userid`
+export const REFERRAL_REFEREE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referee/`
+export const REFERRAL_BY_USERNAME = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-username`
+export const REFERRAL_SEARCH = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/search`
+export const REFERRAL_VOUCHERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/vouchers`
+export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
+export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`
+export const NEXT_GET_COUNTRIES = '/api/countries'
 //LOCAL ENDPOINTS
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
@@ -77,6 +90,7 @@ export const NEXT_GET_ALT_RELATED_PRODUCTS =
 export const NEXT_SIGN_UP = `/api/signup`
 export const NEXT_SIGN_UP_TRADING_ACCOUNT = `/api/signup-trading-account`
 export const NEXT_VALIDATE_EMAIL = `/api/customer/validate-email`
+export const NEXT_VALIDATE_PAYMENT_LINK = `/api/payments/validate-payment-link`
 export const NEXT_AUTHENTICATE = `/api/login`
 export const NEXT_SSO_AUTHENTICATE = `/api/login/sso`
 export const NEXT_UPDATE_DETAILS = `/api/customer/update-details`
@@ -91,7 +105,7 @@ export const NEXT_EDIT_ADDRESS = `/api/customer/edit-address`
 export const NEXT_CREATE_ADDRESS = `/api/customer/create-address`
 export const NEXT_DELETE_ADDRESS = `/api/customer/delete-address`
 export const NEXT_GET_CUSTOMER_DETAILS = `/api/customer/get-customer-details`
-
+export const MASTER_DATA_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/masterdata`
 export const NEXT_GET_ORDER = `/api/order/order-details`
 export const NEXT_CANCEL_REASON = `/api/cancel-reason`
 export const NEXT_CANCEL_ORDER = `/api/order/cancel`
@@ -105,7 +119,8 @@ export const NEXT_GET_BASKET_PROMOS = `/api/get-basket-promotions`
 export const NEXT_BASKET_VALIDATE = `/api/basket/validate`
 export const NEXT_APPLY_PROMOTION = `/api/apply-promo`
 export const PAGE_PREVIEW_CONTENT_ENDPOINT = `api/${process.env.BETTERCMS_API_VERSION}/page`
-
+export const NEXT_B2B_GET_USERS = `/api/b2b/get-users`
+export const NEXT_B2B_GET_QUOTES = `/api/b2b/get-quotes`
 export const NEXT_SHIPPING_ENDPOINT = '/api/shipping-options'
 export const NEXT_UPDATE_CHECKOUT_ADDRESS = '/api/update-checkout-address'
 export const NEXT_UPDATE_SHIPPING = '/api/update-shipping'
@@ -128,9 +143,27 @@ export const PAYMENTS_API = `/api/payments`
 export const NEXT_OTP_REQUEST = '/api/notification/otp'
 export const NEXT_VALIDATE_CHANGE_USERNAME_OTP =
   '/api/notification/validate-change-username-otp'
-
+export const NEXT_REFERRAL_BY_EMAIL = '/api/customer/referral/referral-by-email'
+export const NEXT_REFERRAL_BY_USERID =
+  '/api/customer/referral/referral-by-userId'
+export const NEXT_REFERRAL_BY_USERNAME =
+  '/api/customer/referral/referral-by-username'
+export const NEXT_REFERRAL_BY_SLUG = '/api/customer/referral/referral-by-slug'
+export const NEXT_REFERRAL_SEARCH = '/api/customer/referral/referral-search'
+export const NEXT_REFERRAL_ADD_USER_REFEREE =
+  '/api/customer/referral/referral-add-user-referee'
+export const NEXT_REFERRAL_INVITE_SENT =
+  '/api/customer/referral/referral-invite-sent'
+export const NEXT_REFERRAL_CLICK_ON_INVITE =
+  '/api/customer/referral/referral-click-on-invite'
+export const NEXT_REFERRAL_INFO = '/api/customer/referral/referral-info'
+export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral/referral-vouchers'
+export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
+export const NEXT_COMPARE_ATTRIBUTE = '/api/compare-attributes'
 //CONSTANTS
 
+export const YOUTUBE_VIDEO_EMBED_PREFIX_URL =
+  'https://www.youtube-nocookie.com/embed'
 export const NEXT_GET_PRODUCT_QUICK_VIEW = '/api/catalog/get-product-quick-view'
 
 export const NEXT_GET_PRODUCT_REVIEW = '/api/catalog/get-product-reviews'
@@ -154,7 +187,7 @@ export const NEXT_PUBLIC_DEFAULT_CACHE_TIME =
   process.env.NEXT_PUBLIC_DEFAULT_CACHE_TIME_IN_MILLI_SECS
 export const NEXT_PUBLIC_API_CACHING_LOG_ENABLED =
   process.env.NEXT_PUBLIC_API_CACHING_LOG_ENABLED
-
+export const SEARCH_PROVIDER = process.env.SEARCH_PROVIDER
 // Default currency, language & country settings.
 export const BETTERCOMMERCE_DEFAULT_CURRENCY =
   process.env.BETTERCOMMERCE_DEFAULT_CURRENCY
@@ -171,6 +204,7 @@ export const BETTERCOMMERCE_LANGUAGE = process.env.BETTERCOMMERCE_LANGUAGE
 export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY
 export const SHOW_APPLY_COUPON_SECTION = true
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY
+export const SITE_HOST = process.env.SITE_HOST
 export const SITE_ORIGIN_URL = process.env.SITE_ORIGIN_URL
 export const SITE_NAME = process.env.SITE_NAME
 export const ENABLE_SECURED_PAYMENT_PAYLOAD = stringToBoolean(
@@ -191,7 +225,8 @@ export const OMNILYTICS_DISABLED = process.env.OMNILYTICS_DISABLED
 export const PDP_SIZE_OPTIONS_COUNT = parseInt(
   process.env.PDP_SIZE_OPTIONS_COUNT || '0'
 )
-
+export const MAX_ADD_TO_CART_LIMIT = 5
+export const NEXT_GET_PROOMO_DETAILS = '/api/catalog/get-promo-details'
 export module Messages {
   export module Validations {
     export module RegularExpressions {
@@ -310,6 +345,10 @@ export module Messages {
       CHEQUE_NUMBER_REQUIRED: 'Cheque number is a required',
       CHEQUE_NUMBER_INPUT: 'Cheque Number should only contain digits',
     }
+
+    export const PaymentLink: any = {
+      LINK_EXPIRED: 'Payment link is expired',
+    }
   }
 
   export const Messages: any = {
@@ -347,7 +386,7 @@ export module Messages {
     COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
   }
 }
-
+export const EmptyObject: any = {}
 export module PageActions {
   // Actions assigned: 1 to 50
   export enum BulkOrder {
@@ -423,3 +462,30 @@ export enum SocialMediaType {
   FACEBOOK = 'facebook',
   APPLE = 'apple',
 }
+
+
+export const PRODUCT_TAGS = {
+  newLaunch: 'New Launch',
+  onSale: 'On Sale',
+  trending: 'Trending',
+  exclusive: 'Exclusive',
+  bestSeller: 'BestSeller',
+}
+
+export enum CheckoutStepType {
+  NONE = 0,
+  CONTACT_DETAILS = 1,
+  DELIVERY_DETAILS = 2,
+  DELIVERY_METHOD = 3,
+  PAYMENT_METHOD = 4,
+  REVIEW_AND_PLACE_ORDER = 5,
+  BILLING_DELIVERY_DETAILS = 6,
+}
+
+export enum LoadingActionType {
+  NONE = 0,
+  REMOVE_ITEM = 1,
+  MOVE_TO_WISHLIST = 2,
+}
+
+export const EmptyGuid = '00000000-0000-0000-0000-000000000000'

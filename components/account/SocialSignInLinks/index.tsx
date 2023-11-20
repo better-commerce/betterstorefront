@@ -12,14 +12,14 @@ import {
   SOCIAL_REGISTER_GOOGLE,
 } from '@components/utils/textVariables'
 
-const SocialSignInLinks = ({ containerCss }: any) => {
+const SocialSignInLinks = ({ containerCss, isLoginSidebarOpen }: any) => {
   return (
     <div className={containerCss}>
       <Link
         legacyBehavior
         href={`/my-account/login/social/${SocialMediaType.GOOGLE}`}
       >
-        <a className="w-full px-6 py-4 text-sm font-medium text-center text-white bg-red-500">
+        <a className={`w-full px-6 py-4 text-sm font-medium text-center text-white bg-red-500 ${isLoginSidebarOpen && `!px-0 !py-3`}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="inline-block w-4 h-4 mr-1 rounded google-plus-logo"
@@ -28,8 +28,8 @@ const SocialSignInLinks = ({ containerCss }: any) => {
           >
             <path
               d="M7 11v2.4h3.97c-.16 1.029-1.2 3.02-3.97 3.02-2.39 0-4.34-1.979-4.34-4.42 0-2.44 1.95-4.42 4.34-4.42 1.36 0 2.27.58 2.79 1.08l1.9-1.83c-1.22-1.14-2.8-1.83-4.69-1.83-3.87 0-7 3.13-7 7s3.13 7 7 7c4.04 0 6.721-2.84 6.721-6.84 0-.46-.051-.81-.111-1.16h-6.61zm0 0 17 2h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
             />
           </svg>
           {SOCIAL_REGISTER_GOOGLE}
@@ -39,7 +39,7 @@ const SocialSignInLinks = ({ containerCss }: any) => {
         legacyBehavior
         href={`/my-account/login/social/${SocialMediaType.FACEBOOK}`}
       >
-        <a className="w-full px-6 py-4 text-sm font-medium text-center text-white bg-sky-600">
+        <a className={`w-full px-6 py-4 text-sm font-medium text-center text-white bg-sky-600 ${isLoginSidebarOpen && `!px-0 !py-3 !pl-1 !pr-1`}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="inline-block w-4 h-4 mr-1 rounded fb-logo"
@@ -55,7 +55,7 @@ const SocialSignInLinks = ({ containerCss }: any) => {
         legacyBehavior
         href={`/my-account/login/social/${SocialMediaType.APPLE}`}
       >
-        <a className="w-full px-6 py-4 text-sm font-medium text-center text-white bg-black">
+        <a className={`w-full px-6 py-4 text-sm font-medium text-center text-white bg-black ${isLoginSidebarOpen && `!px-0 !py-3`}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="inline-block w-4 h-4 mr-1 rounded apple-logo"

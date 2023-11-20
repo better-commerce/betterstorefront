@@ -1,7 +1,8 @@
 import useSSOLogin from '@framework/auth/use-sso-login'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from 'pages/api/base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function ssoLoginApiMiddleware(req: any, res: any) {
   const { username, firstName, lastName, mobile, socialMediaType }: any =
     req.body
   try {
@@ -18,3 +19,5 @@ export default async function (req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(ssoLoginApiMiddleware)

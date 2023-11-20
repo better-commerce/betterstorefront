@@ -14,6 +14,7 @@ import {
   NEXT_PUBLIC_API_CACHING_LOG_ENABLED,
 } from '@components/utils/constants'
 import { Guid } from '@commerce/types'
+import { IFetcherProps } from 'framework/contracts/api/IFetcherProps'
 
 const SingletonFactory = (function () {
   let accessToken = ''
@@ -88,16 +89,17 @@ export const setGeneralParams = (param: any, value: any) => {
   store.set(param, value)
 }
 
-const fetcher = async ({
-  url = '',
-  method = 'post',
-  data = {},
-  params = {},
-  headers = {},
-  cookies = {},
-  baseUrl = '',
-  logRequest = false,
-}: any) => {
+const fetcher = async (props: IFetcherProps | any) => {
+  const {
+    url = '',
+    method = 'post',
+    data = {},
+    params = {},
+    headers = {},
+    cookies = {},
+    baseUrl = '',
+    logRequest = false,
+  } = props
   const computedUrl = new URL(url, baseUrl || BASE_URL)
   const newConfig = {
     Currency:
@@ -140,7 +142,6 @@ const fetcher = async ({
   if (Object.keys(data).length) {
     config.data = data
   }
-  // console.log({config})
   try {
     const response = await axiosInstance(config)
     if (logRequest) {

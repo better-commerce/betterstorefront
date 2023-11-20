@@ -8,8 +8,10 @@ import {
   GENERAL_DEFAULT_DELIVERY_ADDRESS,
   GENERAL_DEFAULT_BILLING_ADDRESS,
 } from '@components/utils/textVariables'
-import { getCurrentPage } from '@framework/utils/app-util'
+import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
+import { UserRoleType } from '@framework/utils/enums'
+import DeleteModal from './DeleteModal'
 
 export default function AddressItem({
   item,
@@ -96,15 +98,17 @@ export default function AddressItem({
           })
       )
       .catch(() => errCallback)
+      deleteCloseModal()
   }
 
-  function deletecloseModal() {
+  function deleteCloseModal() {
     setIsOpen(false)
   }
 
-  function deleteopenModal() {
+  function deleteOpenModal() {
     setIsOpen(true)
   }
+  const isB2B = isB2BUser(user)
   return (
     <div>
       {isEditMode ? (
@@ -131,67 +135,130 @@ export default function AddressItem({
           onSubmit={handleAddressSubmit}
         />
       ) : (
-        <>
-     
-          <div className="flex lg:flex-row items-center justify-between px-5 py-5 mt-5 mb-5 border rounded-lg flex-col">
-            <div className="flex flex-col text-md font-regular w-full">
-              <span className="text-xl font-bold">
-                {item.firstName + ' ' + item.lastName}
-              </span>
-              {item.label && (
-                <span className="flex items-start mt-2">
-                  <span className="p-1 bg-black text-white font-bold">
-                    {label}
-                  </span>
+      <>
+      {isB2B ? (
+            <div className="flex lg:flex-row items-center justify-between px-5 py-5 mt-5 mb-5 border rounded-lg flex-col">
+              <div className="flex flex-col text-md font-regular w-full">
+                <span className="text-xl font-bold">
+                  {item?.firstName + ' ' + item?.lastName}
                 </span>
-              )}
-              <span className='mt-2'>{item.address1}</span>
-              <span>{item.address2}</span>
-              <span>
-                {item.city} - {item.postCode}
-              </span>
-              <span>{item.phoneNo}</span>
-            </div>
-            <div className='w-full'>
-              <div className="justify-end mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 w-full">
-                <button
-                  onClick={() => {
-                    onEditAddress(item?.id)
-                  }}
-                  className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
-                >
-                  {GENERAL_EDIT}
-                </button>
-                <button
-                  onClick={deleteItem}
-                  className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
-                >
-                  {GENERAL_DELETE}
-                </button>
-              </div>
-              <div className="flex items-center justify-between mt-5">
-                {/* {item.isDefaultDelivery && (
-                  <div className="px-2 py-2 mr-2 border">
-                    {GENERAL_DEFAULT_DELIVERY_ADDRESS}
-                  </div>
-                )}
-                {item.isDefaultBilling && (
-                  <div className="px-2 py-2 border">
-                    {GENERAL_DEFAULT_BILLING_ADDRESS}
-                  </div>
-                )} */}
-                {item.isDefault && (
-                  <div className="p-1 border bg-black">
-                    <span className="text-white font-semibold">
-                      Default address
+                {item?.label && (
+                  <span className="flex items-start mt-2">
+                    <span className="p-1 bg-black text-white font-bold">
+                      {label}
                     </span>
-                  </div>
+                  </span>
                 )}
+                <span className='mt-2'>{item?.address1}</span>
+                <span>{item?.address2}</span>
+                <span>
+                  {item?.city} - {item?.postCode}
+                </span>
+                <span>{item?.phoneNo}</span>
               </div>
-            </div>
-          </div>
-        
-        </>
+              <div className='w-full'>
+                {user?.companyUserRole === UserRoleType.ADMIN && <div className="justify-end mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 w-full">
+                  <button
+                    onClick={() => {
+                      onEditAddress(item?.id)
+                    }}
+                    className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                  >
+                    {GENERAL_EDIT}
+                  </button>
+                  <button
+                    onClick={deleteOpenModal}
+                    className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                  >
+                    {GENERAL_DELETE}
+                  </button>
+                </div>}
+                <div className="flex items-center justify-between mt-5">
+                  {/* {item.isDefaultDelivery && (
+                    <div className="px-2 py-2 mr-2 border">
+                      {GENERAL_DEFAULT_DELIVERY_ADDRESS}
+                    </div>
+                  )}
+                  {item.isDefaultBilling && (
+                    <div className="px-2 py-2 border">
+                      {GENERAL_DEFAULT_BILLING_ADDRESS}
+                    </div>
+                  )} */}
+                  {item?.isDefault && (
+                    <div className="p-1 border bg-black">
+                      <span className="text-white font-semibold">
+                        Default address
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>   
+      ) : (
+        <div className="flex lg:flex-row items-center justify-between px-5 py-5 mt-5 mb-5 border rounded-lg flex-col">
+              <div className="flex flex-col text-md font-regular w-full">
+                <span className="text-xl font-bold">
+                  {item?.firstName + ' ' + item?.lastName}
+                </span>
+                {item?.label && (
+                  <span className="flex items-start mt-2">
+                    <span className="p-1 bg-black text-white font-bold">
+                      {label}
+                    </span>
+                  </span>
+                )}
+                <span className='mt-2'>{item?.address1}</span>
+                <span>{item?.address2}</span>
+                <span>
+                  {item?.city} - {item?.postCode}
+                </span>
+                <span>{item?.phoneNo}</span>
+              </div>
+              <div className='w-full'>
+                <div className="justify-end mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 w-full">
+                  <button
+                    onClick={() => {
+                      onEditAddress(item?.id)
+                    }}
+                    className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                  >
+                    {GENERAL_EDIT}
+                  </button>
+                  <button
+                    onClick={deleteOpenModal}
+                    className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                  >
+                    {GENERAL_DELETE}
+                  </button>
+                </div>
+                <div className="flex items-center justify-between mt-5">
+                  {/* {item.isDefaultDelivery && (
+                    <div className="px-2 py-2 mr-2 border">
+                      {GENERAL_DEFAULT_DELIVERY_ADDRESS}
+                    </div>
+                  )}
+                  {item.isDefaultBilling && (
+                    <div className="px-2 py-2 border">
+                      {GENERAL_DEFAULT_BILLING_ADDRESS}
+                    </div>
+                  )} */}
+                  {item?.isDefault && (
+                    <div className="p-1 border bg-black">
+                      <span className="text-white font-semibold">
+                        Default address
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+        </div> 
+      )}
+      <DeleteModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          deleteItem={deleteItem}
+        />
+      </>
       )}
     </div>
   )

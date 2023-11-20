@@ -96,7 +96,7 @@ export default function Wishlist() {
 
       <main className="lg:px-8">
         <div className="max-w-4xl lg:mx-12">
-          <div className="lg:px-0 sm:px-0">
+          <div className="lg:px-0 sm:px-0 pt-5">
             <h1 className="font-extrabold tracking-tight text-gray-900">
               {/* {WISHLIST_TITLE} */}
             </h1>
@@ -126,7 +126,7 @@ export default function Wishlist() {
             {isLoading ? <LoadingDots /> : null}
             <div className="space-y-16 sm:space-y-24">
               <div className="flow-root px-0 mt-2 sm:mt-4 sm:px-0">
-                <div className="grid grid-cols-2 -mx-px sm:gap-y-4 sm:mx-0 md:grid-cols-4 product-listing-main lg:grid-cols-4">
+                <div className="grid grid-cols-2 -mx-px sm:gap-y-4 sm:mx-0 md:grid-cols-2 product-listing-main lg:grid-cols-4">
                   {data.map((product: any, wid: number) => {
                     const saving =
                       product?.listPrice?.raw?.withTax -

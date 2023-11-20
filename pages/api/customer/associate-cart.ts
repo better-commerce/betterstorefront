@@ -1,7 +1,8 @@
 import { associateCart } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const AssociateCartApiMiddleware = async (req: any, res: any) => {
+const associateCartApiMiddleware = async (req: any, res: any) => {
   const { basketId, userId }: any = req.body.data
   try {
     const response = await associateCart()({
@@ -13,6 +14,6 @@ const AssociateCartApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default AssociateCartApiMiddleware;
+export default apiRouteGuard(associateCartApiMiddleware)

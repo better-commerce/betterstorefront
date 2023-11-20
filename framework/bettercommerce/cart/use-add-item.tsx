@@ -24,7 +24,7 @@ export default function useAddItem() {
       basketId,
       productId,
       qty,
-      manualUnitPrice,
+      //manualUnitPrice,
       displayOrder,
       stockCode,
     }

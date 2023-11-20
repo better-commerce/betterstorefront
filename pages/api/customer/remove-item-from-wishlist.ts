@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const RemoveItemFromWishlistApiMiddleware = async (req: any, res: any) => {
+const removeItemFromWishlistApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.removeItemFromWishlist({
       query: req.body,
@@ -13,4 +14,4 @@ const RemoveItemFromWishlistApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default RemoveItemFromWishlistApiMiddleware
+export default apiRouteGuard(removeItemFromWishlistApiMiddleware)

@@ -3,7 +3,6 @@ import { getCommerceApi as commerceApi } from '@commerce/api'
 import createFetcher from './utils/fetch-local'
 import {
   getInfra,
-  getSlugs,
   getProduct,
   getProductPreview,
   getAllProducts,
@@ -40,6 +39,7 @@ import {
   getProductReview,
   resetCache,
   logRequest,
+  getCountries,
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -62,7 +62,6 @@ const operations = {
   getProduct,
   getProductPreview,
   getInfra,
-  getSlugs,
   getProductQuickview,
   notifyMe,
   priceMatch,
@@ -91,6 +90,7 @@ const operations = {
   getProductReview,
   resetCache,
   logRequest,
+  getCountries,
 }
 
 export const provider = { config, operations }

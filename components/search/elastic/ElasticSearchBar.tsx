@@ -1,15 +1,37 @@
+import { useEffect, useRef } from 'react'
 import { SearchBox, withSearch } from '@elastic/react-search-ui'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
+import { useRouter } from 'next/router'
 
 //
 import { useUI } from '@components/ui'
 
 const CustomView = (props: any) => {
-  const { value, onChange, onSubmit, setSearchTerm } = props
+  const { value, onChange, setSearchTerm } = props
+  const router = useRouter()
+  const inputRef = useRef<any>(null)
   const { setShowSearchBar } = useUI()
 
+  useEffect(() => {
+    // Listener for snippet injector reset.
+    router.events.on('routeChangeStart', () => {
+      handleClearSearch()
+    })
+
+    // Dispose listener.
+    return () => {
+      router.events.off('routeChangeStart', () => {})
+    }
+  }, [router.events])
+
   const handleSubmit = (e: any) => {
-    onSubmit()
+    e.preventDefault()
+    router.push({
+      pathname: '/search',
+      query: {
+        freeText: value,
+      },
+    })
   }
 
   const handleChange = (e: any) => {
@@ -21,6 +43,7 @@ const CustomView = (props: any) => {
     onChange('')
     setSearchTerm('')
     setShowSearchBar(false)
+    inputRef.current?.blur()
   }
 
   return (
@@ -28,11 +51,12 @@ const CustomView = (props: any) => {
       <div className="sui-search-box">
         <div className="sui-search-box__wrapper">
           <input
+            ref={inputRef}
             type="text"
             value={value}
             onChange={handleChange}
             placeholder="Search for products"
-            className="sui-search-box__text-input "
+            className="sui-search-box__text-input dark:bg-white"
           />
         </div>
         {/* <input

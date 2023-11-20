@@ -24,6 +24,7 @@ const Logo = ({ className = '', ...props }) => {
       alt="BetterComerce"
       width={60}
       height={36}
+      className="h-auto w-16 md:w-12 lg:w-16"
     />
   )
 }

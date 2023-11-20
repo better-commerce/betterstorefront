@@ -62,6 +62,7 @@ import {
   buildSearchOptionsFromConfig,
   getConfig,
 } from '@components/config/config-helper'
+import { Guid } from '@commerce/types'
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
 const connector = new AppSearchAPIConnector({
   searchKey,
@@ -117,8 +118,8 @@ const accountDropDownConfigUnauthorized: any = [
       >
         <path
           d="M7 11v2.4h3.97c-.16 1.029-1.2 3.02-3.97 3.02-2.39 0-4.34-1.979-4.34-4.42 0-2.44 1.95-4.42 4.34-4.42 1.36 0 2.27.58 2.79 1.08l1.9-1.83c-1.22-1.14-2.8-1.83-4.69-1.83-3.87 0-7 3.13-7 7s3.13 7 7 7c4.04 0 6.721-2.84 6.721-6.84 0-.46-.051-.81-.111-1.16h-6.61zm0 0 17 2h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
         />
       </svg>
     ),
@@ -182,6 +183,7 @@ const Navbar: FC<Props & IExtraProps> = ({
     openCart,
     openWishlist,
     setShowSearchBar,
+    openLoginSideBar,
     openBulkAdd,
     showSearchBar,
   } = useUI()
@@ -215,7 +217,10 @@ const Navbar: FC<Props & IExtraProps> = ({
       className: 'text-left p-2 cursor-pointer',
     },
     {
-      href: '/my-account/orders',
+      href:
+        user?.companyId !== Guid.empty
+          ? '/my-account/my-company?tab=orders'
+          : '/my-account/orders',
       title: GENERAL_MY_ORDERS,
       className: 'text-left p-2 cursor-pointer',
     },
@@ -251,18 +256,15 @@ const Navbar: FC<Props & IExtraProps> = ({
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
 
-  const configAction = (pair: any) => {
+  const configAction = async (pair: any) => {
+    if (!pair) return
     const value: any = Object.values(pair)[0]
     const key = Object.keys(pair)[0]
-    const { pathname, asPath, query } = Router
+    const { data: configActionResult } = await axios.post(NEXT_SET_CONFIG, { obj: pair })
     Cookies.set(key, value)
-    axios
-      .post(NEXT_SET_CONFIG, { obj: pair })
-      .then(() => {
-        Router.reload()
-      })
-      .catch((err: any) => console.log(err))
+    router.reload()
   }
+
 
   const hyperlinkHandler = (hyperlink: string) => {
     return hyperlink[0] === '/' ? hyperlink : `/${hyperlink}`
@@ -299,16 +301,31 @@ const Navbar: FC<Props & IExtraProps> = ({
     }
   }
 
-  const viewWishlist = () => {
-    if (currentPage) {
-      if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'wishlist', {
-          ecommerce: {
-            header: 'Menu Bar',
-            current_page: currentPage,
-          },
-        })
+  function handleWishlist() {
+    try {
+      const viewWishlist = () => {
+        if (currentPage) {
+          if (typeof window !== 'undefined') {
+            recordGA4Event(window, 'wishlist', {
+              ecommerce: {
+                header: 'Menu Bar',
+                current_page: currentPage,
+              },
+            })
+          }
+        }
       }
+      const objUser = localStorage.getItem('user')
+      if (!objUser || isGuestUser) {
+        //  setAlert({ type: 'success', msg:" Please Login "})
+        openLoginSideBar()
+        return
+      }
+      if (objUser) {
+        openWishlist()
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -523,7 +540,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                                           return (
                                             <div
                                               key={`navbar-parent-${navIdx}`}
-                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-0 gap-y-0 gap-x-0 lg:gap-x-0"
+                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-6 gap-y-0 gap-x-0 lg:gap-x-0"
                                             >
                                               <ul
                                                 role="list"
@@ -585,6 +602,7 @@ const Navbar: FC<Props & IExtraProps> = ({
       </Transition.Root>
       {!isMobile && !isIPadorTablet && (
         <div className="fixed top-0 w-full h-6 bg-gray-300 z-999">
+          <div className="promotion-banner mob-marquee"></div>
           <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
             {b2bEnabled && (
               <BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />
@@ -612,229 +630,218 @@ const Navbar: FC<Props & IExtraProps> = ({
           </div>
         </div>
       )}
-      <SearchProvider config={elasticConfig}>
-        <header
-          className={cn(
-            'fixed top-0 right-0 w-full bg-white shadow-md sm:top-6 bg-header-color z-999 navbar-min-64',
-            {
-              '!absolute': showSearchBar,
-            }
-          )}
-        >
-          <nav
-            aria-label="Top"
-            className="relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 md:w-4/5 sm:px-0 lg:px-0"
-          >
-            <button
-              type="button"
-              className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md sm:hidden"
-              onClick={() => {
-                hamburgerMenu()
-                setOpen(true)
-              }}
-            >
-              <span className="sr-only">Open menu</span>
-              <Bars3Icon className="w-6 h-6 mob-menu-icon" aria-hidden="true" />
-            </button>
 
-            <Link href="/" title="BetterCommerce">
-              <div className="flex w-20 cursor-pointer sm:w-32">
-                <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
-                <Logo />
-              </div>
-            </Link>
-            {renderState && (
-              <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16">
-                {config?.map((item: any, idx: number) => (
-                  <Popover
-                    key={`popover-fly-menu-${idx}`}
-                    className="flex"
-                    onMouseEnter={() => setOpenState(idx)}
-                    onMouseLeave={() => setOpenState(-1)}
-                  >
-                    {({ open }) => (
-                      <>
-                        {!item.navBlocks.length ? (
-                          <Popover.Button
-                            className={classNames(
-                              openState == idx
-                                ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
-                                : 'border-transparent text-black hover:text-black text-header-clr',
-                              'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                            )}
-                          >
-                            <Link
-                              href={`/${removePrecedingSlash(item.hyperlink)}`}
-                              className="relative flex items-center h-full text-header-clr"
-                              title={item.caption}
-                            >
-                              {item.caption}
-                            </Link>
-                          </Popover.Button>
-                        ) : (
-                          <Popover.Button
-                            className={classNames(
-                              openState == idx
-                                ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
-                                : 'border-transparent text-black hover:text-black text-header-clr',
-                              'relative z-10 flex items-center sm:h-16 transition-colors ease-out uppercase hover:font-semibold duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                            )}
+      <header
+        className={cn(
+          'fixed top-0 right-0 w-full bg-white shadow-md lg:top-6 bg-header-color z-999 navbar-min-64',
+          {
+            'fixed': showSearchBar,
+          }
+        )}
+      >
+        <nav
+          aria-label="Top"
+          className="container relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 sm:px-4 md:px-4 lg:px-4 ipad-nav"
+        >
+          <button
+            type="button"
+            className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md lg:hidden"
+            onClick={() => {
+              hamburgerMenu()
+              setOpen(true)
+            }}
+          >
+            <span className="sr-only">Open menu</span>
+            <Bars3Icon className="w-6 h-6 mob-menu-icon" aria-hidden="true" />
+          </button>
+
+          <Link href="/" title="BetterCommerce">
+            <div className="flex w-20 cursor-pointer xl:w-32">
+              <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
+              <Logo />
+            </div>
+          </Link>
+          {renderState && (
+            <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16 mob-landscape-hidden">
+              {config?.map((item: any, idx: number) => (
+                <Popover
+                  key={`popover-fly-menu-${idx}`}
+                  className="flex"
+                  onMouseEnter={() => setOpenState(idx)}
+                  onMouseLeave={() => setOpenState(-1)}
+                >
+                  {({ open }) => (
+                    <>
+                      {!item.navBlocks.length ? (
+                        <Popover.Button
+                          className={classNames(
+                            openState == idx
+                              ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
+                              : 'border-transparent text-black hover:text-black text-header-clr',
+                            'relative z-10 flex items-center sm:h-16 transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                          )}
+                        >
+                          <Link
+                            href={`/${removePrecedingSlash(item.hyperlink)}`}
+                            className="relative flex items-center h-full text-header-clr"
+                            title={item.caption}
                           >
                             {item.caption}
-                          </Popover.Button>
-                        )}
-                        {item.navBlocks.length ? (
-                          <Transition
-                            show={openState == idx}
-                            as={Fragment}
-                            enter="transition ease-out duration-200"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="transition ease-in duration-150"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                          >
-                            <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
-                              <div className="relative grid items-start w-4/5 grid-cols-1 px-4 pt-10 pb-12 mx-auto bg-white sm:px-0 lg:px-0 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
-                                {item.navBlocks.map(
-                                  (navBlock: any, navIdx: number) => (
-                                    <>
-                                      <h5 className="text-xl font-semibold text-gray-900 capitalize">
-                                        {navBlock.boxTitle}
-                                      </h5>
-                                      <div
-                                        key={`navItems-${navIdx}`}
-                                        className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8"
-                                      >
-                                        {navBlock.navItems.map(
-                                          (navItem: any, idx: number) => (
-                                            <Popover.Button
-                                              key={`popover-button-${idx}`}
-                                              className={classNames(
-                                                openState == idx
-                                                  ? ''
-                                                  : 'border-gray-200 text-gray-700 hover:text-pink',
-                                                'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
-                                              )}
-                                            >
-                                              <Link
-                                                href={
-                                                  navBlock?.navBlockType == 9
-                                                    ? `/collection/${removePrecedingSlash(
-                                                        navItem.itemLink
-                                                      )}`
-                                                    : `/${removePrecedingSlash(
-                                                        navItem.itemLink
-                                                      )}`
-                                                }
-                                                className="relative flex items-center h-full hover:text-pink"
-                                                title={navItem.caption}
-                                                onClick={() => setOpenState(-1)}
-                                              >
-                                                {navItem.caption}
-                                              </Link>
-                                            </Popover.Button>
-                                          )
-                                        )}
-                                      </div>
-                                    </>
-                                  )
-                                )}
-                              </div>
-                            </Popover.Panel>
-                          </Transition>
-                        ) : null}
-                      </>
-                    )}
-                  </Popover>
-                ))}
-              </Popover.Group>
-            )}
-            <div className="flex items-center justify-end flex-1 cart-icon-dark-white">
-              <Searchbar
-                onClick={setShowSearchBar}
-                keywords={keywords}
-              />
-              <Account
-                title={title}
-                config={accountDropdownConfig}
-                deviceInfo={deviceInfo}
-              />
-              <div className="hidden sm:flex">
-                <CurrencySwitcher
-                  config={currencies}
-                  title={SELECT_CURRENCY}
-                  action={configAction}
-                />
-                <LanguageSwitcher
-                  config={languages}
-                  title={SELECT_LANGUAGE}
-                  action={configAction}
-                />
-              </div>
-              <div className="flow-root w-10 px-1 sm:w-16">
-                <button
-                  className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
-                  onClick={() => {
-                    viewWishlist()
-                    openWishlist()
-                  }}
-                >
-                  <HeartIcon
-                    className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600"
-                    aria-hidden="true"
-                    aria-label="Wishlist"
-                  />
-                  <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
-                    Wishlist
-                  </span>
-                  {wishListItems.length > 0 && delayEffect && (
-                    <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-gray-500 rounded-full -top-1 sm:block -right-1">
-                      {wishListItems.length}
-                    </span>
-                  )}
-                  <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
-                </button>
-              </div>
-
-              <div className="flow-root w-10 px-1 sm:w-16">
-                <button
-                  className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
-                  onClick={() => {
-                    viewCart(cartItems)
-                    openCart()
-                  }}
-                >
-                  <ShoppingCartIcon
-                    className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500"
-                    aria-hidden="true"
-                    aria-label="Add to cart"
-                  />
-                  <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
-                    Cart
-                  </span>
-                  {renderState && (
-                    <>
-                      {cartItems.lineItems?.length > 0 && (
-                        <span className="absolute w-4 h-4 ml-2 text-xs font-medium text-center text-white bg-gray-500 rounded-full -top-1 -right-2">
-                          {cartItems.lineItems?.length}
-                        </span>
+                          </Link>
+                        </Popover.Button>
+                      ) : (
+                        <Popover.Button
+                          className={classNames(
+                            openState == idx
+                              ? 'border-indigo-600 text-indigo-600 text-hover-clr border-hover-clr'
+                              : 'border-transparent text-black hover:text-black text-header-clr',
+                            'relative z-10 flex items-center sm:h-16 transition-colors ease-out uppercase hover:font-semibold duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
+                          )}
+                        >
+                          {item.caption}
+                        </Popover.Button>
                       )}
-                      <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                      {item.navBlocks.length ? (
+                        <Transition
+                          show={openState == idx}
+                          as={Fragment}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
+                            <div className="relative grid items-start w-4/5 grid-cols-1 px-4 pt-10 pb-12 mx-auto bg-white sm:px-0 lg:px-0 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
+                              {item.navBlocks.map(
+                                (navBlock: any, navIdx: number) => (
+                                  <div key={navIdx}>
+                                    <h5 className="text-xl font-semibold text-gray-900 capitalize">
+                                      {navBlock.boxTitle}
+                                    </h5>
+                                    <div
+                                      key={`navItems-${navIdx}`}
+                                      className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8"
+                                    >
+                                      {navBlock.navItems.map(
+                                        (navItem: any, idx: number) => (
+                                          <Popover.Button
+                                            key={`popover-button-${idx}`}
+                                            className={classNames(
+                                              openState == idx
+                                                ? ''
+                                                : 'border-gray-200 text-gray-700 hover:text-pink',
+                                              'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px'
+                                            )}
+                                          >
+                                            <Link
+                                              href={
+                                                navBlock?.navBlockType == 9
+                                                  ? `/collection/${removePrecedingSlash(
+                                                      navItem.itemLink
+                                                    )}`
+                                                  : `/${removePrecedingSlash(
+                                                      navItem.itemLink
+                                                    )}`
+                                              }
+                                              className="relative flex items-center h-full hover:text-pink"
+                                              title={navItem.caption}
+                                              onClick={() => setOpenState(-1)}
+                                            >
+                                              {navItem.caption}
+                                            </Link>
+                                          </Popover.Button>
+                                        )
+                                      )}
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </Popover.Panel>
+                        </Transition>
+                      ) : null}
                     </>
                   )}
-                </button>
-              </div>
+                </Popover>
+              ))}
+            </Popover.Group>
+          )}
+          <div className="flex items-center justify-end flex-1 cart-icon-dark-white">
+            <Searchbar onClick={setShowSearchBar} keywords={keywords} />
+            <Account
+              title={title}
+              config={accountDropdownConfig}
+              deviceInfo={deviceInfo}
+            />
+            <div className="hidden sm:flex">
+              <CurrencySwitcher
+                config={currencies}
+                title={SELECT_CURRENCY}
+                action={configAction}
+              />
+              <LanguageSwitcher
+                config={languages}
+                title={SELECT_LANGUAGE}
+                action={configAction}
+              />
             </div>
-          </nav>
-        </header>
-        {showSearchBar && (
-          <SearchWrapper
-            keywords={keywords}
-            closeWrapper={() => setShowSearchBar(false)}
-          />
-        )}
-      </SearchProvider>
+            <div className="flow-root w-10 px-1 md:w-12 xl:w-16">
+              <button
+                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
+                onClick={() => {
+                  handleWishlist()
+                }}
+              >
+                <HeartIcon
+                  className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600"
+                  aria-hidden="true"
+                  aria-label="Wishlist"
+                />
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
+                  Wishlist
+                </span>
+                {wishListItems.length > 0 && delayEffect && (
+                  <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-gray-500 rounded-full -top-1 sm:block -right-1">
+                    {wishListItems.length}
+                  </span>
+                )}
+                <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+              </button>
+            </div>
+
+            <div className="flow-root w-10 px-1 md:w-12 xl:w-16">
+              <button
+                className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
+                onClick={() => {
+                  viewCart(cartItems)
+                  openCart()
+                }}
+              >
+                <ShoppingCartIcon
+                  className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500"
+                  aria-hidden="true"
+                  aria-label="Add to cart"
+                />
+                <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
+                  Cart
+                </span>
+                {renderState && (
+                  <>
+                    {cartItems.lineItems?.length > 0 && (
+                      <span className="absolute w-4 h-4 ml-2 text-xs font-medium text-center text-white bg-gray-500 rounded-full -top-1 -right-2">
+                        {cartItems.lineItems?.length}
+                      </span>
+                    )}
+                    <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </nav>
+      </header>
     </>
   )
 }

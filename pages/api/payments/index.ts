@@ -3,8 +3,9 @@ import { apiMiddlewareErrorHandler } from '@framework/utils'
 import { decipherPayload } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
 import usePayments from 'framework/bettercommerce/api/endpoints/payments'
+import apiRouteGuard from '../base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function paymentsApiMiddleware(req: any, res: any) {
   let referer
   let origin: string = req?.headers?.referer
   if (origin) {
@@ -42,3 +43,5 @@ export default async function (req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(paymentsApiMiddleware)

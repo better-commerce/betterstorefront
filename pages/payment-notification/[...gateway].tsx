@@ -11,19 +11,7 @@ import PaymentGatewayNotification from '@components/checkout/PaymentGatewayNotif
 // Other Imports
 import { EmptyString } from '@components/utils/constants'
 import { PaymentMethodType } from '@components/utils/payment-constants'
-import { IPaymentInfo } from '@better-commerce/bc-payments-sdk'
-
-export interface IGatewayPageProps {
-  readonly gateway: string
-  readonly params?: {
-    token?: string
-    orderId?: string
-    payerId?: string
-    paymentInfo?: IPaymentInfo
-  }
-  readonly isCancelled: boolean
-  readonly isCOD?: boolean
-}
+import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 
 const GatewayPage = (props: IGatewayPageProps) => {
   const { gateway, params, isCancelled } = props

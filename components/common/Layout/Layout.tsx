@@ -21,6 +21,7 @@ import {
 } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
+import LoginSidebarView from '@components/account/Login/LoginSideBarView'
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
 const CartSidebarView = dynamic(
   () => import('@components/cart/CartSidebarView')
@@ -102,6 +103,7 @@ const SidebarView: FC<
           maxBasketItemsCount={maxBasketItemsCount}
         />
       )}
+      {sidebarView === 'LOGIN_SIDEBAR_VIEW' && <LoginSidebarView />}
       {sidebarView === 'BULK_ADD_VIEW' && <BulkAddSidebarView />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
@@ -269,7 +271,7 @@ const Layout: FC<Props & IExtraProps> = ({
             maxBasketItemsCount={maxBasketItemsCount}
             keywords={keywords}
           />
-          <main className="pt-16 sm:pt-20 fit">
+          <main className="pt-16 sm:pt-24 fit">
             {displayAlert && <AlertRibbon />}
             {children}
           </main>

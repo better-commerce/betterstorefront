@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-const ApplyPromoApiMiddleware = async (req: any, res: any) => {
+const applyPromoApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.applyPromo({
       basketId: req.body.basketId,
@@ -15,4 +16,4 @@ const ApplyPromoApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default ApplyPromoApiMiddleware;
+export default apiRouteGuard(applyPromoApiMiddleware)

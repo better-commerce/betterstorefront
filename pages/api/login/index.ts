@@ -1,7 +1,8 @@
 import { useLogin } from '@framework/auth'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function loginApiMiddleware(req: any, res: any) {
   const { email, password }: any = req.body.data
   try {
     const response = await useLogin()({
@@ -14,3 +15,5 @@ export default async function (req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(loginApiMiddleware)
