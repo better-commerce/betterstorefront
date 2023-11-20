@@ -60,7 +60,8 @@ export async function getStaticProps({
           slug: HOME_PAGE_DEFAULT_SLUG,
           workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
           channel: 'Web',
-          currency: currencyCode
+          currency: currencyCode,
+          cachedCopy: true,
         })
         const PageContentWeb = await PageContentsPromiseWeb
         pageContentsWeb.push({ key: currencyCode, value: PageContentWeb })
