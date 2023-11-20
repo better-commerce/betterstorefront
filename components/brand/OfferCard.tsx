@@ -40,7 +40,13 @@ const OfferCard = ({
       key={`offers-${key}`}
       className={`flex flex-col items-start pl-10 ${bgColour} h-[400px] justify-evenly py-2`}
     >
-      <Image alt="brand" src={src} width={62} height={51} />
+      <Image
+        alt="brand"
+        src={src}
+        width={62}
+        height={51}
+        className="h-auto w-10 sm:w-16"
+      />
       <div
         className={`text-[20px] w-3/4 text-start ${fontColor} font-semibold cursor-default uppercase leading-8 py-5`}
       >

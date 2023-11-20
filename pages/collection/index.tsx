@@ -12,7 +12,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 export default function CollectionList(props: any) {
   const css = { maxWidth: '100%', height: 'auto' }
   return (
-    <main className="w-full px-6 mx-auto md:w-4/5 sm:px-0">
+    <main className="w-full px-6 mx-auto 2xl:w-4/5 sm:px-4">
       <section aria-labelledby="products-heading" className="mt-8">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
           {SHOP_BY_COLLECTION}
@@ -23,7 +23,7 @@ export default function CollectionList(props: any) {
               <Link key={key} passHref href={`/collection/${collection.slug}`}>
                 <span key={collection.id} className="group">
                   <div className="relative w-full overflow-hidden bg-gray-100 rounded-lg aspect-w-1 aspect-h-1 sm:aspect-w-2 sm:aspect-h-3">
-                    <div className="image-container">
+                    <div className="image-container relative">
                       <Image
                         src={
                           generateUri(collection.mainImage, 'h=1000&fm=webp') ||
@@ -31,7 +31,9 @@ export default function CollectionList(props: any) {
                         }
                         alt={collection.name}
                         className="object-cover object-center w-full h-full group-hover:opacity-75 image"
+                        sizes="(max-width: 500px) 100px, (max-width: 1023px) 400px, 1000px"
                         fill
+                        priority
                       ></Image>
                     </div>
                   </div>

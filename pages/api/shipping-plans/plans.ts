@@ -1,11 +1,12 @@
 import { getShippingPlans } from '@framework/shipping'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
 interface BodyProps {
   model: any
 }
 
-const GetShippingPlansApiMiddleware = async (req: any, res: any) => {
+const getShippingPlansApiMiddleware = async (req: any, res: any) => {
   const { model }: any = req.body
   try {
     const response = await getShippingPlans()({
@@ -16,6 +17,6 @@ const GetShippingPlansApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default GetShippingPlansApiMiddleware;
+export default apiRouteGuard(getShippingPlansApiMiddleware)

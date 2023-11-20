@@ -1,7 +1,8 @@
 import { loginCheckout } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const LoginCheckoutApiMiddleware = async (req: any, res: any) => {
+const loginCheckoutApiMiddleware = async (req: any, res: any) => {
   const { basketId, email, password }: any = req.body
   try {
     const response = await loginCheckout()({
@@ -14,6 +15,6 @@ const LoginCheckoutApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default LoginCheckoutApiMiddleware;
+export default apiRouteGuard(loginCheckoutApiMiddleware)

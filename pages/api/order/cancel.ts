@@ -1,7 +1,8 @@
 import { cancelOrder } from '@framework/api/operations'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-export default async function cancelOrderAPI(req: any, res: any) {
+async function cancelOrderApiMiddleware(req: any, res: any) {
   try {
     const response = await cancelOrder()(req.body.id, req?.cookies)
     res.status(200).json({ response })
@@ -9,3 +10,5 @@ export default async function cancelOrderAPI(req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(cancelOrderApiMiddleware)

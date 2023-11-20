@@ -118,6 +118,7 @@ const COMPONENTS_MAP: any = {
 
 export default function CustomerForm({
   type = 'register',
+  isLoginSidebarOpen,
   onSubmit = () => {},
   btnText = GENERAL_REGISTER,
   email = '', // This prop contains the value of "Email Address" that is validated for availability at first step.
@@ -184,8 +185,17 @@ export default function CustomerForm({
         isSubmitting,
       }: any) => {
         return (
-          <div className="flex flex-col items-center justify-center w-full px-5 py-1">
-            <Form className="w-full font-semibold sm:w-1/2">
+          <div
+            className={`flex flex-col items-center justify-center w-full px-5 py-1 ${
+              !isLoginSidebarOpen && `px-5`
+            }`}
+          >
+            <Form
+              onSubmit={handleSubmit}
+              className={`w-full font-semibold ${
+                !isLoginSidebarOpen && `sm:w-1/2`
+              }`}
+            >
               {extendedConfig.map((formItem: any, idx: number) => {
                 function handleKeyPress(e: any) {
                   if (e.keyCode == 13) {
@@ -241,18 +251,22 @@ export default function CustomerForm({
                   </>
                 )
               })}
-            </Form>
-            <div className="flex items-center justify-center w-full my-5 sm:w-1/2">
-              <Button
-                type="submit"
-                onClick={handleSubmit}
-                className="!font-normal w-full border border-black btn-c btn-primary"
-                loading={isSubmitting}
-                disabled={isSubmitting}
+              <div
+                className={`flex items-center justify-center !w-full my-5 ${
+                  !isLoginSidebarOpen && `md:w-1/2`
+                }`}
               >
-                {!isSubmitting && btnText}
-              </Button>
-            </div>
+                <Button
+                  type="submit"
+                  // onClick={handleSubmit}
+                  className="!font-normal w-full border border-black btn-c btn-primary"
+                  loading={isSubmitting}
+                  disabled={isSubmitting}
+                >
+                  {!isSubmitting && btnText}
+                </Button>
+              </div>
+            </Form>
           </div>
         )
       }}

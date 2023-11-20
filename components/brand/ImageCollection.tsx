@@ -12,11 +12,6 @@ SwiperCore.use([Navigation])
 
 export default function ImageCollection({ heading, range, AttrArray }: any) {
   const [bannerCollection, setbannerCollection] = useState<any>([])
-  const [obj, setObj] = useState({
-    productName: '',
-    prodSlug: '',
-    prodImage: '',
-  })
   let TotalValues: number = 0
 
   function handleRangeChange() {
@@ -50,8 +45,8 @@ export default function ImageCollection({ heading, range, AttrArray }: any) {
             >
               {val.title !== '' && (
                 <p
-                  key={Idx}
-                  className="absolute z-50 flex justify-center py-2 m-auto mt-24 text-sm font-semibold uppercase rounded-md bg-gray-50 px-9 sm:px-8 sm:mt-0 sm:py-4 md:text-md 2xl:text-lg"
+                  key={`${val.title ? val.title : val.name}${Idx}`}
+                  className="absolute z-50 flex text-[#212530] justify-center py-2 m-auto mt-24 text-sm font-semibold uppercase rounded-md bg-gray-50 px-9 sm:px-8 sm:mt-0 sm:py-4 md:text-md 2xl:text-lg"
                 >
                   {' '}
                   <span className="md:max-w-[10rem] 2xl:max-w-[13rem] truncate">
@@ -67,6 +62,7 @@ export default function ImageCollection({ heading, range, AttrArray }: any) {
                 src={val.url ? val.url || IMG_PLACEHOLDER : val.image}
                 width={305}
                 height={224}
+                priority
                 className="w-full group-hover:opacity-20"
               ></Image>
             </Link>

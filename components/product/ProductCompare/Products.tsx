@@ -30,6 +30,7 @@ import { hideElement, showElement } from '@framework/utils/ui-util'
 import { stringFormat, tryParseJson } from '@framework/utils/parse-util'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
+import ButtonNotifyMe from '../ButtonNotifyMe'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -39,6 +40,7 @@ const PLPQuickView = dynamic(
 interface Props {
   product: any
   hideWishlistCTA?: any
+  attributesCount?: number
 }
 
 interface Attribute {
@@ -47,11 +49,19 @@ interface Attribute {
   fieldValues?: []
 }
 
+const EMPTY_COMPARE_SET = {
+  key: '-',
+  value: '-',
+  display: '-',
+  compareAtPLP: false,
+}
+
 const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   product: productData,
   hideWishlistCTA = false,
   deviceInfo,
   maxBasketItemsCount,
+  attributesCount = 0,
 }) => {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
@@ -74,6 +84,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
   const [product, setProduct] = useState(productData || {})
+  const [attribs, setAttribs] = useState<any>([])
 
   const handleUpdateWishlistItem = useCallback(() => {
     if (wishListItems.length < 1) return
@@ -91,6 +102,17 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   useEffect(() => {
     setProduct(productData)
+    if (productData.attributes?.length > 0) {
+      if (productData.attributes?.length !== attributesCount) {
+        const emptySetCount = attributesCount - productData.attributes?.length
+        const emptyCompareSet = Array(emptySetCount).fill(EMPTY_COMPARE_SET)
+        setAttribs([...productData.attributes, ...emptyCompareSet])
+        return
+      }
+      setAttribs([...productData.attributes])
+    } else {
+      setAttribs(Array(attributesCount).fill(EMPTY_COMPARE_SET))
+    }
   }, [productData])
 
   useEffect(() => {
@@ -239,12 +261,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       },
       shortMessage: '',
     }
-    if (!product.currentStock && !product.preOrder.isEnabled) {
-      buttonConfig.title = BTN_NOTIFY_ME
-      buttonConfig.isNotifyMeEnabled = true
-      buttonConfig.action = async () => handleNotification()
-      buttonConfig.buttonType = 'button'
-    } else if (!product?.currentStock && product?.preOrder?.isEnabled) {
+   if (!product?.currentStock && product?.preOrder?.isEnabled) {
       buttonConfig.title = BTN_PRE_ORDER
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
@@ -273,12 +290,14 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           />
         )
       case false:
-        <Image
-          alt="cross_icon"
-          width={36}
-          height={36}
-          src="/assets/images/cross_icon.svg"
-        />
+        return (
+          <Image
+            alt="cross_icon"
+            width={36}
+            height={36}
+            src="/assets/images/cross_icon.svg"
+          />
+        )
       default:
         return val
     }
@@ -287,7 +306,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div
-        className="sticky top-0 z-10 flex flex-col bg-white prod-group pb-14 min-height-com"
+        className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14 min-height-com"
         key={product.id}
       >
         <div className="relative mb-4 overflow-hidden bg-gray-200 border aspect-w-1 aspect-h-1 mobile-card-panel white-card-sm">
@@ -306,7 +325,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 IMG_PLACEHOLDER
               }
               alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
+              className="object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
               style={css}
               width={400}
               height={500}
@@ -320,7 +339,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   IMG_PLACEHOLDER
                 }
                 alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto-sm mx-auto"
+                className="hidden object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
                 style={css}
                 width={400}
                 height={500}
@@ -348,7 +367,11 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                       : product?.listPrice?.formatted?.withoutTax}
                   </span>
                   <span className="text-xs font-semibold text-red-600">
-                    ({discount}% Off)
+                    {discount > 0 && (
+                      <span className="text-xs font-semibold text-red-600">
+                        ({discount}% Off)
+                      </span>
+                    )}
                   </span>
                 </>
               )}
@@ -357,17 +380,19 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.name?.toLowerCase()}
           </div>
         </Link>
-        <div className="flex flex-col absolute bottom-0 left-0 right-0">
-          <Button
+        <div className="absolute bottom-0 left-0 right-0 flex flex-col p-2">
+          {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
+            <ButtonNotifyMe product={product} className="mt-2 text-sm font-medium rounded-md" />
+          ) : (<Button
             className="mt-2 text-sm font-medium rounded-md"
             title={buttonConfig.title}
             action={buttonConfig.action}
             type="button"
             buttonType={buttonConfig.buttonType || 'cart'}
-          />
+          />)}
         </div>
       </div>
-      <div className="mt-10 bg-white border-t border-gray-200">
+      <div className="mt-5 bg-white border-t border-gray-200 lg:mt-10">
         <div className="flex items-center justify-center w-full pb-4 my-4 text-center border-b border-gray-200">
           {[0, 1, 2, 3, 4].map((rating) => (
             <StarIcon
@@ -388,8 +413,8 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
           <span className="font-semibold text-black">{product?.brand}</span>
         </div>
-        {product.attributes?.map((attrib: any) => (
-          <div key={attrib.key} className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
+        {attribs?.map?.map((attrib: any, idx: number) => (
+          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
             <span>
               {getAttribValue(attrib.value)}
             </span>

@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const GetProductQuickviewApiMiddleware = async (req: any, res: any) => {
+const getProductQuickviewApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getProductQuickview({
       query: req.body.slug,
@@ -13,4 +14,4 @@ const GetProductQuickviewApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default GetProductQuickviewApiMiddleware
+export default apiRouteGuard(getProductQuickviewApiMiddleware)

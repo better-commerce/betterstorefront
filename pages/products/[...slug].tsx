@@ -18,22 +18,23 @@ export async function getStaticProps({
     pdpLookbook = null,
     pdpCachedImages = null
   let availabelPromotions = null
-  let allProductsByBrand = null
+  let allProductsByCategory = null
   let pdpLookbookProducts = {}
 
   try {
     const productPromise = commerce.getProduct({ query: params!?.slug[0] })
     product = await productPromise
 
-    const allProductsByBrandRes = await commerce.getAllProducts({
+    const allProductsByCategoryRes = await commerce.getAllProducts({
       query: {
-        brandId: product?.product?.brandId,
-        pageSize: 10,
+        categoryId: product?.product?.classification?.categoryCode,
+        pageSize: 50,
       },
     })
-    if (allProductsByBrandRes?.products?.results?.length > 0) {
-      allProductsByBrand = allProductsByBrandRes?.products?.results
+    if (allProductsByCategoryRes?.products?.results?.length > 0) {
+      allProductsByCategory = allProductsByCategoryRes?.products?.results
     }
+
 
     const availabelPromotionsPromise = commerce.getProductPromos({
       query: product?.product?.recordId,
@@ -86,10 +87,10 @@ export async function getStaticProps({
       data: product,
       slug: params!.slug[0],
       globalSnippets: infra?.snippets ?? [],
-      snippets: product?.snippets,
+      snippets: product?.snippets ?? [],
       relatedProducts: relatedProducts,
       availabelPromotions: availabelPromotions,
-      allProductsByBrand: allProductsByBrand,
+      allProductsByCategory: allProductsByCategory,
       reviews: reviews,
       pdpCachedImages: pdpCachedImages?.images
         ? JSON.parse(pdpCachedImages?.images)
@@ -118,7 +119,7 @@ function Slug({
   slug,
   relatedProducts,
   availabelPromotions,
-  allProductsByBrand,
+  allProductsByCategory,
   pdpLookbookProducts,
   pdpCachedImages,
   reviews,
@@ -138,7 +139,7 @@ function Slug({
         snippets={data.snippets}
         relatedProducts={relatedProducts}
         promotions={availabelPromotions}
-        allProductsByBrand={allProductsByBrand}
+        allProductsByCategory={allProductsByCategory}
         pdpLookbookProducts={pdpLookbookProducts}
         pdpCachedImages={pdpCachedImages}
         reviews={reviews}

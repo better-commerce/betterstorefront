@@ -1,7 +1,8 @@
 import { mergeCart } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-const MergeCartApiMiddleware = async (req: any, res: any) => {
+const mergeCartApiMiddleware = async (req: any, res: any) => {
   const { userBasketId, currentBasketId }: any = req.body.data
   try {
     const response = await mergeCart()({
@@ -13,6 +14,6 @@ const MergeCartApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default MergeCartApiMiddleware;
+export default apiRouteGuard(mergeCartApiMiddleware)

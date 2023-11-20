@@ -21,11 +21,14 @@ const FooterMenu: FC<Props> = ({ config }: any) => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 px-2 py-0 pl-0 sm:gap-8 sm:grid-cols-2 sm:px-0 sm:py-6 sm:pt-0 lg:pl-4">
+      <div className="grid grid-cols-1 gap-4 px-2 py-0 pl-0 sm:gap-8 sm:grid-cols-1 sm:px-0 sm:py-6 sm:pt-0 lg:pl-4">
         {config?.length && (
           <>
-            {config?.map((item: any) => (
-              <>
+            {config?.map((item: any, idx: number) => (
+              <div
+                key={idx}
+                className="flex md:flex-row flex-col gap-y-4 sm:gap-y-4"
+              >
                 {item?.navBlocks
                   ?.sort(
                     (
@@ -82,7 +85,7 @@ const FooterMenu: FC<Props> = ({ config }: any) => {
                         </div>
                       )
                   )}
-              </>
+              </div>
             ))}
           </>
         )}

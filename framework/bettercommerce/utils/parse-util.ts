@@ -8,7 +8,8 @@
 // Package Imports
 import { DATE_TIME_FORMAT } from '@components/utils/constants'
 import { CURRENCY_SYMBOL_POUND } from '@components/utils/textVariables'
-import { toInteger, toNumber } from 'lodash'
+import { toNumber } from 'lodash'
+import moment from 'moment'
 import { hrtime } from 'process'
 const format = require('string-format')
 
@@ -47,7 +48,10 @@ export const stringToNumber = (stringValue: string | undefined): number => {
   }
   return 0
 }
-
+export const roundToDecimalPlaces = (value: any, decimalPlaces: number = 2): any => {
+  const decPlaces = Math.pow(10, decimalPlaces)
+  return Math.round((value + Number.EPSILON) * decPlaces) / decPlaces
+}
 export const matchStrings = (
   input1: string,
   input2: string,
@@ -68,7 +72,7 @@ export const tryParseJson = (json: any) => {
     try {
       parsed = JSON.parse(json)
       return parsed
-    } catch (e: any) { }
+    } catch (e: any) {}
   }
   return null
 }
@@ -86,7 +90,7 @@ export const priceFormat = (
       intParsed = parseInt(value)
     } else {
       floatParsed = value
-      intParsed = toInteger(value)
+      intParsed = parseInt(value.toString())
     }
 
     if (floatParsed % intParsed === 0) {
@@ -157,4 +161,18 @@ export const stringFormat = (input: string, data: object) => {
     return format(input, data)
   }
   return ''
+}
+
+
+export const dateFormat = (date: string | Date, format: string): string => {
+  let dt = date
+  if (typeof date === 'string') {
+    dt = new Date(date)
+  }
+
+  return moment(dt).format(format)
+}
+
+export const deliveryDateFormat = (date: string | Date): string => {
+  return dateFormat(date, 'DD/MM/yyyy')
 }

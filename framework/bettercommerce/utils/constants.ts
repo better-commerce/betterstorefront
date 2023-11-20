@@ -1,4 +1,3 @@
-import { toNumber } from 'lodash'
 import { stringToBoolean } from './parse-util'
 
 export const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
@@ -12,7 +11,7 @@ export const BETTERCMS_BASE_URL = process.env.BETTERCMS_BASE_URL
 export const IS_TEST_PAYMENT_ENABLED_ON_LIVE =
   process.env.IS_TEST_PAYMENT_ENABLED_ON_LIVE
 export const TEST_PAYMENT_AMOUNT = process.env.TEST_PAYMENT_AMOUNT
-  ? toNumber(process.env.TEST_PAYMENT_AMOUNT)
+  ? parseFloat(process.env.TEST_PAYMENT_AMOUNT)
   : 0.0
 
 export const BETTERCMS_API_VERSION = process.env.BETTERCMS_API_VERSION
@@ -46,5 +45,7 @@ export module Cookie {
     export const COMPANY_ID = 'CompanyId'
     export const GOOGLE_TRANSLATE = 'googtrans'
     export const CLIENT_IP_ADDRESS = 'ClientIP'
+    export const IS_PAYMENT_LINK = 'ipl'
+    export const API_TOKEN = 'i'
   }
 }

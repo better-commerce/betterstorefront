@@ -1,7 +1,8 @@
 import { useCart } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function getCartApiMiddleware(req: any, res: any) {
   const { basketId }: any = req.query
   try {
     const response = await useCart()({
@@ -13,3 +14,5 @@ export default async function (req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(getCartApiMiddleware)

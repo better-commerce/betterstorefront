@@ -2,28 +2,39 @@
 import React from 'react'
 
 // Other Imports
-import { useUI } from '@components/ui/context'
+import { EmptyString } from '@components/utils/constants'
+import { IOverlayLoaderState, useUI } from '@components/ui/context'
+import Spinner from '@components/ui/Spinner'
 
 const OverlayLoader = () => {
   const { overlayLoaderState }: any = useUI()
+  const { visible = false, message = EmptyString, backdropInvisible = false, }: IOverlayLoaderState = overlayLoaderState
 
   return (
     <>
-      {overlayLoaderState?.visible && (
-        <div className="overlay-panel">
+      {visible && (
+        <div className={`${backdropInvisible ? "overlay-panel-over-viewport" : "overlay-panel"}`} >
           <div className="fixed top-0 right-0 z-50 flex items-center justify-center w-screen h-screen">
             <div className="m-auto">
-              <div className="w-32 h-32 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
-              {overlayLoaderState?.message && (
-                <div className="flex items-center">
-                  <p className="text-white m-auto">
-                    {overlayLoaderState?.message}
-                  </p>
-                </div>
-              )}
+              {
+                backdropInvisible ? (
+                  <Spinner />
+                ) : (
+                  <>
+                    <div className="w-32 h-32 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
+                    {message && (
+                      <div className="flex items-center">
+                        <p className="text-white m-auto">
+                          {message}
+                        </p>
+                      </div>
+                    )}
+                  </>
+                )
+              }
             </div>
-          </div>
-        </div>
+          </div >
+        </div >
       )}
     </>
   )

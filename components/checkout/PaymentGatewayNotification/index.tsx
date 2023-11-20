@@ -14,10 +14,10 @@ import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import { processPaymentResponse } from '@framework/utils/payment-util'
 import { PaymentStatus } from '@components/utils/payment-constants'
-import { IGatewayPageProps } from 'pages/payment-notification/[...gateway]'
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Cookie } from '@framework/utils/constants'
+import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 
 const IS_RESPONSE_REDIRECT_ENABLED = true
 

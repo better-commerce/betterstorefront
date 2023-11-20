@@ -1,7 +1,8 @@
 import { useAddItem } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from './base/api-route-guard'
 
-export default async function (req: any, res: any) {
+async function addItemToCartApiMiddleware(req: any, res: any) {
   const {
     basketId,
     productId,
@@ -25,3 +26,5 @@ export default async function (req: any, res: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }
 }
+
+export default apiRouteGuard(addItemToCartApiMiddleware)

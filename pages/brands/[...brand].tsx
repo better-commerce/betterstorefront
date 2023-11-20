@@ -21,7 +21,7 @@ import {
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
-import { ImageCollection, PlainText, Video } from '@components/brand'
+import { PlainText, Video } from '@components/brand'
 import getCollectionById from '@framework/api/content/getCollectionById'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -29,10 +29,12 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 const RecommendedProductCollection = dynamic(
   () => import('@components/brand/RecommendedProductCollection')
 )
-const ImageBanner = dynamic(() => import('@components/brand/ImageBanner'))
-const MultiBrandVideo = dynamic(
-  () => import('@components/brand/MultiBrandVideo')
-)
+import ImageCollection from '@components/brand/ImageCollection'
+import ImageBanner from '@components/brand/ImageBanner'
+// const MultiBrandVideo = dynamic(
+//   () => import('@components/brand/MultiBrandVideo')
+// )
+import MultiBrandVideo from '@components/brand/MultiBrandVideo'
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
 const ProductSort = dynamic(() => import('@components/product/ProductSort'))
 const ProductGrid = dynamic(
@@ -91,13 +93,13 @@ const DEFAULT_STATE = {
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
-      return { ...state, sortBy: payload }
+      return { ...state, sortBy: payload, currentPage: 1 }
     case PAGE:
       return { ...state, currentPage: payload }
     case SORT_ORDER:
       return { ...state, sortOrder: payload }
     case CLEAR:
-      return { ...state, filters: [] }
+      return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
     case ADD_FILTERS:
@@ -313,7 +315,7 @@ function BrandDetailPage({
       filters: state.filters,
       freeText: '',
       gender: null,
-      ignoreDisplayInSerach: false,
+      ignoreDisplayInSearch: false,
       includeExcludedBrand: false,
       page: state.currentPage,
       pageSize: 0,
@@ -330,7 +332,7 @@ function BrandDetailPage({
     })
 
     recordEvent(EVENTS.FreeText)
-  })
+  }, [])
 
   useEffect(() => {
     const Widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
@@ -372,8 +374,11 @@ function BrandDetailPage({
     : data?.products
 
   useEffect(() => {
-    setRecommendedProducts(productDataToPass.results.slice(0, 8))
+    if (productDataToPass?.results?.length > 0) {
+      setRecommendedProducts(productDataToPass.results.slice(0, 8))
+    }
   }, [productDataToPass])
+
   const showCompareProducts = () => {
     setProductCompare(true)
   }
@@ -412,7 +417,6 @@ function BrandDetailPage({
         <meta name="title" content={brandDetails?.name || 'Brands'} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
-
         <meta property="og:image" content="" />
         <meta property="og:title" content={brandDetails?.name} key="ogtitle" />
         <meta
@@ -429,24 +433,27 @@ function BrandDetailPage({
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
-          <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 md:w-4/5 lg:px-0 sm:px-10">
+          <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 2xl:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
-              <div className="flex flex-col items-center bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <Image
                   alt="Brand Logo"
                   src={
                     brandDetails.images.length !== 0
                       ? brandDetails.images[0]
-                      : '/dummyLogo.svg'
+                      : IMG_PLACEHOLDER
                   }
                   width={212}
                   height={200}
+                  loading="eager"
+                  priority
+                  className="w-[120px] md:w-[212px] h-auto"
                 />
                 <div
                   dangerouslySetInnerHTML={{
                     __html: brandDetails?.description,
                   }}
-                  className="text-[18px] text-center leading-6 py-5"
+                  className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5"
                 />
                 <button
                   className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80"
@@ -477,13 +484,13 @@ function BrandDetailPage({
             </div>
 
             <div className="mt-10">
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 sm:px-4">
                 <div className="flex flex-row justify-between">
-                  <p className="font-semibold uppercase cursor-default font-lg">
+                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
                     {BTN_RECOMMENDED_PROD}
                   </p>
                   <button
-                    className="font-semibold uppercase cursor-pointer font-lg hover:underline"
+                    className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline"
                     onClick={handleClick}
                   >
                     {BTN_SEE_ALL}
@@ -531,14 +538,14 @@ function BrandDetailPage({
 
           <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
             <div className="flex justify-between pb-10 mt-4">
-              <p className="font-semibold uppercase cursor-default font-lg">
+              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
                 {FEATURES_HEADING}
                 {` `}
                 {brandDetails.name}
               </p>
               {!isOnlyMobile && (
                 <button
-                  className="font-semibold uppercase cursor-pointer font-lg md:block hover:underline"
+                  className="font-semibold text-[#212530] uppercase cursor-pointer font-lg md:block hover:underline"
                   onClick={handleClick}
                 >
                   {BTN_SEE_ALL}
@@ -568,11 +575,11 @@ function BrandDetailPage({
             {!isOnlyMobile && (
               <>
                 <div className="flex justify-between py-10">
-                  <p className="font-semibold uppercase cursor-default font-lg">
+                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
                     {BTN_RECOMMENDED_PROD}
                   </p>
                   <button
-                    className="font-semibold uppercase cursor-pointer font-lg hover:underline"
+                    className="font-semibold text-[#212530] uppercase cursor-pointer font-lg hover:underline"
                     onClick={handleClick}
                   >
                     {BTN_SEE_ALL}
@@ -586,7 +593,7 @@ function BrandDetailPage({
             )}
 
             <div className="mb-20">
-              <p className="my-10 font-semibold uppercase cursor-default font-lg">
+              <p className="my-10 font-semibold text-[#212530] uppercase cursor-default font-lg">
                 {faq.title}
               </p>
               {faq?.results?.map((val: any, Idx: number) => {
@@ -598,7 +605,7 @@ function BrandDetailPage({
           </div>
         </>
       ) : (
-        <div className="pb-0 mx-auto mt-4 bg-transparent md:w-4/5 sm:mt-6">
+        <div className="pt-5 pb-0 mx-auto mt-4 bg-transparent 2xl:w-4/5 sm:mt-6 sm:px-6 md:px-6 2xl:px-0">
           <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
             <Link href="/brands" passHref>
               <span className="flex items-end upper case">Brands</span>
@@ -651,50 +658,91 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
 
-  const obj: any = {
-    imageBannerCollectionResponse: [],
-    imageCategoryCollectionResponse: [],
+  const collections: any = {
+    imageBannerCollection: [],
+    imageCategoryCollection: [],
     imgFeatureCollection: [],
-    offerBannerResult: [],
-    productCollectionRes: [],
+    offerBannerCollection: [],
+    productCollection: [],
   }
 
+  let promises: any = []
   const widgets: any = tryParseJson(response?.result?.widgetsConfig)
-
-  if (widgets) {
-    for (var i = 0; i < widgets?.length; i++) {
+  if (widgets?.length) {
+    widgets?.forEach(async (widget: any) => {
       if (
-        widgets[i].manufacturerSettingType == 'ImageCollection' &&
-        widgets[i].code == 'ImageBanner'
+        widget.manufacturerSettingType == 'ImageCollection' &&
+        widget.code == 'ImageBanner'
       ) {
-        obj.imageBannerCollectionResponse = await getCollectionById(
-          widgets[i].recordId
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              collections.imageBannerCollection = await getCollectionById(
+                widget.recordId
+              )
+            } catch (error: any) {}
+            resolve()
+          })
         )
       } else if (
-        widgets[i].manufacturerSettingType == 'ImageCollection' &&
-        widgets[i].code == 'MultipleImagesBanner'
+        widget.manufacturerSettingType == 'ImageCollection' &&
+        widget.code == 'MultipleImagesBanner'
       ) {
-        const res = await getCollectionById(widgets[i].recordId)
-        obj.imageCategoryCollectionResponse = res?.images
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              const res = await getCollectionById(widget.recordId)
+              collections.imageCategoryCollection = res?.images
+            } catch (error: any) {}
+            resolve()
+          })
+        )
       } else if (
-        widgets[i].manufacturerSettingType == 'ImageCollection' &&
-        widgets[i].code == 'FeaturedDewaltImageList'
+        widget.manufacturerSettingType == 'ImageCollection' &&
+        widget.code == 'FeaturedDewaltImageList'
       ) {
-        obj.imgFeatureCollection = await getCollectionById(widgets[i].recordId)
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              collections.imgFeatureCollection = await getCollectionById(
+                widget.recordId
+              )
+            } catch (error: any) {}
+            resolve()
+          })
+        )
       } else if (
-        widgets[i].manufacturerSettingType == 'ImageCollection' &&
-        widgets[i].code == 'FFXOffers'
+        widget.manufacturerSettingType == 'ImageCollection' &&
+        widget.code == 'FFXOffers'
       ) {
-        const res = await getCollectionById(widgets[i].recordId)
-        obj.offerBannerResult = res.images
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              const res = await getCollectionById(widget.recordId)
+              collections.offerBannerCollection = res.images
+            } catch (error: any) {}
+            resolve()
+          })
+        )
       } else if (
-        widgets[i].manufacturerSettingType == 'ProductCollection' &&
-        widgets[i].code == 'FeaturedDewaltSaws'
+        widget.manufacturerSettingType == 'ProductCollection' &&
+        widget.code == 'FeaturedDewaltSaws'
       ) {
-        const res = await getCollectionById(widgets[i].recordId)
-        obj.productCollectionRes = res.products.results
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
+            try {
+              const res = await getCollectionById(widget.recordId)
+              collections.productCollection = res.products.results
+            } catch (error: any) {}
+            resolve()
+          })
+        )
       }
-    }
+    })
+  }
+
+  if (promises?.length) {
+    await Promise.all(promises)
   }
 
   return {
@@ -705,7 +753,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
-      collections: obj ?? [],
+      collections: collections ?? [],
     }, // will be passed to the page component as props
   }
 }

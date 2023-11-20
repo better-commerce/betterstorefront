@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const GetPDPCachedImagesApiMiddleware = async (req: any, res: any) => {
+const getPDPCachedImagesApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.getPdpCachedImage({
       query: req.body.productCode,
@@ -13,4 +14,4 @@ const GetPDPCachedImagesApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default GetPDPCachedImagesApiMiddleware
+export default apiRouteGuard(getPDPCachedImagesApiMiddleware)

@@ -170,6 +170,7 @@
 body {
   font-family: var(--font-primary) !important;
   font-size: var(--font-16);
+  overflow-x: hidden;
 }
 
 h1 {
@@ -199,6 +200,14 @@ h6 {
 
 p {
   font-size: var(--font-14);
+}
+
+.font-10 {
+  font-size: 10px !important;
+}
+
+.font-12 {
+  font-size: 12px !important;
 }
 
 .font-14 {
@@ -645,6 +654,7 @@ p {
 
 .min-height-65 {
   min-height: 65px;
+  height: 100%;
 }
 
 /* footer css */
@@ -696,6 +706,7 @@ p {
   width: auto !important;
   height: 120px !important;
 }
+
 .mobile-card-panel.white-card {
   background: #fff !important;
   min-height: 180px !important;
@@ -706,6 +717,7 @@ p {
   background: #fff !important;
   min-height: 120px !important;
 }
+
 @media screen and (min-width:1024px) {
   .height-img-auto {
     min-height: 0 !important;
@@ -722,6 +734,7 @@ p {
     width: auto !important;
     height: 250px !important;
   }
+
   .mobile-card-panel.white-card {
     background: #fff !important;
     min-height: 350px !important;
@@ -774,13 +787,15 @@ p {
   }
 }
 
-.bg-tan{
- background: var(--tan-clr);
+.bg-tan {
+  background: var(--tan-clr);
 }
-.custom-scroll{
-max-height: 700px;
-overflow-y: auto;
+
+.custom-scroll {
+  max-height: 700px;
+  overflow-y: auto;
 }
+
 .custom-scroll::-webkit-scrollbar {
   width: 0px;
 }
@@ -795,6 +810,13 @@ overflow-y: auto;
   width: 0px;
   border-radius: 0px;
 }
-.outline-primary{
-  outline-color:  var(--outline-color-red);
+
+.outline-primary {
+  outline-color: var(--outline-color-red);
+}
+
+@media screen and (max-width:900px) {
+  .text-10-mob {
+    font-size: 10px !important;
+  }
 }

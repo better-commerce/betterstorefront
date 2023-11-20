@@ -1,7 +1,8 @@
 import { getCustomerOrderDetails } from '@framework/checkout'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const GetCustomerOrderDetailsApiMiddleware = async (req: any, res: any) => {
+const getCustomerOrderDetailsApiMiddleware = async (req: any, res: any) => {
   const { id, orderId }: any = req.body
   try {
     const response: any = await getCustomerOrderDetails()(
@@ -15,4 +16,4 @@ const GetCustomerOrderDetailsApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default GetCustomerOrderDetailsApiMiddleware
+export default apiRouteGuard(getCustomerOrderDetailsApiMiddleware)

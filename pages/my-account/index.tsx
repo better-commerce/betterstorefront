@@ -12,16 +12,75 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
-
 import React from 'react'
+import { stringToBoolean } from '@framework/utils/parse-util'
 import MyDetails from '@components/account/MyDetails'
+import { Guid } from '@commerce/types'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
-  const { user, deleteUser, isGuestUser } = useUI()
+  const { user, deleteUser, isGuestUser,referralProgramActive } = useUI()
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
+  let newConfig: any = []
+  if (config && typeof window !== 'undefined') {
+    let isB2B = user?.companyId !== Guid.empty
+    const hasMyCompany = config.some(
+      (item: any) => item?.props === 'my-company'
+    )
+    const hasReferral = config.some(
+      (item:any)=> item?.props ==='refer-a-friend'
+    )
+    newConfig = [...config]
+    if (isB2B) {
+      let i = newConfig.length
+      if(referralProgramActive){
+        if (!hasReferral){
+          newConfig.push( {
+            type: 'tab',
+            text: 'Refer a Friend',
+            mtext: 'Refer a Friend',
+            props: 'refer-a-friend',
+            href:"/my-account/refer-a-friend"
+          })
+        }
+      }
+      while (i--) {
+        if (
+          newConfig[i]?.props === 'address-book' ||
+          newConfig[i]?.props === 'orders'
+        ) {
+          newConfig.splice(i, 1)
+        }
+      }
+    }
+    if (!isB2B) {
+      if(referralProgramActive){
+        if (!hasReferral){
+          newConfig = [...config]
+          newConfig.push( {
+            type: 'tab',
+            text: 'Refer a Friend',
+            mtext: 'Refer a Friend',
+            props: 'refer-a-friend',
+            href:"/my-account/refer-a-friend"
+          })
+        }
+      } else {
+        newConfig = [...config]
+      }
+    } else if (!hasMyCompany) {
+      newConfig.push({
+        type: 'tab',
+        text: 'My Company',
+        mtext: 'My Company',
+        props: 'my-company',
+        href: '/my-account/my-company',
+      })
+    } 
+  }
+
   useEffect(() => {
     if (isGuestUser) {
       router.push('/')
@@ -51,28 +110,27 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     }
   }
   const [active, setActive] = useState(false)
-
   const handleClick = () => {
     setActive(!active)
   }
   useAnalytics(CustomerProfileViewed, loggedInEventData)
 
   const handleToggleShowState = () => {
-    setShow(!isShow);
+    setShow(!isShow)
   }
 
   // return(<h1>helow wprdls</h1>)
   return (
     <section className="relative pb-10 text-gray-900">
-      <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
+      <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
         <div className="grid w-full grid-cols-12 sm:px-2 sm:pr-0 main-account-grid">
           <div
-            className={`col-span-3 md:pl-12 sm:pl-6 border-r border-gray-200 tab-list-sm sm:pt-10 mob-tab-full ${
+            className={`col-span-3 md:pl-2 sm:pl-2 border-r border-gray-200 tab-list-sm sm:pt-10 mob-tab-full ${
               isShow ? `` : 'mob-hidden'
             }`}
           >
             <div className="sticky left-0 z-10 flex flex-col top-36">
-              {config.map((item: any, idx: number) => (
+              {newConfig.map((item: any, idx: number) => (
                 <>
                   <div
                     key={`my-acc-${idx}`}

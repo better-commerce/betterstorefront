@@ -1,7 +1,8 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const ValidateEmailApiMiddleware = async (req: any, res: any) => {
+const validateEmailApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.validateEmail({
       query: req.body,
@@ -13,4 +14,4 @@ const ValidateEmailApiMiddleware = async (req: any, res: any) => {
   }
 }
 
-export default ValidateEmailApiMiddleware
+export default apiRouteGuard(validateEmailApiMiddleware)

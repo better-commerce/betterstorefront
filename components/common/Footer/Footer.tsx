@@ -61,12 +61,12 @@ const Footer: FC<Props & IExtraProps> = ({
     <>
       <footer
         aria-labelledby="footer-heading"
-        className="px-4 py-8 pt-10 bg-gray-100 shadow-inner sm:px-0 sm:h-96 sm:pt-16 sm:mt-2 bg-footer-color"
+        className="px-4 py-8 pt-10 bg-gray-100 shadow-inner sm:px-6 md:px-6 sm:h-96 sm:pt-16 sm:mt-2 bg-footer-color"
       >
         <h3 id="footer-heading" className="sr-only">
           {GENERAL_FOOOTER}
         </h3>
-        <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
+        <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12 sm:gap-2">
           <div className="sm:col-span-1">
             <Logo />
           </div>

@@ -1,7 +1,8 @@
 import { guestCheckout } from '@framework/cart'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
+import apiRouteGuard from '../base/api-route-guard'
 
-const GuestCheckoutApiMiddleware = async (req: any, res: any) => {
+const guestCheckoutApiMiddleware = async (req: any, res: any) => {
   const { basketId, email, notifyByEmail, notifyBySms, notifyByPost }: any =
     req.body
   try {
@@ -17,6 +18,6 @@ const GuestCheckoutApiMiddleware = async (req: any, res: any) => {
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
-};
+}
 
-export default GuestCheckoutApiMiddleware;
+export default apiRouteGuard(guestCheckoutApiMiddleware)

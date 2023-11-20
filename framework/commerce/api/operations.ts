@@ -25,7 +25,6 @@ export const OPERATIONS = [
   'getProduct',
   'getProductPreview',
   'getInfra',
-  'getSlugs',
   'notifyMe',
   'priceMatch',
   'updateDetails',
@@ -54,6 +53,7 @@ export const OPERATIONS = [
   'getReturnReason',
   'resetCache',
   'logRequest',
+  'getCountries',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -80,7 +80,6 @@ export type Operations<P extends APIProvider> = {
     ): Promise<T['data']>
   }
   getInfra: {}
-  getSlugs: {}
   notifyMe: {}
   applyPromo: {}
   createReview: {}
@@ -107,6 +106,7 @@ export type Operations<P extends APIProvider> = {
   getCancelReason: {}
   cancelOrder: {}
   getReturnReason: {}
+  getCountries: {}
   getAllPages: {
     <T extends GetAllPagesOperation>(opts?: {
       config?: P['config']

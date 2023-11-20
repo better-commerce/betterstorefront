@@ -1,11 +1,23 @@
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
-import { setCookie } from '@components/utils/cookieHandler'
+// Other Imports
+import { matchStrings } from '@framework/utils/parse-util'
+import { getCurrency } from '@framework/utils/app-util'
+import { useUI } from '@components/ui'
 
 export default function CurrencySwitcher({ config = [], title, action }: any) {
+  const { setCurrency } = useUI()
+  const [currencySymbol, setCurrencySymbol] = useState('')
+
+  useEffect(() => {
+    const currencyCode = getCurrency()
+    const currency = config?.find((x: any) => matchStrings(x?.currencyCode, currencyCode, true))
+    setCurrency(currency)
+    setCurrencySymbol(currency?.currencySymbol)
+  }, [config])
   return (
-    <Menu as="div" className="relative flow-root w-10 px-1 text-left sm:w-16">
+    <Menu as="div" className="relative flow-root w-10 px-1 text-left md:w-12 xl:w-16">
       <Menu.Button
         className="grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
         aria-label="Currency"

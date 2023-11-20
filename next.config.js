@@ -12,24 +12,15 @@ const isBC = provider === 'bigcommerce'
 const isBetterCommerce = provider === 'bettercommerce'
 
 module.exports = withCommerceConfig({
+  poweredByHeader: false,
   images: {
     domains: [
       'liveocxcdn.azureedge.net',
       'liveocxstorage.blob.core.windows.net',
-      'cdnbs.bettercommerce.io',
-      'dev-da-cdn-erf7a6h0byf7e6f0.z01.azurefd.net',
-      'cdn.shopify.com',
-      'liveocx.imgix.net',
-      'devocxblob.blob.core.windows.net',
-      'img.ffx.co.uk',
-      'ffxcdn.azureedge.net',
-      'ffxlivestorage.blob.core.windows.net',
-      'livekstmcdn.azureedge.net',
       'devocxstorage.blob.core.windows.net',
-      'imagedelivery.space',
       'www.imagedelivery.space',
     ],
-    // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
+    cacheDuration: 31536000,
   },
   commerce,
   i18n: {
@@ -56,6 +47,19 @@ module.exports = withCommerceConfig({
       // to make the session cookies work.
     ].filter(Boolean)
   },
+  headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+        ],
+      },
+    ]
+  },
   env: {
     BETTERCOMMERCE_AUTH_URL: process.env.BETTERCOMMERCE_AUTH_URL,
     BETTERCOMMERCE_BASE_URL: process.env.BETTERCOMMERCE_BASE_URL,
@@ -76,6 +80,7 @@ module.exports = withCommerceConfig({
     BETTERCMS_API_VERSION: process.env.BETTERCMS_API_VERSION,
     BETTERCMS_API_URL: process.env.BETTERCMS_API_URL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    SITE_HOST: process.env.SITE_HOST,
     SITE_ORIGIN_URL: process.env.SITE_ORIGIN_URL,
     SITE_NAME: process.env.SITE_NAME,
     GA4_DISABLED: process.env.GA4_DISABLED,
@@ -94,20 +99,8 @@ module.exports = withCommerceConfig({
     PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
     OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
     ENABLE_ELASTIC_SEARCH: process.env.ENABLE_ELASTIC_SEARCH,
-  },
-  async headers() {
-    return [
-      {
-        source: '/:all*(svg|jpg|png|woff|woff2)',
-        locale: false,
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=9999999999, must-revalidate',
-          },
-        ],
-      },
-    ]
+    SEARCH_ENGINE_CONFIG: process.env.SEARCH_ENGINE_CONFIG,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER,
   },
 })
 

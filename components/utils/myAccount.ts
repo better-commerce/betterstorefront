@@ -51,6 +51,7 @@ export const config: any = [
     props: 'contact',
    href:"/my-account/contact"
   },
+ 
 ]
 
 

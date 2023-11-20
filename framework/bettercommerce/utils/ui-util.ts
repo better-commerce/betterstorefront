@@ -35,3 +35,24 @@ export const hideSelectedElement = (elemSelector: string) => {
   }
   return false
 }
+
+
+export const setNativeValue = (element: any, value: string) => {
+  if (element) {
+    const valueSetter: any = Object.getOwnPropertyDescriptor(element, 'value')?.set;
+    const prototype = Object.getPrototypeOf(element);
+    const prototypeValueSetter: any = Object.getOwnPropertyDescriptor(prototype, 'value')?.set;
+
+    if (valueSetter && valueSetter !== prototypeValueSetter) {
+      prototypeValueSetter.call(element, value);
+    } else {
+      valueSetter.call(element, value);
+    }
+  }
+}
+
+export const triggerKeyPress = (element: any) => {
+  if (element) {
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+}

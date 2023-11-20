@@ -164,7 +164,7 @@ export async function getStaticProps({
       data: response,
       slug: slug[0],
       globalSnippets: infra?.snippets ?? [],
-      snippets: response?.snippets,
+      snippets: response?.snippets ?? [],
     },
     revalidate: 200,
   }

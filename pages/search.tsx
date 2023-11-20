@@ -74,13 +74,13 @@ const ProductFiltersTopBar = dynamic(
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
-      return { ...state, sortBy: payload }
+      return { ...state, sortBy: payload, currentPage: 1 }
     case PAGE:
       return { ...state, currentPage: payload }
     case SORT_ORDER:
       return { ...state, sortOrder: payload }
     case CLEAR:
-      return { ...state, filters: [] }
+      return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
     case ADD_FILTERS:
@@ -355,7 +355,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           key="ogdesc"
         />
       </NextHead>
-      <div className="pt-6 pb-24 mx-auto bg-transparent md:w-4/5">
+      <div className="pt-6 pb-24 mx-auto bg-transparent 2xl:w-4/5">
         <div className="">
           <h1 className="inline-block pl-4 font-semibold tracking-tight text-black sm:px-0">
             {GENERAL_CATALOG}
@@ -375,7 +375,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           />
         )}*/}
 
-        <div className="grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:grid-cols-12 sm:px-0 lg:px-0">
+        <div className="grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:grid-cols-3 lg:grid-cols-12 md:grid-cols-4 sm:px-0 lg:px-0">
           {isMobile ? (
             <ProductMobileFilters
               handleFilters={handleFilters}
