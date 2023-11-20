@@ -142,18 +142,20 @@ export const insertAdjacentHTML = (
       contentType === SnippetContentType.JAVASCRIPT &&
       (position === 'afterbegin' || position === 'beforeend')
     ) {
-      const { bodyStartScrCntrRef, bodyEndScrCntrRef }: any = refs
-      const node = document
-        .createRange()
-        .createContextualFragment(container.innerHTML)
+      if (refs) {
+        const { bodyStartScrCntrRef, bodyEndScrCntrRef }: any = refs
+        const node = document
+          .createRange()
+          .createContextualFragment(container.innerHTML)
 
-      //arrNodes.forEach(node => {
-      if (position === 'afterbegin' && bodyStartScrCntrRef) {
-        bodyStartScrCntrRef.current.appendChild(node)
-      } else if (position === 'beforeend' && bodyEndScrCntrRef) {
-        bodyEndScrCntrRef.current.appendChild(node)
+        //arrNodes.forEach(node => {
+        if (position === 'afterbegin' && bodyStartScrCntrRef) {
+          bodyStartScrCntrRef.current.appendChild(node)
+        } else if (position === 'beforeend' && bodyEndScrCntrRef) {
+          bodyEndScrCntrRef.current.appendChild(node)
+        }
+        //});
       }
-      //});
       return
     }
 
