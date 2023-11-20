@@ -12,6 +12,7 @@ async function getPagePreviewContentApiMiddleware(req: any, res: any) {
       channel,
       currency,
       cookies: req?.cookies,
+      cachedCopy: true,
     })
     res.status(200).json(response)
   } catch (error) {
