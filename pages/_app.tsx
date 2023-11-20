@@ -4,7 +4,7 @@ import '@assets/icon.css'
 import '@assets/css/chrome-bug.css'
 import '@assets/css/checkout-frame.css'
 import '@assets/css/algolia-instant-search.css'
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Head } from '@components/common'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import 'swiper/css/bundle'
@@ -37,7 +37,10 @@ import setSessionIdCookie, {
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import OverlayLoader from '@components/common/OverlayLoader'
-import { resetSnippetElements } from '@framework/content/use-content-snippet'
+import {
+  ELEM_ATTR,
+  resetSnippetElements,
+} from '@framework/content/use-content-snippet'
 import { ContentSnippet } from '@components/common/Content'
 import NextHead from 'next/head'
 import qs from 'querystring'
@@ -165,7 +168,7 @@ function MyApp({
     )
     if (!OMNILYTICS_DISABLED) {
       document.body.appendChild(addScript)
-        ; (window as any).googleTranslateElementInit = googleTranslateElementInit
+      ;(window as any).googleTranslateElementInit = googleTranslateElementInit
       document.getElementById('goog-gt-tt')?.remove()
     }
   }, [])
@@ -179,7 +182,7 @@ function MyApp({
 
     // Dispose listener.
     return () => {
-      router.events.off('routeChangeStart', () => { })
+      router.events.off('routeChangeStart', () => {})
     }
   }, [router.events])
 
@@ -263,18 +266,20 @@ function MyApp({
 
   const seoInfo =
     pageProps?.metaTitle ||
-      pageProps?.metaDescription ||
-      pageProps?.metaKeywords
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
       ? pageProps
       : pageProps?.data?.product || undefined
 
   const seoImage =
     pageProps?.metaTitle ||
-      pageProps?.metaDescription ||
-      pageProps?.metaKeywords
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
       ? pageProps?.products?.images[0]?.url
       : pageProps?.data?.product?.image || undefined
 
+  const bodyStartScrCntrRef = React.createRef<any>()
+  const bodyEndScrCntrRef = React.createRef<any>()
   return (
     <>
       <NextHead>
@@ -321,7 +326,13 @@ function MyApp({
       {OMNILYTICS_DISABLED ? null : <div id="google_translate_element" />}
 
       <ManagedUIContext>
-        {snippets ? <ContentSnippet {...{ snippets }} /> : <></>}
+        {snippets ? (
+          <ContentSnippet
+            {...{ snippets, refs: { bodyStartScrCntrRef, bodyEndScrCntrRef } }}
+          />
+        ) : (
+          <></>
+        )}
         <CustomCacheBuster buildVersion={packageInfo?.version} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
         {/* TODO: Disable client-side payment link redirect */}
@@ -336,6 +347,10 @@ function MyApp({
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount(appConfig)}
           >
+            <div
+              ref={bodyStartScrCntrRef}
+              className={`${ELEM_ATTR}body-start-script-cntr`}
+            ></div>
             <OverlayLoader />
             <CustomerReferral router={router} />
             <SessionProvider session={pageProps?.session}>
@@ -348,6 +363,10 @@ function MyApp({
               />
             </SessionProvider>
             {/* <RedirectIntercept /> */}
+            <div
+              ref={bodyEndScrCntrRef}
+              className={`${ELEM_ATTR}body-end-script-cntr`}
+            ></div>
           </Layout>
         </ErrorBoundary>
       </ManagedUIContext>
@@ -483,7 +502,7 @@ MyApp.getInitialProps = async (
         footer: navResult?.result?.footer,
       }
     }
-  } catch (error: any) { }
+  } catch (error: any) {}
 
   let appConfig = null
   if (appConfigResult) {
