@@ -103,6 +103,7 @@ export module LocalStorage {
     export const CONVERTED_ORDER = 'convertedOrder'
     export const PREFERRED_PAYMENT = 'prefPay'
     export const DELIVERY_ADDRESS = 'delAddr'
+    export const RECENTLY_VIEWED = 'recVwdProds'
   }
 }
 

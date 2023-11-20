@@ -46,3 +46,6 @@ tsconfig.tsbuildinfo
 
 # npm build output
 #.npmrc
+.env.dev
+.env.prod
+.vscode/settings.json

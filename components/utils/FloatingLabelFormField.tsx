@@ -119,7 +119,7 @@ const FloatingLabelFormField = (props: IFloatingLabelFormFieldProps) => {
               pattern={item?.pattern ? item?.pattern : null}
               min={item?.min ? item?.min : null}
               max={item?.max ? item?.max : null}
-              maxlength={item?.max ? item?.max : null}
+              maxLength={item?.max ? item?.max : null}
               step={item?.step ? item?.step : null}
               onChange={(e: any) => {
                 if (extraConfig?.customHandler) {

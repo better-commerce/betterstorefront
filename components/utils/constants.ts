@@ -21,8 +21,8 @@ export const SEARCH_MINIMAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSI
 export const SEARCH_ADVANCED_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced`
 export const CACHED_IMAGE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product`
 export const LOOKBOOK_SLUG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook/slug`
-export const NEXT_SEARCH_ADVANCED_ENDPOINT =
-  '/api/catalog/get-category-products'
+export const NEXT_SEARCH_ADVANCED_ENDPOINT ='/api/catalog/get-category-products'
+export const PRODUCT_CUSTOM_ATTRIBUTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/custom-attributes`
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
 export const PRODUCT_PREVIEW_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/preview`
 export const BASKET_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket`
@@ -67,7 +67,7 @@ export const REFERRAL_SEARCH = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/comm
 export const REFERRAL_VOUCHERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/vouchers`
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
 export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`
-
+export const NEXT_GET_COUNTRIES = '/api/countries'
 //LOCAL ENDPOINTS
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
@@ -105,7 +105,7 @@ export const NEXT_EDIT_ADDRESS = `/api/customer/edit-address`
 export const NEXT_CREATE_ADDRESS = `/api/customer/create-address`
 export const NEXT_DELETE_ADDRESS = `/api/customer/delete-address`
 export const NEXT_GET_CUSTOMER_DETAILS = `/api/customer/get-customer-details`
-
+export const MASTER_DATA_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/masterdata`
 export const NEXT_GET_ORDER = `/api/order/order-details`
 export const NEXT_CANCEL_REASON = `/api/cancel-reason`
 export const NEXT_CANCEL_ORDER = `/api/order/cancel`
@@ -158,6 +158,8 @@ export const NEXT_REFERRAL_CLICK_ON_INVITE =
   '/api/customer/referral/referral-click-on-invite'
 export const NEXT_REFERRAL_INFO = '/api/customer/referral/referral-info'
 export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral/referral-vouchers'
+export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
+export const NEXT_COMPARE_ATTRIBUTE = '/api/compare-attributes'
 //CONSTANTS
 
 export const YOUTUBE_VIDEO_EMBED_PREFIX_URL =
@@ -185,7 +187,7 @@ export const NEXT_PUBLIC_DEFAULT_CACHE_TIME =
   process.env.NEXT_PUBLIC_DEFAULT_CACHE_TIME_IN_MILLI_SECS
 export const NEXT_PUBLIC_API_CACHING_LOG_ENABLED =
   process.env.NEXT_PUBLIC_API_CACHING_LOG_ENABLED
-
+export const SEARCH_PROVIDER = process.env.SEARCH_PROVIDER
 // Default currency, language & country settings.
 export const BETTERCOMMERCE_DEFAULT_CURRENCY =
   process.env.BETTERCOMMERCE_DEFAULT_CURRENCY
@@ -223,7 +225,8 @@ export const OMNILYTICS_DISABLED = process.env.OMNILYTICS_DISABLED
 export const PDP_SIZE_OPTIONS_COUNT = parseInt(
   process.env.PDP_SIZE_OPTIONS_COUNT || '0'
 )
-
+export const MAX_ADD_TO_CART_LIMIT = 5
+export const NEXT_GET_PROOMO_DETAILS = '/api/catalog/get-promo-details'
 export module Messages {
   export module Validations {
     export module RegularExpressions {
@@ -383,7 +386,7 @@ export module Messages {
     COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
   }
 }
-
+export const EmptyObject: any = {}
 export module PageActions {
   // Actions assigned: 1 to 50
   export enum BulkOrder {
@@ -459,3 +462,30 @@ export enum SocialMediaType {
   FACEBOOK = 'facebook',
   APPLE = 'apple',
 }
+
+
+export const PRODUCT_TAGS = {
+  newLaunch: 'New Launch',
+  onSale: 'On Sale',
+  trending: 'Trending',
+  exclusive: 'Exclusive',
+  bestSeller: 'BestSeller',
+}
+
+export enum CheckoutStepType {
+  NONE = 0,
+  CONTACT_DETAILS = 1,
+  DELIVERY_DETAILS = 2,
+  DELIVERY_METHOD = 3,
+  PAYMENT_METHOD = 4,
+  REVIEW_AND_PLACE_ORDER = 5,
+  BILLING_DELIVERY_DETAILS = 6,
+}
+
+export enum LoadingActionType {
+  NONE = 0,
+  REMOVE_ITEM = 1,
+  MOVE_TO_WISHLIST = 2,
+}
+
+export const EmptyGuid = '00000000-0000-0000-0000-000000000000'

@@ -28,6 +28,9 @@ import {
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
   SITE_ORIGIN_URL,
+  NEXT_GET_CATALOG_PRODUCTS,
+  NEXT_GET_ORDER_RELATED_PRODUCTS,
+  NEXT_COMPARE_ATTRIBUTE
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -46,6 +49,7 @@ import {
   IMG_PLACEHOLDER,
   ITEM_TYPE_ADDON,
   ITEM_TYPE_ADDON_10,
+  ITEM_TYPE_ALTERNATIVE,
   PRICEMATCH_ADDITIONAL_DETAILS,
   PRICEMATCH_BEST_PRICE,
   PRICEMATCH_SEEN_IT_CHEAPER,
@@ -62,7 +66,7 @@ import {
   PDP_ELEM_SELECTORS,
 } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
-import { groupBy, round } from 'lodash'
+import _, { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
@@ -78,31 +82,21 @@ import CacheProductImages from './CacheProductImages'
 import Script from 'next/script'
 import ImageGallery from 'react-image-gallery'
 import PDPCompare from '../PDPCompare'
+import { decrypt, encrypt } from '@framework/utils/cipher'
+import { LocalStorage } from '@components/utils/payment-constants'
 
-const AttributesHandler = dynamic(
-  () => import('@components/product/ProductView/AttributesHandler')
-)
+const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-const RelatedProducts = dynamic(
-  () => import('@components/product/RelatedProducts')
-)
+const RelatedProducts = dynamic(() => import('@components/product/RelatedProducts'))
 const Bundles = dynamic(() => import('@components/product/Bundles'))
 const Reviews = dynamic(() => import('@components/product/Reviews'))
 const PriceMatch = dynamic(() => import('@components/product/PriceMatch'))
 const Engraving = dynamic(() => import('@components/product/Engraving'))
-const ProductDetails = dynamic(
-  () => import('@components/product/ProductDetails')
-)
+const ProductDetails = dynamic(() => import('@components/product/ProductDetails'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const RelatedProductWithGroup = dynamic(
-  () => import('@components/product/RelatedProducts/RelatedProductWithGroup')
-)
-const AvailableOffers = dynamic(
-  () => import('@components/product/ProductView/AvailableOffers')
-)
-const ReviewInput = dynamic(
-  () => import('@components/product/Reviews/ReviewInput')
-)
+const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup'))
+const AvailableOffers = dynamic(() => import('@components/product/ProductView/AvailableOffers'))
+const ReviewInput = dynamic(() => import('@components/product/Reviews/ReviewInput'))
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -125,7 +119,7 @@ export default function ProductView({
   recordEvent,
   slug,
   isPreview = false,
-  relatedProducts,
+  relatedProductsProp,
   promotions,
   pdpLookbookProducts,
   pdpCachedImages: cachedImages,
@@ -133,7 +127,7 @@ export default function ProductView({
   deviceInfo,
   config,
   maxBasketItemsCount,
-  allProductsByBrand,
+  allProductsByCategory: allProductsByCategoryProp,
 }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const {
@@ -149,9 +143,11 @@ export default function ProductView({
     openLoginSideBar,
     isGuestUser,
     setIsCompared,
+    removeFromWishlist,
+    currency,
   } = useUI()
   const isIncludeVAT = vatIncluded()
-  const [updatedProduct, setUpdatedProduct] = useState<any>(null)
+  const [product, setUpdatedProduct] = useState<any>(data)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [isInWishList, setItemsInWishList] = useState(false)
@@ -164,15 +160,62 @@ export default function ProductView({
   const [isLoading, setIsLoading] = useState(true)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
+  const [fullscreen, setFullscreen] = useState(false);
+  const [attributeNames, setAttributeNames] = useState([])
+  const [compareProducts, setCompareProduct] = useState([])
+  const [allProductsByCategory, setAllProductsByCategory] = useState<any>(allProductsByCategoryProp)
+  const [relatedProducts, setRelatedProducts] = useState<any>(relatedProductsProp)
+  const [compareProductsAttributes, setCompareProductAttribute] = useState([])
+  const variantProductsCount = product?.variantProducts?.length
   let currentPage = getCurrentPage()
+  const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
+  useEffect(() => {
+    if (compareProductsAttributes?.length < 0) return
+    let mappedAttribsArrStr: any = compareProductsAttributes?.map((o: any) => o?.customAttributes).flat()
+    mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o?.fieldName))
+    setAttributeNames(mappedAttribsArrStr)
+  }, [compareProductsAttributes])
+  useEffect(() => {
+    axios
+      .post(NEXT_GET_CATALOG_PRODUCTS, {
+        isCategory: true,
+        categoryId: product?.classification?.categoryCode,
+        pageSize: 50,
+      })
+      .then((res: any) => {
+        if (res?.data?.products?.results) {
+          setAllProductsByCategory(res?.data?.products?.results)
+        }
+      })
+  }, [product, currency])
 
-  const product = updatedProduct || data
+  const fetchRelatedProducts = async (productId: string) => {
+    const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId: productId, })
+    setRelatedProducts(relatedProducts)
+    const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item?.relatedType == ITEM_TYPE_ALTERNATIVE)
+    const stockCodeArray = alternativeProducts?.map((item: { stockCode: any }) => item?.stockCode);
+    const newArray = stockCodeArray?.concat(product?.stockCode);
 
-  const [selectedAttrData, setSelectedAttrData] = useState({
-    productId: product?.recordId,
-    stockCode: product?.stockCode,
-    ...product,
-  })
+    if (alternativeProducts?.length > 0) {
+      const { data: compareDataResult }: any = await axios.post(NEXT_COMPARE_ATTRIBUTE, { stockCodes: newArray || [], compareAtPDP: true })
+      setCompareProductAttribute(compareDataResult)
+    }
+  }
+  const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
+  useEffect(() => {
+    if (allProductsByCategory?.length < 0) return
+    let mappedAttribsArrStr = allProductsByCategory?.map((o: any) => o.attributes).flat()
+    mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o.display))
+    setAttributeNames(mappedAttribsArrStr)
+  }, [allProductsByCategory])
+
+  useEffect(() => {
+    axios.post(NEXT_GET_CATALOG_PRODUCTS, { isCategory: true, categoryId: product?.classification?.categoryCode, pageSize: 50, }).then((res: any) => {
+      if (res?.data?.products?.results) {
+        setAllProductsByCategory(res?.data?.products?.results)
+      }
+    })
+  }, [product, currency])
 
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
   const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
@@ -193,6 +236,29 @@ export default function ProductView({
   const fetchProduct = async () => {
     const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW
     const response: any = await axios.post(url, { slug: slug })
+    if (response?.data?.product) {
+      fetchRelatedProducts(response?.data?.product?.recordId)
+      const recentlyViewedProduct: any = response?.data?.product?.stockCode;
+
+      let viewedProductsList = []
+      viewedProductsList = localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) ? JSON.parse(decrypt(
+        localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) || '[]'
+      )) : []
+      if (viewedProductsList?.length == 0) {
+        viewedProductsList?.push(recentlyViewedProduct)
+      } else {
+        const checkDuplicate: any = viewedProductsList?.some(
+          (val: any) => val === recentlyViewedProduct
+        )
+        if (!checkDuplicate) {
+          viewedProductsList.push(recentlyViewedProduct)
+        }
+      }
+      localStorage.setItem(
+        LocalStorage.Key.RECENTLY_VIEWED,
+        encrypt(JSON.stringify(viewedProductsList))
+      )
+    }
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
         entity: JSON.stringify({
@@ -220,9 +286,7 @@ export default function ProductView({
   useEffect(() => {
     fetchProduct()
     setIsCompared('true')
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug])
+  }, [slug, currency])
 
   useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
@@ -681,7 +745,7 @@ export default function ProductView({
 
   const handleProductBundleUpdate = (bundledProduct: any) => {
     if (bundledProduct && bundledProduct?.id) {
-      let clonedProduct = Object.assign({}, updatedProduct)
+      let clonedProduct = Object.assign({}, product)
       if (clonedProduct && clonedProduct?.componentProducts) {
         setUpdatedProduct(clonedProduct)
       }
@@ -729,6 +793,26 @@ export default function ProductView({
     setCartItems(item)
     openCart()
   }
+
+  const toggleFullscreen = () => {
+    setFullscreen(!fullscreen);
+  };
+
+  const renderCustomControls = () => {
+    if (fullscreen) {
+      return (
+        <button className='absolute items-center justify-center rounded flex-end icon-container right-5 z-999 ' onClick={exitFullscreen}>
+          <XMarkIcon className="w-8 h-8 mt-3 text-white border-2 rounded-sm hover:text-orange-500 hover:border-orange-500" aria-hidden="true" />
+        </button>
+      );
+    }
+    return
+  };
+
+  const exitFullscreen = () => {
+    if (document) document?.exitFullscreen();
+    return
+  };
 
   return (
     <>
@@ -807,8 +891,10 @@ export default function ProductView({
                     showPlayButton={false}
                     showBullets={false}
                     showNav={false}
-                    additionalClass="app-image-gallery"
+                    additionalClass={`app-image-gallery ${fullscreen ? 'fullscreen' : ''}`}
                     showFullscreenButton={true}
+                    onScreenChange={toggleFullscreen}
+                    renderCustomControls={renderCustomControls}
                   />
                 </Tab.List>
               </Tab.Group>
@@ -854,7 +940,7 @@ export default function ProductView({
             </p>
             <div className="my-4">
               <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
-              {updatedProduct ? (
+              {product ? (
                 <p className="text-2xl font-bold text-black sm:text-xl font-24">
                   {isIncludeVAT
                     ? selectedAttrData?.price?.formatted?.withTax
@@ -900,7 +986,7 @@ export default function ProductView({
                 key={product?.id}
               />
             )}
-            {updatedProduct ? (
+            {product ? (
               <>
                 {isEngravingAvailable ? (
                   <>
@@ -1012,25 +1098,17 @@ export default function ProductView({
             />
           </>
         ) : null}
-
-        {allProductsByBrand?.length > 0 ? (
-          <div className="flex flex-col w-full px-0 mx-auto ">
+        {alternativeProducts?.length > 0 ? (
+          <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto">
             <div className="flex flex-col section-devider"></div>
-            <PDPCompare
-              name={data?.brand || ''}
-              pageConfig={config}
-              products={allProductsByBrand}
-              deviceInfo={deviceInfo}
-            />
+            <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} />
           </div>
         ) : null}
 
-        {relatedProducts?.relatedProducts?.filter((x: any) =>
-          matchStrings(x?.relatedType, 'ALSOLIKE', true)
-        )?.length > 0 ? (
+        {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 ? (
           <>
             <div className="flex flex-col section-devider"></div>
-            <div className="flex flex-col w-full px-4 mx-auto container page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
+            <div className="container flex flex-col w-full px-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
               <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
                 You May Also Like
               </h3>
@@ -1133,34 +1211,32 @@ export default function ProductView({
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   >
                     <div className="relative px-4 pt-5 pb-4 mx-auto overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-2/6 sm:p-2">
-                      <div>
-                        <div className="flex items-center">
-                          <button
-                            type="button"
-                            className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
-                            onClick={handlePreviewClose}
-                          >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
-                            <XMarkIcon
-                              className="w-6 h-6 text-black"
-                              aria-hidden="true"
+                      <div className="flex items-center">
+                        <button
+                          type="button"
+                          className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
+                          onClick={handlePreviewClose}
+                        >
+                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <XMarkIcon
+                            className="w-6 h-6 text-black"
+                            aria-hidden="true"
+                          />
+                        </button>
+                      </div>
+                      <div className="text-center">
+                        {previewImg && (
+                          <div key={previewImg.name + 'tab-panel'}>
+                            <ImageZoom
+                              src={previewImg || IMG_PLACEHOLDER}
+                              alt={previewImg.name}
+                              blurDataURL={
+                                `${previewImg}?h=600&w=400&fm=webp` ||
+                                IMG_PLACEHOLDER
+                              }
                             />
-                          </button>
-                        </div>
-                        <div className="text-center">
-                          {previewImg && (
-                            <div key={previewImg.name + 'tab-panel'}>
-                              <ImageZoom
-                                src={previewImg || IMG_PLACEHOLDER}
-                                alt={previewImg.name}
-                                blurDataURL={
-                                  `${previewImg}?h=600&w=400&fm=webp` ||
-                                  IMG_PLACEHOLDER
-                                }
-                              />
-                            </div>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Transition.Child>

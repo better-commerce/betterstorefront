@@ -12,3 +12,12 @@ export enum AlertType {
   SUCCESS = 'success',
   ERROR = 'error',
 }
+export enum SearchProvider {
+  DEFAULT = 'default',
+  ELASTIC = 'elastic',
+  ALGOLIA = 'algolia',
+}
+
+export enum UserRoleType {
+  ADMIN = 1,
+}

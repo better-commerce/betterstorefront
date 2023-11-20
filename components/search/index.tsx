@@ -2,10 +2,7 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
-import {
-  ENABLE_ELASTIC_SEARCH,
-  NEXT_SEARCH_PRODUCTS,
-} from '@components/utils/constants'
+import { SEARCH_PROVIDER, NEXT_SEARCH_PRODUCTS, } from '@components/utils/constants'
 import Link from 'next/link'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import rangeMap from '@lib/range-map'
@@ -16,11 +13,14 @@ import { useUI } from '@components/ui/context'
 import { BTN_SEARCH, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 //import ElasticSearchBar from './ElasticSearchBar'
-import ElasticSearch from './ElasticSearch'
-import ElasticSearchResult from './ElasticSearchResult'
+import ElasticSearch from './elastic/ElasticSearch'
+import ElasticSearchResult from './elastic/ElasticSearchResult'
+import { matchStrings } from '@framework/utils/parse-util'
+import { SearchProvider } from '@framework/utils/enums'
+import InstantSearchBar from './algolia/InstantSearchBar'
 
 export default function Search(props: any) {
-  const { closeWrapper = () => {}, keywords } = props;
+  const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])
@@ -60,23 +60,7 @@ export default function Search(props: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue])
 
-  const handleEnterPress = (e: any) => {
-    const keyword = keywords.find(
-      (keyword: any) => keyword.keywords === e.target.value
-    )
-    if (e.key === 'Enter' && keyword) {
-      Router.push(keyword.url)
-    } else if (e.key === 'Enter' && !keyword) {
-      Router.push('/search?freeText=' + e.target.value)
-    }
-  }
 
-  useEffect(() => {
-    document.addEventListener('keypress', handleEnterPress)
-    return () => document.removeEventListener('keypress', handleEnterPress)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     if (path !== Router.asPath) {
@@ -87,12 +71,8 @@ export default function Search(props: any) {
   }, [Router.asPath])
   const css = { maxWidth: '100%', height: 'auto' }
 
-  if (ENABLE_ELASTIC_SEARCH) {
-    return <ElasticSearchResult {...props} />
-  }
-
-  return (
-    <div className="absolute w-full h-full bg-white z-9999">
+  const defaultSearch = (
+    <div className="fixed top-0 left-0 w-full h-full bg-white z-9999">
       <div
         className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10"
         onClick={closeWrapper}
@@ -185,5 +165,29 @@ export default function Search(props: any) {
         </div>
       </div>
     </div>
+  )
+
+  const elasticSearch = (
+    <ElasticSearchResult {...props} />
+  )
+
+  return (
+    <>
+      {
+        matchStrings(SEARCH_PROVIDER!, SearchProvider.DEFAULT) && (
+          <>{defaultSearch}</>
+        )
+      }
+      {
+        matchStrings(SEARCH_PROVIDER!, SearchProvider.ELASTIC) && (
+          <>{elasticSearch}</>
+        )
+      }
+      {
+        matchStrings(SEARCH_PROVIDER!, SearchProvider.ALGOLIA) && (
+          <InstantSearchBar maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} />
+        )
+      }
+    </>
   )
 }

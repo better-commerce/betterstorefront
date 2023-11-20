@@ -148,13 +148,13 @@ const DEFAULT_STATE = {
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
-      return { ...state, sortBy: payload }
+      return { ...state, sortBy: payload, currentPage: 1 }
     case PAGE:
       return { ...state, currentPage: payload }
     case SORT_ORDER:
       return { ...state, sortOrder: payload }
     case CLEAR:
-      return { ...state, filters: [] }
+      return { ...state, currentPage: 1, sortOrder: payload }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
     case SET_CATEGORY_ID:
@@ -563,7 +563,7 @@ function CategoryLandingPage({
                             {feature?.manufacturerName}
                           </p>
                           <div
-                            className="mt-3 font-18 text-white"
+                            className="mt-3 text-white font-18"
                             dangerouslySetInnerHTML={{ __html: feature?.description }}
                           ></div>
                         </Link>
