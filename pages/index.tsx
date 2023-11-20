@@ -93,6 +93,7 @@ export async function getStaticProps({
                   process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
                 channel: 'MobileWeb',
                 currency: currencyCode,
+                cachedCopy: true,
               }
             )
             const PageContentMobileWeb = await PageContentsPromiseMobileWeb
