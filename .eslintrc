@@ -9,6 +9,7 @@
     "@next/next/no-document-import-in-page": "off",
     "react-hooks/exhaustive-deps": 0,
     "import/no-anonymous-default-export": "off",
-    "react-hooks/rules-of-hooks": "off"
+    "react-hooks/rules-of-hooks": "off",
+    "@next/next/no-img-element": "off"
   }
 }
