@@ -10,9 +10,17 @@ import {
   CLOTH_SIZE_ATTRIB_NAME,
   NEXT_CREATE_WISHLIST,
   Messages,
+  MAX_ADD_TO_CART_LIMIT,
+  NEXT_GET_PROOMO_DETAILS,
+  NEXT_REMOVE_WISHLIST,
 } from '@components/utils/constants'
-import { HeartIcon } from '@heroicons/react/24/outline'
-import { round } from 'lodash'
+import {
+  HeartIcon,
+  CheckCircleIcon,
+  StarIcon,
+} from '@heroicons/react/24/outline'
+import { CheckCircleIcon as CheckSolidCircleIcon } from '@heroicons/react/24/solid'
+import _, { round } from 'lodash'
 import {
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
@@ -25,9 +33,16 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
-import { vatIncluded, validateAddToCart } from '@framework/utils/app-util'
+import { vatIncluded, validateAddToCart, cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import { stringFormat } from '@framework/utils/parse-util'
+import { deliveryDateFormat, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
+import cn from 'classnames'
+import classNames from 'classnames'
+import { Listbox } from '@headlessui/react'
+import { Select } from '@components/common/Select'
+import commerce from '@lib/api/commerce'
+import ProductTag from '../ProductTag'
+import ButtonNotifyMe from '../ButtonNotifyMe'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -51,7 +66,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   deviceInfo,
   maxBasketItemsCount,
 }) => {
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
+  const { isMobile, isIPadorTablet } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
     image: productData.image,
     link: productData.slug,
@@ -68,12 +83,26 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     isGuestUser,
     openLoginSideBar,
     setAlert,
-    //includeVAT,
+    isCompared,
+    compareProductList,
+    setCompareProducts,
+    removeFromWishlist
   } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
   const [product, setProduct] = useState(productData || {})
+  const [quantity, setQuantity] = useState(1)
+  const [productPromotion, setProductPromo] = useState(null)
+  const [isInWishList, setIsInWishList] = useState(false)
+
+  useEffect(() => {
+    if (wishListItems?.some((x: any) => x?.stockCode === product?.stockCode)) {
+      setIsInWishList(true)
+    } else {
+      setIsInWishList(false)
+    }
+  }, [wishListItems])
 
   const handleUpdateWishlistItem = useCallback(() => {
     if (wishListItems.length < 1) return
@@ -84,14 +113,28 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     })
   }, [wishListItems, productData])
 
+  const setPromo = async () => {
+    const { data: promoDetails }: any = await axios.post(
+      NEXT_GET_PROOMO_DETAILS,
+      { query: product?.promotions?.find((x: any) => x?.promoCode).promoCode }
+    )
+    setProductPromo(promoDetails)
+  }
+
   useEffect(() => {
     handleUpdateWishlistItem()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wishListItems, productData])
 
   useEffect(() => {
-    setProduct(productData)
-  }, [productData])
+    const compared = Boolean(
+      compareProductList && compareProductList[productData.recordId]
+    )
+    setProduct({
+      ...productData,
+      compared,
+    })
+  }, [productData, compareProductList])
 
   useEffect(() => {
     if (product?.variantProductsAttributeMinimal?.length < 1) return
@@ -117,8 +160,16 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
 
   const insertToLocalWishlist = () => {
-    addToWishlist(product)
-    openWishlist()
+    if (isInWishList) {
+      removeFromWishlist(product?.recordId)
+      setIsInWishList(false)
+      openWishlist()
+    }
+    else {
+      addToWishlist(product)
+      setIsInWishList(true)
+      openWishlist()
+    }
   }
 
   const handleWishList = async () => {
@@ -131,12 +182,22 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     if (objUser) {
       const createWishlist = async () => {
         try {
-          await axios.post(NEXT_CREATE_WISHLIST, {
-            id: user.userId,
-            productId: product.recordId,
-            flag: true,
-          })
-          insertToLocalWishlist()
+          if (isInWishList) {
+            await axios.post(NEXT_REMOVE_WISHLIST, {
+              id: user?.userId,
+              productId: product?.recordId,
+              flag: true,
+            })
+            insertToLocalWishlist()
+          }
+          else {
+            await axios.post(NEXT_CREATE_WISHLIST, {
+              id: user?.userId,
+              productId: product?.recordId,
+              flag: true,
+            })
+            insertToLocalWishlist()
+          }
         } catch (error) {
           console.log(error, 'error')
         }
@@ -178,11 +239,12 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         })
       }
     } else {
-      setCurrentProductData({ image: product.image, link: product.slug })
+      setCurrentProductData({ image: product?.image, link: product?.slug })
     }
   }
 
-  const secondImage = product.images[1]?.image
+  const secondImage =
+    product?.images?.length > 0 ? product?.images[1]?.image : null
 
   const handleHover = (ev: any, type: string) => {
     if (hideWishlistCTA) return
@@ -211,17 +273,16 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
-        const isValid = validateAddToCart(
-          product?.recordId ?? product?.productId,
+        const isValid = cartItemsValidateAddToCart(
+          // product?.recordId ?? product?.productId,
           cartItems,
-          maxBasketItemsCount
+          maxBasketItemsCount,
+          quantity > 1 ? quantity : null
         )
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
-              maxBasketItemsCount,
-            }),
+            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
           })
         }
         return isValid
@@ -231,8 +292,8 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           {
             basketId,
             productId: product?.recordId,
-            qty: 1,
-            manualUnitPrice: product?.price?.raw?.withTax,
+            qty: quantity,
+            manualUnitPrice: product?.price?.raw?.withoutTax,
             stockCode: product?.stockCode,
             userId: user?.userId,
             isAssociated: user?.isAssociated,
@@ -244,12 +305,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       },
       shortMessage: '',
     }
-    if (!product.currentStock && !product.preOrder.isEnabled) {
-      buttonConfig.title = BTN_NOTIFY_ME
-      buttonConfig.isNotifyMeEnabled = true
-      buttonConfig.action = async () => handleNotification()
-      buttonConfig.buttonType = 'button'
-    } else if (!product?.currentStock && product?.preOrder?.isEnabled) {
+    if (!product?.currentStock && product?.preOrder?.isEnabled) {
       buttonConfig.title = BTN_PRE_ORDER
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
@@ -259,74 +315,120 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
 
   const buttonConfig = buttonTitle()
-  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
-  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
+  const saving =
+    (isIncludeVAT
+      ? product?.listPrice?.raw?.withTax
+      : product?.listPrice?.raw?.withoutTax) -
+    (isIncludeVAT
+      ? product?.price?.raw?.withTax
+      : product?.price?.raw?.withoutTax)
+  const discount = round(
+    (saving /
+      (isIncludeVAT
+        ? product?.listPrice?.raw?.withTax
+        : product?.listPrice?.raw?.withoutTax)) *
+    100,
+    0
+  )
   const css = { maxWidth: '100%', height: 'auto' }
 
   const itemPrice = product?.price?.formatted?.withTax
 
+  // const [isEligibleToCompare, setIsEligibleToCompare] = useState(false)
+  const [compareAttributes, setCompareAttributes] = useState<any>([])
+
+  useEffect(() => {
+    const { attributes } = product
+    if (!attributes || attributes?.length < 1) return
+    // let shouldEnabled = false
+    let mappedAttribs: any = []
+    attributes.forEach((attrib: any) => {
+      if (attrib.compareAtPLP) {
+        // shouldEnabled = true
+        mappedAttribs.push(attrib)
+      }
+    })
+    setCompareAttributes(_.uniqBy(mappedAttribs, 'key'))
+    // if (shouldEnabled) {
+    //   setIsEligibleToCompare(shouldEnabled)
+    // }
+  }, [product])
+
+  const handleSetCompareProduct = () => {
+    if (product.compared) {
+      setCompareProducts({
+        id: product.recordId,
+        type: 'remove',
+      })
+    } else {
+      setCompareProducts({
+        id: product.recordId,
+        data: {
+          ...product,
+          attributes: compareAttributes,
+        },
+        type: 'add',
+      })
+    }
+    setProduct((v: any) => ({
+      ...v,
+      compared: !v.compared,
+    }))
+  }
+
+  const isComparedEnabled = stringToBoolean(isCompared)
+  const electricVoltAttrLength = product?.attributes?.filter(
+    (x: any) => x?.key == 'electrical.voltage'
+  )
+  let productNameWithAttr: any = product?.name?.toLowerCase()
+  productNameWithAttr =
+    electricVoltAttrLength?.length > 0
+      ? product?.attributes?.map((volt: any, vId: number) => (
+        <span key={`volt-${vId}`}>
+          {product.name?.toLowerCase()}{' '}
+          <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+            {volt?.value}
+          </span>
+        </span>
+      ))
+      : (productNameWithAttr = product?.name?.toLowerCase())
+  const deliveryDateLength = product?.attributes?.filter(
+    (x: any) => x?.key == 'product.estimatedelivery'
+  )
+  const deliveryDate = product?.attributes?.find(
+    (x: any) => x?.key == 'product.estimatedelivery'
+  )
+  const EtaDate = new Date()
+  if (product?.fulfilFromWarehouseDays != 0) {
+    EtaDate.setDate(EtaDate.getDate() + product?.fulfilFromWarehouseDays)
+  }
+  const WarrantyYear = product?.attributes?.filter((attr: any) => attr.key === 'global.warranty');
+
   return (
     <>
-      <div
-        className="relative pb-4 hover:shadow-lg shadow-gray-200 group prod-group"
-        key={product.id}
-      >
-        <div className="relative overflow-hidden bg-gray-200 aspect-w-1 aspect-h-1 mobile-card-panel white-card">
-          <Link
-            passHref
-            href={`/${currentProductData.link}`}
-            onMouseEnter={(ev: any) => handleHover(ev, 'enter')}
-            onMouseLeave={(ev: any) => handleHover(ev, 'leave')}
-            title={`${product.name} \t ${itemPrice}`}
-          >
-            <Image
-              id={`${product?.productId ?? product?.recordId}-1`}
-              priority
-              src={
-                generateUri(currentProductData.image, 'h=350&fm=webp') ||
-                IMG_PLACEHOLDER
-              }
-              alt={product.name}
-              className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto" 
-              style={css}
-              width={400}
-              height={500}
-            />
-            {product?.images?.length > 1 && (
-              <Image
-                id={`${product?.productId ?? product?.recordId}-2`}
-                priority
-                src={
-                  generateUri(product?.images[1]?.image, 'h=500&fm=webp') ||
-                  IMG_PLACEHOLDER
-                }
-                alt={product.name}
-                className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto mx-auto"
-                style={css}
-                width={400}
-                height={500}
-              />
+      <div className={cn(`relative hover:border-orange-500 grid grid-cols-12 gap-2 overflow-hidden sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-0 pb-4 sm:pb-0 bg-white ${product?.currentStock == 0 ? 'hover:border-gray-200 border-gray-100' : 'hover:border-orange-500 border-gray-200'}`, { 'height-full border-gray-200': isComparedEnabled, 'height-full border-orange-500': product.compared, })} key={product.id}>
+        <div className={`${product?.currentStock == 0 || product?.currentStock < 0 ? 'opacity-100' : ''} relative col-span-4 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card`}>
+          <div className="absolute top-0 right-0 flex items-center justify-between w-full z-1 pos-inherit">
+            <ProductTag product={product} />
+            {isMobile || isIPadorTablet ? null : (
+              product?.currentStock < 11 && product?.currentStock > 0 &&
+              <div className={`${product?.currentStock > 0 ? 'bg-red-500 text-white' : 'bg-red-500 text-white'} w-18 absolute text-center right-0 px-2 py-1 text-xs font-semibold  rounded-md sm:top-2`}>
+                Only {product?.currentStock} left!
+              </div>
             )}
-          </Link>
-          {buttonConfig.isPreOrderEnabled && (
-            <div className="absolute px-1 py-1 bg-yellow-400 rounded-sm top-2">
-              {BTN_PRE_ORDER}
-            </div>
-          )}
-          {buttonConfig.isNotifyMeEnabled && (
-            <div className="absolute px-2 py-1 text-xs font-semibold text-white bg-red-800 rounded-sm top-2">
-              {BTN_NOTIFY_ME}
-            </div>
-          )}
-
-          <div className="absolute bottom-1 left-1 text-gray-900 bg-gray-100 px-[0.4rem] py-0 text-xs font-semibold sm:font-bold">
-            <div className="flex items-center gap-1 star-rating">
-              {product?.rating}
-            </div>
           </div>
-
+          <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${currentProductData.link}`} handleHover={handleHover} itemPrice={itemPrice} productName={product.name} onClick={handleSetCompareProduct}>
+            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
+            {product?.images?.length > 1 && (
+              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
+            )}
+          </ButtonLink>
           {isMobile ? null : (
-            <div className="absolute flex-wrap hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-20 sm:flex group-hover:-translate-y-full">
+            <div
+              className={cn(
+                'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20',
+                { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled }
+              )}>
               {!hideWishlistCTA && (
                 <SimpleButton
                   variant="slim"
@@ -347,98 +449,102 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             </div>
           )}
         </div>
-
-        <Link
-          passHref
-          href={`/${currentProductData.link}`}
-          title={`${product.name} \t ${itemPrice}`}
-        >
-          <h4 className="flex items-center justify-between w-full px-2 my-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
-            {product?.name?.toLowerCase()}
-          </h4>
-
-          <ul className="hidden h-10 px-2 my-1 text-xs text-gray-700 sm:px-2 sizes-ul sm:text-sm prod-ul-size">
-            <li className="mr-1">Sizes:</li>
-            {sizeValues.map((size: any, idx: number) => (
-              <li className="inline-block uppercase" key={idx}>
-                {size?.fieldValue}{' '}
-                {sizeValues.length !== idx + 1 && (
-                  <span className="mr-1 c-sperator">,</span>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          <div className="px-2 text-xs text-left text-black sm:mt-1 sm:text-sm p-font-size">
-            <span className="font-bold">
-              {isIncludeVAT
-                ? product?.price?.formatted?.withTax
-                : product?.price?.formatted?.withoutTax}
-            </span>
-            {product?.listPrice?.raw?.withTax > 0 &&
-              product?.listPrice?.raw?.withTax !=
-                product?.price?.raw?.withTax && (
-                <>
-                  <span className="px-1 text-xs font-medium text-black line-through">
-                    {isIncludeVAT
-                      ? product?.listPrice?.formatted?.withTax
-                      : product?.listPrice?.formatted?.withoutTax}
-                  </span>
-                  <span className="text-xs font-semibold text-red-600">
-                    ({discount}% Off)
-                  </span>
-                </>
+        <div className="col-span-8 sm:col-span-12 sm:pt-4">
+          <div className="flex items-center justify-between w-full px-0 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">
+            <div>
+              {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
+              {isIncludeVAT ? (
+                product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax && (
+                  <span className="px-1 font-normal text-gray-400 line-through">{product?.listPrice?.formatted?.withTax}</span>
+                )
+              ) : (
+                product?.listPrice?.raw?.withoutTax > 0 && product?.listPrice?.raw?.withoutTax != product?.price?.raw?.withoutTax && (
+                  <span className="px-1 font-normal text-gray-400 line-through">{product?.listPrice?.formatted?.withoutTax}</span>
+                )
               )}
-          </div>
-        </Link>
-
-        {isMobile && (
-          <div className="flex m-2 border">
-            <div className="w-4/12">
-              <button
-                className="w-full text-center bg-white p-1.5"
-                onClick={handleWishList}
-                title="Wishlist"
-                disabled={product.hasWishlisted}
-              >
-                <HeartIcon
-                  className={`inline-block w-4 h-4 ${
-                    product.hasWishlisted && 'fill-red-600 text-red-800'
-                  }`}
-                  aria-hidden="true"
-                />
-              </button>
+              <span className="pl-1 text-xs font-light text-right text-gray-400">{isIncludeVAT ? 'inc. VAT' : 'ex. VAT'}</span>
             </div>
-            <div className="w-8/12 text-center border-l sm:col-span-8">
-              <button
-                type="button"
-                onClick={() => handleQuickViewData(product)}
-                className="w-full text-primary dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
-              >
+            {isMobile || isIPadorTablet ? null :
+              <div className={`items-end text-xs font-light text-right text-gray-400`}>
+                {(!isComparedEnabled) && (
+                  <div className={`z-10 bottom-1 right-1`}>
+                    <SimpleButton variant="slim" aria-label="Wishlist" className="flex-1 cursor-none !bg-transparent !shadow-none justify-end items-end text-right !p-0 !border-0 hover:border-0" onClick={handleWishList}>
+                      <i className={`sprite-icons sprite-wishlist${isInWishList ? '-active' : ''}`} />
+                    </SimpleButton>
+                  </div>
+                )}
+              </div>
+            }
+          </div>
+          <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${currentProductData.link}`} handleHover={() => { }} itemPrice={itemPrice} productName={product.name} onClick={handleSetCompareProduct} className="w-full px-0">
+            <div className="flex justify-between w-full px-0 mb-1 font-semibold text-left text-black capitalize font-16 product-name hover:text-gray-950 min-prod-name-height light-font-weight prod-name-block">
+              {productNameWithAttr}
+            </div>
+
+            {isMobile || isIPadorTablet ? null : (
+              <div className="flex items-center justify-between w-full px-0 py-2 text-xs font-medium text-black border-t border-gray-200 sm:font-bold">
+                <div className="flex items-center gap-0">
+                  {[0, 1, 2, 3, 4].map((rating) => (
+                    <StarIcon
+                      key={rating}
+                      className={classNames(
+                        'w-5 h-5 flex-shrink-0 relative -top-0.5',
+                        product?.rating > rating ? 'text-orange-500' : 'text-gray-500'
+                      )}
+                    />
+                  ))}
+                  <p className="relative pl-1 my-auto text-xl font-light -top-0.5">{product?.rating}</p>
+                </div>
+              </div>
+            )}
+            {isComparedEnabled && product?.compared ? (
+              <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
+                {product?.compared ? (
+                  <button className="w-full font-semibold uppercase border border-transparent btn-primary-white font-14">
+                    Remove
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
+          </ButtonLink>
+        </div>
+        {isMobile || isIPadorTablet ? (
+          <>
+            <div className="flex items-center justify-between w-full col-span-12 gap-2 py-2 border-gray-200 border-y">
+              <div className="relative items-end justify-end w-full text-sm font-semibold text-right text-black top-1 product-name hover:text-gray-950">
+                <SimpleButton variant="slim" className={`!p-0 flex-1 !bg-white text-right hover:!bg-white ${isInWishList ? 'cursor-none' : ''}`} onClick={isInWishList ? undefined : handleWishList}>
+                  <i className={`sprite-icons ${isInWishList ? 'sprite-wishlist-active' : 'sprite-wishlist'}`} />
+                </SimpleButton>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 col-span-12 gap-1 sm:mb-4 justify-evenly">
+              {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
+                <ButtonNotifyMe product={product} />
+              ) : (<Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} type="button" buttonType={buttonConfig.buttonType || 'cart'} />)}
+              <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary bg-orange-600 text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">
                 {QUICK_VIEW}
               </button>
             </div>
-          </div>
-        )}
-
-        <div className="flex flex-col">
-          <Button
-            className="hidden mt-2"
-            title={buttonConfig.title}
-            action={buttonConfig.action}
-            type="button"
-            buttonType={buttonConfig.buttonType || 'cart'}
-          />
-        </div>
+          </>
+        ) : null}
       </div>
-      <PLPQuickView
-        isQuickview={Boolean(quickViewData)}
-        setQuickview={() => {}}
-        productData={quickViewData}
-        isQuickviewOpen={Boolean(quickViewData)}
-        setQuickviewOpen={handleCloseQuickView}
-      />
+      <PLPQuickView isQuickview={Boolean(quickViewData)} setQuickview={() => { }} productData={quickViewData} isQuickviewOpen={Boolean(quickViewData)} setQuickviewOpen={handleCloseQuickView} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
     </>
   )
 }
+
+const ButtonLink = (props: any) => {
+  const { isComparedEnabled, children, href, handleHover, itemPrice, productName, onClick, } = props
+  if (isComparedEnabled) {
+    return (
+      <div className="flex flex-col w-full" onClick={onClick}>{children}</div>
+    )
+  }
+  return (
+    <Link passHref href={href} className="img-link-display" onMouseEnter={(ev: any) => handleHover(ev, 'enter')} onMouseLeave={(ev: any) => handleHover(ev, 'leave')} title={`${productName} \t ${itemPrice}`}>
+      {children}
+    </Link>
+  )
+}
+
 export default SearchProductCard

@@ -70,7 +70,7 @@ export class AccountPaymentButton extends BasePaymentButton {
       } else {
         if (b2bCompanyDetails?.companyId) {
           const { creditLimit, creditAvailable } = b2bCompanyDetails
-          if (creditAvailable?.raw?.withTax < creditLimit?.raw?.withTax) {
+          if (creditAvailable?.raw?.withTax <= creditLimit?.raw?.withTax) {
             uiContext?.setOverlayLoaderState({
               visible: true,
               message: 'Please wait...',
@@ -140,7 +140,7 @@ export class AccountPaymentButton extends BasePaymentButton {
     return (
       <>
         <div className="w-full">
-          <dl className="w-2/5 mt-2 space-y-2 sm:space-y-2 px-2 py-3">
+          <dl className="w-2/5 px-2 py-3 mt-2 space-y-2 sm:space-y-2">
             <div className="flex items-center justify-between">
               <dt className="text-sm text-gray-600">Available Credit</dt>
               <dd className="font-semibold text-black text-md">

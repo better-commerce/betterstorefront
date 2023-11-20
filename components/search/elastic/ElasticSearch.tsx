@@ -27,7 +27,7 @@ import {
   getConfig,
   getFacetFields,
 } from '@components/config/config-helper'
-import { vatIncluded } from '@framework/utils/app-util'
+import { getElasticSearchPriceColumn, vatIncluded } from '@framework/utils/app-util'
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
 const connector = new AppSearchAPIConnector({
@@ -76,7 +76,7 @@ const CustomResultView = ({ result }: any) => {
         </h4>
         <h5 className="mt-2 text-sm font-semibold text-black capitalize">
           {result?.currency_uk?.raw}
-          {isIncludeVAT ? result?.price_uk?.raw : result?.priceex_uk?.raw}
+          {result?.[getElasticSearchPriceColumn(isIncludeVAT)]?.raw}
           <span className="pl-2 text-xs font-normal text-gray-400 line-through">
             {result?.currency_uk?.raw}
             {isIncludeVAT ? result?.rrp_uk?.raw : result?.rrp_uk?.raw}
@@ -123,7 +123,7 @@ export default function ElasticSearch() {
                             key={field}
                             field={field}
                             label={field}
-                            // autocompleteSuggestions={true}
+                          // autocompleteSuggestions={true}
                           />
                         </>
                       ))}

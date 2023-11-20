@@ -145,6 +145,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
                           <Image
                             src={`/assets/images/easy-return.png`}
                             width="30"
+                            height={30}
                             alt={replaceAttr?.value}
                           />
                           <div className="text-sm font-semibold text-black">
@@ -170,6 +171,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
                           <Image
                             src={`/assets/images/exchange.png`}
                             width="25"
+                            height={30}
                             alt={returnAttr?.value}
                           />
                           <div className="text-sm font-semibold text-black">

@@ -17,19 +17,10 @@ module.exports = withCommerceConfig({
     domains: [
       'liveocxcdn.azureedge.net',
       'liveocxstorage.blob.core.windows.net',
-      'cdnbs.bettercommerce.io',
-      'dev-da-cdn-erf7a6h0byf7e6f0.z01.azurefd.net',
-      'cdn.shopify.com',
-      'liveocx.imgix.net',
-      'devocxblob.blob.core.windows.net',
-      'img.ffx.co.uk',
-      'ffxcdn.azureedge.net',
-      'ffxlivestorage.blob.core.windows.net',
-      'livekstmcdn.azureedge.net',
       'devocxstorage.blob.core.windows.net',
       'www.imagedelivery.space',
     ],
-    // for trident need to add domain ('res.cloudinary.com', '99yrs.co.in') for images
+    cacheDuration: 31536000,
   },
   commerce,
   i18n: {
@@ -109,6 +100,7 @@ module.exports = withCommerceConfig({
     OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
     ENABLE_ELASTIC_SEARCH: process.env.ENABLE_ELASTIC_SEARCH,
     SEARCH_ENGINE_CONFIG: process.env.SEARCH_ENGINE_CONFIG,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER,
   },
 })
 

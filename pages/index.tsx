@@ -1,6 +1,5 @@
 // Base Imports
-import React, { useState } from 'react'
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { GetStaticPropsContext } from 'next'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
@@ -23,7 +22,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
 import { useRouter } from 'next/router'
 import os from 'os'
-import { obfuscateHostName } from '@framework/utils/app-util'
+import {getCurrency, obfuscateHostName } from '@framework/utils/app-util'
 import { FeatureBar } from '@components/common'
 import { Button } from '@components/ui'
 
@@ -33,7 +32,7 @@ const PromotionBanner = dynamic(
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
-const ProductSlider = dynamic(() => import('@components/product/ProductSlider'))
+const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 const RefferalCard = dynamic(() => import('@components/customer/Referral/ReferralCard'))
 
@@ -49,25 +48,49 @@ export async function getStaticProps({
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
+  let pageContentsWeb = new Array<any>()
+  let pageContentsMobileWeb = new Array<any>()
+  const promises = new Array<Promise<any>>()
 
-  let pageContentsWeb, pageContentsMobileWeb
-  try {
-    const PageContentsPromiseWeb = commerce.getPagePreviewContent({
-      id: '', //pageId,
-      slug: HOME_PAGE_DEFAULT_SLUG,
-      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-      channel: 'Web',
-    })
-    pageContentsWeb = await PageContentsPromiseWeb
+  infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
+    promises.push(new Promise<any>(async (resolve: any, reject: any) => {
+      try {
+        const PageContentsPromiseWeb = commerce.getPagePreviewContent({
+          id: '',
+          slug: HOME_PAGE_DEFAULT_SLUG,
+          workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+          channel: 'Web',
+          currency: currencyCode
+        })
+        const PageContentWeb = await PageContentsPromiseWeb
+        pageContentsWeb.push({ key: currencyCode, value: PageContentWeb })
+        resolve()
+      } catch (error: any) {
+        resolve()
+      }
+    }))
+  })
 
-    const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
-      id: '', //pageId,
-      slug: HOME_PAGE_DEFAULT_SLUG,
-      workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-      channel: 'MobileWeb',
-    })
-    pageContentsMobileWeb = await PageContentsPromiseMobileWeb
-  } catch (error: any) {}
+  infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
+    promises.push(new Promise(async (resolve: any, reject: any) => {
+      try {
+        const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
+          id: '',
+          slug: HOME_PAGE_DEFAULT_SLUG,
+          workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+          channel: 'MobileWeb',
+          currency: currencyCode
+        })
+        const PageContentMobileWeb = await PageContentsPromiseMobileWeb
+        pageContentsMobileWeb.push({ key: currencyCode, value: PageContentMobileWeb })
+        resolve()
+      } catch (error: any) {
+        resolve()
+      }
+    }))
+  })
+
+  await Promise.all(promises)
 
   const hostName = os.hostname()
 
@@ -77,8 +100,8 @@ export async function getStaticProps({
       brands,
       pages,
       globalSnippets: infra?.snippets ?? [],
-      pageContentsWeb: pageContentsWeb ?? {},
-      pageContentsMobileWeb: pageContentsMobileWeb ?? {},
+      pageContentsWeb: pageContentsWeb ?? [],
+      pageContentsMobileWeb: pageContentsMobileWeb ?? [],
       hostName: obfuscateHostName(hostName),
     },
     revalidate: 60,
@@ -95,11 +118,29 @@ function Home({
   pageContentsMobileWeb,
   hostName,
   deviceInfo,
-}: any) { 
+}: any) {
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
-  const pageContents = isMobile ? pageContentsMobileWeb : pageContentsWeb
+  const currencyCode = getCurrency()
+  const homePageContents = isMobile
+    ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || []
+    : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
+  const [pageContents, setPageContents] = useState<any>(homePageContents)
+
+  useEffect(() => {
+    axios
+      .post('/api/page-preview-content', {
+        id: '',
+        slug: HOME_PAGE_DEFAULT_SLUG,
+        workingVersion: process.env.NODE_ENV === 'production' ? true : true,
+        channel: isMobile ? 'MobileWeb' : 'Web',
+        currencyCode,
+      })
+      .then((res: any) => {
+        if (res?.data) setPageContents(res?.data)
+      })
+  }, [currencyCode, isMobile])
 
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
@@ -133,41 +174,41 @@ function Home({
       {(pageContents?.metatitle ||
         pageContents?.metadescription ||
         pageContents?.metakeywords) && (
-        <NextHead>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=5"
-          />
-          <link
-            rel="canonical"
-            id="canonical"
-            href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
-          />
-          <title>{pageContents?.metatitle || 'Home'}</title>
-          <meta name="title" content={pageContents?.metatitle || 'Home'} />
-          {pageContents?.metadescription && (
-            <meta name="description" content={pageContents?.metadescription} />
-          )}
-          {pageContents?.metakeywords && (
-            <meta name="keywords" content={pageContents?.metakeywords} />
-          )}
-          <meta property="og:image" content={pageContents?.image} />
-          {pageContents?.metatitle && (
+          <NextHead>
             <meta
-              property="og:title"
-              content={pageContents?.metatitle}
-              key="ogtitle"
+              name="viewport"
+              content="width=device-width, initial-scale=1, maximum-scale=5"
             />
-          )}
-          {pageContents?.metadescription && (
-            <meta
-              property="og:description"
-              content={pageContents?.metadescription}
-              key="ogdesc"
+            <link
+              rel="canonical"
+              id="canonical"
+              href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
             />
-          )}
-        </NextHead>
-      )}
+            <title>{pageContents?.metatitle || 'Home'}</title>
+            <meta name="title" content={pageContents?.metatitle || 'Home'} />
+            {pageContents?.metadescription && (
+              <meta name="description" content={pageContents?.metadescription} />
+            )}
+            {pageContents?.metakeywords && (
+              <meta name="keywords" content={pageContents?.metakeywords} />
+            )}
+            <meta property="og:image" content={pageContents?.image} />
+            {pageContents?.metatitle && (
+              <meta
+                property="og:title"
+                content={pageContents?.metatitle}
+                key="ogtitle"
+              />
+            )}
+            {pageContents?.metadescription && (
+              <meta
+                property="og:description"
+                content={pageContents?.metadescription}
+                key="ogdesc"
+              />
+            )}
+          </NextHead>
+        )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <Hero banners={pageContents?.banner} />
       <div className="px-4 py-3 mx-auto lg:container sm:py-6 sm:px-4 md:px-4 lg:px-6 2xl:px-0">

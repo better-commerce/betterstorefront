@@ -7,6 +7,7 @@ import {
   NEXT_DELETE_ADDRESS,
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   AddressPageAction,
+  NEXT_GET_COUNTRIES,
 } from '@components/utils/constants'
 import axios from 'axios'
 import AddressItem from './AddressItem'
@@ -83,6 +84,7 @@ export default function AddressBook({ deviceInfo }: any) {
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
   const [defaultBillingAddress, setDefaultBillingAddress] = useState({})
+  const [countries, setCountries] = useState<any>(null)
   const defaultDeliveryMethod = cartItems.shippingMethods?.find(
     (i: any) => i.id === cartItems.shippingMethodId
   )
@@ -204,6 +206,23 @@ export default function AddressBook({ deviceInfo }: any) {
       }
     }
   }
+
+ useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
+        if (data?.result && data?.result?.length > 0) {
+          setCountries(data?.result)
+        } else {
+          setCountries([])
+        }
+      } catch (error) {
+        setCountries([])
+        // console.log(error)
+      }
+    }
+    fetchCountries()
+  }, [])
 
   const fetchAddress = async () => {
     !isLoading && setIsLoading(true)
@@ -444,11 +463,11 @@ export default function AddressBook({ deviceInfo }: any) {
           Addresses
         </h3>
       </div>
-      <main className="lg:px-8 px-4 mt-4">
+      <main className="px-4 mt-4 lg:px-8">
         {!isB2B && (
-          <div className="lg:px-0 mx-auto lg:mb-14">
-            <div className="px-0 sm:px-0 pt-10">
-              <h1 className="mb-3 font-bold tracking-tight  text-primary sm:mb-5 dark:text-black">
+          <div className="mx-auto lg:px-0 lg:mb-14">
+            <div className="px-0 pt-10 sm:px-0">
+              <h1 className="mb-3 font-bold tracking-tight text-primary sm:mb-5 dark:text-black">
                 <span className="hidden text-xl sm:inline-block">{title}</span>
                 <span className="inline-block sm:hidden">Saved Addresses</span>
               </h1>
@@ -470,7 +489,7 @@ export default function AddressBook({ deviceInfo }: any) {
         )}
         {!isNewFormMode && (
           <>
-            <div className="grid grid-cols-1 mx-auto sm:grid-cols-2 sm:gap-y-4 gap-y-2 gap-5">
+            <div className="grid grid-cols-1 gap-5 mx-auto sm:grid-cols-2 sm:gap-y-4 gap-y-2">
               {data.map((item: any, idx: number) => {
                 return (
                   <AddressItem
@@ -490,7 +509,7 @@ export default function AddressBook({ deviceInfo }: any) {
                 )
               })}
 
-              <div className="sticky mt-12 bottom-0 z-10 flex flex-col justify-center w-full bg-white sm:hidden">
+              <div className="sticky bottom-0 z-10 flex flex-col justify-center w-full mt-12 bg-white sm:hidden">
                 {/* {
                 displayAlert ? (
                     <div className="mb-3 m-[-40px] w-auto sm:hidden">
@@ -518,7 +537,7 @@ export default function AddressBook({ deviceInfo }: any) {
               </div>
             </div>
             <div className="flex items-start">
-              <div className="items-center justify-center hidden border border-gray-200 bg-black text-white sm:flex add-list-div">
+              <div className="items-center justify-center hidden text-white bg-black border border-gray-200 sm:flex add-list-div">
                 <button
                   type="submit"
                   onClick={(ev: any) => handleOpenNewAddressModal()}
