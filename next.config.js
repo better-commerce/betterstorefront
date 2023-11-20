@@ -19,6 +19,7 @@ module.exports = withCommerceConfig({
       'liveocxstorage.blob.core.windows.net',
       'devocxstorage.blob.core.windows.net',
       'www.imagedelivery.space',
+      'liveocx.imgix.net',
     ],
     cacheDuration: 31536000,
   },
