@@ -245,7 +245,7 @@ function CategoryLandingPage({
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-      productListMemory?.products?.currentPage ||
+        productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -531,7 +531,10 @@ function CategoryLandingPage({
             <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-0">
               <div className="grid max-w-lg gap-5 mx-auto lg:grid-cols-3 lg:max-w-none">
                 {category?.featuredBrand?.map((feature: any, fdx: number) => (
-                  <div className="flex flex-col overflow-hidden shadow-lg" key={fdx}>
+                  <div
+                    className="flex flex-col overflow-hidden shadow-lg"
+                    key={fdx}
+                  >
                     <div className="flex-shrink-0">
                       <>
                         {feature?.logoImageName != '' ? (
@@ -555,16 +558,15 @@ function CategoryLandingPage({
                     </div>
                     <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
                       <div className="flex-1">
-                        <Link
-                          href={`/${feature?.slug}`}
-                          className="block mt-2"
-                        >
+                        <Link href={`/${feature?.slug}`} className="block mt-2">
                           <p className="text-xl font-semibold text-white">
                             {feature?.manufacturerName}
                           </p>
                           <div
                             className="mt-3 text-white font-18"
-                            dangerouslySetInnerHTML={{ __html: feature?.description }}
+                            dangerouslySetInnerHTML={{
+                              __html: feature?.description,
+                            }}
                           ></div>
                         </Link>
                       </div>
@@ -656,42 +658,43 @@ function CategoryLandingPage({
                   }}
                   className="mySwier"
                 >
-                  {category?.linkGroups[0]?.items?.map(
-                    (relatedcat: any, cdx: number) => (
-                      <SwiperSlide key={cdx}>
-                        <div className="relative group">
-                          <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                          <>
-                            {relatedcat?.image != '' ? (
-                              <Image
-                                src="/default-img.svg"
-                                className="object-fill object-center w-full"
-                                alt="Image"
-                                width={240}
-                                height={160}
-                              />
-                            ) : (
-                              <Image
-                                src="/default-img.svg"
-                                className="object-fill object-center w-full"
-                                alt="Image"
-                                width={240}
-                                height={160}
-                              />
-                            )}
-                          </>
-                          <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                            <Link
-                              href={`/${relatedcat?.link}`}
-                              className="btn-primary-white font-14"
-                            >
-                              <span>{relatedcat?.name}</span>
-                            </Link>
+                  {category?.linkGroups?.length > 0 &&
+                    category?.linkGroups[0]?.items?.map(
+                      (relatedcat: any, cdx: number) => (
+                        <SwiperSlide key={cdx}>
+                          <div className="relative group">
+                            <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
+                            <>
+                              {relatedcat?.image != '' ? (
+                                <Image
+                                  src="/default-img.svg"
+                                  className="object-fill object-center w-full"
+                                  alt="Image"
+                                  width={240}
+                                  height={160}
+                                />
+                              ) : (
+                                <Image
+                                  src="/default-img.svg"
+                                  className="object-fill object-center w-full"
+                                  alt="Image"
+                                  width={240}
+                                  height={160}
+                                />
+                              )}
+                            </>
+                            <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
+                              <Link
+                                href={`/${relatedcat?.link}`}
+                                className="btn-primary-white font-14"
+                              >
+                                <span>{relatedcat?.name}</span>
+                              </Link>
+                            </div>
                           </div>
-                        </div>
-                      </SwiperSlide>
-                    )
-                  )}
+                        </SwiperSlide>
+                      )
+                    )}
                 </Swiper>
               </div>
             </div>
