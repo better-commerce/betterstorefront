@@ -22,7 +22,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
 import { useRouter } from 'next/router'
 import os from 'os'
-import {getCurrency, obfuscateHostName } from '@framework/utils/app-util'
+import { getCurrency, obfuscateHostName } from '@framework/utils/app-util'
 import { FeatureBar } from '@components/common'
 import { Button } from '@components/ui'
 
@@ -34,7 +34,9 @@ const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
-const RefferalCard = dynamic(() => import('@components/customer/Referral/ReferralCard'))
+const RefferalCard = dynamic(
+  () => import('@components/customer/Referral/ReferralCard')
+)
 
 export async function getStaticProps({
   preview,
@@ -52,43 +54,59 @@ export async function getStaticProps({
   let pageContentsMobileWeb = new Array<any>()
   const promises = new Array<Promise<any>>()
 
-  infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
-    promises.push(new Promise<any>(async (resolve: any, reject: any) => {
-      try {
-        const PageContentsPromiseWeb = commerce.getPagePreviewContent({
-          id: '',
-          slug: HOME_PAGE_DEFAULT_SLUG,
-          workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-          channel: 'Web',
-          currency: currencyCode
+  infra?.currencies
+    ?.map((x: any) => x?.currencyCode)
+    ?.forEach((currencyCode: string, index: number) => {
+      promises.push(
+        new Promise<any>(async (resolve: any, reject: any) => {
+          try {
+            const PageContentsPromiseWeb = commerce.getPagePreviewContent({
+              id: '',
+              slug: HOME_PAGE_DEFAULT_SLUG,
+              workingVersion:
+                process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+              channel: 'Web',
+              currency: currencyCode,
+              cachedCopy: true,
+            })
+            const PageContentWeb = await PageContentsPromiseWeb
+            pageContentsWeb.push({ key: currencyCode, value: PageContentWeb })
+            resolve()
+          } catch (error: any) {
+            resolve()
+          }
         })
-        const PageContentWeb = await PageContentsPromiseWeb
-        pageContentsWeb.push({ key: currencyCode, value: PageContentWeb })
-        resolve()
-      } catch (error: any) {
-        resolve()
-      }
-    }))
-  })
+      )
+    })
 
-  infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
-    promises.push(new Promise(async (resolve: any, reject: any) => {
-      try {
-        const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent({
-          id: '',
-          slug: HOME_PAGE_DEFAULT_SLUG,
-          workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-          channel: 'MobileWeb',
-          currency: currencyCode
+  infra?.currencies
+    ?.map((x: any) => x?.currencyCode)
+    ?.forEach((currencyCode: string, index: number) => {
+      promises.push(
+        new Promise(async (resolve: any, reject: any) => {
+          try {
+            const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
+              {
+                id: '',
+                slug: HOME_PAGE_DEFAULT_SLUG,
+                workingVersion:
+                  process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                channel: 'MobileWeb',
+                currency: currencyCode,
+              }
+            )
+            const PageContentMobileWeb = await PageContentsPromiseMobileWeb
+            pageContentsMobileWeb.push({
+              key: currencyCode,
+              value: PageContentMobileWeb,
+            })
+            resolve()
+          } catch (error: any) {
+            resolve()
+          }
         })
-        const PageContentMobileWeb = await PageContentsPromiseMobileWeb
-        pageContentsMobileWeb.push({ key: currencyCode, value: PageContentMobileWeb })
-        resolve()
-      } catch (error: any) {
-        resolve()
-      }
-    }))
-  })
+      )
+    })
 
   await Promise.all(promises)
 
@@ -124,7 +142,8 @@ function Home({
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const currencyCode = getCurrency()
   const homePageContents = isMobile
-    ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || []
+    ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value ||
+      []
     : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(homePageContents)
 
@@ -174,41 +193,41 @@ function Home({
       {(pageContents?.metatitle ||
         pageContents?.metadescription ||
         pageContents?.metakeywords) && (
-          <NextHead>
+        <NextHead>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=5"
+          />
+          <link
+            rel="canonical"
+            id="canonical"
+            href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
+          />
+          <title>{pageContents?.metatitle || 'Home'}</title>
+          <meta name="title" content={pageContents?.metatitle || 'Home'} />
+          {pageContents?.metadescription && (
+            <meta name="description" content={pageContents?.metadescription} />
+          )}
+          {pageContents?.metakeywords && (
+            <meta name="keywords" content={pageContents?.metakeywords} />
+          )}
+          <meta property="og:image" content={pageContents?.image} />
+          {pageContents?.metatitle && (
             <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1, maximum-scale=5"
+              property="og:title"
+              content={pageContents?.metatitle}
+              key="ogtitle"
             />
-            <link
-              rel="canonical"
-              id="canonical"
-              href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
+          )}
+          {pageContents?.metadescription && (
+            <meta
+              property="og:description"
+              content={pageContents?.metadescription}
+              key="ogdesc"
             />
-            <title>{pageContents?.metatitle || 'Home'}</title>
-            <meta name="title" content={pageContents?.metatitle || 'Home'} />
-            {pageContents?.metadescription && (
-              <meta name="description" content={pageContents?.metadescription} />
-            )}
-            {pageContents?.metakeywords && (
-              <meta name="keywords" content={pageContents?.metakeywords} />
-            )}
-            <meta property="og:image" content={pageContents?.image} />
-            {pageContents?.metatitle && (
-              <meta
-                property="og:title"
-                content={pageContents?.metatitle}
-                key="ogtitle"
-              />
-            )}
-            {pageContents?.metadescription && (
-              <meta
-                property="og:description"
-                content={pageContents?.metadescription}
-                key="ogdesc"
-              />
-            )}
-          </NextHead>
-        )}
+          )}
+        </NextHead>
+      )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <Hero banners={pageContents?.banner} />
       <div className="px-4 py-3 mx-auto lg:container sm:py-6 sm:px-4 md:px-4 lg:px-6 2xl:px-0">
