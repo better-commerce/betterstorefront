@@ -1,24 +1,30 @@
 // Package Imports
-import qs from 'querystring'
-import jwt from 'jsonwebtoken'
+//import qs from 'querystring'
+//import jwt from 'jsonwebtoken'
 
 // Other Imports
-import { Cookie } from '@framework/utils/constants'
-import { decrypt } from '@framework/utils/cipher'
+//import { Cookie } from '@framework/utils/constants'
+//import { decrypt } from '@framework/utils/cipher'
 import { EmptyString, SITE_HOST } from '@components/utils/constants'
 
 export default function apiRouteGuard(handler: any) {
   return async (req: any, res: any) => {
     let siteHostValid = undefined
     let siteOriginValid = undefined
+    let siteRefererValid = undefined
     let token = EmptyString
-    const cookies = qs.decode(req?.headers?.cookie, '; ')
+
+    /**
+     * TODO [GS, 08-Sep-23]: Temporarily commented.
+     */
+    /*const cookies = qs.decode(req?.headers?.cookie, '; ')
     if (cookies[Cookie.Key.API_TOKEN]) {
       token = cookies[Cookie.Key.API_TOKEN] as string
-    }
+    }*/
 
     const siteHost = req?.headers?.host
     const siteOrigin = req?.headers?.origin
+    const siteReferer = req?.headers?.referer
     const siteHosts =
       process.env.NODE_ENV === 'development'
         ? ['localhost']
@@ -26,11 +32,14 @@ export default function apiRouteGuard(handler: any) {
     if (siteHosts?.length) {
       siteHostValid = siteHosts?.find((x: string) => siteHost?.includes(x))
       siteOriginValid = siteHosts?.find((x: string) => siteOrigin?.includes(x))
+      siteRefererValid = siteHosts?.find((x: string) =>
+        siteReferer?.includes(x)
+      )
     }
 
-    if (token || (siteHostValid && siteOriginValid)) {
+    if (/*token ||*/ siteRefererValid || (siteHostValid && siteOriginValid)) {
       try {
-        if (token) {
+        /*if (token) {
           const decryptedToken = decrypt(token)
           const jwtResult: any = jwt.decode(decryptedToken)
           if (jwtResult?.exp) {
@@ -42,7 +51,7 @@ export default function apiRouteGuard(handler: any) {
               return res.status(401).json({ error: 'Unauthorized' })
             }
           }
-        }
+        }*/
 
         // Call the original API route handler
         return await handler(req, res)
