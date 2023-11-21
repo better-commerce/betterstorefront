@@ -429,7 +429,20 @@ MyApp.getInitialProps = async (
   const req: any = ctx?.req
   const res: ServerResponse<IncomingMessage> | undefined = ctx?.res
 
-  const token = await getToken(req)
+  /**
+   * TODO: [GS, 08-Sep-23]: `res?.setHeader()` throws error intermittently in Next.js PRODUCTION release.
+   * This issue is not replicated in DEV mode.
+   *
+   * Temporarily commenting this logic to resolve the above issue. This snippet assists [AuthToken] generation
+   * and therefore passed-on to [API RouteGuard] that ensures no external entity is able to access
+   * Next.js app's APIs apart from the app itself.  The [AuthToken] is generated server-side and stored in
+   * encoded format in form of a cookie (valid for 60 mins). The [RouteGuard] validates the token in incoming request's
+   * cookies for authorization.
+   *
+   * The RouteGuard logic will still work as it has another level of checking the source (referrer)
+   * from where the API call has been initiated.
+   */
+  /*const token = await getToken(req)
   if (token) {
     res?.setHeader(
       'Set-Cookie',
@@ -437,7 +450,7 @@ MyApp.getInitialProps = async (
         token
       )}; Path=/; Max-Age=${API_TOKEN_EXPIRY_IN_SECONDS};`
     )
-  }
+  }*/
 
   let clientIPAddress = req?.ip ?? req?.headers['x-real-ip']
   const forwardedFor = req?.headers['x-forwarded-for']
