@@ -1,6 +1,7 @@
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
 import commerce from '@lib/api/commerce'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 
 export async function getSearchStaticProps({
   preview,
@@ -18,7 +19,7 @@ export async function getSearchStaticProps({
       categories,
       brands,
     },
-    revalidate: 200,
+    revalidate: getSecondsInMinutes(20), //200,
   }
 }
 

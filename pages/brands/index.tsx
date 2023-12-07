@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -197,7 +198,7 @@ export async function getStaticProps({
       brands: response.result,
       snippets: response?.snippets ?? [],
     },
-    revalidate: 200,
+    revalidate: getSecondsInMinutes(20), //200,
   }
 }
 /*
