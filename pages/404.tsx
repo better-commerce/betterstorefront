@@ -8,6 +8,7 @@ import {
   ERROR_PAGE_NOT_FOUND_MESSAGE,
 } from '@components/utils/textVariables'
 import Link from 'next/link'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 
 export async function getStaticProps({
   preview,
@@ -23,7 +24,7 @@ export async function getStaticProps({
       categories,
       brands,
     },
-    revalidate: 200,
+    revalidate: getSecondsInMinutes(20), //200,
   }
 }
 

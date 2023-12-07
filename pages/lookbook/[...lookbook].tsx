@@ -23,6 +23,7 @@ import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 
 function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
   const router = useRouter()
@@ -166,7 +167,7 @@ export async function getStaticProps({
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
     },
-    revalidate: 200,
+    revalidate: getSecondsInMinutes(20), //200,
   }
 }
 const PAGE_TYPE = PAGE_TYPES['Page']

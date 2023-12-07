@@ -449,6 +449,15 @@ export const getCurrency = () => {
   return currencyCode
 }
 
+export const getCurrentCurrency = () => {
+  const currencyCode = Cookies.get(Cookie.Key.CURRENT_CURRENCY) || BETTERCOMMERCE_DEFAULT_CURRENCY! || BETTERCOMMERCE_CURRENCY!
+  return currencyCode
+}
+
+export const setCurrentCurrency = (value: string) => {
+  Cookies.set(Cookie.Key.CURRENT_CURRENCY, value)
+}
+
 export const resetAlgoliaSearch = () => {
   const btnReset: any = document.querySelector("button.ais-SearchBox-reset")
   if (btnReset) {
@@ -538,4 +547,8 @@ export const getElasticSearchPriceColumn = (isIncludeVAT: boolean) => {
 
 export const isB2BUser = (user: any): boolean => {
   return (user?.companyId && user?.companyId !== Guid.empty)
+}
+
+export const isIncludeVATInPriceDisplay = (isIncludeVAT: boolean, product: any): boolean => {
+  return (isIncludeVAT || (!isIncludeVAT && product?.price?.raw?.withoutTax === 0))
 }

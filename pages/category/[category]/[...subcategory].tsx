@@ -22,7 +22,7 @@ import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import { matchStrings } from '@framework/utils/parse-util'
+import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
@@ -65,7 +65,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: 60,
+      revalidate: getSecondsInMinutes(20), //60,
     }
   } else
     return {
@@ -76,7 +76,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: 60,
+      revalidate: getSecondsInMinutes(20), //60,
     }
 }
 

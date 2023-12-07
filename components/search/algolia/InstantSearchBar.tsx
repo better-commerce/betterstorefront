@@ -18,7 +18,24 @@ import { EmptyString } from '@components/utils/constants';
 import { isMobile } from 'react-device-detect'
 
 const INDEX_NAME = process.env.ALGOLIA_SEARCH_INDEX
-const SEARCH_CLIENT = algoliaSearch(process.env.ALGOLIA_SEARCH_APPLICATION_ID!, process.env.ALGOLIA_SEARCH_API_KEY!)
+const ORIGINAL_SEARCH_CLIENT = algoliaSearch(process.env.ALGOLIA_SEARCH_APPLICATION_ID!, process.env.ALGOLIA_SEARCH_API_KEY!)
+const SEARCH_CLIENT = {
+    ...ORIGINAL_SEARCH_CLIENT,
+    search(requests: any) {
+        if (requests.every(({ params }: any) => !params.query)) {
+            return Promise.resolve({
+                results: requests.map(() => ({
+                    hits: [],
+                    nbHits: 0,
+                    nbPages: 0,
+                    page: 0,
+                    processingTimeMS: 0
+                }))
+            });
+        }
+        return ORIGINAL_SEARCH_CLIENT.search(requests);
+    }
+}
 const ALGOLIA_SEARCH_SUGGESTIONS_INDEX = process.env.ALGOLIA_SEARCH_SUGGESTIONS_INDEX! || 'productindex_dev_query_suggestions'
 const ALGOLIA_SEARCH_SUGGESTIONS_INDEX_SOURCE_ID = process.env.ALGOLIA_SEARCH_SUGGESTIONS_INDEX_SOURCE_ID! || 'productindex_dev'
 
