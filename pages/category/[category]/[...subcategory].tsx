@@ -9,24 +9,19 @@ import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import {
   ALL_CATEGORY,
   BAD_URL_TEXT,
   IMG_PLACEHOLDER,
-  RESULTS,
 } from '@components/utils/textVariables'
-import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
-import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -66,7 +61,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //60,
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
     }
   } else
     return {
@@ -77,7 +72,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //60,
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
     }
 }
 
