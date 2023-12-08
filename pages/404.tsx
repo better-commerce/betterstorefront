@@ -1,13 +1,9 @@
 import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
 import LayoutError from '../components/common/Layout/LayoutError'
-import { Text } from '@components/ui'
-import Image from 'next/legacy/image'
-import {
-  ERROR_PAGE_NOT_FOUND,
-  ERROR_PAGE_NOT_FOUND_MESSAGE,
-} from '@components/utils/textVariables'
 import Link from 'next/link'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 
 export async function getStaticProps({
   preview,
@@ -23,12 +19,12 @@ export async function getStaticProps({
       categories,
       brands,
     },
-    revalidate: 200,
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //200,
   }
 }
 
 export default function NotFound({ deviceInfo }: any) {
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
+  const { isMobile } = deviceInfo
   return (
     <>
       {!isMobile && (
