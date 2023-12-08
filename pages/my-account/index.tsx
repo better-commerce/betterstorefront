@@ -130,7 +130,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
             }`}
           >
             <div className="sticky left-0 z-10 flex flex-col top-36">
-              {newConfig.map((item: any, idx: number) => (
+              {newConfig?.map((item: any, idx: number) => (
                 <>
                   <div
                     key={`my-acc-${idx}`}

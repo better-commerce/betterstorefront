@@ -463,9 +463,9 @@ export default function CollectionPage(props: any) {
                               </span>
                             </Link>
                             <div className="absolute z-10 text-left bottom-3 left-4">
-                              <h3 className="font-medium text-white text-14">
+                              <p className="font-medium text-white text-14">
                                 {img?.title}
-                              </h3>
+                              </p>
                               <p className="mb-2 font-normal text-left text-white text-10">
                                 {img?.description}
                               </p>

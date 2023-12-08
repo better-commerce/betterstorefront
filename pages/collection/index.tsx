@@ -15,9 +15,9 @@ export default function CollectionList(props: any) {
   return (
     <main className="w-full px-6 mx-auto 2xl:w-4/5 sm:px-4">
       <section aria-labelledby="products-heading" className="mt-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
           {SHOP_BY_COLLECTION}
-        </h2>
+        </h1>
         {props?.data.length > 0 && (
           <div className="grid grid-cols-2 py-10 sm:gap-y-10 gap-y-6 sm:grid-cols-4 gap-x-6 lg:grid-cols-6 xl:gap-x-8">
             {props.data.map((collection: any, key: any) => (
@@ -39,9 +39,9 @@ export default function CollectionList(props: any) {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h1 className="flex w-full pt-2 font-medium text-gray-900 sm:text-xl text-md text-sm">
+                    <h2 className="flex w-full pt-2 font-medium text-gray-900 sm:text-xl text-md text-sm">
                       {collection.name}
-                    </h1>
+                    </h2>
 
                     <h4 className="w-full pt-1 text-xs font-normal text-gray-500 sm:text-sm">
                       {collection.noOfRecords}{' '}

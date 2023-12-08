@@ -904,9 +904,9 @@ export default function ProductView({
           {/* Product info */}
           <div className="px-4 mt-2 sm:mt-10 sm:px-4 lg:mt-0 lg:col-span-5">
             <div className="flex justify-between gap-4 mb-3 sm:mb-0">
-              <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
+              <p className="mb-0 text-sm mt-0 font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}
-              </h3>
+              </p>
               <div className="flex items-center xs:flex-col">
                 <div className="flex items-center xs:text-center align-center">
                   {[0, 1, 2, 3, 4].map((rating) => (
