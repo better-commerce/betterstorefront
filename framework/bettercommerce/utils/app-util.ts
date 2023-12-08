@@ -552,3 +552,9 @@ export const isB2BUser = (user: any): boolean => {
 export const isIncludeVATInPriceDisplay = (isIncludeVAT: boolean, product: any): boolean => {
   return (isIncludeVAT || (!isIncludeVAT && product?.price?.raw?.withoutTax === 0))
 }
+
+export const logError = (error: any) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('error', error)
+  }
+}

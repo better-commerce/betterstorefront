@@ -19,6 +19,7 @@ import SwiperCore, { Navigation } from 'swiper'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 
 SwiperCore.use([Navigation])
 
@@ -131,7 +132,7 @@ export async function getStaticProps({
       globalSnippets: infra?.snippets ?? [],
       snippets: [],
     },
-    revalidate: getSecondsInMinutes(20), //200,
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //200,
   }
 }
 

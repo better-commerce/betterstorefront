@@ -1,31 +1,26 @@
 // Base Imports
 import React, { useEffect, useState } from 'react'
+
+// Package Imports
+import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
-import Link from 'next/link'
 import axios from 'axios'
+
+// Component Imports
+import { Layout } from '@components/common'
+
 // Other Imports
 import commerce from '@lib/api/commerce'
-import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
-import {
-  EmptyObject,
-  HOMEPAGE_SLUG,
-  NEXT_REFERRAL_ADD_USER_REFEREE,
-  NEXT_REFERRAL_BY_SLUG,
-  NEXT_REFERRAL_CLICK_ON_INVITE,
-  SITE_ORIGIN_URL,
-} from '@components/utils/constants'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
+import { HOME_PAGE_DEFAULT_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { useRouter } from 'next/router'
-import os from 'os'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
-import { FeatureBar } from '@components/common'
-import { Button } from '@components/ui'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 
 const PromotionBanner = dynamic(
@@ -125,7 +120,7 @@ export async function getStaticProps({
       pageContentsMobileWeb: pageContentsMobileWeb ?? [],
       hostName: obfuscateHostName(hostName),
     },
-    revalidate: getSecondsInMinutes(20), //60,
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //60,
   }
 }
 

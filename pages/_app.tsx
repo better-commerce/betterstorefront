@@ -11,48 +11,21 @@ import 'swiper/css/bundle'
 import jwt from 'jsonwebtoken'
 import Cookies from 'js-cookie'
 import { v4 as uuid_v4 } from 'uuid'
-import {
-  SessionIdCookieKey,
-  DeviceIdKey,
-  NEXT_API_KEYWORDS_ENDPOINT,
-  SITE_NAME,
-  SITE_ORIGIN_URL,
-  INFRA_ENDPOINT,
-  BETTERCOMMERCE_DEFAULT_CURRENCY,
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
-  NAV_ENDPOINT,
-  EmptyString,
-} from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
 import analytics from '@components/services/analytics/analytics'
-import setSessionIdCookie, {
-  createSession,
-  isValidSession,
-  getExpiry,
-  getMinutesInDays,
-} from '@components/utils/setSessionId'
+import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, } from '@components/utils/setSessionId'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import OverlayLoader from '@components/common/OverlayLoader'
-import {
-  ELEM_ATTR,
-  resetSnippetElements,
-} from '@framework/content/use-content-snippet'
+import { ELEM_ATTR, resetSnippetElements, } from '@framework/content/use-content-snippet'
 import { ContentSnippet } from '@components/common/Content'
 import NextHead from 'next/head'
 import qs from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
-import {
-  AUTH_URL,
-  CLIENT_ID,
-  Cookie,
-  GA4_DISABLED,
-  GA4_MEASUREMENT_ID,
-  SHARED_SECRET,
-} from '@framework/utils/constants'
+import { AUTH_URL, CLIENT_ID, Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, SHARED_SECRET } from '@framework/utils/constants'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { DeviceType } from '@commerce/utils/use-device'
 import InitDeviceInfo from '@components/common/InitDeviceInfo'
@@ -67,7 +40,6 @@ import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import CustomerReferral from '@components/customer/Referral'
-import PaymentLinkRedirect from '@components/payment/PaymentLinkRedirect'
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
@@ -290,26 +262,16 @@ function MyApp({
         {seoInfo && (
           <>
             <title>{seoInfo?.metaTitle}</title>
-            <link
-              rel="canonical"
-              id="canonical"
-              href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath}
-            />
+            {
+              router.asPath.startsWith('/products/') && (
+                <link rel="canonical" href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath} />
+              )
+            }            
             <meta name="title" content={seoInfo?.metaTitle} />
             <meta name="description" content={seoInfo?.metaDescription} />
             <meta name="keywords" content={seoInfo?.metaKeywords} />
-            {/* og meta tags */}
-            <meta
-              property="og:title"
-              content={seoInfo?.metaTitle}
-              key="ogtitle"
-            />
-            <meta
-              property="og:description"
-              content={seoInfo?.metaDescription}
-              key="ogdesc"
-            />
-            {/* og meta tags */}
+            <meta property="og:title" content={seoInfo?.metaTitle} key="ogtitle" />
+            <meta property="og:description" content={seoInfo?.metaDescription} key="ogdesc" />
           </>
         )}
         <meta property="og:type" content="website" />

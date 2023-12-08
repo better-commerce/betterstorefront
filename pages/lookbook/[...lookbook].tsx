@@ -24,6 +24,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 
 function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
   const router = useRouter()
@@ -167,7 +168,7 @@ export async function getStaticProps({
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
     },
-    revalidate: getSecondsInMinutes(20), //200,
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //200,
   }
 }
 const PAGE_TYPE = PAGE_TYPES['Page']

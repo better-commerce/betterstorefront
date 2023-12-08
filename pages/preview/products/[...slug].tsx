@@ -7,6 +7,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { LOADER_LOADING } from '@components/utils/textVariables'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 
 export async function getStaticProps({
   params,
@@ -42,7 +43,7 @@ export async function getStaticProps({
         ? JSON.parse(pdpCachedImages?.images)
         : [],
     },
-    revalidate: getSecondsInMinutes(20), //200,
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //200,
   }
 }
 

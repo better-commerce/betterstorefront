@@ -16,7 +16,6 @@ import Router from 'next/router'
 import Head from 'next/head'
 import { CURRENT_THEME } from '@components/utils/constants'
 import {
-  BTN_ACCEPT_COOKIE,
   GENERAL_COOKIE_TEXT,
 } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
