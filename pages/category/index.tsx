@@ -11,6 +11,8 @@ import {
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 export default function CategoryList(props: any) {
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -129,6 +131,6 @@ export async function getStaticProps({
     props: {
       data,
     },
-    revalidate: 200,
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //200,
   }
 }

@@ -1,5 +1,6 @@
 import { stringToBoolean } from './parse-util'
 
+export const STATIC_PAGE_CACHE_INVALIDATION_IN_MINS = 20
 export const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
 export const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
 export const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL
@@ -37,6 +38,7 @@ export const OMNILYTICS_DISABLED = stringToBoolean(
 export module Cookie {
   export module Key {
     export const CURRENCY = 'Currency'
+    export const CURRENT_CURRENCY = 'CurCurrency'
     export const LANGUAGE = 'Language'
     export const COUNTRY = 'Country'
     export const SESSION_ID = 'sessionId'
@@ -47,5 +49,10 @@ export module Cookie {
     export const CLIENT_IP_ADDRESS = 'ClientIP'
     export const IS_PAYMENT_LINK = 'ipl'
     export const API_TOKEN = 'i'
+    export const USER_TOKEN = 'ut'
+    export const ANALYTICS = 'analytics'
+    export const ADVERTISEMENT = 'advertisement'
+    export const NAV_ENDPOINT_DATA_CACHED = 'nedc'
+    export const ALGOLIA_SETTINGS_DATA_CACHED = 'asdc'
   }
 }

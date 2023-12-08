@@ -9,6 +9,8 @@ import {
   SHOP_BY_COLLECTION,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 export default function CollectionList(props: any) {
   const css = { maxWidth: '100%', height: 'auto' }
   return (
@@ -79,6 +81,6 @@ export async function getStaticProps({
     props: {
       data: collectionData,
     },
-    revalidate: 200,
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //200,
   }
 }
