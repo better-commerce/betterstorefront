@@ -176,3 +176,7 @@ export const dateFormat = (date: string | Date, format: string): string => {
 export const deliveryDateFormat = (date: string | Date): string => {
   return dateFormat(date, 'DD/MM/yyyy')
 }
+
+export const getSecondsInMinutes = (minutes: number): number => {
+  return Math.floor(minutes * 60);
+}
