@@ -29,6 +29,7 @@ import { IPLPFilterState, useUI } from '@components/ui/context'
 import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 import { Product } from '@commerce/types'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 const CompareSelectionBar = dynamic(
   () => import('@components/product/ProductCompare/compareSelectionBar')
 )
@@ -694,7 +695,7 @@ export async function getStaticProps({ params, ...context }: any) {
       snippets: data?.snippets ?? [],
       hostName: obfuscateHostName(hostName),
     },
-    revalidate: getSecondsInMinutes(20), //60,
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //60,
   }
 }
 

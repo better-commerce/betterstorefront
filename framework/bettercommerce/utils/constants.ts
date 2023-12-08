@@ -1,5 +1,6 @@
 import { stringToBoolean } from './parse-util'
 
+export const STATIC_PAGE_CACHE_INVALIDATION_IN_MINS = 20
 export const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
 export const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
 export const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL

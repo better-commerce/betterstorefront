@@ -29,6 +29,7 @@ import axios from 'axios'
 import { NEXT_GET_CATALOG_PRODUCTS } from '@components/utils/constants'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -62,7 +63,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: getSecondsInMinutes(20), //60,
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //60,
     }
   } else
     return {
@@ -73,7 +74,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: getSecondsInMinutes(20), //60,
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //60,
     }
 }
 

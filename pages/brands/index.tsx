@@ -11,6 +11,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -198,7 +199,7 @@ export async function getStaticProps({
       brands: response.result,
       snippets: response?.snippets ?? [],
     },
-    revalidate: getSecondsInMinutes(20), //200,
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //200,
   }
 }
 /*
