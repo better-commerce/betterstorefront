@@ -2,8 +2,7 @@ import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
 import LayoutError from '../components/common/Layout/LayoutError'
 import Link from 'next/link'
-import { getSecondsInMinutes } from '@framework/utils/parse-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 
 export async function getStaticProps({
   preview,
@@ -19,7 +18,7 @@ export async function getStaticProps({
       categories,
       brands,
     },
-    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), //200,
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
 
