@@ -319,12 +319,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   if (category === null) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
-        <h4 className="pb-6 text-3xl font-medium text-gray-400">
+        <h1 className="pb-6 text-3xl font-30 font-medium text-gray-400">
           {BAD_URL_TEXT}
           <Link href="/category">
             <span className="px-3 text-indigo-500">{ALL_CATEGORY}</span>
           </Link>
-        </h4>
+        </h1>
       </div>
     )
   }
