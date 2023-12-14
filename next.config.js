@@ -10,6 +10,7 @@ const commerce = require('./commerce.config.json')
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
 const isBetterCommerce = provider === 'bettercommerce'
+const crypto = require('crypto')
 
 module.exports = withCommerceConfig({
   poweredByHeader: false,
@@ -49,17 +50,45 @@ module.exports = withCommerceConfig({
     ].filter(Boolean)
   },
   headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-        ],
-      },
-    ]
+    const decrypt = (data) => {
+      const ALGORITHM = 'aes-256-cbc'
+      const ENCODING = 'hex'
+      const IV_LENGTH = 16
+      const KEY = process.env.CIPHER_ENCRYPTION_KEY
+
+      const binaryData = new Buffer(data, ENCODING)
+      const iv = binaryData.slice(-IV_LENGTH)
+      const encryptedData = binaryData.slice(0, binaryData.length - IV_LENGTH)
+      const decipher = crypto.createDecipheriv(ALGORITHM, new Buffer(KEY), iv)
+
+      return Buffer.concat([
+        decipher.update(encryptedData),
+        decipher.final(),
+      ]).toString()
+    }
+
+    const tryParseJson = (json) => {
+      if (json) {
+        let parsed = {}
+        try {
+          parsed = JSON.parse(json)
+          return parsed
+        } catch (e) { }
+      }
+      return null
+    }
+
+    if (process.env.SITE_SECURITY_HEADERS) {
+      const headers = decrypt(process.env.SITE_SECURITY_HEADERS)
+      if (headers) {
+        const headersJson = tryParseJson(headers)
+
+        if (headersJson) {
+          return headersJson
+        }
+      }
+    }
+    return []
   },
   env: {
     BETTERCOMMERCE_AUTH_URL: process.env.BETTERCOMMERCE_AUTH_URL,
@@ -81,6 +110,7 @@ module.exports = withCommerceConfig({
     BETTERCMS_API_VERSION: process.env.BETTERCMS_API_VERSION,
     BETTERCMS_API_URL: process.env.BETTERCMS_API_URL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    SITE_SECURITY_HEADERS: process.env.SITE_SECURITY_HEADERS,
     SITE_HOST: process.env.SITE_HOST,
     SITE_ORIGIN_URL: process.env.SITE_ORIGIN_URL,
     SITE_NAME: process.env.SITE_NAME,
