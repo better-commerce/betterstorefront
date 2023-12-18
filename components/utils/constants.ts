@@ -80,6 +80,7 @@ export const NEXT_GET_ORDER_DETAILS = '/api/customer/order-details'
 export const NEXT_GET_CART = `/api/get-cart`
 export const NEXT_ASSOCIATE_CART = '/api/customer/associate-cart'
 export const NEXT_MERGE_CART = '/api/merge-cart'
+export const STATIC_BRAND_PATHS = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/staticpath/brand`
 export const NEXT_GET_COLLECTION_BY_ID = '/api/collection/get-collection-by-id'
 export const NEXT_GET_USER_CART = '/api/get-user-cart'
 export const NEXT_GET_CATALOG_PRODUCTS = '/api/catalog/products'
