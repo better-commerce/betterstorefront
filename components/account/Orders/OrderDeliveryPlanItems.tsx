@@ -12,6 +12,8 @@ import React from "react";
 import OrderLog from "./OrderLog";
 import OrderStatusMapping from "./OrderStatusMapping";
 import TrackingDetail from "./TrackingDetail";
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
+import { generateUri } from "@commerce/utils/uri-util";
 
 const OrderDeliveryPlanItems = ({ items, details, trackPackage, ifCancelled, openHelpModal, setReview }: any) => {
    return (
@@ -151,12 +153,12 @@ const OrderDeliveryPlanItems = ({ items, details, trackPackage, ifCancelled, ope
                                <div className="flex gap-3 py-6 sm:gap-6">
                                  <div className="flex-shrink-0">
                                    <Link href={`/${productItem?.slug}`}>
-                                     <Image
+                                     <img
                                        width={102}
                                        height={148}
                                        src={
-                                         customInfo1?.formatted?.data
-                                           ?.ImageUrl || productItem?.image
+                                         generateUri(customInfo1?.formatted?.data
+                                           ?.ImageUrl,'h=148&webp') || generateUri(productItem?.image,'h=148&webp') || IMG_PLACEHOLDER
                                        }
                                        alt="image"
                                        // className="basket-image"

@@ -1534,6 +1534,10 @@ br {
 .ribbon.left-0{
   left: 0 !important;
 }
+.app-image-gallery.fullscreen .image-gallery-image img {
+  width: auto !important;
+  height: 100vh !important;
+}
 
 .prod-name-block{
   min-height: 48px;

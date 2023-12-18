@@ -41,6 +41,7 @@ import { useState } from 'react'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { vatIncluded } from '@framework/utils/app-util'
+import { generateUri } from '@commerce/utils/uri-util'
 let PERSONALISED_TEXT = ''
 let PERSONALIZATION = ''
 
@@ -174,13 +175,13 @@ export default function Summary({
                   <div className="flex w-full px-3 justify-left">
                     <div className="flex text-initial">
                       <h2 className="align-middle text-md img-sumry-view">
-                        {/* <Image
+                        {/* <img
                           className="align-middle"
                           height={22}
                           width={22}
                           src="/image/bas1.png"
                           alt="logo"
-                        ></Image> */}
+                        ></img> */}
                         <ShoppingCartIcon className="w-4 h-4" />
                         <span className="ml-3 link-button !text-base">
                           {GENERAL_ORDER_SUMMARY}
@@ -223,14 +224,13 @@ export default function Summary({
                             })}
                             <div className="flex-shrink-0">
                               <Link href={`/${product.slug}`}>
-                                <Image
-                                  layout="fixed"
+                                <img
                                   width={80}
                                   height={100}
-                                  src={`${product.image}` || IMG_PLACEHOLDER}
+                                  src={generateUri(`${product.image}`,'h=100&fm=webp') || IMG_PLACEHOLDER}
                                   alt={product.name}
                                   className="object-cover w-full h-full"
-                                ></Image>
+                                />
                               </Link>
                             </div>
 
@@ -514,14 +514,13 @@ export default function Summary({
                           href={!isPaymentLink ? `/${product.slug}` : "#"}
                           className="inline-block font-medium text-gray-700 hover:text-gray-800 hover:underline"
                         >
-                          <Image
-                            layout="fixed"
+                          <img
                             width={80}
                             height={100}
-                            src={`${product.image}` || IMG_PLACEHOLDER}
+                            src={generateUri(`${product.image}`,'h=100&fm=webp') || IMG_PLACEHOLDER}
                             alt={product.name}
                             className="object-cover w-full h-full"
-                          ></Image>
+                          />
                         </Link>
                       </div>
 
@@ -863,13 +862,13 @@ export default function Summary({
                                   </div>
                                 )}
                                 <div className="flex w-full xl:h-[439px] 2xl:h-auto 2xl:object-none xl:object-cover">
-                                  <Image
+                                  <img
                                     src={'/assets/images/refer-a-friend.jpg'}
                                     alt="banner"
                                     height={700}
                                     width={480}
                                     className="object-cover"
-                                  ></Image>
+                                  />
                                 </div>
                               </div>
                             </div>

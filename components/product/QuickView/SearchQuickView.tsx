@@ -536,7 +536,7 @@ export default function SearchQuickView({
           NEXT_GET_PRODUCT_REVIEW,
           { recordId: productData?.objectid?.raw }
         )
-        
+
         setQuickViewData(productQuickViewData?.product)
         setReviewData(reviewData?.review)
       }
@@ -580,9 +580,34 @@ export default function SearchQuickView({
       (isIncludeVAT
         ? quickViewData?.listPrice?.raw?.withTax
         : quickViewData?.listPrice?.raw?.withoutTax)) *
-    100,
+      100,
     0
   )
+
+  const customRenderItem = (item: any) => {
+    return (
+      <div className="flex justify-center image-gallery-image">
+        <img
+          src={generateUri(item?.original,"h=1000&fm=webp")||IMG_PLACEHOLDER}
+          alt={product?.name}
+          height={1000}
+          width={1000}
+          className="!object-contain"
+        />
+      </div>
+    )
+  }
+  const customRenderThumbInner = (item: any) => {
+    return (
+      <img
+        src={generateUri(item?.thumbnail, 'h=300&fm=webp') || IMG_PLACEHOLDER}
+        alt={product?.name}
+        height={100}
+        width={100}
+      />
+    )
+  }
+
   return (
     <>
       <Transition.Root show={isQuickviewOpen} as={Fragment}>
@@ -631,8 +656,8 @@ export default function SearchQuickView({
                         </button>
                         <div className="grid grid-cols-1 sm:gap-4 sm:grid-cols-12">
                           {isMobile ? <div className='flex flex-col justify-center w-full pb-10 text-center ipad-display-none'>
-                            <h4 className='font-bold text-black font-24'>Quick Shop</h4>
-                          </div> :
+                              <h4 className='font-bold text-black font-24'>Quick Shop</h4>
+                            </div> :
                             <div className="sm:col-span-6 md:col-span-6 lg:col-span-6">
                               <div className="flex flex-col px-0 sm:px-0 sm:pb-0">
                                 <Tab.Group
@@ -658,6 +683,8 @@ export default function SearchQuickView({
                                       showNav={true}
                                       additionalClass="app-image-gallery"
                                       showFullscreenButton={false}
+                                      renderItem={customRenderItem}
+                                      renderThumbInner={customRenderThumbInner}
                                     />
                                   </Tab.List>
                                 </Tab.Group>
@@ -668,7 +695,13 @@ export default function SearchQuickView({
                             <div className='grid grid-cols-12 gap-4 sm:grid-cols-1 sm:gap-0'>
                               {isMobile ? (
                                 <div className='flex items-start col-span-5 sm:col-span-1'>
-                                  <Image src={quickViewData?.image} className='border border-gray-400 rounded' width={200} height={200} alt={productData?.title?.raw} />
+                                  <img
+                                    src={generateUri(quickViewData?.image, 'h=200&fm=webp')||IMG_PLACEHOLDER}
+                                    className="border border-gray-400 rounded"
+                                    width={200}
+                                    height={200}
+                                    alt={productData?.title?.raw}
+                                  />
                                 </div>
                               ) : null}
 
@@ -763,7 +796,7 @@ export default function SearchQuickView({
                                 />
                               </div>
                             ) : null}
-                            
+
                             {!isEngravingAvailable ? (
                               <div className="flex mt-6 sm:mt-0 !text-sm">
                                 <button
@@ -789,40 +822,40 @@ export default function SearchQuickView({
                                 </button>
                                 {(product?.currentStock < 1 && !product?.preOrder?.isEnabled && (!product?.flags?.sellWithoutInventory || !selectedAttrData?.sellWithoutInventory)
                                 ) ? (
-                                 <ButtonNotifyMe product={product} />
+                                  <ButtonNotifyMe product={product} />
                                 ) : <Button
-                                  title={buttonConfig.title}
-                                  action={buttonConfig.action}
-                                  validateAction={buttonConfig.validateAction}
-                                  type="button"
-                                  buttonType={buttonConfig.buttonType || 'cart'}
-                                />}
+                                    title={buttonConfig.title}
+                                    action={buttonConfig.action}
+                                    validateAction={buttonConfig.validateAction}
+                                    type="button"
+                                    buttonType={buttonConfig.buttonType || 'cart'}
+                                  />}
                               </div>
                             ) : (
                               <>
                                 <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                                   {(product?.currentStock < 1 && !product?.preOrder?.isEnabled && (!product?.flags?.sellWithoutInventory || !selectedAttrData?.sellWithoutInventory)
                                   ) ? (
-                                   <ButtonNotifyMe product={product} className="block py-3 sm:hidden" />
+                                    <ButtonNotifyMe product={product} className="block py-3 sm:hidden" />
                                   ) : <Button
-                                    className="block py-3 sm:hidden"
-                                    title={buttonConfig.title}
-                                    action={buttonConfig.action}
-                                    validateAction={buttonConfig.validateAction}
-                                    buttonType={buttonConfig.type || 'cart'}
-                                  />}
+                                      className="block py-3 sm:hidden"
+                                      title={buttonConfig.title}
+                                      action={buttonConfig.action}
+                                      validateAction={buttonConfig.validateAction}
+                                      buttonType={buttonConfig.type || 'cart'}
+                                    />}
                                 </div>
                                 <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                                   {(product?.currentStock < 1 && !product?.preOrder?.isEnabled && (!product?.flags?.sellWithoutInventory || !selectedAttrData?.sellWithoutInventory)
                                   ) ? (
-                                   <ButtonNotifyMe product={product} className="hidden sm:block" />
+                                    <ButtonNotifyMe product={product} className="hidden sm:block" />
                                   ) : <Button
-                                    className="hidden sm:block "
-                                    title={buttonConfig.title}
-                                    action={buttonConfig.action}
-                                    validateAction={buttonConfig.validateAction}
-                                    buttonType={buttonConfig.type || 'cart'}
-                                  />}
+                                      className="hidden sm:block "
+                                      title={buttonConfig.title}
+                                      action={buttonConfig.action}
+                                      validateAction={buttonConfig.validateAction}
+                                      buttonType={buttonConfig.type || 'cart'}
+                                    />}
                                   <button
                                     className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                                     onClick={() => showEngravingModal(true)}
@@ -851,7 +884,7 @@ export default function SearchQuickView({
                                   </button>
                                 </div>
                               </>
-                            )}                            
+                            )}
                           </div>
                         </div>
                       </div>

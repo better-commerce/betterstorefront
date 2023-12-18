@@ -814,6 +814,31 @@ export default function ProductView({
     return
   };
 
+  const customRenderItem = (item: any) => {
+    return (
+      <div className="flex justify-center image-gallery-image">
+        <img
+          src={generateUri(item?.original,"h=2000&fm=webp")||IMG_PLACEHOLDER}
+          alt={product?.name}
+          height={1000}
+          width={1000}
+          className="!object-contain"
+        />
+      </div>
+    );
+  };
+  const customRenderThumbInner = (item: any) => {
+    return (
+      <img
+        src= {generateUri(item?.thumbnail,"h=100&fm=webp")||IMG_PLACEHOLDER}
+        alt={product?.name}
+        height={100}
+        width={100}
+      />
+    );
+  };
+
+
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
@@ -895,6 +920,8 @@ export default function ProductView({
                     showFullscreenButton={true}
                     onScreenChange={toggleFullscreen}
                     renderCustomControls={renderCustomControls}
+                    renderItem={customRenderItem}
+                    renderThumbInner={customRenderThumbInner}
                   />
                 </Tab.List>
               </Tab.Group>

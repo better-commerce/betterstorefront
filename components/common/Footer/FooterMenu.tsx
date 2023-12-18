@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { FC, useEffect, useState } from 'react'
 import { IExtraProps } from '../Layout/Layout'
-
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
 declare const window: any
 
 interface Props {
@@ -50,7 +50,7 @@ const FooterMenu: FC<Props> = ({ config }: any) => {
                                   className="text-sm font-medium text-gray-900 text-footer-clr f-footer-weight"
                                   key={`li${fdx}`}
                                   dangerouslySetInnerHTML={{
-                                    __html: navBlock?.contentBody,
+                                    __html: sanitizeHtmlContent(navBlock?.contentBody),
                                   }}
                                 />
                               )}

@@ -808,7 +808,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                     <div className="flex py-6">
                                       <div className="flex-shrink-0 w-24 h-32 overflow-hidden border border-gray-200 rounded-md">
                                         <Link href={`/${product.slug}`}>
-                                          <Image
+                                          <img
                                             width={100}
                                             height={100}
                                             style={css}
@@ -821,7 +821,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                             alt={product.name}
                                             className="object-cover object-center w-full h-full"
                                             onClick={handleRedirectToPDP}
-                                          ></Image>
+                                          />
                                         </Link>
                                         {/* <img
                                     src={product.image}
@@ -966,10 +966,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                   <>
                                                     <div className="flex text-xs font-semibold text-left text-red-500">
                                                       <span className="relative mr-1 top-1">
-                                                        <Image
+                                                        <img
                                                           alt="Sold Out"
                                                           src="/assets/not-shipped-edd.svg"
-                                                          layout="fixed"
                                                           width={20}
                                                           height={20}
                                                           className="relative inline-block mr-1 top-2"
@@ -1026,7 +1025,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                           </ul>
                           {isEmpty && (
                             <div className="flex flex-col items-center justify-between w-full h-full py-9">
-                              <Image
+                              <img
                                 height="100"
                                 width="100"
                                 src="/assets/images/cart.jpg"

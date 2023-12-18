@@ -39,7 +39,7 @@ function Categories({ data, deviceInfo }: any) {
               legacyBehavior
             >
               {isMobile ? (
-                <Image
+                <img
                   src={
                     generateUri(
                       category?.categorylist_image,
@@ -53,7 +53,7 @@ function Categories({ data, deviceInfo }: any) {
                   className="cursor-pointer"
                 />
               ) : (
-                <Image
+                <img
                   src={
                     generateUri(
                       category?.categorylist_image,

@@ -6,7 +6,8 @@ import moment from "moment";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import OrderStatusMapping from "./OrderStatusMapping";
-
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
+import { generateUri } from '@commerce/utils/uri-util'
 const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
    let totalQty = 0;
    item?.items?.forEach((x: any) => { totalQty = totalQty + x.qty; });
@@ -94,14 +95,12 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
                {
                   getProductItems()?.map((productItem: any, pId: number) => (
                      <a href={`/${productItem.slug}`} className='inline-block order-image-nonslider' key={pId}>
-                     <Image
-                        src={productItem.image}
+                     <img
+                        src={generateUri(productItem.image,'h=72&fm=webp') || productItem.image||IMG_PLACEHOLDER}
                         alt=""
-                        layout='fixed'
                         width={40}
                         height={72}
-                        className='object-cover object-center w-full h-full radius-xs sm:h-full'>
-                     </Image>
+                        className='object-cover object-center w-full h-full radius-xs sm:h-full'/>
                      </a>
                ))
                }

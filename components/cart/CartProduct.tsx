@@ -203,7 +203,7 @@ export default function CartProduct({
         key={`cart-items-${product?.id}`}
       >
         <div className="flex items-center justify-center col-span-2">
-          <Image
+          <img
             style={css}
             width={140}
             height={180}

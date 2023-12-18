@@ -1,7 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
-import { SHOP_NOW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, SHOP_NOW } from '@components/utils/textVariables'
 import Router from 'next/router'
+import { generateUri } from '@commerce/utils/uri-util'
 
 const ImageBanner = ({
   heading,
@@ -11,8 +12,8 @@ const ImageBanner = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
       <div className="bg-gray-500 h-[225px] md:h-[452px] w-full">
-        <Image
-          src={manufacturerSettingTypeImgBanner || '/brands/ImageBanner.png'}
+        <img
+          src={generateUri(manufacturerSettingTypeImgBanner, 'h=240&fm=webp') || '/brands/ImageBanner.png'||IMG_PLACEHOLDER}
           height={240}
           width={320}
           alt={manufacturerSettingTypeImgBanner || ''}

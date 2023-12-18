@@ -50,12 +50,11 @@ export default function ProductReturn({ isReturn, setReturn, data }: any) {
                           >
                             <div className="flex flex-col">
                               <div className="flex-1">
-                                <Image
+                                <img
                                   alt="Return"
                                   src={`/assets/images/exchange.png`}
                                   width={115}
                                   height={90}
-                                  layout="fixed"
                                 />
                               </div>
                               <div className="flex-1 mt-4">

@@ -201,7 +201,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                           {wishListItems.map((product: any, idx: number) => (
                             <li key={idx} className="flex py-6">
                               <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                                <Image
+                                <img
                                   style={css}
                                   width={80}
                                   height={80}
@@ -213,7 +213,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                   }
                                   alt={product.name}
                                   className="object-cover object-center w-full h-full"
-                                ></Image>
+                                />
                                 {/* <img
                                   src={product.image}
                                   alt={product.name}

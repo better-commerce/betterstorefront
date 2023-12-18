@@ -18,6 +18,7 @@ import {
   NEXT_REFERRAL_INFO,
   NEXT_REFERRAL_INVITE_SENT,
   NEXT_REFERRAL_VOUCHERS,
+  SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import {
   INVITES_SENT,
@@ -37,7 +38,7 @@ import {
 } from '@heroicons/react/24/outline'
 import Spinner from '@components/ui/Spinner'
 import SideMenu from '@components/account/MyAccountMenu'
-
+import NextHead from 'next/head'
 
 function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
@@ -169,234 +170,251 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
   useAnalytics(CustomerProfileViewed, loggedInEventData)
 
   return (
-    <section className="relative pb-10 text-gray-900">
-      <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
-        <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-        <SideMenu
-              handleClick={handleClick}
-              setShow={setShow}
-              currentOption={currentOption}
-              />
+    <>
+     <NextHead>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <title>{currentOption}</title>
+        <meta name="title" content={currentOption} />
+        <meta name="description" content={currentOption} />
+        <meta name="keywords" content={currentOption} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={currentOption} key="ogtitle" />
+        <meta property="og:description" content={currentOption} key="ogdesc" />
+      </NextHead>
+    
+      <section className="relative pb-10 text-gray-900">
+        <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
+          <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
+          <SideMenu
+                handleClick={handleClick}
+                setShow={setShow}
+                currentOption={currentOption}
+                />
 
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <div
-              className={`relative col-span-9 px-10 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
-                isShow ? `` : ''
-              }`}
-            >
-              <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-                <h1 className="py-2  px-5 font-bold">
-                  {referralInfo?.successfulInvites > 0
-                    ? referralInfo?.successfulInvites == 1
-                      ? `1 ${SUCCESSFUL_INVITE}`
-                      : `${referralInfo?.successfulInvites} ${SUCCESSFUL_INVITES}`
-                    : NO_INVITES}
-                </h1>
-                <div className="w-full border-t-[1px] mt-4 border-gray-300 border-b-[1px] ">
-                  <div className="border-b-[1px] border-gray-300 flex flex-row justify-between px-5 py-2">
-                    <p className="text-sm text-black font-semibold ">
-                      {INVITES_SENT}
-                    </p>
-                    <p className="text-sm text-black font-semibold">
-                      {referralInfo?.invitesSent}
-                    </p>
-                  </div>
-                  <div className="flex flex-row justify-between px-5 py-2">
-                    <p className="text-sm text-black font-semibold">
-                      {CLICKS_ON_INVITES}
-                    </p>
-                    <p className="text-sm text-black font-semibold">
-                      {referralInfo?.clickOnInvites}
-                    </p>
-                  </div>
-                </div>
-                {/* Tell them in person section */}
-                <Disclosure defaultOpen={true}>
-                  {({ open }) => (
-                    <div className="border-b-[1px] border-gray-300 pt-2">
-                      <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
-                        <div className=" w-full flex flex-row justify-between items-center">
-                          <h2 className="text-sm text-black font-semibold capitalize">
-                            {SHARE_IN_PERSON}
-                          </h2>
-                          <span className="h-5 w-5 text-gray-500">
-                            {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                          </span>
-                        </div>
-                      </Disclosure.Button>
-                      <Transition
-                        enter="transition duration-100 ease-out"
-                        enterFrom="transform scale-95 opacity-0"
-                        enterTo="transform scale-100 opacity-100"
-                        leave="transition duration-75 ease-out"
-                        leaveFrom="transform scale-100 opacity-100"
-                        leaveTo="transform scale-95 opacity-0"
-                      >
-                        <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
-                          <div className="px-0 text-sm">
-                            {REFERRAL_CODE_INSTRUCTIONS}
-                            <div className="px-5 my-4 text-sm">
-                              Your friends Enter:
-                              <h2 className="text-black text-lg">
-                                {referralInfo?.slug}{' '}
-                                {/* {user?.firstName+" "+ user?.lastName} */}
-                              </h2>
-                            </div>
-                            <div className="px-5 text-sm leading-relaxed ">
-                             {REFERRAL_INSTRUCTIONS}
-                            </div>
-                          </div>
-                        </Disclosure.Panel>
-                      </Transition>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <div
+                className={`relative col-span-9 px-10 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
+                  isShow ? `` : ''
+                }`}
+              >
+                <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
+                  <h1 className="py-2  px-5 font-bold">
+                    {referralInfo?.successfulInvites > 0
+                      ? referralInfo?.successfulInvites == 1
+                        ? `1 ${SUCCESSFUL_INVITE}`
+                        : `${referralInfo?.successfulInvites} ${SUCCESSFUL_INVITES}`
+                      : NO_INVITES}
+                  </h1>
+                  <div className="w-full border-t-[1px] mt-4 border-gray-300 border-b-[1px] ">
+                    <div className="border-b-[1px] border-gray-300 flex flex-row justify-between px-5 py-2">
+                      <p className="text-sm text-black font-semibold ">
+                        {INVITES_SENT}
+                      </p>
+                      <p className="text-sm text-black font-semibold">
+                        {referralInfo?.invitesSent}
+                      </p>
                     </div>
-                  )}
-                </Disclosure>
-                {/* Share by email section */}
-                <Disclosure defaultOpen={false}>
-                  {({ open }) => (
-                    <div className="border-b-[1px] border-gray-300 pt-2">
-                      <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
-                        <div className=" w-full flex flex-row justify-between items-center">
-                          <h2 className="text-sm text-black font-semibold capitalize">
-                            {SHARE_BY_EMAIL}
-                          </h2>
-                          <span className="h-5 w-5 text-gray-500">
-                            {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                          </span>
-                        </div>
-                      </Disclosure.Button>
-                      <Transition
-                        enter="transition duration-100 ease-out"
-                        enterFrom="transform scale-95 opacity-0"
-                        enterTo="transform scale-100 opacity-100"
-                        leave="transition duration-75 ease-out"
-                        leaveFrom="transform scale-100 opacity-100"
-                        leaveTo="transform scale-95 opacity-0"
-                      >
-                        <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
-                          <div className="px-5 py-2 text-sm">
-                            <p>Share Referral by Email</p>
-                            <Link
-                              href={`mailto:?body=${referralOffers?.refereePromo}, Just use the following link: ${referralLink}&subject=Your friend has sent you a gift!`}
-                              className="font-bold"
-                              onClick={handleInviteSent}
-                            >
-                              {CLICK_TO_SHARE_BY_EMAIL}
-                            </Link>
-                          </div>
-                        </Disclosure.Panel>
-                      </Transition>
+                    <div className="flex flex-row justify-between px-5 py-2">
+                      <p className="text-sm text-black font-semibold">
+                        {CLICKS_ON_INVITES}
+                      </p>
+                      <p className="text-sm text-black font-semibold">
+                        {referralInfo?.clickOnInvites}
+                      </p>
                     </div>
-                  )}
-                </Disclosure>
-                {/* Vouchers Earned Section */}
-                <Disclosure defaultOpen={false}>
-                  {({ open }) => (
-                    <div className="border-b-[1px] border-gray-300 pt-2">
-                      <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
-                        <div className=" w-full flex flex-row justify-between items-center">
-                          <h2 className="text-sm text-black font-semibold capitalize">
-                            {VOUCHERS_EARNED}
-                          </h2>
-                          <span className="h-5 w-5 text-gray-500">
-                            {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                          </span>
-                        </div>
-                      </Disclosure.Button>
-                      <Transition
-                        enter="transition duration-100 ease-out"
-                        enterFrom="transform scale-95 opacity-0"
-                        enterTo="transform scale-100 opacity-100"
-                        leave="transition duration-75 ease-out"
-                        leaveFrom="transform scale-100 opacity-100"
-                        leaveTo="transform scale-95 opacity-0"
-                      >
-                        <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
-                          <div className="px-5 py-2 text-sm">
-                            {vouchersEarned?.length > 0 ? (
-                              <div className="flex flex-col">
-                                <table className='border-separate border-spacing-y-3'>
-                                  <thead>
-                                    <tr>
-                                      <th>Referral</th>
-                                      <th>Order Status</th>
-                                      <th>Voucher Code</th>
-                                      <th>Offer</th>
-                                      <th>Valid From</th>
-                                      <th>Valid Till</th>
-                                      <th>Claimed On</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody className="">
-                                    {vouchersEarned?.map(
-                                      (voucher: any, Idx: any) => {
-                                        return (
-                                          <tr key={Idx} className="py-2 my-2">
-                                            <td className='text-center border-b-[1px] flex flex-col'>
-                                              {voucher?.refereeFirstName && voucher?.refereeLastName && (
-                                              <span>
-                                                {voucher?.refereeFirstName +" " + voucher?.refereeLastName}
-                                              </span>
-                                              )
-                                              }
-                                              <span>
-                                              {voucher?.refereeUserName}
-                                              </span>
-                                            </td>
-                                            <td className='text-center border-b-[1px]'>
-                                              {voucher?.refereeOrderStatusText}
-                                            </td>
-                                            <td className="text-center border-b-[1px]">
-                                              {voucher?.voucherCode!==''?voucher?.voucherCode:"Voucher Not Valid yet"}
-                                            </td>
-                                            <td className="text-center border-b-[1px]">
-                                              {voucher?.promoName}
-                                            </td>
-                                            <td className="text-center border-b-[1px]">
-                                              {dateConverter(
-                                                voucher?.validFrom
-                                              )}
-                                            </td>
-                                            <td className="text-center border-b-[1px]">
-                                              {dateConverter(
-                                                voucher?.validTo
-                                              )}
-                                            </td>
-                                            <td className="text-center border-b-[1px]">
-                                              {voucher?.claimedOn!=="0001-01-01T00:00:00" && dateConverter(
-                                                voucher?.claimedOn
-                                              )}
-                                              {voucher?.claimedOn==="0001-01-01T00:00:00" && (
-                                                "Not Claimed"
-                                              )
-
-                                              }
-                                            </td>
-
-                                          </tr>
-                                        )
-                                      }
-                                    )}
-                                  </tbody>
-                                </table>
+                  </div>
+                  {/* Tell them in person section */}
+                  <Disclosure defaultOpen={true}>
+                    {({ open }) => (
+                      <div className="border-b-[1px] border-gray-300 pt-2">
+                        <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
+                          <div className=" w-full flex flex-row justify-between items-center">
+                            <h2 className="text-sm text-black font-semibold capitalize">
+                              {SHARE_IN_PERSON}
+                            </h2>
+                            <span className="h-5 w-5 text-gray-500">
+                              {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                            </span>
+                          </div>
+                        </Disclosure.Button>
+                        <Transition
+                          enter="transition duration-100 ease-out"
+                          enterFrom="transform scale-95 opacity-0"
+                          enterTo="transform scale-100 opacity-100"
+                          leave="transition duration-75 ease-out"
+                          leaveFrom="transform scale-100 opacity-100"
+                          leaveTo="transform scale-95 opacity-0"
+                        >
+                          <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
+                            <div className="px-0 text-sm">
+                              {REFERRAL_CODE_INSTRUCTIONS}
+                              <div className="px-5 my-4 text-sm">
+                                Your friends Enter:
+                                <h2 className="text-black text-lg">
+                                  {referralInfo?.slug}{' '}
+                                  {/* {user?.firstName+" "+ user?.lastName} */}
+                                </h2>
                               </div>
-                            ) : (
-                              <p>{VOUCHERS_NOT_EARNED}</p>
-                            )}
+                              <div className="px-5 text-sm leading-relaxed ">
+                              {REFERRAL_INSTRUCTIONS}
+                              </div>
+                            </div>
+                          </Disclosure.Panel>
+                        </Transition>
+                      </div>
+                    )}
+                  </Disclosure>
+                  {/* Share by email section */}
+                  <Disclosure defaultOpen={false}>
+                    {({ open }) => (
+                      <div className="border-b-[1px] border-gray-300 pt-2">
+                        <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
+                          <div className=" w-full flex flex-row justify-between items-center">
+                            <h2 className="text-sm text-black font-semibold capitalize">
+                              {SHARE_BY_EMAIL}
+                            </h2>
+                            <span className="h-5 w-5 text-gray-500">
+                              {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                            </span>
                           </div>
-                        </Disclosure.Panel>
-                      </Transition>
-                    </div>
-                  )}
-                </Disclosure>
+                        </Disclosure.Button>
+                        <Transition
+                          enter="transition duration-100 ease-out"
+                          enterFrom="transform scale-95 opacity-0"
+                          enterTo="transform scale-100 opacity-100"
+                          leave="transition duration-75 ease-out"
+                          leaveFrom="transform scale-100 opacity-100"
+                          leaveTo="transform scale-95 opacity-0"
+                        >
+                          <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
+                            <div className="px-5 py-2 text-sm">
+                              <p>Share Referral by Email</p>
+                              <Link
+                                href={`mailto:?body=${referralOffers?.refereePromo}, Just use the following link: ${referralLink}&subject=Your friend has sent you a gift!`}
+                                className="font-bold"
+                                onClick={handleInviteSent}
+                              >
+                                {CLICK_TO_SHARE_BY_EMAIL}
+                              </Link>
+                            </div>
+                          </Disclosure.Panel>
+                        </Transition>
+                      </div>
+                    )}
+                  </Disclosure>
+                  {/* Vouchers Earned Section */}
+                  <Disclosure defaultOpen={false}>
+                    {({ open }) => (
+                      <div className="border-b-[1px] border-gray-300 pt-2">
+                        <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
+                          <div className=" w-full flex flex-row justify-between items-center">
+                            <h2 className="text-sm text-black font-semibold capitalize">
+                              {VOUCHERS_EARNED}
+                            </h2>
+                            <span className="h-5 w-5 text-gray-500">
+                              {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                            </span>
+                          </div>
+                        </Disclosure.Button>
+                        <Transition
+                          enter="transition duration-100 ease-out"
+                          enterFrom="transform scale-95 opacity-0"
+                          enterTo="transform scale-100 opacity-100"
+                          leave="transition duration-75 ease-out"
+                          leaveFrom="transform scale-100 opacity-100"
+                          leaveTo="transform scale-95 opacity-0"
+                        >
+                          <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
+                            <div className="px-5 py-2 text-sm">
+                              {vouchersEarned?.length > 0 ? (
+                                <div className="flex flex-col">
+                                  <table className='border-separate border-spacing-y-3'>
+                                    <thead>
+                                      <tr>
+                                        <th>Referral</th>
+                                        <th>Order Status</th>
+                                        <th>Voucher Code</th>
+                                        <th>Offer</th>
+                                        <th>Valid From</th>
+                                        <th>Valid Till</th>
+                                        <th>Claimed On</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody className="">
+                                      {vouchersEarned?.map(
+                                        (voucher: any, Idx: any) => {
+                                          return (
+                                            <tr key={Idx} className="py-2 my-2">
+                                              <td className='text-center border-b-[1px] flex flex-col'>
+                                                {voucher?.refereeFirstName && voucher?.refereeLastName && (
+                                                <span>
+                                                  {voucher?.refereeFirstName +" " + voucher?.refereeLastName}
+                                                </span>
+                                                )
+                                                }
+                                                <span>
+                                                {voucher?.refereeUserName}
+                                                </span>
+                                              </td>
+                                              <td className='text-center border-b-[1px]'>
+                                                {voucher?.refereeOrderStatusText}
+                                              </td>
+                                              <td className="text-center border-b-[1px]">
+                                                {voucher?.voucherCode!==''?voucher?.voucherCode:"Voucher Not Valid yet"}
+                                              </td>
+                                              <td className="text-center border-b-[1px]">
+                                                {voucher?.promoName}
+                                              </td>
+                                              <td className="text-center border-b-[1px]">
+                                                {dateConverter(
+                                                  voucher?.validFrom
+                                                )}
+                                              </td>
+                                              <td className="text-center border-b-[1px]">
+                                                {dateConverter(
+                                                  voucher?.validTo
+                                                )}
+                                              </td>
+                                              <td className="text-center border-b-[1px]">
+                                                {voucher?.claimedOn!=="0001-01-01T00:00:00" && dateConverter(
+                                                  voucher?.claimedOn
+                                                )}
+                                                {voucher?.claimedOn==="0001-01-01T00:00:00" && (
+                                                  "Not Claimed"
+                                                )
+
+                                                }
+                                              </td>
+
+                                            </tr>
+                                          )
+                                        }
+                                      )}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              ) : (
+                                <p>{VOUCHERS_NOT_EARNED}</p>
+                              )}
+                            </div>
+                          </Disclosure.Panel>
+                        </Transition>
+                      </div>
+                    )}
+                  </Disclosure>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
 

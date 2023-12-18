@@ -397,14 +397,14 @@ export default function CollectionPage(props: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
-        <title>{props?.name}</title>
-        <meta name="title" content={props?.name} />
+        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{props?.metaTitle || props?.name}</title>
+        <meta name="title" content={props?.metaTitle || props?.name} />
         <meta name="description" content={props?.metaDescription} />
         <meta name="keywords" content={props?.metaKeywords} />
 
         <meta property="og:image" content="" />
-        <meta property="og:title" content={props?.name} key="ogtitle" />
+        <meta property="og:title" content={props?.metaTitle || props?.name} key="ogtitle" />
         <meta
           property="og:description"
           content={props?.metaDescription}
@@ -443,15 +443,13 @@ export default function CollectionPage(props: any) {
                               passHref
                             >
                               <span style={{ paddingTop }} className="block">
-                                <Image
+                                <img
                                   src={
-                                    generateUri(imgUrl, 'fm=webp&h=530&q=50') ||
+                                    generateUri(imgUrl, 'h=1600&fm=webp&q=50') ||
                                     IMG_PLACEHOLDER
                                   }
                                   alt="Collection Banner"
-                                  layout="fill"
-                                  objectFit="contain"
-                                  className=""
+                                  className="object-contain"
                                   onLoad={({ target }) => {
                                     const { naturalWidth, naturalHeight } =
                                       target as HTMLImageElement
@@ -459,7 +457,7 @@ export default function CollectionPage(props: any) {
                                       `calc(100% / (${naturalWidth} / ${naturalHeight})`
                                     )
                                   }}
-                                ></Image>
+                                />
                               </span>
                             </Link>
                             <div className="absolute z-10 text-left bottom-3 left-4">
@@ -501,7 +499,7 @@ export default function CollectionPage(props: any) {
                       >
                         <Link legacyBehavior href={img?.link || '#'}>
                           <a>
-                            <Image src={imgUrl} alt="banner" />
+                            <img src={imgUrl} width ={1920} height={460} alt="banner" />
                           </a>
                         </Link>
                       </div>
@@ -522,7 +520,7 @@ export default function CollectionPage(props: any) {
               {props?.images?.map((img: any, idx: number) => (
                 <SwiperSlide key={`horizontal-slider-${idx}`}>
                   <Link href={img.link || '#'}>
-                    <Image
+                    <img
                       style={css}
                       width={1920}
                       height={460}

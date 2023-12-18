@@ -58,7 +58,7 @@ export default function PlainText({ textNames, heading }: any) {
           }}
         >
           <span className="text-[#212530]">Expand</span>
-          <Image
+          <img
             height={150}
             width={150}
             src="/brands/downArrow.svg"
@@ -74,7 +74,7 @@ export default function PlainText({ textNames, heading }: any) {
           }}
         >
           <span className="text-[#212530]">Collapse</span>
-          <Image
+          <img
             height={50}
             width={50}
             src="/brands/downArrow.svg"

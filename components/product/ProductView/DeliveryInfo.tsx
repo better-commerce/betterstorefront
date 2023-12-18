@@ -142,7 +142,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
                           key={`product-${rpdx}-delivery`}
                           className="flex items-center justify-start w-full gap-2 text-left"
                         >
-                          <Image
+                          <img
                             src={`/assets/images/easy-return.png`}
                             width="30"
                             height={30}
@@ -168,7 +168,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
                           key={`product-${rdx}-edd-return`}
                           className="flex items-center justify-start w-full gap-2 text-left"
                         >
-                          <Image
+                          <img
                             src={`/assets/images/exchange.png`}
                             width="25"
                             height={30}
