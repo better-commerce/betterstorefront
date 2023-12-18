@@ -7,9 +7,8 @@ import commerce from '@lib/api/commerce'
 import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
-import { GetServerSideProps } from 'next'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import {
   BTN_RECOMMENDED_PROD,
   BTN_SEE_ALL,
@@ -26,15 +25,25 @@ import getCollectionById from '@framework/api/content/getCollectionById'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-const RecommendedProductCollection = dynamic(
-  () => import('@components/brand/RecommendedProductCollection')
-)
 import ImageCollection from '@components/brand/ImageCollection'
 import ImageBanner from '@components/brand/ImageBanner'
 // const MultiBrandVideo = dynamic(
 //   () => import('@components/brand/MultiBrandVideo')
 // )
 import MultiBrandVideo from '@components/brand/MultiBrandVideo'
+import faq from '@components/brand/faqData.json'
+import SwiperCore, { Navigation } from 'swiper'
+import 'swiper/swiper.min.css'
+import 'swiper/css'
+import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import { useUI } from '@components/ui'
+import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
+import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
+
+const RecommendedProductCollection = dynamic(
+  () => import('@components/brand/RecommendedProductCollection')
+)
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
 const ProductSort = dynamic(() => import('@components/product/ProductSort'))
 const ProductGrid = dynamic(
@@ -42,13 +51,7 @@ const ProductGrid = dynamic(
 )
 const Slider = dynamic(() => import('@components/brand/Slider'))
 const Disclosure = dynamic(() => import('@components/brand/Disclosure'))
-import faq from '@components/brand/faqData.json'
-import SwiperCore, { Navigation } from 'swiper'
-import 'swiper/swiper.min.css'
-import 'swiper/css'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
-import { useUI } from '@components/ui'
-import { sanitizeHtmlContent } from 'framework/utils/app-util'
+
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -657,10 +660,15 @@ function BrandDetailPage({
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const slug = `brands/${context.query.brand[0]}`
-  const response = await getBrandBySlug(slug, context.req.cookies)
-  const infraPromise = commerce.getInfra()
+export async function getStaticProps({
+  params,
+  locale,
+  locales,
+  preview,
+}: GetStaticPropsContext<{ brand: string }>) {
+  const slug = `brands/${params!?.brand[0]}`
+  const response = await getBrandBySlug(slug, {})
+  const infraPromise: any = commerce.getInfra()
   const infra = await infraPromise
 
   const collections: any = {
@@ -752,14 +760,22 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   return {
     props: {
-      query: context.query,
-      params: context.params,
+      query: EmptyObject, //context.query,
+      params: params,
       slug: slug,
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
       collections: collections ?? [],
     }, // will be passed to the page component as props
+  }
+}
+
+export async function getStaticPaths({ locales }: GetStaticPathsContext) {
+  const paths: Array<string> = await getAllBrandsStaticPath()
+  return {
+    paths: paths?.map((x: any) => !x?.slug?.startsWith('/') ? `/${x?.slug}` : x?.slug),
+    fallback: 'blocking',
   }
 }
 
