@@ -1,5 +1,7 @@
 import { stringToBoolean } from './parse-util'
+// import { toNumber } from 'lodash'; cannot aplly toMumber from loadash as it breaks the build process ,Error :Dynamic Code Evaluation (e. g. 'eval', 'new Function', 'WebAssembly.compile') not allowed in Edge Runtime
 
+export const STATIC_PAGE_CACHE_INVALIDATION_IN_MINS =process.env.STATIC_PAGE_CACHE_INVALIDATION_IN_MINS? parseInt(process.env.STATIC_PAGE_CACHE_INVALIDATION_IN_MINS, 10) : 2
 export const STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS = 60
 export const STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS = 200
 export const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
