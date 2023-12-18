@@ -406,6 +406,8 @@ function BrandDetailPage({
     absPath = window?.location?.href
   }
 
+  const sanitizedDescription = sanitizeHtmlContent(brandDetails?.description)
+  
   return (
     <>
       <NextHead>
@@ -617,10 +619,12 @@ function BrandDetailPage({
                 Showing {data?.products?.total} {RESULTS}
               </span>
             </div>
+            {sanitizedDescription && (
             <div
-              dangerouslySetInnerHTML={{ __html:sanitizeHtmlContent(brandDetails?.description )}}
+              dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
               className="mt-2 text-black sm:mt-5"
             />
+            )}
           </div>
           <div className="flex justify-end w-full">
             <ProductSort

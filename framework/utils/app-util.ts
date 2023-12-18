@@ -9,7 +9,6 @@ export const resetSubmitData = (dispatch: any) => {
     dispatch({ type: DataSubmit.RESET_SUBMITTING })
   }
 }
-
 export const sanitizeHtmlContent = (html: any) => {
   try {
     const parser = new DOMParser()
