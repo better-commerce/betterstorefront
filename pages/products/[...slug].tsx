@@ -6,6 +6,7 @@ import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { LOADER_LOADING } from '@components/utils/textVariables'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { logError } from '@framework/utils/app-util'
 
 export async function getStaticProps({
   params,
@@ -78,8 +79,21 @@ export async function getStaticProps({
 
         pdpCachedImages = await pdpCachedImagesPromise
       }
-    } catch (imageE) {}
-  } catch (error: any) {}
+    } catch (imgError) {}
+  } catch (error: any) {
+    logError(error)
+    let errorUrl = '/500'
+    const errorData = error?.response?.data
+    if (errorData?.errorId) {
+      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+    }
+    return {
+      redirect: {
+        destination: errorUrl,
+        permanent: false,
+      },
+    }
+  }
 
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
