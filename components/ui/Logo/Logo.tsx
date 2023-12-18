@@ -18,7 +18,7 @@ const Logo = ({ className = '', ...props }) => {
   }
 
   return (
-    <Image
+    <img
       onClick={logoClick}
       src={`/theme/${CURRENT_THEME}/image/logo.png`}
       alt="BetterComerce"

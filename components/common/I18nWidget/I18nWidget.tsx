@@ -6,6 +6,8 @@ import s from './I18nWidget.module.css'
 import { Cross, ChevronUp } from '@components/icons'
 import ClickOutside from '@lib/click-outside'
 import Image from 'next/image'
+import { generateUri } from '@commerce/utils/uri-util'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 interface LOCALE_DATA {
   name: string
   img: {
@@ -51,11 +53,11 @@ const I18nWidget: FC<React.PropsWithChildren<unknown>> = () => {
           onClick={() => setDisplay(!display)}
         >
           <button className={s.button} aria-label="Language selector">
-            <Image
+            <img
               width="20"
               height="20"
               className="block w-5 mr-2"
-              src={`/${LOCALES_MAP[currentLocale].img.filename}`}
+              src={generateUri(`/${LOCALES_MAP[currentLocale].img.filename}`,'h=20&fm=webp')||IMG_PLACEHOLDER}
               alt={LOCALES_MAP[currentLocale].img.alt}
             />
             {options && (

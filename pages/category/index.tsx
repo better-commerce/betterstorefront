@@ -25,7 +25,7 @@ export default function CategoryList(props: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>Category</title>
         <meta name="title" content="Category" />
         <meta name="description" content="Category" />
@@ -60,7 +60,7 @@ export default function CategoryList(props: any) {
                           <Link key={key} href={`/${category.link}`}>
                             {category?.image ? (
                               <div className="relative overflow-hidden bg-gray-100 aspect-w-1 aspect-h-1 group-hover:bg-gray-200">
-                                <Image
+                                <img
                                   src={
                                     `${category?.image}?fm=webp&h=800&w=400` ||
                                     IMG_PLACEHOLDER
@@ -68,22 +68,19 @@ export default function CategoryList(props: any) {
                                   alt={category.name}
                                   className="object-cover object-center w-full h-auto sm:h-full aspect-[4/3]"
                                   // layout="responsive"
-                                  priority
-                                  width={600}
                                   height={900}
-                                ></Image>
+                                />
                               </div>
                             ) : (
                               <div className="relative overflow-hidden bg-gray-100 aspect-[4/3] group-hover:bg-gray-200">
-                                <Image
+                                <img
                                   src={IMG_PLACEHOLDER}
                                   alt={category.name}
                                   className="object-cover object-center w-full h-auto sm:h-full"
                                   // layout="responsive"
-                                  priority
                                   width={600}
                                   height={900}
-                                ></Image>
+                                />
                               </div>
                             )}
                             <span

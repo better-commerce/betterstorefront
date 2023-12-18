@@ -11,7 +11,7 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
-
+import NextHead from 'next/head'
 import React from 'react'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import MyDetails from '@components/account/MyDetails'
@@ -22,6 +22,7 @@ import axios from 'axios'
 import {
   NEXT_GET_ORDERS,
   NEXT_GET_ORDER_DETAILS,
+  SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import SideMenu from '@components/account/MyAccountMenu'
 
@@ -164,75 +165,114 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
   }, [displayDetailedOrder])
 
   return (
-    <section className="relative pb-10 text-gray-900">
-      <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
-        {!isShowDetailedOrder && (
-          <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-            <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
-              <Link
-                className="mx-2 leading-none mt-1 align-middle"
-                href="/my-account"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-arrow-left"
-                  viewBox="0 0 16 16"
+    <>
+      <NextHead>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <title>{currentOption}</title>
+        <meta name="title" content={currentOption} />
+        <meta name="description" content={currentOption} />
+        <meta name="keywords" content={currentOption} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={currentOption} key="ogtitle" />
+        <meta property="og:description" content={currentOption} key="ogdesc" />
+      </NextHead>
+      <section className="relative pb-10 text-gray-900">
+        <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
+          {!isShowDetailedOrder && (
+            <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
+              <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
+                <Link
+                  className="mx-2 leading-none mt-1 align-middle"
+                  href="/my-account"
                 >
-                  {' '}
-                  <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
-                </svg>
-              </Link>
-              <span className="leading-none">My Orders</span>
-            </h3>
-          </div>
-        )}
-        <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-          {/* <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
-            <div className="sticky left-0 z-10 flex flex-col top-36">
-              {config.map((item: any, idx: number) => (
-                <>
-                  <div
-                    key={`my-acc-${idx}`}
-                    // href="#"
-                    className={`hover:bg-white hover:text-indigo-600 border border-transparent text-md leading-3 font-medium text-gray-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"}`}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-arrow-left"
+                    viewBox="0 0 16 16"
                   >
-                    <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
-                      <i
-                        className={
-                          item.text.toLowerCase() + ' ' + 'sprite-icon'
-                        }
-                      ></i>
-                    </span>
+                    {' '}
+                    <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
+                  </svg>
+                </Link>
+                <span className="leading-none">My Orders</span>
+              </h3>
+            </div>
+          )}
+          <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
+            {/* <div className="col-span-3 border-r border-gray-200 md:pl-2 sm:pl-2 tab-list-sm sm:pt-10 mob-hidden">
+              <div className="sticky left-0 z-10 flex flex-col top-36">
+                {config.map((item: any, idx: number) => (
+                  <>
+                    <div
+                      key={`my-acc-${idx}`}
+                      // href="#"
+                      className={`hover:bg-white hover:text-indigo-600 border border-transparent text-md leading-3 font-medium text-gray-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"}`}
+                    >
+                      <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
+                        <i
+                          className={
+                            item.text.toLowerCase() + ' ' + 'sprite-icon'
+                          }
+                        ></i>
+                      </span>
 
-                    {item.text == 'My Orders' ? (
-                      <>
-                        <div
-                          key={`my-acc-${idx}`}
-                          className={`relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${
-                            item.text == 'My Orders'
-                              ? 'bg-gray-200 text-black font-semibold border-l-4 sm:border-b-0 sm:border-l-4 sm:border-black opacity-full'
-                              : 'font-medium'
-                          }`}
-                        >
-                          <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
-                            <i
-                              className={
-                                item.text.toLowerCase() + ' ' + 'sprite-icon'
-                              }
-                            ></i>
-                          </span>
+                      {item.text == 'My Orders' ? (
+                        <>
+                          <div
+                            key={`my-acc-${idx}`}
+                            className={`relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${
+                              item.text == 'My Orders'
+                                ? 'bg-gray-200 text-black font-semibold border-l-4 sm:border-b-0 sm:border-l-4 sm:border-black opacity-full'
+                                : 'font-medium'
+                            }`}
+                          >
+                            <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
+                              <i
+                                className={
+                                  item.text.toLowerCase() + ' ' + 'sprite-icon'
+                                }
+                              ></i>
+                            </span>
+                            <Link
+                              shallow={true}
+                              href={item.href}
+                              passHref
+                              onClick={() => {
+                                handleClick
+                                setShow(false)
+                              }}
+                              className="inline-block w-full h-full py-4 text-sm text-primary"
+                            >
+                              <span className="inline-block text-black sm:hidden dark:text-black">
+                                {item.mtext}
+                              </span>
+                              <span
+                                className={`hidden sm:inline-block text-black dark:text-black ${
+                                  item.text == 'My Orders' && 'font-display'
+                                }`}
+                              >
+                                {item.text}
+                              </span>
+                            </Link>
+                          </div>
+                        </>
+                      ) : (
+                        <>
                           <Link
                             shallow={true}
                             href={item.href}
                             passHref
                             onClick={() => {
                               handleClick
-                              setShow(false)
                             }}
-                            className="inline-block w-full h-full py-4 text-sm text-primary"
+                            className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
                           >
                             <span className="inline-block text-black sm:hidden dark:text-black">
                               {item.mtext}
@@ -245,60 +285,37 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
                               {item.text}
                             </span>
                           </Link>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <Link
-                          shallow={true}
-                          href={item.href}
-                          passHref
-                          onClick={() => {
-                            handleClick
-                          }}
-                          className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
-                        >
-                          <span className="inline-block text-black sm:hidden dark:text-black">
-                            {item.mtext}
-                          </span>
-                          <span
-                            className={`hidden sm:inline-block text-black dark:text-black ${
-                              item.text == 'My Orders' && 'font-display'
-                            }`}
-                          >
-                            {item.text}
-                          </span>
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                </>
-              ))}
-            </div>
-          </div> */}
-          <SideMenu
-            handleClick={handleClick}
-            setShow={setShow}
-            currentOption={currentOption}
-          />
-          <div
-            className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
-              isShow ? `` : ''
-            }`}
-          >
-            <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-              <MyOrders
-                allOrders={allOrders}
-                handleInfiniteScroll={handleInfiniteScroll}
-                deviceInfo={deviceInfo}
-                isShowDetailedOrder={isShowDetailedOrder}
-                setIsShowDetailedOrder={setIsShowDetailedOrder}
-              />
+                        </>
+                      )}
+                    </div>
+                  </>
+                ))}
+              </div>
+            </div> */}
+            <SideMenu
+              handleClick={handleClick}
+              setShow={setShow}
+              currentOption={currentOption}
+            />
+            <div
+              className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
+                isShow ? `` : ''
+              }`}
+            >
+              <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
+                <MyOrders
+                  allOrders={allOrders}
+                  handleInfiniteScroll={handleInfiniteScroll}
+                  deviceInfo={deviceInfo}
+                  isShowDetailedOrder={isShowDetailedOrder}
+                  setIsShowDetailedOrder={setIsShowDetailedOrder}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
 

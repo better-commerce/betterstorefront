@@ -493,8 +493,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         />
         <link
           rel="canonical"
-          id="canonical"
-          href="https://demostore.bettercommerce.io/cart"
+          href={SITE_ORIGIN_URL + router.asPath}
         />
         <title>Basket</title>
         <meta name="title" content="Basket" />
@@ -529,7 +528,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                     className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3"
                   >
                     <div className="flex-shrink-0">
-                      <Image
+                      <img
                         style={css}
                         width={140}
                         height={180}
@@ -800,7 +799,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                             className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3"
                           >
                             <div className="flex-shrink-0">
-                              <Image
+                              <img
                                 style={css}
                                 width={140}
                                 height={180}
@@ -1202,7 +1201,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                           </div>
                         )}
                         <div className="flex w-full">
-                          <Image
+                          <img
                           src={'/assets/images/refer-a-friend.jpg'}
                           alt='banner'
                           height={700}

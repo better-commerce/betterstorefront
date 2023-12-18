@@ -177,8 +177,8 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
       {readOnly ? (
         <>
           <div className="mb-2 mob-engrav-img iphoneXR:p-1 s20:p-2">
-            <Image
-              src={imageUrl || ''}
+            <img
+              src={generateUri(imageUrl,'h=180&w=200') || ''}
               width={200}
               height={180}
               alt={product.name}
@@ -228,7 +228,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                         )}
                         key={valId}
                       >
-                        <Image
+                        <img
                           src={
                             generateUri(val.image, 'h=500&fm=webp') ||
                             IMG_PLACEHOLDER
@@ -252,7 +252,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                 </Swiper>
               </div>
             ) : (
-              <Image
+              <img
                 src={
                   generateUri(product.images[0].image, 'h=500&fm=webp') ||
                   IMG_PLACEHOLDER

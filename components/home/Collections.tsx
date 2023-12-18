@@ -19,7 +19,7 @@ export default function Collections({ data }: any) {
               passHref
               legacyBehavior
             >
-              <Image
+              <img
                 src={
                   generateUri(
                     collection?.collectionlist_image,

@@ -459,7 +459,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                   key={crdx}
                 >
                   <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
-                    <Image
+                    <img
                       className="w-auto"
                       src="/assets/icons/more-offer-icon.svg"
                       alt=""
@@ -483,7 +483,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     key={`promo-sec-${crdx}`}
                   >
                     <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
-                      <Image
+                      <img
                         className="w-auto"
                         src="/assets/icons/more-offer-icon.svg"
                         alt=""

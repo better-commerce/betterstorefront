@@ -342,7 +342,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
         <title>{GENERAL_CATALOG}</title>
         <meta name="title" content={GENERAL_CATALOG} />
         <meta name="description" content={GENERAL_CATALOG} />

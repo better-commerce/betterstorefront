@@ -282,7 +282,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     switch (parsed) {
       case true:
         return (
-          <Image
+          <img
             alt="check_circle"
             width={36}
             height={36}
@@ -291,7 +291,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         )
       case false:
         return (
-          <Image
+          <img
             alt="cross_icon"
             width={36}
             height={36}
@@ -317,9 +317,8 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             onMouseLeave={(ev: any) => handleHover(ev, 'leave')}
             title={`${product.name} \t ${itemPrice}`}
           >
-            <Image
+            <img
               id={`${product?.productId ?? product?.recordId}-1`}
-              priority
               src={
                 generateUri(currentProductData.image, 'h=250&fm=webp') ||
                 IMG_PLACEHOLDER
@@ -331,9 +330,8 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               height={500}
             />
             {product?.images?.length > 1 && (
-              <Image
+              <img
                 id={`${product?.productId ?? product?.recordId}-2`}
-                priority
                 src={
                   generateUri(product?.images[1]?.image, 'h=500&fm=webp') ||
                   IMG_PLACEHOLDER

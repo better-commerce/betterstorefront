@@ -48,6 +48,7 @@ import 'swiper/swiper.min.css'
 import 'swiper/css'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -335,7 +336,7 @@ function BrandDetailPage({
   }, [])
 
   useEffect(() => {
-    const Widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
+    const Widgets = JSON.parse(brandDetails?.widgetsConfig || '[]')
     Widgets.map((val: any) => {
       if (val.manufacturerSettingType == 'Video' && val.code == 'BrandVideo') {
         setManufacturerStateVideoHeading(val.heading)
@@ -412,13 +413,14 @@ function BrandDetailPage({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
-        <title>{brandDetails?.name || 'Brands'}</title>
+        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
+        <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
         <meta name="title" content={brandDetails?.name || 'Brands'} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={brandDetails?.name} key="ogtitle" />
+        <meta property="og:title" content={brandDetails?.metaTitle || brandDetails?.name} key="ogtitle" />
         <meta
           property="og:description"
           content={brandDetails?.metaDescription}
@@ -436,7 +438,7 @@ function BrandDetailPage({
           <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 2xl:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
               <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
-                <Image
+                <img
                   alt="Brand Logo"
                   src={
                     brandDetails.images.length !== 0
@@ -446,12 +448,11 @@ function BrandDetailPage({
                   width={212}
                   height={200}
                   loading="eager"
-                  priority
                   className="w-[120px] md:w-[212px] h-auto"
                 />
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: brandDetails?.description,
+                    __html: sanitizeHtmlContent(brandDetails?.description),
                   }}
                   className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5"
                 />
@@ -617,7 +618,7 @@ function BrandDetailPage({
               </span>
             </div>
             <div
-              dangerouslySetInnerHTML={{ __html: brandDetails?.description }}
+              dangerouslySetInnerHTML={{ __html:sanitizeHtmlContent(brandDetails?.description )}}
               className="mt-2 text-black sm:mt-5"
             />
           </div>

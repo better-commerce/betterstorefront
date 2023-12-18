@@ -79,7 +79,7 @@ const DefaultButton: FC<Props> = ({
           <LoadingDots /> :
           <>
             <span className="relative pr-1 top-1">
-              <Image src="/assets/icons/add-to-bag.svg" alt="" width={20} height={20} layout="fixed" className="relative pr-2 right-2 top-1" />
+              <img src="/assets/icons/add-to-bag.svg" alt="" width={20} height={20} className="relative pr-2 right-2 top-1" />
             </span>
             <span>{title}</span>
           </>

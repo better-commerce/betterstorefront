@@ -126,7 +126,7 @@ export default function Search(props: any) {
                     <div className="relative overflow-hidden bg-gray-200 rounded-lg aspect-w-1 aspect-h-1 group-hover:opacity-75">
                       <div className="image-container">
                         {product.image && (
-                          <Image
+                          <img
                             src={
                               generateUri(
                                 product.image,
@@ -139,7 +139,7 @@ export default function Search(props: any) {
                             style={css}
                             sizes="50vw"
                             className="object-cover object-center w-full h-48 sm:h-72 image"
-                          ></Image>
+                          />
                         )}
                       </div>
                     </div>

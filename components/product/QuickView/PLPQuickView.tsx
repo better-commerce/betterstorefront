@@ -627,8 +627,7 @@ export default function PLPQuickView({
                                             <div className="relative group">
                                               {image?.image ? (
                                                 <div className="image-container">
-                                                  <Image
-                                                    priority
+                                                  <img
                                                     src={
                                                       generateUri(
                                                         image?.image,
@@ -637,13 +636,9 @@ export default function PLPQuickView({
                                                     }
                                                     alt={image.name}
                                                     className="object-cover object-center w-full h-full image"
-                                                    fill
-                                                    // sizes="320 600 1000"
-                                                    blurDataURL={
-                                                      `${image?.image}?h=600&w=400&fm=webp` ||
-                                                      IMG_PLACEHOLDER
-                                                    }
+                                                    
                                                   />
+                                                  
                                                 </div>
                                               ) : (
                                                 <></>

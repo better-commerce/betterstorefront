@@ -16,6 +16,7 @@ import CncInput from './CheckoutForm/CncInput'
 import CncList from './CheckoutForm/CncList'
 import Delivery from './CheckoutForm/Delivery'
 import DeliveryOptions from './DeliveryOptions'
+import { generateUri } from '@commerce/utils/uri-util'
 
 function SplitDelivery({
   splitDeliveryItems = null,
@@ -95,14 +96,13 @@ function SplitDelivery({
                               href={`/${product.slug}`}
                               className="inline-block font-medium text-gray-700 hover:text-gray-800 hover:underline"
                             >
-                              <Image
-                                layout="fixed"
+                              <img
                                 width={40}
                                 height={60}
-                                src={`${product.image}` || IMG_PLACEHOLDER}
+                                src={generateUri(`${product.image}`,'h=60&fm=webp') || IMG_PLACEHOLDER}
                                 alt={product.name}
                                 className="object-cover w-full h-full"
-                              ></Image>
+                              />
                             </Link>
                           </div>
 

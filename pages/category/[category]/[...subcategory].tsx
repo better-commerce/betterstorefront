@@ -21,6 +21,8 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
@@ -352,13 +354,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
-        <title>{category?.name || 'Category'}</title>
-        <meta name="title" content={category?.name || 'Category'} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{category?.metaTitle || category?.name}</title>
+        <meta name="title" content={category?.metaTitle || category?.name} />
         <meta name="description" content={category?.metaDescription} />
         <meta name="keywords" content={category?.metaKeywords} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={category?.name} key="ogtitle" />
+        <meta property="og:title" content={category?.metaTitle || category?.name} key="ogtitle" />
         <meta
           property="og:description"
           content={category?.metaDescription}
@@ -382,7 +384,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           <h1>{category?.name}</h1>
           <div
             className="font-18"
-            dangerouslySetInnerHTML={{ __html: category?.description }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }}
           ></div>
         </div>
         {/* Category info section End */}
@@ -408,7 +410,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     </div>
                   </div>
                   <div className="order-1 sm:order-2">
-                    <Image
+                    <img
                       src={
                         generateUri(cat?.url, 'h=700&fm=webp') ||
                         IMG_PLACEHOLDER
@@ -523,3 +525,5 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
 }
 
 export default withDataLayer(CategoryPage, PAGE_TYPE)
+
+

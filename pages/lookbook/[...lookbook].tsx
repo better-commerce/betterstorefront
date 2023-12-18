@@ -98,7 +98,7 @@ function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
     <div className="flex flex-col items-center w-full px-4 py-0 pb-24 mx-auto text-left bg-white sm:px-0 lg:px-0">
       <div className="w-full overflow-hidden bg-gray-200 rounded-sm">
         <div className="image-container lookbook-image">
-          <Image
+          <img
             style={css}
             width={1000}
             height={400}

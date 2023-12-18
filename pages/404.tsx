@@ -1,7 +1,10 @@
 import type { GetStaticPropsContext } from 'next'
+import NextHead from 'next/head'
 import commerce from '@lib/api/commerce'
 import LayoutError from '../components/common/Layout/LayoutError'
 import Link from 'next/link'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { useRouter } from 'next/router'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 
 export async function getStaticProps({
@@ -23,11 +26,26 @@ export async function getStaticProps({
 }
 
 export default function NotFound({ deviceInfo }: any) {
-  const { isMobile } = deviceInfo
+  const router = useRouter()
+  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   return (
     <>
       {!isMobile && (
         <>
+          <NextHead>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1, maximum-scale=1"
+            />
+            <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+            <title>404 Error</title>
+            <meta name="title" content="404 Error" />
+            <meta name="description" content="404 Error" />
+            <meta name="keywords" content="404 Error" />
+            <meta property="og:image" content="" />
+            <meta property="og:title" content="404 Error" key="ogtitle" />
+            <meta property="og:description" content="404 Error" key="ogdesc" />
+          </NextHead>
           <div className="w-full py-14 p-5">
             <div className="error-container">
               <div className="error-text-section w-full text-center mb-8 mt-24">
