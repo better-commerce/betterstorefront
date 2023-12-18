@@ -30,7 +30,8 @@ import {
   SITE_ORIGIN_URL,
   NEXT_GET_CATALOG_PRODUCTS,
   NEXT_GET_ORDER_RELATED_PRODUCTS,
-  NEXT_COMPARE_ATTRIBUTE
+  NEXT_COMPARE_ATTRIBUTE,
+  QuantityBreakRule,
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -68,7 +69,7 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
-import { matchStrings, stringFormat } from '@framework/utils/parse-util'
+import { priceFormat, roundToDecimalPlaces,matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import {
   getCurrentPage,
@@ -97,6 +98,7 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup'))
 const AvailableOffers = dynamic(() => import('@components/product/ProductView/AvailableOffers'))
 const ReviewInput = dynamic(() => import('@components/product/Reviews/ReviewInput'))
+const QuantityBreak = dynamic(() => import('@components/product/ProductView/QuantiyBreak'))
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -987,7 +989,9 @@ export default function ProductView({
                 </p>
               ) : null}
             </div>
-
+            {product?.quantityBreakRules?.length > 0 &&
+              <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} />
+            }
             <AttributesHandler
               product={product}
               variant={selectedAttrData}

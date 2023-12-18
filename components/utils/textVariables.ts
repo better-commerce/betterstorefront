@@ -411,3 +411,7 @@ export const GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT = 'Include out of stock produc
 export const GENERAL_PROMOCODE = 'Promo Code'
 export const GENERAL_QUOTE_SUMMARY = 'Quote summary'
 export const RELATED_PRODUCT_WITHGROUP_TEXT = 'Related Products'
+export const QUANTITY_BREAK_SAVE = 'Buy More and Save'
+export const QUANTITY_BREAK_QTY = 'Qty'
+export const QUANTITY_BREAK_PRICE = 'Price Per Item'
+export const QUANTITY_BREAK_SAVINGS = 'Saving'
