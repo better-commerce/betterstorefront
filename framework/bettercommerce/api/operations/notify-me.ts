@@ -5,7 +5,7 @@ export default function notifyUser() {
     const { email, productId, cookies } = query
     try {
       const response: any = await fetcher({
-        url: `${PRODUCT_API_ENDPOINT}${productId}/notifyme?email=email`,
+        url: `${PRODUCT_API_ENDPOINT}${productId}/notifyme?email=${email}`,
         method: 'post',
         cookies,
         data: {
