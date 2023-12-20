@@ -19,6 +19,9 @@ export class AccountPaymentButton extends BasePaymentButton {
     this.state = {
       isPaymentInitiated: false,
       paymentMethod: super.getPaymentMethod(props?.paymentMethod),
+      availableCredit: 0,
+      creditLimit: 0,
+      orderTotal: props?.basketOrderInfo?.basket?.grandTotal?.raw?.withTax,
     }
   }
 
@@ -125,8 +128,17 @@ export class AccountPaymentButton extends BasePaymentButton {
    * Called immediately after a component is mounted.
    */
   public componentDidMount(): void {
+    const that = this
     const { uiContext, dispatchState }: any = this.props
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
+    getB2BCompanyDetails(PaymentMethodType.ACCOUNT_CREDIT, { userId: uiContext?.user?.userId, })
+    .then(({ errors = [], message, messageCode, result: b2bCompanyDetails, }: any) => {
+      const { creditLimit, creditAvailable } = b2bCompanyDetails
+      that.setState({
+        creditLimit: creditLimit?.raw?.withTax,
+        availableCredit: creditAvailable?.raw?.withTax
+      })
+    })
   }
 
   /**
@@ -136,6 +148,7 @@ export class AccountPaymentButton extends BasePaymentButton {
   public render() {
     const that = this
     const { uiContext }: any = this.props
+    const orderTotalGrThAvailableCredit = (this?.state?.orderTotal > this?.state?.availableCredit)
 
     return (
       <>
@@ -165,6 +178,7 @@ export class AccountPaymentButton extends BasePaymentButton {
 
           {this.baseRender({
             ...this?.props,
+            disabled: (orderTotalGrThAvailableCredit || this?.state?.creditLimit === 0 || this?.state?.availableCredit === 0),
             ...{
               onPay: (
                 paymentMethod: any,
