@@ -45,7 +45,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
       <li className='flex items-center text-10-mob sm:text-sm'>
         <Link href="/" passHref>
           <span
-            className="font-normal hover:text-gray-900"
+            className="font-normal hover:text-gray-900 dark:text-black"
           >
             Home
           </span>
@@ -53,7 +53,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
       </li>
       <li className='flex items-center text-10-mob sm:text-sm'>
         <span
-          className="font-normal hover:text-gray-900 mx-1 inline-block"
+          className="font-normal hover:text-gray-900 mx-1 inline-block dark:text-black"
         >
           <ChevronRightIcon className='h-3 w-3'></ChevronRightIcon>
         </span>

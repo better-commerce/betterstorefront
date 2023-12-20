@@ -45,7 +45,7 @@ export default function AvailableOffers({ currency, offers, key }: any) {
         <div className="grid w-full grid-cols-12 px-0 sm:grid-cols-6 sm:px-0 mob-promo-grid">
           <div className="col-span-7 sm:col-span-3 mob-left-7">
             <h2 className="font-semibold font-16 text-16 dark:text-black">
-              <span className="font-medium opacity_056 text-primary">
+              <span className="font-medium opacity_056 text-primary dark:text-black">
                 BEST PRICE:{' '}
               </span>
               <span className="inline-block pl-1 text-sm text-black">

@@ -360,7 +360,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           <h1 className="inline-block pl-4 font-semibold tracking-tight text-black sm:px-0">
             {GENERAL_CATALOG}
           </h1>
-          <span className="inline-block ml-2 text-sm font-medium sm:px-0">
+          <span className="inline-block ml-2 text-sm font-medium sm:px-0 dark:text-black">
             Showing {data.products.total} Results for
           </span>
         </div>
