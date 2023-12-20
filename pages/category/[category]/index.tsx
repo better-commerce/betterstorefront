@@ -402,7 +402,7 @@ function CategoryLandingPage({
           )}
         </div>
         <div className="container px-4 mx-auto my-0 mt-4 bg-transparent sm:px-6 lg:px-6 2xl:px-0">
-          <h1>{category?.name}</h1>
+          <h1 className='dark:text-black'>{category?.name}</h1>
           <div
             className="font-18"
             dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }}

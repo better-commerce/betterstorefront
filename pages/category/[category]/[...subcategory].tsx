@@ -381,9 +381,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
 
         {/* Category info section start */}
         <div className="px-4 mx-auto my-6 mt-4 bg-transparent md:w-4/5 sm:px-4">
-          <h1>{category?.name}</h1>
+          <h1 className='dark:text-black'>{category?.name}</h1>
           <div
-            className="font-18"
+            className="font-18 dark:text-black"
             dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }}
           ></div>
         </div>

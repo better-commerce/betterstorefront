@@ -539,10 +539,10 @@ export default function CollectionPage(props: any) {
         <div
           className={`sticky w-full py-4 mx-auto bg-white top-108 px-0 sm:px-0 md:px-0 2xl:px-0 sm:py-4 ${cls}`}
         >
-          <h1 className="inline-block capitalize text-primary dark:text-primary">
+          <h1 className="inline-block capitalize text-primary dark:text-black">
             {props?.name}
           </h1>
-          <span className="pl-2 mt-0 text-xs font-semibold text-black dark:text-white text-14 sm:h-6">
+          <span className="pl-2 mt-0 text-xs font-semibold text-black text-14 sm:h-6 dark:text-black">
             {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} results`}
           </span>
           <h2>{props?.description}</h2>

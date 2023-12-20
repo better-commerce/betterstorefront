@@ -956,7 +956,7 @@ export default function ProductView({
                     ({reviews?.review?.ratingAverage})
                   </p>
                 ) : (
-                  <p className="pl-1 my-auto text-xs font-bold">(0)</p>
+                  <p className="pl-1 my-auto text-xs font-bold dark:text-black">(0)</p>
                 )}
               </div>
             </div>
