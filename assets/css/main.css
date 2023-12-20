@@ -1568,3 +1568,38 @@ br {
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
 }
 }
+.mob-promo-banner {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.mob-promo-banner .promotion-banner {
+  line-height: 1;
+  overflow: hidden;
+  position: absolute;
+  display: flex;
+  white-space: nowrap;
+  min-width: 80vh;
+}
+@media screen and (max-width: 767px) {
+  .mob-promo-banner:has(.promotion-banner.mob-marquee:empty),
+  .promo-banner-inactive .mob-promo-banner {
+    display: none;
+  }
+  .promo-banner-inactive.promo-banner-active .mob-promo-banner {
+    display: flex;
+  }
+  #header-mob:has(.promotion-banner.mob-marquee:empty),
+  .promo-banner-inactive #header-mob {
+    padding-top: 54px !important;
+  }
+  .promo-banner-inactive.promo-banner-active #header-mob {
+    padding-top: 152px !important;
+  }
+  .promo-banner-inactive .mob-nav-pos-55 {
+    top: 54px;
+  }
+  .promo-banner-inactive.promo-banner-active .mob-nav-pos-55 {
+    top: 91px;
+  }
+}
