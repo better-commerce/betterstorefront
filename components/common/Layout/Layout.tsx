@@ -61,6 +61,7 @@ interface Props {
     pages?: Page[]
     categories: Category[]
     navTree?: any
+    reviewData: any
   }
   nav: []
   footer: []
@@ -143,7 +144,7 @@ export interface IExtraProps {
 const Layout: FC<Props & IExtraProps> = ({
   children,
   config,
-  pageProps: { categories = [], navTree, ...pageProps },
+  pageProps: { categories = [], navTree, reviewData = {}, ...pageProps },
   keywords,
   isLocationLoaded,
   deviceInfo,

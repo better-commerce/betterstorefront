@@ -34,6 +34,7 @@ export const B2B_COMPANY_USERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/co
 export const B2B_USER_QUOTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
 export const AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/authenticate`
 export const SOCIAL_AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/social-login`
+export const REVIEW_SERVICE_BASE_API = `${process.env.BETTERCOMMERCE_REVIEW_BASE_URL}/api/v1/service`
 export const CUSTOMER_BASE_API = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/`
 export const CUSTOMER_NEWSLETTER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/newsletter/subscribe`
 export const ORDERS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/order/`
@@ -113,6 +114,7 @@ export const NEXT_CANCEL_ORDER = `/api/order/cancel`
 export const NEXT_CANCEL_ORDER_LINE = `/api/order/cancel-order-line`
 export const NEXT_RETURN_REASON = `/api/return-reason`
 
+export const NEXT_GET_REVIEW_SUMMARY = `/api/reviews/get-review-summary`
 export const NEXT_CREATE_REVIEW = `/api/create-review`
 export const NEXT_GET_NAVIGATION = `/api/get-navigation`
 export const NEXT_GET_PRODUCT_PROMOS = '/api/catalog/get-product-promos'
@@ -394,7 +396,6 @@ export module PageActions {
     ADD_TO_CART = 1,
   }
 }
-
 export const ALERT_TIMER = 5000
 
 export const DATE_FORMAT = 'DD-MMM-yy'

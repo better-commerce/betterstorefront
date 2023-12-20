@@ -87,14 +87,14 @@ function Checkout({ cart, config, location }: any) {
       setSplitDeliveryItems(deliveryPlans)
     }
     splitDeliveryExtract()
+    if (user?.userId) {
+      fetchAddress()
+    }
   },[])
 
 
   useEffect(() => {
     setIsLoggedIn(Boolean(user?.userId || guestUser?.userId || false))
-    if (user?.userId) {
-      fetchAddress()
-    }
   }, [user, cartItems, guestUser])
 
   useEffect(() => {
@@ -126,10 +126,10 @@ function Checkout({ cart, config, location }: any) {
   const fetchAddress = async () => {
     let userId =
       cartItems?.userId === Guid.empty ? user?.userId : cartItems?.userId
-    if (!userId) return
+    if (!userId || (userId && userId === Guid.empty)) return
     try {
       const response: any = await getAddress(userId)
-      setUserAddresses(response)
+      setUserAddresses(response || [])
       return response
     } catch (error) {
       // console.log(error, 'err')

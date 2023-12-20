@@ -652,8 +652,15 @@ export default function CheckoutForm({
   }
 
   const loadAddressIDs = async (): Promise<Array<any>> => {
-    const response = await getAddress(getUserId())
-    return response
+    const userId = getUserId()
+    if (userId && userId !== Guid.empty) {
+      let userAddresses = addresses
+      if (userAddresses?.length < 1) {
+        userAddresses = await getAddress(userId)
+      }
+      return userAddresses
+    }
+    return []
   }
 
   const lookupAddressId = async (addressInfo: any, addresses?: Array<any>) => {
