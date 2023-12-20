@@ -11,7 +11,7 @@ import 'swiper/css/bundle'
 import jwt from 'jsonwebtoken'
 import Cookies from 'js-cookie'
 import { v4 as uuid_v4 } from 'uuid'
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
@@ -25,7 +25,7 @@ import { ContentSnippet } from '@components/common/Content'
 import NextHead from 'next/head'
 import qs from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
-import { AUTH_URL, CLIENT_ID, Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, SHARED_SECRET } from '@framework/utils/constants'
+import { AUTH_URL, CLIENT_ID, Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, REVIEW_BASE_URL, SHARED_SECRET } from '@framework/utils/constants'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { DeviceType } from '@commerce/utils/use-device'
 import InitDeviceInfo from '@components/common/InitDeviceInfo'
@@ -36,10 +36,11 @@ import { cachedGetData } from '@framework/api/utils/cached-fetch'
 import { AppContext, AppInitialProps } from 'next/app'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
+import { logError, maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import CustomerReferral from '@components/customer/Referral'
+import fetcher from '@framework/fetcher'
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
@@ -513,11 +514,25 @@ MyApp.getInitialProps = async (
     appConfig = encrypt(JSON.stringify(appConfigObj))
   }
 
+  let reviewData: any = EmptyObject
+  try {
+    const res: any = await fetcher({
+      baseUrl: REVIEW_BASE_URL,
+      url: `${REVIEW_SERVICE_BASE_API}/summary`,
+      method: 'post',
+      cookies: {},
+    })
+    reviewData = res?.Result
+  } catch (error: any) {
+    logError(error)
+  }
+
   return {
     pageProps: {
       appConfig: appConfig,
       navTree: navTreeResult,
       clientIPAddress: clientIPAddress,
+      reviewData: reviewData,
     },
   }
 }
