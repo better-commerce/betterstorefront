@@ -222,7 +222,7 @@ export default function Summary({
                                 PERSONALIZATION = val.name
                               }
                             })}
-                            <div className="flex-shrink-0">
+                            <div className="flex-shrink-0 w-32 sm:w-0">
                               <Link href={`/${product.slug}`}>
                                 <img
                                   width={80}
@@ -242,7 +242,7 @@ export default function Summary({
                                       href={`/${product.slug}`}
                                       className="inline-block font-bold text-gray-900 uppercase hover:text-gray-800 hover:underline"
                                     >
-                                      <p>{product?.name}</p>
+                                      <p className='break-words'>{product?.name}</p>
                                     </Link>
                                     <p className="inline-block text-sm font-medium text-gray-900">
                                       {isIncludeVAT

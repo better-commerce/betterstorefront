@@ -578,7 +578,7 @@ export default function PLPQuickView({
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <div className="w-screen max-w-xl p-2">
+                <div className="w-screen max-w-xl p-2 quickview-screen">
                   <div className="flex flex-col h-full shadow-xl bg-gray-50">
                     <div className="flex-1 px-0">
                       <div className="relative py-2 mt-2 sm:px-0">
@@ -590,8 +590,8 @@ export default function PLPQuickView({
                           <span className="sr-only">{CLOSE_PANEL}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
-                        <div className="grid grid-cols-1 sm:grid-cols-12">
-                          <div className="sm:col-span-5 md:col-span-5 lg:col-span-7">
+                        <div className="grid grid-cols-1 lg:grid-cols-12">
+                          <div className="lg:col-span-7">
                             <div className="flex flex-col px-4 sm:px-6 sm:pb-3">
                               <Swiper
                                 slidesPerView={1}
@@ -653,7 +653,7 @@ export default function PLPQuickView({
                               </Swiper>
                             </div>
                           </div>
-                          <div className="sm:col-span-7 md:col-span-7 lg:col-span-5">
+                          <div className="lg:col-span-5">
                             <div className="flex flex-col px-4 my-1 sm:px-6">
                               <h4 className="text-xs font-normal text-gray-400">
                                 {productData?.classification?.category}

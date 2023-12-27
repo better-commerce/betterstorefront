@@ -54,7 +54,7 @@ const FilterItem = ({
 
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div key={`option-right-value-${option.value}-${optionIdx}`} className="flex items-center pt-2">
+    <div key={`option-right-value-${option.value}-${optionIdx}`} className="flex items-center pt-4">
       <input
         name={`${optionIdx}-input[]`}
         defaultValue={option.value}
@@ -199,7 +199,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className="pb-5 mt-2 border-b border-gray-200 max-panel">
+      <div className="pb-5 mt-2 border-b border-gray-200">
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (

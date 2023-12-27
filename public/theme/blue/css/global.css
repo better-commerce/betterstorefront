@@ -680,11 +680,11 @@ p {
   color: var(--btn-text-color-secondary);
 }
 
-.min-cls-h {
+/* .min-cls-h {
   min-height: 440px;
-}
+} */
 
-@media screen and (max-width:767px) {
+@media screen and (min-width:767px) {
   .min-cls-h {
     min-height: 470px;
   }

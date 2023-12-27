@@ -96,7 +96,7 @@ export default function Wishlist() {
       {/* Mobile menu */}
 
       <main className="lg:px-8">
-        <div className="max-w-4xl lg:mx-12">
+        <div className="max-w-4xl lg:mx-12 sm:px-6">
           <div className="lg:px-0 sm:px-0 pt-5">
             <h1 className="font-extrabold tracking-tight text-gray-900">
               {/* {WISHLIST_TITLE} */}
