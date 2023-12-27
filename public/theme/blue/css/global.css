@@ -815,6 +815,11 @@ p {
   outline-color: var(--outline-color-red);
 }
 
+.mob-padding-container{
+  padding-left:15px !important;
+  padding-right:15px !important;
+}
+
 @media screen and (max-width:900px) {
   .text-10-mob {
     font-size: 10px !important;
