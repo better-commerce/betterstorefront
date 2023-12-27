@@ -36,7 +36,7 @@ import { cachedGetData } from '@framework/api/utils/cached-fetch'
 import { AppContext, AppInitialProps } from 'next/app'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
-import { logError, maxBasketItemsCount } from '@framework/utils/app-util'
+import {  backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import CustomerReferral from '@components/customer/Referral'
@@ -73,6 +73,13 @@ const setDeviceIdCookie = () => {
     DataLayerInstance.setItemInDataLayer(DeviceIdKey, Cookies.get(DeviceIdKey))
   }
 }
+
+export const SCROLLABLE_LOCATIONS = [
+  '/collection/',
+  '/brands/',
+  '/category/',
+  '/kit/'
+]
 
 function MyApp({
   Component,
@@ -153,9 +160,19 @@ function MyApp({
       resetSnippetElements()
     })
 
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => window.location.pathname.startsWith(x))
+    if (isScrollEnabled) {
+      router.events.on('routeChangeComplete', () => {
+        backToPageScrollLocation(window.location)
+      })
+    }
+
     // Dispose listener.
     return () => {
       router.events.off('routeChangeStart', () => {})
+      if (isScrollEnabled) {
+        router.events.off('routeChangeComplete', () => { })
+      }
     }
   }, [router.events])
 

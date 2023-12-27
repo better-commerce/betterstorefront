@@ -24,10 +24,12 @@ import {
   maxBasketItemsCount,
   notFoundRedirect,
   obfuscateHostName,
+  setPageScroll,
 } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 const CompareSelectionBar = dynamic(
   () => import('@components/product/ProductCompare/compareSelectionBar')
 )
@@ -342,9 +344,25 @@ export default function CollectionPage(props: any) {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', handleScroll)
     }
+        
+    const trackScroll = (ev: any) => {
+      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+    }
+
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+    if (isScrollEnabled) {
+      window?.addEventListener('scroll', trackScroll)
+      return () => {
+        window?.removeEventListener('scroll', trackScroll)
+      }
+    } /*else {
+      resetPageScroll()
+    }*/
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
+
   }, [])
 
   const [visible, setVisible] = useState(true)

@@ -7,7 +7,7 @@ import commerce from '@lib/api/commerce'
 import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
-import { maxBasketItemsCount, notFoundRedirect } from '@framework/utils/app-util'
+import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import {
   BTN_RECOMMENDED_PROD,
@@ -40,6 +40,7 @@ import { useUI } from '@components/ui'
 import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 
 const RecommendedProductCollection = dynamic(
   () => import('@components/brand/RecommendedProductCollection')
@@ -336,6 +337,21 @@ function BrandDetailPage({
     })
 
     recordEvent(EVENTS.FreeText)
+
+    const trackScroll = (ev: any) => {
+      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+    }
+
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+    if (isScrollEnabled) {
+      window?.addEventListener('scroll', trackScroll)
+      return () => {
+        window?.removeEventListener('scroll', trackScroll)
+      }
+    } /*else {
+      resetPageScroll()
+    }*/
+
   }, [])
 
   useEffect(() => {

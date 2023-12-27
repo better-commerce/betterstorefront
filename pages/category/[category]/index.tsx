@@ -21,7 +21,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { maxBasketItemsCount, notFoundRedirect } from '@framework/utils/app-util'
+import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import getAllProductsOperation from '@framework/api/operations/get-all-products'
 import { ProductCard } from '@components/product'
 import axios from 'axios'
@@ -30,6 +30,7 @@ import CompareSelectionBar from '@components/product/ProductCompare/compareSelec
 import { useUI } from '@components/ui'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -294,6 +295,21 @@ function CategoryLandingPage({
       }
       handleApiCall()
     }
+    
+    const trackScroll = (ev: any) => {
+      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+    }
+
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+    if (isScrollEnabled) {
+      window?.addEventListener('scroll', trackScroll)
+      return () => {
+        window?.removeEventListener('scroll', trackScroll)
+      }
+    } /*else {
+      resetPageScroll()
+    }*/
+
   }, [])
 
   useEffect(() => {
