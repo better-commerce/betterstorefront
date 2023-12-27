@@ -454,11 +454,11 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             <div>
               {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
               {isIncludeVAT ? (
-                product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax && (
+                product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax > product?.price?.raw?.withTax && (
                   <span className="px-1 font-normal text-gray-400 line-through">{product?.listPrice?.formatted?.withTax}</span>
                 )
               ) : (
-                product?.listPrice?.raw?.withoutTax > 0 && product?.listPrice?.raw?.withoutTax != product?.price?.raw?.withoutTax && (
+                product?.listPrice?.raw?.withoutTax > 0 && product?.listPrice?.raw?.withoutTax > product?.price?.raw?.withoutTax && (
                   <span className="px-1 font-normal text-gray-400 line-through">{product?.listPrice?.formatted?.withoutTax}</span>
                 )
               )}
