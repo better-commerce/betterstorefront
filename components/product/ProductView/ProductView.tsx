@@ -13,7 +13,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import SwiperCore, { Navigation } from 'swiper'
+import SwiperCore, { Navigation, Pagination, Zoom } from 'swiper'
 import { Dialog, Transition } from '@headlessui/react'
 import {
   XMarkIcon,
@@ -828,17 +828,20 @@ export default function ProductView({
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
-        <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none 2xl:w-4/5 sm:px-6 md:px-4 lg:px-6 2xl:px-0">
+        <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none 2xl:w-4/5 sm:px-6 md:px-4 lg:px-6 2xl:px-0 mob-container-padding">
           {isMobile ? (
             <Swiper
               slidesPerView={1}
-              spaceBetween={4}
+              spaceBetween={10}
+              zoom={true}
+              modules={[Pagination, Zoom]}
+              pagination={{ clickable: true }}
               navigation={true}
               loop={true}
-              className='!px-4 lg:px-0'
+              className='lg:px-0 swiper-dot-black'
               breakpoints={{
-                640: { slidesPerView: 1.2 },
-                768: { slidesPerView: 4 },
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
                 1024: { slidesPerView: 4 },
               }}
             >
@@ -848,7 +851,7 @@ export default function ProductView({
                   key={`${idx}-slider`}
                 >
                   {image.image ? (
-                    <div className="image-container">
+                    <div className="image-container swiper-zoom-container">
                       <Image
                         priority
                         src={
@@ -909,7 +912,7 @@ export default function ProductView({
           )}
 
           {/* Product info */}
-          <div className="px-4 mt-2 sm:mt-10 sm:px-4 lg:mt-0 lg:col-span-5">
+          <div className="px-4 mt-2 sm:mt-10 sm:px-4 lg:mt-0 lg:col-span-5 mob-padding-container">
             <div className="flex justify-between gap-4 mb-3 sm:mb-0">
               <p className="mb-0 text-sm mt-0 font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}
