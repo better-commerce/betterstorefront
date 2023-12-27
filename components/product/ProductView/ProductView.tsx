@@ -28,7 +28,6 @@ import {
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
   SITE_ORIGIN_URL,
-  NEXT_GET_CATALOG_PRODUCTS,
   NEXT_GET_ORDER_RELATED_PRODUCTS,
   NEXT_COMPARE_ATTRIBUTE,
   QuantityBreakRule,
@@ -177,19 +176,6 @@ export default function ProductView({
     mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o?.fieldName))
     setAttributeNames(mappedAttribsArrStr)
   }, [compareProductsAttributes])
-  useEffect(() => {
-    axios
-      .post(NEXT_GET_CATALOG_PRODUCTS, {
-        isCategory: true,
-        categoryId: product?.classification?.categoryCode,
-        pageSize: 50,
-      })
-      .then((res: any) => {
-        if (res?.data?.products?.results) {
-          setAllProductsByCategory(res?.data?.products?.results)
-        }
-      })
-  }, [product, currency])
 
   const fetchRelatedProducts = async (productId: string) => {
     const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId: productId, })
@@ -210,14 +196,6 @@ export default function ProductView({
     mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o.display))
     setAttributeNames(mappedAttribsArrStr)
   }, [allProductsByCategory])
-
-  useEffect(() => {
-    axios.post(NEXT_GET_CATALOG_PRODUCTS, { isCategory: true, categoryId: product?.classification?.categoryCode, pageSize: 50, }).then((res: any) => {
-      if (res?.data?.products?.results) {
-        setAllProductsByCategory(res?.data?.products?.results)
-      }
-    })
-  }, [product, currency])
 
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
   const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
