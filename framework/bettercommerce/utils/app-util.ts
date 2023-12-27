@@ -559,6 +559,21 @@ export const logError = (error: any) => {
   }
 }
 
+export const isEligibleForFreeShipping = (config: any, grandTotalWithTax: any): boolean  => {
+  const ShippingSettings = config?.configSettings?.find(
+    (x: any) => x.configType === 'ShippingSettings'
+  )
+   
+  if (ShippingSettings?.configKeys?.length) {
+    const FreeShippingOverXValue =
+    ShippingSettings?.configKeys?.find(
+        (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
+      )?.value || '0' 
+    return grandTotalWithTax < FreeShippingOverXValue
+  }
+  return false
+}
+
 export const notFoundRedirect = () => {
   return {
     redirect: {
