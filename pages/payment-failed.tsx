@@ -122,7 +122,7 @@ const PaymentFailedPage = ({
                       }
                       width={200}
                       height={200}
-                      alt={product?.name}
+                      alt={product?.name || 'orders-Image'}
                       className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
                     />
                   </div>

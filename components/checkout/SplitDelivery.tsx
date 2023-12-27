@@ -100,7 +100,7 @@ function SplitDelivery({
                                 width={40}
                                 height={60}
                                 src={generateUri(`${product.image}`,'h=60&fm=webp') || IMG_PLACEHOLDER}
-                                alt={product.name}
+                                alt={product.name || 'product-image'}
                                 className="object-cover w-full h-full"
                               />
                             </Link>

@@ -97,7 +97,7 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
                      <a href={`/${productItem.slug}`} className='inline-block order-image-nonslider' key={pId}>
                      <img
                         src={generateUri(productItem.image,'h=72&fm=webp') || productItem.image||IMG_PLACEHOLDER}
-                        alt=""
+                        alt="product-image"
                         width={40}
                         height={72}
                         className='object-cover object-center w-full h-full radius-xs sm:h-full'/>

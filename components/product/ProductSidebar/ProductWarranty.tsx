@@ -55,7 +55,7 @@ export default function ProductWarranty({
                                 'product.replacementeligibility'
                               ]?.map((replaceAttr: any, rpdx: number) => (
                                 <img
-                                  alt={replaceAttr?.value}
+                                  alt={replaceAttr?.value || 'attribute'}
                                   key={`product-${rpdx}-replacement-image`}
                                   src={`/assets/icons/${replaceAttr?.value
                                     ?.toLowerCase()

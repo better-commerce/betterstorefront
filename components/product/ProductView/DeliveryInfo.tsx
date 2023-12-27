@@ -146,7 +146,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
                             src={`/assets/images/easy-return.png`}
                             width="30"
                             height={30}
-                            alt={replaceAttr?.value}
+                            alt={replaceAttr?.value || 'Easy Return'}
                           />
                           <div className="text-sm font-semibold text-black">
                             {replaceAttr?.value} Days Easy Return

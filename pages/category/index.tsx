@@ -65,7 +65,7 @@ export default function CategoryList(props: any) {
                                     `${category?.image}?fm=webp&h=800&w=400` ||
                                     IMG_PLACEHOLDER
                                   }
-                                  alt={category.name}
+                                  alt={category.name|| 'category'}
                                   className="object-cover object-center w-full h-auto sm:h-full aspect-[4/3]"
                                   // layout="responsive"
                                   height={900}
@@ -75,7 +75,7 @@ export default function CategoryList(props: any) {
                               <div className="relative overflow-hidden bg-gray-100 aspect-[4/3] group-hover:bg-gray-200">
                                 <img
                                   src={IMG_PLACEHOLDER}
-                                  alt={category.name}
+                                  alt={category.name || 'category'}
                                   className="object-cover object-center w-full h-auto sm:h-full"
                                   // layout="responsive"
                                   width={600}

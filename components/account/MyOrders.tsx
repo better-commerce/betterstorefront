@@ -265,7 +265,7 @@ export default function MyOrders({ deviceInfo }: any) {
                           <div className="flex-shrink-0 ml-4 sm:m-0 sm:mr-6 sm:order-first">
                             <img
                               src={generateUri(product.image,'h=200&fm=webp')||IMG_PLACEHOLDER}
-                              alt={product.name}
+                              alt={product.name ||'Order-Image'}
                               className="object-cover object-center w-20 h-20 col-start-2 col-end-3 rounded-lg sm:col-start-1 sm:row-start-1 sm:row-span-2 sm:w-40 sm:h-40 lg:w-52 lg:h-52"
                             />
                           </div>

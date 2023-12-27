@@ -418,9 +418,9 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             )}
           </div>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${currentProductData.link}`} handleHover={handleHover} itemPrice={itemPrice} productName={product.name} onClick={handleSetCompareProduct}>
-            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
+            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'product-image'} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
             {product?.images?.length > 1 && (
-              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
+              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'product-image'} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
             )}
           </ButtonLink>
           {isMobile ? null : (

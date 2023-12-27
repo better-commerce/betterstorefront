@@ -113,7 +113,7 @@ const ExchangeReason = ({ ExchangesReasons, onItemExchange, item, onGetProduct, 
                                             height={50}
                                             key={idx}
                                             src={generateUri(URL.createObjectURL(file),'h=50&fm=webp')||IMG_PLACEHOLDER}
-                                            alt=""
+                                            alt="product-image"
                                         />
                                     ))
                                 )

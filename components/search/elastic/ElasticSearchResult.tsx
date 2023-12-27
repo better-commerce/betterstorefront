@@ -147,7 +147,7 @@ const CustomResultView = ({ result }: any, includeOutOfStockProduct: boolean, ma
               <div className="p-2 mb-4">
                 <img
                   src={result?.imageurl?.raw}
-                  alt={result?.title?.raw}
+                  alt={result?.title?.raw || 'search-result'}
                   className="object-contain mx-auto sm:w-48 sm:h-48"
                 />
               </div>

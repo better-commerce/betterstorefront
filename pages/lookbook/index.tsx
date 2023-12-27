@@ -67,7 +67,7 @@ function LookbookPage({ data }: any) {
                             src={
                               generateUri(lookbook.mainImage, 'h=1200&fm=webp') || IMG_PLACEHOLDER
                             }
-                            alt={lookbook.name}
+                            alt={lookbook.name || 'Lookbook_image'}
                             className="object-cover object-center w-auto h-96 hover:opacity-75 sm:min-h-screen sm:max-h-screen image"
                            
                           />

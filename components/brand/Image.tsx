@@ -10,7 +10,7 @@ export default function Image({ name, heading }: any) {
       <div className="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
         <img
           src={generateUri(name,'h=200&fm=webp')||IMG_PLACEHOLDER}
-          alt={name}
+          alt={name||'product-image'}
           className="w-full h-full object-center object-cover group-hover:opacity-75"
           height={200}
           width={220}

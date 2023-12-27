@@ -519,7 +519,7 @@ function CategoryLandingPage({
                             IMG_PLACEHOLDER
                           }
                           className="w-full"
-                          alt={category?.name}
+                          alt={category?.name || 'Image'}
                           width={700}
                           height={700}
                         />
@@ -736,7 +736,7 @@ function CategoryLandingPage({
                               IMG_PLACEHOLDER
                             }
                             className="w-full"
-                            alt={category?.name}
+                            alt={category?.name || 'category'}
                             width={700}
                             height={700}
                           />

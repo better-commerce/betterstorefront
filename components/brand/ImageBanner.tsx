@@ -16,7 +16,7 @@ const ImageBanner = ({
           src={generateUri(manufacturerSettingTypeImgBanner, 'h=240&fm=webp') || '/brands/ImageBanner.png'||IMG_PLACEHOLDER}
           height={240}
           width={320}
-          alt={manufacturerSettingTypeImgBanner || ''}
+          alt={manufacturerSettingTypeImgBanner || 'ImgBanner'}
           className="w-full h-full"
         />
       </div>

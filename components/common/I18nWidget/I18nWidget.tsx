@@ -58,7 +58,8 @@ const I18nWidget: FC<React.PropsWithChildren<unknown>> = () => {
               height="20"
               className="block w-5 mr-2"
               src={generateUri(`/${LOCALES_MAP[currentLocale].img.filename}`,'h=20&fm=webp')||IMG_PLACEHOLDER}
-              alt={LOCALES_MAP[currentLocale].img.alt}
+              alt={LOCALES_MAP[currentLocale].img.alt||'widget'}
+            
             />
             {options && (
               <span className="cursor-pointer">

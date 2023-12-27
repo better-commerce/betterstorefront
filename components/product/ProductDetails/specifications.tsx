@@ -651,7 +651,7 @@ export default function ProductSpecifications({
                               IMG_PLACEHOLDER
                             }
                             //src={img?.image}
-                            alt={img.name}
+                            alt={img.name||'slider-image'}
                             className="image"
                           ></Image>
                           {/* <Image src={img?.image} className="bhdLno" layout="fill" alt={img.name}></Image> */}

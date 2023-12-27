@@ -487,9 +487,9 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             )}
           </div>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${currentProductData.link}`} handleHover={handleHover} itemPrice={itemPrice} productName={product.name} onClick={handleSetCompareProduct}>
-            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
+            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'compare'} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
             {product?.images?.length > 1 && (
-              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
+              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'compare'} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
             )}
           </ButtonLink>
         </div>
@@ -570,9 +570,9 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                     <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
                     {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
-                      <><img alt={attrib?.value} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
+                      <><img alt={attrib?.value||'icon-cross'} src="/assets/images/cross_icon.svg"  width={2} height={2} className='icon-small' /></>
                       : attrib?.value == "True" || attrib?.value == "Yes" ?
-                        <><img alt={attrib?.value} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
+                        <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
                         : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
                       <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
                   </span>
@@ -632,9 +632,9 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                   <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
                   {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
-                    <><img alt={attrib?.value} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
+                    <><img alt={attrib?.value || 'icon-cross'} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
                     : attrib?.value == "True" || attrib?.value == "Yes" ?
-                      <><img alt={attrib?.value} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
+                      <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
                       : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
                     <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
                 </span>

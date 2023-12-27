@@ -63,7 +63,7 @@ const CustomResultView = ({ result }: any) => {
         <div className="p-2 mb-4 border border-gray-200 group-hover:border-gray-700">
           <img
             src={generateUri(result?.imageurl?.raw,'h=400&fm=webp')||IMG_PLACEHOLDER}
-            alt={''}
+            alt={'search'}
             className="object-contain w-48 h-48"
             width={300}
             height={400}

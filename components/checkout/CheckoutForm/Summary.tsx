@@ -228,7 +228,7 @@ export default function Summary({
                                   width={80}
                                   height={100}
                                   src={generateUri(`${product.image}`,'h=100&fm=webp') || IMG_PLACEHOLDER}
-                                  alt={product.name}
+                                alt={product.name ||'product-image'}
                                   className="object-cover w-full h-full"
                                 />
                               </Link>
@@ -518,7 +518,7 @@ export default function Summary({
                             width={80}
                             height={100}
                             src={generateUri(`${product.image}`,'h=100&fm=webp') || IMG_PLACEHOLDER}
-                            alt={product.name}
+                            alt={product.name || 'product-image'}
                             className="object-cover w-full h-full"
                           />
                         </Link>

@@ -181,7 +181,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
               src={generateUri(imageUrl,'h=180&w=200') || ''}
               width={200}
               height={180}
-              alt={product.name}
+              alt={product.name || 'product'}
               className="mx-auto"
             />
           </div>
@@ -235,7 +235,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                           }
                           width={400}
                           height={500}
-                          alt={val.image}
+                          alt={val.image  || 'product'}
                           className={cn(
                             'max-h-md w-full',
                             !!selectedImage &&
