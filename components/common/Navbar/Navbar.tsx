@@ -787,7 +787,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                 action={configAction}
               />
             </div>
-            <div className="flow-root w-10 px-1 md:w-12 xl:w-16">
+            <div className="flow-root w-10 px-1 md:w-14 xl:w-16">
               <button
                 className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
                 onClick={() => {
@@ -811,7 +811,7 @@ const Navbar: FC<Props & IExtraProps> = ({
               </button>
             </div>
 
-            <div className="flow-root w-10 px-1 md:w-12 xl:w-16">
+            <div className="flow-root w-10 px-1 md:w-14 xl:w-16">
               <button
                 className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center"
                 onClick={() => {

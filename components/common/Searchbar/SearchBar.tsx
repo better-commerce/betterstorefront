@@ -60,7 +60,7 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
       <div className="flex flex-row w-full rounded-sm sm:w-80 md:w-64 xl:w-96">
         <button
           onClick={onClick}
-          className="relative w-full px-4 pr-3 text-gray-400 bg-gray-100 border border-gray-400 rounded-md sm:p-2 sm:pl-3 sm:pr-16 hover:text-gray-500"
+          className="relative w-full px-2 sm:px-4 pr-3 text-gray-400 bg-gray-100 border border-gray-400 rounded-md sm:p-2 sm:pl-3 sm:pr-16 hover:text-gray-500"
           aria-label="Search"
         >
           <span className="sr-only" aria-label="Search">
@@ -70,7 +70,7 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
             Search
           </span>
           <MagnifyingGlassIcon
-            className="w-6 h-6 text-black sm:w-4 sm:h-4 sm:absolute right-4 sm:top-3 sm:right-4 sm:text-gray-400"
+            className="w-4 h-6 text-black sm:w-4 sm:h-4 sm:absolute right-4 sm:top-3 sm:right-4 sm:text-gray-400"
             aria-hidden="true"
             aria-label="Search"
           />

@@ -304,6 +304,37 @@ body {
     top:-46px;
     right: -10px !important;
   }
+  .p-font-size {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .ribbon {
+    padding: 6px 20px 6px 7px;
+    height: 25px !important;
+    -webkit-clip-path: polygon(
+      100% 0,
+      85% 50%,
+      100% 100%,
+      0% 100%,
+      0% 50%,
+      0% 0%
+    );
+    clip-path: polygon(100% 0, 85% 50%, 100% 100%, 0% 100%, 0% 50%, 0% 0%);
+    text-transform: uppercase;
+    letter-spacing: 0em;
+    font-size: 10px;
+    display: flex;
+    font-weight: 600;
+    justify-content: left;
+    align-items: center;
+    max-width: 100px;
+    width: auto;
+    position: relative;
+    left: -18px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+  }
 }
 
 .image-container span {
@@ -1028,10 +1059,10 @@ body {
     min-height: 150px;
   }
 
-  .mobile-card-panel {
+  /* .mobile-card-panel {
     height: 238px !important;
     background: #ffffff;
-  }
+  } */
   .product-name {
     min-height: 30px;
   }
@@ -1601,5 +1632,54 @@ br {
   }
   .promo-banner-inactive.promo-banner-active .mob-nav-pos-55 {
     top: 91px;
+  }
+}
+@media screen and (max-width: 399px) {
+  .btn-c.btn-primary-green,
+  .btn-c.btn-primary,
+  .btn-secondary {
+    font-size: 12px !important;
+  }
+}
+.p-font-size {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+@media only screen and (min-width: 768px) and (max-width: 1024px){
+  .btn-c.btn-primary-green,
+  .btn-c.btn-primary,
+  .btn-secondary {
+    font-size: 12px !important;
+  }
+  main:has(.data-bc-snippet-body-start-script-cntr:empty){
+    padding-top: 66px !important;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .mob-filter {
+    display: none !important;
+  }
+}
+
+/*QUICK VIEW UI*/
+.quickview-screen {
+  display: flex;
+  width: 846px;
+  padding: 48px;
+  align-items: flex-start;
+  gap: 0px;
+  flex-shrink: 0;
+  border-radius: 5px;
+}
+/* IPAD UI CSS Start */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  body .quickview-screen {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 767px) {
+  body .quickview-screen {
+    width: 100%;
   }
 }

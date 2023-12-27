@@ -96,11 +96,11 @@ export default function Filters({
                 <Disclosure
                   as="div"
                   key={section.name}
-                  className="px-4 py-3 border-t border-gray-200"
+                  className="p-0 border-t border-white border-y-2 bg-gray-100"
                 >
                   {({ open }) => (
                     <>
-                      <Disclosure.Button className="flex items-center justify-between w-full px-2 py-3 -mx-2 -my-3 text-sm text-gray-400 bg-white">
+                      <Disclosure.Button className="flex items-center justify-between w-full px-4 py-3">
                         <span className="font-medium text-gray-900">
                           {section.name}
                         </span>
@@ -114,7 +114,7 @@ export default function Filters({
                           />
                         </span>
                       </Disclosure.Button>
-                      <Disclosure.Panel className="pt-6 space-y-3 max-panel">
+                      <Disclosure.Panel className="pt-4 space-y-3 px-4 bg-white">
                         <FilterList
                           handleFilters={handleFilters}
                           sectionKey={section.key}

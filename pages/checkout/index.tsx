@@ -20,6 +20,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
+import CheckoutHeading from '@components/checkout/CheckoutHeading'
 
 export interface actionInterface {
   type?: string
@@ -197,21 +198,24 @@ function Checkout({ cart, config, location }: any) {
 
   if (isLoggedIn) {
     return (
-      <CheckoutForm
-        cart={cart}
-        addresses={userAddresses}
-        setUserAddresses={setUserAddresses}
-        defaultBillingAddress={defaultBillingAddress}
-        defaultShippingAddress={defaultShippingAddress}
-        user={user}
-        getAddress={getAddress}
-        fetchAddress={fetchAddress}
-        config={config}
-        location={location}
-        recordShippingInfo={recordShippingInfo}
-        splitDeliveryItems={splitDeliveryItems}
-        onShippingPlansUpdated={onShippingPlansUpdated}
+      <>
+        <CheckoutHeading />
+        <CheckoutForm
+          cart={cart}
+          addresses={userAddresses}
+          setUserAddresses={setUserAddresses}
+          defaultBillingAddress={defaultBillingAddress}
+          defaultShippingAddress={defaultShippingAddress}
+          user={user}
+          getAddress={getAddress}
+          fetchAddress={fetchAddress}
+          config={config}
+          location={location}
+          recordShippingInfo={recordShippingInfo}
+          splitDeliveryItems={splitDeliveryItems}
+          onShippingPlansUpdated={onShippingPlansUpdated}
       />
+      </>
     )
   }
 

@@ -748,7 +748,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                 </dl>
 
-                <div className="mt-6">
+                <div className="mt-6 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button
                       type="submit"
@@ -1035,7 +1035,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                 </dl>
 
-                <div className="mt-6">
+                <div className="mt-6 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button
                       type="submit"
