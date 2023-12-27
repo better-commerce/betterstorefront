@@ -23,6 +23,7 @@ import axios from 'axios'
 import { Guid } from '@commerce/types'
 import { Cookie } from './constants'
 import { sumBy } from 'lodash'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 
 export const isCartAssociated = (cartItems: any) => {
   if (cartItems?.userId && cartItems?.userId !== Guid.empty) {
@@ -556,6 +557,26 @@ export const isIncludeVATInPriceDisplay = (isIncludeVAT: boolean, product: any):
 export const logError = (error: any) => {
   if (process.env.NODE_ENV === 'development') {
     console.log('error', error)
+  }
+}
+
+export const setPageScroll = (location: any, x = 0, y = 0) => {
+  if (SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))) {
+    setItem(LocalStorage.Key.PAGE_SCROLL, { x, y })
+  }
+}
+
+export const resetPageScroll = (x = 0, y = 0) => {
+  setItem(LocalStorage.Key.PAGE_SCROLL, { x, y })
+}
+
+export const backToPageScrollLocation = (location: any) => {
+  if (SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))) {
+    const scrollLocation: any = getItem(LocalStorage.Key.PAGE_SCROLL)
+    window.scrollTo({
+      top: scrollLocation?.y,
+      behavior: 'smooth',
+    })
   }
 }
 
