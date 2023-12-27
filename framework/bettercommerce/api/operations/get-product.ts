@@ -23,6 +23,7 @@ export default function getProductOperation({
     return {
       product: response.result,
       snippets: response.snippets,
+      status: response?.status
     }
   }
 

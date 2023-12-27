@@ -8,7 +8,11 @@ export default async function getBrandBySlug(slug: string, cookies?: any) {
       method: 'post',
       cookies,
     })
-    return { ...response, ...{ snippets: response.snippets } };
+    return {
+      ...response,
+      ...{ snippets: response?.snippets ?? [] },
+      ...{ status: response?.status },
+    }
   } catch (error) {
     return { hasError: true, error }
   }

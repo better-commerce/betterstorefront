@@ -6,7 +6,7 @@ import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { LOADER_LOADING } from '@components/utils/textVariables'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
-import { logError } from '@framework/utils/app-util'
+import { logError, notFoundRedirect } from '@framework/utils/app-util'
 
 export async function getStaticProps({
   params,
@@ -26,6 +26,10 @@ export async function getStaticProps({
   try {
     const productPromise = commerce.getProduct({ query: params!?.slug[0] })
     product = await productPromise
+
+    if (product?.status === "NotFound") {
+      return notFoundRedirect();
+    }
 
     const allProductsByCategoryRes = await commerce.getAllProducts({
       query: {

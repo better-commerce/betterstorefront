@@ -7,7 +7,7 @@ import commerce from '@lib/api/commerce'
 import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
+import { maxBasketItemsCount, notFoundRedirect } from '@framework/utils/app-util'
 import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import {
   BTN_RECOMMENDED_PROD,
@@ -670,6 +670,10 @@ export async function getStaticProps({
   const response = await getBrandBySlug(slug, {})
   const infraPromise: any = commerce.getInfra()
   const infra = await infraPromise
+
+  if (response?.status === "NotFound") {
+    return notFoundRedirect()
+  }
 
   const collections: any = {
     imageBannerCollection: [],

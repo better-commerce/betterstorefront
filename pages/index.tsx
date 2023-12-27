@@ -43,10 +43,10 @@ export async function getStaticProps({
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
-  const pagesPromise = commerce.getAllPages({ config, preview })
-  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { pages } = await pagesPromise
-  const { categories, brands } = await siteInfoPromise
+  // const pagesPromise = commerce.getAllPages({ config, preview })
+  // const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  // const { pages } = await pagesPromise
+  // const { categories, brands } = await siteInfoPromise
   let pageContentsWeb = new Array<any>()
   let pageContentsMobileWeb = new Array<any>()
   const promises = new Array<Promise<any>>()
@@ -112,9 +112,9 @@ export async function getStaticProps({
 
   return {
     props: {
-      categories,
-      brands,
-      pages,
+      // categories,
+      // brands,
+      // pages,
       globalSnippets: infra?.snippets ?? [],
       pageContentsWeb: pageContentsWeb ?? [],
       pageContentsMobileWeb: pageContentsMobileWeb ?? [],
