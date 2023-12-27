@@ -436,7 +436,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
           <span className="font-semibold text-black">{product?.brand}</span>
         </div>
-        {attribs?.map?.map((attrib: any, idx: number) => (
+        {attribs?.map((attrib: any, idx: number) => (
           <div
             key={idx}
             className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14"
