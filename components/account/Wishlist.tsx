@@ -152,7 +152,7 @@ export default function Wishlist() {
                                   <>
                                     <img
                                       src={generateUri(product.image,'h=600&fm=webp') || IMG_PLACEHOLDER}
-                                      alt={product.name}
+                                      alt={product.name || 'image'}
                                       width={400}
                                       height={600}
                                       className="object-cover object-center w-full h-full radius-xs sm:h-full"
@@ -162,7 +162,7 @@ export default function Wishlist() {
                                   <>
                                     <img
                                       src={IMG_PLACEHOLDER}
-                                      alt={product.name}
+                                      alt={product.name || 'image'}
                                       width={400}
                                       height={600}
                                       className="object-cover object-center w-full h-full radius-xs sm:h-full"

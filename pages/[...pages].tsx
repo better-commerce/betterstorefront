@@ -16,7 +16,7 @@ const COMPONENTS_MAP: any = {
   PlainText: (props: any) => <PlainText {...props} />,
   ProductCollection: (props: any) => <ProductCollection {...props} />,
   Video: (props: any) => <Video {...props} />,
-  ImageBanner: (props: any) => <Image alt="" {...props} />,
+  ImageBanner: (props: any) => <Image alt="Banner-Image"  {...props} />,
   ImageCollection: (props: any) => <ImageCollection {...props} />,
   undefined: () => null,
 }

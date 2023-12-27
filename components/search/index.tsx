@@ -133,7 +133,7 @@ export default function Search(props: any) {
                                 'h=200&fm=webp'
                               ) || IMG_PLACEHOLDER
                             }
-                            alt={product.name}
+                            alt={product.name || "product"}
                             width={20}
                             height={20}
                             style={css}

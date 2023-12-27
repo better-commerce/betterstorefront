@@ -13,7 +13,7 @@ export default function PromotionBanner({ data, key, css }: any) {
         <img
           src={generateUri(data?.promotions_image, 'h=800&fm=webp')||IMG_PLACEHOLDER}
           className="object-cover object-center w-full mob-img-height"
-          alt={data?.promotions_title}
+          alt={data?.promotions_title || 'promotion'}
           width={2000}
           height={800}
           style={css}

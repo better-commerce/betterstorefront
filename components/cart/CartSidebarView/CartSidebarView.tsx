@@ -818,7 +818,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                 'h=200&fm=webp'
                                               ) || IMG_PLACEHOLDER
                                             }
-                                            alt={product.name}
+                                            alt={product.name ||'cart-image'}
                                             className="object-cover object-center w-full h-full"
                                             onClick={handleRedirectToPDP}
                                           />

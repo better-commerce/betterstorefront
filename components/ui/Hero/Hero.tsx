@@ -45,7 +45,7 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
                         generateUri(banner?.url, 'h=761&fm=webp') ||
                         IMG_PLACEHOLDER
                       }
-                      alt={banner?.alt}
+                      alt={banner?.alt || 'banner-image'}
                       style={css}
                       width={1903}
                       height={761}

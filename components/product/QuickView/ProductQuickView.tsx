@@ -703,7 +703,7 @@ export default function ProductQuickView({
                                                         'h=1000&fm=webp'
                                                       ) || IMG_PLACEHOLDER
                                                     }
-                                                    alt={image.name}
+                                                    alt={image.name || 'slider-image'}
                                                     className="object-cover object-center w-full h-full image pdp-image"
                                                     fill
                                                     sizes="320 600 1000"

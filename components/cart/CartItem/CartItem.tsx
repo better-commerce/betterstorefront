@@ -87,7 +87,7 @@ const CartItem = ({
               src={
                 generateUri(item.image, 'h=300&fm=webp') || IMG_PLACEHOLDER
               }
-              alt={item.name}
+              alt={item.name || 'Product-image'}
             />
           </Link>
         </div>

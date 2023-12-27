@@ -811,7 +811,7 @@ export default function ProductView({
     return (
       <img
         src= {generateUri(item?.thumbnail,"h=100&fm=webp")||IMG_PLACEHOLDER}
-        alt={product?.name}
+        alt={product?.name || 'product'}
         height={100}
         width={100}
       />
@@ -855,7 +855,7 @@ export default function ProductView({
                           generateUri(image.image, 'h=600&fm=webp') ||
                           IMG_PLACEHOLDER
                         }
-                        alt={product?.name}
+                        alt={product?.name || 'slider-image'}
                         className="object-cover object-center w-full h-full image"
                         sizes="320 600 1000"
                         quality="70"

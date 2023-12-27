@@ -105,7 +105,7 @@ function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
             src={
               generateUri(data.mainImage, 'h=700&fm=webp') || IMG_PLACEHOLDER
             }
-            alt={data.name}
+            alt={data.name || 'lookbook'}
             className="object-cover object-center w-full h-screen min-h-screen image"
           />
           <div className="lookbook-data">

@@ -211,7 +211,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                       'h=200&fm=webp'
                                     ) || IMG_PLACEHOLDER
                                   }
-                                  alt={product.name}
+                                  alt={product.name || 'wishlist-image'}
                                   className="object-cover object-center w-full h-full"
                                 />
                                 {/* <img

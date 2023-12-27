@@ -343,7 +343,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 generateUri(currentProductData.image, 'h=250&fm=webp') ||
                 IMG_PLACEHOLDER
               }
-              alt={product.name}
+              alt={product.name || 'product'}
               className="object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
               style={css}
               width={400}
@@ -356,7 +356,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   generateUri(product?.images[1]?.image, 'h=500&fm=webp') ||
                   IMG_PLACEHOLDER
                 }
-                alt={product.name}
+                alt={product.name || 'product'}
                 className="hidden object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
                 style={css}
                 width={400}

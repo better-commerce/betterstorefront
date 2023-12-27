@@ -410,7 +410,7 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   generateUri(product?.images[1]?.image, 'h=500&fm=webp') ||
                   IMG_PLACEHOLDER
                 }
-                alt={product?.name}
+                alt={product?.name ||'product-image'}
                 className="hidden object-cover object-center w-full h-full sm:h-full"
                 style={css}
                 width={120}

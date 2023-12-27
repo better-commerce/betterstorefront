@@ -421,7 +421,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                         IMG_PLACEHOLDER
                       }
                       className="w-full"
-                      alt={category?.name}
+                      alt={category?.name || 'category'}
                       width={700}
                       height={700}
                     />

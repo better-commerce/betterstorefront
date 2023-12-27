@@ -48,7 +48,7 @@ export default function CollectionList(props: any) {
                             generateUri(collection.mainImage, 'h=1000&fm=webp') ||
                             IMG_PLACEHOLDER
                           }
-                          alt={collection.name}
+                          alt={collection.name || 'image'}
                           className="object-cover object-center w-full h-full group-hover:opacity-75 image"
                           sizes="(max-width: 500px) 100px, (max-width: 1023px) 400px, 1000px"
                         />

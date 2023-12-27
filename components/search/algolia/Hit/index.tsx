@@ -149,7 +149,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
       <div className={`${hit?.webstock ==0 ? 'opacity-40 ' :''} mx-auto hit-imageURL`}>
         <Link legacyBehavior passHref href={`/${hit?.weburl}`}>
           <a href={`/${hit?.weburl}`} onClick={() => resetAlgoliaSearch()}>
-            <img className='height-img-auto' alt="" src={hit?.imageurl || IMG_PLACEHOLDER} />
+            <img className='height-img-auto' alt="reset" src={hit?.imageurl || IMG_PLACEHOLDER} />
           </a>
         </Link>
       </div>

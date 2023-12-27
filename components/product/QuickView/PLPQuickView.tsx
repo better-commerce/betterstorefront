@@ -635,7 +635,7 @@ export default function PLPQuickView({
                                                         'h=1000&fm=webp'
                                                       ) || IMG_PLACEHOLDER
                                                     }
-                                                    alt={image.name}
+                                                    alt={image.name || 'product-image'}
                                                     className="object-cover object-center w-full h-full image"
                                                     
                                                   />

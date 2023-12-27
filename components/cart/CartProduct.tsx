@@ -208,7 +208,7 @@ export default function CartProduct({
             width={140}
             height={180}
             src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER}
-            alt={product.name}
+            alt={product.name ||"product-image"}
             className="object-cover object-center \w-16 rounded-lg sm:\w-28 image"
           />
         </div>

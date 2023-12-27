@@ -528,7 +528,7 @@ export default function CollectionPage(props: any) {
                       src={
                         generateUri(img.url, 'h=500&fm=webp') || IMG_PLACEHOLDER
                       }
-                      alt={props?.name}
+                      alt={props?.name || 'Collection Banner'}
                       className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
                     />
                   </Link>

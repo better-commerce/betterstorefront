@@ -589,7 +589,7 @@ export default function SearchQuickView({
       <div className="flex justify-center image-gallery-image">
         <img
           src={generateUri(item?.original,"h=1000&fm=webp")||IMG_PLACEHOLDER}
-          alt={product?.name}
+          alt={product?.name || 'product'}
           height={1000}
           width={1000}
           className="!object-contain"
@@ -601,7 +601,7 @@ export default function SearchQuickView({
     return (
       <img
         src={generateUri(item?.thumbnail, 'h=300&fm=webp') || IMG_PLACEHOLDER}
-        alt={product?.name}
+        alt={product?.name || 'product'}
         height={100}
         width={100}
       />
@@ -700,7 +700,7 @@ export default function SearchQuickView({
                                     className="border border-gray-400 rounded"
                                     width={200}
                                     height={200}
-                                    alt={productData?.title?.raw}
+                                    alt={productData?.title?.raw || "product"}
                                   />
                                 </div>
                               ) : null}

@@ -103,7 +103,7 @@ export default function PriceMatch({
                       selling the item you want for less. Let us help!
                     </p>
                     <Image
-                      alt=""
+                      alt="product-Image"
                       src={productImage}
                       className="object-cover object-top h-96 w-96"
                     />
