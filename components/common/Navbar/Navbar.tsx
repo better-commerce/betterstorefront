@@ -105,7 +105,7 @@ const accountDropDownConfigUnauthorized: any = [
     tail: null,
   },
   {
-    href: `/my-account/login/social/${SocialMediaType.GOOGLE}`,
+    href: `/my-account/login/social/${SocialMediaType?.GOOGLE}`,
     title: SOCIAL_REGISTER_GOOGLE,
     className:
       'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
@@ -126,7 +126,7 @@ const accountDropDownConfigUnauthorized: any = [
     tail: null,
   },
   {
-    href: `/my-account/login/social/${SocialMediaType.FACEBOOK}`,
+    href: `/my-account/login/social/${SocialMediaType?.FACEBOOK}`,
     title: SOCIAL_REGISTER_FACEBOOK,
     className:
       'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
@@ -143,7 +143,7 @@ const accountDropDownConfigUnauthorized: any = [
     tail: null,
   },
   {
-    href: `/my-account/login/social/${SocialMediaType.APPLE}`,
+    href: `/my-account/login/social/${SocialMediaType?.APPLE}`,
     title: SOCIAL_REGISTER_APPLE,
     className:
       'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
@@ -199,7 +199,7 @@ const Navbar: FC<Props & IExtraProps> = ({
   // Read b2b enabled value from settings
   const b2bEnabled = b2bSettings?.length
     ? stringToBoolean(
-        b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
+        b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value
       )
     : false
 
@@ -218,7 +218,7 @@ const Navbar: FC<Props & IExtraProps> = ({
     },
     {
       href:
-        user?.companyId !== Guid.empty
+        user?.companyId !== Guid?.empty
           ? '/my-account/my-company?tab=orders'
           : '/my-account/orders',
       title: GENERAL_MY_ORDERS,
@@ -258,8 +258,8 @@ const Navbar: FC<Props & IExtraProps> = ({
 
   const configAction = async (pair: any) => {
     if (!pair) return
-    const value: any = Object.values(pair)[0]
-    const key = Object.keys(pair)[0]
+    const value: any = Object?.values(pair)[0]
+    const key = Object?.keys(pair)[0]
     const { data: configActionResult } = await axios.post(NEXT_SET_CONFIG, { obj: pair })
     Cookies.set(key, value)
     router.reload()
@@ -405,7 +405,7 @@ const Navbar: FC<Props & IExtraProps> = ({
     }
   }
 
-  const hamburgerMenuClickLevel3 = (
+  const hamburgergbvClickLevel3 = (
     item: any,
     subHeader: any,
     subHeader2: any
@@ -491,32 +491,32 @@ const Navbar: FC<Props & IExtraProps> = ({
                 {config?.map((item: any, idx: number) => {
                   return (
                     <div key={idx}>
-                      {!item.navBlocks.length ? (
+                      {!item?.navBlocks?.length ? (
                         <Link
                           key={idx}
-                          title={item.caption}
+                          title={item?.caption}
                           href={hyperlinkHandler(
-                            removePrecedingSlash(item.hyperlink)
+                            removePrecedingSlash(item?.hyperlink)
                           )}
                           passHref
                           onClick={() => {
-                            hamburgerMenuClick(item.caption)
+                            hamburgerMenuClick(item?.caption)
                             setOpen(false)
                           }}
                           className="flex flex-col px-4 py-4 text-sm font-bold text-black border-t whitespace-nowrap"
                         >
-                          {item.caption}
+                          {item?.caption}
                         </Link>
                       ) : (
-                        <Disclosure key={`disclosure-start-${item.caption}`}>
+                        <Disclosure key={`disclosure-start-${item?.caption}`}>
                           {({ open }) => (
                             <>
                               <Disclosure.Button
                                 className="flex justify-between w-full px-0 -mb-px space-x-0 text-left border-t"
-                                onClick={() => hamburgerMenuClick(item.caption)}
+                                onClick={() => hamburgerMenuClick(item?.caption)}
                               >
                                 <div className="flex flex-col px-4 py-4 text-sm font-bold text-black sm:text-lg whitespace-nowrap">
-                                  {item.caption}
+                                  {item?.caption}
                                 </div>
                                 <div className="pt-5 pr-3">
                                   <ChevronUpIcon
@@ -531,11 +531,11 @@ const Navbar: FC<Props & IExtraProps> = ({
 
                               <Disclosure.Panel
                                 as={Fragment}
-                                key={`disclosure-panel-${item.caption}`}
+                                key={`disclosure-panel-${item?.caption}`}
                               >
                                 <div className="space-y-4">
-                                  {item.navBlocks.length
-                                    ? item.navBlocks.map(
+                                  {item?.navBlocks?.length
+                                    ? item?.navBlocks?.map(
                                         (navBlock: any, navIdx: number) => {
                                           return (
                                             <div
@@ -547,20 +547,20 @@ const Navbar: FC<Props & IExtraProps> = ({
                                                 aria-labelledby="clothing-heading"
                                                 className="col-span-1"
                                               >
-                                                {navBlock.navItems.map(
+                                                {navBlock?.navItems?.map(
                                                   (navItem: any, idx: any) => (
                                                     <Link
                                                       legacyBehavior
-                                                      key={`${navItem.caption}-${idx}`}
-                                                      title={navItem.caption}
+                                                      key={`${navItem?.caption}-${idx}`}
+                                                      title={navItem?.caption}
                                                       href={
                                                         navBlock?.navBlockType ==
                                                         9
                                                           ? `/collection/${removePrecedingSlash(
-                                                              navItem.itemLink
+                                                              navItem?.itemLink
                                                             )}`
                                                           : `/${removePrecedingSlash(
-                                                              navItem.itemLink
+                                                              navItem?.itemLink
                                                             )}`
                                                       }
                                                       passHref
@@ -569,13 +569,13 @@ const Navbar: FC<Props & IExtraProps> = ({
                                                         onClick={() => {
                                                           setOpen(false)
                                                           hamburgerMenuClickLevel2(
-                                                            item.caption,
-                                                            navBlock.boxTitle
+                                                            item?.caption,
+                                                            navBlock?.boxTitle
                                                           )
                                                         }}
                                                         className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
                                                       >
-                                                        {navItem.caption}
+                                                        {navItem?.caption}
                                                       </li>
                                                     </Link>
                                                   )
@@ -672,7 +672,7 @@ const Navbar: FC<Props & IExtraProps> = ({
                 >
                   {({ open }) => (
                     <>
-                      {!item.navBlocks.length ? (
+                      {!item?.navBlocks?.length ? (
                         <Popover.Button
                           className={classNames(
                             openState == idx
@@ -682,11 +682,11 @@ const Navbar: FC<Props & IExtraProps> = ({
                           )}
                         >
                           <Link
-                            href={`/${removePrecedingSlash(item.hyperlink)}`}
+                            href={`/${removePrecedingSlash(item?.hyperlink)}`}
                             className="relative flex items-center h-full text-header-clr"
-                            title={item.caption}
+                            title={item?.caption}
                           >
-                            {item.caption}
+                            {item?.caption}
                           </Link>
                         </Popover.Button>
                       ) : (
@@ -698,10 +698,10 @@ const Navbar: FC<Props & IExtraProps> = ({
                             'relative z-10 flex items-center sm:h-16 transition-colors ease-out uppercase hover:font-semibold duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
                           )}
                         >
-                          {item.caption}
+                          {item?.caption}
                         </Popover.Button>
                       )}
-                      {item.navBlocks.length ? (
+                      {item?.navBlocks?.length ? (
                         <Transition
                           show={openState == idx}
                           as={Fragment}
@@ -714,17 +714,17 @@ const Navbar: FC<Props & IExtraProps> = ({
                         >
                           <Popover.Panel className="absolute inset-x-0 text-gray-500 bg-white top-full z-999 sm:text-sm">
                             <div className="relative grid items-start w-4/5 grid-cols-1 px-4 pt-10 pb-12 mx-auto bg-white sm:px-0 lg:px-0 gap-y-10 gap-x-6 md:grid-cols-1 lg:gap-x-8">
-                              {item.navBlocks.map(
+                              {item?.navBlocks?.map(
                                 (navBlock: any, navIdx: number) => (
                                   <div key={navIdx}>
                                     <h5 className="text-xl font-semibold text-gray-900 capitalize">
-                                      {navBlock.boxTitle}
+                                      {navBlock?.boxTitle}
                                     </h5>
                                     <div
                                       key={`navItems-${navIdx}`}
                                       className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8"
                                     >
-                                      {navBlock.navItems.map(
+                                      {navBlock?.navItems?.map(
                                         (navItem: any, idx: number) => (
                                           <Popover.Button
                                             key={`popover-button-${idx}`}
@@ -739,17 +739,17 @@ const Navbar: FC<Props & IExtraProps> = ({
                                               href={
                                                 navBlock?.navBlockType == 9
                                                   ? `/collection/${removePrecedingSlash(
-                                                      navItem.itemLink
+                                                      navItem?.itemLink
                                                     )}`
                                                   : `/${removePrecedingSlash(
-                                                      navItem.itemLink
+                                                      navItem?.itemLink
                                                     )}`
                                               }
                                               className="relative flex items-center h-full hover:text-pink"
-                                              title={navItem.caption}
+                                              title={navItem?.caption}
                                               onClick={() => setOpenState(-1)}
                                             >
-                                              {navItem.caption}
+                                              {navItem?.caption}
                                             </Link>
                                           </Popover.Button>
                                         )
@@ -802,9 +802,9 @@ const Navbar: FC<Props & IExtraProps> = ({
                 <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
                   Wishlist
                 </span>
-                {wishListItems.length > 0 && delayEffect && (
+                {wishListItems?.length > 0 && delayEffect && (
                   <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-gray-500 rounded-full -top-1 sm:block -right-1">
-                    {wishListItems.length}
+                    {wishListItems?.length}
                   </span>
                 )}
                 <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
@@ -829,9 +829,9 @@ const Navbar: FC<Props & IExtraProps> = ({
                 </span>
                 {renderState && (
                   <>
-                    {cartItems.lineItems?.length > 0 && (
+                    {cartItems?.lineItems?.length > 0 && (
                       <span className="absolute w-4 h-4 ml-2 text-xs font-medium text-center text-white bg-gray-500 rounded-full -top-1 -right-2">
-                        {cartItems.lineItems?.length}
+                        {cartItems?.lineItems?.length}
                       </span>
                     )}
                     <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
