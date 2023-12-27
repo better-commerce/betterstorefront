@@ -18,7 +18,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
+import { maxBasketItemsCount, notFoundRedirect } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
@@ -53,6 +53,11 @@ export async function getStaticProps(context: any) {
   const category = await getCategoryBySlug(slug)
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
+
+  if (category?.status === "NotFound") {
+    return notFoundRedirect()
+  }
+
   if (category) {
     const categoryProducts = await getCategoryProducts(category?.id)
     return {

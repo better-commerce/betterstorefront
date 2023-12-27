@@ -558,3 +558,12 @@ export const logError = (error: any) => {
     console.log('error', error)
   }
 }
+
+export const notFoundRedirect = () => {
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/404',
+    },
+  }
+}

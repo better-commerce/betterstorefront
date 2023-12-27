@@ -22,6 +22,7 @@ import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import {
   maxBasketItemsCount,
+  notFoundRedirect,
   obfuscateHostName,
 } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -680,7 +681,10 @@ export async function getStaticProps({ params, ...context }: any) {
   const infra = await infraPromise
   const hostName = os.hostname()
 
-  //console.log(context)
+  if (data?.status === "NotFound") {
+    return notFoundRedirect()
+  }
+
   return {
     props: {
       ...data,

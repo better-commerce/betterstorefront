@@ -402,7 +402,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           {isOutOfStock(product) ? (
             <ButtonNotifyMe
               product={product}
-              className="hidden sm:block btn-secondary"
+              className="mt-2 text-sm font-medium rounded-md"
             />
           ) : (
             <Button
