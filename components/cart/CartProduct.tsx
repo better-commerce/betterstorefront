@@ -220,7 +220,7 @@ export default function CartProduct({
                   ? product.price?.formatted?.withTax
                   : product.price?.formatted?.withoutTax}
                 {product.listPrice?.raw.withTax > 0 &&
-                  product.listPrice?.raw.withTax !=
+                  product.listPrice?.raw.withTax >
                   product.price?.raw?.withTax ? (
                   <span className="px-2 text-sm text-gray-400 line-through">
                     {isIncludeVAT
@@ -293,7 +293,7 @@ export default function CartProduct({
               )}
 
               {product.listPrice?.raw.withTax > 0 &&
-                product.listPrice?.raw.withTax != product.price?.raw?.withTax ? (
+                product.listPrice?.raw.withTax > product.price?.raw?.withTax ? (
                 <span className="px-0 text-sm font-normal text-gray-400 line-through">
                   {isIncludeVAT
                     ? product.listPrice.formatted?.withTax
