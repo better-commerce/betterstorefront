@@ -1634,6 +1634,19 @@ br {
     top: 91px;
   }
 }
+.coupon-text-rotate{
+  width: 140px;
+  position: absolute;
+  left: -54px;
+  top: 46%;
+  rotate: -90deg;
+  text-align: center;
+  font-size: 11px!important;
+  line-height: 11px!important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 20px;
+}
 @media screen and (max-width: 399px) {
   .btn-c.btn-primary-green,
   .btn-c.btn-primary,

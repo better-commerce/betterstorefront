@@ -694,7 +694,7 @@ export default function PLPQuickView({
                                   ? productData?.price?.formatted?.withTax
                                   : productData?.price?.formatted?.withoutTax}
 
-                                {productData?.listPrice?.raw.tax > 0 ? (
+                                { productData?.listPrice?.raw?.withTax > 0 && productData?.listPrice?.raw?.withTax > productData?.price?.raw?.withTax && (
                                   <>
                                     <span className="px-2 text-lg font-normal text-gray-500 line-through sm:text-md">
                                       {isIncludeVAT
@@ -707,7 +707,7 @@ export default function PLPQuickView({
                                       {discount}% off
                                     </span>
                                   </>
-                                ) : null}
+                                )}
                               </p>
                             </div>
                             <div className="flex flex-col px-4 py-4 sm:px-6">
