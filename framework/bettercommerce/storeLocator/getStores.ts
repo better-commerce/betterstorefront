@@ -6,11 +6,11 @@ export default async function getStores(postCode: string, cookies?: any) {
     const response: any = await fetcher({
       url: `${STORE_LOCATOR_API}/${postCode}`,
       method: 'get',
-      //data: { postCode: postCode },
+      data: { postCode: postCode },
       baseUrl: OMS_BASE_URL,
       cookies,
     })
-    return response.result
+    return response.Result
   } catch (error) {
     console.log(error)
   }

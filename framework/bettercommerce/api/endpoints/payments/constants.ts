@@ -2,9 +2,12 @@ export enum BCPaymentEndpoint {
   CONVERT_ORDER = 'co',
   INIT_PAYMENT = 'ip',
   REQUEST_PAYMENT = 'rp',
-  CREATE_ONE_TIME_PAY_ORDER = 'cotpo',
+  CREATE_ONE_TIME_PAY_ORDER = 'cotpo', // for Klarna
   PAYMENT_RESPONSE = 'pr',
+  PAYMENT_WEBHOOK = 'pwh',
   B2B_COMPANY_DETAILS = 'cd',
+  VALIDATE_PAYMENT_SESSION = 'vps', // for ApplePay
+  REQUEST_TOKEN = 'rt', // for Checkout, ApplePay
 }
 
 export enum PayPalOrderIntent {

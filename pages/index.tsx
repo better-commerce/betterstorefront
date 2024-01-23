@@ -18,9 +18,17 @@ import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import {
+  HOME_PAGE_DEFAULT_SLUG,
+  STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
+} from '@framework/utils/constants'
 import { useRouter } from 'next/router'
-import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
+import {
+  getCurrency,
+  getCurrentCurrency,
+  obfuscateHostName,
+  setCurrentCurrency,
+} from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
 
 const PromotionBanner = dynamic(
@@ -31,10 +39,6 @@ const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
-const RefferalCard = dynamic(
-  () => import('@components/customer/Referral/ReferralCard')
-)
-
 export async function getStaticProps({
   preview,
   locale,
@@ -65,6 +69,7 @@ export async function getStaticProps({
               channel: 'Web',
               currency: currencyCode,
               cachedCopy: true,
+              language: config?.locale,
             })
             const pageContentWeb = await pageContentsPromiseWeb
             pageContentsWeb.push({ key: currencyCode, value: pageContentWeb })
@@ -120,7 +125,7 @@ export async function getStaticProps({
       pageContentsMobileWeb: pageContentsMobileWeb ?? [],
       hostName: obfuscateHostName(hostName),
     },
-    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
   }
 }
 
