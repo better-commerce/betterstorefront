@@ -1,6 +1,7 @@
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
 import commerce from '@lib/api/commerce'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 
 export async function getSearchStaticProps({
   preview,
@@ -18,7 +19,7 @@ export async function getSearchStaticProps({
       categories,
       brands,
     },
-    revalidate: 200,
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
 

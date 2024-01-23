@@ -4,10 +4,8 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { processPaymentResponse } from '@framework/utils/payment-util'
-import {
-  PaymentMethodType,
-  PaymentStatus,
-} from '@components/utils/payment-constants'
+import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { PaymentStatus } from '@components/utils/payment-constants'
 
 /* ---------------- HOW TO ADD A NEW PAYMENT METHOD
 

@@ -23,6 +23,7 @@ import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 
 function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
   const router = useRouter()
@@ -97,14 +98,14 @@ function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
     <div className="flex flex-col items-center w-full px-4 py-0 pb-24 mx-auto text-left bg-white sm:px-0 lg:px-0">
       <div className="w-full overflow-hidden bg-gray-200 rounded-sm">
         <div className="image-container lookbook-image">
-          <Image
+          <img
             style={css}
             width={1000}
             height={400}
             src={
               generateUri(data.mainImage, 'h=700&fm=webp') || IMG_PLACEHOLDER
             }
-            alt={data.name}
+            alt={data.name || 'lookbook'}
             className="object-cover object-center w-full h-screen min-h-screen image"
           />
           <div className="lookbook-data">
@@ -166,7 +167,7 @@ export async function getStaticProps({
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
     },
-    revalidate: 200,
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
 const PAGE_TYPE = PAGE_TYPES['Page']

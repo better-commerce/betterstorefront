@@ -5,6 +5,8 @@ import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { LOADER_LOADING } from '@components/utils/textVariables'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { logError, notFoundRedirect } from '@framework/utils/app-util'
 
 export async function getStaticProps({
   params,
@@ -24,6 +26,10 @@ export async function getStaticProps({
   try {
     const productPromise = commerce.getProduct({ query: params!?.slug[0] })
     product = await productPromise
+
+    if (product?.status === "NotFound") {
+      return notFoundRedirect();
+    }
 
     const allProductsByCategoryRes = await commerce.getAllProducts({
       query: {
@@ -77,8 +83,21 @@ export async function getStaticProps({
 
         pdpCachedImages = await pdpCachedImagesPromise
       }
-    } catch (imageE) {}
-  } catch (error: any) {}
+    } catch (imgError) {}
+  } catch (error: any) {
+    logError(error)
+    let errorUrl = '/500'
+    const errorData = error?.response?.data
+    if (errorData?.errorId) {
+      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+    }
+    return {
+      redirect: {
+        destination: errorUrl,
+        permanent: false,
+      },
+    }
+  }
 
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
@@ -96,7 +115,7 @@ export async function getStaticProps({
         ? JSON.parse(pdpCachedImages?.images)
         : [],
     },
-    revalidate: 200,
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
 

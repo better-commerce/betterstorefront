@@ -1,12 +1,29 @@
-import { stringToBoolean } from './parse-util'
+//import { toNumber } from 'lodash'
+import { stringToBoolean, stringToNumber } from './parse-util'
+// import { toNumber } from 'lodash'; cannot apply toMumber from loadash as it breaks the build process ,Error :Dynamic Code Evaluation (e. g. 'eval', 'new Function', 'WebAssembly.compile') not allowed in Edge Runtime
 
+export const STATIC_PAGE_CACHE_INVALIDATION_IN_MINS = process.env
+  .STATIC_PAGE_CACHE_INVALIDATION_IN_MINS
+  ? parseInt(process.env.STATIC_PAGE_CACHE_INVALIDATION_IN_MINS, 10)
+  : 2
+export const STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS = 60
+export const STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS = 200
 export const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
 export const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
 export const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL
 export const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
+export const REVIEW_BASE_URL = process.env.BETTERCOMMERCE_REVIEW_BASE_URL
+export const STATIC_BRANDS_PATH_ENABLED = stringToBoolean(
+  process.env.STATIC_BRANDS_PATH_ENABLED
+)
 export const OMS_BASE_URL = process.env.OMS_BASE_URL
 export const ORG_ID = process.env.NEXT_PUBLIC_ORG_ID
-
+export const CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE = stringToNumber(
+  process.env.CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE
+)
+export const CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE = stringToNumber(
+  process.env.CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE
+)
 export const BETTERCMS_BASE_URL = process.env.BETTERCMS_BASE_URL
 export const IS_TEST_PAYMENT_ENABLED_ON_LIVE =
   process.env.IS_TEST_PAYMENT_ENABLED_ON_LIVE
@@ -37,6 +54,7 @@ export const OMNILYTICS_DISABLED = stringToBoolean(
 export module Cookie {
   export module Key {
     export const CURRENCY = 'Currency'
+    export const CURRENT_CURRENCY = 'CurCurrency'
     export const LANGUAGE = 'Language'
     export const COUNTRY = 'Country'
     export const SESSION_ID = 'sessionId'
@@ -47,5 +65,10 @@ export module Cookie {
     export const CLIENT_IP_ADDRESS = 'ClientIP'
     export const IS_PAYMENT_LINK = 'ipl'
     export const API_TOKEN = 'i'
+    export const USER_TOKEN = 'ut'
+    export const ANALYTICS = 'analytics'
+    export const ADVERTISEMENT = 'advertisement'
+    export const NAV_ENDPOINT_DATA_CACHED = 'nedc'
+    export const ALGOLIA_SETTINGS_DATA_CACHED = 'asdc'
   }
 }

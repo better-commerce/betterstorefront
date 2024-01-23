@@ -21,14 +21,16 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
-import { matchStrings } from '@framework/utils/parse-util'
+import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import getAllProductsOperation from '@framework/api/operations/get-all-products'
 import { ProductCard } from '@components/product'
 import axios from 'axios'
-import { NEXT_GET_CATALOG_PRODUCTS } from '@components/utils/constants'
+import { NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -52,6 +54,11 @@ export async function getStaticProps(context: any) {
   const category = await getCategoryBySlug(slug)
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
+
+  if (category?.status === "NotFound") {
+    return notFoundRedirect()
+  }
+
   if (category) {
     const categoryProducts = await getCategoryProducts(category.id)
     return {
@@ -62,7 +69,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: 60,
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
     }
   } else
     return {
@@ -73,7 +80,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: 60,
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
     }
 }
 
@@ -288,6 +295,21 @@ function CategoryLandingPage({
       }
       handleApiCall()
     }
+    
+    const trackScroll = (ev: any) => {
+      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+    }
+
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+    if (isScrollEnabled) {
+      window?.addEventListener('scroll', trackScroll)
+      return () => {
+        window?.removeEventListener('scroll', trackScroll)
+      }
+    } /*else {
+      resetPageScroll()
+    }*/
+
   }, [])
 
   useEffect(() => {
@@ -344,12 +366,12 @@ function CategoryLandingPage({
   if (category === null) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
-        <h4 className="pb-6 text-3xl font-medium text-gray-400">
+        <h1 className="pb-6 font-30 text-3xl font-medium text-gray-400">
           {BAD_URL_TEXT}
           <Link href="/category">
             <span className="px-3 text-indigo-500">{ALL_CATEGORY}</span>
           </Link>
-        </h4>
+        </h1>
       </div>
     )
   }
@@ -378,7 +400,7 @@ function CategoryLandingPage({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{category?.name || 'Category'}</title>
         <meta name="title" content={category?.name || 'Category'} />
         <meta name="description" content={category?.metaDescription} />
@@ -401,10 +423,10 @@ function CategoryLandingPage({
           )}
         </div>
         <div className="container px-4 mx-auto my-0 mt-4 bg-transparent sm:px-6 lg:px-6 2xl:px-0">
-          <h1>{category?.name}</h1>
+          <h1 className='dark:text-black'>{category?.name}</h1>
           <div
             className="font-18"
-            dangerouslySetInnerHTML={{ __html: category?.description }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }}
           ></div>
         </div>
         {/* popular category start */}
@@ -448,20 +470,18 @@ function CategoryLandingPage({
                             <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
                             <>
                               {featurecat?.image != '' ? (
-                                <Image
-                                  src={featurecat?.image}
+                                <img
+                                  src={generateUri(featurecat?.image,'h=160&fm=webp')||IMG_PLACEHOLDER}
                                   className="object-fill object-center w-full"
                                   alt="Image"
-                                  priority
                                   width={240}
                                   height={160}
                                 />
                               ) : (
-                                <Image
+                                <img
                                   src="/default-img.svg"
                                   className="object-fill object-center w-full"
                                   alt="Image"
-                                  priority
                                   width={240}
                                   height={160}
                                 />
@@ -509,13 +529,13 @@ function CategoryLandingPage({
                         </div>
                       </div>
                       <div className="order-1 sm:order-2">
-                        <Image
+                        <img
                           src={
                             generateUri(cat?.url, 'h=700&fm=webp') ||
                             IMG_PLACEHOLDER
                           }
                           className="w-full"
-                          alt={category?.name}
+                          alt={category?.name || 'Image'}
                           width={700}
                           height={700}
                         />
@@ -538,15 +558,15 @@ function CategoryLandingPage({
                     <div className="flex-shrink-0">
                       <>
                         {feature?.logoImageName != '' ? (
-                          <Image
-                            src={feature?.logoImageName}
+                          <img
+                            src={generateUri(feature?.logoImageName,'h=240&fm=webp') || IMG_PLACEHOLDER}
                             className="object-fill object-center w-full"
                             alt="Image"
                             width={240}
                             height={160}
                           />
                         ) : (
-                          <Image
+                          <img
                             src="/default-img.svg"
                             className="object-fill object-center w-full"
                             alt="Image"
@@ -565,7 +585,7 @@ function CategoryLandingPage({
                           <div
                             className="mt-3 text-white font-18"
                             dangerouslySetInnerHTML={{
-                              __html: feature?.description,
+                             __html: sanitizeHtmlContent( feature?.description),
                             }}
                           ></div>
                         </Link>
@@ -666,7 +686,7 @@ function CategoryLandingPage({
                             <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
                             <>
                               {relatedcat?.image != '' ? (
-                                <Image
+                                <img
                                   src="/default-img.svg"
                                   className="object-fill object-center w-full"
                                   alt="Image"
@@ -674,7 +694,7 @@ function CategoryLandingPage({
                                   height={160}
                                 />
                               ) : (
-                                <Image
+                                <img
                                   src="/default-img.svg"
                                   className="object-fill object-center w-full"
                                   alt="Image"
@@ -726,13 +746,13 @@ function CategoryLandingPage({
                           </div>
                         </div>
                         <div className="order-1 sm:order-2">
-                          <Image
+                          <img
                             src={
                               generateUri(cat?.url, 'h=700&fm=webp') ||
                               IMG_PLACEHOLDER
                             }
                             className="w-full"
-                            alt={category?.name}
+                            alt={category?.name || 'category'}
                             width={700}
                             height={700}
                           />
@@ -781,15 +801,15 @@ function CategoryLandingPage({
                               <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
                               <>
                                 {featurecat?.image != '' ? (
-                                  <Image
-                                    src={featurecat?.image}
+                                  <img
+                                    src={generateUri(featurecat?.image,'h=240&fm=webp')||IMG_PLACEHOLDER}
                                     className="object-fill object-center w-full"
                                     alt="Image"
                                     width={240}
                                     height={160}
                                   />
                                 ) : (
-                                  <Image
+                                  <img
                                     src="/default-img.svg"
                                     className="object-fill object-center w-full"
                                     alt="Image"

@@ -40,6 +40,7 @@ import {
   resetCache,
   logRequest,
   getCountries,
+  getReviewSummary,
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -91,6 +92,7 @@ const operations = {
   resetCache,
   logRequest,
   getCountries,
+  getReviewSummary,
 }
 
 export const provider = { config, operations }

@@ -1,3 +1,5 @@
+import { generateUri } from '@commerce/utils/uri-util'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
@@ -56,12 +58,11 @@ export default function ProductOffers({ isOffers, setOffers, data }: any) {
                             {data ? (
                               <>
                                 <div className="flex-1 image-container">
-                                  <Image
+                                  <img
                                     alt="Offers"
-                                    src={data?.additionalInfo5}
+                                    src={generateUri(data?.additionalInfo5,'h=196&webp')||IMG_PLACEHOLDER}
                                     width={318}
                                     height={196}
-                                    layout="responsive"
                                     className="image"
                                   />
                                 </div>

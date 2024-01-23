@@ -9,6 +9,8 @@ import Image from 'next/image'
 import React from 'react'
 import TrackingDetail from './TrackingDetail'
 import { vatIncluded } from '@framework/utils/app-util'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 
 const OrderItems = ({
   items,
@@ -54,11 +56,10 @@ const OrderItems = ({
               >
                 <div className="flex gap-3 py-6 sm:gap-6">
                   <div className="flex-shrink-0">
-                    <Image
+                    <img
                       width={72}
                       height={128}
-                      layout="fixed"
-                      src={productItem?.image}
+                      src={ generateUri(productItem?.image,'h=128&fm=webp')||IMG_PLACEHOLDER}
                       alt="image"
                       className="basket-image"
                     />

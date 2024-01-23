@@ -18,6 +18,7 @@ import {
 import SwiperCore, { Navigation } from 'swiper'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 
 SwiperCore.use([Navigation])
 
@@ -62,14 +63,14 @@ function LookbookPage({ data }: any) {
                     <div className="relative flex flex-col items-center justify-between group sm:flex-row">
                       <div className="w-full overflow-hidden bg-gray-200 rounded-sm aspect-w-1 aspect-h-1">
                         <div className="image-container">
-                          <Image
+                          <img
                             src={
                               generateUri(lookbook.mainImage, 'h=1200&fm=webp') || IMG_PLACEHOLDER
                             }
-                            alt={lookbook.name}
+                            alt={lookbook.name || 'Lookbook_image'}
                             className="object-cover object-center w-auto h-96 hover:opacity-75 sm:min-h-screen sm:max-h-screen image"
-                            fill
-                          ></Image>
+                           
+                          />
                         </div>
                       </div>
                       <div className="flex flex-col items-center w-full p-5 sm:w-1/2 justify-left">
@@ -130,7 +131,7 @@ export async function getStaticProps({
       globalSnippets: infra?.snippets ?? [],
       snippets: [],
     },
-    revalidate: 200,
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
 

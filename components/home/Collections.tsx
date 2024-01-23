@@ -19,7 +19,7 @@ export default function Collections({ data }: any) {
               passHref
               legacyBehavior
             >
-              <Image
+              <img
                 src={
                   generateUri(
                     collection?.collectionlist_image,
@@ -27,7 +27,7 @@ export default function Collections({ data }: any) {
                   ) || IMG_PLACEHOLDER
                 }
                 className="object-cover object-center cursor-pointer"
-                alt={collection?.collectionlist_title}
+                alt={collection?.collectionlist_title || "collection-image"}
                 width={500}
                 height={300}
                 style={css}

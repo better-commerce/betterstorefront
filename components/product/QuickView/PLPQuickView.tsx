@@ -526,11 +526,12 @@ export default function PLPQuickView({
   }
 
   useEffect(() => {
+    if (!isQuickview) return
     fetchProduct()
     fetchIsQuickView()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productData?.slug])
+}, [isQuickview])
 
   const setModelClose = () => {
     setQuickviewOpen(false)
@@ -577,7 +578,7 @@ export default function PLPQuickView({
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <div className="w-screen max-w-xl p-2">
+                <div className="w-screen max-w-xl p-2 quickview-screen">
                   <div className="flex flex-col h-full shadow-xl bg-gray-50">
                     <div className="flex-1 px-0">
                       <div className="relative py-2 mt-2 sm:px-0">
@@ -589,8 +590,8 @@ export default function PLPQuickView({
                           <span className="sr-only">{CLOSE_PANEL}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
-                        <div className="grid grid-cols-1 sm:grid-cols-12">
-                          <div className="sm:col-span-5 md:col-span-5 lg:col-span-7">
+                        <div className="grid grid-cols-1 lg:grid-cols-12">
+                          <div className="lg:col-span-7">
                             <div className="flex flex-col px-4 sm:px-6 sm:pb-3">
                               <Swiper
                                 slidesPerView={1}
@@ -627,23 +628,18 @@ export default function PLPQuickView({
                                             <div className="relative group">
                                               {image?.image ? (
                                                 <div className="image-container">
-                                                  <Image
-                                                    priority
+                                                  <img
                                                     src={
                                                       generateUri(
                                                         image?.image,
                                                         'h=1000&fm=webp'
                                                       ) || IMG_PLACEHOLDER
                                                     }
-                                                    alt={image.name}
+                                                    alt={image.name || 'product-image'}
                                                     className="object-cover object-center w-full h-full image"
-                                                    fill
-                                                    // sizes="320 600 1000"
-                                                    blurDataURL={
-                                                      `${image?.image}?h=600&w=400&fm=webp` ||
-                                                      IMG_PLACEHOLDER
-                                                    }
+                                                    
                                                   />
+                                                  
                                                 </div>
                                               ) : (
                                                 <></>
@@ -657,7 +653,7 @@ export default function PLPQuickView({
                               </Swiper>
                             </div>
                           </div>
-                          <div className="sm:col-span-7 md:col-span-7 lg:col-span-5">
+                          <div className="lg:col-span-5">
                             <div className="flex flex-col px-4 my-1 sm:px-6">
                               <h4 className="text-xs font-normal text-gray-400">
                                 {productData?.classification?.category}
@@ -698,7 +694,7 @@ export default function PLPQuickView({
                                   ? productData?.price?.formatted?.withTax
                                   : productData?.price?.formatted?.withoutTax}
 
-                                {productData?.listPrice?.raw.tax > 0 ? (
+                                { productData?.listPrice?.raw?.withTax > 0 && productData?.listPrice?.raw?.withTax > productData?.price?.raw?.withTax && (
                                   <>
                                     <span className="px-2 text-lg font-normal text-gray-500 line-through sm:text-md">
                                       {isIncludeVAT
@@ -711,7 +707,7 @@ export default function PLPQuickView({
                                       {discount}% off
                                     </span>
                                   </>
-                                ) : null}
+                                )}
                               </p>
                             </div>
                             <div className="flex flex-col px-4 py-4 sm:px-6">

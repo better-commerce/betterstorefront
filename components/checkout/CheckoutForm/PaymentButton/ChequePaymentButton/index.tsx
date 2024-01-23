@@ -6,7 +6,7 @@ import PaymentGatewayNotification from '@components/checkout/PaymentGatewayNotif
 
 // Other Imports
 import { EmptyString, Messages } from '@components/utils/constants'
-import { PaymentMethodType } from '@components/utils/payment-constants'
+import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { matchStrings } from '@framework/utils/parse-util'
 
 export class ChequePaymentButton extends BasePaymentButton {

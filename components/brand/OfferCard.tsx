@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { SHOP_NOW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, SHOP_NOW } from '@components/utils/textVariables'
 import Router from 'next/router'
+import { generateUri } from '@commerce/utils/uri-util'
 
 const OfferCard = ({
   title,
@@ -40,9 +41,9 @@ const OfferCard = ({
       key={`offers-${key}`}
       className={`flex flex-col items-start pl-10 ${bgColour} h-[400px] justify-evenly py-2`}
     >
-      <Image
+      <img
         alt="brand"
-        src={src}
+        src={generateUri(src, 'h=51&fm=webp') || IMG_PLACEHOLDER}
         width={62}
         height={51}
         className="h-auto w-10 sm:w-16"

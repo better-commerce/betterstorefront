@@ -88,7 +88,7 @@ export default function ProductSort({
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 z-10 w-40 mt-6 text-left origin-top-right bg-white rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-            {products.sortList.length > 0
+            {products?.sortList?.length > 0
               ? products.sortList.map((option: any) => (
                   <Menu.Item key={`short-by-option-${option.value}`}>
                     {({ active }) => (

@@ -1,6 +1,6 @@
 // Base Imports
 import React, { Fragment, useEffect, useState } from 'react'
-
+import NextHead from 'next/head'
 // Package Imports
 import moment from 'moment'
 import Router from 'next/router'
@@ -21,7 +21,7 @@ import ReviewInput from '@components/product/Reviews/ReviewInput'
 import { ArrowLeft } from '@components/icons'
 // import { CLOSE_PANEL, CURRENCY_SYMBOL_RUPEE } from '@components/utils/textVariables';
 import { StarIcon } from '@heroicons/react/24/solid'
-import { DATE_FORMAT } from '@components/utils/constants'
+import { DATE_FORMAT, SITE_ORIGIN_URL } from '@components/utils/constants'
 // import getCustomerOrderDetail from '@framework/checkout/customer-order-details'
 import { round } from 'lodash'
 import Link from 'next/link'
@@ -46,6 +46,7 @@ export default function OrderDetail({
   show,
   deviceInfo,
 }: any) {
+
   const { isMobile, isIPadorTablet } = deviceInfo
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [isHelpOrderOpen, setIsHelpOrderOpen] = useState(false)
@@ -224,6 +225,17 @@ export default function OrderDetail({
 
   return (
     <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" href={SITE_ORIGIN_URL+Router.asPath} />
+        <title>Order Detail : {details?.order?.orderNo}</title>
+        <meta name="title" content={`Order Detail : ${details?.order?.orderNo}`} />
+        <meta name="description" content={`Order Detail : ${details?.order?.orderNo}`} />
+        <meta name="keywords" content={`Order Detail : ${details?.order?.orderNo}`} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={`Order Detail : ${details?.order?.orderNo}`} key="ogtitle" />
+        <meta property="og:description" content={`Order Detail : ${details?.order?.orderNo}`} key="ogdesc" />
+      </NextHead>
       <div className="w-full bg-white">
         <OrderDetailHeader
           details={details}

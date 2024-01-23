@@ -5,32 +5,6 @@ import { ENABLE_SECURED_PAYMENT_PAYLOAD } from './constants'
 export const LOG_REQUEST_OPTIONS = false
 export const TEST_PAYMENT_AMOUNT_FORMATTED = `₹${TEST_PAYMENT_AMOUNT}`
 
-export enum PaymentMethodType {
-  COD = 'cod',
-  JUSPAY = 'juspay',
-  PAYPAL = 'paypal',
-  CHECKOUT = 'checkout',
-  MASTER_CARD = 'mastercard',
-  CLEAR_PAY = 'clearpay',
-  KLARNA = 'klarna',
-  STRIPE = 'stripe',
-  ACCOUNT_CREDIT = 'accountcredit',
-  CHEQUE = 'cheque',
-}
-
-export enum PaymentMethodTypeId {
-  COD = 0,
-  JUSPAY = 1,
-  PAYPAL = 2,
-  CHECKOUT = 3,
-  MASTER_CARD = 4,
-  CLEAR_PAY = 5,
-  KLARNA = 6,
-  STRIPE = 7,
-  ACCOUNT_CREDIT = 8,
-  CHEQUE = 9,
-}
-
 export module Payments {
   export const PARSE_ORDER_ID_REGEX =
     /Order[ ](.*?)(?:[a-zA-Z0-9\-]*)for[ ]basket (.*)(?:[a-zA-Z0-9\-]*)/g
@@ -39,6 +13,29 @@ export module Payments {
   export const KLARNA_FRAMES_SCRIPT_SRC_V1 =
     'https://x.klarnacdn.net/kp/lib/v1/api.js'
   export const CLEARPAY_SCRIPT_SRC = 'afterpay.js'
+
+  export const APPLE_PAY_VERSION = 6
+  export const APPLE_PAY_SCRIPT_SRC_V1 =
+    'https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js'
+  export const APPLE_PAY_MERCHANT_ID = 'merchant.com.commerce.ffx'
+  export const APPLE_PAY_SUPPORTED_NETWORKS = [
+    'visa',
+    'masterCard' /*, 'amex', 'discover',*/,
+  ]
+  export const APPLE_PAY_MERCHANT_CAPABILITIES = [
+    'supports3DS' /*, 'supportsEMV', 'supportsCredit', 'supportsDebit'*/,
+  ]
+  export const APPLE_PAY_REQUIRED_BILLING_CONTACT_FIELDS = [
+    'phone',
+    'postalAddress',
+    'name',
+    'email',
+  ]
+  export const APPLE_PAY_REQUIRED_SHIPPING_CONTACT_FIELDS = [
+    'phone',
+    'name',
+    'email',
+  ]
 
   export module RequestParams {
     export const B2B_COMPANY_DETAILS: any = {
@@ -68,6 +65,21 @@ export module Payments {
 
     export const PROCESS_PAYMENT_RESPONSE: any = {
       t: BCPaymentEndpoint.PAYMENT_RESPONSE,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
+    }
+
+    export const PROCESS_PAYMENT_WEBHOOK: any = {
+      t: BCPaymentEndpoint.PAYMENT_WEBHOOK,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
+    }
+
+    export const VALIDATE_PAYMENT_SESSION: any = {
+      t: BCPaymentEndpoint.VALIDATE_PAYMENT_SESSION,
+      s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
+    }
+
+    export const REQUEST_TOKEN: any = {
+      t: BCPaymentEndpoint.REQUEST_TOKEN,
       s: ENABLE_SECURED_PAYMENT_PAYLOAD ? 1 : 0,
     }
   }
@@ -104,6 +116,7 @@ export module LocalStorage {
     export const PREFERRED_PAYMENT = 'prefPay'
     export const DELIVERY_ADDRESS = 'delAddr'
     export const RECENTLY_VIEWED = 'recVwdProds'
+    export const PAGE_SCROLL = 'pscr'
   }
 }
 

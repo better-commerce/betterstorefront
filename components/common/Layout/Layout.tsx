@@ -16,7 +16,6 @@ import Router from 'next/router'
 import Head from 'next/head'
 import { CURRENT_THEME } from '@components/utils/constants'
 import {
-  BTN_ACCEPT_COOKIE,
   GENERAL_COOKIE_TEXT,
 } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -62,6 +61,7 @@ interface Props {
     pages?: Page[]
     categories: Category[]
     navTree?: any
+    reviewData: any
   }
   nav: []
   footer: []
@@ -90,7 +90,7 @@ const SidebarView: FC<
   React.PropsWithChildren<
     { sidebarView: string; closeSidebar(): any } & IExtraProps
   >
-> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount }) => {
+> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount, config }) => {
   return (
     <Sidebar
       onClose={closeSidebar}
@@ -101,6 +101,7 @@ const SidebarView: FC<
         <CartSidebarView
           deviceInfo={deviceInfo}
           maxBasketItemsCount={maxBasketItemsCount}
+          config={config}
         />
       )}
       {sidebarView === 'LOGIN_SIDEBAR_VIEW' && <LoginSidebarView />}
@@ -116,6 +117,7 @@ const SidebarView: FC<
 const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
   deviceInfo,
   maxBasketItemsCount,
+  config,
 }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
@@ -124,6 +126,7 @@ const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
       closeSidebar={closeSidebar}
       deviceInfo={deviceInfo}
       maxBasketItemsCount={maxBasketItemsCount}
+      config={config}
     />
   ) : null
 }
@@ -139,12 +142,13 @@ export interface IExtraProps {
   readonly isIncludeVAT?: boolean
   onIncludeVATChanged?: any
   keywords?: any
+  config?: any
 }
 
 const Layout: FC<Props & IExtraProps> = ({
   children,
   config,
-  pageProps: { categories = [], navTree, ...pageProps },
+  pageProps: { categories = [], navTree, reviewData = {}, ...pageProps },
   keywords,
   isLocationLoaded,
   deviceInfo,
@@ -284,6 +288,7 @@ const Layout: FC<Props & IExtraProps> = ({
           <SidebarUI
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount}
+            config={config}
           />
           <div className="cookie-bannner">
             <CookieBanner

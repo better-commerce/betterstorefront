@@ -22,7 +22,7 @@ function Categories({ data, deviceInfo }: any) {
       navigation={true}
       breakpoints={{
         640: { slidesPerView: 3.2 },
-        768: { slidesPerView: 4.5 },
+        768: { slidesPerView: 3.2 },
         1024: { slidesPerView: 5.5 },
       }}
     >
@@ -39,7 +39,7 @@ function Categories({ data, deviceInfo }: any) {
               legacyBehavior
             >
               {isMobile ? (
-                <Image
+                <img
                   src={
                     generateUri(
                       category?.categorylist_image,
@@ -53,7 +53,7 @@ function Categories({ data, deviceInfo }: any) {
                   className="cursor-pointer"
                 />
               ) : (
-                <Image
+                <img
                   src={
                     generateUri(
                       category?.categorylist_image,

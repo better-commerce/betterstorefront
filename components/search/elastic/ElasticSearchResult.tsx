@@ -147,7 +147,7 @@ const CustomResultView = ({ result }: any, includeOutOfStockProduct: boolean, ma
               <div className="p-2 mb-4">
                 <img
                   src={result?.imageurl?.raw}
-                  alt={result?.title?.raw}
+                  alt={result?.title?.raw || 'search-result'}
                   className="object-contain mx-auto sm:w-48 sm:h-48"
                 />
               </div>
@@ -243,7 +243,7 @@ const CustomResultView = ({ result }: any, includeOutOfStockProduct: boolean, ma
                   <button
                     type="button"
                     onClick={() => handleQuickViewData(result)}
-                    className="w-full text-primary bg-orange-600 text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
+                    className="w-full text-primary btn-default text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
                   >
                     {QUICK_VIEW}
                   </button>

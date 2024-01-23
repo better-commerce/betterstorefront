@@ -6,7 +6,7 @@ import { decipherPayload } from './app-util'
 import {
   PaymentMethodType,
   PaymentMethodTypeId,
-} from '@components/utils/payment-constants'
+} from '@better-commerce/bc-payments-sdk'
 import {
   ENABLE_SECURED_PAYMENT_PAYLOAD,
   NEXT_CANCEL_ORDER,
@@ -15,6 +15,10 @@ import {
 import { Payments } from '@components/utils/payment-constants'
 import { matchStrings, tryParseJson } from './parse-util'
 import { encrypt } from './cipher'
+import {
+  CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE,
+  CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE,
+} from './constants'
 
 export const getReferer = (origin: string) => {
   let referer
@@ -33,7 +37,12 @@ export const getReferer = (origin: string) => {
   }
   return referer
 }
-
+export const isClearPayPriceThresholdInvalid = function (value: number) {
+  return !(
+    value >= CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE &&
+    value <= CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE
+  )
+}
 export const cancelStorefrontOrder = async (orderId: string) => {
   const { data: orderResponse }: any = await axios.post(NEXT_CANCEL_ORDER, {
     id: orderId,

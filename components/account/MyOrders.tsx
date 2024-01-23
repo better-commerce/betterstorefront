@@ -19,10 +19,12 @@ import {
   GENERAL_TOTAL,
   GENERAL_ORDER_PLACED_ON,
   GENERAL_CREATE_RETURN,
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import ReturnModal from '@components/returns/Modal'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import Image from 'next/image'
+import { generateUri } from '@commerce/utils/uri-util'
 
 export default function MyOrders({ deviceInfo }: any) {
   const [data, setData] = useState([])
@@ -261,9 +263,9 @@ export default function MyOrders({ deviceInfo }: any) {
                             </div>
                           </div>
                           <div className="flex-shrink-0 ml-4 sm:m-0 sm:mr-6 sm:order-first">
-                            <Image
-                              src={product.image}
-                              alt={product.name}
+                            <img
+                              src={generateUri(product.image,'h=200&fm=webp')||IMG_PLACEHOLDER}
+                              alt={product.name ||'Order-Image'}
                               className="object-cover object-center w-20 h-20 col-start-2 col-end-3 rounded-lg sm:col-start-1 sm:row-start-1 sm:row-span-2 sm:w-40 sm:h-40 lg:w-52 lg:h-52"
                             />
                           </div>

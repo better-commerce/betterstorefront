@@ -31,7 +31,7 @@ export default function ProductSpecifications({
       <div className="grid px-4 sm:grid-cols-12 sm:px-4 md:px-6 lg:px-6 2xl:px-0">
         <div className="sm:col-span-8">
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
-            <h2 className="mb-2 font-bold font-18 text-dark-brown">
+            <h2 className="mb-2 font-bold font-18 text-dark-brown dark:text-black">
               {PRODUCT_SPECIFICATION}
             </h2>
             {attrGroup['whyweloveit']?.length > 0 && (
@@ -131,7 +131,7 @@ export default function ProductSpecifications({
                       {attrGroup['product.fabric']?.map(
                         (fabric: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
                               {fabric.fieldText}
                               <span className="s-icon">,</span>
                             </span>
@@ -152,7 +152,7 @@ export default function ProductSpecifications({
                       {attrGroup['clothing.size']?.map(
                         (fit: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
                               {fit.fieldText}
                               <span className="s-icon">,</span>
                             </span>
@@ -173,7 +173,7 @@ export default function ProductSpecifications({
                       {attrGroup['dress.style']?.map(
                         (fit: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
                               {fit.fieldText}
                               <span className="s-icon">,</span>
                             </span>
@@ -194,7 +194,7 @@ export default function ProductSpecifications({
                       {attrGroup['clothing.type']?.map(
                         (fit: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
                               {fit.fieldText}
                               <span className="s-icon">,</span>
                             </span>
@@ -651,7 +651,7 @@ export default function ProductSpecifications({
                               IMG_PLACEHOLDER
                             }
                             //src={img?.image}
-                            alt={img.name}
+                            alt={img.name||'slider-image'}
                             className="image"
                           ></Image>
                           {/* <Image src={img?.image} className="bhdLno" layout="fill" alt={img.name}></Image> */}

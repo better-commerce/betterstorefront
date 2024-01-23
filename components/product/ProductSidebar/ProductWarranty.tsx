@@ -54,15 +54,14 @@ export default function ProductWarranty({
                               {replaceValue[
                                 'product.replacementeligibility'
                               ]?.map((replaceAttr: any, rpdx: number) => (
-                                <Image
-                                  alt={replaceAttr?.value}
+                                <img
+                                  alt={replaceAttr?.value || 'attribute'}
                                   key={`product-${rpdx}-replacement-image`}
                                   src={`/assets/icons/${replaceAttr?.value
                                     ?.toLowerCase()
                                     ?.replace(/ /g, '')}.svg`}
                                   width={115}
                                   height={90}
-                                  layout="fixed"
                                 />
                               ))}
                             </div>

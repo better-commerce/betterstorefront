@@ -475,8 +475,8 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
   return (
     <>
-      <div className={cn('relative height-full border-gray-200 hover:border-gray-500 grid grid-cols-12 gap-2 sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-4 pb-4 sm:pb-0 bg-white',)} key={product.id}>
-        <div className={`${product?.currentStock == 0 ? 'opacity-40' : ''} relative col-span-4 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card`}>
+      <div className={cn('relative height-full border-gray-200 hover:border-gray-500 long-product-card-mobil grid grid-cols-12 gap-2 sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-4 pb-4 sm:pb-0 bg-white',)} key={product.id}>
+        <div className={`${product?.currentStock == 0 ? 'opacity-40' : ''} relative col-span-4 col-mob-12 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card`}>
           <div className="absolute top-0 right-0 z-10 flex items-center justify-between w-full pos-inherit">
             <ProductTag product={product} />
             {isMobile || isIPadorTablet ? null : (
@@ -487,25 +487,25 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             )}
           </div>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${currentProductData.link}`} handleHover={handleHover} itemPrice={itemPrice} productName={product.name} onClick={handleSetCompareProduct}>
-            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
+            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'compare'} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
             {product?.images?.length > 1 && (
-              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
+              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'compare'} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
             )}
           </ButtonLink>
         </div>
 
-        <div className="col-span-8 sm:col-span-12 sm:pt-4">
+        <div className="col-span-8 sm:col-span-12 sm:pt-4 col-mob-12 mob-left-right-padding">
           <div className="flex items-center justify-between w-full px-0 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">
             <div>
               {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
               {isIncludeVAT ? (<>
-                {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product?.price?.raw?.withTax && (
+                {product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax > product?.price?.raw?.withTax && (
                   <span className="px-1 font-normal text-gray-400 line-through">
                     {product?.listPrice?.formatted?.withTax}
                   </span>
                 )}
               </>) : (<>
-                {product?.listPrice?.raw?.withoutTax > 0 && product?.listPrice?.raw?.withoutTax != product?.price?.raw?.withoutTax && (
+                {product?.listPrice?.raw?.withoutTax > 0 && product?.listPrice?.raw?.withoutTax > product?.price?.raw?.withoutTax && (
                   <span className="px-1 font-normal text-gray-400 line-through">
                     {product?.listPrice?.formatted?.withoutTax}
                   </span>
@@ -570,9 +570,9 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                     <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
                     {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
-                      <><Image alt={attrib?.value} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
+                      <><img alt={attrib?.value||'icon-cross'} src="/assets/images/cross_icon.svg"  width={2} height={2} className='icon-small' /></>
                       : attrib?.value == "True" || attrib?.value == "Yes" ?
-                        <><Image alt={attrib?.value} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
+                        <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
                         : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
                       <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
                   </span>
@@ -627,20 +627,20 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
         {isMobile || isIPadorTablet ? (
           <>
-            <div className="flex flex-col w-full col-span-12 gap-0">
+            <div className="flex flex-col w-full col-span-12 gap-0 mob-left-right-padding">
              {attributesMap?.map((attrib: any, attribIdx: any) => (
                 <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                   <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
                   {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
-                    <><Image alt={attrib?.value} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
+                    <><img alt={attrib?.value || 'icon-cross'} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
                     : attrib?.value == "True" || attrib?.value == "Yes" ?
-                      <><Image alt={attrib?.value} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
+                      <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
                       : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
                     <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
                 </span>
               ))}
             </div>
-            <div className='flex items-center justify-between w-full col-span-12 gap-2 py-2 border-gray-200 border-y'>
+            <div className='flex items-center justify-between w-full col-span-12 gap-2 py-2 border-gray-200 border-y mob-left-right-padding'>
               <div className="relative items-end justify-end w-full text-sm font-semibold text-right text-black top-1 product-name hover:text-gray-950">
                 {isInWishList ? (
                   <SimpleButton

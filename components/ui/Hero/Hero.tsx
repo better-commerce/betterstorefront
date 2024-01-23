@@ -40,19 +40,17 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
               <SwiperSlide key={idx}>
                 <Link href={banner?.link || '#'}>
                   <div className="image-container">
-                    <Image
-                      priority
+                    <img
                       src={
-                        generateUri(banner?.url, 'h=600&fm=webp') ||
+                        generateUri(banner?.url, 'h=761&fm=webp') ||
                         IMG_PLACEHOLDER
                       }
-                      alt={banner?.alt}
+                      alt={banner?.alt || 'banner-image'}
                       style={css}
                       width={1903}
                       height={761}
-                      quality="60"
                       className="sm:max-h-screen image banner-Image"
-                    ></Image>
+                    />
                     <div className="sr-only">Banner Image</div>
                   </div>
                 </Link>

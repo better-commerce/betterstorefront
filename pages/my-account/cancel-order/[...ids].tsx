@@ -21,6 +21,7 @@ import {
 } from '@components/utils/constants'
 import {
   CANCEL_ORDER,
+  IMG_PLACEHOLDER,
   ORDER_CANCELLED,
   PROCEED_TO_CANCEL,
   REASON_CANCEL_HEADING,
@@ -28,6 +29,7 @@ import {
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
+import { generateUri } from '@commerce/utils/uri-util'
 
 declare const window: any
 
@@ -165,10 +167,10 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                           <li className="px-0 pb-2 my-4" key={itemId}>
                             <div className="flex gap-3 py-6 sm:gap-6 max-w-fit">
                               <div className="flex-shrink-0">
-                                <Image
+                                <img
                                   width={72}
                                   height={128}
-                                  src={item?.image}
+                                  src={generateUri(item?.image ,'h=128&fm=webp')||IMG_PLACEHOLDER}
                                   alt="image"
                                   className="basket-image"
                                 />

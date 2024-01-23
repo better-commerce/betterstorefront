@@ -8,7 +8,11 @@ export default async function getCategoryBySlug(slug: string) {
       method: 'post',
     });
     //console.log(response);
-    return { ...response.result, ...{ snippets: response?.snippets ?? [] } };
+    return {
+      ...response.result,
+      ...{ snippets: response?.snippets ?? [] },
+      ...{ status: response?.status },
+    }
   } catch (error: any) {
     throw new Error(error);
   }

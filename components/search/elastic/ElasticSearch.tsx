@@ -28,6 +28,8 @@ import {
   getFacetFields,
 } from '@components/config/config-helper'
 import { getElasticSearchPriceColumn, vatIncluded } from '@framework/utils/app-util'
+import { generateUri } from '@commerce/utils/uri-util'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
 const connector = new AppSearchAPIConnector({
@@ -59,9 +61,9 @@ const CustomResultView = ({ result }: any) => {
     <li className="mb-4 bg-white snap-start hover:text-blue-600 group">
       <a href="">
         <div className="p-2 mb-4 border border-gray-200 group-hover:border-gray-700">
-          <Image
-            src={result?.imageurl?.raw}
-            alt={''}
+          <img
+            src={generateUri(result?.imageurl?.raw,'h=400&fm=webp')||IMG_PLACEHOLDER}
+            alt={'search'}
             className="object-contain w-48 h-48"
             width={300}
             height={400}

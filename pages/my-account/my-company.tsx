@@ -11,7 +11,7 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
-
+import NextHead from 'next/head'
 import React from 'react'
 import MyDetails from '@components/account/MyDetails'
 // import MyOrders from '@components/account/MyOrders'
@@ -24,6 +24,7 @@ import {
   NEXT_B2B_GET_USERS,
   NEXT_GET_ORDERS,
   NEXT_GET_ORDER_DETAILS,
+  SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import classNames from 'classnames'
 import CompanyUsers from '@components/account/CompanyUsers'
@@ -249,6 +250,20 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
 
   return (
     <>
+      <NextHead>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <title>{currentOption}</title>
+        <meta name="title" content={currentOption} />
+        <meta name="description" content={currentOption} />
+        <meta name="keywords" content={currentOption} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={currentOption} key="ogtitle" />
+        <meta property="og:description" content={currentOption} key="ogdesc" />
+      </NextHead>
       {!isB2BUser(user) ? (
         <>
           <Spinner />

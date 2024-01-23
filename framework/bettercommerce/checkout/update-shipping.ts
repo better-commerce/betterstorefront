@@ -1,4 +1,4 @@
-import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
+import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 
 interface Props {
@@ -16,7 +16,7 @@ export default function updateShippingMethod() {
     cookies,
   }: Props) {
     const url =
-      CHECKOUT_ENDPOINT +
+    BASKET_ENDPOINT +
       `/${basketId}/delivery/shipping-method?shippingMethodId=${shippingId}&countryCode=${countryCode}`
     try {
       const response: any = await fetcher({

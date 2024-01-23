@@ -10,10 +10,14 @@ import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { useRouter } from 'next/router'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
 const dataNormalizr = (data: any = []) => {
+
   return data.reduce((acc: any, item: any) => {
     let ref = acc.findIndex(
       (i: any) =>
@@ -36,6 +40,7 @@ const dataNormalizr = (data: any = []) => {
 }
 
 function BrandsPage({ brands }: any) {
+  const router = useRouter()
   const data = dataNormalizr(brands.results)
   const [normalizedBrands, setNormalizedBrands] = useState(data)
   const handleSearch = (value: any) => {
@@ -77,7 +82,7 @@ function BrandsPage({ brands }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL+ router.asPath} />
         <title>Brands</title>
         <meta name="title" content="Brands" />
         <meta name="description" content="Brands" />
@@ -197,7 +202,7 @@ export async function getStaticProps({
       brands: response.result,
       snippets: response?.snippets ?? [],
     },
-    revalidate: 200,
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
 /*

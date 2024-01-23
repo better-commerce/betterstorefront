@@ -21,6 +21,7 @@ import {
   GENERAL_REMOVE,
 } from '@components/utils/textVariables'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
+import { generateUri } from '@commerce/utils/uri-util'
 
 export default function Wishlist() {
   const [data, setData] = useState([])
@@ -95,7 +96,7 @@ export default function Wishlist() {
       {/* Mobile menu */}
 
       <main className="lg:px-8">
-        <div className="max-w-4xl lg:mx-12">
+        <div className="max-w-4xl lg:mx-12 sm:px-6">
           <div className="lg:px-0 sm:px-0 pt-5">
             <h1 className="font-extrabold tracking-tight text-gray-900">
               {/* {WISHLIST_TITLE} */}
@@ -146,28 +147,26 @@ export default function Wishlist() {
                         >
                           <Link passHref href={`/${product.slug}`}>
                             <div className="relative overflow-hidden bg-gray-200 radius-xs aspect-w-1 aspect-h-1">
-                              <div className="imae-container">
+                              <div className="image-container">
                                 {product.image != null ? (
                                   <>
-                                    <Image
-                                      src={product.image}
-                                      alt={product.name}
-                                      layout="responsive"
+                                    <img
+                                      src={generateUri(product.image,'h=600&fm=webp') || IMG_PLACEHOLDER}
+                                      alt={product.name || 'image'}
                                       width={400}
                                       height={600}
                                       className="object-cover object-center w-full h-full radius-xs sm:h-full"
-                                    ></Image>
+                                    />
                                   </>
                                 ) : (
                                   <>
-                                    <Image
+                                    <img
                                       src={IMG_PLACEHOLDER}
-                                      alt={product.name}
-                                      layout="responsive"
+                                      alt={product.name || 'image'}
                                       width={400}
                                       height={600}
                                       className="object-cover object-center w-full h-full radius-xs sm:h-full"
-                                    ></Image>
+                                    ></img>
                                   </>
                                 )}
                               </div>

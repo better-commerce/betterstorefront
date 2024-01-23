@@ -493,8 +493,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         />
         <link
           rel="canonical"
-          id="canonical"
-          href="https://demostore.bettercommerce.io/cart"
+          href={SITE_ORIGIN_URL + router.asPath}
         />
         <title>Basket</title>
         <meta name="title" content="Basket" />
@@ -529,7 +528,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                     className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3"
                   >
                     <div className="flex-shrink-0">
-                      <Image
+                      <img
                         style={css}
                         width={140}
                         height={180}
@@ -537,7 +536,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                           generateUri(product.image, 'h=200&fm=webp') ||
                           IMG_PLACEHOLDER
                         }
-                        alt={product.name}
+                        alt={product.name ||'cart-item'}
                         className="object-cover object-center w-16 rounded-lg sm:w-28 image"
                       />
                     </div>
@@ -609,7 +608,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                           <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
                             <Image
                               src={child.image}
-                              alt={child.name}
+                              alt={child.name || 'cart-image'}
                               className="object-cover object-center w-full h-full"
                             />
                           </div>
@@ -749,7 +748,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                 </dl>
 
-                <div className="mt-6">
+                <div className="mt-6 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button
                       type="submit"
@@ -800,7 +799,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                             className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3"
                           >
                             <div className="flex-shrink-0">
-                              <Image
+                              <img
                                 style={css}
                                 width={140}
                                 height={180}
@@ -808,7 +807,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                   generateUri(product.image, 'h=200&fm=webp') ||
                                   IMG_PLACEHOLDER
                                 }
-                                alt={product.name}
+                                alt={product.name || 'cart-item'}
                                 className="object-cover object-center w-16 rounded-lg sm:w-28 image"
                               />
                             </div>
@@ -893,7 +892,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                     <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
                                       <Image
                                         src={child.image}
-                                        alt={child.name}
+                                        alt={child.name||'cart-image'}
                                         className="object-cover object-center w-full h-full"
                                       />
                                     </div>
@@ -1036,7 +1035,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                 </dl>
 
-                <div className="mt-6">
+                <div className="mt-6 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button
                       type="submit"
@@ -1202,7 +1201,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                           </div>
                         )}
                         <div className="flex w-full">
-                          <Image
+                          <img
                           src={'/assets/images/refer-a-friend.jpg'}
                           alt='banner'
                           height={700}

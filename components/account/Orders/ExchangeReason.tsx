@@ -108,12 +108,12 @@ const ExchangeReason = ({ ExchangesReasons, onItemExchange, item, onGetProduct, 
                             {
                                 selectedImages?.length && (
                                     selectedImages?.map((file: any, idx: number) => (
-                                        <Image
+                                        <img
                                             width={50}
                                             height={50}
                                             key={idx}
-                                            src={URL.createObjectURL(file)}
-                                            alt=""
+                                            src={generateUri(URL.createObjectURL(file),'h=50&fm=webp')||IMG_PLACEHOLDER}
+                                            alt="product-image"
                                         />
                                     ))
                                 )

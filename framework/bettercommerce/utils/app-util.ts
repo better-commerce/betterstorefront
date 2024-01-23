@@ -5,7 +5,10 @@ import { v4 as uuid } from 'uuid'
 // Other Imports
 import { decrypt, encrypt } from './cipher'
 import fetcher from '@framework/fetcher'
-import setSessionIdCookie from '@components/utils/setSessionId'
+import setSessionIdCookie, {
+  getExpiry,
+  getMinutesInDays,
+} from '@components/utils/setSessionId'
 import {
   EmptyString,
   INFRA_LOG_ENDPOINT,
@@ -23,6 +26,7 @@ import axios from 'axios'
 import { Guid } from '@commerce/types'
 import { Cookie } from './constants'
 import { sumBy } from 'lodash'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 
 export const isCartAssociated = (cartItems: any) => {
   if (cartItems?.userId && cartItems?.userId !== Guid.empty) {
@@ -413,44 +417,59 @@ export const vatIncluded = () => {
   return stringToBoolean((getItem('includeVAT') as string) || 'false')
 }
 const kitCartItems: any = (cartItems: any) => {
-  const cartItemsExcludingKitItem = cartItems?.lineItems?.filter((val: any) => val?.basketItemGroupId != "")
-  return sumBy(cartItemsExcludingKitItem, 'qty');
+  const cartItemsExcludingKitItem = cartItems?.lineItems?.filter(
+    (val: any) => val?.basketItemGroupId != ''
+  )
+  return sumBy(cartItemsExcludingKitItem, 'qty')
 }
 
 export const cartItemsValidateAddToCart = (
   cartItems: any,
   maxBasketItemsCount: number,
-  quantity?: any,
+  quantity?: any
 ) => {
   let sumOfItemsQty = sumBy(cartItems?.lineItems, 'qty')
   const kitCartItemsQuant = kitCartItems(cartItems)
-  sumOfItemsQty = sumOfItemsQty - (kitCartItemsQuant > 0 ? kitCartItemsQuant : 0)
+  sumOfItemsQty =
+    sumOfItemsQty - (kitCartItemsQuant > 0 ? kitCartItemsQuant : 0)
   if (quantity) {
-    sumOfItemsQty = JSON.parse(quantity) + sumOfItemsQty;
+    sumOfItemsQty = JSON.parse(quantity) + sumOfItemsQty
     if (sumOfItemsQty > maxBasketItemsCount && maxBasketItemsCount !== 0) {
       return false
-    }
-    else if (maxBasketItemsCount === 0) {
+    } else if (maxBasketItemsCount === 0) {
       return true
     }
-  }
-  else {
+  } else {
     if (sumOfItemsQty >= maxBasketItemsCount && maxBasketItemsCount !== 0) {
       return false
-    }
-    else if (maxBasketItemsCount === 0) {
+    } else if (maxBasketItemsCount === 0) {
       return true
     }
   }
   return true
 }
 export const getCurrency = () => {
-  const currencyCode = Cookies.get(Cookie.Key.CURRENCY) || BETTERCOMMERCE_DEFAULT_CURRENCY! || BETTERCOMMERCE_CURRENCY!
+  const currencyCode =
+    Cookies.get(Cookie.Key.CURRENCY) ||
+    BETTERCOMMERCE_DEFAULT_CURRENCY! ||
+    BETTERCOMMERCE_CURRENCY!
   return currencyCode
 }
 
+export const getCurrentCurrency = () => {
+  const currencyCode =
+    Cookies.get(Cookie.Key.CURRENT_CURRENCY) ||
+    BETTERCOMMERCE_DEFAULT_CURRENCY! ||
+    BETTERCOMMERCE_CURRENCY!
+  return currencyCode
+}
+
+export const setCurrentCurrency = (value: string) => {
+  Cookies.set(Cookie.Key.CURRENT_CURRENCY, value)
+}
+
 export const resetAlgoliaSearch = () => {
-  const btnReset: any = document.querySelector("button.ais-SearchBox-reset")
+  const btnReset: any = document.querySelector('button.ais-SearchBox-reset')
   if (btnReset) {
     if (btnReset.click) {
       btnReset.click()
@@ -464,18 +483,18 @@ export const getAlgoliaSearchPriceColumn = (isIncludeVAT: boolean) => {
   const currencyCode = getCurrency()
 
   switch (currencyCode.toUpperCase()) {
-    case "GBP":
-      return isIncludeVAT ? "price_uk" : "priceex_uk"
+    case 'GBP':
+      return isIncludeVAT ? 'price_uk' : 'priceex_uk'
 
-    case "EUR":
-      return isIncludeVAT ? "price_ie" : "priceex_ie"
+    case 'EUR':
+      return isIncludeVAT ? 'price_ie' : 'priceex_ie'
 
-    case "USD":
-      return isIncludeVAT ? "price_us" : "priceex_us"
+    case 'USD':
+      return isIncludeVAT ? 'price_us' : 'priceex_us'
       break
 
     default:
-      return isIncludeVAT ? "price_uk" : "priceex_uk"
+      return isIncludeVAT ? 'price_uk' : 'priceex_uk'
   }
 }
 
@@ -483,18 +502,18 @@ export const getAlgoliaSearchListPriceColumn = (isIncludeVAT: boolean) => {
   const currencyCode = getCurrency()
 
   switch (currencyCode.toUpperCase()) {
-    case "GBP":
-      return isIncludeVAT ? "listprice_uk" : "listpriceex_uk"
+    case 'GBP':
+      return isIncludeVAT ? 'listprice_uk' : 'listpriceex_uk'
 
-    case "EUR":
-      return isIncludeVAT ? "listprice_ie" : "listpriceex_ie"
+    case 'EUR':
+      return isIncludeVAT ? 'listprice_ie' : 'listpriceex_ie'
 
-    case "USD":
-      return isIncludeVAT ? "listprice_us" : "listpriceex_us"
+    case 'USD':
+      return isIncludeVAT ? 'listprice_us' : 'listpriceex_us'
       break
 
     default:
-      return isIncludeVAT ? "listprice_uk" : "listpriceex_uk"
+      return isIncludeVAT ? 'listprice_uk' : 'listpriceex_uk'
   }
 }
 
@@ -502,18 +521,18 @@ export const getAlgoliaSearchCurrencyLabel = () => {
   const currencyCode = getCurrency()
 
   switch (currencyCode.toUpperCase()) {
-    case "GBP":
-      return "currency_uk"
+    case 'GBP':
+      return 'currency_uk'
 
-    case "EUR":
-      return "currency_ie"
+    case 'EUR':
+      return 'currency_ie'
 
-    case "USD":
-      return "currency_us"
+    case 'USD':
+      return 'currency_us'
       break
 
     default:
-      return "currency_uk"
+      return 'currency_uk'
   }
 }
 
@@ -521,21 +540,95 @@ export const getElasticSearchPriceColumn = (isIncludeVAT: boolean) => {
   const currencyCode = getCurrency()
 
   switch (currencyCode.toUpperCase()) {
-    case "GBP":
-      return isIncludeVAT ? "price_uk" : "price_uk"
+    case 'GBP':
+      return isIncludeVAT ? 'price_uk' : 'price_uk'
 
-    case "EUR":
-      return isIncludeVAT ? "price_ie" : "price_ie"
+    case 'EUR':
+      return isIncludeVAT ? 'price_ie' : 'price_ie'
 
-    case "USD":
-      return isIncludeVAT ? "price_us" : "price_us"
+    case 'USD':
+      return isIncludeVAT ? 'price_us' : 'price_us'
       break
 
     default:
-      return isIncludeVAT ? "price_uk" : "price_uk"
+      return isIncludeVAT ? 'price_uk' : 'price_uk'
   }
 }
 
 export const isB2BUser = (user: any): boolean => {
-  return (user?.companyId && user?.companyId !== Guid.empty)
+  return user?.companyId && user?.companyId !== Guid.empty
+}
+
+export const isIncludeVATInPriceDisplay = (
+  isIncludeVAT: boolean,
+  product: any
+): boolean => {
+  return (
+    isIncludeVAT || (!isIncludeVAT && product?.price?.raw?.withoutTax === 0)
+  )
+}
+
+export const logError = (error: any) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('error', error)
+  }
+}
+
+export const setPageScroll = (location: any, x = 0, y = 0) => {
+  if (
+    SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+  ) {
+    setItem(LocalStorage.Key.PAGE_SCROLL, { x, y })
+  }
+}
+
+export const resetPageScroll = (x = 0, y = 0) => {
+  setItem(LocalStorage.Key.PAGE_SCROLL, { x, y })
+}
+
+export const backToPageScrollLocation = (location: any) => {
+  if (
+    SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+  ) {
+    const scrollLocation: any = getItem(LocalStorage.Key.PAGE_SCROLL)
+    window.scrollTo({
+      top: scrollLocation?.y,
+      behavior: 'smooth',
+    })
+  }
+}
+
+export const isEligibleForFreeShipping = (
+  config: any,
+  grandTotalWithTax: any
+): boolean => {
+  const ShippingSettings = config?.configSettings?.find(
+    (x: any) => x.configType === 'ShippingSettings'
+  )
+
+  if (ShippingSettings?.configKeys?.length) {
+    const FreeShippingOverXValue =
+      ShippingSettings?.configKeys?.find(
+        (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
+      )?.value || '0'
+    return grandTotalWithTax < FreeShippingOverXValue
+  }
+  return false
+}
+
+export const notFoundRedirect = () => {
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/404',
+    },
+  }
+}
+
+export const saveUserToken = (userToken: any) => {
+  if (userToken?.access_token) {
+    Cookies.set(Cookie.Key.USER_TOKEN, encrypt(userToken?.access_token), {
+      expires: getExpiry(getMinutesInDays(365)),
+    })
+  }
 }

@@ -59,7 +59,7 @@ export default function ProductTag({ product }: Props) {
     )
   }
   if (tagValues?.newLaunch) {
-    return <div className="w-1/2 text-white bg-gray-700 ribbon">New</div>
+    return <div className="w-1/2 text-white bg-black ribbon">New</div>
   }
 
   if (tagValues?.onSale) {

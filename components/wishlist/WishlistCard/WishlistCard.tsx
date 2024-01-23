@@ -48,7 +48,7 @@ const WishlistCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   return (
     <div className={cn(s.root, { 'opacity-75 pointer-events-none': removing })}>
       <div className={`col-span-3 ${s.productBg}`}>
-        <Image
+        <img
           src={
             generateUri(product.images[0]?.url, 'h=500&fm=webp') ||
             IMG_PLACEHOLDER

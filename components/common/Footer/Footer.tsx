@@ -1,17 +1,7 @@
 import { FC, useEffect, useState } from 'react'
-import Link from 'next/link'
-import type { Page } from '@commerce/types/page'
 import { Logo } from '@components/ui'
-import config from './config'
 import { useRouter } from 'next/router'
-import {
-  BTN_SIGN_UP,
-  COPYRIGHT_FOOTER_INFO,
-  GENERAL_EMAIL_ADDRESS,
-  GENERAL_FOOOTER,
-  SIGN_UP_FOR_NEWSLETTER,
-  SIGN_UP_TEXT,
-} from '@components/utils/textVariables'
+import { COPYRIGHT_FOOTER_INFO, GENERAL_FOOOTER } from '@components/utils/textVariables'
 import { getCurrentPage } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import FooterMenu from '../Footer/FooterMenu'
@@ -71,10 +61,10 @@ const Footer: FC<Props & IExtraProps> = ({
             <Logo />
           </div>
           <div className="sm:col-span-6">
-            <FooterMenu config={config}></FooterMenu>
+            <FooterMenu config={config} />
           </div>
           <div className="sm:col-span-5">
-            <Newsletter></Newsletter>
+            <Newsletter />
           </div>
           <div className="justify-center mt-10 text-center border-t border-white sm:col-span-12 sm:pt-6 sm:mt-10">
             <p className="my-4 font-semibold text-black sm:my-0 text-footer-clr ">

@@ -9,23 +9,22 @@ import { getAllCategories, getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import {
   ALL_CATEGORY,
   BAD_URL_TEXT,
   IMG_PLACEHOLDER,
-  RESULTS,
 } from '@components/utils/textVariables'
-import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
-import { matchStrings } from '@framework/utils/parse-util'
-import CacheProductImages from '@components/product/ProductView/CacheProductImages'
+import { maxBasketItemsCount, setPageScroll, notFoundRedirect } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -55,6 +54,11 @@ export async function getStaticProps(context: any) {
   const category = await getCategoryBySlug(slug)
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
+
+  if (category?.status === "NotFound") {
+    return notFoundRedirect()
+  }
+
   if (category) {
     const categoryProducts = await getCategoryProducts(category?.id)
     return {
@@ -65,7 +69,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: 60,
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
     }
   } else
     return {
@@ -76,7 +80,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: 60,
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
     }
 }
 
@@ -272,6 +276,22 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     setProductDataToPass(dataToPass)
   }, [productListMemory?.products, products])
 
+  useEffect(() => {
+    const trackScroll = (ev: any) => {
+      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+    }
+
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+    if (isScrollEnabled) {
+      window?.addEventListener('scroll', trackScroll)
+      return () => {
+        window?.removeEventListener('scroll', trackScroll)
+      }
+    } /*else {
+      resetPageScroll()
+    }*/
+  },[])
+
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
       router.push(
@@ -323,12 +343,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   if (category === null) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
-        <h4 className="pb-6 text-3xl font-medium text-gray-400">
+        <h1 className="pb-6 text-3xl font-30 font-medium text-gray-400">
           {BAD_URL_TEXT}
           <Link href="/category">
             <span className="px-3 text-indigo-500">{ALL_CATEGORY}</span>
           </Link>
-        </h4>
+        </h1>
       </div>
     )
   }
@@ -356,13 +376,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
-        <title>{category?.name || 'Category'}</title>
-        <meta name="title" content={category?.name || 'Category'} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{category?.metaTitle || category?.name}</title>
+        <meta name="title" content={category?.metaTitle || category?.name} />
         <meta name="description" content={category?.metaDescription} />
         <meta name="keywords" content={category?.metaKeywords} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={category?.name} key="ogtitle" />
+        <meta property="og:title" content={category?.metaTitle || category?.name} key="ogtitle" />
         <meta
           property="og:description"
           content={category?.metaDescription}
@@ -370,7 +390,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         />
       </NextHead>
       <section className="main-section sm:px-4">
-        <div className="px-4 mx-auto mt-4 bg-transparent md:w-4/5 sm:px-4">
+        <div className="px-4 mx-auto mt-4 bg-transparent lg:w-4/5 sm:px-4">
           {/* breadcrumb section start */}
           {category?.breadCrumbs && (
             <BreadCrumbs
@@ -382,11 +402,11 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         </div>
 
         {/* Category info section start */}
-        <div className="px-4 mx-auto my-6 mt-4 bg-transparent md:w-4/5 sm:px-4">
-          <h1>{category?.name}</h1>
+        <div className="px-4 mx-auto my-6 mt-4 bg-transparent lg:w-4/5 sm:px-4">
+          <h1 className='dark:text-black'>{category?.name}</h1>
           <div
-            className="font-18"
-            dangerouslySetInnerHTML={{ __html: category?.description }}
+            className="font-18 dark:text-black"
+            dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }}
           ></div>
         </div>
         {/* Category info section End */}
@@ -412,13 +432,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     </div>
                   </div>
                   <div className="order-1 sm:order-2">
-                    <Image
+                    <img
                       src={
                         generateUri(cat?.url, 'h=700&fm=webp') ||
                         IMG_PLACEHOLDER
                       }
                       className="w-full"
-                      alt={category?.name}
+                      alt={category?.name || 'category'}
                       width={700}
                       height={700}
                     />
@@ -428,7 +448,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
             </>
           ) : null}
         </div>
-        <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-4">
+        <div className="px-4 py-6 mx-auto lg:w-4/5 sm:px-4">
           {/* category banner info End */}
 
           {/*TODO: For browser caching of product images*/}
@@ -527,3 +547,5 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
 }
 
 export default withDataLayer(CategoryPage, PAGE_TYPE)
+
+
