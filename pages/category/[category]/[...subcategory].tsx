@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import { useReducer, useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { getAllCategories, getCategoryBySlug } from '@framework/category'
+import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
@@ -25,6 +25,7 @@ import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -108,7 +109,7 @@ const generateCategories = (categories: any) => {
 }
 
 export async function getStaticPaths() {
-  const data = await getAllCategories()
+  const data = await getAllCategoriesStaticPath()
   return {
     paths: generateCategories(data),
     fallback: 'blocking',

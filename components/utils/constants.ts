@@ -234,6 +234,7 @@ export const PDP_SIZE_OPTIONS_COUNT = parseInt(
 )
 export const MAX_ADD_TO_CART_LIMIT = 5
 export const NEXT_GET_PROOMO_DETAILS = '/api/catalog/get-promo-details'
+export const STATIC_CATEGORY_PATHS = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/staticpath/category`
 export module Messages {
   export module Validations {
     export module RegularExpressions {
