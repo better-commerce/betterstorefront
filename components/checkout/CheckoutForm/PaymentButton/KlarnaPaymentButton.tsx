@@ -5,10 +5,8 @@ import Cookies from 'js-cookie'
 import { KlarnaOrderLine } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
-import {
-  PaymentMethodType,
-  Payments,
-} from '@components/utils/payment-constants'
+import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { Payments } from '@components/utils/payment-constants'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import { IPaymentButtonProps } from './BasePaymentButton'
 
