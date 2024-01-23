@@ -203,12 +203,12 @@ export default function CartProduct({
         key={`cart-items-${product?.id}`}
       >
         <div className="flex items-center justify-center col-span-2">
-          <Image
+          <img
             style={css}
             width={140}
             height={180}
             src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER}
-            alt={product.name}
+            alt={product.name ||"product-image"}
             className="object-cover object-center \w-16 rounded-lg sm:\w-28 image"
           />
         </div>
@@ -220,7 +220,7 @@ export default function CartProduct({
                   ? product.price?.formatted?.withTax
                   : product.price?.formatted?.withoutTax}
                 {product.listPrice?.raw.withTax > 0 &&
-                  product.listPrice?.raw.withTax !=
+                  product.listPrice?.raw.withTax >
                   product.price?.raw?.withTax ? (
                   <span className="px-2 text-sm text-gray-400 line-through">
                     {isIncludeVAT
@@ -293,7 +293,7 @@ export default function CartProduct({
               )}
 
               {product.listPrice?.raw.withTax > 0 &&
-                product.listPrice?.raw.withTax != product.price?.raw?.withTax ? (
+                product.listPrice?.raw.withTax > product.price?.raw?.withTax ? (
                 <span className="px-0 text-sm font-normal text-gray-400 line-through">
                   {isIncludeVAT
                     ? product.listPrice.formatted?.withTax

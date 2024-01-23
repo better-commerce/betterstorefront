@@ -1,5 +1,6 @@
 import type { NextApiHandler } from 'next'
-import type { RequestInit, Response } from '@vercel/fetch'
+import type RequestInit from '@vercel/fetch'
+import type Response from '@vercel/fetch'
 import type { APIEndpoint, APIHandler } from './utils/types'
 import type { CartSchema } from '../types/cart'
 import type { CustomerSchema } from '../types/customer'
@@ -175,7 +176,7 @@ export type GraphQLFetcher<
 
 export interface GraphQLFetcherResult<Data = any> {
   data: Data
-  res: Response
+  res: any //Response
 }
 
 export interface CommerceAPIFetchOptions<Variables> {

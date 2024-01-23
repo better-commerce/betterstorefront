@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Link from 'next/link'
+import { generateUri } from '@commerce/utils/uri-util'
 
 SwiperCore.use([Navigation])
 
@@ -56,15 +57,14 @@ export default function ImageCollection({ heading, range, AttrArray }: any) {
                   </span>
                 </p>
               )}
-              <Image
+              <img
                 alt="logo"
                 key={Idx}
-                src={val.url ? val.url || IMG_PLACEHOLDER : val.image}
+                src={generateUri(val.url, 'h=224&fm=webp') ? generateUri(val.url, 'h=224&fm=webp') || IMG_PLACEHOLDER : val.image || IMG_PLACEHOLDER}
                 width={305}
                 height={224}
-                priority
                 className="w-full group-hover:opacity-20"
-              ></Image>
+              />
             </Link>
           )
         })}

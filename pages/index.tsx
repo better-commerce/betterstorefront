@@ -1,30 +1,35 @@
 // Base Imports
 import React, { useEffect, useState } from 'react'
+
+// Package Imports
+import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
-import Link from 'next/link'
 import axios from 'axios'
+
+// Component Imports
+import { Layout } from '@components/common'
+
 // Other Imports
 import commerce from '@lib/api/commerce'
-import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
-import {
-  HOMEPAGE_SLUG,
-  NEXT_REFERRAL_ADD_USER_REFEREE,
-  NEXT_REFERRAL_BY_SLUG,
-  NEXT_REFERRAL_CLICK_ON_INVITE,
-  SITE_ORIGIN_URL,
-} from '@components/utils/constants'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG } from '@framework/utils/constants'
+import {
+  HOME_PAGE_DEFAULT_SLUG,
+  STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
+} from '@framework/utils/constants'
 import { useRouter } from 'next/router'
-import os from 'os'
-import { getCurrency, obfuscateHostName } from '@framework/utils/app-util'
-import { FeatureBar } from '@components/common'
-import { Button } from '@components/ui'
+import {
+  getCurrency,
+  getCurrentCurrency,
+  obfuscateHostName,
+  setCurrentCurrency,
+} from '@framework/utils/app-util'
+import { matchStrings } from '@framework/utils/parse-util'
 
 const PromotionBanner = dynamic(
   () => import('@components/home/PromotionBanner')
@@ -34,10 +39,6 @@ const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
-const RefferalCard = dynamic(
-  () => import('@components/customer/Referral/ReferralCard')
-)
-
 export async function getStaticProps({
   preview,
   locale,
@@ -46,10 +47,10 @@ export async function getStaticProps({
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
-  const pagesPromise = commerce.getAllPages({ config, preview })
-  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { pages } = await pagesPromise
-  const { categories, brands } = await siteInfoPromise
+  // const pagesPromise = commerce.getAllPages({ config, preview })
+  // const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  // const { pages } = await pagesPromise
+  // const { categories, brands } = await siteInfoPromise
   let pageContentsWeb = new Array<any>()
   let pageContentsMobileWeb = new Array<any>()
   const promises = new Array<Promise<any>>()
@@ -60,7 +61,7 @@ export async function getStaticProps({
       promises.push(
         new Promise<any>(async (resolve: any, reject: any) => {
           try {
-            const PageContentsPromiseWeb = commerce.getPagePreviewContent({
+            const pageContentsPromiseWeb = commerce.getPagePreviewContent({
               id: '',
               slug: HOME_PAGE_DEFAULT_SLUG,
               workingVersion:
@@ -68,9 +69,10 @@ export async function getStaticProps({
               channel: 'Web',
               currency: currencyCode,
               cachedCopy: true,
+              language: config?.locale,
             })
-            const PageContentWeb = await PageContentsPromiseWeb
-            pageContentsWeb.push({ key: currencyCode, value: PageContentWeb })
+            const pageContentWeb = await pageContentsPromiseWeb
+            pageContentsWeb.push({ key: currencyCode, value: pageContentWeb })
             resolve()
           } catch (error: any) {
             resolve()
@@ -85,7 +87,7 @@ export async function getStaticProps({
       promises.push(
         new Promise(async (resolve: any, reject: any) => {
           try {
-            const PageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
+            const pageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
               {
                 id: '',
                 slug: HOME_PAGE_DEFAULT_SLUG,
@@ -96,10 +98,10 @@ export async function getStaticProps({
                 cachedCopy: true,
               }
             )
-            const PageContentMobileWeb = await PageContentsPromiseMobileWeb
+            const pageContentMobileWeb = await pageContentsPromiseMobileWeb
             pageContentsMobileWeb.push({
               key: currencyCode,
-              value: PageContentMobileWeb,
+              value: pageContentMobileWeb,
             })
             resolve()
           } catch (error: any) {
@@ -115,15 +117,15 @@ export async function getStaticProps({
 
   return {
     props: {
-      categories,
-      brands,
-      pages,
+      // categories,
+      // brands,
+      // pages,
       globalSnippets: infra?.snippets ?? [],
       pageContentsWeb: pageContentsWeb ?? [],
       pageContentsMobileWeb: pageContentsMobileWeb ?? [],
       hostName: obfuscateHostName(hostName),
     },
-    revalidate: 60,
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
   }
 }
 
@@ -149,17 +151,22 @@ function Home({
   const [pageContents, setPageContents] = useState<any>(homePageContents)
 
   useEffect(() => {
-    axios
-      .post('/api/page-preview-content', {
-        id: '',
-        slug: HOME_PAGE_DEFAULT_SLUG,
-        workingVersion: process.env.NODE_ENV === 'production' ? true : true,
-        channel: isMobile ? 'MobileWeb' : 'Web',
-        currencyCode,
-      })
-      .then((res: any) => {
-        if (res?.data) setPageContents(res?.data)
-      })
+    const currentCurrency = getCurrentCurrency()
+    if (!matchStrings(currencyCode, currentCurrency, true)) {
+      axios
+        .post('/api/page-preview-content', {
+          id: '',
+          slug: HOME_PAGE_DEFAULT_SLUG,
+          workingVersion: process.env.NODE_ENV === 'production' ? true : true,
+          channel: isMobile ? 'MobileWeb' : 'Web',
+          cachedCopy: true,
+          currencyCode,
+        })
+        .then((res: any) => {
+          if (res?.data) setPageContents(res?.data)
+        })
+      setCurrentCurrency(currencyCode)
+    }
   }, [currencyCode, isMobile])
 
   useAnalytics(PageViewed, {

@@ -10,7 +10,7 @@ import PaymentGatewayNotification from '@components/checkout/PaymentGatewayNotif
 
 // Other Imports
 import { EmptyString } from '@components/utils/constants'
-import { PaymentMethodType } from '@components/utils/payment-constants'
+import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 
 const GatewayPage = (props: IGatewayPageProps) => {

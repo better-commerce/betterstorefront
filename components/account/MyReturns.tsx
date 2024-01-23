@@ -12,6 +12,7 @@ import {
   GENERAL_REFUND_AMOUNT,
   GENERAL_ADD_TO_BASKET,
   GENERAL_RETURN_NUMBER,
+  IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { NEXT_GET_RETURNS } from '@components/utils/constants'
 import { useUI } from '@components/ui'
@@ -19,6 +20,7 @@ import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import Image from 'next/image'
+import { generateUri } from '@commerce/utils/uri-util'
 
 export default function MyReturns() {
   const { user, basketId, setCartItems, openCart, cartItems } = useUI()
@@ -187,9 +189,11 @@ export default function MyReturns() {
                             </div>
                           </div>
                           <div className="flex-shrink-0 ml-4 sm:m-0 sm:mr-6 sm:order-first">
-                            <Image
-                              src={product.image}
-                              alt={product.name}
+                            <img
+                              src={generateUri(product.image,'h=100&fm=webp')||IMG_PLACEHOLDER}
+                              alt={product.name || 'returns-Image'}
+                              height={100}
+                              width={100}
                               className="object-cover object-center w-20 h-20 col-start-2 col-end-3 rounded-lg sm:col-start-1 sm:row-start-1 sm:row-span-2 sm:w-40 sm:h-40 lg:w-52 lg:h-52"
                             />
                           </div>

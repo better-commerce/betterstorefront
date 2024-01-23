@@ -13,14 +13,12 @@ import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
 import NotifyUserPopup from '@components/ui/NotifyPopup'
-import SearchWrapper from '@components/search/index'
 import Router from 'next/router'
 import ProgressBar from '@components/ui/ProgressBar'
 import {
   BTN_ACCEPT_COOKIE,
   GENERAL_COOKIE_TEXT,
 } from '@components/utils/textVariables'
-import { IDeviceInfo } from '@components/ui/context'
 import { IExtraProps } from './Layout'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
@@ -48,6 +46,7 @@ interface Props {
     pages?: Page[]
     categories: Category[]
     navTree: any
+    reviewData: any
   }
   nav: []
   footer: []
@@ -114,7 +113,7 @@ interface LayoutProps {
 const LayoutError: FC<Props & IExtraProps> = ({
   children,
   config,
-  pageProps: { categories = [], navTree, ...pageProps },
+  pageProps: { categories = [], navTree, reviewData = {}, ...pageProps },
   keywords,
   isLocationLoaded,
   deviceInfo,

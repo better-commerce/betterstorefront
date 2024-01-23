@@ -9,6 +9,7 @@ export default function getPagePreviewContentOperation() {
     workingVersion = false,
     channel,
     cachedCopy = true,
+    language = 'en-GB',
   }: any) {
     try {
       const response: any = await fetcher({
@@ -23,6 +24,7 @@ export default function getPagePreviewContentOperation() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
           Channel: channel,
+          language: language,
         },
         baseUrl: BETTERCMS_BASE_URL,
       })

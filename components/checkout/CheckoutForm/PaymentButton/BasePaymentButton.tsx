@@ -26,8 +26,16 @@ export interface IPaymentButtonProps {
   readonly disabled?: boolean
   readonly stripe?: Stripe | null
   readonly stripeElements?: StripeElements | null
+  paymentModeLoadedCallback?: any
+  readonly scrollToBottomEnabled?: boolean
+  readonly contactDetails?: any
+  onScrollToSection?: any
+  recordEvent?: any
 }
-
+export interface IApplePaymentProps {
+  readonly isApplePayScriptLoaded?: boolean
+  onApplePayScriptLoaded?: any
+}
 export interface IDispatchState {
   readonly uiContext?: any
   readonly dispatchState: (value: { type?: string; payload?: any }) => void

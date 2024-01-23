@@ -703,7 +703,7 @@ export default function ProductQuickView({
                                                         'h=1000&fm=webp'
                                                       ) || IMG_PLACEHOLDER
                                                     }
-                                                    alt={image.name}
+                                                    alt={image.name || 'slider-image'}
                                                     className="object-cover object-center w-full h-full image pdp-image"
                                                     fill
                                                     sizes="320 600 1000"
@@ -766,7 +766,7 @@ export default function ProductQuickView({
                                   ? productData?.price?.formatted?.withTax
                                   : productData?.price?.formatted?.withoutTax}
 
-                                {productData?.listPrice?.raw.tax > 0 ? (
+                                {productData?.listPrice?.raw?.withTax > 0 && productData?.listPrice?.raw?.withTax > productData?.price?.raw?.withTax && (
                                   <>
                                     <span className="px-2 text-lg font-normal text-gray-500 line-through sm:text-md">
                                       {isIncludeVAT
@@ -779,7 +779,7 @@ export default function ProductQuickView({
                                       {discount}% off
                                     </span>
                                   </>
-                                ) : null}
+                                )}
                               </p>
                             </div>
                             <div className="flex flex-col px-4 py-4 sm:px-6">

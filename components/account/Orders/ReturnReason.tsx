@@ -11,11 +11,12 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 // import { CancelOrderPageAction, PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES, PDP_REVIEW_IMAGE_SIZE_IN_BYTES, PDP_REVIEW_NO_OF_IMAGES_ALLOWED } from '@components/utils/constants';
 // import { formatBytes } from '@framework/utils/app-util';
 // import SubmitButton from '@components/common/SubmitButton';
-import { CURRENCY_SYMBOL_POUND } from '@components/utils/textVariables';
+import { CURRENCY_SYMBOL_POUND, IMG_PLACEHOLDER } from '@components/utils/textVariables';
 import { PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES, PDP_REVIEW_IMAGE_SIZE_IN_BYTES, PDP_REVIEW_NO_OF_IMAGES_ALLOWED } from '@components/utils/constants';
 import { Button, LoadingDots } from '@components/ui';
 import classNames from 'classnames';
 import Link from 'next/link';
+import { generateUri } from '@commerce/utils/uri-util';
 
 
 const ReturnReason = ({ returnsReasons, onItemReturn, item, itemReturnLoadingState, qty }: any) => {
@@ -118,12 +119,12 @@ const ReturnReason = ({ returnsReasons, onItemReturn, item, itemReturnLoadingSta
                             {
                                 selectedImages?.length && (
                                     selectedImages?.map((file: any, idx: number) => (
-                                        <Image
+                                        <img
                                             width={50}
                                             height={50}
                                             key={idx}
-                                            src={URL.createObjectURL(file)}
-                                            alt=""
+                                            src={generateUri(URL.createObjectURL(file),'h=50&fm=webp')||IMG_PLACEHOLDER}
+                                            alt="image"
                                         />
                                     ))
                                 )

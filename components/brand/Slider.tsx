@@ -8,8 +8,9 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import { Button } from '@components/ui'
-import { BTN_FIND_MORE } from '@components/utils/textVariables'
+import { BTN_FIND_MORE, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Router from 'next/router'
+import { generateUri } from '@commerce/utils/uri-util'
 type data = {
   images: Array<string>
   isBanner: Boolean
@@ -64,11 +65,11 @@ const Slider = ({ images, isBanner }: data) => {
                 className="py-0 2xl:w-[300px] w-[25vw] h-full"
                 key={productIdx}
               >
-                <Image
+                <img
                   key={productIdx}
                   height={1280}
                   width={1280}
-                  src={val.url}
+                  src={generateUri(val.url,'h=1280&fm=webp')||IMG_PLACEHOLDER}
                   alt={`Slide ${currentImageIndex}`}
                 />
                 {isBanner && (

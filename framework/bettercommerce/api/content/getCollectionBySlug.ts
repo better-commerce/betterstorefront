@@ -8,7 +8,11 @@ export default function getCollectionBySlug(slug: string, cookies?: any) {
         method: 'get',
         cookies,
       })
-      return { ...response.result, ...{ snippets: response?.snippets ?? [] } }
+      return {
+        ...response.result,
+        ...{ snippets: response?.snippets ?? [] },
+        ...{ status: response?.status },
+      }
     } catch (error: any) {
       console.log(error)
       // throw new Error(error.message)

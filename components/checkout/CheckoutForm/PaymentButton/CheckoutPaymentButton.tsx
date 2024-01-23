@@ -138,6 +138,11 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     let that = this
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
+    const redirectConfirmUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
+    const redirectCancelUrl = `${window.location.origin}${this.state?.paymentMethod?.settings?.find(
+      (x: any) => x?.key === 'CancelUrl'
+    )?.value || EmptyString
+      }`
     if (orderResult) {
       const orderId = orderResult?.id
 
@@ -148,7 +153,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
             const data: CheckoutPaymentRequest = {
               source: {
                 type: CheckoutPaymentSourceType.TOKEN,
-                token: token,
+                token: token, 
               },
               amount: parseFloat(
                 orderResult?.grandTotal?.raw?.withTax?.toFixed(2)
@@ -201,6 +206,12 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                 udf3: basketOrderInfo?.customerId,
                 udf4: getOrderId(orderInfo?.order),
                 udf5: '',
+              },
+              success_url: redirectConfirmUrl,
+              failure_url: redirectCancelUrl,
+              '3ds': {
+                enabled: that.state.threeDSEnabled,
+                //authentication_id: `sid_${shortUUID.generate()}${moment(new Date()).format("DDMM")}`,
               },
             }
 

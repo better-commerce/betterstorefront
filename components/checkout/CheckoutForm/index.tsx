@@ -52,13 +52,25 @@ import { Cookie } from '@framework/utils/constants'
 
 const Spinner = () => {
   return (
-    <main className="fit bg-white">
-      <div className="fixed top-0 right-0 h-screen w-screen z-50 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+    <main className="bg-white fit">
+      <div className="fixed top-0 right-0 z-50 flex items-center justify-center w-screen h-screen">
+        <div className="w-32 h-32 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
       </div>
     </main>
   )
 }
+
+export const retrieveAddress = async (id: string) => {
+  const response: any = await axios.post(RETRIEVE_ADDRESS, {
+    id,
+  })
+  return {
+    postCode: response.data.response.data[0].PostalCode,
+    address1: response.data.response.data[0].Line1,
+    city: response.data.response.data[0].City,
+  }
+}
+
 export default function CheckoutForm({
   cart,
   user,
@@ -652,8 +664,15 @@ export default function CheckoutForm({
   }
 
   const loadAddressIDs = async (): Promise<Array<any>> => {
-    const response = await getAddress(getUserId())
-    return response
+    const userId = getUserId()
+    if (userId && userId !== Guid.empty) {
+      let userAddresses = addresses
+      if (userAddresses?.length < 1) {
+        userAddresses = await getAddress(userId)
+      }
+      return userAddresses
+    }
+    return []
   }
 
   const lookupAddressId = async (addressInfo: any, addresses?: Array<any>) => {
@@ -791,17 +810,6 @@ export default function CheckoutForm({
     return handleAsync()
   }
 
-  const retrieveAddress = async (id: string) => {
-    const response: any = await axios.post(RETRIEVE_ADDRESS, {
-      id,
-    })
-    return {
-      postCode: response.data.response.data[0].PostalCode,
-      address1: response.data.response.data[0].Line1,
-      city: response.data.response.data[0].City,
-    }
-  }
-
   const setPaymentIntent = (payload: boolean) =>
     dispatch({ type: 'SET_PAYMENT_INTENT', payload })
 
@@ -815,10 +823,10 @@ export default function CheckoutForm({
             : ''
         }`}
       >
-        <div className="max-w-2xl mx-auto pt-4 md:pt-16 lg:pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <div className="max-w-2xl px-4 pt-4 pb-24 mx-auto md:pt-16 lg:pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
           <h1 className="sr-only">{GENERAL_CHECKOUT}</h1>
           <div className="grid lg:grid-cols-5 sm:gap-x-6 xl:gap-x-6">
-            <div className="sm:col-span-3 pb-6 lg:order-1 order-2">
+            <div className="order-2 pb-6 sm:col-span-3 lg:order-1">
               {!isShippingDisabled && (
                 <Delivery
                   appConfig={config}
@@ -826,14 +834,14 @@ export default function CheckoutForm({
                   setParentShipping={setShippingMethod}
                   toggleDelivery={toggleDelivery}
                   isDeliveryMethodSelected={state?.isDeliveryMethodSelected}
-                  splitDeliveryItems = {splitDeliveryItems}
+                  splitDeliveryItems={splitDeliveryItems}
                   onShippingPlansUpdated={onShippingPlansUpdated}
                 />
               )}
 
               {state.isCNC || isShippingDisabled ? null : (
-                <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
-                  <h4 className="font-bold uppercase text-black">
+                <div className="p-6 py-6 mt-3 bg-white border border-gray-200 shadow">
+                  <h4 className="font-bold text-black uppercase">
                     {GENERAL_DELIVERY_ADDRESS}
                   </h4>
                   {state?.isDeliveryMethodSelected ? (
@@ -885,8 +893,8 @@ export default function CheckoutForm({
               />
 
               {/* Payment */}
-              {/* <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
-                <h4 className="font-bold uppercase text-black">
+              {/* <div className="p-6 py-6 mt-3 bg-white border border-gray-200 shadow">
+                <h4 className="font-bold text-black uppercase">
                   {BILLING_INFORMATION}
                 </h4>
                 {(state?.isShippingInformationCompleted ||
@@ -916,8 +924,8 @@ export default function CheckoutForm({
                     />
                   )}
               </div> */}
-              <div className="py-6 mt-3 border border-gray-200 bg-white shadow p-6">
-                <h4 className="font-bold uppercase text-black">
+              <div className="p-6 py-6 mt-3 bg-white border border-gray-200 shadow">
+                <h4 className="font-bold text-black uppercase">
                   {GENERAL_PAYMENT}
                 </h4>
                 {state.isPaymentInformationCompleted && (
@@ -945,7 +953,7 @@ export default function CheckoutForm({
             </div>
 
             {/* Order summary */}
-            <div className="sm:col-span-3 md:col-span-3 lg:col-span-2 lg:order-2 order-1">
+            <div className="order-1 sm:col-span-3 md:col-span-3 lg:col-span-2 lg:order-2">
               <Summary
                 isShippingDisabled={isShippingDisabled}
                 cart={cartItems}

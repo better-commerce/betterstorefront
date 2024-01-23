@@ -20,6 +20,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
+import CheckoutHeading from '@components/checkout/CheckoutHeading'
 
 export interface actionInterface {
   type?: string
@@ -87,14 +88,14 @@ function Checkout({ cart, config, location }: any) {
       setSplitDeliveryItems(deliveryPlans)
     }
     splitDeliveryExtract()
+    if (user?.userId) {
+      fetchAddress()
+    }
   },[])
 
 
   useEffect(() => {
     setIsLoggedIn(Boolean(user?.userId || guestUser?.userId || false))
-    if (user?.userId) {
-      fetchAddress()
-    }
   }, [user, cartItems, guestUser])
 
   useEffect(() => {
@@ -126,10 +127,10 @@ function Checkout({ cart, config, location }: any) {
   const fetchAddress = async () => {
     let userId =
       cartItems?.userId === Guid.empty ? user?.userId : cartItems?.userId
-    if (!userId) return
+    if (!userId || (userId && userId === Guid.empty)) return
     try {
       const response: any = await getAddress(userId)
-      setUserAddresses(response)
+      setUserAddresses(response || [])
       return response
     } catch (error) {
       // console.log(error, 'err')
@@ -197,21 +198,24 @@ function Checkout({ cart, config, location }: any) {
 
   if (isLoggedIn) {
     return (
-      <CheckoutForm
-        cart={cart}
-        addresses={userAddresses}
-        setUserAddresses={setUserAddresses}
-        defaultBillingAddress={defaultBillingAddress}
-        defaultShippingAddress={defaultShippingAddress}
-        user={user}
-        getAddress={getAddress}
-        fetchAddress={fetchAddress}
-        config={config}
-        location={location}
-        recordShippingInfo={recordShippingInfo}
-        splitDeliveryItems={splitDeliveryItems}
-        onShippingPlansUpdated={onShippingPlansUpdated}
+      <>
+        <CheckoutHeading />
+        <CheckoutForm
+          cart={cart}
+          addresses={userAddresses}
+          setUserAddresses={setUserAddresses}
+          defaultBillingAddress={defaultBillingAddress}
+          defaultShippingAddress={defaultShippingAddress}
+          user={user}
+          getAddress={getAddress}
+          fetchAddress={fetchAddress}
+          config={config}
+          location={location}
+          recordShippingInfo={recordShippingInfo}
+          splitDeliveryItems={splitDeliveryItems}
+          onShippingPlansUpdated={onShippingPlansUpdated}
       />
+      </>
     )
   }
 

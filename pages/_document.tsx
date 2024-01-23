@@ -13,7 +13,7 @@ export default class MyDocument extends NextDocument /*Document*/ {
     return (
       <Html>
         <Head></Head>
-        <body className="custom_class">
+        <body className="custom_class promo-banner-inactive">
           <Main />
           <NextScript />
           <link

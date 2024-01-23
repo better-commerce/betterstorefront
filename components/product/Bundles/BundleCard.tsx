@@ -69,7 +69,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                   <div className="overflow-hidden bg-gray-100 rounded-lg aspect-w-2 aspect-h-3 sm:col-span-4 lg:col-span-5">
                     <Image
                       src={activeImage}
-                      alt={productData.images[0]?.alt || ''}
+                      alt={productData.images[0]?.alt || "product-Images"}
                       className="object-cover object-center"
                     />
                   </div>
@@ -120,7 +120,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                                 key={imageIdx}
                                 className="object-cover object-center w-16 h-16 p-1 border rounded-md"
                                 src={image?.image}
-                                alt=""
+                                alt={image?.alt||'bundle-Image'}
                                 onClick={() => setActiveImage(image?.image)}
                               />
                             )

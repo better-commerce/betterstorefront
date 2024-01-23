@@ -402,7 +402,7 @@ export default function OrderConfirmation({ config }: any) {
                     className="flex py-10 space-x-6 border-b border-gray-200"
                   >
                     <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                      <Image
+                      <img
                         style={css}
                         src={
                           generateUri(product.image, 'h=200&fm=webp') ||
@@ -410,9 +410,9 @@ export default function OrderConfirmation({ config }: any) {
                         }
                         width={200}
                         height={200}
-                        alt={product.name}
+                        alt={product.name ||'thank you'}
                         className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
-                      ></Image>
+                      />
                     </div>
                     <div className="flex flex-col flex-auto">
                       <div>
@@ -762,13 +762,13 @@ export default function OrderConfirmation({ config }: any) {
                           </div>
                         )}
                         <div className="flex w-full">
-                          <Image
+                          <img
                             src={'/assets/images/refer-a-friend.jpg'}
                             alt="banner"
                             height={700}
                             width={480}
                             className="object-cover"
-                          ></Image>
+                          />
                         </div>
                       </div>
                     </div>

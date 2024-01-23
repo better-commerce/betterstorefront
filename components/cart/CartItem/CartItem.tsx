@@ -79,7 +79,7 @@ const CartItem = ({
       <div className="flex flex-row py-4 space-x-4">
         <div className="relative z-0 w-16 h-16 overflow-hidden cursor-pointer bg-violet">
           <Link href={`/product/${item.path}`}>
-            <Image
+            <img
               onClick={() => closeSidebarIfPresent()}
               className={s.productImage}
               width={150}
@@ -87,8 +87,7 @@ const CartItem = ({
               src={
                 generateUri(item.image, 'h=300&fm=webp') || IMG_PLACEHOLDER
               }
-              alt={item.name}
-              unoptimized
+              alt={item.name || 'Product-image'}
             />
           </Link>
         </div>

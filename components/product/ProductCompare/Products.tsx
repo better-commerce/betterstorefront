@@ -261,7 +261,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       },
       shortMessage: '',
     }
-   if (!product?.currentStock && product?.preOrder?.isEnabled) {
+    if (!product?.currentStock && product?.preOrder?.isEnabled) {
       buttonConfig.title = BTN_PRE_ORDER
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
@@ -282,7 +282,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     switch (parsed) {
       case true:
         return (
-          <Image
+          <img
             alt="check_circle"
             width={36}
             height={36}
@@ -291,7 +291,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         )
       case false:
         return (
-          <Image
+          <img
             alt="cross_icon"
             width={36}
             height={36}
@@ -301,6 +301,26 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       default:
         return val
     }
+  }
+
+  const isOutOfStock = (product: any) => {
+    if (
+      product?.hasOwnProperty('preOrder') &&
+      product?.hasOwnProperty('flags')
+    ) {
+      return (
+        product?.currentStock < 1 &&
+        !product?.preOrder?.isEnabled &&
+        !product?.flags?.sellWithoutInventory
+      )
+    }
+    if (product?.hasOwnProperty('preOrder')) {
+      return product?.currentStock < 1 && !product?.preOrder?.isEnabled
+    }
+    if (product?.hasOwnProperty('flags')) {
+      return product?.currentStock < 1 && !product?.flags?.sellWithoutInventory
+    }
+    return product?.currentStock < 1
   }
 
   return (
@@ -317,28 +337,26 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             onMouseLeave={(ev: any) => handleHover(ev, 'leave')}
             title={`${product.name} \t ${itemPrice}`}
           >
-            <Image
+            <img
               id={`${product?.productId ?? product?.recordId}-1`}
-              priority
               src={
                 generateUri(currentProductData.image, 'h=250&fm=webp') ||
                 IMG_PLACEHOLDER
               }
-              alt={product.name}
+              alt={product.name || 'product'}
               className="object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
               style={css}
               width={400}
               height={500}
             />
             {product?.images?.length > 1 && (
-              <Image
+              <img
                 id={`${product?.productId ?? product?.recordId}-2`}
-                priority
                 src={
                   generateUri(product?.images[1]?.image, 'h=500&fm=webp') ||
                   IMG_PLACEHOLDER
                 }
-                alt={product.name}
+                alt={product.name || 'product'}
                 className="hidden object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
                 style={css}
                 width={400}
@@ -359,7 +377,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               : product?.price?.formatted?.withoutTax}
             {product?.listPrice?.raw?.withTax > 0 &&
               product?.listPrice?.raw?.withTax !=
-              product?.price?.raw?.withTax && (
+                product?.price?.raw?.withTax && (
                 <>
                   <span className="px-1 text-xs font-medium text-black line-through">
                     {isIncludeVAT
@@ -381,15 +399,20 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </div>
         </Link>
         <div className="absolute bottom-0 left-0 right-0 flex flex-col p-2">
-          {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
-            <ButtonNotifyMe product={product} className="mt-2 text-sm font-medium rounded-md" />
-          ) : (<Button
-            className="mt-2 text-sm font-medium rounded-md"
-            title={buttonConfig.title}
-            action={buttonConfig.action}
-            type="button"
-            buttonType={buttonConfig.buttonType || 'cart'}
-          />)}
+          {isOutOfStock(product) ? (
+            <ButtonNotifyMe
+              product={product}
+              className="mt-2 text-sm font-medium rounded-md"
+            />
+          ) : (
+            <Button
+              className="mt-2 text-sm font-medium rounded-md"
+              title={buttonConfig.title}
+              action={buttonConfig.action}
+              type="button"
+              buttonType={buttonConfig.buttonType || 'cart'}
+            />
+          )}
         </div>
       </div>
       <div className="mt-5 bg-white border-t border-gray-200 lg:mt-10">
@@ -413,11 +436,12 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
           <span className="font-semibold text-black">{product?.brand}</span>
         </div>
-        {attribs?.map?.map((attrib: any, idx: number) => (
-          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
-            <span>
-              {getAttribValue(attrib.value)}
-            </span>
+        {attribs?.map((attrib: any, idx: number) => (
+          <div
+            key={idx}
+            className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14"
+          >
+            <span>{getAttribValue(attrib.value)}</span>
           </div>
         ))}
       </div>

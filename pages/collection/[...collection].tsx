@@ -22,12 +22,14 @@ import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import {
   maxBasketItemsCount,
+  notFoundRedirect,
   obfuscateHostName,
+  setPageScroll,
 } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
-import CacheProductImages from '@components/product/ProductView/CacheProductImages'
-import { Product } from '@commerce/types'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 const CompareSelectionBar = dynamic(
   () => import('@components/product/ProductCompare/compareSelectionBar')
 )
@@ -342,9 +344,25 @@ export default function CollectionPage(props: any) {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', handleScroll)
     }
+        
+    const trackScroll = (ev: any) => {
+      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+    }
+
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+    if (isScrollEnabled) {
+      window?.addEventListener('scroll', trackScroll)
+      return () => {
+        window?.removeEventListener('scroll', trackScroll)
+      }
+    } /*else {
+      resetPageScroll()
+    }*/
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
+
   }, [])
 
   const [visible, setVisible] = useState(true)
@@ -398,14 +416,14 @@ export default function CollectionPage(props: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
-        <title>{props?.name}</title>
-        <meta name="title" content={props?.name} />
+        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{props?.metaTitle || props?.name}</title>
+        <meta name="title" content={props?.metaTitle || props?.name} />
         <meta name="description" content={props?.metaDescription} />
         <meta name="keywords" content={props?.metaKeywords} />
 
         <meta property="og:image" content="" />
-        <meta property="og:title" content={props?.name} key="ogtitle" />
+        <meta property="og:title" content={props?.metaTitle || props?.name} key="ogtitle" />
         <meta
           property="og:description"
           content={props?.metaDescription}
@@ -444,15 +462,13 @@ export default function CollectionPage(props: any) {
                               passHref
                             >
                               <span style={{ paddingTop }} className="block">
-                                <Image
+                                <img
                                   src={
-                                    generateUri(imgUrl, 'fm=webp&h=530&q=50') ||
+                                    generateUri(imgUrl, 'h=1600&fm=webp&q=50') ||
                                     IMG_PLACEHOLDER
                                   }
                                   alt="Collection Banner"
-                                  layout="fill"
-                                  objectFit="contain"
-                                  className=""
+                                  className="object-contain"
                                   onLoad={({ target }) => {
                                     const { naturalWidth, naturalHeight } =
                                       target as HTMLImageElement
@@ -460,13 +476,13 @@ export default function CollectionPage(props: any) {
                                       `calc(100% / (${naturalWidth} / ${naturalHeight})`
                                     )
                                   }}
-                                ></Image>
+                                />
                               </span>
                             </Link>
                             <div className="absolute z-10 text-left bottom-3 left-4">
-                              <h3 className="font-medium text-white text-14">
+                              <p className="font-medium text-white text-14">
                                 {img?.title}
-                              </h3>
+                              </p>
                               <p className="mb-2 font-normal text-left text-white text-10">
                                 {img?.description}
                               </p>
@@ -502,7 +518,7 @@ export default function CollectionPage(props: any) {
                       >
                         <Link legacyBehavior href={img?.link || '#'}>
                           <a>
-                            <Image src={imgUrl} alt="banner" />
+                            <img src={imgUrl} width ={1920} height={460} alt="banner" />
                           </a>
                         </Link>
                       </div>
@@ -523,14 +539,14 @@ export default function CollectionPage(props: any) {
               {props?.images?.map((img: any, idx: number) => (
                 <SwiperSlide key={`horizontal-slider-${idx}`}>
                   <Link href={img.link || '#'}>
-                    <Image
+                    <img
                       style={css}
                       width={1920}
                       height={460}
                       src={
                         generateUri(img.url, 'h=500&fm=webp') || IMG_PLACEHOLDER
                       }
-                      alt={props?.name}
+                      alt={props?.name || 'Collection Banner'}
                       className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
                     />
                   </Link>
@@ -540,12 +556,12 @@ export default function CollectionPage(props: any) {
           ))}
 
         <div
-          className={`sticky w-full py-4 mx-auto bg-white top-108 px-0 sm:px-0 md:px-0 2xl:px-0 sm:py-4 ${cls}`}
+          className={`sticky w-full py-4 mx-auto bg-white top-108 px-4 sm:px-4 2xl:px-0 sm:py-4 ${cls}`}
         >
-          <h1 className="inline-block capitalize text-primary dark:text-primary">
+          <h1 className="inline-block capitalize text-primary dark:text-black">
             {props?.name}
           </h1>
-          <span className="pl-2 mt-0 text-xs font-semibold text-black dark:text-white text-14 sm:h-6">
+          <span className="pl-2 mt-0 text-xs font-semibold text-black text-14 sm:h-6 dark:text-black">
             {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} results`}
           </span>
           <h2>{props?.description}</h2>
@@ -683,7 +699,10 @@ export async function getStaticProps({ params, ...context }: any) {
   const infra = await infraPromise
   const hostName = os.hostname()
 
-  //console.log(context)
+  if (data?.status === "NotFound") {
+    return notFoundRedirect()
+  }
+
   return {
     props: {
       ...data,
@@ -693,7 +712,7 @@ export async function getStaticProps({ params, ...context }: any) {
       snippets: data?.snippets ?? [],
       hostName: obfuscateHostName(hostName),
     },
-    revalidate: 60,
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
   }
 }
 

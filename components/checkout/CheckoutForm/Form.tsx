@@ -346,7 +346,7 @@ export default function AddressForm({
                   type="button"
                   // onClick={() => handleNewFormButton(values, errors)}
                   onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="max-w-xs w-full flex-1 border border-black hover:bg-black hover:text-white text-sm rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium  sm:w-full"
+                  className="max-w-xs w-full flex-1 border border-black hover:bg-black hover:text-white text-sm text-black rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium  sm:w-full"
                 >
                   {ADD_ADDRESS}
                 </button>

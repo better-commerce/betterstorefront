@@ -54,7 +54,7 @@ const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({
         // loop={true}
         breakpoints={{
           640: { slidesPerView: 1.1 },
-          768: { slidesPerView: 5 },
+          768: { slidesPerView: 2 },
           1024: { slidesPerView: 5 },
         }}
       >

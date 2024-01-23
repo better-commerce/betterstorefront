@@ -13,7 +13,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import SwiperCore, { Navigation } from 'swiper'
+import SwiperCore, { Navigation, Pagination, Zoom } from 'swiper'
 import { Dialog, Transition } from '@headlessui/react'
 import {
   XMarkIcon,
@@ -28,9 +28,9 @@ import {
   NEXT_GET_PRODUCT,
   NEXT_GET_PRODUCT_PREVIEW,
   SITE_ORIGIN_URL,
-  NEXT_GET_CATALOG_PRODUCTS,
   NEXT_GET_ORDER_RELATED_PRODUCTS,
-  NEXT_COMPARE_ATTRIBUTE
+  NEXT_COMPARE_ATTRIBUTE,
+  QuantityBreakRule,
 } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -68,7 +68,7 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
-import { matchStrings, stringFormat } from '@framework/utils/parse-util'
+import { priceFormat, roundToDecimalPlaces,matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import {
   getCurrentPage,
@@ -97,6 +97,7 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup'))
 const AvailableOffers = dynamic(() => import('@components/product/ProductView/AvailableOffers'))
 const ReviewInput = dynamic(() => import('@components/product/Reviews/ReviewInput'))
+const QuantityBreak = dynamic(() => import('@components/product/ProductView/QuantiyBreak'))
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -175,19 +176,6 @@ export default function ProductView({
     mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o?.fieldName))
     setAttributeNames(mappedAttribsArrStr)
   }, [compareProductsAttributes])
-  useEffect(() => {
-    axios
-      .post(NEXT_GET_CATALOG_PRODUCTS, {
-        isCategory: true,
-        categoryId: product?.classification?.categoryCode,
-        pageSize: 50,
-      })
-      .then((res: any) => {
-        if (res?.data?.products?.results) {
-          setAllProductsByCategory(res?.data?.products?.results)
-        }
-      })
-  }, [product, currency])
 
   const fetchRelatedProducts = async (productId: string) => {
     const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId: productId, })
@@ -208,14 +196,6 @@ export default function ProductView({
     mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o.display))
     setAttributeNames(mappedAttribsArrStr)
   }, [allProductsByCategory])
-
-  useEffect(() => {
-    axios.post(NEXT_GET_CATALOG_PRODUCTS, { isCategory: true, categoryId: product?.classification?.categoryCode, pageSize: 50, }).then((res: any) => {
-      if (res?.data?.products?.results) {
-        setAllProductsByCategory(res?.data?.products?.results)
-      }
-    })
-  }, [product, currency])
 
   const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
   const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
@@ -814,6 +794,31 @@ export default function ProductView({
     return
   };
 
+  const customRenderItem = (item: any) => {
+    return (
+      <div className="flex justify-center image-gallery-image">
+        <img
+          src={generateUri(item?.original,"h=2000&fm=webp")||IMG_PLACEHOLDER}
+          alt={product?.name}
+          height={1000}
+          width={1000}
+          className="!object-contain"
+        />
+      </div>
+    );
+  };
+  const customRenderThumbInner = (item: any) => {
+    return (
+      <img
+        src= {generateUri(item?.thumbnail,"h=100&fm=webp")||IMG_PLACEHOLDER}
+        alt={product?.name || 'product'}
+        height={100}
+        width={100}
+      />
+    );
+  };
+
+
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
@@ -823,17 +828,20 @@ export default function ProductView({
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
-        <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none 2xl:w-4/5 sm:px-6 md:px-4 lg:px-6 2xl:px-0">
+        <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none 2xl:w-4/5 sm:px-6 md:px-4 lg:px-6 2xl:px-0 mob-container-padding">
           {isMobile ? (
             <Swiper
               slidesPerView={1}
-              spaceBetween={4}
+              spaceBetween={10}
+              zoom={true}
+              modules={[Pagination, Zoom]}
+              pagination={{ clickable: true }}
               navigation={true}
               loop={true}
-              className='!px-4 lg:px-0'
+              className='lg:px-0 swiper-dot-black'
               breakpoints={{
-                640: { slidesPerView: 1.2 },
-                768: { slidesPerView: 4 },
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
                 1024: { slidesPerView: 4 },
               }}
             >
@@ -843,14 +851,14 @@ export default function ProductView({
                   key={`${idx}-slider`}
                 >
                   {image.image ? (
-                    <div className="image-container">
+                    <div className="image-container swiper-zoom-container">
                       <Image
                         priority
                         src={
                           generateUri(image.image, 'h=600&fm=webp') ||
                           IMG_PLACEHOLDER
                         }
-                        alt={product?.name}
+                        alt={product?.name || 'slider-image'}
                         className="object-cover object-center w-full h-full image"
                         sizes="320 600 1000"
                         quality="70"
@@ -895,6 +903,8 @@ export default function ProductView({
                     showFullscreenButton={true}
                     onScreenChange={toggleFullscreen}
                     renderCustomControls={renderCustomControls}
+                    renderItem={customRenderItem}
+                    renderThumbInner={customRenderThumbInner}
                   />
                 </Tab.List>
               </Tab.Group>
@@ -902,11 +912,11 @@ export default function ProductView({
           )}
 
           {/* Product info */}
-          <div className="px-4 mt-2 sm:mt-10 sm:px-4 lg:mt-0 lg:col-span-5">
+          <div className="px-4 mt-2 sm:mt-10 sm:px-4 lg:mt-0 lg:col-span-5 mob-padding-container">
             <div className="flex justify-between gap-4 mb-3 sm:mb-0">
-              <h3 className="mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
+              <p className="mb-0 text-sm mt-0 font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}
-              </h3>
+              </p>
               <div className="flex items-center xs:flex-col">
                 <div className="flex items-center xs:text-center align-center">
                   {[0, 1, 2, 3, 4].map((rating) => (
@@ -927,7 +937,7 @@ export default function ProductView({
                     ({reviews?.review?.ratingAverage})
                   </p>
                 ) : (
-                  <p className="pl-1 my-auto text-xs font-bold">(0)</p>
+                  <p className="pl-1 my-auto text-xs font-bold dark:text-black">(0)</p>
                 )}
               </div>
             </div>
@@ -960,7 +970,9 @@ export default function ProductView({
                 </p>
               ) : null}
             </div>
-
+            {product?.quantityBreakRules?.length > 0 &&
+              <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} />
+            }
             <AttributesHandler
               product={product}
               variant={selectedAttrData}

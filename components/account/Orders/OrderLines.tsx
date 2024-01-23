@@ -3,6 +3,8 @@ import { DATE_FORMAT } from "@components/utils/constants";
 import moment from "moment";
 import Image from "next/image";
 import OrderStatusMapping from "./OrderStatusMapping";
+import { generateUri } from "@commerce/utils/uri-util";
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 
 const OrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
    let totalQty =0;
@@ -79,14 +81,13 @@ const OrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
             <div className='w-full py-2 order-image-sec'>
                {order?.itemsBasic?.map((item: any, ldx: number) => (
                   <a href={`/${item.slug}`} className='inline-block order-image-nonslider' key={ldx}>
-                     <Image
-                        src={item.image}
-                        alt=""
-                        layout='fixed'
+                     <img
+                        src={generateUri(item?.image,'h=72&fm=webp')||IMG_PLACEHOLDER} 
+                        alt="image"
                         width={40}
                         height={72}
                         className='object-cover object-center w-full h-full radius-xs sm:h-full'>
-                     </Image>
+                     </img>
                   </a>
                ))}
             </div>

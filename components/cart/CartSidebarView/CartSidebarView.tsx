@@ -40,6 +40,7 @@ import {
   NEXT_GET_PRODUCT,
   NEXT_GET_BASKET_PROMOS,
   NEXT_BASKET_VALIDATE,
+  LoadingActionType,
 } from '@components/utils/constants'
 
 import useTranslation, {
@@ -68,7 +69,7 @@ import useTranslation, {
   SUBTOTAL_EXCLUDING_TAX,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { getCurrentPage, vatIncluded } from '@framework/utils/app-util'
+import { getCurrentPage, isEligibleForFreeShipping, vatIncluded } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { data } from 'autoprefixer'
 import Engraving from '@components/product/Engraving'
@@ -76,10 +77,12 @@ import RelatedProductWithGroup from '@components/product/RelatedProducts/Related
 import SizeChangeModal from '../SizeChange'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { Guid } from '@commerce/types'
+import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   deviceInfo,
   maxBasketItemsCount,
+  config
 }: any) => {
   const {
     addToWishlist,
@@ -131,6 +134,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false)
   const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
+  const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
     useState(null)
   const isIncludeVAT = vatIncluded()
@@ -808,7 +812,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                     <div className="flex py-6">
                                       <div className="flex-shrink-0 w-24 h-32 overflow-hidden border border-gray-200 rounded-md">
                                         <Link href={`/${product.slug}`}>
-                                          <Image
+                                          <img
                                             width={100}
                                             height={100}
                                             style={css}
@@ -818,10 +822,10 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                 'h=200&fm=webp'
                                               ) || IMG_PLACEHOLDER
                                             }
-                                            alt={product.name}
+                                            alt={product.name ||'cart-image'}
                                             className="object-cover object-center w-full h-full"
                                             onClick={handleRedirectToPDP}
-                                          ></Image>
+                                          />
                                         </Link>
                                         {/* <img
                                     src={product.image}
@@ -966,10 +970,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                                                   <>
                                                     <div className="flex text-xs font-semibold text-left text-red-500">
                                                       <span className="relative mr-1 top-1">
-                                                        <Image
+                                                        <img
                                                           alt="Sold Out"
                                                           src="/assets/not-shipped-edd.svg"
-                                                          layout="fixed"
                                                           width={20}
                                                           height={20}
                                                           className="relative inline-block mr-1 top-2"
@@ -1026,7 +1029,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                           </ul>
                           {isEmpty && (
                             <div className="flex flex-col items-center justify-between w-full h-full py-9">
-                              <Image
+                              <img
                                 height="100"
                                 width="100"
                                 src="/assets/images/cart.jpg"
@@ -1089,76 +1092,17 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({
                         <div className="section-devider-sm"></div>
                       </div>
                     )}
-                    <Transition appear show={isOpen} as={Fragment}>
-                      <Dialog
-                        as="div"
-                        open={isOpen}
-                        className="relative z-9999"
-                        onClose={closeModal}
-                      >
-                        <Transition.Child
-                          as={Fragment}
-                          enter="ease-out duration-300"
-                          enterFrom="opacity-0"
-                          enterTo="opacity-30"
-                          leave="ease-in duration-300"
-                          leaveFrom="opacity-30"
-                          leaveTo="opacity-0"
-                        >
-                          <div className="fixed inset-0 bg-black " />
-                        </Transition.Child>
-
-                        <div className="fixed inset-0 overflow-y-auto">
-                          <div className="flex items-center justify-center min-h-full p-4 text-center">
-                            <Transition.Child
-                              as={Fragment}
-                              enter="transition duration-100 ease-out"
-                              enterFrom="transform scale-95 opacity-0"
-                              enterTo="transform scale-100 opacity-100"
-                              leave="transition duration-75 ease-out"
-                              leaveFrom="transform scale-100 opacity-100"
-                              leaveTo="transform scale-95 opacity-0"
-                            >
-                              <Dialog.Panel className="w-full max-w-md pb-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl">
-                                <Dialog.Title
-                                  as="div"
-                                  className="flex justify-between w-full px-6 py-3 text-lg font-medium leading-6 text-gray-900 border-b-2 shadow xsm:text-md border-gray-50"
-                                >
-                                  Remove this Item?
-                                  <XMarkIcon
-                                    className="w-5 h-5 text-gray-500 hover:text-gray-400"
-                                    onClick={closeModal}
-                                  ></XMarkIcon>
-                                </Dialog.Title>
-                                {/* <hr className="w-full my-2 shadow-md "></hr> */}
-                                <p className="p-6 text-sm font-normal text-black">
-                                  Are you sure you don't want this product? You
-                                  may move it to Wishlist and buy later.
-                                </p>
-                                <div className="flex items-center justify-around w-full px-6 mt-2">
-                                  <button
-                                    onClick={() => {
-                                      handleItem(itemClicked, 'delete')
-                                    }}
-                                    className="flex items-center justify-center w-full h-16 px-6 py-2 mx-3 text-sm font-medium text-red-700 bg-white border border-gray-300 shadow-sm lg:text-md hover:bg-gray-100 md:w-full"
-                                  >
-                                    {GENERAL_REMOVE}
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      handleWishList(itemClicked)
-                                    }}
-                                    className="flex items-center justify-center w-full h-16 px-6 py-2 mx-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 shadow-sm hover:bg-gray-100 md:w-full"
-                                  >
-                                    {BTN_MOVE_TO_WISHLIST}
-                                  </button>
-                                </div>
-                              </Dialog.Panel>
-                            </Transition.Child>
-                          </div>
-                        </div>
-                      </Dialog>
-                    </Transition>
+                    <CartItemRemoveModal 
+                      product={itemClicked}
+                      isOpen={isOpen}
+                      closeModal={closeModal}
+                      loadingAction={loadingAction}
+                      handleItem={handleItem}
+                      itemClicked={itemClicked}
+                      handleWishList={handleWishList}
+                      setLoadingAction={setLoadingAction}
+                      config={config}
+                    />
                     <div className="sm:px-4 px-4">
                       <PromotionInput
                         basketPromos={basketPromos}

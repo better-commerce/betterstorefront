@@ -17,7 +17,8 @@ export const PAGE_TYPES = {
 export default function withDataLayer(
   Component: any,
   pageType: string,
-  showLayout = true
+  showLayout = true,
+  CustomLayout?: any
 ) {
   function WrappedComponent(props: any) {
     useEffect(() => {
@@ -40,7 +41,11 @@ export default function withDataLayer(
   }
 
   if (showLayout) {
-    WrappedComponent.Layout = Layout
+    if (CustomLayout) {
+      WrappedComponent.Layout = CustomLayout
+    } else {
+      WrappedComponent.Layout = Layout
+    }
   }
   return WrappedComponent
 }

@@ -7,9 +7,8 @@ import commerce from '@lib/api/commerce'
 import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
-import { GetServerSideProps } from 'next'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
+import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import {
   BTN_RECOMMENDED_PROD,
   BTN_SEE_ALL,
@@ -26,15 +25,26 @@ import getCollectionById from '@framework/api/content/getCollectionById'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-const RecommendedProductCollection = dynamic(
-  () => import('@components/brand/RecommendedProductCollection')
-)
 import ImageCollection from '@components/brand/ImageCollection'
 import ImageBanner from '@components/brand/ImageBanner'
 // const MultiBrandVideo = dynamic(
 //   () => import('@components/brand/MultiBrandVideo')
 // )
 import MultiBrandVideo from '@components/brand/MultiBrandVideo'
+import faq from '@components/brand/faqData.json'
+import SwiperCore, { Navigation } from 'swiper'
+import 'swiper/swiper.min.css'
+import 'swiper/css'
+import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import { useUI } from '@components/ui'
+import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
+import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+
+const RecommendedProductCollection = dynamic(
+  () => import('@components/brand/RecommendedProductCollection')
+)
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
 const ProductSort = dynamic(() => import('@components/product/ProductSort'))
 const ProductGrid = dynamic(
@@ -42,12 +52,7 @@ const ProductGrid = dynamic(
 )
 const Slider = dynamic(() => import('@components/brand/Slider'))
 const Disclosure = dynamic(() => import('@components/brand/Disclosure'))
-import faq from '@components/brand/faqData.json'
-import SwiperCore, { Navigation } from 'swiper'
-import 'swiper/swiper.min.css'
-import 'swiper/css'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
-import { useUI } from '@components/ui'
+
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -332,10 +337,25 @@ function BrandDetailPage({
     })
 
     recordEvent(EVENTS.FreeText)
+
+    const trackScroll = (ev: any) => {
+      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+    }
+
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+    if (isScrollEnabled) {
+      window?.addEventListener('scroll', trackScroll)
+      return () => {
+        window?.removeEventListener('scroll', trackScroll)
+      }
+    } /*else {
+      resetPageScroll()
+    }*/
+
   }, [])
 
   useEffect(() => {
-    const Widgets = JSON.parse(brandDetails.widgetsConfig || '[]')
+    const Widgets = JSON.parse(brandDetails?.widgetsConfig || '[]')
     Widgets.map((val: any) => {
       if (val.manufacturerSettingType == 'Video' && val.code == 'BrandVideo') {
         setManufacturerStateVideoHeading(val.heading)
@@ -391,12 +411,12 @@ function BrandDetailPage({
   if (brandDetails === null) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
-        <h4 className="pb-6 text-3xl font-medium text-gray-400">
+        <h1 className="pb-6 text-3xl font-30 font-medium text-gray-400">
           This is a bad url. please go back to
           <Link href="/brands">
             <span className="px-3 text-indigo-500">All brands</span>
           </Link>
-        </h4>
+        </h1>
       </div>
     )
   }
@@ -405,6 +425,8 @@ function BrandDetailPage({
     absPath = window?.location?.href
   }
 
+  const sanitizedDescription = sanitizeHtmlContent(brandDetails?.description)
+  
   return (
     <>
       <NextHead>
@@ -412,13 +434,14 @@ function BrandDetailPage({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" id="canonical" href={absPath} />
-        <title>{brandDetails?.name || 'Brands'}</title>
+        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
+        <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
         <meta name="title" content={brandDetails?.name || 'Brands'} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={brandDetails?.name} key="ogtitle" />
+        <meta property="og:title" content={brandDetails?.metaTitle || brandDetails?.name} key="ogtitle" />
         <meta
           property="og:description"
           content={brandDetails?.metaDescription}
@@ -436,7 +459,7 @@ function BrandDetailPage({
           <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 2xl:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
               <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
-                <Image
+                <img
                   alt="Brand Logo"
                   src={
                     brandDetails.images.length !== 0
@@ -446,12 +469,11 @@ function BrandDetailPage({
                   width={212}
                   height={200}
                   loading="eager"
-                  priority
                   className="w-[120px] md:w-[212px] h-auto"
                 />
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: brandDetails?.description,
+                    __html: sanitizeHtmlContent(brandDetails?.description),
                   }}
                   className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5"
                 />
@@ -616,10 +638,12 @@ function BrandDetailPage({
                 Showing {data?.products?.total} {RESULTS}
               </span>
             </div>
+            {sanitizedDescription && (
             <div
-              dangerouslySetInnerHTML={{ __html: brandDetails?.description }}
+              dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
               className="mt-2 text-black sm:mt-5"
             />
+            )}
           </div>
           <div className="flex justify-end w-full">
             <ProductSort
@@ -652,11 +676,20 @@ function BrandDetailPage({
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const slug = `brands/${context.query.brand[0]}`
-  const response = await getBrandBySlug(slug, context.req.cookies)
-  const infraPromise = commerce.getInfra()
+export async function getStaticProps({
+  params,
+  locale,
+  locales,
+  preview,
+}: GetStaticPropsContext<{ brand: string }>) {
+  const slug = `brands/${params!?.brand[0]}`
+  const response = await getBrandBySlug(slug, {})
+  const infraPromise: any = commerce.getInfra()
   const infra = await infraPromise
+
+  if (response?.status === "NotFound") {
+    return notFoundRedirect()
+  }
 
   const collections: any = {
     imageBannerCollection: [],
@@ -747,14 +780,22 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   return {
     props: {
-      query: context.query,
-      params: context.params,
+      query: EmptyObject, //context.query,
+      params: params,
       slug: slug,
       brandDetails: response.result,
       globalSnippets: infra?.snippets ?? [],
       snippets: response?.snippets ?? [],
       collections: collections ?? [],
     }, // will be passed to the page component as props
+  }
+}
+
+export async function getStaticPaths({ locales }: GetStaticPathsContext) {
+  const paths: Array<string> = await getAllBrandsStaticPath()
+  return {
+    paths: paths?.map((x: any) => !x?.slug?.startsWith('/') ? `/${x?.slug}` : x?.slug),
+    fallback: 'blocking',
   }
 }
 
