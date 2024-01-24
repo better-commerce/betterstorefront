@@ -236,6 +236,7 @@ function Home({
           )}
         </NextHead>
       )}
+
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <Hero banners={pageContents?.banner} />
       <div className="px-4 py-3 mx-auto lg:container sm:py-6 sm:px-4 md:px-4 lg:px-6 2xl:px-0">
