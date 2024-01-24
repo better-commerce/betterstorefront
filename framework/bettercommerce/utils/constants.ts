@@ -50,6 +50,9 @@ export const PRODUCT_IMAGE_CDN_URL = process.env.PRODUCT_IMAGE_CDN_URL
 export const OMNILYTICS_DISABLED = stringToBoolean(
   process.env.OMNILYTICS_DISABLED
 )
+export const STATIC_CATEGORIES_PATH_ENABLED = stringToBoolean(
+  process.env.STATIC_CATEGORIES_PATH_ENABLED
+)
 
 export module Cookie {
   export module Key {
