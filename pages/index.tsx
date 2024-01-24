@@ -33,10 +33,6 @@ const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
-const RefferalCard = dynamic(
-  () => import('@components/customer/Referral/ReferralCard')
-)
-
 export async function getStaticProps({
   preview,
   locale,

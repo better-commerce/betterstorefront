@@ -8,6 +8,8 @@ export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
 export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
 export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
 export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
+export const NEXT_UPDATE_CHECKOUT2_ADDRESS =
+  '/api/basket/update-checkout2-address'
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
 export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
@@ -21,7 +23,8 @@ export const SEARCH_MINIMAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSI
 export const SEARCH_ADVANCED_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced`
 export const CACHED_IMAGE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product`
 export const LOOKBOOK_SLUG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook/slug`
-export const NEXT_SEARCH_ADVANCED_ENDPOINT ='/api/catalog/get-category-products'
+export const NEXT_SEARCH_ADVANCED_ENDPOINT =
+  '/api/catalog/get-category-products'
 export const PRODUCT_CUSTOM_ATTRIBUTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/custom-attributes`
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
 export const PRODUCT_PREVIEW_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/preview`
@@ -87,6 +90,7 @@ export const NEXT_GET_USER_CART = '/api/get-user-cart'
 export const NEXT_GET_CATALOG_PRODUCTS = '/api/catalog/products'
 export const NEXT_GET_ORDER_RELATED_PRODUCTS =
   '/api/catalog/get-related-products'
+export const NEXT_PAYMENT_METHODS_LIST = '/api/payment-methods-list'
 export const NEXT_GET_ALT_RELATED_PRODUCTS =
   '/api/catalog/get-alternate-related-product'
 export const NEXT_SIGN_UP = `/api/signup`
@@ -230,6 +234,7 @@ export const PDP_SIZE_OPTIONS_COUNT = parseInt(
 )
 export const MAX_ADD_TO_CART_LIMIT = 5
 export const NEXT_GET_PROOMO_DETAILS = '/api/catalog/get-promo-details'
+export const STATIC_CATEGORY_PATHS = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/staticpath/category`
 export module Messages {
   export module Validations {
     export module RegularExpressions {
@@ -254,6 +259,7 @@ export module Messages {
       export const STOCK_CODE = /^[a-zA-Z0-9\\-]+$/g
       export const QUANTITY = /^[1-9]{1}[0-9]*$/g
       export const CSV_DATA = /^[a-zA-Z0-9\-]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
+      export const EMPTY_SPACE = /\S/
     }
 
     export const Login: any = {
@@ -352,6 +358,34 @@ export module Messages {
     export const PaymentLink: any = {
       LINK_EXPIRED: 'Payment link is expired',
     }
+
+    export module CheckoutSection {
+      export const BILLING_ADDRESS_NOT_FOUND = "Billing address not found"
+      export const SHIPPING_ADDRESS_NOT_FOUND = "Shipping address not found"
+
+      export const ContactDetails: any = {
+        B2B_GUEST_CHECKOUT_NOT_ALLOWED: 'Guest checkout not allowed with the provided e-mail address',
+        FIRST_NAME_REQUIRED: 'First Name is a required field',
+        FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
+        FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
+        LAST_NAME_REQUIRED: 'Last Name is a required field',
+        LAST_NAME_MIN_LEN: 'Last Name must be at least 3 characters',
+        LAST_NAME_INPUT: 'First Name should only contain alpha-numerics',
+        EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
+        EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
+        PHONE_NUMBER_REQUIRED: 'Phone Number is a required field',
+        PHONE_NUMBER_INPUT: 'Phone Number is not valid',
+        PHONE_NUMBER_MAX_LEN: 'Phone Number must be at most 12 digits',
+        PHONE_NUMBER_MIN_LEN: 'Phone Number must be at least 7 digits',
+      }
+
+      export const BillingAddressDetails: any = {
+        COMPANY_NAME_REQUIRED: 'Company name is required',
+        POST_CODE_MAX_LEN: 'Postcode must be at most 10 digits',
+        POST_CODE_REQUIRED: 'Postcode is a required field',
+        POST_CODE_NUMBER: 'Postcode must only contain numbers',
+      }
+    }
   }
 
   export const Messages: any = {
@@ -387,6 +421,17 @@ export module Messages {
     TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
     COMPANY_NOT_FOUND: 'Company not found.',
     COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
+  }
+
+  export const ContactUs: any = {
+    FIRST_NAME_REQUIRED: 'First Name is a required field',
+    FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
+    FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
+    EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
+    EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
+    FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
+    TITLE_REQUIRED: 'Title is a require field',
+    MESSAGE_REQUIRED: 'Message is a require field'
   }
 }
 export const EmptyObject: any = {}
@@ -465,7 +510,6 @@ export enum SocialMediaType {
   APPLE = 'apple',
 }
 
-
 export const PRODUCT_TAGS = {
   newLaunch: 'New Launch',
   onSale: 'On Sale',
@@ -481,6 +525,7 @@ export enum CheckoutStepType {
   DELIVERY_METHOD = 3,
   PAYMENT_METHOD = 4,
   REVIEW_AND_PLACE_ORDER = 5,
+  REVIEW_AND_PLACE_ORDER_PAYMENT_SECTION = 51, // Ordinal introduced for fix for scroll issue on checkout page.
   BILLING_DELIVERY_DETAILS = 6,
 }
 

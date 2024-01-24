@@ -475,8 +475,8 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
   return (
     <>
-      <div className={cn('relative height-full border-gray-200 hover:border-gray-500 grid grid-cols-12 gap-2 sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-4 pb-4 sm:pb-0 bg-white',)} key={product.id}>
-        <div className={`${product?.currentStock == 0 ? 'opacity-40' : ''} relative col-span-4 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card`}>
+      <div className={cn('relative height-full border-gray-200 hover:border-gray-500 long-product-card-mobil grid grid-cols-12 gap-2 sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-4 pb-4 sm:pb-0 bg-white',)} key={product.id}>
+        <div className={`${product?.currentStock == 0 ? 'opacity-40' : ''} relative col-span-4 col-mob-12 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card`}>
           <div className="absolute top-0 right-0 z-10 flex items-center justify-between w-full pos-inherit">
             <ProductTag product={product} />
             {isMobile || isIPadorTablet ? null : (
@@ -494,7 +494,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </ButtonLink>
         </div>
 
-        <div className="col-span-8 sm:col-span-12 sm:pt-4">
+        <div className="col-span-8 sm:col-span-12 sm:pt-4 col-mob-12 mob-left-right-padding">
           <div className="flex items-center justify-between w-full px-0 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">
             <div>
               {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
@@ -627,7 +627,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
         {isMobile || isIPadorTablet ? (
           <>
-            <div className="flex flex-col w-full col-span-12 gap-0">
+            <div className="flex flex-col w-full col-span-12 gap-0 mob-left-right-padding">
              {attributesMap?.map((attrib: any, attribIdx: any) => (
                 <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                   <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
@@ -640,7 +640,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 </span>
               ))}
             </div>
-            <div className='flex items-center justify-between w-full col-span-12 gap-2 py-2 border-gray-200 border-y'>
+            <div className='flex items-center justify-between w-full col-span-12 gap-2 py-2 border-gray-200 border-y mob-left-right-padding'>
               <div className="relative items-end justify-end w-full text-sm font-semibold text-right text-black top-1 product-name hover:text-gray-950">
                 {isInWishList ? (
                   <SimpleButton

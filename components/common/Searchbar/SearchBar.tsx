@@ -57,10 +57,10 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
 
   const defaultSearch = (
     <>
-      <div className="flex flex-row w-full rounded-sm sm:w-80 md:w-64 xl:w-96">
+      <div className="flex flex-row w-full rounded-sm sm:w-80 md:w-64 xl:w-96 mobile-search-icon">
         <button
           onClick={onClick}
-          className="relative w-full px-2 sm:px-4 pr-3 text-gray-400 bg-gray-100 border border-gray-400 rounded-md sm:p-2 sm:pl-3 sm:pr-16 hover:text-gray-500"
+          className="relative w-full px-2 sm:px-4 pr-3 text-gray-400 bg-gray-100 border border-gray-400 rounded-md sm:p-2 sm:pl-3 sm:pr-16 hover:text-gray-500 search-mob-btn"
           aria-label="Search"
         >
           <span className="sr-only" aria-label="Search">
