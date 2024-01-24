@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import { useReducer, useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { getAllCategories, getCategoryBySlug } from '@framework/category'
+import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
@@ -34,6 +34,7 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -155,7 +156,7 @@ const generateCategories = (categories: any) => {
 }
 
 export async function getStaticPaths() {
-  const data = await getAllCategories()
+  const data = await getAllCategoriesStaticPath()
   return {
     paths: generateCategories(data),
     fallback: 'blocking',

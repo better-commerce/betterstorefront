@@ -4,7 +4,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import { SEARCH_PROVIDER, NEXT_SEARCH_PRODUCTS, } from '@components/utils/constants'
 import Link from 'next/link'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import rangeMap from '@lib/range-map'
 import { useRouter } from 'next/router'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -74,17 +74,23 @@ export default function Search(props: any) {
   const defaultSearch = (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-9999">
       <div
-        className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10"
+        className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden"
         onClick={closeWrapper}
       >
         <XMarkIcon />
       </div>
-      <div className="flex flex-col items-center justify-center w-full px-4 py-5 mt-10 sm:px-10">
+      <div className="flex flex-col items-center justify-center w-full px-4 py-5 mt-4 sm:mt-10 sm:px-10">
         <div className="w-full mx-auto mb-4 sm:w-3/5">
-          <div className="flex flex-row px-1 rounded-sm">
+          <div className="flex flex-row px-1 rounded-sm mob-center-align">
             <label className="hidden" htmlFor={'search-bar'}>
               {BTN_SEARCH}
             </label>
+            <div
+              className="text-gray-900 cursor-pointer h-9 w-9 hidden desktop-hidden mobile-visible"
+              onClick={closeWrapper}
+            >
+             <ChevronLeftIcon />
+            </div>
             <input
               id={'search-bar'}
               autoFocus
@@ -92,7 +98,7 @@ export default function Search(props: any) {
               placeholder={BTN_SEARCH}
               onChange={(e: any) => setInputValue(e.target.value)}
             />
-            <div className="relative py-4 text-gray-400 right-10">
+            <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
               <MagnifyingGlassIcon
                 className="w-6 h-6"
                 aria-hidden="true"

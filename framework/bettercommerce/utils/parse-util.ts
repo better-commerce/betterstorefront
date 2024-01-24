@@ -48,7 +48,10 @@ export const stringToNumber = (stringValue: string | undefined): number => {
   }
   return 0
 }
-export const roundToDecimalPlaces = (value: any, decimalPlaces: number = 2): any => {
+export const roundToDecimalPlaces = (
+  value: any,
+  decimalPlaces: number = 2
+): any => {
   const decPlaces = Math.pow(10, decimalPlaces)
   return Math.round((value + Number.EPSILON) * decPlaces) / decPlaces
 }
@@ -163,7 +166,6 @@ export const stringFormat = (input: string, data: object) => {
   return ''
 }
 
-
 export const dateFormat = (date: string | Date, format: string): string => {
   let dt = date
   if (typeof date === 'string') {
@@ -178,5 +180,82 @@ export const deliveryDateFormat = (date: string | Date): string => {
 }
 
 export const getSecondsInMinutes = (minutes: number): number => {
-  return Math.floor(minutes * 60);
+  return Math.floor(minutes * 60)
+}
+
+export const formatFromToDates = (from: string, to: string) => {
+  // const [fromDateStr, toDateStr] = input.split(',').map(dateStr => dateStr.trim());
+
+  const fromDate = new Date(from)
+  const toDate = new Date(to)
+
+  const fromDay = fromDate.getDate()
+  const toDay = toDate.getDate()
+
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
+
+  const fromMonth = months[fromDate.getMonth()]
+  const toMonth = months[toDate.getMonth()]
+  let formatted
+
+  if (fromMonth === toMonth) {
+    formatted = `${fromDay}${getOrdinalSuffix(
+      fromDay
+    )} - ${toDay}${getOrdinalSuffix(toDay)} ${fromMonth}`
+  } else {
+    formatted = `${fromDay}${getOrdinalSuffix(
+      fromDay
+    )} ${fromMonth} - ${toDay}${getOrdinalSuffix(toDay)} ${toMonth}`
+  }
+
+  return formatted
+}
+
+const getOrdinalSuffix = (day: number): string => {
+  if (day >= 11 && day <= 13) {
+    return 'th'
+  }
+  switch (day % 10) {
+    case 1:
+      return 'st'
+    case 2:
+      return 'nd'
+    case 3:
+      return 'rd'
+    default:
+      return 'th'
+  }
+}
+
+export const eddDateFormat = (date: string | Date) => {
+  let dt: any = date
+  if (typeof date === 'string') {
+    dt = new Date(date)
+  }
+
+  // ensure the date is displayed with today and yesterday
+  return moment(dt).calendar(null, {
+    // when the date is closer, specify custom values
+    lastWeek: '[last] dddd',
+    lastDay: '[yesterday], D MMMM',
+    sameDay: '[today], D MMMM',
+    nextDay: '[tomorrow], D MMMM',
+    nextWeek: 'dddd, D MMMM',
+
+    // when the date is further away, use from-now functionality             
+    sameElse: 'dddd, D MMMM'
+  })
 }

@@ -40,6 +40,7 @@ interface IPromotionInputProps {
   // readonly paymentOffers: any | undefined
   readonly items: any
   readonly getBasketPromoses?: any
+  readonly deviceInfo?: any
 }
 
 const PromotionInput = (props: IPromotionInputProps) => {

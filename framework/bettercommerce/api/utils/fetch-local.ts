@@ -1,5 +1,5 @@
 import { FetcherError } from '@commerce/utils/errors'
-import type { GraphQLFetcher } from '@commerce/api'
+import type { GraphQLFetcher, GraphQLFetcherResult } from '@commerce/api'
 import type { BetterCommerceConfig } from '../index'
 import fetch from './fetch'
 
@@ -7,7 +7,12 @@ const fetchGraphqlApi: (
   getConfig: () => BetterCommerceConfig
 ) => GraphQLFetcher =
   (getConfig) =>
-  async (query: string, { variables, preview } = {}, fetchOptions) => {
+  async (
+    query: string,
+    queryData?: any,
+    fetchOptions?: any
+  ): Promise<GraphQLFetcherResult<any>> => {
+    const { variables, preview }: any = queryData
     const config = getConfig()
     const options: any = {
       ...fetchOptions,
@@ -20,8 +25,8 @@ const fetchGraphqlApi: (
         query,
         variables,
       }),
-    };
-    const res = await fetch(config.commerceUrl, options)
+    }
+    const res: any = await fetch(config.commerceUrl, options)
 
     const json = await res.json()
     if (json.errors) {
@@ -31,7 +36,8 @@ const fetchGraphqlApi: (
       })
     }
 
-    return { data: json.data, res }
+    let value: GraphQLFetcherResult = { data: json.data, res }
+    return value
   }
 
 export default fetchGraphqlApi

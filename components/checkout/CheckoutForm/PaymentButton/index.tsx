@@ -1,10 +1,17 @@
 // Base Imports
 import React, { useEffect } from 'react'
 
+// Package Imports
+import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+
 // Component Imports
 import { CODPaymentButton } from './CODPaymentButton'
 import { PayPalPaymentButton } from './PayPalPaymentButton'
-import { IDispatchState, IPaymentButtonProps } from './BasePaymentButton'
+import {
+  IApplePaymentProps,
+  IDispatchState,
+  IPaymentButtonProps,
+} from './BasePaymentButton'
 import { MasterCardPaymentButton } from './MasterCardPaymentButton'
 import { CheckoutPaymentButton } from './CheckoutPaymentButton'
 import { StripePaymentButton } from './StripePaymentButton'
@@ -12,17 +19,20 @@ import { KlarnaPaymentButton } from './KlarnaPaymentButton'
 import { ClearPayPaymentButton } from './ClearPayPaymentButton'
 import AccountPaymentButton from './AccountPaymentButton'
 import ChequePaymentButton from './ChequePaymentButton'
+// import { ApplePayPaymentButton } from './ApplePayPaymentButton'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'
-import { PaymentMethodType } from '@components/utils/payment-constants'
+import { CheckoutStepType } from '@components/utils/constants'
 
 /**
  * Factory helper/renderer component for <PaymentButton>
  * @param props
  * @returns
  */
-const PaymentButton = (props: IPaymentButtonProps & IDispatchState) => {
+const PaymentButton = (
+  props: IPaymentButtonProps & IDispatchState & IApplePaymentProps
+) => {
   const { paymentMethod } = props
 
   let Component: any
@@ -61,16 +71,20 @@ const PaymentButton = (props: IPaymentButtonProps & IDispatchState) => {
   ) {
     Component = ChequePaymentButton
   } else if (
+    matchStrings(
+      paymentMethod?.systemName,
+      PaymentMethodType.CHECKOUT_APPLE_PAY,
+      true
+    )
+  ) {
+    //Component = ApplePayPaymentButton
+  } else if (
     matchStrings(paymentMethod?.systemName, PaymentMethodType.COD, true)
   ) {
     Component = CODPaymentButton
   } else {
     Component = <></>
   }
-
-  useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight)
-  }, [])
 
   return <Component {...props} />
 }
