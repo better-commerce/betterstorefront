@@ -18,13 +18,17 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { maxBasketItemsCount, setPageScroll, notFoundRedirect } from '@framework/utils/app-util'
+import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
+
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -51,37 +55,97 @@ export async function getStaticProps(context: any) {
     context.params[slugName] +
     '/' +
     context.params[childSlugName].join('/')
-  const category = await getCategoryBySlug(slug)
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
 
-  if (category?.status === "NotFound") {
+  const cachedDataUID = {
+    infraUID: Redis.Key.INFRA_CONFIG,
+    categorySlugUID: Redis.Key.Category.Slug + '_' + slug,
+    categoryProductUID: Redis.Key.Category.CategoryProduct + '_' + slug
+  }
+
+  const cachedData = await getDataByUID([
+    cachedDataUID.infraUID,
+    cachedDataUID.categorySlugUID,
+    cachedDataUID.categoryProductUID,
+  ]) 
+
+  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+  let categorySlugUIDData: any = parseDataValue(cachedData, cachedDataUID.categorySlugUID)
+  let categoryProductUIDData: any = parseDataValue(cachedData, cachedDataUID.categoryProductUID)
+  
+  try {
+    if(!categorySlugUIDData){
+      categorySlugUIDData = await getCategoryBySlug(slug)
+      // save to redis
+      await setData([{ key: cachedDataUID.categorySlugUID, value: categorySlugUIDData }])
+    }
+    if(!infraUIDData){
+      const infraPromise = commerce.getInfra()
+      infraUIDData = await infraPromise
+      await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
+    }
+  } catch (error: any) {
+    logError(error)
+
+    let errorUrl = '/500'
+    const errorData = error?.response?.data
+    if (errorData?.errorId) {
+      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+    }
+    return {
+      redirect: {
+        destination: errorUrl,
+        permanent: false,
+      },
+    }
+  }
+
+
+
+  if (categorySlugUIDData?.status === "NotFound") {
     return notFoundRedirect()
   }
 
-  if (category) {
-    const categoryProducts = await getCategoryProducts(category?.id)
-    return {
-      props: {
-        category,
-        slug,
-        products: categoryProducts,
-        globalSnippets: infra?.snippets ?? [],
-        snippets: category?.snippets ?? [],
-      },
-      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
+
+  if (categorySlugUIDData && categorySlugUIDData?.id) {
+    if(!categoryProductUIDData){
+      categoryProductUIDData = await getCategoryProducts(categorySlugUIDData?.id)
+      // save to redis
+      await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
+
+      return {
+        props: {
+          category: categorySlugUIDData,
+          slug,
+          products: categoryProductUIDData,
+          globalSnippets: infraUIDData?.snippets ?? [],
+          snippets: categorySlugUIDData?.snippets ?? [],
+        },
+        revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
+      }
     }
-  } else
-    return {
-      props: {
-        category,
-        slug,
-        products: null,
-        globalSnippets: infra?.snippets ?? [],
-        snippets: category?.snippets ?? [],
-      },
-      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
-    }
+    else{
+      return {
+        props: {
+          category: categorySlugUIDData,
+          slug,
+          products: categoryProductUIDData,
+          globalSnippets: infraUIDData?.snippets ?? [],
+          snippets: categorySlugUIDData?.snippets ?? [],
+        },
+        revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
+      }
+  }
+  }else
+  return {
+    props: {
+      category: categorySlugUIDData,
+      slug,
+      products: null,
+      globalSnippets: infraUIDData?.snippets ?? [],
+      snippets: categorySlugUIDData?.snippets ?? [],
+    },
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
+  }
 }
 
 const generateCategories = (categories: any) => {
