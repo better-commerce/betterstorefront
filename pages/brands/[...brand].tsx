@@ -41,6 +41,8 @@ import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
 
 const RecommendedProductCollection = dynamic(
   () => import('@components/brand/RecommendedProductCollection')
@@ -683,110 +685,134 @@ export async function getStaticProps({
   preview,
 }: GetStaticPropsContext<{ brand: string }>) {
   const slug = `brands/${params!?.brand[0]}`
-  const response = await getBrandBySlug(slug, {})
-  const infraPromise: any = commerce.getInfra()
-  const infra = await infraPromise
+  const cachedDataUID = {
+    infraUID : Redis.Key.INFRA_CONFIG,
+    brandSlugUID: Redis.Key.Brands.Slug + '_' + slug,
+    collectionUID: Redis.Key.Brands.Collection + '_' + slug
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.infraUID,
+    cachedDataUID.brandSlugUID,
+    cachedDataUID.collectionUID,
+  ])
+  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+  let brandBySlugUIDData: any = parseDataValue(cachedData, cachedDataUID.brandSlugUID)
+  let collectionUIDData: any = parseDataValue(cachedData, cachedDataUID.collectionUID)
 
-  if (response?.status === "NotFound") {
+  if (!brandBySlugUIDData) {
+    brandBySlugUIDData = await getBrandBySlug(slug, {})
+    await setData([{ key: cachedDataUID.brandSlugUID, value: brandBySlugUIDData }])
+  }
+  
+  if(!infraUIDData) {
+    infraUIDData = await commerce.getInfra()
+    await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
+  }
+
+    if (brandBySlugUIDData?.status === "NotFound") {
     return notFoundRedirect()
   }
 
   const collections: any = {
-    imageBannerCollection: [],
-    imageCategoryCollection: [],
-    imgFeatureCollection: [],
-    offerBannerCollection: [],
-    productCollection: [],
+    imageBannerCollection: collectionUIDData?.imageBannerCollection || [],
+    imageCategoryCollection: collectionUIDData?.imageCategoryCollection || [],
+    imgFeatureCollection: collectionUIDData?.imgFeatureCollection || [],
+    offerBannerCollection: collectionUIDData?.offerBannerCollection || [],
+    productCollection: collectionUIDData?.productCollection || [],
   }
 
-  let promises: any = []
-  const widgets: any = tryParseJson(response?.result?.widgetsConfig)
-  if (widgets?.length) {
-    widgets?.forEach(async (widget: any) => {
-      if (
-        widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'ImageBanner'
-      ) {
-        promises.push(
-          new Promise(async (resolve: any, reject: any) => {
-            try {
-              collections.imageBannerCollection = await getCollectionById(
-                widget.recordId
-              )
-            } catch (error: any) {}
-            resolve()
-          })
-        )
-      } else if (
-        widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'MultipleImagesBanner'
-      ) {
-        promises.push(
-          new Promise(async (resolve: any, reject: any) => {
-            try {
-              const res = await getCollectionById(widget.recordId)
-              collections.imageCategoryCollection = res?.images
-            } catch (error: any) {}
-            resolve()
-          })
-        )
-      } else if (
-        widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'FeaturedDewaltImageList'
-      ) {
-        promises.push(
-          new Promise(async (resolve: any, reject: any) => {
-            try {
-              collections.imgFeatureCollection = await getCollectionById(
-                widget.recordId
-              )
-            } catch (error: any) {}
-            resolve()
-          })
-        )
-      } else if (
-        widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'FFXOffers'
-      ) {
-        promises.push(
-          new Promise(async (resolve: any, reject: any) => {
-            try {
-              const res = await getCollectionById(widget.recordId)
-              collections.offerBannerCollection = res.images
-            } catch (error: any) {}
-            resolve()
-          })
-        )
-      } else if (
-        widget.manufacturerSettingType == 'ProductCollection' &&
-        widget.code == 'FeaturedDewaltSaws'
-      ) {
-        promises.push(
-          new Promise(async (resolve: any, reject: any) => {
-            try {
-              const res = await getCollectionById(widget.recordId)
-              collections.productCollection = res.products.results
-            } catch (error: any) {}
-            resolve()
-          })
-        )
-      }
-    })
-  }
+  try {
+    let promises: any = []
+    const widgets: any = tryParseJson(brandBySlugUIDData?.result?.widgetsConfig) || []
+    if (widgets?.length) {
+      widgets?.forEach(async (widget: any) => {
+        if (
+          widget.manufacturerSettingType == 'ImageCollection' &&
+          widget.code == 'ImageBanner'
+        ) {
+          promises.push(
+            new Promise(async (resolve: any, reject: any) => {
+              try {
+                collections.imageBannerCollection = await getCollectionById(
+                  widget.recordId
+                )
+              } catch (error: any) {}
+              resolve()
+            })
+          )
+        } else if (
+          widget.manufacturerSettingType == 'ImageCollection' &&
+          widget.code == 'MultipleImagesBanner'
+        ) {
+          promises.push(
+            new Promise(async (resolve: any, reject: any) => {
+              try {
+                const res = await getCollectionById(widget.recordId)
+                collections.imageCategoryCollection = res?.images
+              } catch (error: any) {}
+              resolve()
+            })
+          )
+        } else if (
+          widget.manufacturerSettingType == 'ImageCollection' &&
+          widget.code == 'FeaturedDewaltImageList'
+        ) {
+          promises.push(
+            new Promise(async (resolve: any, reject: any) => {
+              try {
+                collections.imgFeatureCollection = await getCollectionById(
+                  widget.recordId
+                )
+              } catch (error: any) {}
+              resolve()
+            })
+          )
+        } else if (
+          widget.manufacturerSettingType == 'ImageCollection' &&
+          widget.code == 'FFXOffers'
+        ) {
+          promises.push(
+            new Promise(async (resolve: any, reject: any) => {
+              try {
+                const res = await getCollectionById(widget.recordId)
+                collections.offerBannerCollection = res.images
+              } catch (error: any) {}
+              resolve()
+            })
+          )
+        } else if (
+          widget.manufacturerSettingType == 'ProductCollection' &&
+          widget.code == 'FeaturedDewaltSaws'
+        ) {
+          promises.push(
+            new Promise(async (resolve: any, reject: any) => {
+              try {
+                const res = await getCollectionById(widget.recordId)
+                collections.productCollection = res.products.results
+              } catch (error: any) {}
+              resolve()
+            })
+          )
+        }
+      })
+    }
 
-  if (promises?.length) {
-    await Promise.all(promises)
+    if (promises?.length) {
+      await Promise.all(promises)
+      await setData([{ key: cachedDataUID.collectionUID, value: collections }])
+    }
+  } catch (error: any) {
+    // return console.error(error)
   }
-
   return {
     props: {
       query: EmptyObject, //context.query,
       params: params,
       slug: slug,
-      brandDetails: response.result,
-      globalSnippets: infra?.snippets ?? [],
-      snippets: response?.snippets ?? [],
-      collections: collections ?? [],
+      brandDetails: brandBySlugUIDData?.result ?? {},
+      globalSnippets: infraUIDData?.snippets ?? [],
+      snippets: brandBySlugUIDData?.snippets ?? [],
+      collections,
     }, // will be passed to the page component as props
   }
 }
