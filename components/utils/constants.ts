@@ -234,6 +234,7 @@ export const PDP_SIZE_OPTIONS_COUNT = parseInt(
 )
 export const MAX_ADD_TO_CART_LIMIT = 5
 export const NEXT_GET_PROOMO_DETAILS = '/api/catalog/get-promo-details'
+export const STATIC_CATEGORY_PATHS = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/staticpath/category`
 export module Messages {
   export module Validations {
     export module RegularExpressions {
@@ -359,11 +360,12 @@ export module Messages {
     }
 
     export module CheckoutSection {
-      export const BILLING_ADDRESS_NOT_FOUND = "Billing address not found"
-      export const SHIPPING_ADDRESS_NOT_FOUND = "Shipping address not found"
+      export const BILLING_ADDRESS_NOT_FOUND = 'Billing address not found'
+      export const SHIPPING_ADDRESS_NOT_FOUND = 'Shipping address not found'
 
       export const ContactDetails: any = {
-        B2B_GUEST_CHECKOUT_NOT_ALLOWED: 'Guest checkout not allowed with the provided e-mail address',
+        B2B_GUEST_CHECKOUT_NOT_ALLOWED:
+          'Guest checkout not allowed with the provided e-mail address',
         FIRST_NAME_REQUIRED: 'First Name is a required field',
         FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
         FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
@@ -430,7 +432,7 @@ export module Messages {
     EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
     FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
     TITLE_REQUIRED: 'Title is a require field',
-    MESSAGE_REQUIRED: 'Message is a require field'
+    MESSAGE_REQUIRED: 'Message is a require field',
   }
 }
 export const EmptyObject: any = {}

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import { useReducer, useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { getAllCategories, getCategoryBySlug } from '@framework/category'
+import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
@@ -18,13 +18,18 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { maxBasketItemsCount, setPageScroll, notFoundRedirect } from '@framework/utils/app-util'
+import {
+  maxBasketItemsCount,
+  setPageScroll,
+  notFoundRedirect,
+} from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -55,7 +60,7 @@ export async function getStaticProps(context: any) {
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
 
-  if (category?.status === "NotFound") {
+  if (category?.status === 'NotFound') {
     return notFoundRedirect()
   }
 
@@ -69,7 +74,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
     }
   } else
     return {
@@ -80,7 +85,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
     }
 }
 
@@ -108,7 +113,7 @@ const generateCategories = (categories: any) => {
 }
 
 export async function getStaticPaths() {
-  const data = await getAllCategories()
+  const data = await getAllCategoriesStaticPath()
   return {
     paths: generateCategories(data),
     fallback: 'blocking',
@@ -162,13 +167,13 @@ const DEFAULT_STATE = {
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
-       return { ...state, sortBy: payload, currentPage: 1 }
+      return { ...state, sortBy: payload, currentPage: 1 }
     case PAGE:
       return { ...state, currentPage: payload }
     case SORT_ORDER:
       return { ...state, sortOrder: payload }
     case CLEAR:
-       return { ...state, currentPage: 1, filters: [] }
+      return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
     case SET_CATEGORY_ID:
@@ -278,10 +283,16 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
 
   useEffect(() => {
     const trackScroll = (ev: any) => {
-      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+      setPageScroll(
+        window?.location,
+        ev.currentTarget.scrollX,
+        ev.currentTarget.scrollY
+      )
     }
 
-    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) =>
+      location.pathname.startsWith(x)
+    )
     if (isScrollEnabled) {
       window?.addEventListener('scroll', trackScroll)
       return () => {
@@ -290,7 +301,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     } /*else {
       resetPageScroll()
     }*/
-  },[])
+  }, [])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
@@ -382,7 +393,11 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         <meta name="description" content={category?.metaDescription} />
         <meta name="keywords" content={category?.metaKeywords} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={category?.metaTitle || category?.name} key="ogtitle" />
+        <meta
+          property="og:title"
+          content={category?.metaTitle || category?.name}
+          key="ogtitle"
+        />
         <meta
           property="og:description"
           content={category?.metaDescription}
@@ -403,10 +418,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
 
         {/* Category info section start */}
         <div className="px-4 mx-auto my-6 mt-4 bg-transparent lg:w-4/5 sm:px-4">
-          <h1 className='dark:text-black'>{category?.name}</h1>
+          <h1 className="dark:text-black">{category?.name}</h1>
           <div
             className="font-18 dark:text-black"
-            dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtmlContent(category?.description),
+            }}
           ></div>
         </div>
         {/* Category info section End */}
@@ -523,15 +540,15 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     />
                   </div>
                 ))}
-                <CompareSelectionBar
-                  name={category?.name}
-                  showCompareProducts={showCompareProducts}
-                  products={productDataToPass}
-                  isCompare={isProductCompare}
-                  maxBasketItemsCount={maxBasketItemsCount(config)}
-                  closeCompareProducts={closeCompareProducts}
-                  deviceInfo={deviceInfo}
-                />
+              <CompareSelectionBar
+                name={category?.name}
+                showCompareProducts={showCompareProducts}
+                products={productDataToPass}
+                isCompare={isProductCompare}
+                maxBasketItemsCount={maxBasketItemsCount(config)}
+                closeCompareProducts={closeCompareProducts}
+                deviceInfo={deviceInfo}
+              />
             </div>
           ) : (
             <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
@@ -547,5 +564,3 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
 }
 
 export default withDataLayer(CategoryPage, PAGE_TYPE)
-
-

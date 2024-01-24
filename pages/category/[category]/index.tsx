@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import { useReducer, useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { getAllCategories, getCategoryBySlug } from '@framework/category'
+import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
@@ -21,16 +21,24 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
+import {
+  maxBasketItemsCount,
+  notFoundRedirect,
+  setPageScroll,
+} from '@framework/utils/app-util'
 import getAllProductsOperation from '@framework/api/operations/get-all-products'
 import { ProductCard } from '@components/product'
 import axios from 'axios'
-import { NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import {
+  NEXT_GET_CATALOG_PRODUCTS,
+  SITE_ORIGIN_URL,
+} from '@components/utils/constants'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
 )
@@ -55,7 +63,7 @@ export async function getStaticProps(context: any) {
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
 
-  if (category?.status === "NotFound") {
+  if (category?.status === 'NotFound') {
     return notFoundRedirect()
   }
 
@@ -69,7 +77,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
     }
   } else
     return {
@@ -80,7 +88,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infra?.snippets ?? [],
         snippets: category?.snippets ?? [],
       },
-      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
+      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
     }
 }
 
@@ -101,7 +109,7 @@ const generateCategories = (categories: any) => {
 }
 
 export async function getStaticPaths() {
-  const data = await getAllCategories()
+  const data = await getAllCategoriesStaticPath()
   return {
     paths: generateCategories(data),
     fallback: 'blocking',
@@ -295,12 +303,18 @@ function CategoryLandingPage({
       }
       handleApiCall()
     }
-    
+
     const trackScroll = (ev: any) => {
-      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+      setPageScroll(
+        window?.location,
+        ev.currentTarget.scrollX,
+        ev.currentTarget.scrollY
+      )
     }
 
-    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) =>
+      location.pathname.startsWith(x)
+    )
     if (isScrollEnabled) {
       window?.addEventListener('scroll', trackScroll)
       return () => {
@@ -309,7 +323,6 @@ function CategoryLandingPage({
     } /*else {
       resetPageScroll()
     }*/
-
   }, [])
 
   useEffect(() => {
@@ -423,10 +436,12 @@ function CategoryLandingPage({
           )}
         </div>
         <div className="container px-4 mx-auto my-0 mt-4 bg-transparent sm:px-6 lg:px-6 2xl:px-0">
-          <h1 className='dark:text-black'>{category?.name}</h1>
+          <h1 className="dark:text-black">{category?.name}</h1>
           <div
             className="font-18"
-            dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtmlContent(category?.description),
+            }}
           ></div>
         </div>
         {/* popular category start */}
@@ -471,7 +486,12 @@ function CategoryLandingPage({
                             <>
                               {featurecat?.image != '' ? (
                                 <img
-                                  src={generateUri(featurecat?.image,'h=160&fm=webp')||IMG_PLACEHOLDER}
+                                  src={
+                                    generateUri(
+                                      featurecat?.image,
+                                      'h=160&fm=webp'
+                                    ) || IMG_PLACEHOLDER
+                                  }
                                   className="object-fill object-center w-full"
                                   alt="Image"
                                   width={240}
@@ -559,7 +579,12 @@ function CategoryLandingPage({
                       <>
                         {feature?.logoImageName != '' ? (
                           <img
-                            src={generateUri(feature?.logoImageName,'h=240&fm=webp') || IMG_PLACEHOLDER}
+                            src={
+                              generateUri(
+                                feature?.logoImageName,
+                                'h=240&fm=webp'
+                              ) || IMG_PLACEHOLDER
+                            }
                             className="object-fill object-center w-full"
                             alt="Image"
                             width={240}
@@ -585,7 +610,7 @@ function CategoryLandingPage({
                           <div
                             className="mt-3 text-white font-18"
                             dangerouslySetInnerHTML={{
-                             __html: sanitizeHtmlContent( feature?.description),
+                              __html: sanitizeHtmlContent(feature?.description),
                             }}
                           ></div>
                         </Link>
@@ -802,7 +827,12 @@ function CategoryLandingPage({
                               <>
                                 {featurecat?.image != '' ? (
                                   <img
-                                    src={generateUri(featurecat?.image,'h=240&fm=webp')||IMG_PLACEHOLDER}
+                                    src={
+                                      generateUri(
+                                        featurecat?.image,
+                                        'h=240&fm=webp'
+                                      ) || IMG_PLACEHOLDER
+                                    }
                                     className="object-fill object-center w-full"
                                     alt="Image"
                                     width={240}
