@@ -40,7 +40,7 @@ const CartItemRemoveModal = ({
                     leaveFrom="opacity-30"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-black " />
+                    <div className="fixed inset-0" />
                 </Transition.Child>
 
                 <div className="fixed inset-0 overflow-y-auto">
