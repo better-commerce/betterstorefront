@@ -28,7 +28,7 @@ import {
 } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
 import axios from 'axios'
-import { AlertType } from '@framework/utils/enums'
+import { AlertType, CheckoutStep } from '@framework/utils/enums'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import CheckoutLayoutV2 from '@components/common/Layout/CheckoutLayoutV2'
 import {
@@ -57,17 +57,6 @@ export enum BasketStage {
   SHIPPING_ADDRESS_PROVIDED = 4,
   BILLING_ADDRESS_PROVIDED = 41,
   PLACED = 5,
-}
-
-enum CheckoutStep {
-  NONE = '',
-  LOGIN = 'login',
-  ADDRESS = 'address',
-  NEW_ADDRESS = 'new-address',
-  EDIT_ADDRESS = 'edit-address',
-  BILLING_ADDRESS = 'billing-address',
-  DELIVERY = 'delivery',
-  REVIEW = 'review',
 }
 
 const steps = [
@@ -735,6 +724,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo }: any) => {
     onContinue: () => {
       goToStep(CheckoutStep.REVIEW)
     },
+    goToStep
   }
 
   const reviewOrderProps = {

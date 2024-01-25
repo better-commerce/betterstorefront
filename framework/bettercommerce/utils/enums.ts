@@ -21,3 +21,14 @@ export enum SearchProvider {
 export enum UserRoleType {
   ADMIN = 1,
 }
+
+export enum CheckoutStep {
+  NONE = '',
+  LOGIN = 'login',
+  ADDRESS = 'address',
+  NEW_ADDRESS = 'new-address',
+  EDIT_ADDRESS = 'edit-address',
+  BILLING_ADDRESS = 'billing-address',
+  DELIVERY = 'delivery',
+  REVIEW = 'review',
+}
