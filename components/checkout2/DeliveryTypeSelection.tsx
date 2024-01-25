@@ -25,29 +25,21 @@ const DeliveryTypeSelection = ({
 }: DeliveryTypeSelectionProps) => {
   const DELIVERY_METHODS_TYPE = [
     {
-      id: 1,
+      id: 0,
       title: 'Deliver',
       content: ADDRESS_OF_YOUR_CHOICE,
       children: [],
       type: 1,
     },
     {
-      id: 2,
+      id: 1,
       type: 2,
       title: 'Collect',
       content: IN_STORE_OR_COLLECT_PLUS,
       children: [],
     },
   ]
-  const [shippingMethods, setShippingMethods] = useState(new Array<any>())
   const [deliveryMethods, setDeliveryMethods] = useState(DELIVERY_METHODS_TYPE)
-  const [shippingMethod, setShippingMethod] = useState({
-    id: false,
-    displayName: '',
-    description: '',
-    shippingCode: '',
-    price: { formatted: { withTax: '' } },
-  })
   const { basketId } = useUI()
   const loadDeliveryMethods = async (shippingAddress: any) => {
     const response = await postData(NEXT_SHIPPING_ENDPOINT, {
@@ -55,7 +47,6 @@ const DeliveryTypeSelection = ({
       countryCode:
         shippingAddress?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
     })
-    setShippingMethods(response)
     if (response.length) {
       const tempArrNew = groupBy(response, 'type')
       const output = new Array<any>()
@@ -67,10 +58,11 @@ const DeliveryTypeSelection = ({
         output.push(data)
       })
       setDeliveryMethods(output)
-      if (output[0].children[0]) {
-        setShippingMethod(output[0].children[0])
+      if(deliveryTypeMethod) {
+        setDeliveryTypeMethod(output[deliveryTypeMethod?.id])
+      } else {
+        setDeliveryTypeMethod(output[0])
       }
-      setDeliveryTypeMethod(output[0])
     }
   }
   useEffect(() => {
@@ -87,8 +79,6 @@ const DeliveryTypeSelection = ({
           value={deliveryTypeMethod}
           onChange={(newSelectedDeliveryMethod) => {
             setDeliveryTypeMethod(newSelectedDeliveryMethod)
-            // Update to output[1] instead of output[0]
-            setShippingMethod(newSelectedDeliveryMethod.children[1])
           }}
           className="w-full gap-4"
         >
