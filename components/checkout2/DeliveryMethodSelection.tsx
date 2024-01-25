@@ -2,20 +2,13 @@
 import React, { useEffect, useState } from 'react'
 
 // Component Imports
-import { LoadingDots, useUI } from '@components/ui'
+import { useUI } from '@components/ui'
 
 // Other Imports
-import { postData } from '@components/utils/clientFetcher'
-import {
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  NEXT_SHIPPING_ENDPOINT,
-} from '@components/utils/constants'
-import { AlertType } from '@framework/utils/enums'
+import { AlertType, CheckoutStep } from '@framework/utils/enums'
 import { vatIncluded } from '@framework/utils/app-util'
 import { eddDateFormat } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
-import { groupBy } from 'lodash'
-import { ADDRESS_OF_YOUR_CHOICE, IN_STORE_OR_COLLECT_PLUS } from '@components/utils/textVariables'
 import FindStore from './FindStore'
 
 interface ShippingMethod {
@@ -30,6 +23,7 @@ interface DeliveryMethodSelectionProps {
   readonly deliveryMethod: any
   onDeliveryMethodSelect: (method: ShippingMethod, store: any) => void
   onContinue: () => void
+  goToStep: any
 }
 
 const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
@@ -37,63 +31,16 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   deliveryMethod,
   onDeliveryMethodSelect,
   onContinue,
+  goToStep = () => {}
 }) => {
   const isIncludeVAT = vatIncluded()
-  const { basketId, setAlert } = useUI()
-  const DELIVERY_METHODS_TYPE = [
-    {
-      id: 1,
-      title: 'Deliver',
-      content: ADDRESS_OF_YOUR_CHOICE,
-      children: [],
-      type: 1,
-    },
-    {
-      id: 2,
-      type: 2,
-      title: 'Collect',
-      content: IN_STORE_OR_COLLECT_PLUS,
-      children: [],
-    },
-  ]
+  const { setAlert } = useUI()
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState<any>(null)
-  const [deliveryMethods, setDeliveryMethods] = useState(DELIVERY_METHODS_TYPE)
   const [showFindStore, setShowFindStore] = useState<boolean>(false)
   const [selectedStore, setSelectedStore] = useState<any>(null)
-  const [shippingMethod, setShippingMethod] = useState({
-    id: false,
-    displayName: '',
-    description: '',
-    shippingCode: '',
-    price: { formatted: { withTax: '' } },
-  })
   const [selectedShippingMethod, setSelectedShippingMethod] = useState<any>()
   const [selectedShippingMethodId, setSelectedShippingMethodId] =
     useState<string>(basket?.shippingMethodId)
-
-    const loadDeliveryMethods = async (shippingAddress: any) => {
-      const response = await postData(NEXT_SHIPPING_ENDPOINT, {
-        basketId,
-        countryCode:
-          shippingAddress?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-      })
-      if (response.length) {
-        const tempArrNew = groupBy(response, 'type')
-        const output = new Array<any>()
-        Object.entries(tempArrNew)?.forEach(([key, value]) => {
-          const data: any = DELIVERY_METHODS_TYPE?.find(
-            (o: any) => o.type === parseInt(key)
-          )
-          data.children = value
-          output.push(data)
-        })
-        setDeliveryMethods(output)
-        if (output[0].children[0]) {
-          setShippingMethod(output[0].children[0])
-        }
-        setSelectedDeliveryMethod(output[0])
-      }
-    }
 
   const handleMethodSelection = (method: any) => {
     setSelectedShippingMethodId(method?.id)
@@ -128,7 +75,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
     if(deliveryMethod){
       setSelectedDeliveryMethod(deliveryMethod)
     } else {
-      loadDeliveryMethods(basket?.shippingAddress)
+      goToStep(CheckoutStep.ADDRESS)
     }
   }, [deliveryMethod])
 
