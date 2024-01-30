@@ -27,6 +27,7 @@ import {
   Messages,
   NEXT_GET_ORDER,
   NEXT_GET_ORDERS,
+  NEXT_INFRA_ENDPOINT,
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import {
