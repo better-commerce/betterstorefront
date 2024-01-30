@@ -63,13 +63,16 @@ import {
   getConfig,
 } from '@components/config/config-helper'
 import { Guid } from '@commerce/types'
-const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
-const connector = new AppSearchAPIConnector({
-  searchKey,
-  engineName,
-  hostIdentifier,
-  endpointBase,
-})
+let connector: any
+if (process.env.ELASTIC_ENGINE_NAME) {
+  const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
+  connector = new AppSearchAPIConnector({
+    searchKey,
+    engineName,
+    hostIdentifier,
+    endpointBase,
+  })
+}
 const elasticConfig = {
   searchQuery: {
     facets: buildFacetConfigFromConfig(),
@@ -199,8 +202,8 @@ const Navbar: FC<Props & IExtraProps> = ({
   // Read b2b enabled value from settings
   const b2bEnabled = b2bSettings?.length
     ? stringToBoolean(
-        b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value
-      )
+      b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value
+    )
     : false
 
   let deviceCheck = ''
@@ -520,11 +523,10 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 </div>
                                 <div className="pt-5 pr-3">
                                   <ChevronUpIcon
-                                    className={`${
-                                      !open
+                                    className={`${!open
                                         ? 'transition-transform duration-150 rotate-180 transform'
                                         : 'transition-transform duration-150 rotate-0 transform'
-                                    } h-5 w-5 text-black`}
+                                      } h-5 w-5 text-black`}
                                   />
                                 </div>
                               </Disclosure.Button>
@@ -536,55 +538,55 @@ const Navbar: FC<Props & IExtraProps> = ({
                                 <div className="space-y-4">
                                   {item?.navBlocks?.length
                                     ? item?.navBlocks?.map(
-                                        (navBlock: any, navIdx: number) => {
-                                          return (
-                                            <div
-                                              key={`navbar-parent-${navIdx}`}
-                                              className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-6 gap-y-0 gap-x-0 lg:gap-x-0"
+                                      (navBlock: any, navIdx: number) => {
+                                        return (
+                                          <div
+                                            key={`navbar-parent-${navIdx}`}
+                                            className="grid grid-cols-1 px-5 py-2 border-t border-gray-200 sm:px-6 gap-y-0 gap-x-0 lg:gap-x-0"
+                                          >
+                                            <ul
+                                              role="list"
+                                              aria-labelledby="clothing-heading"
+                                              className="col-span-1"
                                             >
-                                              <ul
-                                                role="list"
-                                                aria-labelledby="clothing-heading"
-                                                className="col-span-1"
-                                              >
-                                                {navBlock?.navItems?.map(
-                                                  (navItem: any, idx: any) => (
-                                                    <Link
-                                                      legacyBehavior
-                                                      key={`${navItem?.caption}-${idx}`}
-                                                      title={navItem?.caption}
-                                                      href={
-                                                        navBlock?.navBlockType ==
+                                              {navBlock?.navItems?.map(
+                                                (navItem: any, idx: any) => (
+                                                  <Link
+                                                    legacyBehavior
+                                                    key={`${navItem?.caption}-${idx}`}
+                                                    title={navItem?.caption}
+                                                    href={
+                                                      navBlock?.navBlockType ==
                                                         9
-                                                          ? `/collection/${removePrecedingSlash(
-                                                              navItem?.itemLink
-                                                            )}`
-                                                          : `/${removePrecedingSlash(
-                                                              navItem?.itemLink
-                                                            )}`
-                                                      }
-                                                      passHref
+                                                        ? `/collection/${removePrecedingSlash(
+                                                          navItem?.itemLink
+                                                        )}`
+                                                        : `/${removePrecedingSlash(
+                                                          navItem?.itemLink
+                                                        )}`
+                                                    }
+                                                    passHref
+                                                  >
+                                                    <li
+                                                      onClick={() => {
+                                                        setOpen(false)
+                                                        hamburgerMenuClickLevel2(
+                                                          item?.caption,
+                                                          navBlock?.boxTitle
+                                                        )
+                                                      }}
+                                                      className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
                                                     >
-                                                      <li
-                                                        onClick={() => {
-                                                          setOpen(false)
-                                                          hamburgerMenuClickLevel2(
-                                                            item?.caption,
-                                                            navBlock?.boxTitle
-                                                          )
-                                                        }}
-                                                        className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700"
-                                                      >
-                                                        {navItem?.caption}
-                                                      </li>
-                                                    </Link>
-                                                  )
-                                                )}
-                                              </ul>
-                                            </div>
-                                          )
-                                        }
-                                      )
+                                                      {navItem?.caption}
+                                                    </li>
+                                                  </Link>
+                                                )
+                                              )}
+                                            </ul>
+                                          </div>
+                                        )
+                                      }
+                                    )
                                     : null}
                                 </div>
                               </Disclosure.Panel>
@@ -739,11 +741,11 @@ const Navbar: FC<Props & IExtraProps> = ({
                                               href={
                                                 navBlock?.navBlockType == 9
                                                   ? `/collection/${removePrecedingSlash(
-                                                      navItem?.itemLink
-                                                    )}`
+                                                    navItem?.itemLink
+                                                  )}`
                                                   : `/${removePrecedingSlash(
-                                                      navItem?.itemLink
-                                                    )}`
+                                                    navItem?.itemLink
+                                                  )}`
                                               }
                                               className="relative flex items-center h-full hover:text-pink"
                                               title={navItem?.caption}

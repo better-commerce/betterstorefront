@@ -29,8 +29,11 @@ import SearchQuickView from '@components/product/QuickView/SearchQuickView'
 import { deliveryDateFormat, matchStrings, priceFormat } from '@framework/utils/parse-util'
 import { Switch } from '@headlessui/react'
 
-const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
-const connector = new AppSearchAPIConnector({ searchKey, engineName, hostIdentifier, endpointBase, })
+let connector: any
+if (process.env.ELASTIC_ENGINE_NAME) {
+  const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
+  connector = new AppSearchAPIConnector({ searchKey, engineName, hostIdentifier, endpointBase, })
+}
 const config = {
   searchQuery: {
     facets: buildFacetConfigFromConfig(),

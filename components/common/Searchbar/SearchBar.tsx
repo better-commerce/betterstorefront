@@ -21,13 +21,16 @@ import { SearchProvider as Provider } from '@framework/utils/enums'
 import InstantSearchBar from '@components/search/algolia/InstantSearchBar'
 
 const SearchWrapper = dynamic(() => import('@components/search'))
-const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
-const connector = new AppSearchAPIConnector({
-  searchKey,
-  engineName,
-  hostIdentifier,
-  endpointBase,
-})
+let connector: any
+if (process.env.ELASTIC_ENGINE_NAME) {
+  const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
+  connector = new AppSearchAPIConnector({
+    searchKey,
+    engineName,
+    hostIdentifier,
+    endpointBase,
+  })
+}
 const elasticConfig = {
   searchQuery: {
     facets: buildFacetConfigFromConfig(),
