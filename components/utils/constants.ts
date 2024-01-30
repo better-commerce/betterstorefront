@@ -137,7 +137,6 @@ export const NEXT_SEARCH_PRODUCTS = `/api/catalog/search`
 export const NEXT_GET_PRODUCT = '/api/catalog/get-product'
 export const NEXT_GET_PRODUCT_PREVIEW = '/api/catalog/get-product-preview'
 export const NEXT_PAYMENT_METHODS = '/api/payment-methods'
-export const NEXT_INFRA_ENDPOINT = '/api/infra'
 export const NEXT_SET_CONFIG = '/api/set-config'
 export const NEXT_FORGOT_PASSWORD = '/api/customer/forgot-password'
 export const NEXT_RESET_PASSWORD = '/api/customer/reset-password'
