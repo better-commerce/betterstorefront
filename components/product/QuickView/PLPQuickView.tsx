@@ -675,7 +675,7 @@ export default function PLPQuickView({
                                             handleWishList()
                                           }
                                         }}
-                                        className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                                        className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
                                       >
                                         {isInWishList ? (
                                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
@@ -727,7 +727,7 @@ export default function PLPQuickView({
                                               handleWishList()
                                             }
                                           }}
-                                          className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
+                                          className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
                                         >
                                           {isInWishList ? (
                                             <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />

@@ -921,7 +921,7 @@ export default function ProductView({
                     </div>
                     <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                       <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
-                      <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
+                      <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                         {isInWishList ? (
                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                         ) : (
@@ -934,7 +934,7 @@ export default function ProductView({
                 ) : (
                   <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                     <Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
-                    <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
+                    <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                       {isInWishList ? (
                         <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                       ) : (

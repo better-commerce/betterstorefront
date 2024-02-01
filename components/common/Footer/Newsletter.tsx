@@ -61,12 +61,12 @@ export default function Newsletter() {
           placeholder="Enter Email ID"
           value={value}
           onChange={handleChange}
-          className="w-full min-w-0 px-4 py-4 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+          className="w-full min-w-0 px-4 py-2 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
         />
         <div className="flex-shrink-0 ml-4">
           <button
             type="submit"
-            className="flex items-center justify-center w-full h-full px-6 py-4 font-medium uppercase btn-secondary border-footer-btn"
+            className="flex items-center justify-center w-full h-full px-6 py-2 font-medium uppercase btn-secondary border-footer-btn"
           >
             {BTN_SIGN_UP}
           </button>

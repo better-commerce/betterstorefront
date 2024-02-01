@@ -282,7 +282,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                       <p>
                         <button
                           type="button"
-                          className="flex items-center justify-center px-6 py-3 font-medium uppercase btn-primary"
+                          className="flex items-center justify-center px-6 py-2 font-medium uppercase btn-primary button"
                           onClick={handleClose}
                         >
                           {GENERAL_CONTINUE_SHOPPING}
