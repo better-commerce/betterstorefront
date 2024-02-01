@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ACTION_TYPES } from 'pages/search'
 import { BTN_SEARCH } from '@components/utils/textVariables'
+import { useUI } from '@components/ui'
 
 const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
@@ -27,6 +28,7 @@ const FilterItem = ({
   ...props
 }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
+  const { currency } = useUI()
 
   useEffect(() => {
     setCheckbox(isChecked)
@@ -47,14 +49,18 @@ const FilterItem = ({
   }
 
   const generateOptionName = () => {
-    if (sectionKey === FILTER_KEYS.PRICE) return `${option.name} £` //TBD
+    if (sectionKey === FILTER_KEYS.PRICE)
+      return `${option.name} ${currency?.currencySymbol}`
     if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1]
     else return option.name
   }
 
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div key={`option-right-value-${option.value}-${optionIdx}`} className="flex items-center pt-4">
+    <div
+      key={`option-right-value-${option.value}-${optionIdx}`}
+      className="flex items-center pt-4"
+    >
       <input
         name={`${optionIdx}-input[]`}
         defaultValue={option.value}
@@ -199,7 +205,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className="pb-5 mt-2 border-b border-gray-200">
+      <div className="pb-5 mt-1 max-panel">
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (

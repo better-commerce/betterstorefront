@@ -26,28 +26,9 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
    return (
       <>
          <div className='w-full p-4 border-b-2 border-dotted order-info-top'>
-            <p className='text-sm font-medium order-number text-black'>
-               #{order.orderNo}{' '} • {' '}{item?.items?.length} {itemLabel} {idx} • {' '} {totalQty} {unitLabel}
+            <p className='text-sm font-medium text-black order-number'>
+               #{order.orderNo}{' '} • {' '}{item?.items?.length} {itemLabel} • {' '} {totalQty} {unitLabel}
             </p>
-            {/* <button type="button" className='text-base font-bold text-black order-link'>
-               {
-                  Object.entries(getCategories()).map(([key, values]: any, iid: number) => {
-                     let itemQty = 0;
-                     getCategories()[key].forEach((x: any) => { itemQty = itemQty + x.qty; });
-                     return (
-                        <>
-                           <span
-                              key={iid}
-                              className='object-cover object-center w-full h-full mr-2 text-primary dark:text-black radius-xs sm:h-full cat-span'>
-                              {itemQty} {key.toLowerCase()}
-                              <span className='comma-span'>,</span>
-                              <span className='hidden ml-2 arrow-span'><i className='sprite-icon sprite-right-arrow-black'></i></span>
-                           </span>
-                        </>
-                     )
-                  })
-               }
-            </button> */}
          </div>
          {/* top info end */}
 
@@ -57,10 +38,10 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
                <div>
                   {
                      order?.orderDetails?.order?.id && (
-                        <p className='text-sm text-black font-medium'>
+                        <p className='text-sm font-medium text-black'>
                            {order?.orderDetails?.order?.deliveryPlans.length > 0 ? (
                               <>
-                              <span>Package {idx + 1}/{order?.orderDetails?.order?.deliveryPlans.length} • </span>
+                                 <span>Package {idx + 1}/{order?.orderDetails?.order?.deliveryPlans.length} • </span>
                               </>
                            ) : (
                               <span>Package {idx + 1}/1 • </span>
@@ -91,18 +72,13 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
                   />
                </div>
             </div>
-            <div className='w-full py-2 order-image-sec'>
+            <div className='grid w-full grid-cols-6 gap-2 py-2 order-image-sec'>
                {
                   getProductItems()?.map((productItem: any, pId: number) => (
-                     <a href={`/${productItem.slug}`} className='inline-block order-image-nonslider' key={pId}>
-                     <img
-                        src={generateUri(productItem.image,'h=72&fm=webp') || productItem.image||IMG_PLACEHOLDER}
-                        alt="product-image"
-                        width={40}
-                        height={72}
-                        className='object-cover object-center w-full h-full radius-xs sm:h-full'/>
+                     <a href={`/${productItem.slug}`} className='inline-block border border-gray-200 order-image-nonslider' key={pId}>
+                        <img src={generateUri(productItem.image, 'h=72&fm=webp') || productItem.image || IMG_PLACEHOLDER} alt="product-image" width={40} height={72} className='object-cover object-center w-full h-full radius-xs sm:h-full' />
                      </a>
-               ))
+                  ))
                }
             </div>
             {

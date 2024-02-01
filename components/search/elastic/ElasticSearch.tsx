@@ -27,17 +27,23 @@ import {
   getConfig,
   getFacetFields,
 } from '@components/config/config-helper'
-import { getElasticSearchPriceColumn, vatIncluded } from '@framework/utils/app-util'
+import {
+  getElasticSearchPriceColumn,
+  vatIncluded,
+} from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
-const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
-const connector = new AppSearchAPIConnector({
-  searchKey,
-  engineName,
-  hostIdentifier,
-  endpointBase,
-})
+let connector: any
+if (process.env.ELASTIC_ENGINE_NAME) {
+  const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
+  connector = new AppSearchAPIConnector({
+    searchKey,
+    engineName,
+    hostIdentifier,
+    endpointBase,
+  })
+}
 const config = {
   searchQuery: {
     facets: buildFacetConfigFromConfig(),
@@ -62,7 +68,10 @@ const CustomResultView = ({ result }: any) => {
       <a href="">
         <div className="p-2 mb-4 border border-gray-200 group-hover:border-gray-700">
           <img
-            src={generateUri(result?.imageurl?.raw,'h=400&fm=webp')||IMG_PLACEHOLDER}
+            src={
+              generateUri(result?.imageurl?.raw, 'h=400&fm=webp') ||
+              IMG_PLACEHOLDER
+            }
             alt={'search'}
             className="object-contain w-48 h-48"
             width={300}
@@ -125,7 +134,7 @@ export default function ElasticSearch() {
                             key={field}
                             field={field}
                             label={field}
-                          // autocompleteSuggestions={true}
+                            // autocompleteSuggestions={true}
                           />
                         </>
                       ))}

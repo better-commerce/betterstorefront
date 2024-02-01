@@ -7,6 +7,13 @@ export default function CompareSelectionBar({ name, showCompareProducts, isCompa
   const { isCompared, setIsCompared, compareProductList, resetCompareProducts } = useUI()
   const [products, setProducts] = useState([])
   const router = useRouter()
+
+  useEffect(() => {
+    return () => {
+      setIsCompared('false')
+    }
+  }, [])
+
   useEffect(() => {
     if (!router.pathname.includes('/products')) {
       setIsCompared('false')

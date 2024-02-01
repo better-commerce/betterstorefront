@@ -6,11 +6,7 @@
 */
 
 // Package Imports
-import { DATE_TIME_FORMAT } from '@components/utils/constants'
-import { CURRENCY_SYMBOL_POUND } from '@components/utils/textVariables'
-import { toNumber } from 'lodash'
 import moment from 'moment'
-import { hrtime } from 'process'
 const format = require('string-format')
 
 /**
@@ -82,7 +78,8 @@ export const tryParseJson = (json: any) => {
 
 export const priceFormat = (
   value: string | number | undefined,
-  decimalPlaces: number = 2
+  decimalPlaces: number = 2,
+  currencySymbol: string = ''
 ): string => {
   if (value) {
     // Not undefined
@@ -98,14 +95,14 @@ export const priceFormat = (
 
     if (floatParsed % intParsed === 0) {
       // zeroes after decimal point.
-      return CURRENCY_SYMBOL_POUND + intParsed.toString()
+      return currencySymbol + intParsed.toString()
     }
 
     // Round off to the specified {decimalPlaces}.
-    return CURRENCY_SYMBOL_POUND + floatParsed.toFixed(2)
+    return currencySymbol + floatParsed.toFixed(2)
     //return Math.round(floatParsed * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
   }
-  return '0'
+  return currencySymbol + '0'
 }
 
 export const localDateToConvert = (date_to_convert_str: any) => {
@@ -255,7 +252,7 @@ export const eddDateFormat = (date: string | Date) => {
     nextDay: '[tomorrow], D MMMM',
     nextWeek: 'dddd, D MMMM',
 
-    // when the date is further away, use from-now functionality             
-    sameElse: 'dddd, D MMMM'
+    // when the date is further away, use from-now functionality
+    sameElse: 'dddd, D MMMM',
   })
 }

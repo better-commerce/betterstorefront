@@ -103,12 +103,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const [isProductCompare, setProductCompare] = useState(false)
   const adaptedQuery = { ...query }
-  adaptedQuery.currentPage
-    ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
-    : false
-  adaptedQuery.filters
-    ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
-    : false
+  adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
+  adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
 
   const initialState = {
     ...DEFAULT_STATE,
@@ -338,10 +334,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
         <title>{GENERAL_CATALOG}</title>
         <meta name="title" content={GENERAL_CATALOG} />
@@ -349,76 +342,28 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         <meta name="keywords" content="Search" />
         <meta property="og:image" content="" />
         <meta property="og:title" content={GENERAL_CATALOG} key="ogtitle" />
-        <meta
-          property="og:description"
-          content={GENERAL_CATALOG}
-          key="ogdesc"
-        />
+        <meta property="og:description" content={GENERAL_CATALOG} key="ogdesc" />
       </NextHead>
-      <div className="pt-6 pb-24 mx-auto bg-transparent 2xl:w-4/5">
+      <div className="container pt-6 pb-24 mx-auto">
         <div className="">
-          <h1 className="inline-block pl-4 font-semibold tracking-tight text-black sm:px-4">
+          <h1 className="inline-block pl-0 font-semibold tracking-tight text-black sm:px-0">
             {GENERAL_CATALOG}
           </h1>
           <span className="inline-block ml-2 text-sm font-medium sm:px-0 dark:text-black">
             Showing {data.products.total} Results for
           </span>
         </div>
-
-        {/*TODO: For browser caching of product images*/}
-        {/*{productDataToPass?.results?.length > 0 && (
-          <CacheProductImages
-            data={productDataToPass?.results
-              ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
-              .flat(1)}
-            setIsLoading={setIsLoading}
-          />
-        )}*/}
-
-        <div className="grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:grid-cols-3 lg:grid-cols-12 md:grid-cols-4 sm:px-0 lg:px-0">
+        <div className={`sm:grid-cols-3 lg:grid-cols-12 md:grid-cols-4 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:px-0 lg:px-0`}>
           {isMobile ? (
-            <ProductMobileFilters
-              handleFilters={handleFilters}
-              products={data.products}
-              routerFilters={state.filters}
-              handleSortBy={handleSortBy}
-              clearAll={clearAll}
-              routerSortOption={state.sortBy}
-            />
+            <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
           ) : (
-            <ProductFilterRight
-              handleFilters={handleFilters}
-              products={data.products}
-              routerFilters={state.filters}
-            />
+            <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
           )}
-          <div className="sm:col-span-10">
-            <ProductFiltersTopBar
-              products={data.products}
-              handleSortBy={handleSortBy}
-              routerFilters={state.filters}
-              clearAll={clearAll}
-              routerSortOption={state.sortBy}
-            />
-            <ProductGrid
-              products={productDataToPass}
-              currentPage={state.currentPage}
-              handlePageChange={handlePageChange}
-              handleInfiniteScroll={handleInfiniteScroll}
-              deviceInfo={deviceInfo}
-              maxBasketItemsCount={maxBasketItemsCount(config)}
-              isCompared={isCompared}
-            />
+          <div className={`sm:col-span-10`}>
+            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
+            <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           </div>
-          <CompareSelectionBar
-            name={GENERAL_CATALOG}
-            showCompareProducts={showCompareProducts}
-            products={data.products}
-            isCompare={isProductCompare}
-            maxBasketItemsCount={maxBasketItemsCount(config)}
-            closeCompareProducts={closeCompareProducts}
-            deviceInfo={deviceInfo}
-          />
+          <CompareSelectionBar name={GENERAL_CATALOG} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
         </div>
       </div>
       <Script

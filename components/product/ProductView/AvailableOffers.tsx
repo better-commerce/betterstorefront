@@ -49,7 +49,7 @@ export default function AvailableOffers({ currency, offers, key }: any) {
                 BEST PRICE:{' '}
               </span>
               <span className="inline-block pl-1 text-sm text-black">
-                {priceFormat(bestprice)}
+                {priceFormat(bestprice, undefined, currency?.currencySymbol)}
               </span>
             </h2>
             <p className="text-xs font-medium text-gray-900">
@@ -131,13 +131,11 @@ export default function AvailableOffers({ currency, offers, key }: any) {
                           {saving.additionalInfo2 == 'False' ||
                           saving.additionalInfo2 == 'false' ? (
                             <p className="mt-1 text-xs font-medium text-left text-black break-word-text">
-                              {saving?.code}, Save {currency?.currencySymbol}
-                              {amountPrice} extra
+                              {saving?.code}
                             </p>
                           ) : (
                             <p className="mt-1 font-mono text-sm font-medium text-left text-black break-word-text">
-                              {saving?.code}, Save {currency?.currencySymbol}
-                              {percentDiscount?.toFixed(2)} extra
+                              {saving?.code}
                             </p>
                           )}
                         </span>
