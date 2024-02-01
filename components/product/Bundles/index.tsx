@@ -84,7 +84,7 @@ export default function Bundles({
             {price}
           </p>
           <button
-            className="ml-2 flex-1 bg-black border rounded-sm uppercase lg:py-2 py-3 sm:px-4 px-1 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full  btn-c btn-primary"
+            className="ml-2 flex-1 bg-black border rounded-sm uppercase py-2 sm:px-4 px-1 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full  btn-c btn-primary button"
             onClick={onBundleAddToCart}
           >
             Add Bundle To basket
