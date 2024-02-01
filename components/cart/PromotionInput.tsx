@@ -525,7 +525,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                   }
                   type="submit"
                   title={GENERAL_APPLY_TEXT}
-                  className={`px-3 xsm:h-10 flex items-center justify-center lg:h-10 md:h-10 btn-secondary w-full py-2`}
+                  className={`px-3 xsm:h-10 flex items-center uppercase justify-center lg:h-10 md:h-10 btn-secondary w-full py-2`}
                 >
                   {GENERAL_APPLY_TEXT}
                 </button>

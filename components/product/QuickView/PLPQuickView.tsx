@@ -531,7 +531,7 @@ export default function PLPQuickView({
     fetchIsQuickView()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [isQuickview])
+  }, [isQuickview])
 
   const setModelClose = () => {
     setQuickviewOpen(false)
@@ -547,124 +547,68 @@ export default function PLPQuickView({
   return (
     <>
       <Transition.Root show={isQuickviewOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 overflow-hidden z-999"
-          onClose={() => setModelClose()}
-        >
+        <Dialog as="div" className="fixed inset-0 overflow-hidden z-999" onClose={() => setModelClose()} >
           <div className="absolute inset-0 overflow-hidden z-999">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay
-                className="w-full h-screen bg-black opacity-50"
-                onClick={() => setModelClose()}
-              />
+            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+              <Dialog.Overlay className="w-full h-screen bg-black opacity-50" onClick={() => setModelClose()} />
             </Transition.Child>
 
             <div className="fixed inset-0 flex items-center justify-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
+              <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
                 <div className="w-screen max-w-xl p-2 quickview-screen">
-                  <div className="flex flex-col h-full shadow-xl bg-gray-50">
+                  <div className="flex flex-col h-full rounded-md shadow-xl bg-gray-50">
                     <div className="flex-1 px-0">
                       <div className="relative py-2 mt-2 sm:px-0">
-                        <button
-                          type="button"
-                          className="absolute -top-11 right-0 lg:-top-2 lg:-right-8 p-0.5 bg-gray-300 rounded-full"
-                          onClick={() => setModelClose()}
-                        >
+                        <button type="button" className="absolute -top-11 right-0 lg:-top-2 lg:-right-8 p-0.5 bg-gray-300 rounded-full" onClick={() => setModelClose()} >
                           <span className="sr-only">{CLOSE_PANEL}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                         <div className="grid grid-cols-1 lg:grid-cols-12">
-                          <div className="lg:col-span-7">
+                          <div className="lg:col-span-6">
                             <div className="flex flex-col px-4 sm:px-6 sm:pb-3">
-                              <Swiper
-                                slidesPerView={1}
-                                spaceBetween={4}
-                                navigation={true}
-                                loop={false}
-                                breakpoints={{
-                                  640: {
-                                    slidesPerView: 1,
-                                  },
-                                  768: {
-                                    slidesPerView: 1,
-                                  },
-                                  1024: {
-                                    slidesPerView: 1,
-                                  },
-                                }}
-                              >
-                                <div
-                                  role="list"
-                                  className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-12 lg:gap-x-0"
-                                >
-                                  {productData?.images?.map(
-                                    (image: any, idx: number) =>
-                                      image?.tag != 'specification' && (
-                                        <SwiperSlide
-                                          className="px-0"
-                                          key={`${idx}-slider`}
-                                        >
-                                          <div
-                                            key={idx}
-                                            className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto"
-                                          >
-                                            <div className="relative group">
-                                              {image?.image ? (
-                                                <div className="image-container">
-                                                  <img
-                                                    src={
-                                                      generateUri(
-                                                        image?.image,
-                                                        'h=1000&fm=webp'
-                                                      ) || IMG_PLACEHOLDER
-                                                    }
-                                                    alt={image.name || 'product-image'}
-                                                    className="object-cover object-center w-full h-full image"
-                                                    
-                                                  />
-                                                  
-                                                </div>
-                                              ) : (
-                                                <></>
-                                              )}
-                                            </div>
+                              <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 1, }, 1024: { slidesPerView: 1, }, }} >
+                                {productData?.images?.length > 0 ? (<>
+                                  <div role="list" className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-12 lg:gap-x-0" >
+                                    {productData?.images?.map((image: any, idx: number) => image?.tag != 'specification' && (
+                                      <SwiperSlide className="px-0" key={`${idx}-slider`} >
+                                        <div key={idx} className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto" >
+                                          <div className="relative group">
+                                            {image?.image ? (
+                                              <div className="image-container">
+                                                <img src={generateUri(image?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} alt={image.name || 'product-image'} className="object-cover object-center w-full h-full image" />
+                                              </div>
+                                            ) : (
+                                              <></>
+                                            )}
                                           </div>
-                                        </SwiperSlide>
-                                      )
-                                  )}
-                                </div>
+                                        </div>
+                                      </SwiperSlide>
+                                    ))}
+                                  </div>
+                                </>) : (<>
+                                  <div role="list" className="inline-flex mx-0 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-1 lg:gap-x-0" >
+                                    {productData?.images?.length == 0 &&
+                                      <div className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto" >
+                                        <div className="relative group">
+                                          <div className="image-container">
+                                            <img src={IMG_PLACEHOLDER} alt="Dummy Image" className="object-cover object-center w-full h-full image" />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    }
+                                  </div>
+                                </>)}
                               </Swiper>
                             </div>
                           </div>
-                          <div className="lg:col-span-5">
+                          <div className="lg:col-span-6">
                             <div className="flex flex-col px-4 my-1 sm:px-6">
                               <h4 className="text-xs font-normal text-gray-400">
                                 {productData?.classification?.category}
                               </h4>
-                              <h3 className="grid grid-cols-12 mb-2 lg:text-xl md:text-xl text-sm font-bold tracking-tight text-primary sm:text-2xl sm:grid-cols-6">
-                                <div className="col-span-8 sm:col-span-4 text-sm sm:text-sm md:text-sm lg:text-lg">
-                                  <Link
-                                    href={`/${productData?.slug}`}
-                                    passHref
-                                    onClick={() => setQuickview(undefined)}
-                                  >
+                              <h3 className="grid grid-cols-12 mb-2 text-sm font-bold tracking-tight lg:text-xl md:text-xl text-primary sm:text-2xl sm:grid-cols-6">
+                                <div className="col-span-8 text-sm sm:col-span-4 sm:text-sm md:text-sm lg:text-lg">
+                                  <Link href={`/${productData?.slug}`} passHref onClick={() => setQuickview(undefined)} >
                                     {productData?.name || productData?.name}{' '}
                                   </Link>
                                 </div>
@@ -690,18 +634,11 @@ export default function PLPQuickView({
                             </div>
                             <div className="flex flex-col px-4 mt-1 sm:px-6">
                               <p className="mb-2 text-lg font-semibold text-primary sm:text-md">
-                                {isIncludeVAT
-                                  ? productData?.price?.formatted?.withTax
-                                  : productData?.price?.formatted?.withoutTax}
-
-                                { productData?.listPrice?.raw?.withTax > 0 && productData?.listPrice?.raw?.withTax > productData?.price?.raw?.withTax && (
+                                {isIncludeVAT ? productData?.price?.formatted?.withTax : productData?.price?.formatted?.withoutTax}
+                                {productData?.listPrice?.raw?.withTax > 0 && productData?.listPrice?.raw?.withTax > productData?.price?.raw?.withTax && (
                                   <>
                                     <span className="px-2 text-lg font-normal text-gray-500 line-through sm:text-md">
-                                      {isIncludeVAT
-                                        ? productData?.listPrice?.formatted
-                                            ?.withTax
-                                        : productData?.listPrice?.formatted
-                                            ?.withoutTax}
+                                      {isIncludeVAT ? productData?.listPrice?.formatted?.withTax : productData?.listPrice?.formatted?.withoutTax}
                                     </span>
                                     <span className="text-lg font-normal text-red-500 sm:text-md">
                                       {discount}% off
@@ -815,9 +752,9 @@ export default function PLPQuickView({
                 </div>
               </Transition.Child>
             </div>
-          </div>
-        </Dialog>
-      </Transition.Root>
+          </div >
+        </Dialog >
+      </Transition.Root >
     </>
   )
 }

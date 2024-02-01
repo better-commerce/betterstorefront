@@ -85,35 +85,20 @@ export default function Search(props: any) {
             <label className="hidden" htmlFor={'search-bar'}>
               {BTN_SEARCH}
             </label>
-            <div
-              className="text-gray-900 cursor-pointer h-9 w-9 hidden desktop-hidden mobile-visible"
-              onClick={closeWrapper}
-            >
-             <ChevronLeftIcon />
+            <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
+              <ChevronLeftIcon />
             </div>
-            <input
-              id={'search-bar'}
-              autoFocus
-              className="w-full min-w-0 px-3 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700"
-              placeholder={BTN_SEARCH}
-              onChange={(e: any) => setInputValue(e.target.value)}
-            />
+            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-3 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700" placeholder={BTN_SEARCH} onChange={(e: any) => setInputValue(e.target.value)} />
             <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
-              <MagnifyingGlassIcon
-                className="w-6 h-6"
-                aria-hidden="true"
-              />
+              <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
             </div>
           </div>
         </div>
-        <div className="grid w-full grid-cols-2 sm:w-3/5 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid w-full grid-cols-2 sm:w-3/5 sm:mx-0 md:grid-cols-3 lg:grid-cols-4 max-panel-search">
           {isLoading &&
             rangeMap(12, (i) => (
-              <div
-                key={i}
-                className="mx-auto mt-20 rounded-md shadow-md w-60 h-72"
-              >
-                <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
+              <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
+                <div className="flex flex-row items-center justify-center h-full space-x-2 animate-pulse">
                   <div className="flex flex-col space-y-3">
                     <div className="w-full h-48 bg-gray-100 rounded-md "></div>
                     <div className="h-6 mt-40 bg-gray-100 rounded-md w-36 "></div>
@@ -123,42 +108,24 @@ export default function Search(props: any) {
             ))}
           {products?.map((product: any, idx: number) => {
             return (
-              <div
-                className="border-b border-r border-gray-200"
-                key={idx}
-              >
-                <div className="relative p-4 group sm:p-6">
+              <div className="border-b border-r border-gray-200" key={idx} >
+                <div className="relative p-4 group sm:p-2">
                   <Link passHref href={`/${product.slug}`}>
                     <div className="relative overflow-hidden bg-gray-200 rounded-lg aspect-w-1 aspect-h-1 group-hover:opacity-75">
                       <div className="image-container">
-                        {product.image && (
-                          <img
-                            src={
-                              generateUri(
-                                product.image,
-                                'h=200&fm=webp'
-                              ) || IMG_PLACEHOLDER
-                            }
-                            alt={product.name || "product"}
-                            width={20}
-                            height={20}
-                            style={css}
-                            sizes="50vw"
-                            className="object-cover object-center w-full h-48 sm:h-72 image"
-                          />
-                        )}
+                        <img src={ generateUri( product.image, 'h=200&fm=webp' ) || IMG_PLACEHOLDER } alt={product.name || "product"} width={20} height={20} style={css} sizes="50vw" className="object-cover object-center w-full h-48 sm:h-72 image" />
                       </div>
                     </div>
                   </Link>
 
-                  <div className="pt-10 pb-4 text-center">
-                    <h3 className="text-sm font-medium text-gray-900 min-h-50px">
+                  <div className="pt-4 pb-1 text-center">
+                    <h3 className="text-sm font-medium text-gray-900">
                       <Link href={`/${product.slug}`}>
                         {product.name}
                       </Link>
                     </h3>
 
-                    <p className="mt-4 font-medium text-gray-900">
+                    <p className="mt-1 font-medium text-gray-900">
                       {product?.price?.formatted?.withTax}
                     </p>
 

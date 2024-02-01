@@ -13,6 +13,7 @@ const isBetterCommerce = provider === 'bettercommerce'
 const crypto = require('crypto')
 
 module.exports = withCommerceConfig({
+  output: 'standalone',
   poweredByHeader: false,
   images: {
     domains: [

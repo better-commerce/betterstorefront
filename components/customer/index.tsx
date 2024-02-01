@@ -186,7 +186,7 @@ export default function CustomerForm({
       }: any) => {
         return (
           <div
-            className={`flex flex-col items-center justify-center w-full px-5 py-1 ${
+            className={`flex flex-col items-center justify-center w-full px-5 py-5 ${
               !isLoginSidebarOpen && `px-5`
             }`}
           >

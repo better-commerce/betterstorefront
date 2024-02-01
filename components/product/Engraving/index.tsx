@@ -13,7 +13,7 @@ import LoadingDots from '@components/ui/LoadingDots'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 export default function Engraving({
   onClose = () => {},
-  engravingPrice = '£5.99',
+  engravingPrice = '5.99',
   show = false,
   handleToggleDialog,
   submitForm,
