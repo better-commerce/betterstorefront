@@ -541,7 +541,7 @@ export default function AddressBook({ deviceInfo }: any) {
                 <button
                   type="submit"
                   onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="p-4 font-semibold text-center cursor-pointer btn-primary"
+                  className="p-4 font-semibold text-center cursor-pointer btn-primary button uppercase"
                 >
                   {ADD_ADDRESS}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">

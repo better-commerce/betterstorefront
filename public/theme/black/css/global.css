@@ -244,18 +244,30 @@ p {
 .btn-primary {
   background: var(--btn-bg-primary);
   color: var(--btn-text-color-primary);
-  font-size: var(--font-18);
+  font-size: var(--font-14);
 }
 
 .btn-c.btn-primary {
   background: var(--btn-bg-primary);
   color: var(--btn-text-color-primary);
-  font-size: var(--font-18);
+  font-size: var(--font-14);
 }
 
 .btn-c.btn-primary:hover {
   background: var(--btn-bg-hover-primary);
   color: var(--btn-hover-text-color-primary);
+}
+
+
+.btn-c.btn-primary {
+  display: inline-block;
+  text-align: center;
+  background: var(--btn-bg-hover-primary);
+  color: var(--btn-hover-text-color-primary);
+  font-size: var(--font-14);
+  padding: 6px 12px !important;
+  border-radius: 4px;
+  border: 0 !important;
 }
 
 .btn-primary:hover {
@@ -266,7 +278,7 @@ p {
 .btn-secondary {
   background: var(--btn-bg-secondary);
   color: var(--btn-text-color-secondary);
-  font-size: var(--font-18);
+  font-size: var(--font-14);
 }
 
 .btn-secondary:hover {
@@ -279,8 +291,8 @@ p {
   text-align: center;
   background: var(--btn-bg-secondary) !important;
   color: var(--btn-text-color-secondary);
-  font-size: var(--font-18);
-  padding: 12px 24px !important;
+  font-size: var(--font-14);
+  padding: 6px 12px !important;
 
   border-radius: 4px;
   border: 0 !important;
@@ -296,7 +308,7 @@ p {
   color: var(--btn-text-color-default);
   border: 2px solid var(--btn-text-color-default);
   border-color: var(--btn-border-clr-default);
-  font-size: var(--font-18);
+  font-size: var(--font-14);
 }
 
 .btn-default:hover {
@@ -385,8 +397,10 @@ p {
   border-radius: 4px;
   color: var(--btn-text-color-white);
   border: 2px solid var(--btn-border-white);
-  font-size: var(--font-18);
+  font-size: var(--font-14);
   box-sizing: border-box;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important
 }
 
 .btn-primary-white:hover {
@@ -1032,4 +1046,20 @@ object {
     width: 100%;
     padding-left: 0rem;
   }
+}
+
+.button {
+  display: inline-block !important;
+  text-align: center !important;
+  background: var(--btn-bg-secondary) !important;
+  color: var(--btn-text-color-secondary) !important;
+  font-size: var(--font-14) !important;
+  padding: 6px 12px !important;
+  border: 0 !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important
+}
+.button:hover {
+  background: var(--btn-bg-hover-secondary) !important;
+  color: var(--btn-hover-text-color-secondary) !important;
 }

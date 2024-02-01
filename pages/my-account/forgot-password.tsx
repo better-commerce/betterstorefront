@@ -127,7 +127,7 @@ function ForgotPasswordPage() {
             })}
             <Button
               type="submit"
-              className="!font-normal w-full"
+              className="!font-normal w-full button"
               loading={isLoading}
               disabled={isLoading}
             >

@@ -592,7 +592,7 @@ const Navbar: FC<Props & IExtraProps> = ({
             </div>
             <div className="flow-root w-10 px-2 sm:w-12">
               <div className="flex justify-center flex-1 mx-auto">
-                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
+                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded() || true} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
               </div>
             </div>
           </div>

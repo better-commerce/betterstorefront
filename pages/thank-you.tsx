@@ -644,7 +644,7 @@ export default function OrderConfirmation({ config }: any) {
           ) : null}
           <div className="max-w-xl mt-5 text-center">
             <Link href={`/`} passHref>
-              <span className="p-3 font-medium btn-primary">
+              <span className="p-3 font-medium btn-primary button">
                 {BTN_BACK_TO_HOME}
               </span>
             </Link>
