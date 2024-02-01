@@ -354,7 +354,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   if (category === null) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
-        <h1 className="pb-6 text-3xl font-30 font-medium text-gray-400">
+        <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
           {BAD_URL_TEXT}
           <Link href="/category">
             <span className="px-3 text-indigo-500">{ALL_CATEGORY}</span>
@@ -404,7 +404,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           key="ogdesc"
         />
       </NextHead>
-      <section className="main-section sm:px-4">
+      <section className="main-section">
         <div className="px-4 mx-auto mt-4 bg-transparent lg:w-4/5 sm:px-4">
           {/* breadcrumb section start */}
           {category?.breadCrumbs && (

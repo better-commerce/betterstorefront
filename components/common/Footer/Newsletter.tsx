@@ -66,7 +66,7 @@ export default function Newsletter() {
         <div className="flex-shrink-0 ml-4">
           <button
             type="submit"
-            className="flex items-center justify-center w-full h-full px-6 py-4 font-medium uppercase btn-secondary"
+            className="flex items-center justify-center w-full h-full px-6 py-4 font-medium uppercase btn-secondary border-footer-btn"
           >
             {BTN_SIGN_UP}
           </button>

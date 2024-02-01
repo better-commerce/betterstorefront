@@ -66,12 +66,12 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
     >
       {({ errors, touched, handleSubmit, values, handleChange }: any) => {
         return (
-          <div className="flex-col w-full px-5 py-5 flex items-center justify-center">
-            <Form className="font-semibold w-full sm:w-1/2">
+          <div className="flex flex-col items-center justify-center w-full px-5 py-5">
+            <Form className="w-full font-semibold sm:w-1/2">
               {config.map((formItem: any, idx: number) => {
                 return (
                   <>
-                    <label className="text-gray-700 text-sm">
+                    <label className="text-sm text-gray-700">
                       {formItem.label}
                     </label>
 
@@ -82,14 +82,14 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
                       onChange={handleChange}
                       value={values[formItem.key]}
                       type={formItem.type}
-                      className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                      className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
                     />
-                    <h3 className="text-center py-2 text-gray-600 text-sm">
+                    <h3 className="py-2 text-sm text-center text-gray-600">
                       {GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION}
                     </h3>
 
                     {errors[formItem.key] && touched[formItem.key] ? (
-                      <div className="text-red-400 text-sm">
+                      <div className="text-sm text-red-400">
                         {errors[formItem.key]}
                       </div>
                     ) : null}
@@ -107,11 +107,11 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
                 })}
               </div>
             </Form>
-            <div className="mt-10 flex sm:flex-col1">
+            <div className="flex mt-10 sm:flex-col1">
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="max-w-xs flex-1 uppercase bg-black border border-transparent rounded-sm py-3 px-8 flex items-center justify-center btn-primary sm:w-full"
+                className="flex items-center justify-center flex-1 w-full max-w-xs px-8 py-3 uppercase bg-black border border-transparent rounded-sm btn-primary sm:w-full"
               >
                 {BTN_CHECKOUT_SECURELY}
               </button>

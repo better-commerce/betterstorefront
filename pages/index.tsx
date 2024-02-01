@@ -7,7 +7,10 @@ import type { GetStaticPropsContext } from 'next'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
-
+import { Swiper, SwiperSlide } from 'swiper/react'
+// Import Swiper styles
+import 'swiper/css'
+import 'swiper/css/navigation'
 // Component Imports
 import { Layout } from '@components/common'
 
@@ -28,9 +31,13 @@ import {
   getCurrentCurrency,
   obfuscateHostName,
   setCurrentCurrency,
+  maxBasketItemsCount,
 } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
-
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import Link from 'next/link'
+import { generateUri } from '@commerce/utils/uri-util'
+import BestSellerProduct from '@components/product/BestSellerProduct'
 const PromotionBanner = dynamic(
   () => import('@components/home/PromotionBanner')
 )
@@ -68,7 +75,7 @@ export async function getStaticProps({
                 process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
               channel: 'Web',
               currency: currencyCode,
-              cachedCopy: true,
+              cachedCopy: false,
               language: config?.locale,
             })
             const pageContentWeb = await pageContentsPromiseWeb
@@ -139,6 +146,7 @@ function Home({
   pageContentsMobileWeb,
   hostName,
   deviceInfo,
+  config,
 }: any) {
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -238,7 +246,7 @@ function Home({
       )}
 
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      <Hero banners={pageContents?.banner} />
+      <Hero deviceInfo={deviceInfo} banners={pageContents?.banner} />
       <div className="px-4 py-3 mx-auto lg:container sm:py-6 sm:px-4 md:px-4 lg:px-6 2xl:px-0">
         {pageContents?.heading?.map((heading: any, hId: number) => (
           <Heading

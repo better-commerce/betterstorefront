@@ -149,7 +149,18 @@ const fetcher = async (props: IFetcherProps | any) => {
     }
     return response.data
   } catch (error: any) {
-    throw error
+    const errorStatusCode = error.status
+    let errorBody = error.data
+
+    if (errorStatusCode === 400) {
+      return {
+        hasError: true,
+        status: errorStatusCode,
+        message: errorBody?.message,
+      }
+    } else {
+      throw error
+    }
   }
 }
 export default fetcher

@@ -5,9 +5,11 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { IDeviceInfo } from '@components/ui/context'
 
 interface HeroProps {
   banners?: []
+  readonly deviceInfo: IDeviceInfo
 }
 
 interface BannerProps {
@@ -23,8 +25,8 @@ import { generateUri } from '@commerce/utils/uri-util'
 
 // install Swiper modules
 SwiperCore.use([Navigation])
-
-const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
+const Hero: React.FC<HeroProps> = ({ banners = [], deviceInfo }: HeroProps) => {
+  const { isOnlyMobile } = deviceInfo
   const css = { maxWidth: '100%', height: 'auto' }
   return (
     <>
@@ -34,32 +36,30 @@ const Hero: FC<React.PropsWithChildren<HeroProps>> = ({ banners = [] }) => {
         loop={true}
         className="relative bg-gray-900 mySwiper"
       >
-        {banners &&
-          banners?.map((banner: BannerProps, idx: number) => {
-            return (
-              <SwiperSlide key={idx}>
-                <Link href={banner?.link || '#'}>
-                  <div className="image-container">
-                    <img
-                      src={
-                        generateUri(banner?.url, 'h=761&fm=webp') ||
-                        IMG_PLACEHOLDER
-                      }
-                      alt={banner?.alt || 'banner-image'}
-                      style={css}
-                      width={1903}
-                      height={761}
-                      className="sm:max-h-screen image banner-Image"
-                    />
-                    <div className="sr-only">Banner Image</div>
-                  </div>
-                </Link>
-              </SwiperSlide>
-            )
-          })}
+        {banners?.sort((a: { displayOrder: number }, b: { displayOrder: number }) => a.displayOrder > b.displayOrder ? 1 : -1).map((banner: any, bid: number) => (
+          <>
+            <SwiperSlide key={bid}>
+              <Link href={banner?.link || '#'}>
+                <div className="image-container">
+                  {isOnlyMobile ? (
+                    <>
+                      {banner?.mobileUrl != '' ? (
+                        <img src={generateUri(banner?.mobileUrl, 'h=690&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-center w-full" alt={banner?.alt} width={690} height={690} />
+                      ) : (
+                        <img src={generateUri(banner?.url, 'h=761&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={761} className="sm:max-h-screen image banner-Image" />
+                      )}
+                    </>
+                  ) : (
+                    <img src={generateUri(banner?.url, 'h=761&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={761} className="sm:max-h-screen image banner-Image" />
+                  )}
+                  <div className="sr-only">Banner Image</div>
+                </div>
+              </Link>
+            </SwiperSlide>
+          </>
+        ))}
       </Swiper>
     </>
   )
 }
-
 export default Hero

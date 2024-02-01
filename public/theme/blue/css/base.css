@@ -84,17 +84,17 @@
   /* secondary color variable */
 
   /* button primary variable */
-  --btn-bg-primary: #000;
+  --btn-bg-primary: #16223b;
   --btn-text-color-primary: #fff;
   --btn-hover-text-color-primary: #fff;
   --btn-bg-hover-primary: #0f172a;
   /* button primary variable */
 
   /* button secondary variable */
-  --btn-bg-secondary: #000;
+  --btn-bg-secondary: #16223b;
   --btn-text-color-secondary: #fff;
   --btn-hover-text-color-secondary: #fff;
-  --btn-bg-hover-secondary: #000;
+  --btn-bg-hover-secondary: #16223b;
   /* button secondary variable */
 
   /* button primary red variable */
@@ -218,19 +218,19 @@
   /* label default white variable */
 
   /* Header variable */
-  --bg-header-color: #fff;
-  --text-header-clr: #2e2929;
-  --text-hover-clr: #000;
-  --border-hover-clr: #000;
-  --menu-icon-color: #000;
+  --bg-header-color: #ffffff;
+  --text-header-clr: #000000;
+  --text-hover-clr: #000000;
+  --border-hover-clr: #000000;
+  --menu-icon-color: #000000;
   /* footer variable */
 
   /* footer variable */
-  --bg-footer-color: #f3f4f6;
-  --text-footer-clr: #000;
+  --bg-footer-color: #f5f5f5;
+  --text-footer-clr: #000000;
   /* footer variable */
   /* compare outline color */
-  --outline-color-red: #212530;
+  --outline-color-red: #ffffff;
   /* compare outline color */
 }
 
@@ -452,6 +452,96 @@
     url('../font/Urbanist-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../font/Lato-Black.woff2') format('woff2'),
+    url('../font/Lato-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../font/Lato-BlackItalic.woff2') format('woff2'),
+    url('../font/Lato-BlackItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../font/Lato-LightItalic.woff2') format('woff2'),
+    url('../font/Lato-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../font/Lato-Light.woff2') format('woff2'),
+    url('../font/Lato-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../font/Lato-Bold.woff2') format('woff2'),
+    url('../font/Lato-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato Hairline';
+  src: url('../font/Lato-Hairline.woff2') format('woff2'),
+    url('../font/Lato-Hairline.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato Hairline';
+  src: url('../font/Lato-HairlineItalic.woff2') format('woff2'),
+    url('../font/Lato-HairlineItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../font/Lato-Regular.woff2') format('woff2'),
+    url('../font/Lato-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../font/Lato-Italic.woff2') format('woff2'),
+    url('../font/Lato-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../font/Lato-BoldItalic.woff2') format('woff2'),
+    url('../font/Lato-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
   font-display: swap;
 }
 

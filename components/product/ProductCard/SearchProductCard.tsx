@@ -418,9 +418,9 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             )}
           </div>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${currentProductData.link}`} handleHover={handleHover} itemPrice={itemPrice} productName={product.name} onClick={handleSetCompareProduct}>
-            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name||'search'} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
+            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'search'} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
             {product?.images?.length > 1 && (
-              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name||'search'} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
+              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'search'} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
             )}
           </ButtonLink>
           {isMobile ? null : (
@@ -510,17 +510,17 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
         {isMobile || isIPadorTablet ? (
           <>
-            <div className="flex items-center justify-between w-full col-span-12 gap-2 py-2 border-gray-200 border-y mob-left-right-padding">
-              <div className="relative items-end justify-end w-full text-sm font-semibold text-right text-black top-1 product-name hover:text-gray-950">
-                <SimpleButton variant="slim" className={`!p-0 flex-1 !bg-white text-right hover:!bg-white ${isInWishList ? 'cursor-none' : ''}`} onClick={isInWishList ? undefined : handleWishList}>
-                  <i className={`sprite-icons ${isInWishList ? 'sprite-wishlist-active' : 'sprite-wishlist'}`} />
-                </SimpleButton>
-              </div>
-            </div>
             <div className="grid grid-cols-2 col-span-12 gap-1 sm:mb-4 justify-evenly">
-              {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
-                <ButtonNotifyMe product={product} />
-              ) : (<Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} type="button" buttonType={buttonConfig.buttonType || 'cart'} />)}
+              {!hideWishlistCTA && (
+                <SimpleButton
+                  variant="slim"
+                  className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
+                  onClick={handleWishList}
+                  disabled={product.hasWishlisted}
+                >
+                  {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
+                </SimpleButton>
+              )}
               <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary bg-orange-600 text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">
                 {QUICK_VIEW}
               </button>

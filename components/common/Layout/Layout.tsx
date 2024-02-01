@@ -155,7 +155,7 @@ const Layout: FC<Props & IExtraProps> = ({
   maxBasketItemsCount = 0,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const { showSearchBar, setShowSearchBar } = useUI()
+  const { showSearchBar, setShowSearchBar, setIsCompared } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] =
@@ -163,7 +163,10 @@ const Layout: FC<Props & IExtraProps> = ({
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
-    Router.events.on('routeChangeComplete', () => setIsLoading(false))
+    Router.events.on('routeChangeComplete', () => {
+      setIsLoading(false)
+      setIsCompared('false')
+    })
 
     if (!document.title) {
       document.title = document.location.host

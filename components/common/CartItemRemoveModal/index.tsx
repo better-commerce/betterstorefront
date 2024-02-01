@@ -78,15 +78,15 @@ const CartItemRemoveModal = ({
                                             setLoadingAction(LoadingActionType.REMOVE_ITEM)
                                             handleItem(itemClicked, 'delete')
                                         }}
-                                        className="flex items-center justify-center w-full h-16 px-6 py-2 mx-3 text-sm font-medium text-red-700 bg-white border border-gray-300 shadow-sm lg:text-md hover:bg-gray-100 md:w-full"
+                                        className="flex items-center justify-center w-full px-6 py-3 mx-3 text-sm font-semibold text-red-700 uppercase bg-white border border-gray-300 shadow-sm lg:text-md hover:bg-gray-100 md:w-full"
                                     >
                                         {loadingAction === LoadingActionType.REMOVE_ITEM ? (
-                                            <>{LoadingDots}</>
+                                            <LoadingDots />
                                         ) : (
                                             <>{GENERAL_REMOVE}</>
                                         )}
                                     </button>
-                                    <button
+                                    {/* <button
                                         onClick={() => {
                                             setLoadingAction(LoadingActionType.MOVE_TO_WISHLIST)
                                             handleWishList(itemClicked)
@@ -94,11 +94,11 @@ const CartItemRemoveModal = ({
                                         className="flex items-center justify-center w-full h-16 px-6 py-2 mx-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 shadow-sm hover:bg-gray-100 md:w-full"
                                     >
                                         {loadingAction === LoadingActionType.MOVE_TO_WISHLIST ? (
-                                            <>{LoadingDots}</>
+                                            <LoadingDots />
                                         ) : (
                                             <>{BTN_MOVE_TO_WISHLIST}</>
                                         )}
-                                    </button>
+                                    </button> */}
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>

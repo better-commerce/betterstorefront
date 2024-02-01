@@ -164,20 +164,20 @@ export default function AddressForm({
                           <div>
                             {item.id === defaultValues.id ? (
                               <CheckCircleIcon
-                                className="h-5 pr-4 text-left align-left text-black"
+                                className="h-5 pr-4 text-left text-black align-left"
                                 aria-hidden="true"
                               />
                             ) : null}
                             {item.id !== defaultValues.id ? (
                               <CheckCircleIcon
-                                className="h-5 pr-4 text-left align-left text-gray-200"
+                                className="h-5 pr-4 text-left text-gray-200 align-left"
                                 aria-hidden="true"
                               />
                             ) : null}
-                            <div className="space-y-4 mt-6 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0 justify-end"></div>
+                            <div className="justify-end mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0"></div>
                           </div>
                           <div className="flex text-md font-regular flex-wrap =">
-                            <span className="font-semibold pr-1">
+                            <span className="pr-1 font-semibold">
                               {item.firstName + ' ' + item.lastName},
                             </span>
                             <span className="pr-1">{item.address1}, </span>
@@ -200,15 +200,15 @@ export default function AddressForm({
                     })}
                 </>
               ) : (
-                <div className="w-full text-center mt-4">
-                  <span className="text-gray-500 text-sm">
+                <div className="w-full mt-4 text-center">
+                  <span className="text-sm text-gray-500">
                     No saved addresses.
                   </span>
                 </div>
               )}
             </div>
             {/* {isFormOpen && (
-              <Form className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+              <Form className="grid grid-cols-1 mt-4 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                 {config.map((formItem: any, idx: number) => {
                   let classNames = ''
                   formItem.isFullWidth
@@ -227,7 +227,7 @@ export default function AddressForm({
                       className={classNames}
                     >
                       <div>
-                        <label className="text-gray-700 text-sm">
+                        <label className="text-sm text-gray-700">
                           {formItem.label}
                         </label>
                         <Field
@@ -262,11 +262,11 @@ export default function AddressForm({
                         {formItem.addressFinder &&
                         values[formItem.name] === postCodeValue &&
                         addressList.length > 0 ? (
-                          <div className="absolute bg-white z-10 w-64 max-h-80 overflow-scroll">
+                          <div className="absolute z-10 w-64 overflow-scroll bg-white max-h-80">
                             <div className="bg-gray-900">
                               <h2
                                 onClick={() => setAddressList([])}
-                                className="py-2 px-2 text-white cursor-pointer"
+                                className="px-2 py-2 text-white cursor-pointer"
                               >
                                 {GENERAL_CLOSE}
                               </h2>
@@ -276,7 +276,7 @@ export default function AddressForm({
                                 return (
                                   <div
                                     key={addressIdx}
-                                    className="py-2 px-2 text-gray-900 hover:text-white border-t hover:bg-gray-900"
+                                    className="px-2 py-2 text-gray-900 border-t hover:text-white hover:bg-gray-900"
                                   >
                                     <h2
                                       className="cursor-pointer"
@@ -304,13 +304,13 @@ export default function AddressForm({
                             handleAddressList(values[formItem.name])
                           }
                           style={{ maxWidth: '20%' }}
-                          className="ml-3 mt-8 mb-8 max-w-xs flex-1 bg-black border border-transparent uppercase rounded-sm py-2 px-6 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
+                          className="flex items-center justify-center flex-1 max-w-xs px-6 py-2 mt-8 mb-8 ml-3 font-medium text-white uppercase bg-black border border-transparent rounded-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full"
                         >
                           {BTN_FIND}
                         </button>
                       ) : null}
                       {errors[formItem.name] && touched[formItem.name] ? (
-                        <div className="text-red-400 text-sm">
+                        <div className="text-sm text-red-400">
                           {errors[formItem.name]}
                         </div>
                       ) : null}
@@ -320,12 +320,12 @@ export default function AddressForm({
               </Form>
             )} */}
             {!isPaymentLink && (
-              <div className="flex lg:flex-row md:flex-row gap-2 mt-10 flex-col flex-wrap justify-center">
+              <div className="flex flex-col flex-wrap justify-center gap-2 mt-10 lg:flex-row md:flex-row">
                 {/* {isFormOpen && (
                   <button
                     type="button"
                     onClick={() => setNewFormOpen(false)}
-                    className="max-w-xs m-2 flex-1 bg-gray-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
+                    className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 m-2 font-medium text-white bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                   >
                     {GENERAL_CANCEL}
                   </button>
@@ -337,7 +337,7 @@ export default function AddressForm({
                     onClick={(...args) =>
                       handleFormSubmit(handleSubmit, ...args)
                     }
-                    className="max-w-xs w-full flex-1 border border-transparent text-sm rounded-sm uppercase py-3 px-8 flex items-center justify-center hover:bg-slate-900 font-medium text-white bg-black sm:w-full"
+                    className="flex items-center justify-center flex-1 w-full max-w-xs px-8 py-3 text-sm font-medium text-white uppercase bg-black border border-transparent rounded-sm hover:bg-slate-900 sm:w-full"
                   >
                     {btnTitle}
                   </button>
@@ -346,7 +346,7 @@ export default function AddressForm({
                   type="button"
                   // onClick={() => handleNewFormButton(values, errors)}
                   onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="max-w-xs w-full flex-1 border border-black hover:bg-black hover:text-white text-sm text-black rounded-sm uppercase py-3 px-8 flex items-center justify-center font-medium  sm:w-full"
+                  className="flex items-center justify-center flex-1 w-full max-w-xs px-8 py-3 text-sm font-medium text-black uppercase border border-black rounded-md hover:bg-black hover:text-white sm:w-full"
                 >
                   {ADD_ADDRESS}
                 </button>
@@ -354,7 +354,7 @@ export default function AddressForm({
                 <button
                   type="button"
                   onClick={closeEditMode}
-                  className="max-w-xs flex-1 bg-gray-500 border border-transparent rounded-md py-3 ml-5 px-8 flex items-center justify-center font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                  className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 ml-5 font-medium text-white bg-gray-500 border border-transparent rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
                   {GENERAL_CANCEL}
                 </button>
@@ -372,7 +372,7 @@ export default function AddressForm({
                     sameAddressAction(values)
                     // }
                   }}
-                  className="h-4 w-4 accent-gray-900"
+                  className="w-4 h-4 accent-gray-900"
                 />
                 <label
                   htmlFor={`sameAddress`}

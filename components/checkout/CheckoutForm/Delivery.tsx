@@ -213,10 +213,10 @@ export default function Delivery({
   }
 
   return (
-    <div className="py-6 mt-0 border border-gray-200 bg-white shadow p-6">
+    <div className="p-6 py-6 mt-0 bg-white border border-gray-200 shadow">
       {isDeliveryMethodSelected ? (
         <>
-          <h4 className="font-bold uppercase text-black">
+          <h4 className="font-bold text-black uppercase">
             {isSplitDelivery
               ? GENERAL_COMBINED_DELIVERY
               : GENERAL_DELIVERY_METHOD}
@@ -237,8 +237,8 @@ export default function Delivery({
             {isSelected ? (
               <>
                 {!isPaymentLink && (
-                  <div className="py-5 flex justify-between items-center">
-                    <span className="font-normal d-inline font-sm pr-1 text-gray-900">
+                  <div className="flex items-center justify-between py-5">
+                    <span className="pr-1 font-normal text-gray-900 d-inline font-sm">
                       {selectedCountry.name}
                     </span>
                     <div className="flex">
@@ -257,7 +257,7 @@ export default function Delivery({
               <>
                 <select
                   onChange={handleChange}
-                  className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                  className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
                 >
                   {appConfig.shippingCountries?.map(
                     (country: any, idx: number) => {
@@ -273,7 +273,7 @@ export default function Delivery({
                     }
                   )}
                 </select>
-                <div className="py-2 h-12 flex justify-left w-full">
+                <div className="flex w-full h-12 py-2 justify-left">
                   <Button
                     buttonType="button"
                     action={async () => setIsSelected(true)}
@@ -303,7 +303,7 @@ export default function Delivery({
                 : GENERAL_DELIVERY_METHOD}
             </RadioGroup.Label>
 
-            <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+            <div className="grid grid-cols-1 mt-4 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
               {deliveryMethods.map(
                 (deliveryMethod: any, deliveryIdx) =>
                   !!deliveryMethod.children.length && (
@@ -320,31 +320,26 @@ export default function Delivery({
                     >
                       {({ checked, active }) => (
                         <>
-                          <div className="flex-1 flex">
+                          <div className="flex flex-1">
                             <div className="flex flex-col">
                               <RadioGroup.Label
                                 as="span"
-                                className="block text-md uppercase font-bold text-gray-900"
+                                className="block font-bold text-gray-900 uppercase text-md"
                               >
                                 {deliveryMethod.title}
                               </RadioGroup.Label>
                               <RadioGroup.Description
                                 as="span"
-                                className="mt-1 flex items-center text-sm text-gray-500"
+                                className="flex items-center mt-1 text-sm text-gray-500"
                               >
                                 {deliveryMethod.content}
                               </RadioGroup.Description>
-                              <RadioGroup.Description
-                                as="span"
-                                className="mt-6 text-sm font-medium text-gray-900"
-                              >
-                                {deliveryMethod.price}
-                              </RadioGroup.Description>
+                              
                             </div>
                           </div>
                           {checked ? (
                             <CheckCircleIcon
-                              className="h-5 w-5 text-black"
+                              className="w-5 h-5 text-black"
                               aria-hidden="true"
                             />
                           ) : null}
@@ -362,29 +357,30 @@ export default function Delivery({
                   )
               )}
             </div>
-            <ul className={`text-gray-900 mt-10`}>
+            <ul className={`text-gray-900 mt-4`}>
               {selectedDeliveryMethod.children.map((item: any, idx: number) => {
                 return (
                   <div key={idx} className="flex flex-col">
                     <li
                       onClick={() => handleShippingMethod(item)}
                       className={`${shippingMethod.id === item.id ? 'border-black' : ''
-                        }  pointer border-2 py-5 px-5 flex justify-between flex-row`}
+                        }  pointer border-2 py-5 px-5 flex justify-between flex-row items-center`}
                     >
                       <div>
-                        <h4 className="uppercase font-bold text-gray-900">
+                        <h4 className="mt-0 font-bold text-gray-900 uppercase">
                           {item.displayName}
                         </h4>
-                        <p className="text-sm py-2">{item.description}</p>
+                        <div className="px-0" dangerouslySetInnerHTML={{ __html: item.description }} />
+
                       </div>
-                      <div className="flex flex-row justify-center items-center">
-                        <h3 className="text-lg uppercase font-bold text-gray-900">
+                      <div className="flex flex-row items-center justify-center">
+                        <h3 className="text-lg font-bold text-gray-900 uppercase">
                           {item.price.formatted.withTax}
                         </h3>
                         {shippingMethod.id === item.id ? (
                           <div className="ml-5">
                             <CheckCircleIcon
-                              className="h-5 w-5 text-black"
+                              className="w-5 h-5 text-black"
                               aria-hidden="true"
                             />
                           </div>
@@ -407,7 +403,7 @@ export default function Delivery({
             </ul>
           </RadioGroup>
           {selectedDeliveryMethod.id ? (
-            <div className="py-5 flex justify-center w-40">
+            <div className="flex justify-center w-40 py-5">
               <Button
                 buttonType="button"
                 action={submitShippingMethod}
