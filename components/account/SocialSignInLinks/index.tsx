@@ -19,7 +19,7 @@ const SocialSignInLinks = ({ containerCss, isLoginSidebarOpen }: any) => {
         legacyBehavior
         href={`/my-account/login/social/${SocialMediaType.GOOGLE}`}
       >
-        <a className={`w-full px-6 py-4 text-sm font-medium text-center text-white bg-red-500 ${isLoginSidebarOpen && `!px-0 !py-3`}`}>
+        <a className={`w-full px-6 py-2 text-sm font-medium text-center text-white bg-red-500 ${isLoginSidebarOpen && `!px-0 !py-2`}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="inline-block w-4 h-4 mr-1 rounded google-plus-logo"
@@ -39,7 +39,7 @@ const SocialSignInLinks = ({ containerCss, isLoginSidebarOpen }: any) => {
         legacyBehavior
         href={`/my-account/login/social/${SocialMediaType.FACEBOOK}`}
       >
-        <a className={`w-full px-6 py-4 text-sm font-medium text-center text-white bg-sky-600 ${isLoginSidebarOpen && `!px-0 !py-3 !pl-1 !pr-1`}`}>
+        <a className={`w-full px-6 py-2 text-sm font-medium text-center text-white bg-sky-600 ${isLoginSidebarOpen && `!px-0 !py-2 !pl-1 !pr-1`}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="inline-block w-4 h-4 mr-1 rounded fb-logo"
@@ -55,7 +55,7 @@ const SocialSignInLinks = ({ containerCss, isLoginSidebarOpen }: any) => {
         legacyBehavior
         href={`/my-account/login/social/${SocialMediaType.APPLE}`}
       >
-        <a className={`w-full px-6 py-4 text-sm font-medium text-center text-white bg-black ${isLoginSidebarOpen && `!px-0 !py-3`}`}>
+        <a className={`w-full px-6 py-2 text-sm font-medium text-center text-white bg-black ${isLoginSidebarOpen && `!px-0 !py-2`}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="inline-block w-4 h-4 mr-1 rounded apple-logo"

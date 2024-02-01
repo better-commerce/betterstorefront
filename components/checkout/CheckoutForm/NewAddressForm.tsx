@@ -216,7 +216,7 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
                             */}
 
               <SubmitButton
-                cssClass="w-full flex items-center btn-basic-property justify-center px-4 py-2 -mr-0.5 text-white bg-header-color border-2 border-black rounded-md hover:bg-gray-800 hover:text-white sm:px-6 hover:border-gray-900"
+                cssClass="w-full flex items-center btn-basic-property justify-center px-4 py-2 -mr-0.5 text-white bg-header-color border-2 border-black rounded-md hover:bg-gray-800 hover:text-white sm:px-6 hover:border-gray-900 button"
                 submitState={submitState}
                 source={AddressPageAction.SAVE}
               >

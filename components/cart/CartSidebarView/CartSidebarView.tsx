@@ -709,9 +709,11 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       </div>
                     )}
                     <CartItemRemoveModal product={itemClicked} isOpen={isOpen} closeModal={closeModal} loadingAction={loadingAction} handleItem={handleItem} itemClicked={itemClicked} handleWishList={handleWishList} setLoadingAction={setLoadingAction} config={config} />
+                    {!isEmpty &&
                     <div className="px-4 sm:px-4">
                       <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
                     </div>
+                    }
                     {!isEmpty && (
                       <div className="pt-4 pb-3 pl-5 pr-5 mt-2 bg-white">
                         <div className="flex justify-between text-sm text-gray-900">
@@ -744,7 +746,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
                     <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
-                      <Link href="/cart" onClick={() => { handleClose(); beginCheckout(cartItems) }} className="flex items-center justify-center py-3 uppercase transition btn-primary hover:opacity-75" >
+                      <Link href="/cart" onClick={() => { handleClose(); beginCheckout(cartItems) }} className="flex items-center justify-center py-2 uppercase transition btn-primary hover:opacity-75" >
                         {content.GENERAL_CHECKOUT}
                       </Link>
                     </div>

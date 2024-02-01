@@ -230,7 +230,7 @@ export default function Wishlist() {
                               {product?.currentStock > 0 ? (
                                 <button
                                   onClick={() => handleAddToCart(product)}
-                                  className="flex items-center justify-center w-full p-3 text-xs font-semibold text-black uppercase border"
+                                  className="flex items-center justify-center w-full p-3 text-xs font-semibold text-black uppercase border button"
                                 >
                                   <span className="mr-2">
                                     <i className="sprite-icon sprite-cart"></i>

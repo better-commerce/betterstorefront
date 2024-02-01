@@ -452,7 +452,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
                 <button
                   type="submit"
                   onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="p-4 font-semibold text-center cursor-pointer text-orange"
+                  className="p-4 font-semibold text-center cursor-pointer text-orange button uppercase"
                 >
                   {ADD_ADDRESS}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">

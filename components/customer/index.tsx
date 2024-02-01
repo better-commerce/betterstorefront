@@ -259,7 +259,7 @@ export default function CustomerForm({
                 <Button
                   type="submit"
                   // onClick={handleSubmit}
-                  className="!font-normal w-full border border-black btn-c btn-primary"
+                  className="!font-normal w-full border border-black btn-c btn-primary button !py-2"
                   loading={isSubmitting}
                   disabled={isSubmitting}
                 >

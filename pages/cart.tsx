@@ -776,7 +776,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   <Link href="/checkout">
                     <button
                       type="submit"
-                      className="w-full px-4 py-3 font-medium text-center text-white uppercase btn-primary"
+                      className="w-full px-4 py-2 font-medium text-center text-white uppercase btn-primary"
                     >
                       {BTN_PLACE_ORDER}
                     </button>
@@ -1063,7 +1063,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   <Link href="/checkout">
                     <button
                       type="submit"
-                      className="w-full px-4 py-3 font-medium text-center text-white uppercase btn-primary"
+                      className="w-full px-4 py-2 font-medium text-center text-white uppercase btn-primary"
                     >
                       {BTN_PLACE_ORDER}
                     </button>
