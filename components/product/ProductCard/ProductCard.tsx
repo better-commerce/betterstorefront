@@ -424,32 +424,19 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             )}
           </ButtonLink>
           {isMobile ? null : (
-            <div
-              className={cn(
-                'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20',
-                { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled }
-              )}>
+            <div className={cn( 'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20', { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled } )}>
               {!hideWishlistCTA && (
-                <SimpleButton
-                  variant="slim"
-                  className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
-                  onClick={handleWishList}
-                  disabled={product.hasWishlisted}
-                >
+                <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300" onClick={handleWishList} disabled={product.hasWishlisted} >
                   {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
                 </SimpleButton>
               )}
-              <SimpleButton
-                variant="slim"
-                className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14"
-                onClick={() => handleQuickViewData(product)}
-              >
+              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14" onClick={() => handleQuickViewData(product)} >
                 {QUICK_VIEW}
               </SimpleButton>
             </div>
           )}
         </div>
-        <div className="col-span-8 sm:col-span-12 sm:pt-4 col-mob-12 col-mob-12 mob-left-right-padding">
+        <div className="col-span-8 sm:col-span-12 sm:pt-4 col-mob-12 mob-left-right-padding">
           <div className="flex items-center justify-between w-full px-0 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">
             <div>
               {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
@@ -485,13 +472,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               <div className="flex items-center justify-between w-full px-0 py-2 text-xs font-medium text-black border-t border-gray-200 sm:font-bold">
                 <div className="flex items-center gap-0">
                   {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      className={classNames(
-                        'w-5 h-5 flex-shrink-0 relative -top-0.5',
-                        product?.rating > rating ? 'text-orange-500' : 'text-gray-500'
-                      )}
-                    />
+                    <StarIcon key={rating} className={classNames( 'w-5 h-5 flex-shrink-0 relative -top-0.5', product?.rating > rating ? 'text-orange-500' : 'text-gray-500' )} />
                   ))}
                   <p className="relative pl-1 my-auto text-xl font-light -top-0.5">{product?.rating}</p>
                 </div>

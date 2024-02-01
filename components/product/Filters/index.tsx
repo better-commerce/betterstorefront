@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/24/solid'
+import { ChevronDownIcon, FunnelIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
@@ -134,19 +134,19 @@ export default function Filters({
 
       <section
         aria-labelledby="filter-heading-filter"
-        className="flex items-center justify-between px-0 py-0 text-center w-screen border-t border-gray-200 sm:px-4 lg:max-w-7xl lg:px-8"
+        className="flex items-center justify-between px-0 py-0 text-center w-screen mob-w-screen border-t border-gray-200 sm:px-4 lg:max-w-7xl lg:px-8"
       >
         <h2 id="filter-heading-filter" className="sr-only">
           {GENERAL_FILTER_TITLE}
         </h2>
         <div className="relative col-start-1 row-start-1 py-3">
-          <div className="flex px-4 pr-2 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex px-2 pr-2 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
             <button
               onClick={() => setOpen(true)}
               title="Product Filter"
               className="flex items-center font-medium text-gray-700 group px-4 py-2 bg-gray-200"
             >
-           FILTER
+              <AdjustmentsHorizontalIcon className='w-5 h-5 text-black' />
               {/* {appliedFilters?.length > 0 && routerFilters.length} */}
             </button>
           </div>

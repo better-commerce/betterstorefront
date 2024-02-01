@@ -537,11 +537,11 @@ export default function AddressBook({ deviceInfo }: any) {
               </div>
             </div>
             <div className="flex items-start">
-              <div className="items-center justify-center hidden text-white bg-black border border-gray-200 sm:flex add-list-div">
+              <div className="items-center justify-center hidden text-white sm:flex add-list-div">
                 <button
                   type="submit"
                   onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="p-4 font-semibold text-center cursor-pointer text-orange"
+                  className="p-4 font-semibold text-center cursor-pointer btn-primary"
                 >
                   {ADD_ADDRESS}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">

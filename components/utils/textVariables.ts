@@ -115,7 +115,8 @@ export const ORDER_STATUS_CANCELLED = 'Cancelled'
 export const WISHLIST_TITLE = 'Wishlist'
 export const ITEM_WISHLISTED = 'Wishlisted'
 export const GENERAL_WISHLIST = 'My Wishlist'
-export const FREE_SHIPPING_CART_ITEM_REMOVE_TILE = "You're about to lose Free Delivery!"
+export const FREE_SHIPPING_CART_ITEM_REMOVE_TILE =
+  "You're about to lose Free Delivery!"
 export const WISHLIST_SUB_TITLE = 'You haven’t wished for anything yet.'
 export const WISHLIST_SIDEBAR_MESSAGE =
   'Uh-oh, you don’t have any items in here'
@@ -290,9 +291,11 @@ export const PERFECT_FOR = 'Perfect for'
 export const FABRIC_CARE = 'Fabric care'
 export const WASH_CARE = 'Wash care'
 export const COLLAR = 'Collar'
-export const GENERAL_CARE_TEXT = 'This is a limited edition production run. Printing starts when the drop ends.'
+export const GENERAL_CARE_TEXT =
+  'This is a limited edition production run. Printing starts when the drop ends.'
 export const GENERAL_DETAILS = 'Details'
-export const GENERAL_DETAILS_TEXT = 'This is a limited edition production run. Printing starts when the drop ends. Reminder: Bad Boys For Life. Shipping may take 10+ days due to COVID-19.'
+export const GENERAL_DETAILS_TEXT =
+  'This is a limited edition production run. Printing starts when the drop ends. Reminder: Bad Boys For Life. Shipping may take 10+ days due to COVID-19.'
 export const BTN_SEE_EVERYTHING = 'See everything'
 export const GENERAL_SORT = 'Sort by'
 export const CHOOSE_A_COLOR = 'Choose a color'
@@ -327,10 +330,11 @@ export const GENERAL_BILLING_ADDRESS = 'Billing address'
 export const GENERAL_DELIVERED_BY = 'Delivered by'
 export const GENERAL_SPLIT_DELIVERY = 'Split Delivery'
 export const GENERAL_SUMMARY = 'Summary'
-export const GENERAL_NEXT_ORDER_PROMO = 'Congratulations! You can get a discount on your next order using code'
+export const GENERAL_NEXT_ORDER_PROMO =
+  'Congratulations! You can get a discount on your next order using code'
 export const VALIDATION_YOU_ARE_ALREADY_LOGGED_IN = "You're already logged in"
-export const OFFER_VALIDITY='Your offer is valid for {days} days'
-export const LOGIN_SUCCESSFUL='login successfully'
+export const OFFER_VALIDITY = 'Your offer is valid for {days} days'
+export const LOGIN_SUCCESSFUL = 'login successfully'
 export const INVALID_ACCOUNT =
   'No account has been found with this email/password'
 export const VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP =
@@ -376,8 +380,6 @@ export const SLUG_TYPE_MANUFACTURER = 'Manufacturer'
 export const GENERAL_FOOOTER = 'Footer'
 export const SIZE_CHART = 'Size chart'
 
-export const CURRENCY_SYMBOL_RUPEE = '₹'
-export const CURRENCY_SYMBOL_POUND = '£'
 export const ORDER_CANCELLED = 'Order Cancelled Successfully'
 export const CANCEL_ORDER = 'Cancel Order'
 export const CHAT_WITH_US = 'Chat with us'
@@ -404,12 +406,15 @@ export const SHARE_IN_PERSON = 'Tell them in Person'
 export const SHARE_BY_EMAIL = 'Share by Email'
 export const BEEN_REFERRED_BY_A_FRIEND = 'Been Referred by a Friend?'
 export const FIND_THEM = 'Find Them!'
-export const USER_NOT_FOUND = "Unfortunately, couldn't find a user with this name"
-export const VOUCHERS_EARNED = "Vouchers Earned"
-export const VOUCHERS_NOT_EARNED = "No Vouchers Earned Yet"
-export const EMAIL_FIELD_VALIDATION = "Email field cannot be empty!"
-export const CLICK_TO_SHARE_BY_EMAIL = "Click here to share Referral link by Email"
-export const GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT = 'Include out of stock products'
+export const USER_NOT_FOUND =
+  "Unfortunately, couldn't find a user with this name"
+export const VOUCHERS_EARNED = 'Vouchers Earned'
+export const VOUCHERS_NOT_EARNED = 'No Vouchers Earned Yet'
+export const EMAIL_FIELD_VALIDATION = 'Email field cannot be empty!'
+export const CLICK_TO_SHARE_BY_EMAIL =
+  'Click here to share Referral link by Email'
+export const GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT =
+  'Include out of stock products'
 export const GENERAL_PROMOCODE = 'Promo Code'
 export const GENERAL_QUOTE_SUMMARY = 'Quote summary'
 export const RELATED_PRODUCT_WITHGROUP_TEXT = 'Related Products'

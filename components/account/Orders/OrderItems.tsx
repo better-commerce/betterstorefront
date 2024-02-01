@@ -59,7 +59,10 @@ const OrderItems = ({
                     <img
                       width={72}
                       height={128}
-                      src={ generateUri(productItem?.image,'h=128&fm=webp')||IMG_PLACEHOLDER}
+                      src={
+                        generateUri(productItem?.image, 'h=128&fm=webp') ||
+                        IMG_PLACEHOLDER
+                      }
                       alt="image"
                       className="basket-image"
                     />
@@ -98,17 +101,29 @@ const OrderItems = ({
                         </h3>
                         <p className="mt-2 text-sm font-semibold text-secondary-full-opacity">
                           {isIncludeVAT
-                            ? priceFormat(productItem?.price?.raw?.withTax)
-                            : priceFormat(productItem?.price?.raw?.withoutTax)}
+                            ? priceFormat(
+                                productItem?.price?.raw?.withTax,
+                                undefined,
+                                productItem?.price?.currencySymbol
+                              )
+                            : priceFormat(
+                                productItem?.price?.raw?.withoutTax,
+                                undefined,
+                                productItem?.price?.currencySymbol
+                              )}
                           {productItem?.listPrice?.raw?.tax > 0 ? (
                             <>
                               <span className="px-2 text-sm font-normal line-through text-brown-light sm:text-md">
                                 {isIncludeVAT
                                   ? priceFormat(
-                                      productItem?.listPrice?.raw?.withTax
+                                      productItem?.listPrice?.raw?.withTax,
+                                      undefined,
+                                      productItem?.listPrice?.currencySymbol
                                     )
                                   : priceFormat(
-                                      productItem?.listPrice?.raw?.withoutTax
+                                      productItem?.listPrice?.raw?.withoutTax,
+                                      undefined,
+                                      productItem?.listPrice?.currencySymbol
                                     )}
                               </span>
                               <span className="text-sm font-normal text-green sm:text-md">

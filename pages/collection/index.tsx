@@ -31,7 +31,7 @@ export default function CollectionList(props: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath}  key="ogurl" />
       </NextHead>
-      <main className="w-full px-6 mx-auto 2xl:w-4/5 sm:px-4">
+      <main className="w-full px-6 mx-auto container sm:px-4">
         <section aria-labelledby="products-heading" className="mt-8">
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
             {SHOP_BY_COLLECTION}

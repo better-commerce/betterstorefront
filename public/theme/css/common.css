@@ -149,7 +149,8 @@
     height: auto !important;
 }
 .long-product-card-mobile .mob-left-right-padding{
-    padding:0 10px
+    padding:0 10px;
+    box-sizing: border-box;
 }
 .long-product-card-mobile .ribbon{
     left: 0px;

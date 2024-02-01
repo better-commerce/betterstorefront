@@ -113,7 +113,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     })
   }
 
-  private onCardTokenized(ev: any): void {}
+  private onCardTokenized(ev: any): void { }
 
   private onCardValidationChanged(): void {
     this.setState({
@@ -153,7 +153,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
             const data: CheckoutPaymentRequest = {
               source: {
                 type: CheckoutPaymentSourceType.TOKEN,
-                token: token, 
+                token: token,
               },
               amount: parseFloat(
                 orderResult?.grandTotal?.raw?.withTax?.toFixed(2)
@@ -168,9 +168,8 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                 email: basketOrderInfo?.user?.email || EmptyString,
                 name:
                   basketOrderInfo?.user?.firstName ||
-                  basketOrderInfo?.user?.lastName
-                    ? `${basketOrderInfo?.user?.firstName ?? ''} ${
-                        basketOrderInfo?.user?.lastName ?? ''
+                    basketOrderInfo?.user?.lastName
+                    ? `${basketOrderInfo?.user?.firstName ?? ''} ${basketOrderInfo?.user?.lastName ?? ''
                       }`.trim()
                     : basketOrderInfo?.user?.email || EmptyString,
               },
@@ -304,6 +303,9 @@ export class CheckoutPaymentButton extends BasePaymentButton {
 
         {that.state?.scriptLoaded && (
           <div className="checkout-frame-container">
+            <h5 className="mb-6 font-semibold text-black font-18">
+              Debit/Credit Card details
+            </h5>
             <Frames
               config={config}
               ready={() => that.onFrameReady()}
@@ -317,38 +319,46 @@ export class CheckoutPaymentButton extends BasePaymentButton {
               }
               cardBinChanged={(ev: any) => that.onCardBinChanged(ev)}
             >
-              <div>
+              <div className='mb-5'>
+                <label className="text-black font-14">Card number*</label>
                 <CardNumber />
               </div>
-              <div className="date-and-code">
-                <ExpiryDate />
-                <Cvv />
+              <div className="mb-5 date-and-code">
+                <label className="text-black font-14">Expiry date*</label>
+                <div className="w-auto mb-5 w-200-md">
+                  <ExpiryDate />
+                </div>
+                <label className="text-black font-14">CVV*</label>
+                <div className="relative w-auto mb-5 w-100-md">
+                  <Cvv />
+                </div>
               </div>
 
               {that.state.formLoaded
                 ? that.baseRender({
-                    ...that?.props,
-                    ...{
-                      disabled: that.state.disabledFormSubmit,
-                      onPay: (
-                        paymentMethod: any,
-                        basketOrderInfo: any,
-                        uiContext: any,
-                        dispatchState: Function
-                      ) =>
-                        that.onCapturePayment(
-                          that.state.paymentMethod,
-                          basketOrderInfo,
-                          uiContext,
-                          dispatchState
-                        ),
-                      btnTitle: GENERAL_PAY,
-                    },
-                  })
+                  ...that?.props,
+                  ...{
+                    disabled: that.state.disabledFormSubmit,
+                    onPay: (
+                      paymentMethod: any,
+                      basketOrderInfo: any,
+                      uiContext: any,
+                      dispatchState: Function
+                    ) =>
+                      that.onCapturePayment(
+                        that.state.paymentMethod,
+                        basketOrderInfo,
+                        uiContext,
+                        dispatchState
+                      ),
+                    btnTitle: GENERAL_PAY,
+                  },
+                })
                 : null}
-            </Frames>
-          </div>
-        )}
+            </Frames >
+          </div >
+        )
+        }
       </>
     )
   }
