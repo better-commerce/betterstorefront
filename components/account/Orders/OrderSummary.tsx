@@ -144,7 +144,7 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
             <button
               type="button"
               onClick={() => openOrderHelpModal(details?.order)}
-              className="block w-full px-4 py-3 mb-3 font-bold text-center text-white bg-black hover:opacity-90 btn-basic-property rounde-sm"
+              className="block w-full mb-3 btn-basic-property btn btn-primary"
             >
               Need Help with Your Order?
             </button>
