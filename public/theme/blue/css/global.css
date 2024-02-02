@@ -311,19 +311,31 @@ p {
 }
 
 /* button  css start */
+.btn {
+  font-size: var(--font-14);
+  box-sizing: border-box;
+  border-radius: 6px;
+  display: inline-block;
+  text-align: center !important;
+  padding: 0.70rem 12px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+}
+
+.btn:hover {
+  opacity: 0.75 !important;
+}
+
 .btn-primary {
   background: var(--btn-bg-primary);
   color: var(--btn-text-color-primary);
-  font-size: var(--font-14);
-  border-radius: 6px;
 }
 
 .btn-c.btn-primary {
   background: var(--btn-bg-primary);
   color: var(--btn-text-color-primary);
-  font-size: var(--font-14);
-  border-radius: 6px;
-  box-sizing: border-box;
+  border: 0 !important;
 }
 
 .btn-c.btn-primary:hover {
@@ -336,22 +348,9 @@ p {
   color: var(--btn-hover-text-color-primary);
 }
 
-.btn-c.btn-primary {
-  display: inline-block;
-  text-align: center;
-  background: var(--btn-bg-hover-primary);
-  color: var(--btn-hover-text-color-primary);
-  font-size: var(--font-14);
-  padding: 6px 12px !important;
-  border-radius: 4px;
-  border: 0 !important;
-}
-
 .btn-secondary {
   background: var(--btn-bg-secondary);
   color: var(--btn-text-color-secondary);
-  font-size: var(--font-14);
-  border-radius: 6px;
 }
 
 .btn-secondary:hover {
@@ -360,13 +359,8 @@ p {
 }
 
 .btn-c.btn-secondary {
-  display: inline-block;
-  text-align: center;
   background: var(--btn-bg-secondary) !important;
   color: var(--btn-text-color-secondary);
-  font-size: var(--font-14);
-  padding: 6px 12px !important;
-  border-radius: 6px;
   border: 0 !important;
 }
 
@@ -380,8 +374,6 @@ p {
   color: var(--btn-text-color-default);
   border: 2px solid var(--btn-text-color-default);
   border-color: var(--btn-border-clr-default);
-  font-size: var(--font-14);
-  border-radius: 6px;
 }
 
 .btn-default:hover {
@@ -391,15 +383,9 @@ p {
 }
 
 .btn-c.btn-primary-red {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px !important;
   background: var(--btn-bg-red) !important;
-  border-radius: 6px;
   color: var(--btn-text-color-red);
   border: 2px solid var(--btn-border-red);
-  font-size: var(--font-16);
-  box-sizing: border-box;
 }
 
 .btn-c.btn-primary-red:hover {
@@ -409,15 +395,9 @@ p {
 }
 
 .btn-primary-red {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-bg-red);
-  border-radius: 6px;
   color: var(--btn-text-color-red);
   border: 2px solid var(--btn-border-red);
-  font-size: var(--font-16);
-  box-sizing: border-box;
 }
 
 .btn-primary-red:hover {
@@ -427,15 +407,9 @@ p {
 }
 
 .btn-primary-blue {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-bg-blue);
-  border-radius: 6px;
   color: var(--btn-text-color-blue);
   border: 2px solid var(--btn-border-blue);
-  font-size: var(--font-16);
-  box-sizing: border-box;
 }
 
 .btn-primary-blue:hover {
@@ -445,16 +419,10 @@ p {
 }
 
 .btn-primary-teal {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-bg-teal);
-  border-radius: 6px;
   color: var(--btn-text-color-teal);
   border: 2px solid var(--btn-border-teal);
-  font-size: var(--font-16);
-  box-sizing: border-box;
-}
+ }
 
 .btn-primary-teal:hover {
   background: var(--btn-bg-hover-teal);
@@ -463,17 +431,9 @@ p {
 }
 
 .btn-primary-white {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-bg-white);
-  border-radius: 6px;
   color: var(--btn-text-color-white);
   border: 2px solid var(--btn-border-white);
-  font-size: var(--font-14);
-  box-sizing: border-box;
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important
 }
 
 .btn-primary-white:hover {
@@ -483,16 +443,10 @@ p {
 }
 
 .btn-default-red {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-d-bg-red);
-  border-radius: 6px;
   color: var(--btn-d-text-color-red);
   border: 2px solid var(--btn-d-border-red);
-  font-size: var(--font-16);
-  box-sizing: border-box;
-}
+ }
 
 .btn-default-red:hover {
   background: var(--btn-d-bg-hover-red);
@@ -501,15 +455,9 @@ p {
 }
 
 .btn-default-blue {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-d-bg-blue);
-  border-radius: 6px;
   color: var(--btn-d-text-color-blue);
   border: 2px solid var(--btn-d-border-blue);
-  font-size: var(--font-16);
-  box-sizing: border-box;
 }
 
 .btn-default-blue:hover {
@@ -519,15 +467,10 @@ p {
 }
 
 .btn-default-teal {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-d-bg-teal);
   border-radius: 6px;
   color: var(--btn-d-text-color-teal);
   border: 2px solid var(--btn-d-border-teal);
-  font-size: var(--font-16);
-  box-sizing: border-box;
 }
 
 .btn-default-teal:hover {
@@ -1146,8 +1089,8 @@ p {
 }
 
 @media screen and (max-width:1620px) {
-  .btn-c.btn-secondary {
-    padding: 12px 12px !important;
+  .btn {
+    font-size: var(--font-12) !important;
   }
 }
 

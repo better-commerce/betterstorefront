@@ -1686,7 +1686,7 @@ br {
 /*QUICK VIEW UI*/
 .quickview-screen {
   display: flex;
-  width: 100%;
+  width: 880px;
   padding: 0;
   align-items: flex-start;
   gap: 0px;
@@ -1694,6 +1694,7 @@ br {
   border-radius: 8px;
   margin: 0 auto;
   justify-content: center;
+  min-height: 400px;
 }
 /* IPAD UI CSS Start */
 @media screen and (min-width: 768px) and (max-width: 1024px) {

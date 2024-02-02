@@ -174,7 +174,7 @@ export default function MyDetails({ handleToggleShowState }: any) {
                       <Button
                         type="submit"
                         onClick={handleSubmit}
-                        className="link-button !py-3 btn-c btn-primary button"
+                        className="link-button btn btn-c btn-primary"
                         loading={isSubmitting}
                         disabled={isSubmitting}
                       >
