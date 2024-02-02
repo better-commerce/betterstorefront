@@ -430,7 +430,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
                 </SimpleButton>
               )}
-              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14" onClick={() => handleQuickViewData(product)} >
+              <SimpleButton variant="slim" className="flex-1 btn btn-c btn-secondary" onClick={() => handleQuickViewData(product)} >
                 {QUICK_VIEW}
               </SimpleButton>
             </div>
