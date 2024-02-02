@@ -70,7 +70,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
       {error ? <span className="text-red-500 capitalize">{error}</span> : null}
       <div className="w-full px-4 sm:px-0 md:w-1/2 flex justify-center items-center my-5">
         <Button
-          className="btn-c btn-primary"
+          className="btn btn-c btn-primary"
           buttonType="default"
           action={handleSubmit}
           title={'Submit'}
