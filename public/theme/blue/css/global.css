@@ -317,9 +317,7 @@ p {
   border-radius: 6px;
   display: inline-block;
   text-align: center !important;
-  padding: 6px 12px !important;
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
+  padding: 0.70rem 12px !important;
   cursor: pointer !important;
   font-weight: bold !important;
   text-transform: uppercase !important;
