@@ -58,7 +58,7 @@ export default function PaymentMethods({
               <h4 className="mt-0 font-bold uppercase">{item.displayName}</h4>
               {/* =================Only for Demo Purpose will optimized after demo=================== */}
               {item.displayName == "Checkout" ? <img src='/theme/blue/image/Pay-by-card.png' alt={item.displayName} />
-                : item.displayName == "Paypal" ? <img src='/theme/blue/image/paypal.png' alt={item.displayName} />
+                : (item.displayName == "Paypal" || item.displayName == "Pay by Paypal") ? <img src='/theme/blue/image/paypal.png' alt={item.displayName} />
                 : item.displayName == "Clearpay" ? <img src='/theme/blue/image/clearpay.png' alt={item.displayName} />
                 : item.displayName == "COD" ? <img src='/theme/blue/image/cod.png' alt={item.displayName} />
                 : item.displayName == "Klarna" ? <img src='/theme/blue/image/klarna.png' alt={item.displayName} />
