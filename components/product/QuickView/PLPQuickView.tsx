@@ -650,41 +650,17 @@ export default function PLPQuickView({
                             <div className="flex flex-col px-4 py-4 sm:px-6">
                               {updatedProduct ? (
                                 <>
-                                  <AttributesHandler
-                                    product={product}
-                                    variant={selectedAttrData}
-                                    setSelectedAttrData={setSelectedAttrData}
-                                    variantInfo={variantInfo}
-                                    handleSetProductVariantInfo={
-                                      handleSetProductVariantInfo
-                                    }
-                                    sizeInit={sizeInit}
-                                    setSizeInit={setSizeInit}
-                                  />
+                                  <AttributesHandler product={product} variant={selectedAttrData} setSelectedAttrData={setSelectedAttrData} variantInfo={variantInfo} handleSetProductVariantInfo={ handleSetProductVariantInfo } sizeInit={sizeInit} setSizeInit={setSizeInit} />
                                   {!isEngravingAvailable && (
-                                    <div className="flex mt-6 sm:mt-0 sm:flex-col1 !text-sm">
-                                      <Button
-                                        title={buttonConfig.title}
-                                        action={buttonConfig.action}
-                                        buttonType={buttonConfig.type || 'cart'}
-                                      />
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          if (!isInWishList) {
-                                            handleWishList()
-                                          }
-                                        }}
-                                        className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                                      >
+                                    <div className="flex mt-6 sm:mt-4 sm:flex-col1 !text-sm">
+                                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                      <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                                         {isInWishList ? (
                                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                                         ) : (
                                           <HeartIcon className="flex-shrink-0 w-6 h-6" />
                                         )}
-                                        <span className="sr-only">
-                                          {BTN_ADD_TO_FAVORITES}
-                                        </span>
+                                        <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
                                       </button>
                                     </div>
                                   )}
@@ -692,43 +668,14 @@ export default function PLPQuickView({
                                   {isEngravingAvailable && (
                                     <>
                                       <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                                        <Button
-                                          className="block py-3 sm:hidden"
-                                          title={buttonConfig.title}
-                                          action={buttonConfig.action}
-                                          buttonType={
-                                            buttonConfig.type || 'cart'
-                                          }
-                                        />
+                                        <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={ buttonConfig.type || 'cart' } />
                                       </div>
                                       <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                                        <Button
-                                          className="hidden sm:block "
-                                          title={buttonConfig.title}
-                                          action={buttonConfig.action}
-                                          buttonType={
-                                            buttonConfig.type || 'cart'
-                                          }
-                                        />
-                                        <button
-                                          className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                                          onClick={() =>
-                                            showEngravingModal(true)
-                                          }
-                                        >
-                                          <span className="font-bold">
-                                            {GENERAL_ENGRAVING}
-                                          </span>
+                                        <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={ buttonConfig.type || 'cart' } />
+                                        <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true) } >
+                                          <span className="font-bold"> {GENERAL_ENGRAVING} </span>
                                         </button>
-                                        <button
-                                          type="button"
-                                          onClick={() => {
-                                            if (!isInWishList) {
-                                              handleWishList()
-                                            }
-                                          }}
-                                          className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                                        >
+                                        <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                                           {isInWishList ? (
                                             <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                                           ) : (
