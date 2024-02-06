@@ -137,10 +137,10 @@ function BrandDetailPage({
   let imageBannerCollectionResponse: any =
     collections.imageBannerCollectionResponse
   let imageCategoryCollectionResponse: any =
-    collections.imageCategoryCollectionResponse
+    collections.imageCategoryCollection
   let imgFeatureCollection: any = collections.imgFeatureCollection
   let offerBannerResult: any = collections.offerBannerResult
-  let productCollectionRes: any = collections.productCollectionRes
+  let productCollectionRes: any = collections.productCollection
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -411,7 +411,7 @@ function BrandDetailPage({
   if (brandDetails === null) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
-        <h1 className="pb-6 text-3xl font-30 font-medium text-gray-400">
+        <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
           This is a bad url. please go back to
           <Link href="/brands">
             <span className="px-3 text-indigo-500">All brands</span>
@@ -520,7 +520,7 @@ function BrandDetailPage({
                 </div>
 
                 <RecommendedProductCollection
-                  recommendedProducts={recommendedProducts}
+                  recommendedProducts={productCollectionRes}
                   deviceInfo={deviceInfo}
                   config={config}
                 />
@@ -593,26 +593,6 @@ function BrandDetailPage({
               textNames={textNames || []}
               heading={manufacturerStateTextHeading}
             />
-
-            {!isOnlyMobile && (
-              <>
-                <div className="flex justify-between py-10">
-                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
-                    {BTN_RECOMMENDED_PROD}
-                  </p>
-                  <button
-                    className="font-semibold text-[#212530] uppercase cursor-pointer font-lg hover:underline"
-                    onClick={handleClick}
-                  >
-                    {BTN_SEE_ALL}
-                  </button>
-                </div>
-                <ImageCollection
-                  range={4}
-                  AttrArray={productCollectionRes || []}
-                />
-              </>
-            )}
 
             <div className="mb-20">
               <p className="my-10 font-semibold text-[#212530] uppercase cursor-default font-lg">
@@ -719,7 +699,7 @@ export async function getStaticProps({
         )
       } else if (
         widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'MultipleImagesBanner'
+        widget.code == 'MultipleImageBanner'
       ) {
         promises.push(
           new Promise(async (resolve: any, reject: any) => {
@@ -732,34 +712,20 @@ export async function getStaticProps({
         )
       } else if (
         widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'FeaturedDewaltImageList'
-      ) {
-        promises.push(
-          new Promise(async (resolve: any, reject: any) => {
-            try {
-              collections.imgFeatureCollection = await getCollectionById(
-                widget.recordId
-              )
-            } catch (error: any) {}
-            resolve()
-          })
-        )
-      } else if (
-        widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'FFXOffers'
+        widget.code == 'HeroBanner'
       ) {
         promises.push(
           new Promise(async (resolve: any, reject: any) => {
             try {
               const res = await getCollectionById(widget.recordId)
-              collections.offerBannerCollection = res.images
+              collections.imageCategoryCollection = res?.images
             } catch (error: any) {}
             resolve()
           })
         )
       } else if (
         widget.manufacturerSettingType == 'ProductCollection' &&
-        widget.code == 'FeaturedDewaltSaws'
+        widget.code == 'RecommendedProductCollection'
       ) {
         promises.push(
           new Promise(async (resolve: any, reject: any) => {
