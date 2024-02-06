@@ -459,43 +459,17 @@ function BrandDetailPage({
           <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 2xl:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
               <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
-                <img
-                  alt="Brand Logo"
-                  src={
-                    brandDetails.images.length !== 0
-                      ? brandDetails.images[0]
-                      : IMG_PLACEHOLDER
-                  }
-                  width={212}
-                  height={200}
-                  loading="eager"
-                  className="w-[120px] md:w-[212px] h-auto"
-                />
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: sanitizeHtmlContent(brandDetails?.description),
-                  }}
-                  className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5"
-                />
-                <button
-                  className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80"
-                  onClick={handleClick}
-                >
+                <img alt="Brand Logo" src={ brandDetails.premiumBrandLogo || IMG_PLACEHOLDER } width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
+                <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5" />
+                <button className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80" onClick={handleClick} >
                   {SHOP_NOW}
                 </button>
               </div>
-              <ImageCollection
-                range={2}
-                AttrArray={imageBannerCollectionResponse?.images || []}
-                showTitle={true}
-              />
+              <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
             </div>
 
             <div className="mt-0 md:mt-10">
-              <Video
-                heading={manufacturerStateVideoHeading}
-                name={manufacturerStateVideoName}
-              />
+              <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
             </div>
 
             <div className="mt-10">
@@ -539,22 +513,6 @@ function BrandDetailPage({
                   buttonText={val.buttonText}
                 />
               ))}
-            </div>
-          </div>
-
-          <div className="w-full mt-10">
-            <ImageBanner
-              manufacturerSettingTypeImgBanner={
-                manufacturerSettingTypeImgBanner
-              }
-              heading={manufacturerImgBannerHeading}
-              link={manufImgBannerLink}
-            />
-            <div className="mt-10">
-              <MultiBrandVideo
-                heading={multiBrandVidHeading || ''}
-                name={manufacturerStateMultiBrandVidNames || ''}
-              />
             </div>
           </div>
 
