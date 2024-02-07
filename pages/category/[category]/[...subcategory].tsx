@@ -25,6 +25,7 @@ import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
@@ -199,6 +200,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
     : false
   const [isProductCompare, setProductCompare] = useState(false)
+  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const { isCompared } = useUI()
   const initialState = {
     ...DEFAULT_STATE,
@@ -223,7 +225,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true } },
+      { ...state, ...{ slug: slug, isCategory: true , excludeOOSProduct } },
     ],
     ([url, body]: any) => postData(url, body),
     {
@@ -276,6 +278,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
       : data?.products // productListMemory?.products
     setProductDataToPass(dataToPass)
   }, [productListMemory?.products, products])
+
+  const onEnableOutOfStockItems = (val: boolean) => {
+    setExcludeOOSProduct(!val)
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
 
   useEffect(() => {
     const trackScroll = (ev: any) => {
@@ -477,11 +485,20 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                         routerSortOption={state.sortBy}
                       />
                     ) : (
-                      <ProductFilterRight
-                        handleFilters={handleFilters}
-                        products={productDataToPass}
-                        routerFilters={state.filters}
-                      />
+                    <>
+                      <div className="flex float-right w-1/5 py-2 mt-1 -top-16">
+                        <OutOfStockFilter
+                          excludeOOSProduct={excludeOOSProduct}
+                          onEnableOutOfStockItems={onEnableOutOfStockItems}
+                        />
+                      </div>
+
+                        <ProductFilterRight
+                          handleFilters={handleFilters}
+                          products={productDataToPass}
+                          routerFilters={state.filters}
+                        />
+                    </>
                     )}
                     <div className="sm:col-span-10 p-[1px]">
                       {isMobile ? null : (
@@ -506,6 +523,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                   </>
                 ) : (
                   <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                    <div className="flex justify-end w-full col-span-12">
+                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                    </div>
                     <ProductFiltersTopBar
                       products={productDataToPass}
                       handleSortBy={handleSortBy}
