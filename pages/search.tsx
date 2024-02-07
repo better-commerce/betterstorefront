@@ -16,6 +16,7 @@ import NextHead from 'next/head'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -102,6 +103,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const [isProductCompare, setProductCompare] = useState(false)
+  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const adaptedQuery = { ...query }
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
@@ -140,7 +142,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', state],
+    ['/api/catalog/products', {...state,excludeOOSProduct}],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -160,6 +162,13 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.freeText])
+
+  const onEnableOutOfStockItems = (val: boolean) => {
+    setExcludeOOSProduct(!val)
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
+
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
@@ -360,6 +369,9 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
             <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
           )}
           <div className={`sm:col-span-10`}>
+          <div className="flex justify-end w-full col-span-12">
+            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+          </div>
             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
             <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           </div>

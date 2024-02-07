@@ -30,6 +30,7 @@ import CompareSelectionBar from '@components/product/ProductCompare/compareSelec
 import { useUI } from '@components/ui'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 const ProductFilterRight = dynamic(
@@ -207,6 +208,7 @@ function CategoryLandingPage({
   const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [minimalProd, setMinimalProd] = useState<any>([])
+  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
     data = {
       products: {
@@ -223,7 +225,7 @@ function CategoryLandingPage({
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true } },
+      { ...state, ...{ slug: slug, isCategory: true ,excludeOOSProduct} },
     ],
     ([url, body]: any) => postData(url, body),
     {
@@ -243,6 +245,12 @@ function CategoryLandingPage({
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
+
+  const onEnableOutOfStockItems = (val: boolean) => {
+    setExcludeOOSProduct(!val)
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
 
   useEffect(() => {
     if (category.id !== state.categoryId)
@@ -851,21 +859,37 @@ function CategoryLandingPage({
                             routerSortOption={state.sortBy}
                           />
                         ) : (
+                          <>
+                            <div className="flex justify-end w-full col-span-12">
+                              <OutOfStockFilter
+                                excludeOOSProduct={excludeOOSProduct}
+                                onEnableOutOfStockItems={onEnableOutOfStockItems}
+                              />
+                            </div>
                           <ProductFilterRight
                             handleFilters={handleFilters}
                             products={productDataToPass}
                             routerFilters={state.filters}
                           />
+                          </>
                         )}
                         <div className="sm:col-span-10 p-[1px]">
                           {isMobile ? null : (
-                            <ProductFiltersTopBar
-                              products={productDataToPass}
-                              handleSortBy={handleSortBy}
-                              routerFilters={state.filters}
-                              clearAll={clearAll}
-                              routerSortOption={state.sortBy}
-                            />
+                            <>
+                              <div className="flex justify-end w-full col-span-12">
+                                <OutOfStockFilter
+                                  excludeOOSProduct={excludeOOSProduct}
+                                  onEnableOutOfStockItems={onEnableOutOfStockItems}
+                                  />
+                              </div>
+                              <ProductFiltersTopBar
+                                products={productDataToPass}
+                                handleSortBy={handleSortBy}
+                                routerFilters={state.filters}
+                                clearAll={clearAll}
+                                routerSortOption={state.sortBy}
+                              />
+                            </>  
                           )}
                           <ProductGridWithFacet
                             products={productDataToPass}
@@ -880,6 +904,12 @@ function CategoryLandingPage({
                       </>
                     ) : (
                       <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                        <div className="flex justify-end w-full col-span-12">
+                          <OutOfStockFilter
+                            excludeOOSProduct={excludeOOSProduct}
+                            onEnableOutOfStockItems={onEnableOutOfStockItems}
+                            />
+                        </div>
                         <ProductFiltersTopBar
                           products={productDataToPass}
                           handleSortBy={handleSortBy}
