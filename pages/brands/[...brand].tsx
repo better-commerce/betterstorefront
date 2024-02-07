@@ -31,6 +31,7 @@ import ImageBanner from '@components/brand/ImageBanner'
 //   () => import('@components/brand/MultiBrandVideo')
 // )
 import MultiBrandVideo from '@components/brand/MultiBrandVideo'
+import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import faq from '@components/brand/faqData.json'
 import SwiperCore, { Navigation } from 'swiper'
 import 'swiper/swiper.min.css'
@@ -211,6 +212,7 @@ function BrandDetailPage({
   const [recommendedProducts, setRecommendedProducts] = useState([])
   const [showLandingPage, setShowLandingPage] = useState(true)
   const [isProductCompare, setProductCompare] = useState(false)
+  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
     data = {
       products: {
@@ -224,7 +226,7 @@ function BrandDetailPage({
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: slug } }],
+    ['/api/catalog/products', { ...state, ...{ slug: slug , excludeOOSProduct} }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -233,6 +235,12 @@ function BrandDetailPage({
 
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
+
+  const onEnableOutOfStockItems = (val: boolean) => {
+    setExcludeOOSProduct(!val)
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
@@ -289,6 +297,12 @@ function BrandDetailPage({
       dispatch({ type: PAGE, payload: data.products.currentPage + 1 })
     }
   }
+
+  const clearAll = () => { 
+    dispatch({ type: CLEAR })  
+    dispatch({ type: ADD_FILTERS, payload: { Key: 'brandNoAnlz', Value: brandDetails?.name, IsSelected: true, }, }) 
+  }
+
 
   const handleSortBy = (payload: any) => {
     router.push({
@@ -582,6 +596,9 @@ function BrandDetailPage({
               className="mt-2 text-black sm:mt-5"
             />
             )}
+          </div>
+          <div className="flex justify-end w-full col-span-12">
+            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
           <div className="flex justify-end w-full">
             <ProductSort
