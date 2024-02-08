@@ -79,7 +79,7 @@ function Categories({ data, deviceInfo }: any) {
               passHref
               legacyBehavior
             >
-              <a className="w-full mb-2 font-medium btn-primary-white btn-padding-none">
+              <a className="w-full mb-2 btn btn-primary-white btn-padding-none">
                 {category?.categorylist_buttontext}
               </a>
             </Link>

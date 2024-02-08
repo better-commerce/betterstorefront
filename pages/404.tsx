@@ -61,7 +61,7 @@ export default function NotFound({ deviceInfo }: any) {
               <div className="w-40 mx-auto text-center mt-5">
                 <Link
                   href="/"
-                  className="text-white bg-black block p-4 text-center text-sm font-semibold"
+                  className="btn btn-primary"
                 >
                   Back to Homepage
                 </Link>
@@ -87,7 +87,7 @@ export default function NotFound({ deviceInfo }: any) {
               <div className="w-40 mx-auto text-center mt-5">
                 <Link
                   href="/"
-                  className="text-white bg-black block p-4 text-center text-sm font-semibold"
+                  className="btn btn-primary"
                 >
                   Back to Homepage
                 </Link>

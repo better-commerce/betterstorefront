@@ -78,7 +78,7 @@ const CartItemRemoveModal = ({
                                             setLoadingAction(LoadingActionType.REMOVE_ITEM)
                                             handleItem(itemClicked, 'delete')
                                         }}
-                                        className="flex items-center justify-center w-full px-6 py-3 mx-3 text-sm font-semibold text-red-700 uppercase bg-white border border-gray-300 shadow-sm lg:text-md hover:bg-gray-100 md:w-full"
+                                        className="flex items-center justify-center w-full  text-red-700 border border-gray-300 shadow-sm btn btn btn-primary md:w-full"
                                     >
                                         {loadingAction === LoadingActionType.REMOVE_ITEM ? (
                                             <LoadingDots />
