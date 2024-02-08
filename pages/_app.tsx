@@ -10,9 +10,8 @@ import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import 'swiper/css/bundle'
 import jwt from 'jsonwebtoken'
 import Cookies from 'js-cookie'
-import { uniqBy } from 'lodash'
 import { v4 as uuid_v4 } from 'uuid'
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
@@ -21,12 +20,12 @@ import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinute
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import OverlayLoader from '@components/common/OverlayLoader'
-import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
+import { ELEM_ATTR, resetSnippetElements, } from '@framework/content/use-content-snippet'
 import { ContentSnippet } from '@components/common/Content'
 import NextHead from 'next/head'
 import qs from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
-import { AUTH_URL, CLIENT_ID, Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, REVIEW_BASE_URL, SHARED_SECRET, } from '@framework/utils/constants'
+import { AUTH_URL, CLIENT_ID, Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, REVIEW_BASE_URL, SHARED_SECRET } from '@framework/utils/constants'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { DeviceType } from '@commerce/utils/use-device'
 import InitDeviceInfo from '@components/common/InitDeviceInfo'
@@ -37,19 +36,13 @@ import { cachedGetData } from '@framework/api/utils/cached-fetch'
 import { AppContext, AppInitialProps } from 'next/app'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
-import { backToPageScrollLocation, logError, maxBasketItemsCount, } from '@framework/utils/app-util'
+import {  backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import CustomerReferral from '@components/customer/Referral'
 import fetcher from '@framework/fetcher'
 
-interface IScriptSnippet {
-  readonly src?: string
-  readonly type?: string
-  readonly innerHTML?: string
-}
-
-//const API_TOKEN_EXPIRY_IN_SECONDS = 3600
+const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
 }
@@ -72,7 +65,9 @@ const TEST_GEO_DATA = {
 const setDeviceIdCookie = () => {
   if (!Cookies.get(DeviceIdKey)) {
     const deviceId = uuid_v4()
-    Cookies.set(DeviceIdKey, deviceId, { expires: getExpiry(getMinutesInDays(365)), })
+    Cookies.set(DeviceIdKey, deviceId, {
+      expires: getExpiry(getMinutesInDays(365)),
+    })
     DataLayerInstance.setItemInDataLayer(DeviceIdKey, deviceId)
   } else {
     DataLayerInstance.setItemInDataLayer(DeviceIdKey, Cookies.get(DeviceIdKey))
@@ -83,7 +78,7 @@ export const SCROLLABLE_LOCATIONS = [
   '/collection/',
   '/brands/',
   '/category/',
-  '/kit/',
+  '/kit/'
 ]
 
 function MyApp({
@@ -107,13 +102,11 @@ function MyApp({
     isOnlyMobile: undefined,
   })
 
-  let snippets = [
+  const snippets = [
     ...(pageProps?.globalSnippets ?? []),
     ...(pageProps?.snippets ?? []),
     ...(pageProps?.data?.snippets ?? []),
   ]
-  snippets = uniqBy(snippets, 'name') //Prevent duplicate data being passed on to snippets rendering engine.
-  const excludingHeadSnippets = snippets?.filter((x: ISnippet) => !['topHead', 'head'].includes(x?.placement?.toLowerCase()))
 
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
@@ -125,7 +118,9 @@ function MyApp({
       new windowClone.google.translate.TranslateElement(
         {
           pageLanguage: 'en',
-          layout: windowClone.google.translate.TranslateElement.FloatPosition.TOP_LEFT,
+          layout:
+            windowClone.google.translate.TranslateElement.FloatPosition
+              .TOP_LEFT,
         },
         'google_translate_element'
       )
@@ -165,9 +160,7 @@ function MyApp({
       resetSnippetElements()
     })
 
-    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) =>
-      window.location.pathname.startsWith(x)
-    )
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => window.location.pathname.startsWith(x))
     if (isScrollEnabled) {
       router.events.on('routeChangeComplete', () => {
         backToPageScrollLocation(window.location)
@@ -178,7 +171,7 @@ function MyApp({
     return () => {
       router.events.off('routeChangeStart', () => {})
       if (isScrollEnabled) {
-        router.events.off('routeChangeComplete', () => {})
+        router.events.off('routeChangeComplete', () => { })
       }
     }
   }, [router.events])
@@ -223,8 +216,6 @@ function MyApp({
   }, [])
 
   useEffect(() => {
-    setTopHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'TopHead' && x?.type === SnippetContentType.JAVASCRIPT))
-    setHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'Head' && x?.type === SnippetContentType.JAVASCRIPT))
     DataLayerInstance.setDataLayer()
 
     // If browser session is not yet started.
@@ -263,59 +254,25 @@ function MyApp({
     }
   }, [])
 
-  const getScriptSnippets = (snippet: ISnippet): Array<IScriptSnippet> => {
-    let scripts = new Array<IScriptSnippet>()
-    if (typeof document !== undefined) {
-      let container = document.createElement('div')
-      container.insertAdjacentHTML('beforeend', snippet.content)
-      const arrNodes = container.querySelectorAll('*')
-      arrNodes.forEach((node: any, key: number) => {
-        if (node.innerHTML) {
-          scripts.push({ type: 'text/javascript', innerHTML: node.innerHTML, })
-        } else if (node.src) {
-          scripts.push({ type: 'text/javascript', src: node.src, })
-        }
-      })
-    }
-    return scripts
-  }
-
-  const seoInfo = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords
+  const seoInfo =
+    pageProps?.metaTitle ||
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
       ? pageProps
       : pageProps?.data?.product || undefined
 
-  const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords
+  const seoImage =
+    pageProps?.metaTitle ||
+    pageProps?.metaDescription ||
+    pageProps?.metaKeywords
       ? pageProps?.products?.images[0]?.url
       : pageProps?.data?.product?.image || undefined
 
   const bodyStartScrCntrRef = React.createRef<any>()
   const bodyEndScrCntrRef = React.createRef<any>()
-  const [topHeadJSSnippets, setTopHeadJSSnippets] = useState(new Array<any>())
-  const [headJSSnippets, setHeadJSSnippets] = useState(new Array<any>())
   return (
     <>
       <NextHead>
-        {topHeadJSSnippets?.length > 0 &&
-          topHeadJSSnippets?.map((snippet: ISnippet, index: number) => {
-            const scripts = getScriptSnippets(snippet)
-            return (
-              scripts.length > 0 &&
-              scripts?.map((script: IScriptSnippet, index: number) => (
-                <>
-                  {script?.innerHTML && (
-                    <script
-                      type={script?.type}
-                      dangerouslySetInnerHTML={{ __html: script?.innerHTML }}
-                    />
-                  )}
-                  {script?.src && (
-                    <script type={script?.type} src={script?.src} />
-                  )}
-                </>
-              ))
-            )
-          })}
-
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
@@ -323,25 +280,16 @@ function MyApp({
         {seoInfo && (
           <>
             <title>{seoInfo?.metaTitle}</title>
-            {router.asPath.startsWith('/products/') && (
-              <link
-                rel="canonical"
-                href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath}
-              />
-            )}
+            {
+              router.asPath.startsWith('/products/') && (
+                <link rel="canonical" href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath} />
+              )
+            }            
             <meta name="title" content={seoInfo?.metaTitle} />
             <meta name="description" content={seoInfo?.metaDescription} />
             <meta name="keywords" content={seoInfo?.metaKeywords} />
-            <meta
-              property="og:title"
-              content={seoInfo?.metaTitle}
-              key="ogtitle"
-            />
-            <meta
-              property="og:description"
-              content={seoInfo?.metaDescription}
-              key="ogdesc"
-            />
+            <meta property="og:title" content={seoInfo?.metaTitle} key="ogtitle" />
+            <meta property="og:description" content={seoInfo?.metaDescription} key="ogdesc" />
           </>
         )}
         <meta property="og:type" content="website" />
@@ -352,39 +300,15 @@ function MyApp({
           key="ogurl"
         />
         <meta property="og:image" content={seoImage} />
-
-        {headJSSnippets?.length > 0 &&
-          headJSSnippets?.map((snippet: ISnippet, index: number) => {
-            const scripts = getScriptSnippets(snippet)
-            return (
-              scripts.length > 0 &&
-              scripts?.map((script: IScriptSnippet, index: number) => (
-                <>
-                  {script?.innerHTML && (
-                    <script
-                      type={script?.type}
-                      dangerouslySetInnerHTML={{ __html: script?.innerHTML }}
-                    />
-                  )}
-                  {script?.src && (
-                    <script type={script?.type} src={script?.src} />
-                  )}
-                </>
-              ))
-            )
-          })}
       </NextHead>
 
       <Head {...appConfig}></Head>
       {OMNILYTICS_DISABLED ? null : <div id="google_translate_element" />}
 
       <ManagedUIContext>
-        {excludingHeadSnippets ? (
+        {snippets ? (
           <ContentSnippet
-            {...{
-              excludingHeadSnippets,
-              refs: { bodyStartScrCntrRef, bodyEndScrCntrRef },
-            }}
+            {...{ snippets, refs: { bodyStartScrCntrRef, bodyEndScrCntrRef } }}
           />
         ) : (
           <></>

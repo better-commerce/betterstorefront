@@ -18,7 +18,7 @@ import {
   CheckCircleIcon,
   StarIcon,
 } from '@heroicons/react/24/outline'
-import { HeartIcon } from '@heroicons/react/20/solid'
+import { HeartIcon } from '@heroicons/react/24/outline'
 import { CheckCircleIcon as CheckSolidCircleIcon } from '@heroicons/react/24/solid'
 import _, { round } from 'lodash'
 import {
@@ -441,11 +441,11 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           )}
         </div>
         <div className="col-span-8 sm:col-span-12 sm:pt-4 col-mob-12 mob-left-right-padding">
-          {!hideWishlistCTA && <button type="button" onClick={handleWishList} className="absolute right-0 top-0 px-1 sm:py-4 text-gray-500 rounded-sm hover:text-pink hover:border-pink" >
+          {!hideWishlistCTA && <button type="button" onClick={handleWishList} className="absolute top-0 right-0 px-1 text-gray-500 rounded-sm sm:py-4 hover:text-pink hover:border-pink" >
             {isInWishList ? (
-              <HeartIcon className="flex-shrink-0 w-8 h-8 text-pink" />
+              <HeartIcon className="flex-shrink-0 w-5 h-5 text-red-600" />
             ) : (
-              <HeartIcon className="flex-shrink-0 w-8 h-8" />
+              <HeartIcon className="flex-shrink-0 w-5 h-5" />
             )}
           </button>}
           <div className="flex items-center justify-between w-full px-0 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">

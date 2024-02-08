@@ -7,10 +7,7 @@ import type { GetStaticPropsContext } from 'next'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
-import { Swiper, SwiperSlide } from 'swiper/react'
-// Import Swiper styles
-import 'swiper/css'
-import 'swiper/css/navigation'
+
 // Component Imports
 import { Layout } from '@components/common'
 
@@ -21,23 +18,11 @@ import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import {
-  HOME_PAGE_DEFAULT_SLUG,
-  STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
-} from '@framework/utils/constants'
+import { HOME_PAGE_DEFAULT_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
 import { useRouter } from 'next/router'
-import {
-  getCurrency,
-  getCurrentCurrency,
-  obfuscateHostName,
-  setCurrentCurrency,
-  maxBasketItemsCount,
-} from '@framework/utils/app-util'
+import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import Link from 'next/link'
-import { generateUri } from '@commerce/utils/uri-util'
-import BestSellerProduct from '@components/product/BestSellerProduct'
+
 const PromotionBanner = dynamic(
   () => import('@components/home/PromotionBanner')
 )
@@ -46,6 +31,10 @@ const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
+const RefferalCard = dynamic(
+  () => import('@components/customer/Referral/ReferralCard')
+)
+
 export async function getStaticProps({
   preview,
   locale,
@@ -75,8 +64,7 @@ export async function getStaticProps({
                 process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
               channel: 'Web',
               currency: currencyCode,
-              cachedCopy: false,
-              language: config?.locale,
+              cachedCopy: true,
             })
             const pageContentWeb = await pageContentsPromiseWeb
             pageContentsWeb.push({ key: currencyCode, value: pageContentWeb })
@@ -132,7 +120,7 @@ export async function getStaticProps({
       pageContentsMobileWeb: pageContentsMobileWeb ?? [],
       hostName: obfuscateHostName(hostName),
     },
-    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
+    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
   }
 }
 
@@ -146,7 +134,6 @@ function Home({
   pageContentsMobileWeb,
   hostName,
   deviceInfo,
-  config,
 }: any) {
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -177,23 +164,23 @@ function Home({
     }
   }, [currencyCode, isMobile])
 
-  useAnalytics(PageViewed, {
-    entity: JSON.stringify({
-      id: '',
-      name: pageContents?.metatitle,
-      metaTitle: pageContents?.metaTitle,
-      MetaKeywords: pageContents?.metaKeywords,
-      MetaDescription: pageContents?.metaDescription,
-      Slug: pageContents?.slug,
-      Title: pageContents?.metatitle,
-      ViewType: 'Page View',
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: pageContents?.metaTitle,
-    entityType: 'Page',
-    entityId: '',
-    eventType: 'PageViewed',
-  })
+  // useAnalytics(PageViewed, {
+  //   entity: JSON.stringify({
+  //     id: '',
+  //     name: pageContents?.metatitle,
+  //     metaTitle: pageContents?.metaTitle,
+  //     MetaKeywords: pageContents?.metaKeywords,
+  //     MetaDescription: pageContents?.metaDescription,
+  //     Slug: pageContents?.slug,
+  //     Title: pageContents?.metatitle,
+  //     ViewType: 'Page View',
+  //   }),
+  //   entityName: PAGE_TYPE,
+  //   pageTitle: pageContents?.metaTitle,
+  //   entityType: 'Page',
+  //   entityId: '',
+  //   eventType: 'PageViewed',
+  // })
   const css = { maxWidth: '100%', minHeight: '350px' }
 
   if (!pageContents) {
