@@ -97,7 +97,7 @@ export default function Wishlist() {
 
       <main className="lg:px-8">
         <div className="max-w-4xl lg:mx-12 sm:px-6">
-          <div className="lg:px-0 sm:px-0 pt-5">
+          <div className="pt-5 lg:px-0 sm:px-0">
             <h1 className="font-extrabold tracking-tight text-gray-900">
               {/* {WISHLIST_TITLE} */}
             </h1>
@@ -191,33 +191,13 @@ export default function Wishlist() {
                                 {product.name}
                               </Link>
                             </h3>
-                            <p className="px-2 mt-1 mb-2 font-medium text-12 text-primary sm:mt-2 min-h-40 sm:mb-0">
-                              {isIncludeVAT
-                                ? priceFormat(
-                                    product?.price?.raw?.withTax,
-                                    undefined,
-                                    product?.price?.currencySymbol
-                                  )
-                                : priceFormat(
-                                    product?.price?.raw?.withoutTax,
-                                    undefined,
-                                    product?.price?.currencySymbol
-                                  )}
+                            <p className="px-2 mt-1 mb-2 font-medium text-12 text-primary sm:mt-2 sm:mb-0">
+                              {isIncludeVAT ? priceFormat( product?.price?.raw?.withTax, undefined, product?.price?.currencySymbol ) : priceFormat( product?.price?.raw?.withoutTax, undefined, product?.price?.currencySymbol )}
                               {product?.listPrice?.raw?.withTax >
                               product?.price?.raw?.withTax ? (
                                 <>
                                   <span className="px-2 font-normal text-gray-500 line-through text-12">
-                                    {isIncludeVAT
-                                      ? priceFormat(
-                                          product?.listPrice?.raw?.withTax,
-                                          undefined,
-                                          product?.listPrice?.currencySymbol
-                                        )
-                                      : priceFormat(
-                                          product?.listPrice?.raw?.withoutTax,
-                                          undefined,
-                                          product?.listPrice?.currencySymbol
-                                        )}
+                                    {isIncludeVAT ? priceFormat( product?.listPrice?.raw?.withTax, undefined, product?.listPrice?.currencySymbol ) : priceFormat( product?.listPrice?.raw?.withoutTax, undefined, product?.listPrice?.currencySymbol )}
                                   </span>
                                   <span className="font-normal text-12 text-emerald-500">
                                     {discount}% off

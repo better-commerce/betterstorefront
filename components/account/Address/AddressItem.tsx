@@ -137,7 +137,7 @@ export default function AddressItem({
       ) : (
         <>
           {isB2B ? (
-            <div className='flex flex-col w-full px-5 py-5 mt-5 mb-5 border rounded-lg '>
+            <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
                 <div>
                   <span className="text-xl font-bold">
@@ -192,7 +192,7 @@ export default function AddressItem({
               </div>
             </div>
           ) : (
-            <div className='flex flex-col w-full px-5 py-5 mt-5 mb-5 border rounded-lg '>
+            <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
                 <div>
                   <span className="text-xl font-bold">

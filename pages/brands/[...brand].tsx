@@ -31,6 +31,7 @@ import ImageBanner from '@components/brand/ImageBanner'
 //   () => import('@components/brand/MultiBrandVideo')
 // )
 import MultiBrandVideo from '@components/brand/MultiBrandVideo'
+import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import faq from '@components/brand/faqData.json'
 import SwiperCore, { Navigation } from 'swiper'
 import 'swiper/swiper.min.css'
@@ -137,10 +138,10 @@ function BrandDetailPage({
   let imageBannerCollectionResponse: any =
     collections.imageBannerCollectionResponse
   let imageCategoryCollectionResponse: any =
-    collections.imageCategoryCollectionResponse
+    collections.imageCategoryCollection
   let imgFeatureCollection: any = collections.imgFeatureCollection
   let offerBannerResult: any = collections.offerBannerResult
-  let productCollectionRes: any = collections.productCollectionRes
+  let productCollectionRes: any = collections.productCollection
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -211,6 +212,7 @@ function BrandDetailPage({
   const [recommendedProducts, setRecommendedProducts] = useState([])
   const [showLandingPage, setShowLandingPage] = useState(true)
   const [isProductCompare, setProductCompare] = useState(false)
+  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
     data = {
       products: {
@@ -224,7 +226,7 @@ function BrandDetailPage({
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: slug } }],
+    ['/api/catalog/products', { ...state, ...{ slug: slug, excludeOOSProduct } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -234,11 +236,17 @@ function BrandDetailPage({
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
 
+  const onEnableOutOfStockItems = (val: boolean) => {
+    setExcludeOOSProduct(!val)
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
+
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-        productListMemory?.products?.currentPage ||
+      productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total ||
       data?.products?.sortBy !== productListMemory?.products?.sortBy
     ) {
@@ -289,6 +297,12 @@ function BrandDetailPage({
       dispatch({ type: PAGE, payload: data.products.currentPage + 1 })
     }
   }
+
+  const clearAll = () => {
+    dispatch({ type: CLEAR })
+    dispatch({ type: ADD_FILTERS, payload: { Key: 'brandNoAnlz', Value: brandDetails?.name, IsSelected: true, }, })
+  }
+
 
   const handleSortBy = (payload: any) => {
     router.push({
@@ -411,7 +425,7 @@ function BrandDetailPage({
   if (brandDetails === null) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
-        <h1 className="pb-6 text-3xl font-30 font-medium text-gray-400">
+        <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
           This is a bad url. please go back to
           <Link href="/brands">
             <span className="px-3 text-indigo-500">All brands</span>
@@ -426,15 +440,12 @@ function BrandDetailPage({
   }
 
   const sanitizedDescription = sanitizeHtmlContent(brandDetails?.description)
-  
+
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
-        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
         <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
         <meta name="title" content={brandDetails?.name || 'Brands'} />
@@ -442,182 +453,63 @@ function BrandDetailPage({
         <meta name="keywords" content={brandDetails?.metaKeywords} />
         <meta property="og:image" content="" />
         <meta property="og:title" content={brandDetails?.metaTitle || brandDetails?.name} key="ogtitle" />
-        <meta
-          property="og:description"
-          content={brandDetails?.metaDescription}
-          key="ogdesc"
-        />
+        <meta property="og:description" content={brandDetails?.metaDescription} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta
-          property="og:url"
-          content={absPath || SITE_ORIGIN_URL + router.asPath}
-          key="ogurl"
-        />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
           <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 2xl:w-4/5 lg:px-0 sm:px-10">
             <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
               <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
-                <img
-                  alt="Brand Logo"
-                  src={
-                    brandDetails.images.length !== 0
-                      ? brandDetails.images[0]
-                      : IMG_PLACEHOLDER
-                  }
-                  width={212}
-                  height={200}
-                  loading="eager"
-                  className="w-[120px] md:w-[212px] h-auto"
-                />
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: sanitizeHtmlContent(brandDetails?.description),
-                  }}
-                  className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5"
-                />
-                <button
-                  className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80"
-                  onClick={handleClick}
-                >
-                  {SHOP_NOW}
-                </button>
+                <img alt="Brand Logo" src={brandDetails.premiumBrandLogo || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
+                <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5" />
+                <button className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80" onClick={handleClick} > {SHOP_NOW} </button>
               </div>
-              <ImageCollection
-                range={2}
-                AttrArray={imageBannerCollectionResponse?.images || []}
-                showTitle={true}
-              />
+              <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
             </div>
-
             <div className="mt-0 md:mt-10">
-              <Video
-                heading={manufacturerStateVideoHeading}
-                name={manufacturerStateVideoName}
-              />
+              <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
             </div>
-
             <div className="mt-10">
-              <Slider
-                images={imageCategoryCollectionResponse || []}
-                isBanner={true}
-              />
+              <Slider images={imageCategoryCollectionResponse || []} isBanner={true} />
             </div>
-
             <div className="mt-10">
               <div className="flex flex-col gap-4 sm:px-4">
                 <div className="flex flex-row justify-between">
-                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
-                    {BTN_RECOMMENDED_PROD}
-                  </p>
-                  <button
-                    className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline"
-                    onClick={handleClick}
-                  >
-                    {BTN_SEE_ALL}
-                  </button>
+                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {BTN_RECOMMENDED_PROD} </p>
+                  <button className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline" onClick={handleClick} > {BTN_SEE_ALL} </button>
                 </div>
-
-                <RecommendedProductCollection
-                  recommendedProducts={recommendedProducts}
-                  deviceInfo={deviceInfo}
-                  config={config}
-                />
+                <RecommendedProductCollection recommendedProducts={productCollectionRes} deviceInfo={deviceInfo} config={config} />
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-5 my-10 md:grid-cols-2">
               {offerBannerResult?.map((val: any, Idx: number) => (
-                <OfferCard
-                  key={Idx}
-                  index={Idx}
-                  title={val.title}
-                  description={val.description}
-                  src={val.url}
-                  link={val.link}
-                  buttonText={val.buttonText}
-                />
+                <OfferCard key={Idx} index={Idx} title={val.title} description={val.description} src={val.url} link={val.link} buttonText={val.buttonText} />
               ))}
-            </div>
-          </div>
-
-          <div className="w-full mt-10">
-            <ImageBanner
-              manufacturerSettingTypeImgBanner={
-                manufacturerSettingTypeImgBanner
-              }
-              heading={manufacturerImgBannerHeading}
-              link={manufImgBannerLink}
-            />
-            <div className="mt-10">
-              <MultiBrandVideo
-                heading={multiBrandVidHeading || ''}
-                name={manufacturerStateMultiBrandVidNames || ''}
-              />
             </div>
           </div>
 
           <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
             <div className="flex justify-between pb-10 mt-4">
-              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
-                {FEATURES_HEADING}
-                {` `}
-                {brandDetails.name}
-              </p>
+              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {FEATURES_HEADING} {` `} {brandDetails.name} </p>
               {!isOnlyMobile && (
-                <button
-                  className="font-semibold text-[#212530] uppercase cursor-pointer font-lg md:block hover:underline"
-                  onClick={handleClick}
-                >
-                  {BTN_SEE_ALL}
-                </button>
+                <button className="font-semibold text-[#212530] uppercase cursor-pointer font-lg md:block hover:underline" onClick={handleClick} > {BTN_SEE_ALL} </button>
               )}
             </div>
             {isOnlyMobile ? (
               <div className="mb-10 max-h-[30vh]">
-                <Slider
-                  images={imgFeatureCollection?.images || []}
-                  isBanner={false}
-                />
+                <Slider images={imgFeatureCollection?.images || []} isBanner={false} />
               </div>
             ) : (
               <div className="mb-10">
-                <ImageCollection
-                  range={4}
-                  AttrArray={imgFeatureCollection?.images || []}
-                />
+                <ImageCollection range={4} AttrArray={imgFeatureCollection?.images || []} />
               </div>
             )}
-            <PlainText
-              textNames={textNames || []}
-              heading={manufacturerStateTextHeading}
-            />
-
-            {!isOnlyMobile && (
-              <>
-                <div className="flex justify-between py-10">
-                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg">
-                    {BTN_RECOMMENDED_PROD}
-                  </p>
-                  <button
-                    className="font-semibold text-[#212530] uppercase cursor-pointer font-lg hover:underline"
-                    onClick={handleClick}
-                  >
-                    {BTN_SEE_ALL}
-                  </button>
-                </div>
-                <ImageCollection
-                  range={4}
-                  AttrArray={productCollectionRes || []}
-                />
-              </>
-            )}
-
+            <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
             <div className="mb-20">
-              <p className="my-10 font-semibold text-[#212530] uppercase cursor-default font-lg">
-                {faq.title}
-              </p>
+              <p className="my-10 font-semibold text-[#212530] uppercase cursor-default font-lg"> {faq.title} </p>
               {faq?.results?.map((val: any, Idx: number) => {
                 return (
                   <Disclosure key={Idx} heading={val.faq} details={val.ans} />
@@ -634,42 +526,20 @@ function BrandDetailPage({
             </Link>
             <div className="">
               <h1 className="inline-block text-black">{brandDetails?.name}</h1>
-              <span className="inline-block ml-2 text-sm font-semibold text-black">
-                Showing {data?.products?.total} {RESULTS}
-              </span>
+              <span className="inline-block ml-2 text-sm font-semibold text-black"> Showing {data?.products?.total} {RESULTS} </span>
             </div>
             {sanitizedDescription && (
-            <div
-              dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-              className="mt-2 text-black sm:mt-5"
-            />
+              <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} className="mt-2 text-black sm:mt-5" />
             )}
           </div>
-          <div className="flex justify-end w-full">
-            <ProductSort
-              routerSortOption={state.sortBy}
-              products={data.products}
-              action={handleSortBy}
-            />
+          <div className="flex justify-end w-full col-span-12">
+            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
-          <ProductGrid
-            products={productDataToPass}
-            currentPage={state.currentPage}
-            handlePageChange={handlePageChange}
-            handleInfiniteScroll={handleInfiniteScroll}
-            deviceInfo={deviceInfo}
-            maxBasketItemsCount={maxBasketItemsCount(config)}
-            isCompared={isCompared}
-          />
-          <CompareSelectionBar
-            name={brandDetails?.name}
-            showCompareProducts={showCompareProducts}
-            products={productDataToPass}
-            isCompare={isProductCompare}
-            maxBasketItemsCount={maxBasketItemsCount(config)}
-            closeCompareProducts={closeCompareProducts}
-            deviceInfo={deviceInfo}
-          />
+          <div className="flex justify-end w-full">
+            <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} />
+          </div>
+          <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+          <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
         </div>
       )}
     </>
@@ -713,60 +583,46 @@ export async function getStaticProps({
               collections.imageBannerCollection = await getCollectionById(
                 widget.recordId
               )
-            } catch (error: any) {}
+            } catch (error: any) { }
             resolve()
           })
         )
       } else if (
         widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'MultipleImagesBanner'
+        widget.code == 'MultipleImageBanner'
       ) {
         promises.push(
           new Promise(async (resolve: any, reject: any) => {
             try {
               const res = await getCollectionById(widget.recordId)
               collections.imageCategoryCollection = res?.images
-            } catch (error: any) {}
+            } catch (error: any) { }
             resolve()
           })
         )
       } else if (
         widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'FeaturedDewaltImageList'
-      ) {
-        promises.push(
-          new Promise(async (resolve: any, reject: any) => {
-            try {
-              collections.imgFeatureCollection = await getCollectionById(
-                widget.recordId
-              )
-            } catch (error: any) {}
-            resolve()
-          })
-        )
-      } else if (
-        widget.manufacturerSettingType == 'ImageCollection' &&
-        widget.code == 'FFXOffers'
+        widget.code == 'HeroBanner'
       ) {
         promises.push(
           new Promise(async (resolve: any, reject: any) => {
             try {
               const res = await getCollectionById(widget.recordId)
-              collections.offerBannerCollection = res.images
-            } catch (error: any) {}
+              collections.imageCategoryCollection = res?.images
+            } catch (error: any) { }
             resolve()
           })
         )
       } else if (
         widget.manufacturerSettingType == 'ProductCollection' &&
-        widget.code == 'FeaturedDewaltSaws'
+        widget.code == 'RecommendedProductCollection'
       ) {
         promises.push(
           new Promise(async (resolve: any, reject: any) => {
             try {
               const res = await getCollectionById(widget.recordId)
               collections.productCollection = res.products.results
-            } catch (error: any) {}
+            } catch (error: any) { }
             resolve()
           })
         )

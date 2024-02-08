@@ -22,6 +22,7 @@ import SizeChangeModal from '../SizeChange'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { Guid } from '@commerce/types'
 import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
+import RecentlyViewedProduct from '@components/product/RelatedProducts/RecentlyViewedProducts'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist,wishListItems, displayAlert, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -714,6 +715,14 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                   <RelatedProductWithGroup products={altRelatedProducts?.relatedProducts?.products?.results || []} productPerColumn={1.7} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
                                 </div>
                               )}
+                            </div>
+                          )}
+                         {isEmpty && (
+                            <div className="cart-recently-viewed">
+                              <RecentlyViewedProduct
+                                deviceInfo={deviceInfo}
+                                config={config}
+                              />
                             </div>
                           )}
                           {!isEmpty && relatedProductData && (
