@@ -399,7 +399,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         />
       </NextHead>
       <section className="main-section">
-        <div className="px-4 mx-auto mt-4 bg-transparent lg:w-4/5 sm:px-4">
+        <div className="container px-4 mx-auto mt-4 bg-transparent">
           {/* breadcrumb section start */}
           {category?.breadCrumbs && (
             <BreadCrumbs
@@ -411,7 +411,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         </div>
 
         {/* Category info section start */}
-        <div className="px-4 mx-auto my-6 mt-4 bg-transparent lg:w-4/5 sm:px-4">
+        <div className="container px-4 mx-auto my-6 mt-4 bg-transparent">
           <h1 className='dark:text-black'>{category?.name}</h1>
           <div
             className="font-18 dark:text-black"
@@ -457,7 +457,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
             </>
           ) : null}
         </div>
-        <div className="px-4 py-6 mx-auto lg:w-4/5 sm:px-4">
+        <div className="container px-4 py-6 mx-auto">
           {/* category banner info End */}
 
           {/*TODO: For browser caching of product images*/}
