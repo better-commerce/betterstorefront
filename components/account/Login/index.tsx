@@ -125,9 +125,9 @@ export default function Login({ isLoginSidebarOpen }: any) {
         </div> */}
         <SocialSignInLinks
           isLoginSidebarOpen={isLoginSidebarOpen}
-          containerCss={`flex justify-center gap-2 px-3 mx-auto ${
+          containerCss={`flex justify-center gap-2 px-3 sm:px-0 mx-auto ${
             isLoginSidebarOpen
-              ? 'sm:w-full width-md-full !px-0'
+              ? 'sm:w-full width-md-full'
               : 'width-md-full sm:w-1/2'
           }`}
         />

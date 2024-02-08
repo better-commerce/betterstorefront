@@ -29,6 +29,7 @@ import {
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 const CompareSelectionBar = dynamic(
   () => import('@components/product/ProductCompare/compareSelectionBar')
@@ -150,7 +151,7 @@ export default function CollectionPage(props: any) {
   }
 
   const [state, dispatch] = useReducer(reducer, initialState)
-
+  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
     data: collection,
     data = {
@@ -167,7 +168,7 @@ export default function CollectionPage(props: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: props?.slug } }],
+    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -190,6 +191,12 @@ export default function CollectionPage(props: any) {
   })
 
   const [productDataToPass, setProductDataToPass] = useState(props?.products)
+
+  const onEnableOutOfStockItems = (val: boolean) => {
+    setExcludeOOSProduct(!val)
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
 
   useEffect(() => {
     if (productDataToPass) {
@@ -514,19 +521,35 @@ export default function CollectionPage(props: any) {
             {props?.allowFacets ? (
               <>
                 {isMobile ? (
-                  <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
-                ) : (
-                  <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                  <>
+                    <div className="flex justify-end w-full">
+                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                    </div>
+                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
+                  </>
+                ) : ( 
+                    <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
                 )}
                 <div className="sm:col-span-10 p-[1px]">
-                  {isMobile ? null : (
+                  {isMobile ? null : (   
+                  <>
+                    <div className="flex justify-end w-full">
+                      <OutOfStockFilter
+                        excludeOOSProduct={excludeOOSProduct}
+                        onEnableOutOfStockItems={onEnableOutOfStockItems}
+                        />
+                    </div>
                     <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
+                  </>    
                   )}
                   <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
                 </div>
               </>
             ) : (
               <div className="col-span-12">
+                <div className="flex justify-end w-full">
+                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                </div>
                 <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
                 <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
               </div>

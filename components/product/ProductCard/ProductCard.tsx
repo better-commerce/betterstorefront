@@ -15,15 +15,17 @@ import {
   NEXT_REMOVE_WISHLIST,
 } from '@components/utils/constants'
 import {
-  HeartIcon,
   CheckCircleIcon,
+  HeartIcon,
   StarIcon,
 } from '@heroicons/react/24/outline'
+
 import { CheckCircleIcon as CheckSolidCircleIcon } from '@heroicons/react/24/solid'
 import _, { round } from 'lodash'
 import {
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
+  GENERAL_ADD_TO_BAG,
   GENERAL_ADD_TO_BASKET,
   IMG_PLACEHOLDER,
   ITEM_WISHLISTED,
@@ -43,6 +45,7 @@ import { Select } from '@components/common/Select'
 import commerce from '@lib/api/commerce'
 import ProductTag from '../ProductTag'
 import ButtonNotifyMe from '../ButtonNotifyMe'
+import wishlistHandler from '@components/services/wishlist'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -95,6 +98,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const [quantity, setQuantity] = useState(1)
   const [productPromotion, setProductPromo] = useState(null)
   const [isInWishList, setIsInWishList] = useState(false)
+  const {deleteWishlistItem} = wishlistHandler()
 
   useEffect(() => {
     if (wishListItems?.some((x: any) => x?.stockCode === product?.stockCode)) {
@@ -173,6 +177,12 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
 
   const handleWishList = async () => {
+    if (isInWishList) {
+      deleteWishlistItem(user?.userId, product?.recordId)
+      removeFromWishlist(product?.recordId)
+      openWishlist()
+      return
+    }
     const objUser = localStorage.getItem('user')
     if (!objUser || isGuestUser) {
       //  setAlert({ type: 'success', msg:" Please Login "})
@@ -407,7 +417,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div className={cn(`relative hover:border-orange-500 long-product-card-mobile grid grid-cols-12 gap-2 overflow-hidden sm:gap-0 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 shadow-gray-200 group prod-group border rounded-md px-4 pt-4 sm:pt-0 pb-4 sm:pb-0 bg-white ${product?.currentStock == 0 ? 'hover:border-gray-200 border-gray-100' : 'hover:border-orange-500 border-gray-200'}`, { 'height-full border-gray-200': isComparedEnabled, 'height-full border-orange-500': product.compared, })} key={product.id}>
-        <div className={`${product?.currentStock == 0 || product?.currentStock < 0 ? 'opacity-100' : ''} relative col-span-4 col-mob-12 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card m-auto`}>
+        <div className={`${product?.currentStock == 0 || product?.currentStock < 0 ? 'opacity-100' : ''} relative w-full col-span-4 col-mob-12 bg-gray-200 rounded-md sm:col-span-12 aspect-w-1 aspect-h-1 mobile-card-panel white-card bundle-card m-auto`}>
           <div className="absolute top-0 right-0 flex items-center justify-between w-full z-1 pos-inherit">
             <ProductTag product={product} />
             {isMobile || isIPadorTablet ? null : (
@@ -418,25 +428,26 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             )}
           </div>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${currentProductData.link}`} handleHover={handleHover} itemPrice={itemPrice} productName={product.name} onClick={handleSetCompareProduct}>
-            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'product-image'} className="object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
+            <img id={`${product?.productId ?? product?.recordId}-1`} src={generateUri(currentProductData.image, 'h=350&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'product-image'} className="object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto bundle-height-img-auto" style={css} width={400} height={500} />
             {product?.images?.length > 1 && (
-              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'product-image'} className="hidden object-cover object-center w-full h-full sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
+              <img id={`${product?.productId ?? product?.recordId}-2`} src={generateUri(product?.images[1]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={product.name ||'product-image'} className="hidden object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto bundle-height-img-auto" width={400} height={500} />
             )}
           </ButtonLink>
           {isMobile ? null : (
-            <div className={cn( 'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20', { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled } )}>
-              {!hideWishlistCTA && (
-                <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300" onClick={handleWishList} disabled={product.hasWishlisted} >
-                  {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
-                </SimpleButton>
-              )}
-              <SimpleButton variant="slim" className="flex-1 btn btn-c btn-secondary" onClick={() => handleQuickViewData(product)} >
-                {QUICK_VIEW}
-              </SimpleButton>
+            <div className={cn( 'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-4 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20', { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled } )}>
+              <Button title={GENERAL_ADD_TO_BAG} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300" onClick={() => handleQuickViewData(product)} > {QUICK_VIEW} </SimpleButton>
             </div>
           )}
         </div>
-        <div className="col-span-8 sm:col-span-12 sm:pt-4 col-mob-12 mob-left-right-padding">
+        <div className="relative col-span-8 sm:col-span-12 sm:pt-4 col-mob-12 mob-left-right-padding">
+          {!hideWishlistCTA && <button type="button" onClick={handleWishList} className="absolute top-0 right-0 px-1 text-gray-500 rounded-sm sm:py-4 hover:text-pink hover:border-pink" >
+            {isInWishList ? (
+              <HeartIcon className="flex-shrink-0 w-5 h-5 text-red-600" />
+            ) : (
+              <HeartIcon className="flex-shrink-0 w-5 h-5" />
+            )}
+          </button>}
           <div className="flex items-center justify-between w-full px-0 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">
             <div>
               {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
@@ -502,7 +513,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
                 <ButtonNotifyMe product={product} />
               ) : (<Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} type="button" buttonType={buttonConfig.buttonType || 'cart'} />)}
-              <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary btn-default text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">
+              <button type="button" onClick={() => handleQuickViewData(product)} className="w-full outline-none btn btn-default dark:text-primary">
                 {QUICK_VIEW}
               </button>
             </div>

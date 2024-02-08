@@ -1149,3 +1149,10 @@ p {
   background: var(--btn-bg-hover-secondary) !important;
   color: var(--btn-hover-text-color-secondary) !important;
 }
+@media screen and (max-width:767px) {
+.cart-recently-viewed{
+  width: 325px !important;
+  max-width: 325px !important;
+  min-width: auto;
+}
+}
