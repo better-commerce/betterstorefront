@@ -15,15 +15,16 @@ import {
   NEXT_REMOVE_WISHLIST,
 } from '@components/utils/constants'
 import {
-  HeartIcon,
   CheckCircleIcon,
   StarIcon,
 } from '@heroicons/react/24/outline'
+import { HeartIcon } from '@heroicons/react/20/solid'
 import { CheckCircleIcon as CheckSolidCircleIcon } from '@heroicons/react/24/solid'
 import _, { round } from 'lodash'
 import {
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
+  GENERAL_ADD_TO_BAG,
   GENERAL_ADD_TO_BASKET,
   IMG_PLACEHOLDER,
   ITEM_WISHLISTED,
@@ -43,6 +44,7 @@ import { Select } from '@components/common/Select'
 import commerce from '@lib/api/commerce'
 import ProductTag from '../ProductTag'
 import ButtonNotifyMe from '../ButtonNotifyMe'
+import wishlistHandler from '@components/services/wishlist'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(
@@ -95,6 +97,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const [quantity, setQuantity] = useState(1)
   const [productPromotion, setProductPromo] = useState(null)
   const [isInWishList, setIsInWishList] = useState(false)
+  const { deleteWishlistItem } = wishlistHandler()
 
   useEffect(() => {
     if (wishListItems?.some((x: any) => x?.stockCode === product?.stockCode)) {
@@ -173,6 +176,12 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
 
   const handleWishList = async () => {
+    if (isInWishList) {
+      deleteWishlistItem(user?.userId, product?.recordId)
+      removeFromWishlist(product?.recordId)
+      openWishlist()
+      return
+    }
     const objUser = localStorage.getItem('user')
     if (!objUser || isGuestUser) {
       //  setAlert({ type: 'success', msg:" Please Login "})
@@ -425,31 +434,20 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </ButtonLink>
           {isMobile ? null : (
             <div
-              className={cn(
-                'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-2 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20',
-                { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled }
-              )}>
-              {!hideWishlistCTA && (
-                <SimpleButton
-                  variant="slim"
-                  className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
-                  onClick={handleWishList}
-                  disabled={product.hasWishlisted}
-                >
-                  {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
-                </SimpleButton>
-              )}
-              <SimpleButton
-                variant="slim"
-                className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14"
-                onClick={() => handleQuickViewData(product)}
-              >
-                {QUICK_VIEW}
-              </SimpleButton>
+              className={cn( 'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-4 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20', { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled } )}>
+              <Button title={GENERAL_ADD_TO_BAG} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300" onClick={() => handleQuickViewData(product)} > {QUICK_VIEW} </SimpleButton>
             </div>
           )}
         </div>
         <div className="col-span-8 sm:col-span-12 sm:pt-4 col-mob-12 mob-left-right-padding">
+          {!hideWishlistCTA && <button type="button" onClick={handleWishList} className="absolute right-0 top-0 px-1 sm:py-4 text-gray-500 rounded-sm hover:text-pink hover:border-pink" >
+            {isInWishList ? (
+              <HeartIcon className="flex-shrink-0 w-8 h-8 text-pink" />
+            ) : (
+              <HeartIcon className="flex-shrink-0 w-8 h-8" />
+            )}
+          </button>}
           <div className="flex items-center justify-between w-full px-0 text-xs font-bold text-left text-black sm:mt-1 sm:text-sm p-font-size">
             <div>
               {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
