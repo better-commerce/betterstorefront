@@ -836,7 +836,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                           <button
                             onClick={() => applyMultiPromo()}
                             type="button"
-                            className="w-full text-white bg-black hover:bg-gray-800 btn-basic-property"
+                            className="w-full btn btn-primary"
                           >{`Apply ${multiPromo?.length} ${
                             multiPromo?.length > 1 ? 'Coupons' : 'Coupon'
                           }`}</button>
