@@ -164,23 +164,23 @@ function Home({
     }
   }, [currencyCode, isMobile])
 
-  // useAnalytics(PageViewed, {
-  //   entity: JSON.stringify({
-  //     id: '',
-  //     name: pageContents?.metatitle,
-  //     metaTitle: pageContents?.metaTitle,
-  //     MetaKeywords: pageContents?.metaKeywords,
-  //     MetaDescription: pageContents?.metaDescription,
-  //     Slug: pageContents?.slug,
-  //     Title: pageContents?.metatitle,
-  //     ViewType: 'Page View',
-  //   }),
-  //   entityName: PAGE_TYPE,
-  //   pageTitle: pageContents?.metaTitle,
-  //   entityType: 'Page',
-  //   entityId: '',
-  //   eventType: 'PageViewed',
-  // })
+  useAnalytics(PageViewed, {
+    entity: JSON.stringify({
+      id: '',
+      name: pageContents?.metatitle,
+      metaTitle: pageContents?.metaTitle,
+      MetaKeywords: pageContents?.metaKeywords,
+      MetaDescription: pageContents?.metaDescription,
+      Slug: pageContents?.slug,
+      Title: pageContents?.metatitle,
+      ViewType: 'Page View',
+    }),
+    entityName: PAGE_TYPE,
+    pageTitle: pageContents?.metaTitle,
+    entityType: 'Page',
+    entityId: '',
+    eventType: 'PageViewed',
+  })
   const css = { maxWidth: '100%', minHeight: '350px' }
 
   if (!pageContents) {
