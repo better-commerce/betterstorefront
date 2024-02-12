@@ -797,27 +797,15 @@ export default function ProductView({
   const customRenderItem = (item: any) => {
     return (
       <div className="flex justify-center image-gallery-image">
-        <img
-          src={generateUri(item?.original, "h=2000&fm=webp") || IMG_PLACEHOLDER}
-          alt={product?.name}
-          height={1000}
-          width={1000}
-          className="!object-contain"
-        />
+        <img src={generateUri(item?.original, "h=2000&fm=webp") || IMG_PLACEHOLDER} alt={product?.name} height={1000} width={1000} className="!object-contain" />
       </div>
     );
   };
   const customRenderThumbInner = (item: any) => {
     return (
-      <img
-        src={generateUri(item?.thumbnail, "h=100&fm=webp") || IMG_PLACEHOLDER}
-        alt={product?.name || 'product'}
-        height={100}
-        width={100}
-      />
+      <img src={generateUri(item?.thumbnail, "h=150&fm=webp") || IMG_PLACEHOLDER} alt={product?.name || 'product'} height={150} width={100} />
     );
   };
-
 
   return (
     <>
@@ -889,9 +877,7 @@ export default function ProductView({
                   {selectedAttrData?.listPrice?.raw.tax > 0 ? (
                     <>
                       <span className="px-2 text-sm font-medium text-gray-900 line-through"> {isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax} </span>
-                      <span className="text-sm font-medium text-red-500">
-                        {discount}% off
-                      </span>
+                      <span className="text-sm font-medium text-red-500"> {discount}% off </span>
                     </>
                   ) : null}
                 </p>
