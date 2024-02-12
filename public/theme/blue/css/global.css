@@ -1156,3 +1156,6 @@ p {
   min-width: auto;
 }
 }
+.wishlist-img-height{
+  min-height: 272px !important;
+}
