@@ -15,66 +15,18 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation, Pagination, Zoom } from 'swiper'
 import { Dialog, Transition } from '@headlessui/react'
-import {
-  XMarkIcon,
-  PlusSmallIcon,
-  MinusSmallIcon,
-} from '@heroicons/react/24/outline'
-import {
-  Messages,
-  NEXT_CREATE_WISHLIST,
-  NEXT_BULK_ADD_TO_CART,
-  NEXT_UPDATE_CART_INFO,
-  NEXT_GET_PRODUCT,
-  NEXT_GET_PRODUCT_PREVIEW,
-  SITE_ORIGIN_URL,
-  NEXT_GET_ORDER_RELATED_PRODUCTS,
-  NEXT_COMPARE_ATTRIBUTE,
-  QuantityBreakRule,
-} from '@components/utils/constants'
+import { XMarkIcon, PlusSmallIcon, MinusSmallIcon, } from '@heroicons/react/24/outline'
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, SITE_ORIGIN_URL, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, QuantityBreakRule, } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  ALERT_SUCCESS_WISHLIST_MESSAGE,
-  BTN_ADD_TO_FAVORITES,
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  CLOSE_PANEL,
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_ENGRAVING,
-  GENERAL_PRICE_LABEL_RRP,
-  GENERAL_REFERENCE,
-  GENERAL_REVIEWS,
-  GENERAL_REVIEW_OUT_OF_FIVE,
-  IMG_PLACEHOLDER,
-  ITEM_TYPE_ADDON,
-  ITEM_TYPE_ADDON_10,
-  ITEM_TYPE_ALTERNATIVE,
-  PRICEMATCH_ADDITIONAL_DETAILS,
-  PRICEMATCH_BEST_PRICE,
-  PRICEMATCH_SEEN_IT_CHEAPER,
-  PRODUCT_AVAILABILITY,
-  PRODUCT_INFORMATION,
-  PRODUCT_IN_STOCK,
-  PRODUCT_OUT_OF_STOCK,
-  PRODUCT_PERSONALIZATION_TITLE,
-  SLUG_TYPE_MANUFACTURER,
-  YOUTUBE_VIDEO_PLAYER,
-} from '@components/utils/textVariables'
-import {
-  ELEM_ATTR,
-  PDP_ELEM_SELECTORS,
-} from '@framework/content/use-content-snippet'
+import { ALERT_SUCCESS_WISHLIST_MESSAGE, BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, GENERAL_PRICE_LABEL_RRP, GENERAL_REFERENCE, GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, PRICEMATCH_ADDITIONAL_DETAILS, PRICEMATCH_BEST_PRICE, PRICEMATCH_SEEN_IT_CHEAPER, PRODUCT_AVAILABILITY, PRODUCT_INFORMATION, PRODUCT_IN_STOCK, PRODUCT_OUT_OF_STOCK, PRODUCT_PERSONALIZATION_TITLE, SLUG_TYPE_MANUFACTURER, YOUTUBE_VIDEO_PLAYER, } from '@components/utils/textVariables'
+import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { priceFormat, roundToDecimalPlaces, matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import {
-  getCurrentPage,
-  validateAddToCart,
-  vatIncluded,
-} from '@framework/utils/app-util'
+import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
@@ -113,40 +65,9 @@ const PLACEMENTS_MAP: any = {
   },
 }
 
-export default function ProductView({
-  data = { images: [] },
-  snippets = [],
-  setEntities,
-  recordEvent,
-  slug,
-  isPreview = false,
-  relatedProductsProp,
-  promotions,
-  pdpLookbookProducts,
-  pdpCachedImages: cachedImages,
-  reviews,
-  deviceInfo,
-  config,
-  maxBasketItemsCount,
-  allProductsByCategory: allProductsByCategoryProp,
-}: any) {
+export default function ProductView({ data = { images: [] }, snippets = [], setEntities, recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpLookbookProducts, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
-  const {
-    openNotifyUser,
-    addToWishlist,
-    openWishlist,
-    basketId,
-    cartItems,
-    setAlert,
-    setCartItems,
-    user,
-    openCart,
-    openLoginSideBar,
-    isGuestUser,
-    setIsCompared,
-    removeFromWishlist,
-    currency,
-  } = useUI()
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
   const isIncludeVAT = vatIncluded()
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
@@ -154,10 +75,7 @@ export default function ProductView({
   const [isInWishList, setItemsInWishList] = useState(false)
   const [previewImg, setPreviewImg] = useState<any>()
   const [reviewInput, setReviewInput] = useState(false)
-  const [variantInfo, setVariantInfo] = useState<any>({
-    variantColour: '',
-    variantSize: '',
-  })
+  const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
   const [isLoading, setIsLoading] = useState(true)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
@@ -219,17 +137,12 @@ export default function ProductView({
     if (response?.data?.product) {
       fetchRelatedProducts(response?.data?.product?.recordId)
       const recentlyViewedProduct: any = response?.data?.product?.stockCode;
-
       let viewedProductsList = []
-      viewedProductsList = localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) ? JSON.parse(decrypt(
-        localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) || '[]'
-      )) : []
+      viewedProductsList = localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) ? JSON.parse(decrypt(localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) || '[]')) : []
       if (viewedProductsList?.length == 0) {
         viewedProductsList?.push(recentlyViewedProduct)
       } else {
-        const checkDuplicate: any = viewedProductsList?.some(
-          (val: any) => val === recentlyViewedProduct
-        )
+        const checkDuplicate: any = viewedProductsList?.some((val: any) => val === recentlyViewedProduct)
         if (!checkDuplicate) {
           viewedProductsList.push(recentlyViewedProduct)
         }
@@ -331,9 +244,7 @@ export default function ProductView({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
-        const cartLineItem: any = cartItems?.lineItems?.find(
-          (o: any) => o.productId === selectedAttrData?.productId?.toUpperCase()
-        )
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
         if (selectedAttrData?.currentStock === cartLineItem?.qty) {
           setAlert({
             type: 'error',
@@ -416,7 +327,6 @@ export default function ProductView({
                     item_var_id: items?.stockCode,
                   })
                 ),
-                // device: deviceCheck,
                 current_page: currentPage,
               },
             })
@@ -453,10 +363,7 @@ export default function ProductView({
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
           validateAction: async () => {
-            const cartLineItem: any = cartItems?.lineItems?.find(
-              (o: any) =>
-                o.productId === selectedAttrData?.productId?.toUpperCase()
-            )
+            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
               setAlert({
                 type: 'error',
@@ -502,15 +409,13 @@ export default function ProductView({
                     {
                       item_name: product?.name,
                       item_brand: product?.brand,
-                      item_category2:
-                        product?.mappedCategories[1]?.categoryName,
+                      item_category2: product?.mappedCategories[1]?.categoryName,
                       item_variant: product?.variantGroupCode,
                       quantity: 1,
                       item_id: product?.productCode,
                       price: product?.price?.raw?.withTax,
                       item_var_id: product?.stockCode,
-                      item_list_name:
-                        product?.mappedCategories[2]?.categoryName,
+                      item_list_name: product?.mappedCategories[2]?.categoryName,
                       index: 1,
                     },
                   ],
@@ -529,20 +434,15 @@ export default function ProductView({
                         item_id: items?.sku,
                         price: items?.price?.raw?.withTax,
                         item_brand: items?.brand,
-                        item_category2: items?.categoryItems?.length
-                          ? items?.categoryItems[1]?.categoryName
-                          : '',
+                        item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : '',
                         item_variant: items?.colorName,
-                        item_list_name: items?.categoryItems?.length
-                          ? items?.categoryItems[0]?.categoryName
-                          : '',
+                        item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : '',
                         item_list_id: '',
                         index: itemId,
                         quantity: items?.qty,
                         item_var_id: items?.stockCode,
                       })
                     ),
-                    // device: deviceCheck,
                     current_page: currentPage,
                   },
                 })
@@ -571,9 +471,7 @@ export default function ProductView({
         stockCode: selectedAttrData?.stockCode,
       },
     }
-    const addonProducts = relatedProducts?.relatedProducts?.filter(
-      (item: any) => item?.itemType === ITEM_TYPE_ADDON_10
-    )
+    const addonProducts = relatedProducts?.relatedProducts?.filter((item: any) => item?.itemType === ITEM_TYPE_ADDON_10)
     const addonProductsWithParentProduct = addonProducts?.map((item: any) => {
       item.parentProductId = updatedProduct?.recordId
       return item
@@ -718,11 +616,7 @@ export default function ProductView({
       createWishlist()
     } else insertToLocalWishlist()
   }
-
-  const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter(
-    (item: any) => item.stockCode !== ITEM_TYPE_ADDON
-  )
-
+  const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode !== ITEM_TYPE_ADDON)
   const handleProductBundleUpdate = (bundledProduct: any) => {
     if (bundledProduct && bundledProduct?.id) {
       let clonedProduct = Object.assign({}, product)
@@ -732,16 +626,11 @@ export default function ProductView({
     }
   }
 
-  const breadcrumbs = product?.breadCrumbs?.filter(
-    (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
-  )
+  const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
   SwiperCore.use([Navigation])
   const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
-  const addonPrice = relatedProducts?.relatedProducts?.find(
-    (x: any) => x?.itemType == 10
-  )?.price?.formatted?.withTax
-
+  const addonPrice = relatedProducts?.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax
   const css = { maxWidth: '100%', height: 'auto' }
   const attrGroup = groupBy(product?.customAttributes, 'key')
 
@@ -826,7 +715,7 @@ export default function ProductView({
                       <img src={generateUri(image?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} alt={product?.name || 'slider-image'} className="object-cover object-center w-full h-full image" sizes="320 600 1000" width={600} height={1000} />
                     </div>
                   ) : (
-                    <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
+                    <img src={IMG_PLACEHOLDER} alt={product?.name || 'slider-image'} className="object-cover object-center w-full h-full image" sizes="320 600 1000" width={600} height={1000} />
                   )}
                 </SwiperSlide>
               ))}
