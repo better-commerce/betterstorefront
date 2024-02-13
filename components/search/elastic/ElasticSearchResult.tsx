@@ -129,6 +129,18 @@ const CustomResultView = (
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+          if (matchStrings(o.productId, result?.recordId, true) || matchStrings(o.productId, result?.productId, true)) {
+            return o
+          }
+        })
+        if (result?.currentStock === cartLineItem?.qty && !result?.fulfilFromSupplier && !result?.flags?.sellWithoutInventory) {
+          setAlert({
+            type: 'error',
+            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+          })
+          return false
+        }
         const isValid = cartItemsValidateAddToCart(
           cartItems,
           maxBasketItemsCount

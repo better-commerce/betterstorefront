@@ -42,7 +42,7 @@ import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import ImageGallery from 'react-image-gallery'
-import { priceFormat } from '@framework/utils/parse-util'
+import { matchStrings, priceFormat } from '@framework/utils/parse-util'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import { isMobile } from 'react-device-detect'
 
@@ -150,6 +150,18 @@ export default function SearchQuickView({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+          if (matchStrings(o.productId, quickViewData?.recordId, true) || matchStrings(o.productId, quickViewData?.productId, true)) {
+            return o
+          }
+        })
+        if (quickViewData?.currentStock === cartLineItem?.qty && !quickViewData?.fulfilFromSupplier && !quickViewData?.flags?.sellWithoutInventory) {
+          setAlert({
+            type: 'error',
+            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+          })
+          return false
+        }
         const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount)
         if (!isValid) {
           setAlert({
@@ -250,6 +262,18 @@ export default function SearchQuickView({
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
           validateAction: async () => {
+            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+              if (matchStrings(o.productId, quickViewData?.recordId, true) || matchStrings(o.productId, quickViewData?.productId, true)) {
+                return o
+              }
+            })
+            if (quickViewData?.currentStock === cartLineItem?.qty && !quickViewData?.fulfilFromSupplier && !quickViewData?.flags?.sellWithoutInventory) {
+              setAlert({
+                type: 'error',
+                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+              })
+              return false
+            }
             const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount)
             if (!isValid) {
               setAlert({
