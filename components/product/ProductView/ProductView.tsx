@@ -245,7 +245,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
-        if (selectedAttrData?.currentStock === cartLineItem?.qty) {
+        if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier &&  !selectedAttrData?.flags?.sellWithoutInventory) {
           setAlert({
             type: 'error',
             msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
