@@ -1,6 +1,7 @@
 // Other Imports
 import fetcher from '@framework/fetcher'
 import { BASKET_ENDPOINT } from '@components/utils/constants'
+import { logError } from '@framework/utils/app-util'
 
 export default async function useValidatePaymentLink({ link, cookies }: any) {
   try {
@@ -11,7 +12,7 @@ export default async function useValidatePaymentLink({ link, cookies }: any) {
     })
     return response
   } catch (error: any) {
-    console.log(error)
+    logError(error)
     return {
       hasError: true,
       errorId: error?.data?.errorId,
