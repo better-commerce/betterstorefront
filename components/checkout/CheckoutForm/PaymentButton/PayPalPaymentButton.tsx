@@ -4,25 +4,19 @@ import React from 'react'
 // Package Imports
 import Router from 'next/router'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
-import {
-  CreateOrderData,
-  CreateOrderActions,
-  OnApproveData,
-  OnApproveActions,
-} from '@paypal/paypal-js/types/components/buttons'
+import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions, } from '@paypal/paypal-js/types/components/buttons'
 
 // Component Imports
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import { IPaymentButtonProps } from './BasePaymentButton'
 
 // Other Imports
-import {
-  BETTERCOMMERCE_DEFAULT_CURRENCY,
-  EmptyString,
-  Messages,
-} from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString, Messages, } from '@components/utils/constants'
 import { PayPalOrderIntent } from '@framework/api/endpoints/payments/constants'
-import { getOrderInfo } from '@framework/utils/app-util'
+import { getCurrency, getOrderId, getOrderInfo } from '@framework/utils/app-util'
+import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { roundToDecimalPlaces } from '@framework/utils/parse-util'
+import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 const BUTTONS_DEFAULT_LAYOUT: any = {
   layout: 'vertical',
@@ -57,31 +51,28 @@ export class PayPalPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    uiContext?.setOverlayLoaderState({
-      visible: true,
-      message: 'Initiating order...',
-    })
+    uiContext?.setOverlayLoaderState({ visible: true, message: 'Initiating order...', })
 
-    const { state, result: orderResult } = await super.confirmOrder(
-      paymentMethod,
-      basketOrderInfo,
-      uiContext,
-      dispatchState
-    )
+    const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {
-      uiContext?.hideOverlayLoaderState()
+      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.PAYPAL)
       this.setState({
         confirmed: true,
       })
+      if (this.props?.paymentModeLoadedCallback) {
+        setTimeout(() => {
+          uiContext?.hideOverlayLoaderState()
+          this.props?.paymentModeLoadedCallback(PaymentMethodType.PAYPAL)
+        }, 100)
+      } else {
+        uiContext?.hideOverlayLoaderState()
+      }
     } else {
       uiContext?.hideOverlayLoaderState()
       if (state) {
         dispatchState(state)
       } else {
-        dispatchState({
-          type: 'SET_ERROR',
-          payload: Messages.Errors['GENERIC_ERROR'],
-        })
+        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
       }
     }
   }
@@ -93,6 +84,8 @@ export class PayPalPaymentButton extends BasePaymentButton {
    * @returns
    */
   private onCreateOrder(data: CreateOrderData, actions: CreateOrderActions) {
+    const { dispatchState } = this.props
+    dispatchState({ type: 'SET_ERROR', payload: EmptyString })
     const orderData: any = this.getOrderInputPayload()
     return actions.order.create(orderData)
   }
@@ -130,12 +123,12 @@ export class PayPalPaymentButton extends BasePaymentButton {
       const orderId = orderResult?.id
       const items = [
         {
-          name: `Items for Order: ${orderId}; Basket: ${orderResult?.basketId}`,
+          name: `Items for Order: ${orderId}; Basket: ${orderResult?.basketId}; OrderId: ${getOrderId(orderInfo?.order)}`,
 
           // Quantity field contains sum of item quantities.
-          quantity: orderResult?.items
+          quantity: 1 /*orderResult?.items
             ?.map((x: any) => x?.qty)
-            ?.reduce((sum: number, current: number) => sum + current, 0),
+            ?.reduce((sum: number, current: number) => sum + current, 0),*/,
 
           // SKU field contains concatenated stock codes with item quantity in brackets i.e. "SKU1(2), SKU2(4), ..."
           sku: orderResult?.items
@@ -145,32 +138,32 @@ export class PayPalPaymentButton extends BasePaymentButton {
           category: 'DIGITAL_GOODS',
           unit_amount: {
             currency_code: orderResult?.currencyCode,
-            value: orderResult?.grandTotal?.raw?.withoutTax?.toFixed(2),
+            value: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
           },
           tax: {
             currency_code: orderResult?.currencyCode,
-            value: orderResult?.grandTotal?.raw?.tax?.toFixed(2),
+            value: 0, //roundToDecimalPlaces(orderResult?.grandTotal?.raw?.tax),
           },
         },
       ]
 
       const purchaseUnits = [
         {
-          reference_id: orderResult?.basketId,
-          description: `Order ${orderId} for basket ${orderResult?.basketId}`,
+          reference_id: orderId, //orderResult?.basketId,
+          description: `Order ${orderId} for basket ${orderResult?.basketId} for orderId ${getOrderId(orderInfo?.order)}`,
           //custom_id: EmptyString,
           items: items,
           amount: {
             currency_code: orderResult?.currencyCode,
-            value: orderResult?.grandTotal?.raw?.withTax?.toFixed(2),
+            value: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
             breakdown: {
               item_total: {
                 currency_code: orderResult?.currencyCode,
-                value: orderResult?.grandTotal?.raw?.withoutTax?.toFixed(2),
+                value: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
               },
               tax_total: {
                 currency_code: orderResult?.currencyCode,
-                value: orderResult?.grandTotal?.raw?.tax?.toFixed(2),
+                value: 0, //roundToDecimalPlaces(orderResult?.grandTotal?.raw?.tax),
               },
             },
           },
@@ -226,31 +219,40 @@ export class PayPalPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
+    const currency = getCurrency()
+    const { dispatchState } = this.props
     const clientId = super.getPaymentMethodSetting(
       this?.state?.paymentMethod,
       'accountcode'
     )
+    const isProduction = (process.env.NODE_ENV === 'production')
 
     return (
-      this.state.confirmed && (
-        <PayPalScriptProvider
-          options={{
-            'client-id': clientId,
-            currency: BETTERCOMMERCE_DEFAULT_CURRENCY,
-          }}
-        >
-          <PayPalButtons
-            style={BUTTONS_DEFAULT_LAYOUT}
-            fundingSource={'paypal'}
-            createOrder={(data: CreateOrderData, actions: CreateOrderActions) =>
-              that.onCreateOrder(data, actions)
-            }
-            onApprove={(data: OnApproveData, actions: OnApproveActions) =>
-              that.onApprove(data, actions)
-            }
-          />
-        </PayPalScriptProvider>
-      )
+      <>
+        {that.state.confirmed && (
+          <PayPalScriptProvider
+            options={{
+              'client-id': clientId,
+              currency: currency || BETTERCOMMERCE_DEFAULT_CURRENCY,
+            }}
+          >
+            <PayPalButtons
+              style={BUTTONS_DEFAULT_LAYOUT}
+              fundingSource={'paypal'}
+              createOrder={(
+                data: CreateOrderData,
+                actions: CreateOrderActions
+              ) => that.onCreateOrder(data, actions)}
+              onError={(error: any) => {
+                dispatchState({ type: 'SET_ERROR', payload: isProduction ? Messages.Errors['GENERIC_ERROR'] : JSON.stringify({ message: error?.message, stack: error?.stack }) })
+              }}
+              onApprove={(data: OnApproveData, actions: OnApproveActions) =>
+                that.onApprove(data, actions)
+              }
+            />
+          </PayPalScriptProvider>
+        )}
+      </>
     )
   }
 }
