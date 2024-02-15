@@ -4,34 +4,18 @@ import { RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import CncInput from './CncInput'
 import { postData } from '@components/utils/clientFetcher'
-import {
-  NEXT_SHIPPING_ENDPOINT,
-  NEXT_UPDATE_SHIPPING,
-  NEXT_CLICK_AND_COLLECT,
+import { NEXT_SHIPPING_ENDPOINT, NEXT_UPDATE_SHIPPING, NEXT_CLICK_AND_COLLECT,
 } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Button from '@components/ui/IndigoButton'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import axios from 'axios'
 import CncList from './CncList'
-import {
-  ADDRESS_OF_YOUR_CHOICE,
-  IN_STORE_OR_COLLECT_PLUS,
-  GENERAL_SELECT_COUNTRY,
-  GENERAL_EDIT,
-  GENERAL_CONFIRM,
-  GENERAL_DELIVERY_METHOD,
-  IMG_PLACEHOLDER,
-  GENERAL_PRICE_LABEL_RRP,
-  GENERAL_COMBINED_DELIVERY,
-} from '@components/utils/textVariables'
-import Link from 'next/link'
-import Image from 'next/image'
-import { tryParseJson } from '@framework/utils/parse-util'
-import EyeIcon from '@heroicons/react/24/solid'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { ADDRESS_OF_YOUR_CHOICE, IN_STORE_OR_COLLECT_PLUS, GENERAL_SELECT_COUNTRY, GENERAL_EDIT, GENERAL_CONFIRM, GENERAL_DELIVERY_METHOD, GENERAL_COMBINED_DELIVERY, } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import SplitDelivery from '../SplitDelivery'
+import { DEFAULT_COUNTRY } from '@components/checkout2/BillingAddressForm'
+import { BETTERCOMMERCE_DEFAULT_COUNTRY } from '@components/utils/constants'
 const DELIVERY_METHODS_TYPE = [
   {
     id: 1,
@@ -142,18 +126,18 @@ export default function Delivery({
 
   useEffect(() => {
     const getDefaultCountry = async () => {
-      const { CountryCode } = geoData
-      const defaultSelectedCountry: any = appConfig.shippingCountries?.find(
-        (item: any) => item.twoLetterIsoCode === CountryCode
-      )
+      // const { CountryCode } = geoData
+      // const defaultSelectedCountry: any = appConfig.shippingCountries?.find(
+      //   (item: any) => item.twoLetterIsoCode === CountryCode
+      // )
 
+      // if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
+
+      const defaultSelectedCountry = appConfig.shippingCountries?.find( (item: any) => item.twoLetterIsoCode === appConfig.defaultCountry )
       if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
-      else {
-        const defaultCountry = appConfig.shippingCountries[0] || {
-          name: 'United Kingdom',
-          twoLetterIsoCode: 'GB',
-        }
-        setSelectedCountry(defaultCountry)
+      else{
+        const defaultCountry = appConfig.defaultCountry ||
+        appConfig.shippingCountries[0] || { name:DEFAULT_COUNTRY, twoLetterIsoCode: BETTERCOMMERCE_DEFAULT_COUNTRY, }
       }
     }
     if (Object.keys(appConfig).length) getDefaultCountry()

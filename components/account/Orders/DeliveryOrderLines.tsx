@@ -1,10 +1,6 @@
-import { DATE_TIME_FORMAT, DATE_FORMAT } from "@components/utils/constants";
-import { CheckIcon, ClockIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { AuBankAccountElement } from "@stripe/react-stripe-js";
+import { DATE_FORMAT } from "@components/utils/constants";
 import { groupBy } from "lodash";
 import moment from "moment";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
 import OrderStatusMapping from "./OrderStatusMapping";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { generateUri } from '@commerce/utils/uri-util'
@@ -76,7 +72,7 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
                {
                   getProductItems()?.map((productItem: any, pId: number) => (
                      <a href={`/${productItem.slug}`} className='inline-block border border-gray-200 order-image-nonslider' key={pId}>
-                        <img src={generateUri(productItem.image, 'h=72&fm=webp') || productItem.image || IMG_PLACEHOLDER} alt="product-image" width={40} height={72} className='object-cover object-center w-full h-full radius-xs sm:h-full' />
+                        <img src={generateUri(productItem.image, 'h=720&fm=webp') || productItem.image || IMG_PLACEHOLDER} alt="product-image" width={40} height={72} className='object-cover object-center w-full h-full radius-xs sm:h-full' />
                      </a>
                   ))
                }

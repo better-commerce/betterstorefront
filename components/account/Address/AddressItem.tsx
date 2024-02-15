@@ -2,12 +2,7 @@ import { useState } from 'react'
 import Form from './AddressBookForm'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  GENERAL_EDIT,
-  GENERAL_DELETE,
-  GENERAL_DEFAULT_DELIVERY_ADDRESS,
-  GENERAL_DEFAULT_BILLING_ADDRESS,
-} from '@components/utils/textVariables'
+import { GENERAL_EDIT, GENERAL_DELETE, GENERAL_DEFAULT_DELIVERY_ADDRESS, GENERAL_DEFAULT_BILLING_ADDRESS, } from '@components/utils/textVariables'
 import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { UserRoleType } from '@framework/utils/enums'
@@ -29,6 +24,7 @@ export default function AddressItem({
     lastName,
     address1,
     address2,
+    address3,
     city,
     state,
     postCode,
@@ -119,6 +115,7 @@ export default function AddressItem({
             lastName: lastName || '',
             address1: address1 || '',
             address2: address2 || '',
+            address3: address3 || '',
             city: city || '',
             state: state || '',
             postCode: postCode || '',
@@ -220,10 +217,10 @@ export default function AddressItem({
                 <div className="flex flex-col w-full text-md font-regular">
                   <span className='mt-2'>{item?.address1}</span>
                   <span>{item?.address2}</span>
-                  <span>
-                    {item?.city} - {item?.postCode}
-                  </span>
-                  <span>{item?.phoneNo}</span>
+                  <span>{item?.address3}</span>
+                  <span>{item?.country}</span>
+                  <span> {item?.city} - {item?.postCode} 
+                  </span> <span>{item?.phoneNo}</span> 
                 </div>
                 <div className='w-full'>
                   <div className="justify-end w-full mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
