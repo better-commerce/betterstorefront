@@ -51,9 +51,7 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
         // console.log(pincodeLookupResult)
 
         if (pincodeLookupResult?.length) {
-          const lookup = pincodeLookupResult?.find((x: any) =>
-            matchStrings(x?.pin, postcode, true)
-          )
+          const lookup = pincodeLookupResult?.find((x: any) => matchStrings(x?.pin, postcode, true) )
           return lookup
         }
       }

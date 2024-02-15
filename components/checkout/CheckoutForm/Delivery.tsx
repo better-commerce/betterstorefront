@@ -133,14 +133,14 @@ export default function Delivery({
 
       // if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
 
-      const defaultSelectedCountry = appConfig.shippingCountries?.find( (item: any) => item.twoLetterIsoCode === appConfig.defaultCountry )
+      const defaultSelectedCountry = appConfig.shippingCountries?.find( (item: any) => item?.twoLetterIsoCode === appConfig?.defaultCountry )
       if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
       else{
-        const defaultCountry = appConfig.defaultCountry ||
-        appConfig.shippingCountries[0] || { name:DEFAULT_COUNTRY, twoLetterIsoCode: BETTERCOMMERCE_DEFAULT_COUNTRY, }
+        const defaultCountry = appConfig?.defaultCountry ||
+        appConfig?.shippingCountries[0] || { name:DEFAULT_COUNTRY, twoLetterIsoCode: BETTERCOMMERCE_DEFAULT_COUNTRY, }
       }
     }
-    if (Object.keys(appConfig).length) getDefaultCountry()
+    if (Object.keys(appConfig)?.length) getDefaultCountry()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appConfig])
