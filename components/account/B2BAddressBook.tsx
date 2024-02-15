@@ -211,7 +211,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
   const fetchCountries = async () => {
     try {
       const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
-      if (data?.result && data?.result?.length > 0) {
+      if (data?.result?.length > 0) {
         setCountries(data?.result)
       } else {
         setCountries([])

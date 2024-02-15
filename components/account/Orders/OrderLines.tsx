@@ -52,16 +52,16 @@ const OrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
                </div>
                <div className='flex items-center justify-end pb-2'>
                   <OrderStatusMapping
-                     orderStatusDisplay={order.orderStatusDisplay}
-                     orderStatusRag={order.orderStatusRag}
+                     orderStatusDisplay={order?.orderStatusDisplay}
+                     orderStatusRag={order?.orderStatusRag}
                   />
                </div>
             </div>
             <div className='grid w-full grid-cols-6 gap-2 py-2 order-image-sec'>
                {
                   order?.itemsBasic?.map((productItem: any, pId: number) => (
-                     <a href={`/${productItem.slug}`} className='inline-block border border-gray-200 order-image-nonslider' key={pId}>
-                        <img src={generateUri(productItem.image, 'h=720&fm=webp') || productItem.image || IMG_PLACEHOLDER} alt="product-image" width={40} height={72} className='object-cover object-center w-full h-full radius-xs sm:h-full' />
+                     <a href={`/${productItem?.slug}`} className='inline-block border border-gray-200 order-image-nonslider' key={pId}>
+                        <img src={generateUri(productItem?.image, 'h=720&fm=webp') || productItem?.image || IMG_PLACEHOLDER} alt="product-image" width={40} height={72} className='object-cover object-center w-full h-full radius-xs sm:h-full' />
                      </a>
                   ))
                }

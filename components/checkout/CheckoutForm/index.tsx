@@ -350,8 +350,8 @@ export default function CheckoutForm({
     const newValues = {
       ...values,
       userId: getUserId(),
-      country: data?.country.split('&')[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
-      countryCode: data?.country.split('&')[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      country: data?.country?.split('&')[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: data?.country?.split('&')[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
     }
     if (data?.id == 0) {
       lookupAddressId(newValues).then((addressId: number) => {
@@ -750,7 +750,7 @@ export default function CheckoutForm({
     const fetchCountries = async () => {
       try {
         const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
-        if (data?.result && data?.result?.length > 0) {
+        if (data?.result?.length > 0) {
           setCountries(data?.result)
         } else {
           setCountries([])
@@ -812,8 +812,8 @@ export default function CheckoutForm({
         country: state.deliveryMethod.twoLetterIsoCode,
       })
 
-      if (response.data) {
-        return response.data.response.data.map((item: any) => {
+      if (response?.data) {
+        return response.data?.response?.data?.map((item: any) => {
           return {
             text: item.Text,
             id: item.Id,
