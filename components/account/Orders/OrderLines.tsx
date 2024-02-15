@@ -1,7 +1,6 @@
 import React from "react";
 import { DATE_FORMAT } from "@components/utils/constants";
 import moment from "moment";
-import Image from "next/image";
 import OrderStatusMapping from "./OrderStatusMapping";
 import { generateUri } from "@commerce/utils/uri-util";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
@@ -62,7 +61,7 @@ const OrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
                {
                   order?.itemsBasic?.map((productItem: any, pId: number) => (
                      <a href={`/${productItem.slug}`} className='inline-block border border-gray-200 order-image-nonslider' key={pId}>
-                        <img src={generateUri(productItem.image, 'h=72&fm=webp') || productItem.image || IMG_PLACEHOLDER} alt="product-image" width={40} height={72} className='object-cover object-center w-full h-full radius-xs sm:h-full' />
+                        <img src={generateUri(productItem.image, 'h=720&fm=webp') || productItem.image || IMG_PLACEHOLDER} alt="product-image" width={40} height={72} className='object-cover object-center w-full h-full radius-xs sm:h-full' />
                      </a>
                   ))
                }

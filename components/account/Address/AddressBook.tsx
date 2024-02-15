@@ -1,34 +1,14 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { useUI } from '@components/ui/context'
-import {
-  NEXT_ADDRESS,
-  NEXT_EDIT_ADDRESS,
-  NEXT_CREATE_ADDRESS,
-  NEXT_DELETE_ADDRESS,
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  AddressPageAction,
-  NEXT_GET_COUNTRIES,
-} from '@components/utils/constants'
+import { NEXT_ADDRESS, NEXT_EDIT_ADDRESS, NEXT_CREATE_ADDRESS, NEXT_DELETE_ADDRESS, BETTERCOMMERCE_DEFAULT_COUNTRY, AddressPageAction, NEXT_GET_COUNTRIES, } from '@components/utils/constants'
 import axios from 'axios'
 import AddressItem from './AddressItem'
 import Form from './AddressBookForm'
 import { LoadingDots } from '@components/ui'
-import {
-  DETAILS_SUCCESS,
-  DETAILS_ERROR,
-  ADDRESS_BOOK_TITLE,
-  DETAILS_SUBTITLE,
-  EMPTY_ADDRESS,
-  ADD_ADDRESS,
-} from '@components/utils/textVariables'
+import { DETAILS_SUCCESS, DETAILS_ERROR, ADDRESS_BOOK_TITLE, DETAILS_SUBTITLE, EMPTY_ADDRESS, ADD_ADDRESS, } from '@components/utils/textVariables'
 import { CustomerAddressModel } from 'models/customer'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import {
-  getCurrentPage,
-  resetSubmitData,
-  submitData,
-  parseFullName,
-} from '@framework/utils/app-util'
+import { getCurrentPage, resetSubmitData, submitData, parseFullName, } from '@framework/utils/app-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 // import useDevice from '@commerce/utils/use-device'
 import NewAddressModal from '@components/checkout/CheckoutForm/NewAddressModal'
@@ -324,16 +304,16 @@ export default function AddressBook({ deviceInfo }: any) {
     openNewAddressModal()
   }
   const handleNewAddress = (data: any, callback?: Function) => {
-    const name = parseFullName(data?.name)
     const values = {
       address1: data?.address1,
       address2: data?.address2,
+      address3: data?.address3,
       city: data?.city,
       state: data?.state,
-      firstName: name?.firstName,
-      lastName: name?.lastName ?? '',
+      firstName: data?.firstName,
+      lastName: data?.lastName || '',
       phoneNo: data?.mobileNumber,
-      postCode: data?.pinCode,
+      postCode: data?.postCode,
       label: matchStrings(data?.categoryName, 'Other', true)
         ? data?.otherAddressType
         : data?.categoryName,
@@ -346,10 +326,8 @@ export default function AddressBook({ deviceInfo }: any) {
     const newValues = {
       ...values,
       userId: user?.userId,
-      country:
-        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-      countryCode:
-        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      country: data?.country.split('&')[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: data?.country.split('&')[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
     }
     if (data?.id == 0) {
       lookupAddressId(newValues).then((addressId: number) => {
@@ -360,6 +338,8 @@ export default function AddressBook({ deviceInfo }: any) {
               // setUser(updatedUser);
               // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
               // });
+              console.log("values", newValues)
+              console.log("createAddress",createAddressResult)
               fetchAddress()
               const values = {
                 ...newValues,
@@ -556,6 +536,7 @@ export default function AddressBook({ deviceInfo }: any) {
           selectedAddress={selectedAddress}
           submitState={submitState}
           isOpen={isNewAddressModalOpen}
+          countries = {countries}
           onSubmit={(data: any) => {
             submitData(submitDispatch, AddressPageAction.SAVE)
             handleNewAddress(data, () => {

@@ -8,8 +8,6 @@ function renderRadioOptions(
   items: any,
   itemsCount: any,
   selectedValue: any,
-  openRemainElems: boolean = false,
-  handleToggleOpenRemainElems: any,
   sizeInit: any,
   setSizeInit: any
 ) {
@@ -33,25 +31,10 @@ function renderRadioOptions(
             'pdp-color-swatch-item relative z-1 h-10 w-10  border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-inset-1 hover:ring-1',
             {
               'ring-1 z-1': selectedValue === item.fieldValue,
-              hidden: !openRemainElems,
             }
           )}
         />
       ))}
-
-      {/* show less button */}
-      {openRemainElems && (
-        <button className="relative flex items-center justify-center h-10 px-1 bg-gray-300 z-1 hover:opacity-75 bg-nav" onClick={() => handleToggleOpenRemainElems()}>
-          <p className="text-gray-900 text-ms">{'<'}</p>
-        </button>
-      )}
-
-      {/* show more button */}
-      {remainingItems && remainingItems.length > 0 && !openRemainElems && (
-        <div className="relative flex items-center justify-center w-10 h-10 transition duration-100 bg-gray-300 outline-none cursor-pointer z-99 hover:opacity-75 bg-nav" onClick={() => handleToggleOpenRemainElems()}>
-          <p className="text-xs text-gray-900">More</p>
-        </div>
-      )}
     </div>
   )
 }
@@ -95,8 +78,6 @@ export default function InlineList({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
-  const [openRemainElems, setOpenRemainElems] = useState(false)
-  const handleToggleOpenRemainElems = () => setOpenRemainElems(!openRemainElems)
   return (
     <>
       <div className="flex flex-col justify-start gap-1 mt-2">
@@ -110,7 +91,7 @@ export default function InlineList({
       </div>
       <RadioGroup onChange={handleChange} className="mt-2">
         <div>
-          {renderRadioOptions(items, PDP_SIZE_OPTIONS_COUNT, currentAttribute, openRemainElems, handleToggleOpenRemainElems, sizeInit, setSizeInit)}
+          {renderRadioOptions(items, PDP_SIZE_OPTIONS_COUNT, currentAttribute,sizeInit, setSizeInit)}
         </div>
       </RadioGroup>
     </>

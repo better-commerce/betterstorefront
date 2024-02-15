@@ -20,11 +20,10 @@ export const NEW_ADDRESS_FORM_ID = 'newAddressForm'
 export const NEW_ADDRESS_FORM_FIELDS = [
   {
     type: 'text',
-    name: 'pinCode',
-    placeholder: 'Pincode',
-    label: 'Pincode',
-    className:
-      'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    name: 'postCode',
+    placeholder: 'Postcode',
+    label: 'Postcode',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: true,
     disabled: false,
@@ -41,8 +40,7 @@ export const NEW_ADDRESS_FORM_FIELDS = [
     name: 'city',
     placeholder: 'City',
     label: 'City',
-    className:
-      'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: true,
     disabled: false,
@@ -52,8 +50,7 @@ export const NEW_ADDRESS_FORM_FIELDS = [
     name: 'state',
     placeholder: 'State',
     label: 'State',
-    className:
-      'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: true,
     disabled: false,
@@ -61,10 +58,9 @@ export const NEW_ADDRESS_FORM_FIELDS = [
   {
     type: 'text',
     name: 'address1',
-    placeholder: 'House/ Flat/ Office Number',
-    label: 'House/ Flat/ Office Number',
-    className:
-      'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    placeholder: 'Address Line 1',
+    label: 'Address Line 1',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: true,
     disabled: false,
@@ -72,13 +68,31 @@ export const NEW_ADDRESS_FORM_FIELDS = [
   {
     type: 'text',
     name: 'address2',
-    placeholder: 'Road Name/ Area/ Colony',
-    label: 'Road Name/ Area/ Colony',
-    className:
-      'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    placeholder: 'Address Line 2',
+    label: 'Address Line 2',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: false,
     disabled: false,
+  },
+  {
+    type: 'text',
+    name: 'address3',
+    placeholder: 'Address Line 3',
+    label: 'Address Line 3',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    labelClassName: 'text-gray-700 text-sm dark:text-black',
+    required: false,
+    disabled: false,
+  },
+  {
+    type : 'select',
+    name : 'country',
+    label : 'Country',
+    labelClassName: 'text-gray-600 text-sm dark:text-black',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-gray-200 border border-gray-300 text-sm rounded-sm shadow-sm py-4 px-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    required : true,
+    disabled : false
   },
   {
     type: 'checkbox',
@@ -93,11 +107,20 @@ export const NEW_ADDRESS_FORM_FIELDS = [
   },
   {
     type: 'text',
-    name: 'name',
-    placeholder: 'Name',
-    label: 'Name',
-    className:
-      'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    name: 'firstName',
+    placeholder: 'First Name',
+    label: 'First Name',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    labelClassName: 'text-gray-700 text-sm dark:text-black',
+    required: true,
+    disabled: false,
+  },
+  {
+    type: 'text',
+    name: 'lastName',
+    placeholder: 'Last Name',
+    label: 'Last Name',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: true,
     disabled: false,
@@ -107,8 +130,7 @@ export const NEW_ADDRESS_FORM_FIELDS = [
     name: 'mobileNumber',
     placeholder: 'Mobile Number',
     label: 'Mobile Number',
-    className:
-      'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
+    className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
     labelClassName: 'text-gray-700 text-sm dark:text-black',
     required: true,
     disabled: false,
@@ -167,8 +189,8 @@ export const NEW_ADDRESS_FORM_FIELDS = [
 ]
 export const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
   id: Yup.number().notRequired(),
-  pinCode: Yup.string()
-    .required(Messages.Validations.AddNewAddress['PIN_CODE_REQUIRED'])
+  postCode: Yup.string()
+    .required(Messages.Validations.AddNewAddress['POST_CODE_REQUIRED'])
     .min(3),
   // .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
   //   message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
@@ -188,13 +210,24 @@ export const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
     .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
       message: Messages.Validations.AddNewAddress['ADDRESS_2_INPUT'],
     }),
+  address3: Yup.string().nullable()
+    .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
+      message: Messages.Validations.AddNewAddress['ADDRESS_3_INPUT'],
+  }),
+  country: Yup.string().required(Messages.Validations.AddNewAddress['COUNTRY_REQUIRED']),
   useAsDefault: Yup.boolean(),
-  name: Yup.string()
+  firstName: Yup.string()
     .min(3)
-    .required(Messages.Validations.AddNewAddress['NAME_REQUIRED'])
+    .required(Messages.Validations.AddNewAddress['FIRST_NAME_REQUIRED'])
     .matches(Messages.Validations.RegularExpressions.FULL_NAME, {
-      message: Messages.Validations.AddNewAddress['NAME_INPUT'],
-    }),
+      message: Messages.Validations.AddNewAddress['FIRST_NAME_INPUT'],
+  }),
+  lastName: Yup.string()
+    .min(3)
+    .required(Messages.Validations.AddNewAddress['LAST_NAME_REQUIRED'])
+    .matches(Messages.Validations.RegularExpressions.FULL_NAME, {
+      message: Messages.Validations.AddNewAddress['LAST_NAME_INPUT'],
+  }),
   mobileNumber: Yup.string()
     .max(10)
     .required(Messages.Validations.AddNewAddress['MOBILE_NUMBER_REQUIRED'])
@@ -219,13 +252,15 @@ export const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
 })
 export const DEFAULT_ADDRESS_VALUES = {
   id: 0,
-  pinCode: '',
+  postCode: '',
   city: '',
   state: '',
   address1: '',
   address2: '',
+  country: '',
   useAsDefault: false,
-  name: '',
+  firstName: '',
+  lastName: '',
   mobileNumber: '',
   categoryName: findByFieldName(NEW_ADDRESS_FORM_FIELDS, 'categoryName')
     ?.options?.length
@@ -239,6 +274,7 @@ export const DEFAULT_ADDRESS_VALUES = {
 interface INewAddressModalProps {
   readonly selectedAddress: any | undefined
   readonly submitState: ISubmitStateInterface
+  readonly countries: any
   readonly isOpen: boolean
   readonly btnTitle: string
   readonly isRegisterAsGuestUser: boolean
@@ -252,6 +288,7 @@ const NewAddressModal = (props: INewAddressModalProps) => {
     submitState,
     isOpen,
     onSubmit,
+    countries,
     onCloseModal = () => {},
     btnTitle,
     isRegisterAsGuestUser,
@@ -322,6 +359,7 @@ const NewAddressModal = (props: INewAddressModalProps) => {
                           isRegisterAsGuestUser={isRegisterAsGuestUser}
                           btnTitle={btnTitle}
                           submitState={submitState}
+                          countries={countries}
                           formId={NEW_ADDRESS_FORM_ID}
                           formFields={NEW_ADDRESS_FORM_FIELDS}
                           schema={NEW_ADDRESS_FORM_SCHEMA}
@@ -329,14 +367,18 @@ const NewAddressModal = (props: INewAddressModalProps) => {
                             selectedAddress && selectedAddress?.id
                               ? {
                                   id: selectedAddressId ?? selectedAddress?.id,
-                                  pinCode: selectedAddress?.postCode,
+                                  postCode: selectedAddress?.postCode,
                                   city: selectedAddress?.city,
                                   state: selectedAddress?.state,
+                                  countryCode: selectedAddress?.countryCode,
+                                  country : selectedAddress?.country,
                                   address1: selectedAddress?.address1,
                                   address2: selectedAddress?.address2,
-                                  useAsDefault:
-                                    selectedAddress?.isDefault ?? false,
+                                  address3: selectedAddress?.address3,
+                                  useAsDefault: selectedAddress?.isDefault ?? false,
                                   name: `${selectedAddress?.firstName} ${selectedAddress?.lastName}`.trim(),
+                                  firstName: selectedAddress?.firstName.trim(),
+                                  lastName: selectedAddress?.lastName.trim(),
                                   mobileNumber: selectedAddress?.phoneNo,
                                   categoryName: findByFieldName(
                                     NEW_ADDRESS_FORM_FIELDS,

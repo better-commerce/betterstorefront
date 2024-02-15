@@ -14,6 +14,7 @@ import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   NEXT_ADDRESS,
   AddressPageAction,
+  NEXT_GET_COUNTRIES,
 } from '@components/utils/constants'
 import {
   shippingFormConfig,
@@ -269,7 +270,7 @@ export default function CheckoutForm({
   // const [deliveryCheck, setDeliveryCheck] = useState(false)
   const { addToCart, associateCart } = cartHandler()
   const { state: submitState, dispatch: submitDispatch } = useDataSubmit()
-
+  const [countries, setCountries] = useState<any>(null)
   const { createAddress, updateAddress: updateAddressHandler } = asyncHandler()
 
   const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
@@ -327,16 +328,16 @@ export default function CheckoutForm({
   //   }).catch((error: any) => console.log(error));
   // }
   const handleNewAddress = (data: any, callback?: Function) => {
-    const name = parseFullName(data?.name)
     const values = {
       address1: data?.address1,
       address2: data?.address2,
+      address3: data?.address3,
       city: data?.city,
       state: data?.state,
-      firstName: name?.firstName,
-      lastName: name?.lastName ?? '',
+      firstName: data?.firstName,
+      lastName: data?.lastName ?? '',
       phoneNo: data?.mobileNumber,
-      postCode: data?.pinCode,
+      postCode: data?.postCode,
       label: matchStrings(data?.categoryName, 'Other', true)
         ? data?.otherAddressType
         : data?.categoryName,
@@ -349,10 +350,8 @@ export default function CheckoutForm({
     const newValues = {
       ...values,
       userId: getUserId(),
-      country:
-        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-      countryCode:
-        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      country: data?.country.split('&')[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: data?.country.split('&')[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
     }
     if (data?.id == 0) {
       lookupAddressId(newValues).then((addressId: number) => {
@@ -363,7 +362,6 @@ export default function CheckoutForm({
               // setUser(updatedUser);
               // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
               // });
-
               if (!createAddressResult?.id) {
                 throw new Error('Something went wrong!!')
               }
@@ -748,6 +746,23 @@ export default function CheckoutForm({
     }
   }, [state?.isPaymentInformationCompleted])
 
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
+        if (data?.result && data?.result?.length > 0) {
+          setCountries(data?.result)
+        } else {
+          setCountries([])
+        }
+      } catch (error) {
+        setCountries([])
+      }
+    }
+    fetchCountries()
+  }, [])
+
+
   const getPaymentOrderInfo = async (paymentMethod: any) => {
     dispatch({ type: 'SET_PAYMENT_METHOD', payload: paymentMethod })
 
@@ -880,6 +895,7 @@ export default function CheckoutForm({
               <NewAddressModal
                 selectedAddress={selectedAddress}
                 submitState={submitState}
+                countries={countries}
                 isOpen={isNewAddressModalOpen}
                 onSubmit={(data: any) => {
                   submitData(submitDispatch, AddressPageAction.SAVE)

@@ -12,7 +12,7 @@ import { retrieveAddress } from '@components/checkout/CheckoutForm'
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
 
-const DEFAULT_COUNTRY = 'United Kingdom'
+export const DEFAULT_COUNTRY = 'United Kingdom'
 
 const BillingAddressForm: React.FC<any> = ({
   editAddressValues,

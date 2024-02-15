@@ -21,6 +21,16 @@ const AddressFormField = ({ key, context, item, extraConfig }: any) => {
           extraConfig={extraConfig}
         />
       )}
+      
+      {matchStrings(item?.name, 'country', true) &&(
+        <div className="w-min-full py-4 pb-0 select">
+          <FormField
+            context={context}
+            item={item}
+            extraConfig={extraConfig}
+          />
+        </div>
+      )}
 
       {matchStrings(item?.name, 'useAsDefault', true) && (
         <div className="w-full py-4 pb-0 checkbox">
