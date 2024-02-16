@@ -1,35 +1,14 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { useUI } from '@components/ui/context'
-import {
-  NEXT_ADDRESS,
-  NEXT_EDIT_ADDRESS,
-  NEXT_CREATE_ADDRESS,
-  NEXT_DELETE_ADDRESS,
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  AddressPageAction,
-  NEXT_GET_COUNTRIES,
-  Messages,
-} from '@components/utils/constants'
+import { NEXT_ADDRESS, NEXT_EDIT_ADDRESS, NEXT_CREATE_ADDRESS, NEXT_DELETE_ADDRESS, BETTERCOMMERCE_DEFAULT_COUNTRY, AddressPageAction, NEXT_GET_COUNTRIES, Messages, } from '@components/utils/constants'
 import axios from 'axios'
 import AddressItem from './AddressItem'
 import Form from './AddressBookForm'
 import { LoadingDots } from '@components/ui'
-import {
-  DETAILS_SUCCESS,
-  DETAILS_ERROR,
-  ADDRESS_BOOK_TITLE,
-  DETAILS_SUBTITLE,
-  EMPTY_ADDRESS,
-  ADD_ADDRESS,
-} from '@components/utils/textVariables'
+import { DETAILS_SUCCESS, DETAILS_ERROR, ADDRESS_BOOK_TITLE, DETAILS_SUBTITLE, EMPTY_ADDRESS, ADD_ADDRESS, } from '@components/utils/textVariables'
 import { CustomerAddressModel } from 'models/customer'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import {
-  getCurrentPage,
-  resetSubmitData,
-  submitData,
-  parseFullName,
-} from '@framework/utils/app-util'
+import { getCurrentPage, resetSubmitData, submitData, parseFullName, } from '@framework/utils/app-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 // import useDevice from '@commerce/utils/use-device'
 import NewAddressModal from '@components/checkout/CheckoutForm/NewAddressModal'
