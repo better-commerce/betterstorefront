@@ -20,7 +20,7 @@ import { BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, Q
 import cartHandler from '@components/services/cart'
 import { cartItemsValidateAddToCart, getAlgoliaSearchCurrencyLabel, getAlgoliaSearchListPriceColumn, getAlgoliaSearchPriceColumn, resetAlgoliaSearch, vatIncluded } from '@framework/utils/app-util'
 import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_GET_PRODUCT_QUICK_VIEW } from '@components/utils/constants'
-import { deliveryDateFormat, roundToDecimalPlaces } from '@framework/utils/parse-util'
+import { deliveryDateFormat, matchStrings, roundToDecimalPlaces } from '@framework/utils/parse-util'
 import ProductTag from '@components/product/ProductTag'
 import { isMobile } from 'react-device-detect'
 
@@ -46,6 +46,18 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+          if (matchStrings(o.productId, hit?.objectID, true)) {
+            return o
+          }
+        })
+        if (hit?.webstock === cartLineItem?.qty && !hit?.fulfilFromSupplier) {
+          setAlert({
+            type: 'error',
+            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+          })
+          return false
+        }
         const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount)
         if (!isValid) {
           setAlert({

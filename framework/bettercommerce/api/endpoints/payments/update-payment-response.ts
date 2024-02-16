@@ -2,23 +2,18 @@
 import { v4 as uuid } from 'uuid'
 
 // Other Imports
-import { logPaymentRequest } from '@framework/utils/app-util'
+import { logError, logPaymentRequest } from '@framework/utils/app-util'
 import { LOG_REQUEST_OPTIONS } from '@components/utils/payment-constants'
 import {
   BCEnvironment,
   BetterCommerceOperation,
 } from '@better-commerce/bc-payments-sdk'
-import {
-  AUTH_URL,
-  BASE_URL,
-  CLIENT_ID,
-  SHARED_SECRET,
-} from '@framework/utils/constants'
-import { EmptyString } from '@components/utils/constants'
+import { AUTH_URL, BASE_URL, CLIENT_ID, SHARED_SECRET, } from '@framework/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString } from '@components/utils/constants'
 
 const logId = 'Payments | UpdatePaymentResponse'
 
-const UpdatePaymentResponseApiMiddleware = function () {
+const updatePaymentResponseApiMiddleware = function () {
   return async function useUpdatePaymentResponse({
     data,
     config,
@@ -34,6 +29,7 @@ const UpdatePaymentResponseApiMiddleware = function () {
       }
 
       logData['request'] = data
+      logData['requestId'] = objectId
       if (LOG_REQUEST_OPTIONS) {
         console.log(config)
         logData['requestOptions'] = config
@@ -51,11 +47,17 @@ const UpdatePaymentResponseApiMiddleware = function () {
       )
 
       BCEnvironment.init(CLIENT_ID!, SHARED_SECRET!, config, AUTH_URL, BASE_URL)
+      BCEnvironment.addExtras({
+        country: BETTERCOMMERCE_DEFAULT_COUNTRY,
+        currency: cookies?.Currency,
+        language: BETTERCOMMERCE_DEFAULT_LANGUAGE,
+      })
       const paymentResponseResult =
         await new BetterCommerceOperation().processPayment(params)
 
       logData = {}
       logData['response'] = paymentResponseResult
+      logData['requestId'] = objectId
       await logPaymentRequest(
         {
           //headers: {},
@@ -72,6 +74,7 @@ const UpdatePaymentResponseApiMiddleware = function () {
     } catch (error: any) {
       logData = {}
       logData['error'] = error
+      logData['requestId'] = objectId
       await logPaymentRequest(
         {
           //headers: {},
@@ -84,10 +87,10 @@ const UpdatePaymentResponseApiMiddleware = function () {
         `${logId} Error`
       )
 
-      //console.log(error);
+      logError(error)
       return { hasError: true, error: error?.response?.data }
     }
   }
 }
 
-export default UpdatePaymentResponseApiMiddleware
+export default updatePaymentResponseApiMiddleware

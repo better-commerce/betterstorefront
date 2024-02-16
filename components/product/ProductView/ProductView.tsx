@@ -15,66 +15,18 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation, Pagination, Zoom } from 'swiper'
 import { Dialog, Transition } from '@headlessui/react'
-import {
-  XMarkIcon,
-  PlusSmallIcon,
-  MinusSmallIcon,
-} from '@heroicons/react/24/outline'
-import {
-  Messages,
-  NEXT_CREATE_WISHLIST,
-  NEXT_BULK_ADD_TO_CART,
-  NEXT_UPDATE_CART_INFO,
-  NEXT_GET_PRODUCT,
-  NEXT_GET_PRODUCT_PREVIEW,
-  SITE_ORIGIN_URL,
-  NEXT_GET_ORDER_RELATED_PRODUCTS,
-  NEXT_COMPARE_ATTRIBUTE,
-  QuantityBreakRule,
-} from '@components/utils/constants'
+import { XMarkIcon, PlusSmallIcon, MinusSmallIcon, } from '@heroicons/react/24/outline'
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, SITE_ORIGIN_URL, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, QuantityBreakRule, } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  ALERT_SUCCESS_WISHLIST_MESSAGE,
-  BTN_ADD_TO_FAVORITES,
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  CLOSE_PANEL,
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_ENGRAVING,
-  GENERAL_PRICE_LABEL_RRP,
-  GENERAL_REFERENCE,
-  GENERAL_REVIEWS,
-  GENERAL_REVIEW_OUT_OF_FIVE,
-  IMG_PLACEHOLDER,
-  ITEM_TYPE_ADDON,
-  ITEM_TYPE_ADDON_10,
-  ITEM_TYPE_ALTERNATIVE,
-  PRICEMATCH_ADDITIONAL_DETAILS,
-  PRICEMATCH_BEST_PRICE,
-  PRICEMATCH_SEEN_IT_CHEAPER,
-  PRODUCT_AVAILABILITY,
-  PRODUCT_INFORMATION,
-  PRODUCT_IN_STOCK,
-  PRODUCT_OUT_OF_STOCK,
-  PRODUCT_PERSONALIZATION_TITLE,
-  SLUG_TYPE_MANUFACTURER,
-  YOUTUBE_VIDEO_PLAYER,
-} from '@components/utils/textVariables'
-import {
-  ELEM_ATTR,
-  PDP_ELEM_SELECTORS,
-} from '@framework/content/use-content-snippet'
+import { ALERT_SUCCESS_WISHLIST_MESSAGE, BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, GENERAL_PRICE_LABEL_RRP, GENERAL_REFERENCE, GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, PRICEMATCH_ADDITIONAL_DETAILS, PRICEMATCH_BEST_PRICE, PRICEMATCH_SEEN_IT_CHEAPER, PRODUCT_AVAILABILITY, PRODUCT_INFORMATION, PRODUCT_IN_STOCK, PRODUCT_OUT_OF_STOCK, PRODUCT_PERSONALIZATION_TITLE, SLUG_TYPE_MANUFACTURER, YOUTUBE_VIDEO_PLAYER, } from '@components/utils/textVariables'
+import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
 import { priceFormat, roundToDecimalPlaces, matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import {
-  getCurrentPage,
-  validateAddToCart,
-  vatIncluded,
-} from '@framework/utils/app-util'
+import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
@@ -84,6 +36,7 @@ import ImageGallery from 'react-image-gallery'
 import PDPCompare from '../PDPCompare'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { LocalStorage } from '@components/utils/payment-constants'
+import wishlistHandler from '@components/services/wishlist'
 
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -113,51 +66,17 @@ const PLACEMENTS_MAP: any = {
   },
 }
 
-export default function ProductView({
-  data = { images: [] },
-  snippets = [],
-  setEntities,
-  recordEvent,
-  slug,
-  isPreview = false,
-  relatedProductsProp,
-  promotions,
-  pdpLookbookProducts,
-  pdpCachedImages: cachedImages,
-  reviews,
-  deviceInfo,
-  config,
-  maxBasketItemsCount,
-  allProductsByCategory: allProductsByCategoryProp,
-}: any) {
+export default function ProductView({ data = { images: [] }, snippets = [], setEntities, recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpLookbookProducts, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
-  const {
-    openNotifyUser,
-    addToWishlist,
-    openWishlist,
-    basketId,
-    cartItems,
-    setAlert,
-    setCartItems,
-    user,
-    openCart,
-    openLoginSideBar,
-    isGuestUser,
-    setIsCompared,
-    removeFromWishlist,
-    currency,
-  } = useUI()
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
+  const {isInWishList,deleteWishlistItem} = wishlistHandler()
   const isIncludeVAT = vatIncluded()
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
-  const [isInWishList, setItemsInWishList] = useState(false)
   const [previewImg, setPreviewImg] = useState<any>()
   const [reviewInput, setReviewInput] = useState(false)
-  const [variantInfo, setVariantInfo] = useState<any>({
-    variantColour: '',
-    variantSize: '',
-  })
+  const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
   const [isLoading, setIsLoading] = useState(true)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
@@ -219,17 +138,12 @@ export default function ProductView({
     if (response?.data?.product) {
       fetchRelatedProducts(response?.data?.product?.recordId)
       const recentlyViewedProduct: any = response?.data?.product?.stockCode;
-
       let viewedProductsList = []
-      viewedProductsList = localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) ? JSON.parse(decrypt(
-        localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) || '[]'
-      )) : []
+      viewedProductsList = localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) ? JSON.parse(decrypt(localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) || '[]')) : []
       if (viewedProductsList?.length == 0) {
         viewedProductsList?.push(recentlyViewedProduct)
       } else {
-        const checkDuplicate: any = viewedProductsList?.some(
-          (val: any) => val === recentlyViewedProduct
-        )
+        const checkDuplicate: any = viewedProductsList?.some((val: any) => val === recentlyViewedProduct)
         if (!checkDuplicate) {
           viewedProductsList.push(recentlyViewedProduct)
         }
@@ -331,10 +245,8 @@ export default function ProductView({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
-        const cartLineItem: any = cartItems?.lineItems?.find(
-          (o: any) => o.productId === selectedAttrData?.productId?.toUpperCase()
-        )
-        if (selectedAttrData?.currentStock === cartLineItem?.qty) {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
+        if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier &&  !selectedAttrData?.flags?.sellWithoutInventory) {
           setAlert({
             type: 'error',
             msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
@@ -416,7 +328,6 @@ export default function ProductView({
                     item_var_id: items?.stockCode,
                   })
                 ),
-                // device: deviceCheck,
                 current_page: currentPage,
               },
             })
@@ -453,10 +364,7 @@ export default function ProductView({
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
           validateAction: async () => {
-            const cartLineItem: any = cartItems?.lineItems?.find(
-              (o: any) =>
-                o.productId === selectedAttrData?.productId?.toUpperCase()
-            )
+            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
               setAlert({
                 type: 'error',
@@ -502,15 +410,13 @@ export default function ProductView({
                     {
                       item_name: product?.name,
                       item_brand: product?.brand,
-                      item_category2:
-                        product?.mappedCategories[1]?.categoryName,
+                      item_category2: product?.mappedCategories[1]?.categoryName,
                       item_variant: product?.variantGroupCode,
                       quantity: 1,
                       item_id: product?.productCode,
                       price: product?.price?.raw?.withTax,
                       item_var_id: product?.stockCode,
-                      item_list_name:
-                        product?.mappedCategories[2]?.categoryName,
+                      item_list_name: product?.mappedCategories[2]?.categoryName,
                       index: 1,
                     },
                   ],
@@ -529,20 +435,15 @@ export default function ProductView({
                         item_id: items?.sku,
                         price: items?.price?.raw?.withTax,
                         item_brand: items?.brand,
-                        item_category2: items?.categoryItems?.length
-                          ? items?.categoryItems[1]?.categoryName
-                          : '',
+                        item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : '',
                         item_variant: items?.colorName,
-                        item_list_name: items?.categoryItems?.length
-                          ? items?.categoryItems[0]?.categoryName
-                          : '',
+                        item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : '',
                         item_list_id: '',
                         index: itemId,
                         quantity: items?.qty,
                         item_var_id: items?.stockCode,
                       })
                     ),
-                    // device: deviceCheck,
                     current_page: currentPage,
                   },
                 })
@@ -571,9 +472,7 @@ export default function ProductView({
         stockCode: selectedAttrData?.stockCode,
       },
     }
-    const addonProducts = relatedProducts?.relatedProducts?.filter(
-      (item: any) => item?.itemType === ITEM_TYPE_ADDON_10
-    )
+    const addonProducts = relatedProducts?.relatedProducts?.filter((item: any) => item?.itemType === ITEM_TYPE_ADDON_10)
     const addonProductsWithParentProduct = addonProducts?.map((item: any) => {
       item.parentProductId = updatedProduct?.recordId
       return item
@@ -644,10 +543,15 @@ export default function ProductView({
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
-    setItemsInWishList(true)
     openWishlist()
   }
   const handleWishList = () => {
+    if (isInWishList(product?.recordId)) {
+      deleteWishlistItem(user?.userId, product?.recordId)
+      removeFromWishlist(product?.recordId)
+      openWishlist()
+      return
+    }
     let productAvailability = 'Yes'
     if (product?.currentStock > 0) {
       productAvailability = 'Yes'
@@ -718,11 +622,7 @@ export default function ProductView({
       createWishlist()
     } else insertToLocalWishlist()
   }
-
-  const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter(
-    (item: any) => item.stockCode !== ITEM_TYPE_ADDON
-  )
-
+  const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode !== ITEM_TYPE_ADDON)
   const handleProductBundleUpdate = (bundledProduct: any) => {
     if (bundledProduct && bundledProduct?.id) {
       let clonedProduct = Object.assign({}, product)
@@ -732,16 +632,11 @@ export default function ProductView({
     }
   }
 
-  const breadcrumbs = product?.breadCrumbs?.filter(
-    (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
-  )
+  const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
   SwiperCore.use([Navigation])
   const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
-  const addonPrice = relatedProducts?.relatedProducts?.find(
-    (x: any) => x?.itemType == 10
-  )?.price?.formatted?.withTax
-
+  const addonPrice = relatedProducts?.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax
   const css = { maxWidth: '100%', height: 'auto' }
   const attrGroup = groupBy(product?.customAttributes, 'key')
 
@@ -797,27 +692,15 @@ export default function ProductView({
   const customRenderItem = (item: any) => {
     return (
       <div className="flex justify-center image-gallery-image">
-        <img
-          src={generateUri(item?.original, "h=2000&fm=webp") || IMG_PLACEHOLDER}
-          alt={product?.name}
-          height={1000}
-          width={1000}
-          className="!object-contain"
-        />
+        <img src={generateUri(item?.original, "h=2000&fm=webp") || IMG_PLACEHOLDER} alt={product?.name} height={1000} width={1000} className="!object-contain" />
       </div>
     );
   };
   const customRenderThumbInner = (item: any) => {
     return (
-      <img
-        src={generateUri(item?.thumbnail, "h=100&fm=webp") || IMG_PLACEHOLDER}
-        alt={product?.name || 'product'}
-        height={100}
-        width={100}
-      />
+      <img src={generateUri(item?.thumbnail, "h=150&fm=webp") || IMG_PLACEHOLDER} alt={product?.name || 'product'} height={150} width={100} />
     );
   };
-
 
   return (
     <>
@@ -838,7 +721,7 @@ export default function ProductView({
                       <img src={generateUri(image?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} alt={product?.name || 'slider-image'} className="object-cover object-center w-full h-full image" sizes="320 600 1000" width={600} height={1000} />
                     </div>
                   ) : (
-                    <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
+                    <img src={IMG_PLACEHOLDER} alt={product?.name || 'slider-image'} className="object-cover object-center w-full h-full image" sizes="320 600 1000" width={600} height={1000} />
                   )}
                 </SwiperSlide>
               ))}
@@ -889,9 +772,7 @@ export default function ProductView({
                   {selectedAttrData?.listPrice?.raw.tax > 0 ? (
                     <>
                       <span className="px-2 text-sm font-medium text-gray-900 line-through"> {isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax} </span>
-                      <span className="text-sm font-medium text-red-500">
-                        {discount}% off
-                      </span>
+                      <span className="text-sm font-medium text-red-500"> {discount}% off </span>
                     </>
                   ) : null}
                 </p>
@@ -921,8 +802,8 @@ export default function ProductView({
                     </div>
                     <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                       <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
-                      <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink btn hover:border-pink" >
-                        {isInWishList ? (
+                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink btn hover:border-pink" >
+                        {isInWishList(product?.recordId) ? (
                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                         ) : (
                           <HeartIcon className="flex-shrink-0 w-6 h-6" />
@@ -934,8 +815,8 @@ export default function ProductView({
                 ) : (
                   <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                     <Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
-                    <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn" >
-                      {isInWishList ? (
+                    <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn" >
+                      {isInWishList(product?.recordId) ? (
                         <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                       ) : (
                         <HeartIcon className="flex-shrink-0 w-6 h-6" />

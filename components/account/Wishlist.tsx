@@ -160,7 +160,7 @@ export default function Wishlist() {
                                       alt={product.name || 'image'}
                                       width={400}
                                       height={600}
-                                      className="object-cover object-center w-full h-full radius-xs sm:h-full"
+                                      className="object-cover object-center w-full h-full radius-xs sm:h-full wishlist-img-height"
                                     />
                                   </>
                                 ) : (
@@ -170,7 +170,7 @@ export default function Wishlist() {
                                       alt={product.name || 'image'}
                                       width={400}
                                       height={600}
-                                      className="object-cover object-center w-full h-full radius-xs sm:h-full"
+                                      className="object-cover object-center w-full h-full radius-xs sm:h-full wishlist-img-height"
                                     ></img>
                                   </>
                                 )}
@@ -178,7 +178,7 @@ export default function Wishlist() {
                               <span className="sr-only">{product.name}</span>
                             </div>
                           </Link>
-                          <div className="pt-0">
+                          <div className="pt-0 min-h-40 relative">
                             <div className="grid grid-cols-12 px-2 mt-2 sm:grid-cols-12 sm:gap-x-2">
                               <div className="flex items-center col-span-12 sm:col-span-12">
                                 <h3 className="text-xs truncate max-width-250 text-brown-light text-10">
@@ -210,7 +210,7 @@ export default function Wishlist() {
                               {product?.currentStock > 0 ? (
                                 <button
                                   onClick={() => handleAddToCart(product)}
-                                  className="flex items-center justify-center w-full border btn btn-primary"
+                                  className="flex items-center justify-center w-full border btn btn-primary absolute bottom-0"
                                 >
                                   <span className="mr-2">
                                     <i className="sprite-icon sprite-cart"></i>
@@ -218,7 +218,7 @@ export default function Wishlist() {
                                   {GENERAL_ADD_TO_BASKET}
                                 </button>
                               ) : (
-                                <button className="flex items-center justify-center w-full px-3 py-4 text-xs font-semibold text-black bg-gray-200 border">
+                                <button className="flex items-center justify-center w-full btn border absolute bottom-0 bg-gray-200">
                                   Out Of Stock
                                 </button>
                               )}

@@ -155,6 +155,12 @@ export const convertOrder = async (data: any) => {
     : tryParseJson(orderDetailResult)
 }
 
+/**
+ * Specific to {ClearPay}, {Klarna} & {Stripe}, initiates a payment request.
+ * @param gatewayName 
+ * @param data 
+ * @returns 
+ */
 export const initPayment = async (gatewayName: string, data: any) => {
   const gid = getGatewayId(gatewayName)
   const { data: orderDetailResult } = await axios.post(
@@ -171,6 +177,12 @@ export const initPayment = async (gatewayName: string, data: any) => {
     : tryParseJson(orderDetailResult)
 }
 
+/**
+ * Specific to {Checkout} & {ClearPay}, requests a payment.
+ * @param gatewayName 
+ * @param data 
+ * @returns 
+ */
 export const requestPayment = async (gatewayName: string, data: any) => {
   const gid = getGatewayId(gatewayName)
   const { data: orderDetailResult } = await axios.post(
@@ -187,6 +199,12 @@ export const requestPayment = async (gatewayName: string, data: any) => {
     : tryParseJson(orderDetailResult)
 }
 
+/**
+ * Specific to {Klarna}, creates a one time payment order.
+ * @param gatewayName 
+ * @param data 
+ * @returns 
+ */
 export const createOneTimePaymentOrder = async (
   gatewayName: string,
   data: any
@@ -206,6 +224,50 @@ export const createOneTimePaymentOrder = async (
     : tryParseJson(orderDetailResult)
 }
 
+/**
+ * Specific to {ApplePay}, validates the payment session.
+ * @param gatewayName 
+ * @param data 
+ * @returns 
+ */
+export const validatePaymentSession = async (
+  gatewayName: string,
+  data: any
+) => {
+  const gid = getGatewayId(gatewayName)
+  const { data: orderDetailResult } = await axios.post(
+    PAYMENTS_API, // Endpoint url
+    ENABLE_SECURED_PAYMENT_PAYLOAD
+      ? encrypt(JSON.stringify(data))
+      : JSON.stringify(data), // Data
+    {
+      params: { ...Payments.RequestParams.VALIDATE_PAYMENT_SESSION, gid },
+    }
+  ) // Params
+  return ENABLE_SECURED_PAYMENT_PAYLOAD
+    ? decipherPayload(orderDetailResult)
+    : tryParseJson(orderDetailResult)
+}
+
+export const requestToken = async (
+  gatewayName: string,
+  data: any
+) => {
+  const gid = getGatewayId(gatewayName)
+  const { data: orderDetailResult } = await axios.post(
+    PAYMENTS_API, // Endpoint url
+    ENABLE_SECURED_PAYMENT_PAYLOAD
+      ? encrypt(JSON.stringify(data))
+      : JSON.stringify(data), // Data
+    {
+      params: { ...Payments.RequestParams.REQUEST_TOKEN, gid },
+    }
+  ) // Params
+  return ENABLE_SECURED_PAYMENT_PAYLOAD
+    ? decipherPayload(orderDetailResult)
+    : tryParseJson(orderDetailResult)
+}
+
 export const processPaymentResponse = async (
   gatewayName: string,
   data: any
@@ -218,6 +280,25 @@ export const processPaymentResponse = async (
       : JSON.stringify(data), // Data
     {
       params: { ...Payments.RequestParams.PROCESS_PAYMENT_RESPONSE, gid },
+    }
+  ) // Params
+  return ENABLE_SECURED_PAYMENT_PAYLOAD
+    ? decipherPayload(paymentResponseResult)
+    : tryParseJson(paymentResponseResult)
+}
+
+export const processPaymentWebHook = async (
+  gatewayName: string,
+  data: any
+) => {
+  const gid = getGatewayId(gatewayName)
+  const { data: paymentResponseResult } = await axios.post(
+    PAYMENTS_API, // Endpoint url
+    ENABLE_SECURED_PAYMENT_PAYLOAD
+      ? encrypt(JSON.stringify(data))
+      : JSON.stringify(data), // Data
+    {
+      params: { ...Payments.RequestParams.PROCESS_PAYMENT_WEBHOOK, gid },
     }
   ) // Params
   return ENABLE_SECURED_PAYMENT_PAYLOAD

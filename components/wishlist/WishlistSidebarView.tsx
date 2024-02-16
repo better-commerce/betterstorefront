@@ -32,6 +32,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     basketId,
     setCartItems,
     removeFromWishlist,
+    openCart,
   } = useUI()
   const isIncludeVAT = vatIncluded()
   const { getWishlist, deleteWishlistItem } = useWishlist()
@@ -112,6 +113,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
         setCartItems(response)
         setItemInCart(true)
         deleteItemFromWishlist(product)
+        openCart()
         setTimeout(() => {
           setItemInCart(false)
         }, 3000)

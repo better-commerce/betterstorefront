@@ -12,7 +12,7 @@ import RelatedProducts from '@components/product/RelatedProducts'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, } from '@components/utils/constants'
-import useTranslation, { CLOSE_PANEL, GENERAL_SHOPPING_CART, GENERAL_TOTAL_SAVINGS, WISHLIST_SIDEBAR_MESSAGE, GENERAL_CATALOG, GENERAL_REMOVE, GENERAL_DELETE, SUBTOTAL_INCLUDING_TAX, GENERAL_SHIPPING, GENERAL_DISCOUNT, GENERAL_TOTAL, GENERAL_CHECKOUT, GENERAL_CONTINUE_SHOPPING, GENERAL_OR_TEXT, IMG_PLACEHOLDER, BTN_MOVE_TO_WISHLIST, ADDED_TO_WISH, GENERAL_PERSONALISATION, PERSONALISATION, BTN_ADD_TO_WISHLIST, WISHLIST_SUCCESS_MESSAGE, GENERAL_TAX, SUBTOTAL_EXCLUDING_TAX, ITEM_WISHLISTED, } from '@components/utils/textVariables'
+import useTranslation, { CLOSE_PANEL, GENERAL_SHOPPING_CART, GENERAL_TOTAL_SAVINGS, WISHLIST_SIDEBAR_MESSAGE, GENERAL_CATALOG, GENERAL_REMOVE, GENERAL_DELETE, SUBTOTAL_INCLUDING_TAX, GENERAL_SHIPPING, GENERAL_DISCOUNT, GENERAL_TOTAL, GENERAL_CHECKOUT, GENERAL_CONTINUE_SHOPPING, GENERAL_OR_TEXT, IMG_PLACEHOLDER, BTN_MOVE_TO_WISHLIST, ADDED_TO_WISH, GENERAL_PERSONALISATION, PERSONALISATION, BTN_ADD_TO_WISHLIST, WISHLIST_SUCCESS_MESSAGE, GENERAL_TAX, SUBTOTAL_EXCLUDING_TAX, ITEM_WISHLISTED} from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { getCurrentPage, vatIncluded, } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
@@ -23,9 +23,11 @@ import { IExtraProps } from '@components/common/Layout/Layout'
 import { Guid } from '@commerce/types'
 import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 import RecentlyViewedProduct from '@components/product/RelatedProducts/RecentlyViewedProducts'
+import wishlistHandler from '@components/services/wishlist'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist,wishListItems, displayAlert, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
+  const {isInWishList} = wishlistHandler()
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
@@ -84,11 +86,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     })
     setBasketPromos(basketPromos)
     return basketPromos
-  }
-
-  const isInWishList = (productId: string) => {
-    if (!wishListItems) return false
-    return wishListItems.some((x: any) => x.recordId === productId.toLocaleLowerCase())
   }
 
   const getJusPayPromos = async (cartItems: any) => {
@@ -316,8 +313,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     }
     const createWishlist = async () => {
       try {
-
-      
           await axios.post(NEXT_CREATE_WISHLIST, {
             id: user?.userId,
             productId: (product?.productId).toLowerCase(),

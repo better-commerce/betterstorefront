@@ -15,6 +15,9 @@ import { EmptyString, Messages } from '@components/utils/constants'
 import getStripe from '@components/utils/get-stripe'
 import { initPayment } from '@framework/utils/payment-util'
 import { GENERAL_PAY } from '@components/utils/textVariables'
+import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
+import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 export class StripePaymentButton extends BasePaymentButton {
   /**
@@ -56,6 +59,7 @@ export class StripePaymentButton extends BasePaymentButton {
       dispatchState
     )
     if (orderResult?.success && orderResult?.result?.id) {
+      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.STRIPE)
       const {
         id: orderId,
         orderNo,
