@@ -350,8 +350,8 @@ export default function CheckoutForm({
     const newValues = {
       ...values,
       userId: getUserId(),
-      country: data?.country?.split('&')[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
-      countryCode: data?.country?.split('&')[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      country: data?.country?.split('&')?.[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: data?.country?.split('&')?.[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
     }
     if (data?.id == 0) {
       lookupAddressId(newValues).then((addressId: number) => {
