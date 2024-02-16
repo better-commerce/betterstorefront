@@ -8,6 +8,7 @@ import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   AddressPageAction,
   NEXT_GET_COUNTRIES,
+  Messages,
 } from '@components/utils/constants'
 import axios from 'axios'
 import AddressItem from './AddressItem'
@@ -35,6 +36,7 @@ import NewAddressModal from '@components/checkout/CheckoutForm/NewAddressModal'
 import { matchStrings } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import { Guid } from '@commerce/types'
+import { AlertType } from '@framework/utils/enums'
 
 export function asyncHandler() {
   function getAddress() {
@@ -79,7 +81,7 @@ export default function AddressBook({ deviceInfo }: any) {
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
 
-  const { user, isGuestUser, cartItems, setAddressId } = useUI()
+  const { user, isGuestUser, cartItems, setAddressId ,setAlert } = useUI()
   const [selectedAddress, setSelectedAddress] = useState()
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
@@ -374,8 +376,8 @@ export default function AddressBook({ deviceInfo }: any) {
               // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
-              // setAlert({type:'error',msg:NETWORK_ERR})
-              console.log(error)
+              setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+              closeNewAddressModal()
             })
         } else {
           // Duplicate address exists
@@ -400,7 +402,8 @@ export default function AddressBook({ deviceInfo }: any) {
           // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
         .catch((error: any) => {
-          console.log(error)
+          setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+          closeNewAddressModal()
         })
     }
   }

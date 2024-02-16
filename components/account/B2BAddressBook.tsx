@@ -7,6 +7,7 @@ import {
   NEXT_DELETE_ADDRESS,
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   AddressPageAction,
+  Messages,
 } from '@components/utils/constants'
 import axios from 'axios'
 import AddressItem from '@components/account/Address/AddressItem'
@@ -34,7 +35,7 @@ import NewAddressModal from '@components/checkout/CheckoutForm/NewAddressModal'
 import { matchStrings } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import Spinner from '@components/ui/Spinner'
-
+import { AlertType } from '@framework/utils/enums'
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -78,7 +79,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
 
-  const { user, isGuestUser, cartItems, setAddressId } = useUI()
+  const { user, isGuestUser, cartItems, setAddressId , setAlert } = useUI()
   const [selectedAddress, setSelectedAddress] = useState()
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
@@ -355,8 +356,8 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
               // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
-              // setAlert({type:'error',msg:NETWORK_ERR})
-              console.log(error)
+              setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+              closeNewAddressModal()
             })
         } else {
           // Duplicate address exists
@@ -381,7 +382,8 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
           // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
         .catch((error: any) => {
-          console.log(error)
+          setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+          closeNewAddressModal()
         })
     }
   }

@@ -45,6 +45,7 @@ export const ERROR_LOG_OUTPUT_DIR = process.env.ERROR_LOG_OUTPUT_DIR
 
 export const HTTP_MESSAGES = {
   SERVER_ERROR: 'Internal server error',
+  INVALID_USER_ID: 'User ID was not provided',
 }
 export const PRODUCT_IMAGE_CDN_URL = process.env.PRODUCT_IMAGE_CDN_URL
 export const OMNILYTICS_DISABLED = stringToBoolean(
