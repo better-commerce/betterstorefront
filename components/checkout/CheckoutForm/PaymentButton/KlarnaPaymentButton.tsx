@@ -89,7 +89,6 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
-    const { contactDetails } = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: 'Please wait...', })
     const gatewayName = this.state.paymentMethod?.systemName
     const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
@@ -113,8 +112,8 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         product_url: x?.product_url,
       })),
       billing_address: {
-        given_name: contactDetails?.firstName || basketOrderInfo?.billingAddress?.firstName,
-        family_name: contactDetails?.lastName || basketOrderInfo?.billingAddress?.lastName,
+        given_name: basketOrderInfo?.billingAddress?.firstName || EmptyString,
+        family_name: basketOrderInfo?.billingAddress?.lastName || EmptyString,
         email: basketOrderInfo?.user?.email || basketOrderInfo?.user?.userEmail || EmptyString,
         title: basketOrderInfo?.billingAddress?.title,
         street_address: basketOrderInfo?.billingAddress?.address1,
@@ -130,8 +129,8 @@ export class KlarnaPaymentButton extends BasePaymentButton {
           BETTERCOMMERCE_DEFAULT_COUNTRY,
       },
       shipping_address: {
-        given_name: contactDetails?.firstName || basketOrderInfo?.shippingAddress?.firstName,
-        family_name: contactDetails?.lastName || basketOrderInfo?.shippingAddress?.lastName,
+        given_name: basketOrderInfo?.shippingAddress?.firstName || EmptyString,
+        family_name: basketOrderInfo?.shippingAddress?.lastName || EmptyString,
         email: basketOrderInfo?.user?.email || basketOrderInfo?.user?.userEmail || EmptyString,
         title: basketOrderInfo?.shippingAddress?.title,
         street_address: basketOrderInfo?.shippingAddress?.address1,
@@ -165,8 +164,8 @@ export class KlarnaPaymentButton extends BasePaymentButton {
           const createOrderInput = {
             ...rest,
             billing_address: {
-              given_name: contactDetails?.firstName || basketOrderInfo?.billingAddress?.firstName,
-              family_name: contactDetails?.lastName || basketOrderInfo?.billingAddress?.lastName,
+              given_name: basketOrderInfo?.billingAddress?.firstName || EmptyString,
+              family_name: basketOrderInfo?.billingAddress?.lastName || EmptyString,
               email: basketOrderInfo?.user?.email || basketOrderInfo?.user?.userEmail || EmptyString,
               title: basketOrderInfo?.billingAddress?.title,
               street_address: basketOrderInfo?.billingAddress?.address1,
@@ -182,8 +181,8 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                 BETTERCOMMERCE_DEFAULT_COUNTRY,
             },
             shipping_address: {
-              given_name: contactDetails?.firstName || basketOrderInfo?.shippingAddress?.firstName,
-              family_name: contactDetails?.lastName || basketOrderInfo?.shippingAddress?.lastName,
+              given_name: basketOrderInfo?.shippingAddress?.firstName || EmptyString,
+              family_name: basketOrderInfo?.shippingAddress?.lastName || EmptyString,
               email: basketOrderInfo?.user?.email || basketOrderInfo?.user?.userEmail || EmptyString,
               title: basketOrderInfo?.shippingAddress?.title,
               street_address: basketOrderInfo?.shippingAddress?.address1,

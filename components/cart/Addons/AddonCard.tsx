@@ -34,7 +34,7 @@ import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, validateAddToCart, cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import { stringFormat, stringToBoolean } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import cn from 'classnames'
 import classNames from 'classnames'
 import ButtonNotifyMe from '@components/product/ButtonNotifyMe'
@@ -257,6 +257,18 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+          if (matchStrings(o.productId, product?.recordId, true) || matchStrings(o.productId, product?.productId, true)) {
+            return o
+          }
+        })
+        if (product?.currentStock === cartLineItem?.qty && !product?.fulfilFromSupplier && !product?.flags?.sellWithoutInventory) {
+          setAlert({
+            type: 'error',
+            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+          })
+          return false
+        }
         const isValid = cartItemsValidateAddToCart(
           // product?.recordId ?? product?.productId,
           cartItems,

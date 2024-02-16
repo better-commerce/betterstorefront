@@ -148,7 +148,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
    * @returns
    */
   private getOrderInputPayload() {
-    const { basketOrderInfo, uiContext, contactDetails } = this.props
+    const { basketOrderInfo, uiContext } = this.props
 
     const shippingMethodId = uiContext?.cartItems?.shippingMethodId
     const shippingCountry = uiContext?.cartItems?.shippingMethods?.find((x: any) => x?.id === shippingMethodId)?.countryCode || EmptyString
@@ -199,7 +199,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
           },
         ],
         consumer: {
-          givenNames: contactDetails?.firstName || billingAddress?.firstName || EmptyString,
+          givenNames: billingAddress?.firstName || EmptyString,
           surname: billingAddress?.lastName ?? EmptyString,
           email: uiContext?.user?.email,
           phoneNumber: uiContext?.user?.mobile || billingAddress?.phoneNo,
@@ -210,7 +210,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
           countryCode: billingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
           line1: billingAddress?.address1,
           line2: billingAddress?.address2,
-          name: `${contactDetails?.firstName || billingAddress?.firstName || EmptyString} ${contactDetails?.lastName || billingAddress?.lastName || EmptyString
+          name: `${billingAddress?.firstName || EmptyString} ${billingAddress?.lastName || EmptyString
             }`.trim(),
           phoneNumber: billingAddress?.phoneNo,
           postcode: billingAddress?.postCode,
@@ -226,7 +226,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
             BETTERCOMMERCE_DEFAULT_COUNTRY,
           line1: shippingAddress?.address1,
           line2: shippingAddress?.address2,
-          name: `${contactDetails?.firstName || shippingAddress?.firstName || EmptyString} ${contactDetails?.lastName || shippingAddress?.lastName || EmptyString
+          name: `${shippingAddress?.firstName || EmptyString} ${shippingAddress?.lastName || EmptyString
             }`.trim(),
           phoneNumber: shippingAddress?.phoneNo,
           postcode: shippingAddress?.postCode,

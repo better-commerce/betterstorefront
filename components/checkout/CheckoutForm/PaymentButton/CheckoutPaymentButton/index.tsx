@@ -139,7 +139,6 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     dispatchState: Function
   ) {
     let that = this
-    const { contactDetails } = this.props
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
     const redirectConfirmUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
