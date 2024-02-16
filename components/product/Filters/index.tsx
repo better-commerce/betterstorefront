@@ -20,6 +20,7 @@ interface Props {
   routerFilters: any
   clearAll: any
   routerSortOption: any
+  removeFilter: any
 }
 
 export default function Filters({
@@ -29,6 +30,7 @@ export default function Filters({
   routerFilters,
   clearAll,
   routerSortOption,
+  removeFilter,
 }: Props) {
   const [open, setOpen] = useState(false)
 
@@ -173,20 +175,21 @@ export default function Filters({
               </button>
             </div>
           </div>
-          <div className="grid flex-col grid-cols-1 px-4 py-2 border-t border-gray-100 my-2">
-            <div className="grid grid-cols-2">
+          <div className="flex flex-wrap px-4 py-2 border-t border-gray-100 my-2">
+            <div className="flex flex-wrap">
               {appliedFilters.map((appliedFilter: any, idx: number) => (
                 <div
                   key={`applied-filter-${idx}`}
-                  className="flex-1 text-xs text-left text-gray-600 justify-left items-left"
+                  className="flex py-1 px-2 m-1 w-auto text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl"
                 >
                   {appliedFilter.name ? (
-                    <>
+                    <div className="flex">
                       <span className="font-medium">
                         {appliedFilter.name}:{' '}
                       </span>
-                      <span className="ml-1">{appliedFilter.Value}</span>
-                    </>
+                      <span>{appliedFilter.Value}</span>
+                      <XMarkIcon onClick={ () => removeFilter(appliedFilter)} className='flex w-4 h-4 my-auto ml-1 cursor-pointer md:h-3 md:w-3 2xl:h-4 2xl:w-4'/>
+                    </div>
                   ) : null}
                 </div>
               ))}

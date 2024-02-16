@@ -178,12 +178,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
-      return {
-        ...state,
-        filters: state.filters.filter(
-          (item: any) => item.Value !== payload.Value
-        ),
-      }
+      return { ...state, filters: state.filters.filter( (item: any) => item.Value !== payload.Value ), }
     default:
       return { ...state }
   }
@@ -346,6 +341,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
       payload: payload,
     })
   }
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
+  }
   const clearAll = () => dispatch({ type: CLEAR })
 
   // IMPLEMENT HANDLING FOR NULL OBJECT
@@ -483,6 +481,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                         handleSortBy={handleSortBy}
                         clearAll={clearAll}
                         routerSortOption={state.sortBy}
+                        removeFilter={removeFilter}
                       />
                     ) : (
                     <>
@@ -508,6 +507,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                           routerFilters={state.filters}
                           clearAll={clearAll}
                           routerSortOption={state.sortBy}
+                          removeFilter={removeFilter}
                         />
                       )}
                       <ProductGridWithFacet
@@ -532,6 +532,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                       routerFilters={state.filters}
                       clearAll={clearAll}
                       routerSortOption={state.sortBy}
+                      removeFilter={removeFilter}
                     />
                     <ProductGrid
                       products={productDataToPass}

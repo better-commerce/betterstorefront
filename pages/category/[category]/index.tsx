@@ -385,6 +385,10 @@ function CategoryLandingPage({
     )
   }
 
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
+  }
+
   /*const productDataToPass =
     IS_INFINITE_SCROLL && productListMemory.products?.results?.length
       ? productListMemory.products
@@ -857,6 +861,7 @@ function CategoryLandingPage({
                             handleSortBy={handleSortBy}
                             clearAll={clearAll}
                             routerSortOption={state.sortBy}
+                            removeFilter={removeFilter}
                           />
                         ) : (
                           <>
@@ -888,6 +893,7 @@ function CategoryLandingPage({
                                 routerFilters={state.filters}
                                 clearAll={clearAll}
                                 routerSortOption={state.sortBy}
+                                removeFilter={removeFilter}
                               />
                             </>  
                           )}
@@ -916,6 +922,7 @@ function CategoryLandingPage({
                           routerFilters={state.filters}
                           clearAll={clearAll}
                           routerSortOption={state.sortBy}
+                          removeFilter={removeFilter}
                         />
                         <ProductGrid
                           products={productDataToPass}

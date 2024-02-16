@@ -275,6 +275,10 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.filters])
 
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
+  }
+
   const handleFilters = (filter: null, type: string) => {
     dispatch({
       type,
@@ -364,7 +368,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         </div>
         <div className={`sm:grid-cols-3 lg:grid-cols-12 md:grid-cols-4 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:px-0 lg:px-0`}>
           {isMobile ? (
-            <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
+            <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
           ) : (
             <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
           )}
@@ -372,7 +376,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           <div className="flex justify-end w-full col-span-12">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
-            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
+            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
             <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           </div>
           <CompareSelectionBar name={GENERAL_CATALOG} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
