@@ -167,6 +167,9 @@ export const NEXT_REFERRAL_INFO = '/api/customer/referral/referral-info'
 export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral/referral-vouchers'
 export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
 export const NEXT_COMPARE_ATTRIBUTE = '/api/compare-attributes'
+export const NEXT_LOG_ACTIVITY = '/api/log/activity'
+export const NEXT_LOG_PAYMENT = '/api/log/payment'
+
 //CONSTANTS
 
 export const YOUTUBE_VIDEO_EMBED_PREFIX_URL =

@@ -22,24 +22,13 @@ import { HOME_PAGE_DEFAULT_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } 
 import { useRouter } from 'next/router'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
-
-const PromotionBanner = dynamic(
-  () => import('@components/home/PromotionBanner')
-)
+const PromotionBanner = dynamic(() => import('@components/home/PromotionBanner'))
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
-const RefferalCard = dynamic(
-  () => import('@components/customer/Referral/ReferralCard')
-)
-
-export async function getStaticProps({
-  preview,
-  locale,
-  locales,
-}: GetStaticPropsContext) {
+export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
@@ -76,45 +65,33 @@ export async function getStaticProps({
       )
     })
 
-  infra?.currencies
-    ?.map((x: any) => x?.currencyCode)
-    ?.forEach((currencyCode: string, index: number) => {
-      promises.push(
-        new Promise(async (resolve: any, reject: any) => {
-          try {
-            const pageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
-              {
-                id: '',
-                slug: HOME_PAGE_DEFAULT_SLUG,
-                workingVersion:
-                  process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                channel: 'MobileWeb',
-                currency: currencyCode,
-                cachedCopy: true,
-              }
-            )
-            const pageContentMobileWeb = await pageContentsPromiseMobileWeb
-            pageContentsMobileWeb.push({
-              key: currencyCode,
-              value: pageContentMobileWeb,
-            })
-            resolve()
-          } catch (error: any) {
-            resolve()
-          }
-        })
-      )
-    })
-
+  infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
+    promises.push(
+      new Promise(async (resolve: any, reject: any) => {
+        try {
+          const pageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
+            {
+              id: '',
+              slug: HOME_PAGE_DEFAULT_SLUG,
+              workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+              channel: 'MobileWeb',
+              currency: currencyCode,
+              cachedCopy: true,
+            }
+          )
+          const pageContentMobileWeb = await pageContentsPromiseMobileWeb
+          pageContentsMobileWeb.push({ key: currencyCode, value: pageContentMobileWeb, })
+          resolve()
+        } catch (error: any) {
+          resolve()
+        }
+      })
+    )
+  })
   await Promise.all(promises)
-
   const hostName = os.hostname()
-
   return {
     props: {
-      // categories,
-      // brands,
-      // pages,
       globalSnippets: infra?.snippets ?? [],
       pageContentsWeb: pageContentsWeb ?? [],
       pageContentsMobileWeb: pageContentsMobileWeb ?? [],
@@ -126,23 +103,12 @@ export async function getStaticProps({
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({
-  setEntities,
-  recordEvent,
-  ipAddress,
-  pageContentsWeb,
-  pageContentsMobileWeb,
-  hostName,
-  deviceInfo,
-}: any) {
+function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, }: any) {
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const currencyCode = getCurrency()
-  const homePageContents = isMobile
-    ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value ||
-      []
-    : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
+  const homePageContents = isMobile ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || [] : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(homePageContents)
 
   useEffect(() => {
@@ -185,27 +151,16 @@ function Home({
 
   if (!pageContents) {
     return (
-      <div className="flex w-full text-center flex-con">
-        <Loader />
-      </div>
+      <div className="flex w-full text-center flex-con"> <Loader /> </div>
     )
   }
 
   return (
     <>
-      {(pageContents?.metatitle ||
-        pageContents?.metadescription ||
-        pageContents?.metakeywords) && (
+      {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
         <NextHead>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=5"
-          />
-          <link
-            rel="canonical"
-            id="canonical"
-            href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
-          />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+          <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
           <title>{pageContents?.metatitle || 'Home'}</title>
           <meta name="title" content={pageContents?.metatitle || 'Home'} />
           {pageContents?.metadescription && (
@@ -216,18 +171,10 @@ function Home({
           )}
           <meta property="og:image" content={pageContents?.image} />
           {pageContents?.metatitle && (
-            <meta
-              property="og:title"
-              content={pageContents?.metatitle}
-              key="ogtitle"
-            />
+            <meta property="og:title" content={pageContents?.metatitle} key="ogtitle" />
           )}
           {pageContents?.metadescription && (
-            <meta
-              property="og:description"
-              content={pageContents?.metadescription}
-              key="ogdesc"
-            />
+            <meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />
           )}
         </NextHead>
       )}
@@ -236,19 +183,11 @@ function Home({
       <Hero deviceInfo={deviceInfo} banners={pageContents?.banner} />
       <div className="px-4 py-3 mx-auto lg:container sm:py-6 sm:px-4 md:px-4 lg:px-6 2xl:px-0">
         {pageContents?.heading?.map((heading: any, hId: number) => (
-          <Heading
-            title={heading?.heading_title}
-            subTitle={heading?.heading_subtitle}
-            key={`category-heading-${hId}`}
-          />
+          <Heading title={heading?.heading_title} subTitle={heading?.heading_subtitle} key={`category-heading-${hId}`} />
         ))}
         <Categories data={pageContents?.categorylist} deviceInfo={deviceInfo} />
         {pageContents?.productheading?.map((productH: any, Pid: number) => (
-          <Heading
-            title={productH?.productheading_title}
-            subTitle={productH?.productheading_subtitle}
-            key={`product-heading-${Pid}`}
-          />
+          <Heading title={productH?.productheading_title} subTitle={productH?.productheading_subtitle} key={`product-heading-${Pid}`} />
         ))}
         <ProductSlider config={pageContents} deviceInfo={deviceInfo} />
       </div>
@@ -258,11 +197,7 @@ function Home({
       ))}
       <div className="px-4 py-3 mx-auto lg:container sm:px-4 lg:px-0 sm:py-6 md:px-4">
         {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
-          <Heading
-            title={heading?.collectionheadings_title}
-            subTitle={heading?.collectionheadings_subtitle}
-            key={`collection-heading-${cId}`}
-          />
+          <Heading title={heading?.collectionheadings_title} subTitle={heading?.collectionheadings_subtitle} key={`collection-heading-${cId}`} />
         ))}
         <Collections data={pageContents?.collectionlist} />
       </div>

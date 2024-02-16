@@ -18,7 +18,7 @@ import {
   BETTERCOMMERCE_CURRENCY,
 } from '@components/utils/constants'
 import { stringToBoolean, tryParseJson, matchStrings } from './parse-util'
-import { ILogRequestParams } from '@framework/api/operations/log-request'
+import { ILogRequestParams } from '@framework/api/operations/log-payment'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { DataSubmit } from '@commerce/utils/use-data-submit'

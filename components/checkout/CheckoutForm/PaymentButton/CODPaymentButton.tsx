@@ -1,10 +1,13 @@
 // Component Imports
+import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { IPaymentButtonProps } from './BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import PaymentGatewayNotification from '@components/checkout/PaymentGatewayNotification'
 
 // Other Imports
 import { EmptyString, Messages } from '@components/utils/constants'
+import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 
 export class CODPaymentButton extends BasePaymentButton {
   /**
@@ -49,7 +52,7 @@ export class CODPaymentButton extends BasePaymentButton {
       if (state) {
         dispatchState(state)
       }
-
+      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.COD)
       this.setState({
         isPaymentInitiated: true,
       })

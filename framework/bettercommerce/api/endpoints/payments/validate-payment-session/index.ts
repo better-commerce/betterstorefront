@@ -1,4 +1,6 @@
 // Package Imports
+import fs from 'fs'
+import path from 'path'
 import { v4 as uuid } from 'uuid'
 
 // Other Imports
@@ -11,22 +13,20 @@ import {
 import { AUTH_URL, BASE_URL, CLIENT_ID, SHARED_SECRET, } from '@framework/utils/constants'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString } from '@components/utils/constants'
 
-const logId = 'Payments | RequestPayment'
+const logId = 'Payments | ValidatePaymentSession'
 
-const requestPaymentApiMiddleware = function () {
+const validatePaymentSessionApiMiddleware = function () {
 
   /**
    * ________
    * CHECKOUT
    * ‾‾‾‾‾‾‾‾
-   * Request a payment or payout. Sends a request for payment or payout.
-   * API Reference - https://api-reference.checkout.com/#operation/requestAPaymentOrPayout
+   * <Not Required>
    * 
    * ________
    * CLEARPAY
    * ‾‾‾‾‾‾‾‾
-   * Capture Full Payment. This endpoint performs a payment capture for the full value of the payment plan.
-   * API Reference - https://developers.clearpay.co.uk/clearpay-online/reference/capture-full-payment
+   * <Not Required>
    * 
    * ______
    * KLARNA
@@ -43,15 +43,14 @@ const requestPaymentApiMiddleware = function () {
    * ‾‾‾‾‾‾
    * <Not Required>
    * 
-   * _________________
-   * Checkout ApplePay
-   * ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-   * Request a payment or payout. Sends a request for payment or payout.
-   * API Reference - https://www.checkout.com/docs/payments/add-payment-methods/apple-pay#Endpoints_2
-   * 
+   * ________
+   * ApplePay
+   * ‾‾‾‾‾‾‾‾
+   * Validates the payment session.
+   * API Reference - https://developer.apple.com/documentation/apple_pay_on_the_web/apple_pay_js_api/providing_merchant_validation
    * @returns 
    */
-  return async function useRequestPayment({
+  return async function useValidatePaymentSession({
     data,
     config,
     cookies,
@@ -78,18 +77,29 @@ const requestPaymentApiMiddleware = function () {
         `${config?.systemName} | ${logId} Request`
       )
 
+
+      const pemCert = await fs.readFileSync(
+        path.join(__dirname, '/certificates/ApplePayMerchant.pem')
+      )
+      const keyCert = await fs.readFileSync(
+        path.join(__dirname, '/certificates/ApplePayMerchant.key')
+      )
+
       BCEnvironment.init(CLIENT_ID!, SHARED_SECRET!, config, AUTH_URL, BASE_URL)
       BCEnvironment.addExtras({
         country: BETTERCOMMERCE_DEFAULT_COUNTRY,
         currency: cookies?.Currency,
         language: BETTERCOMMERCE_DEFAULT_LANGUAGE,
       })
-      const requestPaymentResult = await new PaymentOperation().requestPayment(
-        data
-      )
+      BCEnvironment.addExtras({
+        pemCert,
+        keyCert,
+      })
+      const validatePaymentResult =
+        await new PaymentOperation().validatePaymentSession(data)
 
       logData = {}
-      logData['response'] = requestPaymentResult
+      logData['response'] = validatePaymentResult
       logData['requestId'] = objectId
       await logPaymentRequest(
         {
@@ -103,7 +113,7 @@ const requestPaymentApiMiddleware = function () {
         `${config?.systemName} | ${logId} Response`
       )
 
-      return requestPaymentResult
+      return validatePaymentResult
     } catch (error: any) {
       logData = {}
       logData['error'] = error
@@ -126,4 +136,4 @@ const requestPaymentApiMiddleware = function () {
   }
 }
 
-export default requestPaymentApiMiddleware
+export default validatePaymentSessionApiMiddleware

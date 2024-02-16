@@ -188,6 +188,14 @@ export default function SizeInline({
    }
 
    const handleOnChange = (value: any) => {
+      let slug = '';
+      const selectedVariant = product?.variantProducts.find((variant:any) => {
+        const matchingAttributes = variant?.attributes.filter( (attr:any) => attr?.fieldCode === 'clothing.size' && attr?.fieldValue === value );
+        return matchingAttributes?.length > 0;
+      });
+  
+      slug = selectedVariant ? selectedVariant?.slug:`products/${router?.query?.slug}`;
+      
       const stockPerAttrValue = getProductFromAttributes(
          fieldCode,
          value,
@@ -240,7 +248,7 @@ export default function SizeInline({
                </span>
             </h4>
          </div>
-         <RadioGroup onChange={handleOnChange} className="mt-2 dark:text-black">
+         <RadioGroup value={selected} onChange={handleOnChange} className="mt-2 dark:text-black">
             <div>
                {
                   <RenderRadioOptions
