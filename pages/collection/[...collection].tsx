@@ -256,6 +256,10 @@ export default function CollectionPage(props: any) {
       setProductDataToPass(dataToPass)
     }
   }, [productListMemory?.products, data?.products])
+    
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
+  }
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
@@ -525,7 +529,7 @@ export default function CollectionPage(props: any) {
                     <div className="flex justify-end w-full">
                       <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                     </div>
-                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
+                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
                   </>
                 ) : ( 
                     <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
@@ -539,7 +543,7 @@ export default function CollectionPage(props: any) {
                         onEnableOutOfStockItems={onEnableOutOfStockItems}
                         />
                     </div>
-                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
+                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy}  removeFilter={removeFilter}/>
                   </>    
                   )}
                   <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
@@ -550,7 +554,7 @@ export default function CollectionPage(props: any) {
                 <div className="flex justify-end w-full">
                       <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                 </div>
-                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
+                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
                 <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
               </div>
             )}
