@@ -1,40 +1,21 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { useUI } from '@components/ui/context'
-import {
-  NEXT_ADDRESS,
-  NEXT_EDIT_ADDRESS,
-  NEXT_CREATE_ADDRESS,
-  NEXT_DELETE_ADDRESS,
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  AddressPageAction,
-  NEXT_GET_COUNTRIES,
-} from '@components/utils/constants'
+import { NEXT_ADDRESS, NEXT_EDIT_ADDRESS, NEXT_CREATE_ADDRESS, NEXT_DELETE_ADDRESS, BETTERCOMMERCE_DEFAULT_COUNTRY, AddressPageAction, NEXT_GET_COUNTRIES, Messages, } from '@components/utils/constants'
 import axios from 'axios'
 import AddressItem from './AddressItem'
 import Form from './AddressBookForm'
 import { LoadingDots } from '@components/ui'
-import {
-  DETAILS_SUCCESS,
-  DETAILS_ERROR,
-  ADDRESS_BOOK_TITLE,
-  DETAILS_SUBTITLE,
-  EMPTY_ADDRESS,
-  ADD_ADDRESS,
-} from '@components/utils/textVariables'
+import { DETAILS_SUCCESS, DETAILS_ERROR, ADDRESS_BOOK_TITLE, DETAILS_SUBTITLE, EMPTY_ADDRESS, ADD_ADDRESS, } from '@components/utils/textVariables'
 import { CustomerAddressModel } from 'models/customer'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import {
-  getCurrentPage,
-  resetSubmitData,
-  submitData,
-  parseFullName,
-} from '@framework/utils/app-util'
+import { getCurrentPage, resetSubmitData, submitData, parseFullName, } from '@framework/utils/app-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 // import useDevice from '@commerce/utils/use-device'
 import NewAddressModal from '@components/checkout/CheckoutForm/NewAddressModal'
 import { matchStrings } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import { Guid } from '@commerce/types'
+import { AlertType } from '@framework/utils/enums'
 
 export function asyncHandler() {
   function getAddress() {
@@ -79,7 +60,7 @@ export default function AddressBook({ deviceInfo }: any) {
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
 
-  const { user, isGuestUser, cartItems, setAddressId } = useUI()
+  const { user, isGuestUser, cartItems, setAddressId ,setAlert } = useUI()
   const [selectedAddress, setSelectedAddress] = useState()
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
@@ -211,7 +192,7 @@ export default function AddressBook({ deviceInfo }: any) {
     const fetchCountries = async () => {
       try {
         const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
-        if (data?.result && data?.result?.length > 0) {
+        if ( data?.result?.length > 0) {
           setCountries(data?.result)
         } else {
           setCountries([])
@@ -324,16 +305,16 @@ export default function AddressBook({ deviceInfo }: any) {
     openNewAddressModal()
   }
   const handleNewAddress = (data: any, callback?: Function) => {
-    const name = parseFullName(data?.name)
     const values = {
       address1: data?.address1,
       address2: data?.address2,
+      address3: data?.address3,
       city: data?.city,
       state: data?.state,
-      firstName: name?.firstName,
-      lastName: name?.lastName ?? '',
+      firstName: data?.firstName,
+      lastName: data?.lastName || '',
       phoneNo: data?.mobileNumber,
-      postCode: data?.pinCode,
+      postCode: data?.postCode,
       label: matchStrings(data?.categoryName, 'Other', true)
         ? data?.otherAddressType
         : data?.categoryName,
@@ -346,10 +327,8 @@ export default function AddressBook({ deviceInfo }: any) {
     const newValues = {
       ...values,
       userId: user?.userId,
-      country:
-        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-      countryCode:
-        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      country: data?.country?.split('&')?.[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: data?.country?.split('&')?.[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
     }
     if (data?.id == 0) {
       lookupAddressId(newValues).then((addressId: number) => {
@@ -360,6 +339,7 @@ export default function AddressBook({ deviceInfo }: any) {
               // setUser(updatedUser);
               // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
               // });
+    
               fetchAddress()
               const values = {
                 ...newValues,
@@ -374,8 +354,8 @@ export default function AddressBook({ deviceInfo }: any) {
               // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
-              // setAlert({type:'error',msg:NETWORK_ERR})
-              console.log(error)
+              setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+              closeNewAddressModal()
             })
         } else {
           // Duplicate address exists
@@ -400,7 +380,8 @@ export default function AddressBook({ deviceInfo }: any) {
           // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
         .catch((error: any) => {
-          console.log(error)
+          setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+          closeNewAddressModal()
         })
     }
   }
@@ -537,11 +518,11 @@ export default function AddressBook({ deviceInfo }: any) {
               </div>
             </div>
             <div className="flex items-start">
-              <div className="items-center justify-center hidden text-white bg-black border border-gray-200 sm:flex add-list-div">
+              <div className="items-center justify-center hidden text-white sm:flex add-list-div">
                 <button
                   type="submit"
                   onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="p-4 font-semibold text-center cursor-pointer text-orange"
+                  className="btn-primary btn"
                 >
                   {ADD_ADDRESS}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">
@@ -556,6 +537,7 @@ export default function AddressBook({ deviceInfo }: any) {
           selectedAddress={selectedAddress}
           submitState={submitState}
           isOpen={isNewAddressModalOpen}
+          countries = {countries}
           onSubmit={(data: any) => {
             submitData(submitDispatch, AddressPageAction.SAVE)
             handleNewAddress(data, () => {

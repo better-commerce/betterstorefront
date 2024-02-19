@@ -28,7 +28,7 @@ enum SnippetPlacementType {
   ORDER_CONFIRMATION = 'OrderConfirmationAfterProgressBar', // Inject before footer on thank you page.
 }
 
-interface ISnippet {
+export interface ISnippet {
   readonly name: string
   readonly type: string
   readonly placement: string

@@ -11,12 +11,12 @@ import DefaultButton from '@components/ui/IndigoButton'
 import { convertOrder } from '@framework/utils/payment-util'
 import {
   LocalStorage,
-  PaymentStatus,
 } from '@components/utils/payment-constants'
-import { parsePaymentMethods } from '@framework/utils/app-util'
+import { getOrderId, getOrderInfo, parsePaymentMethods } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
-import { IPaymentInfo } from '@better-commerce/bc-payments-sdk'
+import { IPaymentInfo, PaymentStatus } from '@better-commerce/bc-payments-sdk'
+import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 export interface IPaymentButtonProps {
   readonly paymentMethod: any | null
@@ -32,10 +32,17 @@ export interface IPaymentButtonProps {
   onScrollToSection?: any
   recordEvent?: any
 }
+
 export interface IApplePaymentProps {
   readonly isApplePayScriptLoaded?: boolean
   onApplePayScriptLoaded?: any
 }
+
+export interface IAgeVerifyProps {
+  readonly isAgeVerified: boolean
+  onVerifyAge: any
+}
+
 export interface IDispatchState {
   readonly uiContext?: any
   readonly dispatchState: (value: { type?: string; payload?: any }) => void
@@ -49,9 +56,8 @@ interface IPaymentButton {
  * Abstract factory component for <PaymentButton>
  */
 export default abstract class BasePaymentButton
-  extends React.Component<IPaymentButtonProps & IDispatchState, any>
-  implements IPaymentButton
-{
+  extends React.Component<IPaymentButtonProps & IApplePaymentProps & IDispatchState, any>
+  implements IPaymentButton {
   /**
    * Executes create order on CommerceHub for generic payment methods on storefront.
    * @param paymentMethod {Object} PaymentMethod info of the executing payment type.
@@ -68,19 +74,12 @@ export default abstract class BasePaymentButton
     paymentInfo?: IPaymentInfo
   ): Promise<{ status: boolean; state: any; result?: any }> {
     try {
-      const convertOrderInput: any = !isCOD
-        ? this.getNonCODConvertOrderPayload(
-            paymentMethod,
-            data,
-            uiContext,
-            paymentInfo
-          )
-        : this.getCODConvertOrderPayload(
-            paymentMethod,
-            data,
-            uiContext,
-            paymentInfo
-          )
+      let convertOrderInput: any = !isCOD
+        ? this.getNonCODConvertOrderPayload(paymentMethod, data, uiContext, paymentInfo)
+        : this.getCODConvertOrderPayload(paymentMethod, data, uiContext, paymentInfo)
+      if (convertOrderInput?.basket) {
+        convertOrderInput.basket = null
+      }
       const orderResult: any = await convertOrder(convertOrderInput)
       if (orderResult?.message || orderResult?.errors?.length) {
         let errorResult
@@ -158,6 +157,61 @@ export default abstract class BasePaymentButton
         status: false,
         state: null,
       }
+    }
+  }
+
+  public recordAddPaymentInfoEvent(uiContext: any, recordEvent: Function, paymentType: string) {
+    if (recordEvent) {
+      const { user, cartItems } = uiContext
+      const orderInfo = getOrderInfo()
+      const transactionId = getOrderId(orderInfo?.order)
+      const data = {
+        event: 'add_payment_info',
+        gtm: {
+          uniqueEventId: GTMUniqueEventID.ADD_PAYMENT_INFO,
+          start: new Date().getTime(),
+        },
+        crto: {
+          email: user?.email,
+          transactionId,
+          products: cartItems?.lineItems?.map((item: any, itemId: number) => ({
+            id: item?.sku,
+            price: item?.price?.raw?.withTax,
+            quantity: item?.qty,
+          })),
+        },
+        ecommerce: {
+          items: cartItems?.lineItems?.map(
+            (item: any, itemId: number) => ({
+              item_id: item?.stockCode,
+              item_name: item?.name,
+              Affliation: "FFX Website",
+              Coupon: "",
+              discount: "",
+              index: itemId,
+              item_list_name: item?.categoryItems?.length
+                ? item?.categoryItems[0]?.categoryName
+                : item?.classification?.category,
+              item_list_id: item?.categoryItems?.length
+                ? item?.categoryItems[0]?.categoryId
+                : item?.stockCode,
+              item_variant: item?.variantGroupCode || item?.colorName,
+              item_brand: item?.brand,
+              quantity: item?.qty,
+              item_is_bundle_item: false,
+              price: item?.price?.raw?.withTax,
+            })
+          ),
+          value: cartItems?.grandTotal?.raw?.withTax,
+          currency: cartItems?.baseCurrency,
+          payment_type: paymentType.toUpperCase(),
+        },
+      }
+      
+      recordEvent({
+        name: 'add_payment_info',
+        data,
+      })
     }
   }
 

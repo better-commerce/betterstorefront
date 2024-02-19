@@ -3,7 +3,7 @@ import { BCPaymentEndpoint } from '@framework/api/endpoints/payments/constants'
 import { ENABLE_SECURED_PAYMENT_PAYLOAD } from './constants'
 
 export const LOG_REQUEST_OPTIONS = false
-export const TEST_PAYMENT_AMOUNT_FORMATTED = `₹${TEST_PAYMENT_AMOUNT}`
+export const TEST_PAYMENT_AMOUNT_FORMATTED = `${TEST_PAYMENT_AMOUNT}`
 
 export module Payments {
   export const PARSE_ORDER_ID_REGEX =

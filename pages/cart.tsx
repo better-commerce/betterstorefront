@@ -56,6 +56,7 @@ import {
   vatIncluded,
 } from '@framework/utils/app-util'
 import {
+  LoadingActionType,
   NEXT_BASKET_VALIDATE,
   NEXT_GET_ALT_RELATED_PRODUCTS,
   NEXT_GET_BASKET_PROMOS,
@@ -70,6 +71,7 @@ import RelatedProductWithGroup from '@components/product/RelatedProducts/Related
 import SplitDelivery from '@components/checkout/SplitDelivery'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
+import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
@@ -106,6 +108,9 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     undefined
   )
   const [reValidateData, setBasketReValidate] = useState<any>([])
+  const [isOpen, setIsOpen] = useState(false)
+  const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
+  const [itemClicked, setItemClicked] = useState<any | Array<any>>()
   const getBasketPromos = async (basketId: string) => {
     const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
       params: { basketId: basketId },
@@ -249,7 +254,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
 
   const groupItemsByDeliveryDate = (items: any) => {
     const groupedItems: any = {}
-
+    if (!items) return groupedItems
     for (const item of items) {
       const deliveryDate = new Date(
         item.deliveryDateTarget
@@ -439,6 +444,9 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   }, [])
 
   const handleItem = (product: any, type = 'increase') => {
+    if (isOpen && !(type === 'delete')) {
+      closeModal()
+    }
     const asyncHandleItem = async () => {
       let data: any = {
         basketId,
@@ -468,9 +476,22 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       } catch (error) {
         console.log(error)
       }
+      if (isOpen && type === 'delete') {
+        setLoadingAction(LoadingActionType.NONE)
+        closeModal()
+      }
     }
     asyncHandleItem()
   }
+  
+  const openModal = () => {
+    setIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
+  
   const isIncludeVAT = vatIncluded()
   const userCart = cartItems
   const isEmpty: boolean = userCart?.lineItems?.length === 0
@@ -648,7 +669,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                       <div className="absolute top-0 right-0">
                         <button
                           type="button"
-                          onClick={() => handleItem(product, 'delete')}
+                          onClick={() => {
+                            openModal()
+                            setItemClicked(product)
+                          }}
                           className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
                         >
                           <span className="sr-only">{GENERAL_REMOVE}</span>
@@ -752,7 +776,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   <Link href="/checkout">
                     <button
                       type="submit"
-                      className="w-full px-4 py-3 font-medium text-center text-white uppercase btn-primary"
+                      className="w-full btn btn-primary"
                     >
                       {BTN_PLACE_ORDER}
                     </button>
@@ -1039,7 +1063,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   <Link href="/checkout">
                     <button
                       type="submit"
-                      className="w-full px-4 py-3 font-medium text-center text-white uppercase btn-primary"
+                      className="w-full btn btn-primary"
                     >
                       {BTN_PLACE_ORDER}
                     </button>
@@ -1085,6 +1109,16 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         />
         {/*Referred By a friend*/}{/*CODE NOT TO BE REMOVED, FOR FUTURE USE*/}
       </div>
+      <CartItemRemoveModal
+        product={itemClicked}
+        isOpen={isOpen}
+        closeModal={closeModal}
+        loadingAction={loadingAction}
+        handleItem={handleItem}
+        itemClicked={itemClicked}
+        setLoadingAction={setLoadingAction}
+        config={config}
+      />
       {/* <Transition.Root show={referralModalShow} as={Fragment}>
         <Dialog
           as="div"

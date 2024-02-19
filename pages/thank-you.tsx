@@ -28,11 +28,10 @@ import {
   NEXT_GET_ORDER,
   NEXT_GET_ORDERS,
   NEXT_INFRA_ENDPOINT,
+  EmptyString,
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
-import {
-
-} from '@components/utils/constants'
+import {} from '@components/utils/constants'
 import { removeItem } from '@components/utils/localStorage'
 import {
   BTN_BACK_TO_HOME,
@@ -62,7 +61,7 @@ import {
   SUBTOTAL_EXCLUDING_TAX,
   SUBTOTAL_INCLUDING_TAX,
   YOUR_INFORMATION,
-  OFFER_VALIDITY
+  OFFER_VALIDITY,
 } from '@components/utils/textVariables'
 import {
   ELEM_ATTR,
@@ -70,10 +69,17 @@ import {
 } from '@framework/content/use-content-snippet'
 import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
-import { LocalStorage } from '@components/utils/payment-constants'
+import {
+  LocalStorage,
+  PaymentStatus,
+} from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
-import { stringFormat, stringToBoolean } from '@framework/utils/parse-util'
+import {
+  eddDateFormat,
+  stringFormat,
+  stringToBoolean,
+} from '@framework/utils/parse-util'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -94,9 +100,17 @@ export default function OrderConfirmation({ config }: any) {
   const [referralLink, setReferralLink] = useState('')
   const [copied, setCopied] = useState(false)
   const [isReferralSlugLoading, setIsReferralSlugLoading] = useState(false)
-  const { setOrderId, orderId, user, setGuestUser, setIsGuestUser, guestUser, isGuestUser, resetIsPaymentLink } = useUI()
+  const {
+    setOrderId,
+    orderId,
+    user,
+    setGuestUser,
+    setIsGuestUser,
+    guestUser,
+    isGuestUser,
+    resetIsPaymentLink,
+  } = useUI()
   const shareOptionsConfig = [
-
     {
       name: 'email',
       onClick: () => {
@@ -104,7 +118,9 @@ export default function OrderConfirmation({ config }: any) {
         handleInviteSent()
       },
       icon: (
-        <Link href={`mailto:?body=${referralOffers?.refereePromo}, Just use the following link: ${referralLink}&subject=Your friend has sent you a gift!`}>
+        <Link
+          href={`mailto:?body=${referralOffers?.refereePromo}, Just use the following link: ${referralLink}&subject=Your friend has sent you a gift!`}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -122,7 +138,9 @@ export default function OrderConfirmation({ config }: any) {
       onClick: () => {
         setShareMethod('facebook')
         handleInviteSent()
-        window.open(`${FACEBOOK_SHARE_STRING}?u=${referralLink}&quote='Referral Link'`)
+        window.open(
+          `${FACEBOOK_SHARE_STRING}?u=${referralLink}&quote='Referral Link'`
+        )
       },
       icon: (
         <svg
@@ -133,11 +151,7 @@ export default function OrderConfirmation({ config }: any) {
           fill="#000000"
         >
           <g id=" " strokeWidth="0"></g>
-          <g
-            id=" "
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          ></g>
+          <g id=" " strokeLinecap="round" strokeLinejoin="round"></g>
           <g id=" ">
             <defs> </defs>{' '}
             <g
@@ -174,13 +188,31 @@ export default function OrderConfirmation({ config }: any) {
       onClick: () => {
         setShareMethod('twitter')
         handleInviteSent()
-        window.open(`${TWITTER_SHARE_STRING}?url=${referralLink}&text=Referral Link`)
+        window.open(
+          `${TWITTER_SHARE_STRING}?url=${referralLink}&text=Referral Link`
+        )
       },
       icon: (
-        <svg fill="#000000" className='w-6 h-6' viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M245.65723,77.65674l-30.16407,30.16455C209.4707,177.70215,150.53809,232,80,232c-14.52441,0-26.49414-2.30273-35.57764-6.84473-7.33056-3.665-10.33349-7.59912-11.07861-8.71777a8,8,0,0,1,3.84717-11.92822c.25732-.09717,23.84814-9.15772,39.09521-26.40869a109.574,109.574,0,0,1-24.72656-24.355c-13.708-18.60352-28.206-50.91114-19.43066-99.17676a8.00023,8.00023,0,0,1,13.52832-4.22559c.35254.35156,33.64209,33.1709,74.3374,43.772L120,87.99609a48.31863,48.31863,0,0,1,48.6084-47.99267,48.11329,48.11329,0,0,1,40.96875,23.99609L240,64a8.0001,8.0001,0,0,1,5.65723,13.65674Z"></path> </g></svg>
+        <svg
+          fill="#000000"
+          className="w-6 h-6"
+          viewBox="0 0 256 256"
+          id="Flat"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            {' '}
+            <path d="M245.65723,77.65674l-30.16407,30.16455C209.4707,177.70215,150.53809,232,80,232c-14.52441,0-26.49414-2.30273-35.57764-6.84473-7.33056-3.665-10.33349-7.59912-11.07861-8.71777a8,8,0,0,1,3.84717-11.92822c.25732-.09717,23.84814-9.15772,39.09521-26.40869a109.574,109.574,0,0,1-24.72656-24.355c-13.708-18.60352-28.206-50.91114-19.43066-99.17676a8.00023,8.00023,0,0,1,13.52832-4.22559c.35254.35156,33.64209,33.1709,74.3374,43.772L120,87.99609a48.31863,48.31863,0,0,1,48.6084-47.99267,48.11329,48.11329,0,0,1,40.96875,23.99609L240,64a8.0001,8.0001,0,0,1,5.65723,13.65674Z"></path>{' '}
+          </g>
+        </svg>
       ),
     },
-
   ]
 
   const handleInviteSent = async () => {
@@ -201,7 +233,8 @@ export default function OrderConfirmation({ config }: any) {
   const router = useRouter()
   const referralDescription = (
     <>
-      Our refer-a-friend programme will process your data and send you referral service emails.
+      Our refer-a-friend programme will process your data and send you referral
+      service emails.
     </>
   )
   const referralTermsAndConditions = (
@@ -318,7 +351,6 @@ export default function OrderConfirmation({ config }: any) {
     return function cleanup() {
       setOrderId('')
     }
-
   }, [])
 
   const setModelClose = () => {
@@ -342,7 +374,8 @@ export default function OrderConfirmation({ config }: any) {
 
   const handleReferralInfo = async () => {
     let { data: data } = await axios.get(NEXT_REFERRAL_INFO)
-    if (data?.referralDetails?.referrerPromo && !isGuestUser) { //rm user?.email if guest user can refer
+    if (data?.referralDetails?.referrerPromo && !isGuestUser) {
+      //rm user?.email if guest user can refer
       setReferralOffers(data?.referralDetails)
       setIsReferModalOpen(true)
       handleReferralByEmail()
@@ -366,6 +399,15 @@ export default function OrderConfirmation({ config }: any) {
     )
   }
   const css = { maxWidth: '100%', height: 'auto' }
+
+  const getPaymentMethodName = (payments: any) => {
+    return (
+      payments?.find(
+        (x: any) => x?.isValid /* && x?.status === PaymentStatus.PAID */
+      )?.paymentGateway || EmptyString
+    )
+  }
+
   return (
     <>
       <main className="px-4 pt-6 pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
@@ -410,7 +452,7 @@ export default function OrderConfirmation({ config }: any) {
                         }
                         width={200}
                         height={200}
-                        alt={product.name ||'thank you'}
+                        alt={product.name || 'thank you'}
                         className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
                       />
                     </div>
@@ -446,13 +488,6 @@ export default function OrderConfirmation({ config }: any) {
                       </div>
                     </div>
                   </div>
-
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: product.shortDescription,
-                    }}
-                    className="mt-10 mb-10 text-sm text-gray-500 topspace lg:pl-5 sm:pl-2"
-                  />
                 </>
               ))}
 
@@ -462,7 +497,7 @@ export default function OrderConfirmation({ config }: any) {
                 <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>
                 <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                   <div>
-                    <dt className="font-medium text-gray-900">
+                    <dt className="font-bold text-gray-900">
                       {/* {GENERAL_SHIPPING_ADDRESS} */}
                       {GENERAL_DELIVERY_ADDRESS}
                     </dt>
@@ -496,26 +531,35 @@ export default function OrderConfirmation({ config }: any) {
                 <dl className="grid grid-cols-2 py-10 text-sm border-t border-gray-200 gap-x-6">
                   {order?.payments && (
                     <div>
-                      <dt className="font-medium text-gray-900">
+                      <dt className="font-bold text-gray-900">
                         {GENERAL_PAYMENT_METHOD}
                       </dt>
                       <dd className="mt-2 text-gray-700">
-                        <p>{order?.payments[0]?.paymentMethod}</p>
-                        {/* <p>{order?.payments[0]?.paymentGateway}</p> */}
+                        <p>{getPaymentMethodName(order?.payments)}</p>
                       </dd>
                     </div>
                   )}
                   <div>
-                    <dt className="font-medium text-gray-900">
+                    <dt className="font-bold text-gray-900">
                       {GENERAL_SHIPPING_METHOD}
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <p>{order?.shipping?.displayName}</p>
                       <p>
                         {GENERAL_DELIVERED_BY}:{' '}
-                        {new Date(
-                          order?.shipping?.expectedDeliveryDate
-                        ).toLocaleDateString()}
+                        {order?.deliveryPlans?.length >= 1 ? (
+                          <p className="font-semibold uppercase font-24 dark:text-black">
+                            {eddDateFormat(
+                              order?.deliveryPlans[0].deliveryDateTarget
+                            )}
+                          </p>
+                        ) : (
+                          <p className="font-semibold uppercase font-14 dark:text-black">
+                            {eddDateFormat(
+                              order?.shipping?.expectedDeliveryDate
+                            )}
+                          </p>
+                        )}
                       </p>
                     </dd>
                   </div>
@@ -531,10 +575,9 @@ export default function OrderConfirmation({ config }: any) {
                         </span>
                       </p>
                       <p>
-                        {stringFormat(
-                          OFFER_VALIDITY,
-                          { days: nextOrderPromo?.nextOrderPromoValidity }
-                        )}
+                        {stringFormat(OFFER_VALIDITY, {
+                          days: nextOrderPromo?.nextOrderPromoValidity,
+                        })}
                       </p>
                     </div>
                   )}
@@ -549,10 +592,9 @@ export default function OrderConfirmation({ config }: any) {
                         </span>
                       </p>
                       <p>
-                        {stringFormat(
-                          OFFER_VALIDITY,
-                          { days: nextOrderPromo?.nextOrderPromoValidity }
-                        )}
+                        {stringFormat(OFFER_VALIDITY, {
+                          days: nextOrderPromo?.nextOrderPromoValidity,
+                        })}
                       </p>
                     </div>
                   )}
@@ -602,7 +644,7 @@ export default function OrderConfirmation({ config }: any) {
           ) : null}
           <div className="max-w-xl mt-5 text-center">
             <Link href={`/`} passHref>
-              <span className="p-3 font-medium btn-primary">
+              <span className="btn-primary btn">
                 {BTN_BACK_TO_HOME}
               </span>
             </Link>
@@ -701,13 +743,13 @@ export default function OrderConfirmation({ config }: any) {
                               </span> */}
                             </div>
                             <p className="px-5 text-center">
-                              Tell your friends to enter your Referral Code like this at
-                              Checkout
+                              Tell your friends to enter your Referral Code like
+                              this at Checkout
                             </p>
                             <h2 className="mx-2 text-lg ">
                               {referralObj?.slug}
                             </h2>
-                            <Button className="my-3" onClick={() => { }}>
+                            <Button className="my-3" onClick={() => {}}>
                               {SHARE_IN_PERSON}
                             </Button>
 

@@ -186,7 +186,7 @@ export default function CustomerForm({
       }: any) => {
         return (
           <div
-            className={`flex flex-col items-center justify-center w-full px-5 py-1 ${
+            className={`flex flex-col items-center justify-center w-full lg:px-0 px-5 py-5 ${
               !isLoginSidebarOpen && `px-5`
             }`}
           >
@@ -259,7 +259,7 @@ export default function CustomerForm({
                 <Button
                   type="submit"
                   // onClick={handleSubmit}
-                  className="!font-normal w-full border border-black btn-c btn-primary"
+                  className="w-full border border-black btn btn-c btn-primary"
                   loading={isSubmitting}
                   disabled={isSubmitting}
                 >

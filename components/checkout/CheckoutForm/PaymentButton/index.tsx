@@ -7,11 +7,7 @@ import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 // Component Imports
 import { CODPaymentButton } from './CODPaymentButton'
 import { PayPalPaymentButton } from './PayPalPaymentButton'
-import {
-  IApplePaymentProps,
-  IDispatchState,
-  IPaymentButtonProps,
-} from './BasePaymentButton'
+import { IApplePaymentProps, IDispatchState, IPaymentButtonProps } from './BasePaymentButton'
 import { MasterCardPaymentButton } from './MasterCardPaymentButton'
 import { CheckoutPaymentButton } from './CheckoutPaymentButton'
 import { StripePaymentButton } from './StripePaymentButton'
@@ -19,21 +15,18 @@ import { KlarnaPaymentButton } from './KlarnaPaymentButton'
 import { ClearPayPaymentButton } from './ClearPayPaymentButton'
 import AccountPaymentButton from './AccountPaymentButton'
 import ChequePaymentButton from './ChequePaymentButton'
-// import { ApplePayPaymentButton } from './ApplePayPaymentButton'
+import { CheckoutApplePayPaymentButton } from './CheckoutPaymentButton/ApplePayPaymentButton'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'
-import { CheckoutStepType } from '@components/utils/constants'
 
 /**
  * Factory helper/renderer component for <PaymentButton>
  * @param props
  * @returns
  */
-const PaymentButton = (
-  props: IPaymentButtonProps & IDispatchState & IApplePaymentProps
-) => {
-  const { paymentMethod } = props
+const PaymentButton = (props: IPaymentButtonProps & IDispatchState & IApplePaymentProps) => {
+  const { paymentMethod, scrollToBottomEnabled = true, onScrollToSection } = props
 
   let Component: any
   if (matchStrings(paymentMethod?.systemName, PaymentMethodType.PAYPAL, true)) {
@@ -77,7 +70,7 @@ const PaymentButton = (
       true
     )
   ) {
-    //Component = ApplePayPaymentButton
+    Component = CheckoutApplePayPaymentButton
   } else if (
     matchStrings(paymentMethod?.systemName, PaymentMethodType.COD, true)
   ) {
@@ -85,7 +78,6 @@ const PaymentButton = (
   } else {
     Component = <></>
   }
-
   return <Component {...props} />
 }
 

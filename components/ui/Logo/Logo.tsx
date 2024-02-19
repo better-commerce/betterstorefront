@@ -18,14 +18,7 @@ const Logo = ({ className = '', ...props }) => {
   }
 
   return (
-    <img
-      onClick={logoClick}
-      src={`/theme/${CURRENT_THEME}/image/logo.png`}
-      alt="BetterComerce"
-      width={60}
-      height={36}
-      className="h-auto w-16 md:w-12 lg:w-16"
-    />
+    <img onClick={logoClick} src={`/theme/${CURRENT_THEME}/image/logo.png`} alt="Shark" width={60} height={36} className="w-16 h-auto md:w-12 lg:w-16" />
   )
 }
 

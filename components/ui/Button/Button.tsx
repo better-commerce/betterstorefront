@@ -63,7 +63,7 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = forwardRef((props
     >
       {children}
       {loading && (
-        <i className="pl-2 m-0 flex">
+        <i className="pl-2 m-0 flex py-2">
           <LoadingDots />
         </i>
       )}

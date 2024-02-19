@@ -2,12 +2,21 @@ import { useState } from 'react'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import useWishlist from '@components/services/wishlist'
-import { NEXT_GET_CUSTOMER_DETAILS, NEXT_LOGIN_CHECKOUT } from '@components/utils/constants'
+import {
+  NEXT_GET_CUSTOMER_DETAILS,
+  NEXT_LOGIN_CHECKOUT,
+} from '@components/utils/constants'
 import axios from 'axios'
 import Form from '@components/customer'
 import GuestForm from './GuestForm'
 import Link from 'next/link'
-import { BTN_CHECKOUT_SECURELY, CUSTOMER_ERROR_MESSAGE, GUEST_CHECKOUT, LOG_IN, NEW_CUSTOMER } from '@components/utils/textVariables'
+import {
+  BTN_CHECKOUT_SECURELY,
+  CUSTOMER_ERROR_MESSAGE,
+  GUEST_CHECKOUT,
+  LOG_IN,
+  NEW_CUSTOMER,
+} from '@components/utils/textVariables'
 const config = [
   {
     title: LOG_IN,
@@ -27,10 +36,12 @@ const DEFAULT_TAB = {
 export default function CheckoutRouter({
   handleGuestMail,
   setIsLoggedIn,
+  fetchAddress,
 }: any) {
   const [noAccount, setNoAccount] = useState(false)
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB)
-  const { setUser, setIsGuestUser, wishlistItems, basketId, setCartItems } = useUI()
+  const { setUser, setIsGuestUser, wishlistItems, basketId, setCartItems } =
+    useUI()
   const { getWishlist } = useWishlist()
 
   const handleUserLogin = (values: any) => {
@@ -45,7 +56,7 @@ export default function CheckoutRouter({
         setNoAccount(false)
         setCartItems(result.data)
         setIsLoggedIn(true)
-        setIsGuestUser(false);
+        setIsGuestUser(false)
         let userObj = {
           userId: result?.data?.userId,
           email: result?.data?.userEmail,
@@ -58,6 +69,7 @@ export default function CheckoutRouter({
           userObj = { ...userObj, ...updatedUserObj?.data }
         }
         setUser(userObj)
+        fetchAddress(userObj?.userId)
         // getWishlist(result.data.userId, wishlistItems)
         Router.push('/checkout')
       }

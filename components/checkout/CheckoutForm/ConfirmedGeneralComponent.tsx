@@ -6,15 +6,13 @@ export default function ConfirmedGeneralComponent({
   isPaymentLink = false,
 }: any) {
   return (
-    <div className="text-gray-900 flex flex-col">
+    <div className="flex flex-col text-gray-900">
       <div className="flex">
-        <ul
-          className={`text-gray-900 mt-3 sm:flex xs:flex-col grid-cols-1 grid`}
-        >
+        <ul className={`text-gray-900 mt-3 sm:flex gap-0 sm:flex-col grid-cols-1 grid`} >
           {Object.keys(content).map((item: any, idx: number) => {
             return (
-              <li key={idx} className="font-normal d-inline font-sm pr-1">
-                {content[item]}
+              <li key={idx} className="pr-1 m-0 font-normal d-inline font-sm">
+                <div dangerouslySetInnerHTML={{ __html: content[item] }} />                
               </li>
             )
           })}
@@ -25,7 +23,7 @@ export default function ConfirmedGeneralComponent({
         <div className="flex">
           <button
             onClick={onStateChange}
-            className="btn font-xs uppercase font-bold"
+            className="font-bold uppercase btn font-xs"
             type="button"
           >
             {GENERAL_EDIT}

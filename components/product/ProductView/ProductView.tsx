@@ -15,66 +15,18 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation, Pagination, Zoom } from 'swiper'
 import { Dialog, Transition } from '@headlessui/react'
-import {
-  XMarkIcon,
-  PlusSmallIcon,
-  MinusSmallIcon,
-} from '@heroicons/react/24/outline'
-import {
-  Messages,
-  NEXT_CREATE_WISHLIST,
-  NEXT_BULK_ADD_TO_CART,
-  NEXT_UPDATE_CART_INFO,
-  NEXT_GET_PRODUCT,
-  NEXT_GET_PRODUCT_PREVIEW,
-  SITE_ORIGIN_URL,
-  NEXT_GET_ORDER_RELATED_PRODUCTS,
-  NEXT_COMPARE_ATTRIBUTE,
-  QuantityBreakRule,
-} from '@components/utils/constants'
+import { XMarkIcon, PlusSmallIcon, MinusSmallIcon, } from '@heroicons/react/24/outline'
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, SITE_ORIGIN_URL, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, QuantityBreakRule, } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  ALERT_SUCCESS_WISHLIST_MESSAGE,
-  BTN_ADD_TO_FAVORITES,
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  CLOSE_PANEL,
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_ENGRAVING,
-  GENERAL_PRICE_LABEL_RRP,
-  GENERAL_REFERENCE,
-  GENERAL_REVIEWS,
-  GENERAL_REVIEW_OUT_OF_FIVE,
-  IMG_PLACEHOLDER,
-  ITEM_TYPE_ADDON,
-  ITEM_TYPE_ADDON_10,
-  ITEM_TYPE_ALTERNATIVE,
-  PRICEMATCH_ADDITIONAL_DETAILS,
-  PRICEMATCH_BEST_PRICE,
-  PRICEMATCH_SEEN_IT_CHEAPER,
-  PRODUCT_AVAILABILITY,
-  PRODUCT_INFORMATION,
-  PRODUCT_IN_STOCK,
-  PRODUCT_OUT_OF_STOCK,
-  PRODUCT_PERSONALIZATION_TITLE,
-  SLUG_TYPE_MANUFACTURER,
-  YOUTUBE_VIDEO_PLAYER,
-} from '@components/utils/textVariables'
-import {
-  ELEM_ATTR,
-  PDP_ELEM_SELECTORS,
-} from '@framework/content/use-content-snippet'
+import { ALERT_SUCCESS_WISHLIST_MESSAGE, BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, GENERAL_PRICE_LABEL_RRP, GENERAL_REFERENCE, GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, PRICEMATCH_ADDITIONAL_DETAILS, PRICEMATCH_BEST_PRICE, PRICEMATCH_SEEN_IT_CHEAPER, PRODUCT_AVAILABILITY, PRODUCT_INFORMATION, PRODUCT_IN_STOCK, PRODUCT_OUT_OF_STOCK, PRODUCT_PERSONALIZATION_TITLE, SLUG_TYPE_MANUFACTURER, YOUTUBE_VIDEO_PLAYER, } from '@components/utils/textVariables'
+import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import ImageZoom from 'react-image-zooom'
-import { priceFormat, roundToDecimalPlaces,matchStrings, stringFormat } from '@framework/utils/parse-util'
+import { priceFormat, roundToDecimalPlaces, matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import {
-  getCurrentPage,
-  validateAddToCart,
-  vatIncluded,
-} from '@framework/utils/app-util'
+import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
@@ -84,6 +36,7 @@ import ImageGallery from 'react-image-gallery'
 import PDPCompare from '../PDPCompare'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { LocalStorage } from '@components/utils/payment-constants'
+import wishlistHandler from '@components/services/wishlist'
 
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -113,51 +66,17 @@ const PLACEMENTS_MAP: any = {
   },
 }
 
-export default function ProductView({
-  data = { images: [] },
-  snippets = [],
-  setEntities,
-  recordEvent,
-  slug,
-  isPreview = false,
-  relatedProductsProp,
-  promotions,
-  pdpLookbookProducts,
-  pdpCachedImages: cachedImages,
-  reviews,
-  deviceInfo,
-  config,
-  maxBasketItemsCount,
-  allProductsByCategory: allProductsByCategoryProp,
-}: any) {
+export default function ProductView({ data = { images: [] }, snippets = [], setEntities, recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpLookbookProducts, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
-  const {
-    openNotifyUser,
-    addToWishlist,
-    openWishlist,
-    basketId,
-    cartItems,
-    setAlert,
-    setCartItems,
-    user,
-    openCart,
-    openLoginSideBar,
-    isGuestUser,
-    setIsCompared,
-    removeFromWishlist,
-    currency,
-  } = useUI()
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
+  const {isInWishList,deleteWishlistItem} = wishlistHandler()
   const isIncludeVAT = vatIncluded()
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
-  const [isInWishList, setItemsInWishList] = useState(false)
   const [previewImg, setPreviewImg] = useState<any>()
   const [reviewInput, setReviewInput] = useState(false)
-  const [variantInfo, setVariantInfo] = useState<any>({
-    variantColour: '',
-    variantSize: '',
-  })
+  const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
   const [isLoading, setIsLoading] = useState(true)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
@@ -219,17 +138,12 @@ export default function ProductView({
     if (response?.data?.product) {
       fetchRelatedProducts(response?.data?.product?.recordId)
       const recentlyViewedProduct: any = response?.data?.product?.stockCode;
-
       let viewedProductsList = []
-      viewedProductsList = localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) ? JSON.parse(decrypt(
-        localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) || '[]'
-      )) : []
+      viewedProductsList = localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) ? JSON.parse(decrypt(localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED) || '[]')) : []
       if (viewedProductsList?.length == 0) {
         viewedProductsList?.push(recentlyViewedProduct)
       } else {
-        const checkDuplicate: any = viewedProductsList?.some(
-          (val: any) => val === recentlyViewedProduct
-        )
+        const checkDuplicate: any = viewedProductsList?.some((val: any) => val === recentlyViewedProduct)
         if (!checkDuplicate) {
           viewedProductsList.push(recentlyViewedProduct)
         }
@@ -331,10 +245,8 @@ export default function ProductView({
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
       validateAction: async () => {
-        const cartLineItem: any = cartItems?.lineItems?.find(
-          (o: any) => o.productId === selectedAttrData?.productId?.toUpperCase()
-        )
-        if (selectedAttrData?.currentStock === cartLineItem?.qty) {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
+        if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier &&  !selectedAttrData?.flags?.sellWithoutInventory) {
           setAlert({
             type: 'error',
             msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
@@ -416,7 +328,6 @@ export default function ProductView({
                     item_var_id: items?.stockCode,
                   })
                 ),
-                // device: deviceCheck,
                 current_page: currentPage,
               },
             })
@@ -453,10 +364,7 @@ export default function ProductView({
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
           validateAction: async () => {
-            const cartLineItem: any = cartItems?.lineItems?.find(
-              (o: any) =>
-                o.productId === selectedAttrData?.productId?.toUpperCase()
-            )
+            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
               setAlert({
                 type: 'error',
@@ -502,15 +410,13 @@ export default function ProductView({
                     {
                       item_name: product?.name,
                       item_brand: product?.brand,
-                      item_category2:
-                        product?.mappedCategories[1]?.categoryName,
+                      item_category2: product?.mappedCategories[1]?.categoryName,
                       item_variant: product?.variantGroupCode,
                       quantity: 1,
                       item_id: product?.productCode,
                       price: product?.price?.raw?.withTax,
                       item_var_id: product?.stockCode,
-                      item_list_name:
-                        product?.mappedCategories[2]?.categoryName,
+                      item_list_name: product?.mappedCategories[2]?.categoryName,
                       index: 1,
                     },
                   ],
@@ -529,20 +435,15 @@ export default function ProductView({
                         item_id: items?.sku,
                         price: items?.price?.raw?.withTax,
                         item_brand: items?.brand,
-                        item_category2: items?.categoryItems?.length
-                          ? items?.categoryItems[1]?.categoryName
-                          : '',
+                        item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : '',
                         item_variant: items?.colorName,
-                        item_list_name: items?.categoryItems?.length
-                          ? items?.categoryItems[0]?.categoryName
-                          : '',
+                        item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : '',
                         item_list_id: '',
                         index: itemId,
                         quantity: items?.qty,
                         item_var_id: items?.stockCode,
                       })
                     ),
-                    // device: deviceCheck,
                     current_page: currentPage,
                   },
                 })
@@ -571,9 +472,7 @@ export default function ProductView({
         stockCode: selectedAttrData?.stockCode,
       },
     }
-    const addonProducts = relatedProducts?.relatedProducts?.filter(
-      (item: any) => item?.itemType === ITEM_TYPE_ADDON_10
-    )
+    const addonProducts = relatedProducts?.relatedProducts?.filter((item: any) => item?.itemType === ITEM_TYPE_ADDON_10)
     const addonProductsWithParentProduct = addonProducts?.map((item: any) => {
       item.parentProductId = updatedProduct?.recordId
       return item
@@ -644,10 +543,15 @@ export default function ProductView({
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
-    setItemsInWishList(true)
     openWishlist()
   }
   const handleWishList = () => {
+    if (isInWishList(product?.recordId)) {
+      deleteWishlistItem(user?.userId, product?.recordId)
+      removeFromWishlist(product?.recordId)
+      openWishlist()
+      return
+    }
     let productAvailability = 'Yes'
     if (product?.currentStock > 0) {
       productAvailability = 'Yes'
@@ -718,11 +622,7 @@ export default function ProductView({
       createWishlist()
     } else insertToLocalWishlist()
   }
-
-  const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter(
-    (item: any) => item.stockCode !== ITEM_TYPE_ADDON
-  )
-
+  const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode !== ITEM_TYPE_ADDON)
   const handleProductBundleUpdate = (bundledProduct: any) => {
     if (bundledProduct && bundledProduct?.id) {
       let clonedProduct = Object.assign({}, product)
@@ -732,16 +632,11 @@ export default function ProductView({
     }
   }
 
-  const breadcrumbs = product?.breadCrumbs?.filter(
-    (item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER
-  )
+  const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
   SwiperCore.use([Navigation])
   const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
-  const addonPrice = relatedProducts?.relatedProducts?.find(
-    (x: any) => x?.itemType == 10
-  )?.price?.formatted?.withTax
-
+  const addonPrice = relatedProducts?.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax
   const css = { maxWidth: '100%', height: 'auto' }
   const attrGroup = groupBy(product?.customAttributes, 'key')
 
@@ -797,27 +692,15 @@ export default function ProductView({
   const customRenderItem = (item: any) => {
     return (
       <div className="flex justify-center image-gallery-image">
-        <img
-          src={generateUri(item?.original,"h=2000&fm=webp")||IMG_PLACEHOLDER}
-          alt={product?.name}
-          height={1000}
-          width={1000}
-          className="!object-contain"
-        />
+        <img src={generateUri(item?.original, "h=2000&fm=webp") || IMG_PLACEHOLDER} alt={product?.name} height={1000} width={1000} className="!object-contain" />
       </div>
     );
   };
   const customRenderThumbInner = (item: any) => {
     return (
-      <img
-        src= {generateUri(item?.thumbnail,"h=100&fm=webp")||IMG_PLACEHOLDER}
-        alt={product?.name || 'product'}
-        height={100}
-        width={100}
-      />
+      <img src={generateUri(item?.thumbnail, "h=150&fm=webp") || IMG_PLACEHOLDER} alt={product?.name || 'product'} height={150} width={100} />
     );
   };
-
 
   return (
     <>
@@ -830,82 +713,24 @@ export default function ProductView({
         </div>
         <div className="mx-auto lg:grid lg:grid-cols-12 lg:items-start lg:max-w-none 2xl:w-4/5 sm:px-6 md:px-4 lg:px-6 2xl:px-0 mob-container-padding">
           {isMobile ? (
-            <Swiper
-              slidesPerView={1}
-              spaceBetween={10}
-              zoom={true}
-              modules={[Pagination, Zoom]}
-              pagination={{ clickable: true }}
-              navigation={true}
-              loop={true}
-              className='lg:px-0 swiper-dot-black'
-              breakpoints={{
-                640: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                1024: { slidesPerView: 4 },
-              }}
-            >
+            <Swiper slidesPerView={1} spaceBetween={10} zoom={true} modules={[Pagination, Zoom]} pagination={{ clickable: true }} navigation={true} loop={true} className='lg:px-0 swiper-dot-black' breakpoints={{ 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 4 }, }} >
               {content?.map((image: any, idx) => (
-                <SwiperSlide
-                  className="relative inline-flex flex-col w-full px-0 text-center cursor-pointer group lg:w-auto"
-                  key={`${idx}-slider`}
-                >
+                <SwiperSlide className="relative inline-flex flex-col w-full px-0 text-center cursor-pointer group lg:w-auto" key={`${idx}-slider`} >
                   {image.image ? (
                     <div className="image-container swiper-zoom-container">
-                      <Image
-                        priority
-                        src={
-                          generateUri(image.image, 'h=600&fm=webp') ||
-                          IMG_PLACEHOLDER
-                        }
-                        alt={product?.name || 'slider-image'}
-                        className="object-cover object-center w-full h-full image"
-                        sizes="320 600 1000"
-                        quality="70"
-                        width={600}
-                        height={1000}
-                        blurDataURL={
-                          `${image.image}?h=600&w=400&fm=webp` ||
-                          IMG_PLACEHOLDER
-                        }
-                      />
+                      <img src={generateUri(image?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} alt={product?.name || 'slider-image'} className="object-cover object-center w-full h-full image" sizes="320 600 1000" width={600} height={1000} />
                     </div>
                   ) : (
-                    <PlayIcon className="object-cover object-center w-20 h-20 mx-auto" />
+                    <img src={IMG_PLACEHOLDER} alt={product?.name || 'slider-image'} className="object-cover object-center w-full h-full image" sizes="320 600 1000" width={600} height={1000} />
                   )}
                 </SwiperSlide>
               ))}
             </Swiper>
           ) : (
             <>
-              <Tab.Group
-                as="div"
-                className="sticky flex flex-col-reverse top-24 lg:col-span-7 min-mobile-pdp"
-                title="product images"
-              >
-                <Tab.List
-                  className={
-                    content?.length > 1
-                      ? 'grid grid-cols-1 gap-10 sm:grid-cols-1'
-                      : 'grid grid-cols-1 gap-10 sm:grid-cols-1'
-                  }
-                >
-                  <ImageGallery
-                    thumbnailAlt={product?.name}
-                    thumbnailTitle={product?.name}
-                    originalAlt={product?.name}
-                    items={images}
-                    thumbnailPosition="left"
-                    showPlayButton={false}
-                    showBullets={false}
-                    showNav={false}
-                    additionalClass={`app-image-gallery ${fullscreen ? 'fullscreen' : ''}`}
-                    showFullscreenButton={true}
-                    onScreenChange={toggleFullscreen}
-                    renderCustomControls={renderCustomControls}
-                    renderItem={customRenderItem}
-                    renderThumbInner={customRenderThumbInner}
-                  />
+              <Tab.Group as="div" className="sticky flex flex-col-reverse top-24 lg:col-span-7 min-mobile-pdp" title="product images" >
+                <Tab.List className={content?.length > 1 ? 'grid grid-cols-1 gap-10 sm:grid-cols-1' : 'grid grid-cols-1 gap-10 sm:grid-cols-1'} >
+                  <ImageGallery thumbnailAlt={product?.name} thumbnailTitle={product?.name} originalAlt={product?.name} items={images} thumbnailPosition="left" showPlayButton={false} showBullets={false} showNav={false} additionalClass={`app-image-gallery ${fullscreen ? 'fullscreen' : ''}`} showFullscreenButton={true} onScreenChange={toggleFullscreen} renderCustomControls={renderCustomControls} renderItem={customRenderItem} renderThumbInner={customRenderThumbInner} />
                 </Tab.List>
               </Tab.Group>
             </>
@@ -914,22 +739,13 @@ export default function ProductView({
           {/* Product info */}
           <div className="px-4 mt-2 sm:mt-10 sm:px-4 lg:mt-0 lg:col-span-5 mob-padding-container">
             <div className="flex justify-between gap-4 mb-3 sm:mb-0">
-              <p className="mb-0 text-sm mt-0 font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
+              <p className="mt-0 mb-0 text-sm font-semibold tracking-tight text-gray-700 uppercase sm:text-md sm:font-bold">
                 {selectedAttrData.brand}
               </p>
               <div className="flex items-center xs:flex-col">
                 <div className="flex items-center xs:text-center align-center">
                   {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      aria-hidden="true"
-                      className={classNames(
-                        reviews?.review?.ratingAverage > rating
-                          ? 'text-yellow-400 h-3 w-3'
-                          : 'text-gray-300 h-4 w-4',
-                        'flex-shrink-0'
-                      )}
-                    />
+                    <StarIcon key={rating} aria-hidden="true" className={classNames(reviews?.review?.ratingAverage > rating ? 'text-yellow-400 h-3 w-3' : 'text-gray-300 h-4 w-4', 'flex-shrink-0')} />
                   ))}
                 </div>
                 {reviews?.review?.productReviews?.length > 0 ? (
@@ -952,19 +768,11 @@ export default function ProductView({
               <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
               {product ? (
                 <p className="text-2xl font-bold text-black sm:text-xl font-24">
-                  {isIncludeVAT
-                    ? selectedAttrData?.price?.formatted?.withTax
-                    : selectedAttrData?.price?.formatted?.withoutTax}
+                  {isIncludeVAT ? selectedAttrData?.price?.formatted?.withTax : selectedAttrData?.price?.formatted?.withoutTax}
                   {selectedAttrData?.listPrice?.raw.tax > 0 ? (
                     <>
-                      <span className="px-2 text-sm font-medium text-gray-900 line-through">
-                        {isIncludeVAT
-                          ? product?.listPrice?.formatted?.withTax
-                          : product?.listPrice?.formatted?.withoutTax}
-                      </span>
-                      <span className="text-sm font-medium text-red-500">
-                        {discount}% off
-                      </span>
+                      <span className="px-2 text-sm font-medium text-gray-900 line-through"> {isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax} </span>
+                      <span className="text-sm font-medium text-red-500"> {discount}% off </span>
                     </>
                   ) : null}
                 </p>
@@ -973,59 +781,29 @@ export default function ProductView({
             {product?.quantityBreakRules?.length > 0 &&
               <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} />
             }
-            <AttributesHandler
-              product={product}
-              variant={selectedAttrData}
-              setSelectedAttrData={setSelectedAttrData}
-              variantInfo={variantInfo}
-              handleSetProductVariantInfo={handleSetProductVariantInfo}
-              sizeInit={sizeInit}
-              setSizeInit={setSizeInit}
-            />
+            <AttributesHandler product={product} variant={selectedAttrData} setSelectedAttrData={setSelectedAttrData} variantInfo={variantInfo} handleSetProductVariantInfo={handleSetProductVariantInfo} sizeInit={sizeInit} setSizeInit={setSizeInit} />
 
             <h4 className="h-5 my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
-              {PRODUCT_AVAILABILITY}:{' '}
-              {product?.currentStock > 0 ? (
+              {PRODUCT_AVAILABILITY}:{' '} {product?.currentStock > 0 ? (
                 <span>{PRODUCT_IN_STOCK}</span>
               ) : (
                 <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
               )}
             </h4>
             {promotions?.promotions?.availablePromotions?.length > 0 && (
-              <AvailableOffers
-                currency={product?.price}
-                offers={promotions?.promotions}
-                key={product?.id}
-              />
+              <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
             )}
             {product ? (
               <>
                 {isEngravingAvailable ? (
                   <>
-                    <div
-                      className="flex w-auto mt-3 text-sm underline cursor-pointer hover:opacity-80 text-pink"
-                      onClick={() => showEngravingModal(true)}
-                    >
+                    <div className="flex w-auto mt-3 text-sm underline cursor-pointer hover:opacity-80 text-pink" onClick={() => showEngravingModal(true)} >
                       {PRODUCT_PERSONALIZATION_TITLE}
                     </div>
                     <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                      <Button
-                        className="hidden sm:block "
-                        title={buttonConfig.title}
-                        action={buttonConfig.action}
-                        validateAction={buttonConfig.validateAction}
-                        buttonType={buttonConfig.type || 'cart'}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!isInWishList) {
-                            handleWishList()
-                          }
-                        }}
-                        className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                      >
-                        {isInWishList ? (
+                      <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
+                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink btn hover:border-pink" >
+                        {isInWishList(product?.recordId) ? (
                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                         ) : (
                           <HeartIcon className="flex-shrink-0 w-6 h-6" />
@@ -1036,22 +814,9 @@ export default function ProductView({
                   </>
                 ) : (
                   <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                    <Button
-                      title={buttonConfig.title}
-                      action={buttonConfig.action}
-                      validateAction={buttonConfig.validateAction}
-                      buttonType={buttonConfig.type || 'cart'}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!isInWishList) {
-                          handleWishList()
-                        }
-                      }}
-                      className="flex items-center justify-center px-4 py-3 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink"
-                    >
-                      {isInWishList ? (
+                    <Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
+                    <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn" >
+                      {isInWishList(product?.recordId) ? (
                         <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                       ) : (
                         <HeartIcon className="flex-shrink-0 w-6 h-6" />
@@ -1063,51 +828,26 @@ export default function ProductView({
               </>
             ) : null}
             <div className="flex-1 order-6 w-full sm:order-5">
-              <DeliveryInfo
-                product={product}
-                grpData={attrGroup}
-                config={config}
-              />
+              <DeliveryInfo product={product} grpData={attrGroup} config={config} />
             </div>
             <section aria-labelledby="details-heading" className="mt-4 sm:mt-6">
-              <h2 id="details-heading" className="sr-only">
-                {PRICEMATCH_ADDITIONAL_DETAILS}
-              </h2>
-              <ProductDetails
-                product={product}
-                description={product?.description || product?.shortDescription}
-              />
+              <h2 id="details-heading" className="sr-only"> {PRICEMATCH_ADDITIONAL_DETAILS} </h2>
+              <ProductDetails product={product} description={product?.description || product?.shortDescription} />
               <p className="mt-6 text-lg text-gray-900 sm:mt-10">
-                {selectedAttrData?.currentStock > 0
-                  ? product?.deliveryMessage
-                  : product?.stockAvailabilityMessage}
+                {selectedAttrData?.currentStock > 0 ? product?.deliveryMessage : product?.stockAvailabilityMessage}
               </p>
             </section>
           </div>
         </div>
         <div className="flex flex-col section-devider"></div>
         <div className="flex flex-col w-full px-0 lg:mx-auto sm:container page-container">
-          <ProductSpecifications
-            attrGroup={attrGroup}
-            product={product}
-            deviceInfo={deviceInfo}
-          />
+          <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
         </div>
 
         {product?.componentProducts ? (
           <>
             <div className="flex flex-col section-devider"></div>
-            <Bundles
-              price={
-                isIncludeVAT
-                  ? product?.price?.formatted?.withTax
-                  : product?.price?.formatted?.withoutTax
-              }
-              products={product?.componentProducts}
-              productBundleUpdate={handleProductBundleUpdate}
-              deviceInfo={deviceInfo}
-              onBundleAddToCart={bundleAddToCart}
-            />
+            <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} />
           </>
         ) : null}
         {alternativeProducts?.length > 0 ? (
@@ -1121,15 +861,8 @@ export default function ProductView({
           <>
             <div className="flex flex-col section-devider"></div>
             <div className="container flex flex-col w-full px-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
-              <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10">
-                You May Also Like
-              </h3>
-              <RelatedProductWithGroup
-                products={relatedProducts?.relatedProducts}
-                productPerColumn={5}
-                deviceInfo={deviceInfo}
-                maxBasketItemsCount={maxBasketItemsCount}
-              />
+              <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10"> You May Also Like </h3>
+              <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
             </div>
           </>
         ) : null}
@@ -1137,53 +870,21 @@ export default function ProductView({
         <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
         {reviews?.review?.productReviews?.length > 0 && (
           <>
-            <div
-              className="flex flex-col section-devider"
-              aria-hidden="true"
-            ></div>
+            <div className="flex flex-col section-devider" aria-hidden="true" ></div>
             <Reviews className="mx-auto md:w-4/5" data={reviews?.review} />
           </>
         )}
-        <div className="flex flex-col section-devider" aria-hidden="true"></div>
-        <div className="px-4 pb-5 mx-auto mb-5 sm:px-4 lg:container sm:pb-10 sm:mb-10 md:px-6 lg:px-6 2xl:px-0">
+        <div className="flex flex-col section-devider " aria-hidden="true"></div>
+        <div className="px-4 pb-5 mx-auto mb-5 sm:px-4 lg:container sm:pb-10 sm:mb-10 md:px-6 lg:px-6 2xl:px-0 ">
           {reviewInput && <ReviewInput productId={product?.recordId} />}
         </div>
         {isEngravingAvailable && (
-          <Engraving
-            show={isEngravingOpen}
-            submitForm={handleEngravingSubmit}
-            onClose={() => showEngravingModal(false)}
-            handleToggleDialog={handleTogglePersonalizationDialog}
-            product={product}
-          />
+          <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
         )}
 
-        <PriceMatch
-          show={isPriceMatchModalShown}
-          onClose={showPriceMatchModal}
-          productName={product?.name}
-          productImage={
-            product?.images?.length ? product?.images[0]?.image : null
-          }
-          productId={product?.id}
-          stockCode={product?.stockCode}
-          ourCost={
-            isIncludeVAT
-              ? product?.price?.raw?.withTax
-              : product?.price?.raw?.withoutTax
-          }
-          rrp={
-            isIncludeVAT
-              ? product?.listPrice?.raw?.withTax
-              : product?.listPrice?.raw?.withoutTax
-          }
-          ourDeliveryCost={product?.price?.raw?.tax}
-        />
+        <PriceMatch show={isPriceMatchModalShown} onClose={showPriceMatchModal} productName={product?.name} productImage={product?.images?.length ? product?.images[0]?.image : null} productId={product?.id} stockCode={product?.stockCode} ourCost={isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax} rrp={isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax} ourDeliveryCost={product?.price?.raw?.tax} />
 
         <div className="flex flex-col w-full">
-          <div className="flex flex-col">
-            <div className="section-devider"></div>
-          </div>
           <div className="px-4 mx-auto sm:container page-container sm:px-6">
             <ProductDescription seoInfo={attrGroup} />
           </div>
@@ -1191,62 +892,25 @@ export default function ProductView({
 
         {previewImg ? (
           <Transition.Root show={previewImg != undefined} as={Fragment}>
-            <Dialog
-              as="div"
-              className="relative mt-4 z-999 top-4"
-              onClose={handlePreviewClose}
-            >
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <div
-                  className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
-                  onClick={handlePreviewClose}
-                />
+            <Dialog as="div" className="relative mt-4 z-999 top-4" onClose={handlePreviewClose} >
+              <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+                <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={handlePreviewClose} />
               </Transition.Child>
 
               <div className="fixed top-0 left-0 w-full overflow-y-auto z-9999">
                 <div className="flex items-end justify-center h-screen min-h-screen p-4 mx-auto text-center sm:items-center sm:p-0">
-                  <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    enterTo="opacity-100 translate-y-0 sm:scale-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  >
+                  <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" >
                     <div className="relative px-4 pt-5 pb-4 mx-auto overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-2/6 sm:p-2">
                       <div className="flex items-center">
-                        <button
-                          type="button"
-                          className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
-                          onClick={handlePreviewClose}
-                        >
+                        <button type="button" className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99" onClick={handlePreviewClose} >
                           <span className="sr-only">{CLOSE_PANEL}</span>
-                          <XMarkIcon
-                            className="w-6 h-6 text-black"
-                            aria-hidden="true"
-                          />
+                          <XMarkIcon className="w-6 h-6 text-black" aria-hidden="true" />
                         </button>
                       </div>
                       <div className="text-center">
                         {previewImg && (
                           <div key={previewImg.name + 'tab-panel'}>
-                            <ImageZoom
-                              src={previewImg || IMG_PLACEHOLDER}
-                              alt={previewImg.name}
-                              blurDataURL={
-                                `${previewImg}?h=600&w=400&fm=webp` ||
-                                IMG_PLACEHOLDER
-                              }
-                            />
+                            <ImageZoom src={previewImg || IMG_PLACEHOLDER} alt={previewImg.name} blurDataURL={`${previewImg}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER} />
                           </div>
                         )}
                       </div>

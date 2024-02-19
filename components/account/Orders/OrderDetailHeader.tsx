@@ -72,7 +72,11 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                 ORDER TOTAL
               </h5>
               <p className="text-sm dark:text-black text-primary">
-                {priceFormat(details?.order.grandTotal?.raw?.withTax)}
+                {priceFormat(
+                  details?.order.grandTotal?.raw?.withTax,
+                  undefined,
+                  details?.order?.grandTotal?.currencySymbol
+                )}
               </p>
             </div>
           </div>

@@ -29,7 +29,8 @@ import { NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/co
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
@@ -261,6 +262,7 @@ function CategoryLandingPage({
   const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [minimalProd, setMinimalProd] = useState<any>([])
+  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
     data = {
       products: {
@@ -277,7 +279,7 @@ function CategoryLandingPage({
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true } },
+      { ...state, ...{ slug: slug, isCategory: true ,excludeOOSProduct} },
     ],
     ([url, body]: any) => postData(url, body),
     {
@@ -297,6 +299,12 @@ function CategoryLandingPage({
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
+
+  const onEnableOutOfStockItems = (val: boolean) => {
+    setExcludeOOSProduct(!val)
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
 
   useEffect(() => {
     if (category.id !== state.categoryId)
@@ -421,7 +429,7 @@ function CategoryLandingPage({
   if (category === null) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
-        <h1 className="pb-6 font-30 text-3xl font-medium text-gray-400">
+        <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
           {BAD_URL_TEXT}
           <Link href="/category">
             <span className="px-3 text-indigo-500">{ALL_CATEGORY}</span>
@@ -429,6 +437,10 @@ function CategoryLandingPage({
         </h1>
       </div>
     )
+  }
+
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
   }
 
   /*const productDataToPass =
@@ -468,7 +480,7 @@ function CategoryLandingPage({
           key="ogdesc"
         />
       </NextHead>
-      <section className="main-section sm:px-4">
+      <section className="main-section">
         <div className="container px-4 mx-auto mt-4 bg-transparent sm:px-4 lg:px-6 lg:pt-6 2xl:px-0">
           {category?.breadCrumbs && (
             <BreadCrumbs
@@ -778,7 +790,7 @@ function CategoryLandingPage({
           </div>
         ) : (
           <>
-            <div className="w-full px-4 py-0 mx-auto sm:px-0">
+            <div className="w-full px-0 py-0 mx-auto sm:px-0">
               {/* category banner info start */}
               <div className="container py-0 mx-auto">
                 {category && category?.images && category?.images.length ? (
@@ -903,23 +915,41 @@ function CategoryLandingPage({
                             handleSortBy={handleSortBy}
                             clearAll={clearAll}
                             routerSortOption={state.sortBy}
+                            removeFilter={removeFilter}
                           />
                         ) : (
+                          <>
+                            <div className="flex justify-end w-full col-span-12">
+                              <OutOfStockFilter
+                                excludeOOSProduct={excludeOOSProduct}
+                                onEnableOutOfStockItems={onEnableOutOfStockItems}
+                              />
+                            </div>
                           <ProductFilterRight
                             handleFilters={handleFilters}
                             products={productDataToPass}
                             routerFilters={state.filters}
                           />
+                          </>
                         )}
                         <div className="sm:col-span-10 p-[1px]">
                           {isMobile ? null : (
-                            <ProductFiltersTopBar
-                              products={productDataToPass}
-                              handleSortBy={handleSortBy}
-                              routerFilters={state.filters}
-                              clearAll={clearAll}
-                              routerSortOption={state.sortBy}
-                            />
+                            <>
+                              <div className="flex justify-end w-full col-span-12">
+                                <OutOfStockFilter
+                                  excludeOOSProduct={excludeOOSProduct}
+                                  onEnableOutOfStockItems={onEnableOutOfStockItems}
+                                  />
+                              </div>
+                              <ProductFiltersTopBar
+                                products={productDataToPass}
+                                handleSortBy={handleSortBy}
+                                routerFilters={state.filters}
+                                clearAll={clearAll}
+                                routerSortOption={state.sortBy}
+                                removeFilter={removeFilter}
+                              />
+                            </>  
                           )}
                           <ProductGridWithFacet
                             products={productDataToPass}
@@ -934,12 +964,19 @@ function CategoryLandingPage({
                       </>
                     ) : (
                       <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                        <div className="flex justify-end w-full col-span-12">
+                          <OutOfStockFilter
+                            excludeOOSProduct={excludeOOSProduct}
+                            onEnableOutOfStockItems={onEnableOutOfStockItems}
+                            />
+                        </div>
                         <ProductFiltersTopBar
                           products={productDataToPass}
                           handleSortBy={handleSortBy}
                           routerFilters={state.filters}
                           clearAll={clearAll}
                           routerSortOption={state.sortBy}
+                          removeFilter={removeFilter}
                         />
                         <ProductGrid
                           products={productDataToPass}

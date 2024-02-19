@@ -97,7 +97,7 @@ export default function Wishlist() {
 
       <main className="lg:px-8">
         <div className="max-w-4xl lg:mx-12 sm:px-6">
-          <div className="lg:px-0 sm:px-0 pt-5">
+          <div className="pt-5 lg:px-0 sm:px-0">
             <h1 className="font-extrabold tracking-tight text-gray-900">
               {/* {WISHLIST_TITLE} */}
             </h1>
@@ -151,11 +151,16 @@ export default function Wishlist() {
                                 {product.image != null ? (
                                   <>
                                     <img
-                                      src={generateUri(product.image,'h=600&fm=webp') || IMG_PLACEHOLDER}
+                                      src={
+                                        generateUri(
+                                          product.image,
+                                          'h=600&fm=webp'
+                                        ) || IMG_PLACEHOLDER
+                                      }
                                       alt={product.name || 'image'}
                                       width={400}
                                       height={600}
-                                      className="object-cover object-center w-full h-full radius-xs sm:h-full"
+                                      className="object-cover object-center w-full h-full radius-xs sm:h-full wishlist-img-height"
                                     />
                                   </>
                                 ) : (
@@ -165,7 +170,7 @@ export default function Wishlist() {
                                       alt={product.name || 'image'}
                                       width={400}
                                       height={600}
-                                      className="object-cover object-center w-full h-full radius-xs sm:h-full"
+                                      className="object-cover object-center w-full h-full radius-xs sm:h-full wishlist-img-height"
                                     ></img>
                                   </>
                                 )}
@@ -173,7 +178,7 @@ export default function Wishlist() {
                               <span className="sr-only">{product.name}</span>
                             </div>
                           </Link>
-                          <div className="pt-0">
+                          <div className="pt-0 min-h-40 relative">
                             <div className="grid grid-cols-12 px-2 mt-2 sm:grid-cols-12 sm:gap-x-2">
                               <div className="flex items-center col-span-12 sm:col-span-12">
                                 <h3 className="text-xs truncate max-width-250 text-brown-light text-10">
@@ -186,21 +191,13 @@ export default function Wishlist() {
                                 {product.name}
                               </Link>
                             </h3>
-                            <p className="px-2 mt-1 mb-2 font-medium text-12 text-primary sm:mt-2 min-h-40 sm:mb-0">
-                              {isIncludeVAT
-                                ? priceFormat(product?.price?.raw?.withTax)
-                                : priceFormat(product?.price?.raw?.withoutTax)}
+                            <p className="px-2 mt-1 mb-2 font-medium text-12 text-primary sm:mt-2 sm:mb-0">
+                              {isIncludeVAT ? priceFormat( product?.price?.raw?.withTax, undefined, product?.price?.currencySymbol ) : priceFormat( product?.price?.raw?.withoutTax, undefined, product?.price?.currencySymbol )}
                               {product?.listPrice?.raw?.withTax >
                               product?.price?.raw?.withTax ? (
                                 <>
                                   <span className="px-2 font-normal text-gray-500 line-through text-12">
-                                    {isIncludeVAT
-                                      ? priceFormat(
-                                          product?.listPrice?.raw?.withTax
-                                        )
-                                      : priceFormat(
-                                          product?.listPrice?.raw?.withoutTax
-                                        )}
+                                    {isIncludeVAT ? priceFormat( product?.listPrice?.raw?.withTax, undefined, product?.listPrice?.currencySymbol ) : priceFormat( product?.listPrice?.raw?.withoutTax, undefined, product?.listPrice?.currencySymbol )}
                                   </span>
                                   <span className="font-normal text-12 text-emerald-500">
                                     {discount}% off
@@ -213,7 +210,7 @@ export default function Wishlist() {
                               {product?.currentStock > 0 ? (
                                 <button
                                   onClick={() => handleAddToCart(product)}
-                                  className="flex items-center justify-center w-full p-3 text-xs font-semibold text-black uppercase border"
+                                  className="flex items-center justify-center w-full border btn btn-primary absolute bottom-0"
                                 >
                                   <span className="mr-2">
                                     <i className="sprite-icon sprite-cart"></i>
@@ -221,7 +218,7 @@ export default function Wishlist() {
                                   {GENERAL_ADD_TO_BASKET}
                                 </button>
                               ) : (
-                                <button className="flex items-center justify-center w-full px-3 py-4 text-xs font-semibold text-black bg-gray-200 border">
+                                <button className="flex items-center justify-center w-full btn border absolute bottom-0 bg-gray-200">
                                   Out Of Stock
                                 </button>
                               )}

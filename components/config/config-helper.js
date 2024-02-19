@@ -15,9 +15,11 @@ export function getConfig() {
   }
 
   let config = {}
-  const engineName = process.env.SEARCH_ENGINE_CONFIG
+  const engineName = process.env.ELASTIC_ENGINE_NAME
   if (engineName) {
     config = ElasticEngineConfig[engineName]
+  } else {
+    return {}
   }
 
   if (config.engineName) return config
