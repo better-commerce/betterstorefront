@@ -11,7 +11,7 @@ import 'swiper/css/bundle'
 import jwt from 'jsonwebtoken'
 import Cookies from 'js-cookie'
 import { v4 as uuid_v4 } from 'uuid'
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
@@ -101,6 +101,7 @@ function MyApp({
     deviceType: DeviceType.UNKNOWN,
     isOnlyMobile: undefined,
   })
+  const [updatedPageProps, setUpdatedPageProps] = useState(pageProps)
 
   const snippets = [
     ...(pageProps?.globalSnippets ?? []),
@@ -140,6 +141,7 @@ function MyApp({
   }
 
   useEffect(() => {
+    setNavTree()
     setClientIPAddress(pageProps)
     const addScript = document.createElement('script')
     addScript.setAttribute(
@@ -152,6 +154,15 @@ function MyApp({
       document.getElementById('goog-gt-tt')?.remove()
     }
   }, [])
+
+  const setNavTree = async () => {
+    const { data: navResult }: any = await axios.get(NEXT_GET_NAVIGATION)
+    const { nav = [], footer = [] } = navResult
+    if (nav?.length || footer?.length) {
+      const updatedPageProps = { ...pageProps, navTree: navResult }
+      setUpdatedPageProps(updatedPageProps)
+    }
+  }
 
   useEffect(() => {
     // Listener for snippet injector reset.
@@ -322,7 +333,7 @@ function MyApp({
             nav={nav}
             footer={footer}
             config={appConfig}
-            pageProps={pageProps}
+            pageProps={updatedPageProps}
             keywords={keywordsData}
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount(appConfig)}
@@ -488,13 +499,6 @@ MyApp.getInitialProps = async (
         ).value ||
       BETTERCOMMERCE_DEFAULT_LANGUAGE
 
-    const navResult = await cachedGetData(NAV_ENDPOINT, req?.cookies, headers)
-    if (!navResult?.message && navResult?.errors?.length == 0) {
-      navTreeResult = {
-        nav: navResult?.result?.header,
-        footer: navResult?.result?.footer,
-      }
-    }
   } catch (error: any) {}
 
   let appConfig = null
