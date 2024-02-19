@@ -5,8 +5,11 @@ import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { LOADER_LOADING } from '@components/utils/textVariables'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { logError, notFoundRedirect } from '@framework/utils/app-util'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 
 export async function getStaticProps({
   params,
@@ -14,74 +17,108 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
-  let product = null,
-    reviews = null,
-    relatedProducts = null,
-    pdpLookbook = null,
-    pdpCachedImages = null
-  let availabelPromotions = null
-  let allProductsByCategory = null
-  let pdpLookbookProducts = {}
+  const slug = params!?.slug[0]
+  const cachedDataUID = {
+    infraUID : Redis.Key.INFRA_CONFIG,
+    productSlugUID: Redis.Key.PDP.Products + '_' + slug,
+    productReviewUID: Redis.Key.PDP.ProductReviewData + '_' + slug,
+    relatedProductUID: Redis.Key.PDP.RelatedProduct + '_' + slug,
+    pdpLookBookUID: Redis.Key.PDP.PDPLookBook + '_' + slug,
+    pdpCacheImageUID: Redis.Key.PDP.PDPCacheImage + '_' + slug,
+    availablePromoUID: Redis.Key.PDP.AvailablePromo + '_' + slug,
+    productCategoryUID: Redis.Key.PDP.ProductsByCat + '_' + slug,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.infraUID,
+    cachedDataUID.productSlugUID,
+    cachedDataUID.productReviewUID,
+    cachedDataUID.relatedProductUID,
+    cachedDataUID.pdpLookBookUID,
+    cachedDataUID.pdpCacheImageUID,
+    cachedDataUID.availablePromoUID,
+    cachedDataUID.productCategoryUID,
+  ])
+  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+  let productSlugUIDData: any = parseDataValue(cachedData, cachedDataUID.productSlugUID)
+  let productReviewUIDData: any = parseDataValue(cachedData, cachedDataUID.productReviewUID)
+  let relatedProductUIDData: any = parseDataValue(cachedData, cachedDataUID.relatedProductUID)
+  let pdpLookBookUIDData: any = parseDataValue(cachedData, cachedDataUID.pdpLookBookUID)
+  let pdpCacheImageUIDData: any = parseDataValue(cachedData, cachedDataUID.pdpCacheImageUID)
+  let availablePromoUIDData: any = parseDataValue(cachedData, cachedDataUID.availablePromoUID)
+  let productCategoryUIDData: any = parseDataValue(cachedData, cachedDataUID.productCategoryUID)
 
   try {
-    const productPromise = commerce.getProduct({ query: params!?.slug[0] })
-    product = await productPromise
 
-    if (product?.status === "NotFound") {
+    if (!productSlugUIDData) {
+      const productPromise = commerce.getProduct({ query: slug })
+      productSlugUIDData = await productPromise
+      await setData([{ key: cachedDataUID.productSlugUID, value: productSlugUIDData }])
+    }
+
+    if (productSlugUIDData?.status === "NotFound") {
       return notFoundRedirect();
     }
-
-    const allProductsByCategoryRes = await commerce.getAllProducts({
-      query: {
-        categoryId: product?.product?.classification?.categoryCode,
-        pageSize: 50,
-      },
-    })
-    if (allProductsByCategoryRes?.products?.results?.length > 0) {
-      allProductsByCategory = allProductsByCategoryRes?.products?.results
+    if(!productCategoryUIDData){
+      const allProductsByCategoryRes = await commerce.getAllProducts({
+        query: {
+          categoryId: productSlugUIDData?.product?.classification?.categoryCode,
+          pageSize: 50,
+        },
+      })
+      if (allProductsByCategoryRes?.products?.results?.length > 0) {
+        productCategoryUIDData = allProductsByCategoryRes?.products?.results
+      }
+      await setData([{ key: cachedDataUID.productCategoryUID, value: productCategoryUIDData }])
     }
 
+    if(!availablePromoUIDData){
+      const availablePromotionsPromise = commerce.getProductPromos({
+        query: productSlugUIDData?.product?.recordId,
+      })
+      availablePromoUIDData = await availablePromotionsPromise
+      await setData([{ key: cachedDataUID.availablePromoUID, value: availablePromoUIDData }])
+    }
+    if(!relatedProductUIDData){
+      const relatedProductsPromise = commerce.getRelatedProducts({
+        query: productSlugUIDData?.product?.recordId,
+      })
+      relatedProductUIDData = await relatedProductsPromise
+      await setData([{ key: cachedDataUID.relatedProductUID, value: relatedProductUIDData }])
+    }
 
-    const availabelPromotionsPromise = commerce.getProductPromos({
-      query: product?.product?.recordId,
-    })
-    availabelPromotions = await availabelPromotionsPromise
-
-    const relatedProductsPromise = commerce.getRelatedProducts({
-      query: product?.product?.recordId,
-    })
-    relatedProducts = await relatedProductsPromise
-
-    // relatedProducts)
-
-    const reviewPromise = commerce.getProductReview({
-      query: product?.product?.recordId,
-    })
-    reviews = await reviewPromise
+ 
+    
+    if(!productReviewUIDData){
+      const reviewPromise = commerce.getProductReview({
+        query: productSlugUIDData?.product?.recordId,
+      })
+      productReviewUIDData = await reviewPromise
+      await setData([{ key: cachedDataUID.productReviewUID, value: productReviewUIDData }])
+    }
 
     // GET SELECTED PRODUCT ALL REVIEWS
-    const pdpLookbookPromise = commerce.getPdpLookbook({
-      query: product?.product?.stockCode,
-    })
-
-    pdpLookbook = await pdpLookbookPromise
-
-    if (pdpLookbook?.lookbooks?.length > 0) {
-      // GET SELECTED PRODUCT ALL REVIEWS
-      const pdpLookbookProductsPromise = commerce.getPdpLookbookProduct({
-        query: pdpLookbook?.lookbooks[0]?.slug,
+    if(!pdpLookBookUIDData){
+      const pdpLookbookPromise = commerce.getPdpLookbook({
+        query: productSlugUIDData?.product?.stockCode,
       })
-      pdpLookbookProducts = await pdpLookbookProductsPromise
+      const pdpLookbook = await pdpLookbookPromise
+      if (pdpLookbook?.lookbooks?.length > 0) {
+        const pdpLookbookProductsPromise = commerce.getPdpLookbookProduct({
+          query: pdpLookbook?.lookbooks[0]?.slug,
+        })
+        pdpLookBookUIDData = await pdpLookbookProductsPromise
+        await setData([{ key: cachedDataUID.pdpLookBookUID, value: pdpLookBookUIDData }])
+      }
     }
 
     try {
-      if (product?.product?.productCode) {
+      if (productSlugUIDData?.product?.productCode) {
         // GET SELECTED PRODUCT ALL REVIEWS
         const pdpCachedImagesPromise = commerce.getPdpCachedImage({
-          query: product?.product?.productCode,
+          query: productSlugUIDData?.product?.productCode,
         })
 
-        pdpCachedImages = await pdpCachedImagesPromise
+        pdpCacheImageUIDData = await pdpCachedImagesPromise
       }
     } catch (imgError) {}
   } catch (error: any) {
@@ -99,23 +136,26 @@ export async function getStaticProps({
     }
   }
 
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
+  if(!infraUIDData){
+    const infraPromise = commerce.getInfra()
+    infraUIDData = await infraPromise
+    await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
+  }
   return {
     props: {
-      data: product,
-      slug: params!.slug[0],
-      globalSnippets: infra?.snippets ?? [],
-      snippets: product?.snippets ?? [],
-      relatedProducts: relatedProducts,
-      availabelPromotions: availabelPromotions,
-      allProductsByCategory: allProductsByCategory,
-      reviews: reviews,
-      pdpCachedImages: pdpCachedImages?.images
-        ? JSON.parse(pdpCachedImages?.images)
+      data: productSlugUIDData,
+      slug: slug,
+      globalSnippets: infraUIDData?.snippets ?? [],
+      snippets: productSlugUIDData?.snippets ?? [],
+      relatedProducts: relatedProductUIDData,
+      availabelPromotions: availablePromoUIDData,
+      allProductsByCategory: productCategoryUIDData,
+      reviews: productReviewUIDData,
+      pdpCachedImages: pdpCacheImageUIDData?.images
+        ? JSON.parse(pdpCacheImageUIDData?.images)
         : [],
     },
-    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
 }
 

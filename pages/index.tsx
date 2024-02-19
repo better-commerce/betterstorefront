@@ -18,10 +18,12 @@ import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import { HOME_PAGE_DEFAULT_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { useRouter } from 'next/router'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
-import { matchStrings } from '@framework/utils/parse-util'
+import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
+import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
 const PromotionBanner = dynamic(() => import('@components/home/PromotionBanner'))
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
@@ -29,34 +31,66 @@ const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
+  const cachedData = await getDataByUID([ Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb, ])
+  const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
+  const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
+
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
-  // const pagesPromise = commerce.getAllPages({ config, preview })
-  // const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  // const { pages } = await pagesPromise
-  // const { categories, brands } = await siteInfoPromise
-  let pageContentsWeb = new Array<any>()
-  let pageContentsMobileWeb = new Array<any>()
   const promises = new Array<Promise<any>>()
+  if (!containsArrayData(pageContentWebUIDData)) {
+    infra?.currencies
+      ?.map((x: any) => x?.currencyCode)
+      ?.forEach((currencyCode: string, index: number) => {
+        promises.push(
+          new Promise<any>(async (resolve: any, reject: any) => {
+            try {
+              const pageContentsPromiseWeb = commerce.getPagePreviewContent({
+                id: '',
+                slug: HOME_PAGE_DEFAULT_SLUG,
+                workingVersion:
+                  process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                channel: 'Web',
+                currency: currencyCode,
+                cachedCopy: true,
+              })
+              const pageContentWeb = await pageContentsPromiseWeb
+              pageContentWebUIDData.push({ key: currencyCode, value: pageContentWeb })
+              await setData([{ key: Redis.Key.HomepageWeb, value: pageContentWebUIDData }])
+              resolve()
+            } catch (error: any) {
+              resolve()
+            }
+          })
+        )
+      })
+  }
 
-  infra?.currencies
-    ?.map((x: any) => x?.currencyCode)
-    ?.forEach((currencyCode: string, index: number) => {
-      promises.push(
-        new Promise<any>(async (resolve: any, reject: any) => {
+  if (!containsArrayData(pageContentMobileWebUIDData)) {
+    infra?.currencies
+      ?.map((x: any) => x?.currencyCode)
+      ?.forEach((currencyCode: string, index: number) => {
+        promises.push(
+          new Promise(async (resolve: any, reject: any) => {
           try {
-            const pageContentsPromiseWeb = commerce.getPagePreviewContent({
-              id: '',
-              slug: HOME_PAGE_DEFAULT_SLUG,
-              workingVersion:
-                process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-              channel: 'Web',
-              currency: currencyCode,
-              cachedCopy: true,
+            const pageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
+              {
+                id: '',
+                slug: HOME_PAGE_DEFAULT_SLUG,
+                workingVersion:
+                  process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                channel: 'MobileWeb',
+                currency: currencyCode,
+                cachedCopy: true,
+              }
+            )
+            const pageContentMobileWeb = await pageContentsPromiseMobileWeb
+            pageContentMobileWebUIDData.push({
+              key: currencyCode,
+              value: pageContentMobileWeb,
             })
-            const pageContentWeb = await pageContentsPromiseWeb
-            pageContentsWeb.push({ key: currencyCode, value: pageContentWeb })
+            await setData([{ key: Redis.Key.HomepageMobileWeb, value: pageContentMobileWebUIDData }])
             resolve()
           } catch (error: any) {
             resolve()
@@ -64,40 +98,18 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
         })
       )
     })
+  }
 
-  infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
-    promises.push(
-      new Promise(async (resolve: any, reject: any) => {
-        try {
-          const pageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
-            {
-              id: '',
-              slug: HOME_PAGE_DEFAULT_SLUG,
-              workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-              channel: 'MobileWeb',
-              currency: currencyCode,
-              cachedCopy: true,
-            }
-          )
-          const pageContentMobileWeb = await pageContentsPromiseMobileWeb
-          pageContentsMobileWeb.push({ key: currencyCode, value: pageContentMobileWeb, })
-          resolve()
-        } catch (error: any) {
-          resolve()
-        }
-      })
-    )
-  })
   await Promise.all(promises)
   const hostName = os.hostname()
   return {
     props: {
       globalSnippets: infra?.snippets ?? [],
-      pageContentsWeb: pageContentsWeb ?? [],
-      pageContentsMobileWeb: pageContentsMobileWeb ?? [],
+      pageContentsWeb: pageContentWebUIDData,
+      pageContentsMobileWeb: pageContentMobileWebUIDData,
       hostName: obfuscateHostName(hostName),
     },
-    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
 }
 
