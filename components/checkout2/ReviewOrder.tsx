@@ -1,14 +1,11 @@
 // Base Imports
 import React from 'react'
 
-// Package Imports
-import { useRouter } from 'next/router'
-
 // Other Imports
-import { useUI } from '@components/ui'
 import { vatIncluded } from '@framework/utils/app-util'
 import { eddDateFormat } from '@framework/utils/parse-util'
 import PaymentMethodSelection from './PaymentMethodSelection'
+import { CheckoutStep } from '@framework/utils/enums'
 
 interface ShippingMethod {
   id: string
@@ -154,7 +151,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
               <button
                 className="justify-end font-semibold text-black font-12 hover:text-orange-600"
                 onClick={() =>
-                  goToStep('delivery')
+                  goToStep(CheckoutStep.DELIVERY)
                 }
               >
                 Change

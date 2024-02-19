@@ -8,17 +8,12 @@ import {
   BCEnvironment,
   BetterCommerceOperation,
 } from '@better-commerce/bc-payments-sdk'
-import {
-  AUTH_URL,
-  BASE_URL,
-  CLIENT_ID,
-  SHARED_SECRET,
-} from '@framework/utils/constants'
-import { EmptyString } from '@components/utils/constants'
+import { AUTH_URL, BASE_URL, CLIENT_ID, SHARED_SECRET, } from '@framework/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString } from '@components/utils/constants'
 
 const logId = 'Payments | ConvertOrder'
 
-const ConvertOrderApiMiddleware = function () {
+const convertOrderApiMiddleware = function () {
   return async function useConvertOrder({
     data,
     config,
@@ -34,6 +29,7 @@ const ConvertOrderApiMiddleware = function () {
       }
 
       logData['request'] = data
+      logData['requestId'] = objectId
       if (LOG_REQUEST_OPTIONS) {
         console.log(config)
         logData['requestOptions'] = config
@@ -51,11 +47,17 @@ const ConvertOrderApiMiddleware = function () {
       )
 
       BCEnvironment.init(CLIENT_ID!, SHARED_SECRET!, config, AUTH_URL, BASE_URL)
+      BCEnvironment.addExtras({
+        country: BETTERCOMMERCE_DEFAULT_COUNTRY,
+        currency: cookies?.Currency,
+        language: BETTERCOMMERCE_DEFAULT_LANGUAGE,
+      })
       const convertOrderResult =
         await new BetterCommerceOperation().convertOrder(params)
 
       logData = {}
       logData['response'] = convertOrderResult
+      logData['requestId'] = objectId
       await logPaymentRequest(
         {
           //headers: {},
@@ -72,6 +74,7 @@ const ConvertOrderApiMiddleware = function () {
     } catch (error: any) {
       logData = {}
       logData['error'] = error
+      logData['requestId'] = objectId
       await logPaymentRequest(
         {
           //headers: {},
@@ -90,4 +93,4 @@ const ConvertOrderApiMiddleware = function () {
   }
 }
 
-export default ConvertOrderApiMiddleware
+export default convertOrderApiMiddleware

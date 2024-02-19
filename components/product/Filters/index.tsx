@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/24/solid'
+import { ChevronDownIcon, FunnelIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
@@ -20,6 +20,7 @@ interface Props {
   routerFilters: any
   clearAll: any
   routerSortOption: any
+  removeFilter: any
 }
 
 export default function Filters({
@@ -29,6 +30,7 @@ export default function Filters({
   routerFilters,
   clearAll,
   routerSortOption,
+  removeFilter,
 }: Props) {
   const [open, setOpen] = useState(false)
 
@@ -134,19 +136,19 @@ export default function Filters({
 
       <section
         aria-labelledby="filter-heading-filter"
-        className="flex items-center justify-between px-0 py-0 text-center w-screen border-t border-gray-200 sm:px-4 lg:max-w-7xl lg:px-8"
+        className="flex items-center justify-between px-0 py-0 text-center w-screen mob-w-screen border-t border-gray-200 sm:px-4 lg:max-w-7xl lg:px-8"
       >
         <h2 id="filter-heading-filter" className="sr-only">
           {GENERAL_FILTER_TITLE}
         </h2>
         <div className="relative col-start-1 row-start-1 py-3">
-          <div className="flex px-4 pr-2 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex px-2 pr-2 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
             <button
               onClick={() => setOpen(true)}
               title="Product Filter"
               className="flex items-center font-medium text-gray-700 group px-4 py-2 bg-gray-200"
             >
-           FILTER
+              <AdjustmentsHorizontalIcon className='w-5 h-5 text-black' />
               {/* {appliedFilters?.length > 0 && routerFilters.length} */}
             </button>
           </div>
@@ -173,20 +175,21 @@ export default function Filters({
               </button>
             </div>
           </div>
-          <div className="grid flex-col grid-cols-1 px-4 py-2 border-t border-gray-100 my-2">
-            <div className="grid grid-cols-2">
+          <div className="flex flex-wrap px-4 py-2 border-t border-gray-100 my-2">
+            <div className="flex flex-wrap">
               {appliedFilters.map((appliedFilter: any, idx: number) => (
                 <div
                   key={`applied-filter-${idx}`}
-                  className="flex-1 text-xs text-left text-gray-600 justify-left items-left"
+                  className="flex py-1 px-2 m-1 w-auto text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl"
                 >
                   {appliedFilter.name ? (
-                    <>
+                    <div className="flex">
                       <span className="font-medium">
                         {appliedFilter.name}:{' '}
                       </span>
-                      <span className="ml-1">{appliedFilter.Value}</span>
-                    </>
+                      <span>{appliedFilter.Value}</span>
+                      <XMarkIcon onClick={ () => removeFilter(appliedFilter)} className='flex w-4 h-4 my-auto ml-1 cursor-pointer md:h-3 md:w-3 2xl:h-4 2xl:w-4'/>
+                    </div>
                   ) : null}
                 </div>
               ))}

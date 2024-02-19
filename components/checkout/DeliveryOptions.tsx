@@ -195,7 +195,7 @@ function DeliveryOptions({
   }
 
   return (
-    <div className="flex w-full h-full items-center justify-center">
+    <div className="flex items-center justify-center w-full h-full">
       {isLoading ? (
         <LoadingDots />
       ) : (
@@ -207,7 +207,7 @@ function DeliveryOptions({
               {`Delivery ${count+1}`}
             </RadioGroup.Label> */}
 
-          <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+          <div className="grid grid-cols-1 mt-4 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
             {deliveryMethods.map(
               (deliveryMethod: any, deliveryIdx: any) =>
                 !!deliveryMethod.children.length && (
@@ -224,17 +224,17 @@ function DeliveryOptions({
                   >
                     {({ checked, active }) => (
                       <>
-                        <div className="flex-1 flex">
+                        <div className="flex flex-1">
                           <div className="flex flex-col">
                             <RadioGroup.Label
                               as="span"
-                              className="block text-md uppercase font-bold text-gray-900"
+                              className="block font-bold text-gray-900 uppercase text-md"
                             >
                               {deliveryMethod.title}
                             </RadioGroup.Label>
                             <RadioGroup.Description
                               as="span"
-                              className="mt-1 flex items-center text-sm text-gray-500"
+                              className="flex items-center mt-1 text-sm text-gray-500"
                             >
                               {deliveryMethod.content}
                             </RadioGroup.Description>
@@ -248,7 +248,7 @@ function DeliveryOptions({
                         </div>
                         {checked ? (
                           <CheckCircleIcon
-                            className="h-5 w-5 text-black"
+                            className="w-5 h-5 text-black"
                             aria-hidden="true"
                           />
                         ) : null}
@@ -266,7 +266,7 @@ function DeliveryOptions({
                 )
             )}
           </div>
-          <ul className={`text-gray-900 mt-10`}>
+          <ul className={`text-gray-900 mt-4`}>
             {selectedDeliveryMethod.children.map((item: any, idx: number) => {
               return (
                 <div key={idx} className="flex flex-col">
@@ -277,21 +277,21 @@ function DeliveryOptions({
                     }  pointer border-2 py-5 px-5 flex justify-between flex-row`}
                   >
                     <div>
-                      <h4 className="uppercase font-bold text-gray-900">
+                      <h4 className="font-bold text-gray-900 uppercase">
                         {'Standard Shipping'} {/* {item.displayName} */}
                       </h4>
-                      <p className="text-sm py-2">
+                      <p className="py-2 text-sm">
                         {products[0]?.shippingSpeed}
                       </p>
                     </div>
-                    <div className="flex flex-row justify-center items-center">
-                      <h3 className="text-lg uppercase font-bold text-gray-900">
+                    <div className="flex flex-row items-center justify-center">
+                      <h3 className="text-lg font-bold text-gray-900 uppercase">
                         {item.price.formatted.withTax}
                       </h3>
                       {shippingMethod.id === item.id ? (
                         <div className="ml-5">
                           <CheckCircleIcon
-                            className="h-5 w-5 text-black"
+                            className="w-5 h-5 text-black"
                             aria-hidden="true"
                           />
                         </div>

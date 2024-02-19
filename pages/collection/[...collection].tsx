@@ -32,6 +32,7 @@ import { IPLPFilterState, useUI } from '@components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
+import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 const CompareSelectionBar = dynamic(
@@ -154,7 +155,7 @@ export default function CollectionPage(props: any) {
   }
 
   const [state, dispatch] = useReducer(reducer, initialState)
-
+  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
     data: collection,
     data = {
@@ -171,7 +172,7 @@ export default function CollectionPage(props: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: props?.slug } }],
+    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -194,6 +195,12 @@ export default function CollectionPage(props: any) {
   })
 
   const [productDataToPass, setProductDataToPass] = useState(props?.products)
+
+  const onEnableOutOfStockItems = (val: boolean) => {
+    setExcludeOOSProduct(!val)
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
 
   useEffect(() => {
     if (productDataToPass) {
@@ -253,6 +260,10 @@ export default function CollectionPage(props: any) {
       setProductDataToPass(dataToPass)
     }
   }, [productListMemory?.products, data?.products])
+    
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
+  }
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
@@ -416,34 +427,20 @@ export default function CollectionPage(props: any) {
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{props?.metaTitle || props?.name}</title>
         <meta name="title" content={props?.metaTitle || props?.name} />
         <meta name="description" content={props?.metaDescription} />
         <meta name="keywords" content={props?.metaKeywords} />
-
         <meta property="og:image" content="" />
         <meta property="og:title" content={props?.metaTitle || props?.name} key="ogtitle" />
-        <meta
-          property="og:description"
-          content={props?.metaDescription}
-          key="ogdesc"
-        />
+        <meta property="og:description" content={props?.metaDescription} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta
-          property="og:url"
-          content={absPath || SITE_ORIGIN_URL + router.asPath}
-          key="ogurl"
-        />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      {props?.hostName && (
-        <input className="inst" type="hidden" value={props?.hostName} />
-      )}
-      <div className="pt-6 pb-24 mx-auto bg-transparent 2xl:w-4/5 sm:px-0">
+      {props?.hostName && ( <input className="inst" type="hidden" value={props?.hostName} /> )}
+      <div className="pt-6 pb-24 mx-auto bg-transparent container sm:px-0">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
@@ -455,32 +452,13 @@ export default function CollectionPage(props: any) {
                 <>
                   <div className="w-full v-image-space">
                     {props?.images?.map((img: any, idx: number) => {
-                      const imgUrl =
-                        (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
+                      const imgUrl = (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
                       return (
                         <div key={`property-images-${idx}`}>
                           <div className="relative w-full h-auto px-0 collection-multi-vimage">
-                            <Link
-                              legacyBehavior
-                              href={img?.link || '#'}
-                              passHref
-                            >
+                            <Link legacyBehavior href={img?.link || '#'} passHref >
                               <span style={{ paddingTop }} className="block">
-                                <img
-                                  src={
-                                    generateUri(imgUrl, 'h=1600&fm=webp&q=50') ||
-                                    IMG_PLACEHOLDER
-                                  }
-                                  alt="Collection Banner"
-                                  className="object-contain"
-                                  onLoad={({ target }) => {
-                                    const { naturalWidth, naturalHeight } =
-                                      target as HTMLImageElement
-                                    setPaddingTop(
-                                      `calc(100% / (${naturalWidth} / ${naturalHeight})`
-                                    )
-                                  }}
-                                />
+                                <img src={ generateUri(imgUrl, 'h=1600&fm=webp&q=50') || IMG_PLACEHOLDER } alt="Collection Banner" className="object-contain" onLoad={({ target }) => { const { naturalWidth, naturalHeight } = target as HTMLImageElement; setPaddingTop( `calc(100% / (${naturalWidth} / ${naturalHeight})` ) }} />
                               </span>
                             </Link>
                             <div className="absolute z-10 text-left bottom-3 left-4">
@@ -492,11 +470,7 @@ export default function CollectionPage(props: any) {
                               </p>
                               {img?.title ? (
                                 <>
-                                  <Link
-                                    legacyBehavior
-                                    href={img?.link}
-                                    passHref
-                                  >
+                                  <Link legacyBehavior href={img?.link} passHref >
                                     <span className="font-medium text-left text-white underline text-12">
                                       Shop now
                                     </span>
@@ -513,17 +487,11 @@ export default function CollectionPage(props: any) {
               ) : (
                 <>
                   {props?.images?.map((img: any, idx: number) => {
-                    const imgUrl =
-                      (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
+                    const imgUrl = (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url
                     return (
-                      <div
-                        className="w-full h-auto px-0"
-                        key={`banner-image-${idx}`}
-                      >
+                      <div className="w-full h-auto px-0" key={`banner-image-${idx}`} >
                         <Link legacyBehavior href={img?.link || '#'}>
-                          <a>
-                            <img src={imgUrl} width ={1920} height={460} alt="banner" />
-                          </a>
+                          <a> <img src={imgUrl} width ={1920} height={460} alt="banner" /> </a>
                         </Link>
                       </div>
                     )
@@ -535,33 +503,18 @@ export default function CollectionPage(props: any) {
         )}
         {props?.customInfo3 == 'Horizontal' ||
           (props?.customInfo3 == 'horizontal' && props?.images?.length > 0 && (
-            <Swiper
-              navigation={true}
-              loop={true}
-              className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0"
-            >
+            <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0" >
               {props?.images?.map((img: any, idx: number) => (
                 <SwiperSlide key={`horizontal-slider-${idx}`}>
                   <Link href={img.link || '#'}>
-                    <img
-                      style={css}
-                      width={1920}
-                      height={460}
-                      src={
-                        generateUri(img.url, 'h=500&fm=webp') || IMG_PLACEHOLDER
-                      }
-                      alt={props?.name || 'Collection Banner'}
-                      className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96"
-                    />
+                    <img style={css} width={1920} height={460} src={ generateUri(img.url, 'h=500&fm=webp') || IMG_PLACEHOLDER } alt={props?.name || 'Collection Banner'} className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96" />
                   </Link>
                 </SwiperSlide>
               ))}
             </Swiper>
           ))}
 
-        <div
-          className={`sticky w-full py-4 mx-auto bg-white top-108 px-4 sm:px-4 2xl:px-0 sm:py-4 ${cls}`}
-        >
+        <div className={`sticky w-full py-4 mx-auto bg-white top-108 px-4 sm:px-4 2xl:px-0 sm:py-4 ${cls}`} >
           <h1 className="inline-block capitalize text-primary dark:text-black">
             {props?.name}
           </h1>
@@ -576,60 +529,37 @@ export default function CollectionPage(props: any) {
             {props?.allowFacets ? (
               <>
                 {isMobile ? (
-                  <ProductMobileFilters
-                    handleFilters={handleFilters}
-                    products={data.products}
-                    routerFilters={state.filters}
-                    handleSortBy={handleSortBy}
-                    clearAll={clearAll}
-                    routerSortOption={state.sortBy}
-                  />
-                ) : (
-                  <ProductFilterRight
-                    handleFilters={handleFilters}
-                    products={data.products}
-                    routerFilters={state.filters}
-                  />
+                  <>
+                    <div className="flex justify-end w-full">
+                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                    </div>
+                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
+                  </>
+                ) : ( 
+                    <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
                 )}
                 <div className="sm:col-span-10 p-[1px]">
-                  {isMobile ? null : (
-                    <ProductFiltersTopBar
-                      products={data.products}
-                      handleSortBy={handleSortBy}
-                      routerFilters={state.filters}
-                      clearAll={clearAll}
-                      routerSortOption={state.sortBy}
-                    />
+                  {isMobile ? null : (   
+                  <>
+                    <div className="flex justify-end w-full">
+                      <OutOfStockFilter
+                        excludeOOSProduct={excludeOOSProduct}
+                        onEnableOutOfStockItems={onEnableOutOfStockItems}
+                        />
+                    </div>
+                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy}  removeFilter={removeFilter}/>
+                  </>    
                   )}
-                  <ProductGridWithFacet
-                    products={productDataToPass}
-                    currentPage={state?.currentPage}
-                    handlePageChange={handlePageChange}
-                    handleInfiniteScroll={handleInfiniteScroll}
-                    deviceInfo={deviceInfo}
-                    maxBasketItemsCount={maxBasketItemsCount(config)}
-                    isCompared={isCompared}
-                  />
+                  <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
                 </div>
               </>
             ) : (
               <div className="col-span-12">
-                <ProductFiltersTopBar
-                  products={data.products}
-                  handleSortBy={handleSortBy}
-                  routerFilters={state.filters}
-                  clearAll={clearAll}
-                  routerSortOption={state.sortBy}
-                />
-                <ProductGrid
-                  products={productDataToPass}
-                  currentPage={state?.currentPage}
-                  handlePageChange={handlePageChange}
-                  handleInfiniteScroll={handleInfiniteScroll}
-                  deviceInfo={deviceInfo}
-                  maxBasketItemsCount={maxBasketItemsCount(config)}
-                  isCompared={isCompared}
-                />
+                <div className="flex justify-end w-full">
+                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                </div>
+                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
+                <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
               </div>
             )}
           </div>
@@ -649,21 +579,9 @@ export default function CollectionPage(props: any) {
           </div>
         )}
 
-        <PLPFilterSidebar
-          handleSortBy={handleSortBy}
-          openSidebar={openPLPSidebar}
-          handleTogglePLPSidebar={handleTogglePLPSidebar}
-          plpFilterState={plpFilterState}
-        />
+        <PLPFilterSidebar handleSortBy={handleSortBy} openSidebar={openPLPSidebar} handleTogglePLPSidebar={handleTogglePLPSidebar} plpFilterState={plpFilterState} />
 
-        <CompareSelectionBar
-          name={props?.name}
-          showCompareProducts={showCompareProducts}
-          isCompare={isProductCompare}
-          maxBasketItemsCount={maxBasketItemsCount(config)}
-          closeCompareProducts={closeCompareProducts}
-          deviceInfo={deviceInfo}
-        />
+        <CompareSelectionBar name={props?.name} showCompareProducts={showCompareProducts} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
 
         {data?.products?.results?.length > 0 && (
           <Script

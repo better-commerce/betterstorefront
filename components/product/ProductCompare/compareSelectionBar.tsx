@@ -7,6 +7,13 @@ export default function CompareSelectionBar({ name, showCompareProducts, isCompa
   const { isCompared, setIsCompared, compareProductList, resetCompareProducts } = useUI()
   const [products, setProducts] = useState([])
   const router = useRouter()
+
+  useEffect(() => {
+    return () => {
+      setIsCompared('false')
+    }
+  }, [])
+
   useEffect(() => {
     if (!router.pathname.includes('/products')) {
       setIsCompared('false')
@@ -35,7 +42,7 @@ export default function CompareSelectionBar({ name, showCompareProducts, isCompa
           </div>
           <div className="flex items-center flex-1 mb-2 text-right sm:justify-end gap-x-4">
             <button onClick={() => clearAllSelected()} className="order-2 px-4 font-semibold text-black underline sm:order-1 font-14 hover:text-orange-600">Clear all</button>
-            <button type="button" onClick={() => showCompareProducts()} className="order-1 p-3 font-semibold text-center text-white uppercase bg-black rounded sm:order-2 sm:truncate disabled:cursor-not-allowed btn-primary disabled:opacity-20" disabled={!Boolean(products?.length > 1)} title={!Boolean(products?.length > 1) ? 'Please select at least 2 items.' : ''}>
+            <button type="button" onClick={() => showCompareProducts()} className="order-1 p-3 font-semibold text-center text-white uppercase bg-black rounded sm:order-2 sm:truncate disabled:cursor-not-allowed btn-primary disabled:opacity-20 button" disabled={!Boolean(products?.length > 1)} title={!Boolean(products?.length > 1) ? 'Please select at least 2 items.' : ''}>
               Compare Selected
             </button>
           </div>

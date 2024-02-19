@@ -8,7 +8,7 @@ import { cloneDeep } from 'lodash'
 const ATTR_COMPONENTS: any = {
   SizeInline: (props: any) => <SizeInline {...props} />,
   HorizontalList: (props: any) => <InlineList {...props} />,
-  Dropdown: (props: any) => <Dropdown {...props} />,
+  Dropdown: (props: any) => <SizeInline {...props} />, // Used SizeInline Component because FFX used inline design we can use <Dropdown {...props} /> if we can
 }
 
 export default function AttributesHandler({
@@ -18,7 +18,7 @@ export default function AttributesHandler({
   variantInfo,
   handleSetProductVariantInfo,
   isQuickView = false,
-  handleFetchProductQuickView,
+  handleFetchProductQuickView = () => {},
   setVariantInfo,
   componentAttributeKey = '',
   sizeInit,
@@ -32,14 +32,16 @@ export default function AttributesHandler({
   } = product
 
   const TEMP_MAP = variantAttributes?.reduce((tempMap: any, attribute: any) => {
-    const componentKey = attribute?.fieldName == 'Colour' ?  attribute?.inputType == "" ? 'HorizontalList' : attribute?.inputType || 'HorizontalList' :
+    const componentKey = attribute?.fieldName == 'Colour' ?
+      attribute?.inputType == "" ? 'HorizontalList' : attribute?.inputType || 'HorizontalList' :
       attribute?.inputType == "" ? 'SizeInline' : attribute?.inputType || 'SizeInline';
     tempMap[attribute?.fieldCode] = ATTR_COMPONENTS[componentKey];
     return tempMap;
   }, {});
 
   const dynamicComponentMap = variantAttributes?.reduce((map: any, attribute: any) => {
-    const componentKey = attribute?.fieldName == 'Colour' ? attribute?.inputType == "" ? 'HorizontalList' : attribute?.inputType || 'HorizontalList' :
+    const componentKey = attribute?.fieldName == 'Colour' ?
+      attribute?.inputType == "" ? 'HorizontalList' : attribute?.inputType || 'HorizontalList' :
       attribute?.inputType == "" ? 'SizeInline' : attribute?.inputType || 'SizeInline';
     map[attribute?.fieldCode] = ATTR_COMPONENTS[componentKey];
     return map;
@@ -66,7 +68,7 @@ export default function AttributesHandler({
   }, [componentAttributeKey])
 
   const router = useRouter()
-  const slug = productSlug || `products/${router.query.slug}`
+  const slug = productSlug || variant?.slug || variant?.link || `products/${router.query.slug}`
   const originalAttributes = getAttributesFromSlug(slug, variantProducts) || {}
   const generatedAttrCombination = Object?.fromEntries(Object?.entries(originalAttributes))
   const [attrCombination, setAttrCombination] = useState(generatedAttrCombination)
@@ -110,29 +112,16 @@ export default function AttributesHandler({
       [fieldCode]: value,
     };
 
-    // for quickview
-    const constructQuickViewParameters = (fieldData: any, fieldSet: any) => {
-      const parameters: any = {
-        slug: fieldSet?.slug || null,
-        fieldSet,
-      };
-
-      Object?.keys(fieldData)?.forEach((fieldCode) => {
-        parameters[fieldCode] = fieldData[fieldCode];
-      });
-
-      return parameters;
-    };
-
+    // for quick view product
     if (isQuickView) {
-      const quickViewParameters = constructQuickViewParameters(updatedFieldData, fieldSet);
-      handleFetchProductQuickView(quickViewParameters);
-      return;
+      handleFetchProductQuickView(fieldSet?.slug);
     }
 
-    if (fieldSet?.slug) {
+    // for PDP, page should get refreshed if slug exist
+    if (fieldSet?.slug && !isQuickView) {
       router.push(`/${fieldSet?.slug}`)
     }
+
     setFieldData(updatedFieldData);
   }
 
@@ -241,13 +230,32 @@ export default function AttributesHandler({
   }
 
   const generateDynamicAttributes = () => {
-    const dynamicAttributes = variantAttributes?.map((attribute: any, index: number) => ({
-      ...attribute,
-      displayOrder: index + 1,
-    }));
-
-    return dynamicAttributes;
-  };
+    const dynamicAttributes = variantAttributes?.map(
+      (attribute: any, index: number) => ({
+        ...attribute,
+        displayOrder: index + 1,
+      })
+    ) || []
+    if (variantProducts?.length > 0) {
+      for (let i = 1; i < dynamicAttributes?.length; i++) {
+        const variantAttrib = dynamicAttributes[i]
+        const attribValues: any = []
+        for (let j = 0; j < variantProducts?.length; j++) {
+          const variantProd = variantProducts[j]
+          attribValues.push(
+            variantProd?.attributes?.find(
+              (o: any) => o.fieldCode === variantAttrib.fieldCode
+            )
+          )
+        }
+        variantAttrib.fieldValues = variantAttrib.fieldValues.filter(
+          (field: any) =>
+            attribValues.some((o: any) => o.fieldValue === field.fieldValue)
+        )
+      }
+    }
+    return dynamicAttributes
+  }
 
   const DefaultComponent: any = () => null;
   const stateAttributes: any = attrCombination;
@@ -255,14 +263,14 @@ export default function AttributesHandler({
   const keyAttributes = dynamicAttributes?.map((attribute: any) => attribute?.fieldCode);
 
   const matchAttributes =
-    variantAttributes && variantAttributes?.length
-      ? variantAttributes?.filter((x: any) => keyAttributes?.includes(x?.fieldCode))
+    dynamicAttributes && dynamicAttributes?.length
+      ? dynamicAttributes?.filter((x: any) => keyAttributes?.includes(x?.fieldCode))
       : false;
 
   const sortAttributes =
     matchAttributes && matchAttributes?.length === keyAttributes?.length;
 
-  const tempVariantAttrs = variantAttributes?.map((x: any, index: number) => ({
+  const tempVariantAttrs = dynamicAttributes?.map((x: any, index: number) => ({
     ...x,
     ...{ displayOrder: index + 1 },
   }));
@@ -289,10 +297,12 @@ export default function AttributesHandler({
       })?.map((option: any, optionIdx: number) => {
         const optionsToPass = generateOptions(option)
         const originalAttribute = isCustomAttr ? stateAttributes[option?.fieldCode] : originalAttributes[option?.fieldCode]
-        const Component = ATTR_COMPONENTS[option?.inputType] || mapComponents[option?.fieldCode] || DefaultComponent
+        const Component = ATTR_COMPONENTS[option?.fieldName == "Colour" ? "HorizontalList" : "SizeInline"] || mapComponents[option?.fieldCode] || DefaultComponent
         return (
           <div key={`attribute-handler-${optionIdx}`}>
             <Component
+              componentIdx={optionIdx}
+              isQuickView={isQuickView}
               currentAttribute={originalAttribute}
               getStockPerAttribute={getStockPerAttribute}
               items={optionsToPass}

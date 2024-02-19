@@ -11,7 +11,7 @@ import {
   ERROR_LOG_OUTPUT_DIR,
   HTTP_MESSAGES,
 } from './constants'
-
+import { Guid } from '@commerce/types'
 export const setCookie = (
   name: string,
   token?: string,
@@ -157,4 +157,8 @@ export const apiMiddlewareErrorHandler = (req: any, res: any, error: any) => {
 
   // send response
   res.status(errorInfo?.statusCode).json(errorInfo)
+}
+
+export const checkIfFalsyUserId = (userId: any) => {
+  return (!userId || (userId && (userId === Guid.empty || userId === 'undefined' || userId === 'null')))
 }

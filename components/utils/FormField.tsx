@@ -1,5 +1,5 @@
 // Base Imports
-import React from 'react'
+import React, { useState } from 'react'
 
 // Package Imports
 import { Field } from 'formik'
@@ -11,6 +11,7 @@ import classNames from 'classnames'
 interface IFormFieldProps {
   readonly context: any
   readonly item: any
+  readonly options?: any
   readonly extraConfig?: any
   readonly lastChildInFloatingContainer?: any
   readonly lastChildInLabel?: any
@@ -172,6 +173,44 @@ const FormField = (props: IFormFieldProps) => {
                 </>
               )
             }}
+          </Field>
+        </>
+      )}
+      {matchStrings(item?.type, 'select', true) && (
+        <>
+          <h3 className={item?.labelClassName}>
+            {item?.label}
+            {item?.required && <span className="text-red-600">*</span>}
+          </h3>
+          <Field name={item?.name} disabled={item?.disabled}>
+            {({ field, meta, form: { setFieldValue } }: any) =>{
+              const data = (context?.initialValues?.countryCode && context?.initialValues?.country) ? `${context?.initialValues?.countryCode}&${context?.initialValues?.country}` : "default";
+              const [selectedValue,setSelectedValue]=useState(data)
+              return(
+                <>
+                  <select
+                    {...field}
+                    className={item?.selectClassName}
+                    onChange={(e: any) => {
+                      setSelectedValue(`${e.target.value}`)
+                      setFieldValue(item?.name, e.target.value);
+                    }}
+                    value={selectedValue}
+                    class={item?.className}
+                  >
+                    <option value="default" disabled selected>
+                    Select a Country
+                    </option>
+                    {item?.options?.map((option: any, idx: number) => (
+                      <option key={idx} value={`${option?.itemValue}&${option?.itemText}`}>
+                        {option?.itemText || context?.initialValues?.country}
+                      </option>
+                    ))}
+                  </select>
+
+                  {item?.required && context?.touched[item?.name] && getErrorLabel(context, item, true)}
+                </>
+            )}}
           </Field>
         </>
       )}

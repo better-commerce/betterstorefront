@@ -32,6 +32,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     basketId,
     setCartItems,
     removeFromWishlist,
+    openCart,
   } = useUI()
   const isIncludeVAT = vatIncluded()
   const { getWishlist, deleteWishlistItem } = useWishlist()
@@ -112,6 +113,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
         setCartItems(response)
         setItemInCart(true)
         deleteItemFromWishlist(product)
+        openCart()
         setTimeout(() => {
           setItemInCart(false)
         }, 3000)
@@ -282,7 +284,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                       <p>
                         <button
                           type="button"
-                          className="flex items-center justify-center px-6 py-3 font-medium uppercase btn-primary"
+                          className="flex items-center justify-center btn btn-primary"
                           onClick={handleClose}
                         >
                           {GENERAL_CONTINUE_SHOPPING}

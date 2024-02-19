@@ -64,7 +64,7 @@ export default function Summary({
   const [referralInfo, setReferralInfo] = useState<any>(null)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
-  const { user,guestUser,isGuestUser } = useUI()
+  const { user, guestUser, isGuestUser } = useUI()
   const handleToggleEngravingModal = (product?: any) => {
     if (product) setSelectedEngravingProduct(product)
     setIsEngravingOpen(!isEngravingOpen)
@@ -102,14 +102,14 @@ export default function Summary({
 
   const handleReferralRegisterUser = async (referralId: any) => {
     let referralEmail = ''
-    if(guestUser?.email){
+    if (guestUser?.email) {
       referralEmail = guestUser?.email
-    } else{
+    } else {
       referralEmail = user?.email
-    } 
+    }
     let { data: voucherInfo } = await axios.post(
       NEXT_REFERRAL_ADD_USER_REFEREE,
-      { referralId: referralId, email: referralEmail})
+      { referralId: referralId, email: referralEmail })
     if (voucherInfo?.referralDetails) {
       setReferralInfo(voucherInfo?.referralDetails)
     } else {
@@ -119,16 +119,16 @@ export default function Summary({
   }
 
   const handleReferralSearch = async () => {
-    if(refCodeInput.trim().length > 0 ){
+    if (refCodeInput.trim().length > 0) {
       setIsLoading(true)
       let { data: referralSearch } = await axios.post(NEXT_REFERRAL_BY_SLUG, {
         slug: refCodeInput.trim(),
       })
       if (referralSearch?.referralDetails) {
         let referrerReferralId = referralSearch?.referralDetails?.id
-        if(referrerReferralId){
+        if (referrerReferralId) {
           handleReferralRegisterUser(referrerReferralId)
-        } else{
+        } else {
           setIsLoading(false)
           setError(USER_NOT_FOUND)
         }
@@ -222,15 +222,11 @@ export default function Summary({
                                 PERSONALIZATION = val.name
                               }
                             })}
-                            <div className="flex-shrink-0 w-32 sm:w-0">
-                              <Link href={`/${product.slug}`}>
-                                <img
-                                  width={80}
-                                  height={100}
-                                  src={generateUri(`${product.image}`,'h=100&fm=webp') || IMG_PLACEHOLDER}
-                                alt={product.name ||'product-image'}
-                                  className="object-cover w-full h-full"
-                                />
+                            <div className="flex-shrink-0 w-10 sm:w-0">
+                              <Link href={`/${product.slug}`} className='w-20' legacyBehavior>
+                                <a href={`/${product.slug}`} className='w-20'>
+                                  <img width={80} height={100} src={generateUri(`${product.image}`, 'h=100&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'product-image'} className="object-cover w-full h-full" />
+                                </a>
                               </Link>
                             </div>
 
@@ -512,12 +508,12 @@ export default function Summary({
                       <div className="flex-shrink-0">
                         <Link
                           href={!isPaymentLink ? `/${product.slug}` : "#"}
-                          className="inline-block font-medium text-gray-700 hover:text-gray-800 hover:underline"
+                          className="inline-block w-20 font-medium text-gray-700 hover:text-gray-800 hover:underline"
                         >
                           <img
                             width={80}
                             height={100}
-                            src={generateUri(`${product.image}`,'h=100&fm=webp') || IMG_PLACEHOLDER}
+                            src={generateUri(`${product.image}`, 'h=100&fm=webp') || IMG_PLACEHOLDER}
                             alt={product.name || 'product-image'}
                             className="object-cover w-full h-full"
                           />
@@ -651,7 +647,7 @@ export default function Summary({
                 </Disclosure>
                 {referralAvailable && guestUser?.email && (
                   <h3
-                    className="text-sm text-green underline font-semibold cursor-pointer"
+                    className="text-sm font-semibold underline cursor-pointer text-green"
                     onClick={() => {
                       setReferralModalShow(true)
                     }}
@@ -786,10 +782,10 @@ export default function Summary({
                                   </button>
                                 </div>
                               </div>
-                              <div className="sm:px-0 flex flex-row">
+                              <div className="flex flex-row sm:px-0">
                                 {/*Referal Program Info view*/}
                                 {referralAvailable && !referralInfo && (
-                                  <div className="my-10 flex w-full flex-col 2xl:justify-center xl:items-center max-w-lg px-9">
+                                  <div className="flex flex-col w-full max-w-lg my-10 2xl:justify-center xl:items-center px-9">
                                     <h2 className="mx-2 text-[30px] text-center">
                                       Search your Friend by their Referral Code
                                     </h2>
@@ -841,14 +837,14 @@ export default function Summary({
                                         onClick={handleCopyClick}
                                       >
                                         {!copied ? (
-                                          <ClipboardIcon className="flex justify-center items-center" />
+                                          <ClipboardIcon className="flex items-center justify-center" />
                                         ) : (
-                                          <ClipboardFill className="flex justify-center items-center" />
+                                          <ClipboardFill className="flex items-center justify-center" />
                                         )}
                                         {/* {copied ? 'COPIED' : 'COPY CODE'} */}
                                       </div>
                                     </div>
-                                    <p className="px-5 text-center font-bold">
+                                    <p className="px-5 font-bold text-center">
                                       Offer: {referralInfo?.promoName}
                                     </p>
                                     <p className="font-bold">

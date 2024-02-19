@@ -6,11 +6,7 @@
 */
 
 // Package Imports
-import { DATE_TIME_FORMAT } from '@components/utils/constants'
-import { CURRENCY_SYMBOL_POUND } from '@components/utils/textVariables'
-import { toNumber } from 'lodash'
 import moment from 'moment'
-import { hrtime } from 'process'
 const format = require('string-format')
 
 /**
@@ -48,13 +44,31 @@ export const stringToNumber = (stringValue: string | undefined): number => {
   }
   return 0
 }
-export const roundToDecimalPlaces = (
-  value: any,
-  decimalPlaces: number = 2
-): any => {
-  const decPlaces = Math.pow(10, decimalPlaces)
-  return Math.round((value + Number.EPSILON) * decPlaces) / decPlaces
+export const roundToDecimalPlaces = (value: any, decimalPlaces: number = 2, ignoreWholeNumberFormatting = false): any => {
+  /*const decPlaces = Math.pow(10, decimalPlaces)
+  return Math.round((value + Number.EPSILON) * decPlaces) / decPlaces*/
+
+  if (ignoreWholeNumberFormatting && value % 1 == 0) {
+    return value
+  }
+
+  var negative = false;
+  if (decimalPlaces === undefined) {
+    decimalPlaces = 0;
+  }
+  if (value < 0) {
+    negative = true;
+    value = value * -1;
+  }
+  var multiplicator = Math.pow(10, decimalPlaces);
+  value = parseFloat((value * multiplicator).toFixed(11));
+  value = (Math.round(value) / multiplicator).toFixed(2);
+  if (negative) {
+    value = (value * -1).toFixed(2);
+  }
+  return value;
 }
+
 export const matchStrings = (
   input1: string,
   input2: string,
@@ -82,7 +96,8 @@ export const tryParseJson = (json: any) => {
 
 export const priceFormat = (
   value: string | number | undefined,
-  decimalPlaces: number = 2
+  decimalPlaces: number = 2,
+  currencySymbol: string = ''
 ): string => {
   if (value) {
     // Not undefined
@@ -98,14 +113,14 @@ export const priceFormat = (
 
     if (floatParsed % intParsed === 0) {
       // zeroes after decimal point.
-      return CURRENCY_SYMBOL_POUND + intParsed.toString()
+      return currencySymbol + intParsed.toString()
     }
 
     // Round off to the specified {decimalPlaces}.
-    return CURRENCY_SYMBOL_POUND + floatParsed.toFixed(2)
+    return currencySymbol + floatParsed.toFixed(2)
     //return Math.round(floatParsed * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
   }
-  return '0'
+  return currencySymbol + '0'
 }
 
 export const localDateToConvert = (date_to_convert_str: any) => {
@@ -255,7 +270,7 @@ export const eddDateFormat = (date: string | Date) => {
     nextDay: '[tomorrow], D MMMM',
     nextWeek: 'dddd, D MMMM',
 
-    // when the date is further away, use from-now functionality             
-    sameElse: 'dddd, D MMMM'
+    // when the date is further away, use from-now functionality
+    sameElse: 'dddd, D MMMM',
   })
 }

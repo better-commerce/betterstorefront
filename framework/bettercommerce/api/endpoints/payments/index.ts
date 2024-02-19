@@ -1,5 +1,17 @@
 // Package Imports
 import store from 'store'
+import { getGatewayName } from '@better-commerce/bc-payments-sdk'
+
+// Payment Hooks
+import useUpdatePaymentResponse from './update-payment-response'
+import useRequestPayment from './request-payment'
+import useInitPayment from './init-payment'
+import useOneTimePaymentOrder from './create-one-time-payment-order'
+import useConvertOrder from './convert-order'
+import useB2BCompanyDetails from './b2b-company-details'
+import useValidatePaymentSession from './validate-payment-session'
+import useRequestToken from './request-token'
+import useUpdatePaymentWebHook from './update-payment-webhook'
 
 // Other Imports
 import { BCPaymentEndpoint } from './constants'
@@ -11,13 +23,7 @@ import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   BETTERCOMMERCE_DEFAULT_CURRENCY,
 } from '@components/utils/constants'
-import { getGatewayName } from '@framework/utils/payment-util'
-import useUpdatePaymentResponse from './update-payment-response'
-import useRequestPayment from './request-payment'
-import useInitPayment from './init-payment'
-import useOneTimePaymentOrder from './create-one-time-payment-order'
-import useConvertOrder from './convert-order'
-import useB2BCompanyDetails from './b2b-company-details'
+import { logError } from '@framework/utils/app-util'
 
 const PaymentsApiMiddleware = async function useBCPayments({
   data = {},
@@ -35,6 +41,9 @@ const PaymentsApiMiddleware = async function useBCPayments({
   const initPayment = useInitPayment()
   const requestPayment = useRequestPayment()
   const oneTimePaymentOrder = useOneTimePaymentOrder()
+  const validatePaymentSession = useValidatePaymentSession()
+  const requestToken = useRequestToken()
+  const updatePaymentWebHook = useUpdatePaymentWebHook()
 
   try {
     if (gatewayId) {
@@ -97,9 +106,40 @@ const PaymentsApiMiddleware = async function useBCPayments({
           })
         }
         break
+
+      case BCPaymentEndpoint.VALIDATE_PAYMENT_SESSION:
+        if (paymentConfig) {
+          response = await validatePaymentSession({
+            data,
+            config: paymentConfig,
+            cookies,
+          })
+        }
+        break
+
+      case BCPaymentEndpoint.REQUEST_TOKEN:
+        if (paymentConfig) {
+          response = await requestToken({
+            data,
+            config: paymentConfig,
+            cookies,
+          })
+        }
+        break
+
+      // ------------------ Webhook ------------------
+      case BCPaymentEndpoint.PAYMENT_WEBHOOK:
+        if (paymentConfig) {
+          response = await updatePaymentWebHook({
+            data,
+            config: paymentConfig,
+            cookies,
+          })
+        }
+        break
     }
   } catch (error: any) {
-    console.log(error)
+    logError(error)
     return { hasError: true, error: error?.message }
   }
 
@@ -133,8 +173,8 @@ const getPaymentConfig = async ({
   })
   const paymentConfig = response?.length
     ? response?.find(
-        (x) => x?.systemName?.toLowerCase() === paymentGateway?.toLowerCase()
-      )
+      (x) => x?.systemName?.toLowerCase() === paymentGateway?.toLowerCase()
+    )
     : undefined
   /*const paymentConfig = response?.length ? response?.find(x => matchStrings(x.systemName, PAYPAL_PAY_METHOD_SYSTEM_NAME || "", true)) : undefined;
     if (paymentConfig?.settings?.length) {

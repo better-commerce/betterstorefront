@@ -8,17 +8,12 @@ import {
   BCEnvironment,
   BetterCommerceOperation,
 } from '@better-commerce/bc-payments-sdk'
-import {
-  AUTH_URL,
-  BASE_URL,
-  CLIENT_ID,
-  SHARED_SECRET,
-} from '@framework/utils/constants'
-import { EmptyString } from '@components/utils/constants'
+import { AUTH_URL, BASE_URL, CLIENT_ID, SHARED_SECRET, } from '@framework/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString } from '@components/utils/constants'
 
 const logId = 'B2BCompanyDetails'
 
-const B2BCompanyDetailsApiMiddleware = function () {
+const b2bCompanyDetailsApiMiddleware = function () {
   return async function useB2BCompanyDetails({
     data,
     config,
@@ -34,6 +29,7 @@ const B2BCompanyDetailsApiMiddleware = function () {
       }
 
       logData['request'] = data
+      logData['requestId'] = objectId
       if (LOG_REQUEST_OPTIONS) {
         console.log(config)
         logData['requestOptions'] = config
@@ -51,11 +47,17 @@ const B2BCompanyDetailsApiMiddleware = function () {
       )
 
       BCEnvironment.init(CLIENT_ID!, SHARED_SECRET!, config, AUTH_URL, BASE_URL)
+      BCEnvironment.addExtras({
+        country: BETTERCOMMERCE_DEFAULT_COUNTRY,
+        currency: cookies?.Currency,
+        language: BETTERCOMMERCE_DEFAULT_LANGUAGE,
+      })
       const b2bCompanyDetailsResult =
         await new BetterCommerceOperation().getCompanyDetails(params)
 
       logData = {}
       logData['response'] = b2bCompanyDetailsResult
+      logData['requestId'] = objectId
       await logPaymentRequest(
         {
           //headers: {},
@@ -72,6 +74,7 @@ const B2BCompanyDetailsApiMiddleware = function () {
     } catch (error: any) {
       logData = {}
       logData['error'] = error
+      logData['requestId'] = objectId
       await logPaymentRequest(
         {
           //headers: {},
@@ -90,4 +93,4 @@ const B2BCompanyDetailsApiMiddleware = function () {
   }
 }
 
-export default B2BCompanyDetailsApiMiddleware
+export default b2bCompanyDetailsApiMiddleware

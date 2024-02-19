@@ -1,5 +1,4 @@
 import { DATE_FORMAT } from '@components/utils/constants'
-import { CURRENCY_SYMBOL_POUND } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import { priceFormat } from '@framework/utils/parse-util'
 import moment from 'moment'
@@ -28,8 +27,16 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
               </p>
               <p className="font-medium text-12 text-secondary-full-opacity">
                 {isIncludeVAT
-                  ? priceFormat(details?.order.subTotal?.raw?.withTax)
-                  : priceFormat(details?.order.subTotal?.raw?.withoutTax)}
+                  ? priceFormat(
+                      details?.order.subTotal?.raw?.withTax,
+                      undefined,
+                      details?.order.subTotal?.currencySymbol
+                    )
+                  : priceFormat(
+                      details?.order.subTotal?.raw?.withoutTax,
+                      undefined,
+                      details?.order.subTotal?.currencySymbol
+                    )}
               </p>
             </div>
             {details?.order.discount?.raw?.withTax > 0 ? (
@@ -40,8 +47,16 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                   </p>
                   <p className="font-medium text-12 text-green">
                     {isIncludeVAT
-                      ? priceFormat(details?.order.discount?.raw?.withTax)
-                      : priceFormat(details?.order.discount?.raw?.withoutTax)}
+                      ? priceFormat(
+                          details?.order.discount?.raw?.withTax,
+                          undefined,
+                          details?.order.discount?.currencySymbol
+                        )
+                      : priceFormat(
+                          details?.order.discount?.raw?.withoutTax,
+                          undefined,
+                          details?.order.discount?.currencySymbol
+                        )}
                   </p>
                 </div>
               </>
@@ -51,7 +66,11 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 Subtotal
               </p>
               <p className="font-medium text-12 text-secondary-full-opacity">
-                {priceFormat(subTotalAmount)}
+                {priceFormat(
+                  subTotalAmount,
+                  undefined,
+                  details?.order.subTotal?.currencySymbol
+                )}
               </p>
             </div>
             <div className="flex justify-between py-1 mb-2 text-black font-small">
@@ -63,9 +82,15 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 <>
                   <p className="font-medium text-12 text-secondary-full-opacity">
                     {isIncludeVAT
-                      ? priceFormat(details?.order.shippingCharge?.raw?.withTax)
+                      ? priceFormat(
+                          details?.order.shippingCharge?.raw?.withTax,
+                          undefined,
+                          details?.order.shippingCharge?.currencySymbol
+                        )
                       : priceFormat(
-                          details?.order.shippingCharge?.raw?.withoutTax
+                          details?.order.shippingCharge?.raw?.withoutTax,
+                          undefined,
+                          details?.order.shippingCharge?.currencySymbol
                         )}
                   </p>
                 </>
@@ -82,7 +107,9 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 </p>
                 <p className="font-medium text-12 text-secondary-full-opacity">
                   {priceFormat(
-                    details?.order.paymentServiceCharge?.raw?.withTax
+                    details?.order.paymentServiceCharge?.raw?.withTax,
+                    undefined,
+                    details?.order.paymentServiceCharge?.currencySymbol
                   )}
                 </p>
               </div>
@@ -92,7 +119,11 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 Tax
               </p>
               <p className="font-medium text-12 text-secondary-full-opacity">
-                {priceFormat(details?.order.grandTotal?.raw?.tax)}
+                {priceFormat(
+                  details?.order.grandTotal?.raw?.tax,
+                  undefined,
+                  details?.order.grandTotal?.currencySymbol
+                )}
               </p>
             </div>
             <div className="flex justify-between py-4 mt-4 text-black border-t border-gray-200 border-dashed font-small">
@@ -100,7 +131,11 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 You pay
               </p>
               <p className="font-semibold text-16 text-secondary-full-opacity">
-                {priceFormat(details?.order.grandTotal?.raw?.withTax)}
+                {priceFormat(
+                  details?.order.grandTotal?.raw?.withTax,
+                  undefined,
+                  details?.order.grandTotal?.currencySymbol
+                )}
               </p>
             </div>
           </div>
@@ -109,7 +144,7 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
             <button
               type="button"
               onClick={() => openOrderHelpModal(details?.order)}
-              className="block w-full px-4 py-3 mb-3 font-bold text-center text-white bg-black hover:opacity-90 btn-basic-property rounde-sm"
+              className="block w-full mb-3 btn-basic-property btn btn-primary"
             >
               Need Help with Your Order?
             </button>

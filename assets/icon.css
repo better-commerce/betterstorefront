@@ -50,3 +50,14 @@
 	width: 15px;
 	height: 12px;
 }
+
+.sprite-fb-icon {
+	background-position: -7px -185px;
+	width: 11px;
+	height: 20px;
+}
+.sprite-instagram-icon {
+	background-position: 0 -288px;
+	width: 24px;
+	height: 24px;
+}

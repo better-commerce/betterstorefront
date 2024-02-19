@@ -50,7 +50,7 @@ export default function Collections({ data }: any) {
               passHref
               legacyBehavior
             >
-              <a className="px-4 py-2 text-lg font-medium text-center border btn-default">
+              <a className="btn border btn-default">
                 Shop Now
               </a>
             </Link>
