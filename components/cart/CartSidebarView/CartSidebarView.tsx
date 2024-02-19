@@ -120,12 +120,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
           await getBasketPromos(basketId)
           await fetchBasketReValidate()
           setIsGetBasketPromoRunning(!isGetBasketPromoRunning)
-
-          if (cartItems?.lineItems?.length) {
-            const lastItemProductId =
-              cartItems?.lineItems[cartItems?.lineItems?.length - 1]?.productId
-            await fetchRelatedProducts(lastItemProductId)
-          }
           resolve()
         }
       )
@@ -164,16 +158,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
 
   const handleLoadAsync = async (preferredPaymentMethod: any) => {
     const promises = new Array<Promise<any>>()
-    promises.push(
-      await new Promise<any>(async (resolve: any, rejec: any) => {
-        if (cartItems?.lineItems?.length) {
-          const lastItemProductId =
-            cartItems?.lineItems[cartItems?.lineItems?.length - 1]?.productId
-          await fetchRelatedProducts(lastItemProductId)
-        }
-        resolve()
-      })
-    )
 
     promises.push(
       await new Promise<any>(async (resolve: any, rejec: any) => {
@@ -182,24 +166,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
       })
     )
 
-    promises.push(
-      await new Promise<any>(async (resolve: any, rejec: any) => {
-        await getAlltrelatedProducts()
-        resolve()
-      })
-    )
-
     Promise.all(promises)
-  }
-
-  const getAlltrelatedProducts = async () => {
-    const { data: altRelatedProducts }: any = await axios.post(
-      NEXT_GET_ALT_RELATED_PRODUCTS,
-      {
-        slug: collectionSlug,
-      }
-    )
-    setAltRelatedProducts(altRelatedProducts)
   }
 
   const handleToggleEngravingModal = (product?: any) => {
@@ -223,7 +190,21 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBasketFetched])
+  }, [isBasketFetched ,basketId, cartItems])
+
+  useEffect(() => {
+    const loadRelatedProducts = async () => {
+        await new Promise<any>(async (resolve: any, reject: any) => {
+          if (cartItems?.lineItems?.length) {
+            const lastItemProductId =
+              cartItems?.lineItems[cartItems?.lineItems?.length - 1]?.productId
+            await fetchRelatedProducts(lastItemProductId)
+          }
+          resolve()
+        })
+    }
+    loadRelatedProducts()
+  },[cartItems?.lineItems?.length])
 
   useEffect(() => {
     // const handleCartitems = async () => {
