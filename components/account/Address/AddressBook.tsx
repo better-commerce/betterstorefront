@@ -192,7 +192,7 @@ export default function AddressBook({ deviceInfo }: any) {
     const fetchCountries = async () => {
       try {
         const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
-        if (data?.result && data?.result?.length > 0) {
+        if ( data?.result?.length > 0) {
           setCountries(data?.result)
         } else {
           setCountries([])
@@ -305,16 +305,16 @@ export default function AddressBook({ deviceInfo }: any) {
     openNewAddressModal()
   }
   const handleNewAddress = (data: any, callback?: Function) => {
-    const name = parseFullName(data?.name)
     const values = {
       address1: data?.address1,
       address2: data?.address2,
+      address3: data?.address3,
       city: data?.city,
       state: data?.state,
-      firstName: name?.firstName,
-      lastName: name?.lastName ?? '',
+      firstName: data?.firstName,
+      lastName: data?.lastName || '',
       phoneNo: data?.mobileNumber,
-      postCode: data?.pinCode,
+      postCode: data?.postCode,
       label: matchStrings(data?.categoryName, 'Other', true)
         ? data?.otherAddressType
         : data?.categoryName,
@@ -327,10 +327,8 @@ export default function AddressBook({ deviceInfo }: any) {
     const newValues = {
       ...values,
       userId: user?.userId,
-      country:
-        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-      countryCode:
-        state?.deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      country: data?.country?.split('&')?.[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: data?.country?.split('&')?.[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
     }
     if (data?.id == 0) {
       lookupAddressId(newValues).then((addressId: number) => {
@@ -341,6 +339,7 @@ export default function AddressBook({ deviceInfo }: any) {
               // setUser(updatedUser);
               // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
               // });
+    
               fetchAddress()
               const values = {
                 ...newValues,
@@ -538,6 +537,7 @@ export default function AddressBook({ deviceInfo }: any) {
           selectedAddress={selectedAddress}
           submitState={submitState}
           isOpen={isNewAddressModalOpen}
+          countries = {countries}
           onSubmit={(data: any) => {
             submitData(submitDispatch, AddressPageAction.SAVE)
             handleNewAddress(data, () => {

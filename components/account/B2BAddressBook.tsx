@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { useUI } from '@components/ui/context'
-import { NEXT_ADDRESS, NEXT_EDIT_ADDRESS, NEXT_CREATE_ADDRESS, NEXT_DELETE_ADDRESS, BETTERCOMMERCE_DEFAULT_COUNTRY, AddressPageAction, Messages, } from '@components/utils/constants'
+import { NEXT_ADDRESS, NEXT_EDIT_ADDRESS, NEXT_CREATE_ADDRESS, NEXT_DELETE_ADDRESS, BETTERCOMMERCE_DEFAULT_COUNTRY, AddressPageAction, Messages, NEXT_GET_COUNTRIES, } from '@components/utils/constants'
 import axios from 'axios'
 import AddressItem from '@components/account/Address/AddressItem'
 import Form from '@components/account/Address/AddressBookForm'
@@ -58,7 +58,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
   const [isLoading, setIsLoading] = useState(true)
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
-
+  const [countries, setCountries] = useState<any>(null)
   const { user, isGuestUser, cartItems, setAddressId , setAlert } = useUI()
   const [selectedAddress, setSelectedAddress] = useState()
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
@@ -185,6 +185,24 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
       }
     }
   }
+
+  
+ useEffect(() => {
+  const fetchCountries = async () => {
+    try {
+      const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
+      if (data?.result?.length > 0) {
+        setCountries(data?.result)
+      } else {
+        setCountries([])
+      }
+    } catch (error) {
+      setCountries([])
+      // console.log(error)
+    }
+  }
+  fetchCountries()
+}, [])
 
   const fetchAddress = async () => {
     !isLoading && setIsLoading(true)
@@ -505,6 +523,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
           )}
           <NewAddressModal
             selectedAddress={selectedAddress}
+            countries = {countries}
             submitState={submitState}
             isOpen={isNewAddressModalOpen}
             onSubmit={(data: any) => {
