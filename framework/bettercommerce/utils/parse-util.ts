@@ -44,13 +44,31 @@ export const stringToNumber = (stringValue: string | undefined): number => {
   }
   return 0
 }
-export const roundToDecimalPlaces = (
-  value: any,
-  decimalPlaces: number = 2
-): any => {
-  const decPlaces = Math.pow(10, decimalPlaces)
-  return Math.round((value + Number.EPSILON) * decPlaces) / decPlaces
+export const roundToDecimalPlaces = (value: any, decimalPlaces: number = 2, ignoreWholeNumberFormatting = false): any => {
+  /*const decPlaces = Math.pow(10, decimalPlaces)
+  return Math.round((value + Number.EPSILON) * decPlaces) / decPlaces*/
+
+  if (ignoreWholeNumberFormatting && value % 1 == 0) {
+    return value
+  }
+
+  var negative = false;
+  if (decimalPlaces === undefined) {
+    decimalPlaces = 0;
+  }
+  if (value < 0) {
+    negative = true;
+    value = value * -1;
+  }
+  var multiplicator = Math.pow(10, decimalPlaces);
+  value = parseFloat((value * multiplicator).toFixed(11));
+  value = (Math.round(value) / multiplicator).toFixed(2);
+  if (negative) {
+    value = (value * -1).toFixed(2);
+  }
+  return value;
 }
+
 export const matchStrings = (
   input1: string,
   input2: string,

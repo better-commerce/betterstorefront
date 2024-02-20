@@ -1,4 +1,4 @@
-import { Formik, Form, Field } from 'formik'
+import { Formik} from 'formik'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useState, useRef, useEffect } from 'react'
@@ -143,6 +143,12 @@ export default function AddressForm({
         handleChange,
         setValues,
       }: any) => {
+
+        useEffect(() => {
+          setValues(initState)
+          setAddress(initState)
+        },[initState])
+        
         return (
           <>
             <div className="flex flex-wrap bg-white">

@@ -38,7 +38,8 @@ import {
   getPagePreviewContent,
   getProductReview,
   resetCache,
-  logRequest,
+  logPayment,
+  logActivity,
   getCountries,
   getReviewSummary,
 } from './operations'
@@ -90,7 +91,8 @@ const operations = {
   getPagePreviewContent,
   getProductReview,
   resetCache,
-  logRequest,
+  logPayment,
+  logActivity,
   getCountries,
   getReviewSummary,
 }

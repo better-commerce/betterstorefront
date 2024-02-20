@@ -23,8 +23,7 @@ export const SEARCH_MINIMAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSI
 export const SEARCH_ADVANCED_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced`
 export const CACHED_IMAGE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product`
 export const LOOKBOOK_SLUG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook/slug`
-export const NEXT_SEARCH_ADVANCED_ENDPOINT =
-  '/api/catalog/get-category-products'
+export const NEXT_SEARCH_ADVANCED_ENDPOINT = '/api/catalog/get-category-products'
 export const PRODUCT_CUSTOM_ATTRIBUTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/custom-attributes`
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
 export const PRODUCT_PREVIEW_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/preview`
@@ -167,6 +166,9 @@ export const NEXT_REFERRAL_INFO = '/api/customer/referral/referral-info'
 export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral/referral-vouchers'
 export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
 export const NEXT_COMPARE_ATTRIBUTE = '/api/compare-attributes'
+export const NEXT_LOG_ACTIVITY = '/api/log/activity'
+export const NEXT_LOG_PAYMENT = '/api/log/payment'
+
 //CONSTANTS
 
 export const YOUTUBE_VIDEO_EMBED_PREFIX_URL =
@@ -286,28 +288,29 @@ export module Messages {
     }
 
     export const AddNewAddress: any = {
-      PIN_CODE_REQUIRED: 'Pincode is a required field',
-      PIN_CODE_UNREACHABLE: 'Pincode non-serviceable',
-      PIN_CODE_NUM: 'Pincode should contain only digits',
+      POST_CODE_REQUIRED: 'Postcode is a required field',
+      POST_CODE_UNREACHABLE: 'Postcode non-serviceable',
+      POST_CODE_NUM: 'Postcode should contain only digits',
       CITY_REQUIRED: 'City is a required field',
       STATE_REQUIRED: 'State is a required field',
+      COUNTRY_REQUIRED : 'Country is a required field',
+      ADDRESS_1_REQUIRED: 'Address 1 is a required field',
+      ADDRESS_1_INPUT: 'Address 1 should only contain alpha-numerics',
+      ADDRESS_2_INPUT: 'Address 2 should only contain alpha-numerics',
+      ADDRESS_3_INPUT: 'Address 2 should only contain alpha-numerics',
 
-      ADDRESS_1_REQUIRED: 'House / Flat/ Office Number is a required field',
-      ADDRESS_1_INPUT:
-        'House / Flat/ Office Number should only contain alpha-numerics',
-      ADDRESS_2_INPUT:
-        'Road Name / Area/ Colony should only contain alpha-numerics',
-
-      NAME_REQUIRED: 'Name is a required field',
-      NAME_MIN_LENGTH: 'Name must be at least 3 characters',
-      NAME_INPUT: 'Name should only contain alpha-numerics',
+      FIRST_NAME_REQUIRED: 'First Name is a required field',
+      LAST_NAME_REQUIRED : 'Last Name is a required field',
+      FIRST_NAME_MIN_LENGTH: 'Name must be at least 3 characters',
+      FIRST_NAME_INPUT: 'Name should only contain alpha-numerics',
+      LAST_NAME_MIN_LENGTH: 'Name must be at least 3 characters',
+      LAST_NAME_INPUT: 'Name should only contain alpha-numerics',
 
       MOBILE_NUMBER_REQUIRED: 'Mobile number is a required field',
       MOBILE_NUMBER_INPUT: 'Mobile number should only contain numbers',
 
       ADDRESS_TYPE_REQUIRED: 'Address is a required field',
-      ADDRESS_TYPE_MIN_LENGTH:
-        'House/ Flat/ Office Number should be more than 3 characters',
+      ADDRESS_TYPE_MIN_LENGTH: 'Address Field should be more than 3 characters',
       ADDRESS_TYPE_INPUT: 'Address should only contain alpha-numerics',
     }
 
@@ -332,11 +335,11 @@ export module Messages {
     }
 
     export const DeliveryInfo: any = {
-      PIN_CODE_REQUIRED: 'Pincode is a required field',
-      PIN_CODE_MIN_LENGTH: 'Pincode must be at least 6 characters',
-      VALID_PIN: 'Please enter a valid pincode',
-      PIN_CODE_MAX_LENGTH: 'Pincode must be at max 6 characters',
-      PIN_CODE_INPUT: 'Pincode should only contain numbers',
+      POST_CODE_REQUIRED: 'Postcode is a required field',
+      POST_CODE_MIN_LENGTH: 'Postcode must be at least 6 characters',
+      VALID_POST: 'Please enter a valid postcode',
+      POST_CODE_MAX_LENGTH: 'Postcode must be at max 6 characters',
+      POST_CODE_INPUT: 'Postcode should only contain numbers',
     }
     export const ResetPassword: any = {
       PASSWORD_VALIDATION_MESSAGE:

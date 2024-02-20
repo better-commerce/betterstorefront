@@ -25,12 +25,16 @@ import {
   notFoundRedirect,
   obfuscateHostName,
   setPageScroll,
+  logError
 } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 const CompareSelectionBar = dynamic(
   () => import('@components/product/ProductCompare/compareSelectionBar')
 )
@@ -256,6 +260,10 @@ export default function CollectionPage(props: any) {
       setProductDataToPass(dataToPass)
     }
   }, [productListMemory?.products, data?.products])
+    
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
+  }
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
@@ -525,7 +533,7 @@ export default function CollectionPage(props: any) {
                     <div className="flex justify-end w-full">
                       <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                     </div>
-                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} />
+                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
                   </>
                 ) : ( 
                     <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
@@ -539,7 +547,7 @@ export default function CollectionPage(props: any) {
                         onEnableOutOfStockItems={onEnableOutOfStockItems}
                         />
                     </div>
-                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
+                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy}  removeFilter={removeFilter}/>
                   </>    
                   )}
                   <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
@@ -550,7 +558,7 @@ export default function CollectionPage(props: any) {
                 <div className="flex justify-end w-full">
                       <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                 </div>
-                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} />
+                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
                 <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
               </div>
             )}
@@ -607,26 +615,61 @@ CollectionPage.Layout = Layout
 
 export async function getStaticProps({ params, ...context }: any) {
   const slug: any = params!.collection
-  const data = await getCollectionBySlug(slug[0])
+  const cachedDataUID = {
+    infraUID: Redis.Key.INFRA_CONFIG,
+    collectionUID: Redis.Key.Collection + '_' + slug,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.infraUID,
+    cachedDataUID.collectionUID
+  ])
 
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
-  const hostName = os.hostname()
+  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+  let collectionUIDData: any = parseDataValue(cachedData, cachedDataUID.collectionUID)
+  let hostName
 
-  if (data?.status === "NotFound") {
+  try {
+    if (!collectionUIDData) {
+      collectionUIDData = await getCollectionBySlug(slug[0])
+      await setData([{ key: cachedDataUID.collectionUID, value: collectionUIDData }])
+    }
+    if(!infraUIDData){
+      const infraPromise = commerce.getInfra()
+      infraUIDData = await infraPromise
+      await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
+    }
+    hostName = os.hostname()
+
+  } catch (error: any) {
+    logError(error)
+
+    let errorUrl = '/500'
+    const errorData = error?.response?.data
+    if (errorData?.errorId) {
+      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+    }
+    return {
+      redirect: {
+        destination: errorUrl,
+        permanent: false,
+      },
+    }
+  }
+
+  if (collectionUIDData?.status === "NotFound") {
     return notFoundRedirect()
   }
 
   return {
     props: {
-      ...data,
+      ...collectionUIDData,
       query: context,
       slug: params!.collection[0],
-      globalSnippets: infra?.snippets ?? [],
-      snippets: data?.snippets ?? [],
+      globalSnippets: infraUIDData?.snippets ?? [],
+      snippets: collectionUIDData?.snippets ?? [],
       hostName: obfuscateHostName(hostName),
     },
-    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
 }
 

@@ -52,7 +52,8 @@ export const OPERATIONS = [
   'cancelOrder',
   'getReturnReason',
   'resetCache',
-  'logRequest',
+  'logPayment',
+  'logActivity',
   'getCountries',
   'getReviewSummary',
 ] as const
@@ -231,7 +232,8 @@ export type Operations<P extends APIProvider> = {
   }
 
   resetCache: {}
-  logRequest: {}
+  logPayment: {}
+  logActivity: {}
   getReviewSummary: {}
 }
 

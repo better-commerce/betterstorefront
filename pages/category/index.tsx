@@ -11,7 +11,12 @@ import {
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
+import { logError } from '@framework/utils/app-util'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
+
 export default function CategoryList(props: any) {
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -122,11 +127,34 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
-  const data = await getAllCategories()
+  let categoryUIDData: any
+  try {
+    const categoryUID =  Redis.Key.Category.AllCategory
+    const cachedData = await getDataByUID([categoryUID])
+    categoryUIDData = parseDataValue(cachedData, categoryUID)
+    if(!containsArrayData(categoryUIDData)){
+      categoryUIDData = await getAllCategories()
+      await setData([{ key: categoryUID, value: categoryUIDData }])
+    }
+  } catch (error: any) {
+    logError(error)
+
+    let errorUrl = '/500'
+    const errorData = error?.response?.data
+    if (errorData?.errorId) {
+      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+    }
+    return {
+      redirect: {
+        destination: errorUrl,
+        permanent: false,
+      },
+    }
+  }
   return {
     props: {
-      data,
+      data: categoryUIDData,
     },
-    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
 }

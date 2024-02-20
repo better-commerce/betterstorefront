@@ -1,40 +1,21 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { useUI } from '@components/ui/context'
-import {
-  NEXT_ADDRESS,
-  NEXT_EDIT_ADDRESS,
-  NEXT_CREATE_ADDRESS,
-  NEXT_DELETE_ADDRESS,
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  AddressPageAction,
-} from '@components/utils/constants'
+import { NEXT_ADDRESS, NEXT_EDIT_ADDRESS, NEXT_CREATE_ADDRESS, NEXT_DELETE_ADDRESS, BETTERCOMMERCE_DEFAULT_COUNTRY, AddressPageAction, Messages, NEXT_GET_COUNTRIES, } from '@components/utils/constants'
 import axios from 'axios'
 import AddressItem from '@components/account/Address/AddressItem'
 import Form from '@components/account/Address/AddressBookForm'
 import { LoadingDots } from '@components/ui'
-import {
-  DETAILS_SUCCESS,
-  DETAILS_ERROR,
-  ADDRESS_BOOK_TITLE,
-  DETAILS_SUBTITLE,
-  EMPTY_ADDRESS,
-  ADD_ADDRESS,
-} from '@components/utils/textVariables'
+import { DETAILS_SUCCESS, DETAILS_ERROR, ADDRESS_BOOK_TITLE, DETAILS_SUBTITLE, EMPTY_ADDRESS, ADD_ADDRESS, } from '@components/utils/textVariables'
 import { CustomerAddressModel } from 'models/customer'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import {
-  getCurrentPage,
-  resetSubmitData,
-  submitData,
-  parseFullName,
-} from '@framework/utils/app-util'
+import { getCurrentPage, resetSubmitData, submitData, parseFullName, } from '@framework/utils/app-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 // import useDevice from '@commerce/utils/use-device'
 import NewAddressModal from '@components/checkout/CheckoutForm/NewAddressModal'
 import { matchStrings } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import Spinner from '@components/ui/Spinner'
-
+import { AlertType } from '@framework/utils/enums'
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -77,8 +58,8 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
   const [isLoading, setIsLoading] = useState(true)
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
-
-  const { user, isGuestUser, cartItems, setAddressId } = useUI()
+  const [countries, setCountries] = useState<any>(null)
+  const { user, isGuestUser, cartItems, setAddressId , setAlert } = useUI()
   const [selectedAddress, setSelectedAddress] = useState()
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
@@ -204,6 +185,24 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
       }
     }
   }
+
+  
+ useEffect(() => {
+  const fetchCountries = async () => {
+    try {
+      const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
+      if (data?.result?.length > 0) {
+        setCountries(data?.result)
+      } else {
+        setCountries([])
+      }
+    } catch (error) {
+      setCountries([])
+      // console.log(error)
+    }
+  }
+  fetchCountries()
+}, [])
 
   const fetchAddress = async () => {
     !isLoading && setIsLoading(true)
@@ -355,8 +354,8 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
               // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
-              // setAlert({type:'error',msg:NETWORK_ERR})
-              console.log(error)
+              setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+              closeNewAddressModal()
             })
         } else {
           // Duplicate address exists
@@ -381,7 +380,8 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
           // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
         .catch((error: any) => {
-          console.log(error)
+          setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+          closeNewAddressModal()
         })
     }
   }
@@ -523,6 +523,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
           )}
           <NewAddressModal
             selectedAddress={selectedAddress}
+            countries = {countries}
             submitState={submitState}
             isOpen={isNewAddressModalOpen}
             onSubmit={(data: any) => {
