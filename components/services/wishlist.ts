@@ -4,10 +4,11 @@ import {
   NEXT_REMOVE_WISHLIST,
 } from '@components/utils/constants'
 import axios from 'axios'
+import { useUI } from '@components/ui/context'
 
 export default function wishlistHandler() {
   let accessToken: boolean | any = false
-
+  const {wishListItems}= useUI()
   if (typeof window !== 'undefined') {
     accessToken = localStorage.getItem('user')
   }
@@ -79,5 +80,10 @@ export default function wishlistHandler() {
         throw new Error(error)
       }
     },
+
+    isInWishList : ( productId: string) => {
+      if (!wishListItems) return false
+      return wishListItems.some((x: any) => x.recordId === productId?.toLocaleLowerCase())
+    }
   }
 }

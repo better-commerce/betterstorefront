@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@algolia/autocomplete-plugin-query-suggestions": "^1.11.0",
-    "@better-commerce/bc-payments-sdk": "0.2.1",
+    "@better-commerce/bc-payments-sdk": "0.2.5",
     "@elastic/react-search-ui": "^1.20.2",
     "@elastic/search-ui-app-search-connector": "^1.20.2",
     "@headlessui/react": "^1.7.14",
@@ -45,6 +45,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "email-validator": "^2.0.4",
+    "ioredis": "5.3.2",
     "formik": "^2.2.9",
     "frames-react": "1.1.0",
     "js-cookie": "^3.0.5",

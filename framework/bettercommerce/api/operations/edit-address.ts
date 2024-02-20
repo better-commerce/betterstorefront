@@ -12,6 +12,7 @@ export default function useAddress() {
       lastName: query?.lastName || ' ',
       address1: query?.address1,
       address2: query?.address2,
+      address3: query?.address3,
       city: query?.city,
       PostCode: query?.postCode,
       Country: query?.country,

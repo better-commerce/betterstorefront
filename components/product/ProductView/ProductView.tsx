@@ -36,6 +36,7 @@ import ImageGallery from 'react-image-gallery'
 import PDPCompare from '../PDPCompare'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { LocalStorage } from '@components/utils/payment-constants'
+import wishlistHandler from '@components/services/wishlist'
 
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -68,11 +69,11 @@ const PLACEMENTS_MAP: any = {
 export default function ProductView({ data = { images: [] }, snippets = [], setEntities, recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpLookbookProducts, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, }: any) {
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
+  const {isInWishList,deleteWishlistItem} = wishlistHandler()
   const isIncludeVAT = vatIncluded()
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
-  const [isInWishList, setItemsInWishList] = useState(false)
   const [previewImg, setPreviewImg] = useState<any>()
   const [reviewInput, setReviewInput] = useState(false)
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
@@ -537,10 +538,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
-    setItemsInWishList(true)
     openWishlist()
   }
   const handleWishList = () => {
+    if (isInWishList(product?.recordId)) {
+      deleteWishlistItem(user?.userId, product?.recordId)
+      removeFromWishlist(product?.recordId)
+      openWishlist()
+      return
+    }
     let productAvailability = 'Yes'
     if (product?.currentStock > 0) {
       productAvailability = 'Yes'
@@ -791,8 +797,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
                     </div>
                     <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                       <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
-                      <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink btn hover:border-pink" >
-                        {isInWishList ? (
+                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink btn hover:border-pink" >
+                        {isInWishList(product?.recordId) ? (
                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                         ) : (
                           <HeartIcon className="flex-shrink-0 w-6 h-6" />
@@ -804,8 +810,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
                 ) : (
                   <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                     <Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
-                    <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn" >
-                      {isInWishList ? (
+                    <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn" >
+                      {isInWishList(product?.recordId) ? (
                         <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                       ) : (
                         <HeartIcon className="flex-shrink-0 w-6 h-6" />

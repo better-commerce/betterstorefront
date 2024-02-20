@@ -12,7 +12,11 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
+import { logError } from '@framework/utils/app-util'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 export default function CollectionList(props: any) {
   const router =useRouter();
   const css = { maxWidth: '100%', height: 'auto' }
@@ -92,11 +96,37 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
-  const collectionData = await getCollections()
-  return {
-    props: {
-      data: collectionData,
-    },
-    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
+  const collectionUID = Redis.Key.Collection
+  const cachedData = await getDataByUID([ collectionUID ])
+  let collectionUIDData: any = parseDataValue(cachedData, collectionUID) || []
+  try {
+    if (!containsArrayData(collectionUIDData)) {
+      collectionUIDData = await getCollections()
+      await setData([{ key: collectionUID, value: collectionUIDData }])
+    }
+    return {
+      props: {
+        data: collectionUIDData,
+      },
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
+    }
+  } catch (error: any) {
+    logError(error)
+
+    let errorUrl = '/500'
+    const errorData = error?.response?.data
+    if (errorData?.errorId) {
+      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+    }
+
+    return {
+      props: {
+        data: collectionUIDData,
+      },
+      redirect: {
+        destination: errorUrl,
+        permanent: false,
+      },
+    }
   }
 }

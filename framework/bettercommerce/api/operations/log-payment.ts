@@ -1,3 +1,4 @@
+import { logError } from '@framework/utils/app-util'
 import fetcher from '../../fetcher'
 import { INFRA_LOG_ENDPOINT } from '@components/utils/constants'
 
@@ -31,8 +32,7 @@ export default function logRequest() {
       })
       return response
     } catch (error: any) {
-      console.log(error, 'err')
-      // throw new Error(error.message)
+      logError(error)
     }
   }
 }

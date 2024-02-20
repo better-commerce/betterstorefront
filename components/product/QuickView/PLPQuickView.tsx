@@ -175,7 +175,7 @@ export default function PLPQuickView({
           { product: selectedAttrData }
         )
         setCartItems(item)
-        setModelClose()
+        setModalClose()
         if (typeof window !== 'undefined') {
           recordGA4Event(window, 'add_to_cart', {
             ecommerce: {
@@ -554,14 +554,35 @@ export default function PLPQuickView({
           { recordId: productQuickViewData?.product?.recordId }
         )
 
+        const data = productQuickViewData?.product
         setQuickViewData(productQuickViewData?.product)
         setReviewData(reviewData?.review)
+        if (data) {
+          setSelectedAttrData({ productId: data?.recordId, stockCode: data?.stockCode, ...data, })
+        }
         // console.log('QUICKVIEW_PRODUCTDATA:',productQuickViewData?.product)
       }
 
       if (productData?.slug) loadView(productData?.slug)
     } else {
       setQuickViewData(undefined)
+    }
+    return [isQuickview]
+  }
+
+  const handleFetchProductQuickView = (slug: string) => {
+    if(isQuickview){
+      const loadView = async (slug:string) => {
+        const { data: productQuickViewData }: any = await axios.post( NEXT_GET_PRODUCT_QUICK_VIEW, { slug: slug } )
+        const data = productQuickViewData?.product
+        const { data: reviewData }: any = await axios.post( NEXT_GET_PRODUCT_REVIEW, { recordId: data?.recordId } )
+        setQuickViewData(data)
+        setReviewData(reviewData?.review)
+        if (data) {
+          setSelectedAttrData({ productId: data?.recordId, stockCode: data?.stockCode, ...data, })
+        }
+      }
+      if (slug) loadView(slug)
     }
     return [isQuickview]
   }
@@ -574,7 +595,9 @@ export default function PLPQuickView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isQuickview])
 
-  const setModelClose = () => {
+  const setModalClose = () => {
+    setSelectedAttrData(undefined)
+    setQuickViewData(undefined)
     setQuickviewOpen(false)
   }
 
@@ -588,10 +611,10 @@ export default function PLPQuickView({
   return (
     <>
       <Transition.Root show={isQuickviewOpen} as={Fragment}>
-        <Dialog as="div" className="fixed inset-0 overflow-hidden z-999" onClose={() => setModelClose()} >
+        <Dialog as="div" className="fixed inset-0 overflow-hidden z-999" onClose={() => setModalClose()} >
           <div className="absolute inset-0 overflow-hidden z-999">
             <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
-              <Dialog.Overlay className="w-full h-screen bg-black opacity-50" onClick={() => setModelClose()} />
+              <Dialog.Overlay className="w-full h-screen bg-black opacity-50" onClick={() => setModalClose()} />
             </Transition.Child>
 
             <div className="fixed inset-0 flex items-center justify-center">
@@ -600,7 +623,7 @@ export default function PLPQuickView({
                   <div className="flex flex-col h-full rounded-md shadow-xl bg-gray-50">
                     <div className="flex-1 px-0">
                       <div className="relative py-2 mt-2 sm:px-0">
-                        <button type="button" className="absolute -top-11 right-0 lg:-top-2 lg:-right-8 p-0.5 bg-gray-300 rounded-full" onClick={() => setModelClose()} >
+                        <button type="button" className="absolute -top-11 right-0 lg:-top-2 lg:-right-8 p-0.5 bg-gray-300 rounded-full" onClick={() => setModalClose()} >
                           <span className="sr-only">{CLOSE_PANEL}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
@@ -691,7 +714,18 @@ export default function PLPQuickView({
                             <div className="flex flex-col px-4 py-4 sm:px-6">
                               {updatedProduct ? (
                                 <>
-                                  <AttributesHandler product={product} variant={selectedAttrData} setSelectedAttrData={setSelectedAttrData} variantInfo={variantInfo} handleSetProductVariantInfo={ handleSetProductVariantInfo } sizeInit={sizeInit} setSizeInit={setSizeInit} />
+                                 {quickViewData &&
+                                    <AttributesHandler 
+                                      product={quickViewData} 
+                                      variant={selectedAttrData} 
+                                      setSelectedAttrData={setSelectedAttrData} 
+                                      variantInfo={variantInfo} 
+                                      handleSetProductVariantInfo={ handleSetProductVariantInfo }
+                                      handleFetchProductQuickView = {handleFetchProductQuickView}
+                                      isQuickView={true}
+                                      sizeInit={sizeInit} 
+                                      setSizeInit={setSizeInit} />
+                                 }
                                   {!isEngravingAvailable && (
                                     <div className="flex mt-6 sm:mt-4 sm:flex-col1 !text-sm">
                                       <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />

@@ -12,7 +12,10 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -196,13 +199,24 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
-  const response = await getBrands({})
+  const cachedDataUID = {
+    brandsUID: Redis.Key.Brands.Brand,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.brandsUID,
+  ])
+  let brandsUIDData: any = parseDataValue(cachedData, cachedDataUID.brandsUID)
+  if(!brandsUIDData){
+    brandsUIDData = await getBrands({})
+    await setData([{ key: cachedDataUID.brandsUID, value: brandsUIDData }])
+  }
+
   return {
     props: {
-      brands: response.result,
-      snippets: response?.snippets ?? [],
+      brands: brandsUIDData?.result,
+      snippets: brandsUIDData?.snippets ?? [],
     },
-    revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
 }
 /*
