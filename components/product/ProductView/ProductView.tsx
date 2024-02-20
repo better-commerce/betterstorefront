@@ -336,15 +336,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
       },
       shortMessage: '',
     }
-    if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled) {
-      if (
-        !product?.flags?.sellWithoutInventory ||
-        !selectedAttrData?.sellWithoutInventory
-      ) {
-        buttonConfig.title = BTN_NOTIFY_ME
-        buttonConfig.action = async () => handleNotification()
-        buttonConfig.type = 'button'
-      }
+    if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) {
+      buttonConfig.title = BTN_NOTIFY_ME
+      buttonConfig.action = async () => handleNotification()
+      buttonConfig.type = 'button'
     } else if (
       product?.preOrder?.isEnabled &&
       selectedAttrData?.currentStock <= 0
@@ -784,10 +779,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
             <AttributesHandler product={product} variant={selectedAttrData} setSelectedAttrData={setSelectedAttrData} variantInfo={variantInfo} handleSetProductVariantInfo={handleSetProductVariantInfo} sizeInit={sizeInit} setSizeInit={setSizeInit} />
 
             <h4 className="h-5 my-4 text-sm font-bold tracking-tight text-black uppercase sm:font-semibold">
-              {PRODUCT_AVAILABILITY}:{' '} {product?.currentStock > 0 ? (
-                <span>{PRODUCT_IN_STOCK}</span>
+              {PRODUCT_AVAILABILITY}:{' '} {(product?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) ? (
+                <span>{PRODUCT_OUT_OF_STOCK}</span>
               ) : (
-                <span className="text-red-500">{PRODUCT_OUT_OF_STOCK}</span>
+                <span className="text-red-500">{PRODUCT_IN_STOCK}</span>
               )}
             </h4>
             {promotions?.promotions?.availablePromotions?.length > 0 && (
