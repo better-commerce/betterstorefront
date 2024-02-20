@@ -29,7 +29,8 @@ export default function ProductTag({ product }: Props) {
         exclusive: product?.tags?.indexOf(PRODUCT_TAGS.exclusive) > -1,
         bestSeller: product?.tags?.indexOf(PRODUCT_TAGS.bestSeller) > -1,
       })
-      setIsNotifyMeEnabled(product?.webstock < 1)
+      // setIsNotifyMeEnabled(product?.webstock < 1)
+      setIsNotifyMeEnabled(product?.notifyme && !product?.backorder)
       setIsPreorderEnabled(product?.preorder)
     } else {
       setTagValues({
@@ -39,7 +40,7 @@ export default function ProductTag({ product }: Props) {
         exclusive: product?.exclusive,
         bestSeller: product?.bestSeller,
       })
-      setIsNotifyMeEnabled(product?.currentStock < 1 && !product?.preOrder?.isEnabled)
+      setIsNotifyMeEnabled(product?.currentStock < 1 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory && !product?.fulfilFromSupplier)
       setIsPreorderEnabled(product?.currentStock < 1 && product?.preOrder?.isEnabled)
     }
   }, [product])
