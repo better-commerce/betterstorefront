@@ -1,4 +1,5 @@
 import {
+  Messages,
   NEXT_BULK_ADD_TO_CART,
   NEXT_CREATE_WISHLIST,
   NEXT_GET_PRODUCT,
@@ -37,7 +38,8 @@ import { useUI } from '@components/ui'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { getCurrentPage, vatIncluded } from '@framework/utils/app-util'
+import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
+import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 
 SwiperCore.use([Navigation])
 
@@ -86,6 +88,7 @@ export default function PLPQuickView({
   productData,
   isQuickviewOpen,
   setQuickviewOpen,
+  maxBasketItemsCount,
 }: any) {
   const {
     openNotifyUser,
@@ -95,6 +98,7 @@ export default function PLPQuickView({
     cartItems,
     setCartItems,
     user,
+    setAlert,
   } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
@@ -138,6 +142,24 @@ export default function PLPQuickView({
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: GENERAL_ADD_TO_BASKET,
+      validateAction: async () => {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+          if (matchStrings(o.productId, selectedAttrData?.recordId, true) || matchStrings(o.productId, selectedAttrData?.productId, true)) {
+            return o
+          }
+        })
+        if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier && !selectedAttrData?.flags?.sellWithoutInventory) {
+          setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'], })
+          return false
+        }
+        const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount,)
+        if (!isValid) {
+          setAlert({
+            type: 'error', msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], { maxBasketItemsCount, }),
+          })
+        }
+        return isValid
+      },
       action: async () => {
         const item = await cartHandler().addToCart(
           {
@@ -209,15 +231,10 @@ export default function PLPQuickView({
       },
       shortMessage: '',
     }
-    if (selectedAttrData.currentStock <= 0 && !product.preOrder.isEnabled) {
-      if (
-        !product.flags.sellWithoutInventory ||
-        !selectedAttrData.sellWithoutInventory
-      ) {
+    if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) {
         buttonConfig.title = BTN_NOTIFY_ME
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
-      }
     } else if (
       product?.preOrder?.isEnabled &&
       selectedAttrData?.currentStock <= 0
@@ -236,6 +253,30 @@ export default function PLPQuickView({
       ) {
         buttonConfig = {
           title: GENERAL_ADD_TO_BASKET,
+          validateAction: async () => {
+            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
+            if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier && !selectedAttrData?.flags?.sellWithoutInventory) {
+              setAlert({
+                type: 'error',
+                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+              })
+              return false
+            }
+            const isValid = cartItemsValidateAddToCart(
+              cartItems,
+              maxBasketItemsCount
+            )
+            if (!isValid) {
+              setAlert({
+                type: 'error',
+                msg: stringFormat(
+                  Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+                  { maxBasketItemsCount }
+                ),
+              })
+            }
+            return isValid
+          },
           action: async () => {
             const item = await cartHandler().addToCart(
               {
