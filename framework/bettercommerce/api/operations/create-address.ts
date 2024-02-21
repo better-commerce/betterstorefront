@@ -16,6 +16,7 @@ export default function useAddress() {
       lastName: query?.lastName,
       Address1: query?.address1,
       Address2: query?.address2,
+      Address3 : query?.address3,
       City: query?.city,
       PostCode: query?.postCode,
       Country: query?.country || BETTERCOMMERCE_DEFAULT_COUNTRY,

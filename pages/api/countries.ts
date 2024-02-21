@@ -1,6 +1,6 @@
 import commerce from '@lib/api/commerce'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
-import apiRouteGuard from '../base/api-route-guard'
+import apiRouteGuard from './base/api-route-guard'
 
 const getCountriesApiMiddleware = async (req: any, res: any) => {
   try {

@@ -21,24 +21,20 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import {
-  maxBasketItemsCount,
-  notFoundRedirect,
-  setPageScroll,
-} from '@framework/utils/app-util'
+import { logError, maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import getAllProductsOperation from '@framework/api/operations/get-all-products'
 import { ProductCard } from '@components/product'
 import axios from 'axios'
-import {
-  NEXT_GET_CATALOG_PRODUCTS,
-  SITE_ORIGIN_URL,
-} from '@components/utils/constants'
+import { NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 const ProductFilterRight = dynamic(
   () => import('@components/product/Filters/filtersRight')
@@ -60,37 +56,91 @@ declare const window: any
 export async function getStaticProps(context: any) {
   const slugName = Object.keys(context.params)[0]
   const slug = slugName + '/' + context.params[slugName]
-  const category = await getCategoryBySlug(slug)
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
 
-  if (category?.status === 'NotFound') {
+  const cachedDataUID = {
+    infraUID: Redis.Key.INFRA_CONFIG,
+    categorySlugUID: Redis.Key.Category.Slug + '_' + slug,
+    categoryProductUID: Redis.Key.Category.CategoryProduct + '_' + slug,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.infraUID,
+    cachedDataUID.categorySlugUID,
+    cachedDataUID.categoryProductUID,
+  ])
+
+  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+  let categorySlugUIDData: any = parseDataValue(cachedData, cachedDataUID.categorySlugUID)
+  let categoryProductUIDData: any = parseDataValue(cachedData, cachedDataUID.categoryProductUID)
+
+  try {
+    if(!categorySlugUIDData){
+      categorySlugUIDData = await getCategoryBySlug(slug)
+      await setData([{ key: cachedDataUID.categorySlugUID, value: categorySlugUIDData }])
+    }
+    if(!infraUIDData){
+      const infraPromise = commerce.getInfra()
+      infraUIDData = await infraPromise
+      await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
+    }
+  } catch (error: any) {
+    logError(error)
+
+    let errorUrl = '/500'
+    const errorData = error?.response?.data
+    if (errorData?.errorId) {
+      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+    }
+    return {
+      redirect: {
+        destination: errorUrl,
+        permanent: false,
+      },
+    }
+  }
+
+  if (categorySlugUIDData?.status === "NotFound") {
     return notFoundRedirect()
   }
 
-  if (category) {
-    const categoryProducts = await getCategoryProducts(category.id)
+  if (categorySlugUIDData && categorySlugUIDData?.id) {
+    if(!categoryProductUIDData){
+      const categoryProductUIDData = await getCategoryProducts(categorySlugUIDData?.id)
+      await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
     return {
+
       props: {
-        category,
+        category: categorySlugUIDData,
         slug,
-        products: categoryProducts,
-        globalSnippets: infra?.snippets ?? [],
-        snippets: category?.snippets ?? [],
+        products: categoryProductUIDData,
+        globalSnippets: infraUIDData?.snippets ?? [],
+        snippets: categorySlugUIDData?.snippets ?? [],
       },
-      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
     }
-  } else
+  } else{
     return {
       props: {
-        category,
+        category: categorySlugUIDData,
+        slug,
+        products: categoryProductUIDData,
+        globalSnippets: infraUIDData?.snippets ?? [],
+        snippets: categorySlugUIDData?.snippets ?? [],
+      },
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
+    }
+  }
+}else{
+    return {
+      props: {
+        category: categorySlugUIDData,
         slug,
         products: null,
-        globalSnippets: infra?.snippets ?? [],
-        snippets: category?.snippets ?? [],
+        globalSnippets: infraUIDData?.snippets ?? [],
+        snippets: categorySlugUIDData?.snippets ?? [],
       },
-      revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_60_SECONDS,
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
     }
+  }
 }
 
 const generateCategories = (categories: any) => {
@@ -101,9 +151,6 @@ const generateCategories = (categories: any) => {
         ? categoryMap.push(`/${category.link}`)
         : categoryMap.push(`/category/${category.link}`)
     }
-    // if (category.subCategories) {
-    //   category.subCategories.forEach((i: any) => generateCategory(i))
-    // }
   }
   categories.forEach((category: any) => generateCategory(category))
   return categoryMap
@@ -311,18 +358,12 @@ function CategoryLandingPage({
       }
       handleApiCall()
     }
-
+    
     const trackScroll = (ev: any) => {
-      setPageScroll(
-        window?.location,
-        ev.currentTarget.scrollX,
-        ev.currentTarget.scrollY
-      )
+      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
     }
 
-    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) =>
-      location.pathname.startsWith(x)
-    )
+    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
     if (isScrollEnabled) {
       window?.addEventListener('scroll', trackScroll)
       return () => {
@@ -331,6 +372,7 @@ function CategoryLandingPage({
     } /*else {
       resetPageScroll()
     }*/
+
   }, [])
 
   useEffect(() => {
@@ -397,6 +439,10 @@ function CategoryLandingPage({
     )
   }
 
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
+  }
+
   /*const productDataToPass =
     IS_INFINITE_SCROLL && productListMemory.products?.results?.length
       ? productListMemory.products
@@ -444,12 +490,10 @@ function CategoryLandingPage({
           )}
         </div>
         <div className="container px-4 mx-auto my-0 mt-4 bg-transparent sm:px-6 lg:px-6 2xl:px-0">
-          <h1 className="dark:text-black">{category?.name}</h1>
+          <h1 className='dark:text-black'>{category?.name}</h1>
           <div
             className="font-18"
-            dangerouslySetInnerHTML={{
-              __html: sanitizeHtmlContent(category?.description),
-            }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }}
           ></div>
         </div>
         {/* popular category start */}
@@ -494,12 +538,7 @@ function CategoryLandingPage({
                             <>
                               {featurecat?.image != '' ? (
                                 <img
-                                  src={
-                                    generateUri(
-                                      featurecat?.image,
-                                      'h=160&fm=webp'
-                                    ) || IMG_PLACEHOLDER
-                                  }
+                                  src={generateUri(featurecat?.image,'h=160&fm=webp')||IMG_PLACEHOLDER}
                                   className="object-fill object-center w-full"
                                   alt="Image"
                                   width={240}
@@ -587,12 +626,7 @@ function CategoryLandingPage({
                       <>
                         {feature?.logoImageName != '' ? (
                           <img
-                            src={
-                              generateUri(
-                                feature?.logoImageName,
-                                'h=240&fm=webp'
-                              ) || IMG_PLACEHOLDER
-                            }
+                            src={generateUri(feature?.logoImageName,'h=240&fm=webp') || IMG_PLACEHOLDER}
                             className="object-fill object-center w-full"
                             alt="Image"
                             width={240}
@@ -618,7 +652,7 @@ function CategoryLandingPage({
                           <div
                             className="mt-3 text-white font-18"
                             dangerouslySetInnerHTML={{
-                              __html: sanitizeHtmlContent(feature?.description),
+                             __html: sanitizeHtmlContent( feature?.description),
                             }}
                           ></div>
                         </Link>
@@ -835,12 +869,7 @@ function CategoryLandingPage({
                               <>
                                 {featurecat?.image != '' ? (
                                   <img
-                                    src={
-                                      generateUri(
-                                        featurecat?.image,
-                                        'h=240&fm=webp'
-                                      ) || IMG_PLACEHOLDER
-                                    }
+                                    src={generateUri(featurecat?.image,'h=240&fm=webp')||IMG_PLACEHOLDER}
                                     className="object-fill object-center w-full"
                                     alt="Image"
                                     width={240}
@@ -886,6 +915,7 @@ function CategoryLandingPage({
                             handleSortBy={handleSortBy}
                             clearAll={clearAll}
                             routerSortOption={state.sortBy}
+                            removeFilter={removeFilter}
                           />
                         ) : (
                           <>
@@ -917,6 +947,7 @@ function CategoryLandingPage({
                                 routerFilters={state.filters}
                                 clearAll={clearAll}
                                 routerSortOption={state.sortBy}
+                                removeFilter={removeFilter}
                               />
                             </>  
                           )}
@@ -945,6 +976,7 @@ function CategoryLandingPage({
                           routerFilters={state.filters}
                           clearAll={clearAll}
                           routerSortOption={state.sortBy}
+                          removeFilter={removeFilter}
                         />
                         <ProductGrid
                           products={productDataToPass}

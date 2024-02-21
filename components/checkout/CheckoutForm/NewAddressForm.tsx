@@ -32,6 +32,7 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
     defaultValues,
     formFields,
     btnTitle,
+    countries,
     isRegisterAsGuestUser,
     onSubmit = () => {},
   } = props
@@ -44,15 +45,13 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
   const onLookup = async (target: any) => {
     //const target: any = ev?.target;
     if (target?.name === NEW_ADDRESS_FORM_FIELDS[0]?.name) {
-      const pincode = target?.value
-      if (pincode) {
-        const pincodeLookupResult = await pincodeLookup(pincode)
+      const postcode = target?.value
+      if (postcode) {
+        const pincodeLookupResult = await pincodeLookup(postcode)
         // console.log(pincodeLookupResult)
 
         if (pincodeLookupResult?.length) {
-          const lookup = pincodeLookupResult?.find((x: any) =>
-            matchStrings(x?.pin, pincode, true)
-          )
+          const lookup = pincodeLookupResult?.find((x: any) => matchStrings(x?.pin, postcode, true) )
           return lookup
         }
       }
@@ -91,7 +90,7 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
               <div className="w-full mt-1 add-form-section">
                 {(formFields?.length
                   ? Array.from<any>([]).concat([
-                      findByFieldName(formFields, 'pinCode'),
+                      findByFieldName(formFields, 'postCode'),
                     ])
                   : []
                 )?.map((item: any, idx: number) => (
@@ -137,12 +136,13 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
                   ? Array.from<any>([]).concat([
                       findByFieldName(formFields, 'address1'),
                       findByFieldName(formFields, 'address2'),
+                      findByFieldName(formFields, 'address3'),
                     ])
                   : []
                 )?.map((item: any, idx: number) => (
                   <AddressFormField key={idx} context={context} item={item} />
                 ))}
-
+               { <AddressFormField context={context} item = {{...findByFieldName(formFields, "country"),options:countries}} /> }
                 {
                   <AddressFormField
                     context={context}
@@ -157,18 +157,20 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
                 This Information will be use to contact you for updates.
               </p>
               <div className="w-full mt-1 add-form-section">
+              <div className="grid w-full grid-cols-2 overflow-hidden gap-x-4">
                 {(formFields?.length
                   ? Array.from<any>([]).concat([
-                      findByFieldName(formFields, 'name'),
-                      {
-                        ...findByFieldName(formFields, 'mobileNumber'),
-                        // ...{ disabled: isRegisterAsGuestUser },
-                      },
+                    findByFieldName(formFields, 'firstName'),
+                    findByFieldName(formFields, 'lastName'),
                     ])
                   : []
                 )?.map((item: any, idx: number) => (
                   <AddressFormField key={idx} context={context} item={item} />
                 ))}
+              </div>
+              {
+                <AddressFormField context={context} item={findByFieldName(formFields, 'mobileNumber')} />
+              }
                 {
                   <AddressFormField
                     context={context}
