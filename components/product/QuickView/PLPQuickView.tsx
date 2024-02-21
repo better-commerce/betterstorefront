@@ -1,23 +1,5 @@
-import {
-  Messages,
-  NEXT_BULK_ADD_TO_CART,
-  NEXT_CREATE_WISHLIST,
-  NEXT_GET_PRODUCT,
-  NEXT_GET_PRODUCT_QUICK_VIEW,
-  NEXT_GET_PRODUCT_REVIEW,
-  NEXT_UPDATE_CART_INFO,
-  PRODUCTS_SLUG_PREFIX,
-} from '@components/utils/constants'
-import {
-  BTN_ADD_TO_FAVORITES,
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  CLOSE_PANEL,
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_ENGRAVING,
-  IMG_PLACEHOLDER,
-  ITEM_TYPE_ADDON,
-} from '@components/utils/textVariables'
+import { Messages,NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO, PRODUCTS_SLUG_PREFIX, } from '@components/utils/constants'
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, PlayIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
@@ -40,6 +22,7 @@ import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
+import wishlistHandler from '@components/services/wishlist'
 
 SwiperCore.use([Navigation])
 
@@ -53,30 +36,9 @@ var settings = {
   centerMode: false,
   dots: true,
   responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        infinite: true,
-        dots: true,
-      },
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        initialSlide: 1,
-      },
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
-      },
-    },
+    { breakpoint: 1024, settings: { slidesToShow: 5, slidesToScroll: 1, infinite: true, dots: true, }, },
+    { breakpoint: 600, settings: { slidesToShow: 3, slidesToScroll: 1, initialSlide: 1, }, },
+    { breakpoint: 480, settings: { slidesToShow: 2, slidesToScroll: 1, }, },
   ],
 }
 function classNames(...classes: any) {
@@ -90,32 +52,16 @@ export default function PLPQuickView({
   setQuickviewOpen,
   maxBasketItemsCount,
 }: any) {
-  const {
-    openNotifyUser,
-    addToWishlist,
-    openWishlist,
-    basketId,
-    cartItems,
-    setCartItems,
-    user,
-    setAlert,
-  } = useUI()
+  const {isInWishList , deleteWishlistItem } = wishlistHandler()
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, removeFromWishlist, setAlert } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
   const [close, setClose] = useState(isQuickviewOpen)
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
   const [reviewData, setReviewData] = useState<any>(undefined)
   const [isEngravingOpen, showEngravingModal] = useState(false)
-  const [isInWishList, setItemsInWishList] = useState(false)
-  const [variantInfo, setVariantInfo] = useState<any>({
-    variantColour: '',
-    variantSize: '',
-  })
-  const [selectedAttrData, setSelectedAttrData] = useState({
-    productId: quickViewData?.recordId,
-    stockCode: quickViewData?.stockCode,
-    ...quickViewData,
-  })
+  const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
+  const [selectedAttrData, setSelectedAttrData] = useState({ productId: quickViewData?.recordId, stockCode: quickViewData?.stockCode, ...quickViewData, })
   const [sizeInit, setSizeInit] = useState('')
   let currentPage = getCurrentPage()
   const product = updatedProduct || productData
@@ -363,10 +309,16 @@ export default function PLPQuickView({
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
-    setItemsInWishList(true)
     openWishlist()
   }
-  const handleWishList = () => {
+  const handleWishList =() => {
+    const product = {...quickViewData , productId: selectedAttrData.productId, stockCode: selectedAttrData.stockCode,}
+    if (isInWishList(product?.productId)) {
+      deleteWishlistItem(user?.userId, product?.productId)
+      removeFromWishlist(product?.productId)
+      openWishlist()
+      return
+    }
     let productAvailability = 'Yes'
     if (product?.currentStock > 0) {
       productAvailability = 'Yes'
@@ -381,19 +333,19 @@ export default function PLPQuickView({
           current_page: 'Quick view ',
         },
       })
-
       recordGA4Event(window, 'add_to_wishlist', {
         ecommerce: {
           items: [
             {
               item_name: product?.name,
               item_brand: product?.brand,
-              item_category: product?.classification?.mainCategoryName,
-              item_category2: product?.classification?.category,
               item_variant: product?.variantGroupCode,
               quantity: 1,
-              item_id: product?.sku,
+              stockCode: product?.stockCode,
               price: product?.price?.raw?.withTax,
+              item_list_name: product?.mappedCategories[0]?.categoryName,
+              item_id: product?.productCode,
+              item_var_id: product?.stockCode,
             },
           ],
           item_var_id: product?.stockCode,
@@ -421,7 +373,7 @@ export default function PLPQuickView({
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
             id: user.userId,
-            productId: product.recordId,
+            productId: product?.productId,
             flag: true,
           })
           insertToLocalWishlist()
@@ -631,9 +583,9 @@ export default function PLPQuickView({
                           <div className="lg:col-span-6">
                             <div className="flex flex-col px-4 sm:px-6 sm:pb-3">
                               <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 1, }, 1024: { slidesPerView: 1, }, }} >
-                                {productData?.images?.length > 0 ? (<>
+                                {quickViewData?.images?.length > 0 ? (<>
                                   <div role="list" className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-12 lg:gap-x-0" >
-                                    {productData?.images?.map((image: any, idx: number) => image?.tag != 'specification' && (
+                                    {quickViewData?.images?.map((image: any, idx: number) => image?.tag != 'specification' && (
                                       <SwiperSlide className="px-0" key={`${idx}-slider`} >
                                         <div key={idx} className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto" >
                                           <div className="relative group">
@@ -651,7 +603,7 @@ export default function PLPQuickView({
                                   </div>
                                 </>) : (<>
                                   <div role="list" className="inline-flex mx-0 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-1 lg:gap-x-0" >
-                                    {productData?.images?.length == 0 &&
+                                    {quickViewData?.images?.length == 0 &&
                                       <div className="inline-flex flex-col w-full text-center cursor-pointer lg:w-auto" >
                                         <div className="relative group">
                                           <div className="image-container">
@@ -668,12 +620,12 @@ export default function PLPQuickView({
                           <div className="lg:col-span-6">
                             <div className="flex flex-col px-4 my-1 sm:px-6">
                               <h4 className="text-xs font-normal text-gray-400">
-                                {productData?.classification?.category}
+                                {quickViewData?.classification?.category}
                               </h4>
                               <h3 className="grid grid-cols-12 mb-2 text-sm font-bold tracking-tight lg:text-xl md:text-xl text-primary sm:text-2xl sm:grid-cols-6">
                                 <div className="col-span-8 text-sm sm:col-span-4 sm:text-sm md:text-sm lg:text-lg">
-                                  <Link href={`/${productData?.slug}`} passHref onClick={() => setQuickview(undefined)} >
-                                    {productData?.name || productData?.name}{' '}
+                                  <Link href={`/${quickViewData?.slug}`} passHref onClick={() => setQuickview(undefined)} >
+                                    {quickViewData?.name || quickViewData?.name}{' '}
                                   </Link>
                                 </div>
                                 <div className="col-span-4 pr-2 font-semibold text-right sm:col-span-2 sm:pr-0">
@@ -681,7 +633,7 @@ export default function PLPQuickView({
                                     <>
                                       <StarIcon className="relative inline-block w-4 h-4 text-yellow-600 -top-1" />
                                       <span className="relative inline-block pl-1 text-xs -top-1 text-primary">
-                                        {productData?.rating} (
+                                        {quickViewData?.rating} (
                                         {reviewData?.totalRecord})
                                       </span>
                                     </>
@@ -689,7 +641,7 @@ export default function PLPQuickView({
                                     <>
                                       <StarIcon className="relative inline-block w-4 h-5 text-yellow-600 -top-1" />
                                       <span className="relative inline-block pl-1 text-xs text-gray-400 -top-1">
-                                        {productData?.rating}
+                                        {quickViewData?.rating}
                                       </span>
                                     </>
                                   )}
@@ -698,11 +650,11 @@ export default function PLPQuickView({
                             </div>
                             <div className="flex flex-col px-4 mt-1 sm:px-6">
                               <p className="mb-2 text-lg font-semibold text-primary sm:text-md">
-                                {isIncludeVAT ? productData?.price?.formatted?.withTax : productData?.price?.formatted?.withoutTax}
-                                {productData?.listPrice?.raw?.withTax > 0 && productData?.listPrice?.raw?.withTax > productData?.price?.raw?.withTax && (
+                                {isIncludeVAT ? quickViewData?.price?.formatted?.withTax : quickViewData?.price?.formatted?.withoutTax}
+                                {quickViewData?.listPrice?.raw?.withTax > 0 && quickViewData?.listPrice?.raw?.withTax > quickViewData?.price?.raw?.withTax && (
                                   <>
                                     <span className="px-2 text-lg font-normal text-gray-500 line-through sm:text-md">
-                                      {isIncludeVAT ? productData?.listPrice?.formatted?.withTax : productData?.listPrice?.formatted?.withoutTax}
+                                      {isIncludeVAT ? quickViewData?.listPrice?.formatted?.withTax :quickViewData?.listPrice?.formatted?.withoutTax}
                                     </span>
                                     <span className="text-lg font-normal text-red-500 sm:text-md">
                                       {discount}% off
@@ -729,8 +681,8 @@ export default function PLPQuickView({
                                   {!isEngravingAvailable && (
                                     <div className="flex mt-6 sm:mt-4 sm:flex-col1 !text-sm">
                                       <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                      <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn">
-                                        {isInWishList ? (
+                                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn">
+                                        {isInWishList(selectedAttrData?.productId) ? (
                                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                                         ) : (
                                           <HeartIcon className="flex-shrink-0 w-6 h-6" />
@@ -750,8 +702,8 @@ export default function PLPQuickView({
                                         <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true) } >
                                           <span className="font-bold"> {GENERAL_ENGRAVING} </span>
                                         </button>
-                                        <button type="button" onClick={() => { if (!isInWishList) { handleWishList() } }} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
-                                          {isInWishList ? (
+                                        <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
+                                          {isInWishList(selectedAttrData?.productId) ? (
                                             <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                                           ) : (
                                             <HeartIcon className="flex-shrink-0 w-6 h-6" />
