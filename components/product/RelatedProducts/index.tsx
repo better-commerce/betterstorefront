@@ -240,6 +240,7 @@ export default function RelatedProducts({
         productData={quickViewProduct}
         isQuickviewOpen={Boolean(quickViewProduct)}
         setQuickviewOpen={handleCloseQuickView}
+        maxBasketItemsCount={maxBasketItemsCount}
       />
     </>
   )
