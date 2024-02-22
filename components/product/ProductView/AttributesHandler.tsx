@@ -1,6 +1,5 @@
 import SizeInline from '@components/product/ProductView/SizeInline'
 import InlineList from '@components/product/ProductView/InlineList'
-import Dropdown from '@components/product/ProductView/Dropdown'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import attributesGenerator, { getAttributesFromSlug, productLookup } from '@components/utils/attributesGenerator'

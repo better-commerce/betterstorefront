@@ -9,28 +9,20 @@ import { Navbar, Footer } from '@components/common'
 import type { Category } from '@commerce/types/site'
 import { WishlistSidebarView } from '@components/wishlist'
 import { CookieBanner } from '@schlomoh/react-cookieconsent'
-import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
+import { Sidebar, Modal, LoadingDots } from '@components/ui'
 import s from './Layout.module.css'
 import AlertRibbon from '@components/ui/AlertRibbon'
 import Router from 'next/router'
 import Head from 'next/head'
 import { CURRENT_THEME } from '@components/utils/constants'
-import {
-  GENERAL_COOKIE_TEXT,
-} from '@components/utils/textVariables'
+import { GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
 import LoginSidebarView from '@components/account/Login/LoginSideBarView'
 const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
-const CartSidebarView = dynamic(
-  () => import('@components/cart/CartSidebarView')
-)
-const PaymentMethodView = dynamic(
-  () => import('@components/checkout/PaymentMethodView')
-)
-const CheckoutSidebarView = dynamic(
-  () => import('@components/checkout/CheckoutSidebarView')
-)
+const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
+const PaymentMethodView = dynamic(() => import('@components/checkout/PaymentMethodView'))
+const CheckoutSidebarView = dynamic(() => import('@components/checkout/CheckoutSidebarView'))
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
 const SearchWrapper = dynamic(() => import('@components/search'))
 const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))

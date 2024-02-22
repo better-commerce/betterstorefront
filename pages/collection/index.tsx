@@ -1,18 +1,13 @@
-import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
+import type { GetStaticPropsContext } from 'next'
 import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import Link from 'next/link'
-import Image from 'next/image'
-import {
-  IMG_PLACEHOLDER,
-  PRODUCTS_AVAILABLE,
-  SHOP_BY_COLLECTION,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, PRODUCTS_AVAILABLE, SHOP_BY_COLLECTION } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { logError } from '@framework/utils/app-util'

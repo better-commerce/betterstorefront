@@ -6,15 +6,9 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import cartHandler from '@components/services/cart'
 import { RELATED_PRODUCT_WITHGROUP_TEXT } from '@components/utils/textVariables'
 import AddonCard from './AddonCard'
-const QuickViewModal = dynamic(
-  () => import('@components/product/QuickView/ProductQuickView')
-)
+const QuickViewModal = dynamic(() => import('@components/product/QuickView/ProductQuickView'))
 
-export default function CartAddonProducts({
-  products,
-  deviceInfo,
-  maxBasketItemsCount,
-}: any) {
+export default function CartAddonProducts({ products, deviceInfo, maxBasketItemsCount }: any) {
   const [isQuickview, setQuickview] = useState(undefined)
   const [isQuickviewOpen, setQuickviewOpen] = useState(false)
   let currentPage = getCurrentPage()

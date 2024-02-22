@@ -3,7 +3,6 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
-import { PDP_BRAND_COMPARE } from '@components/utils/textVariables'
 import ProductCard from '@components/product/ProductCard/ProductCard'
 import { ArrowLeft, ArrowRight } from '@components/icons'
 
@@ -21,10 +20,7 @@ interface Props {
   deviceInfo: any
 }
 
-const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({
-  config,
-  deviceInfo,
-}) => {
+const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({ config, deviceInfo }) => {
   const swiperRef: any = useRef(null)
 
   const isCompared:boolean = true

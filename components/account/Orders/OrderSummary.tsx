@@ -39,7 +39,7 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                     )}
               </p>
             </div>
-            {details?.order.discount?.raw?.withTax > 0 ? (
+            {details?.order.discount?.raw?.withTax > 0 && (
               <>
                 <div className="flex justify-between py-1 mb-2 text-black font-small">
                   <p className="font-medium text-12 text-secondary-full-opacity">
@@ -60,7 +60,7 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                   </p>
                 </div>
               </>
-            ) : null}
+            )}
             <div className="flex justify-between py-1 mb-2 text-black font-small">
               <p className="font-medium text-12 text-secondary-full-opacity">
                 Subtotal

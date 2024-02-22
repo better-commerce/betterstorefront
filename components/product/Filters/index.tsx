@@ -1,17 +1,11 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid'
+import { ChevronDownIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
-import { data } from 'autoprefixer'
-import {
-  BTN_CLEAR_ALL,
-  GENERAL_CLOSE,
-  GENERAL_FILTER_TITLE,
-  PRODUCT_FILTER,
-} from '@components/utils/textVariables'
+import { BTN_CLEAR_ALL, GENERAL_CLOSE, GENERAL_FILTER_TITLE } from '@components/utils/textVariables'
 
 interface Props {
   products: any
@@ -177,20 +171,20 @@ export default function Filters({
           </div>
           <div className="flex flex-wrap px-4 py-2 border-t border-gray-100 my-2">
             <div className="flex flex-wrap">
-              {appliedFilters.map((appliedFilter: any, idx: number) => (
+              {appliedFilters?.map((appliedFilter: any, idx: number) => (
                 <div
                   key={`applied-filter-${idx}`}
                   className="flex py-1 px-2 m-1 w-auto text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl"
                 >
-                  {appliedFilter.name ? (
+                  {appliedFilter?.name && (
                     <div className="flex">
                       <span className="font-medium">
-                        {appliedFilter.name}:{' '}
+                        {appliedFilter?.name}:{' '}
                       </span>
-                      <span>{appliedFilter.Value}</span>
+                      <span>{appliedFilter?.Value}</span>
                       <XMarkIcon onClick={ () => removeFilter(appliedFilter)} className='flex w-4 h-4 my-auto ml-1 cursor-pointer md:h-3 md:w-3 2xl:h-4 2xl:w-4'/>
                     </div>
-                  ) : null}
+                  )}
                 </div>
               ))}
             </div>

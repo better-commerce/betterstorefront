@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { IMG_PLACEHOLDER, SHOP_NOW } from '@components/utils/textVariables'
 import Router from 'next/router'
 import { generateUri } from '@commerce/utils/uri-util'
 
-const OfferCard = ({
-  title,
-  description,
-  src,
-  link,
-  index,
-  buttonText,
-  key,
-}: any) => {
+const OfferCard = ({ title, description, src, link, index, buttonText, key }: any) => {
   const [bgColour, setBgColor] = useState('')
   const [fontColor, setFontColour] = useState('text-black')
 

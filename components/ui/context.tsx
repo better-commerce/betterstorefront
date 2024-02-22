@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { isDesktop, isMobile } from 'react-device-detect'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
@@ -13,7 +13,6 @@ import { resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { LOGOUT } from '@components/utils/textVariables'
 import { Cookie } from '@framework/utils/constants'
-import { tryParseJson } from '@framework/utils/parse-util'
 
 declare const window: any
 

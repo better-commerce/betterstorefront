@@ -444,7 +444,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
             {!data.length && !isLoading && (
               <div className="py-4 sm:py-10 lg:mx-0">{EMPTY_ADDRESS}</div>
             )}
-            {isLoading ? <LoadingDots /> : null}
+            {isLoading && <LoadingDots />}
           </div>
           {isAdmin && (
             <div className="flex items-start">

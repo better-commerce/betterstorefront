@@ -1,56 +1,27 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import Image from 'next/image'
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
-import {
-  CLOTH_COLOUR_ATTRIB_NAME,
-  CLOTH_SIZE_ATTRIB_NAME,
-  NEXT_CREATE_WISHLIST,
-  Messages,
-  MAX_ADD_TO_CART_LIMIT,
-  NEXT_GET_PROOMO_DETAILS,
-  NEXT_REMOVE_WISHLIST,
-} from '@components/utils/constants'
-import {
-  CheckCircleIcon,
-  HeartIcon,
-  StarIcon,
-} from '@heroicons/react/24/outline'
-
-import { CheckCircleIcon as CheckSolidCircleIcon } from '@heroicons/react/24/solid'
+import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, NEXT_GET_PROOMO_DETAILS, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
+import { HeartIcon, StarIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import {
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  GENERAL_ADD_TO_BAG,
-  GENERAL_ADD_TO_BASKET,
-  IMG_PLACEHOLDER,
-  ITEM_WISHLISTED,
-  QUICK_VIEW,
-  WISHLIST_TITLE,
-} from '@components/utils/textVariables'
+import { BTN_PRE_ORDER, GENERAL_ADD_TO_BAG, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, QUICK_VIEW } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
-import { vatIncluded, validateAddToCart, cartItemsValidateAddToCart } from '@framework/utils/app-util'
+import { vatIncluded, cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import { deliveryDateFormat, matchStrings, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
+import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import cn from 'classnames'
 import classNames from 'classnames'
-import { Listbox } from '@headlessui/react'
-import { Select } from '@components/common/Select'
-import commerce from '@lib/api/commerce'
 import ProductTag from '../ProductTag'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import wishlistHandler from '@components/services/wishlist'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const PLPQuickView = dynamic(
-  () => import('@components/product/QuickView/PLPQuickView')
-)
+const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
 
 interface Props {
   product: any
@@ -63,34 +34,13 @@ interface Attribute {
   fieldValues?: []
 }
 
-const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
-  product: productData,
-  hideWishlistCTA = false,
-  deviceInfo,
-  maxBasketItemsCount,
-}) => {
+const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product: productData, hideWishlistCTA = false, deviceInfo, maxBasketItemsCount }) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
     image: productData.image,
     link: productData.slug,
   })
-  const {
-    basketId,
-    user,
-    addToWishlist,
-    openWishlist,
-    setCartItems,
-    openNotifyUser,
-    cartItems,
-    wishListItems,
-    isGuestUser,
-    openLoginSideBar,
-    setAlert,
-    isCompared,
-    compareProductList,
-    setCompareProducts,
-    removeFromWishlist
-  } = useUI()
+  const { basketId, user, addToWishlist, openWishlist, setCartItems, openNotifyUser, cartItems, wishListItems, isGuestUser, openLoginSideBar, setAlert, isCompared, compareProductList, setCompareProducts, removeFromWishlist } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
@@ -253,8 +203,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     }
   }
 
-  const secondImage =
-    product?.images?.length > 0 ? product?.images[1]?.image : null
+  const secondImage = useMemo(() => product?.images?.[1]?.image ?? false, [product?.images]);
 
   const handleHover = (ev: any, type: string) => {
     if (hideWishlistCTA) return
@@ -296,7 +245,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           // product?.recordId ?? product?.productId,
           cartItems,
           maxBasketItemsCount,
-          quantity > 1 ? quantity : null
+          quantity > 1 && quantity
         )
         if (!isValid) {
           setAlert({
@@ -498,18 +447,18 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 </div>
               </div>
             )}
-            {isComparedEnabled && product?.compared ? (
+            {isComparedEnabled && product?.compared && (
               <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
-                {product?.compared ? (
+                {product?.compared && (
                   <button className="w-full font-semibold uppercase border border-transparent btn-primary-white font-14">
                     Remove
                   </button>
-                ) : null}
+                )}
               </div>
-            ) : null}
+            )}
           </ButtonLink>
         </div>
-        {isMobile || isIPadorTablet ? (
+        {isMobile || isIPadorTablet && (
           <>
             <div className="flex items-center justify-between w-full col-span-12 gap-2 py-2 border-gray-200 border-y mob-left-right-padding">
               <div className="relative items-end justify-end w-full text-sm font-semibold text-right text-black top-1 product-name hover:text-gray-950">
@@ -527,7 +476,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
               </button>
             </div>
           </>
-        ) : null}
+        )}
       </div>
       <PLPQuickView isQuickview={Boolean(quickViewData)} setQuickview={() => { }} productData={quickViewData} isQuickviewOpen={Boolean(quickViewData)} setQuickviewOpen={handleCloseQuickView} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
     </>

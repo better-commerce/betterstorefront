@@ -9,12 +9,9 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-const PLPQuickView = dynamic(
-  () => import('@components/product/QuickView/PLPQuickView')
-)
-const ProductCard = dynamic(
-  () => import('@components/product/ProductCard/ProductCard')
-)
+const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
+const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
+
 declare const window: any
 interface Attribute {
   fieldName?: string

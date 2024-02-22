@@ -111,7 +111,7 @@ const OrderItems = ({
                                 undefined,
                                 productItem?.price?.currencySymbol
                               )}
-                          {productItem?.listPrice?.raw?.tax > 0 ? (
+                          {productItem?.listPrice?.raw?.tax > 0 && (
                             <>
                               <span className="px-2 text-sm font-normal line-through text-brown-light sm:text-md">
                                 {isIncludeVAT
@@ -130,7 +130,7 @@ const OrderItems = ({
                                 {discount}% off
                               </span>
                             </>
-                          ) : null}
+                          )}
                         </p>
                       </div>
                     </div>
@@ -180,9 +180,9 @@ const OrderItems = ({
           )
         })}
       </ul>
-      {details?.order.allowedToTrack ? (
+      {details?.order.allowedToTrack && (
         <TrackingDetail deliveryPlan={details?.order?.deliveryPlans} />
-      ) : null}
+      )}
     </>
   )
 }

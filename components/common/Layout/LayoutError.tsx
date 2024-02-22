@@ -33,8 +33,7 @@ const dynamicProps = {
   loading: Loading,
 }
 
-const FeatureBar: ComponentType<any> = dynamic(
-  () => import('@components/common/FeatureBar'),
+const FeatureBar: ComponentType<any> = dynamic(() => import('@components/common/FeatureBar'),
   {
     ...dynamicProps,
   }

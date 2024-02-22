@@ -39,12 +39,7 @@ import OrderDeliveryPlanItems from './OrderDeliveryPlanItems'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { vatIncluded } from '@framework/utils/app-util'
 
-export default function OrderDetail({
-  details,
-  showDetailedOrder,
-  show,
-  deviceInfo,
-}: any) {
+export default function OrderDetail({ details, showDetailedOrder, show, deviceInfo }: any) {
   const { isMobile, isIPadorTablet } = deviceInfo
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [isHelpOrderOpen, setIsHelpOrderOpen] = useState(false)

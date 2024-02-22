@@ -1,6 +1,6 @@
 import ProductSort from '@components/product/ProductSort'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { BTN_CLEAR_ALL, GENERAL_FILTER_TITLE, PRODUCT_FILTER, } from '@components/utils/textVariables'
+import { BTN_CLEAR_ALL } from '@components/utils/textVariables'
 interface Props {
   products: any
   handleSortBy: any
@@ -34,12 +34,12 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleSor
             <div className="flex flex-wrap px-4 py-2 border-t border-gray-100 my-2">
               {appliedFilters?.map((appliedFilter: any, idx: number) => (
                 <div key={`applied-filter-top-bar-${idx}`} className="flex m-1 justify-center text-gray-600" >
-                  {appliedFilter.name ? (
+                  {appliedFilter?.name && (
                     <span className="flex px-3 text-sm font-medium text-gray-600 border border-gray-200 bg-gray-50 rounded-2xl">
-                      {appliedFilter.Value}
+                      {appliedFilter?.Value}
                       <XMarkIcon onClick={ () => removeFilter(appliedFilter)} className='flex w-4 h-4 my-auto ml-1 cursor-pointer md:h-3 md:w-3 2xl:h-4 2xl:w-4'/>
                     </span>
-                  ) : null}
+                  )}
                 </div>
               ))}
             </div>

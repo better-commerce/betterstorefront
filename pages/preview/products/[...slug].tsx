@@ -8,12 +8,7 @@ import { LOADER_LOADING } from '@components/utils/textVariables'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 
-export async function getStaticProps({
-  params,
-  locale,
-  locales,
-  preview,
-}: GetStaticPropsContext<{ slug: string }>) {
+export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string }>) {
   let pdpCachedImages = null
   const productPromise = commerce.getProductPreview({ query: params!.slug[0] })
   const product = await productPromise

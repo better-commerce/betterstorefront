@@ -246,12 +246,12 @@ function DeliveryOptions({
                             </RadioGroup.Description>
                           </div>
                         </div>
-                        {checked ? (
+                        {checked && (
                           <CheckCircleIcon
                             className="w-5 h-5 text-black"
                             aria-hidden="true"
                           />
-                        ) : null}
+                        )}
                         <div
                           className={classNames(
                             active ? 'border' : 'border-2',
@@ -288,14 +288,14 @@ function DeliveryOptions({
                       <h3 className="text-lg font-bold text-gray-900 uppercase">
                         {item.price.formatted.withTax}
                       </h3>
-                      {shippingMethod.id === item.id ? (
+                      {shippingMethod.id === item.id && (
                         <div className="ml-5">
                           <CheckCircleIcon
                             className="w-5 h-5 text-black"
                             aria-hidden="true"
                           />
                         </div>
-                      ) : null}
+                      )}
                     </div>
                   </li>
                   {isCncMethod && <CncInput handleSubmit={handleCncPostCode} />}

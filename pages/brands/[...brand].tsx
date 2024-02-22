@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
-import Image from 'next/image'
 import Link from 'next/link'
 import useSwr from 'swr'
 import commerce from '@lib/api/commerce'
@@ -9,14 +8,7 @@ import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import {
-  BTN_RECOMMENDED_PROD,
-  BTN_SEE_ALL,
-  FEATURES_HEADING,
-  IMG_PLACEHOLDER,
-  RESULTS,
-  SHOP_NOW,
-} from '@components/utils/textVariables'
+import { BTN_RECOMMENDED_PROD, BTN_SEE_ALL, FEATURES_HEADING, IMG_PLACEHOLDER, RESULTS, SHOP_NOW } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -26,11 +18,9 @@ import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import ImageCollection from '@components/brand/ImageCollection'
-import ImageBanner from '@components/brand/ImageBanner'
 // const MultiBrandVideo = dynamic(
 //   () => import('@components/brand/MultiBrandVideo')
 // )
-import MultiBrandVideo from '@components/brand/MultiBrandVideo'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import faq from '@components/brand/faqData.json'
 import SwiperCore, { Navigation } from 'swiper'
@@ -45,14 +35,10 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 
-const RecommendedProductCollection = dynamic(
-  () => import('@components/brand/RecommendedProductCollection')
-)
+const RecommendedProductCollection = dynamic(() => import('@components/brand/RecommendedProductCollection'))
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
 const ProductSort = dynamic(() => import('@components/product/ProductSort'))
-const ProductGrid = dynamic(
-  () => import('@components/product/Grid/ProductGrid')
-)
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 const Slider = dynamic(() => import('@components/brand/Slider'))
 const Disclosure = dynamic(() => import('@components/brand/Disclosure'))
 

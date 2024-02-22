@@ -174,12 +174,12 @@ export default function AddressForm({
                                 aria-hidden="true"
                               />
                             ) : null}
-                            {item.id !== defaultValues.id ? (
+                            {item.id !== defaultValues.id && (
                               <CheckCircleIcon
                                 className="h-5 pr-4 text-left text-gray-200 align-left"
                                 aria-hidden="true"
                               />
-                            ) : null}
+                            )}
                             <div className="justify-end mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0"></div>
                           </div>
                           <div className="flex text-md font-regular flex-wrap =">

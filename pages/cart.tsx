@@ -1,77 +1,36 @@
+// Base Imports
+import { useEffect, useState } from 'react'
+
+// Package Imports
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
-import { XMarkIcon as XMarkIconSolid } from '@heroicons/react/24/solid'
-import { Layout } from '@components/common'
-import { GetServerSideProps } from 'next'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { useCart as getCart } from '@framework/cart'
-import cookie from 'cookie'
-import { basketId as basketIdGenerator } from '@components/ui/context'
-import Link from 'next/link'
-import { useUI } from '@components/ui/context'
-import classNames from 'classnames'
-import cartHandler from '@components/services/cart'
-import {
-  PlusSmallIcon,
-  MinusSmallIcon,
-  ChevronDownIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline'
-import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
-const PromotionInput = dynamic(
-  () => import('../components/cart/PromotionInput')
-)
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import axios from 'axios'
-import { Disclosure, Transition,Dialog  } from '@headlessui/react'
-import { Fragment } from 'react'
-import { Button, LoadingDots } from '@components/ui'
-import {XMarkIcon} from '@heroicons/react/24/outline'
-import { CLOSE_PANEL } from '@components/utils/textVariables'
-import { getShippingPlans } from '@framework/shipping'
-import {
-  BTN_CHECKOUT_NOW,
-  BTN_PLACE_ORDER,
-  GENERAL_CATALOG,
-  GENERAL_DISCOUNT,
-  GENERAL_ORDER_SUMMARY,
-  GENERAL_PRICE_LABEL_RRP,
-  GENERAL_REMOVE,
-  GENERAL_SHIPPING,
-  GENERAL_SHOPPING_CART,
-  GENERAL_TAX,
-  GENERAL_TOTAL,
-  IMG_PLACEHOLDER,
-  ITEMS_IN_YOUR_CART,
-  SUBTOTAL_EXCLUDING_TAX,
-  SUBTOTAL_INCLUDING_TAX,
-} from '@components/utils/textVariables'
+import { GetServerSideProps } from 'next'
+import cookie from 'cookie'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+
+// Component Imports
+import { Layout } from '@components/common'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { useCart as getCart } from '@framework/cart'
+import { basketId as basketIdGenerator } from '@components/ui/context'
+import { useUI } from '@components/ui/context'
+import cartHandler from '@components/services/cart'
+import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { LoadingDots } from '@components/ui'
+import { BTN_PLACE_ORDER, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_PRICE_LABEL_RRP, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TAX, GENERAL_TOTAL, IMG_PLACEHOLDER, SUBTOTAL_EXCLUDING_TAX, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
-import {
-  getCurrentPage,
-  validateAddToCart,
-  vatIncluded,
-} from '@framework/utils/app-util'
-import {
-  LoadingActionType,
-  NEXT_BASKET_VALIDATE,
-  NEXT_GET_ALT_RELATED_PRODUCTS,
-  NEXT_GET_BASKET_PROMOS,
-  NEXT_GET_ORDER_RELATED_PRODUCTS,
-  NEXT_SHIPPING_PLANS,
-  SITE_NAME,
-  SITE_ORIGIN_URL,
-  collectionSlug,
-} from '@components/utils/constants'
-import { useRouter } from 'next/router'
+import { vatIncluded } from '@framework/utils/app-util'
+import { LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
-import SplitDelivery from '@components/checkout/SplitDelivery'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
+const PromotionInput = dynamic(() => import('../components/cart/PromotionInput'))
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
@@ -578,14 +537,14 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                           : product.price?.formatted?.withoutTax}
                         {product.listPrice?.raw.withTax > 0 &&
                         product.listPrice?.raw.withTax !=
-                          product.price?.raw?.withTax ? (
+                          product.price?.raw?.withTax && (
                           <span className="px-2 text-sm text-red-400 line-through">
                             {GENERAL_PRICE_LABEL_RRP}{' '}
                             {isIncludeVAT
                               ? product.listPrice.formatted?.withTax
                               : product.listPrice.formatted?.withoutTax}
                           </span>
-                        ) : null}
+                        )}
                       </div>
                       <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
                         {product?.variantProducts?.length > 0 ? (
@@ -688,7 +647,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                     </div>
                   </div>
                 ))}
-                {/* <section>
+              </section>
+              {/* <section>
                   {splitDeliveryItems && (
                     <SplitDelivery
                       splitDeliveryItems={splitDeliveryItems}
@@ -696,7 +656,6 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                     />
                   )}
                 </section> */}
-              </section>
               <section
                 aria-labelledby="summary-heading"
                 className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-20 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5"
@@ -852,14 +811,14 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                   : product.price?.formatted?.withoutTax}
                                 {product.listPrice?.raw.withTax > 0 &&
                                 product.listPrice?.raw.withTax !=
-                                  product.price?.raw?.withTax ? (
+                                  product.price?.raw?.withTax && (
                                   <span className="px-2 text-sm text-red-400 line-through">
                                     {GENERAL_PRICE_LABEL_RRP}{' '}
                                     {isIncludeVAT
                                       ? product.listPrice.formatted?.withTax
                                       : product.listPrice.formatted?.withoutTax}
                                   </span>
-                                ) : null}
+                                )}
                               </div>
                               <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
                                 {product?.variantProducts?.length > 0 ? (

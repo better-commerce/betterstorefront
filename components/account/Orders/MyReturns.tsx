@@ -361,9 +361,9 @@ export default function MyReturns() {
                                 </div>
                               ) : product.status === 'out-for-delivery' ? (
                                 <p>{ORDER_STATUS_OUT_FOR_DELIVERY}</p>
-                              ) : product.status === 'cancelled' ? (
+                              ) : product.status === 'cancelled' && (
                                 <p className="text-gray-500">{ORDER_STATUS_CANCELLED}</p>
-                              ) : null}
+                              )}
                             </div>
                           </div>
                           <div className="ml-4 flex-shrink-0 sm:m-0 sm:mr-6 sm:order-first">
