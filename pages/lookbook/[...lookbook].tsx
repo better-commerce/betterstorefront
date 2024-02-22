@@ -5,9 +5,7 @@ import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
-const ProductGrid = dynamic(
-  () => import('@components/product/Grid/ProductGrid')
-)
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {

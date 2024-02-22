@@ -6,17 +6,7 @@ import axios from 'axios'
 import { NEXT_API_PRICE_MATCH_ENDPOINT } from '@components/utils/constants'
 import Image from 'next/image'
 
-export default function PriceMatch({
-  show,
-  onClose,
-  productImage,
-  productId,
-  stockCode,
-  productName,
-  ourCost,
-  ourDeliveryCost,
-  rrp,
-}: any) {
+export default function PriceMatch({ show, onClose, productImage, productId, stockCode, productName, ourCost, ourDeliveryCost, rrp }: any) {
   const submitContactForm = (values: any) => {
     const priceMatch = {
       productId: productId,

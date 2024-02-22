@@ -155,7 +155,7 @@ function OrdersListView({
 
                 {(isMobile || isIPadorTablet) && (
                   <div className="sticky bottom-0 z-50 p-0 sm:px-0">
-                    {displayAlert ? (
+                    {displayAlert && (
                       <div className="mb-3 mt-3 m-[-20px] w-auto">
                         <div
                           className={`${alertBgColor(
@@ -173,7 +173,7 @@ function OrdersListView({
                           </h4>
                         </div>
                       </div>
-                    ) : null}
+                    )}
                   </div>
                 )}
               </div>

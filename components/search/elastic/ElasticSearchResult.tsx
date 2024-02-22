@@ -31,8 +31,6 @@ import ElasticSearchSuggestions from './ElasticSearchSuggestions'
 import { CloudIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 import cn from 'classnames'
-const SimpleButton = dynamic(() => import('@components/ui/Button'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import { MAX_ADD_TO_CART_LIMIT, Messages } from '@components/utils/constants'
 import {
   BTN_NOTIFY_ME,
@@ -52,6 +50,8 @@ import {
   priceFormat,
 } from '@framework/utils/parse-util'
 import { Switch } from '@headlessui/react'
+const SimpleButton = dynamic(() => import('@components/ui/Button'))
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {

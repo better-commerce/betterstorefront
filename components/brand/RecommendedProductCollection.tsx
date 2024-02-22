@@ -8,13 +8,8 @@ import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import dynamic from 'next/dynamic'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import {
-  BTN_RECOMMENDED_PROD,
-  BTN_SEE_ALL,
-} from '@components/utils/textVariables'
-const ProductCard = dynamic(
-  () => import('@components/product/ProductCard/ProductCard')
-)
+
+const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
 
 const RecommendedProductCollection = ({
   recommendedProducts,

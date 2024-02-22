@@ -36,7 +36,6 @@ import { priceFormat, stringFormat } from '@framework/utils/parse-util'
 import AttributesHandler from '../ProductView/AttributesHandler'
 import dynamic from 'next/dynamic'
 import { useUI } from '@components/ui'
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import {
@@ -44,6 +43,7 @@ import {
   validateAddToCart,
   vatIncluded,
 } from '@framework/utils/app-util'
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
 

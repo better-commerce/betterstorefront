@@ -213,7 +213,7 @@ export default function CartProduct({
           />
         </div>
         <div className="flex flex-col col-span-10 sm:col-span-7">
-          {isMobile ? (
+          {isMobile && (
             <div className="flex justify-between">
               <div className="mt-0 font-semibold text-black font-14 font-Inter">
                 {isIncludeVAT
@@ -221,19 +221,19 @@ export default function CartProduct({
                   : product.price?.formatted?.withoutTax}
                 {product.listPrice?.raw.withTax > 0 &&
                   product.listPrice?.raw.withTax >
-                  product.price?.raw?.withTax ? (
+                  product.price?.raw?.withTax && (
                   <span className="px-2 text-sm text-gray-400 line-through">
                     {isIncludeVAT
                       ? product.listPrice.formatted?.withTax
                       : product.listPrice.formatted?.withoutTax}
                   </span>
-                ) : null}
+                )}
               </div>
               <div className="items-end text-xs font-light text-left text-gray-400 sm:text-right">
                 {isIncludeVAT ? 'inc. VAT' : 'ex. VAT'}
               </div>
             </div>
-          ) : null}
+          )}
           <div className="flex-1">
             <Link href={`/${product.slug}`}>
               <span className="font-light text-black font-18 font-Inter">
@@ -293,13 +293,13 @@ export default function CartProduct({
               )}
 
               {product.listPrice?.raw.withTax > 0 &&
-                product.listPrice?.raw.withTax > product.price?.raw?.withTax ? (
+                product.listPrice?.raw.withTax > product.price?.raw?.withTax && (
                 <span className="px-0 text-sm font-normal text-gray-400 line-through">
                   {isIncludeVAT
                     ? product.listPrice.formatted?.withTax
                     : product.listPrice.formatted?.withoutTax}
                 </span>
-              ) : null}
+              )}
             </div>
             <div className="items-end text-xs font-light text-left text-gray-400 sm:text-right">
               {isIncludeVAT ? 'inc. VAT' : 'ex. VAT'}
@@ -307,7 +307,7 @@ export default function CartProduct({
           </div>
         )}
 
-        {isMobile ? (
+        {isMobile && (
           <>
             <div className="flex justify-between w-full col-span-12 px-2 py-2 mt-1 border-gray-200 border-y">
               <div>
@@ -335,7 +335,7 @@ export default function CartProduct({
               </div>
             </div>
           </>
-        ) : null}
+        )}
         <div className="grid items-center grid-cols-1 col-span-12 gap-2 sm:justify-between sm:grid-cols-12">
           <div className="sm:col-span-2">
             {reValidateData?.message != null && soldOutMessage != '' && (

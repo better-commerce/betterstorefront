@@ -2,7 +2,6 @@
 import { useState } from 'react'
 
 // Package Imports
-import Image from 'next/image'
 import Cookies from 'js-cookie'
 
 // Component Imports
@@ -13,11 +12,7 @@ import ProductReturn from '../ProductSidebar/ProductReturn'
 // Other Imports
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { stringToBoolean } from '@framework/utils/parse-util'
-import {
-  BETTERCOMMERCE_CURRENCY,
-  BETTERCOMMERCE_DEFAULT_CURRENCY,
-  EmptyString,
-} from '@components/utils/constants'
+import { BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString } from '@components/utils/constants'
 import { Cookie } from '@framework/utils/constants'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'

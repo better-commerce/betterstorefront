@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
@@ -9,20 +8,13 @@ import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
-import {
-  ALL_CATEGORY,
-  BAD_URL_TEXT,
-  IMG_PLACEHOLDER,
-  RESULTS,
-} from '@components/utils/textVariables'
+import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { logError, maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import getAllProductsOperation from '@framework/api/operations/get-all-products'
 import { ProductCard } from '@components/product'
 import axios from 'axios'
 import { NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
@@ -36,19 +28,11 @@ import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-ut
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
-const ProductFilterRight = dynamic(
-  () => import('@components/product/Filters/filtersRight')
-)
-const ProductMobileFilters = dynamic(
-  () => import('@components/product/Filters')
-)
-const ProductFiltersTopBar = dynamic(
-  () => import('@components/product/Filters/FilterTopBar')
-)
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
-const ProductGrid = dynamic(
-  () => import('@components/product/Grid/ProductGrid')
-)
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
@@ -501,11 +485,11 @@ function CategoryLandingPage({
           <div className="w-full">
             <div className="py-4">
               {category?.subCategories?.filter((x: any) => x.isFeatured == true)
-                .length > 0 ? (
+                .length > 0 && (
                 <div className="container px-4 mx-auto mb-4 sm:px-0">
                   <h2 className="font-bold font-18">Popular categories</h2>
                 </div>
-              ) : null}
+              )}
               <Swiper
                 // install Swiper modules
                 spaceBetween={0}
@@ -574,7 +558,7 @@ function CategoryLandingPage({
 
             {/* category banner info start */}
             <div className="w-full py-4">
-              {category && category?.images && category?.images.length ? (
+              {category && category?.images && category?.images.length && (
                 <>
                   {category?.images.map((cat: any, idx: number) => (
                     <div
@@ -610,7 +594,7 @@ function CategoryLandingPage({
                     </div>
                   ))}
                 </>
-              ) : null}
+              )}
             </div>
             {/* category banner info End */}
 
@@ -793,7 +777,7 @@ function CategoryLandingPage({
             <div className="w-full px-0 py-0 mx-auto sm:px-0">
               {/* category banner info start */}
               <div className="container py-0 mx-auto">
-                {category && category?.images && category?.images.length ? (
+                {category && category?.images && category?.images.length && (
                   <>
                     {category?.images.map((cat: any, idx: number) => (
                       <div
@@ -827,17 +811,17 @@ function CategoryLandingPage({
                       </div>
                     ))}
                   </>
-                ) : null}
+                )}
               </div>
               {/* category banner info End */}
               <div className="py-0">
                 {category?.subCategories?.filter(
                   (x: any) => x.isFeatured == true
-                ).length > 0 ? (
+                ).length > 0 && (
                   <h2 className="container mx-auto mb-4 font-bold font-18">
                     Popular categories
                   </h2>
-                ) : null}
+                )}
                 <Swiper
                   spaceBetween={0}
                   slidesPerView={1}

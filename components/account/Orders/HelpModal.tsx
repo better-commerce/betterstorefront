@@ -95,12 +95,12 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                              </a>
                                           )}
                                           {
-                                             details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 ?
+                                             details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 &&
                                                 <a href="javascript:void(0);" className='block w-full hover:opacity-90 dark:hover:bg-accent-8 px-4 py-2 mb-2 bg-gray-900 font-bold uppercase text-center text-white border btn-basic-property'
                                                    onClick={() => onCancelItem("Cancel")}>
                                                    {GENERAL_CANCEL} Item
                                                 </a>
-                                                : null
+                                                
                                           }
                                        </div>
                                     </div>
@@ -161,13 +161,11 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                              className='w-full dark:hover:bg-accent-8 mb-2 border btn-basic-property btn'>
                                              {CHAT_WITH_US}
                                           </a>
-                                          {
-                                             details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 ?
+                                          {details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 &&
                                                 <a href="javascript:void(0);" className='w-full dark:hover:bg-accent-8 mb-2 border btn-primary btn'
                                                    onClick={() => onCancelOrder("Cancel")}>
                                                    {CANCEL_ORDER}
                                                 </a>
-                                                : null
                                           }
                                        </div>
                                     </div>

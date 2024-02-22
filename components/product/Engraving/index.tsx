@@ -1,26 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import {
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_CLOSE,
-  GENERAL_ENGRAVING,
-  GENERAL_ENGRAVING_PERSONALIZE_BOTTLE,
-  GENERAL_PERSONALISATION,
-  GENERAL_PERSONALISATION_READONLY,
-} from '@components/utils/textVariables'
+import { Dialog } from '@headlessui/react'
+import { GENERAL_ADD_TO_BASKET } from '@components/utils/textVariables'
 import { ProductPersonaliser } from '../ProductPersonaliser'
 import LoadingDots from '@components/ui/LoadingDots'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-export default function Engraving({
-  onClose = () => {},
-  engravingPrice = '5.99',
-  show = false,
-  handleToggleDialog,
-  submitForm,
-  product,
-  isPersonalizeLoading,
-  readOnly = false,
-}: any) {
+export default function Engraving({ engravingPrice = '5.99', show = false, handleToggleDialog, submitForm, product, isPersonalizeLoading, readOnly = false }: any) {
   const [data, setData] = useState<any>(null)
 
   const getData = async () => {

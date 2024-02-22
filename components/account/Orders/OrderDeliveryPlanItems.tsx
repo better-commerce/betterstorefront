@@ -92,7 +92,7 @@ const OrderDeliveryPlanItems = ({
               )}
             </Disclosure>
           </div>
-          {details?.order?.allowedToTrack ? (
+          {details?.order?.allowedToTrack && (
             <>
               <div className="w-full px-4 py-4 mb-4 border-b border-gray-300 border-dashed sm:px-16 sm:pl-0 sm:pt-0">
                 <div className="flex flex-col w-full">
@@ -108,7 +108,7 @@ const OrderDeliveryPlanItems = ({
                 </div>
               </div>
             </>
-          ) : null}
+          )}
 
           <div className="w-full">
             <div className="px-0 mt-4">
@@ -236,7 +236,7 @@ const OrderDeliveryPlanItems = ({
                                           productItem?.price?.currencySymbol
                                         )}
                                         {productItem?.listPrice?.raw?.tax >
-                                        0 ? (
+                                        0 && (
                                           <>
                                             <span className="px-2 text-sm font-normal line-through text-brown-light sm:text-md">
                                               {priceFormat(
@@ -251,7 +251,7 @@ const OrderDeliveryPlanItems = ({
                                               {discount}% off
                                             </span>
                                           </>
-                                        ) : null}
+                                        )}
                                       </p>
                                     </div>
                                   </div>
@@ -302,7 +302,7 @@ const OrderDeliveryPlanItems = ({
                                   </a>
                                 </div>
                               )}
-                              {details?.order.allowedToReview ? (
+                              {details?.order.allowedToReview && (
                                 <>
                                   <div className="flex w-full py-4">
                                     <p
@@ -325,7 +325,7 @@ const OrderDeliveryPlanItems = ({
                                     </div>
                                   </div>
                                 </>
-                              ) : null}
+                              )}
                             </li>
                           </>
                         )
@@ -335,10 +335,10 @@ const OrderDeliveryPlanItems = ({
               </div>
             </div>
           </div>
-          {details?.order.allowedToTrack ? (
+          {details?.order.allowedToTrack && (
             <TrackingDetail deliveryPlan={deliveryPlan} />
-          ) : null}
-          {deliveryPlan?.invoiceURL ? (
+          )}
+          {deliveryPlan?.invoiceURL && (
             <div className="py-6">
               <a
                 href={deliveryPlan?.invoiceURL}
@@ -347,7 +347,7 @@ const OrderDeliveryPlanItems = ({
                 Download Invoice
               </a>
             </div>
-          ) : null}
+          )}
         </div>
       ))}
     </>

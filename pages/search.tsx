@@ -1,7 +1,12 @@
-import dynamic from 'next/dynamic'
+// Base Imports
 import { useReducer, useEffect, useState } from 'react'
+
+// Package Imports
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
+
+// Component Imports
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import Script from 'next/script'
@@ -14,7 +19,6 @@ import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 declare const window: any
@@ -45,33 +49,13 @@ interface stateInterface {
 const IS_INFINITE_SCROLL =
   process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 const PAGE_TYPE = PAGE_TYPES['Search']
-const {
-  SORT_BY,
-  PAGE,
-  SORT_ORDER,
-  CLEAR,
-  HANDLE_FILTERS_UI,
-  ADD_FILTERS,
-  REMOVE_FILTERS,
-  FREE_TEXT,
-} = ACTION_TYPES
-const DEFAULT_STATE = {
-  sortBy: '',
-  sortOrder: 'asc',
-  currentPage: 1,
-  filters: [],
-  freeText: '',
-}
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
 const ProductGrid = dynamic(() => import('@components/product/Grid'))
-const ProductMobileFilters = dynamic(
-  () => import('@components/product/Filters')
-)
-const ProductFilterRight = dynamic(
-  () => import('@components/product/Filters/filtersRight')
-)
-const ProductFiltersTopBar = dynamic(
-  () => import('@components/product/Filters/FilterTopBar')
-)
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
+
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:

@@ -118,7 +118,7 @@ const PAGE_TYPE = PAGE_TYPES.Home
 function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, }: any) {
   const router = useRouter()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
+  const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const homePageContents = isMobile ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || [] : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(homePageContents)

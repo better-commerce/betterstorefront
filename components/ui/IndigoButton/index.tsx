@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import { FC } from 'react'
 import { useUI } from '@components/ui/context'
-import { useState } from 'react'
 import { LoadingDots } from '@components/ui'
 interface Props {
   className?: string

@@ -5,81 +5,21 @@ import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import axios from 'axios'
 import { Transition, Dialog } from '@headlessui/react'
-import {
-  ChatBubbleLeftEllipsisIcon,
-  EnvelopeIcon,
-  LinkIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import { CLOSE_PANEL, SHARE_IN_PERSON } from '@components/utils/textVariables'
-import {
-  NEXT_REFERRAL_ADD_USER_REFEREE,
-  NEXT_REFERRAL_BY_EMAIL,
-  NEXT_REFERRAL_BY_USERID,
-  NEXT_REFERRAL_BY_USERNAME,
-  NEXT_REFERRAL_CLICK_ON_INVITE,
-  NEXT_REFERRAL_INVITE_SENT,
-  NEXT_REFERRAL_SEARCH,
-  NEXT_REFERRAL_INFO,
-  FACEBOOK_SHARE_STRING,
-  TWITTER_SHARE_STRING,
-  Messages,
-  NEXT_GET_ORDER,
-  NEXT_GET_ORDERS,
-  NEXT_INFRA_ENDPOINT,
-  EmptyString,
-} from '@components/utils/constants'
+import { NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
+  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import {} from '@components/utils/constants'
 import { removeItem } from '@components/utils/localStorage'
-import {
-  BTN_BACK_TO_HOME,
-  GENERAL_ADDRESSES,
-  GENERAL_BILLING_ADDRESS,
-  GENERAL_DELIVERED_BY,
-  GENERAL_DELIVERY_ADDRESS,
-  GENERAL_ITEMS,
-  GENERAL_NEXT_ORDER_PROMO,
-  GENERAL_ON_THE_WAY,
-  GENERAL_ORDER_WILL_BE_WITH_YOU_SOON,
-  GENERAL_PAYMENT,
-  GENERAL_PAYMENT_METHOD,
-  GENERAL_PRICE,
-  GENERAL_QUANTITY,
-  GENERAL_SHIPPING,
-  GENERAL_SHIPPING_ADDRESS,
-  GENERAL_SHIPPING_METHOD,
-  GENERAL_SUMMARY,
-  GENERAL_TAX,
-  GENERAL_THANK_YOU,
-  GENERAL_TOTAL,
-  GENERAL_YOUR_ORDER,
-  IMG_PLACEHOLDER,
-  LOADING_YOUR_ORDERS,
-  NO_ORDER_PROVIDED,
-  SUBTOTAL_EXCLUDING_TAX,
-  SUBTOTAL_INCLUDING_TAX,
-  YOUR_INFORMATION,
-  OFFER_VALIDITY,
-} from '@components/utils/textVariables'
-import {
-  ELEM_ATTR,
-  ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS,
-} from '@framework/content/use-content-snippet'
-import Image from 'next/image'
+import { BTN_BACK_TO_HOME, GENERAL_ADDRESSES, GENERAL_DELIVERED_BY, GENERAL_DELIVERY_ADDRESS, GENERAL_ITEMS, GENERAL_NEXT_ORDER_PROMO, GENERAL_ON_THE_WAY, GENERAL_ORDER_WILL_BE_WITH_YOU_SOON, GENERAL_PAYMENT, GENERAL_PAYMENT_METHOD, GENERAL_PRICE, GENERAL_QUANTITY, GENERAL_SHIPPING, GENERAL_SHIPPING_METHOD, GENERAL_SUMMARY, GENERAL_TAX, GENERAL_THANK_YOU, GENERAL_TOTAL, GENERAL_YOUR_ORDER, IMG_PLACEHOLDER, LOADING_YOUR_ORDERS, NO_ORDER_PROVIDED, SUBTOTAL_EXCLUDING_TAX, SUBTOTAL_INCLUDING_TAX, YOUR_INFORMATION, OFFER_VALIDITY } from '@components/utils/textVariables'
+import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
-import {
-  LocalStorage,
-  PaymentStatus,
-} from '@components/utils/payment-constants'
+import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
-import {
-  eddDateFormat,
-  stringFormat,
-  stringToBoolean,
-} from '@framework/utils/parse-util'
+import { eddDateFormat, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()

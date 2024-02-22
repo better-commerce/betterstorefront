@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import axios from 'axios'
-import { FC, useCallback } from 'react'
+import { FC } from 'react'
 import { useUI } from '@components/ui/context'
 import { useEffect, useState, Fragment } from 'react'
 import { matchStrings, priceFormat, stringFormat, tryParseJson, } from '@framework/utils/parse-util'
@@ -26,7 +26,7 @@ import RecentlyViewedProduct from '@components/product/RelatedProducts/RecentlyV
 import wishlistHandler from '@components/services/wishlist'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
-  const { addToWishlist, openWishlist,wishListItems, displayAlert, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
+  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
   const {isInWishList} = wishlistHandler()
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)

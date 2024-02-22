@@ -1,32 +1,30 @@
+// Base Imports
+import { useReducer, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+
+// Package Imports
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Script from 'next/script'
 import NextHead from 'next/head'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
-import getCollections from '@framework/api/content/getCollections'
-import { Layout } from '@components/common'
-import os from 'os'
-import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
-import { useReducer, useEffect, useState } from 'react'
 import useSwr from 'swr'
-import { postData } from '@components/utils/clientFetcher'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { ChevronLeftIcon } from '@heroicons/react/24/outline'
 import 'swiper/css'
 import 'swiper/css/navigation'
+
+// Component Imports
+import getCollections from '@framework/api/content/getCollections'
+import { Layout } from '@components/common'
+import os from 'os'
+import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
+import { postData } from '@components/utils/clientFetcher'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import {
-  maxBasketItemsCount,
-  notFoundRedirect,
-  obfuscateHostName,
-  setPageScroll,
-  logError
-} from '@framework/utils/app-util'
+import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
@@ -35,26 +33,14 @@ import { Redis } from '@framework/utils/redis-constants'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
-const CompareSelectionBar = dynamic(
-  () => import('@components/product/ProductCompare/compareSelectionBar')
-)
-const ProductFilterRight = dynamic(
-  () => import('@components/product/Filters/filtersRight')
-)
-const ProductMobileFilters = dynamic(
-  () => import('@components/product/Filters')
-)
-const ProductFiltersTopBar = dynamic(
-  () => import('@components/product/Filters/FilterTopBar')
-)
+const CompareSelectionBar = dynamic(() => import('@components/product/ProductCompare/compareSelectionBar'))
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
-const ProductGrid = dynamic(
-  () => import('@components/product/Grid/ProductGrid')
-)
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-const PLPFilterSidebar = dynamic(
-  () => import('@components/product/Filters/PLPFilterSidebarView')
-)
+const PLPFilterSidebar = dynamic(() => import('@components/product/Filters/PLPFilterSidebarView'))
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -124,7 +110,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 
 export default function CollectionPage(props: any) {
   const { deviceInfo, config } = props
-  const { isOnlyMobile, isMobile, isIPadorTablet } = deviceInfo
+  const { isOnlyMobile, isMobile } = deviceInfo
   const router = useRouter()
   const [paddingTop, setPaddingTop] = useState('0')
   const [isProductCompare, setProductCompare] = useState(false)
@@ -468,7 +454,7 @@ export default function CollectionPage(props: any) {
                               <p className="mb-2 font-normal text-left text-white text-10">
                                 {img?.description}
                               </p>
-                              {img?.title ? (
+                              {img?.title && (
                                 <>
                                   <Link legacyBehavior href={img?.link} passHref >
                                     <span className="font-medium text-left text-white underline text-12">
@@ -476,7 +462,7 @@ export default function CollectionPage(props: any) {
                                     </span>
                                   </Link>
                                 </>
-                              ) : null}
+                              )}
                             </div>
                           </div>
                         </div>

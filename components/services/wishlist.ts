@@ -1,8 +1,4 @@
-import {
-  NEXT_GET_WISHLIST,
-  NEXT_CREATE_WISHLIST,
-  NEXT_REMOVE_WISHLIST,
-} from '@components/utils/constants'
+import { NEXT_GET_WISHLIST, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
 import axios from 'axios'
 import { useUI } from '@components/ui/context'
 

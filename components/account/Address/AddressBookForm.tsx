@@ -8,11 +8,7 @@ const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
 }
 
-export default function AddressForm({
-  initialValues = {},
-  onSubmit = () => {},
-  closeEditMode,
-}: any) {
+export default function AddressForm({ initialValues = {}, onSubmit = () => {}, closeEditMode }: any) {
   return (
     <Formik
       validationSchema={schema}
@@ -65,11 +61,11 @@ export default function AddressForm({
                         })}
                       </Field>
                     )}
-                    {errors[formItem.name] && touched[formItem.name] ? (
+                    {errors[formItem.name] && touched[formItem.name] && (
                       <div className="text-red-400 text-xs capitalize mb-2">
                         {errors[formItem.name]}
                       </div>
-                    ) : null}
+                    )}
                   </div>
                 )
               })}

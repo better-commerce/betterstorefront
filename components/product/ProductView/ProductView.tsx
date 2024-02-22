@@ -1,46 +1,48 @@
-import Link from 'next/link'
+// Base Imports
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+
+// Package Imports
 import dynamic from 'next/dynamic'
-import { useState, useEffect, Fragment, useCallback } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import ImageGallery from 'react-image-gallery'
+import { decrypt, encrypt } from '@framework/utils/cipher'
 import { Tab } from '@headlessui/react'
 import { HeartIcon } from '@heroicons/react/24/outline'
-import { StarIcon, PlayIcon, PlusIcon } from '@heroicons/react/24/solid'
+import { StarIcon } from '@heroicons/react/24/solid'
+import SwiperCore, { Navigation, Pagination, Zoom } from 'swiper'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import Script from 'next/script';
+
+// Component Imports
 import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
-import axios from 'axios'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import Image from 'next/image'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import SwiperCore, { Navigation, Pagination, Zoom } from 'swiper'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon, PlusSmallIcon, MinusSmallIcon, } from '@heroicons/react/24/outline'
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, SITE_ORIGIN_URL, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, QuantityBreakRule, } from '@components/utils/constants'
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { ALERT_SUCCESS_WISHLIST_MESSAGE, BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, GENERAL_PRICE_LABEL_RRP, GENERAL_REFERENCE, GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, PRICEMATCH_ADDITIONAL_DETAILS, PRICEMATCH_BEST_PRICE, PRICEMATCH_SEEN_IT_CHEAPER, PRODUCT_AVAILABILITY, PRODUCT_INFORMATION, PRODUCT_IN_STOCK, PRODUCT_OUT_OF_STOCK, PRODUCT_PERSONALIZATION_TITLE, SLUG_TYPE_MANUFACTURER, YOUTUBE_VIDEO_PLAYER, } from '@components/utils/textVariables'
+
+// Other Imports
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_REFERENCE, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, PRICEMATCH_ADDITIONAL_DETAILS, PRODUCT_AVAILABILITY, PRODUCT_INFORMATION, PRODUCT_IN_STOCK, PRODUCT_OUT_OF_STOCK, PRODUCT_PERSONALIZATION_TITLE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
-import ImageZoom from 'react-image-zooom'
-import { priceFormat, roundToDecimalPlaces, matchStrings, stringFormat } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
-import Script from 'next/script'
-import ImageGallery from 'react-image-gallery'
 import PDPCompare from '../PDPCompare'
-import { decrypt, encrypt } from '@framework/utils/cipher'
 import { LocalStorage } from '@components/utils/payment-constants'
 import wishlistHandler from '@components/services/wishlist'
-
+const Preview = dynamic(() => import('@components/product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-const RelatedProducts = dynamic(() => import('@components/product/RelatedProducts'))
 const Bundles = dynamic(() => import('@components/product/Bundles'))
 const Reviews = dynamic(() => import('@components/product/Reviews'))
 const PriceMatch = dynamic(() => import('@components/product/PriceMatch'))
@@ -66,8 +68,8 @@ const PLACEMENTS_MAP: any = {
   },
 }
 
-export default function ProductView({ data = { images: [] }, snippets = [], setEntities, recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpLookbookProducts, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, }: any) {
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
+export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, }: any) {
+  const { isMobile } = deviceInfo
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
   const {isInWishList,deleteWishlistItem} = wishlistHandler()
   const isIncludeVAT = vatIncluded()
@@ -82,11 +84,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
   const [fullscreen, setFullscreen] = useState(false);
   const [attributeNames, setAttributeNames] = useState([])
-  const [compareProducts, setCompareProduct] = useState([])
   const [allProductsByCategory, setAllProductsByCategory] = useState<any>(allProductsByCategoryProp)
   const [relatedProducts, setRelatedProducts] = useState<any>(relatedProductsProp)
   const [compareProductsAttributes, setCompareProductAttribute] = useState([])
-  const variantProductsCount = product?.variantProducts?.length
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   useEffect(() => {
@@ -761,17 +761,17 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
             </p>
             <div className="my-4">
               <h2 className="sr-only">{PRODUCT_INFORMATION}</h2>
-              {product ? (
+              {product && (
                 <p className="text-2xl font-bold text-black sm:text-xl font-24">
                   {isIncludeVAT ? selectedAttrData?.price?.formatted?.withTax : selectedAttrData?.price?.formatted?.withoutTax}
-                  {selectedAttrData?.listPrice?.raw.tax > 0 ? (
+                  {selectedAttrData?.listPrice?.raw.tax > 0 && (
                     <>
                       <span className="px-2 text-sm font-medium text-gray-900 line-through"> {isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax} </span>
                       <span className="text-sm font-medium text-red-500"> {discount}% off </span>
                     </>
-                  ) : null}
+                  )}
                 </p>
-              ) : null}
+              )}
             </div>
             {product?.quantityBreakRules?.length > 0 &&
               <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} />
@@ -788,7 +788,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
             {promotions?.promotions?.availablePromotions?.length > 0 && (
               <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
             )}
-            {product ? (
+            {product && (
               <>
                 {isEngravingAvailable ? (
                   <>
@@ -821,7 +821,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
                   </div>
                 )}
               </>
-            ) : null}
+            )}
             <div className="flex-1 order-6 w-full sm:order-5">
               <DeliveryInfo product={product} grpData={attrGroup} config={config} />
             </div>
@@ -839,20 +839,20 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
           <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
         </div>
 
-        {product?.componentProducts ? (
+        {product?.componentProducts && (
           <>
             <div className="flex flex-col section-devider"></div>
             <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} />
           </>
-        ) : null}
-        {alternativeProducts?.length > 0 ? (
+        )}
+        {alternativeProducts?.length > 0 && (
           <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto">
             <div className="flex flex-col section-devider"></div>
             <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} />
           </div>
-        ) : null}
+        )}
 
-        {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 ? (
+        {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
           <>
             <div className="flex flex-col section-devider"></div>
             <div className="container flex flex-col w-full px-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
@@ -860,7 +860,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
               <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
             </div>
           </>
-        ) : null}
+        )}
 
         <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
         {reviews?.review?.productReviews?.length > 0 && (
@@ -877,7 +877,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
           <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
         )}
 
-        <PriceMatch show={isPriceMatchModalShown} onClose={showPriceMatchModal} productName={product?.name} productImage={product?.images?.length ? product?.images[0]?.image : null} productId={product?.id} stockCode={product?.stockCode} ourCost={isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax} rrp={isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax} ourDeliveryCost={product?.price?.raw?.tax} />
+        <PriceMatch show={isPriceMatchModalShown} onClose={showPriceMatchModal} productName={product?.name} productImage={product?.images?.length && product?.images[0]?.image} productId={product?.id} stockCode={product?.stockCode} ourCost={isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax} rrp={isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax} ourDeliveryCost={product?.price?.raw?.tax} />
 
         <div className="flex flex-col w-full">
           <div className="px-4 mx-auto sm:container page-container sm:px-6">
@@ -885,66 +885,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], setE
           </div>
         </div>
 
-        {previewImg ? (
-          <Transition.Root show={previewImg != undefined} as={Fragment}>
-            <Dialog as="div" className="relative mt-4 z-999 top-4" onClose={handlePreviewClose} >
-              <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
-                <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={handlePreviewClose} />
-              </Transition.Child>
-
-              <div className="fixed top-0 left-0 w-full overflow-y-auto z-9999">
-                <div className="flex items-end justify-center h-screen min-h-screen p-4 mx-auto text-center sm:items-center sm:p-0">
-                  <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" >
-                    <div className="relative px-4 pt-5 pb-4 mx-auto overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-2/6 sm:p-2">
-                      <div className="flex items-center">
-                        <button type="button" className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99" onClick={handlePreviewClose} >
-                          <span className="sr-only">{CLOSE_PANEL}</span>
-                          <XMarkIcon className="w-6 h-6 text-black" aria-hidden="true" />
-                        </button>
-                      </div>
-                      <div className="text-center">
-                        {previewImg && (
-                          <div key={previewImg.name + 'tab-panel'}>
-                            <ImageZoom src={previewImg || IMG_PLACEHOLDER} alt={previewImg.name} blurDataURL={`${previewImg}?h=600&w=400&fm=webp` || IMG_PLACEHOLDER} />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </Transition.Child>
-                </div>
-              </div>
-            </Dialog>
-          </Transition.Root>
-        ) : null}
+        {previewImg && <Preview previewImg={previewImg} handlePreviewClose={handlePreviewClose} />
+        }
       </div>
-      <Script
-        type="application/ld+json"
-        id="schema"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-          {
-            "@context": "https://schema.org/",
-            "@type": "Product",
-            "name": ${product?.name},
-            "image": ${product?.image},
-            "description": ${product?.metaDescription},
-            "sku": ${product?.stockCode},
-            "brand": {
-              "@type": "Brand",
-              "name": ${product?.brand}
-            },
-            "offers": {
-              "@type": "Offer",
-              "url": ${SITE_ORIGIN_URL + '/' + product?.link},
-              "priceCurrency": ${product?.price?.currencySymbol},
-              "price": ${product?.price?.raw?.withTax},
-              "availability": "https://schema.org/${product?.seoAvailability}"
-            }
-          }
-        `,
-        }}
-      />
     </>
   )
 }

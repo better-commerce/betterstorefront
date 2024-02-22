@@ -1,6 +1,5 @@
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import Image from 'next/image'
 import Link from 'next/link'
 
 export default function Collections({ data }: any) {
