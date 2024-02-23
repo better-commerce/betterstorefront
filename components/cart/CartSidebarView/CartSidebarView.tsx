@@ -14,7 +14,7 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, } from '@components/utils/constants'
 import useTranslation, { CLOSE_PANEL, GENERAL_SHOPPING_CART, GENERAL_TOTAL_SAVINGS, WISHLIST_SIDEBAR_MESSAGE, GENERAL_CATALOG, GENERAL_REMOVE, GENERAL_DELETE, SUBTOTAL_INCLUDING_TAX, GENERAL_SHIPPING, GENERAL_DISCOUNT, GENERAL_TOTAL, GENERAL_CHECKOUT, GENERAL_CONTINUE_SHOPPING, GENERAL_OR_TEXT, IMG_PLACEHOLDER, BTN_MOVE_TO_WISHLIST, ADDED_TO_WISH, GENERAL_PERSONALISATION, PERSONALISATION, BTN_ADD_TO_WISHLIST, WISHLIST_SUCCESS_MESSAGE, GENERAL_TAX, SUBTOTAL_EXCLUDING_TAX, ITEM_WISHLISTED} from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { getCurrentPage, vatIncluded, } from '@framework/utils/app-util'
+import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Engraving from '@components/product/Engraving'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
@@ -109,7 +109,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
       basketId: basketId,
     })
 
-    setBasketReValidate(reValidate?.result)
+    setBasketReValidate({ ...reValidate?.result, message: reValidate?.result?.messageCode })
     return reValidate?.result
   }
 
@@ -568,10 +568,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                         <div className="flow-root">
                           <ul role="list" className="px-4 -my-6 divide-y divide-gray-200 sm:px-6" >
                             {cartItems.lineItems?.sort((lineItem1: any, lineItem2: any) => { return (lineItem1?.displayOrder - lineItem2?.displayOrder) })?.map((product: any) => {
-                              let soldOutMessage = ''
-                              if (reValidateData?.message != null) {
-                                soldOutMessage = reValidateData?.message?.includes(product.stockCode)
-                              }
+                              const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
                               return (
                                 <li key={product.id} className="">
                                   <div className="grid items-start grid-cols-12 gap-1 py-4">
