@@ -24,7 +24,7 @@ import { BTN_PLACE_ORDER, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMA
 import { generateUri } from '@commerce/utils/uri-util'
 import { tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
-import { vatIncluded } from '@framework/utils/app-util'
+import { vatIncluded , getCartValidateMessages, maxBasketItemsCount  } from '@framework/utils/app-util'
 import { LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
@@ -357,7 +357,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       basketId: basketId,
     })
 
-    setBasketReValidate(reValidate?.result)
+    setBasketReValidate({ ...reValidate?.result, message: reValidate?.result?.messageCode })
+    const validationMessage: any = tryParseJson(reValidate?.result?.messageCode) || []
     return reValidate?.result
   }
 
