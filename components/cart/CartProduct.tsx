@@ -352,7 +352,7 @@ export default function CartProduct({
                           className="relative inline-block mr-2"
                         />
                       </span>
-                      <span className="">Sold Out</span>
+                      <span className="">{soldOutMessage}</span>
                     </div>
                   </>
                 </div>
