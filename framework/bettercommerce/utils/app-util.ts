@@ -524,11 +524,7 @@ export const getCartValidateMessages = (messageCode: string, product: any) => {
     if ( messageCodes?.length) {
       const priceChanged = messageCodes?.find((x: any) => x?.Key === product?.stockCode && matchStrings(x?.Value, "PriceChanged", true))
       const soldOut = messageCodes?.find((x: any) => x?.Key === product?.stockCode && matchStrings(x?.Value, "SoldOut", true))
-      if (priceChanged) {
-        message = "Price Changed"
-      } else if (soldOut) {
-        message = "Sold Out"
-      }
+      message = priceChanged ? "Price Changed" : soldOut ? "Sold Out" : EmptyString
     }
   }
   return message

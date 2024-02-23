@@ -108,7 +108,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     const { data: reValidate }: any = await axios.post(NEXT_BASKET_VALIDATE, {
       basketId: basketId,
     })
-
     setBasketReValidate({ ...reValidate?.result, message: reValidate?.result?.messageCode })
     return reValidate?.result
   }
@@ -661,6 +660,11 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                           </button>
                                         </div>
                                       </div>
+                                    </div>
+                                    <div className="flex flex-col flex-1 col-span-12 ml-4">
+                                      <span className="text-xs font-normal text-center text-red-400">
+                                          {soldOutMessage}
+                                      </span>
                                     </div>
                                   </div>
                                 </li>

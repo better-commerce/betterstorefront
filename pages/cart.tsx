@@ -358,7 +358,6 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     })
 
     setBasketReValidate({ ...reValidate?.result, message: reValidate?.result?.messageCode })
-    const validationMessage: any = tryParseJson(reValidate?.result?.messageCode) || []
     return reValidate?.result
   }
 
@@ -500,154 +499,141 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         </h1>
         {!isEmpty && !isSplitDelivery && (
           <>
-            {JSON.stringify(altRelatedProducts)}
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
               <section aria-labelledby="cart-heading" className="lg:col-span-7">
-                {userCart.lineItems?.map((product: any, productIdx: number) => (
-                  <div
-                    key={productIdx}
-                    className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3"
-                  >
-                    <div className="flex-shrink-0">
-                      <img
-                        style={css}
-                        width={140}
-                        height={180}
-                        src={
-                          generateUri(product.image, 'h=200&fm=webp') ||
-                          IMG_PLACEHOLDER
-                        }
-                        alt={product.name ||'cart-item'}
-                        className="object-cover object-center w-16 rounded-lg sm:w-28 image"
-                      />
-                    </div>
-                    <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
-                      <h3 className="py-0 text-xs font-normal text-black sm:py-0 sm:text-xs">
-                        {product.brand}
-                      </h3>
-                      <h3 className="my-2 text-sm sm:text-sm sm:my-1">
-                        <Link href={`/${product.slug}`}>
-                          <span className="font-normal text-gray-700 hover:text-gray-800 pr-6">
-                            {product.name}
-                          </span>
-                        </Link>
-                      </h3>
-                      <div className="mt-0 font-bold text-black text-md sm:font-semibold">
-                        {isIncludeVAT
-                          ? product.price?.formatted?.withTax
-                          : product.price?.formatted?.withoutTax}
-                        {product.listPrice?.raw.withTax > 0 &&
-                        product.listPrice?.raw.withTax !=
-                          product.price?.raw?.withTax && (
-                          <span className="px-2 text-sm text-red-400 line-through">
-                            {GENERAL_PRICE_LABEL_RRP}{' '}
+                {userCart.lineItems?.map((product: any, productIdx: number) =>{      
+                  const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+                  return(
+                      <div key={productIdx} className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3" >
+                        <div className="flex-shrink-0">
+                          <img
+                            style={css}
+                            width={140}
+                            height={180}
+                            src={ generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER }
+                            alt={product.name ||'cart-item'}
+                            className="object-cover object-center w-16 rounded-lg sm:w-28 image"
+                          />
+                        </div>
+                        <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
+                          <h3 className="py-0 text-xs font-normal text-black sm:py-0 sm:text-xs">
+                            {product.brand}
+                          </h3>
+                          <h3 className="my-2 text-sm sm:text-sm sm:my-1">
+                            <Link href={`/${product.slug}`}>
+                              <span className="font-normal text-gray-700 hover:text-gray-800 pr-6">
+                                {product.name}
+                              </span>
+                            </Link>
+                          </h3>
+                          <div className="mt-0 font-bold text-black text-md sm:font-semibold">
                             {isIncludeVAT
-                              ? product.listPrice.formatted?.withTax
-                              : product.listPrice.formatted?.withoutTax}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                        {product?.variantProducts?.length > 0 ? (
-                          <div
-                            role="button"
-                            onClick={handleToggleOpenSizeChangeModal.bind(
-                              null,
-                              product
+                              ? product.price?.formatted?.withTax
+                              : product.price?.formatted?.withoutTax}
+                            {product.listPrice?.raw.withTax > 0 &&
+                            product.listPrice?.raw.withTax !=
+                              product.price?.raw?.withTax && (
+                              <span className="px-2 text-sm text-red-400 line-through">
+                                {GENERAL_PRICE_LABEL_RRP}{' '}
+                                {isIncludeVAT
+                                  ? product.listPrice.formatted?.withTax
+                                  : product.listPrice.formatted?.withoutTax}
+                              </span>
                             )}
-                          >
-                            <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
-                              <div className="mr-1 text-sm text-gray-700">
-                                Size:{' '}
-                                <span className="font-semibold text-black uppercase">
-                                  {getLineItemSizeWithoutSlug(product)}
-                                </span>
-                              </div>
-                              <ChevronDownIcon className="w-4 h-4 text-black" />
-                            </div>
                           </div>
-                        ) : (
-                          <div></div>
-                        )}
-                        <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                          <MinusSmallIcon
-                            onClick={() => handleItem(product, 'decrease')}
-                            className="w-4 cursor-pointer"
-                          />
-                          <span className="px-4 py-2 text-md sm:py-2">
-                            {product.qty}
-                          </span>
-                          <PlusSmallIcon
-                            className="w-4 cursor-pointer"
-                            onClick={() => handleItem(product, 'increase')}
-                          />
-                        </div>
-                      </div>
-
-                      {product.children?.map((child: any, idx: number) => (
-                        <div className="flex mt-10" key={'child' + idx}>
-                          <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                            <Image
-                              src={child.image}
-                              alt={child.name || 'cart-image'}
-                              className="object-cover object-center w-full h-full"
-                            />
+                          <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
+                            <span className="text-md font-semibold text-center text-red-400"> {soldOutMessage} </span>
                           </div>
-                          <div className="flex justify-between ml-5 font-medium text-gray-900">
-                            <Link href={`/${child.slug}`}>{child.name}</Link>
-                            <p className="ml-4">
-                              {child.price?.formatted?.withTax > 0
-                                ? isIncludeVAT
-                                  ? child.price?.formatted?.withTax
-                                  : child.price?.formatted?.withoutTax
-                                : ''}
-                            </p>
-                          </div>
-                          {!child.parentProductId ? (
-                            <div className="flex items-center justify-end flex-1 text-sm">
-                              <button
-                                type="button"
-                                onClick={() => handleItem(child, 'delete')}
-                                className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
+                          <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
+                            {product?.variantProducts?.length > 0 ? (
+                              <div
+                                role="button"
+                                onClick={handleToggleOpenSizeChangeModal.bind(
+                                  null,
+                                  product
+                                )}
                               >
-                                <span className="sr-only">
-                                  {GENERAL_REMOVE}
-                                </span>
-                                <TrashIcon
-                                  className="w-5 h-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
+                                <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
+                                  <div className="mr-1 text-sm text-gray-700">
+                                    Size:{' '}
+                                    <span className="font-semibold text-black uppercase">
+                                      {getLineItemSizeWithoutSlug(product)}
+                                    </span>
+                                  </div>
+                                  <ChevronDownIcon className="w-4 h-4 text-black" />
+                                </div>
+                              </div>
+                            ) : (
+                              <div></div>
+                            )}
+                            <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
+                              <MinusSmallIcon
+                                onClick={() => handleItem(product, 'decrease')}
+                                className="w-4 cursor-pointer"
+                              />
+                              <span className="px-4 py-2 text-md sm:py-2">
+                                {product.qty}
+                              </span>
+                              <PlusSmallIcon
+                                className="w-4 cursor-pointer"
+                                onClick={() => handleItem(product, 'increase')}
+                              />
                             </div>
-                          ) : (
-                            <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">
-                              {child.qty}
+                          </div>
+
+                          {product.children?.map((child: any, idx: number) => (
+                            <div className="flex mt-10" key={'child' + idx}>
+                              <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
+                                <Image src={child.image} alt={child.name || 'cart-image'} className="object-cover object-center w-full h-full" />
+                              </div>
+                              <div className="flex justify-between ml-5 font-medium text-gray-900">
+                                <Link href={`/${child.slug}`}>{child.name}</Link>
+                                <p className="ml-4">
+                                  {child.price?.formatted?.withTax > 0
+                                    ? isIncludeVAT
+                                      ? child.price?.formatted?.withTax
+                                      : child.price?.formatted?.withoutTax
+                                    : ''}
+                                </p>
+                              </div>
+                              {!child.parentProductId ? (
+                                <div className="flex items-center justify-end flex-1 text-sm">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleItem(child, 'delete')}
+                                    className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
+                                  >
+                                    <span className="sr-only"> {GENERAL_REMOVE} </span>
+                                    <TrashIcon className="w-5 h-5" aria-hidden="true" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">
+                                  {child.qty}
+                                </div>
+                              )}
                             </div>
-                          )}
+                          ))}
+                          <div className="absolute top-0 right-0">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                openModal()
+                                setItemClicked(product)
+                              }}
+                              className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
+                            >
+                              <span className="sr-only">{GENERAL_REMOVE}</span>
+                              <TrashIcon className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5" aria-hidden="true" />
+                            </button>
+                          </div>
+                          <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
+                            {product.shippingPlan?.shippingSpeed}
+                          </div>
                         </div>
-                      ))}
-                      <div className="absolute top-0 right-0">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            openModal()
-                            setItemClicked(product)
-                          }}
-                          className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
-                        >
-                          <span className="sr-only">{GENERAL_REMOVE}</span>
-                          <TrashIcon
-                            className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5"
-                            aria-hidden="true"
-                          />
-                        </button>
                       </div>
-                      <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
-                        {product.shippingPlan?.shippingSpeed}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </section>
               {/* <section>
                   {splitDeliveryItems && (
