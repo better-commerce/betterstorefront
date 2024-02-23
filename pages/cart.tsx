@@ -22,7 +22,7 @@ import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon } from '@hero
 import { LoadingDots } from '@components/ui'
 import { BTN_PLACE_ORDER, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_PRICE_LABEL_RRP, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TAX, GENERAL_TOTAL, IMG_PLACEHOLDER, SUBTOTAL_EXCLUDING_TAX, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { tryParseJson } from '@framework/utils/parse-util'
+import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
 import { vatIncluded , getCartValidateMessages, maxBasketItemsCount  } from '@framework/utils/app-util'
 import { LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
@@ -514,6 +514,32 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                             alt={product.name ||'cart-item'}
                             className="object-cover object-center w-16 rounded-lg sm:w-28 image"
                           />
+                          <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
+                          { reValidateData?.message != null && soldOutMessage != '' && (
+                              matchStrings(soldOutMessage, "sold out", true) ? (
+                                <div className="flex flex-col col-span-12">
+                                  <div className="flex text-xs font-semibold text-left text-red-500">
+                                    <span className="relative mr-1">
+                                      <img
+                                        alt="Sold Out"
+                                        src="/assets/images/not-shipped-edd.svg"
+                                        width={20}
+                                        height={20}
+                                        className="relative inline-block mr-1 top-2"
+                                      />
+                                    </span>
+                                    <span className="mt-2">{soldOutMessage}</span>
+                                  </div>
+                                </div>
+                              ) : matchStrings(soldOutMessage, "price changed", true) && (
+                                <div className="items-center w-full col-span-12">
+                                  <div className="flex justify-center w-full p-1 text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded">
+                                    {soldOutMessage}
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </div>
                         </div>
                         <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
                           <h3 className="py-0 text-xs font-normal text-black sm:py-0 sm:text-xs">
@@ -540,9 +566,6 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                   : product.listPrice.formatted?.withoutTax}
                               </span>
                             )}
-                          </div>
-                          <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                            <span className="text-md font-semibold text-center text-red-400"> {soldOutMessage} </span>
                           </div>
                           <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
                             {product?.variantProducts?.length > 0 ? (

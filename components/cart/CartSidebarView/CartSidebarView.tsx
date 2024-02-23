@@ -632,16 +632,32 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                               <PlusSmallIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
                                             </div>
 
-                                            {reValidateData?.message != null && soldOutMessage != '' && (
-                                              <div className="flex flex-col">
-                                                <div className="flex text-xs font-semibold text-left text-red-500">
-                                                  <span className="relative mr-1 top-1">
-                                                    <img alt="Sold Out" src="/assets/not-shipped-edd.svg" width={20} height={20} className="relative inline-block mr-1 top-2" />
-                                                  </span>
-                                                  <span className="mt-2"> {' '} Sold Out{' '} </span>
-                                                </div>
-                                              </div>
-                                            )}
+                                            <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
+                                              { reValidateData?.message != null && soldOutMessage != '' && (
+                                                matchStrings(soldOutMessage, "sold out", true) ? (
+                                                  <div className="flex flex-col col-span-12">
+                                                    <div className="flex text-xs font-semibold text-left text-red-500">
+                                                      <span className="relative mr-1">
+                                                        <img
+                                                          alt="Sold Out"
+                                                          src="/assets/images/not-shipped-edd.svg"
+                                                          width={20}
+                                                          height={20}
+                                                          className="relative inline-block mr-1 top-2"
+                                                        />
+                                                      </span>
+                                                      <span className="mt-2">{soldOutMessage}</span>
+                                                    </div>
+                                                  </div>
+                                                ) : matchStrings(soldOutMessage, "price changed", true) && (
+                                                  <div className="items-center w-full col-span-12">
+                                                    <div className="flex justify-center w-full p-1 text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded">
+                                                      {soldOutMessage}
+                                                    </div>
+                                                  </div>
+                                                )
+                                              )}
+                                            </div>
                                           </div>
                                         </div>
                                         <div className="flex flex-row justify-between mt-3 \text-left">
@@ -660,11 +676,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                           </button>
                                         </div>
                                       </div>
-                                    </div>
-                                    <div className="flex flex-col flex-1 col-span-12 ml-4">
-                                      <span className="text-xs font-normal text-center text-red-400">
-                                          {soldOutMessage}
-                                      </span>
                                     </div>
                                   </div>
                                 </li>
