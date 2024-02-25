@@ -1233,7 +1233,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   })
 
   return {
-    props: { cart: response }, // will be passed to the page component as props
+    props: {
+      cart: response,
+      snippets: response?.snippets || [],
+    }, // will be passed to the page component as props
   }
 }
 
