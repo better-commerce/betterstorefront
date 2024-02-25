@@ -51,6 +51,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       })
 
       return {
+        snippets: response?.snippets ?? [],
         products: response.result || {
           results: [],
           sortList: [],

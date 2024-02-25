@@ -149,8 +149,8 @@ const useContentSnippet = (snippets: Array<ISnippet>, refs: any): void => {
               footerAfter(snippet)
             } /*else if (snippet.placement === SnippetPlacementType.SITE_LOGO) { // For "SiteLogo"
     
-                            siteLogo(snippet);
-                        }*/ else if (
+              siteLogo(snippet);
+            }*/ else if (
               snippet.placement === SnippetPlacementType.PRODUCT_AND_BRAND_DESC
             ) {
               // For "ProductAndBrandDescription"
