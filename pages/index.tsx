@@ -31,7 +31,7 @@ const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
-  const cachedData = await getDataByUID([ Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb, ])
+  const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
   const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
   const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
 
@@ -73,38 +73,41 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
       ?.forEach((currencyCode: string, index: number) => {
         promises.push(
           new Promise(async (resolve: any, reject: any) => {
-          try {
-            const pageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
-              {
-                id: '',
-                slug: HOME_PAGE_DEFAULT_SLUG,
-                workingVersion:
-                  process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                channel: 'MobileWeb',
-                currency: currencyCode,
-                cachedCopy: true,
-              }
-            )
-            const pageContentMobileWeb = await pageContentsPromiseMobileWeb
-            pageContentMobileWebUIDData.push({
-              key: currencyCode,
-              value: pageContentMobileWeb,
-            })
-            await setData([{ key: Redis.Key.HomepageMobileWeb, value: pageContentMobileWebUIDData }])
-            resolve()
-          } catch (error: any) {
-            resolve()
-          }
-        })
-      )
-    })
+            try {
+              const pageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
+                {
+                  id: '',
+                  slug: HOME_PAGE_DEFAULT_SLUG,
+                  workingVersion:
+                    process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                  channel: 'MobileWeb',
+                  currency: currencyCode,
+                  cachedCopy: true,
+                }
+              )
+              const pageContentMobileWeb = await pageContentsPromiseMobileWeb
+              pageContentMobileWebUIDData.push({
+                key: currencyCode,
+                value: pageContentMobileWeb,
+              })
+              await setData([{ key: Redis.Key.HomepageMobileWeb, value: pageContentMobileWebUIDData }])
+              resolve()
+            } catch (error: any) {
+              resolve()
+            }
+          })
+        )
+      })
   }
 
   await Promise.all(promises)
+  const slugsPromise = commerce.getSlugs({ slug: HOME_PAGE_DEFAULT_SLUG });
+  const slugs = await slugsPromise;
   const hostName = os.hostname()
   return {
     props: {
       globalSnippets: infra?.snippets ?? [],
+      snippets: slugs?.snippets ?? [],
       pageContentsWeb: pageContentWebUIDData,
       pageContentsMobileWeb: pageContentMobileWebUIDData,
       hostName: obfuscateHostName(hostName),
