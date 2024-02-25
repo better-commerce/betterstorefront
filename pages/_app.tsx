@@ -20,7 +20,7 @@ import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinute
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import OverlayLoader from '@components/common/OverlayLoader'
-import { ELEM_ATTR, resetSnippetElements, } from '@framework/content/use-content-snippet'
+import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
 import { ContentSnippet } from '@components/common/Content'
 import NextHead from 'next/head'
 import qs from 'querystring'
@@ -36,11 +36,14 @@ import { cachedGetData } from '@framework/api/utils/cached-fetch'
 import { AppContext, AppInitialProps } from 'next/app'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
-import {  backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
+import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
 import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import CustomerReferral from '@components/customer/Referral'
 import fetcher from '@framework/fetcher'
+import ScriptContentSnippet from '@components/common/Content/ScriptContentSnippet'
+import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
+import { uniqBy } from 'lodash'
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
@@ -94,6 +97,8 @@ function MyApp({
   const [keywordsData, setKeywordsData] = useState([])
   const [isAppLoading, setAppIsLoading] = useState(true)
   const [language, setLanguage] = useState('')
+  const [topHeadJSSnippets, setTopHeadJSSnippets] = useState(new Array<any>())
+  const [headJSSnippets, setHeadJSSnippets] = useState(new Array<any>())
   const [deviceInfo, setDeviceInfo] = useState<IDeviceInfo>({
     isMobile: undefined,
     isDesktop: undefined,
@@ -103,11 +108,12 @@ function MyApp({
   })
   const [updatedPageProps, setUpdatedPageProps] = useState(pageProps)
 
-  const snippets = [
+  let snippets = [
     ...(pageProps?.globalSnippets ?? []),
     ...(pageProps?.snippets ?? []),
     ...(pageProps?.data?.snippets ?? []),
   ]
+  snippets = uniqBy(snippets, 'name'); //Prevent duplicate data being passed on to snippets rendering engine.
 
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
@@ -150,7 +156,7 @@ function MyApp({
     )
     if (!OMNILYTICS_DISABLED) {
       document.body.appendChild(addScript)
-      ;(window as any).googleTranslateElementInit = googleTranslateElementInit
+        ; (window as any).googleTranslateElementInit = googleTranslateElementInit
       document.getElementById('goog-gt-tt')?.remove()
     }
   }, [])
@@ -180,7 +186,7 @@ function MyApp({
 
     // Dispose listener.
     return () => {
-      router.events.off('routeChangeStart', () => {})
+      router.events.off('routeChangeStart', () => { })
       if (isScrollEnabled) {
         router.events.off('routeChangeComplete', () => { })
       }
@@ -227,6 +233,8 @@ function MyApp({
   }, [])
 
   useEffect(() => {
+    setTopHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'TopHead' && x?.type === SnippetContentType.JAVASCRIPT))
+    setHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'Head' && x?.type === SnippetContentType.JAVASCRIPT))
     DataLayerInstance.setDataLayer()
 
     // If browser session is not yet started.
@@ -267,15 +275,15 @@ function MyApp({
 
   const seoInfo =
     pageProps?.metaTitle ||
-    pageProps?.metaDescription ||
-    pageProps?.metaKeywords
+      pageProps?.metaDescription ||
+      pageProps?.metaKeywords
       ? pageProps
       : pageProps?.data?.product || undefined
 
   const seoImage =
     pageProps?.metaTitle ||
-    pageProps?.metaDescription ||
-    pageProps?.metaKeywords
+      pageProps?.metaDescription ||
+      pageProps?.metaKeywords
       ? pageProps?.products?.images[0]?.url
       : pageProps?.data?.product?.image || undefined
 
@@ -284,6 +292,9 @@ function MyApp({
   return (
     <>
       <NextHead>
+        {topHeadJSSnippets?.length > 0 && (
+          <ScriptContentSnippet snippets={topHeadJSSnippets} />
+        )}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
@@ -295,7 +306,7 @@ function MyApp({
               router.asPath.startsWith('/products/') && (
                 <link rel="canonical" href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath} />
               )
-            }            
+            }
             <meta name="title" content={seoInfo?.metaTitle} />
             <meta name="description" content={seoInfo?.metaDescription} />
             <meta name="keywords" content={seoInfo?.metaKeywords} />
@@ -311,18 +322,17 @@ function MyApp({
           key="ogurl"
         />
         <meta property="og:image" content={seoImage} />
+        {headJSSnippets?.length > 0 && (
+          <ScriptContentSnippet snippets={headJSSnippets} />
+        )}
       </NextHead>
 
       <Head {...appConfig}></Head>
       {OMNILYTICS_DISABLED ? null : <div id="google_translate_element" />}
 
       <ManagedUIContext>
-        {snippets ? (
-          <ContentSnippet
-            {...{ snippets, refs: { bodyStartScrCntrRef, bodyEndScrCntrRef } }}
-          />
-        ) : (
-          <></>
+        {(snippets?.length > 0) && (
+          <NonHeadContentSnippet snippets={snippets} refs={{ bodyStartScrCntrRef, bodyEndScrCntrRef }} />
         )}
         <CustomCacheBuster buildVersion={packageInfo?.version} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
@@ -499,7 +509,7 @@ MyApp.getInitialProps = async (
         ).value ||
       BETTERCOMMERCE_DEFAULT_LANGUAGE
 
-  } catch (error: any) {}
+  } catch (error: any) { }
 
   let appConfig = null
   if (appConfigResult) {
