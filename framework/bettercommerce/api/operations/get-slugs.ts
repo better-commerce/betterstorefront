@@ -8,7 +8,7 @@ export default function getSlugsOperation() {
         url: `${SITEVIEW_ENDPOINT}/slug?slug=${slug}`,
         method: 'post',
       })
-      return {snippets: response?.snippets ?? []};
+      return { ...response?.result, snippets: response?.snippets ?? [] };
       //return response?.result
     } catch (error) {
       console.log(error)
