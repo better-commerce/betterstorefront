@@ -18,7 +18,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
 import CartAddonsSidebar from './Addons/CartAddonsSidebar'
-import { deliveryDateFormat, tryParseJson} from '@framework/utils/parse-util'
+import { deliveryDateFormat, matchStrings, tryParseJson} from '@framework/utils/parse-util'
 import { cartItemsValidateAddToCart } from '@framework/utils/app-util'
 
 export default function CartProduct({
@@ -339,22 +339,30 @@ export default function CartProduct({
         <div className="grid items-center grid-cols-1 col-span-12 gap-2 sm:justify-between sm:grid-cols-12">
           <div className="sm:col-span-2">
             {reValidateData?.message != null && soldOutMessage != '' && (
-              <div className="flex flex-col">
-                <>
-                  <div className="flex items-center text-xs font-semibold text-left text-red-500">
-                    <span className="relative">
-                      <img
-                        alt="Sold Out"
-                        src="/assets/images/not-shipped-edd.svg"
-                        width={20}
-                        height={20}
-                        className="relative inline-block mr-2"
-                      />
-                    </span>
-                    <span className="">Sold Out</span>
+               matchStrings(soldOutMessage, "sold out", true) ? (
+                <div className="flex flex-col">
+                  <>
+                    <div className="flex items-center text-xs font-semibold text-left text-red-500">
+                      <span className="relative">
+                        <img
+                          alt="Sold Out"
+                          src="/assets/images/not-shipped-edd.svg"
+                          width={20}
+                          height={20}
+                          className="relative inline-block mr-2"
+                        />
+                      </span>
+                      <span className="">{soldOutMessage}</span>
+                    </div>
+                  </>
+                </div>
+              ) : matchStrings(soldOutMessage, "price changed", true) && (
+                <div className="col-span-12 items-center w-full">
+                  <div className="flex text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded p-1 w-full justify-center">
+                    {soldOutMessage}
                   </div>
-                </>
-              </div>
+                </div>
+              )
             )}
           </div>
           <div className="sm:col-span-5">

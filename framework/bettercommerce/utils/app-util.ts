@@ -517,6 +517,18 @@ export const getAlgoliaSearchListPriceColumn = (isIncludeVAT: boolean) => {
   }
 }
 
+export const getCartValidateMessages = (messageCode: string, product: any) => {
+  let message = EmptyString
+  if (messageCode) {
+    const messageCodes = tryParseJson(messageCode) as any[];
+    if ( messageCodes?.length) {
+      const priceChanged = messageCodes?.find((x: any) => x?.Key === product?.stockCode && matchStrings(x?.Value, "PriceChanged", true))
+      const soldOut = messageCodes?.find((x: any) => x?.Key === product?.stockCode && matchStrings(x?.Value, "SoldOut", true))
+      message = priceChanged ? "Price Changed" : soldOut ? "Sold Out" : EmptyString
+    }
+  }
+  return message
+}
 export const getAlgoliaSearchCurrencyLabel = () => {
   const currencyCode = getCurrency()
 
