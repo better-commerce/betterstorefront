@@ -583,7 +583,10 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                             <Link href={`/${product.slug}`}> {' '} {product.name}{' '}</Link>
                                           </h5>
                                           <p className="mt-0 ml-4 font-bold text-black">
-                                            {isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax}
+                                          { product?.price?.raw?.withTax > 0 ? 
+                                            (isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax )
+                                            :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
+                                            }
                                           </p>
                                         </div>
                                         <div className="">
