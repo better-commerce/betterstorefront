@@ -553,9 +553,12 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                             </Link>
                           </h3>
                           <div className="mt-0 font-bold text-black text-md sm:font-semibold">
-                            {isIncludeVAT
-                              ? product.price?.formatted?.withTax
-                              : product.price?.formatted?.withoutTax}
+                            { product?.price?.raw?.withTax > 0 ? (
+                              isIncludeVAT
+                                ? product.price?.formatted?.withTax
+                                : product.price?.formatted?.withoutTax)
+                              :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
+                            }
                             {product.listPrice?.raw.withTax > 0 &&
                             product.listPrice?.raw.withTax !=
                               product.price?.raw?.withTax && (
@@ -816,9 +819,12 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                 </Link>
                               </h3>
                               <div className="mt-0 font-bold text-black text-md sm:font-semibold">
-                                {isIncludeVAT
-                                  ? product.price?.formatted?.withTax
-                                  : product.price?.formatted?.withoutTax}
+                                {product?.price?.raw?.withTax > 0 ? 
+                                  (isIncludeVAT
+                                    ? product.price?.formatted?.withTax
+                                    : product.price?.formatted?.withoutTax)
+                                  :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
+                                  }
                                 {product.listPrice?.raw.withTax > 0 &&
                                 product.listPrice?.raw.withTax !=
                                   product.price?.raw?.withTax && (

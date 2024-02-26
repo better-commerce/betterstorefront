@@ -213,9 +213,12 @@ export default function MyOrders({ deviceInfo }: any) {
                                   />
                                 </div>
                                 <p className="mt-1 font-medium text-gray-900 sm:mt-0 sm:ml-6">
-                                  {isIncludeVAT
-                                    ? product.price?.formatted?.withTax
-                                    : product.price?.formatted?.withoutTax}
+                                  {product?.price?.raw?.withTax > 0 ? 
+                                    (isIncludeVAT
+                                      ? product.price?.formatted?.withTax
+                                      : product.price?.formatted?.withoutTax)
+                                    :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
+                                    }
                                 </p>
                               </div>
                               <div className="flex mt-2 text-sm font-medium sm:mt-4">

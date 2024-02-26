@@ -41,14 +41,7 @@ const OrderItems = ({
           const itemStatusCss = ifItemCancelled
             ? 'label-Cancelled'
             : 'label-confirmed'
-          return productItem?.price?.raw?.withTax == 0 ? (
-            <>
-              <div className="w-full px-4 pb-0 my-4 sm:px-16 no-change-button">
-                {/* <ReplacementItem data={productItem} key={odx} details={details} /> */}
-                {/* <CartFreeGift data={productItem} key={odx} /> */}
-              </div>
-            </>
-          ) : (
+          return (
             <>
               <li
                 className="inline-block w-full px-4 pb-0 my-4 sm:px-16"
@@ -100,7 +93,7 @@ const OrderItems = ({
                           </a>
                         </h3>
                         <p className="mt-2 text-sm font-semibold text-secondary-full-opacity">
-                          {isIncludeVAT
+                          {productItem?.price?.raw?.withTax > 0 ? isIncludeVAT
                             ? priceFormat(
                                 productItem?.price?.raw?.withTax,
                                 undefined,
@@ -110,7 +103,8 @@ const OrderItems = ({
                                 productItem?.price?.raw?.withoutTax,
                                 undefined,
                                 productItem?.price?.currencySymbol
-                              )}
+                              )
+                            : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>}
                           {productItem?.listPrice?.raw?.tax > 0 && (
                             <>
                               <span className="px-2 text-sm font-normal line-through text-brown-light sm:text-md">
