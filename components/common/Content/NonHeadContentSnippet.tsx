@@ -5,7 +5,7 @@ import React, { memo, useEffect, useState } from 'react'
 import ContentSnippet from './ContentSnippet'
 
 // Other Imports
-import { ISnippet } from '@framework/content/use-content-snippet'
+import { ELEM_ATTR, ISnippet } from '@framework/content/use-content-snippet'
 
 const NonHeadContentSnippet = memo((props: any) => {
     const { snippets, refs } = props
@@ -13,12 +13,38 @@ const NonHeadContentSnippet = memo((props: any) => {
     const [loaded, isLoaded] = useState(true)
     const restSnippets = snippets?.filter((x: ISnippet) => !['topHead', 'head'].includes(x?.placement?.toLowerCase()))
     useEffect(() => {
-        const bodyStartElem: any = document.querySelector('div.data-bc-snippet-body-start-script-cntr')
-        const bodyEndElem: any = document.querySelector('div.data-bc-snippet-body-end-script-cntr')
+        const bodyStartElem: any = document.querySelector(`div.${ELEM_ATTR}body-start-script-cntr`)
+        const bodyEndElem: any = document.querySelector(`div.${ELEM_ATTR}body-end-script-cntr`)
+
+        if (bodyStartElem) {
+            const childNodes: Array<any> = bodyStartElem.childNodes
+            if (childNodes?.length) {
+                childNodes?.forEach((childNode: any) => {
+                    bodyStartElem?.removeChild(childNode)
+                })
+            }
+        }
+
+        if (bodyEndElem) {
+            const childNodes: Array<any> = bodyEndElem.childNodes
+            if (childNodes?.length) {
+                childNodes?.forEach((childNode: any) => {
+                    bodyEndElem?.removeChild(childNode)
+                })
+            }
+        }
 
         //setTimeout(() => {
-        isLoaded((restSnippets?.length > 0 && (bodyStartElem?.childNodes?.length > 0 && bodyEndElem?.childNodes?.length > 0)))
+        isLoaded((restSnippets?.length > 0 /*&& (bodyStartElem?.childNodes?.length > 0 && bodyEndElem?.childNodes?.length > 0)*/))
         //}, 1);
+
+        /*//setTimeout(() => {
+        isLoaded(false)
+        //}, 1);
+
+        return () => {
+            isLoaded(false)
+        }*/
     }, [])
 
     if (loaded) {
