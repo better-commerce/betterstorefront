@@ -442,7 +442,7 @@ export default function OrderConfirmation({ config }: any) {
                               {GENERAL_PRICE}
                             </dt>
                             <dd className="ml-2 text-gray-700">
-                              {product.price.formatted.withTax}
+                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>}
                             </dd>
                           </div>
                         </dl>
