@@ -6,7 +6,8 @@ import React, { memo, } from 'react'
 // Other Imports
 import { ISnippet } from '@framework/content/use-content-snippet'
 
-interface IScriptSnippet {
+export interface IScriptSnippet {
+    readonly name?: string
     readonly src?: string
     readonly type?: string
     readonly innerHTML?: string
@@ -22,9 +23,9 @@ const ScriptContentSnippet = memo(({ snippets }: any) => {
             const arrNodes = container.querySelectorAll('*')
             arrNodes.forEach((node: any, key: number) => {
                 if (node.innerHTML) {
-                    scripts.push({ type: 'text/javascript', innerHTML: node.innerHTML, })
+                    scripts.push({ name: snippet.name, type: 'text/javascript', innerHTML: node.innerHTML, })
                 } else if (node.src) {
-                    scripts.push({ type: 'text/javascript', src: node.src, })
+                    scripts.push({ name: snippet.name, type: 'text/javascript', src: node.src, })
                 }
             })
         }
@@ -39,10 +40,10 @@ const ScriptContentSnippet = memo(({ snippets }: any) => {
                 scripts?.map((script: IScriptSnippet, index: number) => (
                     <>
                         {script?.src && (
-                            <script type={script?.type || 'text/javascript'} src={script?.src}></script>
+                            <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} src={script?.src}></script>
                         )}
                         {script?.innerHTML && (
-                            <script type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
+                            <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
                         )}
                     </>
                 ))
