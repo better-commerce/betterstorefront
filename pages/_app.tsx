@@ -41,7 +41,7 @@ import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import CustomerReferral from '@components/customer/Referral'
 import fetcher from '@framework/fetcher'
-import ScriptContentSnippet from '@components/common/Content/ScriptContentSnippet'
+import { IScriptSnippet } from '@components/common/Content/ScriptContentSnippet'
 import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
 import { uniqBy } from 'lodash'
 
@@ -273,6 +273,62 @@ function MyApp({
     }
   }, [])
 
+  const getScriptSnippets = (snippet: ISnippet): Array<IScriptSnippet> => {
+    let scripts = new Array<IScriptSnippet>()
+    if (typeof document !== undefined) {
+      let container = document.createElement('div')
+      container.insertAdjacentHTML('beforeend', snippet.content)
+      const arrNodes = container.querySelectorAll('*')
+      arrNodes.forEach((node: any, key: number) => {
+        if (node.innerHTML) {
+          scripts.push({ name: snippet.name, type: 'text/javascript', innerHTML: node.innerHTML, })
+        } else if (node.src) {
+          scripts.push({ name: snippet.name, type: 'text/javascript', src: node.src, })
+        }
+      })
+    }
+    return scripts
+  }
+
+  const topHeadElements = (
+    topHeadJSSnippets?.map((snippet: ISnippet, index: number) => {
+      const scripts = getScriptSnippets(snippet)
+      return (
+        scripts.length > 0 &&
+        scripts?.map((script: IScriptSnippet, index: number) => (
+          <>
+            {script?.src && (
+              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} src={script?.src}></script>
+            )}
+            {script?.innerHTML && (
+              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
+            )}
+          </>
+        ))
+      )
+    })
+  )
+
+  const headElements = (
+    headJSSnippets?.map((snippet: ISnippet, index: number) => {
+      const scripts = getScriptSnippets(snippet)
+      return (
+        scripts.length > 0 &&
+        scripts?.map((script: IScriptSnippet, index: number) => (
+          <>
+            {script?.src && (
+              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} src={script?.src}></script>
+            )}
+            {script?.innerHTML && (
+              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
+            )}
+          </>
+        ))
+      )
+    })
+  )
+
+
   const seoInfo =
     pageProps?.metaTitle ||
       pageProps?.metaDescription ||
@@ -292,9 +348,7 @@ function MyApp({
   return (
     <>
       <NextHead>
-        {topHeadJSSnippets?.length > 0 && (
-          <ScriptContentSnippet snippets={topHeadJSSnippets} />
-        )}
+        {topHeadElements}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
@@ -322,9 +376,7 @@ function MyApp({
           key="ogurl"
         />
         <meta property="og:image" content={seoImage} />
-        {headJSSnippets?.length > 0 && (
-          <ScriptContentSnippet snippets={headJSSnippets} />
-        )}
+        {headElements}
       </NextHead>
 
       <Head {...appConfig}></Head>
