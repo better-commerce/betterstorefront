@@ -21,6 +21,7 @@ interface BannerProps {
 import SwiperCore, { Navigation } from 'swiper'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import LazyImage from '@components/home/LazyImage'
 
 // install Swiper modules
 SwiperCore.use([Navigation])
@@ -43,13 +44,13 @@ const Hero: React.FC<HeroProps> = ({ banners = [], deviceInfo }: HeroProps) => {
                   {isOnlyMobile ? (
                     <>
                       {banner?.mobileUrl != '' ? (
-                        <img src={generateUri(banner?.mobileUrl, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-center w-full" alt={banner?.alt} width={690} height={500} />
+                        <LazyImage src={generateUri(banner?.mobileUrl, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-center w-full" alt={banner?.alt} width={690} height={500} />
                       ) : (
                         <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className="sm:max-h-screen image banner-Image" />
                       )}
                     </>
                   ) : (
-                    <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className="sm:max-h-screen image banner-Image" />
+                    <LazyImage src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className="sm:max-h-screen image banner-Image" />
                   )}
                   <div className="sr-only">Banner Image</div>
                 </div>
