@@ -19,10 +19,10 @@ import { GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
 import LoginSidebarView from '@components/account/Login/LoginSideBarView'
-const ShippingView = dynamic(() => import('@components/checkout/ShippingView'))
+const ShippingView = dynamic(() => import('@components/checkout-old/ShippingView'))
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
-const PaymentMethodView = dynamic(() => import('@components/checkout/PaymentMethodView'))
-const CheckoutSidebarView = dynamic(() => import('@components/checkout/CheckoutSidebarView'))
+const PaymentMethodView = dynamic(() => import('@components/checkout-old/PaymentMethodView'))
+const CheckoutSidebarView = dynamic(() => import('@components/checkout-old/CheckoutSidebarView'))
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
 const SearchWrapper = dynamic(() => import('@components/search'))
 const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))

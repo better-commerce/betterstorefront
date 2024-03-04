@@ -95,6 +95,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
         </span>
       </div>
       <DeliveryTypeSelection
+        basket={basket}
         deliveryTypeMethod={deliveryTypeMethod}
         setDeliveryTypeMethod={setDeliveryTypeMethod}
       />
