@@ -43,13 +43,13 @@ const Hero: React.FC<HeroProps> = ({ banners = [], deviceInfo }: HeroProps) => {
                   {isOnlyMobile ? (
                     <>
                       {banner?.mobileUrl != '' ? (
-                        <img src={generateUri(banner?.mobileUrl, 'h=690&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-center w-full" alt={banner?.alt} width={690} height={690} />
+                        <img src={generateUri(banner?.mobileUrl, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-center w-full" alt={banner?.alt} width={690} height={500} />
                       ) : (
-                        <img src={generateUri(banner?.url, 'h=761&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={761} className="sm:max-h-screen image banner-Image" />
+                        <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className="sm:max-h-screen image banner-Image" />
                       )}
                     </>
                   ) : (
-                    <img src={generateUri(banner?.url, 'h=761&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={761} className="sm:max-h-screen image banner-Image" />
+                    <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className="sm:max-h-screen image banner-Image" />
                   )}
                   <div className="sr-only">Banner Image</div>
                 </div>
