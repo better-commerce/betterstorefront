@@ -546,7 +546,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo }: any) => {
     }
   }
 
-  const handleDeliveryMethodSelect = async (method: any) => {
+  const handleDeliveryMethodSelect = async (method: any, store: any) => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
     let deliveryPlans = basket?.deliveryPlans
     if (basket?.shippingMethodId != method?.id) {
