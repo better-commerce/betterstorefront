@@ -15,11 +15,13 @@ import {
 import { TruckIcon, CubeIcon } from '@heroicons/react/24/outline'
 
 interface DeliveryTypeSelectionProps {
+  basket: any
   deliveryTypeMethod: any
   setDeliveryTypeMethod: any
 }
 
 const DeliveryTypeSelection = ({
+  basket,
   deliveryTypeMethod,
   setDeliveryTypeMethod,
 }: DeliveryTypeSelectionProps) => {
@@ -66,7 +68,11 @@ const DeliveryTypeSelection = ({
     }
   }
   useEffect(() => {
-    loadDeliveryMethods(basketId)
+    if(basket?.shippingAddress?.id){
+      loadDeliveryMethods(basket?.shippingAddress)
+    } else {
+      loadDeliveryMethods(null)
+    }
   }, [])
   return (
     <>

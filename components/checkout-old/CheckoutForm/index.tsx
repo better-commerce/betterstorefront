@@ -37,7 +37,7 @@ import {
   GENERAL_SAVE_CHANGES,
   SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
-import PaymentWidget from '@components/checkout/PaymentWidget'
+import PaymentWidget from '@components/checkout-old/PaymentWidget'
 import { AddressType } from '@framework/utils/enums'
 import { LocalStorage } from '@components/utils/payment-constants'
 import {
