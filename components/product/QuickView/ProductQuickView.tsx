@@ -1,25 +1,6 @@
-import {
-  NEXT_BULK_ADD_TO_CART,
-  NEXT_CREATE_WISHLIST,
-  NEXT_GET_PRODUCT,
-  NEXT_GET_PRODUCT_QUICK_VIEW,
-  NEXT_GET_PRODUCT_REVIEW,
-  NEXT_UPDATE_CART_INFO,
-  PRODUCTS_SLUG_PREFIX,
-  Messages,
-} from '@components/utils/constants'
-import {
-  BTN_ADD_TO_FAVORITES,
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  CLOSE_PANEL,
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_ENGRAVING,
-  GENERAL_SHOPPING_CART,
-  IMG_PLACEHOLDER,
-  ITEM_TYPE_ADDON,
-} from '@components/utils/textVariables'
-import { Dialog, RadioGroup, Transition } from '@headlessui/react'
+import { NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_UPDATE_CART_INFO, PRODUCTS_SLUG_PREFIX, Messages } from '@components/utils/constants'
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
+import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, PlayIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import axios from 'axios'
@@ -32,17 +13,12 @@ import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
 import Link from 'next/link'
 import { round } from 'lodash'
-import { priceFormat, stringFormat } from '@framework/utils/parse-util'
-import AttributesHandler from '../ProductView/AttributesHandler'
+import { stringFormat } from '@framework/utils/parse-util'
 import dynamic from 'next/dynamic'
 import { useUI } from '@components/ui'
 import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import {
-  getCurrentPage,
-  validateAddToCart,
-  vatIncluded,
-} from '@framework/utils/app-util'
+import { getCurrentPage, validateAddToCart, vatIncluded } from '@framework/utils/app-util'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])

@@ -1,10 +1,5 @@
 import cn from 'classnames'
-import React, {
-  forwardRef,
-  ButtonHTMLAttributes,
-  JSXElementConstructor,
-  useRef,
-} from 'react'
+import { forwardRef, ButtonHTMLAttributes, JSXElementConstructor, useRef } from 'react'
 import { mergeRefs } from 'react-merge-refs'
 import s from './Button.module.css'
 import { LoadingDots } from '@components/ui'

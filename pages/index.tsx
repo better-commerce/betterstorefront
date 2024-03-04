@@ -1,5 +1,5 @@
 // Base Imports
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // Package Imports
 import os from 'os'
@@ -39,66 +39,41 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
   const promises = new Array<Promise<any>>()
-  if (!containsArrayData(pageContentWebUIDData)) {
-    infra?.currencies
-      ?.map((x: any) => x?.currencyCode)
-      ?.forEach((currencyCode: string, index: number) => {
-        promises.push(
-          new Promise<any>(async (resolve: any, reject: any) => {
-            try {
-              const pageContentsPromiseWeb = commerce.getPagePreviewContent({
-                id: '',
-                slug: HOME_PAGE_DEFAULT_SLUG,
-                workingVersion:
-                  process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                channel: 'Web',
-                currency: currencyCode,
-                cachedCopy: true,
-              })
-              const pageContentWeb = await pageContentsPromiseWeb
-              pageContentWebUIDData.push({ key: currencyCode, value: pageContentWeb })
-              await setData([{ key: Redis.Key.HomepageWeb, value: pageContentWebUIDData }])
-              resolve()
-            } catch (error: any) {
-              resolve()
-            }
-          })
-        )
-      })
-  }
 
-  if (!containsArrayData(pageContentMobileWebUIDData)) {
-    infra?.currencies
-      ?.map((x: any) => x?.currencyCode)
-      ?.forEach((currencyCode: string, index: number) => {
-        promises.push(
-          new Promise(async (resolve: any, reject: any) => {
-            try {
-              const pageContentsPromiseMobileWeb = commerce.getPagePreviewContent(
-                {
+  const fetchData = async (
+    pageContentUIDData: any[],
+    pageContentUIDKey: string,
+    channel: 'Web' | 'MobileWeb'
+  ) => {
+    if (!containsArrayData(pageContentUIDData)) {
+      infra?.currencies
+        ?.map((x: any) => x?.currencyCode)
+        ?.forEach((currencyCode: string, index: number) => {
+          promises.push(
+            new Promise(async (resolve: any, reject: any) => {
+              try {
+                const pageContentsPromise = commerce.getPagePreviewContent({
                   id: '',
                   slug: HOME_PAGE_DEFAULT_SLUG,
-                  workingVersion:
-                    process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                  channel: 'MobileWeb',
+                  workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                  channel: channel,
                   currency: currencyCode,
                   cachedCopy: true,
-                }
-              )
-              const pageContentMobileWeb = await pageContentsPromiseMobileWeb
-              pageContentMobileWebUIDData.push({
-                key: currencyCode,
-                value: pageContentMobileWeb,
-              })
-              await setData([{ key: Redis.Key.HomepageMobileWeb, value: pageContentMobileWebUIDData }])
-              resolve()
-            } catch (error: any) {
-              resolve()
-            }
-          })
-        )
-      })
-  }
+                })
+                const pageContent = await pageContentsPromise
+                pageContentUIDData.push({ key: currencyCode, value: pageContent })
+                await setData([{ key: pageContentUIDKey, value: pageContentUIDData }])
+                resolve()
+              } catch (error: any) {
+                resolve()
+              }
+            })
+          )
+        })
+    }
+  };
+  fetchData(pageContentWebUIDData, Redis.Key.HomepageWeb, 'Web');
+  fetchData(pageContentMobileWebUIDData, Redis.Key.HomepageMobileWeb, 'MobileWeb');
 
   await Promise.all(promises)
   const slugsPromise = commerce.getSlugs({ slug: HOME_PAGE_DEFAULT_SLUG });
@@ -178,19 +153,11 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
           <title>{pageContents?.metatitle || 'Home'}</title>
           <meta name="title" content={pageContents?.metatitle || 'Home'} />
-          {pageContents?.metadescription && (
-            <meta name="description" content={pageContents?.metadescription} />
-          )}
-          {pageContents?.metakeywords && (
-            <meta name="keywords" content={pageContents?.metakeywords} />
-          )}
+          {pageContents?.metadescription && ( <meta name="description" content={pageContents?.metadescription} /> )}
+          {pageContents?.metakeywords && ( <meta name="keywords" content={pageContents?.metakeywords} /> )}
           <meta property="og:image" content={pageContents?.image} />
-          {pageContents?.metatitle && (
-            <meta property="og:title" content={pageContents?.metatitle} key="ogtitle" />
-          )}
-          {pageContents?.metadescription && (
-            <meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />
-          )}
+          {pageContents?.metatitle && ( <meta property="og:title" content={pageContents?.metatitle} key="ogtitle" /> )}
+          {pageContents?.metadescription && ( <meta property="og:description" content={pageContents?.metadescription} key="ogdesc" /> )}
         </NextHead>
       )}
 

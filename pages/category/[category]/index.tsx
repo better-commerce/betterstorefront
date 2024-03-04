@@ -558,7 +558,7 @@ function CategoryLandingPage({
 
             {/* category banner info start */}
             <div className="w-full py-4">
-              {category && category?.images && category?.images.length && (
+              {category && category?.images && category?.images.length ? (
                 <>
                   {category?.images.map((cat: any, idx: number) => (
                     <div
@@ -594,7 +594,7 @@ function CategoryLandingPage({
                     </div>
                   ))}
                 </>
-              )}
+              ) : null}
             </div>
             {/* category banner info End */}
 
@@ -777,7 +777,7 @@ function CategoryLandingPage({
             <div className="w-full px-0 py-0 mx-auto sm:px-0">
               {/* category banner info start */}
               <div className="container py-0 mx-auto">
-                {category && category?.images && category?.images.length && (
+                {category && category?.images && category?.images.length ? (
                   <>
                     {category?.images.map((cat: any, idx: number) => (
                       <div
@@ -811,7 +811,7 @@ function CategoryLandingPage({
                       </div>
                     ))}
                   </>
-                )}
+                ) : null}
               </div>
               {/* category banner info End */}
               <div className="py-0">

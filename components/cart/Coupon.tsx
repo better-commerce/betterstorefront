@@ -198,7 +198,7 @@ const Coupon = (props: IPromotionInputProps) => {
                         </div>
 
                         <div className="flex flex-col justify-start my-0 sm:hidden sm:my-0">
-                          {cartItems.promotionsApplied?.length &&
+                          {cartItems.promotionsApplied?.length ?
                             cartItems.promotionsApplied.map(
                               (promo: any, key: number) => {
                                 return (
@@ -249,7 +249,7 @@ const Coupon = (props: IPromotionInputProps) => {
                                   </div>
                                 )
                               }
-                            )}
+                            ) : null}
                         </div>
                       </div>
                       <div className="p-6 overflow-y-auto">
