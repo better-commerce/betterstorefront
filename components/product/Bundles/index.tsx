@@ -1,20 +1,8 @@
 import { ChangeEvent, useState } from 'react'
 import BundleCard from './BundleCard'
-import {
-  BUNDLE_TEXT,
-  YOUR_BUNDLE_INCLUDE,
-} from '@components/utils/textVariables'
-import { ColorFilledSquare } from '@components/ui/ColorFilledSquare'
-import Image from 'next/image'
 import ProductCard from '../ProductCard/ProductCard'
 
-export default function Bundles({
-  price = '',
-  products = [],
-  productBundleUpdate = () => {},
-  deviceInfo,
-  onBundleAddToCart = () => {},
-}: any) {
+export default function Bundles({ onClose = () => {}, price = '', products = [], productBundleUpdate = () => {}, deviceInfo, onBundleAddToCart = () => {} }: any) {
   const [productData, setProductData] = useState(null)
   const handleProduct = (product: any) => {
     setProductData(product)
@@ -66,6 +54,7 @@ export default function Bundles({
     }
     return '#FFFFFF'
   }
+
   const css = { maxWidth: '100%', minHeight: '350px' }
   return (
     <section

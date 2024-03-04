@@ -124,7 +124,7 @@ export default function Wishlist() {
                 </div>
               </div>
             )}
-            {isLoading ? <LoadingDots /> : null}
+            {isLoading && <LoadingDots /> }
             <div className="space-y-16 sm:space-y-24">
               <div className="flow-root px-0 mt-2 sm:mt-4 sm:px-0">
                 <div className="grid grid-cols-2 -mx-px sm:gap-y-4 sm:mx-0 md:grid-cols-2 product-listing-main lg:grid-cols-4">
@@ -194,7 +194,7 @@ export default function Wishlist() {
                             <p className="px-2 mt-1 mb-2 font-medium text-12 text-primary sm:mt-2 sm:mb-0">
                               {isIncludeVAT ? priceFormat( product?.price?.raw?.withTax, undefined, product?.price?.currencySymbol ) : priceFormat( product?.price?.raw?.withoutTax, undefined, product?.price?.currencySymbol )}
                               {product?.listPrice?.raw?.withTax >
-                              product?.price?.raw?.withTax ? (
+                              product?.price?.raw?.withTax && (
                                 <>
                                   <span className="px-2 font-normal text-gray-500 line-through text-12">
                                     {isIncludeVAT ? priceFormat( product?.listPrice?.raw?.withTax, undefined, product?.listPrice?.currencySymbol ) : priceFormat( product?.listPrice?.raw?.withoutTax, undefined, product?.listPrice?.currencySymbol )}
@@ -203,7 +203,7 @@ export default function Wishlist() {
                                     {discount}% off
                                   </span>
                                 </>
-                              ) : null}
+                              )}
                             </p>
 
                             <div className="w-full px-2 mt-3">

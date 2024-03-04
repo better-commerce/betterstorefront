@@ -1,7 +1,12 @@
-import dynamic from 'next/dynamic'
+// Base Imports
 import { useReducer, useEffect, useState } from 'react'
+
+// Package Imports
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
+
+// Component Imports
 import { postData } from '@components/utils/clientFetcher'
 import { GetServerSideProps } from 'next'
 import Script from 'next/script'
@@ -14,9 +19,9 @@ import { GENERAL_CATALOG } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import CacheProductImages from '@components/product/ProductView/CacheProductImages'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
+import commerce from '@lib/api/commerce'
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -45,33 +50,13 @@ interface stateInterface {
 const IS_INFINITE_SCROLL =
   process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 const PAGE_TYPE = PAGE_TYPES['Search']
-const {
-  SORT_BY,
-  PAGE,
-  SORT_ORDER,
-  CLEAR,
-  HANDLE_FILTERS_UI,
-  ADD_FILTERS,
-  REMOVE_FILTERS,
-  FREE_TEXT,
-} = ACTION_TYPES
-const DEFAULT_STATE = {
-  sortBy: '',
-  sortOrder: 'asc',
-  currentPage: 1,
-  filters: [],
-  freeText: '',
-}
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
 const ProductGrid = dynamic(() => import('@components/product/Grid'))
-const ProductMobileFilters = dynamic(
-  () => import('@components/product/Filters')
-)
-const ProductFilterRight = dynamic(
-  () => import('@components/product/Filters/filtersRight')
-)
-const ProductFiltersTopBar = dynamic(
-  () => import('@components/product/Filters/FilterTopBar')
-)
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
+
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
@@ -142,7 +127,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', {...state,excludeOOSProduct}],
+    ['/api/catalog/products', { ...state, excludeOOSProduct }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -348,7 +333,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{GENERAL_CATALOG}</title>
         <meta name="title" content={GENERAL_CATALOG} />
         <meta name="description" content={GENERAL_CATALOG} />
@@ -368,15 +353,15 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         </div>
         <div className={`sm:grid-cols-3 lg:grid-cols-12 md:grid-cols-4 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:px-0 lg:px-0`}>
           {isMobile ? (
-            <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
+            <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
           ) : (
             <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
           )}
           <div className={`sm:col-span-10`}>
-          <div className="flex justify-end w-full col-span-12">
-            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-          </div>
-            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
+            <div className="flex justify-end w-full col-span-12">
+              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+            </div>
+            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
             <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           </div>
           <CompareSelectionBar name={GENERAL_CATALOG} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
@@ -407,8 +392,12 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const allProducts = await commerce.getAllProducts({ ...DEFAULT_STATE })
   return {
-    props: { query: context.query }, // will be passed to the page component as props
+    props: {
+      query: context.query,
+      snippets: allProducts?.snippets ?? [],
+    }, // will be passed to the page component as props
   }
 }
 

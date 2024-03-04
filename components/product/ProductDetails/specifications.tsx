@@ -1,20 +1,9 @@
-import {
-  PRODUCT_DESCRIPTION,
-  PRODUCT_SPECIFICATION,
-  GENERAL_SHIPPING,
-  GENERAL_RETURNS,
-  PERFECT_FOR,
-  FABRIC_CARE,
-  COLLAR,
-  WASH_CARE,
-  IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
+import { PRODUCT_SPECIFICATION, PERFECT_FOR, FABRIC_CARE, COLLAR, WASH_CARE, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import SwiperCore, { Navigation, FreeMode } from 'swiper'
+import { FreeMode } from 'swiper'
 import Image from 'next/image'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { groupBy } from 'lodash'
 import { useState } from 'react'
 import { generateUri } from '@commerce/utils/uri-util'

@@ -1,13 +1,10 @@
 import classNames from '@components/utils/classNames'
-import { Fragment, use, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { GENERAL_SORT } from '@components/utils/textVariables'
-import ToggleSwitch from '@components/common/ToggleSwitch'
-import { vatIncluded } from '@framework/utils/app-util'
-import { stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
+import { stringToBoolean } from '@framework/utils/parse-util'
 import { getItem } from '@components/utils/localStorage'
 import { useUI } from '@components/ui'
 import { Switch } from '@headlessui/react'
@@ -89,7 +86,7 @@ export default function ProductSort({
         >
           <Menu.Items className="absolute right-0 z-10 w-40 mt-6 text-left origin-top-right bg-white rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
             {products?.sortList?.length > 0
-              ? products.sortList.map((option: any) => (
+              && products.sortList.map((option: any) => (
                   <Menu.Item key={`short-by-option-${option.value}`}>
                     {({ active }) => (
                       <span
@@ -106,8 +103,7 @@ export default function ProductSort({
                       </span>
                     )}
                   </Menu.Item>
-                ))
-              : null}
+                ))}
           </Menu.Items>
         </Transition>
       </Menu>

@@ -2,12 +2,9 @@ import { useEffect } from 'react'
 import Router from 'next/router'
 import dynamic from 'next/dynamic'
 import rangeMap from '@lib/range-map'
-const ProductCard = dynamic(
-  () => import('@components/product/ProductCard/ProductCard')
-)
+const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 const Pagination = dynamic(() => import('@components/product/Pagination'))
-import { TITLE_PRODUCTS } from '@components/utils/textVariables'
 import { IExtraProps } from '@components/common/Layout/Layout'
 
 interface Props {

@@ -1,11 +1,6 @@
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-export default function InfiniteScrollComponent({
-  component,
-  total,
-  fetchData,
-  currentNumber,
-}: any) {
+export default function InfiniteScrollComponent({ component, total, fetchData, currentNumber }: any) {
   return (
     <InfiniteScroll
       dataLength={total} //This is important field to render the next data

@@ -1,10 +1,6 @@
 // Base Imports
 import React from 'react'
 
-// Package Imports
-
-// Component Imports
-
 // Other Imports
 import { stringFormat } from '@framework/utils/parse-util'
 import { PRODUCT_DELIVERY_MESSAGE } from '@components/utils/textVariables'

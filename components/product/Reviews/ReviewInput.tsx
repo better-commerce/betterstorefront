@@ -1,16 +1,8 @@
 import withAuth from '@components/utils/withAuth'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
-import { useState, useEffect } from 'react'
-import {
-  BTN_SUBMIT,
-  ERROR_WOOPS_SOMETHING_WENT_WRONG,
-  GENERAL_REVIEW_OUT_OF_FIVE,
-  MESSAGE_CHARACTERS_LEFT,
-  POST_YOUR_REVIEW,
-  REVIEW_COMMENT,
-  REVIEW_TITLE,
-} from '@components/utils/textVariables'
+import { useState } from 'react'
+import { BTN_SUBMIT, ERROR_WOOPS_SOMETHING_WENT_WRONG, GENERAL_REVIEW_OUT_OF_FIVE, MESSAGE_CHARACTERS_LEFT, POST_YOUR_REVIEW, REVIEW_COMMENT, REVIEW_TITLE } from '@components/utils/textVariables'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
@@ -23,7 +15,6 @@ const MAX_LENGTH = 240
 
 const TITLE_MIN_LENGTH = 2
 const TITLE_MAX_LENGTH = 20
-
 interface ReviewInputProps {
   productId: string
 }

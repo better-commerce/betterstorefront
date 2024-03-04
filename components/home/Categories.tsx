@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import Link from 'next/link'
@@ -8,7 +7,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 
 function Categories({ data, deviceInfo }: any) {
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
+  const { isMobile } = deviceInfo
   const css = { maxWidth: '100%', minHeight: '350px' }
   const mobcss = { maxWidth: '100%', minHeight: '250px' }
   const [renderState, setRenderState] = useState(false)

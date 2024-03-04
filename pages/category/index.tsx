@@ -1,15 +1,10 @@
 import type { GetStaticPropsContext } from 'next'
 import { getAllCategories } from '@framework/category'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import NextHead from 'next/head'
 import { Layout } from '@components/common'
-import {
-  IMG_PLACEHOLDER,
-  SHOP_BY_CATEGORY,
-} from '@components/utils/textVariables'
-import { generateUri } from '@commerce/utils/uri-util'
+import { IMG_PLACEHOLDER, SHOP_BY_CATEGORY } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'

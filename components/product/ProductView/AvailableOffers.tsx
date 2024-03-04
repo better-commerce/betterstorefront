@@ -4,8 +4,6 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
-
-import { useUI } from '@components/ui'
 import ProductSaleCountdown from './SaleCountDown'
 import { priceFormat } from '@framework/utils/parse-util'
 declare const window: any
@@ -15,7 +13,6 @@ export default function AvailableOffers({ currency, offers, key }: any) {
   const [isCopied, showCopied] = useState(false)
   const [copyData, setCode] = useState<any>()
   const [offerData, setOffer] = useState<any>({})
-  const { basketId, setCartItems, cartItems } = useUI()
   function setOfferData(data: any) {
     if (data) {
       setOffer(data)

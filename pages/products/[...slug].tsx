@@ -1,22 +1,17 @@
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
-import { Layout } from '@components/common'
+import ProductLayout from '@components/common/Layout/ProductLayout'
 import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { LOADER_LOADING } from '@components/utils/textVariables'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { logError, notFoundRedirect } from '@framework/utils/app-util'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 
-export async function getStaticProps({
-  params,
-  locale,
-  locales,
-  preview,
-}: GetStaticPropsContext<{ slug: string; recordId: string }>) {
+export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]
   const cachedDataUID = {
     infraUID : Redis.Key.INFRA_CONFIG,
@@ -209,6 +204,6 @@ function Slug({
   )
 }
 
-Slug.Layout = Layout
+Slug.ProductLayout = ProductLayout
 
-export default withDataLayer(Slug, PAGE_TYPES.Product)
+export default withDataLayer(Slug, PAGE_TYPES.Product, true, ProductLayout)

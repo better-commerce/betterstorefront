@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import {
-ChevronRightIcon
-} from '@heroicons/react/24/outline'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 interface Props {
   items: []
   currentProduct: any
@@ -71,7 +68,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
               {breadcrumb.title}
             </span>
           </Link>
-          {breadcrumbIdx !== flattenedItems.length - 1 ? (
+          {breadcrumbIdx !== flattenedItems.length - 1 && (
             <svg
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +78,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
             >
               <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
             </svg>
-          ) : null}
+          )}
         </li>
       ))}
     </ol>

@@ -35,13 +35,13 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                 <h5 className="font-bold text-16 text-secondary-full-opacity ">
                   Order Details
                 </h5>
-                {details?.order?.parentCustomNo?.length != 0 ? (
+                {details?.order?.parentCustomNo?.length != 0 && (
                   <>
                     <p className="text-sm text-black-light mob-font-14">
                       Replacement Order
                     </p>
                   </>
-                ) : null}
+                )}
                 <p className="text-sm text-black-light">
                   #{details?.order.orderNo} • {details?.order?.items?.length}{' '}
                   {details?.order?.items?.length > 1 ? (
@@ -50,13 +50,13 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                     <span>ITEM</span>
                   )}
                 </p>
-                {details?.order?.parentCustomNo?.length != 0 ? (
+                {details?.order?.parentCustomNo?.length != 0 && (
                   <>
                     <p className="font-bold font-10 text-black-light">
                       Original Order: {details?.order.parentCustomNo}
                     </p>
                   </>
-                ) : null}
+                )}
               </div>
             </div>
             <div className="hidden sm:block">

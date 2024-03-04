@@ -8,7 +8,7 @@ import { LoadingDots, useUI } from '@components/ui'
 // Other Imports
 import { isEligibleForFreeShipping } from '@framework/utils/app-util'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { BTN_MOVE_TO_WISHLIST, FREE_SHIPPING_CART_ITEM_REMOVE_TILE, GENERAL_REMOVE, GENERAL_REMOVE_ITEM } from '@components/utils/textVariables'
+import { FREE_SHIPPING_CART_ITEM_REMOVE_TILE, GENERAL_REMOVE, GENERAL_REMOVE_ITEM } from '@components/utils/textVariables'
 import { LoadingActionType } from '@components/utils/constants'
 
 const CartItemRemoveModal = ({

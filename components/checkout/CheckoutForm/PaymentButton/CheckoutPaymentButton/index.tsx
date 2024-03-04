@@ -454,7 +454,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
 
               <div className="items-center max-120-wd">
                 {that.state.formLoaded
-                  ? that.baseRender({
+                  && that.baseRender({
                     ...that?.props,
                     ...{
                       disabled: that.state.disabledFormSubmit,
@@ -472,8 +472,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                         ),
                       btnTitle: GENERAL_PAY,
                     },
-                  })
-                  : null}
+                  })}
               </div>
             </Frames>
           </div>

@@ -37,7 +37,6 @@ import { round } from 'lodash'
 import AttributesHandler from '../ProductView/AttributesHandler'
 import dynamic from 'next/dynamic'
 import { useUI } from '@components/ui'
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
@@ -45,6 +44,7 @@ import ImageGallery from 'react-image-gallery'
 import { matchStrings, priceFormat } from '@framework/utils/parse-util'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import { isMobile } from 'react-device-detect'
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
 

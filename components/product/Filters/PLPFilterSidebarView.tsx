@@ -2,7 +2,6 @@ import { useEffect, Fragment, useState, FC } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import useWishlist from '@components/services/wishlist'
-
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import useCart from '@components/services/cart'
@@ -16,21 +15,8 @@ type PLPFilterSidebarProps = {
   plpFilterState: IPLPFilterState | any
 }
 
-const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({
-  handleSortBy,
-  openSidebar,
-  handleTogglePLPSidebar,
-  plpFilterState,
-}) => {
-  const {
-    closeSidebar,
-    setWishlist,
-    user,
-    wishlistItems,
-    basketId,
-    setCartItems,
-    removeFromWishlist,
-  } = useUI()
+const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({ handleSortBy, openSidebar, handleTogglePLPSidebar, plpFilterState }) => {
+  const { closeSidebar, setWishlist, user, wishlistItems, basketId, setCartItems, removeFromWishlist } = useUI()
   const { getWishlist, deleteWishlistItem } = useWishlist()
   const { addToCart } = useCart()
   const [isItemInCart, setItemInCart] = useState(false)
