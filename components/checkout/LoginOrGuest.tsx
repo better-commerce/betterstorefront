@@ -35,6 +35,7 @@ const loginCheckoutFormSchema = yup.object({
 })
 
 const LoginOrGuest: React.FC<any> = ({
+  basket,
   onLoginSuccess,
   onGuestCheckout,
   onSubmit,
@@ -183,6 +184,7 @@ const LoginOrGuest: React.FC<any> = ({
             )}
           </form>
           <DeliveryTypeSelection
+            basket={basket}
             deliveryTypeMethod={deliveryTypeMethod}
             setDeliveryTypeMethod={setDeliveryTypeMethod}
           />

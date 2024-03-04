@@ -2,33 +2,30 @@ import React, { useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import {
   ADDRESS_FINDER_SCHEMA,
-  CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA,
+  BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA,
 } from './config'
 import {
   BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
   EmptyString,
 } from '@components/utils/constants'
-import { retrieveAddress } from '@components/checkout/CheckoutForm'
+import { retrieveAddress } from '@components/checkout-old/CheckoutForm'
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
 
-const DEFAULT_COUNTRY = 'United Kingdom'
+export const DEFAULT_COUNTRY = 'United Kingdom'
 
-const ShippingAddressForm: React.FC<any> = ({
+const BillingAddressForm: React.FC<any> = ({
   editAddressValues,
   onSubmit,
   searchAddressByPostcode,
-  guestCheckoutFormik,
-  isGuest,
-  onGuestCheckout,
   onEditAddressToggleView,
   shippingCountries,
+  billingCountries,
+  useSameForBilling,
+  shouldDisplayEmail = true,
 }) => {
+  const { isGuestUser, user } = useUI()
   const [searchedAddresses, setSearchedAddresses] = useState([])
-  const { user, setOverlayLoaderState, hideOverlayLoaderState, isGuestUser } =
-    useUI()
-  const [useSameForBilling, setUseSameForBilling] = useState(true)
-  const [isGuestCheckoutSubmit, setIsGuestCheckoutSubmit] = useState(false)
 
   const addressFinderFormik = useFormik({
     initialValues: {
@@ -65,23 +62,22 @@ const ShippingAddressForm: React.FC<any> = ({
       state: editAddressValues?.state || EmptyString,
       country: editAddressValues?.country || DEFAULT_COUNTRY,
     },
-    validationSchema: CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA,
+    validationSchema: BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA,
     onSubmit: (values, { setSubmitting }) => {
-      const payload: any = CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA.cast(values)
+      const payload: any =
+        BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA.cast(values)
       formik.setValues(payload)
-      payload.countryCode = shippingCountries?.find(
+      payload.countryCode = billingCountries?.find(
         (o: any) => o.name === payload.country
       )?.twoLetterIsoCode
-      const isNewAddress = !Boolean(editAddressValues)
       onSubmit(
-        { ...payload, useSameForBilling },
-        isNewAddress,
+        { ...payload, isBilling: true },
+        true,
         () => {
           setSubmitting(false)
           formik.resetForm()
-          hideOverlayLoaderState()
         },
-        isGuestCheckoutSubmit || isGuestUser
+        isGuestUser
       )
     },
   })
@@ -96,36 +92,9 @@ const ShippingAddressForm: React.FC<any> = ({
     }
   }
 
-  const handleGuestWithAddressSubmit = async (e: any) => {
-    e.preventDefault()
-    setIsGuestCheckoutSubmit(false)
-    if (guestCheckoutFormik) {
-      setIsGuestCheckoutSubmit(true)
-      const guestCheckoutErrors = await guestCheckoutFormik.validateForm()
-      const addressErrors = await formik.validateForm()
-      if (
-        (!guestCheckoutErrors ||
-          (guestCheckoutErrors &&
-            Object.keys(guestCheckoutErrors).length == 0)) &&
-        (!addressErrors ||
-          (addressErrors && Object.keys(addressErrors).length == 0))
-      ) {
-        setOverlayLoaderState({ visible: true, message: 'Please wait...' })
-        if (onGuestCheckout) {
-          onGuestCheckout(guestCheckoutFormik.values, () => {
-            formik.handleSubmit()
-          })
-        } else {
-          formik.handleSubmit()
-        }
-      }
-    } else {
-      formik.handleSubmit()
-    }
-  }
   return (
     <>
-      {!isGuest && (
+      {shouldDisplayEmail && (
         <div className="flex flex-col gap-0 p-2 my-2 border border-gray-200 rounded-md sm:my-4 sm:p-4 bg-gray-50">
           <span className="font-semibold text-black font-14 mob-font-12 dark:text-black">
             {user?.userEmail || user?.email}
@@ -133,75 +102,71 @@ const ShippingAddressForm: React.FC<any> = ({
         </div>
       )}
       <div
-        className={`flex flex-col gap-2 sm:mt-4 mt-3 sm:rounded-md sm:border ${
-          isGuest
-            ? 'border-transparent bg-white py-4 px-0'
-            : 'sm:border-gray-200 sm:bg-gray-50 sm:py-4 sm:px-4'
-        }`}
+        className={`${
+          !useSameForBilling
+            ? ''
+            : 'sm:border sm:border-gray-200 sm:bg-gray-50 bg-white rounded-md sm:p-4'
+        } flex flex-col gap-2 my-4 `}
       >
-        <h5 className="font-medium font-18 dark:text-black">
-          {editAddressValues ? 'Edit' : ''} Shipping Address
-        </h5>
-        <div className="p-0 mb-4 rounded-md sm:bg-transparent sm:border-0 sm:rounded-none sm:mb-0">
-          {/* address finder form */}
-          {!editAddressValues && (
-            <form
-              onSubmit={addressFinderFormik.handleSubmit}
-              className="flex items-start w-full gap-2 mt-1 sm:gap-4 sm:mt-4"
-            >
-              <div className="">
-                <input
-                  name="postCode"
-                  type="text"
-                  value={addressFinderFormik.values.postCode}
-                  onChange={addressFinderFormik.handleChange}
-                  placeholder="Enter your postcode"
-                  className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default"
-                />
-                {addressFinderFormik.errors.postCode &&
-                  addressFinderFormik.touched.postCode && (
-                    <span className="form-input-error">
-                      {addressFinderFormik.errors.postCode}
-                    </span>
-                  )}
-                {searchedAddresses?.length > 0 && (
-                  <div className="absolute z-10 p-4 mt-2 origin-top-right transform scale-100 bg-white border border-black rounded shadow-xl opacity-100 dark:bg-white focus:outline-none">
-                    <div className="!max-h-80 overflow-y-scroll max-panel pr-4">
-                      {searchedAddresses?.map(
-                        (address: any, addressIdx: number) => {
-                          return (
-                            <AddressItem
-                              option={address?.description}
-                              optionIdx={addressIdx}
-                              key={addressIdx}
-                              address={address}
-                              handleSelectAddress={handleSelectAddress}
-                            />
-                          )
-                        }
-                      )}
-                    </div>
+        <h5 className="font-medium font-18 dark:text-black">Billing Address</h5>
+        {/* address finder form */}
+        <div className="border border-gray-200 sm:border-none sm:border-transparent rounded-md sm:rounded-none sm:p-0 p-3 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4">
+          <form
+            onSubmit={addressFinderFormik.handleSubmit}
+            className="flex items-start w-full gap-4 sm:mt-4"
+          >
+            <div className="">
+              <input
+                name="postCode"
+                type="text"
+                value={addressFinderFormik.values.postCode}
+                onChange={addressFinderFormik.handleChange}
+                placeholder="Enter your postcode"
+                className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default"
+              />
+              {addressFinderFormik.errors.postCode &&
+                addressFinderFormik.touched.postCode && (
+                  <span className="form-input-error">
+                    {addressFinderFormik.errors.postCode}
+                  </span>
+                )}
+              {searchedAddresses?.length > 0 && (
+                <div className="absolute z-10 p-4 mt-2 origin-top-right transform scale-100 bg-white border border-black rounded shadow-xl opacity-100 focus:outline-none">
+                  <div className="!max-h-80 overflow-y-scroll max-panel pr-4">
+                    {searchedAddresses?.map(
+                      (address: any, addressIdx: number) => {
+                        return (
+                          <AddressItem
+                            option={address?.description}
+                            optionIdx={addressIdx}
+                            key={addressIdx}
+                            address={address}
+                            handleSelectAddress={handleSelectAddress}
+                          />
+                        )
+                      }
+                    )}
                   </div>
-                )}
-              </div>
-              <button
-                type="submit"
-                disabled={addressFinderFormik.isSubmitting}
-                className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary lg:py-2 py-3 sm:px-4 px-1"
-              >
-                {addressFinderFormik.isSubmitting ? (
-                  <LoadingDots />
-                ) : isMobile ? (
-                  'Find'
-                ) : (
-                  'Find Address'
-                )}
-              </button>
-            </form>
-          )}
+                </div>
+              )}
+            </div>
+            <button
+              type="submit"
+              disabled={addressFinderFormik.isSubmitting}
+              className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary lg:py-2 py-3 sm:px-4 px-1"
+            >
+              {addressFinderFormik.isSubmitting ? (
+                <LoadingDots />
+              ) : isMobile ? (
+                'Find'
+              ) : (
+                'Find Address'
+              )}
+            </button>
+          </form>
           {/* address form */}
           <form
-            onSubmit={handleGuestWithAddressSubmit}
+            onSubmit={formik.handleSubmit}
             className="flex flex-col w-full gap-1 mt-1 sm:gap-4 sm:mt-4"
           >
             <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-12">
@@ -213,13 +178,13 @@ const ShippingAddressForm: React.FC<any> = ({
                   className="checkout-input-field dark:bg-white dark:text-black"
                 >
                   <option value="">Select Country</option>
-                  {shippingCountries?.map((country: any, idx: number) => (
+                  {billingCountries?.map((country: any, idx: number) => (
                     <option key={idx} value={country.name}>
                       {country.name}
                     </option>
                   ))}
                 </select>
-                {formik.errors.country && (
+                {formik.errors.country && formik.touched.country && (
                   <span className="form-input-error">
                     {formik.errors.country}
                   </span>
@@ -249,13 +214,12 @@ const ShippingAddressForm: React.FC<any> = ({
                   placeholder="Last Name"
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
                 />
-                {formik.errors.lastName && (
+                {formik.errors.lastName && formik.touched.lastName && (
                   <span className="form-input-error">
                     {formik.errors.lastName}
                   </span>
                 )}
               </div>
-
               <div className="sm:col-span-12">
                 <input
                   name="phoneNo"
@@ -299,13 +263,12 @@ const ShippingAddressForm: React.FC<any> = ({
                     }
                   }}
                 />
-                {formik.errors.phoneNo && (
+                {formik.errors.phoneNo && formik.touched.phoneNo && (
                   <span className="form-input-error">
                     {formik.errors.phoneNo}
                   </span>
                 )}
               </div>
-
               <div className="sm:col-span-12">
                 <input
                   name="companyName"
@@ -313,9 +276,9 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.companyName}
                   onChange={formik.handleChange}
                   placeholder="Company name and VAT number (optional)"
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
                 />
-                {formik.errors.companyName && (
+                {formik.errors.companyName && formik.touched.companyName && (
                   <span className="form-input-error">
                     {formik.errors.companyName}
                   </span>
@@ -328,9 +291,9 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.address1}
                   onChange={formik.handleChange}
                   placeholder="Address Line 1"
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
                 />
-                {formik.errors.address1 && (
+                {formik.errors.address1 && formik.touched.address1 && (
                   <span className="form-input-error">
                     {formik.errors.address1}
                   </span>
@@ -342,10 +305,10 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.address2}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
                   placeholder="Address Line 2"
                 />
-                {formik.errors.address2 && (
+                {formik.errors.address2 && formik.touched.address2 && (
                   <span className="form-input-error">
                     {formik.errors.address2}
                   </span>
@@ -357,10 +320,10 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.address3}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
                   placeholder="Address Line 3"
                 />
-                {formik.errors.address3 && (
+                {formik.errors.address3 && formik.touched.address3 && (
                   <span className="form-input-error">
                     {formik.errors.address3}
                   </span>
@@ -372,10 +335,10 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.city}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
                   placeholder="City"
                 />
-                {formik.errors.city && (
+                {formik.errors.city && formik.touched.city && (
                   <span className="form-input-error">{formik.errors.city}</span>
                 )}
               </div>
@@ -385,10 +348,10 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.postCode}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
                   placeholder="Postcode"
                 />
-                {formik.errors.postCode && (
+                {formik.errors.postCode && formik.touched.postCode && (
                   <span className="form-input-error">
                     {formik.errors.postCode}
                   </span>
@@ -401,35 +364,16 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.state}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
                   placeholder="County, state, province, etc.. (optional)"
                 />
-                {formik.errors.state && (
+                {formik.errors.state && formik.touched.state && (
                   <span className="form-input-error">
                     {formik.errors.state}
                   </span>
                 )}
               </div>
             </div>
-
-            <div>
-              <input
-                id="useSameForBilling"
-                name="useSameForBilling"
-                type="checkbox"
-                checked={useSameForBilling}
-                onChange={(e) => {
-                  setUseSameForBilling(e.target.checked)
-                }}
-              />
-              <label
-                htmlFor="useSameForBilling"
-                className="pl-1 font-medium text-black font-14"
-              >
-                Use same address for Billing
-              </label>
-            </div>
-
             <div className="grid flex-col w-full gap-2 mt-4 sm:justify-end sm:gap-2 sm:flex-row sm:flex sm:w-auto">
               {onEditAddressToggleView && (
                 <button
@@ -445,9 +389,7 @@ const ShippingAddressForm: React.FC<any> = ({
                 type="submit"
                 disabled={formik.isSubmitting}
               >
-                {useSameForBilling
-                  ? 'Save And Continue to Delivery'
-                  : 'Save And Continue to Billing'}
+                Save And Continue to Delivery
               </button>
             </div>
           </form>
@@ -457,7 +399,7 @@ const ShippingAddressForm: React.FC<any> = ({
   )
 }
 
-export default ShippingAddressForm
+export default BillingAddressForm
 
 const AddressItem = ({
   option,
