@@ -1,15 +1,15 @@
 // Component Imports
-import ChequePayment, { CHEQUE_PAYMENT_FORM_ID } from './ChequePayment'
-import { IPaymentButtonProps } from '../BasePaymentButton'
-import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
-import PaymentGatewayNotification from '@components/checkout/PaymentGatewayNotification'
+import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { IPaymentButtonProps } from './BasePaymentButton'
+import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
+import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayNotification'
 
 // Other Imports
 import { EmptyString, Messages } from '@components/utils/constants'
-import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
-import { matchStrings } from '@framework/utils/parse-util'
+import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 
-export class ChequePaymentButton extends BasePaymentButton {
+export class CODPaymentButton extends BasePaymentButton {
   /**
    * CTor
    * @param props
@@ -19,21 +19,11 @@ export class ChequePaymentButton extends BasePaymentButton {
     this.state = {
       isPaymentInitiated: false,
       paymentMethod: super.getPaymentMethod(props?.paymentMethod),
-      paymentInfo: {
-        paymentInfo1: null,
-        paymentInfo2: null,
-        paymentInfo3: null,
-        paymentInfo4: null,
-        paymentInfo5: null,
-        paymentInfo6: null,
-        paymentInfo7: null,
-        paymentInfo8: null,
-      },
     }
   }
 
   /**
-   * Executes order generation for Account payment method on CommerceHub.
+   * Executes order generation for COD payment method on CommerceHub.
    * @param paymentMethod {Object} PaymentMethod info of the executing payment type.
    * @param basketOrderInfo {Object} Input data object for generating the CommerceHub order.
    * @param uiContext {Object} Method for dispatching global ui state changes.
@@ -43,31 +33,18 @@ export class ChequePaymentButton extends BasePaymentButton {
     paymentMethod: any,
     basketOrderInfo: any,
     uiContext: any,
-    dispatchState: Function,
-    chequeNumber: string
+    dispatchState: Function
   ) {
     uiContext?.setOverlayLoaderState({
       visible: true,
       message: 'Please wait...',
     })
-    const paymentInfo = {
-      paymentInfo1: null,
-      paymentInfo2: null,
-      paymentInfo3: null,
-      paymentInfo4: null,
-      paymentInfo5: null,
-      paymentInfo6: null,
-      paymentInfo7: chequeNumber,
-      paymentInfo8: null,
-    }
-    this.setState({ paymentInfo: paymentInfo })
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
       basketOrderInfo,
       uiContext,
       dispatchState,
-      false,
-      paymentInfo
+      true
     )
     if (orderResult?.success && orderResult?.result?.id) {
       uiContext?.hideOverlayLoaderState()
@@ -75,7 +52,7 @@ export class ChequePaymentButton extends BasePaymentButton {
       if (state) {
         dispatchState(state)
       }
-
+      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.COD)
       this.setState({
         isPaymentInitiated: true,
       })
@@ -96,20 +73,8 @@ export class ChequePaymentButton extends BasePaymentButton {
    * Called immediately after a component is mounted.
    */
   public componentDidMount(): void {
-    const { uiContext, dispatchState }: any = this.props
+    const { dispatchState }: any = this.props
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
-  }
-
-  private async onChequeSubmit(data: any): Promise<void> {
-    const { paymentMethod, basketOrderInfo, uiContext, dispatchState } =
-      this.props
-    await this.onPay(
-      this.state.paymentMethod,
-      basketOrderInfo,
-      uiContext,
-      dispatchState,
-      data?.chequeNo
-    )
   }
 
   /**
@@ -118,34 +83,34 @@ export class ChequePaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { uiContext }: any = this.props
-
     return (
       <>
-        <div className="w-full">
-          <dl className="w-2/5 space-y-2 sm:space-y-2 py-2">
-            <ChequePayment
-              onSubmit={async (data: any) => await that.onChequeSubmit(data)}
-            />
-          </dl>
-
-          {this.baseRender({
-            ...this?.props,
-            ...{
-              formId: CHEQUE_PAYMENT_FORM_ID,
-            },
-          })}
-        </div>
+        {this.baseRender({
+          ...this?.props,
+          ...{
+            onPay: (
+              paymentMethod: any,
+              basketOrderInfo: any,
+              uiContext: any,
+              dispatchState: Function
+            ) =>
+              that.onPay(
+                that.state.paymentMethod,
+                basketOrderInfo,
+                uiContext,
+                dispatchState
+              ),
+          },
+        })}
 
         {this.state.isPaymentInitiated && (
           <PaymentGatewayNotification
-            isCOD={false}
+            isCOD={true}
             gateway={this.state?.paymentMethod?.systemName}
             params={{
               token: EmptyString,
               orderId: EmptyString,
               payerId: EmptyString,
-              paymentInfo: that.state.paymentInfo,
             }}
             isCancelled={false}
           />
@@ -154,5 +119,3 @@ export class ChequePaymentButton extends BasePaymentButton {
     )
   }
 }
-
-export default ChequePaymentButton
