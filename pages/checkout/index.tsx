@@ -186,9 +186,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo }: any) => {
     } else {
       updateAddressList({ ...basketRes?.shippingAddress, isBilling: false })
     }
-    const step = getStepFromStage(basketRes?.stage)
+    // const step = getStepFromStage(basketRes?.stage)
     new Promise(() => {
-      goToStep(step || CheckoutStep.LOGIN)
+      goToStep(CheckoutStep.LOGIN)
     })
     hideOverlayLoaderState()
   }
