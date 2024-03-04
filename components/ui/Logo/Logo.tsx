@@ -18,7 +18,7 @@ const Logo = ({ className = '', ...props }) => {
   }
 
   return (
-    <img onClick={logoClick} src={`/theme/${CURRENT_THEME}/image/logo.png`} alt="Shark" width={60} height={36} className="w-16 h-auto md:w-12 lg:w-16" />
+    <img onClick={logoClick} src={`https://cdnbs.bettercommerce.io/betterstore/siteassets/logo.png?fm=webp&h=60`} alt="Shark" width={60} height={36} className="w-16 h-auto md:w-12 lg:w-16" />
   )
 }
 
