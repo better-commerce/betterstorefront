@@ -6,7 +6,7 @@ import { GetServerSideProps } from 'next'
 
 // Component Imports
 import Spinner from '@components/ui/Spinner'
-import PaymentGatewayNotification from '@components/checkout/PaymentGatewayNotification'
+import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayNotification'
 
 // Other Imports
 import { getItem } from '@components/utils/localStorage'
@@ -17,7 +17,7 @@ import {
 } from '@better-commerce/bc-payments-sdk'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 import { LocalStorage } from '@components/utils/payment-constants'
-import { CARD_PAYMENT_3DS_ENABLED } from '@components/checkout/CheckoutForm/PaymentButton/CheckoutPaymentButton'
+import { CARD_PAYMENT_3DS_ENABLED } from '@components/checkout-old/CheckoutForm/PaymentButton/CheckoutPaymentButton'
 
 const GatewayPage = (props: IGatewayPageProps) => {
   const { gateway, isCancelled } = props

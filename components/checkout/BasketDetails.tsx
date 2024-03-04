@@ -27,9 +27,9 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
-import Summary from '@components/checkout2/Summary'
+import Summary from '@components/checkout/Summary'
 import { sortBy } from 'lodash'
-import BasketItems from '@components/checkout2/BasketItems'
+import BasketItems from '@components/checkout/BasketItems'
 interface BasketItem {
   id: string
   name: string

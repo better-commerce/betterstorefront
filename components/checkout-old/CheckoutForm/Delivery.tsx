@@ -14,7 +14,7 @@ import CncList from './CncList'
 import { ADDRESS_OF_YOUR_CHOICE, IN_STORE_OR_COLLECT_PLUS, GENERAL_SELECT_COUNTRY, GENERAL_EDIT, GENERAL_CONFIRM, GENERAL_DELIVERY_METHOD, GENERAL_COMBINED_DELIVERY, } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import SplitDelivery from '../SplitDelivery'
-import { DEFAULT_COUNTRY } from '@components/checkout2/BillingAddressForm'
+import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY } from '@components/utils/constants'
 const DELIVERY_METHODS_TYPE = [
   {
