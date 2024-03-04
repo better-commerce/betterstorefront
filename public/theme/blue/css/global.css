@@ -1114,7 +1114,7 @@ p {
 }
 
 .min-height-65 {
-  min-height: 65px;
+  min-height: 82px;
   height: 100%;
 }
 
@@ -1157,7 +1157,7 @@ p {
 
 /* product list image width and height control css  */
 .height-img-auto {
-  min-height: 0 !important;
+  min-height: 0;
   object-fit: contain !important;
   object-position: inherit;
   width: auto !important;
@@ -1185,7 +1185,7 @@ p {
 
 @media screen and (min-width:1024px) {
   .height-img-auto {
-    min-height: 0 !important;
+    min-height: 0;
     object-fit: contain !important;
     object-position: inherit;
     width: auto !important;
