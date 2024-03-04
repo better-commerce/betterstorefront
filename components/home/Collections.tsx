@@ -1,6 +1,7 @@
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Link from 'next/link'
+import LazyImage from './LazyImage'
 
 export default function Collections({ data }: any) {
   const css = { maxWidth: '100%', minHeight: '350px' }
@@ -18,7 +19,7 @@ export default function Collections({ data }: any) {
               passHref
               legacyBehavior
             >
-              <img
+              <LazyImage
                 src={
                   generateUri(
                     collection?.collectionlist_image,
