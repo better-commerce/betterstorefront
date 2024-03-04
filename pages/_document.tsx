@@ -12,24 +12,16 @@ export default class MyDocument extends NextDocument /*Document*/ {
   render() {
     return (
       <Html>
-        <Head></Head>
+        <Head>
+          <link rel="stylesheet" href={`/theme/${CURRENT_THEME}/css/global.css`} />
+          <link rel="stylesheet" href={`/theme/css/common.css`} />
+        </Head>
         <body className="custom_class promo-banner-inactive">
           <Main />
           <NextScript />
-          <link
-            rel="stylesheet"
-            href={`/theme/${CURRENT_THEME}/css/global.css`}
-          />
-          <link
-            rel="stylesheet"
-            href={`/theme/css/common.css`}
-          />
           {OMNILYTICS_DISABLED ?
             null
-            : <Script
-              src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js"
-              strategy="beforeInteractive"
-            />}
+            : <Script src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js" strategy="beforeInteractive" />}
         </body>
       </Html>
     )

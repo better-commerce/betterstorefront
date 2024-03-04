@@ -326,22 +326,8 @@ function MyApp({
       )
     })
   )
-
-
-  const seoInfo =
-    pageProps?.metaTitle ||
-      pageProps?.metaDescription ||
-      pageProps?.metaKeywords
-      ? pageProps
-      : pageProps?.data?.product || undefined
-
-  const seoImage =
-    pageProps?.metaTitle ||
-      pageProps?.metaDescription ||
-      pageProps?.metaKeywords
-      ? pageProps?.products?.images[0]?.url
-      : pageProps?.data?.product?.image || undefined
-
+  const seoInfo = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps : pageProps?.data?.product || undefined
+  const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps?.products?.images[0]?.url : pageProps?.data?.product?.image || undefined
   const bodyStartScrCntrRef = React.createRef<any>()
   const bodyEndScrCntrRef = React.createRef<any>()
   return (
@@ -369,11 +355,7 @@ function MyApp({
         )}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta
-          property="og:url"
-          content={SITE_ORIGIN_URL + router.asPath}
-          key="ogurl"
-        />
+        <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath} key="ogurl" />
         <meta property="og:image" content={seoImage} />
         {headElements}
       </NextHead>
