@@ -60,10 +60,9 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
     orderResponse: {},
     showStripe: false,
     isPaymentIntent: isBrowser
-      ? new URLSearchParams(window.location.search).get(
+      && new URLSearchParams(window.location.search).get(
         'payment_intent_client_secret'
-      )
-      : null,
+      ),
     isPaymentWidgetActive: false,
   }
 

@@ -9,7 +9,6 @@ import {
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { setItem, getItem, removeItem } from '@components/utils/localStorage'
 import { BundleType } from '@framework/utils/enums'
 import { Guid } from '@commerce/types'
 

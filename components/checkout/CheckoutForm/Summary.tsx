@@ -531,9 +531,11 @@ export default function Summary({
                                 <p>{product?.name}</p>
                               </Link>
                               <p className="inline-block text-sm font-bold text-gray-700 uppercase">
-                                {isIncludeVAT
-                                  ? product.price?.formatted?.withTax
-                                  : product.price?.formatted?.withoutTax}
+                                {product?.price?.raw?.withTax > 0 ? 
+                                  (isIncludeVAT
+                                    ? product.price?.formatted?.withTax
+                                    : product.price?.formatted?.withoutTax)
+                                    :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>}
                                 {product.listPrice?.raw.withTax > 0 &&
                                   product.listPrice?.raw.withTax !=
                                   product.price?.raw?.withTax ? (

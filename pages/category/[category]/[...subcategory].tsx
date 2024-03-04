@@ -1,19 +1,19 @@
+// Base Imports
+import { useReducer, useState, useEffect } from 'react'
+
+// Package Imports
 import Link from 'next/link'
-import Image from 'next/image'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
-import { useReducer, useState, useEffect } from 'react'
+
+// Component Imports
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import {
-  ALL_CATEGORY,
-  BAD_URL_TEXT,
-  IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
+import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
@@ -30,19 +30,11 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
-const ProductFilterRight = dynamic(
-  () => import('@components/product/Filters/filtersRight')
-)
-const ProductMobileFilters = dynamic(
-  () => import('@components/product/Filters')
-)
-const ProductFiltersTopBar = dynamic(
-  () => import('@components/product/Filters/FilterTopBar')
-)
+const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
-const ProductGrid = dynamic(
-  () => import('@components/product/Grid/ProductGrid')
-)
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
@@ -516,7 +508,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                 </div>
               ))}
             </>
-          ) : null}
+          ): null }
         </div>
         <div className="container px-4 py-6 mx-auto">
           {/* category banner info End */}
@@ -632,5 +624,3 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
 }
 
 export default withDataLayer(CategoryPage, PAGE_TYPE)
-
-

@@ -1,13 +1,7 @@
 import { GetServerSideProps } from 'next'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import {
-  PlainText,
-  ProductCollection,
-  Video,
-  Image,
-  ImageCollection,
-} from '@components/brand'
+import { PlainText, ProductCollection, Video, Image, ImageCollection } from '@components/brand'
 import React from 'react'
 import commerce from '@lib/api/commerce'
 import { maxBasketItemsCount } from '@framework/utils/app-util'

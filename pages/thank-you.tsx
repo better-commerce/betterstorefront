@@ -1,88 +1,33 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import axios from 'axios'
 import { Transition, Dialog } from '@headlessui/react'
-import {
-  ChatBubbleLeftEllipsisIcon,
-  EnvelopeIcon,
-  LinkIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import { CLOSE_PANEL, SHARE_IN_PERSON } from '@components/utils/textVariables'
 import {
-  NEXT_REFERRAL_ADD_USER_REFEREE,
-  NEXT_REFERRAL_BY_EMAIL,
-  NEXT_REFERRAL_BY_USERID,
-  NEXT_REFERRAL_BY_USERNAME,
-  NEXT_REFERRAL_CLICK_ON_INVITE,
-  NEXT_REFERRAL_INVITE_SENT,
-  NEXT_REFERRAL_SEARCH,
-  NEXT_REFERRAL_INFO,
-  FACEBOOK_SHARE_STRING,
-  TWITTER_SHARE_STRING,
-  Messages,
-  NEXT_GET_ORDER,
-  NEXT_GET_ORDERS,
-  NEXT_INFRA_ENDPOINT,
-  EmptyString,
+  NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
+  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
-import {} from '@components/utils/constants'
+import { } from '@components/utils/constants'
 import { removeItem } from '@components/utils/localStorage'
-import {
-  BTN_BACK_TO_HOME,
-  GENERAL_ADDRESSES,
-  GENERAL_BILLING_ADDRESS,
-  GENERAL_DELIVERED_BY,
-  GENERAL_DELIVERY_ADDRESS,
-  GENERAL_ITEMS,
-  GENERAL_NEXT_ORDER_PROMO,
-  GENERAL_ON_THE_WAY,
-  GENERAL_ORDER_WILL_BE_WITH_YOU_SOON,
-  GENERAL_PAYMENT,
-  GENERAL_PAYMENT_METHOD,
-  GENERAL_PRICE,
-  GENERAL_QUANTITY,
-  GENERAL_SHIPPING,
-  GENERAL_SHIPPING_ADDRESS,
-  GENERAL_SHIPPING_METHOD,
-  GENERAL_SUMMARY,
-  GENERAL_TAX,
-  GENERAL_THANK_YOU,
-  GENERAL_TOTAL,
-  GENERAL_YOUR_ORDER,
-  IMG_PLACEHOLDER,
-  LOADING_YOUR_ORDERS,
-  NO_ORDER_PROVIDED,
-  SUBTOTAL_EXCLUDING_TAX,
-  SUBTOTAL_INCLUDING_TAX,
-  YOUR_INFORMATION,
-  OFFER_VALIDITY,
-} from '@components/utils/textVariables'
-import {
-  ELEM_ATTR,
-  ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS,
-} from '@framework/content/use-content-snippet'
-import Image from 'next/image'
+import { BTN_BACK_TO_HOME, GENERAL_ADDRESSES, GENERAL_DELIVERED_BY, GENERAL_DELIVERY_ADDRESS, GENERAL_ITEMS, GENERAL_NEXT_ORDER_PROMO, GENERAL_ON_THE_WAY, GENERAL_ORDER_WILL_BE_WITH_YOU_SOON, GENERAL_PAYMENT, GENERAL_PAYMENT_METHOD, GENERAL_PRICE, GENERAL_QUANTITY, GENERAL_SHIPPING, GENERAL_SHIPPING_METHOD, GENERAL_SUMMARY, GENERAL_TAX, GENERAL_THANK_YOU, GENERAL_TOTAL, GENERAL_YOUR_ORDER, IMG_PLACEHOLDER, LOADING_YOUR_ORDERS, NO_ORDER_PROVIDED, SUBTOTAL_EXCLUDING_TAX, SUBTOTAL_INCLUDING_TAX, YOUR_INFORMATION, OFFER_VALIDITY } from '@components/utils/textVariables'
+import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
-import {
-  LocalStorage,
-  PaymentStatus,
-} from '@components/utils/payment-constants'
+import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
-import {
-  eddDateFormat,
-  stringFormat,
-  stringToBoolean,
-} from '@framework/utils/parse-util'
+import { eddDateFormat, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
+import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
+  const [isSnippetLoaded, setIsSnippetLoaded] = useState(false)
+  const [snippets, setSnippets] = useState(new Array<any>())
   const [isLoading, setIsLoading] = useState(true)
   const [isReferModalOpen, setIsReferModalOpen] = useState(false)
   const [shareReferralView, setShareReferralView] = useState(false)
@@ -339,6 +284,9 @@ export default function OrderConfirmation({ config }: any) {
         id: orderId,
       })
       setOrderData(data.order)
+      setTimeout(() => {
+        setSnippets(data?.snippets || [])
+      }, 100);
       setIsLoading(false)
     }
     removeItem(LocalStorage.Key.ORDER_RESPONSE)
@@ -352,6 +300,12 @@ export default function OrderConfirmation({ config }: any) {
       setOrderId('')
     }
   }, [])
+
+  useEffect(() => {
+    if (snippets?.length > 0) {
+      setIsSnippetLoaded(true)
+    }
+  }, [snippets])
 
   const setModelClose = () => {
     setIsReferModalOpen(false)
@@ -408,8 +362,15 @@ export default function OrderConfirmation({ config }: any) {
     )
   }
 
+  const bodyStartScrCntrRef = React.createRef<any>()
+  const bodyEndScrCntrRef = React.createRef<any>()
+
   return (
     <>
+      <div
+        ref={bodyStartScrCntrRef}
+        className={`${ELEM_ATTR}body-start-script-cntr-pc`}
+      ></div>
       <main className="px-4 pt-6 pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
@@ -481,7 +442,7 @@ export default function OrderConfirmation({ config }: any) {
                               {GENERAL_PRICE}
                             </dt>
                             <dd className="ml-2 text-gray-700">
-                              {product.price.formatted.withTax}
+                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>}
                             </dd>
                           </div>
                         </dl>
@@ -749,7 +710,7 @@ export default function OrderConfirmation({ config }: any) {
                             <h2 className="mx-2 text-lg ">
                               {referralObj?.slug}
                             </h2>
-                            <Button className="my-3" onClick={() => {}}>
+                            <Button className="my-3" onClick={() => { }}>
                               {SHARE_IN_PERSON}
                             </Button>
 
@@ -821,6 +782,15 @@ export default function OrderConfirmation({ config }: any) {
           </div>
         </Dialog>
       </Transition.Root>
+
+      <div
+        ref={bodyEndScrCntrRef}
+        className={`${ELEM_ATTR}body-end-script-cntr-pc`}
+      ></div>
+
+      {(!isSnippetLoaded && snippets?.length > 0) && (
+        <NonHeadContentSnippet snippets={snippets} refs={{ bodyStartScrCntrRef, bodyEndScrCntrRef }} />
+      )}
     </>
   )
 }

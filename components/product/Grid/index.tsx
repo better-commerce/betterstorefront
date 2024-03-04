@@ -3,9 +3,7 @@ import Router from 'next/router'
 import dynamic from 'next/dynamic'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import rangeMap from '@lib/range-map'
-const ProductCard = dynamic(
-  () => import('@components/product/ProductCard/ProductCard')
-)
+const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 const Pagination = dynamic(() => import('@components/product/Pagination'))
 interface Props {
@@ -16,15 +14,8 @@ interface Props {
   isCompared: any
 }
 
-export default function Grid({
-  products,
-  currentPage,
-  handlePageChange = () => {},
-  handleInfiniteScroll,
-  deviceInfo,
-  maxBasketItemsCount,
-  isCompared,
-}: Props & IExtraProps) {
+export default function Grid({ products, currentPage, handlePageChange = () => {}, handleInfiniteScroll,
+  deviceInfo, maxBasketItemsCount, isCompared }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL =
     process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 

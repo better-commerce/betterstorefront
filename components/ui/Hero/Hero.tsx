@@ -1,10 +1,9 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { IDeviceInfo } from '@components/ui/context'
 
 interface HeroProps {

@@ -19,12 +19,7 @@ import Spinner from '@components/ui/Spinner'
 import Link from 'next/link'
 import OrdersListView from './OrdersListView'
 
-export default function MyOrders({
-  allOrders,
-  handleInfiniteScroll,
-  deviceInfo,
-  isShowDetailedOrder, setIsShowDetailedOrder 
-}: any) {
+export default function MyOrders({ allOrders, handleInfiniteScroll, deviceInfo, isShowDetailedOrder, setIsShowDetailedOrder }: any) {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { user, displayAlert, alertRibbon } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>(undefined)

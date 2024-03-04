@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import Image from 'next/image'
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
@@ -11,16 +10,11 @@ import {
   NEXT_CREATE_WISHLIST,
   Messages,
 } from '@components/utils/constants'
-import { HeartIcon } from '@heroicons/react/24/outline'
 import { round } from 'lodash'
 import {
-  BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
   GENERAL_ADD_TO_BASKET,
   IMG_PLACEHOLDER,
-  ITEM_WISHLISTED,
-  QUICK_VIEW,
-  WISHLIST_TITLE,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
@@ -33,8 +27,7 @@ import classNames from 'classnames'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const PLPQuickView = dynamic(
-  () => import('@components/product/QuickView/PLPQuickView')
+const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView')
 )
 
 interface Props {
@@ -199,7 +192,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     }
   }
 
-  const secondImage = product.images[1]?.image
+  const secondImage = useMemo(() => product?.images?.[1]?.image ?? false, [product?.images]);
 
   const handleHover = (ev: any, type: string) => {
     if (hideWishlistCTA) return

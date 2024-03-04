@@ -1,8 +1,5 @@
 import classNames from '@components/utils/classNames'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
-import ToggleSwitch from '@components/common/ToggleSwitch'
-import { vatIncluded } from '@framework/utils/app-util'
 
 const MAX_CHARS = 19
 

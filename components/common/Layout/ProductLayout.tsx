@@ -123,7 +123,7 @@ const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
   ) : null
 }
 
-interface LayoutProps {
+interface ProductLayoutProps {
   nav: []
   footer: []
 }
@@ -137,7 +137,7 @@ export interface IExtraProps {
   config?: any
 }
 
-const Layout: FC<Props & IExtraProps> = ({
+const ProductLayout: FC<Props & IExtraProps> = ({
   children,
   config,
   pageProps: { categories = [], navTree, reviewData = {}, ...pageProps },
@@ -165,8 +165,8 @@ const Layout: FC<Props & IExtraProps> = ({
     }
 
     return () => {
-      Router.events.off('routeChangeStart', () => {})
-      Router.events.off('routeChangeComplete', () => {})
+      Router.events.off('routeChangeStart', () => { })
+      Router.events.off('routeChangeComplete', () => { })
     }
   }, [])
 
@@ -186,6 +186,10 @@ const Layout: FC<Props & IExtraProps> = ({
   return (
     <>
       <Head>
+        <link
+         rel="stylesheet"
+          href={`/assets/css/image-gallery.css`}
+        />
         <link
           rel="apple-touch-icon"
           sizes="57x57"
@@ -303,4 +307,4 @@ const Layout: FC<Props & IExtraProps> = ({
   )
 }
 
-export default Layout
+export default ProductLayout 

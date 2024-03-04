@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Image from 'next/image'
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
@@ -40,9 +40,7 @@ import classNames from 'classnames'
 import ButtonNotifyMe from '@components/product/ButtonNotifyMe'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const PLPQuickView = dynamic(
-  () => import('@components/product/QuickView/PLPQuickView')
-)
+const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
 
 interface Props {
   product: any
@@ -227,8 +225,7 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     }
   }
 
-  const secondImage =
-    product?.images?.length > 0 ? product?.images[1]?.image : null
+  const secondImage = useMemo(() => product?.images?.[1]?.image ?? false, [product?.images]);
 
   const handleHover = (ev: any, type: string) => {
     if (hideWishlistCTA) return

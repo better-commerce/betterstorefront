@@ -1,17 +1,6 @@
-import { Tab, Disclosure } from '@headlessui/react'
-import {
-  HeartIcon,
-  MinusSmallIcon,
-  PlusSmallIcon,
-} from '@heroicons/react/24/outline'
-import { StarIcon, PlayIcon } from '@heroicons/react/24/solid'
-import classNames from '@components/utils/classNames'
-import {
-  PRODUCT_DESCRIPTION,
-  PRODUCT_SPECIFICATION,
-  GENERAL_SHIPPING,
-  GENERAL_RETURNS,
-} from '@components/utils/textVariables'
+import { Disclosure } from '@headlessui/react'
+import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
+import { PRODUCT_DESCRIPTION, GENERAL_SHIPPING, GENERAL_RETURNS } from '@components/utils/textVariables'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 
 const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i

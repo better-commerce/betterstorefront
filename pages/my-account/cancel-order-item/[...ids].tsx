@@ -33,11 +33,7 @@ import { Guid } from '@commerce/types'
 
 declare const window: any
 
-export default function OrderCancel({
-  orderId = Guid.empty,
-  itemId = Guid.empty,
-  deviceInfo,
-}: any) {
+export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: any) {
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
   const [itemDatas, setItemDatas] = useState<any>(undefined)
