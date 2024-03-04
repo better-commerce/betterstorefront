@@ -17,20 +17,14 @@ export default class MyDocument extends NextDocument /*Document*/ {
           <Main />
           <NextScript />
           <link
-            rel="stylesheet"
-            href={`/theme/${CURRENT_THEME}/css/base.css`}
-          />
-          <link
-            rel="stylesheet"
+            rel="preload"
             href={`/theme/${CURRENT_THEME}/css/global.css`}
+            as="style" 
           />
           <link
-            rel="stylesheet"
+            rel="preload"
             href={`/theme/css/common.css`}
-          />
-          <link
-            rel="stylesheet"
-            href={`/assets/css/image-gallery.css`}
+            as="style" 
           />
           {OMNILYTICS_DISABLED ?
             null
@@ -39,6 +33,14 @@ export default class MyDocument extends NextDocument /*Document*/ {
               strategy="beforeInteractive"
             />}
         </body>
+        <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              if(document) {
+            document.querySelectorAll("link[rel='preload'][as='style']").forEach(link => link.rel = "stylesheet")}
+            `
+            }}
+          />
       </Html>
     )
   }

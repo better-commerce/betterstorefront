@@ -1,4 +1,3 @@
-import '@assets/css/base.css'
 import '@assets/css/main.css'
 import '@assets/icon.css'
 import '@assets/css/chrome-bug.css'

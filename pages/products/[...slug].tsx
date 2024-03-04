@@ -1,7 +1,7 @@
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
-import { Layout } from '@components/common'
+import ProductLayout from '@components/common/Layout/ProductLayout'
 import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { LOADER_LOADING } from '@components/utils/textVariables'
@@ -204,6 +204,6 @@ function Slug({
   )
 }
 
-Slug.Layout = Layout
+Slug.ProductLayout = ProductLayout
 
-export default withDataLayer(Slug, PAGE_TYPES.Product)
+export default withDataLayer(Slug, PAGE_TYPES.Product, true, ProductLayout)
