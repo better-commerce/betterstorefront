@@ -23,6 +23,7 @@ module.exports = withCommerceConfig({
       'devocxstorage.blob.core.windows.net',
       'www.imagedelivery.space',
       'liveocx.imgix.net',
+      'livebccdn-euhthweyb6ckdcec.z01.azurefd.net'
     ],
     cacheDuration: 31536000,
   },
