@@ -11,10 +11,10 @@ const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
 const isBetterCommerce = provider === 'bettercommerce'
 const crypto = require('crypto')
-const isProd = process.env.NODE_ENV === 'production'
+//const isProd = process.env.NODE_ENV === 'production'
 module.exports = withCommerceConfig({
   output: 'standalone',
-  assetPrefix: isProd ? 'https://cdnbs.bettercommerce.io' : undefined,
+  //assetPrefix: isProd ? 'https://cdnbs.bettercommerce.io' : undefined,
   poweredByHeader: false,
   images: {
     domains: [
