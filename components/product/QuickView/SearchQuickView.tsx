@@ -1,36 +1,13 @@
-import {
-  MAX_ADD_TO_CART_LIMIT,
-  Messages,
-  NEXT_BULK_ADD_TO_CART,
-  NEXT_CREATE_WISHLIST,
-  NEXT_GET_PRODUCT,
-  NEXT_GET_PRODUCT_QUICK_VIEW,
-  NEXT_GET_PRODUCT_REVIEW,
-  NEXT_UPDATE_CART_INFO,
-  PRODUCTS_SLUG_PREFIX,
-} from '@components/utils/constants'
-import {
-  BTN_ADD_TO_FAVORITES,
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  CLOSE_PANEL,
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_ENGRAVING,
-  IMG_PLACEHOLDER,
-  ITEM_TYPE_ADDON,
-} from '@components/utils/textVariables'
+import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO } from '@components/utils/constants'
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import { Tab } from '@headlessui/react'
 import { Dialog, Transition } from '@headlessui/react'
-import { HeartIcon, PlayIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { StarIcon } from '@heroicons/react/24/outline'
+import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import { Fragment, useEffect, useState } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
-
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
-import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
 import Link from 'next/link'
 import { round } from 'lodash'
@@ -41,7 +18,7 @@ import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import ImageGallery from 'react-image-gallery'
-import { matchStrings, priceFormat } from '@framework/utils/parse-util'
+import { matchStrings } from '@framework/utils/parse-util'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import { isMobile } from 'react-device-detect'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
@@ -87,24 +64,8 @@ var settings = {
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
-export default function SearchQuickView({
-  isQuickview,
-  setQuickview,
-  productData,
-  isQuickviewOpen,
-  setQuickviewOpen,
-  maxBasketItemsCount,
-}: any) {
-  const {
-    openNotifyUser,
-    addToWishlist,
-    openWishlist,
-    basketId,
-    cartItems,
-    setCartItems,
-    user,
-    setAlert,
-  } = useUI()
+export default function SearchQuickView({ isQuickview, setQuickview, productData, isQuickviewOpen, setQuickviewOpen, maxBasketItemsCount }: any) {
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, setAlert } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
   const [close, setClose] = useState(isQuickviewOpen)

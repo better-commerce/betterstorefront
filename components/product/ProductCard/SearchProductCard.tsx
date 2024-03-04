@@ -4,26 +4,11 @@ import { FC, useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
-import {
-  CLOTH_COLOUR_ATTRIB_NAME,
-  CLOTH_SIZE_ATTRIB_NAME,
-  NEXT_CREATE_WISHLIST,
-  Messages,
-  NEXT_GET_PROOMO_DETAILS,
-  NEXT_REMOVE_WISHLIST,
-} from '@components/utils/constants'
+import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, NEXT_GET_PROOMO_DETAILS, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
 import { StarIcon } from '@heroicons/react/24/outline'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import {
-  BTN_PRE_ORDER,
-  GENERAL_ADD_TO_BAG,
-  GENERAL_ADD_TO_BASKET,
-  IMG_PLACEHOLDER,
-  ITEM_WISHLISTED,
-  QUICK_VIEW,
-  WISHLIST_TITLE,
-} from '@components/utils/textVariables'
+import { BTN_PRE_ORDER, GENERAL_ADD_TO_BAG, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, ITEM_WISHLISTED, QUICK_VIEW, WISHLIST_TITLE, } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
@@ -60,23 +45,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     image: productData.image,
     link: productData.slug,
   })
-  const {
-    basketId,
-    user,
-    addToWishlist,
-    openWishlist,
-    setCartItems,
-    openNotifyUser,
-    cartItems,
-    wishListItems,
-    isGuestUser,
-    openLoginSideBar,
-    setAlert,
-    isCompared,
-    compareProductList,
-    setCompareProducts,
-    removeFromWishlist
-  } = useUI()
+  const { basketId, user, addToWishlist, openWishlist, setCartItems, openNotifyUser, cartItems, wishListItems, isGuestUser, openLoginSideBar, setAlert, isCompared, compareProductList, setCompareProducts, removeFromWishlist } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])

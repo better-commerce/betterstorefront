@@ -1,55 +1,21 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import Image from 'next/image'
 import { FC, useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
-import {
-  CLOTH_COLOUR_ATTRIB_NAME,
-  CLOTH_SIZE_ATTRIB_NAME,
-  NEXT_CREATE_WISHLIST,
-  Messages,
-  MAX_ADD_TO_CART_LIMIT,
-  NEXT_GET_PROOMO_DETAILS,
-  NEXT_REMOVE_WISHLIST,
-} from '@components/utils/constants'
-import {
-  HeartIcon,
-  CheckCircleIcon,
-  StarIcon,
-} from '@heroicons/react/24/outline'
-import { CheckCircleIcon as CheckSolidCircleIcon } from '@heroicons/react/24/solid'
+import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, NEXT_GET_PROOMO_DETAILS, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
+import { StarIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import {
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  GENERAL_ADD_TO_BASKET,
-  IMG_PLACEHOLDER,
-  ITEM_WISHLISTED,
-  QUICK_VIEW,
-  WISHLIST_TITLE,
-} from '@components/utils/textVariables'
+import { BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, QUICK_VIEW } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
-import {
-  vatIncluded,
-  validateAddToCart,
-  cartItemsValidateAddToCart,
-} from '@framework/utils/app-util'
+import { vatIncluded, cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import {
-  deliveryDateFormat,
-  matchStrings,
-  stringToBoolean,
-  tryParseJson,
-} from '@framework/utils/parse-util'
+import { matchStrings, stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
 import cn from 'classnames'
 import classNames from 'classnames'
-import { Listbox } from '@headlessui/react'
-import { Select } from '@components/common/Select'
-import commerce from '@lib/api/commerce'
 import { ArrowRight } from '@components/icons'
 import ProductTag from '../ProductTag'
 import ButtonNotifyMe from '../ButtonNotifyMe'
