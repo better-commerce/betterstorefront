@@ -1956,8 +1956,7 @@ br {
 }
 
 .sprite-icons {
-  background: url(/assets/images/sprite-new-v1.png)
-    no-repeat;
+  background: url(https://cdnbs.bettercommerce.io/betterstore/siteassets/sprite-new-v1.png) no-repeat;
   background-repeat: no-repeat;
   position: relative;
   display: inline-block;
