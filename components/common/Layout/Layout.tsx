@@ -186,26 +186,10 @@ const Layout: FC<Props & IExtraProps> = ({
   return (
     <>
       <Head>
-        <link
-          rel="apple-touch-icon"
-          sizes="57x57"
-          href={`/theme/${CURRENT_THEME}/favicon/apple-icon-57x57.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="60x60"
-          href={`/theme/${CURRENT_THEME}/favicon/apple-icon-60x60.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="72x72"
-          href={`/theme/${CURRENT_THEME}/favicon/apple-icon-72x72.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="76x76"
-          href={`/theme/${CURRENT_THEME}/favicon/apple-icon-76x76.png`}
-        />
+        <link rel="apple-touch-icon" sizes="57x57" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-57x57.png`} />
+        <link rel="apple-touch-icon" sizes="60x60" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-60x60.png`} />
+        <link rel="apple-touch-icon" sizes="72x72" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-72x72.png`} />
+        <link rel="apple-touch-icon" sizes="76x76" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-76x76.png`} />
         <link
           rel="apple-touch-icon"
           sizes="114x114"
