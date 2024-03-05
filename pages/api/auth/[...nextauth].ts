@@ -7,6 +7,17 @@ import AppleProvider from 'next-auth/providers/apple'
 // Other Imports
 
 export const authOptions: AuthOptions = {
+  cookies: {
+    callbackUrl: {
+      name: `__Secure-next-auth.callback-url`,
+      options: {
+        httpOnly: false,
+        sameSite: "none",
+        path: "/",
+        secure: true,
+      },
+    },
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
