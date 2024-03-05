@@ -44,5 +44,6 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: 'jwt',
   },
+  secret: 'hiFNcRU0Mw1H2SUDmNyTfqRC7PpXxq1b2GbJfiDnwWo=',
 }
 export default NextAuth(authOptions)
