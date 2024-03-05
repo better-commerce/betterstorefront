@@ -54,16 +54,16 @@ module.exports = withCommerceConfig({
       return null
     }
 
-    if (process.env.SITE_SECURITY_HEADERS) {
-      const headers = decrypt(process.env.SITE_SECURITY_HEADERS)
-      if (headers) {
-        const headersJson = tryParseJson(headers)
+    // if (process.env.SITE_SECURITY_HEADERS) {
+    //   const headers = decrypt(process.env.SITE_SECURITY_HEADERS)
+    //   if (headers) {
+    //     const headersJson = tryParseJson(headers)
 
-        if (headersJson) {
-          return headersJson
-        }
-      }
-    }
+    //     if (headersJson) {
+    //       return headersJson
+    //     }
+    //   }
+    // }
     return []
   },
   env: {
