@@ -21,7 +21,6 @@ interface BannerProps {
 import SwiperCore, { Navigation } from 'swiper'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import LazyImage from '@components/home/LazyImage'
 
 // install Swiper modules
 SwiperCore.use([Navigation])

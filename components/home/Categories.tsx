@@ -5,7 +5,6 @@ import 'swiper/css/navigation'
 import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import LazyImage from '../home/LazyImage'
 
 function Categories({ data, deviceInfo }: any) {
   const { isMobile } = deviceInfo
@@ -39,7 +38,7 @@ function Categories({ data, deviceInfo }: any) {
               legacyBehavior
             >
               {isMobile ? (
-                <LazyImage
+                <img
                   src={
                     generateUri(
                       category?.categorylist_image,
@@ -53,7 +52,7 @@ function Categories({ data, deviceInfo }: any) {
                   className="cursor-pointer"
                 />
               ) : (
-                <LazyImage
+                <img
                   src={
                     generateUri(
                       category?.categorylist_image,
