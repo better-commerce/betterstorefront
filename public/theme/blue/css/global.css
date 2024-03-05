@@ -298,8 +298,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Black.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Black.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Black.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -307,8 +307,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraLight.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraLight.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraLight.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -316,8 +316,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Italic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Italic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Italic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -325,8 +325,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraBoldItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraBoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -334,8 +334,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-BlackItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-BlackItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-BlackItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-BlackItalic.woff') format('woff');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
@@ -343,8 +343,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Light.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Light.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Light.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -352,8 +352,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-BoldItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-BoldItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-BoldItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -361,8 +361,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraBold.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraBold.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraBold.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraBold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -370,8 +370,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraLightItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraLightItalic.woff') format('woff');
   font-weight: 200;
   font-style: italic;
   font-display: swap;
@@ -379,8 +379,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Bold.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Bold.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Bold.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -388,8 +388,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-SemiBold.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-SemiBold.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-SemiBold.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -397,8 +397,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-SemiBoldItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-SemiBoldItalic.woff') format('woff');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -406,8 +406,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Regular.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Regular.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Regular.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -415,8 +415,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ThinItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ThinItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ThinItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ThinItalic.woff') format('woff');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -424,8 +424,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-MediumItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-MediumItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-MediumItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-MediumItalic.woff') format('woff');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -433,8 +433,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-LightItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-LightItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-LightItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-LightItalic.woff') format('woff');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -442,8 +442,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Medium.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Medium.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Medium.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -451,8 +451,8 @@
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Thin.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Thin.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Thin.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -497,8 +497,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Black.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Black.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Black.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -506,8 +506,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraLight.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraLight.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraLight.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -515,8 +515,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Italic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Italic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Italic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -524,8 +524,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraBoldItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraBoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -533,8 +533,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-BlackItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-BlackItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-BlackItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-BlackItalic.woff') format('woff');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
@@ -542,8 +542,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Light.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Light.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Light.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -551,8 +551,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-BoldItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-BoldItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-BoldItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -560,8 +560,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraBold.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraBold.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraBold.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraBold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -569,8 +569,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ExtraLightItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ExtraLightItalic.woff') format('woff');
   font-weight: 200;
   font-style: italic;
   font-display: swap;
@@ -578,8 +578,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Bold.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Bold.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Bold.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -587,8 +587,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-SemiBold.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-SemiBold.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-SemiBold.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -596,8 +596,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-SemiBoldItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-SemiBoldItalic.woff') format('woff');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -605,8 +605,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Regular.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Regular.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Regular.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -614,8 +614,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ThinItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-ThinItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ThinItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-ThinItalic.woff') format('woff');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -623,8 +623,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-MediumItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-MediumItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-MediumItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-MediumItalic.woff') format('woff');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -632,8 +632,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-LightItalic.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-LightItalic.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-LightItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-LightItalic.woff') format('woff');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -641,8 +641,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Medium.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Medium.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Medium.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -650,8 +650,8 @@ a {
 
 @font-face {
   font-family: 'Urbanist';
-  src: url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Thin.woff2') format('woff2'),
-    url('https://livebccdn-euhthweyb6ckdcec.z01.azurefd.net/betterstore/cms-media/font/Urbanist-Thin.woff') format('woff');
+  src: url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Thin.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.io/betterstore/cms-media/font/Urbanist-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
