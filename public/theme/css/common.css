@@ -156,3 +156,8 @@
     left: 0px;
 }
 }
+@media screen and (min-width:1026px) {
+    .font-h1-xl{
+        font-size: 135px !important;
+    }
+}
