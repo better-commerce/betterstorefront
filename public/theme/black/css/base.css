@@ -301,8 +301,8 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Bold.woff2') format('woff2'),
-    url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Bold.woff') format('woff');
+  src: url('../font/Inter-Bold.woff2') format('woff2'),
+    url('../font/Inter-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -310,8 +310,8 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-ExtraBold.woff2') format('woff2'),
-    url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-ExtraBold.woff') format('woff');
+  src: url('../font/Inter-ExtraBold.woff2') format('woff2'),
+    url('../font/Inter-ExtraBold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -319,8 +319,8 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Black.woff2') format('woff2'),
-    url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Black.woff') format('woff');
+  src: url('../font/Inter-Black.woff2') format('woff2'),
+    url('../font/Inter-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -328,8 +328,8 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-ExtraLight.woff2') format('woff2'),
-    url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-ExtraLight.woff') format('woff');
+  src: url('../font/Inter-ExtraLight.woff2') format('woff2'),
+    url('../font/Inter-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -337,8 +337,8 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Light.woff2') format('woff2'),
-    url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Light.woff') format('woff');
+  src: url('../font/Inter-Light.woff2') format('woff2'),
+    url('../font/Inter-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -346,8 +346,8 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-SemiBold.woff2') format('woff2'),
-    url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-SemiBold.woff') format('woff');
+  src: url('../font/Inter-SemiBold.woff2') format('woff2'),
+    url('../font/Inter-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -355,8 +355,8 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Thin.woff2') format('woff2'),
-    url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Thin.woff') format('woff');
+  src: url('../font/Inter-Thin.woff2') format('woff2'),
+    url('../font/Inter-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -364,8 +364,8 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Regular.woff2') format('woff2'),
-    url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Regular.woff') format('woff');
+  src: url('../font/Inter-Regular.woff2') format('woff2'),
+    url('../font/Inter-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -373,8 +373,8 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Medium.woff2') format('woff2'),
-    url('https://cdnbs3.bettercommerce.tech/theme/blue/font/Inter-Medium.woff') format('woff');
+  src: url('../font/Inter-Medium.woff2') format('woff2'),
+    url('../font/Inter-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
