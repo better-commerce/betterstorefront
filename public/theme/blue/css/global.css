@@ -818,29 +818,29 @@ p {
 }
 
 .btn-primary {
-  background: var(--btn-bg-primary);
-  color: var(--btn-text-color-primary);
+  background: var(--btn-bg-primary) !important;
+  color: var(--btn-text-color-primary) !important;
 }
 
 .btn-c.btn-primary {
-  background: var(--btn-bg-primary);
-  color: var(--btn-text-color-primary);
+  background: var(--btn-bg-primary) !important;
+  color: var(--btn-text-color-primary) !important;
   border: 0 !important;
 }
 
 .btn-c.btn-primary:hover {
-  background: var(--btn-bg-hover-primary);
-  color: var(--btn-hover-text-color-primary);
+  background: var(--btn-bg-hover-primary) !important;
+  color: var(--btn-hover-text-color-primary) !important;
 }
 
 .btn-primary:hover {
-  background: var(--btn-bg-hover-primary);
-  color: var(--btn-hover-text-color-primary);
+  background: var(--btn-bg-hover-primary) !important;
+  color: var(--btn-hover-text-color-primary) !important;
 }
 
 .btn-secondary {
-  background: var(--btn-bg-secondary);
-  color: var(--btn-text-color-secondary);
+  background: var(--btn-bg-secondary) !important;
+  color: var(--btn-text-color-secondary) !important;
 }
 
 .btn-secondary:hover {
@@ -850,20 +850,20 @@ p {
 
 .btn-c.btn-secondary {
   background: var(--btn-bg-secondary) !important;
-  color: var(--btn-text-color-secondary);
+  color: var(--btn-text-color-secondary) !important;
   border: 0 !important;
 }
 
 .btn-c.btn-secondary:hover {
   background: var(--btn-bg-hover-secondary) !important;
-  color: var(--btn-hover-text-color-secondary);
+  color: var(--btn-hover-text-color-secondary) !important;
 }
 
 .btn-default {
-  background: var(--btn-bg-default);
+  background: var(--btn-bg-default) !important;
   color: var(--btn-text-color-default);
-  border: 2px solid var(--btn-text-color-default);
-  border-color: var(--btn-border-clr-default);
+  border: 2px solid var(--btn-text-color-default) !important;
+  border-color: var(--btn-border-clr-default) !important;
 }
 
 .btn-default:hover {
@@ -874,18 +874,18 @@ p {
 
 .btn-c.btn-primary-red {
   background: var(--btn-bg-red) !important;
-  color: var(--btn-text-color-red);
+  color: var(--btn-text-color-red) !important;
   border: 2px solid var(--btn-border-red);
 }
 
 .btn-c.btn-primary-red:hover {
   background: var(--btn-bg-hover-red) !important;
-  color: var(--btn-hover-text-color-red);
+  color: var(--btn-hover-text-color-red) !important;
   border: 2px solid var(--btn-border-hover-red);
 }
 
 .btn-primary-red {
-  background: var(--btn-bg-red);
+  background: var(--btn-bg-red) !important;
   color: var(--btn-text-color-red);
   border: 2px solid var(--btn-border-red);
 }

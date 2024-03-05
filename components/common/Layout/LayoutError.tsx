@@ -15,12 +15,10 @@ import s from './Layout.module.css'
 import NotifyUserPopup from '@components/ui/NotifyPopup'
 import Router from 'next/router'
 import ProgressBar from '@components/ui/ProgressBar'
-import {
-  BTN_ACCEPT_COOKIE,
-  GENERAL_COOKIE_TEXT,
-} from '@components/utils/textVariables'
+import { CookieBanner } from '@schlomoh/react-cookieconsent'
 import { IExtraProps } from './Layout'
 import { stringToBoolean } from '@framework/utils/parse-util'
+import { GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
 
 const Loading = () => (
@@ -151,7 +149,14 @@ const LayoutError: FC<Props & IExtraProps> = ({
       setIsIncludeVATState(value)
     }, 50)
   }
-
+  const primaryButtonStyle = { backgroundColor: 'black' }
+  const secondaryButtonStyle = { backgroundColor: 'gray' }
+  const Content = () => (
+    <>
+      <h3></h3>
+      <p>{GENERAL_COOKIE_TEXT}</p>
+    </>
+  )
   return (
     <CommerceProvider locale={locale}>
       {isLoading && <ProgressBar />}
@@ -174,18 +179,18 @@ const LayoutError: FC<Props & IExtraProps> = ({
         />
         <ModalUI />
         <SidebarUI />
-        <FeatureBar
-          title={GENERAL_COOKIE_TEXT}
-          hide={acceptedCookies}
-          action={
-            <Button
-              className="mx-5 btn-c btn-primary"
-              onClick={() => onAcceptCookies()}
-            >
-              {BTN_ACCEPT_COOKIE}
-            </Button>
-          }
-        />
+        <div className="cookie-bannner">
+            <CookieBanner
+              enableManagement
+              managementButtonText="Manage Cookies"
+              headingColor="white"
+              managementContent={<Content />}
+              cookieCategories={['analytics', 'advertisement']}
+              infoContent={<Content />}
+              primaryButtonStyle={primaryButtonStyle}
+              secondaryButtonStyle={secondaryButtonStyle}
+            />
+          </div>
       </div>
     </CommerceProvider>
   )

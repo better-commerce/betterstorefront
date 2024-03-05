@@ -52,12 +52,12 @@ export default function InternalServerError({ deviceInfo }: any) {
       {(isMobile || isIPadorTablet) ? (
         <>
           <div className="w-full px-10 py-8 pr-10">
-            <div className="error-container">
+            <div className="error-container py-4 sm:py-12">
               <div className="w-full px-10 pr-10 mt-24 mb-8 text-left error-text-section">
-                <h1 className="mb-2 text-base font-semibold text-black">
+                <h1 className="mb-2 font-22 font-semibold text-black">
                   500 : Internal Server Error
                 </h1>
-                <p className="text-xs text-brown-light">
+                <p className="font-16 text-brown-light">
                   Check that you typed the address correctly. Maybe go back to
                   your previous page or try using our site search to find
                   something specific.
@@ -77,13 +77,13 @@ export default function InternalServerError({ deviceInfo }: any) {
       ) : (
         <>
           <div className="w-full px-10 py-8 pr-10">
-            <div className="error-container">
+            <div className="error-container py-4 sm:py-12">
               <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
-                <h1 className='text-5xl font-bold'>500</h1>
-                <h2 className="mb-2 text-base font-semibold text-black">
+                <h1 className='text-5xl font-bold font-h1-xl'>500</h1>
+                <h2 className="mb-2 font-32 font-semibold text-black">
                   Internal Server Error
                 </h2>
-                <p className="text-xs text-brown-light">
+                <p className="font-16 text-brown-light">
                   Check that you typed the address correctly. Maybe go back to
                   your previous page or try using our site search to find
                   something specific.

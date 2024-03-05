@@ -13,7 +13,9 @@ export default class MyDocument extends NextDocument /*Document*/ {
     return (
       <Html>
         <Head>
+          <link rel="preload" href={`/theme/${CURRENT_THEME}/css/global.css`} as="style" />
           <link rel="stylesheet" href={`/theme/${CURRENT_THEME}/css/global.css`} />
+          <link rel="preload" href={`/theme/css/common.css`} as="style" />
           <link rel="stylesheet" href={`/theme/css/common.css`} />
         </Head>
         <body className="custom_class promo-banner-inactive">
