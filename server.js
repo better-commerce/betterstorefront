@@ -11,7 +11,7 @@ app.prepare().then(() => {
   const server = express();
 
   // Define your CORS whitelist
-  const whitelist = ['https://liveocxcdn2.azureedge.net', 'https://cdnbs.bettercommerce.io'];
+  const whitelist = ['https://liveocxcdn2.azureedge.net', 'https://cdnbs.bettercommerce.io','https://cdnbs.bettercommerce.tech'];
   const corsOptions = {
     origin: function (origin, callback) {
       if (whitelist.indexOf(origin) !== -1 || !origin) {

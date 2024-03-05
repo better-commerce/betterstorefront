@@ -13,10 +13,10 @@ module.exports = withCommerceConfig({
   output: 'standalone',
   poweredByHeader: false,
   images: {
-    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net'],
+    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net','cdnbs.bettercommerce.tech'],
     cacheDuration: 31536000,
   },
-  //assetPrefix: isProd ? 'https://cdnbs.bettercommerce.io' : '',
+  assetPrefix: isProd ? 'https://cdnbs.bettercommerce.tech' : '',
   commerce,
   i18n: { locales: ['es'], defaultLocale: 'en-US' },
   rewrites() {
