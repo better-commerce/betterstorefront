@@ -76,24 +76,25 @@ export default function InternalServerError({ deviceInfo }: any) {
         </>
       ) : (
         <>
-          <div className="w-full p-5 bg-[#f7f6f6] pb-14">
+          <div className="w-full px-10 py-8 pr-10">
             <div className="error-container">
-              <div className="w-full mt-1 mb-8 text-center error-text-section">
-                <img src='/assets/images/500-error.gif' width="540" height="302" className='mx-auto' alt='500 Error' />
-                <h1 className="mb-2 font-semibold text-black">
+              <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
+                <h1 className='text-5xl font-bold'>500</h1>
+                <h2 className="mb-2 text-base font-semibold text-black">
                   Internal Server Error
-                </h1>
-                <h2 className='font-semibold text-orange-600'>WE'VE DOWNED TOOLS</h2>
-                <p className="text-gray-400 font-16">
-                  To carry on shopping with free next day delivery
+                </h2>
+                <p className="text-xs text-brown-light">
+                  Check that you typed the address correctly. Maybe go back to
+                  your previous page or try using our site search to find
+                  something specific.
                 </p>
               </div>
-              <div className="w-auto mx-auto mt-3 text-center">
+              <div className="w-40 mx-auto mt-5 text-center">
                 <Link
                   href="/"
-                  className="block p-4 text-sm font-semibold text-center text-white btn-primary"
+                  className="block p-4 text-sm font-semibold text-center text-white bg-black"
                 >
-                  Click Here
+                  Back to Homepage
                 </Link>
               </div>
             </div>
