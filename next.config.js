@@ -13,7 +13,7 @@ module.exports = withCommerceConfig({
   output: 'standalone',
   poweredByHeader: false,
   images: {
-    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net','cdnbs.bettercommerce.tech'],
+    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net', 'cdnbs.bettercommerce.tech'],
     cacheDuration: 31536000,
   },
   assetPrefix: isProd ? 'https://cdnbs.bettercommerce.tech' : '',
@@ -26,45 +26,19 @@ module.exports = withCommerceConfig({
       isBC && { source: '/logout', destination: '/api/logout?redirect_to=/' },
     ].filter(Boolean)
   },
-  headers() {
-    const decrypt = (data) => {
-      const ALGORITHM = 'aes-256-cbc'
-      const ENCODING = 'hex'
-      const IV_LENGTH = 16
-      const KEY = process.env.CIPHER_ENCRYPTION_KEY
-      const binaryData = new Buffer(data, ENCODING)
-      const iv = binaryData.slice(-IV_LENGTH)
-      const encryptedData = binaryData.slice(0, binaryData.length - IV_LENGTH)
-      const decipher = crypto.createDecipheriv(ALGORITHM, new Buffer(KEY), iv)
-
-      return Buffer.concat([
-        decipher.update(encryptedData),
-        decipher.final(),
-      ]).toString()
-    }
-
-    const tryParseJson = (json) => {
-      if (json) {
-        let parsed = {}
-        try {
-          parsed = JSON.parse(json)
-          return parsed
-        } catch (e) { }
+  async headers() {
+    return [
+      {
+        // matching all API routes
+        source: "/api/:path*",
+        headers: [
+          { key: "Access-Control-Allow-Credentials", value: "true" },
+          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
+          { key: "Access-Control-Allow-Methods", value: "GET,DELETE,PATCH,POST,PUT" },
+          { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
+        ]
       }
-      return null
-    }
-
-    // if (process.env.SITE_SECURITY_HEADERS) {
-    //   const headers = decrypt(process.env.SITE_SECURITY_HEADERS)
-    //   if (headers) {
-    //     const headersJson = tryParseJson(headers)
-
-    //     if (headersJson) {
-    //       return headersJson
-    //     }
-    //   }
-    // }
-    return []
+    ]
   },
   env: {
     BETTERCOMMERCE_AUTH_URL: process.env.BETTERCOMMERCE_AUTH_URL,
