@@ -16,7 +16,7 @@ module.exports = withCommerceConfig({
     domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net'],
     cacheDuration: 31536000,
   },
-  assetPrefix: isProd ? 'https://liveocxcdn2.azureedge.net' : '',
+  assetPrefix: isProd ? 'https://cdnbs.bettercommerce.io' : '',
   commerce,
   i18n: { locales: ['es'], defaultLocale: 'en-US' },
   rewrites() {
