@@ -1,7 +1,6 @@
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Link from 'next/link'
-import LazyImage from './LazyImage'
 
 export default function PromotionBanner({ data, key, css }: any) {
   return (
@@ -10,7 +9,7 @@ export default function PromotionBanner({ data, key, css }: any) {
       key={`full-banner-${key}`}
     >
       <Link href={data?.promotions_link} passHref legacyBehavior>
-        <LazyImage
+        <img
           src={generateUri(data?.promotions_image, 'h=800&fm=webp')||IMG_PLACEHOLDER}
           className="object-cover object-center w-full mob-img-height"
           alt={data?.promotions_title || 'promotion'}
