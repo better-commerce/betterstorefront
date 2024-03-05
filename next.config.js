@@ -2,54 +2,28 @@
  * @type {import('next').NextConfig}
  */
 
-const {
-  withCommerceConfig,
-  getProviderName,
-} = require('./framework/commerce/config')
+const { withCommerceConfig, getProviderName, } = require('./framework/commerce/config')
 const commerce = require('./commerce.config.json')
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
-const isBetterCommerce = provider === 'bettercommerce'
 const crypto = require('crypto')
-//const isProd = process.env.NODE_ENV === 'production'
+const isBetterCommerce = provider === 'bettercommerce'
+const isProd = process.env.NODE_ENV === 'production'
 module.exports = withCommerceConfig({
   output: 'standalone',
-  //assetPrefix: isProd ? 'https://cdnbs.bettercommerce.io' : undefined,
   poweredByHeader: false,
   images: {
-    domains: [
-      'liveocxcdn.azureedge.net',
-      'liveocxstorage.blob.core.windows.net',
-      'devocxstorage.blob.core.windows.net',
-      'www.imagedelivery.space',
-      'liveocx.imgix.net',
-      'livebccdn-euhthweyb6ckdcec.z01.azurefd.net'
-    ],
+    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net'],
     cacheDuration: 31536000,
   },
+  assetPrefix: isProd ? 'https://liveocxcdn2.azureedge.net' : undefined,
   commerce,
-  i18n: {
-    locales: ['es'],
-    defaultLocale: 'en-US',
-  },
+  i18n: { locales: ['es'], defaultLocale: 'en-US' },
   rewrites() {
     return [
-      {
-        source: '/robots.txt',
-        destination: '/api/robots',
-      },
-      isBC && {
-        source: '/checkout',
-        destination: '/api/checkout',
-      },
-      // The logout is also an action so this route is not required, but it's also another way
-      // you can allow a logout!
-      isBC && {
-        source: '/logout',
-        destination: '/api/logout?redirect_to=/',
-      },
-      // For Vendure, rewrite the local api url to the remote (external) api url. This is required
-      // to make the session cookies work.
+      { source: '/robots.txt', destination: '/api/robots' },
+      isBC && { source: '/checkout', destination: '/api/checkout' },
+      isBC && { source: '/logout', destination: '/api/logout?redirect_to=/' },
     ].filter(Boolean)
   },
   headers() {
@@ -58,7 +32,6 @@ module.exports = withCommerceConfig({
       const ENCODING = 'hex'
       const IV_LENGTH = 16
       const KEY = process.env.CIPHER_ENCRYPTION_KEY
-
       const binaryData = new Buffer(data, ENCODING)
       const iv = binaryData.slice(-IV_LENGTH)
       const encryptedData = binaryData.slice(0, binaryData.length - IV_LENGTH)
@@ -99,13 +72,10 @@ module.exports = withCommerceConfig({
     BETTERCOMMERCE_CLIENT_ID: process.env.BETTERCOMMERCE_CLIENT_ID,
     BETTERCOMMERCE_SHARED_SECRET: process.env.BETTERCOMMERCE_SHARED_SECRET,
     OMS_BASE_URL: process.env.OMS_BASE_URL,
-    BETTERCOMMERCE_DEFAULT_CURRENCY:
-      process.env.BETTERCOMMERCE_DEFAULT_CURRENCY,
-    BETTERCOMMERCE_DEFAULT_LANGUAGE:
-      process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE,
+    BETTERCOMMERCE_DEFAULT_CURRENCY: process.env.BETTERCOMMERCE_DEFAULT_CURRENCY,
+    BETTERCOMMERCE_DEFAULT_LANGUAGE: process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE,
     BETTERCOMMERCE_DEFAULT_COUNTRY: process.env.BETTERCOMMERCE_DEFAULT_COUNTRY,
-    BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE:
-      process.env.BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
+    BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE: process.env.BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
     BETTERCOMMERCE_CURRENCY: process.env.BETTERCOMMERCE_CURRENCY,
     BETTERCOMMERCE_LANGUAGE: process.env.BETTERCOMMERCE_LANGUAGE,
     BETTERCOMMERCE_COUNTRY: process.env.BETTERCOMMERCE_COUNTRY,
@@ -121,10 +91,8 @@ module.exports = withCommerceConfig({
     GA4_MEASUREMENT_ID: process.env.GA4_MEASUREMENT_ID,
     CIPHER_ENCRYPTION_KEY: process.env.CIPHER_ENCRYPTION_KEY,
     ENABLE_SECURED_PAYMENT_PAYLOAD: process.env.ENABLE_SECURED_PAYMENT_PAYLOAD,
-    SECURE_PAYMENT_METHODS_SETTINGS_FIELDS:
-      process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS,
-    PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS:
-      process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
+    SECURE_PAYMENT_METHODS_SETTINGS_FIELDS: process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS,
+    PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS: process.env.PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
     OTP_LOGIN_ENABLED: process.env.OTP_LOGIN_ENABLED,
     ERROR_LOG_ENABLED: process.env.ERROR_LOG_ENABLED,
     ERROR_LOG_OUTPUT_DIR: process.env.ERROR_LOG_OUTPUT_DIR,
@@ -142,6 +110,3 @@ module.exports = withCommerceConfig({
     REDIS_CACHE_DURATION_SECS: process.env.REDIS_CACHE_DURATION_SECS,
   },
 })
-
-// Don't delete this console log, useful to see the commerce config in Vercel deployments
-//console.log('next.config.js', JSON.stringify(module.exports, null, 2))
