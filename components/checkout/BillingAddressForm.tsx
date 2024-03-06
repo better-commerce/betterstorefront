@@ -153,7 +153,7 @@ const BillingAddressForm: React.FC<any> = ({
             <button
               type="submit"
               disabled={addressFinderFormik.isSubmitting}
-              className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary lg:py-2 py-3 sm:px-4 px-1"
+              className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1"
             >
               {addressFinderFormik.isSubmitting ? (
                 <LoadingDots />
@@ -377,7 +377,7 @@ const BillingAddressForm: React.FC<any> = ({
             <div className="grid flex-col w-full gap-2 mt-4 sm:justify-end sm:gap-2 sm:flex-row sm:flex sm:w-auto">
               {onEditAddressToggleView && (
                 <button
-                  className="border border-black btn-primary-white"
+                  className="border-black btn-primary-white btn"
                   type="button"
                   onClick={() => onEditAddressToggleView(undefined)}
                 >
@@ -385,7 +385,7 @@ const BillingAddressForm: React.FC<any> = ({
                 </button>
               )}
               <button
-                className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary lg:py-2 py-3 sm:px-4 px-1"
+                className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1"
                 type="submit"
                 disabled={formik.isSubmitting}
               >
