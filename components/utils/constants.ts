@@ -425,6 +425,7 @@ export module Messages {
     TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
     COMPANY_NOT_FOUND: 'Company not found.',
     COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
+    ADDRESS_NOT_FOUND: 'No address found for the given postcode'
   }
 
   export const ContactUs: any = {
