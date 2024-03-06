@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { useUI } from '@components/ui'
+import { LoadingDots, useUI } from '@components/ui'
 import { AlertType } from '@framework/utils/enums'
 import axios from 'axios'
 import { NEXT_STORE_LOCATOR } from '@components/utils/constants'
+import { GENERAL_FIND_STORE, GENERAL_FIND_STORE_TITLE } from '@components/utils/textVariables'
 
 interface FindStoreProps {
   onStoreSelected: (store: any) => void
@@ -12,16 +13,18 @@ const FindStore: React.FC<FindStoreProps> = ({ onStoreSelected }) => {
   const { setAlert } = useUI()
   const [postCode, setPostCode] = useState<any>(null)
   const [stores, setStores] = useState<any>([])
+  const [loading, setLoading] = useState<boolean>(false)
   const [selectedStore, setSelectedStore] = useState<any>(null)
 
   // Function to fetch stores based on postcode
   const fetchStores = async () => {
     try {
       if (!postCode) return
+      setLoading(true)
       const { data } = await axios.post(NEXT_STORE_LOCATOR, {
         postCode,
       })
-
+      setLoading(false)
       if(data?.length){
         setStores(data)
       } else {
@@ -57,7 +60,7 @@ const FindStore: React.FC<FindStoreProps> = ({ onStoreSelected }) => {
   return (
     <div className="flex flex-col gap-2 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
       <h5 className="font-semibold uppercase font-18 dark:text-black">
-        Find Store Near You
+        {GENERAL_FIND_STORE_TITLE}
       </h5>
       <div className="grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2">
         <input
@@ -71,7 +74,7 @@ const FindStore: React.FC<FindStoreProps> = ({ onStoreSelected }) => {
           className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4"
           onClick={fetchStores}
         >
-          Find Stores
+          {loading ? <LoadingDots /> : GENERAL_FIND_STORE}
         </button>
       </div>
       {stores?.length > 0 && (

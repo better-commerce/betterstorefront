@@ -11,6 +11,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import NextHead from 'next/head'
 import cookie from 'cookie'
+import { loqateAddress } from '@components/checkout-old/CheckoutForm'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   CURRENT_THEME,
@@ -384,13 +385,13 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
   const searchAddressByPostcode = async (postCode: string) => {
     if (!postCode) return
     try {
-      const postCodeAddressRes: any = []
-      // if (postCodeAddressRes?.length < 1) {
-      //   return setAlert({
-      //     type: AlertType.ERROR,
-      //     msg: Messages.Errors['ADDRESS_NOT_FOUND'],
-      //   })
-      // }
+      const postCodeAddressRes: any = await loqateAddress(postCode)
+      if (postCodeAddressRes?.length < 1) {
+        return setAlert({
+          type: AlertType.ERROR,
+          msg: Messages.Errors['ADDRESS_NOT_FOUND'],
+        })
+      }
       return postCodeAddressRes
     } catch (error) {
       setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR'] })

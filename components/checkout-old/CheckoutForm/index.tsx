@@ -45,7 +45,7 @@ import {
   resetSubmitData,
   submitData,
 } from '@framework/utils/app-util'
-import { matchStrings } from '@framework/utils/parse-util'
+import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 import NewAddressModal from './NewAddressModal'
 import { Guid } from '@commerce/types'
@@ -69,6 +69,27 @@ export const retrieveAddress = async (id: string) => {
     postCode: response.data.response.data[0].PostalCode,
     address1: response.data.response.data[0].Line1,
     city: response.data.response.data[0].City,
+  }
+}
+
+export const loqateAddress = async (postCode: string ) => {
+  try {
+    const cartItems: any = tryParseJson(localStorage.getItem('cartItems'));
+    const deliveryMethod = cartItems?.shippingMethods?.find((method: any) => method?.id === cartItems?.shippingMethodId);
+    const response = await axios.post(LOQATE_ADDRESS, {
+      postCode,
+      country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+    });
+
+    const responseData = response?.data?.response?.data || [];
+    return responseData?.map((item: any) => ({
+      text: item?.Text,
+      id: item?.Id,
+      description: item?.Description,
+    }));
+  } catch (error) {
+    console.error('Error:', error);
+    return [];
   }
 }
 
@@ -802,26 +823,6 @@ export default function CheckoutForm({
     )
     paymentOrderInfo.shippingAddress.id = shippingAddrId
     return paymentOrderInfo
-  }
-
-  const loqateAddress = (postCode: string = 'E1') => {
-    const handleAsync = async () => {
-      const response: any = await axios.post(LOQATE_ADDRESS, {
-        postCode,
-        country: state.deliveryMethod.twoLetterIsoCode,
-      })
-
-      if (response?.data) {
-        return response.data?.response?.data?.map((item: any) => {
-          return {
-            text: item.Text,
-            id: item.Id,
-            description: item.Description,
-          }
-        })
-      } else return []
-    }
-    return handleAsync()
   }
 
   const setPaymentIntent = (payload: boolean) =>
