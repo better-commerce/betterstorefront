@@ -292,8 +292,8 @@ export default function OrderConfirmation({ config }: any) {
     removeItem(LocalStorage.Key.ORDER_RESPONSE)
     removeItem(LocalStorage.Key.ORDER_PAYMENT)
     resetIsPaymentLink()
-    setGuestUser({})
-    setIsGuestUser(false)
+    // setGuestUser({})
+    // setIsGuestUser(false) 
     if (orderId) fetchOrder()
     if (!orderId) setIsLoading(false)
     return function cleanup() {
