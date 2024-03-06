@@ -7,6 +7,17 @@ import AppleProvider from 'next-auth/providers/apple'
 // Other Imports
 
 export const authOptions: AuthOptions = {
+  cookies: {
+    callbackUrl: {
+      name: `__Secure-next-auth.callback-url`,
+      options: {
+        httpOnly: false,
+        sameSite: "none",
+        path: "/",
+        secure: true,
+      },
+    },
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -19,6 +30,13 @@ export const authOptions: AuthOptions = {
     }),
 
     AppleProvider({
+      authorization: {
+        params: {
+          scope: "name email",
+          response_mode: "form_post",
+          response_type: "code",
+        },
+      },
       clientId: process.env.APPLE_CLIENT_ID!,
       clientSecret: process.env.APPLE_CLIENT_SECRET!,
     }),
@@ -26,5 +44,6 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: 'jwt',
   },
+  secret: 'hiFNcRU0Mw1H2SUDmNyTfqRC7PpXxq1b2GbJfiDnwWo=',
 }
 export default NextAuth(authOptions)
