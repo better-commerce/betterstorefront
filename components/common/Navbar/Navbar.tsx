@@ -607,13 +607,13 @@ const Navbar: FC<Props & IExtraProps> = ({
           </button>
 
           <Link href="/" title="BetterCommerce">
-            <div className="flex w-20 cursor-pointer xl:w-32">
+            <div className="flex w-20 cursor-pointer xl:w-20">
               <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
               <Logo />
             </div>
           </Link>
           {renderState && (
-            <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 px-6 pb-px space-x-8 overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16 mob-landscape-hidden ">
+            <Popover.Group className="absolute inset-x-0 bottom-0 hidden w-full h-16 gap-4 px-6 pb-px overflow-x-auto border-t sm:border-t-0 sm:justify-left sm:overflow-visible sm:pb-0 sm:static sm:self-stretch sm:flex sm:h-16 mob-landscape-hidden ">
               {config?.map((item: any, idx: number) => (
                 <Popover
                   key={`popover-fly-menu-${idx}`}
