@@ -248,17 +248,17 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
     })
   }
 
-  useEffect(() => {
-    router.push({
-      pathname: router.pathname,
-      query: {
-        ...router.query,
-        filters: JSON.stringify(state.filters),
-      },
-    })
+  // useEffect(() => {
+  //   router.push({
+  //     pathname: router.pathname,
+  //     query: {
+  //       ...router.query,
+  //       filters: JSON.stringify(state.filters),
+  //     },
+  //   })
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.filters])
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.filters])
 
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })
