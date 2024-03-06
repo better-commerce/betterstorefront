@@ -13,7 +13,7 @@ module.exports = withCommerceConfig({
   output: 'standalone',
   poweredByHeader: false,
   images: {
-    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net','cdnbs.bettercommerce.tech'],
+    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net', 'cdnbs.bettercommerce.tech'],
     cacheDuration: 31536000,
   },
   basePath: isProd ? 'https://cdnbs3.bettercommerce.tech' : '',
@@ -64,7 +64,37 @@ module.exports = withCommerceConfig({
     //     }
     //   }
     // }
-    return []
+    return [
+      {
+        "source": "/:path*",
+        "headers": [
+          {
+            "key": "X-Frame-Options",
+            "value": "SAMEORIGIN"
+          },
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; connect-src 'self' data: https:; frame-src 'self' data: https:; script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; style-src 'self' 'unsafe-eval' 'unsafe-inline' https:; img-src 'self' blob: data: https:; font-src 'cdnbs3.bettercommerce.tech' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; block-all-mixed-content;upgrade-insecure-requests;"
+          },
+          {
+            "key": "Strict-Transport-Security",
+            "value": "max-age=3571000; includeSubDomains; preload"
+          },
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=*, browsing-topics=()"
+          }
+        ]
+      }
+    ]
   },
   env: {
     BETTERCOMMERCE_AUTH_URL: process.env.BETTERCOMMERCE_AUTH_URL,
