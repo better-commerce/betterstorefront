@@ -153,25 +153,31 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
           <title>{pageContents?.metatitle || 'Home'}</title>
           <meta name="title" content={pageContents?.metatitle || 'Home'} />
-          {pageContents?.metadescription && ( <meta name="description" content={pageContents?.metadescription} /> )}
-          {pageContents?.metakeywords && ( <meta name="keywords" content={pageContents?.metakeywords} /> )}
+          {pageContents?.metadescription && (<meta name="description" content={pageContents?.metadescription} />)}
+          {pageContents?.metakeywords && (<meta name="keywords" content={pageContents?.metakeywords} />)}
           <meta property="og:image" content={pageContents?.image} />
-          {pageContents?.metatitle && ( <meta property="og:title" content={pageContents?.metatitle} key="ogtitle" /> )}
-          {pageContents?.metadescription && ( <meta property="og:description" content={pageContents?.metadescription} key="ogdesc" /> )}
+          {pageContents?.metatitle && (<meta property="og:title" content={pageContents?.metatitle} key="ogtitle" />)}
+          {pageContents?.metadescription && (<meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />)}
         </NextHead>
       )}
 
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <Hero deviceInfo={deviceInfo} banners={pageContents?.banner} />
       <div className="px-4 py-3 mx-auto lg:container sm:py-6 sm:px-4 md:px-4 lg:px-6 2xl:px-0">
-        {pageContents?.heading?.map((heading: any, hId: number) => (
-          <Heading title={heading?.heading_title} subTitle={heading?.heading_subtitle} key={`category-heading-${hId}`} />
-        ))}
-        <Categories data={pageContents?.categorylist} deviceInfo={deviceInfo} />
-        {pageContents?.productheading?.map((productH: any, Pid: number) => (
-          <Heading title={productH?.productheading_title} subTitle={productH?.productheading_subtitle} key={`product-heading-${Pid}`} />
-        ))}
-        <ProductSlider config={pageContents} deviceInfo={deviceInfo} />
+        <div className='w-full flex flex-col min-h-[400px]'>
+          {pageContents?.heading?.map((heading: any, hId: number) => (
+            <Heading title={heading?.heading_title} subTitle={heading?.heading_subtitle} key={`category-heading-${hId}`} />
+          ))}
+          <Categories data={pageContents?.categorylist} deviceInfo={deviceInfo} />
+        </div>
+        <div className='w-full flex flex-col min-h-[100px]'>
+          {pageContents?.productheading?.map((productH: any, Pid: number) => (
+            <Heading title={productH?.productheading_title} subTitle={productH?.productheading_subtitle} key={`product-heading-${Pid}`} />
+          ))}
+        </div>
+        <div className='w-full flex flex-col min-h-[560px]'>
+          <ProductSlider config={pageContents} deviceInfo={deviceInfo} />
+        </div>
       </div>
 
       {pageContents?.promotions?.map((banner: any, bId: number) => (

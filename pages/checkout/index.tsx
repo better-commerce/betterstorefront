@@ -10,6 +10,7 @@ import BasketDetails from '@components/checkout/BasketDetails'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import NextHead from 'next/head'
+import cookie from 'cookie'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   CURRENT_THEME,
@@ -47,6 +48,7 @@ import { decrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
 import { Logo } from '@components/ui'
 import { compact } from 'lodash'
+import { GetServerSideProps } from 'next'
 
 export enum BasketStage {
   CREATED = 0,
@@ -68,13 +70,12 @@ const steps = [
   { key: 'review', label: 'Payment', shouldActiveOn: '' },
 ]
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo }: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
   const router = useRouter()
   const uiContext = useUI()
   const {
     isGuestUser,
     user,
-    basketId,
     setAlert,
     setUser,
     setIsGuestUser,
@@ -84,7 +85,6 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo }: any) => {
   } = useUI()
   const [basket, setBasket] = useState<any>(undefined)
   const [appConfigData, setAppConfigData] = useState<any>()
-  console.log({appConfig})
   const { isMobile, isIPadorTablet } = deviceInfo
   const { getAddress, createAddress, updateAddress } = addressHandler()
   const { getCart } = cartHandler()
@@ -244,7 +244,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo }: any) => {
         }
         setUser(userObj)
         setIsGuestUser(false)
-        setIsGhostUser(false)
+        // setIsGhostUser(false)
         setOverlayLoaderState({ visible: true, message: 'Please wait...' })
 
         if (basketResult?.id && basketResult?.id !== EmptyGuid) {
@@ -974,6 +974,13 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo }: any) => {
       </div>
     </>
   )
+}
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const cookies = cookie.parse(context.req.headers.cookie || '')
+  let basketId: any = cookies?.basketId
+  return {
+    props: { basketId }
+  }
 }
 const PAGE_TYPE = PAGE_TYPES['Checkout']
 export default withDataLayer(
