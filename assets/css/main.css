@@ -1,4 +1,7 @@
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* base css start */
 :root {
   --primary: #ffffff;

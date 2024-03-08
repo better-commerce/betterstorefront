@@ -1,7 +1,6 @@
 import '@assets/css/main.css'
-import '@assets/icon.css'
-import '@assets/css/chrome-bug.css'
-import '@assets/css/checkout-frame.css'
+import "fonts/line-awesome-1.3.0/css/line-awesome.css";
+import "styles/index.scss";
 import '@assets/css/algolia-instant-search.css'
 import React, { FC, useEffect, useState } from 'react'
 import { Head } from '@components/common'
