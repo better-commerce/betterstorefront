@@ -9,11 +9,17 @@ import ButtonClose from "./shared/ButtonClose/ButtonClose";
 
 export interface ModalQuickViewProps {
   show: boolean;
+  productData: any;
+  deviceInfo?: any;
+  maxBasketItemsCount?: any;
   onCloseModalQuickView: () => void;
 }
 
 const ModalQuickView: FC<ModalQuickViewProps> = ({
   show,
+  productData,
+  deviceInfo,
+  maxBasketItemsCount,
   onCloseModalQuickView,
 }) => {
   const pathname = usePathname();
@@ -60,11 +66,7 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
                 </span>
 
                 <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                  {pathname.includes("/home-2") ? (
-                    <ProductQuickView2 />
-                  ) : (
-                    <ProductQuickView />
-                  )}
+                  <ProductQuickView product={productData} />
                 </div>
               </div>
             </div>

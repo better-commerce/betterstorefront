@@ -15,10 +15,10 @@ function renderRadioOptions(
   let remainingItems = items && items.length > 0 ? items.slice(itemsCount, items.length) : []
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="grid grid-cols-5 sm:grid-cols-7 gap-2 mt-2.5">
       {defaultItems.map((item: any, idx: any) => (
         <RadioGroup.Option key={idx} value={item.fieldValue} title={item.fieldLabel} onClick={() => { setSizeInit('false') }} style={{ backgroundColor: item.fieldValue }}
-          className={cn('pdp-color-swatch-item relative z-1 h-8 w-8 rounded-sm border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-inset-1 hover:ring-1', { 'ring-1 z-1': selectedValue === item.fieldValue, })} />
+          className={cn(' pdp-color-swatch-item relative z-1 rounded-sm border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-inset-1 hover:ring-1', { 'ring-1 z-1': selectedValue === item.fieldValue, })} />
       ))}
 
       {remainingItems.map((item: any, idx: any) => (
@@ -28,7 +28,7 @@ function renderRadioOptions(
           title={item.fieldLabel}
           style={{ backgroundColor: item.fieldValue }}
           className={cn(
-            'pdp-color-swatch-item relative z-1 h-10 w-10  border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-inset-1 hover:ring-1',
+            'relative rounded-2xl border flex items-center justify-center text-sm uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 hover:bg-primary-700 hover:text-black dark:hover:bg-neutral-700 pdp-color-swatch-item z-1 h-10 outline-none ring-gray-600 ring-inset-1 hover:ring-1',
             {
               'ring-1 z-1': selectedValue === item.fieldValue,
             }
