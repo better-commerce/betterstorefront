@@ -1,17 +1,25 @@
 "use client";
 
 import React, { createRef, FC, useState } from "react";
-import Logo from "@components/new-components/Logo/Logo";
-import MenuBar from "@components/new-components/MenuBar/MenuBar";
 import AvatarDropdown from "./AvatarDropdown";
-import Navigation from "@components/new-components/Navigation/Navigation";
 import CartDropdown from "./CartDropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import MenuBar from "../shared/MenuBar/MenuBar";
+import Navigation from "../shared/Navigation/Navigation";
+import { IExtraProps } from "@components/common/Layout/Layout";
+import { Logo } from "@components/ui";
 
-export interface MainNav2LoggedProps {}
+export interface MainNav2LoggedProps { }
+interface Props {
+  config: []
+  currencies: []
+  languages: []
+  configSettings: any
+  keywords?: any
+}
 
-const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
+const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, }) => {
   const inputRef = createRef<HTMLInputElement>();
   const [showSearchForm, setShowSearchForm] = useState(false);
   const router = useRouter();
@@ -73,30 +81,32 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
 
   const renderContent = () => {
     return (
-      <div className="flex justify-between h-20">
-        <div className="flex items-center flex-1 lg:hidden">
-          <MenuBar />
-        </div>
+      <div className="fixed top-0 left-0 z-40 flex justify-between w-full h-20 bg-white">
+        <div className="container flex justify-between mx-auto">
+          <div className="flex items-center flex-1 lg:hidden">
+            <MenuBar />
+          </div>
 
-        <div className="flex items-center lg:flex-1">
-          <Logo className="flex-shrink-0" />
-        </div>
+          <div className="flex items-center lg:flex-1">
+            <Logo className="flex-shrink-0" />
+          </div>
 
-        <div className="flex-[2] hidden lg:flex justify-center mx-4">
-          {showSearchForm ? renderSearchForm() : <Navigation />}
-        </div>
+          <div className="flex-[2] hidden lg:flex justify-center mx-4">
+            {showSearchForm ? renderSearchForm() : <Navigation navItems={config} />}
+          </div>
 
-        <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
-          {!showSearchForm && (
-            <button
-              className="items-center justify-center hidden w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
-              onClick={() => setShowSearchForm(!showSearchForm)}
-            >
-              {renderMagnifyingGlassIcon()}
-            </button>
-          )}
-          <AvatarDropdown />
-          <CartDropdown />
+          <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
+            {!showSearchForm && (
+              <button
+                className="items-center justify-center hidden w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
+                onClick={() => setShowSearchForm(!showSearchForm)}
+              >
+                {renderMagnifyingGlassIcon()}
+              </button>
+            )}
+            <AvatarDropdown />
+            <CartDropdown />
+          </div>
         </div>
       </div>
     );

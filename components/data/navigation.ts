@@ -1,5 +1,5 @@
-import { NavItemType } from "@components/new-components/Navigation/NavigationItem";
-import ncNanoId from "@/utils/ncNanoId";
+import { NavItemType } from "@components/new-components/shared/Navigation/NavigationItem";
+import ncNanoId from "@components/new-components/shared/utils/ncNanoId";
 
 export const MEGAMENU_TEMPLATES: NavItemType[] = [
   {

@@ -2,7 +2,6 @@
 
 import React, { ButtonHTMLAttributes, FC } from "react";
 import twFocusClass from "@components/new-components/shared/utils/twFocusClass";
-import { Route } from "routers/types";
 import Link from "next/link";
 
 export interface ButtonProps {
@@ -14,7 +13,7 @@ export interface ButtonProps {
   loading?: boolean;
   disabled?: boolean;
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
-  href?: Route;
+  href?: any;
   targetBlank?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;

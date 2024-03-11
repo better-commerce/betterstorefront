@@ -4,10 +4,10 @@ import { Popover, Transition } from "@headlessui/react";
 import Prices from "@components/new-components/Prices";
 import { Product, PRODUCTS } from "@components/data/data";
 import { Fragment } from "react";
-import ButtonPrimary from "./shared/Button/ButtonPrimary";
-import ButtonSecondary from "./shared/Button/ButtonSecondary";
 import Image from "next/image";
 import Link from "next/link";
+import ButtonSecondary from "../shared/Button/ButtonSecondary";
+import ButtonPrimary from "../shared/Button/ButtonPrimary";
 
 export default function CartDropdown() {
   const renderProduct = (item: Product, index: number, close: () => void) => {
@@ -21,11 +21,11 @@ export default function CartDropdown() {
             alt={name}
             className="object-contain object-center w-full h-full"
           />
-          <Link
+          {/* <Link
             onClick={close}
             className="absolute inset-0"
             href={"/product-detail"}
-          />
+          /> */}
         </div>
 
         <div className="flex flex-col flex-1 ml-4">
@@ -33,7 +33,7 @@ export default function CartDropdown() {
             <div className="flex justify-between ">
               <div>
                 <h3 className="text-base font-medium ">
-                  <Link onClick={close} href={"/product-detail"}>
+                  <Link onClick={close} href="/product-detail">
                     {name}
                   </Link>
                 </h3>
@@ -115,7 +115,7 @@ export default function CartDropdown() {
               />
             </svg>
 
-            <Link className="absolute inset-0 block md:hidden" href={"/cart"} />
+            <Link className="absolute inset-0 block md:hidden" href="/cart" />
           </Popover.Button>
           <Transition
             as={Fragment}
