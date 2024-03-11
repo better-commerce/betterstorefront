@@ -8,7 +8,9 @@ import { useRouter } from "next/navigation";
 import MenuBar from "../shared/MenuBar/MenuBar";
 import Navigation from "../shared/Navigation/Navigation";
 import { IExtraProps } from "@components/common/Layout/Layout";
-import { Logo } from "@components/ui";
+import { Logo, useUI } from "@components/ui";
+import Link from "next/link";
+import { Searchbar } from "@components/common";
 
 export interface MainNav2LoggedProps { }
 interface Props {
@@ -23,31 +25,10 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   const inputRef = createRef<HTMLInputElement>();
   const [showSearchForm, setShowSearchForm] = useState(false);
   const router = useRouter();
-
+  const { setShowSearchBar } = useUI()
   const renderMagnifyingGlassIcon = () => {
     return (
-      <svg
-        width={22}
-        height={22}
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M22 22L20 20"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <Searchbar onClick={setShowSearchBar} keywords={keywords} />
     );
   };
 
@@ -63,13 +44,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
       >
         <div className="bg-slate-50 dark:bg-slate-800 flex items-center space-x-1.5 px-5 h-full rounded">
           {renderMagnifyingGlassIcon()}
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="Type and press enter"
-            className="w-full text-base bg-transparent border-none focus:outline-none focus:ring-0"
-            autoFocus
-          />
+          <input ref={inputRef} type="text" placeholder="Type and press enter" className="w-full text-base bg-transparent border-none focus:outline-none focus:ring-0" autoFocus />
           <button type="button" onClick={() => setShowSearchForm(false)}>
             <XMarkIcon className="w-5 h-5" />
           </button>
@@ -81,29 +56,29 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
 
   const renderContent = () => {
     return (
-      <div className="fixed top-0 left-0 z-40 flex justify-between w-full h-20 bg-white">
+      <div className="fixed top-0 left-0 z-40 flex justify-between w-full h-20 bg-white border-b border-gray-200">
         <div className="container flex justify-between mx-auto">
           <div className="flex items-center flex-1 lg:hidden">
             <MenuBar />
           </div>
 
           <div className="flex items-center lg:flex-1">
-            <Logo className="flex-shrink-0" />
+            <Link href="/" passHref>
+              <Logo className="flex-shrink-0" />
+            </Link>
           </div>
 
           <div className="flex-[2] hidden lg:flex justify-center mx-4">
-            {showSearchForm ? renderSearchForm() : <Navigation navItems={config} />}
+            <Navigation navItems={config} />
           </div>
 
           <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
-            {!showSearchForm && (
-              <button
-                className="items-center justify-center hidden w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
-                onClick={() => setShowSearchForm(!showSearchForm)}
-              >
-                {renderMagnifyingGlassIcon()}
-              </button>
-            )}
+            <button
+              className="items-center justify-center hidden w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
+              //onClick={() => setShowSearchForm(!showSearchForm)}
+            >
+              {renderMagnifyingGlassIcon()}
+            </button>
             <AvatarDropdown />
             <CartDropdown />
           </div>

@@ -16,6 +16,7 @@ import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
 import LoginSidebarView from '@components/account/Login/LoginSideBarView'
 import MainNav2Logged from '@components/new-components/Header/MainNav2Logged'
 import FooterClean from '../Footer/FooterClean'
+import { CookieBanner } from '@schlomoh/react-cookieconsent'
 const ShippingView = dynamic(() => import('@components/checkout-old/ShippingView'))
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
 const PaymentMethodView = dynamic(() => import('@components/checkout-old/PaymentMethodView'))
@@ -201,7 +202,7 @@ const Layout: FC<Props & IExtraProps> = ({
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
-        <div className={`text-base bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
+        <div className={`text-base pt-20 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
           <MainNav2Logged
             onIncludeVATChanged={includeVATChanged}
             currencies={config?.currencies}
@@ -214,6 +215,24 @@ const Layout: FC<Props & IExtraProps> = ({
           />
           {children}
           <FooterClean />
+          <ModalUI />
+          <SidebarUI
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount}
+            config={config}
+          />
+          <div className="cookie-bannner">
+            <CookieBanner
+              enableManagement
+              managementButtonText="Manage Cookies"
+              headingColor="white"
+              managementContent={<Content />}
+              cookieCategories={['analytics', 'advertisement']}
+              infoContent={<Content />}
+              primaryButtonStyle={primaryButtonStyle}
+              secondaryButtonStyle={secondaryButtonStyle}
+            />
+          </div>
         </div>
       </CommerceProvider>
     </>
