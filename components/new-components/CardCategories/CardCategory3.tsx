@@ -52,6 +52,7 @@ const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name,
                 sizeClass="py-3 px-4 sm:py-3.5 sm:px-6"
                 fontSize="text-sm font-medium"
                 className="nc-shadow-lg"
+                href={"/"}
               >
                 Show me all
               </ButtonSecondary>

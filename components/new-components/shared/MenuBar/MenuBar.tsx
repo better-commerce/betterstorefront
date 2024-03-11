@@ -2,7 +2,7 @@
 
 import React, { useState, Fragment } from "react";
 import { Transition, Dialog } from "@headlessui/react";
-import NavMobile from "@components/new-components/Navigation/NavMobile";
+import NavMobile from "../Navigation/NavMobile";
 
 export interface MenuBarProps {}
 const MenuBar: React.FC<MenuBarProps> = () => {

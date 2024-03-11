@@ -1,5 +1,5 @@
+import { useThemeMode } from "hooks/useThemeMode";
 import React from "react";
-import { useThemeMode } from "@/hooks/useThemeMode";
 
 export interface SwitchDarkModeProps {
   className?: string;

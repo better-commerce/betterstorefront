@@ -3,9 +3,9 @@
 import { Popover, Transition } from "@headlessui/react";
 import { avatarImgs } from "@components/common/Header/fakeData";
 import { Fragment } from "react";
-import Avatar from "@components/new-components/Avatar/Avatar";
-import SwitchDarkMode2 from "@components/new-components/SwitchDarkMode/SwitchDarkMode2";
 import Link from "next/link";
+import Avatar from "../shared/Avatar/Avatar";
+import SwitchDarkMode2 from "../shared/SwitchDarkMode/SwitchDarkMode2";
 
 export default function AvatarDropdown() {
   return (
@@ -17,7 +17,7 @@ export default function AvatarDropdown() {
               className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`}
             >
               <svg
-                className=" w-6 h-6"
+                className="w-6 h-6 "
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -48,8 +48,8 @@ export default function AvatarDropdown() {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 mt-3.5 -right-10 sm:right-0 sm:px-0">
-                <div className="overflow-hidden rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
-                  <div className="relative grid grid-cols-1 gap-6 bg-white dark:bg-neutral-800 py-7 px-6">
+                <div className="overflow-hidden shadow-lg rounded-3xl ring-1 ring-black ring-opacity-5">
+                  <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-neutral-800 py-7">
                     <div className="flex items-center space-x-3">
                       <Avatar imgUrl={avatarImgs[7]} sizeClass="w-12 h-12" />
 
