@@ -1,55 +1,35 @@
-// Base Imports
 import { useEffect, useState } from 'react'
-
-// Package Imports
-import os from 'os'
-import type { GetStaticPropsContext } from 'next'
+import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
-
-// Component Imports
+import os from 'os'
+import type { GetStaticPropsContext } from 'next'
 import { Layout } from '@components/common'
-
-// Other Imports
 import commerce from '@lib/api/commerce'
-import { Hero } from '@components/ui'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_DEFAULT_SLUG, HOME_PAGE_NEW_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { useRouter } from 'next/router'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
-import { PRODUCTS, SPORT_PRODUCTS } from '@components/data/data'
-import SectionHero2 from '@components/new-components/SectionHero/SectionHero2'
-import DiscoverMoreSlider from '@components/new-components/DiscoverMoreSlider'
-import SectionSliderProductCard from '@components/new-components/SectionSliderProductCard'
-import SectionHowItWork from '@components/new-components/SectionHowItWork/SectionHowItWork'
-import SectionPromo1 from '@components/new-components/SectionPromo1'
-import BackgroundSection from '@components/new-components/BackgroundSection/BackgroundSection'
-import SectionGridMoreExplore from '@components/new-components/SectionGridMoreExplore/SectionGridMoreExplore'
-import SectionPromo2 from '@components/new-components/SectionPromo2'
-import SectionSliderLargeProduct from '@components/new-components/SectionSliderLargeProduct'
-import SectionSliderCategories from '@components/new-components/SectionSliderCategories/SectionSliderCategories'
-import SectionPromo3 from '@components/new-components/SectionPromo3'
-import SectionGridFeatureItems from '@components/new-components/SectionGridFeatureItems'
-import SectionClientSay from '@components/new-components/SectionClientSay/SectionClientSay'
-const PromotionBanner = dynamic(() => import('@components/home/PromotionBanner'))
-const Heading = dynamic(() => import('@components/home/Heading'))
-const Categories = dynamic(() => import('@components/home/Categories'))
-const Collections = dynamic(() => import('@components/home/Collections'))
-const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
+const SectionHero2 = dynamic(() => import('@components/new-components/SectionHero/SectionHero2'))
+const DiscoverMoreSlider = dynamic(() => import('@components/new-components/DiscoverMoreSlider'))
+const SectionSliderProductCard = dynamic(() => import('@components/new-components/SectionSliderProductCard'))
+const SectionHowItWork = dynamic(() => import('@components/new-components/SectionHowItWork/SectionHowItWork'))
+const BackgroundSection = dynamic(() => import('@components/new-components/BackgroundSection/BackgroundSection'))
+const SectionSliderLargeProduct = dynamic(() => import('@components/new-components/SectionSliderLargeProduct'))
+const SectionSliderCategories = dynamic(() => import('@components/new-components/SectionSliderCategories/SectionSliderCategories'))
+const SectionPromo3 = dynamic(() => import('@components/new-components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
   const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
   const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
   const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
-
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
@@ -152,14 +132,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     entityId: '',
     eventType: 'PageViewed',
   })
-  const css = { maxWidth: '100%', minHeight: '350px' }
 
   if (!pageContents) {
     return (
       <div className="flex w-full text-center flex-con"> <Loader /> </div>
     )
   }
-
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -178,11 +156,9 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome">
         <SectionHero2 data={pageContents?.banner} />
-
         <div className="mt-24 lg:mt-32">
           <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
         </div>
-
         <div className="container relative my-24 space-y-24 lg:space-y-32 lg:my-32">
           <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} />
           <div className="relative py-16 lg:py-20">
@@ -190,14 +166,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
           </div>
           <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
-
           <div className="py-24 border-y lg:py-32 border-slate-200 dark:border-slate-700">
             <SectionHowItWork data={pageContents?.features} />
           </div>
           <SectionPromo3 data={pageContents?.subscription} />
         </div>
       </div>
-
     </>
   )
 }

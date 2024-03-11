@@ -17,6 +17,7 @@ import LoginSidebarView from '@components/account/Login/LoginSideBarView'
 import MainNav2Logged from '@components/new-components/Header/MainNav2Logged'
 import FooterClean from '../Footer/FooterClean'
 import { CookieBanner } from '@schlomoh/react-cookieconsent'
+import AlertRibbon from '@components/ui/AlertRibbon'
 const ShippingView = dynamic(() => import('@components/checkout-old/ShippingView'))
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
 const PaymentMethodView = dynamic(() => import('@components/checkout-old/PaymentMethodView'))
@@ -213,6 +214,7 @@ const Layout: FC<Props & IExtraProps> = ({
             maxBasketItemsCount={maxBasketItemsCount}
             keywords={keywords}
           />
+          {displayAlert && <AlertRibbon />}
           {children}
           <FooterClean />
           <ModalUI />
