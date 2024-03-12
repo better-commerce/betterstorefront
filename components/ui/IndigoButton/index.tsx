@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { FC } from 'react'
 import { useUI } from '@components/ui/context'
 import { LoadingDots } from '@components/ui'
+import BagIcon from '@components/new-components/BagIcon'
 interface Props {
   className?: string
   title?: string
@@ -75,10 +76,10 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
     <button
       onClick={handleAction}
       type="button"
-      className={`xs:max-w-xs flex-1 ${bgColor} border border-transparent flex items-center justify-center hover:${hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:${focusRingColor} w-full ${className} btn btn-c btn-primary`}
+      className={`${bgColor} hover:${hoverBgColor} focus:${focusRingColor} ${className} nc-Button gap-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-white font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0`}
       disabled={isLoading || disabled}
     >
-      {isLoading ? <LoadingDots /> : title}
+       <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5" /> {isLoading ? <LoadingDots /> : <span>{title}</span>}
     </button>
   )
 }
