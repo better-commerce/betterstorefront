@@ -26,6 +26,7 @@ import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import axios from "axios";
 import { generateUri } from "@commerce/utils/uri-util";
+import ProductTag from "@components/product/ProductTag";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 export interface ProductCardProps {
   className?: string;
@@ -192,7 +193,8 @@ const ProductCard: FC<ProductCardProps> = ({
       </div>
     );
   };
-
+  const CLASSES =
+    "absolute top-3 start-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
   return (
     <>
       <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6 ${className}`} >
@@ -207,7 +209,9 @@ const ProductCard: FC<ProductCardProps> = ({
               alt="product"
             />
           </Link>
-          <ProductStatus status={data?.newLaunch} />
+          <div className={CLASSES}>
+            <ProductTag product={data} />
+          </div>
           <LikeButton liked={isInWishList} className="absolute z-0 top-3 end-3" handleWishList={handleWishList} />
           {renderGroupButtons()}
         </div>

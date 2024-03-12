@@ -20,14 +20,14 @@ const OutOfStockFilter: React.FC<OutOfStockFilterProps> = ({
         checked={!excludeOOSProduct}
         onChange={onEnableOutOfStockItems}
         className={`${
-          excludeOOSProduct ? 'bg-gray-300' : 'bg-emerald-600'
-        } relative mt-3 mr-3 inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+          excludeOOSProduct ? 'bg-gray-300' : 'bg-green'
+        } relative mt-3 mr-3 inline-flex h-[18px] w-[35px] shrink-0 border-black cursor-pointer rounded-full border transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
       >
         <span
           aria-hidden="false"
           className={`${
             excludeOOSProduct ? 'translate-x-0' : 'translate-x-4'
-          } pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+          } pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`}
         />
       </Switch>
     </>
