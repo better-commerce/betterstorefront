@@ -57,23 +57,23 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
         </div>
       </div>
 
-      <div className="relative mt-5 flex justify-between">
+      <div className="relative flex justify-between mt-5">
         {/* TITLE */}
         <div className="flex-1">
-          <h2 className="font-semibold text-lg sm:text-xl ">{name}</h2>
+          <h2 className="text-lg font-semibold sm:text-xl ">{name}</h2>
           {/* AUTHOR */}
-          <div className="mt-3 flex items-center text-slate-500 dark:text-slate-400">
+          <div className="flex items-center mt-3 text-slate-500 dark:text-slate-400">
             <span className="text-sm ">
               <span className="line-clamp-1">{description}</span>
             </span>
-            <span className="h-5 mx-1 sm:mx-2 border-l border-slate-200 dark:border-slate-700"></span>
+            <span className="h-5 mx-1 border-l sm:mx-2 border-slate-200 dark:border-slate-700"></span>
             <StarIcon className="w-4 h-4 text-orange-400" />
-            <span className="text-sm ml-1 ">
+            <span className="ml-1 text-sm ">
               <span className="line-clamp-1">4.9 (269 reviews)</span>
             </span>
           </div>
         </div>
-        <Prices className="mt-0.5 sm:mt-1 ml-4" price={price} />
+        <Prices className="mt-0.5 sm:mt-1 ml-4" listPrice={price} price={price} />
       </div>
       <Link href={"/product-detail-2"} className="absolute inset-0 "></Link>
     </div>
