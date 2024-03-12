@@ -347,20 +347,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     (item: any) => item?.stockCode === ITEM_TYPE_ADDON
   ).length
   const buttonConfig = buttonTitle()
-  const notifyAddTocart = () => {
-    toast.custom(
-      (t) => (
-        <NotifyAddTocart
-          productImage={LIST_IMAGES_DEMO[0]}
-          qualitySelected={qualitySelected}
-          show={t.visible}
-          sizeSelected={sizeSelected}
-          variantActive={variantActive}
-        />
-      ),
-      { position: "top-right", id: "nc-product-notify", duration: 3000 }
-    );
-  };
+
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     openWishlist()
