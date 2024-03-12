@@ -152,7 +152,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
   const renderGroupButtons = () => {
     return (
-      <div className="absolute bottom-0 flex justify-center invisible transition-all opacity-0 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
+      <div className="absolute bottom-0 grid justify-center invisible grid-cols-2 transition-all opacity-0 sm:px-4 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
         <Button size="small" className="hidden sm:block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
         <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
           <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
@@ -161,7 +161,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       </div>
     );
   };
-  const CLASSES = "absolute top-3 start-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
+  const CLASSES = "absolute top-3 start-3";
   return (
     <>
       <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6 ${className}`} >
