@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import LikeButton from "./LikeButton";
 import Prices from "./Prices";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
@@ -20,10 +20,11 @@ import { useUI } from "@components/ui";
 import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
 import dynamic from "next/dynamic";
 import { matchStrings } from "@framework/utils/parse-util";
-import { Messages } from "@components/utils/constants";
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
+import axios from "axios";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 export interface ProductCardProps {
   className?: string;
@@ -42,16 +43,80 @@ const ProductCard: FC<ProductCardProps> = ({
 }) => {
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
-  const { openNotifyUser, basketId, cartItems, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
-  const { isInWishList, deleteWishlistItem } = wishlistHandler()
+  const { openNotifyUser, basketId, cartItems, isGuestUser, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist, wishListItems, openLoginSideBar } = useUI()
+  const [isInWishList, setIsInWishList] = useState(false)
+  const { deleteWishlistItem } = wishlistHandler()
   const [quantity, setQuantity] = useState(1)
   const router = useRouter();
-  const handleQuickViewData = (data: any) => {
+  
+const handleQuickViewData = (data: any) => {
     setShowModalQuickView(true);
     setQuickViewData(data)
   }
+
   const handleNotification = () => {
     openNotifyUser(data.recordId)
+  }
+
+  useEffect(() => {
+    if (wishListItems?.some((x: any) => x?.stockCode === data?.stockCode)) {
+      setIsInWishList(true)
+    } else {
+      setIsInWishList(false)
+    }
+  }, [])
+
+  const insertToLocalWishlist = () => {
+    if (isInWishList) {
+      removeFromWishlist(data?.recordId)
+      setIsInWishList(false)
+      openWishlist()
+    }
+    else {
+      addToWishlist(data)
+      setIsInWishList(true)
+      openWishlist()
+    }
+  }
+
+  const handleWishList = async () => {
+    if (isInWishList) {
+      deleteWishlistItem(user?.userId, data?.recordId)
+      removeFromWishlist(data?.recordId)
+      openWishlist()
+      return
+    }
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
+      //  setAlert({ type: 'success', msg:" Please Login "})
+      openLoginSideBar()
+      return
+    }
+    if (objUser) {
+      const createWishlist = async () => {
+        try {
+          if (isInWishList) {
+            await axios.post(NEXT_REMOVE_WISHLIST, {
+              id: user?.userId,
+              productId: data?.recordId,
+              flag: true,
+            })
+            insertToLocalWishlist()
+          }
+          else {
+            await axios.post(NEXT_CREATE_WISHLIST, {
+              id: user?.userId,
+              productId: data?.recordId,
+              flag: true,
+            })
+            insertToLocalWishlist()
+          }
+        } catch (error) {
+          console.log(error, 'error')
+        }
+      }
+      createWishlist()
+    } else insertToLocalWishlist()
   }
 
   const buttonTitle = () => {
@@ -142,7 +207,7 @@ const ProductCard: FC<ProductCardProps> = ({
             />
           </Link>
           <ProductStatus status={data?.newLaunch} />
-          <LikeButton liked={isLiked} className="absolute z-10 top-3 end-3" />
+          <LikeButton liked={isInWishList} className="absolute z-10 top-3 end-3" handleWishList={handleWishList} />
           {renderGroupButtons()}
         </div>
 
