@@ -66,7 +66,7 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
                 </span>
 
                 <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                  <ProductQuickView product={productData} />
+                  <ProductQuickView product={productData} onCloseModalQuickView={onCloseModalQuickView} />
                 </div>
               </div>
             </div>
