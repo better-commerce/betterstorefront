@@ -60,6 +60,7 @@ interface Props {
   isLocationLoaded: boolean
   config: any
   keywords: []
+  pluginConfig: []
 }
 
 const ModalView: FC<
@@ -82,12 +83,13 @@ const SidebarView: FC<
   React.PropsWithChildren<
     { sidebarView: string; closeSidebar(): any } & IExtraProps
   >
-> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount, config }) => {
+> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount, config, pluginConfig = [] }) => {
   return (
     <Sidebar
       onClose={closeSidebar}
       deviceInfo={deviceInfo}
       maxBasketItemsCount={maxBasketItemsCount}
+      pluginConfig={pluginConfig}
     >
       {sidebarView === 'CART_VIEW' && (
         <CartSidebarView
@@ -96,7 +98,7 @@ const SidebarView: FC<
           config={config}
         />
       )}
-      {sidebarView === 'LOGIN_SIDEBAR_VIEW' && <LoginSidebarView />}
+      {sidebarView === 'LOGIN_SIDEBAR_VIEW' && <LoginSidebarView pluginConfig={pluginConfig} />}
       {sidebarView === 'BULK_ADD_VIEW' && <BulkAddSidebarView />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
@@ -110,6 +112,7 @@ const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
   deviceInfo,
   maxBasketItemsCount,
   config,
+  pluginConfig
 }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
@@ -119,6 +122,7 @@ const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
       deviceInfo={deviceInfo}
       maxBasketItemsCount={maxBasketItemsCount}
       config={config}
+      pluginConfig={pluginConfig}
     />
   ) : null
 }
@@ -135,12 +139,14 @@ export interface IExtraProps {
   onIncludeVATChanged?: any
   keywords?: any
   config?: any
+  pluginConfig?: any
 }
 
 const ProductLayout: FC<Props & IExtraProps> = ({
   children,
   config,
   pageProps: { categories = [], navTree, reviewData = {}, ...pageProps },
+  pluginConfig = [],
   keywords,
   isLocationLoaded,
   deviceInfo,
@@ -269,6 +275,7 @@ const ProductLayout: FC<Props & IExtraProps> = ({
             currencies={config?.currencies}
             config={sortedData}
             configSettings={config?.configSettings}
+            pluginConfig={pluginConfig} 
             languages={config?.languages}
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount}
@@ -288,6 +295,7 @@ const ProductLayout: FC<Props & IExtraProps> = ({
             deviceInfo={deviceInfo}
             maxBasketItemsCount={maxBasketItemsCount}
             config={config}
+            pluginConfig={pluginConfig}
           />
           <div className="cookie-bannner">
             <CookieBanner

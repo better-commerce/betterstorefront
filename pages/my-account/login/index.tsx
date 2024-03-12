@@ -9,7 +9,7 @@ import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
 import { decrypt } from '@framework/utils/cipher'
 import { matchStrings } from '@framework/utils/parse-util'
-function LoginPage({appConfig, pluginConfig}: any) {
+function LoginPage({appConfig, pluginConfig = []}: any) {
   const  router  = useRouter()
   let b2bSettings: any = []
   let pluginSettings: any = []
@@ -59,7 +59,7 @@ function LoginPage({appConfig, pluginConfig}: any) {
           key="ogdesc"
         />
       </NextHead>
-    <Login />
+    <Login pluginConfig={pluginConfig}/>
     </>
     )
       
