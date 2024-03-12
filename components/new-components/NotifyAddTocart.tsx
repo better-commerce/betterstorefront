@@ -48,7 +48,7 @@ const NotifyAddTocart: FC<Props> = ({
                   <span>{sizeSelected || "XL"}</span>
                 </p>
               </div>
-              <Prices price={price} className="mt-0.5" />
+              <Prices price={price} listPrice={price} className="mt-0.5" />
             </div>
           </div>
           <div className="flex items-end justify-between flex-1 text-sm">

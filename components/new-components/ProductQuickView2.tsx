@@ -101,7 +101,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
     }
     return (
       <div>
-        <div className="flex justify-between font-medium text-sm">
+        <div className="flex justify-between text-sm font-medium">
           <label htmlFor="">
             <span className="">
               Size:
@@ -117,7 +117,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
             See sizing chart
           </a>
         </div>
-        <div className="grid grid-cols-5 sm:grid-cols-7 gap-2 mt-3">
+        <div className="grid grid-cols-5 gap-2 mt-3 sm:grid-cols-7">
           {allOfSizes.map((size, index) => {
             const isActive = size === sizeSelected;
             const sizeOutStock = !sizes.includes(size);
@@ -196,7 +196,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
       <div className="space-y-8">
         {/* ---------- 1 HEADING ----------  */}
         <div>
-          <h2 className="text-2xl 2xl:text-3xl font-semibold">
+          <h2 className="text-2xl font-semibold 2xl:text-3xl">
             <Link href="/product-detail">Heavy Weight Shoes</Link>
           </h2>
 
@@ -205,6 +205,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
             <Prices
               contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold"
               price={112}
+              listPrice={122}
             />
 
             <div className="h-6 border-l border-slate-300 dark:border-slate-700"></div>
@@ -218,13 +219,13 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
                 <div className="ml-1.5 flex">
                   <span>4.9</span>
                   <span className="block mx-2">·</span>
-                  <span className="text-slate-600 dark:text-slate-400 underline">
+                  <span className="underline text-slate-600 dark:text-slate-400">
                     142 reviews
                   </span>
                 </div>
               </a>
               <span className="hidden sm:block mx-2.5">·</span>
-              <div className="hidden sm:flex items-center text-sm">
+              <div className="items-center hidden text-sm sm:flex">
                 <SparklesIcon className="w-3.5 h-3.5" />
                 <span className="ml-1 leading-none">{status}</span>
               </div>
@@ -259,7 +260,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
 
         <div className="text-center">
           <Link
-            className="text-primary-6000 hover:text-primary-500 font-medium"
+            className="font-medium text-primary-6000 hover:text-primary-500"
             href="/product-detail"
           >
             View full details
@@ -282,7 +283,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={LIST_IMAGES_DEMO[0]}
-                className="w-full rounded-xl object-cover"
+                className="object-cover w-full rounded-xl"
                 alt="product detail 1"
               />
             </div>

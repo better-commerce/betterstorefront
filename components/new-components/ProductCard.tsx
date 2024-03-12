@@ -250,7 +250,7 @@ const ProductCard: FC<ProductCardProps> = ({
             <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
           </div>
           <div className="flex items-end justify-between ">
-            <Prices price={data?.price?.formatted?.withTax} listPrice={data?.listPrice?.formatted?.withTax} />
+            <Prices price={data?.price} listPrice={data?.listPrice} />
             <div className="flex items-center mb-0.5">
               <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
               <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">

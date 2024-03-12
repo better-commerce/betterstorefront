@@ -28,7 +28,7 @@ import AttributesHandler from "@components/product/ProductView/AttributesHandler
 import axios from "axios";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@components/utils/constants";
 import ProductTag from "@components/product/ProductTag";
-import { useUI } from "@components/ui";
+import { LoadingDots, useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import { cartItemsValidateAddToCart, getCurrentPage } from "@framework/utils/app-util";
 import { matchStrings, stringFormat } from "@framework/utils/parse-util";
@@ -441,7 +441,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   const renderVariants = () => {
     return (
       <div>
-        {quickViewData &&
+        {quickViewData ?
           <AttributesHandler
             product={quickViewData}
             variant={selectedAttrData}
@@ -452,6 +452,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             isQuickView={true}
             sizeInit={sizeInit}
             setSizeInit={setSizeInit} />
+          : <LoadingDots />
         }
       </div>
     );
@@ -474,18 +475,13 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   const renderSectionContent = () => {
     return (
       <div className="space-y-8">
-        {/* ---------- 1 HEADING ----------  */}
         <div>
           <h2 className="text-2xl font-semibold transition-colors hover:text-primary-6000">
             <Link href={product?.slug}>{product?.name}</Link>
           </h2>
-
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-            {/* <div className="flex text-xl font-semibold">$112.00</div> */}
-            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price?.formatted?.withTax} />
-
+            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} />
             <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
-
             <div className="flex items-center">
               <Link href={product?.slug} className="flex items-center text-sm font-medium" >
                 <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
@@ -501,10 +497,8 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           </div>
         </div>
 
-        {/* ---------- 3 VARIANTS AND SIZE LIST ----------  */}
         <div className="">{renderVariants()}</div>
 
-        {/*  ---------- 4  QTY AND ADD TO CART BUTTON */}
         <div className="flex rtl:space-x-reverse">
           {!isEngravingAvailable && (
             <div className="flex mt-6 sm:mt-4 !text-sm w-full">
@@ -536,58 +530,39 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
-                  <span className="sr-only">
-                    {BTN_ADD_TO_FAVORITES}
-                  </span>
+                  <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
                 </button>
               </div>
             </>
           )}
         </div>
-
-        {/*  */}
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {/*  */}
-
-        {/* ---------- 5 ----------  */}
-        <AccordionInfo data={[{ name: "Description", content: quickViewData?.description }]} />
+        {quickViewData ? <AccordionInfo data={[{ name: "Description", content: quickViewData?.description }]} /> : <LoadingDots />}
       </div>
     );
   };
 
   return (
     <div className={`nc-ProductQuickView ${className}`}>
-      {/* MAIn */}
       <div className="lg:flex">
-        {/* CONTENT */}
         <div className="w-full lg:w-[50%] ">
-          {/* HEADING */}
           <div className="relative">
             <div className="aspect-w-16 aspect-h-16">
               <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-xl" alt={product?.name} />
             </div>
-
-            {/* STATUS */}
             {renderStatus()}
-            {/* META FAVORITES */}
             <LikeButton className="absolute end-3 top-3 " />
           </div>
           <div className="hidden grid-cols-2 gap-3 mt-3 lg:grid sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
             {product?.images?.slice(0, 2).map((item: any, index: number) => {
               return (
                 <div key={index} className="aspect-w-3 aspect-h-4">
-                  <img
-                    src={generateUri(item?.url, 'h=400&fm=webp') || IMG_PLACEHOLDER}
-                    className="object-cover w-full rounded-xl"
-                    alt={product?.name}
-                  />
+                  <img src={generateUri(item?.url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-xl" alt={product?.name} />
                 </div>
               );
             })}
           </div>
         </div>
-
-        {/* SIDEBAR */}
         <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8">
           {renderSectionContent()}
         </div>
