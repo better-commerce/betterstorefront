@@ -16,7 +16,15 @@ import Link from "next/link";
 import NcImage from "./shared/NcImage/NcImage";
 import ButtonSecondary from "./shared/Button/ButtonSecondary";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
-
+import { useUI } from "@components/ui";
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
+import dynamic from "next/dynamic";
+import { matchStrings } from "@framework/utils/parse-util";
+import { Messages } from "@components/utils/constants";
+import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
+import cartHandler from "@components/services/cart";
+import wishlistHandler from "@components/services/wishlist";
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
 export interface ProductCardProps {
   className?: string;
   data?: any;
@@ -34,162 +42,78 @@ const ProductCard: FC<ProductCardProps> = ({
 }) => {
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
+  const { openNotifyUser, basketId, cartItems, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
+  const { isInWishList, deleteWishlistItem } = wishlistHandler()
+  const [quantity, setQuantity] = useState(1)
   const router = useRouter();
   const handleQuickViewData = (data: any) => {
     setShowModalQuickView(true);
     setQuickViewData(data)
   }
-  const notifyAddTocart = ({ size }: { size?: string }) => {
-    toast.custom(
-      (t) => (
-        <Transition appear show={t.visible} className="w-full max-w-md p-4 bg-white shadow-lg pointer-events-auto dark:bg-slate-800 rounded-2xl ring-1 ring-black/5 dark:ring-white/10 text-slate-900 dark:text-slate-200" enter="transition-all duration-150" enterFrom="opacity-0 translate-x-20" enterTo="opacity-100 translate-x-0" leave="transition-all duration-150" leaveFrom="opacity-100 translate-x-0" leaveTo="opacity-0 translate-x-20" >
-          <p className="block text-base font-semibold leading-none">
-            Added to cart!
-          </p>
-          <div className="my-4 border-t border-slate-200 dark:border-slate-700" />
-          {renderProductCartOnNotify({ size })}
-        </Transition>
-      ),
-      {
-        position: "top-right",
-        id: String(data?.recordId) || "product-detail",
-        duration: 3000,
-      }
-    );
-  };
+  const handleNotification = () => {
+    openNotifyUser(data.recordId)
+  }
 
-  const renderProductCartOnNotify = ({ size }: { size?: string }) => {
-    return (
-      <div className="flex ">
-        <div className="flex-shrink-0 w-20 h-24 overflow-hidden rounded-xl bg-slate-100">
-          <Image width={80} height={96} src={data?.image} alt={data?.name} className="absolute object-cover object-center" />
-        </div>
+  const buttonTitle = () => {
+    let buttonConfig: any = {
+      title: GENERAL_ADD_TO_BASKET,
+      validateAction: async () => {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+          if (matchStrings(o.productId, data?.recordId, true) || matchStrings(o.productId, data?.productId, true)) {
+            return o
+          }
+        })
+        if (data?.currentStock === cartLineItem?.qty && !data?.fulfilFromSupplier && !data?.flags?.sellWithoutInventory) {
+          setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'], })
+          return false
+        }
+        const isValid = cartItemsValidateAddToCart(
+          // product?.recordId ?? product?.productId,
+          cartItems,
+          maxBasketItemsCount,
+          quantity > 1 && quantity
+        )
+        if (!isValid) {
+          setAlert({
+            type: 'error',
+            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+          })
+        }
+        return isValid
+      },
+      action: async () => {
+        const item = await cartHandler()?.addToCart(
+          {
+            basketId,
+            productId: data?.recordId,
+            qty: quantity,
+            manualUnitPrice: data?.price?.raw?.withoutTax,
+            stockCode: data?.stockCode,
+            userId: user?.userId,
+            isAssociated: user?.isAssociated,
+          },
+          'ADD',
+          { data }
+        )
+        setCartItems(item)
+      },
+      shortMessage: '',
+    }
+    if (!data?.currentStock && data?.preOrder?.isEnabled) {
+      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.isPreOrderEnabled = true
+      buttonConfig.buttonType = 'button'
+      buttonConfig.shortMessage = data?.preOrder?.shortMessage
+    }
+    return buttonConfig
+  }
 
-        <div className="flex flex-col flex-1 ms-4">
-          <div>
-            <div className="flex justify-between ">
-              <h3 className="text-base font-medium ">{data?.name}</h3>
-              <Prices price={data?.price} listPrice={data?.listPrice} className="mt-0.5" />
-            </div>
-          </div>
-          <div className="flex items-end justify-between flex-1 text-sm">
-            <p className="text-gray-500 dark:text-slate-400">Qty 1</p>
-            <div className="flex">
-              <button
-                type="button"
-                className="font-medium text-primary-6000 dark:text-primary-500 "
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.push("/cart");
-                }}
-              >
-                View cart
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const getBorderClass = (Bgclass = "") => {
-    if (Bgclass.includes("red")) {
-      return "border-red-500";
-    }
-    if (Bgclass.includes("violet")) {
-      return "border-violet-500";
-    }
-    if (Bgclass.includes("orange")) {
-      return "border-orange-500";
-    }
-    if (Bgclass.includes("green")) {
-      return "border-green-500";
-    }
-    if (Bgclass.includes("blue")) {
-      return "border-blue-500";
-    }
-    if (Bgclass.includes("sky")) {
-      return "border-sky-500";
-    }
-    if (Bgclass.includes("yellow")) {
-      return "border-yellow-500";
-    }
-    return "border-transparent";
-  };
-
-  // const renderVariants = () => {
-  //   if (!variants || !variants.length || !variantType) {
-  //     return null;
-  //   }
-
-  //   if (variantType === "color") {
-  //     return (
-  //       <div className="flex space-x-1">
-  //         {variants.map((variant:any, index:number) => (
-  //           <div
-  //             key={index}
-  //             onClick={() => setVariantActive(index)}
-  //             className={`relative w-6 h-6 rounded-full overflow-hidden z-10 border cursor-pointer ${
-  //               variantActive === index
-  //                 ? getBorderClass(variant.color)
-  //                 : "border-transparent"
-  //             }`}
-  //             title={variant.name}
-  //           >
-  //             <div
-  //               className={`absolute inset-0.5 rounded-full z-0 ${variant.color}`}
-  //             ></div>
-  //           </div>
-  //         ))}
-  //       </div>
-  //     );
-  //   }
-
-  //   return (
-  //     <div className="flex ">
-  //       {variants.map((variant:any, index:number) => (
-  //         <div
-  //           key={index}
-  //           onClick={() => setVariantActive(index)}
-  //           className={`relative w-11 h-6 rounded-full overflow-hidden z-10 border cursor-pointer ${
-  //             variantActive === index
-  //               ? "border-black dark:border-slate-300"
-  //               : "border-transparent"
-  //           }`}
-  //           title={variant.name}
-  //         >
-  //           <div
-  //             className="absolute inset-0.5 rounded-full overflow-hidden z-0 bg-cover"
-  //             style={{
-  //               backgroundImage: `url(${
-  //                 // @ts-ignore
-  //                 typeof variant.thumbnail?.src === "string"
-  //                   ? // @ts-ignore
-  //                     variant.thumbnail?.src
-  //                   : typeof variant.thumbnail === "string"
-  //                   ? variant.thumbnail
-  //                   : ""
-  //               })`,
-  //             }}
-  //           ></div>
-  //         </div>
-  //       ))}
-  //     </div>
-  //   );
-  // };
+  const buttonConfig = buttonTitle()
 
   const renderGroupButtons = () => {
     return (
       <div className="absolute bottom-0 flex justify-center invisible transition-all opacity-0 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
-        <ButtonPrimary
-          className="shadow-lg"
-          fontSize="text-xs"
-          sizeClass="py-2 px-4"
-          onClick={() => notifyAddTocart({ size: "XL" })}
-        >
-          <BagIcon className="w-3.5 h-3.5 mb-0.5" />
-          <span className="ms-1">Add to bag</span>
-        </ButtonPrimary>
+        <Button size="small" className="hidden sm:block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
         <ButtonSecondary
           className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg"
           fontSize="text-xs"
@@ -202,28 +126,6 @@ const ProductCard: FC<ProductCardProps> = ({
       </div>
     );
   };
-
-  // const renderSizeList = () => {
-  //   if (!sizes || !sizes.length) {
-  //     return null;
-  //   }
-
-  //   return (
-  //     <div className="absolute bottom-0 inset-x-1 space-x-1.5 rtl:space-x-reverse flex justify-center opacity-0 invisible group-hover:bottom-4 group-hover:opacity-100 group-hover:visible transition-all">
-  //       {sizes.map((size:any, index:number) => {
-  //         return (
-  //           <div
-  //             key={index}
-  //             className="flex items-center justify-center w-10 h-10 text-sm font-semibold tracking-tight uppercase transition-colors bg-white cursor-pointer nc-shadow-lg rounded-xl hover:bg-slate-900 hover:text-white text-slate-900"
-  //             onClick={() => notifyAddTocart({ size })}
-  //           >
-  //             {size}
-  //           </div>
-  //         );
-  //       })}
-  //     </div>
-  //   );
-  // };
 
   return (
     <>
