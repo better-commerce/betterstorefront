@@ -349,7 +349,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           </h1>
           <div className='flex justify-between w-full align-bottom'>
             <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
-              We not only help you design exceptional products, but also make it easy for you to share your designs with more like-minded people.
+              Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look.
             </span>
           </div>
         </div>
