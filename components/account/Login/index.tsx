@@ -15,7 +15,13 @@ import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 
-export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [],  }: any) {
+interface LoginProps {
+  isLoginSidebarOpen?: boolean;
+  redirectToOriginUrl?: boolean;
+  pluginConfig: any; 
+}
+
+export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [],  }: LoginProps) {
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -125,7 +131,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
             <div className='social-login-section'>
               <SocialSignInLinks
                 isLoginSidebarOpen={isLoginSidebarOpen}
-                containerCss={`flex justify-center gap-2 px-3 mx-auto ${isLoginSidebarOpen
+                containerCss={`flex justify-center gap-2 mx-auto ${isLoginSidebarOpen
                   ? 'sm:w-full width-md-full !px-0'
                   : 'width-md-full sm:w-1/2'
                   }`}
@@ -136,7 +142,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
           )
         }
         <div
-          className={`flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 ${
+          className={`flex flex-col items-end justify-end w-full mx-auto mt-4 ${
             isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-1/2'
           }`}
         >

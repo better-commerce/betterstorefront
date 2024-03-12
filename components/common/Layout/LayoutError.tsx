@@ -111,6 +111,7 @@ const LayoutError: FC<Props & IExtraProps> = ({
   children,
   config,
   pageProps: { categories = [], navTree, reviewData = {}, ...pageProps },
+  pluginConfig = [],
   keywords,
   isLocationLoaded,
   deviceInfo,
@@ -166,6 +167,7 @@ const LayoutError: FC<Props & IExtraProps> = ({
           currencies={config?.currencies}
           config={sortedData}
           configSettings={config?.configSettings}
+          pluginConfig={pluginConfig}
           languages={config?.languages}
           key="navbar"
           deviceInfo={deviceInfo}

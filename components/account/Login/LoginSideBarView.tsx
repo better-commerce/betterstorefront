@@ -5,7 +5,11 @@ import { CLOSE_PANEL } from '@components/utils/textVariables'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Login from './index'
 
-const LoginSideBarView: FC<React.PropsWithChildren<unknown>> = () => {
+interface LoginSideBarViewProps {
+  pluginConfig: any;
+}
+
+const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = []}) => {
   const { closeSidebar, displaySidebar } = useUI()
   const [openSidebar, setOpenSidebar] = useState(false)
 
@@ -35,7 +39,7 @@ const LoginSideBarView: FC<React.PropsWithChildren<unknown>> = () => {
           <XMarkIcon className="w-5 h-5" aria-hidden="true" />
         </button>
       </div>
-      <Login isLoginSidebarOpen={true} />
+      <Login isLoginSidebarOpen={true} pluginConfig={pluginConfig}/>
     </section>
   )
 }
