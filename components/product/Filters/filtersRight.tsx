@@ -12,7 +12,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleFil
   return (
     <div key="new" className="relative flex-col hidden w-full h-full max-w-xs pr-4 ml-auto overflow-y-auto bg-white sm:col-span-3 sm:flex sm:px-0 2xl:px-0">
       {products.filters?.map((section: any, sectionIdx: number) => (
-        <div key={`applied-filter-right-${sectionIdx}-${section?.key}`} className='border-t border-black'>
+        <div key={`applied-filter-right-${sectionIdx}-${section?.key}`} className='border-b border-slate-300'>
           <Disclosure defaultOpen={sectionIdx === 0}>
             {({ open }) => (
               <>
