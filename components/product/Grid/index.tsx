@@ -40,9 +40,9 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
           currentNumber={products.results.length}
           component={
             <div
-              className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 5
-                ? `lg:grid-cols-4`
-                : 'lg:grid-cols-4'
+              className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 4
+                ? `lg:grid-cols-3`
+                : 'lg:grid-cols-3'
                 }`}
             >
               {!products.results.length &&

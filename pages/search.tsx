@@ -357,7 +357,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
           ) : (
             <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
           )}
-          <div className={`sm:col-span-10`}>
+          <div className={`sm:col-span-9`}>
             <div className="flex justify-end w-full col-span-12">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
