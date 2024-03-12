@@ -25,6 +25,7 @@ import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import axios from "axios";
+import { generateUri } from "@commerce/utils/uri-util";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 export interface ProductCardProps {
   className?: string;
@@ -48,8 +49,8 @@ const ProductCard: FC<ProductCardProps> = ({
   const { deleteWishlistItem } = wishlistHandler()
   const [quantity, setQuantity] = useState(1)
   const router = useRouter();
-  
-const handleQuickViewData = (data: any) => {
+
+  const handleQuickViewData = (data: any) => {
     setShowModalQuickView(true);
     setQuickViewData(data)
   }
@@ -194,12 +195,12 @@ const handleQuickViewData = (data: any) => {
 
   return (
     <>
-      <div className={`nc-ProductCard relative flex flex-col group bg-transparent ${className}`} >
+      <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6 ${className}`} >
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
           <Link href={`/${data?.slug}`} className="block">
             <NcImage
               containerClassName="flex aspect-w-11 aspect-h-12 w-full h-0"
-              src={data?.image}
+              src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
               className="object-cover w-full h-full drop-shadow-xl"
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 40vw"
@@ -207,7 +208,7 @@ const handleQuickViewData = (data: any) => {
             />
           </Link>
           <ProductStatus status={data?.newLaunch} />
-          <LikeButton liked={isInWishList} className="absolute z-10 top-3 end-3" handleWishList={handleWishList} />
+          <LikeButton liked={isInWishList} className="absolute z-0 top-3 end-3" handleWishList={handleWishList} />
           {renderGroupButtons()}
         </div>
 
