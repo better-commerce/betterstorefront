@@ -534,7 +534,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         <div className="w-full lg:w-[50%] ">
           <div className="relative">
             <div className="aspect-w-16 aspect-h-16">
-              <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-xl" alt={product?.name} />
+              <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={product?.name} />
             </div>
             {renderStatus()}
             <LikeButton className="absolute end-3 top-3 " />
@@ -543,7 +543,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             {product?.images?.slice(0, 2).map((item: any, index: number) => {
               return (
                 <div key={index} className="aspect-w-3 aspect-h-4">
-                  <img src={generateUri(item?.url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-xl" alt={product?.name} />
+                  <img src={generateUri(item?.url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={product?.name} />
                 </div>
               );
             })}
