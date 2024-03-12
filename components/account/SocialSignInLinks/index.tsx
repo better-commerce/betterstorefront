@@ -6,15 +6,16 @@ import Link from 'next/link'
 
 // Other Imports
 import { SocialMediaType } from '@components/utils/constants'
-import {
-  SOCIAL_REGISTER_APPLE,
-  SOCIAL_REGISTER_FACEBOOK,
-  SOCIAL_REGISTER_GOOGLE,
-} from '@components/utils/textVariables'
+import { SOCIAL_REGISTER_APPLE, SOCIAL_REGISTER_FACEBOOK, SOCIAL_REGISTER_GOOGLE } from '@components/utils/textVariables'
+import { getEnabledSocialLogins } from '@framework/utils/app-util'
 
-const SocialSignInLinks = ({ containerCss, isLoginSidebarOpen }: any) => {
+const SocialSignInLinks = ({ containerCss, isLoginSidebarOpen, pluginSettings = []  }: any) => {
+  const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginSettings)
+  const socialLogins: Array<string> = SOCIAL_LOGINS_ENABLED.split(',')
   return (
     <div className={containerCss}>
+  {
+    socialLogins?.includes(SocialMediaType.GOOGLE) && (
       <Link
         legacyBehavior
         href={`/my-account/login/social/${SocialMediaType.GOOGLE}`}
@@ -35,6 +36,10 @@ const SocialSignInLinks = ({ containerCss, isLoginSidebarOpen }: any) => {
           {SOCIAL_REGISTER_GOOGLE}
         </a>
       </Link>
+    )
+  }
+  {
+  socialLogins?.includes(SocialMediaType.FACEBOOK) && (
       <Link
         legacyBehavior
         href={`/my-account/login/social/${SocialMediaType.FACEBOOK}`}
@@ -51,6 +56,11 @@ const SocialSignInLinks = ({ containerCss, isLoginSidebarOpen }: any) => {
           {SOCIAL_REGISTER_FACEBOOK}
         </a>
       </Link>
+        )
+      }
+
+      {
+        socialLogins?.includes(SocialMediaType.APPLE) && (
       <Link
         legacyBehavior
         href={`/my-account/login/social/${SocialMediaType.APPLE}`}
@@ -68,6 +78,8 @@ const SocialSignInLinks = ({ containerCss, isLoginSidebarOpen }: any) => {
           {SOCIAL_REGISTER_APPLE}
         </a>
       </Link>
+        )
+      }
     </div>
   )
 }
