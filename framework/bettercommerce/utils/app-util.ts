@@ -644,3 +644,19 @@ export const saveUserToken = (userToken: any) => {
     })
   }
 }
+
+export const getSocialLoginSettings = (pluginSettings: Array<any>): Array<any> => {
+  const socialLoginSettings = pluginSettings?.filter((x: any) => {
+    if (x?.categoryCode === 'SocialLogin') {
+      const settings: any = tryParseJson(x?.settings)
+      return settings?.IsEnabled
+    }
+    return false
+  })
+  return socialLoginSettings
+}
+
+export const getEnabledSocialLogins = (pluginSettings: Array<any>): string => {
+  const socialLoginSettings = getSocialLoginSettings(pluginSettings)
+  return socialLoginSettings?.map((x: any) => x?.name?.toLowerCase())?.join(',') || EmptyString
+}

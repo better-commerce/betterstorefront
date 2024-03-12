@@ -1,30 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 import Router from 'next/router'
 import Link from 'next/link'
 
 import Form from '@components/customer'
-import {
-  NEXT_AUTHENTICATE,
-  NEXT_GET_CUSTOMER_DETAILS,
-  OTP_LOGIN_ENABLED,
-} from '@components/utils/constants'
+import { EmptyString, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, OTP_LOGIN_ENABLED } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  GENERAL_LOGIN,
-  INVALID_ACCOUNT,
-  LOGIN_SUCCESSFUL,
-  VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
-} from '@components/utils/textVariables'
+import { GENERAL_LOGIN, INVALID_ACCOUNT, LOGIN_SUCCESSFUL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
 import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
-import { Guid } from '@commerce/types'
+import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 
-export default function Login({ isLoginSidebarOpen }: any) {
+export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [],  }: any) {
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -43,7 +34,13 @@ export default function Login({ isLoginSidebarOpen }: any) {
   const { getCartByUser, addToCart } = cartHandler()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const otpEnabled = OTP_LOGIN_ENABLED
+  const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
 
+  let redirectUrl = EmptyString
+  if (redirectToOriginUrl) {
+    const url = new URL(document.URL)
+    redirectUrl = `${url?.origin}${url?.pathname}${url?.search}`
+  }
   useAnalytics(PageViewed, {
     eventType: PageViewed,
   })
@@ -123,14 +120,21 @@ export default function Login({ isLoginSidebarOpen }: any) {
             </span>
           )}
         </div> */}
-        <SocialSignInLinks
-          isLoginSidebarOpen={isLoginSidebarOpen}
-          containerCss={`flex justify-center gap-2 px-3 sm:px-0 mx-auto ${
-            isLoginSidebarOpen
-              ? 'sm:w-full width-md-full'
-              : 'width-md-full sm:w-1/2'
-          }`}
-        />
+       {
+          SOCIAL_LOGINS_ENABLED && (
+            <div className='social-login-section'>
+              <SocialSignInLinks
+                isLoginSidebarOpen={isLoginSidebarOpen}
+                containerCss={`flex justify-center gap-2 px-3 mx-auto ${isLoginSidebarOpen
+                  ? 'sm:w-full width-md-full !px-0'
+                  : 'width-md-full sm:w-1/2'
+                  }`}
+                redirectUrl={redirectUrl}
+                pluginSettings={pluginConfig}
+              />
+            </div>
+          )
+        }
         <div
           className={`flex flex-col items-end justify-end w-full px-3 mx-auto mt-4 ${
             isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-1/2'
