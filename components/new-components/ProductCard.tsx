@@ -32,7 +32,7 @@ export interface ProductCardProps {
 const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount }) => {
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
-  const { openNotifyUser, basketId, cartItems, isGuestUser, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist, wishListItems, openLoginSideBar } = useUI()
+  const { basketId, cartItems, isGuestUser, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist, wishListItems, openLoginSideBar } = useUI()
   const [isInWishList, setIsInWishList] = useState(false)
   const { deleteWishlistItem } = wishlistHandler()
   const [quantity, setQuantity] = useState(1)
