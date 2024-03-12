@@ -1,32 +1,25 @@
 "use client";
 
 import React, { FC, useEffect, useState } from "react";
-import LikeButton from "./LikeButton";
-import Prices from "./Prices";
-import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
-import { StarIcon } from "@heroicons/react/24/solid";
-import BagIcon from "./BagIcon";
-import toast from "react-hot-toast";
-import { Transition } from "@headlessui/react";
-import ModalQuickView from "./ModalQuickView";
-import ProductStatus from "./ProductStatus";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import NcImage from "./shared/NcImage/NcImage";
-import ButtonSecondary from "./shared/Button/ButtonSecondary";
-import ButtonPrimary from "./shared/Button/ButtonPrimary";
-import { useUI } from "@components/ui";
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
+import axios from "axios";
 import dynamic from "next/dynamic";
-import { matchStrings } from "@framework/utils/parse-util";
+import Link from "next/link";
+import { StarIcon } from "@heroicons/react/24/solid";
+import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
+import { useUI } from "@components/ui";
+import { BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
-import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
-import axios from "axios";
 import { generateUri } from "@commerce/utils/uri-util";
-import ProductTag from "@components/product/ProductTag";
+import { matchStrings } from "@framework/utils/parse-util";
+import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
+const ProductTag = dynamic(() => import('@components/product/ProductTag'))
+const LikeButton = dynamic(() => import('@components/new-components/LikeButton'))
+const Prices = dynamic(() => import('@components/new-components/Prices'))
+const ModalQuickView = dynamic(() => import('@components/new-components/ModalQuickView'))
+const NcImage = dynamic(() => import('@components/new-components/shared/NcImage/NcImage'))
+const ButtonSecondary = dynamic(() => import('@components/new-components/shared/Button/ButtonSecondary'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 export interface ProductCardProps {
   className?: string;
@@ -36,28 +29,17 @@ export interface ProductCardProps {
   maxBasketItemsCount?: any;
 }
 
-const ProductCard: FC<ProductCardProps> = ({
-  className = "",
-  data,
-  isLiked,
-  deviceInfo,
-  maxBasketItemsCount
-}) => {
+const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount }) => {
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
   const { openNotifyUser, basketId, cartItems, isGuestUser, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist, wishListItems, openLoginSideBar } = useUI()
   const [isInWishList, setIsInWishList] = useState(false)
   const { deleteWishlistItem } = wishlistHandler()
   const [quantity, setQuantity] = useState(1)
-  const router = useRouter();
 
   const handleQuickViewData = (data: any) => {
     setShowModalQuickView(true);
     setQuickViewData(data)
-  }
-
-  const handleNotification = () => {
-    openNotifyUser(data.recordId)
   }
 
   useEffect(() => {
@@ -90,7 +72,6 @@ const ProductCard: FC<ProductCardProps> = ({
     }
     const objUser = localStorage.getItem('user')
     if (!objUser || isGuestUser) {
-      //  setAlert({ type: 'success', msg:" Please Login "})
       openLoginSideBar()
       return
     }
@@ -134,17 +115,9 @@ const ProductCard: FC<ProductCardProps> = ({
           setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'], })
           return false
         }
-        const isValid = cartItemsValidateAddToCart(
-          // product?.recordId ?? product?.productId,
-          cartItems,
-          maxBasketItemsCount,
-          quantity > 1 && quantity
-        )
+        const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount, quantity > 1 && quantity)
         if (!isValid) {
-          setAlert({
-            type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
-          })
+          setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], })
         }
         return isValid
       },
@@ -181,33 +154,20 @@ const ProductCard: FC<ProductCardProps> = ({
     return (
       <div className="absolute bottom-0 flex justify-center invisible transition-all opacity-0 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
         <Button size="small" className="hidden sm:block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-        <ButtonSecondary
-          className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg"
-          fontSize="text-xs"
-          sizeClass="py-2 px-4"
-          onClick={() => handleQuickViewData(data)}
-        >
+        <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
           <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
           <span className="ms-1">Quick view</span>
         </ButtonSecondary>
       </div>
     );
   };
-  const CLASSES =
-    "absolute top-3 start-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
+  const CLASSES = "absolute top-3 start-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
   return (
     <>
       <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6 ${className}`} >
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
           <Link href={`/${data?.slug}`} className="block">
-            <NcImage
-              containerClassName="flex aspect-w-11 aspect-h-12 w-full h-0"
-              src={generateUri(data?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER}
-              className="object-cover object-top w-full h-full drop-shadow-xl"
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 40vw"
-              alt="product"
-            />
+            <NcImage containerClassName="flex aspect-w-11 aspect-h-12 w-full h-0" src={generateUri(data?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" fill sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 40vw" alt="product" />
           </Link>
           <div className={CLASSES}>
             <ProductTag product={data} />
@@ -237,5 +197,4 @@ const ProductCard: FC<ProductCardProps> = ({
     </>
   );
 };
-
 export default ProductCard;
