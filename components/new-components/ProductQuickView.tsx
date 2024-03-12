@@ -428,7 +428,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   const renderVariants = () => {
     return (
       <div>
-        {quickViewData ?
+        {quickViewData &&
           <AttributesHandler
             product={quickViewData}
             variant={selectedAttrData}
@@ -438,8 +438,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             handleFetchProductQuickView={handleFetchProductQuickView}
             isQuickView={true}
             sizeInit={sizeInit}
-            setSizeInit={setSizeInit} />
-          : <LoadingDots />
+            setSizeInit={setSizeInit} />          
         }
       </div>
     );
@@ -524,7 +523,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           )}
         </div>
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {quickViewData ? <AccordionInfo data={[{ name: "Description", content: quickViewData?.description }]} /> : <LoadingDots />}
+        {quickViewData && <AccordionInfo data={[{ name: "Description", content: quickViewData?.description }]} />}
       </div>
     );
   };
