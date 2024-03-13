@@ -98,10 +98,12 @@ function Checkout({ cart, config, location }: any) {
   }, [user, cartItems, guestUser])
 
   useEffect(() => {
-    const billingAddress = userAddresses?.find((o: any) => o.isDefaultBilling)
-    const shippingAddress = userAddresses?.find((o: any) => o.isDefaultDelivery)
+    const billingAddress = userAddresses?.find((o: any) => o.isDefault || o.isDefaultBilling)
+    const shippingAddress = userAddresses?.find((o: any) => o.isDefault || o.isDefaultDelivery)
     if (billingAddress) setDefaultBillingAddress(billingAddress)
+    else setDefaultBillingAddress(userAddresses?.[0] || {})
     if (shippingAddress) setDefaultShippingAddress(shippingAddress)
+    else setDefaultShippingAddress(userAddresses?.[0] || {})
   }, [userAddresses])
 
   const handleGuestMail = (values: any) => {
@@ -251,4 +253,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const PAGE_TYPE = PAGE_TYPES['Checkout']
 
-export default withDataLayer(Checkout, PAGE_TYPE, false)
+export default withDataLayer(Checkout, PAGE_TYPE)

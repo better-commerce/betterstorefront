@@ -34,6 +34,7 @@ export default function AddressForm({
   infoType,
   retrieveAddress,
   handleOpenNewAddressModal,
+  handleOpenEditAddressModal,
   isPaymentLink,
 }: any) {
   const defaultItemsToHide = ['address1', 'address2', 'city', 'postCode']
@@ -59,6 +60,8 @@ export default function AddressForm({
           postCode: defaultValues.postCode,
           phone: defaultValues.phoneNo,
         }}
+        isGuest={isGuest}
+        handleOpenEditAddressModal={() => handleOpenEditAddressModal(defaultValues?.id)}
         isPaymentLink={isPaymentLink}
       />
     )

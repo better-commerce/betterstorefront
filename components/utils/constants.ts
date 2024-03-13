@@ -414,8 +414,8 @@ export module Messages {
       'Your request could not be processed. Please try again after sometime.',
     USERNAME_ALREADY_EXISTS: 'User already exists',
     CUSTOMER_NOT_FOUND: 'Customer not found.',
-    GENERIC_ERROR:
-      'Your request could not be processed. Please try again after sometime.',
+    GENERIC_ERROR: 'Your request could not be processed. Please try again after sometime.',
+    DUPLICATE_ADDRESS : 'Address already exists',
     CART_EMPTY: 'Your cart is empty',
     CART_ITEM_QTY_LIMIT_EXCEEDED:
       'Max allowed quantity is {maxBasketItemsCount}.',

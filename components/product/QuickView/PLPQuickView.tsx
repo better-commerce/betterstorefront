@@ -51,7 +51,7 @@ export default function PLPQuickView({
   maxBasketItemsCount,
 }: any) {
   const {isInWishList , deleteWishlistItem } = wishlistHandler()
-  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, removeFromWishlist, setAlert } = useUI()
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, removeFromWishlist, setAlert ,isGuestUser, openLoginSideBar} = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
   const [close, setClose] = useState(isQuickviewOpen)
@@ -366,6 +366,11 @@ export default function PLPQuickView({
     }
 
     const accessToken = localStorage.getItem('user')
+    if (!accessToken || isGuestUser) {
+      openLoginSideBar()
+      return
+    }
+    else if (accessToken)
     if (accessToken) {
       const createWishlist = async () => {
         try {
