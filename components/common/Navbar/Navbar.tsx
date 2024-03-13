@@ -174,18 +174,11 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     router.reload()
   }
 
-  const hyperlinkHandler = (hyperlink: string) => {
-    return hyperlink[0] === '/' ? hyperlink : `/${hyperlink}`
-  }
-
+  const hyperlinkHandler = (hyperlink: string) => { return hyperlink[0] === '/' ? hyperlink : `/${hyperlink}`}
   const [open, setOpen] = useState(false)
-  const buttonRef = useRef<HTMLButtonElement>(null) // useRef<HTMLButtonElement>(null)
   const [openState, setOpenState] = useState(-1)
   const isProduction = process.env.NODE_ENV === 'production'
   const [renderState, setRenderState] = useState(isProduction)
-
-  // update 'renderState' to check whether the component is rendered or not
-  // used for removing hydration errors
   useEffect(() => {
     if (!isProduction) {
       setRenderState(true)
@@ -402,7 +395,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
             <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap"> Prices inc VAT </div>
             <div className="flow-root w-10 px-2 sm:w-12">
               <div className="flex justify-center flex-1 mx-auto">
-                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded() || true} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
+                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
               </div>
             </div>
           </div>

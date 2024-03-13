@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import Router from 'next/router'
 import dynamic from 'next/dynamic'
 import rangeMap from '@lib/range-map'
-const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
+const ProductCard = dynamic(() => import('@components/new-components/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 const Pagination = dynamic(() => import('@components/product/Pagination'))
 import { IExtraProps } from '@components/common/Layout/Layout'
@@ -18,7 +18,7 @@ interface Props {
 export default function CategoryGrid({
   products,
   currentPage,
-  handlePageChange = () => {},
+  handlePageChange = () => { },
   handleInfiniteScroll,
   deviceInfo,
   maxBasketItemsCount,
@@ -36,7 +36,7 @@ export default function CategoryGrid({
     })
 
     return () => {
-      Router.events.off('routeChangeComplete', () => {})
+      Router.events.off('routeChangeComplete', () => { })
     }
   }, [Router.events])
 
@@ -50,11 +50,10 @@ export default function CategoryGrid({
           currentNumber={products?.results?.length}
           component={
             <div
-              className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${
-                products?.results?.length < 6
-                  ? `lg:grid-cols-5`
-                  : 'lg:grid-cols-5'
-              }`}
+              className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${products?.results?.length < 5
+                  ? `lg:grid-cols-4`
+                  : 'lg:grid-cols-4'
+                }`}
             >
               {!products?.results?.length &&
                 rangeMap(12, (i) => (
@@ -70,12 +69,9 @@ export default function CategoryGrid({
                   </div>
                 ))}
               {products?.results?.map((product: any, productIdx: number) => (
-                <ProductCard
-                  key={productIdx}
-                  product={product}
-                  deviceInfo={deviceInfo}
-                  maxBasketItemsCount={maxBasketItemsCount}
-                />
+                <div key={`products-${productIdx}`}>
+                  <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+                </div>
               ))}
             </div>
           }
@@ -84,11 +80,10 @@ export default function CategoryGrid({
       {!IS_INFINITE_SCROLL && (
         <>
           <div
-            className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-0 sm:px-0 lg:px-4 2xl:px-0 grid-sm-4 ${
-              products?.results?.length < 6
+            className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-0 sm:px-0 lg:px-4 2xl:px-0 grid-sm-4 ${products?.results?.length < 6
                 ? `lg:grid-cols-5`
                 : 'lg:grid-cols-5'
-            }`}
+              }`}
           >
             {!products?.results?.length &&
               rangeMap(12, (i) => (
@@ -104,12 +99,9 @@ export default function CategoryGrid({
                 </div>
               ))}
             {products?.results?.map((product: any, productIdx: number) => (
-              <ProductCard
-                key={productIdx}
-                product={product}
-                deviceInfo={deviceInfo}
-                maxBasketItemsCount={maxBasketItemsCount}
-              />
+              <div key={`products-${productIdx}`}>
+                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+              </div>
             ))}
           </div>
 

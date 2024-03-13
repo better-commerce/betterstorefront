@@ -43,21 +43,23 @@ function RenderRadioOptions({
 
    return (
       <>
-         <div className="flex flex-wrap items-center gap-1">
-            {items?.map((item: any, idx: any) => (
-               isString(item?.fieldValue) && (
-                  <RadioGroup.Option
-                     key={`radio-panel-${idx}-${item?.fieldValue}`}
-                     value={item?.fieldValue}
-                     title={item?.fieldLabel}
-                     style={{ backgroundColor: item?.fieldValue?.includes('#') ? item?.fieldValue : '' }}
-                     onClick={() => { setSizeInit('true') }}
-                     className={`${(selected?.attributes ? selected?.attributes[1]?.fieldValue : currentAttribute) == item?.fieldValue ? 'bg-black text-white dark:text-white' : 'bg-white border-gray-300'} /pdp-color-swatch-item /relative z-99 h-10 min-w-[40px] px-2 w-auto border border-gray-200 flex rounded-sm text-black items-center justify-center cursor-pointer outline-none dark:text-black hover:border-gray-900`}>
-                     <RadioGroup.Label as="p" className="m-auto font-semibold uppercase font-12">
-                        {item?.fieldValue?.includes('#') ? '' : item?.fieldValue}
-                     </RadioGroup.Label>
-                  </RadioGroup.Option>
-               )
+         <div className="grid grid-cols-5 sm:grid-cols-7 gap-2 mt-2.5">
+            {items?.map((item: any, idx: any) => (isString(item?.fieldValue) && (
+               <RadioGroup.Option
+                  key={`radio-panel-${idx}-${item?.fieldValue}`}
+                  value={item?.fieldValue}
+                  title={item?.fieldLabel}
+                  style={{ backgroundColor: item?.fieldValue?.includes('#') ? item?.fieldValue : '' }}
+                  onClick={() => { setSizeInit('true') }}
+                  className={`${(selected?.attributes ? selected?.attributes[1]?.fieldValue : currentAttribute) == item?.fieldValue ?
+                     'bg-primary-500 text-white dark:text-white' :
+                     'bg-white border-gray-300'} 
+                     relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center text-sm uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 hover:bg-primary-700 hover:text-black dark:hover:bg-neutral-700`}>
+                  <RadioGroup.Label as="p" className="m-auto font-semibold uppercase font-12">
+                     {item?.fieldValue?.includes('#') ? '' : item?.fieldValue}
+                  </RadioGroup.Label>
+               </RadioGroup.Option>
+            )
             ))}
          </div>
          <div className={classNames(sizeInit === 'error' ? '' : 'hidden', 'text-red-500 text-sm')}>Please select a Size</div>
@@ -189,13 +191,13 @@ export default function SizeInline({
 
    const handleOnChange = (value: any) => {
       let slug = '';
-      const selectedVariant = product?.variantProducts.find((variant:any) => {
-        const matchingAttributes = variant?.attributes.filter( (attr:any) => attr?.fieldCode === 'clothing.size' && attr?.fieldValue === value );
-        return matchingAttributes?.length > 0;
+      const selectedVariant = product?.variantProducts.find((variant: any) => {
+         const matchingAttributes = variant?.attributes.filter((attr: any) => attr?.fieldCode === 'clothing.size' && attr?.fieldValue === value);
+         return matchingAttributes?.length > 0;
       });
-  
-      slug = selectedVariant ? selectedVariant?.slug:`products/${router?.query?.slug}`;
-      
+
+      slug = selectedVariant ? selectedVariant?.slug : `products/${router?.query?.slug}`;
+
       const stockPerAttrValue = getProductFromAttributes(
          fieldCode,
          value,
