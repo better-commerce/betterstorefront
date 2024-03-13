@@ -1,6 +1,4 @@
 import React from "react";
-import NavigationItem from "./NavigationItem";
-import { NAVIGATION_DEMO_2 } from "@components/data/navigation";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 

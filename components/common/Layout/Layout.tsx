@@ -1,43 +1,34 @@
 import React, { FC, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { CommerceProvider } from '@framework'
-import { IDeviceInfo, useUI } from '@components/ui/context'
-import type { Page } from '@commerce/types/page'
-import type { Category } from '@commerce/types/site'
-import { WishlistSidebarView } from '@components/wishlist'
-import { Sidebar, Modal, LoadingDots } from '@components/ui'
+import { CookieBanner } from '@schlomoh/react-cookieconsent'
 import Router from 'next/router'
 import Head from 'next/head'
+import { CommerceProvider } from '@framework'
+import type { Page } from '@commerce/types/page'
+import type { Category } from '@commerce/types/site'
+import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
-import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
-import LoginSidebarView from '@components/account/Login/LoginSideBarView'
-import MainNav2Logged from '@components/new-components/Header/MainNav2Logged'
-import FooterClean from '../Footer/FooterClean'
-import { CookieBanner } from '@schlomoh/react-cookieconsent'
-import AlertRibbon from '@components/ui/AlertRibbon'
+import { WishlistSidebarView } from '@components/wishlist'
+import { Sidebar, Modal, LoadingDots } from '@components/ui'
+const BulkAddSidebarView = dynamic(() => import('@components/bulk-add/BulkAddSidebarView'))
+const LoginSidebarView = dynamic(() => import('@components/account/Login/LoginSideBarView'))
+const MainNav2Logged = dynamic(() => import('@components/new-components/Header/MainNav2Logged'))
 const ShippingView = dynamic(() => import('@components/checkout-old/ShippingView'))
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
 const PaymentMethodView = dynamic(() => import('@components/checkout-old/PaymentMethodView'))
 const CheckoutSidebarView = dynamic(() => import('@components/checkout-old/CheckoutSidebarView'))
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
-const SearchWrapper = dynamic(() => import('@components/search'))
 const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
+const FooterClean = dynamic(() => import('@components/common/Footer/FooterClean'))
+const AlertRibbon = dynamic(() => import('@components/ui/AlertRibbon'))
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />
   </div>
 )
-
-const dynamicProps = {
-  loading: Loading,
-}
-
-const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
-  ...dynamicProps,
-})
 const primaryButtonStyle = { backgroundColor: 'black' }
 const secondaryButtonStyle = { backgroundColor: 'gray' }
 const Content = () => (
@@ -77,24 +68,10 @@ const ModalUI: FC<React.PropsWithChildren<unknown>> = () => {
   return null
 }
 
-const SidebarView: FC<
-  React.PropsWithChildren<
-    { sidebarView: string; closeSidebar(): any } & IExtraProps
-  >
-> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount, config }) => {
+const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSidebar(): any } & IExtraProps>> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount, config }) => {
   return (
-    <Sidebar
-      onClose={closeSidebar}
-      deviceInfo={deviceInfo}
-      maxBasketItemsCount={maxBasketItemsCount}
-    >
-      {sidebarView === 'CART_VIEW' && (
-        <CartSidebarView
-          deviceInfo={deviceInfo}
-          maxBasketItemsCount={maxBasketItemsCount}
-          config={config}
-        />
-      )}
+    <Sidebar onClose={closeSidebar} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} >
+      {sidebarView === 'CART_VIEW' && (<CartSidebarView deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />)}
       {sidebarView === 'LOGIN_SIDEBAR_VIEW' && <LoginSidebarView />}
       {sidebarView === 'BULK_ADD_VIEW' && <BulkAddSidebarView />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
@@ -105,26 +82,11 @@ const SidebarView: FC<
   )
 }
 
-const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
-  deviceInfo,
-  maxBasketItemsCount,
-  config,
-}: any) => {
+const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
-    <SidebarView
-      sidebarView={sidebarView}
-      closeSidebar={closeSidebar}
-      deviceInfo={deviceInfo}
-      maxBasketItemsCount={maxBasketItemsCount}
-      config={config}
-    />
+    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />
   ) : null
-}
-
-interface LayoutProps {
-  nav: []
-  footer: []
 }
 
 export interface IExtraProps {
@@ -136,22 +98,12 @@ export interface IExtraProps {
   config?: any
 }
 
-const Layout: FC<Props & IExtraProps> = ({
-  children,
-  config,
-  pageProps: { categories = [], navTree, reviewData = {}, ...pageProps },
-  keywords,
-  isLocationLoaded,
-  deviceInfo,
-  maxBasketItemsCount = 0,
-  nav
-}) => {
+const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const { showSearchBar, setShowSearchBar, setIsCompared } = useUI()
+  const { setIsCompared } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
-  const [isIncludeVATState, setIsIncludeVATState] =
-    useState<boolean>(isIncludeVAT)
+  const [isIncludeVATState, setIsIncludeVATState] = useState<boolean>(isIncludeVAT)
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
@@ -203,7 +155,7 @@ const Layout: FC<Props & IExtraProps> = ({
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
-        <div className={`text-base pt-24 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
+        <div className={`text-base pt-20 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
           <MainNav2Logged
             onIncludeVATChanged={includeVATChanged}
             currencies={config?.currencies}
