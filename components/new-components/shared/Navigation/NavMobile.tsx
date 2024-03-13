@@ -10,58 +10,47 @@ import SocialsList from "../SocialsList/SocialsList";
 import SwitchDarkMode from "../SwitchDarkMode/SwitchDarkMode";
 import ButtonClose from "../ButtonClose/ButtonClose";
 import ButtonPrimary from "../Button/ButtonPrimary";
-import Logo from "../Logo/Logo";
+import { Logo } from "@components/ui";
 
 export interface NavMobileProps {
   data?: NavItemType[];
   onClickClose?: () => void;
+  navItems?: any
 }
 
 const NavMobile: React.FC<NavMobileProps> = ({
   data = NAVIGATION_DEMO_2,
+  navItems,
   onClickClose,
 }) => {
-  const _renderMenuChild = (
-    item: NavItemType,
-    itemClass = " pl-3 text-neutral-900 dark:text-neutral-200 font-medium "
-  ) => {
+  const _renderMenuChild = (item: any, itemClass = "pl-3 text-neutral-900 dark:text-neutral-200 font-medium ") => {
     return (
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
-        {item.children?.map((i, index) => (
+        {item.navBlocks?.map((i: any, index: number) => (
           <Disclosure key={index} as="li">
-            <Link
-              href={i.href}
-              className={`flex text-sm rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-0.5 pr-4 ${itemClass}`}
-            >
-              <span
-                className={`py-2.5 ${!i.children ? "block w-full" : ""}`}
-                onClick={onClickClose}
-              >
-                {i.name}
+            <Link href={`/${i.hyperlink}`} className={`flex text-sm rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-0.5 pr-4 ${itemClass}`} >
+              <span className={`py-2.5 ${!i.children ? "block w-full" : ""}`} onClick={onClickClose} >
+                {i.boxTitle}
               </span>
-              {i.children && (
-                <span
-                  className="flex items-center flex-grow"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <Disclosure.Button
-                    as="span"
-                    className="flex justify-end flex-grow"
-                  >
-                    <ChevronDownIcon
-                      className="w-4 h-4 ml-2 text-slate-500"
-                      aria-hidden="true"
-                    />
+              {i.navItems?.length > 0 && (
+                <span className="flex items-center flex-grow" onClick={(e) => e.preventDefault()} >
+                  <Disclosure.Button as="span" className="flex justify-end flex-grow" >
+                    <ChevronDownIcon className="w-4 h-4 ml-2 text-slate-500" aria-hidden="true" />
                   </Disclosure.Button>
                 </span>
               )}
             </Link>
-            {i.children && (
+            {i.navItems && (
               <Disclosure.Panel>
-                {_renderMenuChild(
-                  i,
-                  "pl-3 text-slate-600 dark:text-slate-400 "
-                )}
+                <ul className="grid grid-cols-2 pl-3 mt-2 space-2">
+                  {i.navItems?.map((child: any, cIdx: number) => (
+                    <li key={cIdx} className={`${child.itemType ? "menuIsNew" : ""}`}>
+                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white " href={`/${child.itemLink}`} >
+                        {child.caption.toLowerCase()}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </Disclosure.Panel>
             )}
           </Disclosure>
@@ -70,41 +59,23 @@ const NavMobile: React.FC<NavMobileProps> = ({
     );
   };
 
-  const _renderItem = (item: NavItemType, index: number) => {
+
+  const _renderItem = (item: any, index: number) => {
     return (
-      <Disclosure
-        key={index}
-        as="li"
-        className="text-slate-900 dark:text-white"
-      >
-        <Link
-          className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-          href={item.href}
-        >
-          <span
-            className={!item.children ? "block w-full" : ""}
-            onClick={onClickClose}
-          >
-            {item.name}
+      <Disclosure key={index} as="li" className="text-slate-900 dark:text-white" >
+        <Link className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" href={`/${item.hyperlink}`} >
+          <span className={!item.children ? "block w-full" : ""} onClick={onClickClose} >
+            {item?.caption}
           </span>
-          {item.children && (
-            <span
-              className="flex-grow block"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Disclosure.Button
-                as="span"
-                className="flex justify-end flex-grow"
-              >
-                <ChevronDownIcon
-                  className="w-4 h-4 ml-2 text-neutral-500"
-                  aria-hidden="true"
-                />
+          {item?.navBlocks?.length > 0 && (
+            <span className="flex-grow block" onClick={(e) => e.preventDefault()} >
+              <Disclosure.Button as="span" className="flex justify-end flex-grow" >
+                <ChevronDownIcon className="w-4 h-4 ml-2 text-neutral-500" aria-hidden="true" />
               </Disclosure.Button>
             </span>
           )}
         </Link>
-        {item.children && (
+        {item?.navBlocks?.length > 0 && (
           <Disclosure.Panel>{_renderMenuChild(item)}</Disclosure.Panel>
         )}
       </Disclosure>
@@ -113,45 +84,19 @@ const NavMobile: React.FC<NavMobileProps> = ({
 
   const renderMagnifyingGlassIcon = () => {
     return (
-      <svg
-        width={22}
-        height={22}
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M22 22L20 20"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+      <svg width={22} height={22} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+        <path d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M22 22L20 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   };
 
   const renderSearchForm = () => {
     return (
-      <form
-        action=""
-        method="POST"
-        className="flex-1 text-slate-900 dark:text-slate-200"
-      >
+      <form action="" method="POST" className="flex-1 text-slate-900 dark:text-slate-200" >
         <div className="flex items-center h-full px-4 py-2 space-x-1 bg-slate-50 dark:bg-slate-800 rounded-xl">
           {renderMagnifyingGlassIcon()}
-          <input
-            type="search"
-            placeholder="Type and press enter"
-            className="w-full text-sm bg-transparent border-none focus:outline-none focus:ring-0 "
-          />
+          <input type="search" placeholder="Type and press enter" className="w-full text-sm bg-transparent border-none focus:outline-none focus:ring-0 " />
         </div>
         <input type="submit" hidden value="" />
       </form>
@@ -160,35 +105,15 @@ const NavMobile: React.FC<NavMobileProps> = ({
 
   return (
     <div className="w-full h-screen py-2 overflow-y-auto transition transform bg-white divide-y-2 shadow-lg ring-1 dark:ring-neutral-700 dark:bg-neutral-900 divide-neutral-100 dark:divide-neutral-800">
-      <div className="px-5 py-6">
+      <div className="px-5 pb-2">
         <Logo />
-        <div className="flex flex-col mt-5 text-sm text-slate-600 dark:text-slate-300">
-          <span>
-            Discover the most outstanding articles on all topics of life. Write
-            your stories and share them
-          </span>
-
-          <div className="flex items-center justify-between mt-4">
-            <SocialsList itemClass="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-xl" />
-            <span className="block">
-              <SwitchDarkMode className="bg-neutral-100 dark:bg-neutral-800" />
-            </span>
-          </div>
-        </div>
-        <span className="absolute p-1 right-2 top-2">
+        <span className="absolute p-1 right-2 top-4">
           <ButtonClose onClick={onClickClose} />
         </span>
-
-        <div className="mt-5">{renderSearchForm()}</div>
       </div>
       <ul className="flex flex-col px-2 py-6 space-y-1">
-        {data.map(_renderItem)}
+        {navItems.map(_renderItem)}
       </ul>
-      <div className="flex items-center justify-between px-5 py-6 space-x-2">
-        <ButtonPrimary href={"/"} className="!px-10">
-          Buy this template
-        </ButtonPrimary>
-      </div>
     </div>
   );
 };
