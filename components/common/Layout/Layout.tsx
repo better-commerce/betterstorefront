@@ -159,7 +159,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
           <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} />
           {displayAlert && <AlertRibbon />}
           {children}
-          <FooterClean />
+          <FooterClean navItems={navTree?.footer} />
           <ModalUI />
           <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />
           <div className="cookie-bannner">
