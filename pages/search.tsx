@@ -353,7 +353,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
             </span>
           </div>
         </div>
-        <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-bottom'>
+        <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
           <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> Showing <span className='font-semibold text-black'>{data.products.total}</span> Results </span>
           <div className="flex justify-end align-bottom">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />

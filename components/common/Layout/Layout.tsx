@@ -156,36 +156,14 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         <div className={`text-base pt-20 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
-          <MainNav2Logged
-            onIncludeVATChanged={includeVATChanged}
-            currencies={config?.currencies}
-            config={sortedData}
-            configSettings={config?.configSettings}
-            languages={config?.languages}
-            deviceInfo={deviceInfo}
-            maxBasketItemsCount={maxBasketItemsCount}
-            keywords={keywords}
-          />
+          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} />
           {displayAlert && <AlertRibbon />}
           {children}
           <FooterClean />
           <ModalUI />
-          <SidebarUI
-            deviceInfo={deviceInfo}
-            maxBasketItemsCount={maxBasketItemsCount}
-            config={config}
-          />
+          <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />
           <div className="cookie-bannner">
-            <CookieBanner
-              enableManagement
-              managementButtonText="Manage Cookies"
-              headingColor="white"
-              managementContent={<Content />}
-              cookieCategories={['analytics', 'advertisement']}
-              infoContent={<Content />}
-              primaryButtonStyle={primaryButtonStyle}
-              secondaryButtonStyle={secondaryButtonStyle}
-            />
+            <CookieBanner enableManagement managementButtonText="Manage Cookies" headingColor="white" managementContent={<Content />} cookieCategories={['analytics', 'advertisement']} infoContent={<Content />} primaryButtonStyle={primaryButtonStyle} secondaryButtonStyle={secondaryButtonStyle} />
           </div>
         </div>
       </CommerceProvider>

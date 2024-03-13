@@ -1,6 +1,6 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 import React, { FC } from "react";
-import Avatar from "@components/new-components/Avatar/Avatar";
+import Avatar from "./shared/Avatar/Avatar";
 
 interface ReviewItemDataType {
   name: string;
@@ -32,7 +32,7 @@ const ReviewItem: FC<ReviewItemProps> = ({
       className={`nc-ReviewItem flex flex-col ${className}`}
       data-nc-id="ReviewItem"
     >
-      <div className=" flex space-x-4 ">
+      <div className="flex space-x-4 ">
         <div className="flex-shrink-0 pt-0.5">
           <Avatar
             sizeClass="h-10 w-10 text-lg"
@@ -42,7 +42,7 @@ const ReviewItem: FC<ReviewItemProps> = ({
           />
         </div>
 
-        <div className="flex-1 flex justify-between">
+        <div className="flex justify-between flex-1">
           <div className="text-sm sm:text-base">
             <span className="block font-semibold">{data.name}</span>
             <span className="block mt-0.5 text-slate-500 dark:text-slate-400 text-sm">
@@ -59,7 +59,7 @@ const ReviewItem: FC<ReviewItemProps> = ({
           </div>
         </div>
       </div>
-      <div className="mt-4 prose prose-sm sm:prose dark:prose-invert sm:max-w-2xl">
+      <div className="mt-4 prose-sm prose sm:prose dark:prose-invert sm:max-w-2xl">
         <p className="text-slate-600 dark:text-slate-300">{data.comment}</p>
       </div>
     </div>
