@@ -1,40 +1,35 @@
-// Base Imports
 import { useEffect, useState } from 'react'
-
-// Package Imports
-import os from 'os'
-import type { GetStaticPropsContext } from 'next'
+import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
-
-// Component Imports
+import os from 'os'
+import type { GetStaticPropsContext } from 'next'
 import { Layout } from '@components/common'
-
-// Other Imports
 import commerce from '@lib/api/commerce'
-import { Hero } from '@components/ui'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { useRouter } from 'next/router'
+import { HOME_PAGE_DEFAULT_SLUG, HOME_PAGE_NEW_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
-const PromotionBanner = dynamic(() => import('@components/home/PromotionBanner'))
-const Heading = dynamic(() => import('@components/home/Heading'))
-const Categories = dynamic(() => import('@components/home/Categories'))
-const Collections = dynamic(() => import('@components/home/Collections'))
-const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
+const SectionHero2 = dynamic(() => import('@components/new-components/SectionHero/SectionHero2'))
+const DiscoverMoreSlider = dynamic(() => import('@components/new-components/DiscoverMoreSlider'))
+const SectionSliderProductCard = dynamic(() => import('@components/new-components/SectionSliderProductCard'))
+const SectionHowItWork = dynamic(() => import('@components/new-components/SectionHowItWork/SectionHowItWork'))
+const BackgroundSection = dynamic(() => import('@components/new-components/BackgroundSection/BackgroundSection'))
+const SectionSliderLargeProduct = dynamic(() => import('@components/new-components/SectionSliderLargeProduct'))
+const SectionSliderCategories = dynamic(() => import('@components/new-components/SectionSliderCategories/SectionSliderCategories'))
+const SectionPromo3 = dynamic(() => import('@components/new-components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
+
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
   const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
   const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
   const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
-
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
@@ -54,7 +49,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
               try {
                 const pageContentsPromise = commerce.getPagePreviewContent({
                   id: '',
-                  slug: HOME_PAGE_DEFAULT_SLUG,
+                  slug: HOME_PAGE_NEW_SLUG,
                   workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
                   channel: channel,
                   currency: currencyCode,
@@ -107,7 +102,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       axios
         .post('/api/page-preview-content', {
           id: '',
-          slug: HOME_PAGE_DEFAULT_SLUG,
+          slug: HOME_PAGE_NEW_SLUG,
           workingVersion: process.env.NODE_ENV === 'production' ? true : true,
           channel: isMobile ? 'MobileWeb' : 'Web',
           cachedCopy: true,
@@ -137,14 +132,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     entityId: '',
     eventType: 'PageViewed',
   })
-  const css = { maxWidth: '100%', minHeight: '350px' }
 
   if (!pageContents) {
     return (
       <div className="flex w-full text-center flex-con"> <Loader /> </div>
     )
   }
-
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -160,34 +153,24 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           {pageContents?.metadescription && (<meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />)}
         </NextHead>
       )}
-
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      <Hero deviceInfo={deviceInfo} banners={pageContents?.banner} />
-      <div className="px-4 py-3 mx-auto lg:container sm:py-6 sm:px-4 md:px-4 lg:px-6 2xl:px-0">
-        <div className='w-full flex flex-col min-h-[400px]'>
-          {pageContents?.heading?.map((heading: any, hId: number) => (
-            <Heading title={heading?.heading_title} subTitle={heading?.heading_subtitle} key={`category-heading-${hId}`} />
-          ))}
-          <Categories data={pageContents?.categorylist} deviceInfo={deviceInfo} />
+      <div className="relative overflow-hidden nc-PageHome">
+        <SectionHero2 data={pageContents?.banner} />
+        <div className="mt-24 lg:mt-32">
+          <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
         </div>
-        <div className='w-full flex flex-col min-h-[100px]'>
-          {pageContents?.productheading?.map((productH: any, Pid: number) => (
-            <Heading title={productH?.productheading_title} subTitle={productH?.productheading_subtitle} key={`product-heading-${Pid}`} />
-          ))}
+        <div className="container relative my-24 space-y-24 lg:space-y-32 lg:my-32">
+          <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} />
+          <div className="relative py-16 lg:py-20">
+            <BackgroundSection />
+            <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
+          </div>
+          <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
+          <div className="py-24 border-y lg:py-32 border-slate-200 dark:border-slate-700">
+            <SectionHowItWork data={pageContents?.features} />
+          </div>
+          <SectionPromo3 data={pageContents?.subscription} />
         </div>
-        <div className='w-full flex flex-col min-h-[560px]'>
-          <ProductSlider config={pageContents} deviceInfo={deviceInfo} />
-        </div>
-      </div>
-
-      {pageContents?.promotions?.map((banner: any, bId: number) => (
-        <PromotionBanner data={banner} key={bId} css={css} />
-      ))}
-      <div className="px-4 py-3 mx-auto lg:container sm:px-4 lg:px-0 sm:py-6 md:px-4">
-        {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
-          <Heading title={heading?.collectionheadings_title} subTitle={heading?.collectionheadings_subtitle} key={`collection-heading-${cId}`} />
-        ))}
-        <Collections data={pageContents?.collectionlist} />
       </div>
     </>
   )

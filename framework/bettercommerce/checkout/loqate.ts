@@ -13,22 +13,22 @@ export default function loqateAddress() {
       `?Key=${process.env.LOQATE_KEY}&Text=${postCode}&Countries=${country}`
     try {
       const response: any = await axios.post(findAddressUrl)
-      console.log(response.data.Items)
+      // console.log(response.data.Items)
       if (
-        response.data.Items.length == 1 &&
-        typeof response.data.Items[0].Error != 'undefined'
+        response?.data?.Items.length == 1 &&
+        typeof response?.data?.Items[0]?.Error != 'undefined'
       ) {
         // Show the error message
-        // throw new Error(response.data.Items[0].Description)
+        return { response: { message: response?.data?.Items[0]?.Description , data: [] } }
       } else {
-        if (response.data.Items.length == 0) {
+        if (response?.data?.Items.length == 0) {
           return { response: { message: 'No items found', data: [] } }
         } else {
           return {
             response: {
               message: '',
-              data: response.data.Items.filter(
-                (i: any) => i.Type === 'Address'
+              data: response?.data?.Items?.filter(
+                (i: any) => i?.Type === 'Address'
               ),
             },
           }
@@ -48,7 +48,7 @@ export const retrieveAddress = () => {
         retrieveUrl +
         `?Key=${process.env.LOQATE_KEY}&Id=${encodeURIComponent(id)}`
       const address: any = await axios.post(retrieveAddress)
-      return { response: { message: '', data: address.data.Items } }
+      return { response: { message: '', data: address?.data?.Items } }
     } catch (error: any) {
       console.log(error)
       throw new Error(error.message)

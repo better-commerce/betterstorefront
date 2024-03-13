@@ -92,7 +92,7 @@ export default function Filters({
                 <Disclosure
                   as="div"
                   key={section.name}
-                  className="p-0 border-t border-white border-y-2 bg-gray-100"
+                  className="p-0 bg-gray-100 border-t border-white border-y-2"
                 >
                   {({ open }) => (
                     <>
@@ -110,7 +110,7 @@ export default function Filters({
                           />
                         </span>
                       </Disclosure.Button>
-                      <Disclosure.Panel className="pt-4 space-y-3 px-4 bg-white">
+                      <Disclosure.Panel className="px-4 pt-4 space-y-3 bg-white">
                         <FilterList
                           handleFilters={handleFilters}
                           sectionKey={section.key}
@@ -130,7 +130,7 @@ export default function Filters({
 
       <section
         aria-labelledby="filter-heading-filter"
-        className="flex items-center justify-between px-0 py-0 text-center w-screen mob-w-screen border-t border-gray-200 sm:px-4 lg:max-w-7xl lg:px-8"
+        className="flex items-center justify-between w-screen px-0 py-0 text-center border-t border-gray-200 mob-w-screen sm:px-4 lg:max-w-7xl lg:px-8"
       >
         <h2 id="filter-heading-filter" className="sr-only">
           {GENERAL_FILTER_TITLE}
@@ -140,7 +140,7 @@ export default function Filters({
             <button
               onClick={() => setOpen(true)}
               title="Product Filter"
-              className="flex items-center font-medium text-gray-700 group px-4 py-2 bg-gray-200"
+              className="flex items-center px-4 py-2 font-medium text-gray-700 bg-gray-200 group"
             >
               <AdjustmentsHorizontalIcon className='w-5 h-5 text-black' />
               {/* {appliedFilters?.length > 0 && routerFilters.length} */}
@@ -155,7 +155,7 @@ export default function Filters({
       </section>
       {appliedFilters?.length > 0 && (
         <>
-          <div className='flex justify-between px-4 items-center'>
+          <div className='flex items-center justify-between px-4'>
             <h4 className="flex mb-2 text-sm font-bold">
               Applied Filters
             </h4>
@@ -169,12 +169,12 @@ export default function Filters({
               </button>
             </div>
           </div>
-          <div className="flex flex-wrap px-4 py-2 border-t border-gray-100 my-2">
+          <div className="flex flex-wrap">
             <div className="flex flex-wrap">
               {appliedFilters?.map((appliedFilter: any, idx: number) => (
                 <div
                   key={`applied-filter-${idx}`}
-                  className="flex py-1 px-2 m-1 w-auto text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl"
+                  className="flex w-auto px-2 py-1 m-1 text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl"
                 >
                   {appliedFilter?.name && (
                     <div className="flex">

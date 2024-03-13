@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-
-//
 import { BTN_NOTIFY_ME, BTN_PRE_ORDER } from '@components/utils/textVariables'
 import { PRODUCT_TAGS } from '@components/utils/constants'
+import { BellIcon, ClockIcon, ShoppingBagIcon, SparklesIcon, StarIcon, TagIcon } from '@heroicons/react/24/outline'
+import IconDiscount from '@components/new-components/IconDiscount'
 
 interface Props {
   product: any
@@ -47,46 +47,61 @@ export default function ProductTag({ product }: Props) {
 
   if (isNotifyMeEnabled) {
     return (
-      <div className="w-1/2 !min-w-[100px] text-white bg-red-500 ribbon">
-        {BTN_NOTIFY_ME}
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+        <BellIcon className="w-3.5 h-3.5" />
+        <div className="leading-none ms-1">
+          {BTN_NOTIFY_ME}
+        </div>
       </div>
     )
   }
   if (isPreorderEnabled) {
     return (
-      <div className="w-1/2 sm:!min-w-[105px] text-white bg-emerald-500 ribbon">
-        {BTN_PRE_ORDER}
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+        <ShoppingBagIcon className="w-3.5 h-3.5" />
+        <div className="leading-none ms-1">
+          {BTN_PRE_ORDER}
+        </div>
       </div>
     )
   }
   if (tagValues?.newLaunch) {
-    return <div className="w-1/2 text-white bg-black ribbon">New</div>
+    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'><SparklesIcon className="w-3.5 h-3.5" /><div className="leading-none ms-1"> New in</div></div>
   }
 
   if (tagValues?.onSale) {
-    return <div className="w-1/2 text-white bg-red-700 ribbon">On Sale</div>
+    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'><IconDiscount className="w-3.5 h-3.5" /><div className="leading-none ms-1">On Sale</div></div>
   }
 
   if (tagValues?.bestSeller) {
     return (
-      <div className="w-1/2 sm:!min-w-[110px] text-white ribbon bg-sky-800">
-        Best Seller
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+        <StarIcon className="w-3.5 h-3.5" />
+        <div className="leading-none ms-1">
+          Best Seller
+        </div>
       </div>
     )
   }
 
   if (tagValues?.trending) {
     return (
-      <div className="w-1/2 sm:!min-w-[97px] text-white ribbon bg-sky-800">
-        Trending
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+        <TagIcon className="w-3.5 h-3.5" />
+        <div className="leading-none ms-1">
+          Trending
+        </div>
       </div>
     )
   }
 
   if (tagValues?.exclusive) {
     return (
-      <div className="w-1/2 sm:!min-w-[100px] text-black bg-tan ribbon">
-        Exclusive
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+        <ClockIcon className="w-3.5 h-3.5" />
+        <div className="leading-none ms-1">
+          Exclusive
+        </div>
       </div>
     )
   }
