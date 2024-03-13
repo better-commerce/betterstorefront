@@ -12,11 +12,9 @@ export interface SectionSliderProductCardProps {
   heading?: any;
   subHeading?: string;
   data?: any;
-  headingFontClassName?:any
-  headingClassName:any
 }
 
-const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, headingFontClassName, headingClassName }) => {
+const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data }) => {
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
   useEffect(() => {
