@@ -16,6 +16,7 @@ import { matchStrings } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import { Guid } from '@commerce/types'
 import { AlertType } from '@framework/utils/enums'
+import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
 
 export function asyncHandler() {
   function getAddress() {
@@ -327,8 +328,8 @@ export default function AddressBook({ deviceInfo }: any) {
     const newValues = {
       ...values,
       userId: user?.userId,
-      country: data?.country?.split('&')?.[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
-      countryCode: data?.country?.split('&')?.[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      country: data?.country?.split('&')?.[1] || data?.country || DEFAULT_COUNTRY,
+      countryCode: data?.country?.includes('&') ? data.country.split('&')[0] : data?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY
     }
     if (data?.id == 0) {
       lookupAddressId(newValues).then((addressId: number) => {
@@ -358,7 +359,8 @@ export default function AddressBook({ deviceInfo }: any) {
               closeNewAddressModal()
             })
         } else {
-          // Duplicate address exists
+          setAlert({ type: AlertType.ERROR, msg: Messages.Errors['DUPLICATE_ADDRESS'] })
+          closeNewAddressModal()
         }
       })
     } else {
@@ -373,9 +375,8 @@ export default function AddressBook({ deviceInfo }: any) {
           // });
           fetchAddress()
 
-          if (callback) {
-            callback()
-          }
+          if (callback) { callback()}
+          else{ setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})}
           closeNewAddressModal()
           // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
@@ -401,19 +402,16 @@ export default function AddressBook({ deviceInfo }: any) {
     if (addresses && addresses.length) {
       const lookupAddress = addresses.filter((address: any) => {
         const titleMatch = strVal(address.title) == strVal(addressInfo.title)
-        const firstNameMatch =
-          strVal(address.firstName) == strVal(addressInfo.firstName)
-        const lastNameMatch =
-          strVal(address.lastName) == strVal(addressInfo.lastName)
-        const address1Match =
-          strVal(address.address1) == strVal(addressInfo.address1)
-        const address2Match =
-          strVal(address.address2) == strVal(addressInfo.address2)
+        const firstNameMatch = strVal(address.firstName) == strVal(addressInfo.firstName)
+        const lastNameMatch = strVal(address.lastName) == strVal(addressInfo.lastName)
+        const address1Match = strVal(address.address1) == strVal(addressInfo.address1)
+        const address2Match = strVal(address.address2) == strVal(addressInfo.address2)
+        const address3Match = strVal(address.address3) == strVal(addressInfo.address3)
         const cityMatch = strVal(address.city) == strVal(addressInfo.city)
-        const postCodeMatch =
-          strVal(address.postCode) == strVal(addressInfo.postCode)
-        const phoneNoMatch =
-          strVal(address.phoneNo) == strVal(addressInfo.phoneNo)
+        const stateMatch = strVal(address.state) == strVal(addressInfo.state)
+        const country = strVal(address.country) == strVal(addressInfo.country)
+        const postCodeMatch = strVal(address.postCode) == strVal(addressInfo.postCode)
+        const phoneNoMatch = strVal(address.phoneNo) == strVal(addressInfo.phoneNo)
 
         return (
           titleMatch &&
@@ -421,7 +419,10 @@ export default function AddressBook({ deviceInfo }: any) {
           lastNameMatch &&
           address1Match &&
           address2Match &&
+          address3Match &&
           cityMatch &&
+          stateMatch &&
+          country &&
           postCodeMatch &&
           phoneNoMatch
         )
