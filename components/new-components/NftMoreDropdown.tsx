@@ -1,11 +1,11 @@
 "use client";
 
 import React, { FC, useState } from "react";
-import NcDropDown, { NcDropDownItem } from "@components/new-components/NcDropDown/NcDropDown";
 import ModalDelete from "./ModalDelete";
 import ModalEdit from "./ModalEdit";
 import ModalReportItem from "./ModalReportItem";
 import ModalTransferToken from "./ModalTransferToken";
+import NcDropDown, { NcDropDownItem } from "./shared/NcDropDown/NcDropDown";
 
 export interface NftMoreDropdownProps {
   containerClassName?: string;

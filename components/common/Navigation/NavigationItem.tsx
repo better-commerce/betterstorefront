@@ -5,12 +5,11 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import React, { FC, Fragment, useState } from "react";
 
 import Link from "next/link";
-import { Route } from "routers/types";
 
 export interface NavItemType {
   id: string;
   name: string;
-  href: Route;
+  href: any;
   targetBlank?: boolean;
   children?: NavItemType[];
   type?: "dropdown" | "megaMenu" | "none";

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import Button, { ButtonProps } from "@components/new-components/Button/Button";
+import Button, { ButtonProps } from "./shared/Button/Button";
 
 export interface ButtonDropdownProps extends ButtonProps {}
 
@@ -8,10 +8,10 @@ const ButtonDropdown: FC<ButtonDropdownProps> = ({
   translate,
   children,
   ...args
-}) => {
+}:any) => {
   return (
     <Button
-      className="text-neutral-700 border border-neutral-200 dark:text-neutral-200 dark:border-neutral-700"
+      className="border text-neutral-700 border-neutral-200 dark:text-neutral-200 dark:border-neutral-700"
       sizeClass="px-4 py-2 sm:py-2.5"
       fontSize="text-sm"
       translate="hover:border-neutral-300 w-full justify-between"

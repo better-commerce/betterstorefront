@@ -3,13 +3,12 @@
 import React, { FC, Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
-import { Route } from "../shared/routers/types";
 
 export interface NcDropDownItem {
   id: string;
   name: string;
   icon?: string;
-  href?: Route;
+  href?: any;
 }
 
 export interface NcDropDownProps {

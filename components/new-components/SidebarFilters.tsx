@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Checkbox from "@components/new-components/Checkbox/Checkbox";
 import Slider from "rc-slider";
-import Radio from "@components/new-components/Radio/Radio";
 import MySwitch from "@components/new-components/MySwitch";
+import Checkbox from "./shared/Checkbox/Checkbox";
+import Radio from "./shared/Radio/Radio";
 
 // DEMO DATA
 const DATA_categories = [
@@ -150,7 +150,7 @@ const SidebarFilters = () => {
   // OK
   const renderTabsPriceRage = () => {
     return (
-      <div className="relative flex flex-col py-8 space-y-5 pr-3">
+      <div className="relative flex flex-col py-8 pr-3 space-y-5">
         <div className="space-y-5">
           <span className="font-semibold">Price range</span>
           <Slider
@@ -174,8 +174,8 @@ const SidebarFilters = () => {
             >
               Min price
             </label>
-            <div className="mt-1 relative rounded-md">
-              <span className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
+            <div className="relative mt-1 rounded-md">
+              <span className="absolute inset-y-0 flex items-center pointer-events-none right-4 text-neutral-500 sm:text-sm">
                 $
               </span>
               <input
@@ -183,7 +183,7 @@ const SidebarFilters = () => {
                 name="minPrice"
                 disabled
                 id="minPrice"
-                className="block w-32 pr-10 pl-4 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
+                className="block w-32 pl-4 pr-10 bg-transparent rounded-full sm:text-sm border-neutral-200 dark:border-neutral-700"
                 value={rangePrices[0]}
               />
             </div>
@@ -195,8 +195,8 @@ const SidebarFilters = () => {
             >
               Max price
             </label>
-            <div className="mt-1 relative rounded-md">
-              <span className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
+            <div className="relative mt-1 rounded-md">
+              <span className="absolute inset-y-0 flex items-center pointer-events-none right-4 text-neutral-500 sm:text-sm">
                 $
               </span>
               <input
@@ -204,7 +204,7 @@ const SidebarFilters = () => {
                 disabled
                 name="maxPrice"
                 id="maxPrice"
-                className="block w-32 pr-10 pl-4 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
+                className="block w-32 pl-4 pr-10 bg-transparent rounded-full sm:text-sm border-neutral-200 dark:border-neutral-700"
                 value={rangePrices[1]}
               />
             </div>

@@ -1,10 +1,10 @@
 "use client";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { RadioGroup } from "@headlessui/react";
-import Textarea from "@components/new-components/Textarea/Textarea";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import ButtonSecondary from "./shared/Button/ButtonSecondary";
-import NcModal from "@components/new-components/NcModal/NcModal";
+import Textarea from "./shared/Textarea/Textarea";
+import NcModal from "./shared/NcModal/NcModal";
 
 export interface ProblemPlan {
   name: string;
@@ -68,7 +68,7 @@ const ModalReportItem: FC<ModalReportItemProps> = ({
         {/* RADIO PROBLEM PLANS */}
         <RadioGroup value={problemSelected} onChange={setProblemSelected}>
           <RadioGroup.Label className="sr-only">Problem Plans</RadioGroup.Label>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             {problemPlans.map((plan) => (
               <RadioGroup.Option
                 key={plan.name}

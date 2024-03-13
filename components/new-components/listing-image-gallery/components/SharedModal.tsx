@@ -9,11 +9,11 @@ import { AnimatePresence, motion, MotionConfig } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { useSwipeable } from "react-swipeable";
-import { variants } from "@/utils/animationVariants";
 import downloadPhoto from "../utils/downloadPhoto";
 import { range } from "../utils/range";
 import type { ListingGalleryImage } from "../utils/types";
 import Twitter from "./Icons/Twitter";
+import { variants } from "@components/new-components/shared/utils/animationVariants";
 
 interface SharedModalProps {
   index: number;
@@ -96,7 +96,7 @@ export default function SharedModal({
         </div>
 
         {/* Buttons + bottom nav bar */}
-        <div className="absolute inset-0 mx-auto flex max-w-7xl items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center mx-auto max-w-7xl">
           {/* Buttons */}
           {loaded && (
             <div className="relative aspect-[3/2] max-h-full w-full">
@@ -108,7 +108,7 @@ export default function SharedModal({
                       style={{ transform: "translate3d(0, 0, 0)" }}
                       onClick={() => changePhotoId(index - 1)}
                     >
-                      <ChevronLeftIcon className="h-6 w-6" />
+                      <ChevronLeftIcon className="w-6 h-6" />
                     </button>
                   )}
                   {index + 1 < images.length && (
@@ -117,7 +117,7 @@ export default function SharedModal({
                       style={{ transform: "translate3d(0, 0, 0)" }}
                       onClick={() => changePhotoId(index + 1)}
                     >
-                      <ChevronRightIcon className="h-6 w-6" />
+                      <ChevronRightIcon className="w-6 h-6" />
                     </button>
                   )}
                 </>
@@ -126,34 +126,34 @@ export default function SharedModal({
                 {navigation ? (
                   <a
                     href={"#"}
-                    className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
+                    className="p-2 transition rounded-full bg-black/50 text-white/75 backdrop-blur-lg hover:bg-black/75 hover:text-white"
                     target="_blank"
                     title="Open fullsize version"
                     rel="noreferrer"
                   >
-                    <ArrowTopRightOnSquareIcon className="h-5 w-5" />
+                    <ArrowTopRightOnSquareIcon className="w-5 h-5" />
                   </a>
                 ) : (
                   <a
                     href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20pic%20from%20Chisfis%20!%0A%0A${location.href}`}
-                    className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
+                    className="p-2 transition rounded-full bg-black/50 text-white/75 backdrop-blur-lg hover:bg-black/75 hover:text-white"
                     target="_blank"
                     title="Open fullsize version"
                     rel="noreferrer"
                   >
-                    <Twitter className="h-5 w-5" />
+                    <Twitter className="w-5 h-5" />
                   </a>
                 )}
               </div>
               <div className="absolute top-0 left-0 flex items-center gap-2 p-3 text-white">
                 <button
                   onClick={() => closeModal()}
-                  className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
+                  className="p-2 transition rounded-full bg-black/50 text-white/75 backdrop-blur-lg hover:bg-black/75 hover:text-white"
                 >
                   {navigation ? (
-                    <XMarkIcon className="h-5 w-5" />
+                    <XMarkIcon className="w-5 h-5" />
                   ) : (
-                    <ArrowUturnLeftIcon className="h-5 w-5" />
+                    <ArrowUturnLeftIcon className="w-5 h-5" />
                   )}
                 </button>
               </div>

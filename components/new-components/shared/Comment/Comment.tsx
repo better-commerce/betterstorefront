@@ -1,7 +1,7 @@
 import { _getPersonNameRd } from "@components/common/Header/fakeData";
 import React from "react";
 import { FC } from "react";
-import Avatar from "@components/new-components/Avatar/Avatar";
+import Avatar from "../Avatar/Avatar";
 
 export interface CommentProps {
   isSmall?: boolean;
@@ -9,11 +9,11 @@ export interface CommentProps {
 
 const Comment: FC<CommentProps> = ({ isSmall }) => {
   return (
-    <div className="nc-CommentCard flex ">
+    <div className="flex nc-CommentCard ">
       <div className="pt-1">
         <Avatar sizeClass={`w-6 h-6 ${!isSmall ? "sm:h-8 sm:w-8 " : ""}`} />
       </div>
-      <div className="flex-grow flex flex-col p-4 ml-2 text-sm border border-neutral-200 rounded-xl sm:ml-3 sm:text-base dark:border-neutral-700">
+      <div className="flex flex-col flex-grow p-4 ml-2 text-sm border border-neutral-200 rounded-xl sm:ml-3 sm:text-base dark:border-neutral-700">
         <div className="relative flex items-center pr-6">
           <a
             className="flex-shrink-0 font-semibold text-neutral-800 dark:text-neutral-100"
@@ -22,11 +22,11 @@ const Comment: FC<CommentProps> = ({ isSmall }) => {
             {_getPersonNameRd()}
           </a>
           <span className="mx-2">·</span>
-          <span className="text-neutral-500 dark:text-neutral-400 text-xs line-clamp-1 sm:text-sm">
+          <span className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1 sm:text-sm">
             May 20, 2021
           </span>
         </div>
-        <span className="block text-neutral-700 mt-2 mb-3 sm:mt-3 sm:mb-4 dark:text-neutral-300">
+        <span className="block mt-2 mb-3 text-neutral-700 sm:mt-3 sm:mb-4 dark:text-neutral-300">
           In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at,
           feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend
           quam a odio. In hac habitasse platea dictumst.

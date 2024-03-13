@@ -3,10 +3,10 @@
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Fragment } from "react";
-import { MEGAMENU_TEMPLATES } from "@/data/navigation";
 import CardCategory3 from "@components/new-components/CardCategories/CardCategory3";
-import { NavItemType } from "@components/new-components/Navigation/NavigationItem";
 import Link from "next/link";
+import { MEGAMENU_TEMPLATES } from "@components/data/navigation";
+import { NavItemType } from "../shared/Navigation/NavigationItem";
 
 export default function TemplatesDropdown() {
   const renderMegaMenuNavlink = (item: NavItemType) => {
@@ -25,7 +25,7 @@ export default function TemplatesDropdown() {
   };
 
   return (
-    <div className="TemplatesDropdown hidden lg:block">
+    <div className="hidden TemplatesDropdown lg:block">
       <Popover className="">
         {({ open, close }) => (
           <>
@@ -51,16 +51,16 @@ export default function TemplatesDropdown() {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute z-20 w-full mt-3.5 inset-x-0">
-                <div className="bg-white dark:bg-neutral-900 shadow-lg">
+                <div className="bg-white shadow-lg dark:bg-neutral-900">
                   <div className="container">
                     <div className="flex text-sm border-t border-slate-200 dark:border-slate-700 py-14">
-                      <div className="flex-1 grid grid-cols-4 gap-6 xl:gap-8 pr-6 xl:pr-8">
+                      <div className="grid flex-1 grid-cols-4 gap-6 pr-6 xl:gap-8 xl:pr-8">
                         {MEGAMENU_TEMPLATES.map((item, index) => (
                           <div key={index}>
                             <p className="font-medium text-slate-900 dark:text-neutral-200">
                               {item.name}
                             </p>
-                            <ul className="grid space-y-4 mt-4">
+                            <ul className="grid mt-4 space-y-4">
                               {item.children?.map(renderMegaMenuNavlink)}
                             </ul>
                           </div>
