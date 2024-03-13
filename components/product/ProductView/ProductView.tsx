@@ -895,16 +895,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         </div>
         {/* DETAIL AND REVIEW */}
+
         <div className="mt-12 space-y-10 sm:mt-16 sm:space-y-16">
           {renderDetailSection()}
           <hr className="border-slate-200 dark:border-slate-700" />
-          {renderReviews()}
-          <hr className="border-slate-200 dark:border-slate-700" />
-        </div>
-        <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
           <div className="flex flex-col w-full px-0 lg:mx-auto sm:container page-container">
             <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
           </div>
+          {renderReviews()}
+        </div>
+        <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
           {product?.componentProducts && (
             <>
               <div className="flex flex-col section-devider"></div>
