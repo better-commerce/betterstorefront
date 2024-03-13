@@ -244,9 +244,10 @@ export default function Summary({
                                       {isIncludeVAT
                                         ? product.price?.formatted?.withTax
                                         : product.price?.formatted?.withoutTax}
-                                      {product.listPrice?.raw.withTax > 0 &&
+                                      {product?.price?.raw?.withTax > 0 &&
+                                        product.listPrice?.raw.withTax > 0 &&
                                         product.listPrice?.raw.withTax !=
-                                        product.price?.raw?.withTax ? (
+                                        product.price?.raw?.withTax && (
                                         <span className="px-2 text-sm text-red-400 line-through">
                                           {GENERAL_PRICE_LABEL_RRP}{' '}
                                           {isIncludeVAT
@@ -255,7 +256,7 @@ export default function Summary({
                                             : product.listPrice.formatted
                                               ?.withoutTax}
                                         </span>
-                                      ) : null}
+                                      )}
                                     </p>
                                   </div>
                                   <p className="font-normal text-gray-700 text-ms">
@@ -536,7 +537,8 @@ export default function Summary({
                                     ? product.price?.formatted?.withTax
                                     : product.price?.formatted?.withoutTax)
                                     :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>}
-                                {product.listPrice?.raw.withTax > 0 &&
+                                {product?.price?.raw?.withTax > 0 &&
+                                product.listPrice?.raw.withTax > 0 &&
                                   product.listPrice?.raw.withTax !=
                                   product.price?.raw?.withTax ? (
                                   <span className="px-2 text-sm text-red-400 line-through">

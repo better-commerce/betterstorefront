@@ -3,6 +3,8 @@ import { GENERAL_EDIT } from '@components/utils/textVariables'
 export default function ConfirmedGeneralComponent({
   onStateChange,
   content = {},
+  isGuest =false,
+  handleOpenEditAddressModal=() => {},
   isPaymentLink = false,
 }: any) {
   return (
@@ -22,7 +24,7 @@ export default function ConfirmedGeneralComponent({
       {!isPaymentLink && (
         <div className="flex">
           <button
-            onClick={onStateChange}
+            onClick={isGuest ? handleOpenEditAddressModal : onStateChange}
             className="font-bold uppercase btn font-xs"
             type="button"
           >
