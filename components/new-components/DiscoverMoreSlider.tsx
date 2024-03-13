@@ -59,6 +59,7 @@ const DiscoverMoreSlider = ({ heading, data }: any) => {
     >
       {heading?.map((h: any, iIdx: number) => (
         <Heading
+          key={iIdx}
           className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 nc-p-r-container "
           desc=""
           rightDescText={h?.categoryheading_subtitle}

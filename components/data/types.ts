@@ -1,8 +1,7 @@
-import { Route } from "../shared/routers/types";
 
 export interface CustomLink {
   label: string;
-  href: Route;
+  href: any;
   targetBlank?: boolean;
 }
 
