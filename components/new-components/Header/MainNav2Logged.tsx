@@ -64,12 +64,12 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   const renderContent = () => {
     return (
       <>
-        <div className="fixed top-0 left-0 z-40 flex justify-between w-full h-20 border-b border-gray-200 bg-slate-200">
+        <div className="fixed inset-x-0 top-0 z-20 w-full bg-white/80 backdrop-blur-lg dark:border-gray-700/30 dark:bg-gray-900/80">
           <div className="container flex justify-between mx-auto">
             <div className="promotion-banner mob-marquee"></div>
-            <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
+            <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
               {b2bEnabled && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
-              <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap"> Prices inc VAT </div>
+              <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">Prices inc VAT</div>
               <div className="flow-root w-10 px-2 sm:w-12">
                 <div className="flex justify-center flex-1 mx-auto">
                   <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
@@ -77,18 +77,15 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               </div>
             </div>
           </div>
-        </div>
-        <div className="fixed left-0 z-40 flex justify-between w-full h-20 bg-white border-gray-200 border-y top-6">
           <div className="container flex justify-between mx-auto">
             <div className="flex items-center flex-1 lg:hidden"> <MenuBar /> </div>
-
             <div className="flex items-center lg:flex-1">
               <Link href="/" passHref>
                 <Logo className="flex-shrink-0" />
               </Link>
             </div>
 
-            <div className="flex-[2] hidden lg:flex justify-center mx-4">
+            <div className="flex-[2] justify-center hidden mx-4 lg:flex">
               <Navigation navItems={config} />
             </div>
 

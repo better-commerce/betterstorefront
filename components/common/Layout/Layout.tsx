@@ -203,7 +203,7 @@ const Layout: FC<Props & IExtraProps> = ({
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
-        <div className={`text-base pt-20 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
+        <div className={`text-base pt-24 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
           <MainNav2Logged
             onIncludeVATChanged={includeVATChanged}
             currencies={config?.currencies}
