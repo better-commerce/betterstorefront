@@ -143,12 +143,7 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
                   <AddressFormField key={idx} context={context} item={item} />
                 ))}
                { <AddressFormField context={context} item = {{...findByFieldName(formFields, "country"),options:countries}} /> }
-                {
-                  <AddressFormField
-                    context={context}
-                    item={findByFieldName(formFields, 'useAsDefault')}
-                  />
-                }
+                {!isRegisterAsGuestUser && <AddressFormField context={context} item={findByFieldName(formFields, 'useAsDefault')} /> }
               </div>
             </div>
             <div className="w-full p-4 pt-0">
@@ -177,7 +172,7 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
                     item={findByFieldName(formFields, 'whtsappUpdated')}
                   />
                 }
-                {(formFields?.length
+                {!isRegisterAsGuestUser && (formFields?.length
                   ? Array.from<any>([]).concat([
                       findByFieldName(formFields, 'categoryName'),
                     ])
