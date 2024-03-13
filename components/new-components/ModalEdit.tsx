@@ -2,8 +2,8 @@
 import React, { FC, useEffect, useRef } from "react";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import ButtonSecondary from "./shared/Button/ButtonSecondary";
-import Input from "@components/new-components/Input/Input";
-import NcModal from "@components/new-components/NcModal/NcModal";
+import Input from "./shared/Input/Input";
+import NcModal from "./shared/NcModal/NcModal";
 
 export interface ModalEditProps {
   show: boolean;
@@ -35,7 +35,7 @@ const ModalEdit: FC<ModalEditProps> = ({ show, onCloseModalEdit }) => {
           Change price
         </h3>
         <span className="text-sm">Are you sure you want to change price?</span>
-        <div className="mt-8 relative rounded-md shadow-sm">
+        <div className="relative mt-8 rounded-md shadow-sm">
           <Input ref={textareaRef} defaultValue={"1.000"} type={"text"} />
 
           <div className="absolute inset-y-0 right-0 flex items-center">
@@ -45,7 +45,7 @@ const ModalEdit: FC<ModalEditProps> = ({ show, onCloseModalEdit }) => {
             <select
               id="currency"
               name="currency"
-              className="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-neutral-500 dark:text-neutral-300 sm:text-sm rounded-md"
+              className="h-full py-0 pl-2 bg-transparent border-transparent rounded-md focus:ring-indigo-500 focus:border-indigo-500 pr-7 text-neutral-500 dark:text-neutral-300 sm:text-sm"
             >
               <option>ETH</option>
               <option>BC</option>

@@ -5,8 +5,8 @@ export interface HeaderLoggedProps {}
 
 const HeaderLogged: FC<HeaderLoggedProps> = () => {
   return (
-    <div className="nc-HeaderLogged sticky top-0 w-full z-40 ">
-      <MainNav2Logged />
+    <div className="sticky top-0 z-40 w-full nc-HeaderLogged ">
+      {/* <MainNav2Logged /> */}
     </div>
   );
 };

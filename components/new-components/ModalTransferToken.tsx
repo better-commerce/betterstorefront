@@ -2,8 +2,8 @@
 import React, { FC, useEffect, useRef } from "react";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import ButtonSecondary from "./shared/Button/ButtonSecondary";
-import Input from "@components/new-components/Input/Input";
-import NcModal from "@components/new-components/NcModal/NcModal";
+import Input from "./shared/Input/Input";
+import NcModal from "./shared/NcModal/NcModal";
 
 export interface ModalTransferTokenProps {
   show: boolean;

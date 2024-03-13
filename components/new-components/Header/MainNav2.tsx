@@ -1,8 +1,6 @@
 "use client";
 
 import React, { FC, useState } from "react";
-import Logo from "@components/new-components/Logo/Logo";
-import MenuBar from "@components/new-components/MenuBar/MenuBar";
 import LangDropdown from "./LangDropdown";
 import AvatarDropdown from "./AvatarDropdown";
 import TemplatesDropdown from "./TemplatesDropdown";
@@ -10,6 +8,8 @@ import DropdownCategories from "./DropdownCategories";
 import CartDropdown from "./CartDropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import MenuBar from "../shared/MenuBar/MenuBar";
+import { Logo } from "@components/ui";
 
 export interface MainNav2Props {
   className?: string;
