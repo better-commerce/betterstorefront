@@ -1,6 +1,6 @@
 import { Popover, Transition } from "@headlessui/react";
-import Input from "@components/new-components/Input/Input";
 import React, { FC, Fragment } from "react";
+import Input from "../shared/Input/Input";
 
 interface Props {
   className?: string;
@@ -21,7 +21,7 @@ const SearchDropdown: FC<Props> = ({ className = "" }) => {
 
           return (
             <>
-              <Popover.Button className="w-12 h-12 rounded-full text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none flex items-center justify-center">
+              <Popover.Button className="flex items-center justify-center w-12 h-12 rounded-full text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none">
                 <svg
                   width={22}
                   height={22}

@@ -1,21 +1,21 @@
 "use client";
 
 import React, { createRef, FC, useState } from "react";
-import AvatarDropdown from "./AvatarDropdown";
-import CartDropdown from "./CartDropdown";
+import Link from "next/link";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import MenuBar from "../shared/MenuBar/MenuBar";
-import Navigation from "../shared/Navigation/Navigation";
+import dynamic from "next/dynamic";
 import { IExtraProps } from "@components/common/Layout/Layout";
 import { Logo, useUI } from "@components/ui";
-import Link from "next/link";
 import { Searchbar } from "@components/common";
-import LangDropdown from "./LangDropdown";
-import dynamic from "next/dynamic";
-import ToggleSwitch from "@components/common/ToggleSwitch";
 import { vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
+const AvatarDropdown = dynamic(() => import('@components/new-components/Header/AvatarDropdown'))
+const LangDropdown = dynamic(() => import('@components/new-components/Header/LangDropdown'))
+const CartDropdown = dynamic(() => import('@components/new-components/Header/CartDropdown'))
+const MenuBar = dynamic(() => import('@components/new-components/shared/MenuBar/MenuBar'))
+const Navigation = dynamic(() => import('@components/new-components/shared/Navigation/Navigation'))
+const ToggleSwitch = dynamic(() => import('@components/common/ToggleSwitch'))
 const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
 export interface MainNav2LoggedProps { }
 interface Props {
@@ -64,8 +64,8 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   const renderContent = () => {
     return (
       <>
-        <div className="fixed inset-x-0 top-0 z-20 w-full bg-white/80 backdrop-blur-lg dark:border-gray-700/30 dark:bg-gray-900/80">
-          <div className="container flex justify-between mx-auto">
+        <div className="fixed inset-x-0 top-0 z-20 w-full py-2 sm:py-0 bg-white/80 backdrop-blur-lg dark:border-gray-700/30 dark:bg-gray-900/80">
+          <div className="container justify-between hidden mx-auto sm:flex">
             <div className="promotion-banner mob-marquee"></div>
             <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
               {b2bEnabled && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
@@ -78,7 +78,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
             </div>
           </div>
           <div className="container flex justify-between mx-auto">
-            <div className="flex items-center flex-1 lg:hidden"> <MenuBar /> </div>
+            <div className="flex items-center flex-1 lg:hidden"> <MenuBar navItems={config} /> </div>
             <div className="flex items-center lg:flex-1">
               <Link href="/" passHref>
                 <Logo className="flex-shrink-0" />
@@ -91,7 +91,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
 
             <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
               <LangDropdown />
-              <button className="items-center justify-center hidden w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+              <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
                 {renderMagnifyingGlassIcon()}
               </button>
               <AvatarDropdown />

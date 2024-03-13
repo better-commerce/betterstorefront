@@ -93,39 +93,7 @@ export default function ProductDetails({ product, description }: any) {
 
   return (
     <>
-      <div className="border-b divide-y divide-gray-200">
-        {descriptionConfig.map((desc: any, id: number) => (
-          <Disclosure as="div" key={`${id}-desc-item`} defaultOpen>
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="relative flex items-center justify-between w-full py-2 pr-2 text-left group sm:py-2">
-                  <h2 className="font-bold text-black uppercase font-18">
-                    {desc.title}
-                  </h2>
-                  <span className="flex items-center ml-6">
-                    {open ? (
-                      <MinusSmallIcon
-                        className="block w-6 h-6 text-black group-hover:text-gray-700"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <PlusSmallIcon
-                        className="block w-6 h-6 text-black group-hover:text-gray-700"
-                        aria-hidden="true"
-                      />
-                    )}
-                  </span>
-                </Disclosure.Button>
-                <Disclosure.Panel as="div" className="pb-6 prose-sm prose">
-                  {desc.InnerComponent({
-                    attributes: product.customAttributes || product.attributes,
-                  })}
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        ))}
-      </div>
+      
       <div className="border-b divide-y divide-gray-200 full-table">
         {detailsConfig.map((detail: any, idx: number) => (
           <Disclosure as="div" key={`${idx}-detail-item`}>

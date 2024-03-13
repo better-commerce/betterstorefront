@@ -897,21 +897,21 @@ body {
 }
 
 .promo-bg {
-  background: rgba(0, 25, 137, 0.1);
-  border: 1px solid #001e89;
-  border-radius: 2px !important;
+    background: #f4f7fa !important;
+    border: 1px solid #f4f7fa;
+    border-radius: 22px !important;
 }
 
 .promo-bg:hover {
-  background: rgba(0, 16, 137, 0.1);
-  border: 1px solid #002b89;
+  background: #f4f7fa;
+  border: 1px solid #e8ebef;
 }
 
 .coupon-panel {
   width: auto;
-  background: rgba(0, 57, 137, 0.1);
-  border: 1px solid #001089;
-  border-radius: 2px !important;
+  background: #f4f7fa;
+  border: 1px solid #f4f7fa;
+  border-radius: 20px !important;
   position: relative;
   display: table;
   justify-items: end;
@@ -933,8 +933,8 @@ body {
 
 .coupon-copy {
   display: inline-block;
-  border-left: 1px solid #001989;
-  color: #000e89;
+  border-left: 1px solid #d1d1d1;
+  color: #000000;
   text-align: center;
   justify-content: center;
   padding: 5px 10px;
@@ -17207,4 +17207,14 @@ input[type=time]::-webkit-calendar-picker-indicator {
 }
 .glide--rtl {
   direction: rtl;
+}
+
+.product-detail-description p,
+.product-detail-description ul {
+  margin-bottom: 15px !important;
+}
+
+.product-detail-description strong{
+    color: #393939;
+    font-weight: 600;
 }
