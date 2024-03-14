@@ -15,13 +15,9 @@ import {
   NEXT_ADDRESS,
   AddressPageAction,
   NEXT_GET_COUNTRIES,
+  Messages,
 } from '@components/utils/constants'
-import {
-  shippingFormConfig,
-  shippingSchema,
-  billingFormConfig,
-  billingSchema,
-} from './config'
+import { shippingFormConfig, shippingSchema } from './config'
 import Payments from './Payments'
 import Router from 'next/router'
 import { asyncHandler } from '@components/account/Address/AddressBook'
@@ -38,8 +34,7 @@ import {
   SHIPPING_INFORMATION,
 } from '@components/utils/textVariables'
 import PaymentWidget from '@components/checkout-old/PaymentWidget'
-import { AddressType } from '@framework/utils/enums'
-import { LocalStorage } from '@components/utils/payment-constants'
+import { AddressType , AlertType } from '@framework/utils/enums'
 import {
   parseFullName,
   resetSubmitData,
@@ -50,6 +45,7 @@ import useDataSubmit from '@commerce/utils/use-data-submit'
 import NewAddressModal from './NewAddressModal'
 import { Guid } from '@commerce/types'
 import { Cookie } from '@framework/utils/constants'
+import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
 
 const Spinner = () => {
   return (
@@ -121,6 +117,7 @@ export default function CheckoutForm({
     setGuestUser,
     isPaymentLink,
     hideOverlayLoaderState,
+    setAlert
   } = useUI()
 
   const uiContext = useUI()
@@ -224,6 +221,12 @@ export default function CheckoutForm({
         return {
           ...state,
           isShippingInformationCompleted: !state.isShippingInformationCompleted,
+        }
+      }
+      case 'TOGGLE_SHIPPING_BOOL': {
+        return {
+          ...state,
+          isShippingInformationCompleted: payload,
         }
       }
       case 'TOGGLE_PAYMENT': {
@@ -354,13 +357,12 @@ export default function CheckoutForm({
       address3: data?.address3,
       city: data?.city,
       state: data?.state,
+      country : data?.country,
       firstName: data?.firstName,
       lastName: data?.lastName ?? '',
       phoneNo: data?.mobileNumber,
       postCode: data?.postCode,
-      label: matchStrings(data?.categoryName, 'Other', true)
-        ? data?.otherAddressType
-        : data?.categoryName,
+      label: matchStrings(data?.categoryName, 'Other', true) ? data?.otherAddressType : data?.categoryName,
       title: '',
       isDefault: data?.useAsDefault,
       isDefaultBilling: data?.useAsDefault ? true : false,
@@ -370,8 +372,8 @@ export default function CheckoutForm({
     const newValues = {
       ...values,
       userId: getUserId(),
-      country: data?.country?.split('&')?.[1]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
-      countryCode: data?.country?.split('&')?.[0]|| BETTERCOMMERCE_DEFAULT_COUNTRY,
+      country: data?.country?.split('&')?.[1] || data?.country || DEFAULT_COUNTRY,
+      countryCode: data?.country?.includes('&') ? data.country.split('&')[0] : data?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY
     }
     if (data?.id == 0) {
       lookupAddressId(newValues).then((addressId: number) => {
@@ -396,17 +398,18 @@ export default function CheckoutForm({
                 updatedAddressesArr = updatedAddressesArr.filter((o: any) => {
                   if (mapSavedAddressIds.includes(o.id)) return o
                 })
-                setGuestUser({
-                  ...guestUser,
-                  addresses: [...updatedAddressesArr],
-                })
-                setUserAddresses([...updatedAddressesArr])
+                setGuestUser({ ...guestUser, addresses: [updatedAddressesArr[updatedAddressesArr.length-1]] })
+                setUserAddresses([updatedAddressesArr[updatedAddressesArr.length-1]])
+                handleShippingSubmit(updatedAddressesArr[updatedAddressesArr.length-1])
+                toggleShippingBool(true)
               }
 
               if (callback) {
                 callback()
               }
-
+              if(createAddressResult?.id){
+                setShippingInformation({ ...newValues, id: createAddressResult.id })
+              }
               closeNewAddressModal()
               // setAlert({type:'success',msg:NEW_ADDRESS})
             })
@@ -416,43 +419,16 @@ export default function CheckoutForm({
               console.log(error)
             })
         } else {
-          // Duplicate address exists
-          updateAddressHandler({
-            ...newValues,
-            ...{ id: addressId, customerId: cartItems?.userId },
-          })
-            .then(async (saveAddressResult: any) => {
-              // const updatedUser = { ...user, ...{ notifyByWhatsapp: data?.whtsappUpdated } };
-              // setUser(updatedUser);
-              // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
-              // });
-
-              let updatedAddressesArr = await fetchAddress()
-
-              // get only selected addresses in case of 'Guest' checkout
-              if (isGuestUser || guestUser?.userId) {
-                const mapSavedAddressIds = addresses
-                  .map((o: any) => o.id)
-                  .concat(addressId)
-                updatedAddressesArr = updatedAddressesArr.filter((o: any) => {
-                  if (mapSavedAddressIds.includes(o.id)) return o
-                })
-                setGuestUser({
-                  ...guestUser,
-                  addresses: [...updatedAddressesArr],
-                })
-                setUserAddresses([...updatedAddressesArr])
-              }
-
-              if (callback) {
-                callback()
-              }
-              closeNewAddressModal()
-              // setAlert({type:'success',msg:ADDRESS_UPDATE})
-            })
-            .catch((error: any) => {
-              console.log(error)
-            })
+          if(isGuestUser||guestUser?.userId){
+            setUserAddresses([{ ...newValues, id: addressId}])
+            handleShippingSubmit({ ...newValues, id: addressId})
+            toggleShippingBool(true)
+          }
+          else{ 
+            setAlert({ type: AlertType.ERROR, msg: Messages.Errors['DUPLICATE_ADDRESS'] }) 
+          }
+          closeNewAddressModal()
+            
         }
       })
     }
@@ -504,6 +480,10 @@ export default function CheckoutForm({
 
   const toggleShipping = () => {
     dispatch({ type: 'TOGGLE_SHIPPING' })
+  }
+
+  const toggleShippingBool = (payload: boolean) => {
+    dispatch({ type: 'TOGGLE_SHIPPING_BOOL' , payload : payload})
   }
 
   const paymentData = async () => {
@@ -685,7 +665,7 @@ export default function CheckoutForm({
     const userId = getUserId()
     if (userId && userId !== Guid.empty) {
       let userAddresses = addresses
-      if (userAddresses?.length < 1) {
+      if (userAddresses?.length < 1 || isGuestUser) {
         userAddresses = await getAddress(userId)
       }
       return userAddresses
@@ -883,8 +863,8 @@ export default function CheckoutForm({
                         sameAddressAction={() => {
                           dispatch({ type: 'SET_SAME_ADDRESS' })
                         }}
-                        // onEditAddress={handleEditAddress}
                         handleOpenNewAddressModal={handleOpenNewAddressModal}
+                        handleOpenEditAddressModal={handleEditAddress}
                         isPaymentLink={isPaymentLink}
                       />
                     </>

@@ -6,7 +6,7 @@ const createWishlistApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await commerce.createWishlist({
       query: req.body,
-      cookie: req.cookies,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {

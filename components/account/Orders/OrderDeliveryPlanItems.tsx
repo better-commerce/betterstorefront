@@ -230,11 +230,11 @@ const OrderDeliveryPlanItems = ({
                                         </h3>
                                       </div>
                                       <p className="mt-2 text-sm font-normal text-secondary-full-opacity">
-                                        {priceFormat(
+                                        {productItem?.price?.raw?.withTax > 0 ? priceFormat(
                                           productItem?.price?.raw?.withTax,
                                           undefined,
                                           productItem?.price?.currencySymbol
-                                        )}
+                                        ) : <span className="font-medium uppercase text-14 xs-text-14 text-emerald-600">FREE</span>}
                                         {productItem?.listPrice?.raw?.tax >
                                         0 && (
                                           <>
@@ -247,9 +247,11 @@ const OrderDeliveryPlanItems = ({
                                                   ?.currencySymbol
                                               )}
                                             </span>
-                                            <span className="text-sm font-normal text-green sm:text-md">
-                                              {discount}% off
-                                            </span>
+                                            {productItem?.price?.raw?.withTax > 0 &&
+                                              (<span className="text-sm font-normal text-green sm:text-md">
+                                                {discount}% off
+                                              </span>)
+                                            }
                                           </>
                                         )}
                                       </p>
