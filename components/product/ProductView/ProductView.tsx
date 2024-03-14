@@ -21,7 +21,7 @@ import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, SITE_ORIGIN_URL , PRODUCTS_SLUG_PREFIX} from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
@@ -541,9 +541,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     openWishlist()
   }
   const handleWishList = () => {
-    if (isInWishList(product?.recordId)) {
-      deleteWishlistItem(user?.userId, product?.recordId)
-      removeFromWishlist(product?.recordId)
+    if (isInWishList(selectedAttrData?.productId)) {
+      deleteWishlistItem(user?.userId, selectedAttrData?.productId)
+      removeFromWishlist(selectedAttrData?.productId)
       openWishlist()
       return
     }
@@ -572,11 +572,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               item_category2: product?.mappedCategories[1]?.categoryName,
               item_variant: product?.variantGroupCode,
               quantity: 1,
-              item_id: product?.productCode,
+              item_id: selectedAttrData?.stockCode,
               price: product?.price?.raw?.withTax,
             },
           ],
-          item_var_id: product?.stockCode,
+          item_var_id: selectedAttrData?.stockCode,
           header: 'PDP',
           current_page: 'PDP',
           availability: productAvailability,
@@ -597,7 +597,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
     const objUser = localStorage.getItem('user')
     if (!objUser || isGuestUser) {
-      //  setAlert({ type: 'success', msg:" Please Login "})
       openLoginSideBar()
       return
     }
@@ -606,7 +605,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
             id: user?.userId,
-            productId: product?.recordId,
+            productId: selectedAttrData?.productId,
             flag: true,
           })
           insertToLocalWishlist()
@@ -798,7 +797,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                       <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
                       <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink btn hover:border-pink" >
-                        {isInWishList(product?.recordId) ? (
+                        {isInWishList(selectedAttrData?.productId) ? (
                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                         ) : (
                           <HeartIcon className="flex-shrink-0 w-6 h-6" />
@@ -811,7 +810,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                     <Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} buttonType={buttonConfig.type || 'cart'} />
                     <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn" >
-                      {isInWishList(product?.recordId) ? (
+                      {isInWishList(selectedAttrData?.productId) ? (
                         <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                       ) : (
                         <HeartIcon className="flex-shrink-0 w-6 h-6" />

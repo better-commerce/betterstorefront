@@ -42,7 +42,8 @@ import CustomerReferral from '@components/customer/Referral'
 import fetcher from '@framework/fetcher'
 import { IScriptSnippet } from '@components/common/Content/ScriptContentSnippet'
 import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
-import { uniqBy } from 'lodash'
+import uniqBy from 'lodash/uniqBy'
+import BrowserNavigation from '@components/routing/BrowserNavigation'
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
@@ -374,6 +375,11 @@ function MyApp({
         )}
         <CustomCacheBuster buildVersion={packageInfo?.version} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
+        {
+          (deviceInfo && (deviceInfo.isDesktop || deviceInfo.isMobile || deviceInfo.isIPadorTablet)) && (
+            <BrowserNavigation deviceInfo={deviceInfo} />
+          )
+        }
         {/* TODO: Disable client-side payment link redirect */}
         {/*<PaymentLinkRedirect router={router} />*/}
         <ErrorBoundary>
