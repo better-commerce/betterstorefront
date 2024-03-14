@@ -10,7 +10,7 @@ import 'swiper/css/bundle'
 import jwt from 'jsonwebtoken'
 import Cookies from 'js-cookie'
 import { v4 as uuid_v4 } from 'uuid'
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
@@ -198,6 +198,11 @@ function MyApp({
     appConfig = tryParseJson(decrypt(pageProps?.appConfig))
   }
 
+  let pluginConfig: any = null
+  if (pageProps?.pluginConfig) {
+    pluginConfig = tryParseJson(decrypt(pageProps?.pluginConfig))
+  }
+
   const initializeGTM = () => {
     if (process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID)
       TagManager.initialize(tagManagerArgs)
@@ -382,6 +387,7 @@ function MyApp({
             nav={nav}
             footer={footer}
             config={appConfig}
+            pluginConfig={pluginConfig}
             pageProps={updatedPageProps}
             keywords={keywordsData}
             deviceInfo={deviceInfo}
@@ -399,6 +405,7 @@ function MyApp({
                 location={location}
                 ipAddress={location.Ip}
                 config={appConfig}
+                pluginConfig={pluginConfig}
                 deviceInfo={deviceInfo}
               />
             </SessionProvider>
@@ -507,10 +514,10 @@ MyApp.getInitialProps = async (
   let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
   let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
 
+  const headers = {
+    DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+  }
   try {
-    const headers = {
-      DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-    }
     appConfigResult = await cachedGetData(INFRA_ENDPOINT, req?.cookies, headers)
     const languageCookie =
       req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
@@ -597,9 +604,21 @@ MyApp.getInitialProps = async (
     logError(error)
   }
 
+  let pluginConfig = new Array<any>()
+  const socialLoginConfigUrl = `${INFRA_PLUGIN_CATEGORY_ENDPOINT}?categoryCode=${PluginCategory.SOCIAL_LOGIN}`
+  try {
+    const socialLoginConfig: any = await cachedGetData(socialLoginConfigUrl, req?.cookies, headers)
+    if (socialLoginConfig?.result) {
+      pluginConfig = pluginConfig?.concat(socialLoginConfig?.result)
+    }
+  } catch (error: any) {
+    logError(error)
+  }
+
   return {
     pageProps: {
       appConfig: appConfig,
+      pluginConfig: encrypt(JSON.stringify(pluginConfig)),
       navTree: navTreeResult,
       clientIPAddress: clientIPAddress,
       reviewData: reviewData,
