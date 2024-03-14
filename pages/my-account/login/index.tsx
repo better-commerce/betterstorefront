@@ -7,8 +7,27 @@ import { useUI } from '@components/ui/context'
 import Login from '@components/account/Login'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
-function LoginPage() {
+import { decrypt } from '@framework/utils/cipher'
+import { matchStrings } from '@framework/utils/parse-util'
+function LoginPage({appConfig, pluginConfig = []}: any) {
   const  router  = useRouter()
+  let b2bSettings: any = []
+  let pluginSettings: any = []
+
+  if (appConfig) {
+    appConfig = JSON.parse(decrypt(appConfig))
+    if (appConfig?.configSettings?.length) {
+      b2bSettings =
+        appConfig?.configSettings?.find((x: any) =>
+          matchStrings(x?.configType, 'B2BSettings', true)
+        )?.configKeys || []
+    }
+  }
+
+  if (pluginConfig) {
+    pluginSettings = pluginConfig
+  }
+
   const { isGuestUser, user } = useUI()
 
   if (!isGuestUser && user.userId) {
@@ -40,7 +59,7 @@ function LoginPage() {
           key="ogdesc"
         />
       </NextHead>
-    <Login />
+    <Login pluginConfig={pluginConfig}/>
     </>
     )
       
