@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { Button, LoadingDots } from '@components/ui'
 import { ClipboardIcon } from '@heroicons/react/24/outline'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ReferralCardProps {
   className?: string
@@ -32,6 +33,7 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
   voucher,
   errors,
 }) => {
+  const translate = useTranslation()
   const [show, setShow] = useState(hide||!!voucher)
   const [copied, setCopied] = useState(false)
   const handleCopyClick = async () => {
@@ -78,7 +80,7 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
             >
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder={translate('message.enterYourEmailText')}
                 className="bg-gray-100 rounded-lg w-full px-6 py-3"
                 onChange={onInputChange}
               />
@@ -92,7 +94,7 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
                 className="mx-5 !text-xs  !px-4 rounded btn-c btn-primary"
                 // onClick={onInputChange}
               >
-                {isLoading ? <LoadingDots /> : 'Claim your Gift!'}
+                {isLoading ? <LoadingDots /> : translate('label.referral.claimText')}
               </Button>
             </form>
           </>
@@ -110,12 +112,12 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
               {/*terms and conditions*}
             </span> */}
             <span className="block md:inline">
-              {"Congratulations, you've received a Voucher!"}
+              {translate('label.referral.successText')}
             </span>
             <span className="block mb-6 md:inline md:mb-0 md:ml-2">
               <div className="py-2 flex flex-row border-[1px] my-5 items-center justify-center border-gray-600">
                 <p className="px-3 !mt-0 text-center font-bold ">
-                  Voucher-code: {voucher?.voucherCode}
+                  {translate('label.checkout.voucherCodeText')}: {voucher?.voucherCode}
                 </p>
                 <div className="w-5 m-0 " onClick={handleCopyClick}>
                   {!copied ? (
@@ -126,15 +128,14 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
                 </div>
               </div>
               <p className="px-5 text-center font-bold">
-                Offer: {voucher?.promoName}
+                {translate('label.checkout.offerText')}: {voucher?.promoName}
               </p>
               <p className="px-5 text-center font-bold">
-                Validity:{' '}
-                {`This offer is valid for ${voucher?.validityDays} Days`}
+                {translate('common.label.validitytext')}:{' '}
+                {translate('label.referral.offerValidText')} {`${voucher?.validityDays}`} {translate('common.label.daysText')}
               </p>
               <p className="px-12 text-center">
-                Use this voucher code in the Apply promotion section to avail
-                this offer
+                {translate('common.label.availGiftText')}
               </p>
             </span>
           </>
