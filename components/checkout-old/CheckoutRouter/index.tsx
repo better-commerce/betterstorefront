@@ -17,6 +17,7 @@ import {
   LOG_IN,
   NEW_CUSTOMER,
 } from '@components/utils/textVariables'
+import { translate } from '@components/services/localization'
 const config = [
   {
     title: LOG_IN,
@@ -113,7 +114,7 @@ export default function CheckoutRouter({
         </div>
         {activeTab.key === 'logIn' && (
           <div className="flex justify-center items-center flex-col sm:pl-10 sm:pr-10">
-            <Form btnText="Login" type="login" onSubmit={handleUserLogin} />
+            <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} />
             <div>
               <Link href="/my-account/register">
                 <span className="text-gray-600 underline cursor-pointer">

@@ -23,6 +23,7 @@ import {
   GENERAL_LAST_NAME, 
   GENERAL_PAYMENT_METHOD 
 } from '@components/utils/textVariables'
+import { translate } from '@components/services/localization'
 
 interface Form extends HTMLFormElement {
   cardHolder: HTMLInputElement
@@ -128,7 +129,7 @@ const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
             <div className={s.fieldset}>
               <label className={s.label}>{GENERAL_COUNTRY}</label>
               <select name="country" className={s.select}>
-                <option>Hong Kong</option>
+                <option>{translate('label.checkout.deafultCountryDropdownText')}</option>
               </select>
             </div>
           </div>

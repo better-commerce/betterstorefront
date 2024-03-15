@@ -15,6 +15,7 @@ import {
 } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
+import { translate } from '@components/services/localization'
 
 const SIZE_ATTRIBUTE = 'clothing.size'
 
@@ -332,8 +333,8 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
                   {isSizeUpdateLoading
                     ? 'Updating...'
                     : value
-                    ? 'Update size'
-                    : 'Select a size'}
+                    ? translate('label.product.updateSizeText')
+                    : translate('label.product.sizeSelectiontexts')}
                 </Button>
               </div>
             </Dialog.Panel>

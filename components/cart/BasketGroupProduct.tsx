@@ -15,6 +15,7 @@ import {
 import { NEXT_BULK_ADD_TO_CART } from '@components/utils/constants'
 import { LoadingDots, useUI } from '@components/ui'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
+import { translate } from '@components/services/localization'
 
 const maxKitBasketItemsCount = 5
 
@@ -122,7 +123,7 @@ export default function BasketGroupProduct({
         <div className="col-span-9">
           <div className="flex justify-between">
             <h5 className="box-border pr-4 font-14 dark:text-black">
-              {brandInfo?.brand} {brandInfo?.platform} Custom Kit
+              {brandInfo?.brand} {brandInfo?.platform}{translate('label.cart.customKitText')}
             </h5>
             <span className='dark:text-black'>
               {currency?.currencySymbol}
@@ -130,7 +131,7 @@ export default function BasketGroupProduct({
             </span>
           </div>
           <div className="flex items-center justify-end mt-4 show-on-checkout">
-            <div className='justify-end'><span className='flex flex-col font-semibold text-black'>Qty: {kitQty}</span></div>
+            <div className='justify-end'><span className='flex flex-col font-semibold text-black'>{translate('common.label.qtyText')}{' '}{kitQty}</span></div>
           </div>
           <div className="flex items-center justify-between mt-4 hide-on-checkout">
             <select
@@ -150,7 +151,7 @@ export default function BasketGroupProduct({
             <div>
               <span
                 className="block p-2 cursor-pointer"
-                title="Remove kit"
+                title={translate('label.cart.removeKitText')}
                 onClick={() => {
                   openModal()
                   setItemClicked(products)
@@ -170,7 +171,7 @@ export default function BasketGroupProduct({
             <>
               <div className="flex items-center justify-between pb-1 font-semibold dark:text-black">
                 <span className='font-bold text-black uppercase'>
-                  Kit items ({products?.length})
+                  {translate('label.cart.kitItemsText')}({products?.length})
                   {kitCartLoaded && (
                     <span className="ml-2">
                       <LoadingDots />
@@ -179,7 +180,7 @@ export default function BasketGroupProduct({
                 </span>
                 <Disclosure.Button className="py-2">
                   <span className="border-b-2 border-red-500">
-                    {open ? 'Hide' : 'View'}
+                    {open ? translate('common.label.hideText') : translate('common.label.viewText')}
                   </span>
                 </Disclosure.Button>
               </div>
