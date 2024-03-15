@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import cn from 'classnames'
 import axios from 'axios'
 
-import LoadingDots from '@components/ui/LoadingDots'
 import Button from '@components/ui/Button'
 import { NEXT_OTP_REQUEST, OTP_TIMER } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
+
 
 function LoginOTPForm({ handleUserLogin }: any) {
+  const translate = useTranslation()
   const [shouldDisplayOTPField, setShouldDisplayOTPField] = useState(false)
   const formik: any = useFormik({
     enableReinitialize: true,
@@ -118,7 +119,7 @@ function LoginOTPForm({ handleUserLogin }: any) {
         onSubmit={formik.handleSubmit}
       >
         <div>
-          <label className="text-gray-700 text-sm">Mobile Number</label>
+          <label className="text-gray-700 text-sm">{translate('label.loginWithOTP.mobileNumberText')}</label>
           <input
             name="mobile"
             onChange={formik.handleChange}
@@ -135,14 +136,14 @@ function LoginOTPForm({ handleUserLogin }: any) {
         {shouldDisplayOTPField && (
           <div className="mt-2">
             <div className="flex justify-between">
-              <label className="text-gray-700 text-sm">Verification Code</label>
+              <label className="text-gray-700 text-sm">{translate('label.loginWithOTP.verificationCodeText')}</label>
               <button
                 type="button"
                 disabled={timer > 0}
                 onClick={() => resendOTP(formik.values.mobile)}
                 className="disabled:cursor-not-allowed disabled:opacity-60 text-sm"
               >
-                {timer > 0 && `(${timer}s)`} Resend Code
+                {timer > 0 && `(${timer}s)`} {translate('label.loginWithOTP.resendCodeText')}
               </button>
             </div>
             <input
@@ -168,7 +169,7 @@ function LoginOTPForm({ handleUserLogin }: any) {
             disabled={formik.isSubmitting}
             loading={formik.isSubmitting}
           >
-            {!shouldDisplayOTPField ? 'Request OTP' : 'Verify OTP'}
+            {!shouldDisplayOTPField ? translate('label.loginWithOTP.requestOTPText') : translate('label.loginWithOTP.verifyOTPText')}
           </Button>
         </div>
       </form>

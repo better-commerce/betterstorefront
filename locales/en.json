@@ -480,7 +480,8 @@
       "sortByText": "Sort By"
     },
     "footer": {
-      "footerText": "Footer"
+      "footerText": "Footer",
+      "companyRightsText": "BetterCommerce, Inc. All rights reserved."
     },
     "newsLetter": {
       "successText": "Email Registered Successfully for Newsletter",
@@ -490,7 +491,11 @@
       "signupBtnTitle": "Sign up"
     },
     "social": {
-      "generalText": "Join the community"
+      "generalText": "Join the community",
+      "facebookText": "Facebook",
+      "youtubeText": "Youtube",
+      "telegramText": "Telegram",
+      "twitterText": "Twitter"
     },
     "navBar": {
       "currencyText": "Currency",
@@ -498,7 +503,9 @@
       "languageText": "Lang",
       "includeVatText": "INC VAT",
       "pricesIncludingVatText": "Prices inc VAT",
-      "cartText": "Cart"
+      "cartText": "Cart",
+      "articleDescText": "Discover the most outstanding articles on all topics of life. Write your stories and share them",
+      "buytemplateText": "Buy this template"
     },
     "common": {
       "orderNumberText": "Order number",
@@ -512,7 +519,11 @@
     },
     "referral": {
       "claimText": "Claim your Gift!",
-      "successText": "Congratulations, you've received a Voucher!"
+      "successText": "Congratulations, you've received a Voucher!",
+      "offerValidText": "This offer is valid for",
+      "offerAlreadyUsedByEmailText": "Offer already used by this email address",
+      "availDiscountByEmailText": "You have a referral code! Avail a discount voucher by entering your email",
+      "getDiscountCoupanText": "Get your Discount Coupon"
     },
     "orders": {
       "NoOrderFoundText": "No orders found",
@@ -561,7 +572,9 @@
     "selectDeliveryToContinueErrorMsg": "Please select a delivery method to continue.",
     "noStoreFoundErrorMsg": "No store found.Try with different postcode",
     "cookiesText": "This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.",
-    "validEmailErrorMsg": "Enter a valid Email",
+    "validEmailErrorMsg": "Enter a valid email",
+    "enterEmailText": "Enter Email ID",
+    "enterYourEmailText": "Enter your email",
     "reviewSubmitSuccessfulMsg": "Review submitted successfully.",
     "somethingWentWrongMsg": "Woops!, Something went wrong",
     "orderDeliveryMsg": "For orders above {currencySymbol}{freeShippingOverXValue}, Usually delivered in 2-5 days.",
@@ -664,7 +677,10 @@
       "internalServerError": "Internal Server Error",
       "questionMark": "?",
       "donotCancelText": "Don't Cancel",
-      "personalisationText": "Personalisation"
+      "typeAndEnterText": "Type and press enter",
+      "backText": "Back",
+      "validitytext": "Validity:",
+      "registerText": "Register"
     },
     "numberText": {
       "one": "1"
