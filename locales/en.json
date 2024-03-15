@@ -13,7 +13,6 @@
       "freeNextDayDeliveryMethod": "To carry on shopping with free next day delivery"
     },
     "cancelReason": {
-      "serviceText": "This Information will help us to improve our service",
       "cancelTitle": "Why are you cancelling this {cancelTitle}?",
       "cancelConfirmationText": "Are you certain you want to cancel this {cancelTitle}?",
       "cancelReasonHeadingText": "Reason for cancellation"
@@ -93,7 +92,6 @@
     },
     "help": {
       "getHelpOnItemText": "Get Help with this item",
-      "helpAssistanceText": "We will be glad to assist you. What seems to be bothering you?",
       "returnWindowClosedText": "Return window is now closed since It's been over {returnWindow} Days you've received this item.",
       "returnItemText": "Return Item",
       "cancelItemText": "Cancel Item",
@@ -125,7 +123,6 @@
       "incVATText": "inc. VAT",
       "excVATText": "ex. VAT",
       "getHelpText": "Get help with this order",
-      "helpAssistText": "We will be glad to assist you. What seems to be bothering you?"
     },
     "cancelOrder": {
       "cancelOrderText": "Cancel Order"
@@ -263,7 +260,6 @@
       "offerText": "Offer",
       "validityText": "Validity",
       "offerValidForText": "This offer is valid for",
-      "useVoucherCodeText": "Use this voucher code in the Apply promotion section to avail this offer",
       "deafultCountryDropdownText": "Hong Kong",
       "checkoutTitleText": "checkout",
       "secureCheckoutText": "Secure Checkout",
@@ -354,7 +350,6 @@
       "selectTocompareText1": "Select other",
       "selectToCompareText2": "items to compare products",
       "comparingItemsText1": "Comparing",
-      "comparingItemsText2": "Items",
       "specifications": {
         "fabricText": "Fabric",
         "occasionText": "Occasion",
@@ -505,7 +500,6 @@
       "datePlacedText": "Date placed"
     },
     "loginWithOTP": {
-      "mobileNumberText": "Mobile Number",
       "verificationCodeText": "Verification Code",
       "resendCodeText": "Resend Code",
       "requestOTPText": "Request OTP",
@@ -513,8 +507,7 @@
     },
     "referral": {
       "claimText": "Claim your Gift!",
-      "successText": "Congratulations, you've received a Voucher!",
-      "availGiftText": "Use this voucher code in the Apply promotion section to avail this offer"
+      "successText": "Congratulations, you've received a Voucher!"
     },
     "orders": {
       "NoOrderFoundText": "No orders found",
@@ -577,13 +570,11 @@
       "closeMenuText": "Close menu",
       "itemSingularText": "Item",
       "itemPluralText": "Items",
-      "improveServiceText": "This Information will help us to improve our service",
       "discountText": "% off",
       "rateAndReviewText": "Rate & Review",
       "loadMoreBtnText": "Load More",
       "noteText": "Note:",
       "viewDetailsText": "View Details",
-      "viewBtnText": "View",
       "myAccountText": "My Account",
       "shopNowText": "Shop Now",
       "expandText": "Expand",
@@ -602,7 +593,6 @@
       "qtyText": "Qty:",
       "hideText": "Hide",
       "viewText": "View",
-      "generalNoText": "No",
       "siteNameText": "Bering",
       "submitText": "Submit",
       "closeText": "Close",
@@ -655,7 +645,10 @@
       "orderPlacedOnText": "Order placed on",
       "onText": "on",
       "milesText": "miles",
-      "normalOpeningHoursHeadingText": "Normal Opening Hours"
+      "normalOpeningHoursHeadingText": "Normal Opening Hours",
+      "serviceText": "This Information will help us to improve our service",
+      "helpAssistanceText": "We will be glad to assist you. What seems to be bothering you?",
+      "availGiftText": "Use this voucher code in the Apply promotion section to avail this offer",
     },
     "numberText": {
       "one": "1"
