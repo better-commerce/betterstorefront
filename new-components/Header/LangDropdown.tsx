@@ -5,6 +5,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { FC, Fragment } from "react";
 import { headerCurrency } from "./CurrencyDropdown";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export const headerLanguage = [
   {
@@ -55,6 +56,7 @@ function classNames(...classes: any) {
 }
 
 const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
+  const translate = useTranslation()
   const renderLang = (close: () => void) => {
     return (
       <div className="grid gap-8 lg:grid-cols-2">
@@ -110,7 +112,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
              group h-10 sm:h-12 px-3 py-1.5 inline-flex items-center text-sm text-gray-800 dark:text-neutral-200 font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
             >
               <GlobeAltIcon className="w-[18px] h-[18px] opacity-80" />
-              <span className="ml-2">Language</span>
+              <span className="ml-2">{translate('common.label.languageText')}</span>
               <ChevronDownIcon
                 className={`${open ? "-rotate-180" : "text-opacity-70"}
                   ml-1 h-4 w-4  group-hover:text-opacity-80 transition ease-in-out duration-150`}

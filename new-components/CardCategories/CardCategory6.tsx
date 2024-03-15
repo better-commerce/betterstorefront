@@ -4,6 +4,7 @@ import explore1Svg from "images/collections/explore1.svg";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface CardCategory6Props {
   className?: string;
@@ -22,6 +23,7 @@ const CardCategory6: FC<CardCategory6Props> = ({
   desc,
   color = "bg-rose-50",
 }) => {
+  const translate = useTranslation()
   return (
     <div
       className={`nc-CardCategory6 relative w-full aspect-w-1 aspect-h-1 h-0 rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 group hover:nc-shadow-lg transition-shadow ${className}`}
@@ -53,7 +55,7 @@ const CardCategory6: FC<CardCategory6Props> = ({
             href={"/collection"}
             className="flex items-center text-sm font-medium transition-colors group-hover:text-primary-500"
           >
-            <span>See Collection</span>
+            <span>{translate('common.label.seeCollectionText')}</span>
             <ArrowRightIcon className="w-4 h-4 ml-2.5" />
           </Link>
         </div>

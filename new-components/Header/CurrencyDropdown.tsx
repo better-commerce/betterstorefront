@@ -9,6 +9,7 @@ import {
   BanknotesIcon,
 } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export const headerCurrency = [
   {
@@ -51,6 +52,7 @@ export const headerCurrency = [
 ];
 
 export default function CurrencyDropdown() {
+  const translate = useTranslation()
   return (
     <div className="CurrencyDropdown">
       <Popover className="relative">
@@ -62,7 +64,7 @@ export default function CurrencyDropdown() {
                 group px-3 py-1.5  border-neutral-300 hover:border-neutral-400 dark:border-neutral-700 rounded-full inline-flex items-center text-sm text-gray-700 dark:text-neutral-300 font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
             >
               <BanknotesIcon className="w-5 h-5 opacity-80" />
-              <span className="ml-2">Currency</span>
+              <span className="ml-2">{translate('label.navBar.currencyText')}</span>
               <ChevronDownIcon
                 className={`${open ? "-rotate-180" : "text-opacity-70"}
                   ml-2 h-4 w-4  group-hover:text-opacity-80 transition ease-in-out duration-150`}

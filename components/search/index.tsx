@@ -28,9 +28,7 @@ export default function Search(props: any) {
   const [path, setCurrentPath] = useState(Router.asPath)
   const SearchEvent = EVENTS_MAP.EVENT_TYPES.Search
   const SearchEntity = EVENTS_MAP.ENTITY_TYPES.Search
-
-  const { basketId, cartItems } = useUI()
-
+  
   useEffect(() => {
     const fetchItems = async () => {
       setIsLoading(true)

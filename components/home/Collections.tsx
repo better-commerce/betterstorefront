@@ -1,8 +1,10 @@
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Link from 'next/link'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Collections({ data }: any) {
+  const translate = useTranslation()
   const css = { maxWidth: '100%', minHeight: '350px' }
   return (
     <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-4 sm:grid-cols-3 lg:px-6 2xl:px-0">
@@ -45,12 +47,12 @@ export default function Collections({ data }: any) {
             />
             <Link
               href={collection?.collectionlist_link}
-              title="Shop Now"
+              title={translate('common.label.shopNowText')}
               passHref
               legacyBehavior
             >
               <a className="btn border btn-default">
-                Shop Now
+                {translate('common.label.shopNowText')}
               </a>
             </Link>
           </div>
