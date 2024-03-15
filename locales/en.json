@@ -570,6 +570,7 @@
   },
   "common": {
     "label": {
+      "reviews": "reviews",
       "backToHomepageText": "Back to Homepage",
       "closePanelText": "Close panel",
       "otherText": "Other",

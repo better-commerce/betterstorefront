@@ -4,7 +4,7 @@ import { AlertType } from '@framework/utils/enums'
 import axios from 'axios'
 import { NEXT_STORE_LOCATOR } from '@components/utils/constants'
 import { GENERAL_FIND_STORE, GENERAL_FIND_STORE_TITLE } from '@components/utils/textVariables'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface FindStoreProps {
   onStoreSelected: (store: any) => void
@@ -16,7 +16,7 @@ const FindStore: React.FC<FindStoreProps> = ({ onStoreSelected }) => {
   const [stores, setStores] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [selectedStore, setSelectedStore] = useState<any>(null)
-
+  const translate = useTranslation()
   // Function to fetch stores based on postcode
   const fetchStores = async () => {
     try {

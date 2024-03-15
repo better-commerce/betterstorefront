@@ -10,9 +10,10 @@ import {
   PRODUCT_OPTIONS 
 } from '@components/utils/textVariables'
 import Image from 'next/image'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function BundleCard({ productData, closeModal }: any) {
+  const translate = useTranslation()
   const [activeImage, setActiveImage] = useState(
     productData?.image || productData?.images[0]?.image
   )

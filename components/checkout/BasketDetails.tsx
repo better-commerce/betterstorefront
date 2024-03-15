@@ -25,7 +25,7 @@ import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import Summary from '@components/checkout/Summary'
 import BasketItems from '@components/checkout/BasketItems'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 interface BasketItem {
   id: string
   name: string
@@ -48,6 +48,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
     appliedPromos: null,
     autoAppliedPromos: null,
   })
+  const translate = useTranslation()
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
   useEffect(() => {
     const fetchReferralPromotion = async () => {

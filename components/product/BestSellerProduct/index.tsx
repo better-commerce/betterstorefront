@@ -7,7 +7,7 @@ import SwiperCore, { Navigation } from 'swiper'
 import dynamic from 'next/dynamic'
 import { IDeviceInfo } from '@components/ui/context'
 import ProductCard from '../ProductCard/ProductCard'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 SwiperCore.use([Navigation])
 
@@ -21,7 +21,8 @@ const ProductSlider: React.FC<IProductSliderProps> = ({
   products,
   deviceInfo,
   maxBasketItemsCount,
-}: IProductSliderProps) => {
+}: IProductSliderProps) => {\
+  const translate = useTranslation()
   const swiperRef: any = useRef(null)
   return (
 

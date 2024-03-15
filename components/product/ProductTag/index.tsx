@@ -3,13 +3,14 @@ import { BTN_NOTIFY_ME, BTN_PRE_ORDER } from '@components/utils/textVariables'
 import { PRODUCT_TAGS } from '@components/utils/constants'
 import { BellIcon, ClockIcon, ShoppingBagIcon, SparklesIcon, StarIcon, TagIcon } from '@heroicons/react/24/outline'
 import IconDiscount from '@new-components/IconDiscount'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Props {
   product: any
 }
 
 export default function ProductTag({ product }: Props) {
+  const translate = useTranslation()
   const [isNotifyMeEnabled, setIsNotifyMeEnabled] = useState(false)
   const [isPreorderEnabled, setIsPreorderEnabled] = useState(false)
   const [tagValues, setTagValues] = useState({

@@ -42,7 +42,7 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { vatIncluded } from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 let PERSONALISED_TEXT = ''
 let PERSONALIZATION = ''
 
@@ -56,6 +56,7 @@ export default function Summary({
   isShippingDisabled,
   isPaymentLink = false,
 }: any) {
+  const translate = useTranslation()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const [referralAvailable, setReferralAvailable] = useState(false)

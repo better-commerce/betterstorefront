@@ -1,10 +1,11 @@
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { Fragment, useState } from 'react'
 
 export default function ProductReturn({ isReturn, setReturn, data }: any) {
+  const translate = useTranslation()
   return (
     <>
       <Transition.Root show={isReturn} as={Fragment}>

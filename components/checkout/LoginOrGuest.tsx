@@ -13,7 +13,7 @@ import {
   SAVE_AND_CONTINUE_TO_COLLECT,
 } from '@components/utils/textVariables'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const loginCheckoutFormSchema = yup.object({
   email: yup
@@ -46,6 +46,7 @@ const LoginOrGuest: React.FC<any> = ({
   deliveryTypeMethod,
   setDeliveryTypeMethod
 }) => {
+  const translate = useTranslation()
   const [isLogin, setIsLogin] = useState<boolean>(false)
   const { user } = useUI()
   const guestCheckoutFormik: any = useFormik({

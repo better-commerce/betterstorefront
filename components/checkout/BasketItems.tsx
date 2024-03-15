@@ -1,9 +1,10 @@
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
 
 const BasketItems = ({ userCartItems }: any) => {
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   return (
     <>

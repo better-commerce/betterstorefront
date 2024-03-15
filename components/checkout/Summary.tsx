@@ -1,5 +1,5 @@
 import PromotionInput from '@components/cart/PromotionInput'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyString } from '@components/utils/constants'
 import { GENERAL_DISCOUNT, GENERAL_SHIPPING } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
@@ -11,6 +11,7 @@ const Summary = ({
   basketPromos,
   getBasketPromos,
 }: any) => {
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   return (
     <>

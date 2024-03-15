@@ -23,7 +23,7 @@ import {
   GENERAL_LAST_NAME, 
   GENERAL_PAYMENT_METHOD 
 } from '@components/utils/textVariables'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Form extends HTMLFormElement {
   cardHolder: HTMLInputElement
@@ -42,7 +42,7 @@ interface Form extends HTMLFormElement {
 const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
   const { setSidebarView } = useUI()
   const addCard = useAddCard()
-
+  const translate = useTranslation()
   async function handleSubmit(event: React.ChangeEvent<Form>) {
     event.preventDefault()
 

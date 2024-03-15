@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export async function getStaticProps({
   preview,
@@ -27,6 +27,7 @@ export async function getStaticProps({
 }
 
 export default function NotFound({ deviceInfo }: any) {
+  const translate = useTranslation()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   return (

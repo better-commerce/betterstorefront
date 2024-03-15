@@ -7,12 +7,14 @@ import { NEXT_GET_RETURN_DATA } from '@components/utils/constants'
 import LoadingDots from '@components/ui/LoadingDots'
 import { BTN_SUBMIT } from '@components/utils/textVariables'
 import * as Yup from 'yup'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function ReturnModal({
   handleClose,
   returnData,
   handlePostReturn,
 }: any) {
+  const translate = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [orderReturnData, setOrderReturnData] = useState(null)
 
@@ -133,7 +135,7 @@ export default function ReturnModal({
                       as="h3"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Create return
+                      {translate('label.orderDetails.createReturnBtnText')}
                     </Dialog.Title>
                     <div className="mt-2 flex justify-center items-center text-gray-900">
                       {isLoading ? (

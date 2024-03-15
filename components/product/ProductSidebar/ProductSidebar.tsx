@@ -10,7 +10,7 @@ import {
   SelectedOptions,
 } from '../helpers'
 import { GENERAL_ADD_TO_BASKET, GENERAL_CARE_TEXT, GENERAL_DETAILS, GENERAL_DETAILS_TEXT, GENERAL_NOT_AVAILABLE } from '@components/utils/textVariables'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ProductSidebarProps {
   product: Product
@@ -18,6 +18,7 @@ interface ProductSidebarProps {
 }
 
 const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ product, className }) => {
+  const translate = useTranslation()
   const addItem = useAddItem()
   const { openSidebar } = useUI()
   const [loading, setLoading] = useState(false)

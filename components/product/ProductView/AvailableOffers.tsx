@@ -6,10 +6,11 @@ import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import ProductSaleCountdown from './SaleCountDown'
 import { priceFormat } from '@framework/utils/parse-util'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 declare const window: any
 SwiperCore.use([Navigation])
 export default function AvailableOffers({ currency, offers, key }: any) {
+  const translate = useTranslation()
   const [isOffers, setOffers] = useState(false)
   const [isCopied, showCopied] = useState(false)
   const [copyData, setCode] = useState<any>()

@@ -1,11 +1,11 @@
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { useEffect, useState } from 'react'
 
 const SALE_COUNT_DOWN_ENABLE_BEFORE_DAYS = 500
 
 function ProductSaleCountdown({ startDate, endDate }: any) {
   const [shouldSaleCountdownEnable, setShouldSaleCountdownEnable] = useState(false)
-
+  const translate = useTranslation()
   const calculateTimeLeft = () => {
     const difference = +new Date(endDate) - +new Date()
     let timeLeft: any

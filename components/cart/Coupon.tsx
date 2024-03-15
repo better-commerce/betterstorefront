@@ -15,7 +15,7 @@ import { useUI } from '@components/ui/context'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { NEXT_APPLY_PROMOTION } from '@components/utils/constants'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 declare const window: any
 SwiperCore.use([Navigation])
@@ -57,6 +57,7 @@ const Coupon = (props: IPromotionInputProps) => {
     setError
   } = props
   const { basketId, setCartItems, cartItems } = useUI()
+  const translate = useTranslation()
   const handleSubmit = async (
     method: string = 'apply',
     promoCode: string = value

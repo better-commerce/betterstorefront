@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { groupBy } from 'lodash'
 import { useState } from 'react'
 import { generateUri } from '@commerce/utils/uri-util'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function ProductSpecifications({
   attrGroup,
   product,
@@ -16,6 +16,7 @@ export default function ProductSpecifications({
   const imageTagGroup = groupBy(product?.images, 'tag')
   const [paddingTop, setPaddingTop] = useState('0')
   const { isOnlyMobile } = deviceInfo
+  const translate = useTranslation()
   return (
     <>
       <div className="grid px-4 sm:grid-cols-12 sm:px-4 md:px-6 lg:px-6 2xl:px-0">

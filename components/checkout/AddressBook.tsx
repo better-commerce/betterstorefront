@@ -7,7 +7,7 @@ import { isMobile } from 'react-device-detect'
 import { EmptyObject } from '@components/utils/constants'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
 import { ADD_ADDRESS, GENERAL_EDIT } from '@components/utils/textVariables'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface AddressBookProps {
   editAddressValues: any
@@ -44,6 +44,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
   setDeliveryTypeMethod,
   handleCollect
 }) => {
+  const translate = useTranslation()
   const { user, setAlert, isGuestUser } = useUI()
   const {
     shippingAddress: selectedShippingAddress,

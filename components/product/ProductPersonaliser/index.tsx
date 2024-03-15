@@ -20,7 +20,7 @@ import {
   SELECT_IMAGE_ERROR,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 
 type ProductPersonaliserImage = {
@@ -63,6 +63,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
   product,
   engravingPrice,
 }: ProductPersonaliserProps) => {
+  const translate = useTranslation()
   const [text, setText] = useState<any>([])
   const [isImageCLick, setIsImageCLick] = useState<any>(false)
   const [selectedImage, setSelectedImage] = useState<any>('')

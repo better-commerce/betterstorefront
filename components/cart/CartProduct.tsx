@@ -15,7 +15,7 @@ import Link from 'next/link'
 import CartAddonsSidebar from './Addons/CartAddonsSidebar'
 import { deliveryDateFormat, matchStrings, tryParseJson} from '@framework/utils/parse-util'
 import { cartItemsValidateAddToCart } from '@framework/utils/app-util'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 export default function CartProduct({
@@ -57,7 +57,7 @@ export default function CartProduct({
       ? user?.userId
       : cartItems?.userId
   }
-
+  const translate = useTranslation()
   const openWishlistAfter = () => {
     setTimeout(() => openWishlist(), 1000)
   }

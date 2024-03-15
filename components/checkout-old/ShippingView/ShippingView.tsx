@@ -21,7 +21,7 @@ import {
   GENERAL_SHIPPING, 
   USE_DIFFERENT_SHIPPING_ADDRESS 
 } from '@components/utils/textVariables'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Form extends HTMLFormElement {
   cardHolder: HTMLInputElement
@@ -38,6 +38,7 @@ interface Form extends HTMLFormElement {
 }
 
 const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
+  const translate = useTranslation()
   const { setSidebarView } = useUI()
   const addAddress = useAddAddress()
 

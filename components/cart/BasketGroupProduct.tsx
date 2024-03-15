@@ -14,7 +14,7 @@ import {
 import { NEXT_BULK_ADD_TO_CART } from '@components/utils/constants'
 import { LoadingDots, useUI } from '@components/ui'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const maxKitBasketItemsCount = 5
 
@@ -24,6 +24,7 @@ export default function BasketGroupProduct({
   openModal,
   setItemClicked,
 }: any) {
+  const translate = useTranslation()
   const { basketId, setCartItems, cartItems, kitCartLoaded, setKitCartLoaded, includeVAT, currency, openBasketRemoveItemView } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [brandInfo, setBrandInfo] = useState<any>({})

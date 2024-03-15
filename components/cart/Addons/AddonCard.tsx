@@ -22,7 +22,7 @@ import { hideElement, showElement } from '@framework/utils/ui-util'
 import { matchStrings, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import cn from 'classnames'
 import ButtonNotifyMe from '@components/product/ButtonNotifyMe'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
@@ -65,6 +65,7 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     setCompareProducts,
     removeFromWishlist,
   } = useUI()
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
