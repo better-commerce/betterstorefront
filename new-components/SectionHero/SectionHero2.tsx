@@ -2,14 +2,13 @@
 
 import React, { FC, useState } from "react";
 import backgroundLineSvg from "images/Moon.svg";
-
 import useInterval from "react-use/lib/useInterval";
 import useBoolean from "react-use/lib/useBoolean";
 import Image from "next/image";
 import ButtonPrimary from "../shared/Button/ButtonPrimary";
 import Prev from "../shared/NextPrev/Prev";
 import Next from "../shared/NextPrev/Next";
-import { translate } from "@components/services/localization";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface SectionHero2Props {
   className?: string;
@@ -20,6 +19,7 @@ let TIME_OUT: NodeJS.Timeout | null = null;
 
 const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
   // =================
+  const translate = useTranslation()
   const [indexActive, setIndexActive] = useState(0);
   const [isRunning, toggleIsRunning] = useBoolean(true);
 
