@@ -88,8 +88,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
 function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   let b2bSettings = []
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
-  const [hasPassedEmailValidation, setHasPassedEmailValidation] =
-    useState(false)
+  const [hasPassedEmailValidation, setHasPassedEmailValidation] = useState(false)
   const [userEmail, setUserEmail] = useState('')
   const { isGuestUser, setIsGuestUser, user, basketId } = useUI()
   const [error, setError] = useState('')
