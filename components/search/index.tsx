@@ -71,7 +71,7 @@ export default function Search(props: any) {
   const css = { maxWidth: '100%', height: 'auto' }
 
   const defaultSearch = (
-    <div className="fixed top-0 left-0 w-full h-full bg-white z-9999">
+    <div className="fixed top-0 left-0 w-full h-full bg-white z-9999 search-fixed">
       <div
         className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden"
         onClick={closeWrapper}
