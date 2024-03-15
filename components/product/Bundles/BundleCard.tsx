@@ -10,6 +10,7 @@ import {
   PRODUCT_OPTIONS 
 } from '@components/utils/textVariables'
 import Image from 'next/image'
+import { translate } from '@components/services/localization'
 
 export default function BundleCard({ productData, closeModal }: any) {
   const [activeImage, setActiveImage] = useState(
@@ -78,7 +79,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                     <h3 className='text-xs font-semibold text-gray-400'>{productData?.brand}</h3>
                     <h3 className='text-2xl font-semibold text-gray-900 sm:pr-12'>{productData?.name}</h3>   
                     <h4 className='mt-1 text-sm'>
-                        <span className='inline-block text-xs font-bold uppercase tex-black'>SKU:</span>
+                        <span className='inline-block text-xs font-bold uppercase tex-black'>{translate('label.product.bundles.skuText')}:</span>
                         <span className='inline-block pl-1 text-gray-600'>{productData?.stockCode}</span>
                     </h4>
                     <h4 className='mt-2 text-sm text-black'>

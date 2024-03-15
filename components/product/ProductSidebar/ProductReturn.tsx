@@ -1,3 +1,4 @@
+import { translate } from '@components/services/localization'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
@@ -59,35 +60,23 @@ export default function ProductReturn({ isReturn, setReturn, data }: any) {
                               </div>
                               <div className="flex-1 mt-4">
                                 <h3 className="text-2xl font-bold text-black">
-                                  {retur.value} Days
+                                  {retur.value} {translate('label.product.productSidebar.daysText')}
                                 </h3>
                                 <h3 className="text-2xl font-bold text-black">
-                                  Return &amp; Exchange
+                                 {translate('label.product.productSidebar.return&ExchangeText')}
                                 </h3>
                               </div>
                               <div className="flex-1 mt-6">
                                 <p className="text-sm font-normal text-black">
-                                  BetterStore is all about doing more everyday
-                                  with comfort. If you're not happy with the
-                                  size of any product purchased, or change your
-                                  mind regarding the colour you picked, we'll be
-                                  happy to exchange it for you with the
-                                  preferred size or colour of the product of
-                                  your choice. If you don't like our product,
-                                  we'll refund the same, read below for details:
+                                  {translate('label.product.productSidebar.returnDetailsText')}
                                 </p>
                               </div>
                               <div className="flex-1 mt-4">
                                 <p className="my-4 text-xs font-normal text-gray-400">
-                                  Eligible for refund/replacement: Wrong size or
-                                  change of colour product intact and not tried
-                                  on product tag and packaging intact
+                                {translate('label.product.productSidebar.returnIsEligibleText')}
                                 </p>
                                 <p className="my-4 text-xs font-normal text-gray-400">
-                                  Not eligible for refund-replacement: Product
-                                  has been washed or tried on no product tag or
-                                  original packaging Tear caused by external
-                                  forces Beyond 15 days date of delivery
+                                {translate('label.product.productSidebar.returnIsNotEligibleText')}
                                 </p>
                               </div>
                             </div>

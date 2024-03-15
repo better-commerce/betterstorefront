@@ -1,3 +1,4 @@
+import { translate } from '@components/services/localization'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -76,14 +77,14 @@ const BasketItems = ({ userCartItems }: any) => {
                           FREE
                         </span>
                         <span className="flex flex-col font-semibold text-black">
-                          Qty: {product?.qty}
+                        {translate('label.product.qtyText')} {product?.qty}
                         </span>
                       </>
                     )}
                   </div>
                   <div className="justify-end">
                     <span className="flex flex-col font-semibold text-black">
-                      Qty: {product?.qty}
+                    {translate('label.product.qtyText')} {product?.qty}
                     </span>
                   </div>
                 </div>

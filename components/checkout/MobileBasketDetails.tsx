@@ -29,6 +29,7 @@ import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import PromotionInput from '@components/cart/PromotionInput'
+import { translate } from '@components/services/localization'
 interface BasketItem {
   id: string
   name: string
@@ -263,14 +264,14 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                                           FREE
                                         </span>
                                         <span className="flex flex-col font-semibold text-black">
-                                          Qty: {product?.qty}
+                                        {translate('label.product.qtyText')} {product?.qty}
                                         </span>
                                       </>
                                     )}
                                   </div>
                                   <div className="justify-end">
                                     <span className="flex flex-col font-semibold text-black">
-                                      Qty: {product?.qty}
+                                    {translate('label.product.qtyText')} {product?.qty}
                                     </span>
                                   </div>
                                 </div>

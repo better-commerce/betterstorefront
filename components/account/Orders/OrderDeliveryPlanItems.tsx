@@ -18,6 +18,7 @@ import OrderStatusMapping from './OrderStatusMapping'
 import TrackingDetail from './TrackingDetail'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { translate } from '@components/services/localization'
 
 const OrderDeliveryPlanItems = ({
   items,
@@ -260,7 +261,7 @@ const OrderDeliveryPlanItems = ({
                                   <div className="flex mt-3">
                                     <div className="w-full">
                                       <label className="font-medium capitalize text-12 text-primary dark:text-black">
-                                        Size:{' '}
+                                        {translate('common.label.sizeText')}{' '}
                                         <span className="uppercase">
                                           {productItem?.size}
                                         </span>
@@ -268,7 +269,7 @@ const OrderDeliveryPlanItems = ({
                                     </div>
                                     <div className="w-full">
                                       <label className="font-medium text-12 text-primary dark:text-black">
-                                        Qty: {productItem?.qty}
+                                      {translate('label.product.qtyText')} {productItem?.qty}
                                       </label>
                                     </div>
                                   </div>

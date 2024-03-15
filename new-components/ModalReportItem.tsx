@@ -5,6 +5,7 @@ import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import ButtonSecondary from "./shared/Button/ButtonSecondary";
 import Textarea from "./shared/Textarea/Textarea";
 import NcModal from "./shared/NcModal/NcModal";
+import { translate } from "@components/services/localization";
 
 export interface ProblemPlan {
   name: string;
@@ -112,7 +113,7 @@ const ModalReportItem: FC<ModalReportItemProps> = ({
         {/* TEXAREA MESSAGER */}
         <div className="mt-4">
           <h4 className="text-lg font-semibold text-neutral-700 dark:text-neutral-200">
-            Message
+          {translate('label.product.messageText')}
           </h4>
           <span className="text-sm text-neutral-6000 dark:text-neutral-400">
             Please provide any additional information or context that will help

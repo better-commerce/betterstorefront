@@ -14,13 +14,14 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString } from '@components/utils/constants'
 import { Cookie } from '@framework/utils/constants'
+import { translate } from '@components/services/localization'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
 export const DELIVERY_FORM_FIELDS = [
   {
     type: 'tel',
     name: 'deliveryPinCode',
-    placeholder: 'Enter Pincode',
+    placeholder: translate('label.product.enterPincode'),
     showLabel: false,
     label: 'Pincode',
     className:
@@ -144,7 +145,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
                             alt={replaceAttr?.value || 'Easy Return'}
                           />
                           <div className="text-sm font-semibold text-black">
-                            {replaceAttr?.value} Days Easy Return
+                            {replaceAttr?.value} {translate('label.product.daysEasyReturn')}
                           </div>
                         </div>
                       )
@@ -170,7 +171,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
                             alt={returnAttr?.value}
                           />
                           <div className="text-sm font-semibold text-black">
-                            {returnAttr?.value} Days Easy Exchange
+                            {returnAttr?.value} {translate('label.product.daysEasyExchange')}
                           </div>
                         </div>
                       )

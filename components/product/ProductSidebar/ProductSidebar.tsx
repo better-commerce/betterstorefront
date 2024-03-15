@@ -10,6 +10,7 @@ import {
   SelectedOptions,
 } from '../helpers'
 import { GENERAL_ADD_TO_BASKET, GENERAL_CARE_TEXT, GENERAL_DETAILS, GENERAL_DETAILS_TEXT, GENERAL_NOT_AVAILABLE } from '@components/utils/textVariables'
+import { translate } from '@components/services/localization'
 
 interface ProductSidebarProps {
   product: Product
@@ -42,7 +43,7 @@ const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ prod
       />
       <div className="flex flex-row justify-between items-center">
         <Rating value={4} />
-        <div className="text-accent-6 pr-1 font-medium text-sm">36 reviews</div>
+        <div className="text-accent-6 pr-1 font-medium text-sm">{translate('label.product.productSidebar.36reviewsText')}</div>
       </div>
       <div>
         {process.env.COMMERCE_CART_ENABLED && (

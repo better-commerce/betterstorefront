@@ -48,6 +48,7 @@ import Prices from '@new-components/Prices'
 import Link from 'next/link'
 import ReviewItem from '@new-components/ReviewItem'
 import ButtonSecondary from '@new-components/shared/Button/ButtonSecondary'
+import { translate } from '@components/services/localization'
 const Preview = dynamic(() => import('@components/product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -922,7 +923,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <>
               <div className="flex flex-col section-devider"></div>
               <div className="container flex flex-col w-full px-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
-                <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10"> You May Also Like </h3>
+                <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
               </div>
             </>
