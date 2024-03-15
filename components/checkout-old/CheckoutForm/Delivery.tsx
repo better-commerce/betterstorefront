@@ -16,6 +16,7 @@ import { vatIncluded } from '@framework/utils/app-util'
 import SplitDelivery from '../SplitDelivery'
 import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 const DELIVERY_METHODS_TYPE = [
   {
     id: 1,
@@ -42,10 +43,11 @@ export default function Delivery({
   splitDeliveryItems,
   onShippingPlansUpdated,
 }: any) {
+  const translate = useTranslation();
   const { basketId, setCartItems, cartItems, isPaymentLink, isSplitDelivery } = useUI()
   const isIncludeVAT = vatIncluded()
   const [selectedCountry, setSelectedCountry] = useState({
-    name: 'Country',
+    name: translate('label.checkout.countryText'),
     twoLetterIsoCode: geoData.CountryCode,
   })
   const [deliveryMethods, setDeliveryMethods] = useState(DELIVERY_METHODS_TYPE)

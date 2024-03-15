@@ -133,7 +133,11 @@
       "dontReturnBtnText": "Don't Return",
       "returnNumText": "Return Number",
       "returnHistoryText": "Return History",
-      "returnOrderMsgText": "Check the products you’ve returned"
+      "returnOrderMsgText": "Check the products you’ve returned",
+      "reasonText": "Reason",
+      "selectReasonText": "Select reason",
+      "requiredActionText": "Required action",
+      "selectActionText": "Select action"
     },
     "addressBook": {
       "deleteAddressConfirmText": "Are you sure you want to delete this address?",
@@ -310,7 +314,10 @@
       "paymentMethodText": "Payment Method",
       "paymentHeadingText": "Payment",
       "toChoiceAddressText": "to an address of your choice",
-      "saveAndContinueToCollectBtnText": "Save And Continue to Collect"
+      "saveAndContinueToCollectBtnText": "Save And Continue to Collect",
+      "otherAddressTypeText": "Other Address Type",
+      "whatsappUpdatesText": "Send me updates on WhatsApp",
+      "payLaterWithKlarnaText": "Click Pay Later With Klarna to check if you are eligible"
     },
     "formField": {
       "selectCountryText": "Select a Country"
@@ -326,7 +333,13 @@
       "searchText": "Search",
       "resultCountText1": "Showing",
       "resultCountText2": "Results for",
-      "includeOOSProductsText": "Include out of stock products"
+      "includeOOSProductsText": "Include out of stock products",
+      "topSuggestionsText": "Top Suggestions",
+      "noProductFoundText": "No Product Found",
+      "productSuggestionsText": "Product Suggestions",
+      "searchForProductsText": "Search for products",
+      "showFiltersText": "Show Filters",
+      "noResultFoundForText": "No results found for"
     },
     "product": {
       "viewProductText": "View Product",
@@ -502,7 +515,8 @@
     },
     "common": {
       "orderNumberText": "Order number",
-      "datePlacedText": "Date placed"
+      "datePlacedText": "Date placed",
+      "sportsEquipmentCollectionText": "Sports equipment collection."
     },
     "loginWithOTP": {
       "verificationCodeText": "Verification Code",
@@ -543,6 +557,16 @@
     },
     "home": {
       "exploreMoreBtnText": "Explore More"
+    },
+    "header": {
+      "gotoShopText": "Go to our shop",
+      "lookForWhatYouNeedText": "Look for what you need and love.",
+      "233StaysText": "233 stays",
+      "aug12To18Text": "Aug 12 - 18",
+      "2GuestsText": "2 Guests"
+    },
+    "section": {
+      "findTheBestText": "In this season, find the best 🔥"
     }
   },
   "message": {
@@ -627,8 +651,10 @@
       "addressLine2Text": "Address Line 2",
       "addressLine3Text": "Address Line 3",
       "cityText": "City",
+      "stateText": "State",
       "postcodeText": "Postcode",
       "countyStateEtcText": "County, state, province, etc.. (optional)",
+      "useAsDefautAddressText": "Use as Default Address",
       "expectedDeliveryDateText": "Expected Delivery Date",
       "accountText": "Account",
       "changeText": "Change",
@@ -664,7 +690,26 @@
       "internalServerError": "Internal Server Error",
       "questionMark": "?",
       "donotCancelText": "Don't Cancel",
-      "personalisationText": "Personalisation"
+      "saveAsText": "Save As",
+      "saveBtnText": "Save",
+      "commentText": "Comment",
+      "leaveCommentText": "Leave a comment",
+      "successText": "Success",
+      "showMeAllText": "Show me all",
+      "seeCollectionText": "See Collection",
+      "productsText": "Products",
+      "shopText": "Shops",
+      "languageText": "Language",
+      "typeAndPressEnterText": "Type and press enter",
+      "notificationsText": "Notifications",
+      "templatesText": "Templates",
+      "may20Text": "May 20, 2021",
+      "postCardMetaV2Text": "PostCardMetaV2",
+      "goodNewsText": "Good news from far away 🥇",
+      "letsSeeWhatPeopleThinkText": "Let's see what people think of Ciseco",
+      "startExploringText": "Start exploring.",
+      "manKeywordText": "Man",
+      "startYourSearchText": "Start your search"
     },
     "numberText": {
       "one": "1"

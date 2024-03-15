@@ -10,6 +10,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import MenuBar from "../shared/MenuBar/MenuBar";
 import { Logo } from "@components/ui";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface MainNav2Props {
   className?: string;
@@ -47,6 +48,7 @@ const MainNav2: FC<MainNav2Props> = ({ className = "" }) => {
   };
 
   const renderSearchForm = () => {
+    const translate = useTranslation()
     return (
       <form
         className="flex-1 py-2 text-slate-900 dark:text-slate-100"
@@ -59,7 +61,7 @@ const MainNav2: FC<MainNav2Props> = ({ className = "" }) => {
           {renderMagnifyingGlassIcon()}
           <input
             type="text"
-            placeholder="Type and press enter"
+            placeholder={translate('common.label.typeAndPressEnterText')}
             className="w-full text-base bg-transparent border-none focus:outline-none focus:ring-0"
             autoFocus
           />

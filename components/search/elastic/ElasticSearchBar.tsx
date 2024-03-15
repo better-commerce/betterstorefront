@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react'
 import { SearchBox, withSearch } from '@elastic/react-search-ui'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
 import { useRouter } from 'next/router'
-
-//
 import { useUI } from '@components/ui'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const CustomView = (props: any) => {
+  const translate = useTranslation()
   const { value, onChange, setSearchTerm } = props
   const router = useRouter()
   const inputRef = useRef<any>(null)
@@ -55,7 +55,7 @@ const CustomView = (props: any) => {
             type="text"
             value={value}
             onChange={handleChange}
-            placeholder="Search for products"
+            placeholder={translate('label.search.searchForProductsText')}
             className="sui-search-box__text-input dark:bg-white"
           />
         </div>
