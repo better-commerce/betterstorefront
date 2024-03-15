@@ -1,6 +1,7 @@
 import Spinner from '@components/ui/Spinner'
 import React, { useState } from 'react'
 import QuoteDetail from './QuoteDetail'
+import { translate } from '@components/services/localization'
 
 function B2BQuotes({ quotes }: any) {
   const [quoteData, setQuoteDetail] = useState<any>(undefined)
@@ -39,7 +40,7 @@ function B2BQuotes({ quotes }: any) {
                       }/${new Date(quote?.validUntil).getUTCFullYear()}`}
                   </span>
                   <span className="font-Inter uppercase font-light leading-4 mob-font-14 text-lg tracking-[2%]">
-                    {`Validity Days: ${quote?.validDays} days`}
+                    {`Validity Days: ${quote?.validDays} ${translate('label.product.productSidebar.daysText')}`}
                   </span>
                 </div>
                 <div className="flex flex-col gap-y-2 sm:gap-y-0 sm:flex-row gap-x-6">

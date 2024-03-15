@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Layout } from '@components/common'
 import { CLOSE_PANEL } from '@components/utils/textVariables'
 import Products from './Products'
+import { translate } from '@components/services/localization'
 
 export default function ProductCompare({
   products,
@@ -64,7 +65,7 @@ export default function ProductCompare({
                           onClick={() => closeCompareProducts()}
                           className="w-4 h-4 text-black"
                         />{' '}
-                        Comparing {products?.length} Items
+                        {translate('label.product.comparingItemsText1')} {products?.length} {translate('common.label.itemSingularText')}
                       </Dialog.Title>
                       <div className="flex items-center ml-3 h-7">
                         <button
@@ -84,10 +85,10 @@ export default function ProductCompare({
                         <div className="flex flex-col items-start justify-start w-full p-2 text-left">
                           <div className="sticky w-full top-0 z-10 flex flex-col bg-white sm:h-[220px] md:h-[430px] h-[520px] lg:h-[516px]"></div>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            Ratings
+                            {translate('common.label.ratingText')}
                           </span>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            Brand
+                          {translate('common.label.brandText')}
                           </span>
                           {attributeNames?.map((attribName: any) => (
                             <span

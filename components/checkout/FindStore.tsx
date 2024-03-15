@@ -4,6 +4,7 @@ import { AlertType } from '@framework/utils/enums'
 import axios from 'axios'
 import { NEXT_STORE_LOCATOR } from '@components/utils/constants'
 import { GENERAL_FIND_STORE, GENERAL_FIND_STORE_TITLE } from '@components/utils/textVariables'
+import { translate } from '@components/services/localization'
 
 interface FindStoreProps {
   onStoreSelected: (store: any) => void
@@ -29,7 +30,7 @@ const FindStore: React.FC<FindStoreProps> = ({ onStoreSelected }) => {
         setStores(data)
       } else {
         setStores(null)
-        setAlert({ type: AlertType.ERROR, msg: "No store found.Try with different postcode" })
+        setAlert({ type: AlertType.ERROR, msg: translate('message.noStoreFoundErrorMsg') })
       }
     } catch (error) {
       console.error(error)
@@ -66,7 +67,7 @@ const FindStore: React.FC<FindStoreProps> = ({ onStoreSelected }) => {
         <input
           type="text"
           className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default"
-          placeholder="Enter postcode..."
+          placeholder={translate('common.label.enterPostcodePlaceholder')}
           value={postCode}
           onChange={handlePostCode}
         />

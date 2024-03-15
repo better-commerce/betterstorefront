@@ -12,7 +12,7 @@ import RelatedProducts from '@components/product/RelatedProducts'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, } from '@components/utils/constants'
-import useTranslation, { CLOSE_PANEL, GENERAL_SHOPPING_CART, GENERAL_TOTAL_SAVINGS, WISHLIST_SIDEBAR_MESSAGE, GENERAL_CATALOG, GENERAL_REMOVE, GENERAL_DELETE, SUBTOTAL_INCLUDING_TAX, GENERAL_SHIPPING, GENERAL_DISCOUNT, GENERAL_TOTAL, GENERAL_CHECKOUT, GENERAL_CONTINUE_SHOPPING, GENERAL_OR_TEXT, IMG_PLACEHOLDER, BTN_MOVE_TO_WISHLIST, ADDED_TO_WISH, GENERAL_PERSONALISATION, PERSONALISATION, BTN_ADD_TO_WISHLIST, WISHLIST_SUCCESS_MESSAGE, GENERAL_TAX, SUBTOTAL_EXCLUDING_TAX, ITEM_WISHLISTED} from '@components/utils/textVariables'
+import useTranslation, { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
@@ -24,6 +24,7 @@ import { Guid } from '@commerce/types'
 import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 import RecentlyViewedProduct from '@components/product/RelatedProducts/RecentlyViewedProducts'
 import wishlistHandler from '@components/services/wishlist'
+import { translate } from '@components/services/localization'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -542,16 +543,16 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     <div className="flex-1">
                       <div className="sticky top-0 z-10 flex items-start justify-between px-4 py-4 mb-1 bg-white shadow sm:px-6">
                         <Dialog.Title className="text-lg font-medium text-gray-900 ">
-                          {GENERAL_SHOPPING_CART}
+                          {translate('label.cart.shoppingCartText')}
                           {itemsInBag() > 0 ? (
                             <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {itemsInBag()}{' '} {itemsInBag() > 1 ? ' items' : ' item'}{' '} </span>
                           ) : (
-                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} Empty{' '} </span>
+                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '}{translate('common.label.emptyText')}{' '} </span>
                           )}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
                           <button type="button" className="p-2 -m-2 text-gray-400 hover:text-gray-500" onClick={handleClose} >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                           </button>
                         </div>
@@ -559,7 +560,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
                         <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
                           <h4 className="font-semibold text-green-dark">
-                            {priceFormat(totalDiscount, undefined, cartItems?.discount?.currencySymbol)}{' '} {GENERAL_TOTAL_SAVINGS}
+                            {priceFormat(totalDiscount, undefined, cartItems?.discount?.currencySymbol)}{' '} {translate('label.cart.totalSavingsText')}
                           </h4>
                         </div>
                       )}
@@ -596,18 +597,18 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                                 <div className="flex flex-col mt-2 mb-6">
                                                   <div className="flex justify-between font-medium text-gray-900">
                                                     <div className="image-container">
-                                                      <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title="View Personalisation" >
+                                                      <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title={translate('common.label.viewPersonalisationText')} >
                                                         <EyeIcon className="inline-block w-4 h-4 hover:text-gray-400 lg:-mt-2 md:-mt-1 xsm:-mt-3 xsm:h-5" />
                                                       </span>
                                                     </div>
                                                     <p className="ml-1 mr-1 font-thin text-gray-500"> {' '} |{' '} </p>
                                                     <h3>
-                                                      <span className="text-xs uppercase cursor-default">{`${PERSONALISATION}`}</span>
+                                                      <span className="text-xs uppercase cursor-default">{translate('common.label.personalisationText')}</span>
                                                       <span className="mt-0 ml-4 text-xs"> {' '} {isIncludeVAT ? child.price?.formatted?.withTax : child.price?.formatted?.withoutTax}{' '} </span>
                                                     </h3>
                                                   </div>
-                                                  <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleItem(child, GENERAL_DELETE)} >
-                                                    {GENERAL_REMOVE}
+                                                  <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleItem(child, translate('common.label.deleteText'))} >
+                                                    {translate('common.label.removeText')}
                                                   </button>
                                                 </div>
                                               </div>
@@ -666,14 +667,14 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                         <div className="flex flex-row justify-between mt-3 \text-left">
                                           <button type="button" className="flex items-center gap-1 text-xs font-normal text-left text-red-400 group " onClick={() => { openModal(); setItemClicked(product) }} >
                                             <TrashIcon className="w-4 h-4 text-red-400 group-hover:text-red-700" />
-                                            <span className="group-hover:text-red-700"> {' '} {GENERAL_REMOVE} </span>
+                                            <span className="group-hover:text-red-700">{translate('common.label.removeText')}</span>
                                           </button>
 
                                           <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
                                           { isInWishList(product?.productId) ? ( 
-                                              <><HeartIcon className="w-4 h-4 text-red-500 hover:text-red-700" />{' '}{ITEM_WISHLISTED}</>
+                                              <><HeartIcon className="w-4 h-4 text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
                                             ) : ( 
-                                              <> <HeartIcon className="w-4 h-4 text-gray-700 hover:text-gray-900" />{' '}{BTN_MOVE_TO_WISHLIST} </> 
+                                              <> <HeartIcon className="w-4 h-4 text-gray-700 hover:text-gray-900" />{' '}{translate('label.wishlist.moveToWishlistText')} </> 
                                             )
                                          }
                                           </button>
@@ -687,17 +688,17 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             {isWishlistClicked && (
                               <div className="items-center justify-center w-full h-full py-5 text-xl text-gray-500">
                                 <CheckCircleIcon className="flex items-center justify-center w-full h-12 text-center text-indigo-600" />
-                                <p className="mt-5 text-center"> {' '} {ADDED_TO_WISH}{' '} </p>
+                                <p className="mt-5 text-center"> {' '} {translate('label.wishlist.addedToWishlistText')}{' '} </p>
                               </div>
                             )}
                           </ul>
                           {isEmpty && (
                             <div className="flex flex-col items-center justify-between w-full h-full py-9">
                               <img height="100" width="100" src="/assets/images/cart.jpg" alt="cart" className="text-center" />
-                              <p className="mt-5 text-gray-700"> {WISHLIST_SIDEBAR_MESSAGE} </p>
+                              <p className="mt-5 text-gray-700">{translate('common.label.noItemsPresentText')}</p>
                               <Link href="/search">
                                 <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={handleClose} >
-                                  {GENERAL_CATALOG}
+                                    {translate('label.cart.catalogText')}
                                   <span aria-hidden="true"> &rarr;</span>
                                 </button>
                               </Link>
@@ -722,7 +723,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                 <div className="section-devider-sm"></div>
                               </div>
                               <div className="flex flex-col px-4 mt-0 cart-related-prod sm:px-6">
-                                <RelatedProducts relatedProducts={relatedProductData} productPerColumn={1.8} checkout_refrence={true} title="Frequently Bought Together" handleQuickAddToBag={handleQuickAddToBag} deviceInfo={deviceInfo} />
+                                <RelatedProducts relatedProducts={relatedProductData} productPerColumn={1.8} checkout_refrence={true} title={translate('common.label.frequentlyBoughtTogetherText')} handleQuickAddToBag={handleQuickAddToBag} deviceInfo={deviceInfo} />
                               </div>
                               <div className="flex flex-col">
                                 <div className="section-devider-sm"></div>
@@ -746,26 +747,26 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {!isEmpty && (
                       <div className="pt-4 pb-3 pl-5 pr-5 mt-2 bg-white">
                         <div className="flex justify-between text-sm text-gray-900">
-                          <p> {' '} {isIncludeVAT ? SUBTOTAL_INCLUDING_TAX : SUBTOTAL_EXCLUDING_TAX}{' '} </p>
+                          <p> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}{' '} </p>
                           <p> {' '} {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax : cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
                         </div>
                         <div className="flex justify-between text-sm text-gray-900">
-                          <p>{GENERAL_SHIPPING}</p>
+                          <p>{translate('label.orderSummary.shippingText')}</p>
                           <p> {' '} {isIncludeVAT ? cartItems.shippingCharge?.formatted?.withTax : cartItems.shippingCharge?.formatted?.withoutTax}{' '} </p>
                         </div>
 
                         {cartItems.promotionsApplied?.length > 0 && (
                           <div className="flex justify-between text-sm text-gray-900">
-                            <p>{GENERAL_DISCOUNT}</p>
+                            <p>{translate('label.orderSummary.discountText')}</p>
                             <p className="text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems.discount?.formatted?.withTax : cartItems.discount?.formatted?.withoutTax}{' '} </p>
                           </div>
                         )}
                         <div className="flex justify-between text-sm text-gray-900">
-                          <p>{GENERAL_TAX}</p>
+                          <p>{translate('label.orderSummary.taxText')}</p>
                           <p>{cartItems.grandTotal?.formatted?.tax}</p>
                         </div>
                         <div className="flex justify-between text-sm font-bold text-gray-900">
-                          <p className="link-button">{GENERAL_TOTAL}</p>
+                          <p className="link-button">{translate('label.orderSummary.totalText')}</p>
                           <p className=" link-button"> {' '} {cartItems.grandTotal?.formatted?.withTax}{' '} </p>
                         </div>
                       </div>

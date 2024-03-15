@@ -17,6 +17,7 @@ import CncList from './CheckoutForm/CncList'
 import Delivery from './CheckoutForm/Delivery'
 import DeliveryOptions from './DeliveryOptions'
 import { generateUri } from '@commerce/utils/uri-util'
+import { translate } from '@components/services/localization'
 
 function SplitDelivery({
   splitDeliveryItems = null,
@@ -82,7 +83,7 @@ function SplitDelivery({
               className="flex w-full  border-gray-30 gap-x-5 flex-row"
             >
               <div className="\h-full w-full">
-                <h2 className="text-sm font-bold">{`Delivery ${Idx + 1}`}</h2>
+                <h2 className="text-sm font-bold">{translate('label.checkout.deliveryText')}{' '}{Idx + 1}</h2>
                 <ul role="list" className="divide-y divide-gray-200">
                   {splitDeliveryItems[deliveryDate]?.map(
                     (product: any, Idx: any) => (
@@ -178,7 +179,7 @@ function SplitDelivery({
                                         {customInfo1FormattedData && (
                                           <div className="text-gray-700 text-ms">
                                             <span
-                                              title="Message"
+                                              title={translate('label.product.messageText')}
                                               className={personalizationFont}
                                             >
                                               {

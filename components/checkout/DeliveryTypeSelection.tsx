@@ -13,6 +13,7 @@ import {
   IN_STORE_OR_COLLECT_PLUS,
 } from '@components/utils/textVariables'
 import { TruckIcon, CubeIcon } from '@heroicons/react/24/outline'
+import { translate } from '@components/services/localization'
 
 interface DeliveryTypeSelectionProps {
   basket: any
@@ -77,7 +78,7 @@ const DeliveryTypeSelection = ({
   return (
     <>
       <h5 className="mt-4 mb-2 font-medium text-black font-18 sm:mt-6 sm:mb-4">
-        Delivery Type
+        {translate('label.checkout.deliveryTypeText')}
       </h5>
 
       <div className="flex justify-between w-full gap-4">
