@@ -113,11 +113,11 @@ const Coupon = (props: IPromotionInputProps) => {
       promo?.promoType == 4 ||
       promo?.promoType == 9
     ) {
-      promoDiscount = 'FREE GIFT ITEM'
+      promoDiscount = translate('label.basket.freeGiftItemText')
     }
 
     if (promo?.promoType == 16) {
-      promoDiscount = '50% OFF on 3rd Item'
+      promoDiscount = translate('label.cart.offerText')
     }
   }
 

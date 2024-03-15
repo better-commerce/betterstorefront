@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Disclosure } from '@headlessui/react'
-import Image from 'next/image'
-import _, { sumBy } from 'lodash'
+import sumBy from 'lodash/sumBy'
 import Link from 'next/link'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'

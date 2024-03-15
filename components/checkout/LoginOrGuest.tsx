@@ -95,12 +95,12 @@ const LoginOrGuest: React.FC<any> = ({
             </div>
             <div>
               <span className="font-12">
-                {translate('label.checkout.checkoutWithoutLoginText')}
-                <button
+                {translate('label.checkout.checkoutWithoutLoginText')} 
+              <button
                   className="py-4 pl-1 font-semibold text-orange-600"
                   onClick={onToggleLoginView}
                 >
-                  {isLogin ? translate('label.checkout.guestCheckoutText') : translate('label.checkout.loginText')}
+                  {isLogin ? translate('label.checkout.guestCheckoutText') :translate('label.checkout.loginText')}
                 </button>
               </span>
             </div>
@@ -151,17 +151,17 @@ const LoginOrGuest: React.FC<any> = ({
           <div className="flex items-center justify-between w-full">
             <div>
               <h5 className="font-semibold text-black uppercase font-18">
-                {translate('label.checkout.guestCheckoutText')}
+                {translate('label.checkout.guestCheckoutText')} 
               </h5>
             </div>
             <div>
               <span className="font-12">
-                {translate('label.checkout.haveAnAccountText')}
+                {translate('label.checkout.haveAnAccountText')} 
                 <button
                   className="py-4 pl-1 font-semibold text-orange-600"
                   onClick={onToggleLoginView}
                 >
-                  {isLogin ? translate('label.checkout.guestCheckoutText') : translate('label.checkout.loginText')}
+                  {isLogin ? translate('label.checkout.guestCheckoutText') :translate('label.checkout.loginText')}
                 </button>
               </span>
             </div>

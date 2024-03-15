@@ -7,8 +7,8 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { CheckIcon } from '@heroicons/react/24/solid'
 import { Button, LoadingDots } from '@components/ui';
-import { GENERAL_CANCEL, ORDER_REFUND_INFO, REASON_CANCEL_HEADING } from '@components/utils/textVariables';
 import Spinner from '@components/ui/Spinner';
+import { translate } from '@components/services/localization';
 
 
 export default function CancelReason({ cancellationReasons, onItemCancellation, item, cancelTitle, cancelLoadingState, hideCancellationReasons, }: any) {
@@ -33,12 +33,12 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
               hideCancellationReasons()
             }}>
               <h4 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 dark:text-black">
-                <i className="sprite-icon sprite-left-arrow mr-2"></i> {REASON_CANCEL_HEADING}
+                <i className="sprite-icon sprite-left-arrow mr-2"></i> {translate('label.cancelReason.cancelReasonHeadingText')}
               </h4>
           </a>
           <div className='w-full py-4'>
-            <h4 className='text-base font-bold text-primary dark:text-black'>Why are you cancelling this {cancelTitle}?</h4>
-            <p className='text-sm text-gray-600 dark:text-black'>This Information will help us to improve our service</p>
+            <h4 className='text-base font-bold text-primary dark:text-black'>{translate('label.cancelReason.cancelTitle')} {cancelTitle} {translate('common.label.questionMark')}</h4>
+            <p className='text-sm text-gray-600 dark:text-black'>{translate('common.label.serviceText')}</p>
 
             {
               !cancellationReasons ? (
@@ -80,7 +80,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                       className='relative info-text py-4 text-gray-600'>
                       <InformationCircleIcon className='inline-block w-4 h-4 mb-1' />
                       <span className='text-sm font-normal dark:text-black'>
-                        {'   '}{ORDER_REFUND_INFO}
+                        {translate('label.orderDetails.orderRefundInfo')}
                       </span>
                     </p>
 
@@ -90,7 +90,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                       disabled={isDisabled}
                       onClick={openModal} 
                     >
-                      {GENERAL_CANCEL} {cancelTitle}
+                      {translate('common.label.cancelText')} {cancelTitle}
                     </Button>
                   </div>
                 </>
@@ -132,20 +132,20 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                     <div className="w-full sm:left-1 sm:top-1">
                       <div className='flex justify-between px-4 py-3 border-b'>
                         <div>
-                          <h3 className="text-base font-bold text-black dark:text-black">{GENERAL_CANCEL} {cancelTitle} </h3>
+                          <h3 className="text-base font-bold text-black dark:text-black">{translate('common.label.cancelText')} {cancelTitle} </h3>
                         </div>
                         <button
                           type="button"
                           className="text-black rounded-md outline-none hover:text-gray-500"
                           onClick={closeModal}
                         >
-                          <span className="sr-only">Close panel</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="relative top-0 w-7 h-7" aria-hidden="true" />
                         </button>
                       </div>
                       <div className="w-full p-6 overflow-y-auto">
                         <div className='w-full'>
-                          <p className='text-sm text-black'>Are you certain you want to cancel this {cancelTitle}?</p>
+                          <p className='text-sm text-black'>{translate('label.cancelReason.cancelConfirmationText')} {cancelTitle} {translate('common.label.questionMark')}</p>
                         </div>
                         <div className='w-full py-4'>
                           <Button
@@ -153,7 +153,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                             onClick={closeModal}
                             className='mb-3 !py-3 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200'
                           >
-                            Don't {GENERAL_CANCEL}
+                           {translate('common.label.donotCancelText')}
                           </Button>
                           <Button
                             variant='slim'
@@ -164,7 +164,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                             })}
                             disabled={cancelLoadingState}
                           >
-                            {cancelLoadingState ? <LoadingDots /> : `${GENERAL_CANCEL} ${cancelTitle}`}
+                            {cancelLoadingState ? <LoadingDots /> : `${translate('common.label.cancelText')} ${cancelTitle}`}
                           </Button>
                         </div>
                       </div>
