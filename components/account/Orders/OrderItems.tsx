@@ -11,6 +11,7 @@ import TrackingDetail from './TrackingDetail'
 import { vatIncluded } from '@framework/utils/app-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const OrderItems = ({
   items,
@@ -19,6 +20,7 @@ const OrderItems = ({
   openHelpModal,
   setReview,
 }: any) => {
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   return (
     <>
@@ -121,7 +123,7 @@ const OrderItems = ({
                                     )}
                               </span>
                               <span className="text-sm font-normal text-green sm:text-md">
-                                {discount}% off
+                                {discount}{translate('common.label.discountText')}
                               </span>
                             </>
                           )}
@@ -131,7 +133,7 @@ const OrderItems = ({
                     <div className="flex mt-3">
                       <div className="w-24">
                         <label className="text-sm font-medium capitalize text-primary dark:text-black">
-                          Size:{' '}
+                          {translate('common.label.sizeText')} {' '}
                           <span className="font-medium uppercase">
                             {productItem?.size}
                           </span>
@@ -139,7 +141,7 @@ const OrderItems = ({
                       </div>
                       <div className="w-full">
                         <label className="text-sm font-medium text-primary dark:text-black">
-                          Qty: {productItem?.qty}
+                        {translate('common.label.qtyText')} {productItem?.qty}
                         </label>
                       </div>
                     </div>
@@ -155,7 +157,7 @@ const OrderItems = ({
                       className="w-16 mt-2 text-xs text-black opacity-60"
                       onClick={() => setReview(productItem)}
                     >
-                      Rate Item:{' '}
+                      {translate('label.orderDetails.rateItemText')}:{' '}
                     </p>
                     <div className="flex gap-1 sm:gap-2 flex-center">
                       {Array.from(Array(5).keys()).map((num) => (

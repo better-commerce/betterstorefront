@@ -31,8 +31,10 @@ import { v4 as uuid_v4 } from 'uuid'
 import Cookies from 'js-cookie'
 import setSessionIdCookie, { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import DataLayerInstance from '@components/utils/dataLayer'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData, config, location, }: any) {
+  const translate = useTranslation()
   const isBrowser = typeof window !== 'undefined'
   const INITIAL_STATE = {
     step: CheckoutStepType.NONE,
@@ -498,7 +500,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                 <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
                   <div className="flex flex-col h-full p-0 px-0 pb-6 mx-auto bg-white shadow-xl sm:rounded-md">
                     <div className='flex items-center justify-between w-full py-4'>
-                      <h5 className='font-semibold text-black uppercase font-18'>Quote Detail-{quoteData?.customQuoteNo}</h5>
+                      <h5 className='font-semibold text-black uppercase font-18'>{translate('label.quotes.quoteDetailHeadingText')}{quoteData?.customQuoteNo}</h5>
                       <div className='justify-end'>
                         <button type="button" className="justify-end lg:-top-12 lg:-right-10 p-0.5 z-10 rounded-full dark:text-black" onClick={() => setQuoteModelClose()}>
                           <span className="sr-only">{CLOSE_PANEL}</span>
@@ -560,7 +562,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                           </div>
                           <div className="grid grid-cols-2 gap-4 mt-4">
                             <div className='flex flex-col gap-0 p-4 border border-gray-200'>
-                              <h4 className='mb-4 font-semibold text-black uppercase font-18'>Billing Address</h4>
+                              <h4 className='mb-4 font-semibold text-black uppercase font-18'>{translate('label.addressBook.BillingAddressHeadingText')}</h4>
                               <span className='font-semibold font-14'>{quoteViewData?.billingAddress?.firstName}, {quoteViewData?.billingAddress?.lastName}</span>
                               <span>{quoteViewData?.billingAddress?.address1}</span>
                               <span>{quoteViewData?.billingAddress?.address2}</span>
@@ -568,7 +570,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                               <span>{quoteViewData?.billingAddress?.countryCode}, {quoteViewData?.billingAddress?.postCode}</span>
                             </div>
                             <div className='flex flex-col gap-0 p-4 border border-gray-200'>
-                              <h4 className='mb-4 font-semibold text-black uppercase font-18'>Shipping Address</h4>
+                              <h4 className='mb-4 font-semibold text-black uppercase font-18'>{translate('label.addressBook.shippingAddressHeadingText')}</h4>
                               <span className='font-semibold font-14'>{quoteViewData?.shippingAddress?.firstName}, {quoteViewData?.shippingAddress?.lastName}</span>
                               <span>{quoteViewData?.shippingAddress?.address1}</span>
                               <span>{quoteViewData?.shippingAddress?.address2}</span>
@@ -585,7 +587,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                 {({ open }) => (
                                   <>
                                     <Disclosure.Button className="flex items-center justify-between w-full gap-2 px-0 py-2 text-sm font-medium text-left text-black uppercase bg-white rounded-lg hover:bg-white">
-                                      <span>View Details</span>
+                                      <span>{translate('common.label.viewDetailsText')}</span>
                                       <ChevronDownIcon className={`${open ? 'rotate-180 transform' : ''} w-5 h-5`}/>
                                       {/* <i className={`${open ? 'rotate-180 transform' : ''} sprite-icons sprite-dropdown`} /> */}
                                     </Disclosure.Button>
@@ -612,8 +614,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                             <div className="flex items-center justify-between pt-2 pb-2 border-b border-gray-200 sm:pt-1">
                                               <dt className="flex flex-col items-start text-sm text-black">
                                                 <span className="block text-xs">
-                                                  Discount
-                                                </span>
+                                                  {translate('label.orderSummary.discountText')} </span>
                                                 {groupedPromotions?.autoAppliedPromos?.map(
                                                   (promo: any, promoId: number) => {
                                                     return (
@@ -766,8 +767,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                     as="div"
                     className="flex items-center justify-between w-full px-6 py-3 font-semibold leading-6 text-gray-900 uppercase font-18 xsm:text-md"
                   >
-                    You're about to lose Free Delivery!
-                    {loadingAction === LoadingActionType.NONE && (
+                    {translate('label.orderSummary.loseDeliveryText')} {loadingAction === LoadingActionType.NONE && (
                       <XMarkIcon
                         className="w-8 h-8 text-black border border-black rounded-md cursor-pointer hover:text-orange-500 hover:border-orange-500"
                         onClick={closeModal}
@@ -776,10 +776,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                   </Dialog.Title>
                   {/* <hr className="w-full my-2 shadow-md "></hr> */}
                   <p className="px-6 pb-2 text-sm font-normal text-black">
-                    Removing this item means you'll lose Free Delivery on this
-                    order. Are you sure you want to remove this item from your
-                    basket?
-                  </p>
+                    {translate('label.orderSummary.loseFreeDeliveryConfirmText')} </p>
                   <div className="flex items-center justify-start w-full gap-4 px-6 mt-2">
                     <button
                       onClick={() => {

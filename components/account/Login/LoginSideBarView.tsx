@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react'
 import { CLOSE_PANEL } from '@components/utils/textVariables'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Login from './index'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 interface LoginSideBarViewProps {
   pluginConfig: any;
 }
@@ -12,7 +12,7 @@ interface LoginSideBarViewProps {
 const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = []}) => {
   const { closeSidebar, displaySidebar } = useUI()
   const [openSidebar, setOpenSidebar] = useState(false)
-
+  const translate = useTranslation()
   useEffect(() => {
     // set to 'true'
     setOpenSidebar(displaySidebar)

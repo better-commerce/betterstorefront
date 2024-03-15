@@ -16,6 +16,7 @@ import {
   /*CancelOrderPageAction,*/ NEXT_GET_PRODUCT,
   PRODUCTS_SLUG_PREFIX,
 } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 // import Spinner from '@components/ui/Spinner';
 // import SubmitButton from '@components/common/SubmitButton';
 
@@ -29,6 +30,7 @@ const ExchangeSelection = ({
   submitState,
   deviceInfo,
 }: any) => {
+  const translate = useTranslation()
   const SIZE_ATTRIBUTE = 'clothing.size'
   const COLOR_ATTRIBUTE = 'global.colour'
   const [isOpen, setIsOpen] = useState(false)
@@ -217,11 +219,9 @@ const ExchangeSelection = ({
           ) : (
             <>
               <h4 className="mb-4 text-xl font-bold text-black">
-                Choose Size & Color
-              </h4>
+                {translate('label.exchangeSelection.exchangeVariantHeadingText')} </h4>
               <p className="text-base text-primary">
-                Select color and size of the item you want in exchange
-              </p>
+                {translate('label.exchangeSelection.exchangeVariantText')} </p>
 
               <div className="w-full mt-4">
                 <AttributesHandler
@@ -296,7 +296,7 @@ const ExchangeSelection = ({
                       <div className="flex justify-between px-4 py-3 border-b">
                         <div>
                           <h3 className="text-base font-bold text-black dark:text-black">
-                            Exchange item{' '}
+                            {translate('label.exchangeSelection.exchangeItemText')} {' '}
                           </h3>
                         </div>
                         <button
@@ -304,7 +304,7 @@ const ExchangeSelection = ({
                           className="text-black rounded-md outline-none hover:text-gray-500"
                           onClick={closeModal}
                         >
-                          <span className="sr-only">Close panel</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon
                             className="relative top-0 w-7 h-7"
                             aria-hidden="true"
@@ -314,7 +314,7 @@ const ExchangeSelection = ({
                       <div className="w-full p-6 overflow-y-auto">
                         <div className="w-full">
                           <p className="text-sm text-black">
-                            Are you certain you want to exchange this item?{' '}
+                            {translate('label.exchangeSelection.exchangeConfirmText')}?{' '}
                             {/*You'll miss out on savings of 648!*/}
                           </p>
                         </div>
@@ -336,8 +336,7 @@ const ExchangeSelection = ({
                             className="block w-full px-4 py-3 font-bold text-center text-black border rounde-sm"
                             onClick={() => closeModal()}
                           >
-                            Don't Exchange
-                          </a>
+                            {translate('label.exchangeSelection.dontExchangeText')} </a>
                         </div>
                       </div>
                     </div>
