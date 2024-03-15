@@ -73,14 +73,14 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
 
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {data.map((product:any, index:number) => (
+            {data?.map((product:any, index:number) => (
               <li className={`glide__slide`} key={index}>
                 <MyCollectionCard
-                  name={product.newlookbook_name}
-                  price={product.newlookbook_price}
-                  images={product.newlookbook_looksimage}
+                  name={product?.newlookbook_name}
+                  price={product?.newlookbook_price}
+                  images={product?.newlookbook_looksimage}
                   primaryImage={product?.newlookbook_primaryimage}
-                  description={product.newlookbook_category}
+                  description={product?.newlookbook_category}
                   link={product?.newlookbook_link}
                 />
               </li>
