@@ -56,7 +56,8 @@
       "noOrderFoundHeadingText": "No Order Available",
       "startShoppingBtnText": "Start Shopping",
       "needHelpWithOrderBtnText": "Need Help with Your Order?",
-      "itemRefundText": "Refund of {currencySymbol}{itemTotal} will be processed within 3-5 business days after the item is received and inspected.",
+      "itemRefundText1": "Refund of",
+      "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected." ,
       "courierPartnerHeadingText": "COURIER PARTNER",
       "awbNumberHeadingText": "AWB Number",
       "returnNotCreatedMsg": "Woops! Could not create a return",
@@ -90,7 +91,8 @@
     },
     "help": {
       "getHelpOnItemText": "Get Help with this item",
-      "returnWindowClosedText": "Return window is now closed since It's been over {returnWindow} Days you've received this item.",
+      "returnWindowClosedText1": "Return window is now closed since It's been over",
+      "returnWindowClosedText2": "Days you've received this item.",
       "returnItemText": "Return Item",
       "cancelItemText": "Cancel Item",
       "helpText": "Help?"
@@ -466,6 +468,7 @@
       "applyOnCheckoutText": "(Apply on checkout)"
     },
     "category": {
+      "catogoriesText":"Categories",
       "shopByCategoryText": "Shop by Category",
       "categoryText": "Category",
       "noCategoryAvailableText": "No Category Available",

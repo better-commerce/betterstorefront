@@ -14,7 +14,7 @@ import { GENERAL_LOGIN, INVALID_ACCOUNT, LOGIN_SUCCESSFUL, VALIDATION_YOU_ARE_AL
 import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
@@ -22,6 +22,7 @@ interface LoginProps {
 }
 
 export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [],  }: LoginProps) {
+  const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -148,8 +149,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
         >
           <Link href="/my-account/forgot-password" passHref>
             <span className="block font-medium text-indigo-600 underline cursor-pointer hover:text-indigo-800 hover:underline">
-              Forgot password?
-            </span>
+              {translate('label.login.forgotPasswordBtnText')} </span>
           </Link>
         </div>
       </div>

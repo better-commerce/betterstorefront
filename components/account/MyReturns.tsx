@@ -14,6 +14,7 @@ import {
   GENERAL_RETURN_NUMBER,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { NEXT_GET_RETURNS } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import Link from 'next/link'
@@ -24,7 +25,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 
 export default function MyReturns() {
   const { user, basketId, setCartItems, openCart, cartItems } = useUI()
-
+  const translate = useTranslation()
   const [returns, setReturns] = useState([])
   const isIncludeVAT = vatIncluded()
   const fetchReturns = async () => {
@@ -34,7 +35,7 @@ export default function MyReturns() {
       })
       setReturns(data.response.result)
     } catch (error) {
-      alert('Woops! Error fetching returns')
+      alert(translate('label.myAccount.myOrders.fetchReturnsErrorMsg'))
       console.log(error)
     }
   }

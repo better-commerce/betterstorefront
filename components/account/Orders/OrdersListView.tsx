@@ -8,6 +8,7 @@ import InfiniteScroll from '@components/ui/InfiniteScroll'
 import DeliveryOrderLines from './DeliveryOrderLines'
 import OrderDetail from './OrderDetail'
 import OrderLines from './OrderLines'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function OrdersListView({
   isShowDetailedOrder,
@@ -24,6 +25,7 @@ function OrdersListView({
   deviceInfo,
   orderDetails,
 }: any) {
+  const translate = useTranslation()
   return (
     <>
       {isShowDetailedOrder ? (
@@ -127,8 +129,7 @@ function OrdersListView({
                                     className="px-6 py-2 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white"
                                     onClick={handleInfiniteScroll}
                                   >
-                                    Load More
-                                  </button>
+                                    {translate('common.label.loadMoreBtnText')} </button>
                                 </div>
                               )}
                           </div>
@@ -138,13 +139,11 @@ function OrdersListView({
                       <>
                         <div className="flex flex-col lg:mx-8 w-full px-4 py-12 max-acc-container sm:px-0">
                           <h1 className="my-2 text-2xl font-semibold text-black">
-                            No Order Available
-                          </h1>
+                            {translate('label.orderDetails.noOrderFoundHeadingText')} </h1>
                           <div className="flex w-60 mt-5 sm:flex-col">
                             <Link legacyBehavior passHref href="/">
                               <a className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">
-                                Start Shopping
-                              </a>
+                                {translate('label.orderDetails.startShoppingBtnText')} </a>
                             </Link>
                           </div>
                         </div>

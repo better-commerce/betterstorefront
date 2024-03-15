@@ -3,8 +3,10 @@ import { CANCEL_ORDER, CHAT_WITH_US, GENERAL_CANCEL, GET_HELP_WITH_ORDER, HELP_A
 import { Dialog, Transition } from "@headlessui/react";
 import  {XMarkIcon}  from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHelpMode, onExchangeItem, onReturnItem, onCancelItem, isHelpOrderOpen, closeOrderHelpModal, onCancelOrder, returnRequestedItems, }: any) => {
+   const translate = useTranslation()
    let replacement: any = "";
    let returnData: any = "";
    let replacementWindow: any = "";
@@ -58,7 +60,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                  <div className="w-full pt-4 sm:z-10 sm:px-0 sm:pb-2 sm:left-1 ">
                                     <div className='flex justify-between px-4 pb-4 mb-3 border-b sm:px-6'>
                                        <div>
-                                          <h3 className="text-base font-bold text-black dark:text-black">Get Help with this item </h3>
+                                          <h3 className="text-base font-bold text-black dark:text-black">{translate('label.help.getHelpOnItemText')} </h3>
                                           <p className='text-black font-10 font-normal'>{isHelpStatus?.name}</p>
                                        </div>
                                        <button
@@ -66,15 +68,15 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                           className="text-black rounded-md outline-none hover:text-gray-500"
                                           onClick={closeHelpModal}
                                        >
-                                          <span className="sr-only">Close panel</span>
+                                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                                           <XMarkIcon className="relative top-0 w-7 h-7" aria-hidden="true" />
                                        </button>
                                     </div>
                                     <div className="w-full px-4 pt-2 overflow-y-auto sm:px-6 innerscroll">
                                        <div className='w-full'>
-                                          <p className='mb-4 text-black font-medium text-14'>We will be glad to assist you. What seems to be bothering you? </p>
+                                          <p className='mb-4 text-black font-medium text-14'>{translate('common.label.helpAssistanceText')} </p>
                                           {details?.order?.allowedToReturn && !isHelpStatus?.allowedToExchange && !isHelpStatus?.allowedToReturn &&
-                                             <p className='text-black text-medium text-14'>Return window is now closed since It's been over {returnWindow} Days you've recieved this item.</p>
+                                             <p className='text-black text-medium text-14'>{translate('label.help.returnWindowClosedText1')} {returnWindow} {translate('label.help.returnWindowClosedText1')}</p>
                                           }
                                        </div>
                                        <div className='w-full py-4'>
@@ -91,14 +93,13 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                                 href="javascript:void(0);"
                                                 onClick={() => onReturnItem("Return")}
                                                 className='block w-full hover:opacity-90 dark:hover:bg-accent-8 px-4 py-2 mb-2 bg-gray-900 font-bold uppercase text-center text-white border btn-basic-property'>
-                                                Return Item
-                                             </a>
+                                                {translate('label.help.returnItemText')} </a>
                                           )}
                                           {
                                              details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 &&
                                                 <a href="javascript:void(0);" className='block w-full hover:opacity-90 dark:hover:bg-accent-8 px-4 py-2 mb-2 bg-gray-900 font-bold uppercase text-center text-white border btn-basic-property'
                                                    onClick={() => onCancelItem("Cancel")}>
-                                                   {GENERAL_CANCEL} Item
+                                                   {GENERAL_CANCEL} {translate('common.label.itemSingularText')}
                                                 </a>
                                                 
                                           }
@@ -142,7 +143,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                           className="text-black rounded-md outline-none hover:text-gray-500"
                                           onClick={closeOrderHelpModal}
                                        >
-                                          <span className="sr-only">Close panel</span>
+                                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                                           <XMarkIcon className="relative top-0 w-7 h-7" aria-hidden="true" />
                                        </button>
                                     </div>
