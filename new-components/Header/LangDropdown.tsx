@@ -6,6 +6,8 @@ import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { FC, Fragment } from "react";
 import { headerCurrency } from "./CurrencyDropdown";
 import locales from "@framework/locales.json"
+import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 interface LangDropdownProps {
   panelClassName?: string;
@@ -17,22 +19,30 @@ function classNames(...classes: any) {
 
 const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
   const renderLang = (close: () => void) => {
+    const { i18n } = useTranslation()
     return (
       <div className="grid gap-8 lg:grid-cols-2">
         {locales?.localizations?.map((item, index) => (
-          <a
-            key={index}
-            href="#"
-            onClick={() => close()}
-            className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${item?.isActive ? "bg-gray-100 dark:bg-gray-700" : "opacity-80"}`}
-          >
-            <div className="">
-              <p className="text-sm font-medium ">{item?.countryName}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {item?.languageName}
-              </p>
-            </div>
-          </a>
+          <Link legacyBehavior href="/" locale={item?.culture}>
+            <a
+              key={index}
+              href="#"
+              onClick={() => {
+                //if (item?.isActive) {
+                //i18n.changeLanguage(item?.culture);
+                //}
+                close();
+              }}
+              className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${item?.isActive ? "bg-gray-100 dark:bg-gray-700" : "opacity-80"}`}
+            >
+              <div className="">
+                <p className="text-sm font-medium ">{item?.countryName}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {item?.languageName}
+                </p>
+              </div>
+            </a>
+          </Link>
         ))}
       </div>
     );
