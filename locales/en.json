@@ -11,7 +11,8 @@
       "internalServerErrorText": "500 : Internal Server Error",
       "descriptionText": "Check that you typed the address correctly. Maybe go back to your previous page or try using our site search to find something specific.",
       "weAreDownedText": "WE'VE DOWNED TOOLS",
-      "freeNextDayDeliveryMethod": "To carry on shopping with free next day delivery"
+      "freeNextDayDeliveryMethod": "To carry on shopping with free next day delivery",
+      "internal-server-error": "Internal Server Error"
     },
     "cancelReason": {
       "cancelTitle": "Why are you cancelling this",
@@ -28,7 +29,10 @@
       "removeKitText": "Remove kit",
       "kitItemsText": "Kit items",
       "offerText": "50% OFF on 3rd Item",
-      "cartItemRemoveText": "Are you sure you don't want this product? You may move it to Wishlist and buy later."
+      "multipleCodesApplyText": "You may apply mutliple codes",
+      "cartItemRemoveText": "Are you sure you don't want this product? You may move it to Wishlist and buy later.",
+      "youDontHaveAnyItems": "Uh-oh, you don't have any items in here",
+      "priceLabelText": "RRP"
     },
     "login": {
       "loginBtnText": "Login",
@@ -191,7 +195,16 @@
       "noInvitesText": "No Successful Invites Yet",
       "successfulInviteHeadingText": "Successful Invite",
       "successfulInvitesHeadingText": "Successful Invites",
-      "clicksOnInvitesText": "Clicks on Invites"
+      "clicksOnInvitesText": "Clicks on Invites",
+      "ClaimedText": "Claimed On",
+      "validTillText": "Valid Till",
+      "valifFromText": "Valid From",
+      "VoucherText": "Voucher Code",
+      "orderStatusText": "Order Status",
+      "referralText": "Referral",
+      "shareReferralByEmail": "Share Referral by Email",
+      "yourFriendsEnterText": "Your friends Enter:",
+      "invitesSentText": "Invites Sent"
     },
     "basket": {
       "addToBasketText": "Add to basket",
@@ -317,7 +330,8 @@
       "saveAndContinueToCollectBtnText": "Save And Continue to Collect",
       "otherAddressTypeText": "Other Address Type",
       "whatsappUpdatesText": "Send me updates on WhatsApp",
-      "payLaterWithKlarnaText": "Click Pay Later With Klarna to check if you are eligible"
+      "payLaterWithKlarnaText": "Click Pay Later With Klarna to check if you are eligible",
+      "paymentFailedText": "failed."
     },
     "formField": {
       "selectCountryText": "Select a Country"
@@ -339,7 +353,8 @@
       "productSuggestionsText": "Product Suggestions",
       "searchForProductsText": "Search for products",
       "showFiltersText": "Show Filters",
-      "noResultFoundForText": "No results found for"
+      "noResultFoundForText": "No results found for",
+      "stepIntoWorldText": "Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look."
     },
     "product": {
       "viewProductText": "View Product",
@@ -432,6 +447,7 @@
         "headToFaqText": "Head over to the FAQ section to find out more"
       },
       "copiedText": "Copied!",
+      "copyText": "COPY",
       "compareSameRangeText": "Compare Same Range",
       "messageText": "Message",
       "selectToPersonalizeText": "Select the Product you want to personalise",
@@ -526,7 +542,9 @@
     },
     "referral": {
       "claimText": "Claim your Gift!",
-      "successText": "Congratulations, you've received a Voucher!"
+      "successText": "Congratulations, you've received a Voucher!",
+      "shareLinkText": "or share a link:",
+      "inviteNowUsingText": "Invite now using:"
     },
     "orders": {
       "NoOrderFoundText": "No orders found",
@@ -567,6 +585,20 @@
     },
     "section": {
       "findTheBestText": "In this season, find the best 🔥"
+    },
+    "thankyou": {
+      "summaryText": "Summary",
+      "yourOfferIsValidText": "Your offer is valid for {days} days",
+      "congratilationDiscountText": "Congratulations! You can get a discount on your next order using code",
+      "deliverdText": "Delivered by",
+      "sizeText": "Size",
+      "willBeWithYouSoonText": "will be with you soon.",
+      "itsOnTheWayText": "It's on the way!",
+      "noOrderProvidedText": "Woops! No order provided",
+      "thankyouText": "Thank you!"
+    },
+    "register": {
+      "freeRegisterText": "Register for free"
     }
   },
   "message": {
