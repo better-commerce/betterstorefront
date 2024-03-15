@@ -167,7 +167,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6 ${className}`} >
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
           <Link href={`/${data?.slug}`} className="block">
-            <NcImage containerClassName="flex aspect-w-11 aspect-h-12 w-full h-0" src={generateUri(data?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" fill sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 40vw" alt="product" />
+            <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
+              <img src={generateUri(data?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={data?.name} />
+            </div>
           </Link>
           <div className={CLASSES}>
             <ProductTag product={data} />
