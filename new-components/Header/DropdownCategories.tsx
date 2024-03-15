@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@commerce/utils/use-translation";
 import { Route } from "../shared/routers/types";
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
@@ -70,6 +71,7 @@ const CATEGORIES: SolutionItem[] = [
 ];
 
 export default function DropdownCategories() {
+  const translate = useTranslation()
   return (
     <div className="DropdownCategories">
       <Popover className="relative">
@@ -79,7 +81,7 @@ export default function DropdownCategories() {
               className={`${open ? "" : "text-opacity-90"}
                 group py-2 h-10 sm:h-12 flex items-center rounded-md text-sm sm:text-base font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-0 `}
             >
-              <span>Shops</span>
+              <span>{translate('common.label.shopText')}</span>
               <ChevronDownIcon
                 className={`${open ? "-rotate-180" : "text-opacity-70 "}
                   ml-2 h-5 w-5 text-neutral-700 group-hover:text-opacity-80 transition ease-in-out duration-150 `}
@@ -128,11 +130,11 @@ export default function DropdownCategories() {
                     >
                       <div className="flex items-center">
                         <span className="text-sm font-medium ">
-                          Go to our shop
+                          {translate('label.header.gotoShopText')}
                         </span>
                       </div>
                       <span className="block text-sm text-slate-500 dark:text-neutral-400">
-                        Look for what you need and love.
+                        {translate('label.header.lookForWhatYouNeedText')}
                       </span>
                     </Link>
                   </div>

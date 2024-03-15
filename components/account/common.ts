@@ -1,11 +1,10 @@
 import axios from 'axios'
-import {
-  NEXT_UPDATE_DETAILS,
-  NEXT_SUBSCRIBE,
-} from '@components/utils/constants'
+import { NEXT_UPDATE_DETAILS, NEXT_SUBSCRIBE, } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const handleError = (setTitle: any) => {
-  setTitle('Woops! Something went wrong!')
+  const translate = useTranslation()
+  setTitle(translate('label.addressBook.updateFailedText'))
   window.scrollTo(0, 0)
 }
 
@@ -20,7 +19,8 @@ export const handleSubmit = async (
   setUser: any,
   setTitle: any,
   url: string = URLS.updateDetails
-) => {
+  ) => {
+  const translate = useTranslation()
   try {
     const response = await axios.post(url, {
       ...user,
@@ -28,7 +28,7 @@ export const handleSubmit = async (
     })
     if (response) {
       setUser({ ...user, ...values })
-      setTitle('Success! Your details have been updated!')
+      setTitle(translate('label.addressBook.detailsUpdatedText'))
       window.scrollTo(0, 0)
     } else {
       handleError(setTitle)

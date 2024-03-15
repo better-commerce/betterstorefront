@@ -174,7 +174,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
           <span className="px-1 font-normal text-gray-400 line-through">{hit[currencyLabel]}{roundToDecimalPlaces(hit[listPriceColumn])}</span>
         )}
 
-        <span className="pl-1 text-sm font-light text-right text-gray-400">{isIncludeVAT ? "inc. VAT" : "ex. VAT"}</span>
+        <span className="pl-1 text-sm font-light text-right text-gray-400">{isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}</span>
       </div>
       <div className="py-2 hit-content">
         <div className='flex flex-col'>

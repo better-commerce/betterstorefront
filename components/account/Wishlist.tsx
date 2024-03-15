@@ -22,8 +22,10 @@ import {
 } from '@components/utils/textVariables'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Wishlist() {
+  const translate = useTranslation()
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { user, basketId, setCartItems, openCart, setWishlist, cartItems } =
@@ -110,7 +112,7 @@ export default function Wishlist() {
                   {WISHLIST_SUB_TITLE}
                 </div>
                 <p className="text-xs sm:text-sm text-primary opacity-60">
-                  Explore more and save items in your wishlist.{' '}
+                  {translate('label.wishlist.saveItemsText')}.{' '}
                 </p>
                 <div className="flex w-full mt-5 sm:flex-col">
                   <Link
@@ -119,7 +121,7 @@ export default function Wishlist() {
                     href="/search"
                     className="w-50 flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 btn-primary"
                   >
-                    <Button className="w-52">Start Shopping</Button>
+                    <Button className="w-52">{translate('label.orderDetails.startShoppingBtnText')}</Button>
                   </Link>
                 </div>
               </div>
@@ -200,7 +202,7 @@ export default function Wishlist() {
                                     {isIncludeVAT ? priceFormat( product?.listPrice?.raw?.withTax, undefined, product?.listPrice?.currencySymbol ) : priceFormat( product?.listPrice?.raw?.withoutTax, undefined, product?.listPrice?.currencySymbol )}
                                   </span>
                                   <span className="font-normal text-12 text-emerald-500">
-                                    {discount}% off
+                                    {discount}{translate('common.label.discountText')}
                                   </span>
                                 </>
                               )}
@@ -219,8 +221,7 @@ export default function Wishlist() {
                                 </button>
                               ) : (
                                 <button className="flex items-center justify-center w-full btn border absolute bottom-0 bg-gray-200">
-                                  Out Of Stock
-                                </button>
+                                  {translate('label.basket.outOfStockText')} </button>
                               )}
                             </div>
                             <div className="absolute z-10 inline-block top-3 right-1">

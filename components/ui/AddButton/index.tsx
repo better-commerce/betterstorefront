@@ -3,7 +3,6 @@ import { useUI } from '@components/ui/context'
 import { useState } from 'react'
 import { LoadingDots } from '@components/ui'
 // import { ShoppingBagIcon } from '@heroicons/react/outline'
-import Image from "next/legacy/image";
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -61,7 +60,7 @@ const DefaultButton: FC<Props> = ({
       })
   }
 
-  const { bgColor, hoverBgColor, focusRingColor } = colorScheme
+  const { bgColor, focusRingColor } = colorScheme
 
   return (
     <button

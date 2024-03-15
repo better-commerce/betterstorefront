@@ -34,6 +34,7 @@ import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const RecommendedProductCollection = dynamic(() => import('@components/brand/RecommendedProductCollection'))
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
@@ -112,6 +113,7 @@ function BrandDetailPage({
   config,
   collections, // ...for Attribute Collection api response
 }: any) {
+  const translate = useTranslation()
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isOnlyMobile } = deviceInfo
@@ -406,7 +408,7 @@ function BrandDetailPage({
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
-          This is a bad url. please go back to
+          {translate('common.label.badUrlText')}
           <Link href="/brands">
             <span className="px-3 text-indigo-500">All brands</span>
           </Link>
