@@ -30,7 +30,7 @@ import cartHandler from '@components/services/cart'
 import { Guid } from '@commerce/types'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface PaymentMethodSelectionProps {
   readonly basket: any
@@ -56,6 +56,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
     hideOverlayLoaderState,
     generateBasketId,
   }) => {
+    const translate = useTranslation()
     const { shippingAddress, billingAddress }: any = basket || EmptyObject
     const selectedAddress = { shippingAddress, billingAddress }
     const window: any = global.window

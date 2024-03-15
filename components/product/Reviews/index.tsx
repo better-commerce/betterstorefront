@@ -1,8 +1,9 @@
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import { GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE } from '@components/utils/textVariables'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function Reviews({ data }: any) {
+  const translate = useTranslation()
   return (
     <div className="px-4 py-0 mx-auto bg-white sm:py-0 sm:px-0 lg:px-0 sm:mt-2 md:w-4/5">
       {data?.productReviews?.length && (

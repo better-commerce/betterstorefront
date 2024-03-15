@@ -17,7 +17,7 @@ import {
   LOG_IN,
   NEW_CUSTOMER,
 } from '@components/utils/textVariables'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 const config = [
   {
     title: LOG_IN,
@@ -39,6 +39,7 @@ export default function CheckoutRouter({
   setIsLoggedIn,
   fetchAddress,
 }: any) {
+  const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB)
   const { setUser, setIsGuestUser, wishlistItems, basketId, setCartItems } =

@@ -23,6 +23,7 @@ import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_GET_PRODUCT_QUICK_VIEW } from '@c
 import { deliveryDateFormat, matchStrings, roundToDecimalPlaces } from '@framework/utils/parse-util'
 import ProductTag from '@components/product/ProductTag'
 import { isMobile } from 'react-device-detect'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
@@ -34,6 +35,7 @@ type HitProps = {
 }
 
 const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
+  const translate = useTranslation()
   const { user, basketId, cartItems, setCartItems, setAlert, openNotifyUser, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quantity, setQuantity] = useState(1)
@@ -154,7 +156,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
         {isMobile ? null : (
           hit?.webstock < 11 && hit?.webstock > 0 &&
           <div className={`${hit?.webstock > 0 ? 'bg-yellow-300 text-black' : 'bg-red-500 text-white'} absolute right-0 px-2 py-1 text-xs font-semibold  rounded-md top-2`}>
-            Only {hit?.webstock} left!
+            {translate('label.product.generateOptions.onlyText')} {hit?.webstock} {translate('label.product.generateOptions.leftText')} 
           </div>
         )}
       </div>
@@ -217,7 +219,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
               <div className="flex items-center justify-between w-full px-0 py-3 my-2 text-sm font-semibold text-left text-black border-t border-gray-200 h-9 product-name hover:text-gray-950">
                 <span>
                   <>
-                    Get it by{' '}
+                    {translate('label.basket.getIt')} {' '}
                     {deliveryDateFormat(etaDate)}
                   </>
                 </span>

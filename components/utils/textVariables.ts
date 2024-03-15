@@ -1,28 +1,28 @@
 import { useRouter } from 'next/router'
 
 //USE THIS AS TEMPLATE
-const content: any = {
-  'en-US': {
-    GENERAL_CHECKOUT: 'Checkout',
-  },
-  es: {
-    GENERAL_CHECKOUT: 'Checkout',
-  },
-  'en-GB': {
-    GENERAL_CHECKOUT: 'Checkout',
-  },
-  'es-ES': {
-    GENERAL_CHECKOUT: 'Checkout',
-  },
-}
+// const content: any = {
+//   'en-US': {
+//     GENERAL_CHECKOUT: 'Checkout',
+//   },
+//   es: {
+//     GENERAL_CHECKOUT: 'Checkout',
+//   },
+//   'en-GB': {
+//     GENERAL_CHECKOUT: 'Checkout',
+//   },
+//   'es-ES': {
+//     GENERAL_CHECKOUT: 'Checkout',
+//   },
+// }
 
 //REACT CUSTOM HOOK, TO BE IMPORTED ONLY IN REACT FUNCTIONAL COMPONENTS
-const useTranslation = () => {
-  const { locale }: any = useRouter()
-  return content[locale] || content['en-GB']
-}
+// const useTranslation = () => {
+//   const { locale }: any = useRouter()
+//   return content[locale] || content['en-GB']
+// }
 
-export default useTranslation
+// export default useTranslation
 
 export const MIN_BODY_LENGTH_ERROR =
   'Your review needs to be at least 5 characters long'

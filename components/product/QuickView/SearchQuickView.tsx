@@ -21,7 +21,7 @@ import ImageGallery from 'react-image-gallery'
 import { matchStrings } from '@framework/utils/parse-util'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import { isMobile } from 'react-device-detect'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -66,6 +66,7 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 export default function SearchQuickView({ isQuickview, setQuickview, productData, isQuickviewOpen, setQuickviewOpen, maxBasketItemsCount }: any) {
+  const translate = useTranslation()
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, setAlert } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState<any>(undefined)

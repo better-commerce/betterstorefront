@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 import CartAddonProducts from './CartAddonProducts'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function CartAddonsSidebar({
   addonProducts,
   isModalClose,
@@ -10,6 +10,7 @@ export default function CartAddonsSidebar({
   deviceInfo,
   maxBasketItemsCount,
 }: any) {
+  const translate = useTranslation()
   return (
     <Transition.Root show={isModalClose} as={Fragment}>
       <Dialog

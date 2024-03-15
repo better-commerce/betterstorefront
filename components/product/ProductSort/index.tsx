@@ -8,7 +8,7 @@ import { stringToBoolean } from '@framework/utils/parse-util'
 import { getItem } from '@components/utils/localStorage'
 import { useUI } from '@components/ui'
 import { Switch } from '@headlessui/react'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Props {
   products: any
@@ -21,6 +21,7 @@ export default function ProductSort({
   action,
   routerSortOption,
 }: Props) {
+  const translate = useTranslation()
   const router = useRouter()
   const { isCompared, setIsCompared } = useUI()
   const [enabled, setEnabled] = useState(false)

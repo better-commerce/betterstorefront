@@ -11,7 +11,7 @@ import {
 import { retrieveAddress } from '@components/checkout-old/CheckoutForm'
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const DEFAULT_COUNTRY = 'United Kingdom'
 
@@ -25,6 +25,7 @@ const ShippingAddressForm: React.FC<any> = ({
   onEditAddressToggleView,
   shippingCountries,
 }) => {
+  const translate = useTranslation()
   const [searchedAddresses, setSearchedAddresses] = useState([])
   const { user, setOverlayLoaderState, hideOverlayLoaderState, isGuestUser } =
     useUI()

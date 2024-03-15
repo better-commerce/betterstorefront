@@ -12,7 +12,7 @@ import LayoutError from '../components/common/Layout/LayoutError'
 // Other Imports
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export async function getStaticProps({
   preview,
@@ -28,6 +28,7 @@ export async function getStaticProps({
 }
 
 export default function InternalServerError({ deviceInfo }: any) {
+  const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
   let absPath = ''
   if (typeof window !== 'undefined') {

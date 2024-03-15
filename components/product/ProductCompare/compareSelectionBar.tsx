@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import ProductCompare from '@components/product/ProductCompare'
 import { useUI } from '@components/ui'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function CompareSelectionBar({ name, showCompareProducts, isCompare, maxBasketItemsCount, deviceInfo, closeCompareProducts }: any) {
   const { isCompared, setIsCompared, compareProductList, resetCompareProducts } = useUI()
+  const translate = useTranslation()
   const [products, setProducts] = useState([])
   const router = useRouter()
 

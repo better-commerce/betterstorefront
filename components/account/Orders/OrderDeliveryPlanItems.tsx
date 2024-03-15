@@ -18,7 +18,7 @@ import OrderStatusMapping from './OrderStatusMapping'
 import TrackingDetail from './TrackingDetail'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const OrderDeliveryPlanItems = ({
   items,
@@ -28,6 +28,7 @@ const OrderDeliveryPlanItems = ({
   openHelpModal,
   setReview,
 }: any) => {
+  const translate = useTranslation()
   return (
     <>
       {items?.map((deliveryPlan: any, idx: number) => (

@@ -19,7 +19,7 @@ import { useUI } from '@components/ui'
 import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded } from '@framework/utils/app-util'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -71,6 +71,7 @@ export default function ProductQuickView({
   setQuickviewOpen,
   maxBasketItemsCount,
 }: any) {
+  const translate = useTranslation()
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
   const [close, setClose] = useState(isQuickviewOpen)
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)

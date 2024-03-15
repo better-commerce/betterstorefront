@@ -5,9 +5,10 @@ import Form from './form'
 import axios from 'axios'
 import { NEXT_API_PRICE_MATCH_ENDPOINT } from '@components/utils/constants'
 import Image from 'next/image'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function PriceMatch({ show, onClose, productImage, productId, stockCode, productName, ourCost, ourDeliveryCost, rrp }: any) {
+  const translate = useTranslation()
   const submitContactForm = (values: any) => {
     const priceMatch = {
       productId: productId,

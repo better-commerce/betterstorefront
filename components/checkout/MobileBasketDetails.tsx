@@ -29,7 +29,7 @@ import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import PromotionInput from '@components/cart/PromotionInput'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 interface BasketItem {
   id: string
   name: string
@@ -38,6 +38,7 @@ interface BasketItem {
 }
 
 const MobileBasketDetails = ({ data, deviceInfo }: any) => {
+  const translate = useTranslation()
   const { user, isGuestUser, cartItems, setAlert } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
   const [referralModalShow, setReferralModalShow] = useState(false)

@@ -10,7 +10,7 @@ import { vatIncluded } from '@framework/utils/app-util'
 import { eddDateFormat } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
 import FindStore from './FindStore'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ShippingMethod {
   id: string
@@ -34,6 +34,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   onContinue,
   goToStep = () => {}
 }) => {
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const { setAlert } = useUI()
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState<any>(null)

@@ -6,7 +6,7 @@ import { vatIncluded } from '@framework/utils/app-util'
 import { eddDateFormat } from '@framework/utils/parse-util'
 import PaymentMethodSelection from './PaymentMethodSelection'
 import { CheckoutStep } from '@framework/utils/enums'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ShippingMethod {
   id: string
@@ -54,6 +54,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
   onEditAddressToggleView,
   goToStep
 }: any) => {
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const shippingMethod = basket?.shippingMethods?.find(
     (x: any) => x?.id === basket?.shippingMethodId

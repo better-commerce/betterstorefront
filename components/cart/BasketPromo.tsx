@@ -1,7 +1,7 @@
 import Router, { useRouter } from 'next/router'
 import useDevice from '@commerce/utils/use-device'
 import { GifIcon } from '@heroicons/react/24/solid'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 interface IPromotionInputProps {
   readonly PromotionsCount?: any
   readonly items?: any
@@ -10,6 +10,7 @@ interface IPromotionInputProps {
   readonly basketPromos?: any
 }
 const BasketPromo = (props: IPromotionInputProps) => {
+  const translate = useTranslation()
   const { PromotionsCount, items, promoTypeNot22, viewCoupons, basketPromos } =
     props
   const { isMobile, isIPadorTablet } = useDevice()

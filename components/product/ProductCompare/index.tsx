@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Layout } from '@components/common'
 import { CLOSE_PANEL } from '@components/utils/textVariables'
 import Products from './Products'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function ProductCompare({
   products,
@@ -16,7 +16,7 @@ export default function ProductCompare({
   maxBasketItemsCount,
 }: any) {
   const [attributeNames, setAttributeNames] = useState([])
-
+  const translate = useTranslation()
   useEffect(() => {
     let mappedAttribsArrStr = products.map((o: any) => o.attributes).flat()
     mappedAttribsArrStr = _.uniq(mappedAttribsArrStr.map((o: any) => o.display))

@@ -19,7 +19,7 @@ import { APPLY_PROMOTION,GENERAL_APPLY_TEXT } from '@components/utils/textVariab
 import useDevice from '@commerce/utils/use-device'
 import Coupon from './Coupon'
 import BasketPromo from './BasketPromo'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 declare const window: any
 SwiperCore.use([Navigation])
@@ -33,6 +33,7 @@ interface IPromotionInputProps {
 }
 
 const PromotionInput = (props: IPromotionInputProps) => {
+  const translate = useTranslation()
   const { isMobile, isIPadorTablet } = useDevice()
   const {
     basketPromos,

@@ -13,7 +13,7 @@ import {
   IN_STORE_OR_COLLECT_PLUS,
 } from '@components/utils/textVariables'
 import { TruckIcon, CubeIcon } from '@heroicons/react/24/outline'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface DeliveryTypeSelectionProps {
   basket: any
@@ -26,6 +26,7 @@ const DeliveryTypeSelection = ({
   deliveryTypeMethod,
   setDeliveryTypeMethod,
 }: DeliveryTypeSelectionProps) => {
+  const translate = useTranslation()
   const DELIVERY_METHODS_TYPE = [
     {
       id: 0,

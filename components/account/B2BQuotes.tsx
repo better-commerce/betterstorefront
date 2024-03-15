@@ -1,9 +1,10 @@
 import Spinner from '@components/ui/Spinner'
 import React, { useState } from 'react'
 import QuoteDetail from './QuoteDetail'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function B2BQuotes({ quotes }: any) {
+  const translate = useTranslation()
   const [quoteData, setQuoteDetail] = useState<any>(undefined)
   const [isOpen, setIsOpen] = useState(false)
 

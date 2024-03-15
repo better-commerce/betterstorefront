@@ -8,13 +8,14 @@ import { XMarkIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { CheckIcon } from '@heroicons/react/24/solid'
 import { Button, LoadingDots } from '@components/ui';
 import Spinner from '@components/ui/Spinner';
-import { translate } from '@components/services/localization';
+import { useTranslation } from '@commerce/utils/use-translation'
 
 
 export default function CancelReason({ cancellationReasons, onItemCancellation, item, cancelTitle, cancelLoadingState, hideCancellationReasons, }: any) {
   let [reason, setReason] = useState("")
   let [isOpen, setIsOpen] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true);
+  const translate = useTranslation()
   
   const openModal = () => {
     setIsOpen(true)

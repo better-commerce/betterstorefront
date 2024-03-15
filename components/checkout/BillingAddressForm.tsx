@@ -11,7 +11,7 @@ import {
 import { retrieveAddress } from '@components/checkout-old/CheckoutForm'
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export const DEFAULT_COUNTRY = 'United Kingdom'
 
@@ -25,6 +25,7 @@ const BillingAddressForm: React.FC<any> = ({
   useSameForBilling,
   shouldDisplayEmail = true,
 }) => {
+  const translate = useTranslation()
   const { isGuestUser, user } = useUI()
   const [searchedAddresses, setSearchedAddresses] = useState([])
 

@@ -1,6 +1,7 @@
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 export default function CheckoutHeading() {
+  const translate = useTranslation()
   return (
     <>
       <div className='w-full py-6 pr-4 border-b border-black'>

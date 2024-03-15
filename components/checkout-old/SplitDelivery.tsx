@@ -17,7 +17,7 @@ import CncList from './CheckoutForm/CncList'
 import Delivery from './CheckoutForm/Delivery'
 import DeliveryOptions from './DeliveryOptions'
 import { generateUri } from '@commerce/utils/uri-util'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function SplitDelivery({
   splitDeliveryItems = null,
@@ -37,6 +37,7 @@ function SplitDelivery({
   geoData = null,
   showDeliveryOptions = false,
 }: any) {
+  const translate = useTranslation()
   const [splitDeliveryDates, setSplitDeliveryDates] = useState<any>(null)
   const isIncludeVAT = vatIncluded()
 

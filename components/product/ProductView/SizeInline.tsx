@@ -7,7 +7,7 @@ import { getProductFromAttributes } from '@components/utils/attributesGenerator'
 import { groupBy, isString, round } from 'lodash'
 import { matchStrings } from '@framework/utils/parse-util'
 import SizeAttribute from '@components/product/ProductView/sizeAttribute.json'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 function RenderRadioOptions({
    items,
    itemsCount,
@@ -19,6 +19,7 @@ function RenderRadioOptions({
    setSizeInit,
    currentAttribute,
 }: any) {
+   const translate = useTranslation()
    const [showMoreSize, setShowMoreSize] = useState(true)
    items.sort((s1: any, s2: any) => {
       return s1.displayOrder - s2.displayOrder

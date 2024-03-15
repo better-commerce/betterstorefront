@@ -1,4 +1,4 @@
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
@@ -9,6 +9,7 @@ export default function ProductWarranty({
   setWarranty,
   replaceValue,
 }: any) {
+  const translate = useTranslation()
   return (
     <>
       <Transition.Root show={isWarranty} as={Fragment}>

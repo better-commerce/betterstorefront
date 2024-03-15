@@ -12,7 +12,7 @@ import RelatedProducts from '@components/product/RelatedProducts'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, } from '@components/utils/constants'
-import useTranslation, { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
@@ -24,7 +24,7 @@ import { Guid } from '@commerce/types'
 import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 import RecentlyViewedProduct from '@components/product/RelatedProducts/RecentlyViewedProducts'
 import wishlistHandler from '@components/services/wishlist'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -52,13 +52,13 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
   const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
   const [sizeDialogState, setSizeDialogState] = useState<any>({ type: '', })
-  const content = useTranslation()
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false)
   const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] = useState(null)
   const isIncludeVAT = vatIncluded()
+  const translate = useTranslation()
   const handleToggleOpenSizeChangeModal = async (product?: any) => {
     setOpenSizeChangeModal(!openSizeChangeModal)
     if (product) {
@@ -777,7 +777,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     )}
                     <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
                       <Link href="/cart" onClick={() => { handleClose(); beginCheckout(cartItems) }} className="flex items-center justify-center w-full transition btn btn-primary">
-                        {content.GENERAL_CHECKOUT}
+                      {translate('label.checkout.checkoutTitleText')}
                       </Link>
                     </div>
                   </div>

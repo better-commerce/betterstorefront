@@ -17,7 +17,7 @@ import {
   ADDRESS_OF_YOUR_CHOICE,
   IN_STORE_OR_COLLECT_PLUS,
 } from '@components/utils/textVariables'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function DeliveryOptions({
   products,
@@ -27,6 +27,7 @@ function DeliveryOptions({
   geoData,
   count,
 }: any) {
+  const translate = useTranslation()
   //split delivery options pending, hence using standard shipping options
   const DELIVERY_METHODS_TYPE = [
     {

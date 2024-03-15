@@ -48,7 +48,7 @@ import Prices from '@new-components/Prices'
 import Link from 'next/link'
 import ReviewItem from '@new-components/ReviewItem'
 import ButtonSecondary from '@new-components/shared/Button/ButtonSecondary'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 const Preview = dynamic(() => import('@components/product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -78,6 +78,7 @@ const PLACEMENTS_MAP: any = {
 }
 
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, }: any) {
+  const translate = useTranslation()
   const { isMobile } = deviceInfo
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
@@ -804,7 +805,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <span>{reviews?.review?.ratingAverage}</span>
                   <span className="block mx-2">·</span>
                   <span className="underline text-slate-600 dark:text-slate-400">
-                    {product?.reviewCount} reviews
+                    {product?.reviewCount} {translate('common.label.reviews')}
                   </span>
                 </div>
               </Link>

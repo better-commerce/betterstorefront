@@ -15,11 +15,12 @@ import {
 } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
-import { translate } from '@components/services/localization'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const SIZE_ATTRIBUTE = 'clothing.size'
 
 function SizeChangeModal({ open, handleToggleOpen, product }: any) {
+  const translate = useTranslation()
   const { setCartItems, cartItems, basketId } = useUI()
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState('')
