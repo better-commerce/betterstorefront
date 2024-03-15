@@ -1,4 +1,5 @@
 import { generateUri } from '@commerce/utils/uri-util'
+import { translate } from '@components/services/localization'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -37,7 +38,7 @@ export default function ProductOffers({ isOffers, setOffers, data }: any) {
                               className="mr-2 text-black rounded-md outline-none hover:text-gray-500"
                               onClick={() => setOffers(!isOffers)}
                             >
-                              <span className="sr-only">Close panel</span>
+                              <span className="sr-only">{translate('common.label.closePanelText')}</span>
                               <XMarkIcon
                                 className="relative w-6 h-6 sm:w-8 sm:h-8 sm:top-1"
                                 aria-hidden="true"
@@ -47,7 +48,7 @@ export default function ProductOffers({ isOffers, setOffers, data }: any) {
                           <div className="w-full">
                             <h3 className="font-bold text-20 sm-text-16 text-gray-dark">
                               {' '}
-                              Offer Details
+                              {translate('label.product.offerDetailsText')}
                             </h3>
                           </div>
                         </div>

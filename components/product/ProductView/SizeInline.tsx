@@ -7,6 +7,7 @@ import { getProductFromAttributes } from '@components/utils/attributesGenerator'
 import { groupBy, isString, round } from 'lodash'
 import { matchStrings } from '@framework/utils/parse-util'
 import SizeAttribute from '@components/product/ProductView/sizeAttribute.json'
+import { translate } from '@components/services/localization'
 function RenderRadioOptions({
    items,
    itemsCount,
@@ -62,7 +63,7 @@ function RenderRadioOptions({
             )
             ))}
          </div>
-         <div className={classNames(sizeInit === 'error' ? '' : 'hidden', 'text-red-500 text-sm')}>Please select a Size</div>
+         <div className={classNames(sizeInit === 'error' ? '' : 'hidden', 'text-red-500 text-sm')}>{translate('label.product.selectSizeText')}</div>
       </>
    )
 }
