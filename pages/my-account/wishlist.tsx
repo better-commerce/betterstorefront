@@ -73,13 +73,13 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
         <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
-        <title>{currentOption}</title>
-        <meta name="title" content={currentOption} />
-        <meta name="description" content={currentOption} />
-        <meta name="keywords" content={currentOption} />
+        <title>{translate('label.wishlist.wishlistText')}</title>
+        <meta name="title" content={translate('label.wishlist.wishlistText')} />
+        <meta name="description" content={translate('label.wishlist.wishlistText')} />
+        <meta name="keywords" content={translate('label.wishlist.wishlistText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={currentOption} key="ogtitle" />
-        <meta property="og:description" content={currentOption} key="ogdesc" />
+        <meta property="og:title" content={translate('label.wishlist.wishlistText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.wishlist.wishlistText')} key="ogdesc" />
       </NextHead>
       <section className="relative pb-10 text-gray-900">
         <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">

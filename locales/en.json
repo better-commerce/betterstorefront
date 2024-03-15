@@ -200,7 +200,9 @@
       "referralText": "Referral",
       "shareReferralByEmail": "Share Referral by Email",
       "yourFriendsEnterText": "Your friends Enter:",
-      "invitesSentText": "Invites Sent"
+      "invitesSentText": "Invites Sent",
+      "mySavedAddressText": "My Saved Address",
+      "forgotPasswordText": "Forgot Password"
     },
     "basket": {
       "addToBasketText": "Add to basket",
@@ -695,8 +697,7 @@
       "pageErrorDesc": "Check that you typed the address correctly. Maybe go back to your previous page or try using our site search to find something specific.",
       "internalServerError": "Internal Server Error",
       "questionMark": "?",
-      "donotCancelText": "Don't Cancel",
-      "personalisationText": "Personalisation"
+      "donotCancelText": "Don't Cancel"
     },
     "numberText": {
       "one": "1"
