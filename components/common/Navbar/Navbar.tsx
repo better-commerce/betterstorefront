@@ -188,18 +188,11 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     router.reload()
   }
 
-  const hyperlinkHandler = (hyperlink: string) => {
-    return hyperlink[0] === '/' ? hyperlink : `/${hyperlink}`
-  }
-
+  const hyperlinkHandler = (hyperlink: string) => { return hyperlink[0] === '/' ? hyperlink : `/${hyperlink}`}
   const [open, setOpen] = useState(false)
-  const buttonRef = useRef<HTMLButtonElement>(null) // useRef<HTMLButtonElement>(null)
   const [openState, setOpenState] = useState(-1)
   const isProduction = process.env.NODE_ENV === 'production'
   const [renderState, setRenderState] = useState(isProduction)
-
-  // update 'renderState' to check whether the component is rendered or not
-  // used for removing hydration errors
   useEffect(() => {
     if (!isProduction) {
       setRenderState(true)

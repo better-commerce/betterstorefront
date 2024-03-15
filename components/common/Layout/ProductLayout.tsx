@@ -1,44 +1,35 @@
-import cn from 'classnames'
 import React, { FC, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { CommerceProvider } from '@framework'
-import { IDeviceInfo, useUI } from '@components/ui/context'
-import type { Page } from '@commerce/types/page'
-import { Navbar, Footer } from '@components/common'
-import type { Category } from '@commerce/types/site'
-import { WishlistSidebarView } from '@components/wishlist'
 import { CookieBanner } from '@schlomoh/react-cookieconsent'
-import { Sidebar, Modal, LoadingDots } from '@components/ui'
-import s from './Layout.module.css'
-import AlertRibbon from '@components/ui/AlertRibbon'
 import Router from 'next/router'
 import Head from 'next/head'
+import { CommerceProvider } from '@framework'
+import type { Page } from '@commerce/types/page'
+import type { Category } from '@commerce/types/site'
+import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
-import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
-import LoginSidebarView from '@components/account/Login/LoginSideBarView'
+import { WishlistSidebarView } from '@components/wishlist'
+import { Sidebar, Modal, LoadingDots } from '@components/ui'
+import LoginSideBarView from '@components/account/Login/LoginSideBarView'
+const BulkAddSidebarView = dynamic(() => import('@components/bulk-add/BulkAddSidebarView'))
+const LoginSidebarView = dynamic(() => import('@components/account/Login/LoginSideBarView'))
+const MainNav2Logged = dynamic(() => import('@new-components/Header/MainNav2Logged'))
 const ShippingView = dynamic(() => import('@components/checkout-old/ShippingView'))
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
 const PaymentMethodView = dynamic(() => import('@components/checkout-old/PaymentMethodView'))
 const CheckoutSidebarView = dynamic(() => import('@components/checkout-old/CheckoutSidebarView'))
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
-const SearchWrapper = dynamic(() => import('@components/search'))
 const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
+const FooterClean = dynamic(() => import('@components/common/Footer/FooterClean'))
+const AlertRibbon = dynamic(() => import('@components/ui/AlertRibbon'))
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />
   </div>
 )
-
-const dynamicProps = {
-  loading: Loading,
-}
-
-const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
-  ...dynamicProps,
-})
 const primaryButtonStyle = { backgroundColor: 'black' }
 const secondaryButtonStyle = { backgroundColor: 'gray' }
 const Content = () => (
@@ -79,26 +70,11 @@ const ModalUI: FC<React.PropsWithChildren<unknown>> = () => {
   return null
 }
 
-const SidebarView: FC<
-  React.PropsWithChildren<
-    { sidebarView: string; closeSidebar(): any } & IExtraProps
-  >
-> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount, config, pluginConfig = [] }) => {
+const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSidebar(): any } & IExtraProps>> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount, config, pluginConfig = [] }) => {
   return (
-    <Sidebar
-      onClose={closeSidebar}
-      deviceInfo={deviceInfo}
-      maxBasketItemsCount={maxBasketItemsCount}
-      pluginConfig={pluginConfig}
-    >
-      {sidebarView === 'CART_VIEW' && (
-        <CartSidebarView
-          deviceInfo={deviceInfo}
-          maxBasketItemsCount={maxBasketItemsCount}
-          config={config}
-        />
-      )}
-      {sidebarView === 'LOGIN_SIDEBAR_VIEW' && <LoginSidebarView pluginConfig={pluginConfig} />}
+    <Sidebar onClose={closeSidebar} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} >
+      {sidebarView === 'CART_VIEW' && (<CartSidebarView deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />)}
+      {sidebarView === 'LOGIN_SIDEBAR_VIEW' && <LoginSideBarView pluginConfig={pluginConfig} />}
       {sidebarView === 'BULK_ADD_VIEW' && <BulkAddSidebarView />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
@@ -108,28 +84,11 @@ const SidebarView: FC<
   )
 }
 
-const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({
-  deviceInfo,
-  maxBasketItemsCount,
-  config,
-  pluginConfig
-}: any) => {
+const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, pluginConfig }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
-    <SidebarView
-      sidebarView={sidebarView}
-      closeSidebar={closeSidebar}
-      deviceInfo={deviceInfo}
-      maxBasketItemsCount={maxBasketItemsCount}
-      config={config}
-      pluginConfig={pluginConfig}
-    />
+    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} pluginConfig={pluginConfig} />
   ) : null
-}
-
-interface ProductLayoutProps {
-  nav: []
-  footer: []
 }
 
 export interface IExtraProps {
@@ -142,22 +101,12 @@ export interface IExtraProps {
   pluginConfig?: any
 }
 
-const ProductLayout: FC<Props & IExtraProps> = ({
-  children,
-  config,
-  pageProps: { categories = [], navTree, reviewData = {}, ...pageProps },
-  pluginConfig = [],
-  keywords,
-  isLocationLoaded,
-  deviceInfo,
-  maxBasketItemsCount = 0,
-}) => {
+const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const { showSearchBar, setShowSearchBar, setIsCompared } = useUI()
+  const { setIsCompared } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
-  const [isIncludeVATState, setIsIncludeVATState] =
-    useState<boolean>(isIncludeVAT)
+  const [isIncludeVATState, setIsIncludeVATState] = useState<boolean>(isIncludeVAT)
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
@@ -192,127 +141,37 @@ const ProductLayout: FC<Props & IExtraProps> = ({
   return (
     <>
       <Head>
-        <link
-         rel="stylesheet"
-          href={`/assets/css/image-gallery.css`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="57x57"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-57x57.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="60x60"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-60x60.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="72x72"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-72x72.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="76x76"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-76x76.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="114x114"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-114x114.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="120x120"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-120x120.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="144x144"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-144x144.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="152x152"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-152x152.png`}
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-180x180.png`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="192x192"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/android-icon-192x192.png`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-32x32.png`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="96x96"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-96x96.png`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`}
-        />
+        <link rel="apple-touch-icon" sizes="57x57" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-57x57.png`} />
+        <link rel="apple-touch-icon" sizes="60x60" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-60x60.png`} />
+        <link rel="apple-touch-icon" sizes="72x72" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-72x72.png`} />
+        <link rel="apple-touch-icon" sizes="76x76" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-76x76.png`} />
+        <link rel="apple-touch-icon" sizes="114x114" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-114x114.png`} />
+        <link rel="apple-touch-icon" sizes="120x120" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-120x120.png`} />
+        <link rel="apple-touch-icon" sizes="144x144" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-144x144.png`} />
+        <link rel="apple-touch-icon" sizes="152x152" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-152x152.png`} />
+        <link rel="apple-touch-icon" sizes="180x180" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-180x180.png`} />
+        <link rel="icon" type="image/png" sizes="192x192" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/android-icon-192x192.png`} />
+        <link rel="icon" type="image/png" sizes="32x32" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-32x32.png`} />
+        <link rel="icon" type="image/png" sizes="96x96" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-96x96.png`} />
+        <link rel="icon" type="image/png" sizes="16x16" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
         <link rel="icon" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
+        <link rel="stylesheet" href={`/assets/css/image-gallery.css`} />
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
-        <div className={cn(s.root)}>
-          <Navbar
-            onIncludeVATChanged={includeVATChanged}
-            currencies={config?.currencies}
-            config={sortedData}
-            configSettings={config?.configSettings}
-            pluginConfig={pluginConfig} 
-            languages={config?.languages}
-            deviceInfo={deviceInfo}
-            maxBasketItemsCount={maxBasketItemsCount}
-            keywords={keywords}
-          />
-          <main className="pt-16 sm:pt-24 fit">
-            {displayAlert && <AlertRibbon />}
-            {children}
-          </main>
-          <Footer
-            config={navTree?.footer}
-            deviceInfo={deviceInfo}
-            maxBasketItemsCount={maxBasketItemsCount}
-          />
+        <div className={`text-base sm:pt-20 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
+          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} />
+          {displayAlert && <AlertRibbon />}
+          {children}
+          <FooterClean navItems={navTree?.footer} />
           <ModalUI />
-          <SidebarUI
-            deviceInfo={deviceInfo}
-            maxBasketItemsCount={maxBasketItemsCount}
-            config={config}
-            pluginConfig={pluginConfig}
-          />
+          <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />
           <div className="cookie-bannner">
-            <CookieBanner
-              enableManagement
-              managementButtonText="Manage Cookies"
-              headingColor="white"
-              managementContent={<Content />}
-              cookieCategories={['analytics', 'advertisement']}
-              infoContent={<Content />}
-              primaryButtonStyle={primaryButtonStyle}
-              secondaryButtonStyle={secondaryButtonStyle}
-            />
+            <CookieBanner enableManagement managementButtonText="Manage Cookies" headingColor="white" managementContent={<Content />} cookieCategories={['analytics', 'advertisement']} infoContent={<Content />} primaryButtonStyle={primaryButtonStyle} secondaryButtonStyle={secondaryButtonStyle} />
           </div>
         </div>
       </CommerceProvider>
     </>
-  )
+  );
 }
-
-export default ProductLayout 
+export default Layout

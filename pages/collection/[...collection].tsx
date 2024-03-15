@@ -426,7 +426,7 @@ export default function CollectionPage(props: any) {
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       {props?.hostName && ( <input className="inst" type="hidden" value={props?.hostName} /> )}
-      <div className="pt-6 pb-24 mx-auto bg-transparent container sm:px-0">
+      <div className="container pt-6 pb-24 mx-auto bg-transparent">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}

@@ -111,7 +111,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
       </div>
       <section
         aria-labelledby="details-heading"
-        className="mt-0 border-gray-200 sm:border-t sm:mt-2"
+        className="mt-0"
       >
         {isFreeShippingOverXEnabled && (
           <DeliveryMessage

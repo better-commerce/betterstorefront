@@ -23,11 +23,13 @@
       "@assets/*": ["assets/*"],
       "@assets/css/*": ["assets/css/*"],
       "@components/*": ["components/*"],
+      "@new-components/*": ["new-components/*"],
       "@commerce": ["framework/commerce"],
       "@commerce/*": ["framework/commerce/*"],
       "@framework": ["framework/bettercommerce"],
       "@theme/*": ["theme/*"],
-      "@framework/*": ["framework/bettercommerce/*"]
+      "@framework/*": ["framework/bettercommerce/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
