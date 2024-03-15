@@ -1,11 +1,10 @@
 // Base Imports
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // Package Imports
 import os from 'os'
 import axios from 'axios'
 import Link from 'next/link'
-import Image from 'next/image'
 import { GetServerSideProps } from 'next'
 
 // Component Imports
@@ -17,27 +16,13 @@ import { removeItem } from '@components/utils/localStorage'
 import { NEXT_GET_ORDER } from '@components/utils/constants'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { obfuscateHostName, vatIncluded } from '@framework/utils/app-util'
-import {
-  BTN_BACK_TO_HOME,
-  GENERAL_ADDRESSES,
-  GENERAL_BILLING_ADDRESS,
-  GENERAL_DELIVERY_ADDRESS,
-  GENERAL_ITEMS,
-  GENERAL_ORDER_FAILED,
-  GENERAL_ORDER_NOT_PROCESSED,
-  GENERAL_PRICE,
-  GENERAL_QUANTITY,
-  GENERAL_SHIPPING_ADDRESS,
-  GENERAL_YOUR_ORDER,
-  IMG_PLACEHOLDER,
-  LOADING_YOUR_ORDERS,
-  YOUR_INFORMATION,
-} from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import {
   ELEM_ATTR,
   ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS,
 } from '@framework/content/use-content-snippet'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 const PaymentFailedPage = ({
   //orderId: guidOrderId,
@@ -46,6 +31,7 @@ const PaymentFailedPage = ({
 }: any) => {
   const [order, setOrderData] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
+  const translate = useTranslation()
   const { orderId, setOrderId, user, resetIsPaymentLink } = useUI()
   const isIncludeVAT = vatIncluded()
   useEffect(() => {
@@ -71,7 +57,7 @@ const PaymentFailedPage = ({
     return (
       <main className="px-4 pt-16 pb-24 bg-white sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
         <h2 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
-          {LOADING_YOUR_ORDERS}
+          {translate('label.checkout.loadingYourOrderText')}
         </h2>
         <div className="flex items-center justify-center w-full mt-10 text-gray-900">
           <LoadingDots />
@@ -87,13 +73,13 @@ const PaymentFailedPage = ({
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
             <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
-              {order?.orderNo ? GENERAL_ORDER_FAILED : null}
+              {order?.orderNo ? translate('label.checkout.orderFailedText') : null}
             </p>
             {order?.orderNo ? (
               <h1 className="mt-2 text-black">
-                {GENERAL_YOUR_ORDER}{' '}
+                {translate('label.checkout.yourOrderText')}{' '}
                 <span className="font-bold text-black">{order?.orderNo}</span>{' '}
-                {GENERAL_ORDER_NOT_PROCESSED}
+                  {translate('label.checkout.paymentFailedText')}
               </h1>
             ) : null}
           </div>
@@ -104,10 +90,10 @@ const PaymentFailedPage = ({
               className="mt-10 border-t border-gray-200"
             >
               <h2 id="order-heading" className="sr-only">
-                {GENERAL_YOUR_ORDER}
+                {translate('label.checkout.yourOrderText')}
               </h2>
 
-              <h3 className="sr-only">{GENERAL_ITEMS}</h3>
+              <h3 className="sr-only">{translate('common.label.itemPluralText')}</h3>
               {order?.items?.map((product: any) => (
                 <div
                   key={product?.id}
@@ -143,13 +129,13 @@ const PaymentFailedPage = ({
                       <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
                         <div className="flex">
                           <dt className="font-medium text-gray-900">
-                            {GENERAL_QUANTITY}
+                            {translate('common.label.quantityText')}
                           </dt>
                           <dd className="ml-2 text-gray-700">{product?.qty}</dd>
                         </div>
                         <div className="flex pl-4 sm:pl-6">
                           <dt className="font-medium text-gray-900">
-                            {GENERAL_PRICE}
+                            {translate('common.label.priceText')}
                           </dt>
                           <dd className="ml-2 text-gray-700">
                             {isIncludeVAT
@@ -164,14 +150,14 @@ const PaymentFailedPage = ({
               ))}
 
               <div className="lg:pl-5 sm:pl-2">
-                <h3 className="sr-only">{YOUR_INFORMATION}</h3>
+                <h3 className="sr-only">{translate('common.label.yourInfoText')}</h3>
 
-                <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>
+                <h4 className="sr-only">{translate('label.checkout.addressesText')}</h4>
                 <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                   <div>
                     <dt className="font-medium text-gray-900">
                       {/* {GENERAL_SHIPPING_ADDRESS} */}
-                      {GENERAL_DELIVERY_ADDRESS}
+                        {translate('label.orderDetails.deliveryAddressHeadingText')}
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <address className="not-italic">
@@ -204,7 +190,7 @@ const PaymentFailedPage = ({
           <div className="max-w-xl">
             <Link href={`/`} passHref>
               <span className="font-medium text-indigo-600 hover:text-indigo-500">
-                {BTN_BACK_TO_HOME}
+                {translate('common.label.backToHomeText')}
               </span>
             </Link>
           </div>

@@ -20,7 +20,6 @@ import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
 import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { LoadingDots } from '@components/ui'
-import { BTN_PLACE_ORDER, GENERAL_CATALOG, GENERAL_DISCOUNT, GENERAL_ORDER_SUMMARY, GENERAL_PRICE_LABEL_RRP, GENERAL_REMOVE, GENERAL_SHIPPING, GENERAL_SHOPPING_CART, GENERAL_TAX, GENERAL_TOTAL, IMG_PLACEHOLDER, SUBTOTAL_EXCLUDING_TAX, SUBTOTAL_INCLUDING_TAX } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
@@ -30,6 +29,8 @@ import RelatedProductWithGroup from '@components/product/RelatedProducts/Related
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 const PromotionInput = dynamic(() => import('../components/cart/PromotionInput'))
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   const allowSplitShipping = stringToBoolean(
@@ -54,6 +55,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     isSplitDelivery,
   } = useUI()
   const { addToCart } = cartHandler()
+  const translate = useTranslation()
   const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
@@ -475,7 +477,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
           rel="canonical"
           href={SITE_ORIGIN_URL + router.asPath}
         />
-        <title>Basket</title>
+        <title>{translate('label.basket.basketText')}</title>
         <meta name="title" content="Basket" />
         <meta name="description" content="Basket" />
         <meta name="keywords" content="Basket" />
@@ -491,10 +493,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       </NextHead>
       <div className="container w-full px-4 mx-auto mt-6 mb-10 bg-white sm:px-6 sm:mt-10">
         <h1 className="relative flex items-baseline font-semibold tracking-tighter text-black uppercase">
-          {GENERAL_SHOPPING_CART}{' '}
+            {translate('label.cart.shoppingCartText')}{' '}
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
-            {userCart?.lineItems?.length > 1 ? 'Items' : 'Item'} added
+            {userCart?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')} {translate('label.basket.addedText')}
           </span>
         </h1>
         {!isEmpty && !isSplitDelivery && (
@@ -557,14 +559,14 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                               isIncludeVAT
                                 ? product.price?.formatted?.withTax
                                 : product.price?.formatted?.withoutTax)
-                              :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
+                              :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>
                             }
                             {product?.price?.raw?.withTax > 0 &&
                             product.listPrice?.raw.withTax > 0 &&
                             product.listPrice?.raw.withTax !=
                               product.price?.raw?.withTax && (
                               <span className="px-2 text-sm text-red-400 line-through">
-                                {GENERAL_PRICE_LABEL_RRP}{' '}
+                                  {translate('label.cart.priceLabelText')}{' '}
                                 {isIncludeVAT
                                   ? product.listPrice.formatted?.withTax
                                   : product.listPrice.formatted?.withoutTax}
@@ -630,7 +632,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                     onClick={() => handleItem(child, 'delete')}
                                     className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
                                   >
-                                    <span className="sr-only"> {GENERAL_REMOVE} </span>
+                                    <span className="sr-only"> {translate('common.label.removeText')} </span>
                                     <TrashIcon className="w-5 h-5" aria-hidden="true" />
                                   </button>
                                 </div>
@@ -650,7 +652,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                               }}
                               className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
                             >
-                              <span className="sr-only">{GENERAL_REMOVE}</span>
+                              <span className="sr-only">{translate('common.label.removeText')}</span>
                               <TrashIcon className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5" aria-hidden="true" />
                             </button>
                           </div>
@@ -678,7 +680,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   id="summary-heading"
                   className="mb-1 font-semibold text-black uppercase"
                 >
-                  {GENERAL_ORDER_SUMMARY}
+                  {translate('label.orderSummary.orderSummaryText')}
                 </h4>
                 <div className="mt-4 lg:-mb-3">
                   <PromotionInput
@@ -691,8 +693,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   <div className="flex items-center justify-between">
                     <dt className="text-sm text-gray-600">
                       {isIncludeVAT
-                        ? SUBTOTAL_INCLUDING_TAX
-                        : SUBTOTAL_EXCLUDING_TAX}
+                        ? translate('label.orderSummary.subTotalTaxIncText')
+                        : translate('label.orderSummary.subTotalTaxExcText')}
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {isIncludeVAT
@@ -702,7 +704,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                   <div className="flex items-center justify-between pt-2 sm:pt-1">
                     <dt className="flex items-center text-sm text-gray-600">
-                      <span>{GENERAL_SHIPPING}</span>
+                      <span>{translate('label.orderSummary.shippingText')}</span>
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {isIncludeVAT
@@ -713,7 +715,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   {userCart.promotionsApplied?.length > 0 && (
                     <div className="flex items-center justify-between pt-2 sm:pt-2">
                       <dt className="flex items-center text-sm text-gray-600">
-                        <span>{GENERAL_DISCOUNT}</span>
+                        <span>{translate('label.orderSummary.discountText')}</span>
                       </dt>
                       <dd className="font-semibold text-red-500 text-md">
                         <p>
@@ -727,7 +729,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   )}
                   <div className="flex items-center justify-between pt-2 sm:pt-1">
                     <dt className="flex items-center text-sm text-gray-600">
-                      <span>{GENERAL_TAX}</span>
+                      <span>{translate('label.orderSummary.taxText')}</span>
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {cartItems.grandTotal?.formatted?.tax}
@@ -735,7 +737,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                   <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
                     <dt className="text-lg font-bold text-black">
-                      {GENERAL_TOTAL}
+                      {translate('label.orderSummary.totalText')}
                     </dt>
                     <dd className="text-xl font-bold text-black">
                       {isIncludeVAT
@@ -751,7 +753,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                       type="submit"
                       className="w-full btn btn-primary"
                     >
-                      {BTN_PLACE_ORDER}
+                      {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>
                 </div>
@@ -824,14 +826,14 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                   (isIncludeVAT
                                     ? product.price?.formatted?.withTax
                                     : product.price?.formatted?.withoutTax)
-                                  :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
+                                  :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>
                                   }
                                 {product?.price?.raw?.withTax > 0 &&
                                 product?.listPrice?.raw?.withTax > 0 &&
                                 product?.listPrice?.raw?.withTax !=
                                   product.price?.raw?.withTax && (
                                   <span className="px-2 text-sm text-red-400 line-through">
-                                    {GENERAL_PRICE_LABEL_RRP}{' '}
+                                    {translate('label.cart.priceLabelText')}{' '}
                                     {isIncludeVAT
                                       ? product?.listPrice.formatted?.withTax
                                       : product?.listPrice.formatted?.withoutTax}
@@ -919,7 +921,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                           className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
                                         >
                                           <span className="sr-only">
-                                            {GENERAL_REMOVE}
+                                            {translate('common.label.removeText')}
                                           </span>
                                           <TrashIcon
                                             className="w-5 h-5"
@@ -942,7 +944,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                   className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
                                 >
                                   <span className="sr-only">
-                                    {GENERAL_REMOVE}
+                                    {translate('common.label.removeText')}
                                   </span>
                                   <TrashIcon
                                     className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5"
@@ -969,7 +971,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   id="summary-heading"
                   className="mb-1 font-semibold text-black uppercase"
                 >
-                  {GENERAL_ORDER_SUMMARY}
+                  {translate('label.orderSummary.orderSummaryText')}
                 </h4>
                 <div className="mt-4 lg:-mb-3">
                   <PromotionInput
@@ -982,8 +984,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   <div className="flex items-center justify-between">
                     <dt className="text-sm text-gray-600">
                       {isIncludeVAT
-                        ? SUBTOTAL_INCLUDING_TAX
-                        : SUBTOTAL_EXCLUDING_TAX}
+                        ? translate('label.orderSummary.subTotalTaxIncText')
+                        : translate('label.orderSummary.subTotalTaxExcText')}
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {isIncludeVAT
@@ -993,7 +995,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                   <div className="flex items-center justify-between pt-2 sm:pt-1">
                     <dt className="flex items-center text-sm text-gray-600">
-                      <span>{GENERAL_SHIPPING}</span>
+                      <span>{translate('label.orderSummary.shippingText')}</span>
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {isIncludeVAT
@@ -1004,7 +1006,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   {userCart.promotionsApplied?.length > 0 && (
                     <div className="flex items-center justify-between pt-2 sm:pt-2">
                       <dt className="flex items-center text-sm text-gray-600">
-                        <span>{GENERAL_DISCOUNT}</span>
+                        <span>{translate('label.orderSummary.discountText')}</span>
                       </dt>
                       <dd className="font-semibold text-red-500 text-md">
                         <p>
@@ -1018,7 +1020,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   )}
                   <div className="flex items-center justify-between pt-2 sm:pt-1">
                     <dt className="flex items-center text-sm text-gray-600">
-                      <span>{GENERAL_TAX}</span>
+                      <span>{translate('label.orderSummary.taxText')}</span>
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {cartItems.grandTotal?.formatted?.tax}
@@ -1026,7 +1028,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                   <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
                     <dt className="text-lg font-bold text-black">
-                      {GENERAL_TOTAL}
+                      {translate('label.orderSummary.totalText')}
                     </dt>
                     <dd className="text-xl font-bold text-black">
                       {isIncludeVAT
@@ -1042,7 +1044,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                       type="submit"
                       className="w-full btn btn-primary"
                     >
-                      {BTN_PLACE_ORDER}
+                      {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>
                 </div>
@@ -1067,13 +1069,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         )}
         {isEmpty && (
           <div className="flex flex-col items-center justify-center w-full h-full py-10 text-gray-900">
-            Uh-oh, you don't have any items in here
+            {translate('label.cart.youDontHaveAnyItems')}
             <Link href="/search">
               <button
                 type="button"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                {GENERAL_CATALOG}
+                  {translate('label.cart.catalogText')}
                 <span aria-hidden="true"> &rarr;</span>
               </button>
             </Link>
