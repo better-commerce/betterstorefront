@@ -7,10 +7,10 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { NAVIGATION_DEMO_2 } from "./navigatinData";
 import Logo from "../Logo/Logo";
-import SocialsList from "@components/new-components/shared/SocialsList/SocialsList";
-import SwitchDarkMode from "@components/new-components/shared/SwitchDarkMode/SwitchDarkMode";
-import ButtonClose from "@components/new-components/shared/ButtonClose/ButtonClose";
-import ButtonPrimary from "@components/new-components/shared/Button/ButtonPrimary";
+import SocialsList from "@new-components/shared/SocialsList/SocialsList";
+import SwitchDarkMode from "@new-components/shared/SwitchDarkMode/SwitchDarkMode";
+import ButtonClose from "@new-components/shared/ButtonClose/ButtonClose";
+import ButtonPrimary from "@new-components/shared/Button/ButtonPrimary";
 
 export interface NavMobileProps {
   data?: NavItemType[];

@@ -30,7 +30,7 @@ export default function CollectionList(props: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath}  key="ogurl" />
       </NextHead>
-      <main className="w-full px-6 mx-auto container sm:px-4">
+      <main className="container w-full mx-auto">
         <section aria-labelledby="products-heading" className="mt-8">
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
             {SHOP_BY_COLLECTION}
@@ -41,20 +41,12 @@ export default function CollectionList(props: any) {
                 <Link key={key} passHref href={`/collection/${collection.slug}`}>
                   <span key={collection.id} className="group">
                     <div className="relative w-full overflow-hidden bg-gray-100 rounded-lg aspect-w-1 aspect-h-1 sm:aspect-w-2 sm:aspect-h-3">
-                      <div className="image-container relative">
-                        <img
-                          src={
-                            generateUri(collection.mainImage, 'h=1000&fm=webp') ||
-                            IMG_PLACEHOLDER
-                          }
-                          alt={collection.name || 'image'}
-                          className="object-cover object-center w-full h-full group-hover:opacity-75 image"
-                          sizes="(max-width: 500px) 100px, (max-width: 1023px) 400px, 1000px"
-                        />
+                      <div className="relative image-container">
+                        <img src={ generateUri(collection.mainImage, 'h=1000&fm=webp') || IMG_PLACEHOLDER } alt={collection.name || 'image'} className="object-cover object-center w-full h-full group-hover:opacity-75 image" sizes="(max-width: 500px) 100px, (max-width: 1023px) 400px, 1000px" />
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h2 className="flex w-full pt-2 font-medium text-gray-900 sm:text-xl text-md text-sm">
+                      <h2 className="flex w-full pt-2 text-sm font-medium text-gray-900 sm:text-xl text-md">
                         {collection.name}
                       </h2>
 

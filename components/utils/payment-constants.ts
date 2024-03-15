@@ -117,6 +117,8 @@ export module LocalStorage {
     export const DELIVERY_ADDRESS = 'delAddr'
     export const RECENTLY_VIEWED = 'recVwdProds'
     export const PAGE_SCROLL = 'pscr'
+    export const NAVIGATION_STACK = 'nvs'
+    export const BACKSPACE_PRESSED = 'bsp'
   }
 }
 

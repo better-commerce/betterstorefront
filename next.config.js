@@ -8,7 +8,7 @@ const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
 const crypto = require('crypto')
 const isBetterCommerce = provider === 'bettercommerce'
-const isProd = process.env.NODE_ENV === 'production'
+//const isProd = process.env.NODE_ENV === 'production'
 module.exports = withCommerceConfig({
   output: 'standalone',
   poweredByHeader: false,
@@ -16,7 +16,7 @@ module.exports = withCommerceConfig({
     domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net', 'cdnbs.bettercommerce.tech','cdn.shopify.com'],
     cacheDuration: 31536000,
   },
-  assetPrefix: isProd ? 'https://cdnbs.bettercommerce.tech' : '',  
+  //assetPrefix: isProd ? 'https://cdnbs.bettercommerce.tech' : '',  
   commerce,
   i18n: { locales: ['es'], defaultLocale: 'en-US' },
   rewrites() {

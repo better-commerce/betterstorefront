@@ -16,14 +16,14 @@ import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency 
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
-const SectionHero2 = dynamic(() => import('@components/new-components/SectionHero/SectionHero2'))
-const DiscoverMoreSlider = dynamic(() => import('@components/new-components/DiscoverMoreSlider'))
-const SectionSliderProductCard = dynamic(() => import('@components/new-components/SectionSliderProductCard'))
-const SectionHowItWork = dynamic(() => import('@components/new-components/SectionHowItWork/SectionHowItWork'))
-const BackgroundSection = dynamic(() => import('@components/new-components/BackgroundSection/BackgroundSection'))
-const SectionSliderLargeProduct = dynamic(() => import('@components/new-components/SectionSliderLargeProduct'))
-const SectionSliderCategories = dynamic(() => import('@components/new-components/SectionSliderCategories/SectionSliderCategories'))
-const SectionPromo3 = dynamic(() => import('@components/new-components/SectionPromo3'))
+const SectionHero2 = dynamic(() => import('@new-components/SectionHero/SectionHero2'))
+const DiscoverMoreSlider = dynamic(() => import('@new-components/DiscoverMoreSlider'))
+const SectionSliderProductCard = dynamic(() => import('@new-components/SectionSliderProductCard'))
+const SectionHowItWork = dynamic(() => import('@new-components/SectionHowItWork/SectionHowItWork'))
+const BackgroundSection = dynamic(() => import('@new-components/BackgroundSection/BackgroundSection'))
+const SectionSliderLargeProduct = dynamic(() => import('@new-components/SectionSliderLargeProduct'))
+const SectionSliderCategories = dynamic(() => import('@new-components/SectionSliderCategories/SectionSliderCategories'))
+const SectionPromo3 = dynamic(() => import('@new-components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {

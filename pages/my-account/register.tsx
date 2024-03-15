@@ -2,13 +2,7 @@ import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import axios from 'axios'
-import {
-  NEXT_SIGN_UP,
-  NEXT_VALIDATE_EMAIL,
-  NEXT_ASSOCIATE_CART,
-  NEXT_SIGN_UP_TRADING_ACCOUNT,
-  Messages,
-} from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_ASSOCIATE_CART, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import { useState, useEffect } from 'react'
@@ -18,21 +12,16 @@ import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import {
-  BTN_REGISTER_FOR_FREE,
-  GENERAL_EMAIL,
-  VALIDATION_EMAIL_ALREADY_IN_USE,
-  VALIDATION_ENTER_A_VALID_EMAIL,
-  VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
-} from '@components/utils/textVariables'
+import { BTN_REGISTER_FOR_FREE, GENERAL_EMAIL, VALIDATION_EMAIL_ALREADY_IN_USE, VALIDATION_ENTER_A_VALID_EMAIL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
 import commerce from '@lib/api/commerce'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
+import { getEnabledSocialLogins } from '@framework/utils/app-util'
 
-const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
+const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)
 
   useEffect(() => {
@@ -76,14 +65,18 @@ const EmailInput = ({ value, onChange, submit, apiError = '' }: any) => {
           title={'Submit'}
         />
       </div>
-
-      <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto md:w-1/2 px-3 sm:w-full sm:px-0 width-md-full" />
+      {
+        socialLogins && (
+          <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto md:w-1/2 px-3 sm:w-full sm:px-0 width-md-full" pluginSettings={pluginSettings}/>
+        )
+      }
     </div>
   )
 }
 
-function RegisterPage({ recordEvent, setEntities, config }: any) {
+function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   let b2bSettings = []
+  const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
   const [userEmail, setUserEmail] = useState('')
@@ -223,6 +216,8 @@ function RegisterPage({ recordEvent, setEntities, config }: any) {
                 onChange={(e: any) => setUserEmail(e.target.value)}
                 submit={handleEmailSubmit}
                 apiError={error}
+                pluginSettings={pluginConfig}
+                socialLogins={SOCIAL_LOGINS_ENABLED}
               />
             ) : (
               <Form

@@ -17,7 +17,6 @@ export default class MyDocument extends NextDocument /*Document*/ {
           <link rel="stylesheet" href={`/theme/${CURRENT_THEME}/css/global.css`} />
           <link rel="preload" href={`/theme/css/common.css`} as="style" />
           <link rel="stylesheet" href={`/theme/css/common.css`} />
-          <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"/>
         </Head>
         <body className="custom_class promo-banner-inactive">
           <Main />

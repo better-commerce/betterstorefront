@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { BTN_NOTIFY_ME, BTN_PRE_ORDER } from '@components/utils/textVariables'
 import { PRODUCT_TAGS } from '@components/utils/constants'
 import { BellIcon, ClockIcon, ShoppingBagIcon, SparklesIcon, StarIcon, TagIcon } from '@heroicons/react/24/outline'
-import IconDiscount from '@components/new-components/IconDiscount'
+import IconDiscount from '@new-components/IconDiscount'
 
 interface Props {
   product: any

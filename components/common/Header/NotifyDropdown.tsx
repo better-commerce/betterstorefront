@@ -1,4 +1,4 @@
-import Avatar from "@components/new-components/shared/Avatar/Avatar";
+import Avatar from "@new-components/shared/Avatar/Avatar";
 import { Popover, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
