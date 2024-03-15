@@ -6,6 +6,7 @@
       "descriptionText": "Check that you typed the address correctly. Maybe go back to your previous page or try using our site search to find something specific."
     },
     "500": {
+      "500": "500",
       "titleText": "500 Error",
       "internalServerErrorText": "500 : Internal Server Error",
       "descriptionText": "Check that you typed the address correctly. Maybe go back to your previous page or try using our site search to find something specific.",
@@ -13,8 +14,8 @@
       "freeNextDayDeliveryMethod": "To carry on shopping with free next day delivery"
     },
     "cancelReason": {
-      "cancelTitle": "Why are you cancelling this {cancelTitle}?",
-      "cancelConfirmationText": "Are you certain you want to cancel this {cancelTitle}?",
+      "cancelTitle": "Why are you cancelling this",
+      "cancelConfirmationText": "Are you certain you want to cancel this",
       "cancelReasonHeadingText": "Reason for cancellation"
     },
     "cart": {
@@ -218,13 +219,16 @@
       "basketText": "Basket",
       "addedText": "added",
       "totalAmountText": "Total amount",
-      "checkoutBtnText": "Checkout"
+      "checkoutBtnText": "Checkout",
+      "discountText": "discount"
     },
     "wishlist": {
       "emptyWishlistText": "You haven’t wished for anything yet.",
       "wishlistText": "Wishlist",
       "saveItemsText": "Explore more and save items in your wishlist.",
-      "myWishlistText": "My Wishlist"
+      "myWishlistText": "My Wishlist",
+      "moveToWishlistText": "Move to Wishlist",
+      "addedToWishlistText": "Added to Wishlist"
     },
     "kitBuilder": {
       "buildPackageHeadingText": "BUILD A BESPOKE PACKAGE WITH OUR KIT BUILDER",
@@ -651,7 +655,12 @@
       "normalOpeningHoursHeadingText": "Normal Opening Hours",
       "serviceText": "This Information will help us to improve our service",
       "helpAssistanceText": "We will be glad to assist you. What seems to be bothering you?",
-      "availGiftText": "Use this voucher code in the Apply promotion section to avail this offer"
+      "availGiftText": "Use this voucher code in the Apply promotion section to avail this offer",
+      "pageErrorDesc": "Check that you typed the address correctly. Maybe go back to your previous page or try using our site search to find something specific.",
+      "internalServerError": "Internal Server Error",
+      "questionMark": "?",
+      "donotCancelText": "Don't Cancel",
+      "personalisationText": "Personalisation"
     },
     "numberText": {
       "one": "1"

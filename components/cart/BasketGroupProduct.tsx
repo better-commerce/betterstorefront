@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Disclosure } from '@headlessui/react'
-import Image from 'next/image'
-import _, { sumBy } from 'lodash'
+import sumBy from 'lodash/sumBy'
 import Link from 'next/link'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
@@ -15,6 +14,7 @@ import {
 import { NEXT_BULK_ADD_TO_CART } from '@components/utils/constants'
 import { LoadingDots, useUI } from '@components/ui'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
+import { translate } from '@components/services/localization'
 
 const maxKitBasketItemsCount = 5
 
@@ -122,7 +122,7 @@ export default function BasketGroupProduct({
         <div className="col-span-9">
           <div className="flex justify-between">
             <h5 className="box-border pr-4 font-14 dark:text-black">
-              {brandInfo?.brand} {brandInfo?.platform} Custom Kit
+              {brandInfo?.brand} {brandInfo?.platform} {translate('label.cart.customKitText')}
             </h5>
             <span className='dark:text-black'>
               {currency?.currencySymbol}
@@ -170,7 +170,7 @@ export default function BasketGroupProduct({
             <>
               <div className="flex items-center justify-between pb-1 font-semibold dark:text-black">
                 <span className='font-bold text-black uppercase'>
-                  Kit items ({products?.length})
+                  {translate('label.cart.kitItemsText')} ({products?.length})
                   {kitCartLoaded && (
                     <span className="ml-2">
                       <LoadingDots />
@@ -179,7 +179,7 @@ export default function BasketGroupProduct({
                 </span>
                 <Disclosure.Button className="py-2">
                   <span className="border-b-2 border-red-500">
-                    {open ? 'Hide' : 'View'}
+                    {open ? translate('common.label.hideText') : translate('common.label.viewText')}
                   </span>
                 </Disclosure.Button>
               </div>
