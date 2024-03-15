@@ -16,6 +16,7 @@ import CartAddonsSidebar from './Addons/CartAddonsSidebar'
 import { deliveryDateFormat, matchStrings, tryParseJson} from '@framework/utils/parse-util'
 import { cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { translate } from '@components/services/localization'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 export default function CartProduct({
   product,
