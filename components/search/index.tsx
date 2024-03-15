@@ -74,13 +74,11 @@ export default function Search(props: any) {
   const CLASSES = "absolute top-3 start-3";
   const defaultSearch = (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-9999 search-fixed">
-      <div
-        className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden"
-        onClick={closeWrapper}
-      >
+      <div className='top-0 left-0 right-0 w-full h-40 nc-HeadBackgroundCommon 2xl:h-28 bg-primary-50 dark:bg-neutral-800/20 '></div>
+      <div className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden" onClick={closeWrapper} >
         <XMarkIcon />
       </div>
-      <div className="flex flex-col items-center justify-center w-full px-4 py-5 mt-4 sm:mt-10 sm:px-10">
+      <div className="absolute z-10 flex flex-col items-center justify-center w-full px-4 py-5 mt-4 sm:mt-10 sm:px-10 top-5">
         <div className="w-full mx-auto mb-4 sm:w-3/5">
           <div className="flex flex-row px-1 rounded-sm mob-center-align">
             <label className="hidden" htmlFor={'search-bar'}>
@@ -89,13 +87,13 @@ export default function Search(props: any) {
             <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
               <ChevronLeftIcon />
             </div>
-            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-3 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={BTN_SEARCH} onChange={(e: any) => setInputValue(e.target.value)} />
+            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={BTN_SEARCH} onChange={(e: any) => setInputValue(e.target.value)} />
             <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
               <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
             </div>
           </div>
         </div>
-        <div className="w-full sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search">
+        <div className="w-full mt-6 sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search">
           {isLoading &&
             rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
