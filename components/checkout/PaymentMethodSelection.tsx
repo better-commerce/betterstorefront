@@ -30,6 +30,7 @@ import cartHandler from '@components/services/cart'
 import { Guid } from '@commerce/types'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { recordGA4Event } from '@components/services/analytics/ga4'
+import { translate } from '@components/services/localization'
 
 interface PaymentMethodSelectionProps {
   readonly basket: any
@@ -332,7 +333,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
           <div className="">
             <div className="flex flex-col gap-2 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
               <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">
-                Payment Methods
+                {translate('label.checkout.paymentMethodsText')}
               </h5>
               <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none">
                 <div
@@ -391,8 +392,8 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                                     <>
                                       <i className="sprite-icons icon-btn-accountcredit"></i>
                                       <span className="pl-2 capitalize font-12 dark:text-black">
-                                        Account{' '}
-                                        <span className="block">Credit</span>
+                                        {translate('common.label.accountText')}{' '}
+                                        <span className="block">{translate('label.checkout.creditText')}</span>
                                       </span>
                                     </>
                                   ) : matchStrings(
@@ -403,7 +404,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                                     <>
                                       <i className="sprite-icons icon-btn-cheque"></i>
                                       <span className="pl-2 capitalize font-12 dark:text-black">
-                                        Cheque
+                                        {translate('label.checkout.chequeText')}
                                       </span>
                                     </>
                                   ) : (
@@ -414,8 +415,8 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                                     ) && (
                                       <>
                                         <span className="pl-2 capitalize font-12 dark:text-black">
-                                          Debit/Credit{' '}
-                                          <span className="block">Card</span>
+                                          {translate('label.checkout.debitCreditText')}{' '}
+                                          <span className="block">{translate('label.checkout.cardText')}</span>
                                         </span>
                                       </>
                                     )
@@ -465,7 +466,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
             </div>
           </div>
         ) : (
-          <p>No payment method(s).</p>
+          <p>{translate('label.checkout.noPaymentMethodText')}</p>
         )}
       </>
     ) : (

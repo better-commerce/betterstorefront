@@ -25,11 +25,8 @@
       "catalogText": "Catalog",
       "customKitText": "Custom Kit",
       "removeKitText": "Remove kit",
-      "kitItemsText": "Kit items (",
-      "getItByText": "Get it by",
-      "addOnText": "Add on's for this product",
+      "kitItemsText": "Kit items",
       "offerText": "50% OFF on 3rd Item",
-      "multipleCodesApplyText": "You may apply mutliple codes",
       "cartItemRemoveText": "Are you sure you don't want this product? You may move it to Wishlist and buy later."
     },
     "login": {
@@ -122,7 +119,7 @@
       "loseFreeDeliveryConfirmText": "Removing this item means you'll lose Free Delivery on this order. Are you sure you want to remove this item from your basket?",
       "incVATText": "inc. VAT",
       "excVATText": "ex. VAT",
-      "getHelpText": "Get help with this order",
+      "getHelpText": "Get help with this order"
     },
     "cancelOrder": {
       "cancelOrderText": "Cancel Order"
@@ -194,6 +191,7 @@
     "basket": {
       "addToBasketText": "Add to basket",
       "addTocartText": "Add to cart",
+      "addToBagText": "Add to bag",
       "outOfStockText": "Out Of Stock",
       "promoCodeText": "Promo Code",
       "freeGiftItemText": "FREE GIFT ITEM",
@@ -218,7 +216,10 @@
       "basketText": "Basket",
       "addedText": "added",
       "totalAmountText": "Total amount",
-      "checkoutBtnText": "Checkout"
+      "checkoutBtnText": "Checkout",
+      "multipleCodesApplyText": "You may apply mutliple codes",
+      "getItByText": "Get it by",
+      "addOnText": "Add on's for this product"
     },
     "wishlist": {
       "emptyWishlistText": "You haven’t wished for anything yet.",
@@ -605,6 +606,7 @@
       "addressText": "Address",
       "editAddressText": "Edit Address",
       "addAddressText": "Add Address",
+      "personalisationText": "Personalisation",
       "viewPersonalisationText": "View Personalisation",
       "applyPromoText": "Apply Promo",
       "daysText": "Days",
@@ -652,6 +654,7 @@
       "serviceText": "This Information will help us to improve our service",
       "helpAssistanceText": "We will be glad to assist you. What seems to be bothering you?",
       "availGiftText": "Use this voucher code in the Apply promotion section to avail this offer",
+      "frequentlyBoughtTogetherText": "Frequently Bought Together"
     },
     "numberText": {
       "one": "1"

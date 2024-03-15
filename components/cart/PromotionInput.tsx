@@ -19,6 +19,7 @@ import { APPLY_PROMOTION,GENERAL_APPLY_TEXT } from '@components/utils/textVariab
 import useDevice from '@commerce/utils/use-device'
 import Coupon from './Coupon'
 import BasketPromo from './BasketPromo'
+import { translate } from '@components/services/localization'
 
 declare const window: any
 SwiperCore.use([Navigation])
@@ -225,7 +226,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                             />
                           </div>
                         ) : (
-                          <span>Free Gift Added</span>
+                          <span>{translate('label.basket.freeGiftAddedText')}</span>
                         )}
                         {!promo?.autoApply && (
                           <a href="javascript: void(0);">

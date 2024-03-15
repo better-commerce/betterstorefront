@@ -25,6 +25,7 @@ import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import Summary from '@components/checkout/Summary'
 import BasketItems from '@components/checkout/BasketItems'
+import { translate } from '@components/services/localization'
 interface BasketItem {
   id: string
   name: string
@@ -41,7 +42,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
   const [copied, setCopied] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [refCodeInput, setRefCodeInput] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError] = useState<any>('')
   const [referralEmail, setReferralEmail] = useState<any>('')
   const [groupedPromotions, setGroupedPromotions] = useState<any>({
     appliedPromos: null,
@@ -70,7 +71,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
       setError(voucherInfo?.referralDetails?.message)
     } else {
       setIsLoading(false)
-      setError('Referral Vouchers not available for this user!')
+      setError(translate('label.checkout.referralNotAvailableUserText'))
     }
   }
   const handleInputChange = (e: any) => {
@@ -92,11 +93,11 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
         }
       } else {
         setIsLoading(false)
-        setError('Referral Code not found')
+        setError(translate('label.checkout.referralCodeNotFoundErrorMsg'))
       }
     } else {
       setIsLoading(false)
-      setError('Please enter appropriate Referral Code')
+      setError(translate('label.checkout.EnterReferralCodeText'))
     }
   }
 
@@ -136,7 +137,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
                 <Disclosure.Button className="flex items-center justify-between w-full gap-2 p-3 text-sm font-light text-left text-black normal-case border-b border-gray-700 bg-gray-50">
                   <span className="font-medium text-orange-700 font-12">
                     <ShoppingCartIcon className="inline-block w-4 h-4 text-orange-700" />{' '}
-                    {open ? 'Hide' : 'Show'} order summary{' '}
+                    {open ? translate('common.label.hideText') : translate('common.label.showText')}{translate('label.orderSummary.orderSummaryText')}{' '}
                     <ChevronDownIcon className={`inline-block w-4 h-4 text-orange-700 ${open ? 'rotate-180 transform' : ''}`} />
                   </span>
                   <span className="font-semibold text-black">
@@ -183,7 +184,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
         </>
       ) : (
         <div className="h-auto card-summary right-panel-basket">
-          <h3 className="mb-4 text-2xl font-semibold text-black uppercase">Order Summary</h3>
+          <h3 className="mb-4 text-2xl font-semibold text-black uppercase">{translate('label.orderSummary.orderSummaryText')}</h3>
           {/* product list start */}
           <div className="w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
             <Disclosure defaultOpen={true}>
@@ -291,15 +292,14 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
                         {referralAvailable && !referralInfo && (
                           <div className="flex flex-col w-full max-w-lg my-10 2xl:justify-center xl:items-center px-9">
                             <h2 className="mx-2 text-[30px] text-center">
-                              Search your Friend by their Referral Code
+                              {translate('label.checkout.searchFriendByReferralCodeText')}
                             </h2>
                             <p className="px-8 text-[18px] text-center">
-                              If you think they have signed up, please check and
-                              confirm their details below
+                              {translate('label.checkout.friendSignupConfirmationText')}
                             </p>
                             <input
                               type="text"
-                              placeholder="Enter your friend's Referral Code.."
+                              placeholder={translate('label.checkout.enterReferralCodeText')}
                               className="px-5 w-full my-2 py-3 border-[1px] border-gray-500"
                               onChange={handleInputChange}
                             />
@@ -323,11 +323,11 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
                             )}
                           >
                             <h2 className="px-5 text-center">
-                              Congratulations, We found your friend!
+                              {translate('label.checkout.friendFoundConfirmationText')}
                             </h2>
                             <div className="py-2 flex flex-row border-[1px] my-5 items-center justify-center border-gray-600">
                               <p className="px-3 !mt-0 text-center font-bold ">
-                                Voucher-code: {referralInfo?.voucherCode}
+                               {translate('label.checkout.voucherCodeText')}{' '}{referralInfo?.voucherCode}
                               </p>
                               <div
                                 className="w-5 m-0 "
@@ -342,10 +342,10 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
                               </div>
                             </div>
                             <p className="px-5 font-bold text-center">
-                              Offer: {referralInfo?.promoName}
+                            {translate('label.checkout.offerText')}: {referralInfo?.promoName}
                             </p>
                             <p className="font-bold">
-                              Validity:{' '}
+                            {translate('label.checkout.validityText')}:{' '}
                               {/* {`This offer is valid for ${referralInfo?.validityDays} Days`} */}
                               {`${formatFromToDates(
                                 referralInfo?.validFrom,
@@ -353,8 +353,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
                               )}`}
                             </p>
                             <p className="px-12 text-center">
-                              Use this voucher code in the Apply promotion
-                              section to avail this offer
+                              {translate('common.label.availGiftText')}
                             </p>
                           </div>
                         )}

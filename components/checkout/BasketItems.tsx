@@ -1,3 +1,4 @@
+import { translate } from '@components/services/localization'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -66,24 +67,24 @@ const BasketItems = ({ userCartItems }: any) => {
                             </span>
                           ) : null}
                           <span className="pl-2 font-light text-black font-12">
-                            {isIncludeVAT ? 'inc.' : 'excl.'} VAT
+                            {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText') }
                           </span>
                         </span>
                       </>
                     ) : (
                       <>
                         <span className="flex flex-col font-semibold text-red-500">
-                          FREE
+                          {translate('label.orderSummary.freeText')}
                         </span>
                         <span className="flex flex-col font-semibold text-black">
-                          Qty: {product?.qty}
+                          {translate('common.product.qtyText')}{' '}{product?.qty}
                         </span>
                       </>
                     )}
                   </div>
                   <div className="justify-end">
                     <span className="flex flex-col font-semibold text-black">
-                      Qty: {product?.qty}
+                    {translate('common.product.qtyText')}{' '}{product?.qty}
                     </span>
                   </div>
                 </div>

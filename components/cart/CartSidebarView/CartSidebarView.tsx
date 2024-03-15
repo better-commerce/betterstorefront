@@ -24,6 +24,7 @@ import { Guid } from '@commerce/types'
 import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 import RecentlyViewedProduct from '@components/product/RelatedProducts/RecentlyViewedProducts'
 import wishlistHandler from '@components/services/wishlist'
+import { translate } from '@components/services/localization'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -546,7 +547,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           {itemsInBag() > 0 ? (
                             <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {itemsInBag()}{' '} {itemsInBag() > 1 ? ' items' : ' item'}{' '} </span>
                           ) : (
-                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} Empty{' '} </span>
+                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '}{translate('common.label.emptyText')}{' '} </span>
                           )}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
@@ -596,18 +597,18 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                                 <div className="flex flex-col mt-2 mb-6">
                                                   <div className="flex justify-between font-medium text-gray-900">
                                                     <div className="image-container">
-                                                      <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title="View Personalisation" >
+                                                      <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title={translate('common.label.viewPersonalisationText')} >
                                                         <EyeIcon className="inline-block w-4 h-4 hover:text-gray-400 lg:-mt-2 md:-mt-1 xsm:-mt-3 xsm:h-5" />
                                                       </span>
                                                     </div>
                                                     <p className="ml-1 mr-1 font-thin text-gray-500"> {' '} |{' '} </p>
                                                     <h3>
-                                                      <span className="text-xs uppercase cursor-default">{`${PERSONALISATION}`}</span>
+                                                      <span className="text-xs uppercase cursor-default">{translate('common.label.personalisationText')}</span>
                                                       <span className="mt-0 ml-4 text-xs"> {' '} {isIncludeVAT ? child.price?.formatted?.withTax : child.price?.formatted?.withoutTax}{' '} </span>
                                                     </h3>
                                                   </div>
-                                                  <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleItem(child, GENERAL_DELETE)} >
-                                                    {GENERAL_REMOVE}
+                                                  <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleItem(child, translate('common.label.deleteText'))} >
+                                                    {translate('common.label.removeText')}
                                                   </button>
                                                 </div>
                                               </div>
@@ -722,7 +723,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                 <div className="section-devider-sm"></div>
                               </div>
                               <div className="flex flex-col px-4 mt-0 cart-related-prod sm:px-6">
-                                <RelatedProducts relatedProducts={relatedProductData} productPerColumn={1.8} checkout_refrence={true} title="Frequently Bought Together" handleQuickAddToBag={handleQuickAddToBag} deviceInfo={deviceInfo} />
+                                <RelatedProducts relatedProducts={relatedProductData} productPerColumn={1.8} checkout_refrence={true} title={translate('common.label.frequentlyBoughtTogetherText')} handleQuickAddToBag={handleQuickAddToBag} deviceInfo={deviceInfo} />
                               </div>
                               <div className="flex flex-col">
                                 <div className="section-devider-sm"></div>

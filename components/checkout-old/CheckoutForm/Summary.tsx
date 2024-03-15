@@ -42,6 +42,7 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { vatIncluded } from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
+import { translate } from '@components/services/localization'
 let PERSONALISED_TEXT = ''
 let PERSONALIZATION = ''
 
@@ -114,7 +115,7 @@ export default function Summary({
       setReferralInfo(voucherInfo?.referralDetails)
     } else {
       setIsLoading(false)
-      setError('Referral Vouchers not available for this user!')
+      setError(translate('label.checkout.referralNotAvailableUserText'))
     }
   }
 
@@ -134,7 +135,7 @@ export default function Summary({
         }
       }
     } else {
-      setError('Please enter appropriate Referral Code')
+      setError(translate('label.checkout.EnterReferralCodeText'))
     }
   }
 
@@ -307,7 +308,7 @@ export default function Summary({
                                           </div>
                                           <div className="text-gray-700 text-ms">
                                             <span
-                                              title="Message"
+                                              title={translate('label.product.messageText')}
                                               className={classNames({
                                                 'font-rubikBubblesMerged':
                                                   customFont ===
@@ -332,7 +333,7 @@ export default function Summary({
                                                   product
                                                 )
                                               }
-                                              title="View Personalisation"
+                                              title={translate('common.label.viewPersonalisationText')}
                                             >
                                               <EyeIcon className="inline-block w-4 h-4 -mt-3 text-gray-900 hover:text-gray-400" />
                                             </span>
@@ -372,7 +373,7 @@ export default function Summary({
                             {({ open }) => (
                               <>
                                 <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
-                                  <span>Apply Promo?</span>
+                                  <span>{translate('common.label.applyPromoText')}?</span>
                                 </Disclosure.Button>
                                 <Transition
                                   enter="transition duration-100 ease-out"
@@ -594,7 +595,7 @@ export default function Summary({
                                     {customInfo1FormattedData && (
                                       <div className="text-gray-700 text-ms">
                                         <span
-                                          title="Message"
+                                          title={translate('label.product.messageText')}
                                           className={personalizationFont}
                                         >
                                           {customInfo1FormattedData?.Message}
@@ -605,7 +606,7 @@ export default function Summary({
                                           onClick={() =>
                                             handleToggleEngravingModal(product)
                                           }
-                                          title="View Personalisation"
+                                          title={translate('common.label.viewPersonalisationText')}
                                         >
                                           <EyeIcon className="inline-block w-4 h-4 -mt-3 text-gray-900 hover:text-gray-400" />
                                         </span>
@@ -628,7 +629,7 @@ export default function Summary({
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg opacity-75 text-green focus-visible:ring- link-button">
-                        <span>Apply Promo?</span>
+                        <span>{translate('common.label.applyPromoText')}?</span>
                       </Disclosure.Button>
                       <Transition
                         enter="transition duration-100 ease-out"
@@ -791,15 +792,14 @@ export default function Summary({
                                 {referralAvailable && !referralInfo && (
                                   <div className="flex flex-col w-full max-w-lg my-10 2xl:justify-center xl:items-center px-9">
                                     <h2 className="mx-2 text-[30px] text-center">
-                                      Search your Friend by their Referral Code
+                                      {translate('label.checkout.searchFriendByReferralCodeText')}
                                     </h2>
                                     <p className="px-8 text-[18px] text-center">
-                                      If you think they have signed up, please
-                                      check and confirm their details below
+                                      {translate('label.checkout.friendSignupConfirmationText')}
                                     </p>
                                     <input
                                       type="text"
-                                      placeholder="Enter your friend's Referral Code.."
+                                      placeholder={translate('label.checkout.enterReferralCodeText')}
                                       className="px-5 w-full my-2 py-3 border-[1px] border-gray-500"
                                       onChange={handleInputChange}
                                     />
@@ -829,11 +829,11 @@ export default function Summary({
                                     )}
                                   >
                                     <h2 className="px-5 text-center">
-                                      Congratulations, We found your friend!
+                                      {translate('label.checkout.friendFoundConfirmationText')}
                                     </h2>
                                     <div className="py-2 flex flex-row border-[1px] my-5 items-center justify-center border-gray-600">
                                       <p className="px-3 !mt-0 text-center font-bold ">
-                                        Voucher-code:{' '}
+                                        {translate('label.checkout.voucherCodeText')}:{' '}
                                         {referralInfo?.voucherCode}
                                       </p>
                                       <div
@@ -849,16 +849,14 @@ export default function Summary({
                                       </div>
                                     </div>
                                     <p className="px-5 font-bold text-center">
-                                      Offer: {referralInfo?.promoName}
+                                      {translate('label.checkout.offerText')}: {referralInfo?.promoName}
                                     </p>
                                     <p className="font-bold">
-                                      Validity:{' '}
-                                      {`This offer is valid for ${referralInfo?.validityDays} Days`}
+                                      {translate('label.checkout.validityText')}:{' '}
+                                      {translate('label.checkout.offerValidForText')}{' '}{referralInfo?.validityDays}{' '}{translate('common.label.daysText')}
                                     </p>
                                     <p className="px-12 text-center">
-                                      Use this voucher code in the Apply
-                                      promotion section to avail this offer
-                                    </p>
+                                      {translate('common.label.availGiftText')} </p>
                                   </div>
                                 )}
                                 <div className="flex w-full xl:h-[439px] 2xl:h-auto 2xl:object-none xl:object-cover">

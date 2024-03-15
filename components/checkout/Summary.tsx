@@ -1,4 +1,5 @@
 import PromotionInput from '@components/cart/PromotionInput'
+import { translate } from '@components/services/localization'
 import { EmptyString } from '@components/utils/constants'
 import { GENERAL_DISCOUNT, GENERAL_SHIPPING } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
@@ -33,7 +34,7 @@ const Summary = ({
             {groupedPromotions?.autoAppliedPromos?.length > 0 && (
               <div className="flex items-end justify-between pt-2 mb-2 sm:pt-1">
                 <dt className="flex flex-col items-start text-sm text-black">
-                  <span className="font-14">Discount</span>
+                  <span className="font-14">{translate('label.orderSummary.discountText')}</span>
                   {groupedPromotions?.autoAppliedPromos?.map(
                     (promo: any, idx: number) => (
                       <span key={idx} className="block mt-1 font-14">
@@ -59,7 +60,7 @@ const Summary = ({
             {groupedPromotions?.appliedPromos?.length > 0 && (
               <div className="flex items-end justify-between pt-2 mb-2 sm:pt-1">
                 <dt className="flex flex-col items-start text-sm text-black">
-                  <span className="font-14">Promo code</span>
+                  <span className="font-14">{translate('label.basket.promoCodeText')}</span>
                   {groupedPromotions?.appliedPromos?.map(
                     (promo: any, idx: number) => (
                       <span key={idx} className="block mt-1 font-18">
@@ -83,7 +84,7 @@ const Summary = ({
           </div>
           <div className="flex items-center justify-between pt-2 sm:pt-1">
             <dt className="flex items-center text-black font-14">
-              <span>Subtotal (ex. VAT)</span>
+              <span>{translate('label.orderSummary.subTotalVATIncText')}</span>
             </dt>
             <dd className="font-semibold text-black text-md">
               {basket?.subTotal?.formatted?.withoutTax}
@@ -106,7 +107,7 @@ const Summary = ({
           )}
           <div className="flex items-center justify-between pt-2 sm:pt-1">
             <dt className="flex items-center text-black font-14">
-              <span>Total VAT</span>
+              <span>{translate('label.orderSummary.totalVATText')}</span>
             </dt>
             <dd className="font-semibold text-black text-md">
               {basket?.grandTotal?.formatted?.tax}
@@ -121,10 +122,10 @@ const Summary = ({
               <dd className="font-semibold text-black text-md">
                 {isIncludeVAT
                   ? basket?.shippingCharge?.raw?.withTax == 0
-                    ? 'FREE'
+                    ? translate('label.orderSummary.freeText')
                     : basket?.shippingCharge?.formatted?.withTax || EmptyString
                   : basket?.shippingCharge?.raw?.withoutTax == 0
-                  ? 'FREE'
+                  ? translate('label.orderSummary.freeText')
                   : basket?.shippingCharge?.formatted?.withoutTax ||
                     EmptyString}
               </dd>
@@ -134,7 +135,7 @@ const Summary = ({
           <div
             className={`flex items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`}
           >
-            <dt className="font-bold text-black font-18">Total</dt>
+            <dt className="font-bold text-black font-18">{translate('label.orderSummary.totalText')}</dt>
             <dd className="font-bold text-black font-18">
               {basket?.grandTotal?.formatted?.withTax}
             </dd>

@@ -20,6 +20,7 @@ import Link from 'next/link'
 import CartAddonsSidebar from './Addons/CartAddonsSidebar'
 import { deliveryDateFormat, matchStrings, tryParseJson} from '@framework/utils/parse-util'
 import { cartItemsValidateAddToCart } from '@framework/utils/app-util'
+import { translate } from '@components/services/localization'
 
 export default function CartProduct({
   product,
@@ -230,7 +231,7 @@ export default function CartProduct({
                 )}
               </div>
               <div className="items-end text-xs font-light text-left text-gray-400 sm:text-right">
-                {isIncludeVAT ? 'inc. VAT' : 'ex. VAT'}
+                {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}
               </div>
             </div>
           )}
@@ -245,7 +246,7 @@ export default function CartProduct({
             <div className="flex items-center flex-1 gap-0 mt-2">
               {slaDate > 0 && (
                 <span className="mx-0 text-xs font-semibold text-black sm:mx-0 font-Inter">
-                  Get it by{' '}{deliveryDateFormat(EtaDate)}
+                  {translate('label.basket.getItByText')}{' '}{deliveryDateFormat(EtaDate)}
                 </span>
               )}
             </div>
@@ -302,7 +303,7 @@ export default function CartProduct({
               )}
             </div>
             <div className="items-end text-xs font-light text-left text-gray-400 sm:text-right">
-              {isIncludeVAT ? 'inc. VAT' : 'ex. VAT'}
+              {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}
             </div>
           </div>
         )}
@@ -313,7 +314,7 @@ export default function CartProduct({
               <div>
                 {slaDate > 0 && (
                   <span className="mx-0 text-xs font-semibold text-black sm:mx-6 font-Inter">
-                    Get it by{' '}{deliveryDateFormat(EtaDate)}
+                    {translate('label.basket.getItByText')}{' '}{deliveryDateFormat(EtaDate)}
                   </span>
                 )}
               </div>
@@ -376,7 +377,7 @@ export default function CartProduct({
                 <span className="absolute left-0 top-2/4 -translate-y-2/4 line-height-0">
                   <i className="sprite-icons sprite-plus-filled-small invert-icon"></i>
                 </span>
-                Add on's for this product
+                {translate('label.basket.addOnText')}
               </span>
             </button>}
           </div>
@@ -432,7 +433,7 @@ export default function CartProduct({
                 className="sm:h-10 sm:w-10 min-w-40 w-full col-span-2 btn-primary sm:btn-none btn-sm uppercase font-semibold border-[1px] rounded border-brand-blue group-hover:border-gray-900 group-hover:bg-gray-900 flex items-center justify-center ipad-btn-primary"
               >
                 {isMobile ? (
-                  <>Remove</>
+                  <>{translate('common.label.removeText')}</>
                 ) : (
                  <TrashIcon className='h-6 w-6'/>
                 )}

@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 import CartAddonProducts from './CartAddonProducts'
-import Link from 'next/link'
+import { translate } from '@components/services/localization'
 export default function CartAddonsSidebar({
   addonProducts,
   isModalClose,
@@ -49,7 +49,7 @@ export default function CartAddonsSidebar({
                   <div className="flex flex-col">
                     <div className="sticky top-0 z-10 flex items-center justify-between px-4 pt-6 mb-1 bg-white sm:px-6">
                       <Dialog.Title className="font-semibold text-black font-18 ">
-                        <div>You may also need</div>
+                        <div>{translate('label.cart.youMayAlsoNeedText')}</div>
                       </Dialog.Title>
                       <div className="relative flex items-center ml-3 -top-1 outline-none-s">
                         <button
@@ -79,14 +79,14 @@ export default function CartAddonsSidebar({
                         className="text-center"
                       />
                       <p className="my-5 text-3xl font-semibold text-center text-black uppercase">
-                        No Addon Product Available!
+                        {translate('label.cart.noAddonProdText')}
                       </p>
                       <button
                         type="button"
                         className="w-7/12 px-10 mx-auto text-center btn-primary"
                         onClick={() => closeModal()}
                       >
-                        Continue Shopping
+                        {translate('common.label.continueShoppingText')}
                       </button>
                     </div>
                   }
