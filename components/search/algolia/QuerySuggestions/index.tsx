@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 
 // Other Imports
 import { setNativeValue, triggerKeyPress } from "@framework/utils/ui-util";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 const QuerySuggestions = ({ searchClient, indexName, indexSourceId, searchTerm, setSearchTerm, hitsPerPage }: any) => {
+    const translate = useTranslation()
     const SEARCH_INPUT_SELECTOR = 'input.ais-SearchBox-input'
     const SEARCH_INPUT_SUBMIT_SELECTOR = 'button.ais-SearchBox-submit'
     const [items, setItems] = useState<Array<any>>([])
@@ -59,7 +61,7 @@ const QuerySuggestions = ({ searchClient, indexName, indexSourceId, searchTerm, 
                     </div>
                 ) : (
                     <div className="m-2 ml-4">
-                        No results found for <strong><mark>{searchTerm}</mark></strong>.
+                        {translate('label.search.noResultFoundForText')} <strong><mark>{searchTerm}</mark></strong>.
                     </div>
                 )}
             </div>

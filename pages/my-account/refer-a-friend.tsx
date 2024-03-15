@@ -14,23 +14,16 @@ import { Transition } from '@headlessui/react'
 import axios from 'axios'
 import {
   NEXT_REFERRAL_BY_EMAIL,
-  NEXT_REFERRAL_CLICK_ON_INVITE,
   NEXT_REFERRAL_INFO,
   NEXT_REFERRAL_INVITE_SENT,
   NEXT_REFERRAL_VOUCHERS,
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import {
-  INVITES_SENT,
-  CLICKS_ON_INVITES,
   SUCCESSFUL_INVITES,
   NO_INVITES,
-  SHARE_IN_PERSON,
-  SHARE_BY_EMAIL,
   SUCCESSFUL_INVITE,
-  VOUCHERS_EARNED,
   VOUCHERS_NOT_EARNED,
-  CLICK_TO_SHARE_BY_EMAIL,
 } from '@components/utils/textVariables'
 import {
   ChevronDownIcon,
@@ -39,12 +32,14 @@ import {
 import Spinner from '@components/ui/Spinner'
 import SideMenu from '@components/account/MyAccountMenu'
 import NextHead from 'next/head'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
+  const translate = useTranslation()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const [active, setActive] = useState(false)
@@ -214,7 +209,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                   <div className="w-full border-t-[1px] mt-4 border-gray-300 border-b-[1px] ">
                     <div className="border-b-[1px] border-gray-300 flex flex-row justify-between px-5 py-2">
                       <p className="text-sm text-black font-semibold ">
-                        {INVITES_SENT}
+                        {translate('label.myAccount.invitesSentText')}
                       </p>
                       <p className="text-sm text-black font-semibold">
                         {referralInfo?.invitesSent}
@@ -222,7 +217,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                     </div>
                     <div className="flex flex-row justify-between px-5 py-2">
                       <p className="text-sm text-black font-semibold">
-                        {CLICKS_ON_INVITES}
+                        {translate('label.myAccount.clicksOnInvitesText')}
                       </p>
                       <p className="text-sm text-black font-semibold">
                         {referralInfo?.clickOnInvites}
@@ -236,7 +231,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                         <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
                           <div className=" w-full flex flex-row justify-between items-center">
                             <h2 className="text-sm text-black font-semibold capitalize">
-                              {SHARE_IN_PERSON}
+                              {translate('label.myAccount.shareInPersonBtnText')}
                             </h2>
                             <span className="h-5 w-5 text-gray-500">
                               {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
@@ -255,7 +250,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                             <div className="px-0 text-sm">
                               {REFERRAL_CODE_INSTRUCTIONS}
                               <div className="px-5 my-4 text-sm">
-                                Your friends Enter:
+                                {translate('label.myAccount.yourFriendsEnterText')}
                                 <h2 className="text-black text-lg">
                                   {referralInfo?.slug}{' '}
                                   {/* {user?.firstName+" "+ user?.lastName} */}
@@ -277,7 +272,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                         <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
                           <div className=" w-full flex flex-row justify-between items-center">
                             <h2 className="text-sm text-black font-semibold capitalize">
-                              {SHARE_BY_EMAIL}
+                              {translate('label.myAccount.shareByEmailHeadingText')}
                             </h2>
                             <span className="h-5 w-5 text-gray-500">
                               {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
@@ -294,13 +289,13 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                         >
                           <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-800">
                             <div className="px-5 py-2 text-sm">
-                              <p>Share Referral by Email</p>
+                              <p>{translate('label.myAccount.shareReferralByEmail')}</p>
                               <Link
                                 href={`mailto:?body=${referralOffers?.refereePromo}, Just use the following link: ${referralLink}&subject=Your friend has sent you a gift!`}
                                 className="font-bold"
                                 onClick={handleInviteSent}
                               >
-                                {CLICK_TO_SHARE_BY_EMAIL}
+                                {translate('label.myAccount.shareReferralLinkByEmailBtnText')}
                               </Link>
                             </div>
                           </Disclosure.Panel>
@@ -315,7 +310,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                         <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
                           <div className=" w-full flex flex-row justify-between items-center">
                             <h2 className="text-sm text-black font-semibold capitalize">
-                              {VOUCHERS_EARNED}
+                              {translate('label.myAccount.vouchersEarnedHeadingText')}
                             </h2>
                             <span className="h-5 w-5 text-gray-500">
                               {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
@@ -337,13 +332,13 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                                   <table className='border-separate border-spacing-y-3'>
                                     <thead>
                                       <tr>
-                                        <th>Referral</th>
-                                        <th>Order Status</th>
-                                        <th>Voucher Code</th>
-                                        <th>Offer</th>
-                                        <th>Valid From</th>
-                                        <th>Valid Till</th>
-                                        <th>Claimed On</th>
+                                        <th>{translate('label.myAccount.referralText')}</th>
+                                        <th>{translate('label.myAccount.orderStatusText')}</th>
+                                        <th>{translate('label.myAccount.VoucherText')}</th>
+                                        <th>{translate('label.checkout.offerText')}</th>
+                                        <th>{translate('label.myAccount.valifFromText')}</th>
+                                        <th>{translate('label.myAccount.validTillText')}</th>
+                                        <th>{translate('label.myAccount.ClaimedText')}</th>
                                       </tr>
                                     </thead>
                                     <tbody className="">

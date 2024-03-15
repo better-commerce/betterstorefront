@@ -61,20 +61,20 @@ export default function ReturnModal({
 
   const config = [
     {
-      placeholder: 'Reason',
-      label: 'Select reason',
+      placeholder: translate('label.returnReason.reasonText'),
+      label: translate('label.returnReason.selectReasonText'),
       as: 'select',
       name: 'reasonsForReturn',
     },
     {
-      placeholder: 'Required action',
-      label: 'Select action',
+      placeholder: translate('label.returnReason.requiredActionText'),
+      label: translate('label.returnReason.selectActionText'),
       as: 'select',
       name: 'requiredActions',
     },
     {
-      placeholder: 'Comment',
-      label: 'Leave a comment',
+      placeholder: translate('common.label.commentText'),
+      label: translate('common.label.leaveCommentText'),
       as: 'text',
       name: 'comment',
     },
