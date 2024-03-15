@@ -12,7 +12,6 @@ import {
 } from '@elastic/react-search-ui'
 import { Layout } from '@elastic/react-search-ui-views'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
-import Image from 'next/image'
 import { NoSymbolIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {
   buildAutocompleteQueryConfig,
@@ -42,7 +41,6 @@ import {
 import dynamic from 'next/dynamic'
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui'
-import PLPQuickView from '@components/product/QuickView/PLPQuickView'
 import SearchQuickView from '@components/product/QuickView/SearchQuickView'
 import {
   deliveryDateFormat,
@@ -50,6 +48,7 @@ import {
   priceFormat,
 } from '@framework/utils/parse-util'
 import { Switch } from '@headlessui/react'
+import { useTranslation } from '@commerce/utils/use-translation'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
@@ -74,6 +73,7 @@ const config = {
 }
 const isIncludeVAT = vatIncluded()
 const CustomResultsView = ({ children }: any) => {
+  const translate = useTranslation();
   return (
     <div className="relative ">
       {children.length > 0 ? (
@@ -82,7 +82,7 @@ const CustomResultsView = ({ children }: any) => {
         <div className="flex items-center justify-center w-full py-6 mt-3 text-lg font-medium text-center text-black bg-gray-100">
           <div className="flex items-center gap-2">
             <NoSymbolIcon className="mx-auto text-gray-200 w-7 h-7" />
-            No Product Found
+            {translate('label.search.noProductFoundText')}
           </div>
         </div>
       )}
@@ -112,7 +112,7 @@ const CustomResultView = (
     compareProductList,
     setCompareProducts,
   } = useUI()
-
+  const translate = useTranslation()
   const { isMobile } = deviceInfo
   const [quantity, setQuantity] = useState(1)
   const [quickViewData, setQuickViewData] = useState(null)
@@ -236,7 +236,7 @@ const CustomResultView = (
             {isMobile ? null : (
               <>
                 <div className="flex items-center justify-between w-full px-0 py-2 mt-3 text-sm font-semibold text-left text-black border-t border-gray-200 h-9 product-name hover:text-gray-950">
-                  <span>Get it by {deliveryDateFormat(EtaDate)}</span>
+                  <span>{translate('label.basket.getItByText')} {deliveryDateFormat(EtaDate)}</span>
                 </div>
                 <div
                   className={cn(
@@ -287,7 +287,7 @@ const CustomResultView = (
             {isMobile ? (
               <>
                 <div className="w-full h-10 col-span-8 px-0 py-2 mb-3 text-sm font-semibold text-left text-black border-t border-b border-gray-200 product-name hover:text-gray-950">
-                  <span>Get it by {deliveryDateFormat(EtaDate)}</span>
+                  <span>{translate('label.basket.getItByText')} {deliveryDateFormat(EtaDate)}</span>
                 </div>
 
                 <div className="col-span-12">
@@ -333,6 +333,7 @@ function ElasticSearchResult({
   clearFilters,
   maxBasketItemsCount,
 }: any) {
+  const translate = useTranslation();
   const [includeOutOfStockProduct, setIncludeOutOfStockProduct] =
     useState(false)
   return (
@@ -378,7 +379,7 @@ function ElasticSearchResult({
                       {wasSearched && (
                         <>
                           <h3 className="font-semibold text-black uppercase font-18 sm:mb-0">
-                            Product Suggestions
+                            {translate('label.search.productSuggestionsText')}
                           </h3>
                           <PagingInfo />
                         </>

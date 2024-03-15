@@ -11,7 +11,8 @@
       "internalServerErrorText": "500 : Internal Server Error",
       "descriptionText": "Check that you typed the address correctly. Maybe go back to your previous page or try using our site search to find something specific.",
       "weAreDownedText": "WE'VE DOWNED TOOLS",
-      "freeNextDayDeliveryMethod": "To carry on shopping with free next day delivery"
+      "freeNextDayDeliveryMethod": "To carry on shopping with free next day delivery",
+      "internal-server-error": "Internal Server Error"
     },
     "cancelReason": {
       "cancelTitle": "Why are you cancelling this",
@@ -28,7 +29,10 @@
       "removeKitText": "Remove kit",
       "kitItemsText": "Kit items",
       "offerText": "50% OFF on 3rd Item",
-      "cartItemRemoveText": "Are you sure you don't want this product? You may move it to Wishlist and buy later."
+      "multipleCodesApplyText": "You may apply mutliple codes",
+      "cartItemRemoveText": "Are you sure you don't want this product? You may move it to Wishlist and buy later.",
+      "youDontHaveAnyItems": "Uh-oh, you don't have any items in here",
+      "priceLabelText": "RRP"
     },
     "login": {
       "loginBtnText": "Login",
@@ -56,7 +60,8 @@
       "noOrderFoundHeadingText": "No Order Available",
       "startShoppingBtnText": "Start Shopping",
       "needHelpWithOrderBtnText": "Need Help with Your Order?",
-      "itemRefundText": "Refund of {currencySymbol}{itemTotal} will be processed within 3-5 business days after the item is received and inspected.",
+      "itemRefundText1": "Refund of",
+      "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected." ,
       "courierPartnerHeadingText": "COURIER PARTNER",
       "awbNumberHeadingText": "AWB Number",
       "returnNotCreatedMsg": "Woops! Could not create a return",
@@ -90,7 +95,8 @@
     },
     "help": {
       "getHelpOnItemText": "Get Help with this item",
-      "returnWindowClosedText": "Return window is now closed since It's been over {returnWindow} Days you've received this item.",
+      "returnWindowClosedText1": "Return window is now closed since It's been over",
+      "returnWindowClosedText2": "Days you've received this item.",
       "returnItemText": "Return Item",
       "cancelItemText": "Cancel Item",
       "helpText": "Help?"
@@ -133,7 +139,11 @@
       "dontReturnBtnText": "Don't Return",
       "returnNumText": "Return Number",
       "returnHistoryText": "Return History",
-      "returnOrderMsgText": "Check the products you’ve returned"
+      "returnOrderMsgText": "Check the products you’ve returned",
+      "reasonText": "Reason",
+      "selectReasonText": "Select reason",
+      "requiredActionText": "Required action",
+      "selectActionText": "Select action"
     },
     "addressBook": {
       "deleteAddressConfirmText": "Are you sure you want to delete this address?",
@@ -187,7 +197,16 @@
       "noInvitesText": "No Successful Invites Yet",
       "successfulInviteHeadingText": "Successful Invite",
       "successfulInvitesHeadingText": "Successful Invites",
-      "clicksOnInvitesText": "Clicks on Invites"
+      "clicksOnInvitesText": "Clicks on Invites",
+      "ClaimedText": "Claimed On",
+      "validTillText": "Valid Till",
+      "valifFromText": "Valid From",
+      "VoucherText": "Voucher Code",
+      "orderStatusText": "Order Status",
+      "referralText": "Referral",
+      "shareReferralByEmail": "Share Referral by Email",
+      "yourFriendsEnterText": "Your friends Enter:",
+      "invitesSentText": "Invites Sent"
     },
     "basket": {
       "addToBasketText": "Add to basket",
@@ -310,7 +329,11 @@
       "paymentMethodText": "Payment Method",
       "paymentHeadingText": "Payment",
       "toChoiceAddressText": "to an address of your choice",
-      "saveAndContinueToCollectBtnText": "Save And Continue to Collect"
+      "saveAndContinueToCollectBtnText": "Save And Continue to Collect",
+      "otherAddressTypeText": "Other Address Type",
+      "whatsappUpdatesText": "Send me updates on WhatsApp",
+      "payLaterWithKlarnaText": "Click Pay Later With Klarna to check if you are eligible",
+      "paymentFailedText": "failed."
     },
     "formField": {
       "selectCountryText": "Select a Country"
@@ -326,7 +349,14 @@
       "searchText": "Search",
       "resultCountText1": "Showing",
       "resultCountText2": "Results for",
-      "includeOOSProductsText": "Include out of stock products"
+      "includeOOSProductsText": "Include out of stock products",
+      "topSuggestionsText": "Top Suggestions",
+      "noProductFoundText": "No Product Found",
+      "productSuggestionsText": "Product Suggestions",
+      "searchForProductsText": "Search for products",
+      "showFiltersText": "Show Filters",
+      "noResultFoundForText": "No results found for",
+      "stepIntoWorldText": "Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look."
     },
     "product": {
       "viewProductText": "View Product",
@@ -419,6 +449,7 @@
         "headToFaqText": "Head over to the FAQ section to find out more"
       },
       "copiedText": "Copied!",
+      "copyText": "COPY",
       "compareSameRangeText": "Compare Same Range",
       "messageText": "Message",
       "selectToPersonalizeText": "Select the Product you want to personalise",
@@ -466,6 +497,7 @@
       "applyOnCheckoutText": "(Apply on checkout)"
     },
     "category": {
+      "catogoriesText":"Categories",
       "shopByCategoryText": "Shop by Category",
       "categoryText": "Category",
       "noCategoryAvailableText": "No Category Available",
@@ -509,7 +541,8 @@
     },
     "common": {
       "orderNumberText": "Order number",
-      "datePlacedText": "Date placed"
+      "datePlacedText": "Date placed",
+      "sportsEquipmentCollectionText": "Sports equipment collection."
     },
     "loginWithOTP": {
       "verificationCodeText": "Verification Code",
@@ -523,7 +556,9 @@
       "offerValidText": "This offer is valid for",
       "offerAlreadyUsedByEmailText": "Offer already used by this email address",
       "availDiscountByEmailText": "You have a referral code! Avail a discount voucher by entering your email",
-      "getDiscountCoupanText": "Get your Discount Coupon"
+      "getDiscountCoupanText": "Get your Discount Coupon",
+      "shareLinkText": "or share a link:",
+      "inviteNowUsingText": "Invite now using:"
     },
     "orders": {
       "NoOrderFoundText": "No orders found",
@@ -554,6 +589,30 @@
     },
     "home": {
       "exploreMoreBtnText": "Explore More"
+    },
+    "header": {
+      "gotoShopText": "Go to our shop",
+      "lookForWhatYouNeedText": "Look for what you need and love.",
+      "233StaysText": "233 stays",
+      "aug12To18Text": "Aug 12 - 18",
+      "2GuestsText": "2 Guests"
+    },
+    "section": {
+      "findTheBestText": "In this season, find the best 🔥"
+    },
+    "thankyou": {
+      "summaryText": "Summary",
+      "yourOfferIsValidText": "Your offer is valid for {days} days",
+      "congratilationDiscountText": "Congratulations! You can get a discount on your next order using code",
+      "deliverdText": "Delivered by",
+      "sizeText": "Size",
+      "willBeWithYouSoonText": "will be with you soon.",
+      "itsOnTheWayText": "It's on the way!",
+      "noOrderProvidedText": "Woops! No order provided",
+      "thankyouText": "Thank you!"
+    },
+    "register": {
+      "freeRegisterText": "Register for free"
     }
   },
   "message": {
@@ -640,8 +699,10 @@
       "addressLine2Text": "Address Line 2",
       "addressLine3Text": "Address Line 3",
       "cityText": "City",
+      "stateText": "State",
       "postcodeText": "Postcode",
       "countyStateEtcText": "County, state, province, etc.. (optional)",
+      "useAsDefautAddressText": "Use as Default Address",
       "expectedDeliveryDateText": "Expected Delivery Date",
       "accountText": "Account",
       "changeText": "Change",
@@ -680,7 +741,27 @@
       "typeAndEnterText": "Type and press enter",
       "backText": "Back",
       "validitytext": "Validity:",
-      "registerText": "Register"
+      "registerText": "Register",
+      "saveAsText": "Save As",
+      "saveBtnText": "Save",
+      "commentText": "Comment",
+      "leaveCommentText": "Leave a comment",
+      "successText": "Success",
+      "showMeAllText": "Show me all",
+      "seeCollectionText": "See Collection",
+      "productsText": "Products",
+      "shopText": "Shops",
+      "languageText": "Language",
+      "typeAndPressEnterText": "Type and press enter",
+      "notificationsText": "Notifications",
+      "templatesText": "Templates",
+      "may20Text": "May 20, 2021",
+      "postCardMetaV2Text": "PostCardMetaV2",
+      "goodNewsText": "Good news from far away 🥇",
+      "letsSeeWhatPeopleThinkText": "Let's see what people think of Ciseco",
+      "startExploringText": "Start exploring.",
+      "manKeywordText": "Man",
+      "startYourSearchText": "Start your search"
     },
     "numberText": {
       "one": "1"

@@ -20,6 +20,7 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { vatIncluded } from '@framework/utils/app-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
   const {
@@ -34,6 +35,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     removeFromWishlist,
     openCart,
   } = useUI()
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const { getWishlist, deleteWishlistItem } = useWishlist()
   const [openWishlistSidebar, setOpenWishlistSidebar] = useState(false)
@@ -173,7 +175,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                           className="p-2 -m-2 text-gray-400 hover:text-gray-500"
                           onClick={handleClose}
                         >
-                          <span className="sr-only">Close panel</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                       </div>

@@ -12,18 +12,19 @@ import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { BTN_REGISTER_FOR_FREE, GENERAL_EMAIL, VALIDATION_EMAIL_ALREADY_IN_USE, VALIDATION_ENTER_A_VALID_EMAIL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
+import { VALIDATION_EMAIL_ALREADY_IN_USE, VALIDATION_ENTER_A_VALID_EMAIL } from '@components/utils/textVariables'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
 import commerce from '@lib/api/commerce'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { getEnabledSocialLogins } from '@framework/utils/app-util'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)
-
+  const translate = useTranslation()
   useEffect(() => {
     setError(apiError)
   }, [apiError])
@@ -47,7 +48,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
   return (
     <div className="w-full flex justify-center mt-10 flex-col items-center sm:pl-10 sm:pr-10">
       <div className="font-semibold w-full px-5 sm:px-0 md:w-1/2">
-        <label className="text-gray-700 text-sm">{GENERAL_EMAIL}</label>
+        <label className="text-gray-700 text-sm">{translate('label.addressBook.emailText')}</label>
         <input
           className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
           value={value}
@@ -80,6 +81,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   const [hasPassedEmailValidation, setHasPassedEmailValidation] =
     useState(false)
   const [userEmail, setUserEmail] = useState('')
+  const translate = useTranslation()
   const { isGuestUser, setIsGuestUser, user, basketId } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
@@ -107,7 +109,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        {translate('message.alreadyLoggedInMsg')}
       </div>
     )
   }
@@ -205,7 +207,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h1 className="font-extrabold text-center tracking-tight text-gray-900">
-            {BTN_REGISTER_FOR_FREE}
+            {translate('label.register.freeRegisterText')}
           </h1>
         </div>
         {!successMessage && (

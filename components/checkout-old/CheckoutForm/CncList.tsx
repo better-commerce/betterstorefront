@@ -6,6 +6,7 @@ import {
   GENERAL_ADDRESS,
   NORMAL_OPENING_HOURS
 } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const hardcodedOpeningHours = [
   {
@@ -42,6 +43,7 @@ export default function CncList({
   setSelectedStore,
   submitShippingMethod,
 }: any) {
+  const translate = useTranslation()
   const [selectedLocation, setSelectedLocation] = useState({
     id: '',
     postCode: '',
@@ -97,7 +99,7 @@ export default function CncList({
                 </div>
                 <div className="py-2">
                   <Button
-                    title="Collect from this store"
+                    title={translate('label.checkout.collectFromStoreText')}
                     action={handleStore}
                   />
                 </div>

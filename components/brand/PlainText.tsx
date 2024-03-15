@@ -1,11 +1,12 @@
 import cn from 'classnames'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function PlainText({ textNames, heading }: any) {
   const [height, setHeight] = useState('h-[612px]')
   const [isExpandable, setIsExpandable] = useState(false)
-
+  const translate = useTranslation()
   useEffect(() => {
     if (isExpandable) {
       setHeight('h-[120vh]')
@@ -23,7 +24,7 @@ export default function PlainText({ textNames, heading }: any) {
         <p className="font-semibold text-[12px] text-[#212530] md:text-[32px] leading-2 sm:leading-10 text-sm">
           {heading
             ? heading
-            : 'The brand represents performance, innovation, andreliability, with a hard-earned reputation for quality and highlevels of durability.'}
+            : translate('label.brand.brandHeadingText')}
         </p>
       </div>
       <div className="">
@@ -57,7 +58,7 @@ export default function PlainText({ textNames, heading }: any) {
             setIsExpandable(true)
           }}
         >
-          <span className="text-[#212530]">Expand</span>
+          <span className="text-[#212530]"> {translate('common.label.expandText')}</span>
           <img
             height={150}
             width={150}
@@ -73,7 +74,7 @@ export default function PlainText({ textNames, heading }: any) {
             setIsExpandable(false)
           }}
         >
-          <span className="text-[#212530]">Collapse</span>
+          <span className="text-[#212530]">{translate('common.label.expandText')}</span>
           <img
             height={50}
             width={50}

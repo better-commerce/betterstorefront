@@ -33,7 +33,7 @@ function B2BQuotes({ quotes }: any) {
                   <h2 className="font-semibold leading-6 mob-font-14 sm:text-2xl font-Inter text-brand-blue">
                     {quote?.quoteName} {`(${quote?.customQuoteNo})`}
                   </h2>
-                  <button className='btn-default-blue !border-2 uppercase \mr-2' onClick={() => showQuoteDetail(quote)}>View</button>
+                  <button className='btn-default-blue !border-2 uppercase \mr-2' onClick={() => showQuoteDetail(quote)}>{translate('common.label.viewText')}</button>
                 </div>
                 <div className="flex flex-col gap-y-2 sm:gap-y-0 sm:flex-row gap-x-6">
                   <span className="font-Inter uppercase font-light leading-4 mob-font-14 text-lg tracking-[2%]">
@@ -46,10 +46,10 @@ function B2BQuotes({ quotes }: any) {
                 </div>
                 <div className="flex flex-col gap-y-2 sm:gap-y-0 sm:flex-row gap-x-6">
                   <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
-                    Username: {quote?.userName}
+                  {translate('label.companyUsers.usernameText')} {quote?.userName}
                   </span>
                   <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
-                    Email: {quote?.email}
+                  {translate('label.companyUsers.emailText')}{quote?.email}
                   </span>
                 </div>
               </div>

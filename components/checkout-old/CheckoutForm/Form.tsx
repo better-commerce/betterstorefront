@@ -4,13 +4,8 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useState, useRef, useEffect } from 'react'
 import {
   ADD_ADDRESS,
-  BILLING_ADDRESS_SAME_AS_DELIVERY_ADDRESS,
-  BTN_FIND,
-  BTN_SAVE,
-  ENTER_ADDRESS_MANUALY,
-  GENERAL_CANCEL,
-  GENERAL_CLOSE,
 } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function AddressForm({
   initialValues = {},
@@ -37,6 +32,7 @@ export default function AddressForm({
   handleOpenEditAddressModal,
   isPaymentLink,
 }: any) {
+  const translate = useTranslation();
   const defaultItemsToHide = ['address1', 'address2', 'city', 'postCode']
   const [isFormOpen, setNewFormOpen] = useState(!addresses.length)
   const [addressList, setAddressList] = useState([])
@@ -211,7 +207,7 @@ export default function AddressForm({
               ) : (
                 <div className="w-full mt-4 text-center">
                   <span className="text-sm text-gray-500">
-                    No saved addresses.
+                    {translate('common.label.noSavedAddressText')}
                   </span>
                 </div>
               )}

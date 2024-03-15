@@ -1,7 +1,9 @@
 import Spinner from '@components/ui/Spinner'
 import React from 'react'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function CompanyUsers({ users }: any) {
+  const translate = useTranslation()
   return (
     <section className="w-full">
       {!users ? (
@@ -26,12 +28,12 @@ function CompanyUsers({ users }: any) {
                 </span>
               </div>
               <div className="flex flex-row gap-x-6">
-                {user?.username && <span>Username: {user?.username}</span>}
+                {user?.username && <span> {translate('label.companyUsers.usernameText')} {user?.username}</span>}
                 <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
-                  Email: {user?.email}
+                {translate('label.companyUsers.emailText')} {user?.email}
                 </span>
                 <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
-                  Phone No: {user?.phoneNo}
+                {translate('label.companyUsers.phoneNoText')} {user?.phoneNo}
                 </span>
               </div>
             </div>

@@ -11,6 +11,8 @@ import ButtonThird from "./shared/Button/ButtonThird";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import Radio from "./shared/Radio/Radio";
 import ButtonClose from "./shared/ButtonClose/ButtonClose";
+import { useTranslation } from '@commerce/utils/use-translation'
+import { transferableAbortController } from "util";
 
 // DEMO DATA
 const DATA_categories = [
@@ -76,7 +78,6 @@ const TabFilters = () => {
   const [colorsState, setColorsState] = useState<string[]>([]);
   const [sizesState, setSizesState] = useState<string[]>([]);
   const [sortOrderStates, setSortOrderStates] = useState<string>("");
-
   //
   const closeModalMoreFilter = () => setisOpenMoreFilter(false);
   const openModalMoreFilter = () => setisOpenMoreFilter(true);
@@ -124,6 +125,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsCategories = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -190,7 +192,7 @@ const TabFilters = () => {
                 />
               </svg>
 
-              <span className="ml-2">Categories</span>
+              <span className="ml-2">{translate('label.category.catogoriesText')}</span>
               {!categoriesState.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
               ) : (
@@ -243,14 +245,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -263,6 +263,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsSortOrder = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -365,14 +366,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -385,6 +384,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsColor = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -486,14 +486,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -506,6 +504,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsSize = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -596,14 +595,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -616,6 +613,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsPriceRage = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -740,14 +738,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -851,6 +847,7 @@ const TabFilters = () => {
 
   // FOR RESPONSIVE MOBILE
   const renderTabMobileFilter = () => {
+    const translate = useTranslation()
     return (
       <div className="flex-shrink-0">
         <div
@@ -1111,14 +1108,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={closeModalMoreFilter}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Transition.Child>

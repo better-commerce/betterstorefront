@@ -8,7 +8,6 @@ import PaymentButton from './PaymentButton'
 // Other Imports
 import { GENERAL_CONFIRM } from '@components/utils/textVariables'
 import { IDispatchState } from './PaymentButton/BasePaymentButton'
-import { CreditCardIcon } from '@heroicons/react/24/outline'
 
 interface IPaymentMethodsProps {
   readonly paymentData: Function

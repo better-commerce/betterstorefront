@@ -46,6 +46,7 @@ import NewAddressModal from './NewAddressModal'
 import { Guid } from '@commerce/types'
 import { Cookie } from '@framework/utils/constants'
 import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const Spinner = () => {
   return (
@@ -104,6 +105,7 @@ export default function CheckoutForm({
   splitDeliveryItems,
   onShippingPlansUpdated,
 }: any) {
+  const translate = useTranslation()
   const {
     setCartItems,
     basketId,
@@ -885,7 +887,7 @@ export default function CheckoutForm({
                 }}
                 onCloseModal={closeNewAddressModal}
                 isRegisterAsGuestUser={isRegisterAsGuestUser()}
-                btnTitle="Save Address"
+                btnTitle={translate('label.addressBook.saveAddressBtn')}
               />
 
               {/* Payment */}

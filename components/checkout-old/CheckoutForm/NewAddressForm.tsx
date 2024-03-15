@@ -21,8 +21,10 @@ import { NEW_ADDRESS_FORM_FIELDS } from './NewAddressModal'
 import SubmitButton from '@components/common/SubmitButton'
 import { IFormProps } from 'framework/contracts/IFormProps'
 import { INewAddressFormProps } from 'framework/contracts/address/INewAddressFormProps'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
+  const translate = useTranslation()
   const newAddressFormRef: any = useRef(null)
   const {
     submitState,
@@ -86,7 +88,7 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
         return (
           <Form id={formId} onSubmit={handleSubmit}>
             <div className="w-full p-4">
-              <h2 className="text-base font-bold dark:text-black">Address</h2>
+              <h2 className="text-base font-bold dark:text-black">{translate('common.label.addressText')}</h2>
               <div className="w-full mt-1 add-form-section">
                 {(formFields?.length
                   ? Array.from<any>([]).concat([
@@ -147,10 +149,9 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
               </div>
             </div>
             <div className="w-full p-4 pt-0">
-              <h2 className="text-base font-bold dark:text-black">Contact</h2>
+              <h2 className="text-base font-bold dark:text-black">{translate('label.contactPreferences.contactPreferencesHeadingText')}</h2>
               <p className="mt-1 mb-2 text-xs text-brown-light">
-                This Information will be use to contact you for updates.
-              </p>
+                {translate('label.checkout.contactInfoText')} </p>
               <div className="w-full mt-1 add-form-section">
               <div className="grid w-full grid-cols-2 overflow-hidden gap-x-4">
                 {(formFields?.length
