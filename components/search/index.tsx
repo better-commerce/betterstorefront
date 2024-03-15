@@ -107,7 +107,7 @@ export default function Search(props: any) {
             ))}
           {products?.map((product: any, idx: number) => {
             return (
-              <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6`} >
+              <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6`} key={`search-${idx}`}>
                 <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
                   <Link href={`/${product.slug}`} className="block">
                     <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
