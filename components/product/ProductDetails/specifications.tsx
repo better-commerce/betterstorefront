@@ -20,7 +20,7 @@ export default function ProductSpecifications({
       <div className="grid px-4 sm:grid-cols-12 sm:px-4 md:px-6 lg:px-6 2xl:px-0">
         <div className="sm:col-span-8">
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
-            <h2 className="mb-2 font-bold font-18 text-dark-brown dark:text-black">
+            <h2 className="flex items-center text-2xl font-semibold">
               {PRODUCT_SPECIFICATION}
             </h2>
             {attrGroup['whyweloveit']?.length > 0 && (
@@ -29,7 +29,7 @@ export default function ProductSpecifications({
                   {attrGroup['whyweloveit'].map((detail: any, cdx: number) => (
                     <div
                       key={`product-${cdx}-detil-value`}
-                      className="text-sm font-medium leading-7 text-gray-800"
+                      className="text-slate-600 dark:text-slate-300"
                       dangerouslySetInnerHTML={{
                         __html: detail.value || detail.value,
                       }}

@@ -1,7 +1,5 @@
 // Base Imports
-import React, { useEffect, useRef, useState } from 'react'
-
-// Package Imports
+import React, {useRef } from 'react'
 import ReactSwitch from 'react-switch'
 
 interface IToggleSwitchProps {

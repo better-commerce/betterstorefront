@@ -16,17 +16,7 @@ const FILTER_KEYS = {
   SIZE: 'attributes.value~clothing.size',
 }
 
-const FilterItem = ({
-  option,
-  optionIdx,
-  sectionKey,
-  isChecked = false,
-  isCheckboxTickDisabled = false,
-  bgColor = () => false,
-  onSelect,
-  closeSidebar = () => {},
-  ...props
-}: any) => {
+const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckboxTickDisabled = false, bgColor = () => false, onSelect, closeSidebar = () => { }, ...props }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
   const { currency } = useUI()
 
@@ -36,14 +26,8 @@ const FilterItem = ({
 
   const handleCheckbox = () => {
     setCheckbox(!isCheckboxChecked)
-    let obj = {
-      Key: sectionKey,
-      Value: option.name,
-      IsSelected: true,
-    }
-    let type = !isCheckboxChecked
-      ? ACTION_TYPES.ADD_FILTERS
-      : ACTION_TYPES.REMOVE_FILTERS
+    let obj = { Key: sectionKey, Value: option.name, IsSelected: true, }
+    let type = !isCheckboxChecked ? ACTION_TYPES.ADD_FILTERS : ACTION_TYPES.REMOVE_FILTERS
     onSelect(obj, type)
     closeSidebar()
   }
@@ -57,21 +41,9 @@ const FilterItem = ({
 
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div
-      key={`option-right-value-${option.value}-${optionIdx}`}
-      className="flex items-center pt-4"
-    >
-      <input
-        name={`${optionIdx}-input[]`}
-        defaultValue={option.value}
-        type="checkbox"
-        className="w-4 h-4 border-gray-300 rounded filter-input"
-      />
-      <label
-        htmlFor={`${optionIdx}-input[]`}
-        onClick={handleCheckbox}
-        className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label"
-      >
+    <div key={`option-right-value-${option.value}-${optionIdx}`} className="flex items-center pt-4" >
+      <input name={`${optionIdx}-input[]`} defaultValue={option.value} type="checkbox" className="w-4 h-4 border-gray-300 rounded filter-input" />
+      <label htmlFor={`${optionIdx}-input[]`} onClick={handleCheckbox} className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label" >
         {isCheckboxChecked && !isCheckboxTickDisabled && (
           <div
             style={{
@@ -96,8 +68,8 @@ const FilterItem = ({
               content: '',
               top: '2px',
               float: 'left',
-              height: '16px',
-              width: '16px',
+              height: '20px',
+              width: '20px',
               borderRadius: '10px',
               background: checkboxBgColor,
               border: '1px solid #cccccc',
@@ -112,8 +84,8 @@ const FilterItem = ({
               content: '',
               top: '2px',
               float: 'left',
-              height: '16px',
-              width: '16px',
+              height: '20px',
+              width: '20px',
               borderRadius: '2px',
               background: checkboxBgColor,
               border: '1px solid #cccccc',
@@ -134,13 +106,7 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
       <label className="sr-only">{BTN_SEARCH}</label>
-      <input
-        type="text"
-        onChange={(e) => handleSearch(e.target.value)}
-        autoComplete={BTN_SEARCH}
-        placeholder={BTN_SEARCH}
-        className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-      />
+      <input type="text" onChange={(e) => handleSearch(e.target.value)} autoComplete={BTN_SEARCH} placeholder={BTN_SEARCH} className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
     </>
   )
 }

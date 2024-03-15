@@ -465,7 +465,7 @@ function CategoryLandingPage({
         />
       </NextHead>
       <section className="main-section">
-        <div className="container px-4 mx-auto mt-4 bg-transparent sm:px-4 lg:px-6 lg:pt-6 2xl:px-0">
+        <div className="container mx-auto mt-4 bg-transparent lg:pt-6">
           {category?.breadCrumbs && (
             <BreadCrumbs
               items={category?.breadCrumbs}
@@ -473,7 +473,7 @@ function CategoryLandingPage({
             />
           )}
         </div>
-        <div className="container px-4 mx-auto my-0 mt-4 bg-transparent sm:px-6 lg:px-6 2xl:px-0">
+        <div className="container mx-auto my-0 mt-4 bg-transparent">
           <h1 className='dark:text-black'>{category?.name}</h1>
           <div
             className="font-18"
@@ -486,7 +486,7 @@ function CategoryLandingPage({
             <div className="py-4">
               {category?.subCategories?.filter((x: any) => x.isFeatured == true)
                 .length > 0 && (
-                <div className="container px-4 mx-auto mb-4 sm:px-0">
+                <div className="container mx-auto mb-4">
                   <h2 className="font-bold font-18">Popular categories</h2>
                 </div>
               )}

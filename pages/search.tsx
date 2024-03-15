@@ -343,24 +343,31 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         <meta property="og:description" content={GENERAL_CATALOG} key="ogdesc" />
       </NextHead>
       <div className="container pt-6 pb-24 mx-auto">
-        <div className="">
-          <h1 className="inline-block pl-0 font-semibold tracking-tight text-black sm:px-0">
+        <div className="max-w-screen-sm">
+          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
             {GENERAL_CATALOG}
           </h1>
-          <span className="inline-block ml-2 text-sm font-medium sm:px-0 dark:text-black">
-            Showing {data.products.total} Results for
-          </span>
+          <div className='flex justify-between w-full align-bottom'>
+            <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
+              Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look.
+            </span>
+          </div>
         </div>
-        <div className={`sm:grid-cols-3 lg:grid-cols-12 md:grid-cols-4 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:px-0 lg:px-0`}>
+        <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
+          <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> Showing <span className='font-semibold text-black'>{data.products.total}</span> Results </span>
+          <div className="flex justify-end align-bottom">
+            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+          </div>
+        </div>
+        <hr className="border-slate-200 dark:border-slate-700" />
+
+        <div className={`sm:grid-cols-3 lg:grid-cols-12 md:grid-cols-4 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-3 overflow-hidden sm:px-0 lg:px-0`}>
           {isMobile ? (
             <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
           ) : (
             <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
           )}
-          <div className={`sm:col-span-10`}>
-            <div className="flex justify-end w-full col-span-12">
-              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-            </div>
+          <div className={`sm:col-span-9`}>
             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
             <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           </div>

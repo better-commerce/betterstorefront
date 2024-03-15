@@ -60,17 +60,12 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({
 
   const defaultSearch = (
     <>
-      <div className="flex flex-row w-full rounded-sm sm:w-80 md:w-64 xl:w-96 mobile-search-icon">
-        <button onClick={onClick} className="relative w-full px-2 pr-3 text-gray-400 bg-gray-100 border border-gray-400 rounded-md sm:px-4 sm:p-2 sm:pl-3 sm:pr-16 hover:text-gray-500 search-mob-btn" aria-label="Search" >
-          <span className="sr-only" aria-label="Search">
-            {BTN_SEARCH}
-          </span>
-          <span className="hidden w-full pr-2 text-sm font-normal text-left text-black sm:inline-block">
-            Search
-          </span>
-          <MagnifyingGlassIcon className="w-4 h-6 text-black sm:w-4 sm:h-4 sm:absolute right-4 sm:top-3 sm:right-4 sm:text-gray-400" aria-hidden="true" aria-label="Search" />
-        </button>
-      </div>
+      <div className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none" onClick={onClick}>
+        <svg width={22} height={22} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+          <path d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M22 22L20 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>      
       {showSearchBar && (
         <SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />
       )}
