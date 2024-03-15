@@ -5,47 +5,9 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { FC, Fragment } from "react";
 import { headerCurrency } from "./CurrencyDropdown";
-import { useTranslation } from "@commerce/utils/use-translation";
-
-export const headerLanguage = [
-  {
-    id: "English",
-    name: "English",
-    description: "United State",
-    href: "##",
-    active: true,
-  },
-  {
-    id: "Vietnamese",
-    name: "Vietnamese",
-    description: "Vietnamese",
-    href: "##",
-  },
-  {
-    id: "Francais",
-    name: "Francais",
-    description: "Belgique",
-    href: "##",
-  },
-  {
-    id: "Francais",
-    name: "Francais",
-    description: "Canada",
-    href: "##",
-  },
-  {
-    id: "Francais",
-    name: "Francais",
-    description: "Belgique",
-    href: "##",
-  },
-  {
-    id: "Francais",
-    name: "Francais",
-    description: "Canada",
-    href: "##",
-  },
-];
+import locales from "@framework/locales.json"
+import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 interface LangDropdownProps {
   panelClassName?: string;
@@ -58,24 +20,30 @@ function classNames(...classes: any) {
 const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
   const translate = useTranslation()
   const renderLang = (close: () => void) => {
+    const { i18n } = useTranslation()
     return (
       <div className="grid gap-8 lg:grid-cols-2">
-        {headerLanguage.map((item, index) => (
-          <a
-            key={index}
-            href={item.href}
-            onClick={() => close()}
-            className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${
-              item.active ? "bg-gray-100 dark:bg-gray-700" : "opacity-80"
-            }`}
-          >
-            <div className="">
-              <p className="text-sm font-medium ">{item.name}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {item.description}
-              </p>
-            </div>
-          </a>
+        {locales?.localizations?.map((item, index) => (
+          <Link legacyBehavior href="/" locale={item?.culture}>
+            <a
+              key={index}
+              href="#"
+              onClick={() => {
+                //if (item?.isActive) {
+                //i18n.changeLanguage(item?.culture);
+                //}
+                close();
+              }}
+              className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${item?.isActive ? "bg-gray-100 dark:bg-gray-700" : "opacity-80"}`}
+            >
+              <div className="">
+                <p className="text-sm font-medium ">{item?.countryName}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {item?.languageName}
+                </p>
+              </div>
+            </a>
+          </Link>
         ))}
       </div>
     );
@@ -84,19 +52,20 @@ const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
   const renderCurr = (close: () => void) => {
     return (
       <div className="grid gap-7 lg:grid-cols-2">
-        {headerCurrency.map((item, index) => (
-          <a
-            key={index}
-            href={item.href}
-            onClick={() => close()}
-            className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${
-              item.active ? "bg-gray-100 dark:bg-gray-700" : "opacity-80"
-            }`}
-          >
-            <item.icon className="w-[18px] h-[18px] " />
-            <p className="ml-2 text-sm font-medium ">{item.name}</p>
-          </a>
-        ))}
+        {locales?.localizations?.map((localization, index) => {
+          const item = headerCurrency(localization?.currencyCode, localization?.isActive)
+          return (
+            <a
+              key={index}
+              href={item.href}
+              onClick={() => close()}
+              className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${item.active ? "bg-gray-100 dark:bg-gray-700" : "opacity-80"}`}
+            >
+              <item.icon className="w-[18px] h-[18px] " />
+              <p className="ml-2 text-sm font-medium ">{item.name}</p>
+            </a>
+          )
+        })}
       </div>
     );
   };

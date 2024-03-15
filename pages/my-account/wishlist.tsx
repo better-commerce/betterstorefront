@@ -18,12 +18,14 @@ import wishlist from 'pages/wishlist'
 import { vatIncluded } from '@framework/utils/app-util'
 import SideMenu from '@components/account/MyAccountMenu'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
+  const translate = useTranslation()
   const { user, deleteUser, isGuestUser } = useUI()
   const isIncludeVAT = vatIncluded()
   const currentOption = "Wishlist"
@@ -99,7 +101,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                   <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
                 </svg>
               </Link>
-              <span className="leading-none">Wishlist</span>
+              <span className="leading-none">{translate('label.wishlist.wishlistText')}</span>
             </h3>
           </div>
           <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
