@@ -7,6 +7,7 @@ import { FC, Fragment } from "react";
 import { headerCurrency } from "./CurrencyDropdown";
 import locales from "@framework/locales.json"
 import { useTranslation } from "react-i18next";
+import { useTranslation as useTranslationText } from "@commerce/utils/use-translation";
 import Link from "next/link";
 
 interface LangDropdownProps {
@@ -19,6 +20,7 @@ function classNames(...classes: any) {
 
 const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
   const translate = useTranslation()
+  const translateText = useTranslationText()
   const renderLang = (close: () => void) => {
     const { i18n } = useTranslation()
     return (
@@ -81,7 +83,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
              group h-10 sm:h-12 px-3 py-1.5 inline-flex items-center text-sm text-gray-800 dark:text-neutral-200 font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
             >
               <GlobeAltIcon className="w-[18px] h-[18px] opacity-80" />
-              <span className="ml-2">{translate('common.label.languageText')}</span>
+              <span className="ml-2">{translateText('common.label.languageText')}</span>
               <ChevronDownIcon
                 className={`${open ? "-rotate-180" : "text-opacity-70"}
                   ml-1 h-4 w-4  group-hover:text-opacity-80 transition ease-in-out duration-150`}
