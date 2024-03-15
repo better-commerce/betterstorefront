@@ -1,54 +1,42 @@
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import {
-  CurrencyDollarIcon,
-  CurrencyBangladeshiIcon,
-  CurrencyEuroIcon,
-  CurrencyPoundIcon,
-  CurrencyRupeeIcon,
-  BanknotesIcon,
-} from "@heroicons/react/24/outline";
+import { CurrencyDollarIcon, CurrencyBangladeshiIcon, CurrencyEuroIcon, CurrencyPoundIcon, CurrencyRupeeIcon, BanknotesIcon, } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
+import locales from "@framework/locales.json"
 
-export const headerCurrency = [
-  {
-    id: "EUR",
-    name: "EUR",
+export const headerCurrency = (currencyCode: string, isActive: boolean) => {
+  let icon: any
+  if (currencyCode) {
+    switch (currencyCode?.toUpperCase()) {
+      case "EUR":
+        icon = CurrencyEuroIcon
+        break;
+
+      case "USD":
+        icon = CurrencyDollarIcon
+        break;
+
+      case "BAD":
+        icon = CurrencyBangladeshiIcon
+        break;
+
+      case "GBP":
+        icon = CurrencyPoundIcon
+        break;
+
+      case "QAR":
+        icon = CurrencyRupeeIcon
+        break;
+    }
+  }
+  return {
+    id: currencyCode?.toUpperCase(),
+    name: currencyCode?.toUpperCase(),
     href: "##",
-    icon: CurrencyEuroIcon,
-    active: true,
-  },
-  {
-    id: "USD",
-    name: "USD",
-    href: "##",
-    icon: CurrencyDollarIcon,
-  },
-  {
-    id: "GBF",
-    name: "GBF",
-    href: "##",
-    icon: CurrencyBangladeshiIcon,
-  },
-  {
-    id: "SAR",
-    name: "SAR",
-    href: "##",
-    icon: CurrencyPoundIcon,
-  },
-  {
-    id: "QAR",
-    name: "QAR",
-    href: "##",
-    icon: CurrencyRupeeIcon,
-  },
-  {
-    id: "BAD",
-    name: "BAD",
-    href: "##",
-    icon: CurrencyBangladeshiIcon,
-  },
-];
+    icon: icon,
+    active: isActive,
+  }
+}
 
 export default function CurrencyDropdown() {
   return (
@@ -81,21 +69,23 @@ export default function CurrencyDropdown() {
               <Popover.Panel className="absolute z-10 w-screen max-w-[140px] px-4 mt-3 right-0 sm:px-0">
                 <div className="overflow-hidden shadow-lg rounded-2xl ring-1 ring-black ring-opacity-5">
                   <div className="relative grid bg-white gap-7 dark:bg-neutral-800 p-7">
-                    {headerCurrency.map((item, index) => (
-                      <a
-                        key={index}
-                        href={item.href}
-                        onClick={() => close()}
-                        className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${
-                          item.active
+                    {locales?.localizations?.map((localization, index) => {
+                      const item = headerCurrency(localization?.currencyCode, localization?.isActive)
+                      return (
+                        <a
+                          key={index}
+                          href={item.href}
+                          onClick={() => close()}
+                          className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${item.active
                             ? "bg-gray-100 dark:bg-neutral-700"
                             : "opacity-80"
-                        }`}
-                      >
-                        <item.icon className="w-[18px] h-[18px] " />
-                        <p className="ml-2 text-sm font-medium ">{item.name}</p>
-                      </a>
-                    ))}
+                            }`}
+                        >
+                          <item.icon className="w-[18px] h-[18px] " />
+                          <p className="ml-2 text-sm font-medium ">{item.name}</p>
+                        </a>
+                      )
+                    })}
                   </div>
                 </div>
               </Popover.Panel>
