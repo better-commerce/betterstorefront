@@ -1,15 +1,11 @@
 import cn from 'classnames'
 import {
-  ChangeEvent,
   FC,
-  MouseEventHandler,
   useCallback,
   useEffect,
   useState,
   useRef,
 } from 'react'
-import { Select } from '../../common/Select'
-import { Canvas } from '../Canvas'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -23,9 +19,9 @@ import {
   IMG_PLACEHOLDER,
   SELECT_IMAGE_ERROR,
 } from '@components/utils/textVariables'
-import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
-type ProductPersonaliserOption = { label: string; value: string }
+import { translate } from '@components/services/localization'
+
 
 type ProductPersonaliserImage = {
   url: string
@@ -187,7 +183,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
           </div>
           <div className="px-4 m-auto xsm:p-3">
             <p className="mb-3 text-black xsm:text-sm xsm:flex dark:text-black">
-              <span className="text-2xl text-gray-500">Message</span> :{' '}
+              <span className="text-2xl text-gray-500">{translate('label.product.messageText')}</span> :{' '}
               <span className="text-2xl">{text}</span>
             </p>
           </div>
@@ -202,11 +198,11 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
               <div className="flex flex-col h-full mx-auto w-96">
                 {!selectedImage ? (
                   <p className="my-1 font-medium text-center text-black">
-                    Select the Product you want to personalise
+                    {translate('label.product.selectToPersonalizeText')}
                   </p>
                 ) : (
                   <p className="my-1 font-medium text-center text-black">
-                    Great selection !
+                   {translate('label.product.greatSelectionText')}
                   </p>
                 )}
                 <Swiper
@@ -288,7 +284,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
               )}
             >
               <span className="pl-2 text-xs font-light text-gray-500">
-                YOUR ENGRAVING
+                {translate('label.product.productPersonalisation.yourEngravingText')}
               </span>
               <input
                 className="block w-3/4 pb-2 m-auto font-mono text-sm text-center text-black border-none shadow-none outline-none focus:shadow-outline focus:outline-none"
@@ -300,7 +296,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
             </div>
             <div className="w-full max-w-full pr-6 ml-3">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-700">
-                {counter} / {maxTextLength} characters
+                {counter} / {maxTextLength} {translate('label.product.productPersonalisation.charactersText')}
               </span>
               <div
                 className={cn(
@@ -346,7 +342,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                   )}
                   onClick={removeCharacter}
                 >
-                  Backspace
+                  {translate('label.product.productPersonalisation.backspaceText')}
                 </button>
               </div>
               {showError && (

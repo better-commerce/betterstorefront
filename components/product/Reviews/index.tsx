@@ -1,6 +1,7 @@
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import { GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE } from '@components/utils/textVariables'
+import { translate } from '@components/services/localization'
 export default function Reviews({ data }: any) {
   return (
     <div className="px-4 py-0 mx-auto bg-white sm:py-0 sm:px-0 lg:px-0 sm:mt-2 md:w-4/5">
@@ -17,7 +18,7 @@ export default function Reviews({ data }: any) {
               {GENERAL_REVIEWS}{' '}
             </h2>
             <p className="mb-4 text-xs font-medium text-gray-400">
-              {data?.productReviews?.length} Customer Reviews
+              {data?.productReviews?.length} {translate('label.product.customerReviewsText')}
             </p>
           </div>
         </>

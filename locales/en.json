@@ -122,7 +122,7 @@
       "loseFreeDeliveryConfirmText": "Removing this item means you'll lose Free Delivery on this order. Are you sure you want to remove this item from your basket?",
       "incVATText": "inc. VAT",
       "excVATText": "ex. VAT",
-      "getHelpText": "Get help with this order",
+      "getHelpText": "Get help with this order"
     },
     "cancelOrder": {
       "cancelOrderText": "Cancel Order"
@@ -648,7 +648,7 @@
       "normalOpeningHoursHeadingText": "Normal Opening Hours",
       "serviceText": "This Information will help us to improve our service",
       "helpAssistanceText": "We will be glad to assist you. What seems to be bothering you?",
-      "availGiftText": "Use this voucher code in the Apply promotion section to avail this offer",
+      "availGiftText": "Use this voucher code in the Apply promotion section to avail this offer"
     },
     "numberText": {
       "one": "1"

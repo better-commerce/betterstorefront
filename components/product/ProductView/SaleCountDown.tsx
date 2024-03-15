@@ -1,10 +1,10 @@
+import { translate } from '@components/services/localization'
 import { useEffect, useState } from 'react'
 
 const SALE_COUNT_DOWN_ENABLE_BEFORE_DAYS = 500
 
 function ProductSaleCountdown({ startDate, endDate }: any) {
   const [shouldSaleCountdownEnable, setShouldSaleCountdownEnable] = useState(false)
-  const [initialRender, setInitialRender] = useState(false)
 
   const calculateTimeLeft = () => {
     const difference = +new Date(endDate) - +new Date()
@@ -48,12 +48,11 @@ function ProductSaleCountdown({ startDate, endDate }: any) {
   return (
     <div className="flex mt-1 fh-28">
       <h4 className="w-auto px-3 py-1 text-xs font-medium text-white bg-black sm:text-xs bg-brown text-md-scrn">
-        OFFER ENDS IN
-        <span className='pl-1'>
+       {translate('label.product.offerEndsInText')}        <span className='pl-1'>
           {timeLeft?.hours || timeLeft?.minutes || timeLeft?.seconds ? (
             <span>{timeLeft?.days}d{' '}:{' '}{timeLeft?.hours}h{' '}:{' '}{timeLeft?.minutes}m{' '}:{' '}{timeLeft?.seconds}s</span>
           ) : (
-            <span>Sale End 🔥</span>
+            <span>{translate('label.product.saleEndText')}</span>
           )}
         </span>
       </h4>
