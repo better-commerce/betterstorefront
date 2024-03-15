@@ -9,6 +9,7 @@ import Image from "next/image";
 import ButtonPrimary from "../shared/Button/ButtonPrimary";
 import Prev from "../shared/NextPrev/Prev";
 import Next from "../shared/NextPrev/Next";
+import { translate } from "@components/services/localization";
 
 export interface SectionHero2Props {
   className?: string;
@@ -148,7 +149,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
                 sizeClass="py-3 px-6 sm:py-5 sm:px-9"
                 href={item.btnLink}
               >
-                <span>Explore More</span>
+                <span>{translate('label.home.exploreMoreBtnText')}</span>
                 <span>
                   <svg className="w-5 h-5 ms-2.5" viewBox="0 0 24 24" fill="none">
                     <path
