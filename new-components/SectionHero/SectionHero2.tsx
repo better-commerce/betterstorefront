@@ -170,13 +170,10 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
               </ButtonPrimary>
             </div>
             <div className="top-0 bottom-0 w-full z-[9999] max-w-2xl mt-10 lg:mt-0 lg:absolute end-0 rtl:-end-28 xl:max-w-3xl 2xl:max-w-4xl">
-              <Image
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+              <img
                 className="object-contain object-right-bottom w-full h-full nc-SectionHero2Item__image"
                 src={item.url}
                 alt={item.name}
-                priority
               />
             </div>
           </div>

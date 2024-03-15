@@ -70,7 +70,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
       {!IS_INFINITE_SCROLL && (
         <>
           <div
-            className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 6 ? `lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4` : 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4'
+            className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 6 ? `lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3` : 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3'
               }`}
           >
             {!products?.results?.length &&
