@@ -152,6 +152,9 @@
       "@components/*": [
         "components/*"
       ],
+      "@new-components/*": [
+        "new-components/*"
+      ],
       "@utils/*": [
         "utils/*"
       ]

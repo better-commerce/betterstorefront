@@ -3,7 +3,7 @@ import Router from 'next/router'
 import dynamic from 'next/dynamic'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import rangeMap from '@lib/range-map'
-const ProductCard = dynamic(() => import('@components/new-components/ProductCard'))
+const ProductCard = dynamic(() => import('@new-components/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 const Pagination = dynamic(() => import('@components/product/Pagination'))
 interface Props {

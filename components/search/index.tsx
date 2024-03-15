@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
@@ -18,6 +17,7 @@ import ElasticSearchResult from './elastic/ElasticSearchResult'
 import { matchStrings } from '@framework/utils/parse-util'
 import { SearchProvider } from '@framework/utils/enums'
 import InstantSearchBar from './algolia/InstantSearchBar'
+import { pushSearchToNavigationStack } from '@framework/utils/app-util'
 
 export default function Search(props: any) {
   const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo } = props;
@@ -56,7 +56,6 @@ export default function Search(props: any) {
       }
     }
     if (inputValue.length > 2) fetchItems()
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue])
 
@@ -88,7 +87,7 @@ export default function Search(props: any) {
             <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
               <ChevronLeftIcon />
             </div>
-            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-3 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700" placeholder={BTN_SEARCH} onChange={(e: any) => setInputValue(e.target.value)} />
+            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-3 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={BTN_SEARCH} onChange={(e: any) => setInputValue(e.target.value)} />
             <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
               <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
             </div>
@@ -109,9 +108,16 @@ export default function Search(props: any) {
           {products?.map((product: any, idx: number) => {
             return (
               <div className="border-b border-r border-gray-200" key={idx} >
-                <div className="relative p-4 group sm:p-2">
+                <div className="relative p-4 group sm:p-2" onClick={closeWrapper}>
                   <Link passHref href={`/${product.slug}`}>
-                    <div className="relative overflow-hidden bg-gray-200 rounded-lg aspect-w-1 aspect-h-1 group-hover:opacity-75">
+                    <div className="relative overflow-hidden bg-gray-200 rounded-lg aspect-w-1 aspect-h-1 group-hover:opacity-75"
+                     onClick={() => {
+                      if(inputValue){
+                        const location = window.location
+                        pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
+                      }
+                     }}
+                    >
                       <div className="image-container">
                         <img src={ generateUri( product.image, 'h=200&fm=webp' ) || IMG_PLACEHOLDER } alt={product.name || "product"} width={20} height={20} style={css} sizes="50vw" className="object-cover object-center w-full h-48 sm:h-72 image" />
                       </div>

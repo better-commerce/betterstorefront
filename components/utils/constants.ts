@@ -51,6 +51,7 @@ export const CHECKOUT_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/com
 export const PAYMENTS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout/payment-methods`
 export const RETURNS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/return`
 export const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config`
+export const INFRA_PLUGIN_CATEGORY_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config/plugin/category`
 export const KEYWORDS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/keyword-redirections`
 export const LOQATE_ADDRESS = '/api/loqate'
 export const RETRIEVE_ADDRESS = '/api/retrieve-address'
@@ -414,8 +415,8 @@ export module Messages {
       'Your request could not be processed. Please try again after sometime.',
     USERNAME_ALREADY_EXISTS: 'User already exists',
     CUSTOMER_NOT_FOUND: 'Customer not found.',
-    GENERIC_ERROR:
-      'Your request could not be processed. Please try again after sometime.',
+    GENERIC_ERROR: 'Your request could not be processed. Please try again after sometime.',
+    DUPLICATE_ADDRESS : 'Address already exists',
     CART_EMPTY: 'Your cart is empty',
     CART_ITEM_QTY_LIMIT_EXCEEDED:
       'Max allowed quantity is {maxBasketItemsCount}.',
@@ -508,6 +509,10 @@ export enum AddressPageAction {
 }
 export const NEXT_PINCODE_LOOKUP = '/api/checkout/pincode-lookup'
 export const OTP_TIMER = 45
+
+export enum PluginCategory {
+  SOCIAL_LOGIN = 'SocialLogin',
+}
 
 export enum SocialMediaType {
   GOOGLE = 'google',

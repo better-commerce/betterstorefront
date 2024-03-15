@@ -1,6 +1,6 @@
 import PromotionInput from '@components/cart/PromotionInput'
 import { EmptyString } from '@components/utils/constants'
-import { GENERAL_SHIPPING } from '@components/utils/textVariables'
+import { GENERAL_DISCOUNT, GENERAL_SHIPPING } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 
 const Summary = ({
@@ -89,6 +89,21 @@ const Summary = ({
               {basket?.subTotal?.formatted?.withoutTax}
             </dd>
           </div>
+          {basket?.promotionsApplied?.length > 0 && (
+            <div className="flex items-center justify-between">
+              <dt className="text-sm text-gray-900">
+                <span>{GENERAL_DISCOUNT}</span>
+              </dt>
+              <dd className="text-red-500 text-md">
+                <p>
+                  {'-'}
+                  {isIncludeVAT
+                    ? basket?.discount?.formatted?.withTax
+                    : basket?.discount?.formatted?.withoutTax}
+                </p>
+              </dd>
+            </div>
+          )}
           <div className="flex items-center justify-between pt-2 sm:pt-1">
             <dt className="flex items-center text-black font-14">
               <span>Total VAT</span>
@@ -98,7 +113,7 @@ const Summary = ({
             </dd>
           </div>
 
-          {basket?.deliveryPlans?.length > 0 && (
+          {
             <div className="flex items-center justify-between pt-2 sm:pt-1">
               <dt className="flex items-center text-black font-14">
                 <span>{GENERAL_SHIPPING}</span>
@@ -114,7 +129,7 @@ const Summary = ({
                     EmptyString}
               </dd>
             </div>
-          )}
+          }
 
           <div
             className={`flex items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`}

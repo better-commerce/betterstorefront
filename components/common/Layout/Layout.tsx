@@ -13,9 +13,10 @@ import { GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { WishlistSidebarView } from '@components/wishlist'
 import { Sidebar, Modal, LoadingDots } from '@components/ui'
+import LoginSideBarView from '@components/account/Login/LoginSideBarView'
 const BulkAddSidebarView = dynamic(() => import('@components/bulk-add/BulkAddSidebarView'))
 const LoginSidebarView = dynamic(() => import('@components/account/Login/LoginSideBarView'))
-const MainNav2Logged = dynamic(() => import('@components/new-components/Header/MainNav2Logged'))
+const MainNav2Logged = dynamic(() => import('@new-components/Header/MainNav2Logged'))
 const ShippingView = dynamic(() => import('@components/checkout-old/ShippingView'))
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
 const PaymentMethodView = dynamic(() => import('@components/checkout-old/PaymentMethodView'))
@@ -50,6 +51,7 @@ interface Props {
   isLocationLoaded: boolean
   config: any
   keywords: []
+  pluginConfig: []
 }
 
 const ModalView: FC<
@@ -68,11 +70,11 @@ const ModalUI: FC<React.PropsWithChildren<unknown>> = () => {
   return null
 }
 
-const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSidebar(): any } & IExtraProps>> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount, config }) => {
+const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSidebar(): any } & IExtraProps>> = ({ sidebarView, closeSidebar, deviceInfo, maxBasketItemsCount, config, pluginConfig = [] }) => {
   return (
     <Sidebar onClose={closeSidebar} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} >
       {sidebarView === 'CART_VIEW' && (<CartSidebarView deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />)}
-      {sidebarView === 'LOGIN_SIDEBAR_VIEW' && <LoginSidebarView />}
+      {sidebarView === 'LOGIN_SIDEBAR_VIEW' && <LoginSideBarView pluginConfig={pluginConfig} />}
       {sidebarView === 'BULK_ADD_VIEW' && <BulkAddSidebarView />}
       {sidebarView === 'WISHLIST_VIEW' && <WishlistSidebarView />}
       {sidebarView === 'CHECKOUT_VIEW' && <CheckoutSidebarView />}
@@ -82,10 +84,10 @@ const SidebarView: FC<React.PropsWithChildren<{ sidebarView: string; closeSideba
   )
 }
 
-const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
+const SidebarUI: FC<React.PropsWithChildren<unknown & IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, pluginConfig }: any) => {
   const { displaySidebar, closeSidebar, sidebarView } = useUI()
   return displaySidebar ? (
-    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />
+    <SidebarView sidebarView={sidebarView} closeSidebar={closeSidebar} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} pluginConfig={pluginConfig} />
   ) : null
 }
 
@@ -96,6 +98,7 @@ export interface IExtraProps {
   onIncludeVATChanged?: any
   keywords?: any
   config?: any
+  pluginConfig?: any
 }
 
 const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav }) => {
@@ -155,7 +158,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
-        <div className={`text-base sm:pt-20 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
+        <div className={`text-base sm:pt-24 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
           <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} />
           {displayAlert && <AlertRibbon />}
           {children}

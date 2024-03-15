@@ -1,5 +1,4 @@
 import {
-  EmptyString,
   NEXT_GET_BASKET_PROMOS,
   NEXT_REFERRAL_ADD_USER_REFEREE,
   NEXT_REFERRAL_BY_SLUG,
@@ -9,12 +8,9 @@ import {
   BEEN_REFERRED_BY_A_FRIEND,
   CLOSE_PANEL,
   FIND_THEM,
-  GENERAL_SHIPPING,
-  IMG_PLACEHOLDER,
   USER_NOT_FOUND,
 } from '@components/utils/textVariables'
-import { vatIncluded } from '@framework/utils/app-util'
-import { formatFromToDates, tryParseJson } from '@framework/utils/parse-util'
+import { formatFromToDates } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import {
   ChevronDownIcon,
@@ -28,7 +24,6 @@ import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import Summary from '@components/checkout/Summary'
-import { sortBy } from 'lodash'
 import BasketItems from '@components/checkout/BasketItems'
 interface BasketItem {
   id: string
@@ -39,7 +34,7 @@ interface BasketItem {
 
 const BasketDetails = ({ basket, deviceInfo }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
-  const { user, isGuestUser, setAlert } = useUI()
+  const { isGuestUser} = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
   const [referralModalShow, setReferralModalShow] = useState(false)
   const [referralInfo, setReferralInfo] = useState<any>(null)
@@ -48,13 +43,11 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
   const [refCodeInput, setRefCodeInput] = useState('')
   const [error, setError] = useState('')
   const [referralEmail, setReferralEmail] = useState<any>('')
-  const [userCartItems, setUserCartItems] = useState<any>(null)
   const [groupedPromotions, setGroupedPromotions] = useState<any>({
     appliedPromos: null,
     autoAppliedPromos: null,
   })
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
-  const isIncludeVAT = vatIncluded()
   useEffect(() => {
     const fetchReferralPromotion = async () => {
       let { data: referralPromotions } = await axios.post(NEXT_REFERRAL_INFO)

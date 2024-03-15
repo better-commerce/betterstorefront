@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { FC } from 'react'
 import { useUI } from '@components/ui/context'
 import { LoadingDots } from '@components/ui'
-import BagIcon from '@components/new-components/BagIcon'
+import BagIcon from '@new-components/BagIcon'
 interface Props {
   className?: string
   title?: string

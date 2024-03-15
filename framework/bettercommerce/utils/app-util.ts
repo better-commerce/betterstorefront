@@ -16,6 +16,7 @@ import {
   NEXT_PINCODE_LOOKUP,
   BETTERCOMMERCE_DEFAULT_CURRENCY,
   BETTERCOMMERCE_CURRENCY,
+  EmptyObject,
 } from '@components/utils/constants'
 import { stringToBoolean, tryParseJson, matchStrings } from './parse-util'
 import { ILogRequestParams } from '@framework/api/operations/log-payment'
@@ -643,4 +644,115 @@ export const saveUserToken = (userToken: any) => {
       expires: getExpiry(getMinutesInDays(365)),
     })
   }
+}
+
+export const getBrowserSessionId = (originalDocument?: any) => {
+  let sessionId = /SESS\w*ID=([^;]+)/i.test(document.cookie) ? RegExp.$1 : ""
+
+  if (originalDocument) {
+    sessionId = /SESS\w*ID=([^;]+)/i.test(originalDocument.cookie) ? RegExp.$1 : ""
+  }
+  return sessionId
+}
+
+export const getNavigationStack = (sessionId: string) => {
+  const navigationStack: any = getItem(LocalStorage.Key.NAVIGATION_STACK) || EmptyObject
+  if (sessionId && navigationStack[sessionId]) {
+    const navStack = navigationStack[sessionId]
+    return navStack || []
+  }
+  return new Array<any>()
+}
+
+export const canGoBack = () => {
+  const sessionId = getBrowserSessionId()
+  const navStack: any = getNavigationStack(sessionId)
+  if (navStack?.length) {
+    return (navStack?.length > 1)
+  }
+  return false
+}
+
+export const ensureNavigationStack = (url: string, origin: string) => {
+  const sessionId = getBrowserSessionId()
+  const navStack: Array<string> = getNavigationStack(sessionId)
+
+  if (navStack?.length == 0 || (navStack?.length > 0 && new URL(navStack[navStack?.length - 1], origin).pathname.indexOf(url) === -1 /*!matchStrings(navStack[navStack?.length - 1], url, true)*/)) {
+    navStack.push(url)
+    setItem(LocalStorage.Key.NAVIGATION_STACK, { [`${sessionId}`]: navStack })
+  }
+}
+
+export const pushSearchToNavigationStack = (url: string, searchTerm: string) => {
+  const sessionId = getBrowserSessionId()
+  const navStack = getNavigationStack(sessionId)
+  if (navStack) {
+    navStack.push(!url?.includes('?') ? `${url}?searchTerm=${encodeURIComponent(searchTerm)}` : `${url}&searchTerm=${encodeURIComponent(searchTerm)}`)
+    setItem(LocalStorage.Key.NAVIGATION_STACK, { [`${sessionId}`]: navStack })
+  }
+  /*if (navStack?.length > 0 && matchStrings(navStack[navStack?.length - 1], url, true)) {
+    navStack[navStack?.length - 1] = !url?.includes('?') ? `${url}?searchTerm=${encodeURIComponent(searchTerm)}` : `${url}&searchTerm=${encodeURIComponent(searchTerm)}`
+    setItem(LocalStorage.Key.NAVIGATION_STACK, { [`${sessionId}`]: navStack })
+  }*/
+}
+
+export const getNavigationStackSearchTerm = (window: any) => {
+  const sessionId = getBrowserSessionId()
+  const navStack = getNavigationStack(sessionId)
+  if (navStack?.length) {
+    const lastNav = navStack[navStack?.length - 1]
+    const navUrl = new URL(window.location.pathname, window?.location?.origin)
+    if (lastNav.indexOf(navUrl.pathname) !== -1) {
+      const searchTermUrl = new URL(lastNav, window?.location?.origin)
+      const searchParams = searchTermUrl.searchParams
+      if (searchParams.size) {
+        return searchParams.get('searchTerm') || EmptyString
+      }
+    }
+  }
+  return EmptyString
+}
+
+export const popNavigationStack = () => {
+  const sessionId = getBrowserSessionId()
+  const navStack = getNavigationStack(sessionId)
+  if (navStack) {
+    navStack.pop()
+    setItem(LocalStorage.Key.NAVIGATION_STACK, { [`${sessionId}`]: navStack })
+  }
+}
+
+export const pushNavigationStack = (url: string, window: any) => {
+  const sessionId = getBrowserSessionId()
+  const navStack = getNavigationStack(sessionId)
+  if (navStack?.length === 0) {
+    navStack.push(url)
+  } else {
+    const lastNav = navStack[navStack?.length - 1]
+    const navUrl = new URL(url, window?.location?.origin)
+    if (lastNav.indexOf(navUrl.pathname) === -1 && !matchStrings(lastNav, url, true)) {
+      navStack.push(url)
+      setItem(LocalStorage.Key.NAVIGATION_STACK, { [`${sessionId}`]: navStack })
+    }
+  }
+  /*if ((navStack?.length === 0) || (navStack?.length > 0 && !matchStrings(navStack[navStack?.length - 1], url, true))) {
+    navStack.push(url)
+    setItem(LocalStorage.Key.NAVIGATION_STACK, { [`${sessionId}`]: navStack })
+  }*/
+}
+
+export const getSocialLoginSettings = (pluginSettings: Array<any>): Array<any> => {
+  const socialLoginSettings = pluginSettings?.filter((x: any) => {
+    if (x?.categoryCode === 'SocialLogin') {
+      const settings: any = tryParseJson(x?.settings)
+      return settings?.IsEnabled
+    }
+    return false
+  })
+  return socialLoginSettings
+}
+
+export const getEnabledSocialLogins = (pluginSettings: Array<any>): string => {
+  const socialLoginSettings = getSocialLoginSettings(pluginSettings)
+  return socialLoginSettings?.map((x: any) => x?.name?.toLowerCase())?.join(',') || EmptyString
 }
