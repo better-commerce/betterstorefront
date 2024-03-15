@@ -77,14 +77,14 @@ const BasketItems = ({ userCartItems }: any) => {
                           {translate('label.orderSummary.freeText')}
                         </span>
                         <span className="flex flex-col font-semibold text-black">
-                          {translate('common.product.qtyText')}{' '}{product?.qty}
+                        {translate('label.product.qtyText')} {product?.qty}
                         </span>
                       </>
                     )}
                   </div>
                   <div className="justify-end">
                     <span className="flex flex-col font-semibold text-black">
-                    {translate('common.product.qtyText')}{' '}{product?.qty}
+                    {translate('label.product.qtyText')} {product?.qty}
                     </span>
                   </div>
                 </div>

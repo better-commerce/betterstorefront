@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import axios from 'axios'
 import { generateUri } from '@commerce/utils/uri-util'
-import { LoadingDots, Quantity, useUI } from '@components/ui'
+import { LoadingDots, useUI } from '@components/ui'
 import { HeartIcon, TrashIcon } from '@heroicons/react/24/outline'
 import {
   EmptyGuid,
@@ -10,12 +10,7 @@ import {
   NEXT_CREATE_WISHLIST,
   NEXT_GET_ADDON_PRODUCTS,
 } from '@components/utils/constants'
-import {
-  GENERAL_PRICE_LABEL_RRP,
-  IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
-import Image from 'next/image'
 import Link from 'next/link'
 import CartAddonsSidebar from './Addons/CartAddonsSidebar'
 import { deliveryDateFormat, matchStrings, tryParseJson} from '@framework/utils/parse-util'

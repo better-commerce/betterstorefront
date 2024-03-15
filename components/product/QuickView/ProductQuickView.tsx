@@ -19,6 +19,7 @@ import { useUI } from '@components/ui'
 import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded } from '@framework/utils/app-util'
+import { translate } from '@components/services/localization'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -619,7 +620,7 @@ export default function ProductQuickView({
                     <div className="flex-1 px-0 overflow-y-auto">
                       <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                          Quick View
+                          {translate('label.product.quickViewText')}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
                           <button

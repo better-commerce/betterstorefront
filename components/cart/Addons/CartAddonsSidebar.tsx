@@ -1,4 +1,3 @@
-import { CLOSE_PANEL } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
@@ -57,7 +56,7 @@ export default function CartAddonsSidebar({
                           className="p-2 -m-2 text-black border border-black rounded hover:text-orange-600 hover:border-orange-600 outline-none-s"
                           onClick={() => closeModal()}
                         >
-                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                       </div>

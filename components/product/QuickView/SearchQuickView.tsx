@@ -21,6 +21,7 @@ import ImageGallery from 'react-image-gallery'
 import { matchStrings } from '@framework/utils/parse-util'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import { isMobile } from 'react-device-detect'
+import { translate } from '@components/services/localization'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -641,7 +642,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                         </button>
                         <div className="grid grid-cols-1 sm:gap-4 sm:grid-cols-12">
                           {isMobile ? <div className='flex flex-col justify-center w-full pb-10 text-center ipad-display-none'>
-                            <h4 className='font-bold text-black font-24'>Quick Shop</h4>
+                            <h4 className='font-bold text-black font-24'>{translate('label.product.quickShopText')}</h4>
                           </div> :
                             <div className="sm:col-span-6 md:col-span-6 lg:col-span-6">
                               <div className="flex flex-col px-0 sm:px-0 sm:pb-0">
@@ -740,7 +741,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                                       legacyBehavior
                                     >
                                       <a className="text-sm font-semibold text-black underline">
-                                        View Product
+                                       {translate('label.product.viewProductText')}
                                       </a>
                                     </Link> :
                                     <>
@@ -756,7 +757,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                                         legacyBehavior
                                       >
                                         <a className="text-sm font-semibold text-black underline">
-                                          View more
+                                        {translate('label.product.viewMoreText')}
                                         </a>
                                       </Link>
                                     </>
