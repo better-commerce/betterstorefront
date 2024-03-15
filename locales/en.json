@@ -535,6 +535,9 @@
     },
     "promotion": {
       "applyPromotionText": "Apply promotion"
+    },
+    "home": {
+      "exploreMoreBtnText": "Explore More"
     }
   },
   "message": {
