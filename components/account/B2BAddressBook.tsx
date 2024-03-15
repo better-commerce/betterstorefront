@@ -16,6 +16,7 @@ import { matchStrings } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import Spinner from '@components/ui/Spinner'
 import { AlertType } from '@framework/utils/enums'
+import { useTranslation } from '@commerce/utils/use-translation'
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -52,6 +53,7 @@ export function asyncHandler() {
 }
 
 export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
+  const translate = useTranslation()
   const [data, setData] = useState([])
   const [isNewFormMode, setNewFormMode] = useState(false)
   const [title, setTitle] = useState(ADDRESS_BOOK_TITLE)
@@ -510,7 +512,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
                         {ADD_ADDRESS}{' '}
                       </span>
                       <span className="inline-block text-sm sm:hidden">
-                        Add New Address{' '}
+                        {translate('label.addressBook.addNewAddress')} {' '}
                       </span>
                       <span className="hidden ml-2 leading-none align-middle sm:inline-block">
                         <i className="sprite-icon icon-location-orange"></i>

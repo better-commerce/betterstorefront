@@ -6,6 +6,8 @@ import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { FC, Fragment } from "react";
 import { headerCurrency } from "./CurrencyDropdown";
 import locales from "@framework/locales.json"
+import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 interface LangDropdownProps {
   panelClassName?: string;
@@ -16,23 +18,32 @@ function classNames(...classes: any) {
 }
 
 const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
+  const translate = useTranslation()
   const renderLang = (close: () => void) => {
+    const { i18n } = useTranslation()
     return (
       <div className="grid gap-8 lg:grid-cols-2">
         {locales?.localizations?.map((item, index) => (
-          <a
-            key={index}
-            href="#"
-            onClick={() => close()}
-            className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${item?.isActive ? "bg-gray-100 dark:bg-gray-700" : "opacity-80"}`}
-          >
-            <div className="">
-              <p className="text-sm font-medium ">{item?.countryName}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {item?.languageName}
-              </p>
-            </div>
-          </a>
+          <Link legacyBehavior href="/" locale={item?.culture}>
+            <a
+              key={index}
+              href="#"
+              onClick={() => {
+                //if (item?.isActive) {
+                //i18n.changeLanguage(item?.culture);
+                //}
+                close();
+              }}
+              className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${item?.isActive ? "bg-gray-100 dark:bg-gray-700" : "opacity-80"}`}
+            >
+              <div className="">
+                <p className="text-sm font-medium ">{item?.countryName}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {item?.languageName}
+                </p>
+              </div>
+            </a>
+          </Link>
         ))}
       </div>
     );
@@ -70,7 +81,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
              group h-10 sm:h-12 px-3 py-1.5 inline-flex items-center text-sm text-gray-800 dark:text-neutral-200 font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
             >
               <GlobeAltIcon className="w-[18px] h-[18px] opacity-80" />
-              <span className="ml-2">Language</span>
+              <span className="ml-2">{translate('common.label.languageText')}</span>
               <ChevronDownIcon
                 className={`${open ? "-rotate-180" : "text-opacity-70"}
                   ml-1 h-4 w-4  group-hover:text-opacity-80 transition ease-in-out duration-150`}

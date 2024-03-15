@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { useTranslation } from '@commerce/utils/use-translation'
 interface Props {
   items: []
   currentProduct: any
 }
 
 export default function BreadCrumbs({ items = [], currentProduct }: Props) {
+  const translate = useTranslation()
   const flattenBreadcrumbs = (breadcrumbs: any) => {
     let flattenedItems: [] = []
     const flatten = (items: any, key: string) => {
@@ -37,7 +39,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
     <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
       <li className='flex items-center text-10-mob sm:text-sm'>
         <Link href="/" passHref>
-          <span className="font-light hover:text-gray-900 dark:text-black text-slate-500" > Home </span>
+          <span className="font-light hover:text-gray-900 dark:text-black text-slate-500" > {translate('label.ui.homeText')} </span>
         </Link>
       </li>
       <li className='flex items-center text-10-mob sm:text-sm'>

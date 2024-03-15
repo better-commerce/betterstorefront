@@ -21,12 +21,14 @@ import {
   GENERAL_CREATE_RETURN,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 import ReturnModal from '@components/returns/Modal'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
 
 export default function MyOrders({ deviceInfo }: any) {
+  const translate = useTranslation()
   const [data, setData] = useState([])
   const [productIdsInReturn, setProductIdsInReturn] = useState([''])
   const [returnData, setReturnData] = useState({ product: {}, order: {} })
@@ -177,11 +179,11 @@ export default function MyOrders({ deviceInfo }: any) {
                         </dd>
                       </div>
                       <div className="flex justify-between md:block">
-                        <dt className="font-medium text-gray-900">Status</dt>
+                        <dt className="font-medium text-gray-900">{translate('label.orderDetails.statusText')}</dt>
                         <dd className="md:mt-1">{order.orderStatus}</dd>
                       </div>
                       <div className="flex justify-between md:block">
-                        <dt className="font-medium text-gray-900">Tracking</dt>
+                        <dt className="font-medium text-gray-900">{translate('label.orderDetails.trackingText')}</dt>
                         {/* <dd className="md:mt-1">{order.orderStatus}</dd> */}
                         <a
                           href={order.trackingLink}
@@ -244,8 +246,7 @@ export default function MyOrders({ deviceInfo }: any) {
                                       type="button"
                                       className="text-indigo-600 hover:text-indigo-500"
                                     >
-                                      Return is created
-                                    </button>
+                                      {translate('label.orderDetails.returnCreatedText')} </button>
                                   </div>
                                 ) : (
                                   <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
