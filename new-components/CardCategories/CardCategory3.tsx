@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import { CATS_DISCOVER } from "./data";
 import ButtonSecondary from "../shared/Button/ButtonSecondary";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface CardCategory3Props {
   className?: string;
@@ -15,6 +16,7 @@ export interface CardCategory3Props {
 }
 
 const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name, desc, color, link }) => {
+  const translate = useTranslation()
   return (
     <Link
       href={link}
@@ -54,8 +56,7 @@ const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name,
                 className="nc-shadow-lg"
                 href={"/"}
               >
-                Show me all
-              </ButtonSecondary>
+                {translate('common.label.showMeAllText')} </ButtonSecondary>
             </div>
           </div>
         </div>

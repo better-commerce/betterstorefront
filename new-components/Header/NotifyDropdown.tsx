@@ -1,6 +1,7 @@
 import { Popover, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import Avatar from "../shared/Avatar/Avatar";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 const solutions = [
   {
@@ -24,6 +25,7 @@ const solutions = [
 ];
 
 export default function NotifyDropdown() {
+  const translate = useTranslation()
   return (
     <div className="">
       <Popover className="relative">
@@ -70,7 +72,7 @@ export default function NotifyDropdown() {
               <Popover.Panel className="absolute z-10 w-screen max-w-xs px-4 mt-3 sm:max-w-sm -right-28 sm:right-0 sm:px-0">
                 <div className="overflow-hidden shadow-lg rounded-2xl ring-1 ring-black ring-opacity-5">
                   <div className="relative grid gap-8 bg-white dark:bg-neutral-800 p-7">
-                    <h3 className="text-xl font-semibold">Notifications</h3>
+                    <h3 className="text-xl font-semibold">{translate('common.label.notificationsText')}</h3>
                     {solutions.map((item, index) => (
                       <a
                         key={index}

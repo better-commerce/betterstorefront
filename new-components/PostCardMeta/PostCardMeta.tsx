@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { _getPersonNameRd } from "@components/common/Header/fakeData";
 import Link from "next/link";
 import Avatar from "../shared/Avatar/Avatar";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface PostCardMetaProps {
   className?: string;
@@ -12,6 +13,7 @@ const PostCardMeta: FC<PostCardMetaProps> = ({
   className = "leading-none",
   hiddenAvatar = false,
 }) => {
+  const translate = useTranslation()
   return (
     <div
       className={`nc-PostCardMeta inline-flex items-center fledx-wrap text-neutral-800 dark:text-neutral-200 text-sm ${className}`}
@@ -33,7 +35,7 @@ const PostCardMeta: FC<PostCardMetaProps> = ({
           ·
         </span>
         <span className="font-normal text-neutral-500 dark:text-neutral-400 line-clamp-1">
-          May 20, 2021
+          {translate('common.label.may20Text')}
         </span>
       </>
     </div>
