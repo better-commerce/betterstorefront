@@ -447,10 +447,7 @@ function CategoryLandingPage({
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{category?.name || 'Category'}</title>
         <meta name="title" content={category?.name || 'Category'} />
@@ -458,11 +455,7 @@ function CategoryLandingPage({
         <meta name="keywords" content={category?.metaKeywords} />
         <meta property="og:image" content="" />
         <meta property="og:title" content={category?.name} key="ogtitle" />
-        <meta
-          property="og:description"
-          content={category?.metaDescription}
-          key="ogdesc"
-        />
+        <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
       <section className="main-section">
         <div className="container mx-auto mt-4 bg-transparent lg:pt-6">

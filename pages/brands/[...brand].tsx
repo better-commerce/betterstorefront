@@ -471,7 +471,7 @@ function BrandDetailPage({
             </div>
           </div>
 
-          <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
+          <div className="container w-full pb-20 mx-auto">
             <div className="flex justify-between pb-10 mt-4">
               <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {FEATURES_HEADING} {` `} {brandDetails.name} </p>
               {!isOnlyMobile && (
@@ -500,22 +500,28 @@ function BrandDetailPage({
         </>
       ) : (
         <div className="container pt-5 pb-0 mx-auto mt-4 bg-transparent sm:mt-6">
-          <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
+          <div className="max-w-screen-sm">
             <Link href="/brands" passHref>
-              <span className="flex items-end upper case">Brands</span>
+              <span className="flex items-end upper case font-12">Brands</span>
             </Link>
-            <div className="">
-              <h1 className="inline-block text-black">{brandDetails?.name}</h1>
-              <span className="inline-block ml-2 text-sm font-semibold text-black"> Showing {data?.products?.total} {RESULTS} </span>
+            <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
+              {brandDetails?.name}
+            </h1>
+            {sanitizedDescription &&
+              <div className='flex justify-between w-full align-bottom'>
+                <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" />
+              </div>
+            }
+          </div>
+          <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> Showing {data?.products?.total} {RESULTS}</span>
+            <div className="flex justify-end align-bottom">
+              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
-            {sanitizedDescription && (
-              <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} className="mt-2 text-black sm:mt-5" />
-            )}
           </div>
-          <div className="flex justify-end w-full col-span-12">
-            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-          </div>
-          <div className="flex justify-end w-full">
+          <hr className='border-slate-200 dark:border-slate-700' />
+
+          <div className="flex justify-end w-full pt-6">
             <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} />
           </div>
           <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
@@ -534,7 +540,7 @@ export async function getStaticProps({
 }: GetStaticPropsContext<{ brand: string }>) {
   const slug = `brands/${params!?.brand[0]}`
   const cachedDataUID = {
-    infraUID : Redis.Key.INFRA_CONFIG,
+    infraUID: Redis.Key.INFRA_CONFIG,
     brandSlugUID: Redis.Key.Brands.Slug + '_' + slug,
     collectionUID: Redis.Key.Brands.Collection + '_' + slug
   }
@@ -551,13 +557,13 @@ export async function getStaticProps({
     brandBySlugUIDData = await getBrandBySlug(slug, {})
     await setData([{ key: cachedDataUID.brandSlugUID, value: brandBySlugUIDData }])
   }
-  
-  if(!infraUIDData) {
+
+  if (!infraUIDData) {
     infraUIDData = await commerce.getInfra()
     await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
   }
 
-    if (brandBySlugUIDData?.status === "NotFound") {
+  if (brandBySlugUIDData?.status === "NotFound") {
     return notFoundRedirect()
   }
 
@@ -584,7 +590,7 @@ export async function getStaticProps({
                 collections.imageBannerCollection = await getCollectionById(
                   widget.recordId
                 )
-              } catch (error: any) {}
+              } catch (error: any) { }
               resolve()
             })
           )
@@ -597,7 +603,7 @@ export async function getStaticProps({
               try {
                 const res = await getCollectionById(widget.recordId)
                 collections.imageCategoryCollection = res?.images
-              } catch (error: any) {}
+              } catch (error: any) { }
               resolve()
             })
           )
@@ -611,7 +617,7 @@ export async function getStaticProps({
                 collections.imgFeatureCollection = await getCollectionById(
                   widget.recordId
                 )
-              } catch (error: any) {}
+              } catch (error: any) { }
               resolve()
             })
           )
@@ -624,7 +630,7 @@ export async function getStaticProps({
               try {
                 const res = await getCollectionById(widget.recordId)
                 collections.offerBannerCollection = res.images
-              } catch (error: any) {}
+              } catch (error: any) { }
               resolve()
             })
           )
@@ -637,7 +643,7 @@ export async function getStaticProps({
               try {
                 const res = await getCollectionById(widget.recordId)
                 collections.productCollection = res.products.results
-              } catch (error: any) {}
+              } catch (error: any) { }
               resolve()
             })
           )
