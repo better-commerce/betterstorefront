@@ -1,5 +1,5 @@
 .root {
-  @apply inline-flex items-center justify-center px-10 py-3 text-sm font-semibold leading-6 tracking-wide text-center uppercase transition duration-150 ease-in-out border border-transparent rounded-md shadow-sm cursor-pointer bg-accent-9 text-accent-0;
+  @apply inline-flex items-center justify-center px-10 py-3 text-sm font-semibold leading-6 tracking-wide text-center uppercase transition duration-150 ease-in-out border border-transparent shadow-sm cursor-pointer rounded-2xl bg-accent-9 text-accent-0;
   max-height: 64px;
 }
 
