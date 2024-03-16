@@ -13,9 +13,6 @@ import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import SwiperCore, { Navigation } from 'swiper'
 import {
-  GENERAL_ENGRAVING_PERSONALIZE_BOTTLE,
-  GENERAL_PERSONALISATION,
-  GENERAL_PERSONALISATION_READONLY,
   IMG_PLACEHOLDER,
   SELECT_IMAGE_ERROR,
 } from '@components/utils/textVariables'
@@ -266,15 +263,15 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
           <div>
             {readOnly ? (
               <p className="flex flex-col mx-auto mt-6 text-4xl font-bold text-center text-black">
-                {GENERAL_PERSONALISATION_READONLY}
+                {translate('label.product.productPersonalisation.personaliseProductReadOnlyText')}
               </p>
             ) : (
               <div className="flex flex-col py-0 mx-auto">
                 <p className="mx-auto text-4xl font-bold text-center text-black">
-                  {GENERAL_PERSONALISATION}
+                  {translate('label.product.productPersonalisation.personaliseYourProductText')} 
                 </p>
                 <span className="w-3/4 py-2 m-auto text-center text-gray-500 text-md">
-                  {GENERAL_ENGRAVING_PERSONALIZE_BOTTLE} {engravingPrice}{' '}
+                {translate('label.product.productPersonalisation.engravingPersonalizeBottleText')}  {engravingPrice}{' '}
                 </span>
               </div>
             )}

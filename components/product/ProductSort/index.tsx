@@ -3,7 +3,6 @@ import { Fragment, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/router'
-import { GENERAL_SORT } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { getItem } from '@components/utils/localStorage'
 import { useUI } from '@components/ui'
@@ -60,7 +59,7 @@ export default function ProductSort({
       </div>
       <Menu as="div" className="relative flex pr-4 sm:pr-0">
         <Menu.Button className="inline-flex justify-center font-semibold text-black text-md group hover:text-gray-900">
-          {GENERAL_SORT}{' '}
+           {translate('label.filters.sortByText')}{' '}
           <ChevronDownIcon
             className="flex-shrink-0 w-5 h-5 ml-1 -mr-1 text-gray-400 group-hover:text-gray-500"
             aria-hidden="true"

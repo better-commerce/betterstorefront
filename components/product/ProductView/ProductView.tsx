@@ -26,7 +26,7 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 // Other Imports
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, PRICEMATCH_ADDITIONAL_DETAILS, PRODUCT_AVAILABILITY, PRODUCT_INFORMATION, PRODUCT_IN_STOCK, PRODUCT_OUT_OF_STOCK, PRODUCT_PERSONALIZATION_TITLE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
+import { GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
@@ -348,7 +348,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       shortMessage: '',
     }
     if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) {
-      buttonConfig.title = BTN_NOTIFY_ME
+      buttonConfig.title = translate('label.ui.notifyMeText')
       buttonConfig.action = async () => handleNotification()
       buttonConfig.type = 'button'
     } else if (
@@ -360,7 +360,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         (!product?.flags?.sellWithoutInventory ||
           selectedAttrData?.sellWithoutInventory)
       ) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = translate('label.ui.preOrderText')
         buttonConfig.shortMessage = product?.preOrder?.shortMessage
         return buttonConfig
       } else if (
@@ -459,7 +459,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.ui.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
@@ -831,7 +831,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 ) : (
                   <HeartIcon className="flex-shrink-0 w-6 h-6" />
                 )}
-                <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
               </button>
             </div>
           )}
@@ -852,7 +852,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
-                  <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                  <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
                 </button>
               </div>
             </>

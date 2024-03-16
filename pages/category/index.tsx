@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import NextHead from 'next/head'
 import { Layout } from '@components/common'
-import { IMG_PLACEHOLDER, SHOP_BY_CATEGORY } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
@@ -46,7 +46,7 @@ export default function CategoryList(props: any) {
       <main className="w-full px-4 mx-auto sm:px-6 container lg:px-6 2xl:px-0">
         <section aria-labelledby="products-heading ">
           <h1 className="mt-4 tracking-tight pt-5 dark:text-gray-700">
-            {SHOP_BY_CATEGORY}
+            {translate('label.category.shopByCategoryText')}
           </h1>
           {props?.data.length > 0 && (
             <div className="flow-root mt-1 sm:mt-0 ">

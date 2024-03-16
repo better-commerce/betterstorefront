@@ -1,6 +1,5 @@
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
-import { GENERAL_REVIEWS, GENERAL_REVIEW_OUT_OF_FIVE } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 export default function Reviews({ data }: any) {
   const translate = useTranslation()
@@ -16,7 +15,7 @@ export default function Reviews({ data }: any) {
               </span>
             </h3>
             <h2 className="mb-1 text-2xl font-semibold text-black">
-              {GENERAL_REVIEWS}{' '}
+              {translate('label.product.ratingsAndReviewsText')}{' '}
             </h2>
             <p className="mb-4 text-xs font-medium text-gray-400">
               {data?.productReviews?.length} {translate('label.product.customerReviewsText')}
@@ -41,7 +40,7 @@ export default function Reviews({ data }: any) {
               />
             ))}
             <span className="pl-1 text-sm font-bold">({review.rating})</span>
-            <span className="sr-only"> {GENERAL_REVIEW_OUT_OF_FIVE}</span>
+            <span className="sr-only">{translate('label.product.outOf5starsText')}</span>
           </div>
           <div className="flex-1">
             <h4 className="mt-1 font-semibold text-black text-md sm:mt-2">

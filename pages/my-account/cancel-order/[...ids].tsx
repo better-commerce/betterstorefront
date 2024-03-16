@@ -18,13 +18,7 @@ import {
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER,
 } from '@components/utils/constants'
-import {
-  CANCEL_ORDER,
-  IMG_PLACEHOLDER,
-  ORDER_CANCELLED,
-  PROCEED_TO_CANCEL,
-  REASON_CANCEL_HEADING,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
@@ -93,7 +87,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
       const response = await cancelOrder({ id: orderDetails?.order?.id })
       if (response) {
         setCancelLoading(false)
-        setAlert({ type: 'cancel', msg: ORDER_CANCELLED })
+        setAlert({ type: 'cancel', msg: translate('label.orders.orderCancelledSuccessfullyText') })
         Router.push('/my-account/orders')
       }
     } catch (error) {
@@ -146,7 +140,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
               <Link href="/my-account/orders">
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {CANCEL_ORDER}
+                  {translate('label.cancelOrder.cancelOrderText')}
                 </h3>
               </Link>
             </div>
@@ -155,7 +149,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
               <Link href="/my-account/orders" className="mobile-view">
                 <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {CANCEL_ORDER}
+                  {translate('label.cancelOrder.cancelOrderText')}
                 </h4>
               </Link>
               <div className="w-full">
@@ -227,7 +221,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                         type="button"
                       >
                         <span className="block py-1 font-bold">
-                          {PROCEED_TO_CANCEL}
+                          {translate('message.proceedToCancelText')}
                         </span>
                       </Button>
                     </div>
@@ -252,7 +246,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
               >
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {REASON_CANCEL_HEADING}
+                  {translate('label.cancelReason.cancelReasonHeadingText')}
                 </h3>
               </a>
             </div>

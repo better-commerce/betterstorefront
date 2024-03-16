@@ -1,5 +1,4 @@
 import { DeviceIdKey, NEXT_GET_CART, SessionIdCookieKey, } from '@components/utils/constants'
-import { GENERAL_PROMOCODE, GENERAL_QUOTE_SUMMARY } from '@components/utils/textVariables'
 import { isMobile } from 'react-device-detect'
 import Spinner from '@components/ui/Spinner'
 import { useUI } from '@components/ui/context'
@@ -580,7 +579,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                         <div className='sm:col-span-4'>
                           <>
                             <section aria-labelledby="summary-heading" className="p-4 px-4 mt-4 bg-white border border-gray-200 rounded-sm md:sticky top-24 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-4">
-                              <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-24">{GENERAL_QUOTE_SUMMARY}</h4>
+                              <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-24">{translate('label.quotes.quoteSummaryText')}</h4>
                               <Disclosure defaultOpen>
                                 {({ open }) => (
                                   <>
@@ -643,7 +642,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                             <div className="flex items-center justify-between pt-2 pb-2 border-b border-gray-200 sm:pt-1">
                                               <dt className="flex flex-col items-start text-sm text-black">
                                                 <span className="block text-xs">
-                                                  {GENERAL_PROMOCODE}
+                                                  {translate('label.basket.promoCodeText')}
                                                 </span>
                                                 {groupedPromotions?.appliedPromos?.map(
                                                   (promo: any, promoId: number) => {

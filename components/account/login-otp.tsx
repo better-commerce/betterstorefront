@@ -15,12 +15,12 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
   GENERAL_LOGIN,
-  VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP,
-  VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
 } from '@components/utils/textVariables'
 import LoginOTPForm from '@components/customer/login-otp-form'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function LoginOTPComp() {
+  const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -57,7 +57,7 @@ function LoginOTPComp() {
   if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        {translate('message.alreadyLoggedInMsg')}
       </div>
     )
   }
@@ -137,7 +137,7 @@ function LoginOTPComp() {
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && (
             <span className="text-red-700 text-lg">
-              {VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP}
+              {translate('label.login.noMobileAccountFoundText')}
             </span>
           )}
         </div>

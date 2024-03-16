@@ -8,7 +8,7 @@ import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST,
 import { StarIcon } from '@heroicons/react/24/outline'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import { BTN_PRE_ORDER, GENERAL_ADD_TO_BAG, IMG_PLACEHOLDER, QUICK_VIEW, WISHLIST_TITLE, } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, WISHLIST_TITLE } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
@@ -281,7 +281,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       shortMessage: '',
     }
     if (!product?.currentStock && product?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.ui.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product?.preOrder?.shortMessage
@@ -401,8 +401,8 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           {isMobile ? null : (
             <div
               className={cn( 'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-4 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20', { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled } )}>
-              <Button title={GENERAL_ADD_TO_BAG} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300" onClick={() => handleQuickViewData(product)} > {QUICK_VIEW} </SimpleButton>
+              <Button title={translate('label.basket.addToBagText')} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300" onClick={() => handleQuickViewData(product)} > {translate('label.product.quickViewText')} </SimpleButton>
             </div>
           )}
         </div>
@@ -486,7 +486,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 </SimpleButton>
               )}
               <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary bg-orange-600 text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">
-                {QUICK_VIEW}
+                {translate('label.product.quickViewText')}
               </button>
             </div>
           </>

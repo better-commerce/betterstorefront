@@ -21,13 +21,7 @@ import {
   NEXT_REFERRAL_BY_SLUG,
 } from '@components/utils/constants'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
-import {
-  GENERAL_PRICE_LABEL_RRP,
-  IMG_PLACEHOLDER,
-  FIND_THEM,
-  BEEN_REFERRED_BY_A_FRIEND,
-  USER_NOT_FOUND,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { useState } from 'react'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'
@@ -123,7 +117,7 @@ export default function Summary({
           handleReferralRegisterUser(referrerReferralId)
         } else {
           setIsLoading(false)
-          setError(USER_NOT_FOUND)
+          setError(translate('message.userWithNameNotFoundErrorMsg'))
         }
       }
     } else {
@@ -242,7 +236,6 @@ export default function Summary({
                                         product.listPrice?.raw.withTax !=
                                         product.price?.raw?.withTax && (
                                         <span className="px-2 text-sm text-red-400 line-through">
-                                          {GENERAL_PRICE_LABEL_RRP}{' '}
                                           {isIncludeVAT
                                             ? product.listPrice.formatted
                                               ?.withTax
@@ -535,7 +528,6 @@ export default function Summary({
                                   product.listPrice?.raw.withTax !=
                                   product.price?.raw?.withTax ? (
                                   <span className="px-2 text-sm text-red-400 line-through">
-                                    {GENERAL_PRICE_LABEL_RRP}{' '}
                                     {isIncludeVAT
                                       ? product.listPrice?.formatted?.withTax
                                       : product.listPrice?.formatted
@@ -649,7 +641,7 @@ export default function Summary({
                       setReferralModalShow(true)
                     }}
                   >
-                    {BEEN_REFERRED_BY_A_FRIEND}
+                    {translate('label.myAccount.beenReferredByFriendHeadingText')}
                   </h3>
                 )}
               </div>
@@ -759,7 +751,7 @@ export default function Summary({
                             <div className="flex-1 px-0 overflow-y-auto">
                               <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
                                 <Dialog.Title className="text-lg font-medium text-gray-900">
-                                  {BEEN_REFERRED_BY_A_FRIEND}
+                                  {translate('label.myAccount.beenReferredByFriendHeadingText')}
                                 </Dialog.Title>
                                 <div className="flex items-center ml-3 h-7">
                                   <button
@@ -809,7 +801,7 @@ export default function Summary({
                                       {isLoading ? (
                                         <LoadingDots />
                                       ) : (
-                                        FIND_THEM
+                                        translate('label.myAccount.findReferralBtnText')
                                       )}
                                     </Button>
                                   </div>
