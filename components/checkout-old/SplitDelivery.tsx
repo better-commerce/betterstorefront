@@ -1,20 +1,14 @@
-import {
-  IMG_PLACEHOLDER,
-  GENERAL_PRICE_LABEL_RRP,
-  GENERAL_DELIVERY_METHOD,
-  GENERAL_SPLIT_DELIVERY,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { tryParseJson } from '@framework/utils/parse-util'
-import { CheckCircleIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { vatIncluded } from '@framework/utils/app-util'
-import { RadioGroup } from '@headlessui/react'
-import classNames from 'classnames'
-import CncInput from './CheckoutForm/CncInput'
-import CncList from './CheckoutForm/CncList'
-import Delivery from './CheckoutForm/Delivery'
+// import { RadioGroup } from '@headlessui/react'
+// import classNames from 'classnames'
+// import CncInput from './CheckoutForm/CncInput'
+// import CncList from './CheckoutForm/CncList'
+// import Delivery from './CheckoutForm/Delivery'
 import DeliveryOptions from './DeliveryOptions'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -75,7 +69,7 @@ function SplitDelivery({
   }
   return (
     <section>
-      <h1 className="text-md">{GENERAL_SPLIT_DELIVERY}</h1>
+      <h1 className="text-md">{translate('label.checkout.splitDeliveryText')}</h1>
       {splitDeliveryItems && (
         <div className="mt-4 flex flex-col  \grid \grid-cols-1 gap-y-8 \sm:grid-cols-2 sm:gap-x-4 ">
           {splitDeliveryDates?.map((deliveryDate: any, Idx: any) => (
@@ -126,7 +120,6 @@ function SplitDelivery({
                                     product.listPrice?.raw.withTax !=
                                       product.price?.raw?.withTax ? (
                                       <span className="px-2 text-sm text-red-400 line-through">
-                                        {GENERAL_PRICE_LABEL_RRP}{' '}
                                         {isIncludeVAT
                                           ? product.listPrice?.formatted
                                               ?.withTax

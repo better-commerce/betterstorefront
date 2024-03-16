@@ -1,4 +1,4 @@
-import { PRODUCT_SPECIFICATION, PERFECT_FOR, FABRIC_CARE, COLLAR, WASH_CARE, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -23,7 +23,7 @@ export default function ProductSpecifications({
         <div className="sm:col-span-8">
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
             <h2 className="flex items-center text-2xl font-semibold">
-              {PRODUCT_SPECIFICATION}
+              {translate('label.product.productSpecificationText')}
             </h2>
             {attrGroup['whyweloveit']?.length > 0 && (
               <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
@@ -48,7 +48,7 @@ export default function ProductSpecifications({
                   <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
-                        {COLLAR}
+                        {translate('label.product.specifications.collarText')}
                       </h4>
                     </div>
                     <div className="flex flex-wrap">
@@ -202,7 +202,7 @@ export default function ProductSpecifications({
               <>
                 <div className="flex flex-col mt-3 sm:mt-3">
                   <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
-                    {PERFECT_FOR}
+                    {translate('label.product.specifications.perfectForText')}
                   </h4>
                 </div>
                 <div className="grid grid-cols-2 gap-4 pr-4 mt-0 sm:grid-cols-4">
@@ -231,7 +231,7 @@ export default function ProductSpecifications({
               <>
                 <div className="flex flex-col mt-6">
                   <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                    {FABRIC_CARE}
+                    {translate('label.product.specifications.fabricCareText')}
                   </h4>
                 </div>
                 <div className="grid">
@@ -255,7 +255,7 @@ export default function ProductSpecifications({
               <>
                 <div className="flex flex-col mt-6">
                   <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                    {WASH_CARE}
+                    {translate('label.product.specifications.washCareText')}
                   </h4>
                 </div>
                 <div className="grid">

@@ -12,7 +12,6 @@ import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { VALIDATION_EMAIL_ALREADY_IN_USE, VALIDATION_ENTER_A_VALID_EMAIL } from '@components/utils/textVariables'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { matchStrings } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
@@ -33,7 +32,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       error ? setError('') : false
       await submit(value)
     } else {
-      setError(VALIDATION_ENTER_A_VALID_EMAIL)
+      setError(translate('message.pleaseEnterAValidEmailText'))
     }
   }
 
@@ -194,7 +193,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
       if (!data.length) {
         setHasPassedEmailValidation(true)
       } else {
-        setError(VALIDATION_EMAIL_ALREADY_IN_USE)
+        setError(translate('message.emailAlreadyInUseText'))
       }
     } catch (error) {
       console.log(error)

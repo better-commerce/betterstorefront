@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react'
 import Router from 'next/router'
 
 import { useUI } from '@components/ui/context'
-import { Layout } from '@components/common'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import {
   NEXT_AUTHENTICATE,
   OTP_LOGIN_ENABLED,
@@ -13,14 +11,11 @@ import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP,
-  VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
-} from '@components/utils/textVariables'
 import LoginOTPForm from '@components/customer/login-otp-form'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 function LoginOTPComp() {
+  const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -36,7 +31,6 @@ function LoginOTPComp() {
   } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
-  const translate = useTranslation()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const otpEnabled = OTP_LOGIN_ENABLED
   useAnalytics(PageViewed, {
@@ -58,7 +52,7 @@ function LoginOTPComp() {
   if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        {translate('message.alreadyLoggedInMsg')}
       </div>
     )
   }
@@ -138,7 +132,7 @@ function LoginOTPComp() {
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && (
             <span className="text-red-700 text-lg">
-              {VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP}
+              {translate('label.login.noMobileAccountFoundText')}
             </span>
           )}
         </div>

@@ -1,5 +1,5 @@
 import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO } from '@components/utils/constants'
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import { Tab } from '@headlessui/react'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -215,7 +215,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         (!product.flags.sellWithoutInventory ||
           selectedAttrData.sellWithoutInventory)
       ) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = translate('label.ui.preOrderText')
         buttonConfig.shortMessage = product.preOrder.shortMessage
         return buttonConfig
       } else if (
@@ -320,7 +320,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.ui.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
@@ -866,7 +866,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                                       <HeartIcon className="flex-shrink-0 w-5 h-5" />
                                     )}
                                     <span className="sr-only">
-                                      {BTN_ADD_TO_FAVORITES}
+                                      {translate('label.product.addTofavouriteText')}
                                     </span>
                                   </button>
                                 </div>

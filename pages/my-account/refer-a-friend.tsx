@@ -20,12 +20,6 @@ import {
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import {
-  SUCCESSFUL_INVITES,
-  NO_INVITES,
-  SUCCESSFUL_INVITE,
-  VOUCHERS_NOT_EARNED,
-} from '@components/utils/textVariables'
-import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from '@heroicons/react/24/outline'

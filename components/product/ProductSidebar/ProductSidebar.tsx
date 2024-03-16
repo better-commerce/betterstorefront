@@ -9,7 +9,6 @@ import {
   selectDefaultOptionFromProduct,
   SelectedOptions,
 } from '../helpers'
-import { GENERAL_CARE_TEXT, GENERAL_DETAILS, GENERAL_DETAILS_TEXT, GENERAL_NOT_AVAILABLE } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ProductSidebarProps {
@@ -57,17 +56,17 @@ const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ prod
             disabled={variant?.availableForSale === false}
           >
             {variant?.availableForSale === false
-              ? GENERAL_NOT_AVAILABLE
+              ? translate('common.label.notAvailableText')
               : translate('label.basket.addToBagText')}
           </Button>
         )}
       </div>
       <div className="mt-6">
-        <Collapse title={GENERAL_CARE_TEXT}>
-          {GENERAL_CARE_TEXT}
+        <Collapse title={translate('label.product.productSidebar.careText')}>
+          {translate('label.product.productSidebar.careText')}
         </Collapse>
-        <Collapse title={GENERAL_DETAILS}>
-          {GENERAL_DETAILS_TEXT}
+        <Collapse title={translate('common.label.detailsText')}>
+          {translate('label.product.productSidebar.detailsDescriptionText')}
         </Collapse>
       </div>
     </div>

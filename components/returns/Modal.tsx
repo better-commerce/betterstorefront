@@ -1,11 +1,9 @@
-import { Modal } from '@components/ui'
-import { Formik, Field, Form } from 'formik'
+import { Formik, Form } from 'formik'
 import { useState, useEffect, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios'
 import { NEXT_GET_RETURN_DATA } from '@components/utils/constants'
 import LoadingDots from '@components/ui/LoadingDots'
-import { BTN_SUBMIT } from '@components/utils/textVariables'
 import * as Yup from 'yup'
 import { useTranslation } from '@commerce/utils/use-translation'
 
@@ -215,7 +213,7 @@ export default function ReturnModal({
                                 type="submit"
                                 className="my-4 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                               >
-                                {isSubmitting ? <LoadingDots /> : BTN_SUBMIT}
+                                {isSubmitting ? <LoadingDots /> : translate('common.label.submitText')}
                               </button>
                             </Form>
                           )}

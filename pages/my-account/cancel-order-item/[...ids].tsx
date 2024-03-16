@@ -21,10 +21,6 @@ import {
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER_LINE,
 } from '@components/utils/constants'
-import {
-  ITEM_CANCELLED,
-  PROCEED_TO_CANCEL,
-} from '@components/utils/textVariables'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
@@ -101,7 +97,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
           qty: value,
         })
         setCancelLineItemLoading(false)
-        setAlert({ type: 'success', msg: ITEM_CANCELLED })
+        setAlert({ type: 'success', msg: translate('message.itemCancelledSuccessfullyText') })
         Router.push('/my-account/orders')
         if (typeof window !== 'undefined') {
           recordGA4Event(window, 'cancel_confirm', {
@@ -260,14 +256,14 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
                               }}
                               className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
-                              {PROCEED_TO_CANCEL}
+                              {translate('message.proceedToCancelText')}
                             </button>
                           ) : (
                             <button
                               type="button"
                               className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
-                              {PROCEED_TO_CANCEL}
+                              {translate('message.proceedToCancelText')}
                             </button>
                           )}
                         </div>

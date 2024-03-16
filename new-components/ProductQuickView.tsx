@@ -11,7 +11,7 @@ import detail3JPG from "images/products/detail3.jpg";
 import AccordionInfo from "@new-components/AccordionInfo";
 import Link from "next/link";
 import { generateUri } from "@commerce/utils/uri-util";
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
 import AttributesHandler from "@components/product/ProductView/AttributesHandler";
 import axios from "axios";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@components/utils/constants";
@@ -198,7 +198,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       shortMessage: '',
     }
     if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) {
-      buttonConfig.title = BTN_NOTIFY_ME
+      buttonConfig.title = translate('label.ui.notifyMeText')
       buttonConfig.action = async () => handleNotification()
       buttonConfig.type = 'button'
     } else if (
@@ -210,7 +210,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         (!product.flags.sellWithoutInventory ||
           selectedAttrData.sellWithoutInventory)
       ) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = translate('label.ui.preOrderText')
         buttonConfig.shortMessage = product.preOrder.shortMessage
         return buttonConfig
       } else if (
@@ -316,7 +316,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.ui.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
@@ -481,7 +481,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                 ) : (
                   <HeartIcon className="flex-shrink-0 w-6 h-6" />
                 )}
-                <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
               </button>
             </div>
           )}
@@ -502,7 +502,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
-                  <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                  <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
                 </button>
               </div>
             </>
