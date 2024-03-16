@@ -7,7 +7,7 @@ import Link from "next/link";
 import Avatar from "../shared/Avatar/Avatar";
 import { getCurrentPage } from "@framework/utils/app-util";
 import { useUI } from "@components/ui";
-import { BTN_SIGN_OUT, GENERAL_LOGIN, GENERAL_MY_ORDERS, GENERAL_REGISTER, SOCIAL_REGISTER_APPLE, SOCIAL_REGISTER_FACEBOOK, SOCIAL_REGISTER_GOOGLE, WISHLIST_TITLE } from "@components/utils/textVariables";
+import { GENERAL_LOGIN, GENERAL_MY_ORDERS, GENERAL_REGISTER, SOCIAL_REGISTER_APPLE, SOCIAL_REGISTER_FACEBOOK, SOCIAL_REGISTER_GOOGLE, WISHLIST_TITLE } from "@components/utils/textVariables";
 import { Guid } from "@commerce/types";
 import { Router } from "next/router";
 import { signOut } from "next-auth/react";

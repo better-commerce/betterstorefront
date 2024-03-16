@@ -24,6 +24,7 @@
       "noAddonProdText": "No Addon Product Available!",
       "shoppingCartText": "Shopping cart",
       "totalSavingsText": "Total Savings",
+      "itemsCartViewBagText": "items in cart, view bag",
       "catalogText": "Catalog",
       "customKitText": "Custom Kit",
       "removeKitText": "Remove kit",
@@ -37,6 +38,9 @@
     "login": {
       "loginBtnText": "Login",
       "forgotPasswordBtnText": "Forgot password?",
+      "googleLoginText": "Google Login",
+      "facebookLoginText": "Facebook Login",
+      "appleLoginText": "Apple Login",
       "loginViaOTPHeadingText": "Login via OTP",
       "noMobileAccountFoundText": "No account has been found with this mobile"
     },
@@ -193,6 +197,7 @@
         "fetchReturnsErrorMsg": "Woops! Error fetching returns"
       },
       "passwordText": "Password",
+      "passwordMustMatchText": "Passwords must match",
       "shareReferralLinkByEmailBtnText": "Click here to share Referral link by Email",
       "noVouchersEarnedYetMsg": "No Vouchers Earned Yet",
       "vouchersEarnedHeadingText": "Vouchers Earned",
@@ -351,7 +356,7 @@
       "betterStoreCheckoutText": "BetterStore | Checkout",
       "deliverToThisAddressText": "Deliver to this address",
       "payText": "Pay",
-      "purchaseConfirmationText": "Confirm Purchase",
+      "purchaseConfirmationText": "Confirm Purchase"
     },
     "formField": {
       "selectCountryText": "Select a Country"
@@ -543,7 +548,7 @@
       "filterText": "Filter",
       "highestRatingText": "Highest rating",
       "lowestRatingText": "Lowest rating",
-      "newestRatingsText": "Newest rating",
+      "newestRatingsText": "Newest rating"
     },
     "footer": {
       "footerText": "Footer",
@@ -565,13 +570,16 @@
     },
     "navBar": {
       "currencyText": "Currency",
+      "selectCurrencyText": "Select currency",
+      "selectLanguageText": "Select language",
       "profileText": "Profile",
       "languageText": "Lang",
       "includeVatText": "INC VAT",
       "pricesIncludingVatText": "Prices inc VAT",
       "cartText": "Cart",
       "articleDescText": "Discover the most outstanding articles on all topics of life. Write your stories and share them",
-      "buytemplateText": "Buy this template"
+      "buytemplateText": "Buy this template",
+      "betterCommerceText": "BetterCommerce"
     },
     "common": {
       "orderNumberText": "Order number",
@@ -712,8 +720,10 @@
       "closePanelText": "Close panel",
       "otherText": "Other",
       "saveChangesText": "Save changes",
+      "seeAllText": "See All",
       "cancelText": "Cancel",
       "closeMenuText": "Close menu",
+      "signOutText": "Sign out",
       "itemSingularText": "Item",
       "itemPluralText": "Items",
       "discountText": "% off",
@@ -794,6 +804,7 @@
       "ratingsText": "Ratings",
       "brandText": "Brand",
       "brandsText": "Brands",
+      "changePasswordText": "Change password",
       "allBrandsText": "All Brands",
       "offText": "% Off)",
       "returnsText": "Returns",

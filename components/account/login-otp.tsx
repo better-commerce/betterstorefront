@@ -14,11 +14,11 @@ import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
-  GENERAL_LOGIN,
   VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP,
   VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
 } from '@components/utils/textVariables'
 import LoginOTPForm from '@components/customer/login-otp-form'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function LoginOTPComp() {
   const [noAccount, setNoAccount] = useState(false)
@@ -36,6 +36,7 @@ function LoginOTPComp() {
   } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
+  const translate = useTranslation()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const otpEnabled = OTP_LOGIN_ENABLED
   useAnalytics(PageViewed, {
@@ -130,7 +131,7 @@ function LoginOTPComp() {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h1 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
-            {GENERAL_LOGIN} via OTP
+            {translate('label.login.loginBtnText')} via OTP
           </h1>
         </div>
         <LoginOTPForm handleUserLogin={handleUserLogin} />

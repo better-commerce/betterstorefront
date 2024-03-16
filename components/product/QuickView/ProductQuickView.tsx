@@ -1,5 +1,5 @@
 import { NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_UPDATE_CART_INFO, PRODUCTS_SLUG_PREFIX, Messages } from '@components/utils/constants'
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, PlayIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
@@ -822,7 +822,7 @@ export default function ProductQuickView({
                                           }
                                         >
                                           <span className="font-bold">
-                                            {GENERAL_ENGRAVING}
+                                          {translate('label.product.engravingText')}
                                           </span>
                                         </button>
                                         <button

@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react'
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
-import { PRODUCT_DESCRIPTION,  GENERAL_RETURNS } from '@components/utils/textVariables'
+import { GENERAL_RETURNS } from '@components/utils/textVariables'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
 
@@ -73,7 +73,7 @@ export default function ProductDetails({ product, description }: any) {
 
   const descriptionConfig = [
     {
-      title: PRODUCT_DESCRIPTION,
+      title: translate('label.product.bundles.productInformationText'),
       InnerComponent: (props: any) => (
         <div
           className="space-y-2 text-sm text-gray-700 sm:text-md sm:space-y-6 font-h2-desc"

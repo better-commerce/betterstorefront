@@ -1,7 +1,6 @@
 import { FC, memo } from 'react'
 import { useRouter } from 'next/router'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { BTN_SEARCH } from '@components/utils/textVariables'
 //import ElasticSearchBar from '@components/search/ElasticSearchBar'
 import { SEARCH_PROVIDER } from '@components/utils/constants'
 import dynamic from 'next/dynamic'

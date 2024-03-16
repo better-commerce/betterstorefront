@@ -17,34 +17,37 @@ import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
-export const DELIVERY_FORM_FIELDS = [
-  {
-    type: 'tel',
-    name: 'deliveryPinCode',
-    placeholder: translate('label.product.enterPincode'),
-    showLabel: false,
-    label: 'Pincode',
-    className:
-      'px-3 py-4 text-sm font-normal text-black border bg-zinc-100 border-zinc-100 placeholder:text-gray-400 hover:border-gray-900',
-    labelClassName: 'text-gray-700 text-sm dark:text-black',
-    required: true,
-    disabled: false,
-    max: 6,
-    min: 6,
-    handleChange: (e: any, item: any, context: any) => {
-      const regex = /^[0-9\s]*$/
-      if (regex.test(e?.target.value.toString())) {
-        context.setFieldValue(DELIVERY_FORM_FIELDS[0]?.name, e.target.value)
-      }
-    },
-  },
-]
+
 export default function DeliveryInfo({ product, grpData, config }: any) {
   const translate = useTranslation()
   const [isWarranty, setWarranty] = useState(false)
   const [isReturn, setReturn] = useState(false)
   const [edd, setEDD] = useState<string | undefined>(undefined)
   const [replaceValue, replaceInfo] = useState(grpData)
+
+  const DELIVERY_FORM_FIELDS = [
+    {
+      type: 'tel',
+      name: 'deliveryPinCode',
+      placeholder: translate('label.product.enterPincode'),
+      showLabel: false,
+      label: 'Pincode',
+      className:
+        'px-3 py-4 text-sm font-normal text-black border bg-zinc-100 border-zinc-100 placeholder:text-gray-400 hover:border-gray-900',
+      labelClassName: 'text-gray-700 text-sm dark:text-black',
+      required: true,
+      disabled: false,
+      max: 6,
+      min: 6,
+      handleChange: (e: any, item: any, context: any) => {
+        const regex = /^[0-9\s]*$/
+        if (regex.test(e?.target.value.toString())) {
+          context.setFieldValue(DELIVERY_FORM_FIELDS[0]?.name, e.target.value)
+        }
+      },
+    },
+  ]
+
   const handleClick = (grpData: any) => () => {
     replaceInfo(grpData)
     setWarranty(true)

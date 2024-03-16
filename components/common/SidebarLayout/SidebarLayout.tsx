@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import { Cross, ChevronLeft } from '@components/icons'
 import cn from 'classnames'
 import s from './SidebarLayout.module.css'
-import { GENERAL_BACK, GENERAL_CLOSE } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 type ComponentProps = { className?: string } & (

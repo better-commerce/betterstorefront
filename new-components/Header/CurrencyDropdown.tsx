@@ -3,7 +3,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { CurrencyDollarIcon, CurrencyBangladeshiIcon, CurrencyEuroIcon, CurrencyPoundIcon, CurrencyRupeeIcon, BanknotesIcon, } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import locales from "@framework/locales.json"
-
+import { useTranslation } from '@commerce/utils/use-translation'
 export const headerCurrency = (currencyCode: string, isActive: boolean) => {
   let icon: any
   if (currencyCode) {

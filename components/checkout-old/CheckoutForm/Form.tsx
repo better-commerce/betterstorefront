@@ -270,7 +270,7 @@ export default function AddressForm({
                                 onClick={() => setAddressList([])}
                                 className="px-2 py-2 text-white cursor-pointer"
                               >
-                                {GENERAL_CLOSE}
+                                {translate('common.label.closeText')}
                               </h2>
                             </div>
                             {addressList.map(

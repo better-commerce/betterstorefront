@@ -5,8 +5,8 @@ import { ChevronDownIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/
 import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
-import { BTN_CLEAR_ALL, GENERAL_CLOSE, GENERAL_FILTER_TITLE } from '@components/utils/textVariables'
-
+import { BTN_CLEAR_ALL, GENERAL_FILTER_TITLE } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 interface Props {
   products: any
   handleSortBy: any
@@ -27,6 +27,7 @@ export default function Filters({
   removeFilter,
 }: Props) {
   const [open, setOpen] = useState(false)
+  const translate = useTranslation()
 
   const generateFiltersTitle = (filtersLength: number) => {
     if (filtersLength === 0) return null
@@ -83,7 +84,7 @@ export default function Filters({
                   onClick={() => setOpen(false)}
                   className="flex items-center justify-center w-10 h-6 p-2 -mr-2 text-gray-400 bg-white rounded-md sm:h-10 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  <span className="sr-only">{GENERAL_CLOSE}</span>
+                  <span className="sr-only">{translate('common.label.closeText')}</span>
                   <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                 </button>
               </div>

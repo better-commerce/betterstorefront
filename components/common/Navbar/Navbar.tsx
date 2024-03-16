@@ -24,18 +24,7 @@ const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
 const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
 import {
-  BTN_SIGN_OUT,
-  GENERAL_LOGIN,
   GENERAL_MY_ORDERS,
-  GENERAL_RECENTLY_VIEWED,
-  GENERAL_REGISTER,
-  GENERAL_WORKFLOW_TITLE,
-  SELECT_CURRENCY,
-  SELECT_LANGUAGE,
-  GENERAL_ITEM_IN_CART,
-  SOCIAL_REGISTER_GOOGLE,
-  SOCIAL_REGISTER_FACEBOOK,
-  SOCIAL_REGISTER_APPLE,
 } from '@components/utils/textVariables'
 import {
   getCurrentPage,
@@ -108,7 +97,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const socialMediaConfigs = [
     {
         type: SocialMediaType.GOOGLE,
-        title: SOCIAL_REGISTER_GOOGLE,
+        title: translate('label.login.googleLoginText'),
         className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
         head: (
             <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded google-plus-logo" fill="currentColor" viewBox="0 0 24 24">
@@ -119,7 +108,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     },
     {
         type: SocialMediaType.FACEBOOK,
-        title: SOCIAL_REGISTER_FACEBOOK,
+        title: translate('label.login.facebookLoginText'),
         className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
         head: (
             <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded fb-logo" fill="currentColor" viewBox="0 0 24 24">
@@ -130,7 +119,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     },
     {
         type: SocialMediaType.APPLE,
-        title: SOCIAL_REGISTER_APPLE,
+        title: translate('label.login.appleLoginText'),
         className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
         head: (
             <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded apple-logo" width="4" height="4" viewBox="0 0 496.255 608.728">
@@ -142,8 +131,8 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
  ];
 
   const accountDropDownConfigUnauthorized: any = [
-    { href: '/my-account/login', title: GENERAL_LOGIN, className: 'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full', head: null, tail: null, },
-    { href: '/my-account/register', title: GENERAL_REGISTER, className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full', head: null, tail: null, },  
+    { href: '/my-account/login', title: translate('label.login.loginBtnText'), className: 'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full', head: null, tail: null, },
+    { href: '/my-account/register', title: translate('common.label.registerText'), className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full', head: null, tail: null, },  
   ]
 
   socialMediaConfigs?.forEach(socialMediaConfig => {
@@ -169,7 +158,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
           await signOut()
         }
       },
-      title: BTN_SIGN_OUT,
+      title: translate('label.common.signOutText'),
       className: 'text-left p-2 cursor-pointer text-red-600',
     },
   ]
@@ -425,7 +414,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
           </button>
           <Link href="/" title="BetterCommerce">
             <div className="flex w-20 cursor-pointer xl:w-20">
-              <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
+              <span className="sr-only">{translate('label.navBar.betterCommerceText')}</span>
               <Logo />
             </div>
           </Link>
@@ -478,8 +467,8 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
             <Searchbar onClick={setShowSearchBar} keywords={keywords} />
             <Account title={title} config={accountDropdownConfig} deviceInfo={deviceInfo} />
             <div className="hidden sm:flex ">
-              <CurrencySwitcher config={currencies} title={SELECT_CURRENCY} action={configAction} />
-              <LanguageSwitcher config={languages} title={SELECT_LANGUAGE} action={configAction} />
+              <CurrencySwitcher config={currencies} title={translate('label.navBar.selectCurrencyText')} action={configAction} />
+              <LanguageSwitcher config={languages} title={translate('label.navBar.selectLanguageText')} action={configAction} />
             </div>
             <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-16">
               <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center" onClick={() => { handleWishlist() }} >
@@ -491,7 +480,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
                     {wishListItems?.length}
                   </span>
                 )}
-                <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                <span className="sr-only">{translate('label.cart.itemsCartViewBagText')}</span>
               </button>
             </div>
 
@@ -507,7 +496,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
                         {cartItems?.lineItems?.length}
                       </span>
                     )}
-                    <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                    <span className="sr-only">{translate('label.cart.itemsCartViewBagText')}</span>
                   </>
                 )}
               </button>

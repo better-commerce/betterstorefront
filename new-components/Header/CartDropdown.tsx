@@ -6,10 +6,11 @@ import Link from "next/link";
 import { getCurrentPage } from "@framework/utils/app-util";
 import { recordGA4Event } from "@components/services/analytics/ga4";
 import { useUI } from "@components/ui";
-import { GENERAL_ITEM_IN_CART } from "@components/utils/textVariables";
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function CartDropdown() {
   const { cartItems, openCart } = useUI()
+  const translate = useTranslation()
   let currentPage = getCurrentPage()
   function viewCart(cartItems: any) {
     if (currentPage) {
@@ -46,7 +47,7 @@ export default function CartDropdown() {
                 {cartItems?.lineItems?.length}
               </div>
             )}
-            <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+            <span className="sr-only">{translate('label.cart.itemsCartViewBagText')}</span>
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
               <path d="M2 2H3.74001C4.82001 2 5.67 2.93 5.58 4L4.75 13.96C4.61 15.59 5.89999 16.99 7.53999 16.99H18.19C19.63 16.99 20.89 15.81 21 14.38L21.54 6.88C21.66 5.22 20.4 3.87 18.73 3.87H5.82001" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
               <path d="M16.25 22C16.9404 22 17.5 21.4404 17.5 20.75C17.5 20.0596 16.9404 19.5 16.25 19.5C15.5596 19.5 15 20.0596 15 20.75C15 21.4404 15.5596 22 16.25 22Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />

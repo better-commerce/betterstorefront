@@ -1,5 +1,5 @@
 import { Messages,NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO, PRODUCTS_SLUG_PREFIX, } from '@components/utils/constants'
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, } from '@components/utils/textVariables'
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
@@ -705,7 +705,7 @@ export default function PLPQuickView({
                                       <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                                         <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={ buttonConfig.type || 'cart' } />
                                         <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true) } >
-                                          <span className="font-bold"> {GENERAL_ENGRAVING} </span>
+                                          <span className="font-bold"> {translate('label.product.engravingText')} </span>
                                         </button>
                                         <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                                           {isInWishList(selectedAttrData?.productId) ? (

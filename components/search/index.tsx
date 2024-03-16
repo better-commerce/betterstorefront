@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
-import { BTN_SEARCH, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 //import ElasticSearchBar from './ElasticSearchBar'
 import ElasticSearch from './elastic/ElasticSearch'
@@ -18,6 +18,7 @@ import { matchStrings } from '@framework/utils/parse-util'
 import { SearchProvider } from '@framework/utils/enums'
 import InstantSearchBar from './algolia/InstantSearchBar'
 import { pushSearchToNavigationStack } from '@framework/utils/app-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Search(props: any) {
   const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo } = props;
@@ -27,6 +28,7 @@ export default function Search(props: any) {
   const [isLoading, setIsLoading] = useState(false)
   const [path, setCurrentPath] = useState(Router.asPath)
   const SearchEvent = EVENTS_MAP.EVENT_TYPES.Search
+  const translate = useTranslation()
   const SearchEntity = EVENTS_MAP.ENTITY_TYPES.Search
   
   useEffect(() => {
@@ -80,12 +82,12 @@ export default function Search(props: any) {
         <div className="w-full mx-auto mb-4 sm:w-3/5">
           <div className="flex flex-row px-1 rounded-sm mob-center-align">
             <label className="hidden" htmlFor={'search-bar'}>
-              {BTN_SEARCH}
+            {translate('label.search.searchText')}
             </label>
             <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
               <ChevronLeftIcon />
             </div>
-            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-3 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={BTN_SEARCH} onChange={(e: any) => setInputValue(e.target.value)} />
+            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-3 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} />
             <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
               <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
             </div>

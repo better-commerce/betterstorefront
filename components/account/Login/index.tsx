@@ -10,7 +10,7 @@ import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { GENERAL_LOGIN, INVALID_ACCOUNT, LOGIN_SUCCESSFUL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
+import { INVALID_ACCOUNT, LOGIN_SUCCESSFUL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
 import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
@@ -109,7 +109,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
           <h1 className="font-extrabold tracking-tight text-center text-gray-900">
-            {GENERAL_LOGIN}
+            {translate('label.login.loginBtnText')}
           </h1>
         </div>
         <Form
