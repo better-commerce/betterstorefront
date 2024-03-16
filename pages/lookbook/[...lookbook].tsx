@@ -13,7 +13,6 @@ import {
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { IMG_PLACEHOLDER, SHOP_THE_LOOK } from '@components/utils/textVariables'

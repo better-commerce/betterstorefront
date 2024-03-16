@@ -27,6 +27,7 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
@@ -229,6 +230,7 @@ function CategoryLandingPage({
 }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
+  const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -452,8 +454,8 @@ function CategoryLandingPage({
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>{category?.name || 'Category'}</title>
-        <meta name="title" content={category?.name || 'Category'} />
+        <title>{category?.name || translate('label.category.categoryText')}</title>
+        <meta name="title" content={category?.name || translate('label.category.categoryText')} />
         <meta name="description" content={category?.metaDescription} />
         <meta name="keywords" content={category?.metaKeywords} />
         <meta property="og:image" content="" />
@@ -652,7 +654,7 @@ function CategoryLandingPage({
               <div className="py-6">
                 <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
                   <h2 className="mb-2 font-bold uppercase font-18">
-                    Related categories
+                    {translate('label.category.relatedCategoriesText')}
                   </h2>
                   <Swiper
                     // install Swiper modules
@@ -705,7 +707,7 @@ function CategoryLandingPage({
             <div className="py-6">
               <div className="px-4 mx-auto mb-4 2xl:w-4/5 sm:px-4 lg:px-6 2xl:px-0">
                 <h2 className="mb-2 font-bold uppercase font-18">
-                  related categories
+                  {translate('label.category.relatedCategoriesText')}
                 </h2>
                 <Swiper
                   // install Swiper modules
@@ -819,7 +821,7 @@ function CategoryLandingPage({
                   (x: any) => x.isFeatured == true
                 ).length > 0 && (
                   <h2 className="container mx-auto mb-4 font-bold font-18">
-                    Popular categories
+                    {translate('label.category.popularCategoriesText')}
                   </h2>
                 )}
                 <Swiper
@@ -986,7 +988,7 @@ function CategoryLandingPage({
               ) : (
                 <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
                   <h4 className="text-3xl font-bold text-gray-300">
-                    No Products availabe in {category?.name}
+                    {translate('common.label.noProductAvailableText')} {category?.name}
                   </h4>
                 </div>
               )}

@@ -1,28 +1,25 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { Tab } from '@headlessui/react'
 import { config } from '@components/utils/myAccount'
-import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
-import Router from 'next/router'
 import React from 'react'
-import { stringToBoolean } from '@framework/utils/parse-util'
 import MyDetails from '@components/account/MyDetails'
 import { Guid } from '@commerce/types'
 import NextHead from 'next/head'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
   const { user, deleteUser, isGuestUser,referralProgramActive } = useUI()
   const router = useRouter()
+  const translate = useTranslation()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   let newConfig: any = []
@@ -127,7 +124,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
-        <title>My Account</title>
+        <title>{translate('common.label.myAccountText')}</title>
         <meta name="title" content="My Account" />
         <meta name="description" content="My Account" />
         <meta name="keywords" content="My Account" />

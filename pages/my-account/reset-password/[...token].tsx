@@ -5,7 +5,6 @@ import {
 import { useEffect, useState } from 'react'
 import {
     EmptyString,
-  NEXT_FORGOT_PASSWORD,
   NEXT_RESET_PASSWORD,
   NEXT_VALIDATE_TOKEN,
 } from '@components/utils/constants'

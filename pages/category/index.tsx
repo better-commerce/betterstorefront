@@ -11,6 +11,7 @@ import { containsArrayData, getDataByUID, parseDataValue, setData } from '@frame
 import { Redis } from '@framework/utils/redis-constants'
 import { logError } from '@framework/utils/app-util'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function CategoryList(props: any) {
   let absPath = ''
@@ -18,6 +19,7 @@ export default function CategoryList(props: any) {
     absPath = window?.location?.href
   }
   const router = useRouter()
+  const translate = useTranslation()
   return (
     <>
       <NextHead>
@@ -26,14 +28,14 @@ export default function CategoryList(props: any) {
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>Category</title>
-        <meta name="title" content="Category" />
-        <meta name="description" content="Category" />
-        <meta name="keywords" content="Category" />
+        <title>{translate('label.category.categoryText')}</title>
+        <meta name="title" content={translate('label.category.categoryText')} />
+        <meta name="description" content={translate('label.category.categoryText')} />
+        <meta name="keywords" content={translate('label.category.categoryText')} />
 
         <meta property="og:image" content="" />
-        <meta property="og:title" content="Category" key="ogtitle" />
-        <meta property="og:description" content="Category" key="ogdesc" />
+        <meta property="og:title" content={translate('label.category.categoryText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.category.categoryText')} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta
           property="og:url"
@@ -103,7 +105,7 @@ export default function CategoryList(props: any) {
             <>
               <div className="flex flex-col py-32 text-center">
                 <h1 className="w-full mx-auto text-4xl font-bold text-gray-200">
-                  No Category Available
+                  {translate('label.category.noCategoryAvailableText')}
                 </h1>
               </div>
             </>

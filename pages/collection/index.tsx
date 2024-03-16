@@ -2,7 +2,7 @@ import type { GetStaticPropsContext } from 'next'
 import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import Link from 'next/link'
-import { IMG_PLACEHOLDER, PRODUCTS_AVAILABLE, SHOP_BY_COLLECTION } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, SHOP_BY_COLLECTION } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
@@ -12,21 +12,23 @@ import { containsArrayData, getDataByUID, parseDataValue, setData } from '@frame
 import { Redis } from '@framework/utils/redis-constants'
 import { logError } from '@framework/utils/app-util'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function CollectionList(props: any) {
   const router =useRouter();
   const css = { maxWidth: '100%', height: 'auto' }
+  const translate = useTranslation()
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>Collections</title>
-        <meta name="title" content="Collections" />
-        <meta name="description" content="Collections" />
-        <meta name="keywords" content="Collections" />
+        <title>{translate('label.collection.collectionsText')}</title>
+        <meta name="title" content={translate('label.collection.collectionsText')} />
+        <meta name="description" content={translate('label.collection.collectionsText')} />
+        <meta name="keywords" content={translate('label.collection.collectionsText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content="Collections" key="ogtitle" />
-        <meta property="og:description" content="Collections" key="ogdesc" />
+        <meta property="og:title" content={translate('label.collection.collectionsText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.collection.collectionsText')} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath}  key="ogurl" />
       </NextHead>
@@ -52,7 +54,7 @@ export default function CollectionList(props: any) {
 
                       <h4 className="w-full pt-1 text-xs font-normal text-gray-500 sm:text-sm">
                         {collection.noOfRecords}{' '}
-                        <span className="italic">{PRODUCTS_AVAILABLE}</span>
+                        <span className="italic">{translate('label.collection.productAvailableText')}</span>
                       </h4>
                     </div>
                   </span>
@@ -64,7 +66,7 @@ export default function CollectionList(props: any) {
             <>
               <div className="flex flex-col py-32 text-center">
                 <h2 className="w-full mx-auto text-4xl font-bold text-gray-200">
-                  No Collection Available
+                  {translate('label.collection.noCollectionAvailableText')}
                 </h2>
               </div>
             </>

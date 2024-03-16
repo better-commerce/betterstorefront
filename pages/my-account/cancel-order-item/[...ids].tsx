@@ -30,7 +30,7 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 declare const window: any
 
 export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: any) {
@@ -39,6 +39,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
   const [itemDatas, setItemDatas] = useState<any>(undefined)
   const [itemData, setItemData] = useState<any>(undefined)
   const [showCancellationReasons, setShowCancellationReasons] = useState(false)
+  const translate = useTranslation()
   const [cancellationReasons, setCancellationReasons] = useState<any>(undefined)
   const [value, setValue] = useState<any>('')
   const handleChange = (e: any) => {
@@ -156,7 +157,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
               <Link href="/my-account/orders">
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {GENERAL_CANCEL} Item
+                  {GENERAL_CANCEL} {translate('common.label.itemSingularText')}
                 </h3>
               </Link>
             </div>
@@ -164,7 +165,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
               <Link href="/my-account/orders" className="mobile-view">
                 <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {GENERAL_CANCEL} Item
+                  {GENERAL_CANCEL} {translate('common.label.itemSingularText')}
                 </h4>
               </Link>
               <div className="w-full">
@@ -205,7 +206,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
                                 <div className="flex mt-3">
                                   <div className="w-24">
                                     <label className="text-xs text-primary dark:text-black">
-                                      Size:{' '}
+                                      {translate('common.label.sizeText')}{' '}
                                       <span className="uppercase">
                                         {itemData?.size}
                                       </span>
@@ -213,7 +214,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
                                   </div>
                                   <div className="w-full">
                                     <label className="text-xs text-primary dark:text-black">
-                                      Qty: {itemData?.qty}
+                                      {translate('common.label.qtyText')} {itemData?.qty}
                                     </label>
                                   </div>
                                 </div>
@@ -224,13 +225,13 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
                         <div className="flex items-center justify-between pb-2 border-gray-300 border-dashed border-y">
                           <div className="flex items-end flex-1 px-3 py-2 pl-0 mt-1">
                             <label className="text-base font-bold text-primary">
-                              Select Quantity
+                              {translate('label.myAccount.selectQuantityText')}
                             </label>
                           </div>
                           <div className="flex items-end px-3 py-2 pl-0 mt-1 ml-2">
                             <div className="flex items-end flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
                               <label className="text-xs text-primary">
-                                Qty:{' '}
+                               {translate('common.label.qtyText')}{' '}
                               </label>
                               <select
                                 className="w-full px-1 text-xs bg-white sm:w-22 text-primary"
@@ -286,8 +287,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <h3 className="max-w-4xl mx-auto text-xl font-semibold text-black">
                 <Link className="mr-2 leading-none" href="/my-account">
-                  <i className="sprite-icon sprite-left-arrow"></i> Reason for
-                  Cancellation
+                  <i className="sprite-icon sprite-left-arrow"></i> {translate('label.cancelReason.cancelReasonHeadingText')}
                 </Link>
               </h3>
             </div>

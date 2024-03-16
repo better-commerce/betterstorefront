@@ -214,7 +214,13 @@
       "yourFriendsEnterText": "Your friends Enter:",
       "invitesSentText": "Invites Sent",
       "mySavedAddressText": "My Saved Address",
-      "forgotPasswordText": "Forgot Password"
+      "forgotPasswordText": "Forgot Password",
+      "reasonForReturn": "Reason for Return",
+      "proceedToReturnText": "Proceed to Return",
+      "selectQuantityText": "Select Quantity",
+      "myReturnText": "My Return",
+      "noLookbookAvaiableText": "No Lookbook Available",
+      "shopTheLookText": "Shop the look"
     },
     "basket": {
       "addToBasketText": "Add to basket",
@@ -341,7 +347,8 @@
       "otherAddressTypeText": "Other Address Type",
       "whatsappUpdatesText": "Send me updates on WhatsApp",
       "payLaterWithKlarnaText": "Click Pay Later With Klarna to check if you are eligible",
-      "paymentFailedText": "failed."
+      "paymentFailedText": "failed.",
+      "betterStoreCheckoutText": "BetterStore | Checkout"
     },
     "formField": {
       "selectCountryText": "Select a Country"
@@ -636,6 +643,14 @@
     "register": {
       "freeRegisterText": "Register for free"
     },
+    "collection": {
+      "noCollectionAvailableText": "No Collection Available",
+      "productAvailableText": "Products available",
+      "collectionsText": "Collections",
+      "backToCollectionsText": "Back to collections",
+      "noItemAvailableText": "No Item Availabe in",
+      "collectionsTextWithExclamationMark": "Collection!"
+    },
     "color": {
       "whiteText": "White",
       "beigeText": "Beige",
@@ -755,6 +770,8 @@
       "openMenu": "Open menu",
       "ratingsText": "Ratings",
       "brandText": "Brand",
+      "brandsText": "Brands",
+      "allBrandsText": "All Brands",
       "offText": "% Off)",
       "returnsText": "Returns",
       "clearText": "Clear",
