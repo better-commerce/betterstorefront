@@ -9,6 +9,7 @@ import {
   PaymentMethodType,
 } from '@better-commerce/bc-payments-sdk'
 import { Frames, CardNumber, ExpiryDate, Cvv } from 'frames-react'
+import { t as translate } from "i18next";
 
 // Component Imports
 import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
@@ -60,7 +61,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Initiating order...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
@@ -104,7 +105,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
 
   private onCardSubmitted(): void {
     const { uiContext }: any = this.props
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Please wait...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
   }
 
   private onCardTokenized(ev: any): void { }

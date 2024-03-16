@@ -40,6 +40,12 @@
       "loginViaOTPHeadingText": "Login via OTP",
       "noMobileAccountFoundText": "No account has been found with this mobile"
     },
+    "price": {
+      "priceRangeText": "Price range",
+      "minPriceText": "Min price",
+      "maxPricetext": "Max price",
+      "rangePricesText": "Range Prices"
+    },
     "orderDetails": {
       "myOrderHeadingText": "Check the status of recent orders, manage returns, and download invoices.",
       "packageText": "Package",
@@ -512,13 +518,26 @@
       "noCategoryAvailableText": "No Category Available",
       "allCategoriesText": "all categories",
       "relatedCategoriesText": "Related categories",
-      "popularCategoriesText": "Popular categories"
+      "popularCategoriesText": "Popular categories",
+      "newArrivalsText": "New Arrivals",
+      "saleText": "Sale",
+      "backpacksText": "Backpacks",
+      "travelBagsText": "Travel Bags",
+      "laptopSleevesText": "Laptop Sleeves",
+      "organizationText": "Organization",
+      "accessoriesText": "Accessories"
     },
     "filters": {
       "clearAllText": "Clear All",
       "filtersText": "Filters",
       "appliedFiltersText": "Applied Filters",
-      "sortByText": "Sort By"
+      "sortByText": "Sort By",
+      "onSaleText": "On sale",
+      "productFilter3Text": "Products filters (3)",
+      "productFilterText": "Products filters",
+      "sortOrdertext": "Sort Order",
+      "onSaleWithMarkText": "On sale!",
+      "sortOrderText": "Sort order"
     },
     "footer": {
       "footerText": "Footer",
@@ -591,7 +610,8 @@
       "deliveredText": "Delivered",
       "returnHistoryHeadingText": "Return history",
       "outForDeliveryText": "Out For Delivery",
-      "cancelledText": "Cancelled"
+      "cancelledText": "Cancelled",
+      "bestRatingText": "Best Rating"
     },
     "promotion": {
       "applyPromotionText": "Apply promotion"
@@ -630,6 +650,27 @@
       "backToCollectionsText": "Back to collections",
       "noItemAvailableText": "No Item Availabe in",
       "collectionsTextWithExclamationMark": "Collection!"
+    },
+    "color": {
+      "whiteText": "White",
+      "beigeText": "Beige",
+      "blueText": "Blue",
+      "blackText": "Black",
+      "brownText": "Brown",
+      "greenText": "Green",
+      "navyText": "Navy",
+      "orangeText": "Orange",
+      "blackAndOrangeText": "Black and Orange"
+    },
+    "sortOrder": {
+      "mostPopularText": "Most Popular",
+      "bestRatingText": "Best Rating",
+      "newestText": "{t('newest')}",
+      "priceHightToLowText": "Price Hight - Low",
+      "priceLowToHighText": "Price Low - Hight"
+    },
+    "collection": {
+      "topListCollectionText": "Top List Collections."
     }
   },
   "message": {
@@ -780,7 +821,38 @@
       "letsSeeWhatPeopleThinkText": "Let's see what people think of Ciseco",
       "startExploringText": "Start exploring.",
       "manKeywordText": "Man",
-      "startYourSearchText": "Start your search"
+      "startYourSearchText": "Start your search",
+      "colorsText": "Colors",
+      "sizesText": "Sizes",
+      "dollarCurrencySymbol": "$",
+      "productCurrentlyOnSaleText": "Products currently on sale",
+      "theVideosText": "🎬 The Videos",
+      "videoDescription": "Check out our hottest videos. View more and share more new perspectives on just about any topic. Everyone’s welcome.",
+      "bomberJacketText": "Suede Bomber Jacket",
+      "downtownPetText": "Downtown Pet Tote",
+      "sneakersText": "Cader Leather Sneakers",
+      "3SizesAvailText": "3 Sizes Available",
+      "last24HoursText": "Last 24 hours",
+      "last7daysText": "Last 7 days",
+      "last30DaysText": "Last 30 days",
+      "moreItemsText": "More items",
+      "showMeMoreText": "Show me more",
+      "moreLooksText": "More Looks",
+      "specialOfferText": "Special offer",
+      "inKidsProductsText": "in kids products",
+      "fashionDescription": "Fashion is a form of self-expression and autonomy at a particular period and place.",
+      "discoverMoreText": "Discover more",
+      "earnFreeMoneyText": "Earn free money",
+      "withCisecoText": "with Ciseco",
+      "comboTitle": "With Ciseco you will get freeship & savings combo...",
+      "savingsComboText": "Savings combo",
+      "seeSizingChartText": "See sizing chart",
+      "heavyWeightShoesText": "Heavy Weight Shoes",
+      "viewFullDetailsText": "View full details",
+      "142-reviewsText": "142 reviews",
+      "quickViewText": "Quick view",
+      "viewCartText": "View cart",
+      "addToCartText": "Added to cart!"
     },
     "numberText": {
       "one": "1"
