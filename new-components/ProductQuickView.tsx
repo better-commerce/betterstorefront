@@ -1,26 +1,14 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import LikeButton from "@new-components/LikeButton";
 import { StarIcon } from "@heroicons/react/24/solid";
-import BagIcon from "@new-components/BagIcon";
-import NcInputNumber from "@new-components/NcInputNumber";
 import { PRODUCTS } from "@components/data/data";
-import {
-  NoSymbolIcon,
-  ClockIcon,
-  SparklesIcon,
-  HeartIcon,
-} from "@heroicons/react/24/outline";
-import IconDiscount from "@new-components/IconDiscount";
+import { HeartIcon } from "@heroicons/react/24/outline";
 import Prices from "@new-components/Prices";
-import toast from "react-hot-toast";
 import detail1JPG from "images/products/detail1.jpg";
 import detail2JPG from "images/products/detail2.jpg";
 import detail3JPG from "images/products/detail3.jpg";
-import NotifyAddTocart from "./NotifyAddTocart";
 import AccordionInfo from "@new-components/AccordionInfo";
-import Image from "next/image";
 import Link from "next/link";
 import { generateUri } from "@commerce/utils/uri-util";
 import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
@@ -28,7 +16,7 @@ import AttributesHandler from "@components/product/ProductView/AttributesHandler
 import axios from "axios";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@components/utils/constants";
 import ProductTag from "@components/product/ProductTag";
-import { LoadingDots, useUI } from "@components/ui";
+import { useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import { cartItemsValidateAddToCart, getCurrentPage } from "@framework/utils/app-util";
 import { matchStrings, stringFormat } from "@framework/utils/parse-util";
@@ -49,9 +37,6 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
   const { openNotifyUser, basketId, cartItems, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
-  const [variantActive, setVariantActive] = useState(0);
-  const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
-  const [qualitySelected, setQualitySelected] = useState(1);
   const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
