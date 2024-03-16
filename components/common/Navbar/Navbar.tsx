@@ -175,7 +175,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   ]
 
   let accountDropdownConfig = accountDropDownConfigUnauthorized
-  let title = !isGuestUser ? user.userId ? `Hi, ${user.firstName}` : 'My account' : ''
+  let title = !isGuestUser ? user.userId ? `Hi, ${user.firstName}` : translate('common.label.myAccountText') : ''
   if (!isGuestUser && user.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
@@ -346,11 +346,11 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
             <div className="relative flex flex-col w-full max-w-xs pb-12 overflow-y-auto bg-white shadow-xl sm:max-w-xl md:max-w-xl bg-header-color z-9999">
               <div className="flex justify-between px-4 pt-5 pb-2 item-center">
                 <div className="px-0 text-sm font-bold text-black sm:text-lg whitespace-nowrap ">
-                  INC VAT
-                  <ToggleSwitch className="px-4 include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
+                  {translate('label.navBar.includeVatText')} 
+                  <ToggleSwitch className="px-4 include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
                 </div>
                 <button type="button" onClick={() => setOpen(false)} className="absolute inline-flex items-center justify-center p-0 -m-2 text-gray-400 rounded-md right-3 top-3" >
-                  <span className="sr-only">Close menu</span>
+                  <span className="sr-only">{translate('common.label.closeMenuText')}</span>
                   <XMarkIcon className="mt-1 text-white w-7 h-7" aria-hidden="true" />
                 </button>
               </div>
@@ -407,10 +407,10 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
           <div className="promotion-banner mob-marquee"></div>
           <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
             {b2bEnabled && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
-            <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap"> Prices inc VAT </div>
+            <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap"> {translate('label.navBar.pricesIncludingVatText')} </div>
             <div className="flow-root w-10 px-2 sm:w-12">
               <div className="flex justify-center flex-1 mx-auto">
-                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
+                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
               </div>
             </div>
           </div>
@@ -420,7 +420,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
       <header className={cn('fixed top-0 right-0 w-full bg-white shadow-md lg:top-6 sm:py-1 py-0 bg-header-color z-999 navbar-min-64', { fixed: showSearchBar })} >
         <nav aria-label="Top" className="container relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 sm:px-4 md:px-4 lg:px-4 ipad-nav" >
           <button type="button" className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md lg:hidden" onClick={() => { hamburgerMenu(); setOpen(true) }} >
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">{translate('common.label.openMenu')}</span>
             <Bars3Icon className="w-6 h-6 sm:h-8 sm:w-8 mob-menu-icon" aria-hidden="true" />
           </button>
           <Link href="/" title="BetterCommerce">
@@ -485,8 +485,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
               <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center" onClick={() => { handleWishlist() }} >
                 <HeartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                 <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display ">
-                  Wishlist
-                </span>
+                  {translate('label.wishlist.wishlistText')} </span>
                 {wishListItems?.length > 0 && delayEffect && (
                   <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full -top-1 sm:block -right-1">
                     {wishListItems?.length}
@@ -500,8 +499,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
               <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center" onClick={() => { viewCart(cartItems); openCart() }} >
                 <ShoppingCartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="Add to cart" />
                 <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display ">
-                  Cart
-                </span>
+                {translate('label.navBar.cartText')} </span>
                 {renderState && (
                   <>
                     {cartItems?.lineItems?.length > 0 && (

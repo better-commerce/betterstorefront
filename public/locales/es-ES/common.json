@@ -60,7 +60,8 @@
       "noOrderFoundHeadingText": "No Order Available",
       "startShoppingBtnText": "Start Shopping",
       "needHelpWithOrderBtnText": "Need Help with Your Order?",
-      "itemRefundText": "Refund of {currencySymbol}{itemTotal} will be processed within 3-5 business days after the item is received and inspected.",
+      "itemRefundText1": "Refund of",
+      "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected." ,
       "courierPartnerHeadingText": "COURIER PARTNER",
       "awbNumberHeadingText": "AWB Number",
       "returnNotCreatedMsg": "Woops! Could not create a return",
@@ -94,7 +95,8 @@
     },
     "help": {
       "getHelpOnItemText": "Get Help with this item",
-      "returnWindowClosedText": "Return window is now closed since It's been over {returnWindow} Days you've received this item.",
+      "returnWindowClosedText1": "Return window is now closed since It's been over",
+      "returnWindowClosedText2": "Days you've received this item.",
       "returnItemText": "Return Item",
       "cancelItemText": "Cancel Item",
       "helpText": "Help?"
@@ -204,7 +206,9 @@
       "referralText": "Referral",
       "shareReferralByEmail": "Share Referral by Email",
       "yourFriendsEnterText": "Your friends Enter:",
-      "invitesSentText": "Invites Sent"
+      "invitesSentText": "Invites Sent",
+      "mySavedAddressText": "My Saved Address",
+      "forgotPasswordText": "Forgot Password"
     },
     "basket": {
       "addToBasketText": "Add to basket",
@@ -498,6 +502,7 @@
       "applyOnCheckoutText": "(Apply on checkout)"
     },
     "category": {
+      "catogoriesText":"Categories",
       "shopByCategoryText": "Shop by Category",
       "categoryText": "Category",
       "noCategoryAvailableText": "No Category Available",
@@ -517,7 +522,8 @@
       "lowestRatingText": "Lowest rating"
     },
     "footer": {
-      "footerText": "Footer"
+      "footerText": "Footer",
+      "companyRightsText": "BetterCommerce, Inc. All rights reserved."
     },
     "newsLetter": {
       "successText": "Email Registered Successfully for Newsletter",
@@ -527,7 +533,11 @@
       "signupBtnTitle": "Sign up"
     },
     "social": {
-      "generalText": "Join the community"
+      "generalText": "Join the community",
+      "facebookText": "Facebook",
+      "youtubeText": "Youtube",
+      "telegramText": "Telegram",
+      "twitterText": "Twitter"
     },
     "navBar": {
       "currencyText": "Currency",
@@ -535,7 +545,9 @@
       "languageText": "Lang",
       "includeVatText": "INC VAT",
       "pricesIncludingVatText": "Prices inc VAT",
-      "cartText": "Cart"
+      "cartText": "Cart",
+      "articleDescText": "Discover the most outstanding articles on all topics of life. Write your stories and share them",
+      "buytemplateText": "Buy this template"
     },
     "common": {
       "orderNumberText": "Order number",
@@ -551,6 +563,10 @@
     "referral": {
       "claimText": "Claim your Gift!",
       "successText": "Congratulations, you've received a Voucher!",
+      "offerValidText": "This offer is valid for",
+      "offerAlreadyUsedByEmailText": "Offer already used by this email address",
+      "availDiscountByEmailText": "You have a referral code! Avail a discount voucher by entering your email",
+      "getDiscountCoupanText": "Get your Discount Coupon",
       "shareLinkText": "or share a link:",
       "inviteNowUsingText": "Invite now using:"
     },
@@ -627,7 +643,9 @@
     "selectDeliveryToContinueErrorMsg": "Please select a delivery method to continue.",
     "noStoreFoundErrorMsg": "No store found.Try with different postcode",
     "cookiesText": "This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.",
-    "validEmailErrorMsg": "Enter a valid Email",
+    "validEmailErrorMsg": "Enter a valid email",
+    "enterEmailText": "Enter Email ID",
+    "enterYourEmailText": "Enter your email",
     "reviewSubmitSuccessfulMsg": "Review submitted successfully.",
     "somethingWentWrongMsg": "Woops!, Something went wrong",
     "orderDeliveryMsg": "For orders above {currencySymbol}{freeShippingOverXValue}, Usually delivered in 2-5 days.",
@@ -732,6 +750,10 @@
       "internalServerError": "Internal Server Error",
       "questionMark": "?",
       "donotCancelText": "Don't Cancel",
+      "typeAndEnterText": "Type and press enter",
+      "backText": "Back",
+      "validitytext": "Validity:",
+      "registerText": "Register",
       "saveAsText": "Save As",
       "saveBtnText": "Save",
       "commentText": "Comment",

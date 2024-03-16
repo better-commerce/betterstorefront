@@ -202,9 +202,9 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                   <h1 className="py-2  px-5 font-bold">
                     {referralInfo?.successfulInvites > 0
                       ? referralInfo?.successfulInvites == 1
-                        ? `1 ${SUCCESSFUL_INVITE}`
-                        : `${referralInfo?.successfulInvites} ${SUCCESSFUL_INVITES}`
-                      : NO_INVITES}
+                        ? `1 ${translate('label.myAccount.successfulInviteHeadingText')}`
+                        : `${referralInfo?.successfulInvites} ${translate('label.myAccount.successfulInvitesHeadingText')}`
+                      : translate('label.myAccount.noInvitesText')}
                   </h1>
                   <div className="w-full border-t-[1px] mt-4 border-gray-300 border-b-[1px] ">
                     <div className="border-b-[1px] border-gray-300 flex flex-row justify-between px-5 py-2">
@@ -395,7 +395,7 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
                                   </table>
                                 </div>
                               ) : (
-                                <p>{VOUCHERS_NOT_EARNED}</p>
+                                <p>{translate('label.myAccount.noVouchersEarnedYetMsg')}</p>
                               )}
                             </div>
                           </Disclosure.Panel>

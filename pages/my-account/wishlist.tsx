@@ -1,20 +1,16 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { Tab } from '@headlessui/react'
 import { config } from '@components/utils/myAccount'
-import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import NextHead from 'next/head'
 import React from 'react'
 import Wishlist from '@components/account/Wishlist'
-import wishlist from 'pages/wishlist'
 import { vatIncluded } from '@framework/utils/app-util'
 import SideMenu from '@components/account/MyAccountMenu'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
@@ -73,13 +69,13 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
         <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
-        <title>{currentOption}</title>
-        <meta name="title" content={currentOption} />
-        <meta name="description" content={currentOption} />
-        <meta name="keywords" content={currentOption} />
+        <title>{translate('label.wishlist.wishlistText')}</title>
+        <meta name="title" content={translate('label.wishlist.wishlistText')} />
+        <meta name="description" content={translate('label.wishlist.wishlistText')} />
+        <meta name="keywords" content={translate('label.wishlist.wishlistText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={currentOption} key="ogtitle" />
-        <meta property="og:description" content={currentOption} key="ogdesc" />
+        <meta property="og:title" content={translate('label.wishlist.wishlistText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.wishlist.wishlistText')} key="ogdesc" />
       </NextHead>
       <section className="relative pb-10 text-gray-900">
         <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">

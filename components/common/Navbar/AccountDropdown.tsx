@@ -4,8 +4,10 @@ import { UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { getCurrentPage } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Account({ config, title, deviceInfo }: any) {
+  const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
 
   let deviceCheck = ''
@@ -33,7 +35,7 @@ export default function Account({ config, title, deviceInfo }: any) {
       <Menu.Button className="grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center" aria-label="My Account" onClick={() => setLoginAttempt()} >
         <UserIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="My Account" />
         <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
-          Profile
+          {translate('label.navBar.profileText')} 
         </span>
       </Menu.Button>
       <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95" >

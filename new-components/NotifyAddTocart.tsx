@@ -4,6 +4,7 @@ import Prices from "@new-components/Prices";
 
 import Image, { StaticImageData } from "next/image";
 import { PRODUCTS } from "@components/data/data";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 interface Props {
   show: boolean;
@@ -20,6 +21,7 @@ const NotifyAddTocart: FC<Props> = ({
   qualitySelected,
   sizeSelected,
 }) => {
+  const translate = useTranslation()
   const { name, price, variants } = PRODUCTS[0];
 
   const renderProductCartOnNotify = () => {
@@ -52,14 +54,14 @@ const NotifyAddTocart: FC<Props> = ({
             </div>
           </div>
           <div className="flex items-end justify-between flex-1 text-sm">
-            <p className="text-gray-500 dark:text-slate-400">{`Qty ${qualitySelected}`}</p>
+            <p className="text-gray-500 dark:text-slate-400">{translate('label.product.qtyText')} {`${qualitySelected}`}</p>
 
             <div className="flex">
               <button
                 type="button"
                 className="font-medium text-primary-6000 dark:text-primary-500 "
               >
-                View cart
+                {translate('common.label.viewCartText')} 
               </button>
             </div>
           </div>
@@ -81,7 +83,7 @@ const NotifyAddTocart: FC<Props> = ({
       leaveTo="opacity-0 translate-x-20"
     >
       <p className="block text-base font-semibold leading-none">
-        Added to cart!
+        {translate('common.label.addToCartText')} 
       </p>
       <hr className="my-4 border-slate-200 dark:border-slate-700" />
       {renderProductCartOnNotify()}

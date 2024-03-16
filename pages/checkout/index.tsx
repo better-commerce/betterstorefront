@@ -50,7 +50,7 @@ import { Guid } from '@commerce/types'
 import { Logo } from '@components/ui'
 import { compact } from 'lodash'
 import { GetServerSideProps } from 'next'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 export enum BasketStage {
   CREATED = 0,
   ANONYMOUS = 1,
@@ -87,6 +87,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
   const [basket, setBasket] = useState<any>(undefined)
   const [appConfigData, setAppConfigData] = useState<any>()
   const { isMobile, isIPadorTablet } = deviceInfo
+  const translate = useTranslation()
   const { getAddress, createAddress, updateAddress } = addressHandler()
   const { getCart } = cartHandler()
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined)
@@ -901,7 +902,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="canonical" id="canonical" href="https://demostore.bettercommerce.io/checkout" />
-        <title>BetterStore | Checkout</title>
+        <title>{translate('label.checkout.betterStoreCheckoutText')}</title>
         <meta name="title" content="BetterStore Checkout" />
         <meta name="description" content="BetterStore Checkout" />
         <meta name="keywords" content="BetterStore Checkout" />
@@ -926,7 +927,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
             <Logo />
           </Link>
           <h2 className="flex items-center justify-center text-2xl font-semibold mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
-            secure checkout{' '}
+            {translate('label.checkout.secureCheckoutText')}{' '}
             <span>
               <i className="ml-4 sprite-icons sprite-secure"></i>
             </span>
@@ -950,7 +951,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
                   href={`/cart`}
                   className={`bg-white text-black font-normal z-2 cursor-pointer px-0 relative flex items-center gap-2 font-12`}
                 >
-                  <span>Basket</span>
+                  <span>{translate('label.basket.basketText')}</span>
                   <span className={`flex items-center font-16`}>
                     <ChevronRightIcon
                       className={`inline-block w-3 h-3 mx-auto text-gray-800`}

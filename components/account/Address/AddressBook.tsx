@@ -17,7 +17,6 @@ import { Guid } from '@commerce/types'
 import { AlertType } from '@framework/utils/enums'
 import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
 import { useTranslation } from '@commerce/utils/use-translation'
-
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -443,8 +442,7 @@ export default function AddressBook({ deviceInfo }: any) {
               <i className="sprite-icon sprite-left-arrow"></i>
             </span>
           </Link>
-          Addresses
-        </h3>
+          {translate('label.checkout.addressesText')} </h3>
       </div>
       <main className="px-4 mt-4 lg:px-8">
         {!isB2B && (
@@ -452,7 +450,7 @@ export default function AddressBook({ deviceInfo }: any) {
             <div className="px-0 pt-10 sm:px-0">
               <h1 className="mb-3 font-bold tracking-tight text-primary sm:mb-5 dark:text-black">
                 <span className="hidden text-xl sm:inline-block">{title}</span>
-                <span className="inline-block sm:hidden">Saved Addresses</span>
+                <span className="inline-block sm:hidden">{translate('label.addressBook.savedAddressesText')}</span>
               </h1>
             </div>
           </div>
@@ -510,7 +508,7 @@ export default function AddressBook({ deviceInfo }: any) {
                       {translate('label.addressBook.addNewAddress')}{' '}
                     </span>
                     <span className="inline-block text-sm sm:hidden">
-                      Add New Address{' '}
+                      {translate('label.addressBook.addNewAddress')} {' '}
                     </span>
                     <span className="hidden ml-2 leading-none align-middle sm:inline-block">
                       <i className="sprite-icon icon-location-orange"></i>
