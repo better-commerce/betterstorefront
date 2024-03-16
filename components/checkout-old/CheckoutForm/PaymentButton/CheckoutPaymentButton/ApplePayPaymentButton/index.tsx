@@ -5,6 +5,7 @@ import React from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
+import { t as translate } from "i18next";
 import { CheckoutPaymentSourceType, CheckoutPaymentType, PaymentMethodType, PaymentMethodTypeId } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
@@ -50,7 +51,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Initiating order...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {
@@ -87,7 +88,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
 
     const threeDSEnabled = this.state.threeDSEnabled
     const processingChannelId = this?.state?.paymentMethod?.settings?.find((x: any) => x.key === 'Signature')?.value || EmptyString
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Initiating order...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
     this.onPay(this.state.paymentMethod, basketOrderInfo, uiContext, dispatchState).then((isOrderConfirmed: boolean) => {
 
       /**
@@ -114,7 +115,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
             const applePayBtn: any = document.querySelector(`#${btnId}`)
             if (applePayBtn) {
               applePayBtn.addEventListener('click', () => {
-                uiContext?.setOverlayLoaderState({ visible: true, message: 'Please wait...', })
+                uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
 
                 const orderInfo = getOrderInfo()
                 const orderResult: any = orderInfo?.orderResponse
@@ -195,7 +196,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
 
                     applePaySession.onpaymentauthorized = (event: any) => {
 
-                      uiContext?.setOverlayLoaderState({ visible: true, message: 'Authorizing payment...', })
+                      uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.authorizingPaymentText'), })
 
                       const logData = {
                         message: "ApplePay | onpaymentauthorized Started",
