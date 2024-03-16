@@ -64,7 +64,7 @@ const SidebarFilters = () => {
   const DATA_sortOrderRadios = [
     { name: translate('label.sortOrder.mostPopularText'), id: "Most-Popular" },
     { name: translate('label.sortOrder.bestRatingText'), id: "Best-Rating" },
-    { name: translate('label.sortOrder.newestText'), id: "{translate('newest')}" },
+    { name: translate('label.sortOrder.newestText'), id: "Newest" },
     { name: translate('label.sortOrder.priceLowToHighText'), id: "Price-low-hight" },
     { name: translate('label.sortOrder.priceHightToLowText'), id: "Price-hight-low" },
   ];
