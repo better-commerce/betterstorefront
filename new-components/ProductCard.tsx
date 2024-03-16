@@ -14,6 +14,7 @@ import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
 import { matchStrings } from "@framework/utils/parse-util";
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
+import { useTranslation } from "@commerce/utils/use-translation";
 const ProductTag = dynamic(() => import('@components/product/ProductTag'))
 const LikeButton = dynamic(() => import('@new-components/LikeButton'))
 const Prices = dynamic(() => import('@new-components/Prices'))
@@ -30,6 +31,7 @@ export interface ProductCardProps {
 }
 
 const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount }) => {
+  const translate = useTranslation()
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
   const { basketId, cartItems, isGuestUser, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist, wishListItems, openLoginSideBar } = useUI()
@@ -156,7 +158,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         <Button size="small" className="hidden sm:block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
         <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
           <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
-          <span className="ms-1">Quick view</span>
+          <span className="ms-1">{translate('common.label.quickViewText')}</span>
         </ButtonSecondary>
       </div>
     );
@@ -186,7 +188,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             <div className="flex items-center mb-0.5">
               <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
               <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
-                {data?.rating || ""} ({data?.reviewCount || 0} reviews)
+                {data?.rating || ""} ({data?.reviewCount || 0} {translate('common.label.reviews')})
               </span>
             </div>
           </div>
