@@ -4,7 +4,6 @@ import { Layout } from '@components/common'
 
 // Package Imports
 import axios from 'axios'
-import Image from 'next/image'
 import Router from 'next/router'
 import Link from 'next/link'
 
@@ -30,7 +29,7 @@ import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 declare const window: any
 
 export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
@@ -40,6 +39,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
   const [itemData, setItemData] = useState<any>(undefined)
   const [showCancellationReasons, setShowCancellationReasons] = useState(false)
   const [cancellationReasons, setCancellationReasons] = useState<any>(undefined)
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const handleFetchOrderDetails = async (id: any) => {
     const { data: orderDetails }: any = await axios.post(
@@ -200,12 +200,12 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                                     <div className="flex mt-3 text-sm">
                                       <div className="w-24">
                                         <label className="font-medium dark:text-gray-900">
-                                          Size: {item?.size}
+                                          {translate('common.label.sizeText')} {item?.size}
                                         </label>
                                       </div>
                                       <div className="w-full">
                                         <label className="font-medium dark:text-gray-900">
-                                          Qty: {item?.qty}
+                                          {translate('common.label.qtyText')} {item?.qty}
                                         </label>
                                       </div>
                                     </div>
