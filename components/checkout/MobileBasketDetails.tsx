@@ -6,12 +6,7 @@ import {
   NEXT_REFERRAL_BY_SLUG,
   NEXT_REFERRAL_INFO,
 } from '@components/utils/constants'
-import {
-  BEEN_REFERRED_BY_A_FRIEND,
-  FIND_THEM,
-  IMG_PLACEHOLDER,
-  USER_NOT_FOUND,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import { formatFromToDates, tryParseJson } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
@@ -100,7 +95,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
           handleReferralRegisterUser(referrerReferralId)
         } else {
           setIsLoading(false)
-          setError(USER_NOT_FOUND)
+          setError(translate('message.userWithNameNotFoundErrorMsg'))
         }
       } else {
         setIsLoading(false)
@@ -290,7 +285,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         setReferralModalShow(true)
                       }}
                     >
-                      {BEEN_REFERRED_BY_A_FRIEND}
+                      {translate('label.myAccount.beenReferredByFriendHeadingText')}
                     </h3>
                   )}
                 <div className="px-4 mt-0">
@@ -488,7 +483,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                     <div className="flex-1 px-0 overflow-y-auto">
                       <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                          {BEEN_REFERRED_BY_A_FRIEND}
+                        {translate('label.myAccount.beenReferredByFriendHeadingText')}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
                           <button
@@ -528,7 +523,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                                 handleReferralSearch()
                               }}
                             >
-                              {isLoading ? <LoadingDots /> : FIND_THEM}
+                              {isLoading ? <LoadingDots /> : translate('label.myAccount.findReferralBtnText')}
                             </Button>
                           </div>
                         )}

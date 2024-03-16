@@ -1,4 +1,3 @@
-import { BTN_NOTIFY_ME, BTN_PRE_ORDER } from '@components/utils/textVariables'
 import { useUI } from '@components/ui'
 import dynamic from 'next/dynamic'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
@@ -14,12 +13,12 @@ export default function ButtonNotifyMe({ product, className = '' }: Props) {
   }
   return (
     <Button
-      title={BTN_NOTIFY_ME}
+      title={"Notify me"}
       className={className}
       action={() => handleNotification(product?.recordId)}
       type="button"
-      buttonType={BTN_NOTIFY_ME}
-      aria-label={BTN_NOTIFY_ME}
+      buttonType={"Notify me"}
+      aria-label={"Notify me"}
     />
   )
 }

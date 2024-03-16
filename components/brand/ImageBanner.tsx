@@ -1,6 +1,5 @@
 import React from 'react'
-import Image from 'next/image'
-import { IMG_PLACEHOLDER, SHOP_NOW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Router from 'next/router'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -32,7 +31,7 @@ const ImageBanner = ({
             Router.push(link ? link : '#')
           }}
         >
-          {SHOP_NOW}
+          {translate('common.label.shopNowText')}
         </button>
       </div>
     </div>

@@ -7,7 +7,7 @@ import axios from 'axios'
 import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, NEXT_GET_PROOMO_DETAILS, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
 import { StarIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import { BTN_PRE_ORDER,  IMG_PLACEHOLDER, QUICK_VIEW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
@@ -329,7 +329,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       shortMessage: '',
     }
     if (!product?.currentStock && product?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.ui.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product?.preOrder?.shortMessage
@@ -586,7 +586,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   variant="slim"
                   className="!p-1 flex-1 !bg-white !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
                   onClick={() => handleQuickViewData(product)}>
-                  <span className="uppercase">{QUICK_VIEW}</span>
+                  <span className="uppercase">{translate('label.product.quickViewText')}</span>
                 </SimpleButton>
                 {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
                   <ButtonNotifyMe product={product} />
@@ -659,7 +659,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   onClick={() => handleQuickViewData(product)}
                   className="w-full text-primary btn-secondary text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
                 >
-                  {QUICK_VIEW}
+                  {translate('label.product.quickViewText')}
                 </button>
               </div>
             </div>

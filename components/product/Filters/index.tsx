@@ -5,7 +5,8 @@ import { ChevronDownIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/
 import classNames from '@components/utils/classNames'
 import ProductSort from '@components/product/ProductSort'
 import FilterList from './FilterList'
-import { BTN_CLEAR_ALL, GENERAL_CLOSE, GENERAL_FILTER_TITLE } from '@components/utils/textVariables'
+import { GENERAL_CLOSE } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Props {
   products: any
@@ -27,7 +28,7 @@ export default function Filters({
   removeFilter,
 }: Props) {
   const [open, setOpen] = useState(false)
-
+  const translate = useTranslation()
   const generateFiltersTitle = (filtersLength: number) => {
     if (filtersLength === 0) return null
     if (filtersLength === 1) return `${filtersLength} Filter`
@@ -76,7 +77,7 @@ export default function Filters({
             <div className="relative flex flex-col w-full h-full max-w-xs py-2 pb-2 ml-auto overflow-y-auto bg-white shadow-xl sm:py-4 sm:pb-6 z-9999">
               <div className="flex items-center justify-between px-4 py-4">
                 <h2 className="text-lg font-medium text-gray-900">
-                  {GENERAL_FILTER_TITLE}
+                  {translate('label.filters.filtersText')}
                 </h2>
                 <button
                   type="button"
@@ -133,7 +134,7 @@ export default function Filters({
         className="flex items-center justify-between w-screen px-0 py-0 text-center border-t border-gray-200 mob-w-screen sm:px-4 lg:max-w-7xl lg:px-8"
       >
         <h2 id="filter-heading-filter" className="sr-only">
-          {GENERAL_FILTER_TITLE}
+          {translate('label.filters.filtersText')}
         </h2>
         <div className="relative col-start-1 row-start-1 py-3">
           <div className="flex px-2 pr-2 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
@@ -157,7 +158,7 @@ export default function Filters({
         <>
           <div className='flex items-center justify-between px-4'>
             <h4 className="flex mb-2 text-sm font-bold">
-              Applied Filters
+              {translate('label.filters.appliedFiltersText')} 
             </h4>
             <div className="pl-6">
               <button
@@ -165,7 +166,7 @@ export default function Filters({
                 type="button"
                 className="text-gray-500"
               >
-                {BTN_CLEAR_ALL}
+                {translate('label.filters.clearAllText')}
               </button>
             </div>
           </div>

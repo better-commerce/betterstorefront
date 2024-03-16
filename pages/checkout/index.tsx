@@ -32,10 +32,6 @@ import axios from 'axios'
 import { AlertType, CheckoutStep } from '@framework/utils/enums'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import CheckoutLayoutV2 from '@components/common/Layout/CheckoutLayoutV2'
-import {
-  INVALID_ACCOUNT,
-  LOGIN_SUCCESSFUL,
-} from '@components/utils/textVariables'
 import { saveUserToken } from '@framework/utils/app-util'
 import { asyncHandler as addressHandler } from '@components/account/Address/AddressBook'
 import cartHandler from '@components/services/cart'
@@ -227,9 +223,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       const userRes: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       cb()
       if (!userRes?.data) {
-        return setAlert({ type: AlertType.ERROR, msg: INVALID_ACCOUNT })
+        return setAlert({ type: AlertType.ERROR, msg: translate('message.invalidAccountMsg') })
       }
-      setAlert({ type: AlertType.SUCCESS, msg: LOGIN_SUCCESSFUL })
+      setAlert({ type: AlertType.SUCCESS, msg: translate('message.loginSuccessMsg') })
       const { userToken, ...rest } = userRes?.data
       saveUserToken(userToken)
       let userObj = { ...rest }

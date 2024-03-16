@@ -9,9 +9,6 @@ import {
 import { LoadingDots, useUI } from '@components/ui'
 import { GUEST_LOGIN_CHECKOUT2_SCHEMA } from './config'
 import ShippingAddressForm from './ShippingAddressForm'
-import {
-  SAVE_AND_CONTINUE_TO_COLLECT,
-} from '@components/utils/textVariables'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
 import { useTranslation } from '@commerce/utils/use-translation'
 
@@ -209,7 +206,7 @@ const LoginOrGuest: React.FC<any> = ({
                       className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
                       onClick={handleCollect}
                     >
-                      {SAVE_AND_CONTINUE_TO_COLLECT}
+                      {translate('label.checkout.saveAndContinueToCollectBtnText')}
                     </button>
                   </>
                 ) : (
@@ -220,7 +217,7 @@ const LoginOrGuest: React.FC<any> = ({
                         disabled={guestCheckoutFormik.isSubmitting}
                         className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
                       >
-                        {SAVE_AND_CONTINUE_TO_COLLECT}
+                        {translate('label.checkout.saveAndContinueToCollectBtnText')}
                       </button>
                     </form>
                   </>
