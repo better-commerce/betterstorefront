@@ -8,8 +8,8 @@ export default function InfiniteScrollComponent({ component, total, fetchData, c
       hasMore={currentNumber < total}
       loader={null}
       endMessage={
-        <p className="py-5 dark:text-black" style={{ textAlign: 'center' }}>
-          <b>You have seen it all</b>
+        <p className="py-5 font-medium dark:text-black" style={{ textAlign: 'center' }}>
+          You have seen it all
         </p>
       }
     >
