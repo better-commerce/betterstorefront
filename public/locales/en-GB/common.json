@@ -763,7 +763,10 @@
       "letsSeeWhatPeopleThinkText": "Let's see what people think of Ciseco",
       "startExploringText": "Start exploring.",
       "manKeywordText": "Man",
-      "startYourSearchText": "Start your search"
+      "startYourSearchText": "Start your search",
+      "initiatingOrderText": "Initiating order...",
+      "pleaseWaitText": "Please wait...",
+      "authorizingPaymentText": "Authorizing payment..."
     },
     "numberText": {
       "one": "1"
