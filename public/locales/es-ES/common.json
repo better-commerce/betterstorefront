@@ -24,6 +24,7 @@
       "noAddonProdText": "No Addon Product Available!",
       "shoppingCartText": "Shopping cart",
       "totalSavingsText": "Total Savings",
+      "itemsCartViewBagText": "items in cart, view bag",
       "catalogText": "Catalog",
       "customKitText": "Custom Kit",
       "removeKitText": "Remove kit",
@@ -37,8 +38,17 @@
     "login": {
       "loginBtnText": "Login",
       "forgotPasswordBtnText": "Forgot password?",
+      "googleLoginText": "Google Login",
+      "facebookLoginText": "Facebook Login",
+      "appleLoginText": "Apple Login",
       "loginViaOTPHeadingText": "Login via OTP",
       "noMobileAccountFoundText": "No account has been found with this mobile"
+    },
+    "price": {
+      "priceRangeText": "Price range",
+      "minPriceText": "Min price",
+      "maxPricetext": "Max price",
+      "rangePricesText": "Range Prices"
     },
     "orderDetails": {
       "myOrderHeadingText": "Check the status of recent orders, manage returns, and download invoices.",
@@ -61,7 +71,7 @@
       "startShoppingBtnText": "Start Shopping",
       "needHelpWithOrderBtnText": "Need Help with Your Order?",
       "itemRefundText1": "Refund of",
-      "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected." ,
+      "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected.",
       "courierPartnerHeadingText": "COURIER PARTNER",
       "awbNumberHeadingText": "AWB Number",
       "returnNotCreatedMsg": "Woops! Could not create a return",
@@ -187,6 +197,7 @@
         "fetchReturnsErrorMsg": "Woops! Error fetching returns"
       },
       "passwordText": "Password",
+      "passwordMustMatchText": "Passwords must match",
       "shareReferralLinkByEmailBtnText": "Click here to share Referral link by Email",
       "noVouchersEarnedYetMsg": "No Vouchers Earned Yet",
       "vouchersEarnedHeadingText": "Vouchers Earned",
@@ -208,7 +219,13 @@
       "yourFriendsEnterText": "Your friends Enter:",
       "invitesSentText": "Invites Sent",
       "mySavedAddressText": "My Saved Address",
-      "forgotPasswordText": "Forgot Password"
+      "forgotPasswordText": "Forgot Password",
+      "reasonForReturn": "Reason for Return",
+      "proceedToReturnText": "Proceed to Return",
+      "selectQuantityText": "Select Quantity",
+      "myReturnText": "My Return",
+      "noLookbookAvaiableText": "No Lookbook Available",
+      "shopTheLookText": "Shop the look"
     },
     "basket": {
       "addToBasketText": "Add to basket",
@@ -242,7 +259,8 @@
       "multipleCodesApplyText": "You may apply mutliple codes",
       "getItByText": "Get it by",
       "addOnText": "Add on's for this product",
-      "discountText": "discount"
+      "discountText": "discount",
+      "itemsYourCartText": "Items in your cart"
     },
     "wishlist": {
       "emptyWishlistText": "You haven’t wished for anything yet.",
@@ -289,6 +307,7 @@
       "deafultCountryDropdownText": "Hong Kong",
       "checkoutTitleText": "checkout",
       "secureCheckoutText": "Secure Checkout",
+      "checkoutSecurelyText": "Checkout securely",
       "backToBasketText": "Back to basket",
       "deliverText": "Deliver",
       "collectText": "Collect",
@@ -336,9 +355,20 @@
       "whatsappUpdatesText": "Send me updates on WhatsApp",
       "payLaterWithKlarnaText": "Click Pay Later With Klarna to check if you are eligible",
       "paymentFailedText": "failed.",
-      "payText": "Pay",
+      "betterStoreCheckoutText": "BetterStore | Checkout",
+      "splitDeliveryText": "Split Delivery",
       "deliverToThisAddressText": "Deliver to this address",
-      "purchaseConfirmationText": "Confirm Purchase"
+      "payText": "Pay",
+      "purchaseConfirmationText": "Confirm Purchase",
+      "confirmOrderText": "Confirm Order",
+      "newCustomerText": "New customer?",
+      "getLatestPromoText": "To get our latest promotions, exclusive offers, new launches and more, let us know how you'd like us to keep you updated",
+      "cardHolderNameText": "Cardholder Name",
+      "cardNumText": "Card number",
+      "expiresText": "Expires",
+      "cardCVCText": "CVC",
+      "streetAndHouseNoText": "Street and House Number",
+      "appartmentSuiteEtcText": "Apartment, Suite, Etc. (Optional)"
     },
     "formField": {
       "selectCountryText": "Select a Country"
@@ -348,6 +378,7 @@
       "HomePageText": "Home Page",
       "PageEndText": "You have seen it all",
       "notifyMeText": "Notify me",
+      "preOrderText": "Pre-order",
       "notifyDescText": "Be the ﬁrst to know when your size is back in stock"
     },
     "search": {
@@ -423,7 +454,9 @@
         "selectImageText": "Please select an Image before proceeding!",
         "yourEngravingText": "Your Engraving",
         "backspaceText": "Backspace",
-        "charactersText": "Characters"
+        "charactersText": "Characters",
+        "personaliseYourProductText": "Personalise your Product.",
+        "engravingPersonalizeBottleText": "Add Characters with a click. Type in names, initials or numbers. For just"
       },
       "productSidebar": {
         "daysText": "days",
@@ -499,27 +532,42 @@
       "daysEasyExchange": "Days Easy Exchange",
       "enterPincode": "Enter Pincode",
       "bestPriceText": "BEST PRICE:",
-      "applyOnCheckoutText": "(Apply on checkout)"
+      "applyOnCheckoutText": "(Apply on checkout)",
+      "recommendedProductText": "Recommended products",
+      "productSpecificationText": "Product specification"
     },
     "category": {
-      "catogoriesText":"Categories",
+      "catogoriesText": "Categories",
       "shopByCategoryText": "Shop by Category",
       "categoryText": "Category",
       "noCategoryAvailableText": "No Category Available",
       "allCategoriesText": "all categories",
       "relatedCategoriesText": "Related categories",
-      "popularCategoriesText": "Popular categories"
+      "popularCategoriesText": "Popular categories",
+      "newArrivalsText": "New Arrivals",
+      "saleText": "Sale",
+      "backpacksText": "Backpacks",
+      "travelBagsText": "Travel Bags",
+      "laptopSleevesText": "Laptop Sleeves",
+      "organizationText": "Organization",
+      "accessoriesText": "Accessories"
     },
     "filters": {
       "clearAllText": "Clear All",
       "filtersText": "Filters",
       "appliedFiltersText": "Applied Filters",
       "sortByText": "Sort By",
-      "filterText": "Filter",
+      "onSaleText": "On sale",
+      "productFilter3Text": "Products filters (3)",
+      "productFilterText": "Products filters",
+      "onSaleWithMarkText": "On sale!",
       "sortOrderText": "Sort order",
-      "newestRatingsText": "Newest rating",
+      "filterAndSortingText": "Filter & Sorting",
+      "changeSizeText": "Change Size",
+      "filterText": "Filter",
       "highestRatingText": "Highest rating",
-      "lowestRatingText": "Lowest rating"
+      "lowestRatingText": "Lowest rating",
+      "newestRatingsText": "Newest rating"
     },
     "footer": {
       "footerText": "Footer",
@@ -541,13 +589,16 @@
     },
     "navBar": {
       "currencyText": "Currency",
+      "selectCurrencyText": "Select currency",
+      "selectLanguageText": "Select language",
       "profileText": "Profile",
       "languageText": "Lang",
       "includeVatText": "INC VAT",
       "pricesIncludingVatText": "Prices inc VAT",
       "cartText": "Cart",
       "articleDescText": "Discover the most outstanding articles on all topics of life. Write your stories and share them",
-      "buytemplateText": "Buy this template"
+      "buytemplateText": "Buy this template",
+      "betterCommerceText": "BetterCommerce"
     },
     "common": {
       "orderNumberText": "Order number",
@@ -574,7 +625,8 @@
       "NoOrderFoundText": "No orders found",
       "noOrderFoundDisplayText": "Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.",
       "myOrdersText": "My Orders",
-      "forOrderText": "for order"
+      "forOrderText": "for order",
+      "orderCancelledSuccessfullyText": "Order Cancelled Successfully"
     },
     "password": {
       "enterPasswordText": "Enter password",
@@ -593,6 +645,7 @@
       "returnHistoryHeadingText": "Return history",
       "outForDeliveryText": "Out For Delivery",
       "cancelledText": "Cancelled",
+      "bestRatingText": "Best Rating",
       "orderHistory": "Order history"
     },
     "promotion": {
@@ -609,8 +662,7 @@
       "2GuestsText": "2 Guests"
     },
     "section": {
-      "findTheBestText": "In this season, find the best 🔥",
-      "moreCollectionText": "More collections"
+      "findTheBestText": "In this season, find the best 🔥"
     },
     "thankyou": {
       "summaryText": "Summary",
@@ -625,6 +677,39 @@
     },
     "register": {
       "freeRegisterText": "Register for free"
+    },
+    "collection": {
+      "topListCollectionText": "Top List Collections.",
+      "shopByCollectionText": "Shop by Collection",
+      "shopByLifestyleText": "Shop by Lifestyle",
+      "noCollectionAvailableText": "No Collection Available",
+      "productAvailableText": "Products available",
+      "collectionsText": "Collections",
+      "backToCollectionsText": "Back to collections",
+      "noItemAvailableText": "No Item Availabe in",
+      "collectionsTextWithExclamationMark": "Collection!"
+    },
+    "color": {
+      "whiteText": "White",
+      "beigeText": "Beige",
+      "blueText": "Blue",
+      "blackText": "Black",
+      "brownText": "Brown",
+      "greenText": "Green",
+      "navyText": "Navy",
+      "orangeText": "Orange",
+      "blackAndOrangeText": "Black and Orange"
+    },
+    "sortOrder": {
+      "mostPopularText": "Most Popular",
+      "bestRatingText": "Best Rating",
+      "newestText": "Newest",
+      "priceHightToLowText": "Price Hight - Low",
+      "priceLowToHighText": "Price Low - Hight"
+    },
+    "store": {
+      "findStoresText": "Find Stores",
+      "findStoreNearYouText": "Find Store Near You"
     }
   },
   "message": {
@@ -650,7 +735,13 @@
     "somethingWentWrongMsg": "Woops!, Something went wrong",
     "orderDeliveryMsg": "For orders above {currencySymbol}{freeShippingOverXValue}, Usually delivered in 2-5 days.",
     "emailEmptyErrorMsg": "Email field cannot be empty!",
-    "userWithNameNotFoundErrorMsg": "Unfortunately, couldn't find a user with this name"
+    "userWithNameNotFoundErrorMsg": "Unfortunately, couldn't find a user with this name",
+    "pleaseEnterAValidEmailText": "Please enter a valid email",
+    "emailAlreadyInUseText": "This email is already in use",
+    "loaderLoadingText": "Loading...",
+    "itemCancelledSuccessfullyText": "Item Cancelled Successfully",
+    "proceedToCancelText": "Proceed to Cancel",
+    "logoutSuccessfulText": "Logout Successful"
   },
   "common": {
     "label": {
@@ -659,8 +750,10 @@
       "closePanelText": "Close panel",
       "otherText": "Other",
       "saveChangesText": "Save changes",
+      "seeAllText": "See All",
       "cancelText": "Cancel",
       "closeMenuText": "Close menu",
+      "signOutText": "Sign out",
       "itemSingularText": "Item",
       "itemPluralText": "Items",
       "discountText": "% off",
@@ -678,6 +771,42 @@
       "editText": "Edit",
       "deleteText": "Delete",
       "chatWithUsText": "Chat with us",
+      "problemPlansText": "Problem Plans",
+      "replyText": "Reply",
+      "continueBtnText": "Continue",
+      "reportAbuseText": "Report Abuse",
+      "shareText": "Share",
+      "transferTokenDescText": "You can transfer tokens from your address to another",
+      "transferTokenText": "Transfer token",
+      "viewAllReviewsText": "View all reviews",
+      "whatsTrendingText": "What's trending now",
+      "womenKeyword": "Women",
+      "allItemsText": "All items",
+      "menKeyword": "Men",
+      "nextText": "Next",
+      "pasteAddressText": "Paste address",
+      "prevText": "Prev",
+      "provideAdditionalInfoText": "Please provide any additional information or context that will help us understand and handle the situation.",
+      "companyOptionalText": "Company (Optional)",
+      "postalCodeText": "Postal Code",
+      "useADifferentShippingAddText": "Use a different shipping address",
+      "sameAsBillingAddress": "Same as billing address",
+      "addShippingAddressText": "Add Shipping Address",
+      "logoHereText": "Logo Here",
+      "loremIpsumText": "In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.",
+      "changePriceConfirmationText": "Are you sure you want to change price?",
+      "deleteNFTConfirmationText": "Are you sure you want to delete this NFT? You cannot undo this action.",
+      "deleteNFTText": "Delete NFT",
+      "discoverMoreDescText": "Good things are waiting for you",
+      "dummyReviewsText": "4.9 (269 reviews)",
+      "EnableDarkModeText": "Enable dark mode",
+      "featuresText": "Features",
+      "followingText": "Following",
+      "followText": "Follow",
+      "inStoreUsingCollectPlusText": "in store or using Collect+",
+      "jewelsText": "jewels",
+      "kidsText": "Kids",
+      "changePriceText": "Change price",
       "resultsText": "Results",
       "findOutMoreText": "Find out more",
       "continueShoppingText": "Continue Shopping",
@@ -724,6 +853,9 @@
       "openMenu": "Open menu",
       "ratingsText": "Ratings",
       "brandText": "Brand",
+      "brandsText": "Brands",
+      "changePasswordText": "Change password",
+      "allBrandsText": "All Brands",
       "offText": "% Off)",
       "returnsText": "Returns",
       "clearText": "Clear",
@@ -774,38 +906,40 @@
       "startExploringText": "Start exploring.",
       "manKeywordText": "Man",
       "startYourSearchText": "Start your search",
+      "colorsText": "Colors",
+      "sizesText": "Sizes",
+      "dollarCurrencySymbol": "$",
+      "productCurrentlyOnSaleText": "Products currently on sale",
+      "theVideosText": "🎬 The Videos",
+      "videoDescription": "Check out our hottest videos. View more and share more new perspectives on just about any topic. Everyone’s welcome.",
+      "bomberJacketText": "Suede Bomber Jacket",
+      "downtownPetText": "Downtown Pet Tote",
+      "sneakersText": "Cader Leather Sneakers",
+      "3SizesAvailText": "3 Sizes Available",
+      "last24HoursText": "Last 24 hours",
+      "last7daysText": "Last 7 days",
+      "last30DaysText": "Last 30 days",
+      "moreItemsText": "More items",
       "showMeMoreText": "Show me more",
-      "replyText": "Reply",
-      "loremIpsumText": "In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.",
-      "logoHereText": "Logo Here",
-      "prevText": "Prev",
-      "nextText": "Next",
-      "EnableDarkModeText": "Enable dark mode",
-      "dummyReviewsText": "4.9 (269 reviews)",
-      "discoverMoreDescText": "Good things are waiting for you",
+      "moreLooksText": "More Looks",
+      "specialOfferText": "Special offer",
+      "inKidsProductsText": "in kids products",
+      "fashionDescription": "Fashion is a form of self-expression and autonomy at a particular period and place.",
       "discoverMoreText": "Discover more",
-      "followText": "Follow",
-      "followingText": "Following",
-      "allItemsText": "All items",
-      "whatsTrendingText": "What's trending now",
-      "womenKeyword": "Women",
-      "menKeyword": "Men",
-      "kidsText": "Kids",
-      "jewelsText": "jewels",
-      "shareText": "Share",
-      "deleteNFTText": "Delete NFT",
-      "deleteNFTConfirmationText": "Are you sure you want to delete this NFT? You cannot undo this action.",
-      "changePriceText": "Change price",
-      "changePriceConfirmationText": "Are you sure you want to change price?",
-      "problemPlansText": "Problem Plans",
-      "provideAdditionalInfoText": "Please provide any additional information or context that will help us understand and handle the situation.",
-      "reportAbuseText": "Report Abuse",
-      "transferTokenText": "Transfer token",
-      "transferTokenDescText": "You can transfer tokens from your address to another",
-      "pasteAddressText": "Paste address",
-      "viewAllReviewsText": "View all reviews",
-      "featuresText": "Features",
-      "inStoreUsingCollectPlusText": "in store or using Collect+"
+      "earnFreeMoneyText": "Earn free money",
+      "withCisecoText": "with Ciseco",
+      "comboTitle": "With Ciseco you will get freeship & savings combo...",
+      "savingsComboText": "Savings combo",
+      "seeSizingChartText": "See sizing chart",
+      "heavyWeightShoesText": "Heavy Weight Shoes",
+      "viewFullDetailsText": "View full details",
+      "142-reviewsText": "142 reviews",
+      "quickViewText": "Quick view",
+      "viewCartText": "View cart",
+      "addToCartText": "Added to cart!",
+      "initiatingOrderText": "Initiating order...",
+      "pleaseWaitText": "Please wait...",
+      "authorizingPaymentText": "Authorizing payment..."
     },
     "numberText": {
       "one": "1"

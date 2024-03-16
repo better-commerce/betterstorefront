@@ -936,7 +936,10 @@
       "142-reviewsText": "142 reviews",
       "quickViewText": "Quick view",
       "viewCartText": "View cart",
-      "addToCartText": "Added to cart!"
+      "addToCartText": "Added to cart!",
+      "initiatingOrderText": "Initiating order...",
+      "pleaseWaitText": "Please wait...",
+      "authorizingPaymentText": "Authorizing payment..."
     },
     "numberText": {
       "one": "1"
