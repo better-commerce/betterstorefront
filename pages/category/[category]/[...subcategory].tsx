@@ -26,6 +26,7 @@ import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-ut
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
+import { useTranslation } from '@commerce/utils/use-translation'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
@@ -216,6 +217,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
+  const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
@@ -480,7 +482,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           ) : (
             <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
               <h4 className="text-3xl font-bold text-gray-300">
-                No Products availabe in {category?.name}
+                {translate('common.label.noProductAvailableText')} {category?.name}
               </h4>
             </div>
           )}

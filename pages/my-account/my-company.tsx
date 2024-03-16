@@ -3,44 +3,34 @@ import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Tab } from '@headlessui/react'
 import { config } from '@components/utils/myAccount'
-import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import NextHead from 'next/head'
 import React from 'react'
-import MyDetails from '@components/account/MyDetails'
 // import MyOrders from '@components/account/MyOrders'
-import MyOrders from '@components/account/Orders/MyOrders'
-import { matchStrings } from '@framework/utils/parse-util'
 import axios from 'axios'
 import {
   NEXT_ADDRESS,
   NEXT_B2B_GET_QUOTES,
   NEXT_B2B_GET_USERS,
   NEXT_GET_ORDERS,
-  NEXT_GET_ORDER_DETAILS,
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import classNames from 'classnames'
 import CompanyUsers from '@components/account/CompanyUsers'
 import B2BOrders from '@components/account/Orders/B2BOrders'
 import B2BQuotes from '@components/account/B2BQuotes'
-import { getAddress } from '@framework/api/operations'
 import AddressBook from '@components/account/Address/AddressBook'
-import { stringToBoolean } from '@framework/utils/parse-util'
-import B2BAddressBook from '@components/account/B2BAddressBook'
 import Spinner from '@components/ui/Spinner'
 import SideMenu from '@components/account/MyAccountMenu'
-import { isArray } from 'lodash'
 import { Guid } from '@commerce/types'
 import { isB2BUser } from '@framework/utils/app-util'
 import { UserRoleType } from '@framework/utils/enums'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
@@ -49,6 +39,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   const [view, setView] = useState(defaultView)
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
+  const translate = useTranslation()
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const [active, setActive] = useState(false)
 
@@ -290,7 +281,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
                       <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
                     </svg>
                   </Link>
-                  <span className="leading-none">My Company</span>
+                  <span className="leading-none">{translate('label.myAccount.myCompanyText')}</span>
                 </h3>
               </div>
             )}

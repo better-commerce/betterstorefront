@@ -410,7 +410,7 @@ function BrandDetailPage({
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
           {translate('common.label.badUrlText')}
           <Link href="/brands">
-            <span className="px-3 text-indigo-500">All brands</span>
+            <span className="px-3 text-indigo-500">{translate('common.label.allBrandsText')}</span>
           </Link>
         </h1>
       </div>
@@ -430,7 +430,7 @@ function BrandDetailPage({
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
         <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
-        <meta name="title" content={brandDetails?.name || 'Brands'} />
+        <meta name="title" content={brandDetails?.name || translate('common.label.brandsText')} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
         <meta property="og:image" content="" />
@@ -504,11 +504,11 @@ function BrandDetailPage({
         <div className="pt-5 pb-0 mx-auto mt-4 bg-transparent 2xl:w-4/5 sm:mt-6 sm:px-6 md:px-6 2xl:px-0">
           <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
             <Link href="/brands" passHref>
-              <span className="flex items-end upper case">Brands</span>
+              <span className="flex items-end upper case">{translate('common.label.brandsText')}</span>
             </Link>
             <div className="">
               <h1 className="inline-block text-black">{brandDetails?.name}</h1>
-              <span className="inline-block ml-2 text-sm font-semibold text-black"> Showing {data?.products?.total} {RESULTS} </span>
+              <span className="inline-block ml-2 text-sm font-semibold text-black"> {translate('label.search.resultCountText1')} {data?.products?.total} {RESULTS} </span>
             </div>
             {sanitizedDescription && (
               <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} className="mt-2 text-black sm:mt-5" />
