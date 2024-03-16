@@ -2,12 +2,11 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import Checkbox from '@components/account/Address/Checkbox'
 import {
-  BTN_CHECKOUT_SECURELY,
   GENERAL_EMAIL,
   GENERAL_POST,
   GENERAL_SMS,
-  GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION,
 } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
@@ -58,6 +57,7 @@ const checkboxConfig = [
 ]
 
 export default function GuestForm({ onSubmit = () => {} }: any) {
+  const translate = useTranslation()
   return (
     <Formik
       validationSchema={schema}
@@ -85,7 +85,7 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
                       className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
                     />
                     <h3 className="py-2 text-sm text-center text-gray-600">
-                      {GUEST_LATEST_PROMOTIONS_OFFERS_INFORMATION}
+                    {translate('label.checkout.getLatestPromoText')}
                     </h3>
 
                     {errors[formItem.key] && touched[formItem.key] ? (
@@ -113,7 +113,7 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
                 onClick={handleSubmit}
                 className="flex items-center justify-center flex-1 w-full max-w-xs px-8 py-3 uppercase bg-black border border-transparent rounded-sm btn-primary sm:w-full"
               >
-                {BTN_CHECKOUT_SECURELY}
+                {translate('label.checkout.checkoutSecurelyText')}
               </button>
             </div>
           </div>

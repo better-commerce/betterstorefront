@@ -1,8 +1,7 @@
 import { FC } from 'react'
 import s from './ShippingWidget.module.css'
 import { ChevronRight, MapPin, Check } from '@components/icons'
-import cn from 'classnames'
-import { BTN_ADD_SHIPPING_ADDRESS } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ComponentProps {
   onClick?: () => any
@@ -10,6 +9,7 @@ interface ComponentProps {
 }
 
 const ShippingWidget: FC<React.PropsWithChildren<ComponentProps>> = ({ onClick, isValid }) => {
+  const translate = useTranslation();
   /* Shipping Address
   Only available with checkout set to true -
   This means that the provider does offer checkout functionality. */
@@ -18,7 +18,7 @@ const ShippingWidget: FC<React.PropsWithChildren<ComponentProps>> = ({ onClick, 
       <div className="flex flex-1 items-center">
         <MapPin className="w-5 flex" />
         <span className="ml-5 text-sm text-center font-medium">
-          {BTN_ADD_SHIPPING_ADDRESS}
+          {translate('common.label.addShippingAddressText')}
         </span>
         {/* <span>
           1046 Kearny Street.<br/>
