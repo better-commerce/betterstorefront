@@ -22,10 +22,8 @@ import {
 } from '@components/utils/constants'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import {
-  GENERAL_ORDER_SUMMARY,
   GENERAL_PRICE_LABEL_RRP,
   IMG_PLACEHOLDER,
-  ITEMS_IN_YOUR_CART,
   FIND_THEM,
   BEEN_REFERRED_BY_A_FRIEND,
   USER_NOT_FOUND,
@@ -179,7 +177,7 @@ export default function Summary({
                         ></img> */}
                         <ShoppingCartIcon className="w-4 h-4" />
                         <span className="ml-3 link-button !text-base">
-                          {GENERAL_ORDER_SUMMARY}
+                          {translate('label.orderSummary.orderSummaryText')}
                         </span>
                       </h2>
                     </div>
@@ -198,8 +196,8 @@ export default function Summary({
                 </Disclosure.Button>
                 <Disclosure.Panel className="w-full p-6 pb-2 mb-3 text-sm text-gray-500 bg-white border border-gray-200 shadow desk-disclouser-view-hide">
                   <div className="mt-0 bg-white">
-                    {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{GENERAL_ORDER_SUMMARY}</h2> */}
-                    <h3 className="sr-only">{ITEMS_IN_YOUR_CART}</h3>
+                    {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{translate('label.orderSummary.orderSummaryText')}</h2> */}
+                    <h3 className="sr-only">{translate('label.basket.itemsYourCartText')}</h3>
                     <ul role="list" className="divide-y divide-gray-200">
                       {cart.lineItems?.map((product: any) => {
                         let personalization = ''
@@ -456,7 +454,7 @@ export default function Summary({
             onClick={confirmOrder}
             className="w-full px-4 py-3 font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
           >
-            {GENERAL_CONFIRM_ORDER}
+            {translate('label.checkout.confirmOrderText')}
           </button>
         </div> */}
 
@@ -478,12 +476,12 @@ export default function Summary({
           {/* /////////hide data */}
           <div className="mt-0 bg-white border border-gray-200 shadow-sm deskdataonmobile hideipad">
             <h4 className="px-5 py-4 mb-3 font-bold text-gray-900 uppercase bg-gray-200 border-b bg-nav !mt-0">
-              {GENERAL_ORDER_SUMMARY}
+              {translate('label.orderSummary.orderSummaryText')}
             </h4>
 
             <div className="mt-0 bg-white shadow-sm deskdataonmobile">
-              {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{GENERAL_ORDER_SUMMARY}</h2> */}
-              <h3 className="sr-only">{ITEMS_IN_YOUR_CART}</h3>
+              {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{translate('label.orderSummary.orderSummaryText')}</h2> */}
+              <h3 className="sr-only">{translate('label.basket.itemsYourCartText')}</h3>
               <ul role="list" className="divide-y divide-gray-200">
                 {cart.lineItems?.map((product: any) => {
                   let personalization = ''

@@ -254,7 +254,8 @@
       "multipleCodesApplyText": "You may apply mutliple codes",
       "getItByText": "Get it by",
       "addOnText": "Add on's for this product",
-      "discountText": "discount"
+      "discountText": "discount",
+      "itemsYourCartText": "Items in your cart"
     },
     "wishlist": {
       "emptyWishlistText": "You haven’t wished for anything yet.",
@@ -301,6 +302,7 @@
       "deafultCountryDropdownText": "Hong Kong",
       "checkoutTitleText": "checkout",
       "secureCheckoutText": "Secure Checkout",
+      "checkoutSecurelyText": "Checkout securely",
       "backToBasketText": "Back to basket",
       "deliverText": "Deliver",
       "collectText": "Collect",
@@ -352,6 +354,15 @@
       "deliverToThisAddressText": "Deliver to this address",
       "payText": "Pay",
       "purchaseConfirmationText": "Confirm Purchase",
+      "confirmOrderText": "Confirm Order",
+      "newCustomerText": "New customer?",
+      "getLatestPromoText": "To get our latest promotions, exclusive offers, new launches and more, let us know how you'd like us to keep you updated",
+      "cardHolderNameText": "Cardholder Name",
+      "cardNumText": "Card number",
+      "expiresText": "Expires",
+      "cardCVCText": "CVC",
+      "streetAndHouseNoText": "Street and House Number",
+      "appartmentSuiteEtcText": "Apartment, Suite, Etc. (Optional)"
     },
     "formField": {
       "selectCountryText": "Select a Country"
@@ -773,6 +784,7 @@
       "firstNameText": "First Name",
       "lastNameText": "Last Name",
       "mobileNumText": "Mobile Number",
+      "companyOptionalText": "Company (Optional)",
       "companyNameAndVATNumText": "Company name and VAT number (optional)",
       "addressLine1Text": "Address Line 1",
       "addressLine2Text": "Address Line 2",
@@ -780,8 +792,12 @@
       "cityText": "City",
       "stateText": "State",
       "postcodeText": "Postcode",
+      "postalCodeText": "Postal Code",
       "countyStateEtcText": "County, state, province, etc.. (optional)",
       "useAsDefautAddressText": "Use as Default Address",
+      "useADifferentShippingAddText": "Use a different shipping address",
+      "sameAsBillingAddress": "Same as billing address",
+      "addShippingAddressText": "Add Shipping Address",
       "expectedDeliveryDateText": "Expected Delivery Date",
       "accountText": "Account",
       "changeText": "Change",
@@ -889,7 +905,8 @@
       "142-reviewsText": "142 reviews",
       "quickViewText": "Quick view",
       "viewCartText": "View cart",
-      "addToCartText": "Added to cart!"
+      "addToCartText": "Added to cart!",
+      "continueBtnText": "Continue"
     },
     "numberText": {
       "one": "1"
