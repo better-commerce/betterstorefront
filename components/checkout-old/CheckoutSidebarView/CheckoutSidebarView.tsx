@@ -9,9 +9,6 @@ import usePrice from '@framework/product/use-price'
 import useCheckout from '@framework/checkout/use-checkout'
 import ShippingWidget from '../ShippingWidget'
 import s from './CheckoutSidebarView.module.css'
-import {
-  GENERAL_FREE,
-} from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
@@ -63,7 +60,7 @@ const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
           </li>
           <li className="flex justify-between py-1">
             <span>{translate('label.orderSummary.shippingText')}</span>
-            <span className="font-bold tracking-wide">{GENERAL_FREE}</span>
+            <span className="font-bold tracking-wide">{translate('label.orderSummary.freeText')}</span>
           </li>
         </ul>
         <div className="flex justify-between py-3 mb-2 font-bold border-t border-accent-2">

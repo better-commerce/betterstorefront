@@ -8,11 +8,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import {
-  IMG_PLACEHOLDER,
-  RESULTS,
-  SHOP_BY_LIFESTYLRE,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import SwiperCore, { Navigation } from 'swiper'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -36,10 +32,10 @@ function LookbookPage({ data }: any) {
     <div className="relative mt-6 mb-5">
       <div className="px-4 pt-0 pb-6 text-left sm:px-0 lg:px-0">
         <h1 className="w-full mx-auto text-3xl font-semibold tracking-tight text-black sm:w-4/5">
-          {SHOP_BY_LIFESTYLRE}
+          {translate('label.collection.shopByLifestyleText')}
         </h1>
         <h1 className="w-full mx-auto mt-2 font-normal tracking-tight text-gray-500 sm:w-4/5 text-md">
-          {data.length} {RESULTS}
+          {data.length} {translate('common.label.resultsText')}
         </h1>
       </div>
       {data.length > 0 && (

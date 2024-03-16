@@ -2,7 +2,7 @@ import type { GetStaticPropsContext } from 'next'
 import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import Link from 'next/link'
-import { IMG_PLACEHOLDER, SHOP_BY_COLLECTION } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
@@ -35,7 +35,7 @@ export default function CollectionList(props: any) {
       <main className="container w-full mx-auto">
         <section aria-labelledby="products-heading" className="mt-8">
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 uppercase">
-            {SHOP_BY_COLLECTION}
+            {translate('label.collection.shopByCollectionText')}
           </h1>
           {props?.data.length > 0 && (
             <div className="grid grid-cols-2 py-10 sm:gap-y-10 gap-y-6 sm:grid-cols-4 gap-x-6 lg:grid-cols-6 xl:gap-x-8">

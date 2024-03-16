@@ -7,10 +7,7 @@ import axios from 'axios'
 
 //
 import { generateUri } from '@commerce/utils/uri-util'
-import {
-  GENERAL_EDIT_KIT,
-  IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { NEXT_BULK_ADD_TO_CART } from '@components/utils/constants'
 import { LoadingDots, useUI } from '@components/ui'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
@@ -201,7 +198,7 @@ export default function BasketGroupProduct({
                   className="block w-full p-2 mt-4 font-semibold text-center text-black uppercase bg-white border border-gray-400 rounded hover:border-orange-600 hover:text-orange-600"
                   onClick={closeSidebar}
                 >
-                  {GENERAL_EDIT_KIT}
+                 {translate('label.kitBuilder.editMyKitBtnText')}
                 </Link>
               </Disclosure.Panel>
             </>

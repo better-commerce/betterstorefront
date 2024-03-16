@@ -10,7 +10,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import { postData } from '@components/utils/clientFetcher'
-import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
@@ -374,9 +374,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
-          {BAD_URL_TEXT}
+          {translate('common.label.badUrlText')}
           <Link href="/category">
-            <span className="px-3 text-indigo-500">{ALL_CATEGORY}</span>
+            <span className="px-3 text-indigo-500">{translate('label.category.allCategoriesText')}</span>
           </Link>
         </h1>
       </div>

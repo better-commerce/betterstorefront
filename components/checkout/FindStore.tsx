@@ -3,7 +3,6 @@ import { LoadingDots, useUI } from '@components/ui'
 import { AlertType } from '@framework/utils/enums'
 import axios from 'axios'
 import { NEXT_STORE_LOCATOR } from '@components/utils/constants'
-import { GENERAL_FIND_STORE, GENERAL_FIND_STORE_TITLE } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface FindStoreProps {
@@ -61,7 +60,7 @@ const FindStore: React.FC<FindStoreProps> = ({ onStoreSelected }) => {
   return (
     <div className="flex flex-col gap-2 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
       <h5 className="font-semibold uppercase font-18 dark:text-black">
-        {GENERAL_FIND_STORE_TITLE}
+       {translate('label.store.findStoreNearYouText')}
       </h5>
       <div className="grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2">
         <input
@@ -75,7 +74,7 @@ const FindStore: React.FC<FindStoreProps> = ({ onStoreSelected }) => {
           className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4"
           onClick={fetchStores}
         >
-          {loading ? <LoadingDots /> : GENERAL_FIND_STORE}
+          {loading ? <LoadingDots /> : translate('label.store.findStoresText')}
         </button>
       </div>
       {stores?.length > 0 && (

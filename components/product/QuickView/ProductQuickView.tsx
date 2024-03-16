@@ -1,5 +1,5 @@
 import { NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_UPDATE_CART_INFO, PRODUCTS_SLUG_PREFIX, Messages } from '@components/utils/constants'
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, PlayIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
@@ -205,7 +205,7 @@ export default function ProductQuickView({
         !product.flags.sellWithoutInventory ||
         !selectedAttrData.sellWithoutInventory
       ) {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.ui.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
       }
@@ -218,7 +218,7 @@ export default function ProductQuickView({
         (!product.flags.sellWithoutInventory ||
           selectedAttrData.sellWithoutInventory)
       ) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = translate('label.ui.preOrderText')
         buttonConfig.shortMessage = product.preOrder.shortMessage
         return buttonConfig
       } else if (
@@ -328,7 +328,7 @@ export default function ProductQuickView({
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.ui.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
@@ -788,7 +788,7 @@ export default function ProductQuickView({
                                           <HeartIcon className="flex-shrink-0 w-6 h-6" />
                                         )}
                                         <span className="sr-only">
-                                          {BTN_ADD_TO_FAVORITES}
+                                          {translate('label.product.addTofavouriteText')}
                                         </span>
                                       </button>
                                     </div>
@@ -840,7 +840,7 @@ export default function ProductQuickView({
                                             <HeartIcon className="flex-shrink-0 w-6 h-6" />
                                           )}
                                           <span className="sr-only">
-                                            {BTN_ADD_TO_FAVORITES}
+                                            {translate('label.product.addTofavouriteText')}
                                           </span>
                                         </button>
                                       </div>

@@ -57,7 +57,7 @@ export default function ProductDetails({ product, description }: any) {
       ),
     },
     {
-      title: GENERAL_RETURNS,
+      title: translate('common.label.returnsText'),
       InnerComponent: (props: any) => (
         <p className="text-gray-900">
           {props.returnsMessage || (

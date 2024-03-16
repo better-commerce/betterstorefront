@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 // Package Imports
 import axios from 'axios'
-import moment from 'moment'
 import Link from 'next/link'
-import Router from 'next/router'
 import { Highlight, Snippet } from 'react-instantsearch'
 import classNames from 'classnames'
 import dynamic from 'next/dynamic'
@@ -16,7 +14,7 @@ import SearchQuickView from '@components/product/QuickView/SearchQuickView'
 // Other Import
 import { useUI } from '@components/ui'
 //import type { Hit } from 'instantsearch.js'
-import { BTN_NOTIFY_ME, BTN_PRE_ORDER, IMG_PLACEHOLDER, QUICK_VIEW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import cartHandler from '@components/services/cart'
 import { cartItemsValidateAddToCart, getAlgoliaSearchCurrencyLabel, getAlgoliaSearchListPriceColumn, getAlgoliaSearchPriceColumn, resetAlgoliaSearch, vatIncluded } from '@framework/utils/app-util'
 import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_GET_PRODUCT_QUICK_VIEW } from '@components/utils/constants'
@@ -96,12 +94,12 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
       shortMessage: '',
     }
     if (hit?.webstock <= 0 && hit?.itemvisibleonwebsite) {
-      buttonConfig.title = BTN_NOTIFY_ME
+      buttonConfig.title = translate('label.ui.notifyMeText')
       buttonConfig.isNotifyMeEnabled = true
       buttonConfig.action = async () => handleNotification()
       buttonConfig.buttonType = 'button'
     } else if (!hit?.webstock && hit?.preorder) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.ui.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = hit?.preordershortmessage
@@ -240,7 +238,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
                 className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14 uppercase"
                 onClick={async () => await handleQuickViewData(hit)}
               >
-                <span className="uppercase">{QUICK_VIEW}</span>
+                <span className="uppercase">{translate('label.product.quickViewText')}</span>
               </SimpleButton>
             </div>
           )}
@@ -254,7 +252,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
               className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14 uppercase"
               onClick={async () => await handleQuickViewData(hit)}
             >
-              <span className="uppercase">{QUICK_VIEW}</span>
+              <span className="uppercase">{translate('label.product.quickViewText')}</span>
             </SimpleButton>
             <div className="grid items-center w-full grid-cols-12 gap-1 justify-stretch">
               <div className="col-span-3">

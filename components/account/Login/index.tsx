@@ -10,7 +10,6 @@ import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { INVALID_ACCOUNT, LOGIN_SUCCESSFUL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
 import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
@@ -57,10 +56,10 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
       const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       if (!result.data) {
         setNoAccount(true)
-        setAlert({type:'error',msg:INVALID_ACCOUNT})
+        setAlert({type:'error',msg: translate('message.invalidAccountMsg')})
       } else if (result.data) {
         setNoAccount(false)
-        setAlert({type:'success',msg: LOGIN_SUCCESSFUL})
+        setAlert({type:'success',msg: translate('message.loginSuccessMsg')})
         let userObj = { ...result.data }
         // get user updated details
         const updatedUserObj = await axios.post(
@@ -95,7 +94,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
   if (!isGuestUser && user.userId) {
     return (
       <div className="w-full h-full font-extrabold text-center text-gray-900">
-        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        {translate('message.alreadyLoggedInMsg')}
       </div>
     )
   }
@@ -116,14 +115,14 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
           btnText="Login"
           type="login"
           onSubmit={handleUserLogin}
-          apiError={noAccount ? INVALID_ACCOUNT : ''}
+          apiError={noAccount ? translate('message.invalidAccountMsg') : ''}
           isLoginSidebarOpen={isLoginSidebarOpen}
         />
         {/* <div className="flex flex-col items-center justify-center w-full">
           {noAccount && (
-            setAlert({type:'success',msg:INVALID_ACCOUNT})
+            setAlert({type:'success',msg:translate('message.invalidAccountMsg')})
             <span className="text-lg text-red-700">
-              {INVALID_ACCOUNT}
+              {translate('message.invalidAccountMsg')}
             </span>
           )}
         </div> */}

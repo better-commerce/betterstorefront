@@ -27,16 +27,9 @@ import {
   vatIncluded,
 } from '@framework/utils/app-util'
 import ElasticSearchSuggestions from './ElasticSearchSuggestions'
-import { CloudIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 import cn from 'classnames'
 import { MAX_ADD_TO_CART_LIMIT, Messages } from '@components/utils/constants'
-import {
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT,
-  QUICK_VIEW,
-} from '@components/utils/textVariables'
 import dynamic from 'next/dynamic'
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui'
@@ -173,12 +166,12 @@ const CustomResultView = (
       shortMessage: '',
     }
     if (result?.webstock?.raw <= 0 && result?.itemvisibleonwebsite?.raw) {
-      buttonConfig.title = BTN_NOTIFY_ME
+      buttonConfig.title = translate('label.ui.notifyMeText')
       buttonConfig.isNotifyMeEnabled = true
       buttonConfig.action = async () => handleNotification()
       buttonConfig.buttonType = 'button'
     } else if (!result?.currentStock && result?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.ui.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = result?.preOrder?.shortMessage
@@ -247,7 +240,7 @@ const CustomResultView = (
                     className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14 uppercase"
                     onClick={() => handleQuickViewData(result)}
                   >
-                    <span className="uppercase">{QUICK_VIEW}</span>
+                    <span className="uppercase">{translate('label.product.quickViewText')}</span>
                   </SimpleButton>
                   <div className="grid items-center w-full grid-cols-12 gap-1 justify-stretch">
                     <div className="col-span-3">
@@ -303,7 +296,7 @@ const CustomResultView = (
                       onClick={() => handleQuickViewData(result)}
                       className="w-full text-primary btn-default text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
                     >
-                      {QUICK_VIEW}
+                      {translate('label.product.quickViewText')}
                     </button>
                   </div>
                 </div>
@@ -389,7 +382,7 @@ function ElasticSearchResult({
                         {/* show on desktop */}
                         <div className="items-center justify-end flex-1 hidden mx-auto mt-2 mr-4 md:flex">
                           <div className="flex flex-col py-0 pr-2 text-xs font-normal font-14 whitespace-nowrap">
-                            {GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT}
+                            {translate('label.search.includeOOSProductsText')}
                           </div>
                           <Switch
                             checked={includeOutOfStockProduct}
@@ -428,7 +421,7 @@ function ElasticSearchResult({
                     <div className="block col-span-12 md:hidden">
                       <div className="flex items-center justify-end flex-1 mx-auto mt-2 ">
                         <div className="flex flex-col py-0 pr-2 text-xs font-normal font-14 whitespace-nowrap">
-                          {GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT}
+                         {translate('label.search.includeOOSProductsText')}
                         </div>
                         <Switch
                           checked={includeOutOfStockProduct}

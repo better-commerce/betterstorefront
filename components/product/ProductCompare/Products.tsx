@@ -12,7 +12,6 @@ import {
 } from '@components/utils/constants'
 import { round } from 'lodash'
 import {
-  BTN_PRE_ORDER,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -56,7 +55,6 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   maxBasketItemsCount,
   attributesCount = 0,
 }) => {
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
     image: productData.image,
     link: productData.slug,
@@ -265,7 +263,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       shortMessage: '',
     }
     if (!product?.currentStock && product?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.ui.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product?.preOrder?.shortMessage

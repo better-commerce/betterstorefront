@@ -20,7 +20,6 @@ import { requestPayment } from '@framework/utils/payment-util'
 import { LocalStorage, Payments } from '@components/utils/payment-constants'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE, EmptyString, Messages, } from '@components/utils/constants'
-import { GENERAL_PAY } from '@components/utils/textVariables'
 import { getItem, setItem } from '@components/utils/localStorage'
 import { roundToDecimalPlaces } from '@framework/utils/parse-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
@@ -471,7 +470,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                           uiContext,
                           dispatchState
                         ),
-                      btnTitle: GENERAL_PAY,
+                      btnTitle: translate('label.checkout.payText'),
                     },
                   })}
               </div>

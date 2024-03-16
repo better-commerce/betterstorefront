@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { BTN_RECOMMENDED_PROD, IMG_PLACEHOLDER, RESULTS, SHOP_NOW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -446,7 +446,7 @@ function BrandDetailPage({
               <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <img alt="Brand Logo" src={brandDetails.premiumBrandLogo || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
                 <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5" />
-                <button className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80" onClick={handleClick} > {SHOP_NOW} </button>
+                <button className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
               </div>
               <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
             </div>
@@ -459,8 +459,8 @@ function BrandDetailPage({
             <div className="mt-10">
               <div className="flex flex-col gap-4 sm:px-4">
                 <div className="flex flex-row justify-between">
-                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {BTN_RECOMMENDED_PROD} </p>
-                  <button className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline" onClick={handleClick} > {translate('common.label.seeAllText')} </button>
+                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {translate('label.product.recommendedProductText')} </p>
+                  <button className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline" onClick={handleClick} > {translate('common.label.seeAllText')}  </button>
                 </div>
                 <RecommendedProductCollection recommendedProducts={productCollectionRes} deviceInfo={deviceInfo} config={config} />
               </div>
@@ -508,7 +508,7 @@ function BrandDetailPage({
             </Link>
             <div className="">
               <h1 className="inline-block text-black">{brandDetails?.name}</h1>
-              <span className="inline-block ml-2 text-sm font-semibold text-black"> {translate('label.search.resultCountText1')} {data?.products?.total} {RESULTS} </span>
+              <span className="inline-block ml-2 text-sm font-semibold text-black"> {translate('label.search.resultCountText1')} {data?.products?.total} {translate('common.label.resultsText')} </span>
             </div>
             {sanitizedDescription && (
               <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} className="mt-2 text-black sm:mt-5" />

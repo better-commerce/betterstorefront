@@ -1,6 +1,5 @@
 import { RadioGroup } from '@headlessui/react'
 import cn from 'classnames'
-import { GENERAL_COLOUR } from '@components/utils/textVariables'
 import { useState, useEffect } from 'react'
 import { PDP_SIZE_OPTIONS_COUNT } from '@components/utils/constants'
 
@@ -42,7 +41,7 @@ function renderRadioOptions(
 export default function InlineList({
   items = [],
   onChange = () => { },
-  label = GENERAL_COLOUR,
+  label = "Color",
   fieldCode = 'global.colour',
   currentAttribute = 'black',
   generateLink = () => { },

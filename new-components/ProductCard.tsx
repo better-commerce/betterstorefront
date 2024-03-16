@@ -7,7 +7,7 @@ import Link from "next/link";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
-import { BTN_PRE_ORDER,  IMG_PLACEHOLDER } from "@components/utils/textVariables";
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
@@ -31,11 +31,11 @@ export interface ProductCardProps {
 }
 
 const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount }) => {
-  const translate = useTranslation()
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
   const { basketId, cartItems, isGuestUser, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist, wishListItems, openLoginSideBar } = useUI()
   const [isInWishList, setIsInWishList] = useState(false)
+  const translate = useTranslation()
   const { deleteWishlistItem } = wishlistHandler()
   const [quantity, setQuantity] = useState(1)
   const handleQuickViewData = (data: any) => {
@@ -141,7 +141,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       shortMessage: '',
     }
     if (!data?.currentStock && data?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.ui.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = data?.preOrder?.shortMessage
