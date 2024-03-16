@@ -511,7 +511,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
                         {translate('label.addressBook.addNewAddress')}{' '}
                       </span>
                       <span className="inline-block text-sm sm:hidden">
-                        Add New Address{' '}
+                        {translate('label.addressBook.addNewAddress')} {' '}
                       </span>
                       <span className="hidden ml-2 leading-none align-middle sm:inline-block">
                         <i className="sprite-icon icon-location-orange"></i>

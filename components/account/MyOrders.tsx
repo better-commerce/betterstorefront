@@ -18,11 +18,11 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function MyOrders({ deviceInfo }: any) {
+  const translate = useTranslation()
   const [data, setData] = useState([])
   const [productIdsInReturn, setProductIdsInReturn] = useState([''])
   const [returnData, setReturnData] = useState({ product: {}, order: {} })
   const { user, basketId, setCartItems, openCart, cartItems } = useUI()
-  const translate = useTranslation();
   const isIncludeVAT = vatIncluded()
   useEffect(() => {
     const fetchOrders = async () => {
@@ -169,11 +169,11 @@ export default function MyOrders({ deviceInfo }: any) {
                         </dd>
                       </div>
                       <div className="flex justify-between md:block">
-                        <dt className="font-medium text-gray-900">Status</dt>
+                        <dt className="font-medium text-gray-900">{translate('label.orderDetails.statusText')}</dt>
                         <dd className="md:mt-1">{order.orderStatus}</dd>
                       </div>
                       <div className="flex justify-between md:block">
-                        <dt className="font-medium text-gray-900">Tracking</dt>
+                        <dt className="font-medium text-gray-900">{translate('label.orderDetails.trackingText')}</dt>
                         {/* <dd className="md:mt-1">{order.orderStatus}</dd> */}
                         <a
                           href={order.trackingLink}
@@ -236,8 +236,7 @@ export default function MyOrders({ deviceInfo }: any) {
                                       type="button"
                                       className="text-indigo-600 hover:text-indigo-500"
                                     >
-                                      Return is created
-                                    </button>
+                                      {translate('label.orderDetails.returnCreatedText')} </button>
                                   </div>
                                 ) : (
                                   <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">

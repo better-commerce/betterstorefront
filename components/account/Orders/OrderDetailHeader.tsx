@@ -2,8 +2,9 @@ import { DATE_FORMAT } from '@components/utils/constants'
 import { priceFormat } from '@framework/utils/parse-util'
 import moment from 'moment'
 import React from 'react'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
+  const translate = useTranslation()
   return (
     <>
       <div className="w-full pb-6 o-detail-header">
@@ -33,27 +34,25 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
 
               <div className="w-full">
                 <h5 className="font-bold text-16 text-secondary-full-opacity ">
-                  Order Details
-                </h5>
+                  {translate('label.orderDetails.orderDetailsHeadingText')} </h5>
                 {details?.order?.parentCustomNo?.length != 0 && (
                   <>
                     <p className="text-sm text-black-light mob-font-14">
-                      Replacement Order
-                    </p>
+                      {translate('label.orderDetails.replacementOrderText')} </p>
                   </>
                 )}
                 <p className="text-sm text-black-light">
                   #{details?.order.orderNo} • {details?.order?.items?.length}{' '}
                   {details?.order?.items?.length > 1 ? (
-                    <span>ITEMS</span>
+                    <span>{translate('common.label.itemPluralText')}</span>
                   ) : (
-                    <span>ITEM</span>
+                    <span>{translate('common.label.itemSingularText')}</span>
                   )}
                 </p>
                 {details?.order?.parentCustomNo?.length != 0 && (
                   <>
                     <p className="font-bold font-10 text-black-light">
-                      Original Order: {details?.order.parentCustomNo}
+                      {translate('label.orderDetails.originalOrderText')} {details?.order.parentCustomNo}
                     </p>
                   </>
                 )}
@@ -61,16 +60,14 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
             </div>
             <div className="hidden sm:block">
               <h5 className="uppercase font-10 text-black-light">
-                Order PLACED ON
-              </h5>
+                {translate('label.orderDetails.orderPlacedOnHeadingText')} </h5>
               <p className="text-sm dark:text-black text-primary">
                 {moment(new Date(details?.order.orderDate)).format(DATE_FORMAT)}
               </p>
             </div>
             <div className="hidden sm:block">
               <h5 className="text-black font-10 text-black-light">
-                ORDER TOTAL
-              </h5>
+                {translate('label.orderDetails.orderTotalHeadingText')} </h5>
               <p className="text-sm dark:text-black text-primary">
                 {priceFormat(
                   details?.order.grandTotal?.raw?.withTax,
@@ -83,14 +80,13 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
           <div className="flex justify-between py-4 mt-4 border-t sm:pl-16 xsm:pl-16 sm:hidden full-m-ex-header">
             <div className="">
               <h3 className="font-10 text-black-light uppercase !text-sm">
-                Order PLACED ON
-              </h3>
+                {translate('label.orderDetails.orderPlacedOnHeadingText')} </h3>
               <p className="text-sm text-primary">
                 {moment(new Date(details?.order.orderDate)).format(DATE_FORMAT)}
               </p>
             </div>
             <div className="">
-              <h3 className="font-10 text-black-light !text-sm">ORDER TOTAL</h3>
+              <h3 className="font-10 text-black-light !text-sm">{translate('label.orderDetails.orderTotalHeadingText')}</h3>
               <p className="text-sm text-primary">
                 {details?.order?.grandTotal?.formatted?.withTax}
               </p>
@@ -108,8 +104,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
           <div className="w-full">
             <h4 className="mb-2 text-base font-bold text-primary text dark:text-black">
               {' '}
-              Delivery Address
-            </h4>
+              {translate('label.orderDetails.deliveryAddressHeadingText')} </h4>
             <h5 className="mb-1 text-sm text-primary dark:text-black">
               {details?.order?.customer?.label} •{' '}
               {details?.order?.customer?.firstName}{' '}

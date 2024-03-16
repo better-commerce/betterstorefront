@@ -7,7 +7,6 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { UserRoleType } from '@framework/utils/enums'
 import DeleteModal from './DeleteModal'
 import { useTranslation } from '@commerce/utils/use-translation'
-
 export default function AddressItem({
   item,
   updateAddress,
@@ -153,8 +152,7 @@ export default function AddressItem({
                   {item?.isDefault && (
                     <div className="p-1 px-2 bg-black border rounded-md">
                       <span className="font-medium text-white font-12">
-                        Default
-                      </span>
+                        {translate('common.label.defaultText')} </span>
                     </div>
                   )}
                 </div>
@@ -208,8 +206,7 @@ export default function AddressItem({
                   {item?.isDefault && (
                     <div className="p-1 px-2 bg-black border rounded-md">
                       <span className="font-medium text-white font-12">
-                        Default
-                      </span>
+                        {translate('common.label.defaultText')} </span>
                     </div>
                   )}
                 </div>

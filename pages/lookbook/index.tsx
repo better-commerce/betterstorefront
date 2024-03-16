@@ -1,7 +1,6 @@
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
 import Link from 'next/link'
-import Image from 'next/image'
 import type { GetStaticPropsContext } from 'next'
 import getLookbooks from '@framework/api/content/lookbook'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -13,18 +12,18 @@ import {
   IMG_PLACEHOLDER,
   RESULTS,
   SHOP_BY_LIFESTYLRE,
-  SHOP_THE_LOOK,
 } from '@components/utils/textVariables'
 import SwiperCore, { Navigation } from 'swiper'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 SwiperCore.use([Navigation])
 
 function LookbookPage({ data }: any) {
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const {} = EVENTS_MAP.ENTITY_TYPES
+  const translate = useTranslation()
 
   useAnalytics(PageViewed, {
     eventType: PageViewed,
@@ -85,7 +84,7 @@ function LookbookPage({ data }: any) {
                             type="button"
                             className="flex-col justify-start px-5 py-2 mt-6 font-semibold text-gray-900 uppercase border border-gray-900 cursor-pointer align-left hover:bg-gray-100"
                           >
-                            {SHOP_THE_LOOK}
+                            {translate('label.myAccount.shopTheLookText')}
                           </button>
                         </Link>
                       </div>
@@ -101,7 +100,7 @@ function LookbookPage({ data }: any) {
         <>
           <div className="flex flex-col py-32 text-center">
             <h2 className="w-full mx-auto text-4xl font-bold text-gray-200">
-              No Lookbook Available
+              {translate('label.myAccount.noLookbookAvaiableText')}
             </h2>
           </div>
         </>

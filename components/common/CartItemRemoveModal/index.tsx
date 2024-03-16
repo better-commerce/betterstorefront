@@ -70,8 +70,7 @@ const CartItemRemoveModal = ({
                                 </Dialog.Title>
                                 {/* <hr className="w-full my-2 shadow-md "></hr> */}
                                 <p className="p-6 text-sm font-normal text-black">
-                                    Are you sure you don't want this product? You
-                                    may move it to Wishlist and buy later.
+                                    {translate('label.cart.cartItemRemoveText')} 
                                 </p>
                                 <div className="flex items-center justify-around w-full px-6 mt-2">
                                     <button

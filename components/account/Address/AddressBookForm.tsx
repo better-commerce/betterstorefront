@@ -78,7 +78,7 @@ export default function AddressForm({ initialValues = {}, onSubmit = () => {}, c
                 onClick={handleSubmit}
                 className="max-w-xs flex-1 border border-transparent py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
               >
-                {isSubmitting ? <LoadingDots /> : 'Save changes'}
+                {isSubmitting ? <LoadingDots /> : translate('common.label.saveChangesText')}
               </button>
               {!!closeEditMode && (
                 <button

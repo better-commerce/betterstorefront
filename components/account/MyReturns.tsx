@@ -4,14 +4,13 @@ import axios from 'axios'
 import {
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { NEXT_GET_RETURNS } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
-import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
-import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function MyReturns() {
   const { user, basketId, setCartItems, openCart, cartItems } = useUI()
@@ -25,7 +24,7 @@ export default function MyReturns() {
       })
       setReturns(data.response.result)
     } catch (error) {
-      alert('Woops! Error fetching returns')
+      alert(translate('label.myAccount.myOrders.fetchReturnsErrorMsg'))
       console.log(error)
     }
   }

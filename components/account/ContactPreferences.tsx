@@ -11,6 +11,7 @@ import {
   GENERAL_NOT_WANT_RECEIVE_OFFERS,
 } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
+
 const radioBtnsConfig = [
   {
     type: 'radio',
