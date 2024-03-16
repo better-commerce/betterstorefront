@@ -33,6 +33,7 @@ import { Redis } from '@framework/utils/redis-constants'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 const CompareSelectionBar = dynamic(() => import('@components/product/ProductCompare/compareSelectionBar'))
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
@@ -115,6 +116,7 @@ export default function CollectionPage(props: any) {
   const [paddingTop, setPaddingTop] = useState('0')
   const [isProductCompare, setProductCompare] = useState(false)
   const adaptedQuery: any = { ...router.query }
+  const translate = useTranslation()
   const [plpFilterState, setPLPFilterState] = useState<IPLPFilterState>({
     filters: [],
     sortBy: '',
@@ -458,7 +460,7 @@ export default function CollectionPage(props: any) {
                                 <>
                                   <Link legacyBehavior href={img?.link} passHref >
                                     <span className="font-medium text-left text-white underline text-12">
-                                      Shop now
+                                      {translate('common.label.shopNowText')}
                                     </span>
                                   </Link>
                                 </>
@@ -554,12 +556,12 @@ export default function CollectionPage(props: any) {
           <div className="w-full py-32 mx-auto text-center">
             <h3 className="py-3 text-3xl font-semibold text-gray-200">
               {' '}
-              No Item Availabe in {props?.name} Collection!
+              {translate('label.collection.noItemAvailableText')} {props?.name} {translate('label.collection.collectionsTextWithExclamationMark')}
             </h3>
             <Link href="/collection" passHref>
               <span className="text-lg font-semibold text-indigo-500">
                 <ChevronLeftIcon className="relative top-0 inline-block w-4 h-4"></ChevronLeftIcon>{' '}
-                Back to collections
+                {translate('label.collection.backToCollectionsText')}
               </span>
             </Link>
           </div>

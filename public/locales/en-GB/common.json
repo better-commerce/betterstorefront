@@ -61,7 +61,7 @@
       "startShoppingBtnText": "Start Shopping",
       "needHelpWithOrderBtnText": "Need Help with Your Order?",
       "itemRefundText1": "Refund of",
-      "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected." ,
+      "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected.",
       "courierPartnerHeadingText": "COURIER PARTNER",
       "awbNumberHeadingText": "AWB Number",
       "returnNotCreatedMsg": "Woops! Could not create a return",
@@ -208,7 +208,13 @@
       "yourFriendsEnterText": "Your friends Enter:",
       "invitesSentText": "Invites Sent",
       "mySavedAddressText": "My Saved Address",
-      "forgotPasswordText": "Forgot Password"
+      "forgotPasswordText": "Forgot Password",
+      "reasonForReturn": "Reason for Return",
+      "proceedToReturnText": "Proceed to Return",
+      "selectQuantityText": "Select Quantity",
+      "myReturnText": "My Return",
+      "noLookbookAvaiableText": "No Lookbook Available",
+      "shopTheLookText": "Shop the look"
     },
     "basket": {
       "addToBasketText": "Add to basket",
@@ -335,7 +341,8 @@
       "otherAddressTypeText": "Other Address Type",
       "whatsappUpdatesText": "Send me updates on WhatsApp",
       "payLaterWithKlarnaText": "Click Pay Later With Klarna to check if you are eligible",
-      "paymentFailedText": "failed."
+      "paymentFailedText": "failed.",
+      "betterStoreCheckoutText": "BetterStore | Checkout"
     },
     "formField": {
       "selectCountryText": "Select a Country"
@@ -499,7 +506,7 @@
       "applyOnCheckoutText": "(Apply on checkout)"
     },
     "category": {
-      "catogoriesText":"Categories",
+      "catogoriesText": "Categories",
       "shopByCategoryText": "Shop by Category",
       "categoryText": "Category",
       "noCategoryAvailableText": "No Category Available",
@@ -615,6 +622,14 @@
     },
     "register": {
       "freeRegisterText": "Register for free"
+    },
+    "collection": {
+      "noCollectionAvailableText": "No Collection Available",
+      "productAvailableText": "Products available",
+      "collectionsText": "Collections",
+      "backToCollectionsText": "Back to collections",
+      "noItemAvailableText": "No Item Availabe in",
+      "collectionsTextWithExclamationMark": "Collection!"
     }
   },
   "message": {
@@ -714,6 +729,8 @@
       "openMenu": "Open menu",
       "ratingsText": "Ratings",
       "brandText": "Brand",
+      "brandsText": "Brands",
+      "allBrandsText": "All Brands",
       "offText": "% Off)",
       "returnsText": "Returns",
       "clearText": "Clear",
