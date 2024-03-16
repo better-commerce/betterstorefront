@@ -37,7 +37,7 @@ export default function NotFound({ deviceInfo }: any) {
               name="viewport"
               content="width=device-width, initial-scale=1, maximum-scale=1"
             />
-            <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+            <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
             <title>404 Error</title>
             <meta name="title" content="404 Error" />
             <meta name="description" content="404 Error" />
@@ -46,24 +46,20 @@ export default function NotFound({ deviceInfo }: any) {
             <meta property="og:title" content="404 Error" key="ogtitle" />
             <meta property="og:description" content="404 Error" key="ogdesc" />
           </NextHead>
-          <div className="w-full py-14 p-5">
-            <div className="error-container">
-              <div className="error-text-section w-full text-center mb-8 mt-24">
-                <h1 className="text-black sm:text-2xl font-semibold mb-2">
-                  404 : Page Not Found
-                </h1>
-                <p className="text-black">
-                  Check that you typed the address correctly. Maybe go back to
-                  your previous page or try using our site search to find
-                  something specific.
+          <div className="w-full px-10 pt-8 pb-24 pr-10 bg-yellow-100">
+            <div className="py-4 error-container sm:py-12">
+              <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
+                <h1 className='text-5xl font-bold text-yellow-800 font-h1-xl'>404</h1>
+                <h2 className="mb-2 font-semibold text-yellow-600 font-32">
+                  Page Not Found
+                </h2>
+                <p className="font-16 text-brown-light">
+                  Check that you typed the address correctly. Maybe go back to your previous page or try using our site search to find something specific.
                 </p>
               </div>
-              <div className="w-40 mx-auto text-center mt-5">
-                <Link
-                  href="/"
-                  className="btn btn-primary"
-                >
-                  Back to Homepage
+              <div className="mx-auto mt-5 text-center w-80">
+                <Link href="/" className="block p-4 text-sm font-semibold text-center text-white bg-black rounded-3xl" >
+                  Back to Home
                 </Link>
               </div>
             </div>
@@ -72,24 +68,20 @@ export default function NotFound({ deviceInfo }: any) {
       )}
       {isMobile && (
         <>
-          <div className="w-full py-8 px-10 pr-10">
-            <div className="error-container">
-              <div className="error-text-section w-full text-left mb-8 mt-24 px-10 pr-10">
-                <h1 className="text-black text-base font-semibold mb-2">
-                  404 : Page Not Found
-                </h1>
-                <p className="text-brown-light text-xs">
-                  Check that you typed the address correctly. Maybe go back to
-                  your previous page or try using our site search to find
-                  something specific.
+          <div className="w-full px-10 pt-8 pb-24 pr-10 bg-yellow-100">
+            <div className="py-4 error-container sm:py-12">
+              <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
+                <h1 className='text-5xl font-bold font-h1-xl'>404</h1>
+                <h2 className="mb-2 font-semibold text-black font-32">
+                  Page Not Found
+                </h2>
+                <p className="font-16 text-brown-light">
+                  Check that you typed the address correctly. Maybe go back to your previous page or try using our site search to find something specific.
                 </p>
               </div>
-              <div className="w-40 mx-auto text-center mt-5">
-                <Link
-                  href="/"
-                  className="btn btn-primary"
-                >
-                  Back to Homepage
+              <div className="mx-auto mt-5 text-center w-80">
+                <Link href="/" className="block p-4 text-sm font-semibold text-center text-white bg-black rounded-3xl" >
+                  Back to Home
                 </Link>
               </div>
             </div>
