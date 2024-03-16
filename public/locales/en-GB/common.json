@@ -650,7 +650,7 @@
     "sortOrder": {
       "mostPopularText": "Most Popular",
       "bestRatingText": "Best Rating",
-      "newestText": "{t('newest')}",
+      "newestText": "Newest",
       "priceHightToLowText": "Price Hight - Low",
       "priceLowToHighText": "Price Low - Hight"
     },
