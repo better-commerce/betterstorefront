@@ -4,7 +4,6 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ArrowLeftIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Layout } from '@components/common'
-import { CLOSE_PANEL } from '@components/utils/textVariables'
 import Products from './Products'
 import { useTranslation } from '@commerce/utils/use-translation'
 
@@ -73,7 +72,7 @@ export default function ProductCompare({
                           className="p-2 -m-2 text-gray-600 hover:text-gray-500"
                           onClick={() => closeCompareProducts()}
                         >
-                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                       </div>

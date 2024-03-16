@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { BTN_RECOMMENDED_PROD, BTN_SEE_ALL, FEATURES_HEADING, IMG_PLACEHOLDER, RESULTS, SHOP_NOW } from '@components/utils/textVariables'
+import { BTN_RECOMMENDED_PROD, BTN_SEE_ALL, IMG_PLACEHOLDER, RESULTS, SHOP_NOW } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -475,7 +475,7 @@ function BrandDetailPage({
 
           <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
             <div className="flex justify-between pb-10 mt-4">
-              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {FEATURES_HEADING} {` `} {brandDetails.name} </p>
+              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {translate('common.label.featuresText')} {` `} {brandDetails.name} </p>
               {!isOnlyMobile && (
                 <button className="font-semibold text-[#212530] uppercase cursor-pointer font-lg md:block hover:underline" onClick={handleClick} > {BTN_SEE_ALL} </button>
               )}

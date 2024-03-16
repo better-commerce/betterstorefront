@@ -1,5 +1,5 @@
 import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO } from '@components/utils/constants'
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import { Tab } from '@headlessui/react'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -111,7 +111,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, quickViewData?.recordId, true) || matchStrings(o.productId, quickViewData?.productId, true)) {
@@ -223,7 +223,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         selectedAttrData.sellWithoutInventory
       ) {
         buttonConfig = {
-          title: GENERAL_ADD_TO_BASKET,
+          title: translate('label.basket.addToBagText'),
           validateAction: async () => {
             const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
               if (matchStrings(o.productId, quickViewData?.recordId, true) || matchStrings(o.productId, quickViewData?.productId, true)) {
@@ -638,7 +638,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                           className="absolute top-0 right-0 lg:-top-12 lg:-right-10 p-0.5 z-10 rounded-full dark:text-black"
                           onClick={() => setModelClose()}
                         >
-                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-8 h-8" aria-hidden="true" />
                         </button>
                         <div className="grid grid-cols-1 sm:gap-4 sm:grid-cols-12">

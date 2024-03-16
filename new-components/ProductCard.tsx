@@ -7,13 +7,14 @@ import Link from "next/link";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
-import { BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER } from "@components/utils/textVariables";
+import { BTN_PRE_ORDER,  IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
 import { matchStrings } from "@framework/utils/parse-util";
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
+import { useTranslation } from "@commerce/utils/use-translation";
 const ProductTag = dynamic(() => import('@components/product/ProductTag'))
 const LikeButton = dynamic(() => import('@new-components/LikeButton'))
 const Prices = dynamic(() => import('@new-components/Prices'))
@@ -36,7 +37,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const [isInWishList, setIsInWishList] = useState(false)
   const { deleteWishlistItem } = wishlistHandler()
   const [quantity, setQuantity] = useState(1)
-
+  const translate = useTranslation();
   const handleQuickViewData = (data: any) => {
     setShowModalQuickView(true);
     setQuickViewData(data)
@@ -104,7 +105,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, data?.recordId, true) || matchStrings(o.productId, data?.productId, true)) {

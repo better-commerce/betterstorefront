@@ -1,5 +1,5 @@
 import { DeviceIdKey, NEXT_GET_CART, SessionIdCookieKey, } from '@components/utils/constants'
-import { GENERAL_PROMOCODE, GENERAL_QUOTE_SUMMARY, GENERAL_SHIPPING, GENERAL_TAXES, GENERAL_TOTAL, ITEM_TYPE_ADDON, SUBTOTAL_EXCLUDING_TAX, SUBTOTAL_INCLUDING_TAX, } from '@components/utils/textVariables'
+import { GENERAL_PROMOCODE, GENERAL_QUOTE_SUMMARY } from '@components/utils/textVariables'
 import { isMobile } from 'react-device-detect'
 import Spinner from '@components/ui/Spinner'
 import { useUI } from '@components/ui/context'
@@ -15,7 +15,6 @@ import { Disclosure, Transition, Dialog } from '@headlessui/react'
 import { Fragment, useReducer } from 'react'
 import { LoadingDots } from '@components/ui'
 import {  ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { CLOSE_PANEL, GENERAL_REMOVE, SHARE_IN_PERSON, } from '@components/utils/textVariables'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import { CheckoutStepType, LoadingActionType, NEXT_BASKET_VALIDATE, } from '@components/utils/constants'
@@ -31,6 +30,7 @@ import { v4 as uuid_v4 } from 'uuid'
 import Cookies from 'js-cookie'
 import setSessionIdCookie, { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import DataLayerInstance from '@components/utils/dataLayer'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData, config, location, }: any) {
   const isBrowser = typeof window !== 'undefined'
@@ -241,7 +241,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
           (x: any) => x.key === 'OrderSettings.EnabledPartialDelivery'
         )?.value || ''
     )
-
+  const translate = useTranslation();
   const uiContext = useUI()
   const { setCartItems, cartItems, isPaymentLink, user, isGuestUser, basketId, referralProgramActive, setIsSplitDelivery, openLoginSideBar, isSplitDelivery, resetKitCart } = useUI()
   const { addToCart } = cartHandler()
@@ -501,7 +501,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                       <h5 className='font-semibold text-black uppercase font-18'>Quote Detail-{quoteData?.customQuoteNo}</h5>
                       <div className='justify-end'>
                         <button type="button" className="justify-end lg:-top-12 lg:-right-10 p-0.5 z-10 rounded-full dark:text-black" onClick={() => setQuoteModelClose()}>
-                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-8 h-8" aria-hidden="true" />
                         </button>
                       </div>
@@ -593,7 +593,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                       <dl className="mt-2 space-y-2 sm:space-y-2">
                                         <div className="flex items-center justify-between py-3 border-gray-200 border-y">
                                           <dt className="text-sm text-black">
-                                            {isIncludeVAT ? SUBTOTAL_INCLUDING_TAX : SUBTOTAL_EXCLUDING_TAX}
+                                            {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}
                                           </dt>
                                           <dd className="font-semibold text-black text-md">
                                             {isIncludeVAT ? quoteViewData?.subTotal?.formatted?.withTax : quoteViewData?.subTotal?.formatted?.withoutTax}
@@ -601,7 +601,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                         </div>
                                         <div className="flex items-center justify-between pt-2 sm:pt-1">
                                           <dt className="flex items-center text-sm text-black">
-                                            <span>{GENERAL_SHIPPING}</span>
+                                            <span>{translate('label.orderSummary.shippingText')}</span>
                                           </dt>
                                           <dd className="font-semibold text-black text-md">
                                             {isIncludeVAT ? quoteViewData?.shippingCharge?.formatted?.withTax : quoteViewData?.shippingCharge?.formatted?.withoutTax}
@@ -673,7 +673,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                         )}
                                         <div className="flex items-center justify-between pt-2 sm:pt-1">
                                           <dt className="flex items-center text-sm text-black">
-                                            <span>{GENERAL_TAXES}</span>
+                                            <span>{translate('label.orderSummary.taxesText')}</span>
                                           </dt>
                                           <dd className="font-semibold text-black text-md">
                                             {quoteViewData?.grandTotal?.formatted?.tax}
@@ -685,7 +685,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                 )}
                               </Disclosure>
                               <div className="flex items-center justify-between py-2 my-3 text-gray-900 border-y">
-                                <dt className="text-lg font-semibold text-black">{GENERAL_TOTAL}</dt>
+                                <dt className="text-lg font-semibold text-black">{translate('label.orderSummary.totalText')}</dt>
                                 <dd className="text-xl font-semibold text-black">
                                   {quoteViewData?.grandTotal?.formatted?.withTax}
                                 </dd>
@@ -791,7 +791,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                       {loadingAction === LoadingActionType.REMOVE_ITEM ? (
                         <>{LoadingDots}</>
                       ) : (
-                        <>{GENERAL_REMOVE}</>
+                        <>{translate('common.label.removeText')}</>
                       )}
                     </button>
 

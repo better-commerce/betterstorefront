@@ -16,7 +16,6 @@ import PaymentButton from '@components/checkout-old/CheckoutForm/PaymentButton'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { isClearPayPriceThresholdInvalid } from '@framework/utils/payment-util'
 import { Payments } from '@components/utils/payment-constants'
-import { GENERAL_CONFIRM } from '@components/utils/textVariables'
 import { Cookie } from '@framework/utils/constants'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
@@ -438,7 +437,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                 <>
                   <div className="flex flex-col justify-center w-full gap-2 pb-5 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
                     <PaymentButton
-                      btnTitle={GENERAL_CONFIRM}
+                      btnTitle={translate('common.label.confirmText')}
                       paymentMethod={selectedPaymentMethod}
                       basketOrderInfo={basketOrderInfo}
                       uiContext={uiContext}

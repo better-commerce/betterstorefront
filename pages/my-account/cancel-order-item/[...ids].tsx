@@ -22,7 +22,6 @@ import {
   NEXT_CANCEL_ORDER_LINE,
 } from '@components/utils/constants'
 import {
-  GENERAL_CANCEL,
   ITEM_CANCELLED,
   PROCEED_TO_CANCEL,
 } from '@components/utils/textVariables'
@@ -30,10 +29,12 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 declare const window: any
 
 export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: any) {
+  const translate = useTranslation();
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
   const [itemDatas, setItemDatas] = useState<any>(undefined)
@@ -156,7 +157,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
               <Link href="/my-account/orders">
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {GENERAL_CANCEL} Item
+                  {translate('common.label.cancelText')} Item
                 </h3>
               </Link>
             </div>
@@ -164,7 +165,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
               <Link href="/my-account/orders" className="mobile-view">
                 <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {GENERAL_CANCEL} Item
+                  {translate('common.label.cancelText')} Item
                 </h4>
               </Link>
               <div className="w-full">

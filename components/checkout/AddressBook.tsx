@@ -6,7 +6,7 @@ import BillingAddressForm from './BillingAddressForm'
 import { isMobile } from 'react-device-detect'
 import { EmptyObject } from '@components/utils/constants'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
-import { ADD_ADDRESS, GENERAL_EDIT } from '@components/utils/textVariables'
+import { GENERAL_EDIT } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface AddressBookProps {
@@ -112,7 +112,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                 className="py-2 text-xs font-semibold text-black underline sm:text-sm dark:text-black hover:text-orange-600"
                 onClick={onAddNewAddress}
               >
-                {ADD_ADDRESS}
+                {translate('label.addressBook.addNewAddress')}
               </button>
             </div>
             {noAddressesFound && (
@@ -178,7 +178,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                                     onEditAddressToggleView(address)
                                   }}
                                 >
-                                  {GENERAL_EDIT}
+                                  {translate('common.label.editText')}
                                 </button>
                               </div>
                             )}
@@ -192,7 +192,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                                 onEditAddressToggleView(address)
                               }}
                             >
-                              {GENERAL_EDIT}
+                              {translate('common.label.editText')}
                             </button>
                           </div>
                         )}

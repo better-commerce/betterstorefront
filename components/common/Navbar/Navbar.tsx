@@ -29,7 +29,6 @@ import {
   GENERAL_MY_ORDERS,
   GENERAL_RECENTLY_VIEWED,
   GENERAL_REGISTER,
-  MY_ACCOUNT_TITLE,
   GENERAL_WORKFLOW_TITLE,
   SELECT_CURRENCY,
   SELECT_LANGUAGE,
@@ -58,6 +57,7 @@ import {
   getConfig,
 } from '@components/config/config-helper'
 import { Guid } from '@commerce/types'
+import { useTranslation } from '@commerce/utils/use-translation'
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {
   const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
@@ -88,6 +88,7 @@ interface Props {
 
 
 const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [] }) => {
+  const translate = useTranslation();
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const socialLogins: Array<string> = SOCIAL_LOGINS_ENABLED.split(',')
   const router = useRouter()
@@ -158,7 +159,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   });
 
   const accountDropDownConfigAuthorized: any = [
-    { href: '/my-account', title: MY_ACCOUNT_TITLE, className: 'text-left p-2 cursor-pointer', },
+    { href: '/my-account', title: translate('common.label.myAccountText'), className: 'text-left p-2 cursor-pointer', },
     { href: user?.companyId !== Guid?.empty ? '/my-account/my-company?tab=orders' : '/my-account/orders', title: GENERAL_MY_ORDERS, className: 'text-left p-2 cursor-pointer', },
     {
       href: '/',

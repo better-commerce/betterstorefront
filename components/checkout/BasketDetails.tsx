@@ -6,7 +6,6 @@ import {
 } from '@components/utils/constants'
 import {
   BEEN_REFERRED_BY_A_FRIEND,
-  CLOSE_PANEL,
   FIND_THEM,
   USER_NOT_FOUND,
 } from '@components/utils/textVariables'
@@ -283,7 +282,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
                               setReferralModalShow(!referralModalShow)
                             }}
                           >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                           </button>
                         </div>

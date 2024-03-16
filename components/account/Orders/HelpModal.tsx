@@ -1,10 +1,12 @@
 // import { utcDateConvert } from "@framework/utils/parse-util";
-import { CANCEL_ORDER, CHAT_WITH_US, GENERAL_CANCEL, GET_HELP_WITH_ORDER, HELP_ASSIST } from "@components/utils/textVariables";
+import { useTranslation } from "@commerce/utils/use-translation";
+import { CANCEL_ORDER, CHAT_WITH_US, GET_HELP_WITH_ORDER, HELP_ASSIST } from "@components/utils/textVariables";
 import { Dialog, Transition } from "@headlessui/react";
 import  {XMarkIcon}  from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
 
 const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHelpMode, onExchangeItem, onReturnItem, onCancelItem, isHelpOrderOpen, closeOrderHelpModal, onCancelOrder, returnRequestedItems, }: any) => {
+   const translate = useTranslation();
    let replacement: any = "";
    let returnData: any = "";
    let replacementWindow: any = "";
@@ -98,7 +100,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                              details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 &&
                                                 <a href="javascript:void(0);" className='block w-full hover:opacity-90 dark:hover:bg-accent-8 px-4 py-2 mb-2 bg-gray-900 font-bold uppercase text-center text-white border btn-basic-property'
                                                    onClick={() => onCancelItem("Cancel")}>
-                                                   {GENERAL_CANCEL} Item
+                                                   {translate('common.label.cancelText')} Item
                                                 </a>
                                                 
                                           }

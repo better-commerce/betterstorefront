@@ -8,10 +8,6 @@ import { useEffect, useState } from 'react'
 import { postData } from '@components/utils/clientFetcher'
 import { useUI } from '@components/ui'
 import { groupBy } from 'lodash'
-import {
-  ADDRESS_OF_YOUR_CHOICE,
-  IN_STORE_OR_COLLECT_PLUS,
-} from '@components/utils/textVariables'
 import { TruckIcon, CubeIcon } from '@heroicons/react/24/outline'
 import { useTranslation } from '@commerce/utils/use-translation'
 
@@ -31,7 +27,7 @@ const DeliveryTypeSelection = ({
     {
       id: 0,
       title: 'Deliver',
-      content: ADDRESS_OF_YOUR_CHOICE,
+      content: translate('label.checkout.toChoiceAddressText'),
       children: [],
       type: 1,
     },
@@ -39,7 +35,7 @@ const DeliveryTypeSelection = ({
       id: 1,
       type: 2,
       title: 'Collect',
-      content: IN_STORE_OR_COLLECT_PLUS,
+      content: translate('common.label.inStoreUsingCollectPlusText'),
       children: [],
     },
   ]

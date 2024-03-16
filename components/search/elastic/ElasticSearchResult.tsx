@@ -34,7 +34,6 @@ import { MAX_ADD_TO_CART_LIMIT, Messages } from '@components/utils/constants'
 import {
   BTN_NOTIFY_ME,
   BTN_PRE_ORDER,
-  GENERAL_ADD_TO_BASKET,
   GENERAL_INCLUDE_OUT_OF_STOCK_PRODUCT,
   QUICK_VIEW,
 } from '@components/utils/textVariables'
@@ -127,7 +126,7 @@ const CustomResultView = (
   }
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, result?.recordId, true) || matchStrings(o.productId, result?.productId, true)) {

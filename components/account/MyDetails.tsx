@@ -3,21 +3,18 @@ import { Formik, Form, Field } from 'formik'
 import { formConfig, schema } from './configs/details'
 import { useUI } from '@components/ui/context'
 import { handleSubmit } from './common'
-import LoadingDots from '@components/ui/LoadingDots'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  MY_DETAIL_TEXT,
-  GENERAL_SAVE_CHANGES,
-} from '@components/utils/textVariables'
 import { Button } from '@components/ui'
 import { number } from 'yup'
 import Link from 'next/link'
 import { findByFieldName } from '@framework/utils/app-util'
 import FormField from '@components/utils/FormField'
 import { Messages } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function MyDetails({ handleToggleShowState }: any) {
+  const translate = useTranslation();
   const [title, setTitle] = useState('My Details')
   const [phoneVal, setPhoneVal] = useState('')
   const { user, setUser } = useUI()
@@ -104,7 +101,7 @@ export default function MyDetails({ handleToggleShowState }: any) {
             {title}
           </h1> */}
             <p className="mt-2 text-sm text-black font-normal">
-              {MY_DETAIL_TEXT}
+              {translate('label.myAccount.editYourDetailsText')}
             </p>
           </div>
         </div>
@@ -178,7 +175,7 @@ export default function MyDetails({ handleToggleShowState }: any) {
                         loading={isSubmitting}
                         disabled={isSubmitting}
                       >
-                        {!isSubmitting && GENERAL_SAVE_CHANGES}
+                        {!isSubmitting && translate('common.label.saveChangesText')}
                       </Button>
                     </div>
                   </Form>

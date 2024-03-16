@@ -4,6 +4,7 @@ import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import ButtonSecondary from "./shared/Button/ButtonSecondary";
 import Input from "./shared/Input/Input";
 import NcModal from "./shared/NcModal/NcModal";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface ModalTransferTokenProps {
   show: boolean;
@@ -32,22 +33,22 @@ const ModalTransferToken: FC<ModalTransferTokenProps> = ({
   }, [show]);
 
   const renderContent = () => {
+    const translate = useTranslation();
     return (
       <form action="#">
         <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-200">
-          Transfer token
+          {translate('common.label.transferTokenText')}
         </h3>
         <span className="text-sm">
-          You can transfer tokens from your address to another
+          {translate('common.label.transferTokenDescText')}
         </span>
         <div className="mt-8 ">
-          <Input ref={textareaRef} placeholder="Paste address" type={"text"} />
+          <Input ref={textareaRef} placeholder={translate('common.label.pasteAddressText')} type={"text"} />
         </div>
         <div className="mt-4 space-x-3">
-          <ButtonPrimary type="submit">Submit</ButtonPrimary>
+          <ButtonPrimary type="submit">{translate('common.label.submitText')}</ButtonPrimary>
           <ButtonSecondary type="button" onClick={onCloseModalTransferToken}>
-            Cancel
-          </ButtonSecondary>
+            {translate('common.label.cancelText')} </ButtonSecondary>
         </div>
       </form>
     );

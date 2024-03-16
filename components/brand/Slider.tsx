@@ -6,9 +6,10 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
-import { BTN_FIND_MORE, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Router from 'next/router'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 type data = {
   images: Array<string>
   isBanner: Boolean
@@ -16,7 +17,7 @@ type data = {
 
 const Slider = ({ images, isBanner }: data) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-
+  const translate = useTranslation()
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
 
@@ -77,7 +78,7 @@ const Slider = ({ images, isBanner }: data) => {
                       Router.push(val.link ? val.link : '#')
                     }}
                   >
-                    {BTN_FIND_MORE}
+                   {translate('common.label.findOutMoreText')}
                   </p>
                 )}
                 {!isBanner && (

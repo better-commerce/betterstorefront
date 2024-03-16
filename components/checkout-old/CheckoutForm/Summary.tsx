@@ -22,19 +22,12 @@ import {
 } from '@components/utils/constants'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import {
-  GENERAL_DISCOUNT,
   GENERAL_ORDER_SUMMARY,
   GENERAL_PRICE_LABEL_RRP,
-  GENERAL_SHIPPING,
-  GENERAL_TAX,
-  GENERAL_TOTAL,
   IMG_PLACEHOLDER,
   ITEMS_IN_YOUR_CART,
-  SUBTOTAL_EXCLUDING_TAX,
-  SUBTOTAL_INCLUDING_TAX,
   FIND_THEM,
   BEEN_REFERRED_BY_A_FRIEND,
-  CLOSE_PANEL,
   USER_NOT_FOUND,
 } from '@components/utils/textVariables'
 import { useState } from 'react'
@@ -403,8 +396,8 @@ export default function Summary({
                       <div className="flex items-center justify-between">
                         <dt className="text-sm text-gray-900">
                           {isIncludeVAT
-                            ? SUBTOTAL_INCLUDING_TAX
-                            : SUBTOTAL_EXCLUDING_TAX}
+                            ? translate('label.orderSummary.subTotalTaxIncText')
+                            : translate('label.orderSummary.subTotalTaxExcText')}
                         </dt>
                         <dd className="text-gray-900 text-md">
                           {isIncludeVAT
@@ -415,7 +408,7 @@ export default function Summary({
                       {isShippingDisabled ? null : (
                         <div className="flex items-center justify-between">
                           <dt className="text-sm text-gray-900">
-                            {GENERAL_SHIPPING}
+                            {translate('label.orderSummary.shippingText')}
                           </dt>
                           <dd className="text-gray-900 text-md">
                             {isIncludeVAT
@@ -427,7 +420,7 @@ export default function Summary({
                       {cart.promotionsApplied?.length > 0 && (
                         <div className="flex items-center justify-between pt-2">
                           <dt className="text-sm text-gray-900">
-                            <span>{GENERAL_DISCOUNT}</span>
+                            <span>{translate('label.orderSummary.discountText')}</span>
                           </dt>
                           <dd className="text-red-500 text-md">
                             <p>
@@ -440,14 +433,14 @@ export default function Summary({
                         </div>
                       )}
                       <div className="flex items-center justify-between">
-                        <dt className="text-sm text-gray-900">{GENERAL_TAX}</dt>
+                        <dt className="text-sm text-gray-900">{translate('label.orderSummary.taxText')}</dt>
                         <dd className="text-gray-900 text-md">
                           {cart.grandTotal?.formatted?.tax}
                         </dd>
                       </div>
                       <div className="flex items-center justify-between pt-3 border-t">
                         <dt className="text-xl font-semibold text-gray-900 link-button">
-                          {GENERAL_TOTAL}
+                          {translate('label.orderSummary.totalText')}
                         </dt>
                         <dd className="text-xl font-semibold text-gray-900">
                           {isIncludeVAT
@@ -666,8 +659,8 @@ export default function Summary({
                 <div className="flex items-center justify-between font-semibold text-black text-md">
                   <dt>
                     {isIncludeVAT
-                      ? SUBTOTAL_INCLUDING_TAX
-                      : SUBTOTAL_EXCLUDING_TAX}
+                      ? translate('label.orderSummary.subTotalTaxIncText')
+                      : translate('label.orderSummary.subTotalTaxExcText')}
                   </dt>
                   <dd>
                     {isIncludeVAT
@@ -677,7 +670,7 @@ export default function Summary({
                 </div>
                 {isShippingDisabled ? null : (
                   <div className="flex items-center justify-between text-sm text-gray-900">
-                    <dt>{GENERAL_SHIPPING}</dt>
+                    <dt>{translate('label.orderSummary.shippingText')}</dt>
                     <dd>
                       {isIncludeVAT
                         ? cart.shippingCharge?.formatted?.withTax
@@ -688,7 +681,7 @@ export default function Summary({
                 {cart.promotionsApplied?.length > 0 && (
                   <div className="flex items-center justify-between">
                     <dt className="text-sm text-gray-900">
-                      <span>{GENERAL_DISCOUNT}</span>
+                      <span>{translate('label.orderSummary.discountText')}</span>
                     </dt>
                     <dd className="text-red-500 text-md">
                       <p>
@@ -701,14 +694,14 @@ export default function Summary({
                   </div>
                 )}
                 <div className="flex items-center justify-between">
-                  <dt className="text-sm text-gray-900">{GENERAL_TAX}</dt>
+                  <dt className="text-sm text-gray-900">{translate('label.orderSummary.taxText')}</dt>
                   <dd className="text-sm font-medium text-gray-900">
                     {cart.grandTotal?.formatted?.tax}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-lg font-bold text-gray-900 uppercase">
-                    {GENERAL_TOTAL}
+                    {translate('label.orderSummary.totalText')}
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
                     {isIncludeVAT
@@ -779,7 +772,7 @@ export default function Summary({
                                     }}
                                   >
                                     <span className="sr-only">
-                                      {CLOSE_PANEL}
+                                      {translate('common.label.closePanelText')}
                                     </span>
                                     <XMarkIcon
                                       className="w-6 h-6"

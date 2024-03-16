@@ -24,15 +24,6 @@ import { asyncHandler } from '@components/account/Address/AddressBook'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import setSessionIdCookie from '@components/utils/setSessionId'
-import {
-  BILLING_INFORMATION,
-  BTN_DELIVER_TO_THIS_ADDRESS,
-  GENERAL_CHECKOUT,
-  GENERAL_DELIVERY_ADDRESS,
-  GENERAL_PAYMENT,
-  GENERAL_SAVE_CHANGES,
-  SHIPPING_INFORMATION,
-} from '@components/utils/textVariables'
 import PaymentWidget from '@components/checkout-old/PaymentWidget'
 import { AddressType , AlertType } from '@framework/utils/enums'
 import {
@@ -821,7 +812,7 @@ export default function CheckoutForm({
         }`}
       >
         <div className="max-w-2xl px-4 pt-4 pb-24 mx-auto md:pt-16 lg:pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h1 className="sr-only">{GENERAL_CHECKOUT}</h1>
+          <h1 className="sr-only">{translate('label.basket.checkoutBtnText')}</h1>
           <div className="grid lg:grid-cols-5 sm:gap-x-6 xl:gap-x-6">
             <div className="order-2 pb-6 sm:col-span-3 lg:order-1">
               {!isShippingDisabled && (
@@ -839,7 +830,7 @@ export default function CheckoutForm({
               {state.isCNC || isShippingDisabled ? null : (
                 <div className="p-6 py-6 mt-3 bg-white border border-gray-200 shadow">
                   <h4 className="font-bold text-black uppercase">
-                    {GENERAL_DELIVERY_ADDRESS}
+                    {translate('label.orderDetails.deliveryAddressHeadingText')}
                   </h4>
                   {state?.isDeliveryMethodSelected ? (
                     <>
@@ -855,7 +846,7 @@ export default function CheckoutForm({
                         config={shippingFormConfig}
                         initialValues={defaultShippingAddress}
                         isInfoCompleted={state?.isShippingInformationCompleted}
-                        btnTitle={BTN_DELIVER_TO_THIS_ADDRESS}
+                        btnTitle={translate('label.checkout.deliverToThisAddressText')}
                         addresses={addresses}
                         retrieveAddress={retrieveAddress}
                         setAddress={setShippingInformation}
@@ -924,7 +915,7 @@ export default function CheckoutForm({
               </div> */}
               <div className="p-6 py-6 mt-3 bg-white border border-gray-200 shadow">
                 <h4 className="font-bold text-black uppercase">
-                  {GENERAL_PAYMENT}
+                {translate('label.checkout.paymentHeadingText')}
                 </h4>
                 {state.isPaymentInformationCompleted && (
                   <Payments

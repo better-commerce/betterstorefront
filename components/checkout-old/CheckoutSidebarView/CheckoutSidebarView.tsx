@@ -10,17 +10,12 @@ import useCheckout from '@framework/checkout/use-checkout'
 import ShippingWidget from '../ShippingWidget'
 import s from './CheckoutSidebarView.module.css'
 import {
-  BTN_CONFIRM_PURCHASE,
-  CALCULATED_AT_CHECKOUT,
-  GENERAL_CHECKOUT,
   GENERAL_FREE,
-  GENERAL_SHIPPING,
-  GENERAL_SUBTOTAL,
-  GENERAL_TAXES,
-  GENERAL_TOTAL,
 } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
+  const translate = useTranslation();
   const { setSidebarView, closeSidebar } = useUI()
   const { data: checkoutData, submit: onCheckout } = useCheckout()
 
@@ -39,7 +34,7 @@ const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
     >
       <div className="flex-1 px-4 sm:px-6">
         <Link href="/cart">
-          <Text variant="sectionHeading">{GENERAL_CHECKOUT}</Text>
+          <Text variant="sectionHeading">{translate('label.basket.checkoutBtnText')}</Text>
         </Link>
 
         {/*<PaymentWidget
@@ -60,19 +55,19 @@ const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
       >
         <ul className="pb-2">
           <li className="flex justify-between py-1">
-            <span>{GENERAL_SUBTOTAL}</span>
+            <span>{translate('label.orderSummary.subTotalText')}</span>
           </li>
           <li className="flex justify-between py-1">
-            <span>{GENERAL_TAXES}</span>
-            <span>{CALCULATED_AT_CHECKOUT}</span>
+            <span>{translate('label.orderSummary.taxesText')}</span>
+            <span>{translate('label.checkout.calculatedAtCheckoutText')}</span>
           </li>
           <li className="flex justify-between py-1">
-            <span>{GENERAL_SHIPPING}</span>
+            <span>{translate('label.orderSummary.shippingText')}</span>
             <span className="font-bold tracking-wide">{GENERAL_FREE}</span>
           </li>
         </ul>
         <div className="flex justify-between py-3 mb-2 font-bold border-t border-accent-2">
-          <span>{GENERAL_TOTAL}</span>
+          <span>{translate('label.orderSummary.totalText')}</span>
         </div>
         <div>
           {/* Once data is correcly filled */}
@@ -81,7 +76,7 @@ const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
             width="100%"
             disabled={!checkoutData?.hasPayment || !checkoutData?.hasShipping}
           >
-            {BTN_CONFIRM_PURCHASE}
+            {translate('label.checkout.purchaseConfirmationText')}
           </Button>
         </div>
       </form>

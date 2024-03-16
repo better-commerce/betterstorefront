@@ -9,28 +9,20 @@ import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import {
   MY_ORDERS_TEXT,
-  GENERAL_RECENT_ORDERS,
-  GENERAL_ORDER_NUMBER,
-  GENERAL_DATE_PLACED,
-  GENERAL_TRACKING_LINK,
-  GENERAL_VIEW_PRODUCT,
-  GENERAL_ADD_TO_BASKET,
-  ORDER_HISTORY_TITLE,
-  GENERAL_TOTAL,
-  GENERAL_ORDER_PLACED_ON,
-  GENERAL_CREATE_RETURN,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import ReturnModal from '@components/returns/Modal'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function MyOrders({ deviceInfo }: any) {
   const [data, setData] = useState([])
   const [productIdsInReturn, setProductIdsInReturn] = useState([''])
   const [returnData, setReturnData] = useState({ product: {}, order: {} })
   const { user, basketId, setCartItems, openCart, cartItems } = useUI()
+  const translate = useTranslation();
   const isIncludeVAT = vatIncluded()
   useEffect(() => {
     const fetchOrders = async () => {
@@ -127,7 +119,7 @@ export default function MyOrders({ deviceInfo }: any) {
         <div className="max-w-4xl lg:mx-12">
           <div className="lg:px-4 sm:px-0 pt-5">
             <h1 className="font-extrabold tracking-tight text-gray-900">
-              {ORDER_HISTORY_TITLE}
+            {translate('label.order.orderHistory')}
             </h1>
             <p className="mt-2 text-sm text-gray-500">{MY_ORDERS_TEXT}</p>
           </div>
@@ -138,14 +130,14 @@ export default function MyOrders({ deviceInfo }: any) {
           />
           <section aria-labelledby="recent-heading" className="mt-16">
             <h2 id="recent-heading" className="sr-only">
-              {GENERAL_RECENT_ORDERS}
+              {translate('label.orderDetails.recentOrdersText')}
             </h2>
 
             <div className="space-y-16 sm:space-y-24">
               {data.map((order: any) => (
                 <div key={order.orderNo}>
                   <h3 className="sr-only">
-                    {GENERAL_ORDER_PLACED_ON}{' '}
+                    {translate('common.label.orderPlacedText')}{' '}
                     <time dateTime={order.orderDate}>
                       {new Date(order.orderDate).toLocaleDateString()}
                     </time>
@@ -154,13 +146,13 @@ export default function MyOrders({ deviceInfo }: any) {
                     <dl className="flex-auto w-full space-y-6 text-sm text-gray-600 divide-y divide-gray-200 md:divide-y-0 md:space-y-0 md:grid md:grid-cols-5 md:gap-x-10 lg:flex-none lg:gap-x-10">
                       <div className="flex justify-between md:block">
                         <dt className="font-medium text-gray-900">
-                          {GENERAL_ORDER_NUMBER}
+                          {translate('label.common.orderNumberText')}
                         </dt>
                         <dd className="md:mt-1">{order.orderNo}</dd>
                       </div>
                       <div className="flex justify-between pt-4 md:block md:pt-0">
                         <dt className="font-medium text-gray-900">
-                          {GENERAL_DATE_PLACED}
+                          {translate('label.common.datePlacedText')}
                         </dt>
                         <dd className="md:mt-1">
                           <time dateTime={order.orderDate}>
@@ -169,7 +161,7 @@ export default function MyOrders({ deviceInfo }: any) {
                         </dd>
                       </div>
                       <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
-                        <dt>{GENERAL_TOTAL}</dt>
+                        <dt>{translate('label.orderSummary.totalText')}</dt>
                         <dd className="md:mt-1">
                           {isIncludeVAT
                             ? order?.subTotal?.formatted?.withTax
@@ -189,7 +181,7 @@ export default function MyOrders({ deviceInfo }: any) {
                           target="_blank"
                           rel="noreferrer"
                         >
-                          {GENERAL_TRACKING_LINK}
+                          {translate('label.orderDetails.trackingLinkBtnText')}
                         </a>
                       </div>
                     </dl>
@@ -226,14 +218,14 @@ export default function MyOrders({ deviceInfo }: any) {
                                   href={`/${product.slug || '#'}`}
                                   className="text-indigo-600 hover:text-indigo-500"
                                 >
-                                  {GENERAL_VIEW_PRODUCT}
+                                  {translate('label.product.viewProductText')}
                                 </Link>
                                 <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
                                   <button
                                     onClick={() => handleAddToCart(product)}
                                     className="text-indigo-600 hover:text-indigo-500"
                                   >
-                                    {GENERAL_ADD_TO_BASKET}
+                                    {translate('label.basket.addToBagText')}
                                   </button>
                                 </div>
                                 {productIdsInReturn.includes(
@@ -258,7 +250,7 @@ export default function MyOrders({ deviceInfo }: any) {
                                     >
                                       {product.shippedQty < product.qty
                                         ? 'Cancel'
-                                        : GENERAL_CREATE_RETURN}
+                                        : translate('label.orderDetails.createReturnBtnText')}
                                     </button>
                                   </div>
                                 )}

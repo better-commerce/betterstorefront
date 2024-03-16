@@ -1,7 +1,6 @@
 import PromotionInput from '@components/cart/PromotionInput'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyString } from '@components/utils/constants'
-import { GENERAL_DISCOUNT, GENERAL_SHIPPING } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 
 const Summary = ({
@@ -94,7 +93,7 @@ const Summary = ({
           {basket?.promotionsApplied?.length > 0 && (
             <div className="flex items-center justify-between">
               <dt className="text-sm text-gray-900">
-                <span>{GENERAL_DISCOUNT}</span>
+                <span>{translate('label.orderSummary.discountText')}</span>
               </dt>
               <dd className="text-red-500 text-md">
                 <p>
@@ -118,7 +117,7 @@ const Summary = ({
           {
             <div className="flex items-center justify-between pt-2 sm:pt-1">
               <dt className="flex items-center text-black font-14">
-                <span>{GENERAL_SHIPPING}</span>
+                <span>{translate('label.orderSummary.shippingText')}</span>
               </dt>
               <dd className="font-semibold text-black text-md">
                 {isIncludeVAT

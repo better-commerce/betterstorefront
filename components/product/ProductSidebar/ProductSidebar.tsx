@@ -9,7 +9,7 @@ import {
   selectDefaultOptionFromProduct,
   SelectedOptions,
 } from '../helpers'
-import { GENERAL_ADD_TO_BASKET, GENERAL_CARE_TEXT, GENERAL_DETAILS, GENERAL_DETAILS_TEXT, GENERAL_NOT_AVAILABLE } from '@components/utils/textVariables'
+import { GENERAL_CARE_TEXT, GENERAL_DETAILS, GENERAL_DETAILS_TEXT, GENERAL_NOT_AVAILABLE } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ProductSidebarProps {
@@ -49,7 +49,7 @@ const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ prod
       <div>
         {process.env.COMMERCE_CART_ENABLED && (
           <Button
-            aria-label={GENERAL_ADD_TO_BASKET}
+            aria-label={translate('label.basket.addToBagText')}
             type="button"
             className={s.button}
             onClick={addToCart}
@@ -58,7 +58,7 @@ const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ prod
           >
             {variant?.availableForSale === false
               ? GENERAL_NOT_AVAILABLE
-              : GENERAL_ADD_TO_BASKET}
+              : translate('label.basket.addToBagText')}
           </Button>
         )}
       </div>

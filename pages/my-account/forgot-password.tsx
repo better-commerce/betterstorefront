@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next'
 import {
   BTN_SUBMIT,
   FORGOT_PASSWORD,
-  DETAILS_ERROR,
+  translate('label.addressBook.updateFailedText'),
   ERROR_WOOPS_SOMETHING_WENT_WRONG,
 } from '@components/utils/textVariables'
 import { useEffect, useState } from 'react'
@@ -78,7 +78,7 @@ function ForgotPasswordPage() {
       }
       setIsLoading(false)
     } catch (error) {
-      setAlert({ type: 'error', msg: DETAILS_ERROR })
+      setAlert({ type: 'error', msg: translate('label.addressBook.updateFailedText') })
       setIsLoading(false)
     }
   }
