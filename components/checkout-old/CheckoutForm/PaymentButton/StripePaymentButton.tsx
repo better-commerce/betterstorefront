@@ -1,4 +1,5 @@
 // Package Imports
+import { t as translate } from "i18next";
 import { Stripe, StripeElements } from '@stripe/stripe-js'
 import {
   Elements,
