@@ -8,7 +8,7 @@ import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST,
 import { StarIcon } from '@heroicons/react/24/outline'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import { BTN_PRE_ORDER, GENERAL_ADD_TO_BAG, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, ITEM_WISHLISTED, QUICK_VIEW, WISHLIST_TITLE, } from '@components/utils/textVariables'
+import { BTN_PRE_ORDER, GENERAL_ADD_TO_BAG, IMG_PLACEHOLDER, QUICK_VIEW, WISHLIST_TITLE, } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
@@ -19,6 +19,7 @@ import cn from 'classnames'
 import classNames from 'classnames'
 import ProductTag from '../ProductTag'
 import wishlistHandler from '@components/services/wishlist'
+import { useTranslation } from '@commerce/utils/use-translation'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
@@ -54,6 +55,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const [productPromotion, setProductPromo] = useState(null)
   const [isInWishList, setIsInWishList] = useState(false)
   const { deleteWishlistItem } = wishlistHandler()
+  const translate = useTranslation();
 
   useEffect(() => {
     if (wishListItems?.some((x: any) => x?.stockCode === product?.stockCode)) {
@@ -235,7 +237,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, product?.recordId, true) || matchStrings(o.productId, product?.productId, true)) {
@@ -480,7 +482,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   onClick={handleWishList}
                   disabled={product.hasWishlisted}
                 >
-                  {product.hasWishlisted ? ITEM_WISHLISTED : WISHLIST_TITLE}
+                  {product.hasWishlisted ? translate('label.product.wishlistedText') : WISHLIST_TITLE}
                 </SimpleButton>
               )}
               <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary bg-orange-600 text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">

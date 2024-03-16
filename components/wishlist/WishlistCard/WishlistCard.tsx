@@ -8,10 +8,10 @@ import type { Product } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 import useRemoveItem from '@framework/wishlist/use-remove-item'
 import {
-  GENERAL_ADD_TO_BASKET,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Props {
   product: Product
@@ -29,7 +29,7 @@ const WishlistCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
   const removeItem = useRemoveItem({ wishlist: { includeProducts: true } })
   const [loading, setLoading] = useState(false)
   const [removing, setRemoving] = useState(false)
-
+  const translate = useTranslation();
   const handleRemove = async () => {
     setRemoving(true)
 
@@ -67,7 +67,7 @@ const WishlistCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
           <Text html={product.description} />
         </div>
         <Button
-          aria-label={GENERAL_ADD_TO_BASKET}
+          aria-label={translate('label.basket.addToBagText')}
           type="button"
           className={
             'py-1 px-3 border border-secondary rounded-md shadow-sm hover:bg-primary-hover'
@@ -75,7 +75,7 @@ const WishlistCard: FC<React.PropsWithChildren<Props>> = ({ product }) => {
           onClick={addToCart}
           loading={loading}
         >
-          {GENERAL_ADD_TO_BASKET}
+          {translate('label.basket.addToBagText')}
         </Button>
       </div>
       <div className="flex flex-col justify-between col-span-2">

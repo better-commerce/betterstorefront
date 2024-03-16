@@ -3,12 +3,14 @@ import { formConfig, schema } from '../configs/address'
 import Checkbox from './Checkbox'
 import React from 'react'
 import LoadingDots from '@components/ui/LoadingDots'
-import { GENERAL_CANCEL } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
+
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
 }
 
 export default function AddressForm({ initialValues = {}, onSubmit = () => {}, closeEditMode }: any) {
+  const translate = useTranslation();
   return (
     <Formik
       validationSchema={schema}
@@ -84,7 +86,7 @@ export default function AddressForm({ initialValues = {}, onSubmit = () => {}, c
                   onClick={closeEditMode}
                   className="max-w-xs flex-1  border border-transparent py-3 ml-5 px-8 flex items-center justify-center font-medium btn-primary opacity-80 sm:w-full"
                 >
-                  {GENERAL_CANCEL}
+                  {translate('common.label.cancelText')}
                 </button>
               )}
             </div>

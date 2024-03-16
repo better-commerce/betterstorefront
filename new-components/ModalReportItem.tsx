@@ -5,7 +5,7 @@ import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import ButtonSecondary from "./shared/Button/ButtonSecondary";
 import Textarea from "./shared/Textarea/Textarea";
 import NcModal from "./shared/NcModal/NcModal";
-import { translate } from "@components/services/localization";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface ProblemPlan {
   name: string;
@@ -31,6 +31,7 @@ const ModalReportItem: FC<ModalReportItemProps> = ({
   show,
   onCloseModalReportItem,
 }) => {
+  const translate = useTranslation();
   const textareaRef = useRef(null);
 
   const [problemSelected, setProblemSelected] = useState(problemPlans[0]);
@@ -68,7 +69,7 @@ const ModalReportItem: FC<ModalReportItemProps> = ({
       <form action="#">
         {/* RADIO PROBLEM PLANS */}
         <RadioGroup value={problemSelected} onChange={setProblemSelected}>
-          <RadioGroup.Label className="sr-only">Problem Plans</RadioGroup.Label>
+          <RadioGroup.Label className="sr-only">{translate('common.label.problemPlansText')}</RadioGroup.Label>
           <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             {problemPlans.map((plan) => (
               <RadioGroup.Option
@@ -116,8 +117,7 @@ const ModalReportItem: FC<ModalReportItemProps> = ({
           {translate('label.product.messageText')}
           </h4>
           <span className="text-sm text-neutral-6000 dark:text-neutral-400">
-            Please provide any additional information or context that will help
-            us understand and handle the situation.
+            {translate('common.label.provideAdditionalInfoText')}
           </span>
           <Textarea
             placeholder="..."
@@ -130,10 +130,10 @@ const ModalReportItem: FC<ModalReportItemProps> = ({
         </div>
         <div className="mt-4 space-x-3">
           <ButtonPrimary onClick={handleClickSubmitForm} type="submit">
-            Submit
+            {translate('common.label.submitText')}
           </ButtonPrimary>
           <ButtonSecondary type="button" onClick={onCloseModalReportItem}>
-            Cancel
+            {translate('common.label.cancelText')}
           </ButtonSecondary>
         </div>
       </form>
@@ -151,7 +151,7 @@ const ModalReportItem: FC<ModalReportItemProps> = ({
       contentExtraClass="max-w-screen-md"
       renderContent={renderContent}
       renderTrigger={renderTrigger}
-      modalTitle="Report Abuse"
+      modalTitle={translate('common.label.reportAbuseText')}
     />
   );
 };

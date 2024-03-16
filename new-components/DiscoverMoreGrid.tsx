@@ -4,6 +4,7 @@ import Heading from "./Heading/Heading";
 import img1 from "images/discover-more-1.png";
 import img2 from "images/discover-more-2.png";
 import img3 from "images/discover-more-3.png";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 const CATS_DISCOVER = [
   {
@@ -25,15 +26,16 @@ const CATS_DISCOVER = [
 ];
 
 const DiscoverMoreGrid = () => {
+  const translate = useTranslation();
   return (
     <div className="nc-DiscoverMoreGrid relative">
       <Heading
         className="mb-12 text-neutral-900 dark:text-neutral-50"
         desc=""
         isCenter
-        rightDescText="Good things are waiting for you"
+        rightDescText={translate('common.label.discoverMoreDescText')}
       >
-        Discover more
+        {translate('common.label.discoverMoreText')}
       </Heading>
       <div className="relative grid grid-cols-3 gap-8">
         {CATS_DISCOVER.map((item, index) => (

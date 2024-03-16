@@ -18,7 +18,6 @@ import {
   GENERAL_FIRST_NAME, 
   GENERAL_LAST_NAME, 
   GENERAL_POSTCODE, 
-  GENERAL_SHIPPING, 
   USE_DIFFERENT_SHIPPING_ADDRESS 
 } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -65,7 +64,7 @@ const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
       <SidebarLayout handleBack={() => setSidebarView('CHECKOUT_VIEW')}>
         <div className="px-4 sm:px-6 flex-1">
           <h2 className="pt-1 pb-8 text-2xl font-semibold tracking-wide cursor-pointer inline-block">
-            {GENERAL_SHIPPING}
+            {translate('label.orderSummary.shippingText')}
           </h2>
           <div>
             <div className="flex flex-row my-3 items-center">

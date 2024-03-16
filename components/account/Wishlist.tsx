@@ -13,19 +13,16 @@ import { round } from 'lodash'
 import { matchStrings, priceFormat } from '@framework/utils/parse-util'
 import Image from 'next/legacy/image'
 import {
-  WISHLIST_TITLE,
-  WISHLIST_SUB_TITLE,
-  GENERAL_VIEW_PRODUCT,
-  GENERAL_ADD_TO_BASKET,
   IMG_PLACEHOLDER,
-  GENERAL_REMOVE,
 } from '@components/utils/textVariables'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Wishlist() {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const translate = useTranslation();
   const { user, basketId, setCartItems, openCart, setWishlist, cartItems } =
     useUI()
 
@@ -107,7 +104,7 @@ export default function Wishlist() {
             {!data.length && !isLoading && (
               <div className="flex flex-col w-full py-2 max-acc-container sm:px-0">
                 <div className="my-0 font-semibold text-secondary-full-opacity text-m-16 text-24">
-                  {WISHLIST_SUB_TITLE}
+                {translate('label.wishlist.emptyWishlistText')}
                 </div>
                 <p className="text-xs sm:text-sm text-primary opacity-60">
                   Explore more and save items in your wishlist.{' '}
@@ -215,7 +212,7 @@ export default function Wishlist() {
                                   <span className="mr-2">
                                     <i className="sprite-icon sprite-cart"></i>
                                   </span>{' '}
-                                  {GENERAL_ADD_TO_BASKET}
+                                  {translate('label.basket.addToBagText')}
                                 </button>
                               ) : (
                                 <button className="flex items-center justify-center w-full btn border absolute bottom-0 bg-gray-200">

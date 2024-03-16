@@ -8,9 +8,7 @@ import {
 } from '@components/utils/constants'
 import {
   BEEN_REFERRED_BY_A_FRIEND,
-  CLOSE_PANEL,
   FIND_THEM,
-  GENERAL_SHIPPING,
   IMG_PLACEHOLDER,
   USER_NOT_FOUND,
 } from '@components/utils/textVariables'
@@ -413,7 +411,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                     {cartItems?.deliveryPlans?.length > 0 && (
                       <div className="flex items-center justify-between pt-2 sm:pt-1">
                         <dt className="flex items-center text-black font-18">
-                          <span>{GENERAL_SHIPPING}</span>
+                          <span>{translate('label.orderSummary.shippingText')}</span>
                         </dt>
                         <dd className="font-semibold text-black text-md">
                           {isIncludeVAT
@@ -500,7 +498,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                               setReferralModalShow(!referralModalShow)
                             }}
                           >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                           </button>
                         </div>

@@ -1,5 +1,5 @@
 import { Messages,NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO, PRODUCTS_SLUG_PREFIX, } from '@components/utils/constants'
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, } from '@components/utils/textVariables'
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
@@ -20,6 +20,7 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import wishlistHandler from '@components/services/wishlist'
+import { useTranslation } from '@commerce/utils/use-translation'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -50,6 +51,7 @@ export default function PLPQuickView({
   setQuickviewOpen,
   maxBasketItemsCount,
 }: any) {
+  const translate = useTranslation();
   const {isInWishList , deleteWishlistItem } = wishlistHandler()
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, removeFromWishlist, setAlert ,isGuestUser, openLoginSideBar} = useUI()
   const isIncludeVAT = vatIncluded()
@@ -85,7 +87,7 @@ export default function PLPQuickView({
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, selectedAttrData?.recordId, true) || matchStrings(o.productId, selectedAttrData?.productId, true)) {
@@ -196,7 +198,7 @@ export default function PLPQuickView({
         selectedAttrData.sellWithoutInventory
       ) {
         buttonConfig = {
-          title: GENERAL_ADD_TO_BASKET,
+          title: translate('label.basket.addToBagText'),
           validateAction: async () => {
             const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
             if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier && !selectedAttrData?.flags?.sellWithoutInventory) {
@@ -579,7 +581,7 @@ export default function PLPQuickView({
                     <div className="flex-1 px-0">
                       <div className="relative py-2 mt-2 sm:px-0">
                         <button type="button" className="absolute -top-11 right-0 lg:-top-2 lg:-right-8 p-0.5 bg-gray-300 rounded-full" onClick={() => setModalClose()} >
-                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                         <div className="grid grid-cols-1 lg:grid-cols-12">

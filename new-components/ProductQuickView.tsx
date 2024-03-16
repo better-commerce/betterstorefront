@@ -23,7 +23,7 @@ import AccordionInfo from "@new-components/AccordionInfo";
 import Image from "next/image";
 import Link from "next/link";
 import { generateUri } from "@commerce/utils/uri-util";
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
+import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
 import AttributesHandler from "@components/product/ProductView/AttributesHandler";
 import axios from "axios";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@components/utils/constants";
@@ -36,6 +36,7 @@ import cartHandler from "@components/services/cart";
 import { recordGA4Event } from "@components/services/analytics/ga4";
 import wishlistHandler from "@components/services/wishlist";
 import dynamic from "next/dynamic";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface ProductQuickViewProps {
   className?: string;
@@ -59,7 +60,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [sizeInit, setSizeInit] = useState('')
   let currentPage = getCurrentPage()
-
+  const translate = useTranslation();
   const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
     if (colour) {
       setVariantInfo((v: any) => ({
@@ -129,7 +130,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, selectedAttrData?.recordId, true) || matchStrings(o.productId, selectedAttrData?.productId, true)) {
@@ -232,7 +233,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         selectedAttrData.sellWithoutInventory
       ) {
         buttonConfig = {
-          title: GENERAL_ADD_TO_BASKET,
+          title: translate('label.basket.addToBagText'),
           validateAction: async () => {
             const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
             if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier && !selectedAttrData?.flags?.sellWithoutInventory) {

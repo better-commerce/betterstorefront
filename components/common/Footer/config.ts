@@ -11,7 +11,6 @@ import {
   GENERAL_PRIVACY, 
   GENERAL_RETURNS, 
   GENERAL_SECURE_PAYMENT,
-  GENERAL_SHIPPING, 
   GENERAL_SUSTAINABILITY, 
   GENERAL_TEES, 
   GENERAL_TERMS_AND_CONDITIONS, 
@@ -37,7 +36,7 @@ const footerNavigation = {
   ],
   customerService: [
     { name: GENERAL_CONTACT, href: '#' },
-    { name: GENERAL_SHIPPING, href: '#' },
+    { name: 'Shipping', href: '#' },
     { name: GENERAL_RETURNS, href: '#' },
     { name: GENERAL_WARRANTY, href: '#' },
     { name: GENERAL_SECURE_PAYMENT, href: '#' },

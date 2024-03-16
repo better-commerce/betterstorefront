@@ -21,7 +21,6 @@ import {
   GENERAL_COUNTRY, 
   GENERAL_FIRST_NAME, 
   GENERAL_LAST_NAME, 
-  GENERAL_PAYMENT_METHOD 
 } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
@@ -67,7 +66,7 @@ const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
     <form className="h-full" onSubmit={handleSubmit}>
       <SidebarLayout handleBack={() => setSidebarView('CHECKOUT_VIEW')}>
         <div className="px-4 sm:px-6 flex-1">
-          <Text variant="sectionHeading"> {GENERAL_PAYMENT_METHOD}</Text>
+          <Text variant="sectionHeading"> {translate('label.checkout.paymentMethodText')}</Text>
           <div>
             <div className={s.fieldset}>
               <label className={s.label}>{CARDHOLDER_NAME}</label>

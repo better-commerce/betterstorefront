@@ -1,11 +1,6 @@
 import { useState } from 'react'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Button from '@components/ui/IndigoButton'
-import {
-  GENERAL_DISTANCE_MILES,
-  GENERAL_ADDRESS,
-  NORMAL_OPENING_HOURS
-} from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const hardcodedOpeningHours = [
@@ -77,7 +72,7 @@ export default function CncList({
                   {location.availableToCollectIn}
                 </p>
                 <p className="text-sm py-2">
-                  {location.distanceInMetres} {GENERAL_DISTANCE_MILES}
+                  {location.distanceInMetres} {translate('common.label.milesText')}
                 </p>
               </div>
               <div className="flex flex-row justify-center items-center">
@@ -94,7 +89,7 @@ export default function CncList({
             {selectedLocation.id === location.id ? (
               <div className="px-5 py-2 flex flex-col">
                 <div className="py-2">
-                  <h4 className="font-bold">{GENERAL_ADDRESS}</h4>
+                  <h4 className="font-bold">{translate('common.label.addressText')}</h4>
                   <span>{selectedLocation.postCode}</span>
                 </div>
                 <div className="py-2">
@@ -104,7 +99,7 @@ export default function CncList({
                   />
                 </div>
                 <div className="py-2">
-                  <h4 className="font-bold">{NORMAL_OPENING_HOURS}</h4>
+                  <h4 className="font-bold">{translate('common.label.normalOpeningHoursHeadingText')}</h4>
                   <div>
                     {hardcodedOpeningHours.map((datetime: any, idx: number) => (
                       <div

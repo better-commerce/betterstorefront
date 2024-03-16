@@ -16,7 +16,7 @@ import SearchQuickView from '@components/product/QuickView/SearchQuickView'
 // Other Import
 import { useUI } from '@components/ui'
 //import type { Hit } from 'instantsearch.js'
-import { BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, QUICK_VIEW } from '@components/utils/textVariables'
+import { BTN_NOTIFY_ME, BTN_PRE_ORDER, IMG_PLACEHOLDER, QUICK_VIEW } from '@components/utils/textVariables'
 import cartHandler from '@components/services/cart'
 import { cartItemsValidateAddToCart, getAlgoliaSearchCurrencyLabel, getAlgoliaSearchListPriceColumn, getAlgoliaSearchPriceColumn, resetAlgoliaSearch, vatIncluded } from '@framework/utils/app-util'
 import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_GET_PRODUCT_QUICK_VIEW } from '@components/utils/constants'
@@ -46,7 +46,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, hit?.objectID, true)) {

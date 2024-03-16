@@ -2,9 +2,6 @@ import { Formik} from 'formik'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useState, useRef, useEffect } from 'react'
-import {
-  ADD_ADDRESS,
-} from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function AddressForm({
@@ -197,7 +194,7 @@ export default function AddressForm({
                             }}
                             className="flex items-end justify-end w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                             >
-                            {GENERAL_EDIT}
+                            {translate('common.label.editText')}
                             </button> */}
                           </div>
                         </div>
@@ -332,7 +329,7 @@ export default function AddressForm({
                     onClick={() => setNewFormOpen(false)}
                     className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 m-2 font-medium text-white bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
                   >
-                    {GENERAL_CANCEL}
+                    {translate('common.label.cancelText')}
                   </button>
                 )} */}
 
@@ -353,7 +350,7 @@ export default function AddressForm({
                   onClick={(ev: any) => handleOpenNewAddressModal()}
                   className="flex items-center justify-center flex-1 w-full max-w-xs px-8 py-2 text-sm font-medium text-black uppercase border border-black rounded-md hover:bg-black hover:text-white sm:w-full"
                 >
-                  {ADD_ADDRESS}
+                  {translate('label.addressBook.addNewAddress')}
                 </button>
                 {/* {!!closeEditMode && (
                 <button
@@ -361,7 +358,7 @@ export default function AddressForm({
                   onClick={closeEditMode}
                   className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 ml-5 font-medium text-white bg-gray-500 border border-transparent rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
-                  {GENERAL_CANCEL}
+                  {translate('common.label.cancelText')}
                 </button>
               )} */}
               </div>

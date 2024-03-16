@@ -13,10 +13,6 @@ import {
 } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import axios from 'axios'
-import {
-  ADDRESS_OF_YOUR_CHOICE,
-  IN_STORE_OR_COLLECT_PLUS,
-} from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 function DeliveryOptions({
@@ -33,7 +29,7 @@ function DeliveryOptions({
     {
       id: 1,
       title: translate('label.checkout.deliverText'),
-      content: ADDRESS_OF_YOUR_CHOICE,
+      content: translate('label.checkout.toChoiceAddressText'),
       children: [],
       type: 2,
     },
@@ -41,7 +37,7 @@ function DeliveryOptions({
       id: 2,
       type: 1,
       title: translate('label.checkout.collectText'),
-      content: IN_STORE_OR_COLLECT_PLUS,
+      content: translate('common.label.inStoreUsingCollectPlusText'),
       children: [],
     },
   ]
