@@ -6,7 +6,6 @@ import BillingAddressForm from './BillingAddressForm'
 import { isMobile } from 'react-device-detect'
 import { EmptyObject } from '@components/utils/constants'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
-import { GENERAL_EDIT } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface AddressBookProps {

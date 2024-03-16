@@ -38,7 +38,6 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const [isInWishList, setIsInWishList] = useState(false)
   const { deleteWishlistItem } = wishlistHandler()
   const [quantity, setQuantity] = useState(1)
-  const translate = useTranslation();
   const handleQuickViewData = (data: any) => {
     setShowModalQuickView(true);
     setQuickViewData(data)

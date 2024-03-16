@@ -17,7 +17,6 @@ import {
   GENERAL_PERSONALISATION,
   GENERAL_PERSONALISATION_READONLY,
   IMG_PLACEHOLDER,
-  SELECT_IMAGE_ERROR,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -348,7 +347,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
               </div>
               {showError && (
                 <p className="mt-2 -mb-2 text-xs text-red-500 underline">
-                  {SELECT_IMAGE_ERROR}
+                  {translate('label.product.productPersonalisation.selectImageText')}
                 </p>
               )}
               <div className="flex items-center justify-center w-full mt-5 engrav-add-btn">

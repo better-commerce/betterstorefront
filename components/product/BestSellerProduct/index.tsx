@@ -21,7 +21,7 @@ const ProductSlider: React.FC<IProductSliderProps> = ({
   products,
   deviceInfo,
   maxBasketItemsCount,
-}: IProductSliderProps) => {\
+}: IProductSliderProps) => {
   const translate = useTranslation()
   const swiperRef: any = useRef(null)
   return (

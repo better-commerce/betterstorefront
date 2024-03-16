@@ -2,13 +2,6 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { 
-  BTN_SEE_MORE_DETAILS, 
-  GENERAL_CLOSE, 
-  PRODUCT_DESCRIPTION, 
-  PRODUCT_INFORMATION, 
-  PRODUCT_OPTIONS 
-} from '@components/utils/textVariables'
 import Image from 'next/image'
 import { useTranslation } from '@commerce/utils/use-translation'
 
@@ -63,7 +56,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                   className="absolute text-gray-400 top-4 right-4 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8"
                   onClick={closeModal}
                 >
-                  <span className="sr-only">{GENERAL_CLOSE}</span>
+                  <span className="sr-only">{translate('common.label.closeText')}</span>
                   <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                 </button>
 
@@ -94,11 +87,11 @@ export default function BundleCard({ productData, closeModal }: any) {
                       className="mt-2"
                     >
                       <h3 id="information-heading" className="sr-only">
-                        {PRODUCT_INFORMATION}
+                        {translate('label.product.bundles.productInformationText')}
                       </h3>
                     </section>
                     <div className="mt-6">
-                      <h3 className="sr-only">{PRODUCT_DESCRIPTION}</h3>
+                      <h3 className="sr-only">{translate('label.product.bundles.descriptionText')}</h3>
 
                       <div
                         className="space-y-6 text-sm text-gray-700"
@@ -112,7 +105,8 @@ export default function BundleCard({ productData, closeModal }: any) {
                       className="mt-6"
                     >
                       <h3 id="options-heading" className="sr-only">
-                        {PRODUCT_OPTIONS}
+                      {translate('label.product.bundles.optionsText')}
+
                       </h3>
                       <div className="flex justify-between w-1/2">
                         {productData?.images.map(
@@ -135,7 +129,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                             type="submit"
                             className="flex items-center justify-center w-full px-8 py-3 mt-6 font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                           >
-                            {BTN_SEE_MORE_DETAILS}
+                            {translate('label.product.bundles.seeMoreText')}
                           </button>
                         </Link>
                       </form>

@@ -18,9 +18,8 @@ import ProgressBar from '@components/ui/ProgressBar'
 import { CookieBanner } from '@schlomoh/react-cookieconsent'
 import { IExtraProps } from './Layout'
 import { stringToBoolean } from '@framework/utils/parse-util'
-import { GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 import BulkAddSidebarView from '@components/bulk-add/BulkAddSidebarView'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />
@@ -121,6 +120,7 @@ const LayoutError: FC<Props & IExtraProps> = ({
   //const [data, setData] = useState(navTreeFromLocalStorage)
 
   const { includeVAT, setIncludeVAT } = useUI()
+  const translate = useTranslation()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] =
     useState<boolean>(isIncludeVAT)
@@ -155,7 +155,7 @@ const LayoutError: FC<Props & IExtraProps> = ({
   const Content = () => (
     <>
       <h3></h3>
-      <p>{GENERAL_COOKIE_TEXT}</p>
+      <p>{translate('label.message.cookiesText')}</p>
     </>
   )
   return (

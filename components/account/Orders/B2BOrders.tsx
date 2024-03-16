@@ -13,7 +13,6 @@ import { useUI } from '@components/ui/context'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
 
 // Other Imports
-import { GENERAL_RECENT_ORDERS } from '@components/utils/textVariables'
 import {
   NEXT_GET_ORDERS,
   NEXT_GET_ORDER_DETAILS,

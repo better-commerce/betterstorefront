@@ -1,5 +1,4 @@
 import Spinner from '@components/ui/Spinner'
-import { GENERAL_RECENT_ORDERS } from '@components/utils/textVariables'
 import { groupBy } from 'lodash'
 import Link from 'next/link'
 import React from 'react'
